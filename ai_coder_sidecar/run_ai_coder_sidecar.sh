@@ -213,7 +213,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e GIT_CONFIG_VALUE_0=* \
         -w "$WORK_DIR" \
         "$IMAGE_NAME" \
-        sh -c "sudo /usr/local/bin/init-firewall.sh && sleep infinity"
+        sh -c "sudo FIREWALL_ALLOWLIST=\$FIREWALL_ALLOWLIST /usr/local/bin/init-firewall.sh && sleep infinity"
 fi
 
 echo "🔄 Importing zsh history..."
