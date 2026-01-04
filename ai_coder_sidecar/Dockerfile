@@ -71,7 +71,8 @@ RUN mkdir /commandhistory \
 
 # Set `DEVCONTAINER` environment variable to help with orientation
 ENV DEVCONTAINER=true
-ENV TERM=xterm-256color
+ENV TERM=xterm-direct
+ENV COLORTERM=truecolor
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
