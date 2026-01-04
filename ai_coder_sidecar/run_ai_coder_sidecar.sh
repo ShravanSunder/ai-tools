@@ -15,8 +15,8 @@ set -e
 #   --run-cursor    Run Cursor
 # =============================================================================
 
-# Configuration - Global sidecar home
-SIDECAR_HOME="${SIDECAR_HOME:-$HOME/dev/ai-tools/ai_coder_sidecar}"
+# Configuration - Use directory where this script lives
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 IMAGE_NAME="ai-coder-sidecar-image"
 
 # Git-Native Path Discovery
@@ -109,18 +109,14 @@ echo "🚀 Setting up AI Coder Sidecar Environment..."
 echo "   Repo: $REPO_NAME ($WORK_DIR)"
 
 # =============================================================================
-# File Resolution with Fallback
-# Priority: repo-local .devcontainer/ > global SIDECAR_HOME
+# File Resolution - Use files from script's directory
 # =============================================================================
 resolve_file() {
     local filename="$1"
-    local local_path="$WORK_DIR/.devcontainer/$filename"
-    local global_path="$SIDECAR_HOME/$filename"
+    local file_path="$SCRIPT_DIR/$filename"
 
-    if [ -f "$local_path" ]; then
-        echo "$local_path"
-    elif [ -f "$global_path" ]; then
-        echo "$global_path"
+    if [ -f "$file_path" ]; then
+        echo "$file_path"
     else
         echo ""
     fi
@@ -128,13 +124,13 @@ resolve_file() {
 
 DOCKERFILE=$(resolve_file "Dockerfile")
 if [ -z "$DOCKERFILE" ]; then
-    echo "❌ ERROR: Dockerfile not found in .devcontainer/ or $SIDECAR_HOME/"
+    echo "❌ ERROR: Dockerfile not found in $SCRIPT_DIR/"
     exit 1
 fi
 
 # 1. Build the image
 echo "📦 Building Docker image ($IMAGE_NAME)..."
-docker build -t "$IMAGE_NAME" -f "$DOCKERFILE" "$SIDECAR_HOME"
+docker build -t "$IMAGE_NAME" -f "$DOCKERFILE" "$SCRIPT_DIR"
 
 # 2. Cleanup old container if reset is requested or it's not running
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
@@ -199,12 +195,12 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -v "$LOCAL_OPENCODE_DIR":/home/node/.opencode \
         -v "$LOCAL_OPENCODE_DIR":"$LOCAL_OPENCODE_DIR" \
         -v "$HISTORY_VOLUME":/commandhistory \
-        -v "$SIDECAR_HOME":"$SIDECAR_HOME":ro \
+        -v "$SCRIPT_DIR":"$SCRIPT_DIR":ro \
         -e CLAUDE_CONFIG_DIR="$LOCAL_CLAUDE_DIR" \
         -e OPENCODE_CONFIG_DIR="$LOCAL_OPENCODE_DIR" \
         -e CODEX_HOME="$LOCAL_CODEX_DIR" \
         -e DEVCONTAINER=true \
-        -e SIDECAR_HOME="$SIDECAR_HOME" \
+        -e SCRIPT_DIR="$SCRIPT_DIR" \
         -e FIREWALL_ALLOWLIST="$FIREWALL_ALLOWLIST" \
         -e VIRTUAL_ENV="$WORK_DIR/.venv" \
         -e PATH="/home/node/.atuin/bin:/pnpm:$WORK_DIR/.venv/bin:/usr/local/share/npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
@@ -248,7 +244,7 @@ fi
 
 # Execution Logic
 if [ -n "$RUN_CMD" ]; then
-    FULL_EXEC_CMD="docker exec -it $CONTAINER_NAME zsh -c \"clear && $RUN_CMD\""
+    FULL_EXEC_CMD="docker exec -it $CONTAINER_NAME zsh -c \"$RUN_CMD\""
 else
     FULL_EXEC_CMD="docker exec -it $CONTAINER_NAME zsh"
 fi
@@ -261,7 +257,7 @@ if [ "$NO_RUN" = true ]; then
 else
     if [ -n "$RUN_CMD" ]; then
         echo "🚀 Starting agent..."
-        exec docker exec -it "$CONTAINER_NAME" zsh -c "clear && $RUN_CMD"
+        exec docker exec -it "$CONTAINER_NAME" zsh -c "$RUN_CMD"
     else
         echo "🚗 Entering sidecar..."
         exec docker exec -it "$CONTAINER_NAME" zsh
