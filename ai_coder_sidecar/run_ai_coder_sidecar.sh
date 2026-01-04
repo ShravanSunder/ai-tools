@@ -144,29 +144,39 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
     fi
 fi
 
-# 3. Create Volumes and Prepare History Files
+# 3. Resolve paths with fallback (before container check)
+FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.txt")
+[ -z "$FIREWALL_ALLOWLIST" ] && FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.base.txt")
+
+VENV_VOLUME="ai-coder-venv-${DIR_HASH}"
+
+# Automatically find all node_modules directories and generate volume flags
+NODE_MODULES_VOLUMES=""
+for dir in $(find "$WORK_DIR" -name "node_modules" -type d -not -path "*/.*" 2>/dev/null); do
+    NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $dir:$dir"
+done
+
+# 4. Create Volumes and Prepare History Files
 echo "💾 Preparing Volumes and History..."
 docker volume create "$HISTORY_VOLUME" >/dev/null
+docker volume create "$VENV_VOLUME" >/dev/null
 
-# 4. Run the Sidecar
+# 5. Handle container state
+# Remove container if it exists but isn't running (crashed/stopped)
+EXISTING_CONTAINER=$(docker ps -aq -f name="^${CONTAINER_NAME}$")
+if [ -n "$EXISTING_CONTAINER" ]; then
+    RUNNING=$(docker ps -q -f name="^${CONTAINER_NAME}$")
+    if [ -z "$RUNNING" ]; then
+        echo "🧹 Found stopped/crashed container. Removing..."
+        docker rm -f "$CONTAINER_NAME" >/dev/null
+        EXISTING_CONTAINER=""
+    fi
+fi
+
+# 6. Run the Sidecar
 echo "🔥 Starting Sidecar Container..."
 
-if [ ! "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
-    # Create a persistent volume for the Linux Python environment
-    VENV_VOLUME="ai-coder-venv-${DIR_HASH}"
-    docker volume create "$VENV_VOLUME" >/dev/null
-
-    # Automatically find all node_modules directories and generate volume flags
-    NODE_MODULES_VOLUMES=""
-    for dir in $(find "$WORK_DIR" -name "node_modules" -type d -not -path "*/.*" 2>/dev/null); do
-        NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $dir:$dir"
-    done
-
-    # Resolve firewall allowlist with fallback
-    FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.txt")
-    [ -z "$FIREWALL_ALLOWLIST" ] && FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.base.txt")
-
-    # Mount the Git common dir as Read-Only (if it exists)
+if [ -z "$EXISTING_CONTAINER" ]; then
     docker run -d \
         -e ANTHROPIC_API_KEY \
         --name "$CONTAINER_NAME" \
