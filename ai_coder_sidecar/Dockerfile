@@ -159,4 +159,3 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
   chmod 0440 /etc/sudoers.d/node-firewall
 
 USER node
-CMD ["sh", "-c", "pnpm install && uv sync --all-packages && sleep infinity"]
