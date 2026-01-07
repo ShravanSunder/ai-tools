@@ -80,8 +80,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --run-gemini|-run-gemini)
-            # --resume (or -r) immediately loads the most recent session
-            RUN_CMD="gemini --yolo --resume"
+            RUN_CMD="gemini --yolo"
             shift
             ;;
         --run-codex|-run-codex)
