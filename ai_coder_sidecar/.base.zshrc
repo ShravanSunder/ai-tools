@@ -55,6 +55,7 @@ add-zsh-hook precmd _tabby_title_update
 # PNPM
 # #######################
 export PNPM_HOME="/pnpm"
+export PNPM_STORE_DIR="/home/node/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;

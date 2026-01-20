@@ -117,6 +117,43 @@ cdnjs.cloudflare.com
 fonts.googleapis.com
 fonts.gstatic.com
 
+# --- TypeScript/JavaScript Docs ---
+hono.dev
+zod.dev
+react.dev
+nextjs.org
+vitejs.dev
+tailwindcss.com
+tanstack.com
+trpc.io
+drizzle.team
+orm.drizzle.team
+prisma.io
+eslint.org
+prettier.io
+bun.sh
+deno.land
+deno.com
+docs.deno.com
+jsr.io
+
+# --- Python Docs ---
+docs.pydantic.dev
+pydantic.dev
+fastapi.tiangolo.com
+sqlalchemy.org
+docs.sqlalchemy.org
+docs.python.org
+pytest.org
+docs.pytest.org
+ruff.rs
+docs.astral.sh
+astral.sh
+uvicorn.org
+httpx.dev
+polars.rs
+docs.polars.rs
+
 # --- Infrastructure & Observability ---
 sentry.io
 statsig.com

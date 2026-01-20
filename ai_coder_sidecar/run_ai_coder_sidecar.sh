@@ -144,17 +144,31 @@ FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.txt")
 [ -z "$FIREWALL_ALLOWLIST" ] && FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.base.txt")
 
 VENV_VOLUME="ai-coder-venv-${DIR_HASH}"
+PNPM_STORE_VOLUME="ai-coder-pnpm-store-${DIR_HASH}"
 
-# Automatically find all node_modules directories and generate volume flags
+# Discover all node_modules directories and create isolated volumes for each
+# This shadows host node_modules so container gets Linux-native packages
 NODE_MODULES_VOLUMES=""
 for dir in $(find "$WORK_DIR" -name "node_modules" -type d -not -path "*/.*" 2>/dev/null); do
-    NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $dir:$dir"
+    PATH_HASH=$(echo -n "$dir" | md5sum | cut -c1-8)
+    VOL_NAME="ai-coder-nm-${DIR_HASH}-${PATH_HASH}"
+    docker volume create "$VOL_NAME" >/dev/null 2>&1 || true
+    NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $VOL_NAME:$dir"
 done
+
+# Also ensure root node_modules is covered even if it doesn't exist yet on host
+ROOT_NM_VOL="ai-coder-nm-${DIR_HASH}-root"
+docker volume create "$ROOT_NM_VOL" >/dev/null 2>&1 || true
+# Only add if not already in the list
+if ! echo "$NODE_MODULES_VOLUMES" | grep -qF "$WORK_DIR/node_modules"; then
+    NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $ROOT_NM_VOL:$WORK_DIR/node_modules"
+fi
 
 # 4. Create Volumes and Prepare History Files
 echo "💾 Preparing Volumes and History..."
 docker volume create "$HISTORY_VOLUME" >/dev/null
 docker volume create "$VENV_VOLUME" >/dev/null
+docker volume create "$PNPM_STORE_VOLUME" >/dev/null
 
 # 5. Handle container state
 # Remove container if it exists but isn't running (crashed/stopped)
@@ -182,6 +196,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         $GIT_MOUNTS \
         -v "$VENV_VOLUME":"$WORK_DIR/.venv" \
         $NODE_MODULES_VOLUMES \
+        -v "$PNPM_STORE_VOLUME":/home/node/.local/share/pnpm \
         -v "$LOCAL_CLAUDE_DIR":/home/node/.claude \
         -v "$LOCAL_CLAUDE_DIR":"$LOCAL_CLAUDE_DIR" \
         -v "$LOCAL_ATUIN_DIR":/home/node/.config/atuin \
@@ -202,6 +217,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e SCRIPT_DIR="$SCRIPT_DIR" \
         -e FIREWALL_ALLOWLIST="$FIREWALL_ALLOWLIST" \
         -e VIRTUAL_ENV="$WORK_DIR/.venv" \
+        -e PNPM_STORE_DIR="/home/node/.local/share/pnpm" \
         -e PATH="/home/node/.atuin/bin:/pnpm:$WORK_DIR/.venv/bin:/usr/local/share/npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
         -e GIT_CONFIG_COUNT=1 \
         -e GIT_CONFIG_KEY_0=safe.directory \
