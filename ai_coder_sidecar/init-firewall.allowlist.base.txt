@@ -121,3 +121,6 @@ fonts.gstatic.com
 sentry.io
 statsig.com
 dc.services.visualstudio.com
+
+# ---
+youtube.com
