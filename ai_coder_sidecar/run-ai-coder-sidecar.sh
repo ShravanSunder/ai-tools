@@ -49,6 +49,7 @@ CONTAINER_NAME="ai-coder-sidecar-${REPO_NAME}-${DIR_HASH}"
 HISTORY_VOLUME="ai-coder-bashhistory-${DIR_HASH}"
 LOCAL_CLAUDE_DIR="$HOME/.claude"
 LOCAL_ATUIN_DIR="$HOME/.config/atuin"
+LOCAL_ATUIN_DATA_DIR="$HOME/.local/share/atuin"
 LOCAL_ZSH_HISTORY="$HOME/.zsh_history"
 LOCAL_CLAUDE_JSON="$HOME/.claude.json"
 LOCAL_GEMINI_DIR="$HOME/.gemini"
@@ -200,6 +201,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -v "$LOCAL_CLAUDE_DIR":/home/node/.claude \
         -v "$LOCAL_CLAUDE_DIR":"$LOCAL_CLAUDE_DIR" \
         -v "$LOCAL_ATUIN_DIR":/home/node/.config/atuin \
+        -v "$LOCAL_ATUIN_DATA_DIR":/home/node/.local/share/atuin \
         -v "$LOCAL_CLAUDE_JSON":/home/node/.claude.json \
         -v "$LOCAL_CLAUDE_JSON":"$LOCAL_CLAUDE_JSON" \
         -v "$LOCAL_GEMINI_DIR":/home/node/.gemini \
@@ -234,7 +236,7 @@ docker cp "$LOCAL_ZSH_HISTORY" "$CONTAINER_NAME":/home/node/.zsh_history
 echo "🔓 Ensuring permissions..."
 docker exec -u root "$CONTAINER_NAME" chown node:node /home/node/.zsh_history /home/node/.claude.json "$LOCAL_CLAUDE_JSON"
 # Chown other directories normally
-docker exec -u root "$CONTAINER_NAME" chown -R node:node /commandhistory /home/node/.config/atuin /home/node/.claude "$LOCAL_CLAUDE_DIR" /home/node/.gemini "$LOCAL_GEMINI_DIR" /home/node/.codex "$LOCAL_CODEX_DIR" /home/node/.opencode "$LOCAL_OPENCODE_DIR"
+docker exec -u root "$CONTAINER_NAME" chown -R node:node /commandhistory /home/node/.config/atuin /home/node/.local/share/atuin /home/node/.claude "$LOCAL_CLAUDE_DIR" /home/node/.gemini "$LOCAL_GEMINI_DIR" /home/node/.codex "$LOCAL_CODEX_DIR" /home/node/.opencode "$LOCAL_OPENCODE_DIR"
 # Ensure the parent directories of the mirrored configs exist and are owned by node
 docker exec -u root "$CONTAINER_NAME" mkdir -p "$(dirname "$LOCAL_CLAUDE_DIR")" "$(dirname "$LOCAL_OPENCODE_DIR")"
 docker exec -u root "$CONTAINER_NAME" chown node:node "$(dirname "$LOCAL_CLAUDE_DIR")" "$(dirname "$LOCAL_OPENCODE_DIR")"
