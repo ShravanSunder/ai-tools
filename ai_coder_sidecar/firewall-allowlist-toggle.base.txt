@@ -19,7 +19,5 @@
 #   sidecar-ctl.sh firewall clear             # Clear all toggle domains
 #   sidecar-ctl.sh firewall reload            # Apply changes
 # =============================================================================
-
 # --- Currently Enabled Toggle Domains ---
 # (managed by sidecar-ctl.sh, but can be edited manually)
-

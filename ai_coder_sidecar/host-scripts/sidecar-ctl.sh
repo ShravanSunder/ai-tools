@@ -5,25 +5,58 @@
 # Manages firewall allowlists and container state from the host machine.
 # The agent inside the container CANNOT modify firewall rules directly.
 #
+# SAFETY FEATURES:
+#   - Refuses to run as root (prevents accidental host damage)
+#   - Refuses to run inside containers (host-only script)
+#   - Validates all file paths before writing (whitelist of allowed filenames)
+#   - Validates container names match expected sidecar patterns
+#   - Only writes to firewall-allowlist-toggle*.txt files
+#   - Only executes hardcoded firewall.sh inside containers
+#   - No shell injection possible (all paths validated, no eval)
+#
 # Usage:
-#   sidecar-ctl.sh firewall reload              # Reload all allowlists
-#   sidecar-ctl.sh firewall allow <preset>      # Add preset domains to toggle list
-#   sidecar-ctl.sh firewall block <preset>      # Remove preset domains from toggle list
-#   sidecar-ctl.sh firewall allow-for <time> <preset>  # Temporary access for preset
-#   sidecar-ctl.sh firewall allow-all-for <time>       # Temporary access for ALL presets
-#   sidecar-ctl.sh firewall clear               # Clear all toggle domains
-#   sidecar-ctl.sh firewall list                # List current toggle domains
-#   sidecar-ctl.sh firewall presets             # List available presets
-#   sidecar-ctl.sh status                       # Show container + firewall status
-#   sidecar-ctl.sh containers                   # List all sidecar containers
+#   sidecar-ctl.sh firewall reload                     # Reload all allowlists
+#   sidecar-ctl.sh firewall allow <preset|domain>      # Add preset or domain
+#   sidecar-ctl.sh firewall block <preset|domain>      # Remove preset or domain
+#   sidecar-ctl.sh firewall allow-for <time> <preset|domain>  # Temporary access
+#   sidecar-ctl.sh firewall allow-all-for [time]       # Temporary access for ALL (default: 10m)
+#   sidecar-ctl.sh firewall clear                      # Clear all toggle domains
+#   sidecar-ctl.sh firewall list                       # List current toggle domains
+#   sidecar-ctl.sh firewall presets                    # List available presets
+#   sidecar-ctl.sh status                              # Show container + firewall status
+#   sidecar-ctl.sh containers                          # List all sidecar containers
 # =============================================================================
 
 set -euo pipefail
+
+# =============================================================================
+# SAFETY CHECKS - Prevent accidental host damage
+# =============================================================================
+
+# 1. Never run as root on the host
+if [[ $EUID -eq 0 ]]; then
+    echo "ERROR: Do not run this script as root on the host." >&2
+    echo "This script modifies allowlist files and runs docker commands." >&2
+    echo "Run as your normal user instead." >&2
+    exit 1
+fi
+
+# 2. Verify we're not inside a container (this is a HOST-side script)
+if [[ -f /.dockerenv ]] || grep -q docker /proc/1/cgroup 2>/dev/null; then
+    echo "ERROR: This script must run on the HOST, not inside a container." >&2
+    exit 1
+fi
 
 # --- Configuration ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SIDECAR_DIR="$(dirname "$SCRIPT_DIR")"
 PRESETS_DIR="$SIDECAR_DIR/firewall-presets"
+
+# Allowed file patterns for toggle allowlist (safety whitelist)
+ALLOWED_TOGGLE_PATTERNS=(
+    "firewall-allowlist-toggle.base.txt"
+    "firewall-allowlist-toggle.txt"
+)
 
 # Colors
 RED='\033[0;31m'
@@ -52,6 +85,20 @@ parse_duration() {
     fi
 }
 
+# Validate container name matches expected sidecar patterns
+validate_container_name() {
+    local container="$1"
+    
+    # Must match known sidecar naming patterns
+    if [[ "$container" =~ ^ai-coder-sidecar-[a-z0-9-]+-[a-f0-9]{8}$ ]] || \
+       [[ "$container" =~ ^voyager-sidecar-[a-f0-9]{8}$ ]]; then
+        return 0
+    fi
+    
+    log_error "SAFETY: Container name doesn't match expected sidecar patterns: $container"
+    exit 1
+}
+
 # Find sidecar container for current directory
 find_container() {
     local work_dir
@@ -72,29 +119,80 @@ find_container() {
         fi
     done
     
+    # Validate container name if found
+    if [[ -n "$container" ]]; then
+        validate_container_name "$container"
+    fi
+    
     echo "$container"
+}
+
+# Validate that a file path is safe for writing (toggle allowlist only)
+validate_toggle_file() {
+    local file_path="$1"
+    local basename
+    basename=$(basename "$file_path")
+    
+    # Must match allowed patterns
+    local valid=false
+    for pattern in "${ALLOWED_TOGGLE_PATTERNS[@]}"; do
+        if [[ "$basename" == "$pattern" ]]; then
+            valid=true
+            break
+        fi
+    done
+    
+    if [[ "$valid" != true ]]; then
+        log_error "SAFETY: Refusing to write to unexpected file: $file_path"
+        log_error "Expected filename: ${ALLOWED_TOGGLE_PATTERNS[*]}"
+        exit 1
+    fi
+    
+    # Must not contain path traversal
+    if [[ "$file_path" == *".."* ]]; then
+        log_error "SAFETY: Path traversal detected in: $file_path"
+        exit 1
+    fi
+    
+    # Must be under a known safe directory (sidecar dir or .devcontainer)
+    local real_path
+    real_path=$(realpath -m "$file_path" 2>/dev/null || echo "$file_path")
+    
+    if [[ "$real_path" != "$SIDECAR_DIR/"* ]] && [[ "$real_path" != *"/.devcontainer/"* ]] && [[ "$real_path" != *"/ai_coder_sidecar/"* ]]; then
+        log_error "SAFETY: File path not in allowed directory: $file_path"
+        log_error "Must be under sidecar dir or .devcontainer"
+        exit 1
+    fi
+    
+    return 0
 }
 
 # Get toggle allowlist path for a container
 get_toggle_allowlist() {
     local container="$1"
+    local toggle_file=""
     
     # Get the SCRIPT_DIR from container env
     local script_dir
     script_dir=$(docker inspect "$container" --format '{{range .Config.Env}}{{println .}}{{end}}' | grep '^SCRIPT_DIR=' | cut -d= -f2)
     
     if [[ -n "$script_dir" && -f "$script_dir/firewall-allowlist-toggle.base.txt" ]]; then
-        echo "$script_dir/firewall-allowlist-toggle.base.txt"
+        toggle_file="$script_dir/firewall-allowlist-toggle.base.txt"
     else
         # Try to find it in the workspace
         local work_dir
         work_dir=$(docker inspect "$container" --format '{{.Config.WorkingDir}}')
         if [[ -f "$work_dir/.devcontainer/firewall-allowlist-toggle.base.txt" ]]; then
-            echo "$work_dir/.devcontainer/firewall-allowlist-toggle.base.txt"
+            toggle_file="$work_dir/.devcontainer/firewall-allowlist-toggle.base.txt"
         else
-            echo "$SIDECAR_DIR/firewall-allowlist-toggle.base.txt"
+            toggle_file="$SIDECAR_DIR/firewall-allowlist-toggle.base.txt"
         fi
     fi
+    
+    # Validate the path before returning
+    validate_toggle_file "$toggle_file"
+    
+    echo "$toggle_file"
 }
 
 # --- Firewall Commands ---
@@ -113,16 +211,7 @@ cmd_firewall_reload() {
 }
 
 cmd_firewall_allow() {
-    local preset="$1"
-    local preset_file="$PRESETS_DIR/${preset}.txt"
-    
-    if [[ ! -f "$preset_file" ]]; then
-        log_error "Preset not found: $preset"
-        log_info "Available presets:"
-        cmd_firewall_presets
-        exit 1
-    fi
-    
+    local input="$1"
     local container
     container=$(find_container)
     if [[ -z "$container" ]]; then
@@ -133,34 +222,50 @@ cmd_firewall_allow() {
     local toggle_file
     toggle_file=$(get_toggle_allowlist "$container")
     
-    log_info "Adding preset '$preset' to: $toggle_file"
-    
-    # Add domains from preset (skip if already present)
-    while IFS= read -r line || [[ -n "$line" ]]; do
-        line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-        [[ -z "$line" || "$line" == "#"* ]] && continue
-        
-        if ! grep -qxF "$line" "$toggle_file" 2>/dev/null; then
-            echo "$line" >> "$toggle_file"
-            log_info "  Added: $line"
+    # Check if input is a domain (contains a dot) or a preset name
+    if [[ "$input" == *.* ]]; then
+        # It's a domain - add directly
+        log_info "Adding domain '$input' to: $toggle_file"
+        if ! grep -qxF "$input" "$toggle_file" 2>/dev/null; then
+            echo "$input" >> "$toggle_file"
+            log_success "Added: $input"
         else
-            log_warn "  Already present: $line"
+            log_warn "Already present: $input"
         fi
-    done < "$preset_file"
+    else
+        # It's a preset name
+        local preset_file="$PRESETS_DIR/${input}.txt"
+        if [[ ! -f "$preset_file" ]]; then
+            log_error "Preset not found: $input"
+            log_info "Available presets:"
+            cmd_firewall_presets
+            log_info ""
+            log_info "Or add a domain directly: firewall allow example.com"
+            exit 1
+        fi
+        
+        log_info "Adding preset '$input' to: $toggle_file"
+        
+        # Add domains from preset (skip if already present)
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            [[ -z "$line" || "$line" == "#"* ]] && continue
+            
+            if ! grep -qxF "$line" "$toggle_file" 2>/dev/null; then
+                echo "$line" >> "$toggle_file"
+                log_info "  Added: $line"
+            else
+                log_warn "  Already present: $line"
+            fi
+        done < "$preset_file"
+    fi
     
     # Reload firewall
     cmd_firewall_reload
 }
 
 cmd_firewall_block() {
-    local preset="$1"
-    local preset_file="$PRESETS_DIR/${preset}.txt"
-    
-    if [[ ! -f "$preset_file" ]]; then
-        log_error "Preset not found: $preset"
-        exit 1
-    fi
-    
+    local input="$1"
     local container
     container=$(find_container)
     if [[ -z "$container" ]]; then
@@ -171,30 +276,50 @@ cmd_firewall_block() {
     local toggle_file
     toggle_file=$(get_toggle_allowlist "$container")
     
-    log_info "Removing preset '$preset' from: $toggle_file"
-    
-    # Remove domains from preset
-    local temp_file
-    temp_file=$(mktemp)
-    
-    while IFS= read -r toggle_line || [[ -n "$toggle_line" ]]; do
-        local should_remove=false
-        while IFS= read -r preset_line || [[ -n "$preset_line" ]]; do
-            preset_line=$(echo "$preset_line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-            [[ -z "$preset_line" || "$preset_line" == "#"* ]] && continue
-            if [[ "$toggle_line" == "$preset_line" ]]; then
-                should_remove=true
-                log_info "  Removed: $toggle_line"
-                break
-            fi
-        done < "$preset_file"
-        
-        if [[ "$should_remove" == false ]]; then
-            echo "$toggle_line" >> "$temp_file"
+    # Check if input is a domain (contains a dot) or a preset name
+    if [[ "$input" == *.* ]]; then
+        # It's a domain - remove directly
+        log_info "Removing domain '$input' from: $toggle_file"
+        if grep -qxF "$input" "$toggle_file" 2>/dev/null; then
+            grep -vxF "$input" "$toggle_file" > "$toggle_file.tmp" && mv "$toggle_file.tmp" "$toggle_file"
+            log_success "Removed: $input"
+        else
+            log_warn "Not found: $input"
         fi
-    done < "$toggle_file"
-    
-    mv "$temp_file" "$toggle_file"
+    else
+        # It's a preset name
+        local preset_file="$PRESETS_DIR/${input}.txt"
+        if [[ ! -f "$preset_file" ]]; then
+            log_error "Preset not found: $input"
+            log_info "Or remove a domain directly: firewall block example.com"
+            exit 1
+        fi
+        
+        log_info "Removing preset '$input' from: $toggle_file"
+        
+        # Remove domains from preset
+        local temp_file
+        temp_file=$(mktemp)
+        
+        while IFS= read -r toggle_line || [[ -n "$toggle_line" ]]; do
+            local should_remove=false
+            while IFS= read -r preset_line || [[ -n "$preset_line" ]]; do
+                preset_line=$(echo "$preset_line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                [[ -z "$preset_line" || "$preset_line" == "#"* ]] && continue
+                if [[ "$toggle_line" == "$preset_line" ]]; then
+                    should_remove=true
+                    log_info "  Removed: $toggle_line"
+                    break
+                fi
+            done < "$preset_file"
+            
+            if [[ "$should_remove" == false ]]; then
+                echo "$toggle_line" >> "$temp_file"
+            fi
+        done < "$toggle_file"
+        
+        mv "$temp_file" "$toggle_file"
+    fi
     
     # Reload firewall
     cmd_firewall_reload
@@ -229,7 +354,7 @@ cmd_firewall_allow_for() {
 }
 
 cmd_firewall_allow_all_for() {
-    local duration="$1"
+    local duration="${1:-10m}"  # Default to 10 minutes
     
     local seconds
     seconds=$(parse_duration "$duration")
@@ -376,10 +501,10 @@ Usage: $(basename "$0") <command> [args]
 
 Firewall Commands:
   firewall reload                     Reload all allowlists
-  firewall allow <preset>             Add preset domains to toggle list
-  firewall block <preset>             Remove preset domains from toggle list
-  firewall allow-for <time> <preset>  Temporary access for preset (e.g., 15m, 1h)
-  firewall allow-all-for <time>       Temporary access for ALL presets
+  firewall allow <preset|domain>      Add preset or domain to toggle list
+  firewall block <preset|domain>      Remove preset or domain from toggle list
+  firewall allow-for <time> <preset|domain>  Temporary access (e.g., 15m, 1h)
+  firewall allow-all-for [time]       Temporary access for ALL presets (default: 10m)
   firewall clear                      Clear all toggle domains
   firewall list                       List current toggle domains
   firewall presets                    List available presets
@@ -389,10 +514,14 @@ Status Commands:
   containers                          List all sidecar containers
 
 Examples:
-  $(basename "$0") firewall allow jira
-  $(basename "$0") firewall allow-for 15m notion
-  $(basename "$0") firewall allow-all-for 15m    # Quick: allow everything for 15 min
+  $(basename "$0") firewall allow jira              # Add preset
+  $(basename "$0") firewall allow api.example.com   # Add single domain
+  $(basename "$0") firewall allow-for 15m notion    # Preset for 15 min
+  $(basename "$0") firewall allow-for 30m foo.com   # Domain for 30 min
+  $(basename "$0") firewall allow-all-for           # All presets for 10 min (default)
+  $(basename "$0") firewall allow-all-for 15m       # All presets for 15 min
   $(basename "$0") firewall block jira
+  $(basename "$0") firewall block api.example.com
   $(basename "$0") firewall clear
   $(basename "$0") status
 EOF
@@ -417,8 +546,7 @@ case "${1:-}" in
                 cmd_firewall_allow_for "$3" "$4"
                 ;;
             allow-all-for)
-                [[ -z "${3:-}" ]] && { log_error "Usage: firewall allow-all-for <duration>"; exit 1; }
-                cmd_firewall_allow_all_for "$3"
+                cmd_firewall_allow_all_for "${3:-}"  # Defaults to 10m if not provided
                 ;;
             clear)
                 cmd_firewall_clear
