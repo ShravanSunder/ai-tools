@@ -140,8 +140,8 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
 fi
 
 # 3. Resolve paths with fallback (before container check)
-FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.txt")
-[ -z "$FIREWALL_ALLOWLIST" ] && FIREWALL_ALLOWLIST=$(resolve_file "init-firewall.allowlist.base.txt")
+FIREWALL_ALLOWLIST=$(resolve_file "firewall-allowlist-always.txt")
+[ -z "$FIREWALL_ALLOWLIST" ] && FIREWALL_ALLOWLIST=$(resolve_file "firewall-allowlist-always.base.txt")
 
 VENV_VOLUME="ai-coder-venv-${DIR_HASH}"
 PNPM_STORE_VOLUME="ai-coder-pnpm-store-${DIR_HASH}"
@@ -224,7 +224,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e GIT_CONFIG_VALUE_0=* \
         -w "$WORK_DIR" \
         "$IMAGE_NAME" \
-        sh -c "sudo FIREWALL_ALLOWLIST=\$FIREWALL_ALLOWLIST /usr/local/bin/init-firewall.sh && sleep infinity"
+        sh -c "sudo FIREWALL_ALLOWLIST=\$FIREWALL_ALLOWLIST /usr/local/bin/firewall.sh && sleep infinity"
 fi
 
 echo "🔄 Importing zsh history..."

@@ -1,0 +1,25 @@
+# =============================================================================
+# firewall-allowlist-toggle.base.txt - Temporarily Enabled Domains
+# =============================================================================
+# This file contains domains that can be enabled/disabled at runtime
+# without restarting the container. Use the host-side sidecar-ctl.sh script
+# to manage this file and reload the firewall.
+#
+# Format:
+#   - One domain per line
+#   - Comments start with #
+#   - Wildcards: *.example.com is normalized to example.com (dnsmasq matches subdomains)
+#   - Special directive: @github_meta (loads GitHub API CIDRs)
+#
+# Usage from host:
+#   sidecar-ctl.sh firewall allow jira        # Add Jira domains
+#   sidecar-ctl.sh firewall block jira        # Remove Jira domains
+#   sidecar-ctl.sh firewall allow-for 15m jira  # Temporary access
+#   sidecar-ctl.sh firewall allow-all-for 15m   # Allow ALL presets for 15 min
+#   sidecar-ctl.sh firewall clear             # Clear all toggle domains
+#   sidecar-ctl.sh firewall reload            # Apply changes
+# =============================================================================
+
+# --- Currently Enabled Toggle Domains ---
+# (managed by sidecar-ctl.sh, but can be edited manually)
+

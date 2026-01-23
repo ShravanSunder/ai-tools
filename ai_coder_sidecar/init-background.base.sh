@@ -4,6 +4,17 @@
 
 echo "📦 Syncing infrastructure..."
 
+# 0. XVFB: Start virtual display for Playwright headed mode (Electron, screenshots)
+# This runs as a background daemon - DISPLAY=:99 is set in Dockerfile ENV
+if command -v Xvfb &> /dev/null; then
+    if ! pgrep -x Xvfb > /dev/null; then
+        echo "  - Starting Xvfb virtual display on :99..."
+        Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+    else
+        echo "  - Xvfb already running"
+    fi
+fi
+
 # 1. Sync Node modules (pnpm)
 if [ -f package.json ]; then
 	echo "  - Syncing Node modules (pnpm)..."

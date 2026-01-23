@@ -1,0 +1,4 @@
+# Linear domains
+# Used for: Linear issue tracking MCP
+linear.app
+api.linear.app

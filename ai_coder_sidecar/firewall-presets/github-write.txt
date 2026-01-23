@@ -1,0 +1,14 @@
+# GitHub write access
+# Note: GitHub domains are already in base allowlist for read access.
+# This preset is a marker for documentation - the actual git push
+# control is via the .git mount being read-only.
+#
+# To enable git push temporarily:
+#   1. The .git directory is mounted read-only by default
+#   2. Use separate worktrees for write access
+#   3. Or manually remount with write access if needed
+#
+# GitHub API domains (already in base, listed for reference):
+# github.com
+# api.github.com
+# codeload.github.com

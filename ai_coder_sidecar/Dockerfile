@@ -39,6 +39,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Playwright dependencies + Xvfb for headed mode (Electron apps, screenshots)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    xvfb \
+    libgtk-3-0 \
+    libgbm-dev \
+    libxss1 \
+    libxtst6 \
+    libnss3 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    fonts-liberation \
+    fonts-noto-color-emoji \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
@@ -150,12 +171,18 @@ RUN pnpm add -g @google/gemini-cli
 RUN curl -fsSL https://opencode.ai/install | bash
 RUN curl -fsSL https://cursor.com/install | bash
 
+# Install Playwright MCP and Chromium browser
+RUN pnpm add -g @playwright/mcp@latest
+RUN npx playwright install chromium --with-deps
+
+# Set DISPLAY for Xvfb (virtual display for headed mode)
+ENV DISPLAY=:99
 
 # Copy and set up firewall script
-COPY init-firewall.sh /usr/local/bin/
+COPY firewall.sh /usr/local/bin/firewall.sh
 USER root
-RUN chmod +x /usr/local/bin/init-firewall.sh && \
-  echo "node ALL=(root) NOPASSWD:SETENV: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+RUN chmod +x /usr/local/bin/firewall.sh && \
+  echo "node ALL=(root) NOPASSWD:SETENV: /usr/local/bin/firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
 
 USER node

@@ -1,0 +1,7 @@
+# Notion domains
+# Used for: Notion MCP, note access
+notion.so
+*.notion.so
+notion.com
+*.notion.com
+api.notion.com

@@ -1,0 +1,6 @@
+# Slack domains
+# Used for: Slack notifications, Slack MCP
+slack.com
+*.slack.com
+api.slack.com
+files.slack.com
