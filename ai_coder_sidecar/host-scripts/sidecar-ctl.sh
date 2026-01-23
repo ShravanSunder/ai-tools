@@ -19,7 +19,7 @@
 #   sidecar-ctl.sh firewall allow <preset|domain>      # Add preset or domain
 #   sidecar-ctl.sh firewall block <preset|domain>      # Remove preset or domain
 #   sidecar-ctl.sh firewall allow-for <time> <preset|domain>  # Temporary access
-#   sidecar-ctl.sh firewall allow-all-for [time]       # Temporary access for ALL (default: 10m)
+#   sidecar-ctl.sh firewall toggle [time]              # Quick! ALL presets (default: 10m)
 #   sidecar-ctl.sh firewall clear                      # Clear all toggle domains
 #   sidecar-ctl.sh firewall list                       # List current toggle domains
 #   sidecar-ctl.sh firewall presets                    # List available presets
@@ -504,7 +504,8 @@ Firewall Commands:
   firewall allow <preset|domain>      Add preset or domain to toggle list
   firewall block <preset|domain>      Remove preset or domain from toggle list
   firewall allow-for <time> <preset|domain>  Temporary access (e.g., 15m, 1h)
-  firewall allow-all-for [time]       Temporary access for ALL presets (default: 10m)
+  firewall toggle [time]              Quick: allow ALL presets (default: 10m)
+  firewall allow-all-for [time]       Same as toggle
   firewall clear                      Clear all toggle domains
   firewall list                       List current toggle domains
   firewall presets                    List available presets
@@ -518,8 +519,8 @@ Examples:
   $(basename "$0") firewall allow api.example.com   # Add single domain
   $(basename "$0") firewall allow-for 15m notion    # Preset for 15 min
   $(basename "$0") firewall allow-for 30m foo.com   # Domain for 30 min
-  $(basename "$0") firewall allow-all-for           # All presets for 10 min (default)
-  $(basename "$0") firewall allow-all-for 15m       # All presets for 15 min
+  $(basename "$0") firewall toggle                   # Quick! All presets for 10 min
+  $(basename "$0") firewall toggle 15m              # All presets for 15 min
   $(basename "$0") firewall block jira
   $(basename "$0") firewall block api.example.com
   $(basename "$0") firewall clear
@@ -545,7 +546,7 @@ case "${1:-}" in
                 [[ -z "${3:-}" || -z "${4:-}" ]] && { log_error "Usage: firewall allow-for <duration> <preset>"; exit 1; }
                 cmd_firewall_allow_for "$3" "$4"
                 ;;
-            allow-all-for)
+            allow-all-for|toggle)
                 cmd_firewall_allow_all_for "${3:-}"  # Defaults to 10m if not provided
                 ;;
             clear)
