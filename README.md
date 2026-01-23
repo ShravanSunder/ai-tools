@@ -32,8 +32,7 @@ ai_coder_sidecar/
 │   ├── linear.txt
 │   ├── notion.txt
 │   └── slack.txt
-├── host-scripts/
-│   └── sidecar-ctl.sh                   # Host-side control script
+├── sidecar-ctl.sh                       # Host-side control script
 ├── init-background.base.sh              # Background init (Xvfb, etc.)
 ├── init-foreground.base.sh              # Shell init (Atuin, Zap)
 └── .base.zshrc                          # Base zsh config
@@ -44,8 +43,9 @@ ai_coder_sidecar/
 The `sidecar-ctl.sh` script provides host-side control over running sidecars:
 
 ```bash
-# Add to PATH or alias
-alias sidecar-ctl='~/dev/ai-tools/ai_coder_sidecar/host-scripts/sidecar-ctl.sh'
+# Add ai_coder_sidecar to PATH, or create an alias
+export PATH="$PATH:$HOME/dev/ai-tools/ai_coder_sidecar"
+# or: alias sidecar-ctl="$HOME/dev/ai-tools/ai_coder_sidecar/sidecar-ctl.sh"
 
 # Check status (run from project directory)
 cd ~/Documents/code/my-project
