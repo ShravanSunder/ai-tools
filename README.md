@@ -2,6 +2,19 @@
 
 Personal AI development tools and sandboxed environments.
 
+## Repository Variants
+
+This repo has two variants for different contexts:
+
+| Repo | Purpose | Firewall Presets |
+|------|---------|------------------|
+| `~/dev/ai-tools` | Personal projects | github-write, notion, linear |
+| `~/dev/relay-ai-tools` | Work projects (Relay) | All above + jira, slack |
+
+**Work repos** (voyager-ai, risk-process-integrations) should use `relay-ai-tools`.
+
+To sync changes between them, copy updated files or set up git remotes.
+
 ## Agent Sidecar
 
 Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini CLI) with network isolation.
@@ -9,11 +22,11 @@ Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini 
 ### Quick Start
 
 ```bash
-# From any git repository
-~/dev/ai-tools/agent_sidecar/agent-sidecar-router.sh
+# Add to PATH in ~/.zshrc
+export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
 
-# Or use the base sidecar directly
-~/dev/ai-tools/agent_sidecar/run-agent-sidecar.sh
+# From any git repository
+agent-sidecar-router.sh --run-claude
 ```
 
 ### Directory Structure
@@ -34,10 +47,8 @@ agent_sidecar/
 │   └── .base.zshrc                      # Base zsh config
 ├── firewall-toggle-presets/             # Preset domain lists
 │   ├── github-write.txt
-│   ├── jira.txt
-│   ├── linear.txt
 │   ├── notion.txt
-│   └── slack.txt
+│   └── linear.txt
 └── .generated/                          # Runtime files (gitignored)
     ├── firewall-allowlist.compiled.txt  # Merged allowlist
     └── firewall-allowlist-toggle.tmp.txt # Toggle state
@@ -48,10 +59,6 @@ agent_sidecar/
 The `sidecar-ctl.sh` script provides host-side control over running sidecars:
 
 ```bash
-# Add agent_sidecar to PATH, or create an alias
-export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
-# or: alias sidecar-ctl="$HOME/dev/ai-tools/agent_sidecar/sidecar-ctl.sh"
-
 # Check status (run from project directory)
 cd ~/Documents/code/my-project
 sidecar-ctl status
@@ -61,7 +68,6 @@ sidecar-ctl firewall list              # Show toggle allowlist
 sidecar-ctl firewall allow notion      # Allow a preset
 sidecar-ctl firewall allow api.foo.com # Allow a specific domain
 sidecar-ctl firewall block notion      # Block a preset
-sidecar-ctl firewall block api.foo.com # Block a specific domain
 sidecar-ctl firewall toggle            # Enable all presets for 10m (default)
 sidecar-ctl firewall toggle 15m        # Enable all presets for 15 minutes
 sidecar-ctl firewall clear             # Clear all toggled domains
@@ -86,9 +92,7 @@ sidecar-ctl firewall reload            # Reload firewall rules
 
 **Presets** in `firewall-toggle-presets/`:
 - `github-write` - GitHub push access
-- `jira` - Atlassian Jira
 - `notion` - Notion API
-- `slack` - Slack API
 - `linear` - Linear API
 
 ### Per-Project Customization
@@ -104,11 +108,6 @@ Create a `.agent_sidecar/` directory in your project:
 ```
 
 Override files follow the pattern: `{name}.repo.{ext}` (committed) or `{name}.local.{ext}` (gitignored).
-
-**Force base sidecar:**
-```bash
-agent-sidecar-router.sh --use-router
-```
 
 ### Launch Options
 

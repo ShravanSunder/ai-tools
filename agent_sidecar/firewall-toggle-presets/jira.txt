@@ -1,8 +1,0 @@
-# Jira / Atlassian domains
-# Used for: Jira MCP, Confluence access
-atlassian.com
-*.atlassian.com
-atlassian.net
-*.atlassian.net
-jira.com
-*.jira.com
