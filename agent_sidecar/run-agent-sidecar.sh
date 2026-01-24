@@ -47,6 +47,7 @@ DIR_HASH=$(echo -n "$WORK_DIR" | md5sum | cut -c1-8)
 CONTAINER_NAME="agent-sidecar-${REPO_NAME}-${DIR_HASH}"
 HISTORY_VOLUME="agent-sidecar-history-${DIR_HASH}"
 LOCAL_CLAUDE_DIR="$HOME/.claude"
+LOCAL_CLAUDE_CREDENTIALS="$HOME/.claude/.credentials.json"
 LOCAL_ATUIN_DIR="$HOME/.config/atuin"
 LOCAL_ATUIN_DATA_DIR="$HOME/.local/share/atuin"
 LOCAL_ZSH_HISTORY="$HOME/.zsh_history"
@@ -226,6 +227,18 @@ echo "📋 Using Dockerfile: $DOCKERFILE"
 echo "📦 Building Docker image ($IMAGE_NAME)..."
 docker build -t "$IMAGE_NAME" -f "$DOCKERFILE" "$SCRIPT_DIR"
 
+# 1.5. Claude OAuth credentials: Export from macOS Keychain if needed
+# Native install on macOS stores OAuth in Keychain, but Linux container needs a file
+if [ "$(uname)" = "Darwin" ] && [ ! -f "$LOCAL_CLAUDE_CREDENTIALS" ]; then
+    echo "🔐 Exporting Claude OAuth credentials from macOS Keychain..."
+    if security find-generic-password -s "Claude Code-credentials" -w > "$LOCAL_CLAUDE_CREDENTIALS" 2>/dev/null; then
+        chmod 600 "$LOCAL_CLAUDE_CREDENTIALS"
+        echo "   ✅ Credentials exported to $LOCAL_CLAUDE_CREDENTIALS"
+    else
+        echo "   ⚠️  No Claude credentials found in Keychain. Run 'claude' on host to login first."
+    fi
+fi
+
 # 2. Cleanup old container if reset is requested or it's not running
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
     if [ "$RESET" = true ]; then
@@ -366,6 +379,13 @@ docker exec -u root "$CONTAINER_NAME" chown -R node:node /commandhistory /home/n
 # Ensure the parent directories of the mirrored configs exist and are owned by node
 docker exec -u root "$CONTAINER_NAME" mkdir -p "$(dirname "$LOCAL_CLAUDE_DIR")" "$(dirname "$LOCAL_OPENCODE_DIR")"
 docker exec -u root "$CONTAINER_NAME" chown node:node "$(dirname "$LOCAL_CLAUDE_DIR")" "$(dirname "$LOCAL_OPENCODE_DIR")"
+# Setup alternate Claude config location (some versions look in ~/.config/claude-code/)
+docker exec -u root "$CONTAINER_NAME" mkdir -p /home/node/.config/claude-code
+docker exec -u root "$CONTAINER_NAME" chown -R node:node /home/node/.config/claude-code
+# Symlink credentials to alternate location if they exist
+if [ -f "$LOCAL_CLAUDE_CREDENTIALS" ]; then
+    docker exec -u node "$CONTAINER_NAME" ln -sf /home/node/.claude/.credentials.json /home/node/.config/claude-code/auth.json 2>/dev/null || true
+fi
 # Surgically chown workspace to avoid errors on the read-only .git mount
 # We use the dynamic WORK_DIR here for path mirroring
 docker exec -u root "$CONTAINER_NAME" sh -c "find \"$WORK_DIR\" -maxdepth 1 -not -name \".git\" -not -path \"$WORK_DIR\" -exec chown -R node:node {} +" 2>/dev/null || true
