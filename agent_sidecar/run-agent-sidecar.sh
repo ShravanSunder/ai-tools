@@ -163,6 +163,7 @@ IMAGE_NAME="agent-sidecar-image"
 DOCKERFILE_VARIANT="node-py"
 EXTRA_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro"
 EXTRA_APT_PACKAGES=""
+PLAYWRIGHT_EXTRA_HOSTS=""
 
 # =============================================================================
 # Configuration Loading - Three-tier: .local > .repo > .base
@@ -397,6 +398,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e SCRIPT_DIR="$SCRIPT_DIR" \
         -e WORK_DIR="$WORK_DIR" \
         -e FIREWALL_ALLOWLIST="$FIREWALL_ALLOWLIST" \
+        -e PLAYWRIGHT_EXTRA_HOSTS="$PLAYWRIGHT_EXTRA_HOSTS" \
         -e VIRTUAL_ENV="$WORK_DIR/.venv" \
         -e PNPM_STORE_DIR="/home/node/.local/share/pnpm" \
         -e PATH="/home/node/.atuin/bin:/pnpm:$WORK_DIR/.venv/bin:/usr/local/share/npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \

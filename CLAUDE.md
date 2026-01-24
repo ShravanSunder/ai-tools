@@ -184,6 +184,7 @@ The agent inside the container has limited access by design:
 | APT/Debian repos | **None** | Packages installed at build time only, firewall blocks apt repos |
 | Network | **Allowlist only** | Firewall blocks all except explicitly allowed domains |
 | `.git/` | **Read-only** | Mounted read-only to prevent repo corruption |
+| Playwright/Chromium | **Localhost only** | Can only access 127.0.0.1 by default; use `PLAYWRIGHT_EXTRA_HOSTS` to allow more |
 
 ## Important Notes
 

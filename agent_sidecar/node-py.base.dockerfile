@@ -212,8 +212,16 @@ RUN pnpm add -g @openai/codex @google/gemini-cli @playwright/mcp@latest
 # Install Playwright browsers (must be separate - depends on @playwright/mcp)
 RUN pnpm dlx playwright install chromium --with-deps
 
+# Playwright wrapper: restricts Chromium to localhost by default
+COPY setup/playwright-wrapper.sh /usr/local/bin/playwright-wrapper.sh
+USER root
+RUN chmod +x /usr/local/bin/playwright-wrapper.sh
+USER node
+
 # Set DISPLAY for Xvfb (virtual display for headed mode)
+# PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH makes Playwright use our wrapper
 ENV DISPLAY=:99
+ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/local/bin/playwright-wrapper.sh
 
 # Copy and set up firewall script
 COPY setup/firewall.sh /usr/local/bin/firewall.sh
