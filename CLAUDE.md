@@ -39,7 +39,6 @@ This repository contains the Agent Sidecar system for running AI coding assistan
 | Script | Location | Purpose |
 |--------|----------|---------|
 | `run-agent-sidecar.sh` | `agent_sidecar/` | Main entry point, builds/starts container |
-| `agent-sidecar-router.sh` | `agent_sidecar/` | Routes to `.agent_sidecar/` overrides or base |
 | `sidecar-ctl.sh` | `agent_sidecar/` | Host-side firewall control |
 | `firewall.sh` | `agent_sidecar/setup/` | In-container iptables/dnsmasq management |
 

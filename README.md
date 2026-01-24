@@ -26,7 +26,7 @@ Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini 
 export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
 
 # From any git repository
-agent-sidecar-router.sh --run-claude
+run-agent-sidecar.sh --run-claude
 ```
 
 ### Directory Structure
@@ -35,7 +35,6 @@ agent-sidecar-router.sh --run-claude
 agent_sidecar/
 ├── node-py.base.dockerfile              # Base container image
 ├── run-agent-sidecar.sh                 # Main launch script
-├── agent-sidecar-router.sh              # Routes to .agent_sidecar or base
 ├── sidecar-ctl.sh                       # Host-side control script
 ├── sidecar.base.conf                    # Base configuration
 ├── setup/
