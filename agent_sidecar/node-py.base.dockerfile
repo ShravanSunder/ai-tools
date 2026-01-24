@@ -200,16 +200,17 @@ USER node
 ARG CACHE_BUST_AGENT_CLIS=""
 RUN echo "Agent CLI cache bust: ${CACHE_BUST_AGENT_CLIS:-none}"
 
-# Install AI coding assistants
-RUN curl -fsSL https://claude.ai/install.sh | bash
-RUN pnpm add -g @openai/codex
-RUN pnpm add -g @google/gemini-cli
-RUN curl -fsSL https://opencode.ai/install | bash
-RUN curl -fsSL https://cursor.com/install | bash
+# Install AI coding assistants (parallel curl-based installers)
+RUN curl -fsSL https://claude.ai/install.sh | bash & \
+    curl -fsSL https://opencode.ai/install | bash & \
+    curl -fsSL https://cursor.com/install | bash & \
+    wait
 
-# Install Playwright MCP and Chromium browser
-RUN pnpm add -g @playwright/mcp@latest
-RUN npx playwright install chromium --with-deps
+# Install pnpm global packages (single command, pnpm handles concurrency)
+RUN pnpm add -g @openai/codex @google/gemini-cli @playwright/mcp@latest
+
+# Install Playwright browsers (must be separate - depends on @playwright/mcp)
+RUN pnpm dlx playwright install chromium --with-deps
 
 # Set DISPLAY for Xvfb (virtual display for headed mode)
 ENV DISPLAY=:99
