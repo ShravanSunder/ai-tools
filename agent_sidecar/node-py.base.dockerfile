@@ -192,7 +192,15 @@ USER root
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /usr/share/zsh-syntax-highlighting
 USER node
 
-# Install Claude Code (native installer - better performance, security, auto-updates)
+# =============================================================================
+# Agent CLIs - At bottom so --reset updates to latest versions
+# =============================================================================
+# CACHE_BUST_AGENT_CLIS: When --reset is used, a timestamp is passed to invalidate
+# cache from this point forward, ensuring CLIs are re-downloaded/updated.
+ARG CACHE_BUST_AGENT_CLIS=""
+RUN echo "Agent CLI cache bust: ${CACHE_BUST_AGENT_CLIS:-none}"
+
+# Install AI coding assistants
 RUN curl -fsSL https://claude.ai/install.sh | bash
 RUN pnpm add -g @openai/codex
 RUN pnpm add -g @google/gemini-cli
@@ -212,5 +220,15 @@ USER root
 RUN chmod +x /usr/local/bin/firewall.sh && \
   echo "node ALL=(root) NOPASSWD:SETENV: /usr/local/bin/firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
+
+# Per-repo build-extra script (runs as root with full network access at build time)
+# Copied to .generated/ by run-agent-sidecar.sh if .agent_sidecar/build-extra.{repo,local}.sh exists
+COPY .generated/build-extra.s[h] /tmp/
+RUN if [ -f /tmp/build-extra.sh ]; then \
+      echo "🔧 Running build-extra.sh..." && \
+      chmod +x /tmp/build-extra.sh && \
+      /tmp/build-extra.sh && \
+      rm /tmp/build-extra.sh; \
+    fi
 
 USER node

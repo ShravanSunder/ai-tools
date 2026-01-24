@@ -19,8 +19,10 @@ echo "✅ Shell is ready."
 
 # 4. EXTRA SCRIPTS: Run repo + local additions (additive, not replacement)
 # These run IN ADDITION to this base script, not instead of it
+# SIDECAR_CONFIG_DIR is set by run-agent-sidecar.sh (agent cannot access .agent_sidecar directly)
+CONFIG_DIR="${SIDECAR_CONFIG_DIR:-$WORK_DIR/.agent_sidecar}"
 for tier in repo local; do
-    EXTRA_SCRIPT="$WORK_DIR/.agent_sidecar/init-foreground-extra.${tier}.sh"
+    EXTRA_SCRIPT="$CONFIG_DIR/init-foreground-extra.${tier}.sh"
     if [ -f "$EXTRA_SCRIPT" ] && [ -x "$EXTRA_SCRIPT" ]; then
         echo "🐚 Running init-foreground-extra.${tier}.sh..."
         "$EXTRA_SCRIPT" || true

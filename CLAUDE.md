@@ -76,10 +76,30 @@ Set `EXTRA_APT_PACKAGES` in `sidecar.repo.conf` or `sidecar.local.conf`:
 
 ```bash
 # .agent_sidecar/sidecar.repo.conf
-EXTRA_APT_PACKAGES="chromium libfuse2"
+EXTRA_APT_PACKAGES="htop tree"
 ```
 
 Packages are installed at **Docker build time** (requires `--reset` to rebuild when changed).
+
+### Build-Extra Script (per-repo)
+
+For custom build-time installations (AppImages, binaries, etc.), create a build script:
+
+```bash
+# .agent_sidecar/build-extra.repo.sh
+#!/bin/bash
+# Install Obsidian (extracted AppImage, no libfuse2 needed)
+curl -L "https://github.com/.../Obsidian-1.5.3.AppImage" -o /tmp/obsidian.AppImage
+chmod +x /tmp/obsidian.AppImage
+cd /opt && /tmp/obsidian.AppImage --appimage-extract
+mv squashfs-root obsidian && ln -s /opt/obsidian/obsidian /usr/local/bin/obsidian
+rm /tmp/obsidian.AppImage
+```
+
+- Runs as **root** at Docker build time (full network access)
+- Script is deleted after running (agent cannot access it)
+- Resolution: `.local` > `.repo` (no base)
+- Requires `--reset` to rebuild when changed
 
 ### Init Script Extras
 
@@ -105,6 +125,26 @@ Persistent volumes per workspace:
 - `agent-sidecar-pnpm-{hash}` - pnpm store
 - `agent-sidecar-nm-{hash}-*` - node_modules per package
 
+### Initialize a Repository
+
+Use `init_repo_sidecar.sh` to set up `.agent_sidecar/` with template files:
+
+```bash
+# From any repo directory
+/path/to/ai-tools/agent_sidecar/init_repo_sidecar.sh
+
+# Creates:
+#   .agent_sidecar/
+#   ├── .gitignore
+#   ├── sidecar.repo.conf          # Team config
+#   ├── sidecar.local.conf         # Personal config (gitignored)
+#   ├── firewall-allowlist.repo.txt
+#   ├── firewall-allowlist.local.txt
+#   ├── build-extra.repo.sh        # Build-time script template
+#   ├── init-background-extra.repo.sh
+#   └── init-foreground-extra.repo.sh
+```
+
 ### Debugging container issues
 
 ```bash
@@ -114,13 +154,15 @@ sidecar-ctl status
 # List all sidecar containers
 sidecar-ctl containers
 
-# Reset container (fresh start)
+# Reset container (fresh start, updates agent CLIs to latest)
 run-agent-sidecar.sh --reset
 
 # Enter container without running agent
 run-agent-sidecar.sh --no-run
 docker exec -it agent-sidecar-{name}-{hash} zsh
 ```
+
+**Note**: `--reset` also updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions.
 
 ## File Locations
 
@@ -131,6 +173,17 @@ docker exec -it agent-sidecar-{name}-{hash} zsh
 ~/Documents/code/voyager-ai/.agent_sidecar/         # Work repo config
 ~/Documents/code/risk-process-integrations/.agent_sidecar/  # Work repo config
 ```
+
+## Security Model
+
+The agent inside the container has limited access by design:
+
+| Resource | Agent Access | Notes |
+|----------|--------------|-------|
+| `.agent_sidecar/` | **None** | Shadowed with empty tmpfs; config at `/etc/agent-sidecar` for system scripts |
+| APT/Debian repos | **None** | Packages installed at build time only, firewall blocks apt repos |
+| Network | **Allowlist only** | Firewall blocks all except explicitly allowed domains |
+| `.git/` | **Read-only** | Mounted read-only to prevent repo corruption |
 
 ## Important Notes
 

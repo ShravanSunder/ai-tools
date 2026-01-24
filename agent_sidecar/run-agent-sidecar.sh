@@ -224,13 +224,45 @@ if [ ! -f "$DOCKERFILE" ]; then
 fi
 echo "📋 Using Dockerfile: $DOCKERFILE"
 
-# 1. Build the image
+# 1. Prepare build-time files in .generated/
+GENERATED_DIR="$SCRIPT_DIR/.generated"
+mkdir -p "$GENERATED_DIR"
+
+# 1a. Resolve build-extra script (.local > .repo, no base)
+# This runs at Docker build time with full network access
+BUILD_EXTRA_SCRIPT=""
+BUILD_EXTRA_GENERATED="$GENERATED_DIR/build-extra.sh"
+rm -f "$BUILD_EXTRA_GENERATED"  # Clean up from previous builds
+
+if [ -f "$REPO_SIDECAR/build-extra.local.sh" ]; then
+    BUILD_EXTRA_SCRIPT="$REPO_SIDECAR/build-extra.local.sh"
+elif [ -f "$REPO_SIDECAR/build-extra.repo.sh" ]; then
+    BUILD_EXTRA_SCRIPT="$REPO_SIDECAR/build-extra.repo.sh"
+fi
+
+if [ -n "$BUILD_EXTRA_SCRIPT" ]; then
+    echo "📦 Found build-extra script: $BUILD_EXTRA_SCRIPT"
+    cp "$BUILD_EXTRA_SCRIPT" "$BUILD_EXTRA_GENERATED"
+    chmod +x "$BUILD_EXTRA_GENERATED"
+fi
+
+# 2. Build the image
 echo "📦 Building Docker image ($IMAGE_NAME)..."
 if [ -n "$EXTRA_APT_PACKAGES" ]; then
     echo "   Extra APT packages: $EXTRA_APT_PACKAGES"
 fi
+
+# When --reset is used, pass a timestamp to bust the cache for agent CLIs
+# This ensures CLIs are updated to latest versions on reset
+CACHE_BUST_ARG=""
+if [ "$RESET" = true ]; then
+    CACHE_BUST_ARG="--build-arg CACHE_BUST_AGENT_CLIS=$(date +%s)"
+    echo "   Cache bust: Agent CLIs will be updated"
+fi
+
 docker build \
     --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
+    $CACHE_BUST_ARG \
     -t "$IMAGE_NAME" \
     -f "$DOCKERFILE" \
     "$SCRIPT_DIR"
@@ -256,9 +288,6 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
 fi
 
 # 3. Merge firewall allowlists (.base + .repo + .local)
-# Create compiled file in .generated/ so it's accessible inside container
-GENERATED_DIR="$SCRIPT_DIR/.generated"
-mkdir -p "$GENERATED_DIR"
 COMPILED_FIREWALL_FILE="$GENERATED_DIR/firewall-allowlist.compiled.txt"
 
 merge_firewall_lists() {
@@ -358,7 +387,9 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -v "$LOCAL_OPENCODE_DIR":"$LOCAL_OPENCODE_DIR" \
         -v "$HISTORY_VOLUME":/commandhistory \
         -v "$SCRIPT_DIR":"$SCRIPT_DIR":ro \
-        -v "$REPO_SIDECAR":"$REPO_SIDECAR":ro \
+        -v "$REPO_SIDECAR":/etc/agent-sidecar:ro \
+        --mount type=tmpfs,destination="$WORK_DIR/.agent_sidecar" \
+        -e SIDECAR_CONFIG_DIR=/etc/agent-sidecar \
         -e CLAUDE_CONFIG_DIR="$LOCAL_CLAUDE_DIR" \
         -e OPENCODE_CONFIG_DIR="$LOCAL_OPENCODE_DIR" \
         -e CODEX_HOME="$LOCAL_CODEX_DIR" \
