@@ -143,14 +143,13 @@ resolve_allowlist_files() {
         exit 1
     fi
 
-    # Toggle allowlist (optional) - temporarily enabled domains
-    TOGGLE_ALLOWLIST="${FIREWALL_ALLOWLIST_TOGGLE:-}"
-    if [[ -z "$TOGGLE_ALLOWLIST" ]]; then
-        # Derive from base allowlist path
-        local base_dir
-        base_dir=$(dirname "$BASE_ALLOWLIST")
-        TOGGLE_ALLOWLIST="$base_dir/firewall-allowlist-toggle.base.txt"
-    fi
+    # Toggle allowlists (optional) - temporarily enabled domains
+    # Two files: .base.txt (tracked, project defaults) and .tmp.txt (gitignored, runtime changes)
+    local base_dir
+    base_dir=$(dirname "$BASE_ALLOWLIST")
+    
+    TOGGLE_ALLOWLIST_BASE="${FIREWALL_ALLOWLIST_TOGGLE:-$base_dir/firewall-allowlist-toggle.base.txt}"
+    TOGGLE_ALLOWLIST_TMP="$base_dir/firewall-allowlist-toggle.tmp.txt"
 }
 
 # --- 3. Capture Upstream Resolvers ---
@@ -175,11 +174,12 @@ do_reload() {
     resolve_allowlist_files
     capture_upstream_resolvers
     
-    # Read all domains from both files
+    # Read all domains from all files (base + toggle.base + toggle.tmp)
     DOMAINS=()
     GITHUB_META_PRELOAD=false
     read_allowlist_file "$BASE_ALLOWLIST"
-    [[ -f "$TOGGLE_ALLOWLIST" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST"
+    [[ -f "$TOGGLE_ALLOWLIST_BASE" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_BASE"
+    [[ -f "$TOGGLE_ALLOWLIST_TMP" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_TMP"
     
     log_info "Total domains loaded: ${#DOMAINS[@]}"
     
@@ -211,11 +211,12 @@ do_full_init() {
     check_environment
     resolve_allowlist_files
     
-    # Read all domains from both files
+    # Read all domains from all files (base + toggle.base + toggle.tmp)
     DOMAINS=()
     GITHUB_META_PRELOAD=false
     read_allowlist_file "$BASE_ALLOWLIST"
-    [[ -f "$TOGGLE_ALLOWLIST" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST"
+    [[ -f "$TOGGLE_ALLOWLIST_BASE" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_BASE"
+    [[ -f "$TOGGLE_ALLOWLIST_TMP" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_TMP"
     
     log_info "Total domains loaded: ${#DOMAINS[@]}"
     

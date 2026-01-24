@@ -49,11 +49,12 @@ fi
 
 # --- Configuration ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SIDECAR_DIR="$(dirname "$SCRIPT_DIR")"
-PRESETS_DIR="$SIDECAR_DIR/firewall-presets"
+SIDECAR_DIR="$SCRIPT_DIR"
+PRESETS_DIR="$SIDECAR_DIR/firewall-toggle-presets"
 
 # Allowed file patterns for toggle allowlist (safety whitelist)
 ALLOWED_TOGGLE_PATTERNS=(
+    "firewall-allowlist-toggle.tmp.txt"
     "firewall-allowlist-toggle.base.txt"
     "firewall-allowlist-toggle.txt"
 )
@@ -167,7 +168,7 @@ validate_toggle_file() {
     return 0
 }
 
-# Get toggle allowlist path for a container
+# Get toggle allowlist path for a container (returns .tmp.txt for runtime changes)
 get_toggle_allowlist() {
     local container="$1"
     local toggle_file=""
@@ -176,16 +177,17 @@ get_toggle_allowlist() {
     local script_dir
     script_dir=$(docker inspect "$container" --format '{{range .Config.Env}}{{println .}}{{end}}' | grep '^SCRIPT_DIR=' | cut -d= -f2)
     
-    if [[ -n "$script_dir" && -f "$script_dir/firewall-allowlist-toggle.base.txt" ]]; then
-        toggle_file="$script_dir/firewall-allowlist-toggle.base.txt"
+    # Determine the base directory for toggle file
+    if [[ -n "$script_dir" && -d "$script_dir" ]]; then
+        toggle_file="$script_dir/firewall-allowlist-toggle.tmp.txt"
     else
         # Try to find it in the workspace
         local work_dir
         work_dir=$(docker inspect "$container" --format '{{.Config.WorkingDir}}')
-        if [[ -f "$work_dir/.devcontainer/firewall-allowlist-toggle.base.txt" ]]; then
-            toggle_file="$work_dir/.devcontainer/firewall-allowlist-toggle.base.txt"
+        if [[ -d "$work_dir/.devcontainer" ]]; then
+            toggle_file="$work_dir/.devcontainer/firewall-allowlist-toggle.tmp.txt"
         else
-            toggle_file="$SIDECAR_DIR/firewall-allowlist-toggle.base.txt"
+            toggle_file="$SIDECAR_DIR/firewall-allowlist-toggle.tmp.txt"
         fi
     fi
     
@@ -212,6 +214,7 @@ cmd_firewall_reload() {
 
 cmd_firewall_allow() {
     local input="$1"
+    local skip_reload="${2:-false}"  # Optional: skip reload for batching
     local container
     container=$(find_container)
     if [[ -z "$container" ]]; then
@@ -260,12 +263,15 @@ cmd_firewall_allow() {
         done < "$preset_file"
     fi
     
-    # Reload firewall
-    cmd_firewall_reload
+    # Reload firewall (unless batching)
+    if [[ "$skip_reload" != "true" ]]; then
+        cmd_firewall_reload
+    fi
 }
 
 cmd_firewall_block() {
     local input="$1"
+    local skip_reload="${2:-false}"  # Optional: skip reload for batching
     local container
     container=$(find_container)
     if [[ -z "$container" ]]; then
@@ -321,8 +327,10 @@ cmd_firewall_block() {
         mv "$temp_file" "$toggle_file"
     fi
     
-    # Reload firewall
-    cmd_firewall_reload
+    # Reload firewall (unless batching)
+    if [[ "$skip_reload" != "true" ]]; then
+        cmd_firewall_reload
+    fi
 }
 
 cmd_firewall_allow_for() {
@@ -379,19 +387,24 @@ cmd_firewall_allow_all_for() {
         exit 1
     fi
     
-    # Allow all presets
+    # Allow all presets (batched - skip individual reloads)
     for preset in "${presets[@]}"; do
         log_info "Enabling preset: $preset"
-        cmd_firewall_allow "$preset" 2>/dev/null || true
+        cmd_firewall_allow "$preset" "true" 2>/dev/null || true
     done
+    
+    # Single reload after all presets added
+    cmd_firewall_reload
     
     # Schedule removal in background
     (
         sleep "$seconds"
         log_info "Time expired. Removing all presets..."
         for preset in "${presets[@]}"; do
-            cmd_firewall_block "$preset" 2>/dev/null || true
+            cmd_firewall_block "$preset" "true" 2>/dev/null || true
         done
+        # Single reload after all presets removed
+        cmd_firewall_reload
     ) &
     
     local bg_pid=$!

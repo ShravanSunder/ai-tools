@@ -1,3 +1,19 @@
+# =============================================================================
+# nodepy.base.dockerfile - AI Coder Sidecar (Python/Node/TS)
+# =============================================================================
+# Pattern: {variant}.{tier}.dockerfile
+#   - Variant: nodepy (this), rust, python
+#   - Tier: base (ai-tools), repo (committed), local (gitignored)
+#
+# Override with:
+#   - .devcontainer/nodepy.local.dockerfile (personal, gitignored)
+#   - .devcontainer/nodepy.repo.dockerfile  (team, committed)
+#
+# Other variants (in ai_coder_sidecar/):
+#   - rust.base.dockerfile   (Rust + Python/Node) - TODO
+#   - python.base.dockerfile (Python only) - TODO
+# =============================================================================
+
 FROM nikolaik/python-nodejs:python3.13-nodejs24-slim
 
 ARG TZ
@@ -12,6 +28,7 @@ RUN usermod -l node pn && \
     echo "node ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/node && \
     chmod 0440 /etc/sudoers.d/node
 
+ARG USERNAME=node
 ARG CLAUDE_CODE_VERSION=latest
 
 # Install basic development tools and iptables/ipset
@@ -83,12 +100,10 @@ RUN npm install -g corepack@latest \
 RUN mkdir -p /usr/local/share/npm-global && \
   chown -R node:node /usr/local/share
 
-ARG USERNAME=node
-
 # Persist zsh history.
 RUN mkdir /commandhistory \
   && touch /commandhistory/.zsh_history \
-  && chown -R $USERNAME /commandhistory
+  && chown -R node /commandhistory
 
 # Set `DEVCONTAINER` environment variable to help with orientation
 ENV DEVCONTAINER=true
@@ -149,11 +164,12 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 # Install Zap non-interactively for the node user
 RUN zsh -c 'curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh | zsh -s -- --branch release-v1 -k'
 
-# Copy the master .zshrc base and optional local .zshrc
+# Copy zshrc layers (.base.zshrc, .repo.zshrc, .local.zshrc)
 # This preserves the Oh-My-Zsh/Powerlevel10k base from zsh-in-docker
-COPY .base.zshrc .zshr[c] /tmp/
+COPY setup/.base.zshrc .repo.zshr[c] .local.zshr[c] /tmp/
 RUN cat /tmp/.base.zshrc >> /home/node/.zshrc && \
-    if [ -f /tmp/.zshrc ]; then cat /tmp/.zshrc >> /home/node/.zshrc; fi
+    if [ -f /tmp/.repo.zshrc ]; then cat /tmp/.repo.zshrc >> /home/node/.zshrc; fi && \
+    if [ -f /tmp/.local.zshrc ]; then cat /tmp/.local.zshrc >> /home/node/.zshrc; fi
 
 # Pre-install plugins during build to bake them into the image
 # We ignore the exit code here as Zap might return 1 after a clean install in some environments
@@ -179,10 +195,17 @@ RUN npx playwright install chromium --with-deps
 ENV DISPLAY=:99
 
 # Copy and set up firewall script
-COPY firewall.sh /usr/local/bin/firewall.sh
+COPY setup/firewall.sh /usr/local/bin/firewall.sh
 USER root
 RUN chmod +x /usr/local/bin/firewall.sh && \
   echo "node ALL=(root) NOPASSWD:SETENV: /usr/local/bin/firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
 
 USER node
+
+# =============================================================================
+# EXTENSION POINT
+# =============================================================================
+# Repos can add extra instructions by overriding this entire Dockerfile
+# or by creating .devcontainer/Dockerfile with additional layers.
+# =============================================================================

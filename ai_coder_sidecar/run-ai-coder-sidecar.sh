@@ -109,24 +109,91 @@ echo "🚀 Setting up AI Coder Sidecar Environment..."
 echo "   Repo: $REPO_NAME ($WORK_DIR)"
 
 # =============================================================================
-# File Resolution - Use files from script's directory
+# File Resolution - Three-tier: .local > .repo > .base
 # =============================================================================
-resolve_file() {
-    local filename="$1"
-    local file_path="$SCRIPT_DIR/$filename"
+# Naming convention:
+#   .base  = Source of truth (ai-tools)
+#   .repo  = Team overrides (committed to repo's .devcontainer/)
+#   .local = Personal overrides (gitignored)
+#
+# Usage: resolve_file "basename" "ext"
+#   e.g., resolve_file "init-background" "sh"
+#   Returns first found: init-background.local.sh > init-background.repo.sh > init-background.base.sh
+# =============================================================================
+REPO_DEVCONTAINER="$WORK_DIR/.devcontainer"
 
-    if [ -f "$file_path" ]; then
-        echo "$file_path"
-    else
-        echo ""
-    fi
+resolve_file() {
+    local basename="$1"  # e.g., "init-background" or "dockerfile-image"
+    local ext="$2"       # e.g., "sh" or "txt" (empty for no extension)
+    
+    # Build suffix: ".sh" or "" (for files without extensions)
+    local suffix=""
+    [ -n "$ext" ] && suffix=".${ext}"
+    
+    # 1. Local override (gitignored)
+    local local_file="$REPO_DEVCONTAINER/${basename}.local${suffix}"
+    [ -f "$local_file" ] && { echo "$local_file"; return; }
+    
+    # 2. Repo override (checked in)
+    local repo_file="$REPO_DEVCONTAINER/${basename}.repo${suffix}"
+    [ -f "$repo_file" ] && { echo "$repo_file"; return; }
+    
+    # 3. Base (ai-tools/setup/)
+    local base_file="$SCRIPT_DIR/setup/${basename}.base${suffix}"
+    [ -f "$base_file" ] && { echo "$base_file"; return; }
+    
+    echo ""
 }
 
-DOCKERFILE=$(resolve_file "Dockerfile")
-if [ -z "$DOCKERFILE" ]; then
-    echo "❌ ERROR: Dockerfile not found in $SCRIPT_DIR/"
+# =============================================================================
+# Configuration Loading - Three-tier: .local > .repo > .base
+# =============================================================================
+load_config() {
+    # Load base defaults
+    [ -f "$SCRIPT_DIR/sidecar.base.conf" ] && source "$SCRIPT_DIR/sidecar.base.conf"
+    
+    # Load repo overrides (checked in)
+    [ -f "$REPO_DEVCONTAINER/sidecar.repo.conf" ] && source "$REPO_DEVCONTAINER/sidecar.repo.conf"
+    
+    # Load local overrides (gitignored)
+    [ -f "$REPO_DEVCONTAINER/sidecar.local.conf" ] && source "$REPO_DEVCONTAINER/sidecar.local.conf"
+}
+
+# =============================================================================
+# Dockerfile Resolution - Pattern: {variant}.{tier}.dockerfile
+# =============================================================================
+# Variant: nodepy (default), rust, python - what stack to use
+# Tier: base (ai-tools), repo (committed), local (gitignored)
+#
+# Resolution order for selected variant:
+#   1. $REPO_DEVCONTAINER/{variant}.local.dockerfile (personal, gitignored)
+#   2. $REPO_DEVCONTAINER/{variant}.repo.dockerfile (team, committed)
+#   3. $SCRIPT_DIR/{variant}.base.dockerfile (default)
+# =============================================================================
+resolve_dockerfile() {
+    local variant="${DOCKERFILE_VARIANT:-nodepy}"
+    
+    # 1. Local override (gitignored)
+    [ -f "$REPO_DEVCONTAINER/${variant}.local.dockerfile" ] && \
+        { echo "$REPO_DEVCONTAINER/${variant}.local.dockerfile"; return; }
+    
+    # 2. Repo override (committed)
+    [ -f "$REPO_DEVCONTAINER/${variant}.repo.dockerfile" ] && \
+        { echo "$REPO_DEVCONTAINER/${variant}.repo.dockerfile"; return; }
+    
+    # 3. Base (ai-tools)
+    echo "$SCRIPT_DIR/${variant}.base.dockerfile"
+}
+
+# Load configuration
+load_config
+
+DOCKERFILE=$(resolve_dockerfile)
+if [ ! -f "$DOCKERFILE" ]; then
+    echo "❌ ERROR: Dockerfile not found: $DOCKERFILE"
     exit 1
 fi
+echo "📋 Using Dockerfile: $DOCKERFILE"
 
 # 1. Build the image
 echo "📦 Building Docker image ($IMAGE_NAME)..."
@@ -140,9 +207,44 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
     fi
 fi
 
-# 3. Resolve paths with fallback (before container check)
-FIREWALL_ALLOWLIST=$(resolve_file "firewall-allowlist-always.txt")
-[ -z "$FIREWALL_ALLOWLIST" ] && FIREWALL_ALLOWLIST=$(resolve_file "firewall-allowlist-always.base.txt")
+# 3. Merge firewall allowlists (.base + .repo + .local)
+# Create merged file in SCRIPT_DIR so it's accessible inside container
+MERGED_FIREWALL_FILE="$SCRIPT_DIR/firewall-allowlist-merged.txt"
+
+merge_firewall_lists() {
+    # Start fresh
+    > "$MERGED_FIREWALL_FILE"
+    
+    # Base always included
+    if [ -f "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" ]; then
+        cat "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" >> "$MERGED_FIREWALL_FILE"
+    fi
+    
+    # Repo additions (.repo - checked in)
+    if [ -f "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" ]; then
+        echo "" >> "$MERGED_FIREWALL_FILE"
+        echo "# --- Repo-specific additions (.repo) ---" >> "$MERGED_FIREWALL_FILE"
+        cat "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" >> "$MERGED_FIREWALL_FILE"
+    fi
+    
+    # Local additions (.local - gitignored)
+    if [ -f "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" ]; then
+        echo "" >> "$MERGED_FIREWALL_FILE"
+        echo "# --- Local additions (.local) ---" >> "$MERGED_FIREWALL_FILE"
+        cat "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" >> "$MERGED_FIREWALL_FILE"
+    fi
+    
+    # Extra domains from config
+    if [ -n "$EXTRA_FIREWALL_DOMAINS" ]; then
+        echo "" >> "$MERGED_FIREWALL_FILE"
+        echo "# --- Config additions ---" >> "$MERGED_FIREWALL_FILE"
+        echo "$EXTRA_FIREWALL_DOMAINS" | tr ',' '\n' >> "$MERGED_FIREWALL_FILE"
+    fi
+    
+    echo "$MERGED_FIREWALL_FILE"
+}
+
+FIREWALL_ALLOWLIST=$(merge_firewall_lists)
 
 VENV_VOLUME="ai-coder-venv-${DIR_HASH}"
 PNPM_STORE_VOLUME="ai-coder-pnpm-store-${DIR_HASH}"
@@ -197,6 +299,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         $GIT_MOUNTS \
         -v "$VENV_VOLUME":"$WORK_DIR/.venv" \
         $NODE_MODULES_VOLUMES \
+        $EXTRA_MOUNTS \
         -v "$PNPM_STORE_VOLUME":/home/node/.local/share/pnpm \
         -v "$LOCAL_CLAUDE_DIR":/home/node/.claude \
         -v "$LOCAL_CLAUDE_DIR":"$LOCAL_CLAUDE_DIR" \
@@ -212,6 +315,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -v "$LOCAL_OPENCODE_DIR":"$LOCAL_OPENCODE_DIR" \
         -v "$HISTORY_VOLUME":/commandhistory \
         -v "$SCRIPT_DIR":"$SCRIPT_DIR":ro \
+        -v "$REPO_DEVCONTAINER":"$REPO_DEVCONTAINER":ro \
         -e CLAUDE_CONFIG_DIR="$LOCAL_CLAUDE_DIR" \
         -e OPENCODE_CONFIG_DIR="$LOCAL_OPENCODE_DIR" \
         -e CODEX_HOME="$LOCAL_CODEX_DIR" \
@@ -244,18 +348,18 @@ docker exec -u root "$CONTAINER_NAME" chown node:node "$(dirname "$LOCAL_CLAUDE_
 # We use the dynamic WORK_DIR here for path mirroring
 docker exec -u root "$CONTAINER_NAME" sh -c "find \"$WORK_DIR\" -maxdepth 1 -not -name \".git\" -not -path \"$WORK_DIR\" -exec chown -R node:node {} +" 2>/dev/null || true
 
-# 6. Warmup - with fallback resolution
+# 6. Warmup - init scripts (.local > .repo > .base)
 echo "🚀 Triggering background init..."
-INIT_BG_SCRIPT=$(resolve_file "init-background.sh")
-[ -z "$INIT_BG_SCRIPT" ] && INIT_BG_SCRIPT=$(resolve_file "init-background.base.sh")
+INIT_BG_SCRIPT=$(resolve_file "init-background" "sh")
 if [ -n "$INIT_BG_SCRIPT" ]; then
+    echo "   Using: $INIT_BG_SCRIPT"
     docker exec -d -u node "$CONTAINER_NAME" "$INIT_BG_SCRIPT"
 fi
 
 echo "🚀 Triggering foreground init..."
-INIT_FG_SCRIPT=$(resolve_file "init-foreground.sh")
-[ -z "$INIT_FG_SCRIPT" ] && INIT_FG_SCRIPT=$(resolve_file "init-foreground.base.sh")
+INIT_FG_SCRIPT=$(resolve_file "init-foreground" "sh")
 if [ -n "$INIT_FG_SCRIPT" ]; then
+    echo "   Using: $INIT_FG_SCRIPT"
     docker exec -u node "$CONTAINER_NAME" "$INIT_FG_SCRIPT"
 fi
 
