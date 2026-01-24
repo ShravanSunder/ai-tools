@@ -91,7 +91,7 @@ validate_container_name() {
     local container="$1"
     
     # Must match known sidecar naming patterns
-    if [[ "$container" =~ ^ai-coder-sidecar-[a-z0-9-]+-[a-f0-9]{8}$ ]] || \
+    if [[ "$container" =~ ^agent-sidecar-[a-z0-9-]+-[a-f0-9]{8}$ ]] || \
        [[ "$container" =~ ^voyager-sidecar-[a-f0-9]{8}$ ]]; then
         return 0
     fi
@@ -113,7 +113,7 @@ find_container() {
     
     # Try both naming patterns
     local container=""
-    for pattern in "ai-coder-sidecar-${repo_name}-${dir_hash}" "voyager-sidecar-${dir_hash}"; do
+    for pattern in "agent-sidecar-${repo_name}-${dir_hash}"; do
         if docker ps -q -f "name=^${pattern}$" 2>/dev/null | grep -q .; then
             container="$pattern"
             break
@@ -155,13 +155,13 @@ validate_toggle_file() {
         exit 1
     fi
     
-    # Must be under a known safe directory (sidecar dir or .devcontainer)
+    # Must be under a known safe directory (sidecar dir or .agent_sidecar)
     local real_path
     real_path=$(realpath -m "$file_path" 2>/dev/null || echo "$file_path")
     
-    if [[ "$real_path" != "$SIDECAR_DIR/"* ]] && [[ "$real_path" != *"/.devcontainer/"* ]] && [[ "$real_path" != *"/ai_coder_sidecar/"* ]]; then
+    if [[ "$real_path" != "$SIDECAR_DIR/"* ]] && [[ "$real_path" != *"/.agent_sidecar/"* ]] && [[ "$real_path" != *"/agent_sidecar/"* ]]; then
         log_error "SAFETY: File path not in allowed directory: $file_path"
-        log_error "Must be under sidecar dir or .devcontainer"
+        log_error "Must be under sidecar dir or .agent_sidecar"
         exit 1
     fi
     
@@ -185,9 +185,9 @@ get_toggle_allowlist() {
         # Try to find it in the workspace
         local work_dir
         work_dir=$(docker inspect "$container" --format '{{.Config.WorkingDir}}')
-        if [[ -d "$work_dir/.devcontainer" ]]; then
-            mkdir -p "$work_dir/.devcontainer/.generated"
-            toggle_file="$work_dir/.devcontainer/.generated/firewall-allowlist-toggle.tmp.txt"
+        if [[ -d "$work_dir/.agent_sidecar" ]]; then
+            mkdir -p "$work_dir/.agent_sidecar/.generated"
+            toggle_file="$work_dir/.agent_sidecar/.generated/firewall-allowlist-toggle.tmp.txt"
         else
             mkdir -p "$SIDECAR_DIR/.generated"
             toggle_file="$SIDECAR_DIR/.generated/firewall-allowlist-toggle.tmp.txt"
@@ -481,13 +481,13 @@ cmd_status() {
     local container
     container=$(find_container)
     
-    echo "=== AI Coder Sidecar Status ==="
+    echo "=== Agent Sidecar Status ==="
     echo ""
     
     if [[ -z "$container" ]]; then
         log_warn "No sidecar container found for current directory"
         echo ""
-        echo "Run: ai-coder-sidecar-router.sh"
+        echo "Run: agent-sidecar-router.sh"
         return
     fi
     
@@ -506,7 +506,7 @@ cmd_status() {
 
 cmd_containers() {
     echo "=== All Sidecar Containers ==="
-    docker ps -a --filter "name=ai-coder-sidecar" --filter "name=voyager-sidecar" \
+    docker ps -a --filter "name=agent-sidecar" \
         --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 }
 

@@ -127,7 +127,7 @@ resolve_allowlist_files() {
     if [[ -z "$BASE_ALLOWLIST" ]]; then
         # Try common locations
         for candidate in \
-            "$(pwd)/.devcontainer/firewall-allowlist-always.base.txt" \
+            "$(pwd)/.agent_sidecar/firewall-allowlist-always.base.txt" \
             "/usr/local/etc/firewall/firewall-allowlist-always.base.txt" \
             "${SCRIPT_DIR:-}/firewall-allowlist-always.base.txt"
         do
@@ -150,7 +150,7 @@ resolve_allowlist_files() {
     
     # Toggle base is in setup/ (tracked), toggle tmp is in .generated/ (same as compiled file)
     local sidecar_dir
-    sidecar_dir=$(dirname "$base_dir")  # Go up from .generated to ai_coder_sidecar
+    sidecar_dir=$(dirname "$base_dir")  # Go up from .generated to agent_sidecar
     TOGGLE_ALLOWLIST_BASE="${FIREWALL_ALLOWLIST_TOGGLE:-$sidecar_dir/setup/firewall-allowlist-toggle.base.txt}"
     TOGGLE_ALLOWLIST_TMP="$base_dir/firewall-allowlist-toggle.tmp.txt"
 }

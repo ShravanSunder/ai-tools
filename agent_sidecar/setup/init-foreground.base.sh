@@ -1,5 +1,5 @@
 #!/bin/zsh
-# .devcontainer/init-foreground.sh
+# .agent_sidecar/init-foreground.sh
 # Shell Readiness: Ensure Atuin -> Zap -> Zsh are ready sequentially
 
 echo "🐚 Preparing shell session..."

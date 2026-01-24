@@ -4,7 +4,7 @@ set -e
 # =============================================================================
 # AI Coder Sidecar - Repo-agnostic container launcher for AI coding agents
 # =============================================================================
-# Usage: run_ai_coder_sidecar.sh [OPTIONS]
+# Usage: run-agent-sidecar.sh [OPTIONS]
 #   --reset         Remove and recreate container
 #   --no-run        Setup only, don't exec into container
 #   --run <cmd>     Run specific command in container
@@ -44,8 +44,8 @@ fi
 # Generate a unique hash based on the worktree root path
 DIR_HASH=$(echo -n "$WORK_DIR" | md5sum | cut -c1-8)
 
-CONTAINER_NAME="ai-coder-sidecar-${REPO_NAME}-${DIR_HASH}"
-HISTORY_VOLUME="ai-coder-bashhistory-${DIR_HASH}"
+CONTAINER_NAME="agent-sidecar-${REPO_NAME}-${DIR_HASH}"
+HISTORY_VOLUME="agent-sidecar-history-${DIR_HASH}"
 LOCAL_CLAUDE_DIR="$HOME/.claude"
 LOCAL_ATUIN_DIR="$HOME/.config/atuin"
 LOCAL_ATUIN_DATA_DIR="$HOME/.local/share/atuin"
@@ -112,14 +112,14 @@ echo "   Repo: $REPO_NAME ($WORK_DIR)"
 # =============================================================================
 # Naming convention:
 #   .base  = Source of truth (ai-tools)
-#   .repo  = Team overrides (committed to repo's .devcontainer/)
+#   .repo  = Team overrides (committed to repo's .agent_sidecar/)
 #   .local = Personal overrides (gitignored)
 #
 # Usage: resolve_file "basename" "ext"
 #   e.g., resolve_file "init-background" "sh"
 #   Returns first found: init-background.local.sh > init-background.repo.sh > init-background.base.sh
 # =============================================================================
-REPO_DEVCONTAINER="$WORK_DIR/.devcontainer"
+REPO_SIDECAR="$WORK_DIR/.agent_sidecar"
 
 resolve_file() {
     local basename="$1"  # e.g., "init-background" or "dockerfile-image"
@@ -132,14 +132,14 @@ resolve_file() {
     fi
     
     # 1. Local override (gitignored)
-    local local_file="$REPO_DEVCONTAINER/${basename}.local${suffix}"
+    local local_file="$REPO_SIDECAR/${basename}.local${suffix}"
     if [ -f "$local_file" ]; then
         echo "$local_file"
         return
     fi
     
     # 2. Repo override (checked in)
-    local repo_file="$REPO_DEVCONTAINER/${basename}.repo${suffix}"
+    local repo_file="$REPO_SIDECAR/${basename}.repo${suffix}"
     if [ -f "$repo_file" ]; then
         echo "$repo_file"
         return
@@ -158,7 +158,7 @@ resolve_file() {
 # =============================================================================
 # Default Configuration - Set before loading configs so they can be overridden
 # =============================================================================
-IMAGE_NAME="ai-coder-sidecar-image"
+IMAGE_NAME="agent-sidecar-image"
 DOCKERFILE_VARIANT="node-py"
 EXTRA_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro"
 
@@ -172,13 +172,13 @@ load_config() {
     fi
     
     # Load repo overrides (checked in)
-    if [ -f "$REPO_DEVCONTAINER/sidecar.repo.conf" ]; then
-        source "$REPO_DEVCONTAINER/sidecar.repo.conf"
+    if [ -f "$REPO_SIDECAR/sidecar.repo.conf" ]; then
+        source "$REPO_SIDECAR/sidecar.repo.conf"
     fi
     
     # Load local overrides (gitignored)
-    if [ -f "$REPO_DEVCONTAINER/sidecar.local.conf" ]; then
-        source "$REPO_DEVCONTAINER/sidecar.local.conf"
+    if [ -f "$REPO_SIDECAR/sidecar.local.conf" ]; then
+        source "$REPO_SIDECAR/sidecar.local.conf"
     fi
 }
 
@@ -189,22 +189,22 @@ load_config() {
 # Tier: base (ai-tools), repo (committed), local (gitignored)
 #
 # Resolution order for selected variant:
-#   1. $REPO_DEVCONTAINER/{variant}.local.dockerfile (personal, gitignored)
-#   2. $REPO_DEVCONTAINER/{variant}.repo.dockerfile (team, committed)
+#   1. $REPO_SIDECAR/{variant}.local.dockerfile (personal, gitignored)
+#   2. $REPO_SIDECAR/{variant}.repo.dockerfile (team, committed)
 #   3. $SCRIPT_DIR/{variant}.base.dockerfile (default)
 # =============================================================================
 resolve_dockerfile() {
     local variant="${DOCKERFILE_VARIANT:-nodepy}"
     
     # 1. Local override (gitignored)
-    if [ -f "$REPO_DEVCONTAINER/${variant}.local.dockerfile" ]; then
-        echo "$REPO_DEVCONTAINER/${variant}.local.dockerfile"
+    if [ -f "$REPO_SIDECAR/${variant}.local.dockerfile" ]; then
+        echo "$REPO_SIDECAR/${variant}.local.dockerfile"
         return
     fi
     
     # 2. Repo override (committed)
-    if [ -f "$REPO_DEVCONTAINER/${variant}.repo.dockerfile" ]; then
-        echo "$REPO_DEVCONTAINER/${variant}.repo.dockerfile"
+    if [ -f "$REPO_SIDECAR/${variant}.repo.dockerfile" ]; then
+        echo "$REPO_SIDECAR/${variant}.repo.dockerfile"
         return
     fi
     
@@ -250,17 +250,17 @@ merge_firewall_lists() {
     fi
     
     # Repo additions (.repo - checked in)
-    if [ -f "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" ]; then
+    if [ -f "$REPO_SIDECAR/firewall-allowlist.repo.txt" ]; then
         echo "" >> "$COMPILED_FIREWALL_FILE"
         echo "# --- Repo-specific additions (.repo) ---" >> "$COMPILED_FIREWALL_FILE"
-        cat "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" >> "$COMPILED_FIREWALL_FILE"
+        cat "$REPO_SIDECAR/firewall-allowlist.repo.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
     
     # Local additions (.local - gitignored)
-    if [ -f "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" ]; then
+    if [ -f "$REPO_SIDECAR/firewall-allowlist.local.txt" ]; then
         echo "" >> "$COMPILED_FIREWALL_FILE"
         echo "# --- Local additions (.local) ---" >> "$COMPILED_FIREWALL_FILE"
-        cat "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" >> "$COMPILED_FIREWALL_FILE"
+        cat "$REPO_SIDECAR/firewall-allowlist.local.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
     
     echo "$COMPILED_FIREWALL_FILE"
@@ -268,21 +268,21 @@ merge_firewall_lists() {
 
 FIREWALL_ALLOWLIST=$(merge_firewall_lists)
 
-VENV_VOLUME="ai-coder-venv-${DIR_HASH}"
-PNPM_STORE_VOLUME="ai-coder-pnpm-store-${DIR_HASH}"
+VENV_VOLUME="agent-sidecar-venv-${DIR_HASH}"
+PNPM_STORE_VOLUME="agent-sidecar-pnpm-${DIR_HASH}"
 
 # Discover all node_modules directories and create isolated volumes for each
 # This shadows host node_modules so container gets Linux-native packages
 NODE_MODULES_VOLUMES=""
 for dir in $(find "$WORK_DIR" -name "node_modules" -type d -not -path "*/.*" 2>/dev/null); do
     PATH_HASH=$(echo -n "$dir" | md5sum | cut -c1-8)
-    VOL_NAME="ai-coder-nm-${DIR_HASH}-${PATH_HASH}"
+    VOL_NAME="agent-sidecar-nm-${DIR_HASH}-${PATH_HASH}"
     docker volume create "$VOL_NAME" >/dev/null 2>&1 || true
     NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $VOL_NAME:$dir"
 done
 
 # Also ensure root node_modules is covered even if it doesn't exist yet on host
-ROOT_NM_VOL="ai-coder-nm-${DIR_HASH}-root"
+ROOT_NM_VOL="agent-sidecar-nm-${DIR_HASH}-root"
 docker volume create "$ROOT_NM_VOL" >/dev/null 2>&1 || true
 # Only add if not already in the list
 if ! echo "$NODE_MODULES_VOLUMES" | grep -qF "$WORK_DIR/node_modules"; then
@@ -337,7 +337,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -v "$LOCAL_OPENCODE_DIR":"$LOCAL_OPENCODE_DIR" \
         -v "$HISTORY_VOLUME":/commandhistory \
         -v "$SCRIPT_DIR":"$SCRIPT_DIR":ro \
-        -v "$REPO_DEVCONTAINER":"$REPO_DEVCONTAINER":ro \
+        -v "$REPO_SIDECAR":"$REPO_SIDECAR":ro \
         -e CLAUDE_CONFIG_DIR="$LOCAL_CLAUDE_DIR" \
         -e OPENCODE_CONFIG_DIR="$LOCAL_OPENCODE_DIR" \
         -e CODEX_HOME="$LOCAL_CODEX_DIR" \

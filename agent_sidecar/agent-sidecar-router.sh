@@ -2,40 +2,40 @@
 set -e
 
 # =============================================================================
-# AI Coder Sidecar Router
+# Agent Sidecar Router
 # =============================================================================
-# Routes to local .devcontainer/ script if available, otherwise uses global.
+# Routes to local .agent_sidecar/ script if available, otherwise uses global.
 #
 # Priority order:
-#   1. --use-router flag forces use of base sidecar (ignores .devcontainer)
-#   2. .devcontainer/run_ai_coder_sidecar.sh in current repo (if exists)
-#   3. Base run_ai_coder_sidecar.sh (fallback)
+#   1. --use-router flag forces use of base sidecar (ignores .agent_sidecar)
+#   2. .agent_sidecar/run-agent-sidecar.sh in current repo (if exists)
+#   3. Base run-agent-sidecar.sh (fallback)
 #
-# Usage: ai_coder_sidecar_router.sh [OPTIONS]
-#   --use-router    Force use of base router sidecar (ignore .devcontainer)
+# Usage: agent-sidecar-router.sh [OPTIONS]
+#   --use-router    Force use of base router sidecar (ignore .agent_sidecar)
 #   --help          Show this help message
 #   All other options are passed through to the underlying script.
 #
 # Examples:
-#   ai_coder_sidecar_router.sh                    # Auto-detect (prefers .devcontainer)
-#   ai_coder_sidecar_router.sh --use-router       # Force base sidecar
-#   ai_coder_sidecar_router.sh --run-claude       # Run Claude Code
-#   ai_coder_sidecar_router.sh --use-router --run-claude  # Force base + run Claude
+#   agent-sidecar-router.sh                    # Auto-detect (prefers .agent_sidecar)
+#   agent-sidecar-router.sh --use-router       # Force base sidecar
+#   agent-sidecar-router.sh --run-claude       # Run Claude Code
+#   agent-sidecar-router.sh --use-router --run-claude  # Force base + run Claude
 # =============================================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOCAL_SCRIPT=".devcontainer/run-ai-coder-sidecar.sh"
-GLOBAL_SCRIPT="$SCRIPT_DIR/run-ai-coder-sidecar.sh"
+LOCAL_SCRIPT=".agent_sidecar/run-agent-sidecar.sh"
+GLOBAL_SCRIPT="$SCRIPT_DIR/run-agent-sidecar.sh"
 
 # Show help
 show_help() {
     cat <<EOF
-AI Coder Sidecar Router
+Agent Sidecar Router
 
 Usage: $(basename "$0") [OPTIONS]
 
 Router Options:
-  --use-router    Force use of base router sidecar (ignore .devcontainer)
+  --use-router    Force use of base router sidecar (ignore .agent_sidecar)
   --help          Show this help message
 
 Sidecar Options (passed through):
@@ -50,7 +50,7 @@ Sidecar Options (passed through):
 
 Priority Order:
   1. --use-router flag (forces base sidecar)
-  2. .devcontainer/run_ai_coder_sidecar.sh (if exists in repo)
+  2. .agent_sidecar/run-agent-sidecar.sh (if exists in repo)
   3. Base sidecar (fallback)
 
 Examples:
@@ -86,9 +86,9 @@ if [ "$USE_ROUTER" = true ]; then
     echo "🔀 Using base sidecar (--use-router flag)"
     exec "$GLOBAL_SCRIPT" "${REMAINING_ARGS[@]}"
 elif [ -f "$LOCAL_SCRIPT" ]; then
-    echo "🔀 Using local .devcontainer sidecar"
+    echo "🔀 Using local .agent_sidecar sidecar"
     exec "$LOCAL_SCRIPT" "${REMAINING_ARGS[@]}"
 else
-    echo "🔀 Using base sidecar (no .devcontainer found)"
+    echo "🔀 Using base sidecar (no .agent_sidecar found)"
     exec "$GLOBAL_SCRIPT" "${REMAINING_ARGS[@]}"
 fi

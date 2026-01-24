@@ -1,5 +1,5 @@
 #!/bin/zsh
-# .devcontainer/init-background.sh
+# .agent_sidecar/init-background.sh
 # Infrastructure Sync: Raw dependency installation without shell overhead
 
 echo "📦 Syncing infrastructure..."
