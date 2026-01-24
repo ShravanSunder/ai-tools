@@ -2,7 +2,7 @@
 
 Personal AI development tools and sandboxed environments.
 
-## AI Coder Sidecar
+## Agent Sidecar
 
 Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini CLI) with network isolation.
 
@@ -10,32 +10,37 @@ Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini 
 
 ```bash
 # From any git repository
-~/dev/ai-tools/ai_coder_sidecar/ai-coder-sidecar-router.sh
+~/dev/ai-tools/agent_sidecar/agent-sidecar-router.sh
 
 # Or use the base sidecar directly
-~/dev/ai-tools/ai_coder_sidecar/run-ai-coder-sidecar.sh
+~/dev/ai-tools/agent_sidecar/run-agent-sidecar.sh
 ```
 
 ### Directory Structure
 
 ```
-ai_coder_sidecar/
-├── Dockerfile                           # Base container image
-├── run-ai-coder-sidecar.sh              # Main launch script
-├── ai-coder-sidecar-router.sh           # Routes to .devcontainer or base
-├── firewall.sh                          # Egress firewall (runs in container)
-├── firewall-allowlist-always.base.txt   # Always-allowed domains
-├── firewall-allowlist-toggle.base.txt   # Dynamically toggled domains
-├── firewall-presets/                    # Preset domain lists
+agent_sidecar/
+├── node-py.base.dockerfile              # Base container image
+├── run-agent-sidecar.sh                 # Main launch script
+├── agent-sidecar-router.sh              # Routes to .agent_sidecar or base
+├── sidecar-ctl.sh                       # Host-side control script
+├── sidecar.base.conf                    # Base configuration
+├── setup/
+│   ├── firewall.sh                      # Egress firewall (runs in container)
+│   ├── firewall-allowlist.base.txt      # Always-allowed domains
+│   ├── firewall-allowlist-toggle.base.txt # Toggle base domains
+│   ├── init-background.base.sh          # Background init (Xvfb, etc.)
+│   ├── init-foreground.base.sh          # Shell init (Atuin, Zap)
+│   └── .base.zshrc                      # Base zsh config
+├── firewall-toggle-presets/             # Preset domain lists
 │   ├── github-write.txt
 │   ├── jira.txt
 │   ├── linear.txt
 │   ├── notion.txt
 │   └── slack.txt
-├── sidecar-ctl.sh                       # Host-side control script
-├── init-background.base.sh              # Background init (Xvfb, etc.)
-├── init-foreground.base.sh              # Shell init (Atuin, Zap)
-└── .base.zshrc                          # Base zsh config
+└── .generated/                          # Runtime files (gitignored)
+    ├── firewall-allowlist.compiled.txt  # Merged allowlist
+    └── firewall-allowlist-toggle.tmp.txt # Toggle state
 ```
 
 ### Host Control Script
@@ -43,9 +48,9 @@ ai_coder_sidecar/
 The `sidecar-ctl.sh` script provides host-side control over running sidecars:
 
 ```bash
-# Add ai_coder_sidecar to PATH, or create an alias
-export PATH="$PATH:$HOME/dev/ai-tools/ai_coder_sidecar"
-# or: alias sidecar-ctl="$HOME/dev/ai-tools/ai_coder_sidecar/sidecar-ctl.sh"
+# Add agent_sidecar to PATH, or create an alias
+export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
+# or: alias sidecar-ctl="$HOME/dev/ai-tools/agent_sidecar/sidecar-ctl.sh"
 
 # Check status (run from project directory)
 cd ~/Documents/code/my-project
@@ -65,19 +70,21 @@ sidecar-ctl firewall reload            # Reload firewall rules
 
 ### Firewall Allowlists
 
-**Two-tier allowlist system:**
+**Three-tier allowlist system:**
 
-1. **Always Allowlist** (`firewall-allowlist-always.base.txt`): Domains always permitted
+1. **Base Allowlist** (`setup/firewall-allowlist.base.txt`): Domains always permitted
    - Package registries (npm, pypi, etc.)
    - AI services (anthropic, openai, etc.)
    - GitHub (read-only by default)
    - Common dev services
 
-2. **Toggle Allowlist** (`firewall-allowlist-toggle.base.txt`): Dynamically enabled/disabled
-   - Managed via `sidecar-ctl firewall allow/block`
-   - Auto-reverts with `toggle` command timeout
+2. **Repo/Local Overrides**: Add domains per-project
+   - `.agent_sidecar/firewall-allowlist.repo.txt` (team, committed)
+   - `.agent_sidecar/firewall-allowlist.local.txt` (personal, gitignored)
 
-**Presets** in `firewall-presets/`:
+3. **Toggle Presets**: Dynamically enabled/disabled via `sidecar-ctl`
+
+**Presets** in `firewall-toggle-presets/`:
 - `github-write` - GitHub push access
 - `jira` - Atlassian Jira
 - `notion` - Notion API
@@ -86,32 +93,35 @@ sidecar-ctl firewall reload            # Reload firewall rules
 
 ### Per-Project Customization
 
-Create a `.devcontainer/` directory in your project with:
+Create a `.agent_sidecar/` directory in your project:
 
 ```
-.devcontainer/
-├── Dockerfile                           # Extend base or custom
-├── run-ai-coder-sidecar.sh              # Custom launch script
-├── firewall.sh                          # Copy from base
-├── firewall-allowlist-always.base.txt   # Project-specific always-allowed
-├── firewall-allowlist-toggle.base.txt   # Project-specific toggles
-└── .zshrc                               # Additional shell config (optional)
+.agent_sidecar/
+├── README.md                            # Instructions (recommended)
+├── .gitignore                           # Ignore local overrides
+├── sidecar.repo.conf                    # Team config overrides (optional)
+└── firewall-allowlist.repo.txt          # Extra domains for this repo (optional)
 ```
 
-The router script (`ai-coder-sidecar-router.sh`) will automatically use `.devcontainer/run-ai-coder-sidecar.sh` if present.
+Override files follow the pattern: `{name}.repo.{ext}` (committed) or `{name}.local.{ext}` (gitignored).
 
 **Force base sidecar:**
 ```bash
-ai-coder-sidecar-router.sh --use-router
+agent-sidecar-router.sh --use-router
 ```
 
 ### Launch Options
 
 ```bash
-run-ai-coder-sidecar.sh [options]
+run-agent-sidecar.sh [options]
 
 Options:
-  --reset     Remove existing container and create fresh
-  --no-run    Setup only, don't exec into shell
-  --rebuild   Force rebuild Docker image
+  --reset         Remove existing container and create fresh
+  --no-run        Setup only, don't exec into shell
+  --run <cmd>     Run specific command
+  --run-claude    Run Claude Code
+  --run-codex     Run OpenAI Codex
+  --run-gemini    Run Gemini CLI
+  --run-opencode  Run OpenCode
+  --run-cursor    Run Cursor
 ```
