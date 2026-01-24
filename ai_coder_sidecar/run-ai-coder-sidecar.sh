@@ -17,7 +17,6 @@ set -e
 
 # Configuration - Use directory where this script lives
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-IMAGE_NAME="ai-coder-sidecar-image"
 
 # Git-Native Path Discovery
 WORK_DIR=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -128,35 +127,59 @@ resolve_file() {
     
     # Build suffix: ".sh" or "" (for files without extensions)
     local suffix=""
-    [ -n "$ext" ] && suffix=".${ext}"
+    if [ -n "$ext" ]; then
+        suffix=".${ext}"
+    fi
     
     # 1. Local override (gitignored)
     local local_file="$REPO_DEVCONTAINER/${basename}.local${suffix}"
-    [ -f "$local_file" ] && { echo "$local_file"; return; }
+    if [ -f "$local_file" ]; then
+        echo "$local_file"
+        return
+    fi
     
     # 2. Repo override (checked in)
     local repo_file="$REPO_DEVCONTAINER/${basename}.repo${suffix}"
-    [ -f "$repo_file" ] && { echo "$repo_file"; return; }
+    if [ -f "$repo_file" ]; then
+        echo "$repo_file"
+        return
+    fi
     
     # 3. Base (ai-tools/setup/)
     local base_file="$SCRIPT_DIR/setup/${basename}.base${suffix}"
-    [ -f "$base_file" ] && { echo "$base_file"; return; }
+    if [ -f "$base_file" ]; then
+        echo "$base_file"
+        return
+    fi
     
     echo ""
 }
 
 # =============================================================================
+# Default Configuration - Set before loading configs so they can be overridden
+# =============================================================================
+IMAGE_NAME="ai-coder-sidecar-image"
+DOCKERFILE_VARIANT="node-py"
+EXTRA_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro"
+
+# =============================================================================
 # Configuration Loading - Three-tier: .local > .repo > .base
 # =============================================================================
 load_config() {
-    # Load base defaults
-    [ -f "$SCRIPT_DIR/sidecar.base.conf" ] && source "$SCRIPT_DIR/sidecar.base.conf"
+    # Load base config (can override defaults above)
+    if [ -f "$SCRIPT_DIR/sidecar.base.conf" ]; then
+        source "$SCRIPT_DIR/sidecar.base.conf"
+    fi
     
     # Load repo overrides (checked in)
-    [ -f "$REPO_DEVCONTAINER/sidecar.repo.conf" ] && source "$REPO_DEVCONTAINER/sidecar.repo.conf"
+    if [ -f "$REPO_DEVCONTAINER/sidecar.repo.conf" ]; then
+        source "$REPO_DEVCONTAINER/sidecar.repo.conf"
+    fi
     
     # Load local overrides (gitignored)
-    [ -f "$REPO_DEVCONTAINER/sidecar.local.conf" ] && source "$REPO_DEVCONTAINER/sidecar.local.conf"
+    if [ -f "$REPO_DEVCONTAINER/sidecar.local.conf" ]; then
+        source "$REPO_DEVCONTAINER/sidecar.local.conf"
+    fi
 }
 
 # =============================================================================
@@ -174,12 +197,16 @@ resolve_dockerfile() {
     local variant="${DOCKERFILE_VARIANT:-nodepy}"
     
     # 1. Local override (gitignored)
-    [ -f "$REPO_DEVCONTAINER/${variant}.local.dockerfile" ] && \
-        { echo "$REPO_DEVCONTAINER/${variant}.local.dockerfile"; return; }
+    if [ -f "$REPO_DEVCONTAINER/${variant}.local.dockerfile" ]; then
+        echo "$REPO_DEVCONTAINER/${variant}.local.dockerfile"
+        return
+    fi
     
     # 2. Repo override (committed)
-    [ -f "$REPO_DEVCONTAINER/${variant}.repo.dockerfile" ] && \
-        { echo "$REPO_DEVCONTAINER/${variant}.repo.dockerfile"; return; }
+    if [ -f "$REPO_DEVCONTAINER/${variant}.repo.dockerfile" ]; then
+        echo "$REPO_DEVCONTAINER/${variant}.repo.dockerfile"
+        return
+    fi
     
     # 3. Base (ai-tools)
     echo "$SCRIPT_DIR/${variant}.base.dockerfile"
@@ -208,40 +235,35 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
 fi
 
 # 3. Merge firewall allowlists (.base + .repo + .local)
-# Create merged file in SCRIPT_DIR so it's accessible inside container
-MERGED_FIREWALL_FILE="$SCRIPT_DIR/firewall-allowlist-merged.txt"
+# Create compiled file in .generated/ so it's accessible inside container
+GENERATED_DIR="$SCRIPT_DIR/.generated"
+mkdir -p "$GENERATED_DIR"
+COMPILED_FIREWALL_FILE="$GENERATED_DIR/firewall-allowlist.compiled.txt"
 
 merge_firewall_lists() {
     # Start fresh
-    > "$MERGED_FIREWALL_FILE"
+    > "$COMPILED_FIREWALL_FILE"
     
     # Base always included
     if [ -f "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" ]; then
-        cat "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" >> "$MERGED_FIREWALL_FILE"
+        cat "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
     
     # Repo additions (.repo - checked in)
     if [ -f "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" ]; then
-        echo "" >> "$MERGED_FIREWALL_FILE"
-        echo "# --- Repo-specific additions (.repo) ---" >> "$MERGED_FIREWALL_FILE"
-        cat "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" >> "$MERGED_FIREWALL_FILE"
+        echo "" >> "$COMPILED_FIREWALL_FILE"
+        echo "# --- Repo-specific additions (.repo) ---" >> "$COMPILED_FIREWALL_FILE"
+        cat "$REPO_DEVCONTAINER/firewall-allowlist.repo.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
     
     # Local additions (.local - gitignored)
     if [ -f "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" ]; then
-        echo "" >> "$MERGED_FIREWALL_FILE"
-        echo "# --- Local additions (.local) ---" >> "$MERGED_FIREWALL_FILE"
-        cat "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" >> "$MERGED_FIREWALL_FILE"
+        echo "" >> "$COMPILED_FIREWALL_FILE"
+        echo "# --- Local additions (.local) ---" >> "$COMPILED_FIREWALL_FILE"
+        cat "$REPO_DEVCONTAINER/firewall-allowlist.local.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
     
-    # Extra domains from config
-    if [ -n "$EXTRA_FIREWALL_DOMAINS" ]; then
-        echo "" >> "$MERGED_FIREWALL_FILE"
-        echo "# --- Config additions ---" >> "$MERGED_FIREWALL_FILE"
-        echo "$EXTRA_FIREWALL_DOMAINS" | tr ',' '\n' >> "$MERGED_FIREWALL_FILE"
-    fi
-    
-    echo "$MERGED_FIREWALL_FILE"
+    echo "$COMPILED_FIREWALL_FILE"
 }
 
 FIREWALL_ALLOWLIST=$(merge_firewall_lists)
@@ -365,7 +387,8 @@ fi
 
 # Execution Logic
 if [ -n "$RUN_CMD" ]; then
-    FULL_EXEC_CMD="docker exec -it $CONTAINER_NAME zsh -c \"$RUN_CMD\""
+    # Use zsh -i -c to source .zshrc (for PATH to include ~/.local/bin)
+    FULL_EXEC_CMD="docker exec -it $CONTAINER_NAME zsh -i -c \"$RUN_CMD\""
 else
     FULL_EXEC_CMD="docker exec -it $CONTAINER_NAME zsh"
 fi
@@ -378,7 +401,7 @@ if [ "$NO_RUN" = true ]; then
 else
     if [ -n "$RUN_CMD" ]; then
         echo "🚀 Starting agent..."
-        exec docker exec -it "$CONTAINER_NAME" zsh -c "$RUN_CMD"
+        exec docker exec -it "$CONTAINER_NAME" zsh -i -c "$RUN_CMD"
     else
         echo "🚗 Entering sidecar..."
         exec docker exec -it "$CONTAINER_NAME" zsh

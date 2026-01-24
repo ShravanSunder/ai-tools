@@ -62,6 +62,11 @@ case ":$PATH:" in
 esac
 
 # #######################
+# Native installers (claude, cursor, opencode)
+# #######################
+export PATH="$HOME/.local/bin:$PATH"
+
+# #######################
 # COMPLETION SYSTEM
 # #######################
 autoload -Uz compinit

@@ -29,7 +29,6 @@ RUN usermod -l node pn && \
     chmod 0440 /etc/sudoers.d/node
 
 ARG USERNAME=node
-ARG CLAUDE_CODE_VERSION=latest
 
 # Install basic development tools and iptables/ipset
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -55,6 +54,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     wget \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install AWS CLI v2
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
+  unzip awscliv2.zip && ./aws/install && rm -rf aws awscliv2.zip
 
 # Playwright dependencies + Xvfb for headed mode (Electron apps, screenshots)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -180,8 +183,8 @@ USER root
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /usr/share/zsh-syntax-highlighting
 USER node
 
-# Install agents
-RUN pnpm add -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+# Install Claude Code (native installer - better performance, security, auto-updates)
+RUN curl -fsSL https://claude.ai/install.sh | bash
 RUN pnpm add -g @openai/codex
 RUN pnpm add -g @google/gemini-cli
 RUN curl -fsSL https://opencode.ai/install | bash
@@ -202,10 +205,3 @@ RUN chmod +x /usr/local/bin/firewall.sh && \
   chmod 0440 /etc/sudoers.d/node-firewall
 
 USER node
-
-# =============================================================================
-# EXTENSION POINT
-# =============================================================================
-# Repos can add extra instructions by overriding this entire Dockerfile
-# or by creating .devcontainer/Dockerfile with additional layers.
-# =============================================================================

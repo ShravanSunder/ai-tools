@@ -177,17 +177,20 @@ get_toggle_allowlist() {
     local script_dir
     script_dir=$(docker inspect "$container" --format '{{range .Config.Env}}{{println .}}{{end}}' | grep '^SCRIPT_DIR=' | cut -d= -f2)
     
-    # Determine the base directory for toggle file
+    # Determine the base directory for toggle file (in .generated/)
     if [[ -n "$script_dir" && -d "$script_dir" ]]; then
-        toggle_file="$script_dir/firewall-allowlist-toggle.tmp.txt"
+        mkdir -p "$script_dir/.generated"
+        toggle_file="$script_dir/.generated/firewall-allowlist-toggle.tmp.txt"
     else
         # Try to find it in the workspace
         local work_dir
         work_dir=$(docker inspect "$container" --format '{{.Config.WorkingDir}}')
         if [[ -d "$work_dir/.devcontainer" ]]; then
-            toggle_file="$work_dir/.devcontainer/firewall-allowlist-toggle.tmp.txt"
+            mkdir -p "$work_dir/.devcontainer/.generated"
+            toggle_file="$work_dir/.devcontainer/.generated/firewall-allowlist-toggle.tmp.txt"
         else
-            toggle_file="$SIDECAR_DIR/firewall-allowlist-toggle.tmp.txt"
+            mkdir -p "$SIDECAR_DIR/.generated"
+            toggle_file="$SIDECAR_DIR/.generated/firewall-allowlist-toggle.tmp.txt"
         fi
     fi
     

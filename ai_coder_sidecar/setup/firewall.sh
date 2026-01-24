@@ -148,7 +148,10 @@ resolve_allowlist_files() {
     local base_dir
     base_dir=$(dirname "$BASE_ALLOWLIST")
     
-    TOGGLE_ALLOWLIST_BASE="${FIREWALL_ALLOWLIST_TOGGLE:-$base_dir/firewall-allowlist-toggle.base.txt}"
+    # Toggle base is in setup/ (tracked), toggle tmp is in .generated/ (same as compiled file)
+    local sidecar_dir
+    sidecar_dir=$(dirname "$base_dir")  # Go up from .generated to ai_coder_sidecar
+    TOGGLE_ALLOWLIST_BASE="${FIREWALL_ALLOWLIST_TOGGLE:-$sidecar_dir/setup/firewall-allowlist-toggle.base.txt}"
     TOGGLE_ALLOWLIST_TMP="$base_dir/firewall-allowlist-toggle.tmp.txt"
 }
 
