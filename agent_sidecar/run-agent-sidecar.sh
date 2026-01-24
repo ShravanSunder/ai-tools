@@ -162,6 +162,7 @@ resolve_file() {
 IMAGE_NAME="agent-sidecar-image"
 DOCKERFILE_VARIANT="node-py"
 EXTRA_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro"
+EXTRA_APT_PACKAGES=""
 
 # =============================================================================
 # Configuration Loading - Three-tier: .local > .repo > .base
@@ -225,7 +226,14 @@ echo "📋 Using Dockerfile: $DOCKERFILE"
 
 # 1. Build the image
 echo "📦 Building Docker image ($IMAGE_NAME)..."
-docker build -t "$IMAGE_NAME" -f "$DOCKERFILE" "$SCRIPT_DIR"
+if [ -n "$EXTRA_APT_PACKAGES" ]; then
+    echo "   Extra APT packages: $EXTRA_APT_PACKAGES"
+fi
+docker build \
+    --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
+    -t "$IMAGE_NAME" \
+    -f "$DOCKERFILE" \
+    "$SCRIPT_DIR"
 
 # 1.5. Claude OAuth credentials: Export from macOS Keychain if needed
 # Native install on macOS stores OAuth in Keychain, but Linux container needs a file
@@ -356,6 +364,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e CODEX_HOME="$LOCAL_CODEX_DIR" \
         -e DEVCONTAINER=true \
         -e SCRIPT_DIR="$SCRIPT_DIR" \
+        -e WORK_DIR="$WORK_DIR" \
         -e FIREWALL_ALLOWLIST="$FIREWALL_ALLOWLIST" \
         -e VIRTUAL_ENV="$WORK_DIR/.venv" \
         -e PNPM_STORE_DIR="/home/node/.local/share/pnpm" \

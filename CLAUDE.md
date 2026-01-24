@@ -70,6 +70,27 @@ Example resolution for Dockerfile:
 - `firewall-toggle-presets/linear.txt` - Linear API
 - (relay-ai-tools only) `jira.txt`, `slack.txt`
 
+### Extra APT Packages (per-repo)
+
+Set `EXTRA_APT_PACKAGES` in `sidecar.repo.conf` or `sidecar.local.conf`:
+
+```bash
+# .agent_sidecar/sidecar.repo.conf
+EXTRA_APT_PACKAGES="chromium libfuse2"
+```
+
+Packages are installed at **Docker build time** (requires `--reset` to rebuild when changed).
+
+### Init Script Extras
+
+**Extra scripts** (run AFTER base init scripts, additive pattern):
+- `.agent_sidecar/init-background-extra.repo.sh` - Team background commands
+- `.agent_sidecar/init-background-extra.local.sh` - Personal background commands
+- `.agent_sidecar/init-foreground-extra.repo.sh` - Team shell setup
+- `.agent_sidecar/init-foreground-extra.local.sh` - Personal shell setup
+
+These run IN ADDITION to base scripts. The original `init-{bg,fg}.{repo,local}.sh` replacement pattern still works for full overrides.
+
 ### Container Naming
 
 Containers are named: `agent-sidecar-{repo-name}-{dir-hash}`

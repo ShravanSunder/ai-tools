@@ -32,3 +32,13 @@ else
 fi
 
 echo "✅ Infrastructure sync complete."
+
+# 4. EXTRA SCRIPTS: Run repo + local additions (additive, not replacement)
+# These run IN ADDITION to this base script, not instead of it
+for tier in repo local; do
+    EXTRA_SCRIPT="$WORK_DIR/.agent_sidecar/init-background-extra.${tier}.sh"
+    if [ -f "$EXTRA_SCRIPT" ] && [ -x "$EXTRA_SCRIPT" ]; then
+        echo "📦 Running init-background-extra.${tier}.sh..."
+        "$EXTRA_SCRIPT" || true
+    fi
+done

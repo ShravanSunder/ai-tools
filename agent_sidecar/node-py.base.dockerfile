@@ -80,6 +80,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-noto-color-emoji \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Per-repo apt packages (passed via --build-arg from sidecar.conf)
+ARG EXTRA_APT_PACKAGES=""
+RUN if [ -n "$EXTRA_APT_PACKAGES" ]; then \
+      echo "Installing extra apt packages: $EXTRA_APT_PACKAGES" && \
+      apt-get update && \
+      apt-get install -y --no-install-recommends $EXTRA_APT_PACKAGES && \
+      apt-get clean && rm -rf /var/lib/apt/lists/*; \
+    fi
+
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
