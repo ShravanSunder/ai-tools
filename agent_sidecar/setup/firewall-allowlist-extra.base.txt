@@ -46,7 +46,7 @@ codeload.github.com
 objects.githubusercontent.com
 pkg.github.com
 copilot-proxy.githubusercontent.com
-vscode-auth.github.com
+vscode-auth.github.co
 @github_meta
 
 # --- Cursor AI Editor (Telemetry, APIs, Updates) ---

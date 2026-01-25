@@ -204,12 +204,21 @@ get_toggle_allowlist() {
 
 # Re-merge all firewall allowlist extras into the compiled file
 recompile_firewall_allowlist() {
-    local compiled_file="$SIDECAR_DIR/.generated/firewall-allowlist.compiled.txt"
     local work_dir
     work_dir=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     local repo_sidecar="$work_dir/.agent_sidecar"
 
-    mkdir -p "$SIDECAR_DIR/.generated"
+    # Compile to project's .agent_sidecar/.generated/ if it exists, otherwise fall back to SIDECAR_DIR
+    local generated_dir
+    if [[ -d "$repo_sidecar" ]]; then
+        generated_dir="$repo_sidecar/.generated"
+    else
+        generated_dir="$SIDECAR_DIR/.generated"
+    fi
+
+    local compiled_file="$generated_dir/firewall-allowlist.compiled.txt"
+
+    mkdir -p "$generated_dir"
 
     # Start fresh
     > "$compiled_file"

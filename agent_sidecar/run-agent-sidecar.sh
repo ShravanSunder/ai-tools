@@ -289,7 +289,18 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
 fi
 
 # 3. Merge firewall allowlists (.base + .repo + .local)
-COMPILED_FIREWALL_FILE="$GENERATED_DIR/firewall-allowlist.compiled.txt"
+# Use project's .agent_sidecar/.generated/ if it exists, otherwise fall back to SCRIPT_DIR
+if [ -d "$REPO_SIDECAR" ]; then
+    FIREWALL_GENERATED_DIR="$REPO_SIDECAR/.generated"
+    # Container path (since $REPO_SIDECAR is mounted at /etc/agent-sidecar)
+    CONTAINER_FIREWALL_PATH="/etc/agent-sidecar/.generated/firewall-allowlist.compiled.txt"
+else
+    FIREWALL_GENERATED_DIR="$GENERATED_DIR"
+    # Container path (since $SCRIPT_DIR is mounted at same path)
+    CONTAINER_FIREWALL_PATH="$GENERATED_DIR/firewall-allowlist.compiled.txt"
+fi
+mkdir -p "$FIREWALL_GENERATED_DIR"
+COMPILED_FIREWALL_FILE="$FIREWALL_GENERATED_DIR/firewall-allowlist.compiled.txt"
 
 merge_firewall_lists() {
     # Start fresh
@@ -314,7 +325,8 @@ merge_firewall_lists() {
         cat "$REPO_SIDECAR/firewall-allowlist-extra.local.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
 
-    echo "$COMPILED_FIREWALL_FILE"
+    # Return the container-accessible path
+    echo "$CONTAINER_FIREWALL_PATH"
 }
 
 FIREWALL_ALLOWLIST=$(merge_firewall_lists)
