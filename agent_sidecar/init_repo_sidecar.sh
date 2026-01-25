@@ -49,7 +49,8 @@ if [ ! -f "$GITIGNORE" ]; then
 *.local.*
 *.local.sh
 sidecar.local.conf
-firewall-allowlist.local.txt
+firewall-allowlist-extra.local.txt
+extra.local.zshrc
 
 # Generated files
 .generated/
@@ -119,43 +120,47 @@ EOF
 fi
 
 # =============================================================================
-# Create firewall-allowlist.repo.txt template (team firewall additions)
+# Create firewall-allowlist-extra.repo.txt template (team firewall additions)
 # =============================================================================
 if [ "$LOCAL_ONLY" = false ]; then
-    FIREWALL_REPO="$SIDECAR_DIR/firewall-allowlist.repo.txt"
+    FIREWALL_REPO="$SIDECAR_DIR/firewall-allowlist-extra.repo.txt"
     if [ ! -f "$FIREWALL_REPO" ]; then
         cat > "$FIREWALL_REPO" << 'EOF'
 # =============================================================================
-# firewall-allowlist.repo.txt - Team Firewall Additions
+# firewall-allowlist-extra.repo.txt - Team Firewall Additions
 # =============================================================================
 # Domains to allow for this repository. Merged with base allowlist.
 # One domain per line. Comments start with #.
+#
+# Naming: -extra suffix indicates additive (all tiers merged together)
 # =============================================================================
 
 # Example: Allow project-specific APIs
 # api.myproject.com
 # *.myproject.io
 EOF
-        echo "   Created: firewall-allowlist.repo.txt"
+        echo "   Created: firewall-allowlist-extra.repo.txt"
     fi
 fi
 
 # =============================================================================
-# Create firewall-allowlist.local.txt template (personal firewall additions)
+# Create firewall-allowlist-extra.local.txt template (personal firewall additions)
 # =============================================================================
-FIREWALL_LOCAL="$SIDECAR_DIR/firewall-allowlist.local.txt"
+FIREWALL_LOCAL="$SIDECAR_DIR/firewall-allowlist-extra.local.txt"
 if [ ! -f "$FIREWALL_LOCAL" ]; then
     cat > "$FIREWALL_LOCAL" << 'EOF'
 # =============================================================================
-# firewall-allowlist.local.txt - Personal Firewall Additions
+# firewall-allowlist-extra.local.txt - Personal Firewall Additions
 # =============================================================================
 # Personal domains to allow (gitignored). Merged with repo and base allowlists.
+#
+# Naming: -extra suffix indicates additive (all tiers merged together)
 # =============================================================================
 
 # Example: Personal services
 # my-private-api.example.com
 EOF
-    echo "   Created: firewall-allowlist.local.txt (gitignored)"
+    echo "   Created: firewall-allowlist-extra.local.txt (gitignored)"
 fi
 
 # =============================================================================
@@ -259,7 +264,7 @@ echo "✅ Agent Sidecar initialized in: $SIDECAR_DIR"
 echo ""
 echo "📋 Next steps:"
 echo "   1. Edit sidecar.repo.conf to configure team settings"
-echo "   2. Edit firewall-allowlist.repo.txt to add allowed domains"
+echo "   2. Edit firewall-allowlist-extra.repo.txt to add allowed domains"
 echo "   3. Edit build-extra.repo.sh for custom build-time installations"
 echo "   4. Run: run-agent-sidecar.sh --reset"
 echo ""

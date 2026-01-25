@@ -176,12 +176,12 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 # Install Zap non-interactively for the node user
 RUN zsh -c 'curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh | zsh -s -- --branch release-v1 -k'
 
-# Copy zshrc layers (.base.zshrc, .repo.zshrc, .local.zshrc)
+# Copy zshrc layers (additive pattern: extra.base.zshrc, extra.repo.zshrc, extra.local.zshrc)
 # This preserves the Oh-My-Zsh/Powerlevel10k base from zsh-in-docker
-COPY setup/.base.zshrc .repo.zshr[c] .local.zshr[c] /tmp/
-RUN cat /tmp/.base.zshrc >> /home/node/.zshrc && \
-    if [ -f /tmp/.repo.zshrc ]; then cat /tmp/.repo.zshrc >> /home/node/.zshrc; fi && \
-    if [ -f /tmp/.local.zshrc ]; then cat /tmp/.local.zshrc >> /home/node/.zshrc; fi
+COPY setup/extra.base.zshrc extra.repo.zshr[c] extra.local.zshr[c] /tmp/
+RUN cat /tmp/extra.base.zshrc >> /home/node/.zshrc && \
+    if [ -f /tmp/extra.repo.zshrc ]; then cat /tmp/extra.repo.zshrc >> /home/node/.zshrc; fi && \
+    if [ -f /tmp/extra.local.zshrc ]; then cat /tmp/extra.local.zshrc >> /home/node/.zshrc; fi
 
 # Pre-install plugins during build to bake them into the image
 # We ignore the exit code here as Zap might return 1 after a clean install in some environments

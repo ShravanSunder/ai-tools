@@ -50,7 +50,13 @@ Files are resolved in priority order (highest first):
 2. **Repo** (`.repo.` suffix) - Team overrides in `.agent_sidecar/`
 3. **Base** (`.base.` suffix) - Defaults in `agent_sidecar/` or `setup/`
 
-Example resolution for Dockerfile:
+**Naming Convention**:
+| Behavior | Pattern | Examples |
+|----------|---------|----------|
+| **Override** (pick one: local > repo > base) | `{name}.{tier}.{ext}` | `sidecar.repo.conf`, `node-py.local.dockerfile` |
+| **Additive** (merge all that exist) | `{name}-extra.{tier}.{ext}` or `extra.{tier}.{ext}` | `firewall-allowlist-extra.repo.txt`, `extra.repo.zshrc` |
+
+Example resolution for Dockerfile (override pattern):
 ```
 1. .agent_sidecar/node-py.local.dockerfile  (personal, gitignored)
 2. .agent_sidecar/node-py.repo.dockerfile   (team, committed)
@@ -59,10 +65,10 @@ Example resolution for Dockerfile:
 
 ### Firewall System
 
-**Allowlist files** (merged at startup):
-- `setup/firewall-allowlist.base.txt` - Always allowed (npm, pypi, AI APIs, etc.)
-- `.agent_sidecar/firewall-allowlist.repo.txt` - Per-repo additions
-- `.agent_sidecar/firewall-allowlist.local.txt` - Personal additions
+**Allowlist files** (merged at startup, additive `-extra` pattern):
+- `setup/firewall-allowlist-extra.base.txt` - Always allowed (npm, pypi, AI APIs, etc.)
+- `.agent_sidecar/firewall-allowlist-extra.repo.txt` - Per-repo additions
+- `.agent_sidecar/firewall-allowlist-extra.local.txt` - Personal additions
 
 **Toggle presets** (dynamic via `sidecar-ctl`):
 - `firewall-toggle-presets/github-write.txt` - Push to GitHub
@@ -136,11 +142,11 @@ Use `init_repo_sidecar.sh` to set up `.agent_sidecar/` with template files:
 # Creates:
 #   .agent_sidecar/
 #   ├── .gitignore
-#   ├── sidecar.repo.conf          # Team config
-#   ├── sidecar.local.conf         # Personal config (gitignored)
-#   ├── firewall-allowlist.repo.txt
-#   ├── firewall-allowlist.local.txt
-#   ├── build-extra.repo.sh        # Build-time script template
+#   ├── sidecar.repo.conf                   # Team config
+#   ├── sidecar.local.conf                  # Personal config (gitignored)
+#   ├── firewall-allowlist-extra.repo.txt   # Team firewall additions
+#   ├── firewall-allowlist-extra.local.txt  # Personal firewall additions (gitignored)
+#   ├── build-extra.repo.sh                 # Build-time script template
 #   ├── init-background-extra.repo.sh
 #   └── init-foreground-extra.repo.sh
 ```

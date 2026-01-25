@@ -294,26 +294,26 @@ COMPILED_FIREWALL_FILE="$GENERATED_DIR/firewall-allowlist.compiled.txt"
 merge_firewall_lists() {
     # Start fresh
     > "$COMPILED_FIREWALL_FILE"
-    
-    # Base always included
-    if [ -f "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" ]; then
-        cat "$SCRIPT_DIR/setup/firewall-allowlist.base.txt" >> "$COMPILED_FIREWALL_FILE"
+
+    # Base always included (additive pattern: -extra.{tier}.txt)
+    if [ -f "$SCRIPT_DIR/setup/firewall-allowlist-extra.base.txt" ]; then
+        cat "$SCRIPT_DIR/setup/firewall-allowlist-extra.base.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
-    
+
     # Repo additions (.repo - checked in)
-    if [ -f "$REPO_SIDECAR/firewall-allowlist.repo.txt" ]; then
+    if [ -f "$REPO_SIDECAR/firewall-allowlist-extra.repo.txt" ]; then
         echo "" >> "$COMPILED_FIREWALL_FILE"
         echo "# --- Repo-specific additions (.repo) ---" >> "$COMPILED_FIREWALL_FILE"
-        cat "$REPO_SIDECAR/firewall-allowlist.repo.txt" >> "$COMPILED_FIREWALL_FILE"
+        cat "$REPO_SIDECAR/firewall-allowlist-extra.repo.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
-    
+
     # Local additions (.local - gitignored)
-    if [ -f "$REPO_SIDECAR/firewall-allowlist.local.txt" ]; then
+    if [ -f "$REPO_SIDECAR/firewall-allowlist-extra.local.txt" ]; then
         echo "" >> "$COMPILED_FIREWALL_FILE"
         echo "# --- Local additions (.local) ---" >> "$COMPILED_FIREWALL_FILE"
-        cat "$REPO_SIDECAR/firewall-allowlist.local.txt" >> "$COMPILED_FIREWALL_FILE"
+        cat "$REPO_SIDECAR/firewall-allowlist-extra.local.txt" >> "$COMPILED_FIREWALL_FILE"
     fi
-    
+
     echo "$COMPILED_FIREWALL_FILE"
 }
 

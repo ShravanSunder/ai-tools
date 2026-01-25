@@ -201,15 +201,57 @@ get_toggle_allowlist() {
 }
 
 # --- Firewall Commands ---
+
+# Re-merge all firewall allowlist extras into the compiled file
+recompile_firewall_allowlist() {
+    local compiled_file="$SIDECAR_DIR/.generated/firewall-allowlist.compiled.txt"
+    local work_dir
+    work_dir=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+    local repo_sidecar="$work_dir/.agent_sidecar"
+
+    mkdir -p "$SIDECAR_DIR/.generated"
+
+    # Start fresh
+    > "$compiled_file"
+
+    # Base always included (additive pattern: -extra.{tier}.txt)
+    if [[ -f "$SIDECAR_DIR/setup/firewall-allowlist-extra.base.txt" ]]; then
+        cat "$SIDECAR_DIR/setup/firewall-allowlist-extra.base.txt" >> "$compiled_file"
+    fi
+
+    # Repo additions (.repo - checked in)
+    if [[ -f "$repo_sidecar/firewall-allowlist-extra.repo.txt" ]]; then
+        echo "" >> "$compiled_file"
+        echo "# --- Repo-specific additions (.repo) ---" >> "$compiled_file"
+        cat "$repo_sidecar/firewall-allowlist-extra.repo.txt" >> "$compiled_file"
+    fi
+
+    # Local additions (.local - gitignored)
+    if [[ -f "$repo_sidecar/firewall-allowlist-extra.local.txt" ]]; then
+        echo "" >> "$compiled_file"
+        echo "# --- Local additions (.local) ---" >> "$compiled_file"
+        cat "$repo_sidecar/firewall-allowlist-extra.local.txt" >> "$compiled_file"
+    fi
+
+    echo "$compiled_file"
+}
+
 cmd_firewall_reload() {
     local container
     container=$(find_container)
-    
+
     if [[ -z "$container" ]]; then
         log_error "No sidecar container found for current directory"
         exit 1
     fi
-    
+
+    # Re-merge extras into compiled file
+    log_info "Re-merging firewall allowlist extras..."
+    local compiled_file
+    compiled_file=$(recompile_firewall_allowlist)
+    log_success "Compiled: $compiled_file"
+
+    # Reload firewall in container
     log_info "Reloading firewall in container: $container"
     docker exec -u root "$container" /usr/local/bin/firewall.sh --reload
     log_success "Firewall reloaded"
