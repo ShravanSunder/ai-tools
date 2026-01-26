@@ -161,7 +161,10 @@ resolve_file() {
 # =============================================================================
 IMAGE_NAME="agent-sidecar-image"
 DOCKERFILE_VARIANT="node-py"
-EXTRA_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro"
+# Core mounts - always included (not configurable)
+CORE_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro"
+# Extra mounts - per-repo additions (empty by default, purely additive)
+EXTRA_MOUNTS=""
 EXTRA_APT_PACKAGES=""
 PLAYWRIGHT_EXTRA_HOSTS=""
 
@@ -388,6 +391,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         $GIT_MOUNTS \
         -v "$VENV_VOLUME":"$WORK_DIR/.venv" \
         $NODE_MODULES_VOLUMES \
+        $CORE_MOUNTS \
         $EXTRA_MOUNTS \
         -v "$PNPM_STORE_VOLUME":/home/node/.local/share/pnpm \
         -v "$LOCAL_CLAUDE_DIR":/home/node/.claude \
