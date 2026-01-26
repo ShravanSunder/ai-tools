@@ -289,16 +289,20 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
 fi
 
 # 3. Merge firewall allowlists (.base + .repo + .local)
-# Use project's .agent_sidecar/.generated/ if it exists, otherwise fall back to SCRIPT_DIR
-if [ -d "$REPO_SIDECAR" ]; then
-    FIREWALL_GENERATED_DIR="$REPO_SIDECAR/.generated"
-    # Container path (since $REPO_SIDECAR is mounted at /etc/agent-sidecar)
-    CONTAINER_FIREWALL_PATH="/etc/agent-sidecar/.generated/firewall-allowlist.compiled.txt"
-else
-    FIREWALL_GENERATED_DIR="$GENERATED_DIR"
-    # Container path (since $SCRIPT_DIR is mounted at same path)
-    CONTAINER_FIREWALL_PATH="$GENERATED_DIR/firewall-allowlist.compiled.txt"
+# Require .agent_sidecar/ to exist - user must run init_repo_sidecar.sh first
+if [ ! -d "$REPO_SIDECAR" ]; then
+    echo "❌ ERROR: Project sidecar directory not found: $REPO_SIDECAR"
+    echo ""
+    echo "Run the initialization script first:"
+    echo "  $SCRIPT_DIR/init_repo_sidecar.sh"
+    echo ""
+    echo "This creates the .agent_sidecar/ directory with firewall and config templates."
+    exit 1
 fi
+
+FIREWALL_GENERATED_DIR="$REPO_SIDECAR/.generated"
+# Container path (since $REPO_SIDECAR is mounted at /etc/agent-sidecar)
+CONTAINER_FIREWALL_PATH="/etc/agent-sidecar/.generated/firewall-allowlist.compiled.txt"
 mkdir -p "$FIREWALL_GENERATED_DIR"
 COMPILED_FIREWALL_FILE="$FIREWALL_GENERATED_DIR/firewall-allowlist.compiled.txt"
 
