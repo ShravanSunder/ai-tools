@@ -19,12 +19,19 @@ To sync changes between them, copy updated files or set up git remotes.
 
 Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini CLI) with network isolation.
 
+### Setup
+
+Add to your PATH in `~/.zshrc`:
+
+```bash
+export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
+```
+
+Then reload your shell or run `source ~/.zshrc`.
+
 ### Quick Start
 
 ```bash
-# Add to PATH in ~/.zshrc
-export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
-
 # From any git repository
 run-agent-sidecar.sh --run-claude
 ```
@@ -37,13 +44,15 @@ agent_sidecar/
 ├── run-agent-sidecar.sh                 # Main launch script
 ├── sidecar-ctl.sh                       # Host-side control script
 ├── sidecar.base.conf                    # Base configuration
+├── init_repo_sidecar.sh                 # Initialize .agent_sidecar/ in repos
 ├── setup/
 │   ├── firewall.sh                      # Egress firewall (runs in container)
-│   ├── firewall-allowlist.base.txt      # Always-allowed domains
+│   ├── firewall-allowlist-extra.base.txt # Always-allowed domains (additive)
 │   ├── firewall-allowlist-toggle.base.txt # Toggle base domains
 │   ├── init-background.base.sh          # Background init (Xvfb, etc.)
 │   ├── init-foreground.base.sh          # Shell init (Atuin, Zap)
-│   └── .base.zshrc                      # Base zsh config
+│   ├── extra.base.zshrc                 # Base zsh config (additive)
+│   └── playwright-wrapper.sh            # Chromium localhost restriction
 ├── firewall-toggle-presets/             # Preset domain lists
 │   ├── github-write.txt
 │   ├── notion.txt
@@ -77,15 +86,15 @@ sidecar-ctl firewall reload            # Reload firewall rules
 
 **Three-tier allowlist system:**
 
-1. **Base Allowlist** (`setup/firewall-allowlist.base.txt`): Domains always permitted
+1. **Base Allowlist** (`setup/firewall-allowlist-extra.base.txt`): Domains always permitted
    - Package registries (npm, pypi, etc.)
    - AI services (anthropic, openai, etc.)
    - GitHub (read-only by default)
    - Common dev services
 
-2. **Repo/Local Overrides**: Add domains per-project
-   - `.agent_sidecar/firewall-allowlist.repo.txt` (team, committed)
-   - `.agent_sidecar/firewall-allowlist.local.txt` (personal, gitignored)
+2. **Repo/Local Overrides**: Add domains per-project (additive `-extra` pattern)
+   - `.agent_sidecar/firewall-allowlist-extra.repo.txt` (team, committed)
+   - `.agent_sidecar/firewall-allowlist-extra.local.txt` (personal, gitignored)
 
 3. **Toggle Presets**: Dynamically enabled/disabled via `sidecar-ctl`
 
@@ -96,14 +105,24 @@ sidecar-ctl firewall reload            # Reload firewall rules
 
 ### Per-Project Customization
 
-Create a `.agent_sidecar/` directory in your project:
+Use `init_repo_sidecar.sh` to set up a new project:
 
+```bash
+cd ~/path/to/my-project
+/path/to/ai-tools/agent_sidecar/init_repo_sidecar.sh
+```
+
+This creates:
 ```
 .agent_sidecar/
-├── README.md                            # Instructions (recommended)
 ├── .gitignore                           # Ignore local overrides
-├── sidecar.repo.conf                    # Team config overrides (optional)
-└── firewall-allowlist.repo.txt          # Extra domains for this repo (optional)
+├── sidecar.repo.conf                    # Team config overrides
+├── sidecar.local.conf                   # Personal config (gitignored)
+├── firewall-allowlist-extra.repo.txt    # Team firewall additions
+├── firewall-allowlist-extra.local.txt   # Personal firewall additions (gitignored)
+├── build-extra.repo.sh                  # Build-time script template
+├── init-background-extra.repo.sh        # Team background init
+└── init-foreground-extra.repo.sh        # Team foreground init
 ```
 
 Override files follow the pattern: `{name}.repo.{ext}` (committed) or `{name}.local.{ext}` (gitignored).
