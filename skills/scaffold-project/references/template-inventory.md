@@ -35,7 +35,7 @@ Worktrunk configuration for worktree management:
 | `biome.json` | Linter + formatter config with strict rules |
 | `tsconfig.json` | Strict TypeScript configuration |
 | `package.json.template` | Package manifest with dev dependencies |
-| `vitest.config.ts.template` | Vitest test runner configuration |
+| `vitest.config.ts.template` | Vitest test runner configuration (colocated unit tests) |
 
 ### Monorepo
 
@@ -43,7 +43,7 @@ Worktrunk configuration for worktree management:
 |------|---------|
 | `biome.json` | Monorepo-aware biome config with overrides |
 | `package.json.template` | Root workspace config with pnpm workspaces |
-| `vitest.config.ts.template` | Root vitest configuration |
+| `vitest.config.ts.template` | Root vitest configuration (colocated unit tests across packages) |
 | `package-template/` | Template for new packages in monorepo |
 
 ## Python Templates
@@ -55,6 +55,7 @@ Worktrunk configuration for worktree management:
 | `ruff.toml` | Ruff linter configuration with ALL rules |
 | `pyrightconfig.json` | BasedPyright strict type checking |
 | `pyproject.toml.template` | uv-managed project with dev dependencies |
+| `conftest.py.template` | Pytest shared fixtures |
 
 ### Monorepo
 
@@ -63,11 +64,21 @@ Worktrunk configuration for worktree management:
 | `ruff.toml` | Monorepo ruff config with FastAPI extensions |
 | `pyrightconfig.json` | Monorepo paths and execution environments |
 | `pyproject.toml.template` | uv workspace with members config |
+| `conftest.py.template` | Root pytest shared fixtures for all packages |
 
 ## Testing Templates
 
+### vitest-setup.ts.template
+Vitest setup file that runs before each test file. Use for global mocks, extending expect, etc.
+
 ### vitest-browser.config.ts.template
 Vitest browser mode configuration using Playwright provider.
+
+### vitest-multiproject.config.ts.template
+Multi-project vitest configuration supporting:
+- **unit** - Colocated tests in src/**/*.test.ts
+- **integration** - Separate tests/integration/**/*.test.ts
+- **e2e** - Separate tests/e2e/**/*.test.ts with Playwright
 
 ### playwright.config.ts.template
 Playwright E2E testing setup with:
@@ -75,6 +86,35 @@ Playwright E2E testing setup with:
 - Web server configuration
 - HTML reporter
 - Retry and trace settings
+
+### Test Location Conventions
+
+**Unit tests** (colocated with source):
+```
+src/
+├── utils.ts
+└── utils.test.ts       # Colocated unit test
+packages/ts-core/src/
+├── helpers.ts
+└── helpers.test.ts     # Colocated in package
+```
+
+**Integration/E2E tests** (separate directories):
+```
+tests/
+├── integration/        # Integration tests
+│   └── api.test.ts
+└── e2e/               # E2E tests
+    └── login.test.ts
+```
+
+**Python test pattern** (colocated):
+```
+packages/py_core/
+└── py_core/
+    ├── models.py
+    └── models_test.py  # Colocated with *_test.py suffix
+```
 
 ## Cursor Templates
 

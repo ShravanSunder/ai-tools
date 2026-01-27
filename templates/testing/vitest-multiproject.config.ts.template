@@ -1,0 +1,54 @@
+/**
+ * Multi-project Vitest configuration for {{PROJECT_NAME}}
+ *
+ * Run all tests: pnpm test
+ * Run unit tests only: pnpm test --project=unit
+ * Run integration tests: pnpm test --project=integration
+ * Run e2e tests: pnpm test --project=e2e
+ */
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    projects: [
+      // Unit tests: colocated with source files
+      {
+        test: {
+          name: 'unit',
+          environment: 'node',
+          include: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
+          exclude: ['**/node_modules/**'],
+          setupFiles: ['./vitest.setup.ts'],
+        },
+      },
+      // Integration tests: separate directory
+      {
+        test: {
+          name: 'integration',
+          environment: 'node',
+          include: ['tests/integration/**/*.test.ts'],
+          exclude: ['**/node_modules/**'],
+          setupFiles: ['./vitest.setup.ts'],
+          // Integration tests may need longer timeouts
+          testTimeout: 30000,
+        },
+      },
+      // E2E tests: browser environment with Playwright
+      {
+        test: {
+          name: 'e2e',
+          environment: 'node', // Playwright manages its own browser
+          include: ['tests/e2e/**/*.test.ts'],
+          exclude: ['**/node_modules/**'],
+          testTimeout: 60000,
+        },
+      },
+    ],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: ['**/node_modules/**', 'tests/**'],
+    },
+  },
+});

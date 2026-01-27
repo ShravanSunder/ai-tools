@@ -214,6 +214,7 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/typescript/monorepo/package.json.template" "package.json"
         if [[ "$INCLUDE_VITEST" == "true" ]]; then
             copy_template "$TEMPLATES_DIR/typescript/monorepo/vitest.config.ts.template" "vitest.config.ts"
+            copy_template "$TEMPLATES_DIR/testing/vitest-setup.ts.template" "vitest.setup.ts"
         fi
     else
         copy_template "$TEMPLATES_DIR/typescript/single/biome.json" "biome.json"
@@ -221,6 +222,7 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/typescript/single/package.json.template" "package.json"
         if [[ "$INCLUDE_VITEST" == "true" ]]; then
             copy_template "$TEMPLATES_DIR/typescript/single/vitest.config.ts.template" "vitest.config.ts"
+            copy_template "$TEMPLATES_DIR/testing/vitest-setup.ts.template" "vitest.setup.ts"
         fi
         mkdir -p src
     fi
@@ -244,10 +246,12 @@ if [[ "$INCLUDE_PY" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/python/monorepo/ruff.toml" "ruff.toml"
         copy_template "$TEMPLATES_DIR/python/monorepo/pyrightconfig.json" "pyrightconfig.json"
         copy_template "$TEMPLATES_DIR/python/monorepo/pyproject.toml.template" "pyproject.toml"
+        copy_template "$TEMPLATES_DIR/python/monorepo/conftest.py.template" "conftest.py"
     else
         copy_template "$TEMPLATES_DIR/python/single/ruff.toml" "ruff.toml"
         copy_template "$TEMPLATES_DIR/python/single/pyrightconfig.json" "pyrightconfig.json"
         copy_template "$TEMPLATES_DIR/python/single/pyproject.toml.template" "pyproject.toml"
+        copy_template "$TEMPLATES_DIR/python/single/conftest.py.template" "conftest.py"
         mkdir -p src tests
     fi
 fi

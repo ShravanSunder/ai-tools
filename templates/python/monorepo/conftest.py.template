@@ -1,0 +1,37 @@
+"""Root conftest.py for {{PROJECT_NAME}} monorepo.
+
+Shared fixtures available to all packages and services.
+Package-specific fixtures should be in their own conftest.py files.
+"""
+
+import typing as t
+
+import pytest
+
+
+# Example fixture - customize per project
+@pytest.fixture
+def sample_data() -> t.Generator[dict[str, t.Any], None, None]:
+    """Provide sample data for tests."""
+    data = {"key": "value"}
+    yield data
+    # Cleanup if needed
+
+
+@pytest.fixture
+def mock_env(monkeypatch: pytest.MonkeyPatch) -> t.Callable[[str, str], None]:
+    """Helper to set environment variables for tests."""
+
+    def _set_env(key: str, value: str) -> None:
+        monkeypatch.setenv(key, value)
+
+    return _set_env
+
+
+@pytest.fixture(scope="session")
+def test_config() -> dict[str, t.Any]:
+    """Session-scoped test configuration."""
+    return {
+        "timeout": 30,
+        "retry_count": 3,
+    }
