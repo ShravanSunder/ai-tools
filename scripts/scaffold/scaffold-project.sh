@@ -101,9 +101,9 @@ case "$PROJECT_TYPE" in
     *) echo "Error: Invalid project type: $PROJECT_TYPE"; exit 1 ;;
 esac
 
-# Escape special characters for sed replacement
+# Escape special characters for sed replacement (handles /, &, \, and newlines)
 escape_sed() {
-    printf '%s' "$1" | sed -e 's/[\/&]/\\&/g'
+    printf '%s' "$1" | sed -e 's/[\/&\\]/\\&/g' -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g'
 }
 
 # Helper to copy file with variable substitution
@@ -277,11 +277,25 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
     if [[ "$INCLUDE_VITEST_BROWSER" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/testing/vitest-browser.config.ts.template" "vitest.browser.config.ts"
         mkdir -p tests/integration
+        # Add vitest browser dependencies to package.json
+        if [[ -f "package.json" ]] && command -v jq >/dev/null 2>&1; then
+            local tmp_pkg
+            tmp_pkg=$(jq '.devDependencies["@vitest/browser"] = "^3.0.0" | .devDependencies["@vitest/browser-playwright"] = "^3.0.0" | .devDependencies["playwright"] = "^1.49.0"' package.json)
+            printf '%s\n' "$tmp_pkg" > package.json
+            echo "UPDATE: package.json (added vitest-browser deps)"
+        fi
     fi
 
     if [[ "$INCLUDE_PLAYWRIGHT" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/testing/playwright.config.ts.template" "playwright.config.ts"
         mkdir -p tests/e2e
+        # Add playwright dependencies to package.json
+        if [[ -f "package.json" ]] && command -v jq >/dev/null 2>&1; then
+            local tmp_pkg
+            tmp_pkg=$(jq '.devDependencies["@playwright/test"] = "^1.49.0" | .scripts["test:e2e"] = "playwright test"' package.json)
+            printf '%s\n' "$tmp_pkg" > package.json
+            echo "UPDATE: package.json (added playwright deps)"
+        fi
     fi
 fi
 
@@ -294,12 +308,16 @@ if [[ "$INCLUDE_PY" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/python/monorepo/ruff.toml" "ruff.toml"
         copy_template "$TEMPLATES_DIR/python/monorepo/pyrightconfig.json" "pyrightconfig.json"
         copy_template "$TEMPLATES_DIR/python/monorepo/pyproject.toml.template" "pyproject.toml"
-        copy_template "$TEMPLATES_DIR/python/monorepo/conftest.py.template" "conftest.py"
+        if [[ "$INCLUDE_PYTEST" == "true" ]]; then
+            copy_template "$TEMPLATES_DIR/python/monorepo/conftest.py.template" "conftest.py"
+        fi
     else
         copy_template "$TEMPLATES_DIR/python/single/ruff.toml" "ruff.toml"
         copy_template "$TEMPLATES_DIR/python/single/pyrightconfig.json" "pyrightconfig.json"
         copy_template "$TEMPLATES_DIR/python/single/pyproject.toml.template" "pyproject.toml"
-        copy_template "$TEMPLATES_DIR/python/single/conftest.py.template" "conftest.py"
+        if [[ "$INCLUDE_PYTEST" == "true" ]]; then
+            copy_template "$TEMPLATES_DIR/python/single/conftest.py.template" "conftest.py"
+        fi
         mkdir -p src tests
     fi
 fi

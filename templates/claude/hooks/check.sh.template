@@ -12,10 +12,21 @@ proj="${CLAUDE_PROJECT_DIR:-.}"
 has_errors=0
 err() { printf "%s\n" "$*" 1>&2; }
 
+# Prefer local binaries over npx (faster, avoids supply-chain risk)
+get_biome() {
+  local local_bin="$proj/node_modules/.bin/biome"
+  if [[ -x "$local_bin" ]]; then
+    echo "$local_bin"
+  else
+    echo "npx -y @biomejs/biome"
+  fi
+}
+
 # Biome check (token-efficient: one-line hint)
 case "$file_path" in
   *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.json|*.jsonc|*.css)
-    report="$(cd "$proj" && npx -y @biomejs/biome check --reporter=json --max-diagnostics=50 "$file_path" 2>/dev/null || true)"
+    biome_cmd="$(get_biome)"
+    report="$(cd "$proj" && $biome_cmd check --reporter=json --max-diagnostics=50 "$file_path" 2>/dev/null || true)"
     errors="$(jq -r '[.diagnostics[]? | select(.severity=="error")] | length' <<<"$report" 2>/dev/null || echo 0)"
     if (( errors > 0 )); then
       first="$(jq -r '
@@ -34,7 +45,7 @@ case "$file_path" in
       has_errors=1
     else
       # Silent auto-fix on success
-      cd "$proj" && npx -y @biomejs/biome check --write "$file_path" >/dev/null 2>&1 || true
+      cd "$proj" && $biome_cmd check --write "$file_path" >/dev/null 2>&1 || true
     fi
   ;;
 esac
