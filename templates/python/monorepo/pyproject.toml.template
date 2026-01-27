@@ -1,0 +1,39 @@
+[project]
+name = "{{PROJECT_NAME}}"
+version = "0.1.0"
+description = "{{PROJECT_DESCRIPTION}}"
+authors = [
+  { name = "{{AUTHOR_NAME}}", email = "{{AUTHOR_EMAIL}}" },
+]
+requires-python = ">=3.12"
+
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "ruff>=0.9.0",
+  "pytest>=8.0.0",
+  "pytest-asyncio>=1.2.0",
+  "pytest-mock>=3.15.0",
+  "pytest-xdist>=3.6.0",
+  "basedpyright>=1.33.0",
+]
+
+[tool.uv.workspace]
+members = ["packages/*", "services/*", "scripts"]
+exclude = ["packages/ts*", "services/ts*"]
+
+[tool.uv]
+required-version = ">=0.5.0"
+
+[tool.pytest.ini_options]
+testpaths = ["services", "packages"]
+python_files = "test_*.py *_test.py"
+asyncio_mode = "auto"
+norecursedirs = ["tmp"]
+markers = [
+  "integration_llm: tests that hit real language-model APIs",
+  "integration_db: tests that hit real external services",
+  "integration_api: tests that hit real external APIs"
+]
+addopts = "-m 'not integration_llm and not integration_db and not integration_api'"

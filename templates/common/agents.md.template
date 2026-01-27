@@ -1,0 +1,7 @@
+Always follow rules in
+
+@.cursor/rules/{{#if INCLUDE_TS}}ts-rules.mdc{{/if}}
+{{#if INCLUDE_PY}}@.cursor/rules/python-rules.mdc{{/if}}
+{{#if MONOREPO}}@.cursor/rules/monorepo-rules.mdc{{/if}}
+
+Always use the research-specialist agent to understand libraries, use deep-wiki and web search and other tools. It will provide you with answers to specific and nuanced questions.
