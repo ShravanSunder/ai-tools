@@ -75,10 +75,12 @@ Vitest setup file that runs before each test file. Use for global mocks, extendi
 Vitest browser mode configuration using Playwright provider.
 
 ### vitest-multiproject.config.ts.template
-Multi-project vitest configuration supporting:
-- **unit** - Colocated tests in src/**/*.test.ts
-- **integration** - Separate tests/integration/**/*.test.ts
-- **e2e** - Separate tests/e2e/**/*.test.ts with Playwright
+Multi-project vitest configuration with environment-aware file naming:
+- **unit-node** - Node tests: `*.node.test.ts` or `*.test.ts` (default)
+- **unit-browser** - Browser tests via Playwright: `*.browser.test.ts`
+- **integration-browser** - Integration tests in browser: `tests/integration/**/*.browser.test.ts`
+
+E2E tests use Playwright directly (see playwright.config.ts)
 
 ### playwright.config.ts.template
 Playwright E2E testing setup with:
@@ -87,25 +89,28 @@ Playwright E2E testing setup with:
 - HTML reporter
 - Retry and trace settings
 
-### Test Location Conventions
+### Test Location & Naming Conventions
 
-**Unit tests** (colocated with source):
+**TypeScript file naming determines environment:**
+| Pattern | Environment | Location |
+|---------|-------------|----------|
+| `*.test.ts` | Node (default) | Colocated in `src/` |
+| `*.node.test.ts` | Node (explicit) | Colocated in `src/` |
+| `*.browser.test.ts` | Browser (Playwright) | Colocated in `src/` or `tests/integration/` |
+| `*.spec.ts` | Playwright E2E | `tests/e2e/` |
+
+**Example structure:**
 ```
 src/
 ├── utils.ts
-└── utils.test.ts       # Colocated unit test
-packages/ts-core/src/
-├── helpers.ts
-└── helpers.test.ts     # Colocated in package
-```
-
-**Integration/E2E tests** (separate directories):
-```
+├── utils.test.ts           # Node unit test (default)
+├── utils.node.test.ts      # Node unit test (explicit)
+└── Component.browser.test.tsx  # Browser unit test (React)
 tests/
-├── integration/        # Integration tests
-│   └── api.test.ts
-└── e2e/               # E2E tests
-    └── login.test.ts
+├── integration/
+│   └── api.browser.test.ts # Browser integration test
+└── e2e/
+    └── login.spec.ts       # Playwright E2E test
 ```
 
 **Python test pattern** (colocated):
@@ -160,12 +165,19 @@ PostToolUse hook for Claude Code:
 - Ruff + BasedPyright for Python
 
 ### settings.local.json.template
-Claude Code permissions template with common allowed commands:
+Claude Code configuration with permissions and hooks:
+
+**Permissions:**
 - Git operations
 - Package managers (pnpm, npm, uv)
-- Linting tools (biome, ruff)
+- Linting tools (biome, ruff, tsc)
 - Testing tools (vitest, pytest)
-- File operations
+- File operations (ls, cat, find, mkdir, etc.)
+- MCP tools (deepwiki, context7)
+- Denies: rm -rf, rm -r
+
+**Hooks:**
+- PostToolUse hook on Edit|Write that runs `.claude/hooks/check.sh`
 
 ## Monorepo Structure
 

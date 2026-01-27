@@ -101,6 +101,11 @@ case "$PROJECT_TYPE" in
     *) echo "Error: Invalid project type: $PROJECT_TYPE"; exit 1 ;;
 esac
 
+# Escape special characters for sed replacement
+escape_sed() {
+    printf '%s' "$1" | sed -e 's/[\/&]/\\&/g'
+}
+
 # Helper to copy file with variable substitution
 copy_template() {
     local src="$1"
@@ -114,16 +119,58 @@ copy_template() {
     mkdir -p "$(dirname "$dest")"
 
     if [[ "$src" == *.template ]]; then
-        # Substitute variables
-        sed -e "s/{{PROJECT_NAME}}/$PROJECT_NAME/g" \
-            -e "s/{{PROJECT_DESCRIPTION}}/$PROJECT_DESCRIPTION/g" \
-            -e "s/{{AUTHOR_NAME}}/$AUTHOR_NAME/g" \
-            -e "s/{{AUTHOR_EMAIL}}/$AUTHOR_EMAIL/g" \
-            -e "s/{{#if INCLUDE_TS}}//g" \
-            -e "s/{{\/if}}//g" \
-            -e "s/{{#if INCLUDE_PY}}//g" \
-            -e "s/{{#if MONOREPO}}//g" \
-            "$src" > "$dest"
+        # Escape user-provided values for safe sed substitution
+        local escaped_name escaped_desc escaped_author escaped_email
+        escaped_name="$(escape_sed "$PROJECT_NAME")"
+        escaped_desc="$(escape_sed "$PROJECT_DESCRIPTION")"
+        escaped_author="$(escape_sed "$AUTHOR_NAME")"
+        escaped_email="$(escape_sed "$AUTHOR_EMAIL")"
+
+        # Process template: substitute variables first
+        local content
+        content="$(sed -e "s/{{PROJECT_NAME}}/$escaped_name/g" \
+            -e "s/{{PROJECT_DESCRIPTION}}/$escaped_desc/g" \
+            -e "s/{{AUTHOR_NAME}}/$escaped_author/g" \
+            -e "s/{{AUTHOR_EMAIL}}/$escaped_email/g" \
+            "$src")"
+
+        # Handle conditional blocks using perl (more reliable for multiline on macOS)
+        # Process innermost conditionals first (MONOREPO), then outer ones
+        # This handles nested conditionals like {{#if INCLUDE_PY}}...{{#if MONOREPO}}...{{/if}}...{{/if}}
+
+        # Step 1: Process MONOREPO (innermost, no nesting expected)
+        if [[ "$IS_MONOREPO" != "true" ]]; then
+            content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if MONOREPO\}\}[^\{]*\{\{\/if\}\}//gs')"
+        else
+            content="$(printf '%s' "$content" | sed 's/{{#if MONOREPO}}//g')"
+        fi
+
+        # Step 2: Process INCLUDE_TS (may contain resolved MONOREPO content)
+        if [[ "$INCLUDE_TS" != "true" ]]; then
+            # Remove entire line if it contains only this conditional block
+            content="$(printf '%s' "$content" | perl -0777 -pe 's/^[^\S\n]*\{\{#if INCLUDE_TS\}\}[^\n]*\{\{\/if\}\}[^\S\n]*\n?//gm')"
+            # Remove remaining inline/multiline blocks
+            content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if INCLUDE_TS\}\}.*?\{\{\/if\}\}\n?//gs')"
+        else
+            content="$(printf '%s' "$content" | sed 's/{{#if INCLUDE_TS}}//g')"
+        fi
+
+        # Step 3: Process INCLUDE_PY (may contain resolved MONOREPO content)
+        if [[ "$INCLUDE_PY" != "true" ]]; then
+            # Remove entire line if it contains only this conditional block
+            content="$(printf '%s' "$content" | perl -0777 -pe 's/^[^\S\n]*\{\{#if INCLUDE_PY\}\}[^\n]*\{\{\/if\}\}[^\S\n]*\n?//gm')"
+            # Remove remaining inline/multiline blocks
+            content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if INCLUDE_PY\}\}.*?\{\{\/if\}\}\n?//gs')"
+        else
+            content="$(printf '%s' "$content" | sed 's/{{#if INCLUDE_PY}}//g')"
+        fi
+
+        # Remove remaining {{/if}} markers
+        content="$(printf '%s' "$content" | sed 's/{{\/if}}//g')"
+
+        # Write processed content
+        printf '%s\n' "$content" > "$dest"
+
         # Remove .template suffix from dest if present
         local final_dest="${dest%.template}"
         if [[ "$final_dest" != "$dest" ]]; then
@@ -229,11 +276,12 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
 
     if [[ "$INCLUDE_VITEST_BROWSER" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/testing/vitest-browser.config.ts.template" "vitest.browser.config.ts"
+        mkdir -p tests/integration
     fi
 
     if [[ "$INCLUDE_PLAYWRIGHT" == "true" ]]; then
         copy_template "$TEMPLATES_DIR/testing/playwright.config.ts.template" "playwright.config.ts"
-        mkdir -p e2e
+        mkdir -p tests/e2e
     fi
 fi
 

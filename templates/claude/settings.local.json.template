@@ -21,14 +21,35 @@
       "Bash(touch *)",
       "Bash(mv *)",
       "Bash(cp *)",
+      "Bash(tree *)",
+      "Bash(timeout *)",
       "Read",
       "Write",
       "Edit",
       "Glob",
       "Grep",
       "WebFetch(*)",
-      "WebSearch"
+      "WebSearch",
+      "mcp__deepwiki__ask_question",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs"
     ],
-    "deny": []
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -r *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check.sh"
+          }
+        ]
+      }
+    ]
   }
 }

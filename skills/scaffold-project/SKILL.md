@@ -1,6 +1,6 @@
 ---
 name: scaffold-project
-description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python project", "add linting configs", "retrofit an existing project with configs", "update project templates", or mentions setting up biome, ruff, basedpyright, vitest, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
+description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up biome, ruff, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
 version: 0.1.0
 ---
 
@@ -223,6 +223,41 @@ User: "Add my standard configs to this existing Python project"
 3. Add missing: ruff.toml, pyrightconfig.json, .cursor/rules/, etc.
 4. Report what was added
 ```
+
+### Add Individual Testing Config
+
+When user asks to add specific testing setup (vitest, playwright, browser tests), use the scaffold script with appropriate flags or copy individual templates:
+
+```
+User: "Add playwright e2e testing to this project"
+
+1. Run scaffold script with --playwright flag, or:
+2. Read template: ${CLAUDE_PLUGIN_ROOT}/templates/testing/playwright.config.ts.template
+3. Substitute {{PROJECT_NAME}} with actual project name
+4. Write to playwright.config.ts
+5. Create tests/e2e/ directory
+6. Add @playwright/test to devDependencies
+7. Update .gitignore with tmp/, playwright-report/
+```
+
+```
+User: "Add vitest browser mode for React component tests"
+
+1. Run scaffold script with --vitest-browser flag, or:
+2. Read template: ${CLAUDE_PLUGIN_ROOT}/templates/testing/vitest-multiproject.config.ts.template
+3. Substitute {{PROJECT_NAME}}
+4. Write appropriate vitest config (single or multiproject)
+5. Create tests/integration/ directory
+6. Add @vitest/browser-playwright to devDependencies
+```
+
+### File Naming Conventions for Testing
+
+TypeScript test files use naming to determine environment:
+- `*.test.ts` - Node environment (default)
+- `*.node.test.ts` - Node environment (explicit)
+- `*.browser.test.ts` - Browser environment via Playwright
+- `*.spec.ts` - Playwright E2E tests (in tests/e2e/)
 
 ### Update Templates
 

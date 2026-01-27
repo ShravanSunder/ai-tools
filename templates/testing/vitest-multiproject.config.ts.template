@@ -1,47 +1,65 @@
 /**
  * Multi-project Vitest configuration for {{PROJECT_NAME}}
  *
+ * File naming convention determines environment:
+ * - *.node.test.ts    → Node environment
+ * - *.browser.test.ts → Browser environment (Playwright)
+ * - *.test.ts         → Default (Node) environment
+ *
  * Run all tests: pnpm test
- * Run unit tests only: pnpm test --project=unit
- * Run integration tests: pnpm test --project=integration
- * Run e2e tests: pnpm test --project=e2e
+ * Run unit tests (node): pnpm test --project=unit-node
+ * Run unit tests (browser): pnpm test --project=unit-browser
+ * Run integration tests: pnpm test --project=integration-browser
+ *
+ * E2E tests use Playwright directly (see playwright.config.ts)
  */
+import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     globals: true,
+    setupFiles: ['./vitest.setup.ts'],
     projects: [
-      // Unit tests: colocated with source files
+      // Node environment for unit tests - matches *.node.test.ts or plain *.test.ts
       {
         test: {
-          name: 'unit',
+          name: 'unit-node',
           environment: 'node',
-          include: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
-          exclude: ['**/node_modules/**'],
+          include: ['src/**/*.node.test.ts', 'src/**/*.test.ts'],
+          exclude: ['**/node_modules/**', 'src/**/*.browser.test.ts', 'tests/**/*'],
           setupFiles: ['./vitest.setup.ts'],
         },
       },
-      // Integration tests: separate directory
+      // Browser environment for unit tests - matches *.browser.test.ts
       {
         test: {
-          name: 'integration',
-          environment: 'node',
-          include: ['tests/integration/**/*.test.ts'],
-          exclude: ['**/node_modules/**'],
+          name: 'unit-browser',
           setupFiles: ['./vitest.setup.ts'],
-          // Integration tests may need longer timeouts
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+          include: ['src/**/*.browser.test.ts', 'src/**/*.browser.test.tsx'],
+          exclude: ['**/node_modules/**', 'tests/**/*'],
+        },
+      },
+      // Browser environment for integration tests
+      {
+        test: {
+          name: 'integration-browser',
+          setupFiles: ['./vitest.setup.ts'],
           testTimeout: 30000,
-        },
-      },
-      // E2E tests: browser environment with Playwright
-      {
-        test: {
-          name: 'e2e',
-          environment: 'node', // Playwright manages its own browser
-          include: ['tests/e2e/**/*.test.ts'],
-          exclude: ['**/node_modules/**'],
-          testTimeout: 60000,
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+          include: ['tests/integration/**/*.browser.test.ts', 'tests/integration/**/*.browser.test.tsx'],
+          exclude: ['**/node_modules/**', 'tests/e2e/**'],
         },
       },
     ],
