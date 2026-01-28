@@ -279,9 +279,7 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
         mkdir -p tests/integration
         # Add vitest browser dependencies to package.json
         if [[ -f "package.json" ]] && command -v jq >/dev/null 2>&1; then
-            local tmp_pkg
-            tmp_pkg=$(jq '.devDependencies["@vitest/browser"] = "^3.0.0" | .devDependencies["@vitest/browser-playwright"] = "^3.0.0" | .devDependencies["playwright"] = "^1.49.0"' package.json)
-            printf '%s\n' "$tmp_pkg" > package.json
+            jq '.devDependencies["@vitest/browser"] = "^3.0.0" | .devDependencies["@vitest/browser-playwright"] = "^3.0.0" | .devDependencies["playwright"] = "^1.49.0"' package.json > package.json.tmp && mv package.json.tmp package.json
             echo "UPDATE: package.json (added vitest-browser deps)"
         fi
     fi
@@ -291,9 +289,7 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
         mkdir -p tests/e2e
         # Add playwright dependencies to package.json
         if [[ -f "package.json" ]] && command -v jq >/dev/null 2>&1; then
-            local tmp_pkg
-            tmp_pkg=$(jq '.devDependencies["@playwright/test"] = "^1.49.0" | .scripts["test:e2e"] = "playwright test"' package.json)
-            printf '%s\n' "$tmp_pkg" > package.json
+            jq '.devDependencies["@playwright/test"] = "^1.49.0" | .scripts["test:e2e"] = "playwright test"' package.json > package.json.tmp && mv package.json.tmp package.json
             echo "UPDATE: package.json (added playwright deps)"
         fi
     fi

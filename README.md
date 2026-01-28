@@ -2,6 +2,45 @@
 
 Personal AI development tools and sandboxed environments.
 
+## Components
+
+| Component | Purpose |
+|-----------|---------|
+| `agent_sidecar/` | Sandboxed Docker containers for AI coding assistants |
+| `ai_scaffold/` | Claude Code plugin for project scaffolding |
+
+## AI Scaffold Plugin
+
+A Claude Code plugin for scaffolding new projects with standard dev configurations (linters, type checkers, testing, IDE hooks).
+
+### Installation
+
+Add to Claude Code as a plugin:
+```bash
+# In Claude Code settings, add the plugin path:
+~/dev/ai-tools/ai_scaffold
+```
+
+### Usage
+
+Use the `/scaffold-project` command or ask Claude to scaffold a project:
+- "Scaffold a new TypeScript monorepo"
+- "Add vitest browser testing to this project"
+- "Retrofit this repo with my standard configs"
+
+### Supported Configurations
+
+| Category | TypeScript | Python |
+|----------|------------|--------|
+| Linter | Biome | Ruff |
+| Type Checker | TypeScript strict | BasedPyright |
+| Testing | Vitest (+browser, +Playwright) | Pytest (+marks) |
+| Package Manager | pnpm | uv |
+
+See `ai_scaffold/skills/scaffold-project/SKILL.md` for full documentation.
+
+---
+
 ## Repository Variants
 
 This repo has two variants for different contexts:
