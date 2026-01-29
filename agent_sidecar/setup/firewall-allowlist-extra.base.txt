@@ -38,6 +38,16 @@ amazonaws.com
 # Covers s3.amazonaws.com, lambda.us-east-1.amazonaws.com, etc.
 aws.amazon.com
 anysphere-binaries.s3.us-east-1.amazonaws.com
+docs.aws.amazon.com
+
+# --- Azure & Microsoft ---
+azure.microsoft.com
+docs.microsoft.com
+learn.microsoft.com
+azure.com
+
+# --- Google Cloud ---
+cloud.google.com
 
 # --- GitHub Ecosystem (API, Copilot, Programming) ---
 github.com
@@ -71,6 +81,7 @@ api.anthropic.com
 console.anthropic.com
 cdn.anthropic.com
 claude.ai
+docs.anthropic.com
 # OpenAI & Codex API/CLI
 openai.com
 api.openai.com
@@ -78,6 +89,7 @@ auth.openai.com
 developers.openai.com
 codex.openai.com
 chatgpt.com
+platform.openai.com
 # Cursor CLI Agent (cursor.com/install)
 api.cursor.com
 # Perplexity AI
@@ -92,6 +104,7 @@ oauth2.googleapis.com
 generativelanguage.googleapis.com
 cloudassist.google.com
 googleapis.com
+ai.google.dev
 # OpenCode
 opencode.ai
 api.opencode.ai
@@ -101,6 +114,28 @@ models.dev
 modelcontextprotocol.io
 mcp.tavily.com
 mcp.deepwiki.com
+gofastmcp.com
+docs.gofastmcp.com
+# Agent frameworks & LLM tooling
+langchain.com
+docs.langchain.com
+python.langchain.com
+js.langchain.com
+api.python.langchain.com
+llamaindex.ai
+docs.llamaindex.ai
+langchain-ai.github.io
+crewai.com
+docs.crewai.com
+microsoft.github.io
+autogen-ai.github.io
+instructor-ai.github.io
+useinstructor.com
+docs.instructor.ai
+outlines-dev.github.io
+dottxt-ai.github.io
+openrouter.ai
+docs.openrouter.ai
 # Search tools for agents
 www.bing.com
 
@@ -136,9 +171,34 @@ deno.land
 deno.com
 docs.deno.com
 jsr.io
+# React ecosystem
+redux.js.org
+react-redux.js.org
+redux-toolkit.js.org
+react-hook-form.com
+styled-components.com
+emotion.sh
+mui.com
+# Node.js frameworks & tools
+expressjs.com
+nodejs.org
+docs.nestjs.com
+jestjs.io
+webpack.js.org
+esbuild.github.io
+rollupjs.org
+parceljs.org
+# Database clients
+sequelize.org
+typeorm.io
+knexjs.org
+# DBOS
+dbos.dev
+docs.dbos.dev
 
 # --- Python Docs ---
 docs.pydantic.dev
+ai.pydantic.dev
 pydantic.dev
 fastapi.tiangolo.com
 sqlalchemy.org
@@ -153,11 +213,50 @@ uvicorn.org
 httpx.dev
 polars.rs
 docs.polars.rs
+alembic.sqlalchemy.org
+click.palletsprojects.com
+flask.palletsprojects.com
+jinja.palletsprojects.com
+aiohttp.readthedocs.io
+requests.readthedocs.io
+docs.celeryq.dev
+redis.io
+redis-py.readthedocs.io
 
 # --- Infrastructure & Observability ---
 sentry.io
+docs.sentry.io
 statsig.com
 dc.services.visualstudio.com
+docs.datadoghq.com
+datadoghq.com
+docs.launchdarkly.com
+launchdarkly.com
+newrelic.com
+docs.newrelic.com
+grafana.com
+docs.grafana.com
+prometheus.io
+
+# --- Third-Party Services ---
+plaid.com
+stripe.com
+docs.stripe.com
+twilio.com
+sendgrid.com
+docs.sendgrid.com
+auth0.com
+docs.auth0.com
+clerk.com
+docs.clerk.com
+
+# --- Terraform & IaC ---
+terraform.io
+registry.terraform.io
+developer.hashicorp.com
 
 # ---
 youtube.com
+stackoverflow.com
+medium.com
+dev.to
