@@ -8,6 +8,17 @@ version: 0.1.0
 
 Scaffold new projects or retrofit existing ones with standardized development configurations including linters, type checkers, testing setup, IDE hooks, and AI assistant configs.
 
+## CRITICAL: Ask First, Execute Once
+
+**DO NOT** run the scaffold script immediately. Follow this flow:
+
+1. **Detect** - Silently check if new project or retrofit
+2. **Ask ALL questions** - Use AskUserQuestion to gather ALL preferences
+3. **Execute ONCE** - Run scaffold script with all collected options
+4. **Report** - Show what was created
+
+This saves time by avoiding manual corrections after the fact.
+
 ## Overview
 
 This skill guides through three modalities:
@@ -37,30 +48,75 @@ This skill guides through three modalities:
 
 ## Scaffolding Workflow
 
+**IMPORTANT**: Ask ALL questions FIRST, collect ALL preferences, THEN execute ONCE.
+
 ### Step 1: Detect Context
 
-Determine if scaffolding a new project or retrofitting an existing one:
+Silently check if scaffolding a new project or retrofitting:
 
 ```bash
-# Check for existing project indicators
-ls -la package.json pyproject.toml 2>/dev/null
+ls -la package.json pyproject.toml .git 2>/dev/null
 ```
 
-If files exist, ask user whether to retrofit or start fresh.
+### Step 2: Ask All Questions Upfront
 
-### Step 2: Gather Project Info
+Use AskUserQuestion to collect ALL preferences before executing anything. Ask in batches:
 
-Ask user for project details using AskUserQuestion:
+**Batch 1: Project Basics**
+```
+Question 1: "What type of project are you creating?"
+Options:
+- Single-package TypeScript
+- Single-package Python
+- Monorepo TypeScript (pnpm workspaces)
+- Monorepo Python (uv workspaces)
+- Monorepo Both (TypeScript + Python)
 
-1. **Project type**: Single-package or monorepo?
-2. **Languages**: TypeScript, Python, or both?
-3. **Project name**: kebab-case name for the project
-4. **Description**: Brief description of the project
-5. **Testing options**:
-   - Python: pytest with custom marks (default: yes)
-   - TypeScript: vitest (default: yes), browser mode (optional), playwright e2e (optional)
+Question 2: "What is the project name?" (kebab-case)
+```
 
-### Step 3: Execute Scaffolding
+**Batch 2: Directory Structure** (for monorepos)
+```
+Question: "What top-level directories do you want?"
+Options (multiSelect: true):
+- apps/ (Recommended) - Deployable applications
+- packages/ (Recommended) - Shared libraries
+- services/ - Backend services
+- tools/ - CLI tools and scripts
+```
+
+**Batch 3: Testing Setup**
+```
+Question (TypeScript): "Which testing features do you need?"
+Options (multiSelect: true):
+- Vitest unit tests (Recommended)
+- Vitest browser mode - for React/DOM component tests
+- Playwright E2E - for full browser automation tests
+
+Question (Python): "Include pytest with integration markers?"
+Options:
+- Yes (Recommended) - includes integration_llm, integration_db, integration_api markers
+- No - skip pytest setup
+```
+
+**Batch 4: Additional Options**
+```
+Question: "Any additional configurations?"
+Options (multiSelect: true):
+- Claude hooks - lint on file edit
+- Cursor hooks - lint on file edit
+- Worktrunk config - git worktree management
+```
+
+**Batch 5: Conflict Handling** (retrofit only)
+```
+Question: "How should we handle existing files?"
+Options:
+- Skip existing files (Recommended) - only add missing configs
+- Overwrite all - replace existing with scaffold templates
+```
+
+### Step 3: Execute Scaffolding (ONCE)
 
 Run the appropriate scaffold scripts:
 
@@ -208,9 +264,16 @@ Shell scripts for scaffolding operations:
 ```
 User: "Create a new TypeScript monorepo called my-platform"
 
-1. Gather: name=my-platform, type=monorepo-ts, testing=vitest
-2. Execute scaffold script
-3. Result: Full monorepo with biome, vitest, cursor rules, etc.
+Claude asks (AskUserQuestion batch):
+  Q1: "What type of project?" → Monorepo TypeScript
+  Q2: "Top-level directories?" → [apps, packages, services]
+  Q3: "Testing features?" → [Vitest unit, Playwright E2E]
+  Q4: "Additional configs?" → [Claude hooks, Cursor hooks]
+
+AFTER all answers collected, execute ONCE:
+  bash scaffold-project.sh --name my-platform --type monorepo-ts --playwright
+
+Result: Full monorepo created with all selected options.
 ```
 
 ### Retrofit Python Project
@@ -218,10 +281,17 @@ User: "Create a new TypeScript monorepo called my-platform"
 ```
 User: "Add my standard configs to this existing Python project"
 
-1. Detect existing pyproject.toml
-2. Ask: Skip existing or prompt per file?
-3. Add missing: ruff.toml, pyrightconfig.json, .cursor/rules/, etc.
-4. Report what was added
+Claude detects: pyproject.toml exists (retrofit mode)
+
+Claude asks (AskUserQuestion batch):
+  Q1: "Include pytest with markers?" → Yes
+  Q2: "Additional configs?" → [Claude hooks, Worktrunk]
+  Q3: "Handle existing files?" → Skip existing
+
+AFTER all answers, execute ONCE:
+  bash scaffold-project.sh --name existing-project --type single-py
+
+Result: Missing configs added, existing files preserved.
 ```
 
 ### Add Individual Testing Config

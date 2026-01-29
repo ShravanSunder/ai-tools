@@ -25,11 +25,19 @@ Initialize a new project or add standard configurations to an existing project.
 
 Load the scaffold-project skill and follow its workflow:
 
-1. **Detect context** - Check if directory has existing project files
-2. **Gather info** - Ask user about project type, languages, name, testing options
-3. **Execute scaffolding** - Run shell scripts to copy and configure templates
-4. **Handle conflicts** - For retrofit, ask about existing files
-5. **Report results** - Show what was created/skipped
+**IMPORTANT: Ask ALL questions FIRST, then execute ONCE.**
+
+1. **Detect context** - Silently check for existing project files
+2. **Ask ALL questions upfront** - Use AskUserQuestion to gather:
+   - Project type (single/monorepo, TS/Python/both)
+   - Directory structure preferences (for monorepos)
+   - Testing features (vitest, browser mode, playwright, pytest)
+   - Additional configs (claude hooks, cursor hooks, worktrunk)
+   - Conflict handling (for retrofit)
+3. **Execute ONCE** - Run scaffold script with all collected options
+4. **Report results** - Show what was created/skipped
+
+This approach saves time by getting all preferences upfront instead of manual corrections after.
 
 ## Defaults
 
@@ -41,18 +49,26 @@ When user doesn't specify:
 
 ## Examples
 
-### New TypeScript project
+### New TypeScript Monorepo
 ```
-/scaffold-project new
-> Project type? Single-package TypeScript
-> Name? my-cli-tool
-> Testing? vitest (default)
+/scaffold-project
+
+Claude asks (all at once):
+  "What type of project?" → Monorepo TypeScript
+  "Top-level directories?" → [apps, packages]
+  "Testing features?" → [Vitest unit, Vitest browser mode]
+  "Additional configs?" → [Claude hooks]
+
+Claude executes ONCE with all options, creates full project.
 ```
 
 ### Retrofit existing Python project
 ```
-/scaffold-project retrofit
-> Detected: pyproject.toml exists
-> How to handle conflicts? Skip existing
-> Adding: ruff.toml, pyrightconfig.json, .cursor/rules/...
+/scaffold-project
+
+Claude detects pyproject.toml, asks:
+  "Include pytest with markers?" → Yes
+  "Handle existing files?" → Skip existing
+
+Claude executes ONCE, adds only missing configs.
 ```
