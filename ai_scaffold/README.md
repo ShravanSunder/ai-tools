@@ -4,17 +4,9 @@ A Claude Code plugin for scaffolding new projects or retrofitting existing ones 
 
 ## Installation
 
-Add this plugin to Claude Code:
+### Option 1: Local Path (Development)
 
-```bash
-# Open Claude Code settings
-claude config
-
-# Add the plugin path under "plugins":
-~/dev/ai-tools/ai_scaffold
-```
-
-Or add directly to `~/.claude/settings.json`:
+Add directly to `~/.claude/settings.json`:
 
 ```json
 {
@@ -24,7 +16,30 @@ Or add directly to `~/.claude/settings.json`:
 }
 ```
 
-Restart Claude Code after adding the plugin.
+### Option 2: From GitHub Repository
+
+Assumes `gh auth login` is already configured.
+
+```bash
+# Add the ai-tools repo as a marketplace
+/plugin marketplace add ShravanSunder/ai-tools
+
+# Install the scaffold plugin
+/plugin install ai-scaffold@ai-tools
+```
+
+This works for both public and private repos since gh handles authentication.
+
+### Managing Plugins
+
+```bash
+/plugin                    # List installed plugins
+/plugin disable <name>     # Temporarily disable
+/plugin enable <name>      # Re-enable
+/plugin uninstall <name>   # Remove completely
+```
+
+Restart Claude Code after installation.
 
 ## Usage
 

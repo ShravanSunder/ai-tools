@@ -1,0 +1,17 @@
+{
+  "name": "ai-tools",
+  "owner": {
+    "name": "Shravan Sunder"
+  },
+  "metadata": {
+    "description": "AI development tools - scaffolding, sidecar containers, and more"
+  },
+  "plugins": [
+    {
+      "name": "ai-scaffold",
+      "source": "./ai_scaffold",
+      "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
+      "version": "0.1.0"
+    }
+  ]
+}
