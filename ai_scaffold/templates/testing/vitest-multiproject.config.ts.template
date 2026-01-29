@@ -1,0 +1,72 @@
+/**
+ * Multi-project Vitest configuration for {{PROJECT_NAME}}
+ *
+ * File naming convention determines environment:
+ * - *.node.test.ts    → Node environment
+ * - *.browser.test.ts → Browser environment (Playwright)
+ * - *.test.ts         → Default (Node) environment
+ *
+ * Run all tests: pnpm test
+ * Run unit tests (node): pnpm test --project=unit-node
+ * Run unit tests (browser): pnpm test --project=unit-browser
+ * Run integration tests: pnpm test --project=integration-browser
+ *
+ * E2E tests use Playwright directly (see playwright.config.ts)
+ */
+import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    setupFiles: ['./vitest.setup.ts'],
+    projects: [
+      // Node environment for unit tests - matches *.node.test.ts or plain *.test.ts
+      {
+        test: {
+          name: 'unit-node',
+          environment: 'node',
+          include: ['src/**/*.node.test.ts', 'src/**/*.test.ts'],
+          exclude: ['**/node_modules/**', 'src/**/*.browser.test.ts', 'tests/**/*'],
+          setupFiles: ['./vitest.setup.ts'],
+        },
+      },
+      // Browser environment for unit tests - matches *.browser.test.ts
+      {
+        test: {
+          name: 'unit-browser',
+          setupFiles: ['./vitest.setup.ts'],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+          include: ['src/**/*.browser.test.ts', 'src/**/*.browser.test.tsx'],
+          exclude: ['**/node_modules/**', 'tests/**/*'],
+        },
+      },
+      // Browser environment for integration tests
+      {
+        test: {
+          name: 'integration-browser',
+          setupFiles: ['./vitest.setup.ts'],
+          testTimeout: 30000,
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+          include: ['tests/integration/**/*.browser.test.ts', 'tests/integration/**/*.browser.test.tsx'],
+          exclude: ['**/node_modules/**', 'tests/e2e/**'],
+        },
+      },
+    ],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: ['**/node_modules/**', 'tests/**'],
+    },
+  },
+});

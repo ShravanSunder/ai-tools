@@ -1,0 +1,15 @@
+# {{PROJECT_NAME}}
+
+{{PROJECT_DESCRIPTION}}
+
+Always follow rules in:
+{{#if INCLUDE_TS}}
+@.cursor/rules/ts-rules.mdc{{/if}}
+{{#if INCLUDE_PY}}
+@.cursor/rules/python-rules.mdc{{/if}}
+{{#if MONOREPO}}
+@.cursor/rules/monorepo-rules.mdc{{/if}}
+
+## Project-Specific Notes
+
+<!-- Add project-specific context, architecture decisions, and important patterns here -->

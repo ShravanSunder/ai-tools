@@ -1,0 +1,25 @@
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    // Unit tests: colocated with source files across all packages
+    include: [
+      'packages/**/*.test.ts',
+      'packages/**/*.spec.ts',
+      'apps/**/*.test.ts',
+      'apps/**/*.spec.ts',
+      'services/**/*.test.ts',
+      'services/**/*.spec.ts',
+    ],
+    // Integration/E2E tests: separate directories (run with --project)
+    exclude: ['**/node_modules/**', '**/tests/integration/**', '**/tests/e2e/**'],
+    setupFiles: ['./vitest.setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: ['**/node_modules/**', '**/tests/**'],
+    },
+  },
+});

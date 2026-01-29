@@ -1,0 +1,100 @@
+{
+	"$schema": "https://biomejs.dev/schemas/latest/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true,
+		"defaultBranch": "main"
+	},
+	"files": {
+		"includes": ["**"]
+	},
+	"formatter": {
+		"enabled": true,
+		"lineWidth": 100
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"complexity": {
+				"noBannedTypes": "error",
+				"noStaticOnlyClass": "error",
+				"noUselessConstructor": "error",
+				"noUselessThisAlias": "error",
+				"noUselessTypeConstraint": "error",
+				"noVoid": "error",
+				"useLiteralKeys": "off"
+			},
+			"correctness": {
+				"noPrecisionLoss": "error",
+				"noUndeclaredDependencies": "error",
+				"noUnusedImports": "warn",
+				"noUnusedVariables": "warn",
+				"useExhaustiveDependencies": "warn",
+				"useHookAtTopLevel": "error"
+			},
+			"style": {
+				"noNamespace": "error",
+				"noNonNullAssertion": "error",
+				"noParameterAssign": "error",
+				"useArrayLiterals": "error",
+				"useAsConstAssertion": "error",
+				"useImportType": {
+					"level": "warn",
+					"options": {
+						"style": "separatedType"
+					}
+				},
+				"useLiteralEnumMembers": "error",
+				"useThrowOnlyError": "error",
+				"useUnifiedTypeSignatures": "error",
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": ["./*", "../*"],
+								"message": "Relative imports are disallowed. Please use @/ path aliases instead."
+							}
+						]
+					}
+				}
+			},
+			"suspicious": {
+				"noConfusingVoidType": "error",
+				"noEmptyBlockStatements": "warn",
+				"noExplicitAny": "error",
+				"noExtraNonNullAssertion": "error",
+				"noMisleadingInstantiator": "error",
+				"noTsIgnore": "warn",
+				"noUnsafeDeclarationMerging": "error"
+			}
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"semicolons": "always",
+			"quoteStyle": "single"
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.gen.ts", "**/__generated__/**"],
+			"formatter": {
+				"enabled": false
+			},
+			"linter": {
+				"enabled": false
+			}
+		}
+	]
+}

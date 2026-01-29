@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(pnpm *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(uv *)",
+      "Bash(biome *)",
+      "Bash(vitest *)",
+      "Bash(pytest *)",
+      "Bash(tsc *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(wc *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(mv *)",
+      "Bash(cp *)",
+      "Bash(tree *)",
+      "Bash(timeout *)",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "WebFetch(*)",
+      "WebSearch",
+      "mcp__deepwiki__ask_question",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -r *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

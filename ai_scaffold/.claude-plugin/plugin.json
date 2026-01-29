@@ -1,0 +1,9 @@
+{
+  "name": "scaffold-project",
+  "version": "0.1.0",
+  "description": "Scaffold new projects or retrofit existing ones with standard dev configs (linters, rules, hooks, testing)",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": ["scaffolding", "project-setup", "linting", "biome", "ruff", "typescript", "python"]
+}
