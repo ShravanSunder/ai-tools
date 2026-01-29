@@ -108,7 +108,17 @@ Options (multiSelect: true):
 - Worktrunk config - git worktree management
 ```
 
-**Batch 5: Conflict Handling** (retrofit only)
+**Batch 5: CLAUDE.md Content**
+```
+Question: "What should go in CLAUDE.md?"
+Options (multiSelect: true):
+- Structure + rule references (Recommended) - include @.cursor/rules references and project structure
+- Package dependency graph - for monorepos, document inter-package dependencies
+- Placeholders for patterns/constraints - empty sections for you to fill in
+- Skip CLAUDE.md - I'll write it myself
+```
+
+**Batch 6: Conflict Handling** (retrofit only)
 ```
 Question: "How should we handle existing files?"
 Options:
