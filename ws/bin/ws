@@ -125,16 +125,18 @@ show_usage() {
 ws - Workspace manager for worktrees + Kitty + Zellij
 
 Usage:
-  ws list              List all worktrees
-  ws open <branch>     Open worktree in Kitty tab + Zellij
-  ws open .            Open current directory
-  ws status            Show active workspaces
-  ws restore           Reopen all active workspaces
-  ws close <branch>    Remove from active list
+  ws list              List all worktrees (from wt)
+  ws open <branch>     Open worktree by branch name in Kitty tab + Zellij
+  ws open .            Open current directory in Kitty tab + Zellij
+  ws status            Show active workspaces + Zellij sessions
+  ws restore           Reopen all active workspaces after crash
+  ws close <branch>    Remove workspace from active tracking
 
 Examples:
-  ws open feature-auth   # Opens Kitty tab with Zellij session
-  ws restore             # After crash, reopen everything
+  ws list                # See available worktrees
+  ws open feature-auth   # Look up worktree, open in new Kitty tab
+  ws open .              # Already in a dir? Open it in new tab
+  ws restore             # Reopen everything after crash/reboot
 EOF
 }
 

@@ -23,17 +23,21 @@ This will:
 ## Usage
 
 ```bash
-# Workspace commands
-ws list              # List all worktrees
-ws open <branch>     # Open worktree in Kitty tab + Zellij
-ws open .            # Open current directory
-ws status            # Show active workspaces
-ws restore           # Reopen all active workspaces
-ws close <branch>    # Remove from active list
+ws list              # List all worktrees (from wt)
+ws open <branch>     # Look up worktree by branch name, open in Kitty + Zellij
+ws open .            # Open current directory in new Kitty tab + Zellij
+ws status            # Show active workspaces + running Zellij sessions
+ws restore           # Reopen all active workspaces (after crash/reboot)
+ws close <branch>    # Remove workspace from active tracking
 
 # Shell function (from ws.zsh)
 zj [name]            # Attach/create Zellij session
 ```
+
+### `ws open <branch>` vs `ws open .`
+
+- **`ws open feature-auth`** - Looks up the worktree path from `wt list`, then opens it
+- **`ws open .`** - Uses your current directory (useful when you're already `cd`'d somewhere)
 
 ## How It Works
 
