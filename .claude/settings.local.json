@@ -3,7 +3,6 @@
     "allow": [
       "Bash(docker:*)",
       "Bash(docker ps:*)",
-      "Bash(./ai_coder_sidecar/run_ai_coder_sidecar.sh:*)",
       "Bash(# Check if there''s a credentials file anywhere find ~/.claude -name \"\"*credential*\"\" -o -name \"\"*auth*\"\" -o -name \"\"*token*\"\")",
       "Bash(chezmoi status:*)",
       "Bash(chezmoi diff:*)",

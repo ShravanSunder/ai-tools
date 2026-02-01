@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ws"
+STATE_FILE="$STATE_DIR/state.json"
+
+# Ensure state exists
+init_state() {
+  mkdir -p "$STATE_DIR"
+  [[ -f "$STATE_FILE" ]] || echo '{"active":[]}' > "$STATE_FILE"
+}
+
+# ─────────────────────────────────────────────────────────────
+# List worktrees (from wt)
+# ─────────────────────────────────────────────────────────────
+cmd_list() {
+  echo "=== Worktrees ==="
+  wt list --format=json | jq -r '.[] | "\(.branch)\t\(.path)"'
+}
+
+# ─────────────────────────────────────────────────────────────
+# Open worktree in Kitty + Zellij
+# ─────────────────────────────────────────────────────────────
+cmd_open() {
+  local branch="$1"
+  local worktree_path session_name
+
+  if [[ "$branch" == "." ]]; then
+    # Current directory
+    worktree_path="$(pwd)"
+    branch="$(basename "$worktree_path")"
+  else
+    # Find path from wt list
+    worktree_path=$(wt list --format=json | jq -r --arg b "$branch" '.[] | select(.branch == $b) | .path')
+    if [[ -z "$worktree_path" ]]; then
+      echo "Worktree not found: $branch" >&2
+      echo "Available:" >&2
+      wt list --format=json | jq -r '.[] | "  \(.branch)"'
+      exit 1
+    fi
+  fi
+
+  # Session name: repo-branch (sanitized)
+  local repo_name=$(basename "$(dirname "$worktree_path")" | sed 's/\.wt$//')
+  session_name="${repo_name}-${branch}"
+  session_name=$(echo "$session_name" | tr '/' '-' | tr '.' '-')
+
+  echo "Opening: $branch"
+  echo "  Path: $worktree_path"
+  echo "  Zellij session: $session_name"
+
+  # Open in Kitty with Zellij (background, suppress warnings)
+  kitty --single-instance --instance-group=ws \
+    --session <(cat <<EOF
+new_tab $branch
+cd $worktree_path
+launch zellij attach --create $session_name
+EOF
+) 2>/dev/null &
+  disown
+
+  # Track in active list
+  local state=$(cat "$STATE_FILE")
+  local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+  # Remove existing entry for this branch, add fresh
+  state=$(echo "$state" | jq --arg b "$branch" --arg p "$worktree_path" --arg s "$session_name" --arg t "$now" '
+    .active = (.active | map(select(.branch != $b))) + [{
+      "branch": $b,
+      "path": $p,
+      "zellij_session": $s,
+      "last_opened": $t
+    }]
+  ')
+  echo "$state" > "$STATE_FILE"
+}
+
+# ─────────────────────────────────────────────────────────────
+# Status: active workspaces + zellij sessions
+# ─────────────────────────────────────────────────────────────
+cmd_status() {
+  echo "=== Active Workspaces ==="
+  jq -r '.active[] | "  \(.branch) → \(.zellij_session)"' "$STATE_FILE"
+  echo ""
+  echo "=== Zellij Sessions ==="
+  zellij list-sessions 2>/dev/null | sed 's/^/  /' || echo "  (none)"
+}
+
+# ─────────────────────────────────────────────────────────────
+# Restore: reopen all active workspaces
+# ─────────────────────────────────────────────────────────────
+cmd_restore() {
+  local count=$(jq '.active | length' "$STATE_FILE")
+
+  if [[ "$count" == "0" ]]; then
+    echo "No active workspaces to restore"
+    return
+  fi
+
+  echo "Restoring $count workspace(s)..."
+
+  jq -r '.active[] | .branch' "$STATE_FILE" | while read -r branch; do
+    echo "  Opening: $branch"
+    cmd_open "$branch"
+    sleep 0.5  # Give Kitty time between tabs
+  done
+}
+
+# ─────────────────────────────────────────────────────────────
+# Close: remove from active list
+# ─────────────────────────────────────────────────────────────
+cmd_close() {
+  local branch="$1"
+  local state=$(cat "$STATE_FILE")
+  state=$(echo "$state" | jq --arg b "$branch" '.active = (.active | map(select(.branch != $b)))')
+  echo "$state" > "$STATE_FILE"
+  echo "Removed from active: $branch"
+}
+
+# ─────────────────────────────────────────────────────────────
+# Main
+# ─────────────────────────────────────────────────────────────
+show_usage() {
+  cat <<EOF
+ws - Workspace manager for worktrees + Kitty + Zellij
+
+Usage:
+  ws list              List all worktrees
+  ws open <branch>     Open worktree in Kitty tab + Zellij
+  ws open .            Open current directory
+  ws status            Show active workspaces
+  ws restore           Reopen all active workspaces
+  ws close <branch>    Remove from active list
+
+Examples:
+  ws open feature-auth   # Opens Kitty tab with Zellij session
+  ws restore             # After crash, reopen everything
+EOF
+}
+
+init_state
+
+case "${1:-help}" in
+  list)    cmd_list ;;
+  open)    cmd_open "${2:-.}" ;;
+  status)  cmd_status ;;
+  restore) cmd_restore ;;
+  close)   cmd_close "${2:-}" ;;
+  -h|--help|help) show_usage ;;
+  *)
+    echo "Unknown command: $1" >&2
+    show_usage
+    exit 1
+    ;;
+esac

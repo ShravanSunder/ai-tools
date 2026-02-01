@@ -9,7 +9,7 @@
 #   - .devcontainer/nodepy.local.dockerfile (personal, gitignored)
 #   - .devcontainer/nodepy.repo.dockerfile  (team, committed)
 #
-# Other variants (in ai_coder_sidecar/):
+# Other variants (in agent_sidecar/):
 #   - rust.base.dockerfile   (Rust + Python/Node) - TODO
 #   - python.base.dockerfile (Python only) - TODO
 # =============================================================================
