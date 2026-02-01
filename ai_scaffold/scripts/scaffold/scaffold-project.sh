@@ -101,9 +101,10 @@ case "$PROJECT_TYPE" in
     *) echo "Error: Invalid project type: $PROJECT_TYPE"; exit 1 ;;
 esac
 
-# Escape special characters for sed replacement (handles /, &, \, and newlines)
+# Escape special characters for sed replacement (handles /, &, \)
+# Uses perl for cross-platform compatibility (BSD sed on macOS has limited support)
 escape_sed() {
-    printf '%s' "$1" | sed -e 's/[\/&\\]/\\&/g' -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g'
+    printf '%s' "$1" | perl -pe 's/([\/&\\])/\\$1/g'
 }
 
 # Helper to copy file with variable substitution
