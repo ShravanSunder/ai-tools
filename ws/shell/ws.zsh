@@ -1,4 +1,4 @@
-# ws - Workspace Manager v3 shell integration
+# ws - Workspace Manager v4 shell integration
 # Source this file in your .zshrc
 
 # Zellij session helper (attach or create)
@@ -12,46 +12,16 @@ zj() {
   fi
 }
 
-# ─────────────────────────────────────────────────────────────
-# Auto-save hook: saves workspace on shell exit
-# ─────────────────────────────────────────────────────────────
-
-# Track current workspace (set by ws load/save)
-export WS_CURRENT="${WS_CURRENT:-}"
-
-_ws_autosave_hook() {
-  # Skip if not in Kitty or no workspace set
-  [[ -z "${KITTY_WINDOW_ID:-}" ]] && return
-  [[ -z "${WS_CURRENT:-}" ]] && return
-
-  # Check if autosave is enabled
-  local config_file="${XDG_CONFIG_HOME:-$HOME/.config}/ws/config.json"
-  if [[ -f "$config_file" ]]; then
-    local autosave=$(jq -r '.autosave // false' "$config_file" 2>/dev/null)
-    [[ "$autosave" != "true" ]] && return
-  else
-    return
-  fi
-
-  # Quietly save the workspace
-  ws save --quiet 2>/dev/null || true
-}
-
-# Register the hook to run on shell exit
-autoload -Uz add-zsh-hook
-add-zsh-hook zshexit _ws_autosave_hook
-
 # ws completions
 _ws_completions() {
-  local commands="pick save load add list delete init find status autosave help"
   local state_dir="${XDG_CONFIG_HOME:-$HOME/.config}/ws"
   local index_file="$state_dir/index.json"
 
   if [[ ${#words[@]} -eq 2 ]]; then
-    _values 'commands' $commands
+    _values 'commands' pick init add list delete status help
   elif [[ ${#words[@]} -eq 3 ]]; then
     case "${words[2]}" in
-      load|delete|preview)
+      pick|delete)
         # Complete with saved workspace names
         if [[ -f "$index_file" ]]; then
           local workspaces=$(jq -r '.workspaces | keys[]' "$index_file" 2>/dev/null)
@@ -60,16 +30,9 @@ _ws_completions() {
         ;;
       init)
         # Complete with --all flag or repo names
-        _values 'options' '--all' '-a'
+        _values 'options' '--all' '-a' '.'
         if command -v wt >/dev/null 2>&1; then
           local repos=$(wt list --format=json 2>/dev/null | jq -r '.[].path | split("/") | .[-1] | sub("\\.wt$"; "") | sub("\\..*$"; "")' 2>/dev/null | sort -u)
-          _values 'repos' ${(f)repos}
-        fi
-        ;;
-      find)
-        # Complete with repo names from wt
-        if command -v wt >/dev/null 2>&1; then
-          local repos=$(wt list --format=json 2>/dev/null | jq -r '.[].path | split("/") | .[-1]' 2>/dev/null | sort -u)
           _values 'repos' ${(f)repos}
         fi
         ;;
@@ -77,16 +40,13 @@ _ws_completions() {
         # Complete with directories
         _files -/
         ;;
-      autosave)
-        # Complete with on/off
-        _values 'options' 'on' 'off'
-        ;;
     esac
   elif [[ ${#words[@]} -eq 4 ]]; then
     case "${words[2]}" in
       init)
-        # After --all, complete with repo names
+        # After --all, complete with repo names or .
         if [[ "${words[3]}" == "--all" ]] || [[ "${words[3]}" == "-a" ]]; then
+          _values 'options' '.'
           if command -v wt >/dev/null 2>&1; then
             local repos=$(wt list --format=json 2>/dev/null | jq -r '.[].path | split("/") | .[-1] | sub("\\.wt$"; "") | sub("\\..*$"; "")' 2>/dev/null | sort -u)
             _values 'repos' ${(f)repos}
