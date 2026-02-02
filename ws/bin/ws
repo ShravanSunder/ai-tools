@@ -25,18 +25,17 @@ init_state() {
 # Input: tabs_json = [{"name": "main", "cwd": "/path"}, ...]
 generate_kdl_layout() {
   local tabs_json="$1"
-  local first=true
 
   echo "layout {"
+  echo "    tab_template name=\"ws-tab\" {"
+  echo "        pane"
+  echo "        pane size=1 borderless=true {"
+  echo "            plugin location=\"zellij:compact-bar\""
+  echo "        }"
+  echo "    }"
+  echo ""
   echo "$tabs_json" | jq -r '.[] | "\(.name)\t\(.cwd)"' | while IFS=$'\t' read -r name cwd; do
-    if [[ "$first" == "true" ]]; then
-      echo "    tab name=\"$name\" cwd=\"$cwd\" focus=true {"
-      first=false
-    else
-      echo "    tab name=\"$name\" cwd=\"$cwd\" {"
-    fi
-    echo "        pane"
-    echo "    }"
+    echo "    ws-tab name=\"$name\" cwd=\"$cwd\""
   done
   echo "}"
 }
@@ -44,7 +43,8 @@ generate_kdl_layout() {
 # Check if Zellij session exists
 session_exists() {
   local session="$1"
-  zellij list-sessions 2>/dev/null | grep -q "^$session"
+  # Strip ANSI codes and check for session name at start of line
+  zellij list-sessions 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | grep -q "^$session"
 }
 
 # List available repos from wt
@@ -192,10 +192,10 @@ cmd_init() {
         exec zellij attach "$session_name"
         ;;
       "Overwrite (kill and recreate)")
-        echo "Killing existing session..."
-        zellij kill-session "$session_name" 2>/dev/null || true
+        echo "Deleting existing session..."
+        zellij delete-session "$session_name" 2>/dev/null || true
         echo "Creating new session: $session_name"
-        exec zellij --new-session-with-layout "$layout_file" --session "$session_name"
+        exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
         ;;
       "Enter new name")
         local new_name
@@ -211,7 +211,7 @@ cmd_init() {
         updated_index=$(echo "$updated_index" | jq --arg id "$ws_id" --arg session "$session_name" '.workspaces[$id].session_name = $session')
         echo "$updated_index" > "$INDEX_FILE"
         echo "Creating session: $session_name"
-        exec zellij --new-session-with-layout "$layout_file" --session "$session_name"
+        exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
         ;;
       *)
         echo "Cancelled."
@@ -223,7 +223,7 @@ cmd_init() {
   # Start new Zellij session
   echo "Starting Zellij session: $session_name"
   echo ""
-  exec zellij --new-session-with-layout "$layout_file" --session "$session_name"
+  exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
 }
 
 # ─────────────────────────────────────────────────────────────
@@ -300,7 +300,7 @@ cmd_pick() {
   else
     echo "Creating session from layout: $session_name"
     # Use -n to force new session (works even when inside another Zellij session)
-    exec zellij --new-session-with-layout "$layout_file" --session "$session_name"
+    exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
   fi
 }
 
