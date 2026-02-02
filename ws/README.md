@@ -1,4 +1,4 @@
-# ws - Workspace Manager v2
+# ws - Workspace Manager v3
 
 Save and restore Kitty tab + Zellij session compositions.
 
@@ -20,7 +20,7 @@ Zellij sessions persist their pane layouts. We just remember which tabs + sessio
 
 ```bash
 # Install dependencies
-brew install gum jq
+brew install fzf gum jq
 
 # Run setup
 ./setup.sh
@@ -29,7 +29,8 @@ source ~/.zshrc
 
 ## Requirements
 
-- `gum` - interactive picker (install with `brew install gum`)
+- `fzf` - interactive picker with preview (recommended)
+- `gum` - interactive multi-select for `ws init`
 - `jq` - JSON processing
 - `kitty` - terminal with `allow_remote_control yes`
 - `zellij` - terminal multiplexer
@@ -41,22 +42,17 @@ source ~/.zshrc
 
 | Command | Description |
 |---------|-------------|
-| `ws` | Interactive picker - choose workspace to load |
+| `ws` | Interactive picker with preview (fzf) |
 | `ws save [name]` | Save current Kitty window as workspace |
 | `ws load <name>` | Restore a saved workspace |
 | `ws add [path]` | Add folder to current workspace as new tab |
 | `ws list` | List saved workspaces |
 | `ws delete <name>` | Delete a saved workspace |
-| `ws init <repo>` | Quick setup: all worktrees for repo → tabs |
+| `ws init [repo]` | Interactive setup: pick repo, then pick worktrees |
+| `ws init --all <repo>` | Quick setup: ALL worktrees for repo → tabs |
 | `ws find <query>` | Search workspaces by name |
-
-### Tab Management (from v1)
-
-| Command | Description |
-|---------|-------------|
-| `ws open <branch>` | Open single worktree in new tab + zellij |
-| `ws open .` | Open current directory in new tab + zellij |
 | `ws status` | Show current Kitty tabs + Zellij sessions |
+| `ws autosave [on\|off]` | Toggle auto-save on shell exit |
 
 ### Shell Function
 
@@ -76,20 +72,53 @@ ws save my-project
 # Later, restore it:
 ws load my-project
 
-# Or use the interactive picker:
+# Or use the interactive picker with preview:
 ws
+# ┌─────────────────────────┬────────────────────────────┐
+# │ project-dev/            │ obsidian-cortex            │
+# │ > obsidian-cortex  3t   │ ─────────────────────────  │
+# │   askluna-finance  5t   │ Tabs:                      │
+# │                         │   react → zellij:oc-react  │
+# │ ai-sdk/                 │   main → zellij:oc-main    │
+# │   langchain        2t   │   feature-x → zellij:...   │
+# │                         │                            │
+# │                         │ Session status:            │
+# │                         │   🟢 oc-react (active)     │
+# │                         │   ⚪ oc-main               │
+# └─────────────────────────┴────────────────────────────┘
 ```
 
 ### Quick setup from worktrees
 
 ```bash
-# Open all worktrees for a repo as tabs
+# Interactive: pick repo, then pick which worktrees
+ws init
+
+# Pick worktrees for a specific repo
 ws init obsidian-cortex
+
+# Open ALL worktrees (skip selection)
+ws init --all obsidian-cortex
 
 # This creates a tab for each worktree, each with its own zellij session
 # Then save it:
 ws save obsidian-cortex
 ```
+
+### Auto-save
+
+```bash
+# Enable auto-save (workspace saves automatically on shell exit)
+ws autosave on
+
+# Check status
+ws autosave
+
+# Disable
+ws autosave off
+```
+
+When auto-save is enabled and you've loaded or saved a workspace, it will automatically save on shell exit.
 
 ### Add folders to workspace
 
@@ -140,6 +169,7 @@ The parent is the immediate parent directory, auto-detected from your paths.
 
 ```
 ~/.config/ws/
+├── config.json          # Settings (autosave, etc.)
 ├── index.json           # Workspace index with metadata
 └── workspaces/
     ├── project-dev/
