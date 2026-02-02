@@ -8,7 +8,17 @@ This repository contains the Agent Sidecar system for running AI coding assistan
 
 **Two variants exist**:
 - `~/dev/ai-tools` - Personal projects (this repo)
-- `~/dev/relay-ai-tools` - Work projects (fork with additional firewall presets for jira/slack)
+- `~/dev/relay-ai-tools` - Work projects (fork)
+
+### Differences Between Variants
+
+| Feature | ai-tools (personal) | relay-ai-tools (work) |
+|---------|---------------------|----------------------|
+| Firewall presets | github-write, notion, linear | github-write, notion, jira, slack |
+| OpenCode support | Yes (`--run-opencode`) | No (removed) |
+| Agent CLIs | Claude, Codex, Gemini, OpenCode, Cursor | Claude, Codex, Gemini, Cursor |
+
+The repos are maintained separately - sync manually as needed.
 
 ## Architecture
 
@@ -74,7 +84,6 @@ Example resolution for Dockerfile (override pattern):
 - `firewall-toggle-presets/github-write.txt` - Push to GitHub
 - `firewall-toggle-presets/notion.txt` - Notion API
 - `firewall-toggle-presets/linear.txt` - Linear API
-- (relay-ai-tools only) `jira.txt`, `slack.txt`
 
 ### Extra APT Packages (per-repo)
 
@@ -194,8 +203,7 @@ The agent inside the container has limited access by design:
 
 ## Important Notes
 
-- Work repos should use `relay-ai-tools` (has jira/slack presets)
+- Work repos should use `relay-ai-tools`
 - Personal repos should use `ai-tools`
-- The two repos are maintained separately; sync manually as needed
 - All `.local.*` files are gitignored for personal customization
 - The `.generated/` folder contains runtime files (compiled firewall lists)
