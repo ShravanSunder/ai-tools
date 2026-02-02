@@ -1,46 +1,519 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# ─────────────────────────────────────────────────────────────
+# ws - Workspace Manager v2
+# Save and restore Kitty tab + Zellij session compositions
+# ─────────────────────────────────────────────────────────────
+
 STATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ws"
-STATE_FILE="$STATE_DIR/state.json"
+WORKSPACES_DIR="$STATE_DIR/workspaces"
+INDEX_FILE="$STATE_DIR/index.json"
 
-# Ensure state exists
+# ─────────────────────────────────────────────────────────────
+# Helpers
+# ─────────────────────────────────────────────────────────────
+
 init_state() {
-  mkdir -p "$STATE_DIR"
-  [[ -f "$STATE_FILE" ]] || echo '{"active":[]}' > "$STATE_FILE"
+  mkdir -p "$STATE_DIR" "$WORKSPACES_DIR"
+  [[ -f "$INDEX_FILE" ]] || echo '{"workspaces":{},"last_used":""}' > "$INDEX_FILE"
+}
+
+# Get workspace ID from path: parent/repo
+get_workspace_id() {
+  local path="$1"
+  local repo=$(basename "$path")
+  local parent=$(basename "$(dirname "$path")")
+  echo "${parent}/${repo}"
+}
+
+# Format seconds as "2h ago", "3d ago", etc.
+format_time_ago() {
+  local seconds=$1
+  if [[ $seconds -lt 60 ]]; then
+    echo "just now"
+  elif [[ $seconds -lt 3600 ]]; then
+    echo "$((seconds / 60))m ago"
+  elif [[ $seconds -lt 86400 ]]; then
+    echo "$((seconds / 3600))h ago"
+  else
+    echo "$((seconds / 86400))d ago"
+  fi
+}
+
+# Update index with workspace metadata
+update_index() {
+  local ws_id="$1"
+  local ws_file="$2"
+  local name=$(jq -r '.name' "$ws_file")
+  local parent=$(jq -r '.parent' "$ws_file")
+  local tabs_count=$(jq '.tabs | length' "$ws_file")
+  local last_saved=$(jq -r '.last_saved' "$ws_file")
+
+  local index=$(cat "$INDEX_FILE")
+  index=$(echo "$index" | jq \
+    --arg id "$ws_id" \
+    --arg name "$name" \
+    --arg parent "$parent" \
+    --argjson tabs "$tabs_count" \
+    --arg last "$last_saved" \
+    '.workspaces[$id] = {name: $name, parent: $parent, tabs_count: $tabs, last_saved: $last} | .last_used = $id')
+  echo "$index" > "$INDEX_FILE"
+}
+
+# Resolve workspace name to full ID (handles short names if unique)
+resolve_workspace() {
+  local input="$1"
+
+  # If it contains /, assume it's a full ID
+  if [[ "$input" == */* ]]; then
+    echo "$input"
+    return
+  fi
+
+  # Search for unique match by name
+  local matches=$(jq -r --arg name "$input" '.workspaces | to_entries[] | select(.value.name == $name) | .key' "$INDEX_FILE")
+  local count=$(echo "$matches" | grep -c . || true)
+
+  if [[ $count -eq 0 ]]; then
+    echo ""
+  elif [[ $count -eq 1 ]]; then
+    echo "$matches"
+  else
+    echo "AMBIGUOUS"
+  fi
 }
 
 # ─────────────────────────────────────────────────────────────
-# List worktrees (from wt)
+# ws save [name] - Save current Kitty window as workspace
 # ─────────────────────────────────────────────────────────────
-cmd_list() {
-  echo "=== Worktrees ==="
-  wt list --format=json | jq -r '.[] | "\(.branch)\t\(.path)"'
+cmd_save() {
+  local name="${1:-}"
+
+  if [[ -z "${KITTY_WINDOW_ID:-}" ]]; then
+    echo "Error: Must run from inside Kitty" >&2
+    exit 1
+  fi
+
+  # Get tabs from Kitty
+  local kitty_data=$(kitten @ ls 2>/dev/null)
+  if [[ -z "$kitty_data" ]]; then
+    echo "Error: Could not get Kitty window data" >&2
+    exit 1
+  fi
+
+  # Extract tabs with zellij sessions
+  local tabs_json=$(echo "$kitty_data" | jq -c '
+    [.[0].tabs[] |
+      . as $tab |
+      ($tab.windows[] | select(.cmdline | join(" ") | test("zellij"))) as $w |
+      {
+        title: $tab.title,
+        zellij_session: (if ($w.cmdline | length) > 0 then ($w.cmdline | .[-1]) else "" end),
+        cwd: $w.cwd
+      }
+    ] | unique_by(.title)
+  ')
+
+  local tabs_count=$(echo "$tabs_json" | jq 'length')
+  if [[ "$tabs_count" == "0" ]]; then
+    echo "No tabs with Zellij sessions found in current window"
+    exit 1
+  fi
+
+  # Get first tab's cwd to determine workspace ID
+  local first_cwd=$(echo "$tabs_json" | jq -r '.[0].cwd')
+  local parent=$(basename "$(dirname "$first_cwd")")
+
+  # Auto-generate name from cwd if not provided
+  if [[ -z "$name" ]]; then
+    name=$(basename "$first_cwd")
+  fi
+
+  local ws_id="${parent}/${name}"
+  local ws_dir="$WORKSPACES_DIR/$parent"
+  local ws_file="$ws_dir/${name}.json"
+
+  mkdir -p "$ws_dir"
+
+  echo "Saving workspace: $ws_id"
+
+  # Show tabs being saved
+  echo "$tabs_json" | jq -r '.[] | "  Tab: \(.title) → zellij: \(.zellij_session)"'
+
+  # Build workspace file
+  local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  local created="$now"
+
+  # Preserve created date if updating existing
+  if [[ -f "$ws_file" ]]; then
+    created=$(jq -r '.created' "$ws_file")
+  fi
+
+  jq -n \
+    --arg id "$ws_id" \
+    --arg name "$name" \
+    --arg parent "$parent" \
+    --arg root "$first_cwd" \
+    --arg created "$created" \
+    --arg now "$now" \
+    --argjson tabs "$tabs_json" \
+    '{
+      id: $id,
+      name: $name,
+      parent: $parent,
+      root_path: $root,
+      created: $created,
+      last_saved: $now,
+      tabs: $tabs
+    }' > "$ws_file"
+
+  update_index "$ws_id" "$ws_file"
+
+  echo "Saved $tabs_count tab(s) to $ws_file"
 }
 
 # ─────────────────────────────────────────────────────────────
-# Open worktree in Kitty + Zellij
+# ws load <name> - Restore a saved workspace
+# ─────────────────────────────────────────────────────────────
+cmd_load() {
+  local input="${1:-}"
+
+  if [[ -z "$input" ]]; then
+    echo "Usage: ws load <workspace>" >&2
+    exit 1
+  fi
+
+  local ws_id=$(resolve_workspace "$input")
+
+  if [[ -z "$ws_id" ]]; then
+    echo "Workspace not found: $input" >&2
+    echo "Use 'ws list' to see saved workspaces"
+    exit 1
+  fi
+
+  if [[ "$ws_id" == "AMBIGUOUS" ]]; then
+    echo "Ambiguous workspace name: $input" >&2
+    echo "Multiple workspaces match. Use full ID (parent/name):"
+    jq -r --arg name "$input" '.workspaces | to_entries[] | select(.value.name == $name) | "  \(.key)"' "$INDEX_FILE"
+    exit 1
+  fi
+
+  local parent=$(dirname "$ws_id")
+  local name=$(basename "$ws_id")
+  local ws_file="$WORKSPACES_DIR/${parent}/${name}.json"
+
+  if [[ ! -f "$ws_file" ]]; then
+    echo "Workspace file not found: $ws_file" >&2
+    exit 1
+  fi
+
+  echo "Loading workspace: $ws_id"
+
+  local tabs=$(jq -c '.tabs[]' "$ws_file")
+
+  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+    # Inside Kitty: add tabs to current window
+    echo "$tabs" | while read -r tab; do
+      local title=$(echo "$tab" | jq -r '.title')
+      local session=$(echo "$tab" | jq -r '.zellij_session')
+      local cwd=$(echo "$tab" | jq -r '.cwd')
+
+      echo "  Opening tab: $title → attaching zellij: $session"
+      kitten @ launch --type=tab --tab-title "$title" --cwd "$cwd" \
+        zellij attach --create "$session" 2>/dev/null || true
+      sleep 0.3
+    done
+  else
+    # Outside Kitty: open new window
+    local first_tab=$(echo "$tabs" | head -1)
+    local title=$(echo "$first_tab" | jq -r '.title')
+    local session=$(echo "$first_tab" | jq -r '.zellij_session')
+    local cwd=$(echo "$first_tab" | jq -r '.cwd')
+
+    echo "  Opening Kitty window..."
+    kitty --single-instance --instance-group="$name" \
+      --session <(cat <<EOF
+new_tab $title
+cd $cwd
+launch zellij attach --create $session
+EOF
+) 2>/dev/null &
+    disown
+    sleep 0.5
+
+    # Add remaining tabs
+    echo "$tabs" | tail -n +2 | while read -r tab; do
+      title=$(echo "$tab" | jq -r '.title')
+      session=$(echo "$tab" | jq -r '.zellij_session')
+      cwd=$(echo "$tab" | jq -r '.cwd')
+
+      echo "  Opening tab: $title → attaching zellij: $session"
+      # Note: --to socket may need adjustment based on Kitty config
+      kitty --single-instance --instance-group="$name" \
+        --session <(cat <<EOF
+new_tab $title
+cd $cwd
+launch zellij attach --create $session
+EOF
+) 2>/dev/null &
+      disown
+      sleep 0.3
+    done
+  fi
+
+  local count=$(echo "$tabs" | wc -l | tr -d ' ')
+  echo "Restored $count tab(s)"
+
+  # Update last_used
+  local index=$(cat "$INDEX_FILE")
+  echo "$index" | jq --arg id "$ws_id" '.last_used = $id' > "$INDEX_FILE"
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws add [path] - Add folder to current workspace as new tab
+# ─────────────────────────────────────────────────────────────
+cmd_add() {
+  local path="${1:-.}"
+
+  if [[ -z "${KITTY_WINDOW_ID:-}" ]]; then
+    echo "Error: Must run from inside Kitty" >&2
+    exit 1
+  fi
+
+  # Resolve path
+  if [[ "$path" == "." ]]; then
+    path="$(pwd)"
+  else
+    path=$(cd "$path" && pwd)
+  fi
+
+  local tab_title=$(basename "$path")
+  local session_name=$(basename "$(dirname "$path")")-$(basename "$path")
+  session_name=$(echo "$session_name" | tr '/' '-' | tr '.' '-')
+
+  echo "Adding to workspace: $tab_title"
+  echo "  Path: $path"
+  echo "  Zellij session: $session_name"
+
+  kitten @ launch --type=tab --tab-title "$tab_title" --cwd "$path" \
+    zellij attach --create "$session_name" 2>/dev/null || true
+
+  echo "Tab added. Run 'ws save' to update workspace."
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws list - List saved workspaces
+# ─────────────────────────────────────────────────────────────
+cmd_list_workspaces() {
+  if [[ ! -f "$INDEX_FILE" ]] || [[ $(jq '.workspaces | length' "$INDEX_FILE") -eq 0 ]]; then
+    echo "No saved workspaces."
+    echo "Use 'ws save <name>' to create one."
+    return
+  fi
+
+  echo "=== Saved Workspaces ==="
+  local current_parent=""
+  local now=$(date "+%s")
+
+  jq -r '.workspaces | to_entries | sort_by(.value.parent, .value.name) | .[] | "\(.value.parent)\t\(.value.name)\t\(.value.tabs_count)\t\(.value.last_saved)"' "$INDEX_FILE" | \
+  while IFS=$'\t' read -r parent name tabs last_saved; do
+    # Group header
+    if [[ "$parent" != "$current_parent" ]]; then
+      [[ -n "$current_parent" ]] && echo ""
+      echo "$parent/"
+      current_parent="$parent"
+    fi
+
+    # Format time ago
+    local last_ts=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$last_saved" "+%s" 2>/dev/null || echo "0")
+    local ago=$(format_time_ago $((now - last_ts)))
+
+    printf "  %-20s %d tab(s)  %s\n" "$name" "$tabs" "$ago"
+  done
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws delete <name> - Delete a saved workspace
+# ─────────────────────────────────────────────────────────────
+cmd_delete() {
+  local input="${1:-}"
+
+  if [[ -z "$input" ]]; then
+    echo "Usage: ws delete <workspace>" >&2
+    exit 1
+  fi
+
+  local ws_id=$(resolve_workspace "$input")
+
+  if [[ -z "$ws_id" ]]; then
+    echo "Workspace not found: $input" >&2
+    exit 1
+  fi
+
+  local parent=$(dirname "$ws_id")
+  local name=$(basename "$ws_id")
+  local ws_file="$WORKSPACES_DIR/${parent}/${name}.json"
+
+  if [[ ! -f "$ws_file" ]]; then
+    echo "Workspace file not found" >&2
+    exit 1
+  fi
+
+  rm "$ws_file"
+
+  # Update index
+  local index=$(cat "$INDEX_FILE")
+  index=$(echo "$index" | jq --arg id "$ws_id" 'del(.workspaces[$id])')
+  echo "$index" > "$INDEX_FILE"
+
+  echo "Deleted workspace: $ws_id"
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws init <repo> - Quick setup: all worktrees for repo
+# ─────────────────────────────────────────────────────────────
+cmd_init() {
+  local repo="${1:-}"
+
+  if [[ -z "$repo" ]]; then
+    echo "Usage: ws init <repo-name>" >&2
+    exit 1
+  fi
+
+  # Find worktrees for this repo using wt
+  local worktrees=$(wt list --format=json 2>/dev/null | jq -c --arg repo "$repo" '
+    [.[] | select(.path | test($repo; "i"))]
+  ')
+
+  local count=$(echo "$worktrees" | jq 'length')
+  if [[ "$count" == "0" ]]; then
+    echo "No worktrees found matching: $repo" >&2
+    echo "Available repos:"
+    wt list --format=json 2>/dev/null | jq -r '.[].path | split("/") | .[-1]' | sort -u | sed 's/^/  /'
+    exit 1
+  fi
+
+  echo "Initializing workspace for: $repo"
+  echo "Found $count worktree(s)"
+
+  local first=true
+  echo "$worktrees" | jq -c '.[]' | while read -r wt_entry; do
+    local branch=$(echo "$wt_entry" | jq -r '.branch')
+    local path=$(echo "$wt_entry" | jq -r '.path')
+    local session="${repo}-${branch}"
+    session=$(echo "$session" | tr '/' '-' | tr '.' '-')
+
+    echo "  Opening tab: $branch → creating zellij: $session"
+
+    if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+      kitten @ launch --type=tab --tab-title "$branch" --cwd "$path" \
+        zellij attach --create "$session" 2>/dev/null || true
+    else
+      kitty --single-instance --instance-group="$repo" \
+        --session <(cat <<EOF
+new_tab $branch
+cd $path
+launch zellij attach --create $session
+EOF
+) 2>/dev/null &
+      disown
+    fi
+    sleep 0.3
+  done
+
+  echo ""
+  echo "Created $count tab(s). Run 'ws save $repo' to save this workspace."
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws find <query> - Search workspaces
+# ─────────────────────────────────────────────────────────────
+cmd_find() {
+  local query="${1:-}"
+
+  if [[ -z "$query" ]]; then
+    echo "Usage: ws find <query>" >&2
+    exit 1
+  fi
+
+  echo "=== Matching Workspaces ==="
+  jq -r --arg q "$query" '
+    .workspaces | to_entries[] |
+    select(.key | test($q; "i")) |
+    "  \(.key)  (\(.value.tabs_count) tabs)"
+  ' "$INDEX_FILE"
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws (no args) - Interactive picker using gum
+# ─────────────────────────────────────────────────────────────
+cmd_pick() {
+  if ! command -v gum &>/dev/null; then
+    echo "gum not installed. Install with: brew install gum" >&2
+    echo "Falling back to 'ws list'..."
+    cmd_list_workspaces
+    return
+  fi
+
+  if [[ ! -f "$INDEX_FILE" ]] || [[ $(jq '.workspaces | length' "$INDEX_FILE") -eq 0 ]]; then
+    echo "No saved workspaces."
+    echo "Use 'ws save <name>' to create one."
+    return
+  fi
+
+  # Build display list
+  local now=$(date "+%s")
+  local display=()
+  local ids=()
+
+  while IFS=$'\t' read -r ws_id name parent tabs last_saved; do
+    local last_ts=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$last_saved" "+%s" 2>/dev/null || echo "0")
+    local ago=$(format_time_ago $((now - last_ts)))
+    display+=("$(printf "%-12s %-20s %d tab(s)  %s" "$parent/" "$name" "$tabs" "$ago")")
+    ids+=("$ws_id")
+  done < <(jq -r '.workspaces | to_entries | sort_by(.value.last_saved) | reverse | .[] | "\(.key)\t\(.value.name)\t\(.value.parent)\t\(.value.tabs_count)\t\(.value.last_saved)"' "$INDEX_FILE")
+
+  if [[ ${#display[@]} -eq 0 ]]; then
+    echo "No saved workspaces."
+    return
+  fi
+
+  # Show picker
+  local choice
+  choice=$(printf '%s\n' "${display[@]}" | gum filter --placeholder="Select workspace to load...")
+
+  [[ -z "$choice" ]] && return
+
+  # Find matching ID
+  for i in "${!display[@]}"; do
+    if [[ "${display[$i]}" == "$choice" ]]; then
+      cmd_load "${ids[$i]}"
+      return
+    fi
+  done
+}
+
+# ─────────────────────────────────────────────────────────────
+# ws open <branch> - Open single worktree (kept from v1)
 # ─────────────────────────────────────────────────────────────
 cmd_open() {
   local branch="$1"
   local worktree_path session_name
 
   if [[ "$branch" == "." ]]; then
-    # Current directory
     worktree_path="$(pwd)"
     branch="$(basename "$worktree_path")"
   else
-    # Find path from wt list
-    worktree_path=$(wt list --format=json | jq -r --arg b "$branch" '.[] | select(.branch == $b) | .path')
+    worktree_path=$(wt list --format=json 2>/dev/null | jq -r --arg b "$branch" '.[] | select(.branch == $b) | .path')
     if [[ -z "$worktree_path" ]]; then
       echo "Worktree not found: $branch" >&2
       echo "Available:" >&2
-      wt list --format=json | jq -r '.[] | "  \(.branch)"'
+      wt list --format=json 2>/dev/null | jq -r '.[] | "  \(.branch)"'
       exit 1
     fi
   fi
 
-  # Session name: repo-branch (sanitized)
   local repo_name=$(basename "$(dirname "$worktree_path")" | sed 's/\.wt$//')
   session_name="${repo_name}-${branch}"
   session_name=$(echo "$session_name" | tr '/' '-' | tr '.' '-')
@@ -49,72 +522,42 @@ cmd_open() {
   echo "  Path: $worktree_path"
   echo "  Zellij session: $session_name"
 
-  # Open in Kitty with Zellij (background, suppress warnings)
-  kitty --single-instance --instance-group=ws \
-    --session <(cat <<EOF
+  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+    # Inside Kitty: new tab in current window
+    kitten @ launch --type=tab --tab-title "$branch" --cwd "$worktree_path" \
+      zellij attach --create "$session_name" 2>/dev/null || true
+  else
+    # Outside Kitty: new window
+    kitty --single-instance --instance-group=ws \
+      --session <(cat <<EOF
 new_tab $branch
 cd $worktree_path
 launch zellij attach --create $session_name
 EOF
 ) 2>/dev/null &
-  disown
-
-  # Track in active list
-  local state=$(cat "$STATE_FILE")
-  local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-  # Remove existing entry for this branch, add fresh
-  state=$(echo "$state" | jq --arg b "$branch" --arg p "$worktree_path" --arg s "$session_name" --arg t "$now" '
-    .active = (.active | map(select(.branch != $b))) + [{
-      "branch": $b,
-      "path": $p,
-      "zellij_session": $s,
-      "last_opened": $t
-    }]
-  ')
-  echo "$state" > "$STATE_FILE"
+    disown
+  fi
 }
 
 # ─────────────────────────────────────────────────────────────
-# Status: active workspaces + zellij sessions
+# ws status - Show current tabs + zellij sessions
 # ─────────────────────────────────────────────────────────────
 cmd_status() {
-  echo "=== Active Workspaces ==="
-  jq -r '.active[] | "  \(.branch) → \(.zellij_session)"' "$STATE_FILE"
+  echo "=== Current Kitty Tabs ==="
+  if [[ -n "${KITTY_WINDOW_ID:-}" ]]; then
+    kitten @ ls 2>/dev/null | jq -r '
+      .[0].tabs[] |
+      "  \(.title)" +
+      ((.windows[] | select(.cmdline | join(" ") | test("zellij"))) as $w |
+        if $w then " → zellij: \($w.cmdline[-1])" else "" end)
+    ' 2>/dev/null || echo "  (could not query Kitty)"
+  else
+    echo "  (not running inside Kitty)"
+  fi
+
   echo ""
   echo "=== Zellij Sessions ==="
   zellij list-sessions 2>/dev/null | sed 's/^/  /' || echo "  (none)"
-}
-
-# ─────────────────────────────────────────────────────────────
-# Restore: reopen all active workspaces
-# ─────────────────────────────────────────────────────────────
-cmd_restore() {
-  local count=$(jq '.active | length' "$STATE_FILE")
-
-  if [[ "$count" == "0" ]]; then
-    echo "No active workspaces to restore"
-    return
-  fi
-
-  echo "Restoring $count workspace(s)..."
-
-  jq -r '.active[] | .branch' "$STATE_FILE" | while read -r branch; do
-    echo "  Opening: $branch"
-    cmd_open "$branch"
-    sleep 0.5  # Give Kitty time between tabs
-  done
-}
-
-# ─────────────────────────────────────────────────────────────
-# Close: remove from active list
-# ─────────────────────────────────────────────────────────────
-cmd_close() {
-  local branch="$1"
-  local state=$(cat "$STATE_FILE")
-  state=$(echo "$state" | jq --arg b "$branch" '.active = (.active | map(select(.branch != $b)))')
-  echo "$state" > "$STATE_FILE"
-  echo "Removed from active: $branch"
 }
 
 # ─────────────────────────────────────────────────────────────
@@ -122,32 +565,47 @@ cmd_close() {
 # ─────────────────────────────────────────────────────────────
 show_usage() {
   cat <<EOF
-ws - Workspace manager for worktrees + Kitty + Zellij
+ws - Workspace Manager v2
+
+Save and restore Kitty tab + Zellij session compositions.
 
 Usage:
-  ws list              List all worktrees (from wt)
-  ws open <branch>     Open worktree by branch name in Kitty tab + Zellij
-  ws open .            Open current directory in Kitty tab + Zellij
-  ws status            Show active workspaces + Zellij sessions
-  ws restore           Reopen all active workspaces after crash
-  ws close <branch>    Remove workspace from active tracking
+  ws                   Interactive picker - choose workspace to load
+  ws save [name]       Save current Kitty window as workspace
+  ws load <name>       Restore a saved workspace
+  ws add [path]        Add folder to current workspace as new tab
+  ws list              List saved workspaces
+  ws delete <name>     Delete a saved workspace
+  ws init <repo>       Quick setup: all worktrees for repo → tabs
+  ws find <query>      Search workspaces by name
+
+  ws open <branch>     Open single worktree in new tab + zellij
+  ws open .            Open current dir in new tab + zellij
+  ws status            Show current Kitty tabs + Zellij sessions
 
 Examples:
-  ws list                # See available worktrees
-  ws open feature-auth   # Look up worktree, open in new Kitty tab
-  ws open .              # Already in a dir? Open it in new tab
-  ws restore             # Reopen everything after crash/reboot
+  ws                           # Pick workspace to load
+  ws init obsidian-cortex      # Open all worktrees for repo
+  ws save                      # Save current window (auto-name)
+  ws save my-project           # Save with custom name
+  ws load my-project           # Restore workspace
+  ws add ~/dev/related-repo    # Add folder to current workspace
 EOF
 }
 
 init_state
 
-case "${1:-help}" in
-  list)    cmd_list ;;
+case "${1:-}" in
+  "")      cmd_pick ;;
+  save)    cmd_save "${2:-}" ;;
+  load)    cmd_load "${2:-}" ;;
+  add)     cmd_add "${2:-.}" ;;
+  list)    cmd_list_workspaces ;;
+  delete)  cmd_delete "${2:-}" ;;
+  init)    cmd_init "${2:-}" ;;
+  find)    cmd_find "${2:-}" ;;
   open)    cmd_open "${2:-.}" ;;
   status)  cmd_status ;;
-  restore) cmd_restore ;;
-  close)   cmd_close "${2:-}" ;;
   -h|--help|help) show_usage ;;
   *)
     echo "Unknown command: $1" >&2

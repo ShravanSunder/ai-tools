@@ -1,67 +1,151 @@
-# ws - Workspace Manager
+# ws - Workspace Manager v2
 
-Manages workspaces by integrating worktrees (wt), Kitty terminal, and Zellij multiplexer.
+Save and restore Kitty tab + Zellij session compositions.
+
+## The Problem
+
+You work on multiple repos with multiple worktrees. You set up Kitty tabs + Zellij sessions in a composition that makes sense for your work. You want to come back to that setup later.
+
+## The Solution
+
+```bash
+ws save my-project      # Save current Kitty window (tabs + zellij sessions)
+ws load my-project      # Restore it anytime
+ws                      # Interactive picker to load workspaces
+```
+
+Zellij sessions persist their pane layouts. We just remember which tabs + sessions belong together.
 
 ## Installation
 
 ```bash
-./setup.sh
-source ~/.zshrc  # or restart shell
-```
+# Install dependencies
+brew install gum jq
 
-This will:
-- Symlink `ws` to `~/.local/bin/`
-- Add shell integration to `~/.zshrc` (for `zj` function + completions)
+# Run setup
+./setup.sh
+source ~/.zshrc
+```
 
 ## Requirements
 
-- `wt` (worktrunk) - git worktree manager
-- `kitty` - terminal emulator
+- `gum` - interactive picker (install with `brew install gum`)
+- `jq` - JSON processing
+- `kitty` - terminal with `allow_remote_control yes`
 - `zellij` - terminal multiplexer
-- `jq` - JSON processor
+- `wt` (worktrunk) - for `ws init` to find worktrees
 
-## Usage
+## Commands
+
+### Workspace Management
+
+| Command | Description |
+|---------|-------------|
+| `ws` | Interactive picker - choose workspace to load |
+| `ws save [name]` | Save current Kitty window as workspace |
+| `ws load <name>` | Restore a saved workspace |
+| `ws add [path]` | Add folder to current workspace as new tab |
+| `ws list` | List saved workspaces |
+| `ws delete <name>` | Delete a saved workspace |
+| `ws init <repo>` | Quick setup: all worktrees for repo → tabs |
+| `ws find <query>` | Search workspaces by name |
+
+### Tab Management (from v1)
+
+| Command | Description |
+|---------|-------------|
+| `ws open <branch>` | Open single worktree in new tab + zellij |
+| `ws open .` | Open current directory in new tab + zellij |
+| `ws status` | Show current Kitty tabs + Zellij sessions |
+
+### Shell Function
+
+| Command | Description |
+|---------|-------------|
+| `zj [name]` | Attach/create Zellij session (defaults to current dir name) |
+
+## Usage Examples
+
+### Save and restore a workspace
 
 ```bash
-ws list              # List all worktrees (from wt)
-ws open <branch>     # Look up worktree by branch name, open in Kitty + Zellij
-ws open .            # Open current directory in new Kitty tab + Zellij
-ws status            # Show active workspaces + running Zellij sessions
-ws restore           # Reopen all active workspaces (after crash/reboot)
-ws close <branch>    # Remove workspace from active tracking
+# Set up your workspace manually (open tabs, arrange zellij panes)
+# Then save it:
+ws save my-project
 
-# Shell function (from ws.zsh)
-zj [name]            # Attach/create Zellij session
+# Later, restore it:
+ws load my-project
+
+# Or use the interactive picker:
+ws
 ```
 
-### `ws open <branch>` vs `ws open .`
+### Quick setup from worktrees
 
-- **`ws open feature-auth`** - Looks up the worktree path from `wt list`, then opens it
-- **`ws open .`** - Uses your current directory (useful when you're already `cd`'d somewhere)
+```bash
+# Open all worktrees for a repo as tabs
+ws init obsidian-cortex
+
+# This creates a tab for each worktree, each with its own zellij session
+# Then save it:
+ws save obsidian-cortex
+```
+
+### Add folders to workspace
+
+```bash
+# Add current directory as new tab
+ws add
+
+# Add specific folder
+ws add ~/dev/related-repo
+
+# Save updated workspace
+ws save
+```
+
+### Check current state
+
+```bash
+# See what tabs and sessions are active
+ws status
+
+# List saved workspaces
+ws list
+```
 
 ## How It Works
 
-1. **`ws list`** - Queries `wt list --format=json` to show all worktrees
-2. **`ws open`** - Opens a new Kitty tab with Zellij session for the worktree
-3. **`ws status`** - Shows tracked active workspaces and running Zellij sessions
-4. **`ws restore`** - Reopens all previously active workspaces (useful after crash)
-5. **`ws close`** - Removes a workspace from the active tracking list
+### Workspace Structure
 
-## State File
+```
+Workspace (saved snapshot)
+└── Kitty Window
+    ├── Tab "react" → Zellij session "project-react"
+    │   ├── Pane: worktree-A (zellij manages layout)
+    │   └── Pane: worktree-B
+    └── Tab "main" → Zellij session "project-main"
+        └── Pane: worktree-C
+```
 
-Active workspaces are tracked in `~/.config/ws/state.json`:
+### Workspace ID
 
-```json
-{
-  "active": [
-    {
-      "branch": "feature-auth",
-      "path": "/Users/you/dev/my-app.feature-auth",
-      "zellij_session": "my-app-feature-auth",
-      "last_opened": "2025-01-31T10:00:00Z"
-    }
-  ]
-}
+Each workspace is identified by `parent/name`:
+- `project-dev/obsidian-cortex`
+- `ai-sdk/langchain`
+
+The parent is the immediate parent directory, auto-detected from your paths.
+
+### State Files
+
+```
+~/.config/ws/
+├── index.json           # Workspace index with metadata
+└── workspaces/
+    ├── project-dev/
+    │   └── obsidian-cortex.json
+    └── ai-sdk/
+        └── langchain.json
 ```
 
 ## Uninstall
