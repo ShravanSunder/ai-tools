@@ -419,6 +419,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e WORK_DIR="$WORK_DIR" \
         -e FIREWALL_ALLOWLIST="$FIREWALL_ALLOWLIST" \
         -e PLAYWRIGHT_EXTRA_HOSTS="$PLAYWRIGHT_EXTRA_HOSTS" \
+        -e SIDECAR_ENV_OVERRIDES="$SIDECAR_ENV_OVERRIDES" \
         -e VIRTUAL_ENV="$WORK_DIR/.venv" \
         -e PNPM_STORE_DIR="/home/node/.local/share/pnpm" \
         -e PATH="/home/node/.atuin/bin:/pnpm:$WORK_DIR/.venv/bin:/usr/local/share/npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \

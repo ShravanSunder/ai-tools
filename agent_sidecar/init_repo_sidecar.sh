@@ -93,6 +93,13 @@ if [ "$LOCAL_ONLY" = false ]; then
 # Additional Docker volume mounts (space-separated).
 # Default: -v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro
 # EXTRA_MOUNTS=""
+
+# -----------------------------------------------------------------------------
+# Environment Overrides (applied at shell init inside container)
+# -----------------------------------------------------------------------------
+# Space-separated KEY=VALUE pairs - use for localhost → host.docker.internal
+# Example: SIDECAR_ENV_OVERRIDES="DATABASE_HOST=host.docker.internal REDIS_HOST=host.docker.internal"
+# SIDECAR_ENV_OVERRIDES=""
 EOF
         echo "   Created: sidecar.repo.conf"
     fi

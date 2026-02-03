@@ -73,6 +73,30 @@ autoload -Uz compinit
 compinit
 
 # #######################
+# SIDECAR ENV OVERRIDES
+# #######################
+# Parse SIDECAR_ENV_OVERRIDES from conf files (live, no restart needed)
+# Supports multiline values with \ continuation
+_load_sidecar_env_overrides() {
+    local conf_dir="/etc/agent-sidecar"
+    for conf in "$conf_dir/sidecar.repo.conf" "$conf_dir/sidecar.local.conf"; do
+        [ -f "$conf" ] || continue
+        # Source conf in subshell to safely extract SIDECAR_ENV_OVERRIDES
+        local val=$(
+            SIDECAR_ENV_OVERRIDES=""
+            source "$conf" 2>/dev/null
+            echo "$SIDECAR_ENV_OVERRIDES"
+        )
+        [ -z "$val" ] && continue
+        for kv in ${=val}; do
+            export "$kv"
+        done
+    done
+}
+_load_sidecar_env_overrides
+unset -f _load_sidecar_env_overrides
+
+# #######################
 # CUSTOM CONFIG
 # #######################
 alias ll='ls -la'

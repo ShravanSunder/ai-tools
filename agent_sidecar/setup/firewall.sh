@@ -24,7 +24,14 @@ log_info() { echo "  - $1"; }
 log_error() { echo "❌ ERROR: $1" >&2; }
 log_success() { echo "✅ $1"; }
 
-# Read domains from an allowlist file into the DOMAINS array
+# Check if a string is a valid IPv4 address or CIDR
+is_ipv4_or_cidr() {
+    local entry="$1"
+    # Match IPv4 (1.2.3.4) or CIDR (1.2.3.0/24)
+    [[ "$entry" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(/[0-9]+)?$ ]]
+}
+
+# Read domains/IPs from an allowlist file into DOMAINS and IP_CIDRS arrays
 # Usage: read_allowlist_file "/path/to/file.txt"
 read_allowlist_file() {
     local file="$1"
@@ -48,7 +55,13 @@ read_allowlist_file() {
         local normalized
         normalized=$(echo "$line" | sed 's/^\*\.//')
         
-        # Basic validation
+        # Check for IPv4/CIDR first (before domain validation)
+        if is_ipv4_or_cidr "$normalized"; then
+            IP_CIDRS+=("$normalized")
+            continue
+        fi
+        
+        # Domain validation
         if [[ ! "$normalized" =~ ^[a-zA-Z0-9.-]+$ ]]; then
             log_error "Invalid domain entry: $line"
             exit 1
@@ -96,6 +109,17 @@ load_github_meta() {
     
     log_info "  Adding GitHub 'api' CIDRs..."
     for cidr in $(echo "$meta_json" | jq -r '.api[]' | grep -v ':'); do
+        ipset add "$IPSET_NAME" "$cidr" -!
+    done
+}
+
+# Load explicit IP/CIDR entries into ipset
+load_ip_cidrs() {
+    if [[ ${#IP_CIDRS[@]} -eq 0 ]]; then
+        return 0
+    fi
+    log_info "Adding ${#IP_CIDRS[@]} explicit IP/CIDR entries to ipset..."
+    for cidr in "${IP_CIDRS[@]}"; do
         ipset add "$IPSET_NAME" "$cidr" -!
     done
 }
@@ -177,18 +201,22 @@ do_reload() {
     resolve_allowlist_files
     capture_upstream_resolvers
     
-    # Read all domains from all files (base + toggle.base + toggle.tmp)
+    # Read all domains/IPs from all files (base + toggle.base + toggle.tmp)
     DOMAINS=()
+    IP_CIDRS=()
     GITHUB_META_PRELOAD=false
     read_allowlist_file "$BASE_ALLOWLIST"
     [[ -f "$TOGGLE_ALLOWLIST_BASE" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_BASE"
     [[ -f "$TOGGLE_ALLOWLIST_TMP" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_TMP"
     
-    log_info "Total domains loaded: ${#DOMAINS[@]}"
+    log_info "Loaded: ${#DOMAINS[@]} domains, ${#IP_CIDRS[@]} IPs/CIDRs"
     
     # Flush and recreate ipset (keeps iptables rule intact)
     log_info "Flushing ipset: $IPSET_NAME"
     ipset flush "$IPSET_NAME" 2>/dev/null || ipset create "$IPSET_NAME" hash:net
+    
+    # Add explicit IP/CIDR entries to ipset
+    load_ip_cidrs
     
     # Regenerate dnsmasq config
     generate_dnsmasq_conf
@@ -214,19 +242,23 @@ do_full_init() {
     check_environment
     resolve_allowlist_files
     
-    # Read all domains from all files (base + toggle.base + toggle.tmp)
+    # Read all domains/IPs from all files (base + toggle.base + toggle.tmp)
     DOMAINS=()
+    IP_CIDRS=()
     GITHUB_META_PRELOAD=false
     read_allowlist_file "$BASE_ALLOWLIST"
     [[ -f "$TOGGLE_ALLOWLIST_BASE" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_BASE"
     [[ -f "$TOGGLE_ALLOWLIST_TMP" ]] && read_allowlist_file "$TOGGLE_ALLOWLIST_TMP"
     
-    log_info "Total domains loaded: ${#DOMAINS[@]}"
+    log_info "Loaded: ${#DOMAINS[@]} domains, ${#IP_CIDRS[@]} IPs/CIDRs"
     
     # --- Prep ipset ---
     log_info "Preparing ipset: $IPSET_NAME"
     ipset create "$IPSET_NAME" hash:net -!
     ipset flush "$IPSET_NAME"
+    
+    # Add explicit IP/CIDR entries to ipset
+    load_ip_cidrs
     
     # --- Capture upstream resolvers ---
     capture_upstream_resolvers
