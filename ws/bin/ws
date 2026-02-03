@@ -10,6 +10,7 @@ STATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ws"
 LAYOUTS_DIR="$STATE_DIR/layouts"
 INDEX_FILE="$STATE_DIR/index.json"
 CONFIG_FILE="$STATE_DIR/config.json"
+ZELLIJ_CONFIG="${ZELLIJ_CONFIG_FILE:-$HOME/.config/zellij/config.kdl}"
 
 # ─────────────────────────────────────────────────────────────
 # Helpers
@@ -25,6 +26,8 @@ init_state() {
 # Input: tabs_json = [{"name": "main", "cwd": "/path"}, ...]
 generate_kdl_layout() {
   local tabs_json="$1"
+  local count=$(echo "$tabs_json" | jq 'length')
+  local i=0
 
   echo "layout {"
   echo "    tab_template name=\"ws-tab\" {"
@@ -34,8 +37,16 @@ generate_kdl_layout() {
   echo "        }"
   echo "    }"
   echo ""
-  echo "$tabs_json" | jq -r '.[] | "\(.name)\t\(.cwd)"' | while IFS=$'\t' read -r name cwd; do
-    echo "    ws-tab name=\"$name\" cwd=\"$cwd\""
+
+  while [[ $i -lt $count ]]; do
+    local name=$(echo "$tabs_json" | jq -r ".[$i].name")
+    local cwd=$(echo "$tabs_json" | jq -r ".[$i].cwd")
+    if [[ $i -eq 0 ]]; then
+      echo "    ws-tab name=\"$name\" cwd=\"$cwd\" focus=true"
+    else
+      echo "    ws-tab name=\"$name\" cwd=\"$cwd\""
+    fi
+    ((i++))
   done
   echo "}"
 }
@@ -195,7 +206,7 @@ cmd_init() {
         echo "Deleting existing session..."
         zellij delete-session "$session_name" 2>/dev/null || true
         echo "Creating new session: $session_name"
-        exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
+        exec zellij --new-session-with-layout "$layout_file" --config "$ZELLIJ_CONFIG" --session "$session_name"
         ;;
       "Enter new name")
         local new_name
@@ -211,7 +222,7 @@ cmd_init() {
         updated_index=$(echo "$updated_index" | jq --arg id "$ws_id" --arg session "$session_name" '.workspaces[$id].session_name = $session')
         echo "$updated_index" > "$INDEX_FILE"
         echo "Creating session: $session_name"
-        exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
+        exec zellij --new-session-with-layout "$layout_file" --config "$ZELLIJ_CONFIG" --session "$session_name"
         ;;
       *)
         echo "Cancelled."
@@ -223,7 +234,7 @@ cmd_init() {
   # Start new Zellij session
   echo "Starting Zellij session: $session_name"
   echo ""
-  exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
+  exec zellij --new-session-with-layout "$layout_file" --config "$ZELLIJ_CONFIG" --session "$session_name"
 }
 
 # ─────────────────────────────────────────────────────────────
@@ -300,7 +311,7 @@ cmd_pick() {
   else
     echo "Creating session from layout: $session_name"
     # Use -n to force new session (works even when inside another Zellij session)
-    exec zellij --new-session-with-layout "$layout_file" --config ~/.config/zellij/config.kdl --session "$session_name"
+    exec zellij --new-session-with-layout "$layout_file" --config "$ZELLIJ_CONFIG" --session "$session_name"
   fi
 }
 
@@ -393,6 +404,13 @@ cmd_delete() {
   local parent=$(dirname "$ws_id")
   local name=$(basename "$ws_id")
   local layout_file="$LAYOUTS_DIR/$parent/${name}.kdl"
+  local session_name=$(jq -r --arg id "$ws_id" '.workspaces[$id].session_name' "$INDEX_FILE")
+
+  # Delete Zellij session if it exists
+  if session_exists "$session_name"; then
+    echo "Deleting Zellij session: $session_name"
+    zellij delete-session "$session_name" 2>/dev/null || true
+  fi
 
   # Delete layout file
   [[ -f "$layout_file" ]] && rm "$layout_file"
