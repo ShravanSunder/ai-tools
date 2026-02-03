@@ -429,6 +429,11 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -w "$WORK_DIR" \
         "$IMAGE_NAME" \
         sh -c "sudo FIREWALL_ALLOWLIST=\$FIREWALL_ALLOWLIST /usr/local/bin/firewall.sh && sleep infinity"
+else
+    # Existing container - reload firewall with updated allowlist
+    echo "🔄 Reloading firewall with updated allowlist..."
+    docker exec -u root "$CONTAINER_NAME" \
+        sh -c "FIREWALL_ALLOWLIST=$FIREWALL_ALLOWLIST /usr/local/bin/firewall.sh --reload" || true
 fi
 
 echo "🔄 Importing zsh history..."
