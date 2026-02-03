@@ -192,6 +192,7 @@ parceljs.org
 sequelize.org
 typeorm.io
 knexjs.org
+extensions.duckdb.org
 # DBOS
 dbos.dev
 docs.dbos.dev
