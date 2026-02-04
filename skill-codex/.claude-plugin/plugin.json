@@ -1,5 +1,5 @@
 {
-  "name": "codex",
+  "name": "skill-codex",
   "version": "1.0.0",
   "description": "Delegate hard problems to OpenAI Codex as a background task for deep codebase exploration, architecture reasoning, and code review"
 }
