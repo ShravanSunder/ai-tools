@@ -12,6 +12,18 @@
       "source": "./ai_scaffold",
       "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
       "version": "0.1.0"
+    },
+    {
+      "name": "skill-peekaboo",
+      "source": "./skill-peekaboo",
+      "description": "Visual UI testing for macOS apps using Peekaboo CLI - alternative to Playwright for native macOS testing",
+      "version": "1.0.0"
+    },
+    {
+      "name": "skill-codex",
+      "source": "./skill-codex",
+      "description": "Delegate hard problems to OpenAI Codex as background task - codebase exploration, debugging, code review, architecture",
+      "version": "1.0.0"
     }
   ]
 }
