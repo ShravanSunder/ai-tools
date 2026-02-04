@@ -15,12 +15,20 @@ if command -v Xvfb &> /dev/null; then
     fi
 fi
 
-# 1. Sync Node modules (pnpm)
-if [ -f package.json ]; then
+# 1. Sync Node modules (auto-detect package manager by lockfile)
+if [ -f pnpm-lock.yaml ]; then
 	echo "  - Syncing Node modules (pnpm)..."
 	CI=true pnpm install || true
+elif [ -f package-lock.json ]; then
+	echo "  - Syncing Node modules (npm)..."
+	CI=true npm ci || npm install || true
+elif [ -f yarn.lock ]; then
+	echo "  - Syncing Node modules (yarn)..."
+	CI=true yarn install --frozen-lockfile || yarn install || true
+elif [ -f package.json ]; then
+	echo "  - Skipping Node modules: no lockfile found (run pnpm/npm/yarn install manually)"
 else
-	echo "  - Skipping Node modules (pnpm): package.json not found"
+	echo "  - Skipping Node modules: no package.json found"
 fi
 
 # 2. Sync Python environment (uv)

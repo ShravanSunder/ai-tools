@@ -231,6 +231,7 @@ echo "📋 Using Dockerfile: $DOCKERFILE"
 # 1. Prepare build-time files in .generated/
 GENERATED_DIR="$SCRIPT_DIR/.generated"
 mkdir -p "$GENERATED_DIR"
+touch "$GENERATED_DIR/.keep"  # Ensure directory is never empty for Docker COPY
 
 # 1a. Resolve build-extra script (.local > .repo, no base)
 # This runs at Docker build time with full network access

@@ -232,12 +232,14 @@ RUN chmod +x /usr/local/bin/firewall.sh && \
 
 # Per-repo build-extra script (runs as root with full network access at build time)
 # Copied to .generated/ by run-agent-sidecar.sh if .agent_sidecar/build-extra.{repo,local}.sh exists
-COPY .generated/build-extra.s[h] /tmp/
-RUN if [ -f /tmp/build-extra.sh ]; then \
+COPY .generated/ /tmp/build-extra/
+RUN if [ -f /tmp/build-extra/build-extra.sh ]; then \
       echo "🔧 Running build-extra.sh..." && \
-      chmod +x /tmp/build-extra.sh && \
-      /tmp/build-extra.sh && \
-      rm /tmp/build-extra.sh; \
+      chmod +x /tmp/build-extra/build-extra.sh && \
+      /tmp/build-extra/build-extra.sh && \
+      rm -rf /tmp/build-extra; \
+    else \
+      rm -rf /tmp/build-extra; \
     fi
 
 USER node
