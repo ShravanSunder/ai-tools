@@ -1,6 +1,6 @@
 ---
 name: codex-solver
-description: Delegate hard problems to OpenAI Codex as a background task. Use when Claude is stuck, needs deep codebase exploration, backend architecture reasoning, code review of subsections, or a second opinion on complex solutions. Codex excels at autonomous exploration and deep reasoning. Proactively invoke when facing multi-file analysis, architectural decisions, debugging dead ends, or thorough code review. Codex is SLOW (5-30 min) but thorough - runs as background agent while Claude continues working.
+description: Delegate hard problems to OpenAI Codex using Task tool with run_in_background:true (REQUIRED). Use when Claude is stuck, needs deep codebase exploration, backend architecture reasoning, code review, or a second opinion. Codex excels at autonomous exploration and deep reasoning. Proactively invoke when facing multi-file analysis, architectural decisions, debugging dead ends, or thorough code review. ALWAYS spawn as background agent via Task tool so you can continue helping user while Codex works autonomously.
 ---
 
 # Codex Problem Solver
