@@ -7,6 +7,19 @@ description: Delegate hard problems to OpenAI Codex as a background task. Use wh
 
 Delegate hard problems to OpenAI Codex (GPT-5.2) as a **background task**. Codex runs autonomously, writes findings to tmp files, and reports back.
 
+## CRITICAL: Always Use Background Agent
+
+**You MUST use the Task tool with `run_in_background: true`** to invoke Codex. Never call `mcp__codex__codex` directly - it takes 5-30 minutes and will block the conversation.
+
+```
+Task tool:
+  subagent_type: "general-purpose"
+  run_in_background: true  ← REQUIRED
+  prompt: [see templates below]
+```
+
+This lets you continue helping the user while Codex works. Check back later with `TaskOutput` or read the output files.
+
 ## When to Use Codex (and Why)
 
 ### Codex Strengths (Use For These)
