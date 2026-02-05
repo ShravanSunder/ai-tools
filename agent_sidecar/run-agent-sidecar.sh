@@ -5,7 +5,8 @@ set -e
 # AI Coder Sidecar - Repo-agnostic container launcher for AI coding agents
 # =============================================================================
 # Usage: run-agent-sidecar.sh [OPTIONS]
-#   --reset         Remove and recreate container
+#   --reload        Recreate container (fast, keeps image, picks up config/mount changes)
+#   --full-reset    Rebuild image + recreate container (slow, updates agent CLIs)
 #   --no-run        Setup only, don't exec into container
 #   --run <cmd>     Run specific command in container
 #   --run-claude    Run Claude Code with --dangerously-skip-permissions
@@ -57,14 +58,19 @@ LOCAL_CODEX_DIR="$HOME/.codex"
 LOCAL_OPENCODE_DIR="$HOME/.config/opencode"
 
 # Parse arguments
-RESET=false
+FULL_RESET=false
+RELOAD=false
 NO_RUN=false
 RUN_CMD=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --reset|-reset)
-            RESET=true
+        --full-reset|-full-reset)
+            FULL_RESET=true
+            shift
+            ;;
+        --reload|-reload)
+            RELOAD=true
             shift
             ;;
         --no-run|-no-run)
@@ -251,26 +257,30 @@ if [ -n "$BUILD_EXTRA_SCRIPT" ]; then
     chmod +x "$BUILD_EXTRA_GENERATED"
 fi
 
-# 2. Build the image
-echo "📦 Building Docker image ($IMAGE_NAME)..."
-if [ -n "$EXTRA_APT_PACKAGES" ]; then
-    echo "   Extra APT packages: $EXTRA_APT_PACKAGES"
-fi
+# 2. Build the image (skipped on --reload, which reuses the existing image)
+if [ "$RELOAD" != true ]; then
+    echo "📦 Building Docker image ($IMAGE_NAME)..."
+    if [ -n "$EXTRA_APT_PACKAGES" ]; then
+        echo "   Extra APT packages: $EXTRA_APT_PACKAGES"
+    fi
 
-# When --reset is used, pass a timestamp to bust the cache for agent CLIs
-# This ensures CLIs are updated to latest versions on reset
-CACHE_BUST_ARG=""
-if [ "$RESET" = true ]; then
-    CACHE_BUST_ARG="--build-arg CACHE_BUST_AGENT_CLIS=$(date +%s)"
-    echo "   Cache bust: Agent CLIs will be updated"
-fi
+    # When --full-reset is used, pass a timestamp to bust the cache for agent CLIs
+    # This ensures CLIs are updated to latest versions on full reset
+    CACHE_BUST_ARG=""
+    if [ "$FULL_RESET" = true ]; then
+        CACHE_BUST_ARG="--build-arg CACHE_BUST_AGENT_CLIS=$(date +%s)"
+        echo "   Cache bust: Agent CLIs will be updated"
+    fi
 
-docker build \
-    --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
-    $CACHE_BUST_ARG \
-    -t "$IMAGE_NAME" \
-    -f "$DOCKERFILE" \
-    "$SCRIPT_DIR"
+    docker build \
+        --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
+        $CACHE_BUST_ARG \
+        -t "$IMAGE_NAME" \
+        -f "$DOCKERFILE" \
+        "$SCRIPT_DIR"
+else
+    echo "🔄 Reload requested. Skipping image build, reusing existing image..."
+fi
 
 # 1.5. Claude OAuth credentials: Export from macOS Keychain if needed
 # Native install on macOS stores OAuth in Keychain, but Linux container needs a file
@@ -284,10 +294,13 @@ if [ "$(uname)" = "Darwin" ] && [ ! -f "$LOCAL_CLAUDE_CREDENTIALS" ]; then
     fi
 fi
 
-# 2. Cleanup old container if reset is requested or it's not running
+# 2. Cleanup old container if full-reset or reload is requested
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
-    if [ "$RESET" = true ]; then
-        echo "🧹 Reset requested. Removing existing container..."
+    if [ "$FULL_RESET" = true ]; then
+        echo "🧹 Full reset requested. Removing existing container..."
+        docker rm -f "$CONTAINER_NAME"
+    elif [ "$RELOAD" = true ]; then
+        echo "🔄 Reload requested. Removing existing container..."
         docker rm -f "$CONTAINER_NAME"
     fi
 fi

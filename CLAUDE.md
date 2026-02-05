@@ -94,7 +94,7 @@ Set `EXTRA_APT_PACKAGES` in `sidecar.repo.conf` or `sidecar.local.conf`:
 EXTRA_APT_PACKAGES="htop tree"
 ```
 
-Packages are installed at **Docker build time** (requires `--reset` to rebuild when changed).
+Packages are installed at **Docker build time** (requires `--full-reset` to rebuild when changed).
 
 ### Build-Extra Script (per-repo)
 
@@ -114,7 +114,7 @@ rm /tmp/obsidian.AppImage
 - Runs as **root** at Docker build time (full network access)
 - Script is deleted after running (agent cannot access it)
 - Resolution: `.local` > `.repo` (no base)
-- Requires `--reset` to rebuild when changed
+- Requires `--full-reset` to rebuild when changed
 
 ### Init Script Extras
 
@@ -169,15 +169,26 @@ sidecar-ctl status
 # List all sidecar containers
 sidecar-ctl containers
 
-# Reset container (fresh start, updates agent CLIs to latest)
-run-agent-sidecar.sh --reset
+# Reload container (recreate with current image, picks up config/mount changes)
+run-agent-sidecar.sh --reload
+
+# Full reset (rebuild image + recreate container, updates agent CLIs to latest)
+run-agent-sidecar.sh --full-reset
 
 # Enter container without running agent
 run-agent-sidecar.sh --no-run
 docker exec -it agent-sidecar-{name}-{hash} zsh
 ```
 
-**Note**: `--reset` also updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions.
+**Container lifecycle flags**:
+
+| Flag | Image Build | Container | Speed | Use Case |
+|------|------------|-----------|-------|----------|
+| *(no flag)* | Cached (fast) | Reuse existing | ~3s | Day-to-day re-entry |
+| `--reload` | Skipped | Recreate | ~5-10s | Pick up config/mount changes |
+| `--full-reset` | Cache bust | Recreate | ~2-5min | Update CLIs, Dockerfile, apt packages |
+
+**Note**: `--full-reset` updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions. Named volumes (history, venv, pnpm, node_modules) survive both `--reload` and `--full-reset`.
 
 ## File Locations
 
