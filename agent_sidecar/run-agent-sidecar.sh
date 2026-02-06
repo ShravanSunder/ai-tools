@@ -195,92 +195,179 @@ load_config() {
 }
 
 # =============================================================================
-# Dockerfile Resolution - Pattern: {variant}.{tier}.dockerfile
+# Two-Tier Image Architecture
 # =============================================================================
-# Variant: nodepy (default), rust, python - what stack to use
-# Tier: base (ai-tools), repo (committed), local (gitignored)
+# Tier 1 (Base): Shared image with OS, tools, agent CLIs, Playwright
+#   - Built once, reused by all repos for a given variant
+#   - Image: agent-sidecar-base:{variant}
+#   - Dockerfile: $SCRIPT_DIR/{variant}.base.dockerfile
 #
-# Resolution order for selected variant:
-#   1. $REPO_SIDECAR/{variant}.local.dockerfile (personal, gitignored)
-#   2. $REPO_SIDECAR/{variant}.repo.dockerfile (team, committed)
-#   3. $SCRIPT_DIR/{variant}.base.dockerfile (default)
+# Tier 2 (Overlay/Custom): Per-repo customizations on top of base
+#   - Only built when customizations exist (EXTRA_APT_PACKAGES, build-extra.sh, extra zshrc)
+#   - Or when a custom Dockerfile exists in .agent_sidecar/
+#   - Image: agent-sidecar:{repo-name}
+#   - Custom Dockerfiles must FROM agent-sidecar-base:{variant}
+#
+# If no customizations exist, the base image is used directly (no overlay build).
 # =============================================================================
-resolve_dockerfile() {
-    local variant="${DOCKERFILE_VARIANT:-nodepy}"
-    
-    # 1. Local override (gitignored)
-    if [ -f "$REPO_SIDECAR/${variant}.local.dockerfile" ]; then
-        echo "$REPO_SIDECAR/${variant}.local.dockerfile"
-        return
-    fi
-    
-    # 2. Repo override (committed)
-    if [ -f "$REPO_SIDECAR/${variant}.repo.dockerfile" ]; then
-        echo "$REPO_SIDECAR/${variant}.repo.dockerfile"
-        return
-    fi
-    
-    # 3. Base (ai-tools)
-    echo "$SCRIPT_DIR/${variant}.base.dockerfile"
-}
 
 # Load configuration
 load_config
 
-DOCKERFILE=$(resolve_dockerfile)
-if [ ! -f "$DOCKERFILE" ]; then
-    echo "❌ ERROR: Dockerfile not found: $DOCKERFILE"
+VARIANT="${DOCKERFILE_VARIANT:-node-py}"
+BASE_IMAGE_NAME="agent-sidecar-base:${VARIANT}"
+BASE_DOCKERFILE="$SCRIPT_DIR/${VARIANT}.base.dockerfile"
+OVERLAY_DOCKERFILE="$SCRIPT_DIR/${VARIANT}.overlay.dockerfile"
+
+if [ ! -f "$BASE_DOCKERFILE" ]; then
+    echo "❌ ERROR: Base Dockerfile not found: $BASE_DOCKERFILE"
     exit 1
 fi
-echo "📋 Using Dockerfile: $DOCKERFILE"
 
-# 1. Prepare build-time files in .generated/
-GENERATED_DIR="$SCRIPT_DIR/.generated"
-mkdir -p "$GENERATED_DIR"
-touch "$GENERATED_DIR/.keep"  # Ensure directory is never empty for Docker COPY
-
-# 1a. Resolve build-extra script (.local > .repo, no base)
-# This runs at Docker build time with full network access
+# Resolve build-extra script (.local > .repo, no base)
 BUILD_EXTRA_SCRIPT=""
-BUILD_EXTRA_GENERATED="$GENERATED_DIR/build-extra.sh"
-rm -f "$BUILD_EXTRA_GENERATED"  # Clean up from previous builds
-
 if [ -f "$REPO_SIDECAR/build-extra.local.sh" ]; then
     BUILD_EXTRA_SCRIPT="$REPO_SIDECAR/build-extra.local.sh"
 elif [ -f "$REPO_SIDECAR/build-extra.repo.sh" ]; then
     BUILD_EXTRA_SCRIPT="$REPO_SIDECAR/build-extra.repo.sh"
 fi
 
-if [ -n "$BUILD_EXTRA_SCRIPT" ]; then
-    echo "📦 Found build-extra script: $BUILD_EXTRA_SCRIPT"
-    cp "$BUILD_EXTRA_SCRIPT" "$BUILD_EXTRA_GENERATED"
-    chmod +x "$BUILD_EXTRA_GENERATED"
-fi
+# Detect if per-repo build-time customizations exist
+has_repo_customizations() {
+    [ -n "${EXTRA_APT_PACKAGES:-}" ] && return 0
+    # Check for real build-extra script (not the no-op template)
+    # The template contains "No custom installations" -- if that marker is absent, it's been customized
+    if [ -n "$BUILD_EXTRA_SCRIPT" ] && [ -f "$BUILD_EXTRA_SCRIPT" ]; then
+        if ! grep -q "No custom installations" "$BUILD_EXTRA_SCRIPT"; then
+            return 0
+        fi
+    fi
+    [ -f "$REPO_SIDECAR/extra.repo.zshrc" ] && return 0
+    [ -f "$REPO_SIDECAR/extra.local.zshrc" ] && return 0
+    return 1
+}
 
-# 2. Build the image (skipped on --reload, which reuses the existing image)
+# Check for custom Dockerfile override (.local > .repo)
+resolve_custom_dockerfile() {
+    if [ -f "$REPO_SIDECAR/${VARIANT}.local.dockerfile" ]; then
+        echo "$REPO_SIDECAR/${VARIANT}.local.dockerfile"
+    elif [ -f "$REPO_SIDECAR/${VARIANT}.repo.dockerfile" ]; then
+        echo "$REPO_SIDECAR/${VARIANT}.repo.dockerfile"
+    fi
+}
+
+# Validate that a custom Dockerfile FROMs the base image
+validate_custom_dockerfile() {
+    local df="$1"
+    if ! head -10 "$df" | grep -qE 'FROM.*agent-sidecar-base|FROM.*\$\{?BASE_IMAGE'; then
+        echo "❌ ERROR: Custom Dockerfile must FROM agent-sidecar-base:${VARIANT}"
+        echo "   File: $df"
+        echo "   Add these lines at the top:"
+        echo "     ARG BASE_IMAGE=agent-sidecar-base:${VARIANT}"
+        echo '     FROM ${BASE_IMAGE}'
+        exit 1
+    fi
+}
+
+# Assemble a per-build temporary directory with per-repo files for overlay builds.
+# This avoids the race condition of using shared .generated/ across concurrent builds.
+assemble_overlay_context() {
+    local ctx
+    ctx=$(mktemp -d)
+    # Copy per-repo files into the temp build context
+    if [ -n "$BUILD_EXTRA_SCRIPT" ] && [ -f "$BUILD_EXTRA_SCRIPT" ]; then
+        cp "$BUILD_EXTRA_SCRIPT" "$ctx/build-extra.sh"
+        chmod +x "$ctx/build-extra.sh"
+    fi
+    [ -f "$REPO_SIDECAR/extra.repo.zshrc" ] && cp "$REPO_SIDECAR/extra.repo.zshrc" "$ctx/"
+    [ -f "$REPO_SIDECAR/extra.local.zshrc" ] && cp "$REPO_SIDECAR/extra.local.zshrc" "$ctx/"
+    echo "$ctx"
+}
+
+# =============================================================================
+# Build Images (skipped on --reload)
+# =============================================================================
+FINAL_IMAGE=""
+
 if [ "$RELOAD" != true ]; then
-    echo "📦 Building Docker image ($IMAGE_NAME)..."
-    if [ -n "$EXTRA_APT_PACKAGES" ]; then
-        echo "   Extra APT packages: $EXTRA_APT_PACKAGES"
+    # Phase 1: Base image (shared across all repos for this variant)
+    if [ "$FULL_RESET" = true ] || ! docker image inspect "$BASE_IMAGE_NAME" &>/dev/null; then
+        echo "📦 Building base image ($BASE_IMAGE_NAME)..."
+        CACHE_BUST_ARG=""
+        if [ "$FULL_RESET" = true ]; then
+            CACHE_BUST_ARG="--build-arg CACHE_BUST_AGENT_CLIS=$(date +%s)"
+            echo "   Cache bust: Agent CLIs will be updated"
+        fi
+        docker build \
+            $CACHE_BUST_ARG \
+            -t "$BASE_IMAGE_NAME" \
+            -f "$BASE_DOCKERFILE" \
+            "$SCRIPT_DIR"
+    else
+        echo "✅ Reusing existing base image ($BASE_IMAGE_NAME)"
     fi
 
-    # When --full-reset is used, pass a timestamp to bust the cache for agent CLIs
-    # This ensures CLIs are updated to latest versions on full reset
-    CACHE_BUST_ARG=""
-    if [ "$FULL_RESET" = true ]; then
-        CACHE_BUST_ARG="--build-arg CACHE_BUST_AGENT_CLIS=$(date +%s)"
-        echo "   Cache bust: Agent CLIs will be updated"
+    # Phase 2: Per-repo image
+    CUSTOM_DOCKERFILE=$(resolve_custom_dockerfile)
+
+    if [ -n "$CUSTOM_DOCKERFILE" ]; then
+        # Scenario 3: Custom Dockerfile override -- must FROM base
+        echo "📋 Using custom Dockerfile: $CUSTOM_DOCKERFILE"
+        validate_custom_dockerfile "$CUSTOM_DOCKERFILE"
+        FINAL_IMAGE="agent-sidecar:${REPO_NAME}"
+        BUILD_CONTEXT=$(assemble_overlay_context)
+        trap "rm -rf $BUILD_CONTEXT" EXIT
+        docker build \
+            --build-arg BASE_IMAGE="$BASE_IMAGE_NAME" \
+            --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
+            -t "$FINAL_IMAGE" \
+            -f "$CUSTOM_DOCKERFILE" \
+            "$BUILD_CONTEXT"
+
+    elif has_repo_customizations; then
+        # Scenario 2: Auto overlay with per-repo customizations
+        echo "📦 Building per-repo overlay ($REPO_NAME)..."
+        if [ -n "$EXTRA_APT_PACKAGES" ]; then
+            echo "   Extra APT packages: $EXTRA_APT_PACKAGES"
+        fi
+        FINAL_IMAGE="agent-sidecar:${REPO_NAME}"
+        BUILD_CONTEXT=$(assemble_overlay_context)
+        trap "rm -rf $BUILD_CONTEXT" EXIT
+        docker build \
+            --build-arg BASE_IMAGE="$BASE_IMAGE_NAME" \
+            --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
+            -t "$FINAL_IMAGE" \
+            -f "$OVERLAY_DOCKERFILE" \
+            "$BUILD_CONTEXT"
+
+    else
+        # Scenario 1: No customizations -- use base directly
+        echo "✅ No per-repo customizations, using base image directly"
+        FINAL_IMAGE="$BASE_IMAGE_NAME"
     fi
 
-    docker build \
-        --build-arg EXTRA_APT_PACKAGES="${EXTRA_APT_PACKAGES:-}" \
-        $CACHE_BUST_ARG \
-        -t "$IMAGE_NAME" \
-        -f "$DOCKERFILE" \
-        "$SCRIPT_DIR"
+    # Respect IMAGE_NAME override from sidecar config
+    if [ "${IMAGE_NAME:-agent-sidecar-image}" != "agent-sidecar-image" ]; then
+        FINAL_IMAGE="$IMAGE_NAME"
+    fi
+
+    # Auto-cleanup dangling images from previous builds
+    docker image prune -f 2>/dev/null || true
 else
     echo "🔄 Reload requested. Skipping image build, reusing existing image..."
+    # Determine FINAL_IMAGE for existing container
+    CUSTOM_DOCKERFILE=$(resolve_custom_dockerfile)
+    if [ -n "$CUSTOM_DOCKERFILE" ] || has_repo_customizations; then
+        FINAL_IMAGE="agent-sidecar:${REPO_NAME}"
+    else
+        FINAL_IMAGE="$BASE_IMAGE_NAME"
+    fi
+    if [ "${IMAGE_NAME:-agent-sidecar-image}" != "agent-sidecar-image" ]; then
+        FINAL_IMAGE="$IMAGE_NAME"
+    fi
 fi
+
+echo "📋 Using image: $FINAL_IMAGE"
 
 # 1.5. Claude OAuth credentials: Export from macOS Keychain if needed
 # Native install on macOS stores OAuth in Keychain, but Linux container needs a file
@@ -354,6 +441,8 @@ FIREWALL_ALLOWLIST=$(merge_firewall_lists)
 
 VENV_VOLUME="agent-sidecar-venv-${DIR_HASH}"
 PNPM_STORE_VOLUME="agent-sidecar-pnpm-${DIR_HASH}"
+CACHE_VOLUME="agent-sidecar-cache-${DIR_HASH}"
+UV_CACHE_VOLUME="agent-sidecar-uv-${DIR_HASH}"
 
 # Discover all node_modules directories and create isolated volumes for each
 # This shadows host node_modules so container gets Linux-native packages
@@ -378,6 +467,8 @@ echo "💾 Preparing Volumes and History..."
 docker volume create "$HISTORY_VOLUME" >/dev/null
 docker volume create "$VENV_VOLUME" >/dev/null
 docker volume create "$PNPM_STORE_VOLUME" >/dev/null
+docker volume create "$CACHE_VOLUME" >/dev/null
+docker volume create "$UV_CACHE_VOLUME" >/dev/null
 
 # 5. Handle container state
 # Remove container if it exists but isn't running (crashed/stopped)
@@ -408,6 +499,8 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         $CORE_MOUNTS \
         $EXTRA_MOUNTS \
         -v "$PNPM_STORE_VOLUME":/home/node/.local/share/pnpm \
+        -v "$CACHE_VOLUME":/home/node/.cache \
+        -v "$UV_CACHE_VOLUME":/home/node/.local/share/uv \
         -v "$LOCAL_CLAUDE_DIR":/home/node/.claude \
         -v "$LOCAL_CLAUDE_DIR":"$LOCAL_CLAUDE_DIR" \
         -v "$LOCAL_ATUIN_DIR":/home/node/.config/atuin \
@@ -441,7 +534,7 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -e GIT_CONFIG_KEY_0=safe.directory \
         -e GIT_CONFIG_VALUE_0=* \
         -w "$WORK_DIR" \
-        "$IMAGE_NAME" \
+        "$FINAL_IMAGE" \
         sh -c "sudo FIREWALL_ALLOWLIST=\$FIREWALL_ALLOWLIST /usr/local/bin/firewall.sh && sleep infinity"
 else
     # Existing container - reload firewall with updated allowlist

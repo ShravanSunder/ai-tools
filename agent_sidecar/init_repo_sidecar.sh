@@ -75,9 +75,10 @@ if [ "$LOCAL_ONLY" = false ]; then
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# Extra APT Packages (installed at Docker build time)
+# Extra APT Packages (installed at Docker build time via overlay image)
 # -----------------------------------------------------------------------------
-# Space-separated list. Requires --reset to rebuild when changed.
+# Space-separated list. Triggers a per-repo overlay build on top of the shared base.
+# Requires --full-reset to rebuild when changed.
 # Example: EXTRA_APT_PACKAGES="htop tree postgresql-client"
 # EXTRA_APT_PACKAGES=""
 
@@ -85,7 +86,19 @@ if [ "$LOCAL_ONLY" = false ]; then
 # Dockerfile Variant (default: node-py)
 # -----------------------------------------------------------------------------
 # Available: node-py, rust (TODO), python (TODO)
+# Base image: agent-sidecar-base:{variant} (shared, built once)
 # DOCKERFILE_VARIANT="node-py"
+
+# -----------------------------------------------------------------------------
+# Custom Dockerfile Override
+# -----------------------------------------------------------------------------
+# Place a custom Dockerfile in .agent_sidecar/:
+#   {variant}.repo.dockerfile  (team, committed)
+#   {variant}.local.dockerfile (personal, gitignored)
+#
+# IMPORTANT: Custom Dockerfiles MUST start with:
+#   ARG BASE_IMAGE=agent-sidecar-base:node-py
+#   FROM ${BASE_IMAGE}
 
 # -----------------------------------------------------------------------------
 # Extra Mounts

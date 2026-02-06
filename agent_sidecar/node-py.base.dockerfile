@@ -1,17 +1,16 @@
 # =============================================================================
-# nodepy.base.dockerfile - AI Coder Sidecar (Python/Node/TS)
+# node-py.base.dockerfile - AI Coder Sidecar BASE image (Python/Node/TS)
 # =============================================================================
+# This builds the SHARED base image used by all repos: agent-sidecar-base:{variant}
+#
 # Pattern: {variant}.{tier}.dockerfile
-#   - Variant: nodepy (this), rust, python
-#   - Tier: base (ai-tools), repo (committed), local (gitignored)
+#   - Variant: node-py (this), rust (TODO), python (TODO)
+#   - Tier: base (ai-tools)
 #
-# Override with:
-#   - .devcontainer/nodepy.local.dockerfile (personal, gitignored)
-#   - .devcontainer/nodepy.repo.dockerfile  (team, committed)
+# Per-repo customizations (EXTRA_APT_PACKAGES, build-extra.sh, extra zshrc)
+# are handled by node-py.overlay.dockerfile, NOT this file.
 #
-# Other variants (in agent_sidecar/):
-#   - rust.base.dockerfile   (Rust + Python/Node) - TODO
-#   - python.base.dockerfile (Python only) - TODO
+# Custom Dockerfiles in .agent_sidecar/ must FROM agent-sidecar-base:{variant}.
 # =============================================================================
 
 FROM nikolaik/python-nodejs:python3.13-nodejs24-slim
@@ -79,15 +78,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation \
     fonts-noto-color-emoji \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Per-repo apt packages (passed via --build-arg from sidecar.conf)
-ARG EXTRA_APT_PACKAGES=""
-RUN if [ -n "$EXTRA_APT_PACKAGES" ]; then \
-      echo "Installing extra apt packages: $EXTRA_APT_PACKAGES" && \
-      apt-get update && \
-      apt-get install -y --no-install-recommends $EXTRA_APT_PACKAGES && \
-      apt-get clean && rm -rf /var/lib/apt/lists/*; \
-    fi
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
@@ -176,12 +166,10 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 # Install Zap non-interactively for the node user
 RUN zsh -c 'curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh | zsh -s -- --branch release-v1 -k'
 
-# Copy zshrc layers (additive pattern: extra.base.zshrc, extra.repo.zshrc, extra.local.zshrc)
+# Copy base zshrc (per-repo zshrc handled by overlay Dockerfile)
 # This preserves the Oh-My-Zsh/Powerlevel10k base from zsh-in-docker
-COPY setup/extra.base.zshrc extra.repo.zshr[c] extra.local.zshr[c] /tmp/
-RUN cat /tmp/extra.base.zshrc >> /home/node/.zshrc && \
-    if [ -f /tmp/extra.repo.zshrc ]; then cat /tmp/extra.repo.zshrc >> /home/node/.zshrc; fi && \
-    if [ -f /tmp/extra.local.zshrc ]; then cat /tmp/extra.local.zshrc >> /home/node/.zshrc; fi
+COPY setup/extra.base.zshrc /tmp/
+RUN cat /tmp/extra.base.zshrc >> /home/node/.zshrc
 
 # Pre-install plugins during build to bake them into the image
 # We ignore the exit code here as Zap might return 1 after a clean install in some environments
@@ -229,17 +217,5 @@ USER root
 RUN chmod +x /usr/local/bin/firewall.sh && \
   echo "node ALL=(root) NOPASSWD:SETENV: /usr/local/bin/firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
-
-# Per-repo build-extra script (runs as root with full network access at build time)
-# Copied to .generated/ by run-agent-sidecar.sh if .agent_sidecar/build-extra.{repo,local}.sh exists
-COPY .generated/ /tmp/build-extra/
-RUN if [ -f /tmp/build-extra/build-extra.sh ]; then \
-      echo "🔧 Running build-extra.sh..." && \
-      chmod +x /tmp/build-extra/build-extra.sh && \
-      /tmp/build-extra/build-extra.sh && \
-      rm -rf /tmp/build-extra; \
-    else \
-      rm -rf /tmp/build-extra; \
-    fi
 
 USER node

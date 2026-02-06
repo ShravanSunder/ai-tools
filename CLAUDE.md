@@ -66,11 +66,26 @@ Files are resolved in priority order (highest first):
 | **Override** (pick one: local > repo > base) | `{name}.{tier}.{ext}` | `sidecar.repo.conf`, `node-py.local.dockerfile` |
 | **Additive** (merge all that exist) | `{name}-extra.{tier}.{ext}` or `extra.{tier}.{ext}` | `firewall-allowlist-extra.repo.txt`, `extra.repo.zshrc` |
 
-Example resolution for Dockerfile (override pattern):
+### Two-Tier Image Architecture
+
+Images use a shared base + optional per-repo overlay:
+
+1. **Base image** (`agent-sidecar-base:{variant}`) - Shared across all repos. Contains OS, tools, agent CLIs, Playwright. Built once. Uses Python 3.13.
+2. **Per-repo overlay** (`agent-sidecar:{repo-name}`) - Only built when customizations exist (EXTRA_APT_PACKAGES, build-extra.sh, extra zshrc).
+3. If no customizations, the base image is used directly (no overlay build).
+
+Custom Dockerfiles in `.agent_sidecar/` **must** `FROM agent-sidecar-base:{variant}`:
+```dockerfile
+ARG BASE_IMAGE=agent-sidecar-base:node-py
+FROM ${BASE_IMAGE}
+# ... your customizations ...
+```
+
+Resolution for custom Dockerfiles (override pattern):
 ```
 1. .agent_sidecar/node-py.local.dockerfile  (personal, gitignored)
 2. .agent_sidecar/node-py.repo.dockerfile   (team, committed)
-3. agent_sidecar/node-py.base.dockerfile    (default)
+3. (no override) -> base image used directly, or overlay if customizations exist
 ```
 
 ### Firewall System
@@ -94,7 +109,7 @@ Set `EXTRA_APT_PACKAGES` in `sidecar.repo.conf` or `sidecar.local.conf`:
 EXTRA_APT_PACKAGES="htop tree"
 ```
 
-Packages are installed at **Docker build time** (requires `--full-reset` to rebuild when changed).
+Setting `EXTRA_APT_PACKAGES` triggers a per-repo **overlay image** build on top of the shared base. Requires `--full-reset` to rebuild when changed.
 
 ### Build-Extra Script (per-repo)
 
@@ -138,6 +153,8 @@ Persistent volumes per workspace:
 - `agent-sidecar-history-{hash}` - Shell history
 - `agent-sidecar-venv-{hash}` - Python virtualenv
 - `agent-sidecar-pnpm-{hash}` - pnpm store
+- `agent-sidecar-cache-{hash}` - pnpm/npm cache (persists across container recreation)
+- `agent-sidecar-uv-{hash}` - uv Python downloads and cache
 - `agent-sidecar-nm-{hash}-*` - node_modules per package
 
 ### Initialize a Repository
@@ -172,23 +189,26 @@ sidecar-ctl containers
 # Reload container (recreate with current image, picks up config/mount changes)
 run-agent-sidecar.sh --reload
 
-# Full reset (rebuild image + recreate container, updates agent CLIs to latest)
+# Full reset (rebuild base image + recreate container, updates agent CLIs to latest)
 run-agent-sidecar.sh --full-reset
 
 # Enter container without running agent
 run-agent-sidecar.sh --no-run
 docker exec -it agent-sidecar-{name}-{hash} zsh
+
+# Clean up Docker resources (dangling images, old build cache, orphaned volumes)
+sidecar-ctl cleanup
 ```
 
 **Container lifecycle flags**:
 
-| Flag | Image Build | Container | Speed | Use Case |
-|------|------------|-----------|-------|----------|
-| *(no flag)* | Cached (fast) | Reuse existing | ~3s | Day-to-day re-entry |
-| `--reload` | Skipped | Recreate | ~5-10s | Pick up config/mount changes |
-| `--full-reset` | Cache bust | Recreate | ~2-5min | Update CLIs, Dockerfile, apt packages |
+| Flag | Base Image | Per-Repo Image | Container | Speed | Use Case |
+|------|-----------|---------------|-----------|-------|----------|
+| *(no flag)* | Reuse (or build if missing) | Skip if no customizations | Reuse existing | ~0-3s | Day-to-day re-entry |
+| `--reload` | Skipped | Skipped | Recreate | ~5-10s | Pick up config/mount changes |
+| `--full-reset` | Rebuild (cache bust) | Rebuild if needed | Recreate | ~2-5min | Update CLIs, Dockerfile, apt packages |
 
-**Note**: `--full-reset` updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions. Named volumes (history, venv, pnpm, node_modules) survive both `--reload` and `--full-reset`.
+**Note**: `--full-reset` updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions. Named volumes (history, venv, pnpm, node_modules, cache, uv) survive both `--reload` and `--full-reset`.
 
 ## File Locations
 

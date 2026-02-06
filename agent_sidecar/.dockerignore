@@ -1,0 +1,24 @@
+# =============================================================================
+# .dockerignore - Exclude files from Docker build context
+# =============================================================================
+# The base image build context is agent_sidecar/ (SCRIPT_DIR).
+# Only setup/ files and the Dockerfiles themselves need to enter the context.
+# Everything else is excluded to prevent cache busting and reduce context size.
+# =============================================================================
+
+# Runtime-generated files (written by sidecar-ctl.sh and run-agent-sidecar.sh)
+.generated/
+
+# Scripts that aren't needed in the image
+run-agent-sidecar.sh
+sidecar-ctl.sh
+init_repo_sidecar.sh
+sidecar.base.conf
+.gitignore
+.dockerignore
+
+# Firewall toggle presets (used by sidecar-ctl.sh on host, not in image)
+firewall-toggle-presets/
+
+# Overlay Dockerfile (not needed in base image build context)
+*.overlay.dockerfile

@@ -561,6 +561,36 @@ cmd_containers() {
         --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 }
 
+cmd_cleanup() {
+    echo "=== Docker Resource Cleanup ==="
+    echo ""
+
+    echo "--- Dangling images ---"
+    docker image prune -f 2>/dev/null || true
+    echo ""
+
+    echo "--- Build cache (older than 7 days) ---"
+    docker builder prune -f --filter "until=168h" 2>/dev/null || true
+    echo ""
+
+    echo "--- Stopped sidecar containers ---"
+    local stopped
+    stopped=$(docker ps -aq --filter "name=agent-sidecar-" --filter "status=exited" 2>/dev/null)
+    if [[ -n "$stopped" ]]; then
+        echo "$stopped" | xargs docker rm
+    else
+        echo "  (none)"
+    fi
+    echo ""
+
+    echo "--- Orphaned volumes ---"
+    docker volume prune -f 2>/dev/null || true
+    echo ""
+
+    echo "--- Summary ---"
+    docker system df
+}
+
 # --- Main ---
 show_usage() {
     cat <<EOF
@@ -580,6 +610,9 @@ Firewall Commands:
 Status Commands:
   status                              Show container + firewall status
   containers                          List all sidecar containers
+
+Maintenance Commands:
+  cleanup                             Prune dangling images, old build cache, stopped containers, orphaned volumes
 
 Examples:
   $(basename "$0") firewall allow jira              # Add preset
@@ -637,6 +670,9 @@ case "${1:-}" in
         ;;
     containers)
         cmd_containers
+        ;;
+    cleanup)
+        cmd_cleanup
         ;;
     --help|-h|"")
         show_usage
