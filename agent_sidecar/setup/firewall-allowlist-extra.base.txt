@@ -12,6 +12,14 @@ yarnpkg.com
 registry.yarnpkg.com
 typescriptlang.org
 
+# --- Bash & Unix Tools Documentation ---
+man7.org
+gnu.org
+ss64.com
+explainshell.com
+tmux.github.io
+docs.zellij.dev
+
 # --- Docker Hub & Container Registries ---
 docker.io
 hub.docker.com
@@ -32,6 +40,7 @@ api.cloudflare.com
 workers.dev
 wrangler.devel.cloudflare.com
 dash.cloudflare.com
+developers.cloudflare.com
 
 # --- AWS (Core Services & CLI) ---
 amazonaws.com
@@ -57,6 +66,7 @@ objects.githubusercontent.com
 pkg.github.com
 copilot-proxy.githubusercontent.com
 vscode-auth.github.co
+docs.github.com
 @github_meta
 
 # --- Cursor AI Editor (Telemetry, APIs, Updates) ---
@@ -82,6 +92,7 @@ console.anthropic.com
 cdn.anthropic.com
 claude.ai
 docs.anthropic.com
+spec.anthropic.com
 # OpenAI & Codex API/CLI
 openai.com
 api.openai.com
@@ -90,6 +101,8 @@ developers.openai.com
 codex.openai.com
 chatgpt.com
 platform.openai.com
+spec.openai.com
+openapi.openai.com
 # Cursor CLI Agent (cursor.com/install)
 api.cursor.com
 # Perplexity AI
@@ -105,6 +118,7 @@ generativelanguage.googleapis.com
 cloudassist.google.com
 googleapis.com
 ai.google.dev
+developers.google.com
 # OpenCode
 opencode.ai
 api.opencode.ai
@@ -197,6 +211,14 @@ extensions.duckdb.org
 dbos.dev
 docs.dbos.dev
 
+# --- Go/Golang Docs ---
+pkg.go.dev
+
+# --- Rust Docs ---
+doc.rust-lang.org
+docs.rs
+crates.io
+
 # --- Python Docs ---
 docs.pydantic.dev
 ai.pydantic.dev
@@ -224,6 +246,17 @@ docs.celeryq.dev
 redis.io
 redis-py.readthedocs.io
 
+# --- Database Documentation ---
+postgresql.org
+www.postgresql.org
+dev.mysql.com
+docs.mongodb.com
+sqlite.org
+www.sqlite.org
+duckdb.org
+cassandra.apache.org
+docs.supabase.com
+
 # --- Infrastructure & Observability ---
 sentry.io
 docs.sentry.io
@@ -238,6 +271,11 @@ docs.newrelic.com
 grafana.com
 docs.grafana.com
 prometheus.io
+
+# --- CI/CD & DevOps Tools ---
+docs.github.com
+jenkins.io
+www.jenkins.io
 
 # --- Third-Party Services ---
 plaid.com
