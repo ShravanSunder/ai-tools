@@ -82,6 +82,27 @@ case "$file_path" in
   ;;
 esac
 
+# Swift: SwiftFormat + SwiftLint
+case "$file_path" in
+  *.swift)
+    if command -v swiftformat >/dev/null 2>&1; then
+      if ! swiftformat "$file_path" --quiet 2>&1; then
+        err "Hint: SwiftFormat failed for $file_path"
+        has_errors=1
+      fi
+    fi
+    if command -v swiftlint >/dev/null 2>&1; then
+      lint_out="$(swiftlint lint --strict --quiet "$file_path" 2>&1 || true)"
+      if [[ -n "$lint_out" ]]; then
+        lint_count="$(printf "%s" "$lint_out" | wc -l | tr -d ' ')"
+        first_lint="$(printf "%s" "$lint_out" | head -1)"
+        err "Hint: SwiftLint found ${lint_count} issue(s). ${first_lint}"
+        has_errors=1
+      fi
+    fi
+  ;;
+esac
+
 # Feed hints back to Claude on PostToolUse via stderr when errors exist
 if (( has_errors > 0 )); then
   exit 2

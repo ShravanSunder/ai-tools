@@ -12,6 +12,14 @@ build/
 *.egg-info/
 .eggs/
 
+# Swift
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+Package.resolved
+
 # IDE
 .idea/
 .vscode/

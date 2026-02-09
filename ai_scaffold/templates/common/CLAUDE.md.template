@@ -9,6 +9,9 @@
 {{#if INCLUDE_PY}}
 @.cursor/rules/python-rules.mdc
 {{/if}}
+{{#if INCLUDE_SWIFT}}
+@.cursor/rules/swift-rules.mdc
+{{/if}}
 {{#if MONOREPO}}
 @.cursor/rules/monorepo-rules.mdc
 {{/if}}

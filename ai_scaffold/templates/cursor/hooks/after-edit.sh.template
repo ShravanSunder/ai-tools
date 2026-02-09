@@ -99,6 +99,27 @@ case "$abs" in
   ;;
 esac
 
+# --- Swift: SwiftFormat + SwiftLint ---
+case "$abs" in
+  *.swift)
+    if command -v swiftformat >/dev/null 2>&1; then
+      if ! swiftformat "$abs" --quiet 2>&1; then
+        err "Hint: SwiftFormat failed for $abs"
+        has_errors=1
+      fi
+    fi
+    if command -v swiftlint >/dev/null 2>&1; then
+      lint_out="$(swiftlint lint --strict --quiet "$abs" 2>&1 || true)"
+      if [[ -n "$lint_out" ]]; then
+        lint_count="$(printf "%s" "$lint_out" | wc -l | tr -d ' ')"
+        first_lint="$(printf "%s" "$lint_out" | head -1 | sed -E 's/[[:space:]]+/ /g')"
+        err "Hint: SwiftLint found ${lint_count} issue(s). ${first_lint}"
+        has_errors=1
+      fi
+    fi
+  ;;
+esac
+
 # Do not block edits; afterFileEdit is a notification hook
 # Exit 0 so the agent's apply continues regardless of findings
 exit 0

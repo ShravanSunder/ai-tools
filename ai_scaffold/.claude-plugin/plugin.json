@@ -5,5 +5,5 @@
   "author": {
     "name": "Shravan Sunder"
   },
-  "keywords": ["scaffolding", "project-setup", "linting", "biome", "ruff", "typescript", "python"]
+  "keywords": ["scaffolding", "project-setup", "linting", "biome", "ruff", "swiftlint", "swiftformat", "typescript", "python", "swift", "swiftui"]
 }

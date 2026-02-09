@@ -1,6 +1,6 @@
 ---
 name: scaffold-project
-description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up biome, ruff, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
+description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python/Swift project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up biome, ruff, swiftlint, swiftformat, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
 version: 0.1.0
 ---
 
@@ -29,22 +29,25 @@ This skill guides through three modalities:
 
 ## Supported Configurations
 
-| Category | TypeScript | Python |
-|----------|------------|--------|
-| **Linter** | Biome | Ruff |
-| **Type Checker** | TypeScript strict | BasedPyright |
-| **Testing** | Vitest (+ browser mode, Playwright) | Pytest (+ marks) |
-| **Package Manager** | pnpm | uv |
-| **IDE Hooks** | Cursor afterFileEdit | Cursor afterFileEdit |
-| **AI Hooks** | Claude PostToolUse | Claude PostToolUse |
+| Category | TypeScript | Python | Swift |
+|----------|------------|--------|-------|
+| **Linter** | Biome | Ruff | SwiftLint (strict) |
+| **Formatter** | Biome | Ruff | SwiftFormat |
+| **Type Checker** | TypeScript strict | BasedPyright | Swift compiler |
+| **Testing** | Vitest (+ browser mode, Playwright) | Pytest (+ marks) | Swift Testing |
+| **Package Manager** | pnpm | uv | SPM |
+| **IDE Hooks** | Cursor afterFileEdit | Cursor afterFileEdit | Cursor afterFileEdit |
+| **AI Hooks** | Claude PostToolUse | Claude PostToolUse | Claude PostToolUse |
 
 ## Project Types
 
 - **Single-package TypeScript** - Simple TS library or app
 - **Single-package Python** - Simple Python package
+- **Single-package Swift** - Swift/SwiftUI package (SPM)
 - **Monorepo TypeScript** - pnpm workspaces with apps/packages/services
 - **Monorepo Python** - uv workspaces with packages/services
-- **Monorepo Both** - Combined Python + TypeScript monorepo
+- **Monorepo TypeScript + Python** - Combined Python + TypeScript monorepo
+- **Monorepo Swift + TypeScript** - Swift + TypeScript (SwiftUI + React webviews)
 
 ## Scaffolding Workflow
 
@@ -68,9 +71,11 @@ Question 1: "What type of project are you creating?"
 Options:
 - Single-package TypeScript
 - Single-package Python
+- Single-package Swift/SwiftUI
 - Monorepo TypeScript (pnpm workspaces)
 - Monorepo Python (uv workspaces)
-- Monorepo Both (TypeScript + Python)
+- Monorepo TypeScript + Python
+- Monorepo Swift + TypeScript (SwiftUI + React webviews)
 
 Question 2: "What is the project name?" (kebab-case)
 ```
@@ -142,12 +147,12 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/scaffold/scaffold-project.sh \
 The script handles:
 - Creating directory structure (apps/, packages/, services/ for monorepos)
 - Copying linter configs (biome.json, ruff.toml, pyrightconfig.json)
-- Setting up cursor rules (.cursor/rules/*.mdc)
+- Setting up cursor rules (.cursor/rules/*.md with .mdc symlinks)
 - Creating cursor hooks (.cursor/hooks/)
 - Setting up Claude hooks (.claude/hooks/)
 - Creating package.json/pyproject.toml with dependencies
 - Setting up vitest/pytest configurations
-- Creating CLAUDE.md and agents.md
+- Creating CLAUDE.md and AGENTS.md (symlink to CLAUDE.md)
 - Setting up .gitignore
 - Creating worktrunk config (.config/wt.toml)
 
@@ -187,6 +192,7 @@ Templates use these placeholders:
 | `{{AUTHOR_EMAIL}}` | Author email | `jane@example.com` |
 | `{{INCLUDE_TS}}` | Include TypeScript | `true` |
 | `{{INCLUDE_PY}}` | Include Python | `true` |
+| `{{INCLUDE_SWIFT}}` | Include Swift | `true` |
 | `{{MONOREPO}}` | Is monorepo | `true` |
 
 ## Update Templates Workflow
@@ -242,16 +248,18 @@ All templates are in `${CLAUDE_PLUGIN_ROOT}/templates/`:
 
 ```
 templates/
-├── common/           # CLAUDE.md, agents.md, .gitignore, wt.toml
+├── common/           # CLAUDE.md, .gitignore, wt.toml
 ├── typescript/       # biome.json, tsconfig.json, package.json, vitest
 │   ├── single/
 │   └── monorepo/
 ├── python/           # ruff.toml, pyrightconfig.json, pyproject.toml
 │   ├── single/
 │   └── monorepo/
+├── swift/            # Package.swift, .swiftlint.yml, .swiftformat
+│   └── single/
 ├── testing/          # vitest-browser, playwright configs
 ├── monorepo/         # apps/, packages/, services/ structure
-├── cursor/           # rules/*.mdc, hooks/
+├── cursor/           # rules/*.md (+ .mdc symlinks), hooks/
 └── claude/           # hooks/, settings template
 ```
 

@@ -18,6 +18,7 @@ INCLUDE_VITEST=true
 INCLUDE_VITEST_BROWSER=false
 INCLUDE_PLAYWRIGHT=false
 INCLUDE_PYTEST=true
+INCLUDE_SWIFT=false
 
 usage() {
     cat <<EOF
@@ -27,7 +28,7 @@ Scaffold a new project with standard dev configurations.
 
 Options:
     --name NAME           Project name (kebab-case)
-    --type TYPE           Project type: single-ts, single-py, monorepo-ts, monorepo-py, monorepo-both
+    --type TYPE           Project type: single-ts, single-py, single-swift, monorepo-ts, monorepo-py, monorepo-ts-py, monorepo-swift-ts
     --description DESC    Project description
     --author NAME         Author name
     --email EMAIL         Author email
@@ -71,6 +72,12 @@ if [[ -z "$PROJECT_NAME" ]]; then
     exit 1
 fi
 
+# Validate PROJECT_NAME: kebab-case only, no path traversal
+if [[ ! "$PROJECT_NAME" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+    echo "Error: --name must be kebab-case (lowercase letters, digits, hyphens; must start with letter or digit)"
+    exit 1
+fi
+
 if [[ -z "$PROJECT_TYPE" ]]; then
     echo "Error: --type is required"
     exit 1
@@ -90,14 +97,17 @@ fi
 # Determine what to include based on project type
 INCLUDE_TS=false
 INCLUDE_PY=false
+INCLUDE_SWIFT=false
 IS_MONOREPO=false
 
 case "$PROJECT_TYPE" in
     single-ts) INCLUDE_TS=true ;;
     single-py) INCLUDE_PY=true ;;
+    single-swift) INCLUDE_SWIFT=true ;;
     monorepo-ts) INCLUDE_TS=true; IS_MONOREPO=true ;;
     monorepo-py) INCLUDE_PY=true; IS_MONOREPO=true ;;
-    monorepo-both) INCLUDE_TS=true; INCLUDE_PY=true; IS_MONOREPO=true ;;
+    monorepo-ts-py|monorepo-both) INCLUDE_TS=true; INCLUDE_PY=true; IS_MONOREPO=true ;;
+    monorepo-swift-ts) INCLUDE_SWIFT=true; INCLUDE_TS=true; IS_MONOREPO=true ;;
     *) echo "Error: Invalid project type: $PROJECT_TYPE"; exit 1 ;;
 esac
 
@@ -105,6 +115,40 @@ esac
 # Uses perl for cross-platform compatibility (BSD sed on macOS has limited support)
 escape_sed() {
     printf '%s' "$1" | perl -pe 's/([\/&\\])/\\$1/g'
+}
+
+# Process a single {{#if TAG}}...{{/if}} conditional block in template content.
+# When condition is false: remove entire block (opening tag + content + closing tag).
+# When condition is true: strip opening tag only (closing tags cleaned up separately).
+# Must be called innermost-first for nested conditionals.
+process_conditional() {
+    local content="$1"
+    local tag="$2"
+    local is_true="$3"
+
+    if [[ "$is_true" != "true" ]]; then
+        # Remove entire line if it contains only this conditional block (single-line)
+        content="$(printf '%s' "$content" | perl -0777 -pe 's/^[^\S\n]*\{\{#if '"$tag"'\}\}[^\n]*\{\{\/if\}\}[^\S\n]*\n?//gm')"
+        # Remove remaining multiline blocks
+        content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if '"$tag"'\}\}.*?\{\{\/if\}\}\n?//gs')"
+    else
+        content="$(printf '%s' "$content" | sed 's/{{#if '"$tag"'}}//g')"
+    fi
+
+    printf '%s' "$content"
+}
+
+# Create a symlink, respecting the SKIP_EXISTING flag
+create_symlink() {
+    local target="$1"
+    local link_path="$2"
+
+    if [[ ( -e "$link_path" || -L "$link_path" ) ]] && [[ "$SKIP_EXISTING" == "true" ]]; then
+        echo "SKIP: $link_path (exists)"
+    else
+        ln -sf "$target" "$link_path"
+        echo "LINK: $link_path -> $target"
+    fi
 }
 
 # Helper to copy file with variable substitution
@@ -135,36 +179,11 @@ copy_template() {
             -e "s/{{AUTHOR_EMAIL}}/$escaped_email/g" \
             "$src")"
 
-        # Handle conditional blocks using perl (more reliable for multiline on macOS)
-        # Process innermost conditionals first (MONOREPO), then outer ones
-        # This handles nested conditionals like {{#if INCLUDE_PY}}...{{#if MONOREPO}}...{{/if}}...{{/if}}
-
-        # Step 1: Process MONOREPO (innermost, no nesting expected)
-        if [[ "$IS_MONOREPO" != "true" ]]; then
-            content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if MONOREPO\}\}[^\{]*\{\{\/if\}\}//gs')"
-        else
-            content="$(printf '%s' "$content" | sed 's/{{#if MONOREPO}}//g')"
-        fi
-
-        # Step 2: Process INCLUDE_TS (may contain resolved MONOREPO content)
-        if [[ "$INCLUDE_TS" != "true" ]]; then
-            # Remove entire line if it contains only this conditional block
-            content="$(printf '%s' "$content" | perl -0777 -pe 's/^[^\S\n]*\{\{#if INCLUDE_TS\}\}[^\n]*\{\{\/if\}\}[^\S\n]*\n?//gm')"
-            # Remove remaining inline/multiline blocks
-            content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if INCLUDE_TS\}\}.*?\{\{\/if\}\}\n?//gs')"
-        else
-            content="$(printf '%s' "$content" | sed 's/{{#if INCLUDE_TS}}//g')"
-        fi
-
-        # Step 3: Process INCLUDE_PY (may contain resolved MONOREPO content)
-        if [[ "$INCLUDE_PY" != "true" ]]; then
-            # Remove entire line if it contains only this conditional block
-            content="$(printf '%s' "$content" | perl -0777 -pe 's/^[^\S\n]*\{\{#if INCLUDE_PY\}\}[^\n]*\{\{\/if\}\}[^\S\n]*\n?//gm')"
-            # Remove remaining inline/multiline blocks
-            content="$(printf '%s' "$content" | perl -0777 -pe 's/\{\{#if INCLUDE_PY\}\}.*?\{\{\/if\}\}\n?//gs')"
-        else
-            content="$(printf '%s' "$content" | sed 's/{{#if INCLUDE_PY}}//g')"
-        fi
+        # Handle conditional blocks (innermost first for nested support)
+        content="$(process_conditional "$content" "MONOREPO" "$IS_MONOREPO")"
+        content="$(process_conditional "$content" "INCLUDE_TS" "$INCLUDE_TS")"
+        content="$(process_conditional "$content" "INCLUDE_PY" "$INCLUDE_PY")"
+        content="$(process_conditional "$content" "INCLUDE_SWIFT" "$INCLUDE_SWIFT")"
 
         # Remove remaining {{/if}} markers
         content="$(printf '%s' "$content" | sed 's/{{\/if}}//g')"
@@ -185,19 +204,16 @@ copy_template() {
     echo "CREATE: $dest"
 }
 
-# Helper to copy directory
-copy_dir() {
+# Helper to copy a rule file (.md) and create a .mdc symlink pointing to it
+copy_rule() {
     local src="$1"
-    local dest="$2"
+    local dest_dir="$2"
+    local filename
+    filename="$(basename "$src")"
+    local base="${filename%.md}"
 
-    mkdir -p "$dest"
-
-    for file in "$src"/*; do
-        if [[ -f "$file" ]]; then
-            local filename=$(basename "$file")
-            copy_template "$file" "$dest/$filename"
-        fi
-    done
+    copy_template "$src" "$dest_dir/$filename"
+    create_symlink "$filename" "$dest_dir/${base}.mdc"
 }
 
 echo "=== Scaffolding $PROJECT_NAME ($PROJECT_TYPE) ==="
@@ -219,7 +235,8 @@ fi
 echo ""
 echo "--- Common files ---"
 copy_template "$TEMPLATES_DIR/common/CLAUDE.md.template" "CLAUDE.md"
-copy_template "$TEMPLATES_DIR/common/agents.md.template" "agents.md"
+# Create AGENTS.md as symlink to CLAUDE.md (cross-tool compatibility)
+create_symlink "CLAUDE.md" "AGENTS.md"
 copy_template "$TEMPLATES_DIR/common/gitignore.template" ".gitignore"
 mkdir -p .config
 copy_template "$TEMPLATES_DIR/common/config/wt.toml.template" ".config/wt.toml"
@@ -230,13 +247,16 @@ echo "--- Cursor rules ---"
 mkdir -p .cursor/rules .cursor/hooks
 
 if [[ "$INCLUDE_TS" == "true" ]]; then
-    copy_template "$TEMPLATES_DIR/cursor/rules/ts-rules.mdc" ".cursor/rules/ts-rules.mdc"
+    copy_rule "$TEMPLATES_DIR/cursor/rules/ts-rules.md" ".cursor/rules"
 fi
 if [[ "$INCLUDE_PY" == "true" ]]; then
-    copy_template "$TEMPLATES_DIR/cursor/rules/python-rules.mdc" ".cursor/rules/python-rules.mdc"
+    copy_rule "$TEMPLATES_DIR/cursor/rules/python-rules.md" ".cursor/rules"
+fi
+if [[ "$INCLUDE_SWIFT" == "true" ]]; then
+    copy_rule "$TEMPLATES_DIR/cursor/rules/swift-rules.md" ".cursor/rules"
 fi
 if [[ "$IS_MONOREPO" == "true" ]]; then
-    copy_template "$TEMPLATES_DIR/cursor/rules/monorepo-rules.mdc" ".cursor/rules/monorepo-rules.mdc"
+    copy_rule "$TEMPLATES_DIR/cursor/rules/monorepo-rules.md" ".cursor/rules"
 fi
 
 # Cursor hooks
@@ -319,6 +339,20 @@ if [[ "$INCLUDE_PY" == "true" ]]; then
     fi
 fi
 
+# Swift files
+if [[ "$INCLUDE_SWIFT" == "true" ]]; then
+    echo ""
+    echo "--- Swift configuration ---"
+
+    copy_template "$TEMPLATES_DIR/swift/single/Package.swift.template" "Package.swift"
+    copy_template "$TEMPLATES_DIR/swift/single/.swiftlint.yml" ".swiftlint.yml"
+    copy_template "$TEMPLATES_DIR/swift/single/.swiftformat" ".swiftformat"
+
+    # Create SPM directory structure
+    mkdir -p "Sources/$PROJECT_NAME"
+    mkdir -p "Tests/${PROJECT_NAME}Tests"
+fi
+
 # Create scaffold tracking file
 cat > ".scaffold-project.json" <<EOF
 {
@@ -339,5 +373,8 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
 fi
 if [[ "$INCLUDE_PY" == "true" ]]; then
     echo "  uv sync"
+fi
+if [[ "$INCLUDE_SWIFT" == "true" ]]; then
+    echo "  swift build"
 fi
 echo "  git init (if not already a repo)"

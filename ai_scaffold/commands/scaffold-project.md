@@ -29,7 +29,7 @@ Load the scaffold-project skill and follow its workflow:
 
 1. **Detect context** - Silently check for existing project files
 2. **Ask ALL questions upfront** - Use AskUserQuestion to gather:
-   - Project type (single/monorepo, TS/Python/both)
+   - Project type (single/monorepo, TS/Python/Swift)
    - Directory structure preferences (for monorepos)
    - Testing features (vitest, browser mode, playwright, pytest)
    - Additional configs (claude hooks, cursor hooks, worktrunk)
@@ -44,7 +44,7 @@ This approach saves time by getting all preferences upfront instead of manual co
 When user doesn't specify:
 - **Project name**: Derive from current directory name
 - **Author**: Use git config user.name and user.email
-- **Testing**: vitest for TS, pytest with marks for Python
+- **Testing**: vitest for TS, pytest with marks for Python, Swift Testing for Swift
 - **Conflict handling**: Skip existing files
 
 ## Examples

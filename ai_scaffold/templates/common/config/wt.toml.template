@@ -6,6 +6,9 @@ install_py = "uv sync{{#if MONOREPO}} --all-packages{{/if}}"
 {{#if INCLUDE_TS}}
 install_ts = "pnpm install"
 {{/if}}
+{{#if INCLUDE_SWIFT}}
+build_swift = "swift build"
+{{/if}}
 
 copy-envs = """
 find {{ repo_path }} -name '.env*' -type f | while read src; do

@@ -1,0 +1,10 @@
+# SwiftFormat configuration
+--indent 4
+--self remove
+--wraparguments preserve
+--wrapcollections preserve
+--swiftversion 6.0
+--stripunusedargs closure-only
+--maxwidth 160
+--ifdef no-indent
+--importgrouping alpha

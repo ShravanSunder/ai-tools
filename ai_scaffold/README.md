@@ -52,41 +52,45 @@ Restart Claude Code after installation.
 
 Just ask Claude:
 - "Scaffold a new TypeScript monorepo called my-platform"
+- "Scaffold a new Swift/SwiftUI app"
 - "Add playwright e2e testing to this project"
 - "Retrofit this repo with standard configs"
 - "Add vitest browser mode for React component tests"
 
 ## Supported Configurations
 
-| Category | TypeScript | Python |
-|----------|------------|--------|
-| **Linter** | Biome | Ruff |
-| **Type Checker** | TypeScript strict | BasedPyright |
-| **Testing** | Vitest (+browser, +Playwright) | Pytest (+marks) |
-| **Package Manager** | pnpm | uv |
-| **IDE Hooks** | Cursor afterFileEdit | Cursor afterFileEdit |
-| **AI Hooks** | Claude PostToolUse | Claude PostToolUse |
+| Category | TypeScript | Python | Swift |
+|----------|------------|--------|-------|
+| **Linter** | Biome | Ruff | SwiftLint (strict) |
+| **Formatter** | Biome | Ruff | SwiftFormat |
+| **Type Checker** | TypeScript strict | BasedPyright | Swift compiler |
+| **Testing** | Vitest (+browser, +Playwright) | Pytest (+marks) | Swift Testing |
+| **Package Manager** | pnpm | uv | SPM |
+| **IDE Hooks** | Cursor afterFileEdit | Cursor afterFileEdit | Cursor afterFileEdit |
+| **AI Hooks** | Claude PostToolUse | Claude PostToolUse | Claude PostToolUse |
 
 ## Project Types
 
 - `single-ts` - Single-package TypeScript project
 - `single-py` - Single-package Python project
+- `single-swift` - Single Swift/SwiftUI package (SPM)
 - `monorepo-ts` - TypeScript monorepo (pnpm workspaces)
 - `monorepo-py` - Python monorepo (uv workspaces)
-- `monorepo-both` - Combined Python + TypeScript monorepo
+- `monorepo-ts-py` - Combined Python + TypeScript monorepo
+- `monorepo-swift-ts` - Swift + TypeScript monorepo (SwiftUI + React webviews)
+- `monorepo-both` - Alias for `monorepo-ts-py` (backwards compat)
 
 ## What Gets Created
 
 ### Common Files
 - `CLAUDE.md` - AI assistant instructions
-- `agents.md` - Agent-specific rules
+- `AGENTS.md` → `CLAUDE.md` (symlink for cross-tool compatibility)
 - `.gitignore` - Comprehensive ignore patterns
 - `.config/wt.toml` - Worktrunk configuration
 
 ### Cursor Integration
-- `.cursor/rules/ts-rules.mdc` - TypeScript coding standards
-- `.cursor/rules/python-rules.mdc` - Python coding standards
-- `.cursor/rules/monorepo-rules.mdc` - Monorepo structure rules
+- `.cursor/rules/*.md` - Coding standards (source of truth)
+- `.cursor/rules/*.mdc` → `*.md` (symlinks for Cursor discovery)
 - `.cursor/hooks/` - afterFileEdit hooks for linting
 
 ### Claude Code Integration
@@ -105,6 +109,11 @@ Just ask Claude:
 - `pyproject.toml` - uv-managed project
 - `conftest.py` - Pytest shared fixtures
 
+### Swift
+- `Package.swift` - Swift Package Manager manifest
+- `.swiftlint.yml` - SwiftLint strict configuration
+- `.swiftformat` - SwiftFormat configuration
+
 ## Testing Conventions
 
 ### File Naming (TypeScript)
@@ -120,6 +129,10 @@ Just ask Claude:
 - `*_test.py` - Colocated with source files
 - Markers: `integration_llm`, `integration_db`, `integration_api`
 
+### Swift
+- `Tests/` directory following SPM convention
+- Swift Testing framework (`@Test`, `@Suite`)
+
 ## Manual Script Usage
 
 The scaffold script can also be run directly:
@@ -127,7 +140,7 @@ The scaffold script can also be run directly:
 ```bash
 bash ~/dev/ai-tools/ai_scaffold/scripts/scaffold/scaffold-project.sh \
   --name "my-project" \
-  --type "monorepo-both" \
+  --type "monorepo-ts-py" \
   --description "My awesome project" \
   --target "/path/to/project" \
   --playwright \
@@ -168,11 +181,12 @@ ai_scaffold/
 │   └── scaffold/
 │       └── scaffold-project.sh  # Main script
 └── templates/
-    ├── common/              # CLAUDE.md, agents.md, etc.
+    ├── common/              # CLAUDE.md, .gitignore, etc.
     ├── typescript/          # TS configs (single/monorepo)
     ├── python/              # Python configs (single/monorepo)
+    ├── swift/               # Swift configs (single)
     ├── testing/             # Vitest/Playwright configs
-    ├── cursor/              # Cursor rules and hooks
+    ├── cursor/              # Cursor rules (.md) and hooks
     ├── claude/              # Claude hooks and settings
     └── monorepo/            # Monorepo structure templates
 ```

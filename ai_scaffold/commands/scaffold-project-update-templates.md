@@ -39,6 +39,8 @@ Load the scaffold-project skill and follow its update-templates workflow:
 - Ruff: https://docs.astral.sh/ruff/configuration/
 - BasedPyright: https://docs.basedpyright.com/
 - Vitest: https://vitest.dev/config/
+- SwiftLint: https://realm.github.io/SwiftLint/rule-directory.html
+- SwiftFormat: https://github.com/nicklockwood/SwiftFormat/blob/main/Rules.md
 
 ## Examples
 

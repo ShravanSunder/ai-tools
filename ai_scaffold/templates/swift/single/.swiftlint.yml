@@ -1,0 +1,49 @@
+# SwiftLint configuration — strict mode with industry-standard safety rules
+strict: true
+
+# Default rules enabled plus safety opt-ins
+opt_in_rules:
+  # Safety
+  - force_unwrapping
+  - force_cast
+  - implicitly_unwrapped_optional
+  # SwiftUI
+  - private_swiftui_state
+  - accessibility_label_for_image
+  - accessibility_trait_for_button
+
+disabled_rules: []
+
+# Thresholds
+line_length:
+  warning: 160
+  error: 200
+
+type_body_length:
+  warning: 300
+  error: 500
+
+file_length:
+  warning: 500
+  error: 1000
+
+function_body_length:
+  warning: 50
+  error: 100
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_length:
+    warning: 60
+    error: 80
+  excluded:
+    - id
+    - x
+    - y
+    - z
+    - i
+    - j
+
+reporter: xcode

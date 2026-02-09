@@ -369,9 +369,9 @@ fi
 
 echo "📋 Using image: $FINAL_IMAGE"
 
-# 1.5. Claude OAuth credentials: Export from macOS Keychain if needed
-# Native install on macOS stores OAuth in Keychain, but Linux container needs a file
-if [ "$(uname)" = "Darwin" ] && [ ! -f "$LOCAL_CLAUDE_CREDENTIALS" ]; then
+# 1.5. Claude OAuth credentials: Always re-export from macOS Keychain to keep token fresh
+# Skip when using alternative auth (API key, Bedrock, or Vertex)
+if [ "$(uname)" = "Darwin" ] && [ -z "${ANTHROPIC_API_KEY:-}" ] && [ -z "${CLAUDE_CODE_USE_BEDROCK:-}" ] && [ -z "${CLAUDE_CODE_USE_VERTEX:-}" ]; then
     echo "🔐 Exporting Claude OAuth credentials from macOS Keychain..."
     if security find-generic-password -s "Claude Code-credentials" -w > "$LOCAL_CLAUDE_CREDENTIALS" 2>/dev/null; then
         chmod 600 "$LOCAL_CLAUDE_CREDENTIALS"

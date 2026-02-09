@@ -7,8 +7,8 @@ Complete list of all templates available for scaffolding.
 ### CLAUDE.md.template
 Project-level AI assistant instructions. References cursor rules based on project type.
 
-### agents.md.template
-Agent-specific instructions referencing cursor rules and research-specialist guidance.
+### AGENTS.md (symlink)
+Created as a symlink to CLAUDE.md for cross-tool compatibility (Codex, Copilot, etc.).
 
 ### gitignore.template
 Comprehensive .gitignore covering:
@@ -121,9 +121,27 @@ packages/py_core/
     └── models_test.py  # Colocated with *_test.py suffix
 ```
 
+## Swift Templates
+
+### Single Package
+
+| File | Purpose |
+|------|---------|
+| `Package.swift.template` | SPM manifest with test target |
+| `.swiftlint.yml` | SwiftLint strict config with SwiftUI rules |
+| `.swiftformat` | SwiftFormat config (4-space indent, Swift 6.0) |
+
 ## Cursor Templates
 
-### rules/ts-rules.mdc
+### rules/swift-rules.md
+Swift/SwiftUI coding standards:
+- No Any type, no force unwraps/casts
+- @Observable over ObservableObject
+- MVVM with @Observable ViewModels
+- Swift Testing framework
+- SwiftLint/SwiftFormat tool commands
+
+### rules/ts-rules.md
 TypeScript coding standards:
 - No `any` type
 - Use `satisfies` over `as` casts
@@ -132,7 +150,7 @@ TypeScript coding standards:
 - Zod schema derivation
 - Biome/vitest tool commands
 
-### rules/python-rules.mdc
+### rules/python-rules.md
 Python coding standards:
 - Import typing as `t`
 - Pydantic v2 models
@@ -140,7 +158,7 @@ Python coding standards:
 - Arrange/Act/Assert testing
 - uv commands for linting/testing
 
-### rules/monorepo-rules.mdc
+### rules/monorepo-rules.md
 Monorepo structure and boundaries:
 - uv workspaces for Python
 - pnpm workspaces for TypeScript
@@ -155,6 +173,7 @@ Post-edit hook script that runs:
 - Biome check for TS/JS files
 - TypeScript type checking
 - Ruff + BasedPyright for Python files
+- SwiftFormat + SwiftLint for Swift files
 
 ## Claude Templates
 
@@ -163,6 +182,7 @@ PostToolUse hook for Claude Code:
 - Biome check with auto-fix
 - TypeScript type checking summary
 - Ruff + BasedPyright for Python
+- SwiftFormat + SwiftLint for Swift
 
 ### settings.local.json.template
 Claude Code configuration with permissions and hooks:
@@ -221,3 +241,22 @@ Strict mode with:
 - All report* flags set to error/warning
 - Import cycle detection
 - Unused code detection
+
+### SwiftLint Rules
+
+Configuration:
+- `strict: true` - Strict mode enabled
+- Opt-in safety rules: force_unwrapping, force_cast, implicitly_unwrapped_optional
+- SwiftUI rules: private_swiftui_state, accessibility_label_for_image, accessibility_trait_for_button
+- Line length: warning 160, error 200
+- Function body length: warning 50, error 100
+
+### SwiftFormat Rules
+
+Configuration:
+- `--indent 4` - 4-space indentation
+- `--self remove` - Remove explicit self
+- `--swiftversion 6.0` - Swift 6.0 syntax
+- `--maxwidth 160` - Maximum line width
+- `--wraparguments preserve` - Preserve manual wrapping in view builders
+- `--wrapcollections preserve` - Preserve collection formatting
