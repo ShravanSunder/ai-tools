@@ -1,7 +1,7 @@
 # .config/wt.toml - Worktrunk configuration for worktree management
 [post-start]
 {{#if INCLUDE_PY}}
-install_py = "uv sync{{#if MONOREPO}} --all-packages{{/if}}"
+install_py = "uv sync"
 {{/if}}
 {{#if INCLUDE_TS}}
 install_ts = "pnpm install"
