@@ -1,5 +1,5 @@
 {
-  "description": "Enforce council review before stopping after implementation or plan creation",
+  "description": "Enforce counsel review before stopping after implementation or plan creation",
   "hooks": {
     "Stop": [
       {

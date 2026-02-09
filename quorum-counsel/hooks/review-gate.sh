@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# review-gate.sh — Stop hook for automated council-reviewer
+# review-gate.sh — Stop hook for automated counsel-reviewer
 #
 # Blocks Claude from stopping after implementation or plan creation
-# unless council-reviewer was already spawned. Claude provides only
+# unless counsel-reviewer was already spawned. Claude provides only
 # conversational context (intent, requirements); reviewers gather
 # code/plan data themselves via git diff and file reading.
 
@@ -34,14 +34,14 @@ fi
 [ "$has_implementation" = "false" ] && [ "$has_plan" = "false" ] && exit 0
 
 # --- Already reviewed → allow stop ---
-if grep -q 'council-reviewer' "$TRANSCRIPT_PATH" 2>/dev/null; then
+if grep -q 'counsel-reviewer' "$TRANSCRIPT_PATH" 2>/dev/null; then
   exit 0
 fi
 
 # --- Block and request review ---
 if [ "$has_implementation" = "true" ]; then
   cat >&2 <<'FEEDBACK'
-REVIEW REQUIRED — You MUST spawn council-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
+REVIEW REQUIRED — You MUST spawn counsel-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
 
 Reviewers (Gemini + Codex) will run `git diff` and inspect the codebase themselves.
 You provide ONLY what they cannot see — your intent and conversational context:
@@ -71,7 +71,7 @@ fi
 
 if [ "$has_plan" = "true" ]; then
   cat >&2 <<'FEEDBACK'
-REVIEW REQUIRED — You MUST spawn council-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
+REVIEW REQUIRED — You MUST spawn counsel-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
 
 Reviewers (Gemini + Codex) will read the plan file and inspect the codebase themselves.
 You provide ONLY what they cannot see — your intent and conversational context:
