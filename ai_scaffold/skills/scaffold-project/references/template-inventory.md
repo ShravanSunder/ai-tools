@@ -44,7 +44,7 @@ Worktrunk configuration for worktree management:
 | `biome.json` | Monorepo-aware biome config with overrides |
 | `package.json.template` | Root workspace config with pnpm workspaces |
 | `vitest.config.ts.template` | Root vitest configuration (colocated unit tests across packages) |
-| `package-template/` | Template for new packages in monorepo |
+
 
 ## Python Templates
 

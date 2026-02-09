@@ -8,7 +8,7 @@ TEMPLATES_DIR="$PLUGIN_ROOT/templates"
 
 # Default values
 PROJECT_NAME=""
-PROJECT_TYPE=""  # single-ts, single-py, monorepo-ts, monorepo-py, monorepo-both
+PROJECT_TYPE=""  # single-ts, single-py, single-swift, monorepo-ts, monorepo-py, monorepo-ts-py, monorepo-swift-ts, monorepo-both
 PROJECT_DESCRIPTION=""
 AUTHOR_NAME=""
 AUTHOR_EMAIL=""
