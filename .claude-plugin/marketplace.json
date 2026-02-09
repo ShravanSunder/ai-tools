@@ -24,6 +24,12 @@
       "source": "./skill-codex",
       "description": "Delegate hard problems to OpenAI Codex as background task - codebase exploration, debugging, code review, architecture",
       "version": "1.0.0"
+    },
+    {
+      "name": "quorum-counsel",
+      "source": "./quorum-counsel",
+      "description": "Multi-model review orchestration — council-reviewer and codex-solver background agents with CLI permission hooks",
+      "version": "1.0.0"
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "name": "quorum-counsel",
+  "version": "1.0.0",
+  "description": "Multi-model review orchestration — council-reviewer (Gemini 3 + Codex GPT-5.3) and codex-solver background agents with CLI permission hooks",
+  "author": { "name": "Shravan Sunder" },
+  "keywords": ["review", "code-review", "plan-review", "multi-model", "gemini", "codex", "council"]
+}
