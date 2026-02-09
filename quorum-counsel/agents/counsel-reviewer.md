@@ -2,7 +2,7 @@
 name: counsel-reviewer
 description:   Always use this agent as a BACKGROUND task (run_in_background:true is REQUIRED) for mandatory plan review and code review. Orchestrates both Gemini 3.x and Codex GPT-5.x in parallel, then synthesizes findings into a unified review with consensus issues and model-specific insights.\n\n**CRITICAL**: Caller must provide a complete Context Bundle (requirements, plan/background, constraints, artifacts, review questions). If missing, the reviewer proceeds but must emit Context Sufficiency Warnings and reduce confidence.\n\n**MANDATORY Use Cases**:\n1. **Plan Review**: ALWAYS use after creating implementation plans (validate approach, gaps, edge cases, alternatives)\n2. **Code Review**: ALWAYS use after completing implementation (before claiming done) (bugs, security, test gaps, quality)\n\n**Do NOT use for**: quick fixes or exploration/debugging (use codex-solver instead).
 tools: Bash, Read, Glob
-model: sonnet
+model: haiku
 color: purple
 hooks:
   PreToolUse:

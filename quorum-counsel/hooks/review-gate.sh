@@ -38,8 +38,14 @@ if grep -q 'counsel-reviewer' "$TRANSCRIPT_PATH" 2>/dev/null; then
   exit 0
 fi
 
+# --- Session marker: already requested review → allow stop ---
+SESSION_HASH=$(echo "$TRANSCRIPT_PATH" | md5 -q 2>/dev/null || echo "$TRANSCRIPT_PATH" | md5sum 2>/dev/null | cut -c1-12)
+MARKER="/tmp/counsel-review-gate-${SESSION_HASH}"
+[ -f "$MARKER" ] && exit 0
+
 # --- Block and request review ---
 if [ "$has_implementation" = "true" ]; then
+  touch "$MARKER"
   cat >&2 <<'FEEDBACK'
 REVIEW REQUIRED — You MUST spawn counsel-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
 
@@ -70,6 +76,7 @@ FEEDBACK
 fi
 
 if [ "$has_plan" = "true" ]; then
+  touch "$MARKER"
   cat >&2 <<'FEEDBACK'
 REVIEW REQUIRED — You MUST spawn counsel-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
 
