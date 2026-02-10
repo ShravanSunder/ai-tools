@@ -9,26 +9,20 @@
   "plugins": [
     {
       "name": "ai-scaffold",
-      "source": "./ai_scaffold",
+      "source": "./plugins/ai-scaffold",
       "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
       "version": "0.1.0"
     },
     {
       "name": "skill-peekaboo",
-      "source": "./skill-peekaboo",
+      "source": "./plugins/skill-peekaboo",
       "description": "Visual UI testing for macOS apps using Peekaboo CLI - alternative to Playwright for native macOS testing",
       "version": "1.0.0"
     },
     {
-      "name": "skill-codex",
-      "source": "./skill-codex",
-      "description": "Delegate hard problems to OpenAI Codex as background task - codebase exploration, debugging, code review, architecture",
-      "version": "1.0.0"
-    },
-    {
       "name": "quorum-counsel",
-      "source": "./quorum-counsel",
-      "description": "Multi-model review orchestration — council-reviewer and codex-solver background agents with CLI permission hooks",
+      "source": "./plugins/quorum-counsel",
+      "description": "Multi-model review orchestration - counsel-reviewer and codex-solver background agents with CLI permission hooks",
       "version": "1.0.0"
     }
   ]

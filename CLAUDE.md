@@ -1,23 +1,19 @@
 # AI Tools - Agent Instructions
 
-This repository contains the Agent Sidecar system for running AI coding assistants in sandboxed Docker containers with network isolation.
+This repository contains Claude Code plugins and the Agent Sidecar system for running AI coding assistants in sandboxed Docker containers.
 
 ## Repository Overview
 
-**Purpose**: Provide isolated, firewall-controlled Docker environments for AI agents (Claude Code, Codex, Gemini CLI, etc.) to safely work on codebases.
-
+**Purpose**: AI development tools distributed as Claude Code plugins, plus isolated Docker environments for AI agents.
 
 ## Repository Variants
 
-This repo has two variants for different contexts:
+This repo has two variants maintained separately:
 
-**Two variants exist**:
-- `~/dev/ai-tools` - Personal projects (this repo)
-- `~/dev/relay-ai-tools` - Work projects (fork)
+- `~/dev/ai-tools` -- Personal projects (this repo, public)
+- `~/dev/relay-ai-tools` -- Work projects (private fork)
 
-**Work repos** (voyager-ai, risk-process-integrations) should use `relay-ai-tools`.
-
-To sync changes between them, copy updated files or set up git remotes.
+Work repos should use `relay-ai-tools`. Personal repos should use `ai-tools`.
 
 ### Differences Between Variants
 
@@ -27,31 +23,82 @@ To sync changes between them, copy updated files or set up git remotes.
 | OpenCode support | Yes (`--run-opencode`) | No (removed) |
 | Agent CLIs | Claude, Codex, Gemini, OpenCode, Cursor | Claude, Codex, Gemini, Cursor |
 
-The repos are maintained separately - sync manually as needed.
+### Keeping Variants in Sync
 
-## Architecture
+The repos are maintained separately. When making changes to shared sidecar functionality (scripts, dockerfiles, firewall logic), sync the changes to the other variant:
+
+- Copy updated files manually, or set up git remotes
+- The `agent_sidecar/` directory is the primary sync target
+- Plugin-related files (`plugins/`, `.claude-plugin/`) are NOT synced (personal-only)
+
+## Repository Structure
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ Host Machine                                                     │
-│  ┌─────────────────┐    ┌─────────────────────────────────────┐ │
-│  │ sidecar-ctl.sh  │───▶│ Docker Container (agent-sidecar-*)  │ │
-│  │ (firewall mgmt) │    │  ┌─────────────────────────────────┐│ │
-│  └─────────────────┘    │  │ firewall.sh (iptables/dnsmasq) ││ │
-│                         │  └─────────────────────────────────┘│ │
-│  ┌─────────────────┐    │  ┌─────────────────────────────────┐│ │
-│  │ run-agent-      │───▶│  │ AI Agent (claude/codex/gemini) ││ │
-│  │ sidecar.sh      │    │  └─────────────────────────────────┘│ │
-│  └─────────────────┘    │  ┌─────────────────────────────────┐│ │
-│                         │  │ Mounted: /workspace, ~/.aws,    ││ │
-│                         │  │ ~/.config/micro, volumes for    ││ │
-│                         │  │ node_modules, .venv, pnpm store ││ │
-│                         │  └─────────────────────────────────┘│ │
-│                         └─────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
+ai-tools/
+├── .claude-plugin/marketplace.json   # Plugin marketplace manifest
+├── plugins/                          # Claude Code plugins
+│   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
+│   ├── skill-peekaboo/               # macOS visual UI testing via Peekaboo CLI
+│   └── quorum-counsel/               # Multi-model review (counsel-reviewer + codex-solver)
+├── skills/                           # Pure skills (future, .gitkeep placeholder)
+├── agent_sidecar/                    # Docker sidecar system
+│   ├── run-agent-sidecar.sh          # Main launch script
+│   ├── sidecar-ctl.sh                # Host-side firewall control
+│   ├── sidecar.base.conf             # Base configuration
+│   ├── init_repo_sidecar.sh          # Initialize .agent_sidecar/ in repos
+│   ├── setup/                        # Firewall, init scripts, zsh config
+│   └── firewall-toggle-presets/      # Toggle preset domain lists
+└── CLAUDE.md
 ```
 
-## Key Components
+## Plugin Development
+
+### Marketplace
+
+Plugins are distributed via `.claude-plugin/marketplace.json`. Each plugin entry needs a `name` and `source` (relative path to the plugin directory).
+
+```bash
+# Validate marketplace manifest
+claude plugin validate .
+```
+
+### Plugin Structure
+
+Each plugin lives under `plugins/` and follows the standard Claude Code plugin layout:
+
+```
+plugins/<plugin-name>/
+├── .claude-plugin/plugin.json    # Plugin manifest (name, version, description)
+├── commands/                     # Slash commands (*.md files)
+├── agents/                       # Agent definitions (*.md with YAML frontmatter)
+├── skills/                       # Skills (subdirs with SKILL.md)
+│   └── <skill-name>/
+│       ├── SKILL.md
+│       └── references/           # Supporting docs for the skill
+├── hooks/                        # Hook definitions (hooks.json + scripts)
+└── README.md
+```
+
+### Key Rules
+
+- Plugin `source` paths in `marketplace.json` must use `./plugins/<name>` format (explicit relative paths)
+- `${CLAUDE_PLUGIN_ROOT}` resolves to the cached install path at runtime -- use it in hooks and scripts
+- Path traversal (`..`) is NOT allowed in source paths
+- Plugin `name` is the cache key for consumers -- changing it breaks existing installs
+- Run `claude plugin validate .` after any marketplace changes
+
+### Adding a New Plugin
+
+1. Create `plugins/<name>/` with `.claude-plugin/plugin.json`
+2. Add commands, agents, skills, or hooks as needed
+3. Add an entry to `.claude-plugin/marketplace.json`
+4. Add a `README.md` in the plugin directory
+5. Update `plugins/README.md` with the new plugin listing
+6. Validate: `claude plugin validate .`
+
+## Agent Sidecar
+
+Sandboxed Docker containers for AI coding assistants with network isolation. See `agent_sidecar/README.md` for full documentation.
 
 ### Scripts
 
@@ -154,7 +201,7 @@ These run IN ADDITION to base scripts. The original `init-{bg,fg}.{repo,local}.s
 
 Containers are named: `agent-sidecar-{repo-name}-{dir-hash}`
 
-Example: `agent-sidecar-voyager-ai-b17378ea`
+Example: `agent-sidecar-my-project-a1b2c3d4`
 
 ### Volume Management
 
@@ -219,16 +266,6 @@ sidecar-ctl cleanup
 
 **Note**: `--full-reset` updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions. Named volumes (history, venv, pnpm, node_modules, cache, uv) survive both `--reload` and `--full-reset`.
 
-## File Locations
-
-```
-~/dev/ai-tools/                    # Personal variant
-~/dev/relay-ai-tools/              # Work variant (fork)
-
-~/Documents/code/voyager-ai/.agent_sidecar/         # Work repo config
-~/Documents/code/risk-process-integrations/.agent_sidecar/  # Work repo config
-```
-
 ## Security Model
 
 The agent inside the container has limited access by design:
@@ -243,7 +280,5 @@ The agent inside the container has limited access by design:
 
 ## Important Notes
 
-- Work repos should use `relay-ai-tools`
-- Personal repos should use `ai-tools`
 - All `.local.*` files are gitignored for personal customization
 - The `.generated/` folder contains runtime files (compiled firewall lists)

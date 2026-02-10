@@ -1,171 +1,111 @@
 # AI Tools
 
-Personal AI development tools and sandboxed environments.
+Claude Code plugins and sandboxed Docker environments for AI coding assistants.
 
-## Components
+## Claude Code Plugins
 
-| Component | Purpose |
-|-----------|---------|
-| `agent_sidecar/` | Sandboxed Docker containers for AI coding assistants |
-| `ai_scaffold/` | Claude Code plugin for project scaffolding |
+Install via the Claude Code marketplace:
 
-## AI Scaffold Plugin
-
-A Claude Code plugin for scaffolding new projects with standard dev configurations (linters, type checkers, testing, IDE hooks).
-
-### Installation
-
-Add to Claude Code as a plugin:
 ```bash
-# In Claude Code settings, add the plugin path:
-~/dev/ai-tools/ai_scaffold
+/plugin marketplace add ShravanSunder/ai-tools
 ```
 
-### Usage
+Then install individual plugins with `/plugin install <name>@ai-tools`.
 
-Use the `/scaffold-project` command or ask Claude to scaffold a project:
-- "Scaffold a new TypeScript monorepo"
-- "Add vitest browser testing to this project"
-- "Retrofit this repo with my standard configs"
+| Plugin | Description |
+|--------|-------------|
+| [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
+| [`skill-peekaboo`](plugins/skill-peekaboo/) | Visual UI testing for macOS apps using Peekaboo CLI |
+| [`quorum-counsel`](plugins/quorum-counsel/) | Multi-model review orchestration -- counsel-reviewer and codex-solver background agents |
 
-### Supported Configurations
-
-| Category | TypeScript | Python |
-|----------|------------|--------|
-| Linter | Biome | Ruff |
-| Type Checker | TypeScript strict | BasedPyright |
-| Testing | Vitest (+browser, +Playwright) | Pytest (+marks) |
-| Package Manager | pnpm | uv |
-
-See `ai_scaffold/skills/scaffold-project/SKILL.md` for full documentation.
+See [`plugins/`](plugins/) for full details.
 
 ---
 
-
 ## Agent Sidecar
 
-Sandboxed Docker container for AI coding assistants (Claude Code, Codex, Gemini CLI) with network isolation.
-
-### Setup
-
-Add to your PATH in `~/.zshrc`:
-
-```bash
-export PATH="$PATH:$HOME/dev/ai-tools/agent_sidecar"
-```
-
-Then reload your shell or run `source ~/.zshrc`.
-
-### Quick Start
+Run AI coding agents (Claude Code, Codex, Gemini CLI) inside Docker containers with network-level isolation. The agent gets full workspace access but can only reach domains you explicitly allow.
 
 ```bash
 # From any git repository
 run-agent-sidecar.sh --run-claude
 ```
 
-### Directory Structure
+### Why a sidecar container?
+
+AI agents with tool use can execute arbitrary shell commands, install packages, and make network requests. Running them in a container with an egress firewall provides a practical security boundary without giving up functionality:
+
+```mermaid
+flowchart LR
+    subgraph host ["Host Machine"]
+        ctl["sidecar-ctl.sh\n(firewall control)"]
+        run["run-agent-sidecar.sh"]
+    end
+
+    subgraph container ["Docker Container"]
+        fw["iptables + dnsmasq\n(egress firewall)"]
+        agent["AI Agent\n(claude / codex / gemini)"]
+        ws["/workspace\n(bind mount)"]
+    end
+
+    run -->|"build + start"| container
+    ctl -->|"allow / block domains"| fw
+    agent -->|"read/write files"| ws
+
+    agent -->|"network requests"| fw
+    fw -->|"allowed domains only"| internet["npm, pypi, AI APIs\n(allowlisted)"]
+    fw -.->|"blocked"| blocked["everything else"]
+```
+
+| Concern | How it's handled |
+|---------|-----------------|
+| **Arbitrary network access** | Egress firewall blocks all traffic except allowlisted domains (npm, pypi, AI APIs). Toggle presets for GitHub push, Notion, Linear. |
+| **Persistent state leaking** | Named volumes isolate shell history, venvs, node_modules per workspace. Container recreation is cheap (`--reload` ~5s). |
+| **Package supply chain** | APT repos blocked at firewall level after build. Runtime installs impossible. |
+| **Git corruption** | `.git/` mounted read-only. Agent can read history but cannot rewrite refs or force-push. |
+| **Config tampering** | `.agent_sidecar/` shadowed with empty tmpfs. Agent cannot read or modify sidecar configuration. |
+| **Scope creep across repos** | Each repo gets its own container, volumes, and firewall rules. No cross-repo contamination. |
+
+### Configuration at a glance
+
+Three-tier config hierarchy lets you customize per-team and per-developer without forking:
 
 ```
-agent_sidecar/
-├── node-py.base.dockerfile              # Base container image
-├── run-agent-sidecar.sh                 # Main launch script
-├── sidecar-ctl.sh                       # Host-side control script
-├── sidecar.base.conf                    # Base configuration
-├── init_repo_sidecar.sh                 # Initialize .agent_sidecar/ in repos
-├── setup/
-│   ├── firewall.sh                      # Egress firewall (runs in container)
-│   ├── firewall-allowlist-extra.base.txt # Always-allowed domains (additive)
-│   ├── firewall-allowlist-toggle.base.txt # Toggle base domains
-│   ├── init-background.base.sh          # Background init (Xvfb, etc.)
-│   ├── init-foreground.base.sh          # Shell init (Atuin, Zap)
-│   ├── extra.base.zshrc                 # Base zsh config (additive)
-│   └── playwright-wrapper.sh            # Chromium localhost restriction
-├── firewall-toggle-presets/             # Preset domain lists
-│   ├── github-write.txt
-│   ├── notion.txt
-│   └── linear.txt
-└── .generated/                          # Runtime files (gitignored)
-    ├── firewall-allowlist.compiled.txt  # Merged allowlist
-    └── firewall-allowlist-toggle.tmp.txt # Toggle state
+Base (agent_sidecar/setup/)     -- defaults shipped with this repo
+  + Repo (.agent_sidecar/*.repo.*)  -- team overrides, committed
+    + Local (.agent_sidecar/*.local.*) -- personal overrides, gitignored
 ```
 
-### Host Control Script
+Additive files (firewall allowlists, zshrc, init scripts) merge all tiers. Override files (config, dockerfile) pick the highest-priority tier.
 
-The `sidecar-ctl.sh` script provides host-side control over running sidecars:
+### Quick reference
 
 ```bash
-# Check status (run from project directory)
-cd ~/Documents/code/my-project
-sidecar-ctl status
+run-agent-sidecar.sh --run-claude    # Start Claude Code in sidecar
+run-agent-sidecar.sh --run-codex     # Start Codex
+run-agent-sidecar.sh --run-gemini    # Start Gemini CLI
+run-agent-sidecar.sh --reload        # Recreate container (~5s)
+run-agent-sidecar.sh --full-reset    # Rebuild image + recreate (~2-5min)
 
-# Firewall commands
-sidecar-ctl firewall list              # Show toggle allowlist
-sidecar-ctl firewall allow notion      # Allow a preset
-sidecar-ctl firewall allow api.foo.com # Allow a specific domain
-sidecar-ctl firewall block notion      # Block a preset
-sidecar-ctl firewall toggle            # Enable all presets for 10m (default)
-sidecar-ctl firewall toggle 15m        # Enable all presets for 15 minutes
-sidecar-ctl firewall clear             # Clear all toggled domains
-sidecar-ctl firewall reload            # Reload firewall rules
+sidecar-ctl firewall allow notion    # Allow Notion API
+sidecar-ctl firewall toggle 15m      # Enable all presets for 15 minutes
+sidecar-ctl firewall clear           # Revoke all toggle access
+sidecar-ctl status                   # Show container + firewall state
 ```
 
-### Firewall Allowlists
+See [`agent_sidecar/`](agent_sidecar/) for full setup, architecture, and configuration docs.
 
-**Three-tier allowlist system:**
+---
 
-1. **Base Allowlist** (`setup/firewall-allowlist-extra.base.txt`): Domains always permitted
-   - Package registries (npm, pypi, etc.)
-   - AI services (anthropic, openai, etc.)
-   - GitHub (read-only by default)
-   - Common dev services
+## Repository Structure
 
-2. **Repo/Local Overrides**: Add domains per-project (additive `-extra` pattern)
-   - `.agent_sidecar/firewall-allowlist-extra.repo.txt` (team, committed)
-   - `.agent_sidecar/firewall-allowlist-extra.local.txt` (personal, gitignored)
-
-3. **Toggle Presets**: Dynamically enabled/disabled via `sidecar-ctl`
-
-**Presets** in `firewall-toggle-presets/`:
-- `github-write` - GitHub push access
-- `notion` - Notion API
-- `linear` - Linear API
-
-### Per-Project Customization
-
-Use `init_repo_sidecar.sh` to set up a new project:
-
-```bash
-cd ~/path/to/my-project
-/path/to/ai-tools/agent_sidecar/init_repo_sidecar.sh
 ```
-
-This creates:
-```
-.agent_sidecar/
-├── .gitignore                           # Ignore local overrides
-├── sidecar.repo.conf                    # Team config overrides
-├── sidecar.local.conf                   # Personal config (gitignored)
-├── firewall-allowlist-extra.repo.txt    # Team firewall additions
-├── firewall-allowlist-extra.local.txt   # Personal firewall additions (gitignored)
-├── build-extra.repo.sh                  # Build-time script template
-├── init-background-extra.repo.sh        # Team background init
-└── init-foreground-extra.repo.sh        # Team foreground init
-```
-
-Override files follow the pattern: `{name}.repo.{ext}` (committed) or `{name}.local.{ext}` (gitignored).
-
-### Launch Options
-
-```bash
-run-agent-sidecar.sh [options]
-
-Options:
-  --reset         Remove existing container and create fresh
-  --no-run        Setup only, don't exec into shell
-  --run <cmd>     Run specific command
-  --run-claude    Run Claude Code
-  --run-codex     Run OpenAI Codex
-  --run-gemini    Run Gemini CLI
-  --run-opencode  Run OpenCode
-  --run-cursor    Run Cursor
+ai-tools/
+├── plugins/                     # Claude Code plugins
+│   ├── ai-scaffold/             # Project scaffolding
+│   ├── skill-peekaboo/          # macOS visual UI testing
+│   └── quorum-counsel/          # Multi-model review orchestration
+├── skills/                      # Pure skills (future)
+├── agent_sidecar/               # Docker sidecar system
+└── CLAUDE.md                    # Agent instructions
 ```

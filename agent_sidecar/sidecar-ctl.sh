@@ -91,8 +91,7 @@ validate_container_name() {
     local container="$1"
     
     # Must match known sidecar naming patterns
-    if [[ "$container" =~ ^agent-sidecar-[a-z0-9-]+-[a-f0-9]{8}$ ]] || \
-       [[ "$container" =~ ^voyager-sidecar-[a-f0-9]{8}$ ]]; then
+    if [[ "$container" =~ ^agent-sidecar-[a-z0-9-]+-[a-f0-9]{8}$ ]]; then
         return 0
     fi
     

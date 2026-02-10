@@ -4,31 +4,10 @@ A Claude Code plugin for scaffolding new projects or retrofitting existing ones 
 
 ## Installation
 
-### Option 1: Local Path (Development)
-
-Add directly to `~/.claude/settings.json`:
-
-```json
-{
-  "plugins": [
-    "~/dev/ai-tools/ai_scaffold"
-  ]
-}
-```
-
-### Option 2: From GitHub Repository
-
-Assumes `gh auth login` is already configured.
-
 ```bash
-# Add the ai-tools repo as a marketplace
 /plugin marketplace add ShravanSunder/ai-tools
-
-# Install the scaffold plugin
 /plugin install ai-scaffold@ai-tools
 ```
-
-This works for both public and private repos since gh handles authentication.
 
 ### Managing Plugins
 
@@ -138,7 +117,7 @@ Just ask Claude:
 The scaffold script can also be run directly:
 
 ```bash
-bash ~/dev/ai-tools/ai_scaffold/scripts/scaffold/scaffold-project.sh \
+bash ~/dev/ai-tools/plugins/ai-scaffold/scripts/scaffold/scaffold-project.sh \
   --name "my-project" \
   --type "monorepo-ts-py" \
   --description "My awesome project" \
@@ -166,7 +145,7 @@ bash ~/dev/ai-tools/ai_scaffold/scripts/scaffold/scaffold-project.sh \
 ## Directory Structure
 
 ```
-ai_scaffold/
+ai-scaffold/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
 ├── commands/
