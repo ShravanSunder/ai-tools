@@ -41,18 +41,6 @@ See `ai_scaffold/skills/scaffold-project/SKILL.md` for full documentation.
 
 ---
 
-## Repository Variants
-
-This repo has two variants for different contexts:
-
-| Repo | Purpose | Firewall Presets |
-|------|---------|------------------|
-| `~/dev/ai-tools` | Personal projects | github-write, notion, linear |
-| `~/dev/relay-ai-tools` | Work projects (Relay) | All above + jira, slack |
-
-**Work repos** (voyager-ai, risk-process-integrations) should use `relay-ai-tools`.
-
-To sync changes between them, copy updated files or set up git remotes.
 
 ## Agent Sidecar
 

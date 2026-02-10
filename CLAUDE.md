@@ -6,9 +6,18 @@ This repository contains the Agent Sidecar system for running AI coding assistan
 
 **Purpose**: Provide isolated, firewall-controlled Docker environments for AI agents (Claude Code, Codex, Gemini CLI, etc.) to safely work on codebases.
 
+
+## Repository Variants
+
+This repo has two variants for different contexts:
+
 **Two variants exist**:
 - `~/dev/ai-tools` - Personal projects (this repo)
 - `~/dev/relay-ai-tools` - Work projects (fork)
+
+**Work repos** (voyager-ai, risk-process-integrations) should use `relay-ai-tools`.
+
+To sync changes between them, copy updated files or set up git remotes.
 
 ### Differences Between Variants
 
