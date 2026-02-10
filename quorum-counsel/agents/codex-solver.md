@@ -192,6 +192,7 @@ Report back with exactly this structure:
 
 **Codex Analysis Complete**
 
+**Verdict**: [SOLVED | NEEDS MORE INVESTIGATION | BLOCKED]
 **Pattern**: [exploration | stuck | architecture | impact]
 **Effort**: [low | medium | high]
 

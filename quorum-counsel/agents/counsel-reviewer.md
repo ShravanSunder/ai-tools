@@ -396,73 +396,47 @@ After both models complete, synthesize using weighted aggregation:
 
 ## Response Format
 
-Report back with this structure:
+Write ALL detailed analysis to files first, then return a concise summary to chat.
 
-**Counsel Review Complete**
+### Files to Write (detailed analysis)
 
-**Type**: [plan-review | code-review]
-**Models**: Gemini 3 Pro + Codex GPT-5.3
-**Duration**: [time taken]
+Write these BEFORE returning the chat response:
 
-**Context Sufficiency Warnings**:
-- [Missing/weak context items from the Context Bundle, and how they impact confidence]
+1. `/tmp/counsel-review/{task-id}/summary.md` — Full executive summary with all findings, requirements coverage map (R1..Rn), context sufficiency warnings, model agreement analysis, and complete recommendations
+2. `/tmp/counsel-review/{task-id}/consensus-issues.md` — Issues both models agreed on with severity ratings
+3. `/tmp/counsel-review/{task-id}/requirements-map.md` — R1..Rn coverage map: COVERED/PARTIAL/MISSING with references to plan steps or diff hunks
+4. `/tmp/counsel-review/{task-id}/gemini/review.md` — Full Gemini analysis (written by Gemini)
+5. `/tmp/counsel-review/{task-id}/codex/review.md` — Full Codex analysis (written by Codex)
 
-**Executive Summary**:
-[2-4 sentences: overall assessment, critical issues count, recommendation]
+### Chat Response (brief — what Claude sees first)
 
-**Canonical Requirements (R1..Rn)**:
-- R1. ...
-- R2. ...
+Return ONLY this concise format to chat (~15-20 lines). All details go in the files above.
 
-**Requirements Coverage Map**:
-- R1: [COVERED | PARTIAL | MISSING] → [plan step(s) / file(s) / diff hunk(s)]
-- R2: ...
+```
+**Counsel Review Complete** — {plan-review | code-review}
 
-**Consensus Issues** (Both models agree - HIGH CONFIDENCE):
-1. [Issue both models found - highest priority]
-2. [Another consensus issue]
+**Verdict**: {PASS | PASS WITH CONCERNS | REVISE}
+**Models**: Gemini 3 + Codex GPT-5.3 | Consensus: {X} issues, Codex-only: {Y}, Gemini-only: {Z}
 
-**Critical Findings**:
+**Critical Issues** ({count}):
+- [{severity}] {one-line description} {file:line if applicable}
+- ...
 
-*From Codex (Security & Logic):*
-- [P0] [Security/bug finding]
-- [P1] [Logic error or missing error handling]
+**Requirements Gaps**: {list any MISSING or PARTIAL from R1..Rn, or "All covered"}
 
-*From Gemini (Architecture & Patterns):*
-- [Architectural concern]
-- [Pattern violation or maintainability issue]
+**Top Recommendations**:
+1. {most important action item}
+2. {second action item}
 
-**Edge Cases & Gaps**:
-- [Missing scenario Codex identified]
-- [Integration concern Gemini identified]
+**Detailed Reports**:
+- Full summary: `/tmp/counsel-review/{task-id}/summary.md`
+- Consensus issues: `/tmp/counsel-review/{task-id}/consensus-issues.md`
+- Requirements map: `/tmp/counsel-review/{task-id}/requirements-map.md`
+- Gemini review: `/tmp/counsel-review/{task-id}/gemini/review.md`
+- Codex review: `/tmp/counsel-review/{task-id}/codex/review.md`
+```
 
-**Recommendations**:
-1. [Top recommendation based on consensus]
-2. [Second recommendation]
-3. [Alternative approach if applicable]
-
-**Top Review Questions Answered**:
-- Q1: [answer]
-- Q2: [answer]
-
-**Model Agreement Analysis**:
-- Consensus issues: X
-- Codex-only findings: Y
-- Gemini-only findings: Z
-- Overall confidence: [High/Medium] (based on agreement level)
-
-**Output Files**:
-- `/tmp/counsel-review/{task-id}/summary.md` - This executive summary (Claude reads this first)
-- `/tmp/counsel-review/{task-id}/consensus-issues.md` - Issues both found
-- `/tmp/counsel-review/{task-id}/gemini/review.md` - Full Gemini analysis
-- `/tmp/counsel-review/{task-id}/codex/review.md` - Full Codex analysis
-- `/tmp/counsel-review/{task-id}/context.md` - Claude's conversational context
-- `/tmp/counsel-review/{task-id}/changeset.diff` - Git diff (code-review) OR `plan.md` (plan-review)
-
-**Next Steps for Claude**:
-- [What Claude should do with these findings]
-- [Files to read for verification]
-- [Whether to proceed or revise plan/code]
+Read `summary.md` for full findings. Read individual model reviews for line-by-line analysis.
 
 ## Error Handling
 
