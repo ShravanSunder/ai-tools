@@ -103,8 +103,20 @@ if [ "$LOCAL_ONLY" = false ]; then
 # -----------------------------------------------------------------------------
 # Extra Mounts
 # -----------------------------------------------------------------------------
-# Additional Docker volume mounts (space-separated).
-# Default: -v $HOME/.aws:/home/node/.aws:ro -v $HOME/.config/micro:/home/node/.config/micro
+# Additional Docker volume mounts. ADDED to core mounts (aws, micro).
+# WORK_DIR is set before config loads (git repo root).
+# Use ${WORK_DIR%/*} to get the parent directory (pure bash, no subshell).
+#
+# Example - mount a single sibling repo:
+#   _SIBLING="${WORK_DIR%/*}"
+#   EXTRA_MOUNTS="-v ${_SIBLING}/other-repo:${_SIBLING}/other-repo"
+#
+# Example - mount multiple sibling repos (loop):
+#   _SIBLING="${WORK_DIR%/*}"
+#   EXTRA_MOUNTS=""
+#   for _repo in sibling-a sibling-b sibling-c; do
+#       EXTRA_MOUNTS="${EXTRA_MOUNTS} -v ${_SIBLING}/${_repo}:${_SIBLING}/${_repo}"
+#   done
 # EXTRA_MOUNTS=""
 
 # -----------------------------------------------------------------------------
@@ -130,8 +142,12 @@ if [ ! -f "$LOCAL_CONF" ]; then
 # Personal configuration (gitignored). Overrides sidecar.repo.conf.
 # =============================================================================
 
-# Example: Add personal mounts
-# EXTRA_MOUNTS="-v $HOME/.aws:/home/node/.aws:ro -v $HOME/.ssh:/home/node/.ssh:ro"
+# Example - mount sibling repos (WORK_DIR is the git repo root):
+#   _SIBLING="${WORK_DIR%/*}"
+#   EXTRA_MOUNTS=""
+#   for _repo in sibling-a sibling-b; do
+#       EXTRA_MOUNTS="${EXTRA_MOUNTS} -v ${_SIBLING}/${_repo}:${_SIBLING}/${_repo}"
+#   done
 
 # Example: Personal apt packages
 # EXTRA_APT_PACKAGES="neovim"
