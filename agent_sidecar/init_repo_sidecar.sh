@@ -104,19 +104,26 @@ if [ "$LOCAL_ONLY" = false ]; then
 # Extra Mounts
 # -----------------------------------------------------------------------------
 # Additional Docker volume mounts. ADDED to core mounts (aws, micro).
+#
+# Mount options: :ro (read-only, recommended) or :rw (read-write).
+# Prefer :ro unless the agent needs to write to the mounted path.
+#
 # WORK_DIR is set before config loads (git repo root).
 # Use ${WORK_DIR%/*} to get the parent directory (pure bash, no subshell).
 #
-# Example - mount a single sibling repo:
+# Example - mount a single sibling repo (read-only):
 #   _SIBLING="${WORK_DIR%/*}"
-#   EXTRA_MOUNTS="-v ${_SIBLING}/other-repo:${_SIBLING}/other-repo"
+#   EXTRA_MOUNTS="-v ${_SIBLING}/other-repo:${_SIBLING}/other-repo:ro"
 #
-# Example - mount multiple sibling repos (loop):
+# Example - mount multiple sibling repos (loop, read-only):
 #   _SIBLING="${WORK_DIR%/*}"
 #   EXTRA_MOUNTS=""
 #   for _repo in sibling-a sibling-b sibling-c; do
-#       EXTRA_MOUNTS="${EXTRA_MOUNTS} -v ${_SIBLING}/${_repo}:${_SIBLING}/${_repo}"
+#       EXTRA_MOUNTS="${EXTRA_MOUNTS} -v ${_SIBLING}/${_repo}:${_SIBLING}/${_repo}:ro"
 #   done
+#
+# Example - mount read-write (when agent needs to write):
+#   EXTRA_MOUNTS="-v ${_SIBLING}/shared-output:${_SIBLING}/shared-output:rw"
 # EXTRA_MOUNTS=""
 
 # -----------------------------------------------------------------------------
@@ -142,11 +149,13 @@ if [ ! -f "$LOCAL_CONF" ]; then
 # Personal configuration (gitignored). Overrides sidecar.repo.conf.
 # =============================================================================
 
-# Example - mount sibling repos (WORK_DIR is the git repo root):
+# Mount options: :ro (read-only, recommended) or :rw (read-write).
+#
+# Example - mount sibling repos (read-only, WORK_DIR is the git repo root):
 #   _SIBLING="${WORK_DIR%/*}"
 #   EXTRA_MOUNTS=""
 #   for _repo in sibling-a sibling-b; do
-#       EXTRA_MOUNTS="${EXTRA_MOUNTS} -v ${_SIBLING}/${_repo}:${_SIBLING}/${_repo}"
+#       EXTRA_MOUNTS="${EXTRA_MOUNTS} -v ${_SIBLING}/${_repo}:${_SIBLING}/${_repo}:ro"
 #   done
 
 # Example: Personal apt packages
