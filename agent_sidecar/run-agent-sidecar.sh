@@ -128,6 +128,12 @@ echo "   Repo: $REPO_NAME ($WORK_DIR)"
 # =============================================================================
 REPO_SIDECAR="$WORK_DIR/.agent_sidecar"
 
+if [ ! -d "$REPO_SIDECAR" ]; then
+    echo "❌ Error: .agent_sidecar/ not found in $WORK_DIR"
+    echo "   Run: $SCRIPT_DIR/init_repo_sidecar.sh --default"
+    exit 1
+fi
+
 resolve_file() {
     local basename="$1"  # e.g., "init-background" or "dockerfile-image"
     local ext="$2"       # e.g., "sh" or "txt" (empty for no extension)

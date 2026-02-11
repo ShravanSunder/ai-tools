@@ -5,13 +5,70 @@
 # Creates the .agent_sidecar directory with template configuration files
 # and adds appropriate .gitignore entries.
 #
-# Usage: init_repo_sidecar.sh [--local-only]
-#   --local-only  Only create .local files (for personal setup, all gitignored)
+# Usage: init_repo_sidecar.sh <--default | --repo-only | --local-only>
+#   --default     Create both .repo and .local files (full setup)
+#   --repo-only   Create only .repo files (team setup, no personal overrides)
+#   --local-only  Create only .local files (personal setup, all gitignored)
+#
+# No arguments shows help. Files are never overwritten if they already exist.
 # =============================================================================
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# =============================================================================
+# Help
+# =============================================================================
+show_help() {
+    echo "Usage: init_repo_sidecar.sh <--default | --repo-only | --local-only>"
+    echo ""
+    echo "Initialize .agent_sidecar/ in the current git repository with template"
+    echo "configuration files for the Agent Sidecar Docker environment."
+    echo ""
+    echo "Options:"
+    echo "  --default     Create both .repo and .local files (full setup)"
+    echo "  --repo-only   Create only .repo files (team setup, no personal overrides)"
+    echo "  --local-only  Create only .local files (personal setup, all gitignored)"
+    echo "  -h, --help    Show this help message"
+    echo ""
+    echo "Files are never overwritten if they already exist."
+}
+
+# =============================================================================
+# Parse arguments
+# =============================================================================
+MODE=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --default)    MODE="default";    shift ;;
+        --repo-only)  MODE="repo-only";  shift ;;
+        --local-only) MODE="local-only"; shift ;;
+        -h|--help)    MODE="help";       shift ;;
+        *)
+            echo "❌ Unknown option: $1"
+            echo ""
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+if [ -z "$MODE" ] || [ "$MODE" = "help" ]; then
+    show_help
+    exit 0
+fi
+
+# Derive boolean guards from MODE
+CREATE_REPO=false
+CREATE_LOCAL=false
+
+case "$MODE" in
+    default)    CREATE_REPO=true; CREATE_LOCAL=true ;;
+    repo-only)  CREATE_REPO=true ;;
+    local-only) CREATE_LOCAL=true ;;
+esac
 
 # Find repo root
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -21,26 +78,12 @@ if [ -z "$REPO_ROOT" ]; then
 fi
 
 SIDECAR_DIR="$REPO_ROOT/.agent_sidecar"
-LOCAL_ONLY=false
 
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --local-only)
-            LOCAL_ONLY=true
-            shift
-            ;;
-        *)
-            shift
-            ;;
-    esac
-done
-
-echo "🚀 Initializing Agent Sidecar in: $REPO_ROOT"
+echo "🚀 Initializing Agent Sidecar in: $REPO_ROOT (mode: $MODE)"
 mkdir -p "$SIDECAR_DIR"
 
 # =============================================================================
-# Create .gitignore
+# Create .gitignore (always, in all modes)
 # =============================================================================
 GITIGNORE="$SIDECAR_DIR/.gitignore"
 if [ ! -f "$GITIGNORE" ]; then
@@ -61,7 +104,7 @@ fi
 # =============================================================================
 # Create sidecar.repo.conf (team config)
 # =============================================================================
-if [ "$LOCAL_ONLY" = false ]; then
+if [ "$CREATE_REPO" = true ]; then
     REPO_CONF="$SIDECAR_DIR/sidecar.repo.conf"
     if [ ! -f "$REPO_CONF" ]; then
         cat > "$REPO_CONF" << 'EOF'
@@ -140,9 +183,10 @@ fi
 # =============================================================================
 # Create sidecar.local.conf template (personal config)
 # =============================================================================
-LOCAL_CONF="$SIDECAR_DIR/sidecar.local.conf"
-if [ ! -f "$LOCAL_CONF" ]; then
-    cat > "$LOCAL_CONF" << 'EOF'
+if [ "$CREATE_LOCAL" = true ]; then
+    LOCAL_CONF="$SIDECAR_DIR/sidecar.local.conf"
+    if [ ! -f "$LOCAL_CONF" ]; then
+        cat > "$LOCAL_CONF" << 'EOF'
 # =============================================================================
 # sidecar.local.conf - Personal Agent Sidecar Overrides
 # =============================================================================
@@ -161,13 +205,14 @@ if [ ! -f "$LOCAL_CONF" ]; then
 # Example: Personal apt packages
 # EXTRA_APT_PACKAGES="neovim"
 EOF
-    echo "   Created: sidecar.local.conf (gitignored)"
+        echo "   Created: sidecar.local.conf (gitignored)"
+    fi
 fi
 
 # =============================================================================
 # Create firewall-allowlist-extra.repo.txt template (team firewall additions)
 # =============================================================================
-if [ "$LOCAL_ONLY" = false ]; then
+if [ "$CREATE_REPO" = true ]; then
     FIREWALL_REPO="$SIDECAR_DIR/firewall-allowlist-extra.repo.txt"
     if [ ! -f "$FIREWALL_REPO" ]; then
         cat > "$FIREWALL_REPO" << 'EOF'
@@ -191,9 +236,10 @@ fi
 # =============================================================================
 # Create firewall-allowlist-extra.local.txt template (personal firewall additions)
 # =============================================================================
-FIREWALL_LOCAL="$SIDECAR_DIR/firewall-allowlist-extra.local.txt"
-if [ ! -f "$FIREWALL_LOCAL" ]; then
-    cat > "$FIREWALL_LOCAL" << 'EOF'
+if [ "$CREATE_LOCAL" = true ]; then
+    FIREWALL_LOCAL="$SIDECAR_DIR/firewall-allowlist-extra.local.txt"
+    if [ ! -f "$FIREWALL_LOCAL" ]; then
+        cat > "$FIREWALL_LOCAL" << 'EOF'
 # =============================================================================
 # firewall-allowlist-extra.local.txt - Personal Firewall Additions
 # =============================================================================
@@ -205,13 +251,14 @@ if [ ! -f "$FIREWALL_LOCAL" ]; then
 # Example: Personal services
 # my-private-api.example.com
 EOF
-    echo "   Created: firewall-allowlist-extra.local.txt (gitignored)"
+        echo "   Created: firewall-allowlist-extra.local.txt (gitignored)"
+    fi
 fi
 
 # =============================================================================
 # Create build-extra.repo.sh template (team build-time script)
 # =============================================================================
-if [ "$LOCAL_ONLY" = false ]; then
+if [ "$CREATE_REPO" = true ]; then
     BUILD_EXTRA_REPO="$SIDECAR_DIR/build-extra.repo.sh"
     if [ ! -f "$BUILD_EXTRA_REPO" ]; then
         cat > "$BUILD_EXTRA_REPO" << 'EOF'
@@ -259,7 +306,7 @@ fi
 # =============================================================================
 # Create init script templates
 # =============================================================================
-if [ "$LOCAL_ONLY" = false ]; then
+if [ "$CREATE_REPO" = true ]; then
     # init-background-extra.repo.sh
     INIT_BG="$SIDECAR_DIR/init-background-extra.repo.sh"
     if [ ! -f "$INIT_BG" ]; then
@@ -304,13 +351,22 @@ EOF
     fi
 fi
 
+# =============================================================================
+# Summary
+# =============================================================================
 echo ""
 echo "✅ Agent Sidecar initialized in: $SIDECAR_DIR"
 echo ""
 echo "📋 Next steps:"
-echo "   1. Edit sidecar.repo.conf to configure team settings"
-echo "   2. Edit firewall-allowlist-extra.repo.txt to add allowed domains"
-echo "   3. Edit build-extra.repo.sh for custom build-time installations"
-echo "   4. Run: run-agent-sidecar.sh --reset"
+if [ "$CREATE_REPO" = true ]; then
+    echo "   1. Edit sidecar.repo.conf to configure team settings"
+    echo "   2. Edit firewall-allowlist-extra.repo.txt to add allowed domains"
+    echo "   3. Edit build-extra.repo.sh for custom build-time installations"
+fi
+if [ "$CREATE_LOCAL" = true ]; then
+    echo "   - Edit sidecar.local.conf for personal overrides"
+    echo "   - Edit firewall-allowlist-extra.local.txt for personal domains"
+fi
+echo "   - Run: run-agent-sidecar.sh --reload"
 echo ""
 echo "📚 Documentation: See CLAUDE.md and sidecar.base.conf in ai-tools"
