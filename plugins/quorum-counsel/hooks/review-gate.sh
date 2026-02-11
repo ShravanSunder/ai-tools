@@ -10,15 +10,21 @@ set -euo pipefail
 # Plan review is handled manually via /review-plan command.
 
 INPUT=$(cat)
+STOP_HOOK_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
 TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty')
+
+# --- Loop prevention (official field: true when hook already triggered continuation) ---
+[ "$STOP_HOOK_ACTIVE" = "true" ] && exit 0
 
 # --- No transcript → nothing to check ---
 [ -z "$TRANSCRIPT_PATH" ] || [ ! -f "$TRANSCRIPT_PATH" ] && exit 0
 
-# --- Detect code implementation (Write/Edit tools) ---
+# --- Detect code implementation (Write/Edit/MultiEdit tools) ---
+# Transcript is JSONL using Anthropic API format: tool use entries have
+# "type": "tool_use" and "name": "Write" (NOT "tool_name")
 has_implementation=false
 
-if grep -qE '"tool_name"\s*:\s*"(Write|Edit)"' "$TRANSCRIPT_PATH" 2>/dev/null; then
+if grep -E '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null | grep -qE '"name"\s*:\s*"(Write|Edit|MultiEdit)"'; then
   has_implementation=true
 fi
 
