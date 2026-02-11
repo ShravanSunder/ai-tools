@@ -43,8 +43,8 @@ Delegates hard problems to OpenAI Codex via the `codex exec` CLI. Runs as a back
 
 ## Hooks
 
-- **bash-allow** -- PreToolUse hook that validates bash commands for safety
-- **review-gate** -- Stop hook that prompts for review before completion
+- **bash-allow** -- PreToolUse hook that auto-approves safe bash commands (git read-only, gemini/codex CLI, `/tmp/` ops) for background subagents
+- **review-gate** -- Stop hook that blocks Claude from stopping after Write/Edit/MultiEdit tool usage unless counsel-reviewer was already spawned. Greps the transcript JSONL for `"type": "tool_use"` + `"name": "Write|Edit|MultiEdit"` (Anthropic API format, not `"tool_name"`). Uses `stop_hook_active` field and a `/tmp/` session marker for loop prevention. See "Hook Development Gotchas" in the repo CLAUDE.md for transcript format details.
 
 ## Directory Structure
 

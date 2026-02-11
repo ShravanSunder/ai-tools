@@ -87,6 +87,14 @@ plugins/<plugin-name>/
 - Plugin `name` is the cache key for consumers -- changing it breaks existing installs
 - Run `claude plugin validate .` after any marketplace changes
 
+### Hook Development Gotchas
+
+- **Transcript vs stdin**: The `transcript_path` JSONL file uses Anthropic API format -- tool usage is `{"type": "tool_use", "name": "Write", "input": {...}}` inside a `content` array. The field is `"name"`, NOT `"tool_name"`. The `"tool_name"` field only exists in hook stdin input. Do not grep the transcript for `"tool_name"`.
+- **Display names differ from tool names**: Terminal shows `Create(file)` but the transcript stores `"name": "Write"`. Similarly, `MultiEdit` is a separate tool name.
+- **Cache versioning**: Plugin files are cached by `version` in `plugin.json`. Changing hook scripts or config without bumping the version means Claude Code uses stale cached files. Always bump version after changes.
+- **Stop hooks**: Require `"matcher": "*"` in `hooks.json`. Use `bash ${CLAUDE_PLUGIN_ROOT}/hooks/script.sh` (with `bash` prefix) to ensure execution even if permissions are stripped during caching. Check `stop_hook_active` and exit 0 when true to prevent infinite loops. Exit code 2 blocks the stop; stderr is fed back to Claude as the reason.
+- **Debugging hooks**: Run `claude --debug`, check logs at `~/.claude/debug/`, grep for `Hook Stop` to see hook output and exit codes.
+
 ### Adding a New Plugin
 
 1. Create `plugins/<name>/` with `.claude-plugin/plugin.json`
