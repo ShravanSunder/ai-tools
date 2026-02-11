@@ -1,6 +1,6 @@
 {
   "name": "scaffold-project",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scaffold new projects or retrofit existing ones with standard dev configs (linters, rules, hooks, testing)",
   "author": {
     "name": "Shravan Sunder"
