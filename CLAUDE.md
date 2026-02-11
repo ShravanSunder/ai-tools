@@ -219,19 +219,14 @@ Use `init_repo_sidecar.sh` to set up `.agent_sidecar/` with template files:
 
 ```bash
 # From any repo directory
-/path/to/ai-tools/agent_sidecar/init_repo_sidecar.sh
-
-# Creates:
-#   .agent_sidecar/
-#   ├── .gitignore
-#   ├── sidecar.repo.conf                   # Team config
-#   ├── sidecar.local.conf                  # Personal config (gitignored)
-#   ├── firewall-allowlist-extra.repo.txt   # Team firewall additions
-#   ├── firewall-allowlist-extra.local.txt  # Personal firewall additions (gitignored)
-#   ├── build-extra.repo.sh                 # Build-time script template
-#   ├── init-background-extra.repo.sh
-#   └── init-foreground-extra.repo.sh
+init_repo_sidecar.sh --default          # Full setup (both .repo and .local files)
+init_repo_sidecar.sh --repo-only        # Team setup only
+init_repo_sidecar.sh --local-only       # Personal setup only
+init_repo_sidecar.sh --sync-docs        # Only sync INSTRUCTIONS.md (quick doc update)
+init_repo_sidecar.sh --default --override  # Force-overwrite all files
 ```
+
+Every run copies `agent_sidecar/INSTRUCTIONS.md` into `.agent_sidecar/INSTRUCTIONS.md` (always overwritten). This gives agents in target repos a concise usage reference with links to config docs. Config files are only created if they don't exist, unless `--override` is used. See [`agent_sidecar/INSTRUCTIONS.md`](agent_sidecar/INSTRUCTIONS.md) for the full usage guide that gets synced.
 
 ### Debugging container issues
 

@@ -10,11 +10,7 @@ set -euo pipefail
 # Plan review is handled manually via /review-plan command.
 
 INPUT=$(cat)
-STOP_HOOK_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
 TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty')
-
-# --- Loop prevention ---
-[ "$STOP_HOOK_ACTIVE" = "true" ] && exit 0
 
 # --- No transcript → nothing to check ---
 [ -z "$TRANSCRIPT_PATH" ] || [ ! -f "$TRANSCRIPT_PATH" ] && exit 0
@@ -22,7 +18,7 @@ TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty')
 # --- Detect code implementation (Write/Edit tools) ---
 has_implementation=false
 
-if grep -q '"tool_name":"Write"\|"tool_name":"Edit"' "$TRANSCRIPT_PATH" 2>/dev/null; then
+if grep -qE '"tool_name"\s*:\s*"(Write|Edit)"' "$TRANSCRIPT_PATH" 2>/dev/null; then
   has_implementation=true
 fi
 

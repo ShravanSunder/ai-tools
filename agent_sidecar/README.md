@@ -97,13 +97,24 @@ Use `init_repo_sidecar.sh` to set up a new project:
 
 ```bash
 cd ~/path/to/my-project
-/path/to/ai-tools/agent_sidecar/init_repo_sidecar.sh
+/path/to/ai-tools/agent_sidecar/init_repo_sidecar.sh --default
+```
+
+Options:
+
+```
+  --default      Create both .repo and .local files (full setup)
+  --repo-only    Create only .repo files (team setup)
+  --local-only   Create only .local files (personal setup)
+  --sync-docs    Only sync INSTRUCTIONS.md (quick doc update for existing repos)
+  --override     Combine with any mode to force-overwrite all files
 ```
 
 This creates:
 
 ```
 .agent_sidecar/
+├── INSTRUCTIONS.md                      # Usage guide (auto-synced, always overwritten)
 ├── .gitignore                           # Ignore local overrides
 ├── sidecar.repo.conf                    # Team config overrides
 ├── sidecar.local.conf                   # Personal config (gitignored)
@@ -113,6 +124,8 @@ This creates:
 ├── init-background-extra.repo.sh        # Team background init
 └── init-foreground-extra.repo.sh        # Team foreground init
 ```
+
+`INSTRUCTIONS.md` is always overwritten with the latest version on every init run. Config files are only created if they don't already exist (unless `--override` is used).
 
 ## Launch Options
 
@@ -124,10 +137,11 @@ Options:
   --full-reset  Rebuild base image + recreate container
   --no-run      Setup only, don't exec into shell
   --run <cmd>   Run specific command
-  --run-claude  Run Claude Code
-  --run-codex   Run OpenAI Codex
-  --run-gemini  Run Gemini CLI
-  --run-cursor  Run Cursor
+  --run-claude    Run Claude Code
+  --run-codex     Run OpenAI Codex
+  --run-gemini    Run Gemini CLI
+  --run-opencode  Run OpenCode
+  --run-cursor    Run Cursor
 ```
 
 | Flag | Base Image | Per-Repo Image | Container | Speed | Use Case |
@@ -156,6 +170,7 @@ agent_sidecar/
 ├── sidecar-ctl.sh                       # Host-side firewall control
 ├── sidecar.base.conf                    # Base configuration
 ├── init_repo_sidecar.sh                 # Initialize .agent_sidecar/ in repos
+├── INSTRUCTIONS.md                      # Usage guide (copied into target repos)
 ├── node-py.base.dockerfile              # Base container image
 ├── node-py.overlay.dockerfile           # Per-repo overlay image
 ├── setup/
