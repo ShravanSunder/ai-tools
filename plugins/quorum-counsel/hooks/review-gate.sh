@@ -32,7 +32,9 @@ fi
 [ "$has_implementation" = "false" ] && exit 0
 
 # --- Already reviewed → allow stop ---
-if grep -q 'counsel-reviewer' "$TRANSCRIPT_PATH" 2>/dev/null; then
+# Must match an actual Task tool invocation with subagent_type containing
+# counsel-reviewer, not just a text mention of the name in conversation.
+if grep -E '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null | grep -qE '"subagent_type"\s*:\s*"[^"]*counsel-reviewer"'; then
   exit 0
 fi
 
