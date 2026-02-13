@@ -42,6 +42,9 @@ CHANGESET_SUMMARY:        (code-review only)
 PLAN_FILE:                (plan-review only)
 <Absolute path to the plan .md file>
 
+REVIEW_DIMENSIONS:       (optional — default: all)
+<bugs|security|errors|tests|patterns|all>
+
 REVIEW_QUESTIONS:
 Q1. ...
 Q2. ...
@@ -56,8 +59,9 @@ For **code-review** with PR_NUMBER:
 1. Run `gh pr diff {PR_NUMBER}` → write to `/tmp/counsel-review/{task-id}/changeset.diff`
 2. Run `gh pr view {PR_NUMBER} --json title,body,labels,headRefName,baseRefName` → write to `/tmp/counsel-review/{task-id}/pr-metadata.json`
 3. Run `gh pr diff {PR_NUMBER} --name-only` → write to `/tmp/counsel-review/{task-id}/changed-files.txt`
-4. Run `git log --oneline -10` → write to `/tmp/counsel-review/{task-id}/recent-commits.txt`
-5. Write Claude's conversational context → `/tmp/counsel-review/{task-id}/context.md`
+4. Run `git diff --stat` → write to `/tmp/counsel-review/{task-id}/diff-stat.txt`
+5. Run `git log --oneline -10` → write to `/tmp/counsel-review/{task-id}/recent-commits.txt`
+6. Write Claude's conversational context → `/tmp/counsel-review/{task-id}/context.md`
 
 For **code-review** without PR_NUMBER:
 1. Run `git diff HEAD` and `git diff` (staged + unstaged) → write to `/tmp/counsel-review/{task-id}/changeset.diff`
@@ -166,6 +170,7 @@ CONTEXT_EOF
 gh pr diff {PR_NUMBER} > /tmp/counsel-review/{task-id}/changeset.diff 2>/dev/null || true
 gh pr view {PR_NUMBER} --json title,body,labels,headRefName,baseRefName > /tmp/counsel-review/{task-id}/pr-metadata.json 2>/dev/null || true
 gh pr diff {PR_NUMBER} --name-only > /tmp/counsel-review/{task-id}/changed-files.txt 2>/dev/null || true
+git diff --stat > /tmp/counsel-review/{task-id}/diff-stat.txt 2>/dev/null || true
 git log --oneline -10 > /tmp/counsel-review/{task-id}/recent-commits.txt 2>/dev/null || true
 ```
 
@@ -323,7 +328,10 @@ READ THESE FILES FOR CONTEXT:
 - /tmp/counsel-review/{task-id}/changeset.diff (the actual code changes)
 - /tmp/counsel-review/{task-id}/diff-stat.txt (file-level change summary)
 - /tmp/counsel-review/{task-id}/recent-commits.txt (recent commit history)
+- /tmp/counsel-review/{task-id}/pr-metadata.json (PR title, body, labels — if present)
+- /tmp/counsel-review/{task-id}/changed-files.txt (list of changed files — if present)
 
+Read all files that exist. Some are only present in PR review mode.
 Also explore the codebase to understand existing patterns in the changed files.
 
 YOUR FIRST TASK:
@@ -387,7 +395,10 @@ READ THESE FILES FOR CONTEXT:
 - /tmp/counsel-review/{task-id}/changeset.diff (the actual code changes)
 - /tmp/counsel-review/{task-id}/diff-stat.txt (file-level change summary)
 - /tmp/counsel-review/{task-id}/recent-commits.txt (recent commit history)
+- /tmp/counsel-review/{task-id}/pr-metadata.json (PR title, body, labels — if present)
+- /tmp/counsel-review/{task-id}/changed-files.txt (list of changed files — if present)
 
+Read all files that exist. Some are only present in PR review mode.
 Also read the full source files that were changed to understand surrounding context.
 
 REVIEW RULES:
@@ -465,28 +476,31 @@ After both models complete, synthesize using weighted aggregation:
 
 2. **Extract and normalize findings**:
    - Parse each finding: severity, confidence, description, file:line, category
-   - Discard any findings with confidence < 80
+   - Keep all findings with confidence >= 60 for consensus matching
 
-3. **Apply consensus bonus**:
+3. **Apply consensus bonus** (BEFORE threshold filter):
    - If both models identify the same issue (same file:line, similar description):
      mark as CONSENSUS, add +15 confidence (cap at 100)
-   - Consensus issues get highest priority in the final report
+   - This rescues borderline findings (e.g., 75 + 15 = 90) that both models agree on
 
-4. **Categorize remaining findings**:
+4. **Apply threshold filter**:
+   - Discard any findings with confidence < 80 (after consensus bonus)
+
+5. **Categorize remaining findings**:
    - **Consensus Issues**: Both models found (highest confidence)
    - **Codex-specific**: Only Codex found (security, bugs, silent failures)
    - **Gemini-specific**: Only Gemini found (patterns, compliance, architecture)
 
-5. **Weight by model strength**:
+6. **Weight by model strength**:
    - Architecture/patterns: Gemini 70%, Codex 30%
    - Security/bugs: Codex 80%, Gemini 20%
    - Silent failures: Codex 80%, Gemini 20%
    - Logic errors: Codex 70%, Gemini 30%
    - Edge cases: Codex 60%, Gemini 40%
 
-6. **Sort by**: consensus first, then confidence descending, then severity P0>P1>P2>P3
+7. **Sort by**: consensus first, then confidence descending, then severity P0>P1>P2>P3
 
-7. **Create unified report**: See Response Format below
+8. **Create unified report**: See Response Format below
 
 ## Response Format
 

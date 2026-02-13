@@ -16,15 +16,17 @@ if command -v Xvfb &> /dev/null; then
 fi
 
 # 1. Sync Node modules (auto-detect package manager by lockfile)
+# Use --frozen-lockfile explicitly to prevent modifying the lockfile on the
+# shared bind mount, which would impact the host's node_modules state.
 if [ -f pnpm-lock.yaml ]; then
 	echo "  - Syncing Node modules (pnpm)..."
-	CI=true pnpm install || true
+	pnpm install --frozen-lockfile || true
 elif [ -f package-lock.json ]; then
 	echo "  - Syncing Node modules (npm)..."
-	CI=true npm ci || npm install || true
+	npm ci || true
 elif [ -f yarn.lock ]; then
 	echo "  - Syncing Node modules (yarn)..."
-	CI=true yarn install --frozen-lockfile || yarn install || true
+	yarn install --frozen-lockfile || true
 elif [ -f package.json ]; then
 	echo "  - Skipping Node modules: no lockfile found (run pnpm/npm/yarn install manually)"
 else

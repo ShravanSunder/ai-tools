@@ -18,9 +18,10 @@ with confidence-based scoring to minimize false positives.
 1. **Parse arguments**: Extract PR number (if any) and aspect keywords from `$ARGUMENTS`.
 
 2. **Verify there are changes to review**:
-   - If PR number: run `gh pr view {number} --json state` to confirm PR is open
+   - If PR number: run `gh pr view {number} --json state` to confirm PR exists.
+     If merged or closed, warn the user but proceed (retrospective reviews are valid).
    - If no PR number: check `git diff HEAD` has output
-   - If no changes, inform user and stop
+   - If no changes found (and no PR number), inform user and stop
 
 3. **Extract from conversation context**:
    - Problem statement (what was changed and why)

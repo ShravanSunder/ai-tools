@@ -468,6 +468,64 @@ if ! echo "$NODE_MODULES_VOLUMES" | grep -qF "$WORK_DIR/node_modules"; then
     NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $ROOT_NM_VOL:$WORK_DIR/node_modules"
 fi
 
+# Discover workspace packages (monorepos) and shadow their node_modules too
+# This catches sub-packages where node_modules doesn't exist yet at startup,
+# preventing the container's pnpm/npm install from writing Linux-native packages
+# to the host filesystem via the bind mount.
+add_workspace_nm_volume() {
+    local pkg_dir="$1"
+    local nm_dir="$pkg_dir/node_modules"
+    # Skip if already in the volumes list
+    if echo "$NODE_MODULES_VOLUMES" | grep -qF "$nm_dir"; then
+        return
+    fi
+    local PATH_HASH
+    PATH_HASH=$(echo -n "$nm_dir" | md5sum | cut -c1-8)
+    local VOL_NAME="agent-sidecar-nm-${DIR_HASH}-${PATH_HASH}"
+    docker volume create "$VOL_NAME" >/dev/null 2>&1 || true
+    NODE_MODULES_VOLUMES="$NODE_MODULES_VOLUMES -v $VOL_NAME:$nm_dir"
+}
+
+# Parse pnpm-workspace.yaml for workspace glob patterns
+if [ -f "$WORK_DIR/pnpm-workspace.yaml" ]; then
+    while IFS= read -r pattern; do
+        [ -z "$pattern" ] && continue
+        # Skip negation patterns
+        [[ "$pattern" == !* ]] && continue
+        # Expand glob relative to WORK_DIR (unquoted to allow glob expansion)
+        for pkg_dir in $WORK_DIR/$pattern; do
+            [ -d "$pkg_dir" ] && [ -f "$pkg_dir/package.json" ] && add_workspace_nm_volume "$pkg_dir"
+        done
+    done < <(awk '
+        /^packages:/ { in_pkg=1; next }
+        in_pkg && /^[[:space:]]*-/ {
+            sub(/^[[:space:]]*-[[:space:]]*/, "")
+            gsub(/["'"'"']/, "")
+            print
+            next
+        }
+        /^[^[:space:]#]/ { in_pkg=0 }
+    ' "$WORK_DIR/pnpm-workspace.yaml")
+fi
+
+# Parse package.json workspaces field (npm/yarn monorepos)
+if [ -f "$WORK_DIR/package.json" ] && command -v node >/dev/null 2>&1; then
+    while IFS= read -r pattern; do
+        [ -z "$pattern" ] && continue
+        [[ "$pattern" == !* ]] && continue
+        for pkg_dir in $WORK_DIR/$pattern; do
+            [ -d "$pkg_dir" ] && [ -f "$pkg_dir/package.json" ] && add_workspace_nm_volume "$pkg_dir"
+        done
+    done < <(node -e "
+        try {
+            const pkg = require('$WORK_DIR/package.json');
+            const ws = pkg.workspaces;
+            if (Array.isArray(ws)) ws.forEach(w => console.log(w));
+            else if (ws && Array.isArray(ws.packages)) ws.packages.forEach(w => console.log(w));
+        } catch(e) {}
+    " 2>/dev/null)
+fi
+
 # 4. Create Volumes and Prepare History Files
 echo "💾 Preparing Volumes and History..."
 docker volume create "$HISTORY_VOLUME" >/dev/null
