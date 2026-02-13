@@ -3,10 +3,10 @@ set -euo pipefail
 
 # bash-allow.sh — PreToolUse hook for quorum-counsel subagents
 #
-# Auto-approves specific safe Bash commands needed by counsel-reviewer
-# and codex-solver background subagents. Commands not matched pass
-# through to the normal permission system (which denies in background
-# subagent context).
+# Auto-approves specific safe Bash commands needed by counsel-reviewer,
+# codex-solver, and gemini-solver background subagents. Commands not
+# matched pass through to the normal permission system (which denies
+# in background subagent context).
 #
 # Referenced by agent frontmatter hooks, so only fires for those agents.
 
@@ -40,6 +40,11 @@ fi
 # /tmp/codex-analysis/ ops (exclude destructive)
 if echo "$COMMAND" | grep -qF '/tmp/codex-analysis/'; then
   echo "$COMMAND" | grep -qE '(^|\s)(rm\s|sudo\s|chmod\s|chown\s)' || allow "quorum-counsel: safe /tmp/codex-analysis/ op"
+fi
+
+# /tmp/gemini-analysis/ ops (exclude destructive)
+if echo "$COMMAND" | grep -qF '/tmp/gemini-analysis/'; then
+  echo "$COMMAND" | grep -qE '(^|\s)(rm\s|sudo\s|chmod\s|chown\s)' || allow "quorum-counsel: safe /tmp/gemini-analysis/ op"
 fi
 
 # mkdir -p /tmp/

@@ -37,6 +37,19 @@ Delegates hard problems to OpenAI Codex via the `codex exec` CLI. Runs as a back
 
 **Requires detailed context:** exact file paths, function/class names, code snippets, error messages, what you've tried.
 
+### gemini-solver
+
+Delegates problems to Google Gemini via the `gemini` CLI in read-only non-interactive mode. Runs as a background task (2-10 minutes). Gemini cannot modify source code -- read-only is system-enforced (no `--yolo`).
+
+**Use when:**
+- Need to understand a large or unfamiliar codebase (1M+ token context window)
+- Architecture analysis or system-wide pattern recognition
+- Want a second opinion from a different model family (Gemini vs Claude/Codex)
+- Need detailed explanation of complex code or data flows
+- Need to trace cross-cutting concerns across many files
+
+**Requires detailed context:** exact file paths, function/class names, code snippets, error messages, what you've tried.
+
 ## Commands
 
 - `/review-plan` -- trigger a plan review with counsel-reviewer
@@ -55,7 +68,7 @@ Review dimensions: `bugs`, `security`, `errors`, `tests`, `patterns`, `all` (def
 
 ## Hooks
 
-- **bash-allow** -- PreToolUse hook that auto-approves safe bash commands (git read-only, gh read-only, gemini/codex CLI, `/tmp/` ops) for background subagents
+- **bash-allow** -- PreToolUse hook that auto-approves safe bash commands (git read-only, gh read-only, gemini/codex CLI, `/tmp/` ops) for background subagents (counsel-reviewer, codex-solver, gemini-solver)
 - **review-gate** -- Stop hook that blocks Claude from stopping after Write/Edit/MultiEdit tool usage unless counsel-reviewer was already spawned. Greps the transcript JSONL for `"type": "tool_use"` + `"name": "Write|Edit|MultiEdit"` (Anthropic API format, not `"tool_name"`). Uses `stop_hook_active` field and a `/tmp/` session marker for loop prevention. See "Hook Development Gotchas" in the repo CLAUDE.md for transcript format details.
 
 ## Directory Structure
@@ -65,7 +78,8 @@ quorum-counsel/
 ├── .claude-plugin/plugin.json
 ├── agents/
 │   ├── counsel-reviewer.md    # Multi-model review orchestrator
-│   └── codex-solver.md        # Codex delegation agent
+│   ├── codex-solver.md        # Codex delegation agent
+│   └── gemini-solver.md       # Gemini delegation agent (read-only)
 ├── commands/
 │   ├── review-plan.md         # Plan review command
 │   └── review-pr.md           # Code/PR review command
