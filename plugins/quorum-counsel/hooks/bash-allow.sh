@@ -48,6 +48,9 @@ echo "$COMMAND" | grep -qE '^\s*mkdir\s+(-p\s+)?/tmp/' && allow "quorum-counsel:
 # git read-only
 echo "$COMMAND" | grep -qE '^git\s+(diff|log|show|status|describe)' && allow "quorum-counsel: git read-only"
 
+# gh read-only (PR data gathering for counsel-reviewer)
+echo "$COMMAND" | grep -qE '^gh\s+(pr\s+(view|diff|list|checks)|issue\s+(view|list)|search)' && allow "quorum-counsel: gh read-only"
+
 # wait (parallel job coordination)
 echo "$COMMAND" | grep -qE '^\s*wait(\s|$)' && allow "quorum-counsel: wait"
 

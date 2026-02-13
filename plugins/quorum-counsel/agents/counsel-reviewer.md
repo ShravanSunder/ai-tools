@@ -45,11 +45,21 @@ PLAN_FILE:                (plan-review only)
 REVIEW_QUESTIONS:
 Q1. ...
 Q2. ...
+
+PR_NUMBER:               (optional — if reviewing a GitHub PR)
+<PR number, e.g. 123>
 ```
 
 **Your data gathering responsibilities:**
 
-For **code-review**:
+For **code-review** with PR_NUMBER:
+1. Run `gh pr diff {PR_NUMBER}` → write to `/tmp/counsel-review/{task-id}/changeset.diff`
+2. Run `gh pr view {PR_NUMBER} --json title,body,labels,headRefName,baseRefName` → write to `/tmp/counsel-review/{task-id}/pr-metadata.json`
+3. Run `gh pr diff {PR_NUMBER} --name-only` → write to `/tmp/counsel-review/{task-id}/changed-files.txt`
+4. Run `git log --oneline -10` → write to `/tmp/counsel-review/{task-id}/recent-commits.txt`
+5. Write Claude's conversational context → `/tmp/counsel-review/{task-id}/context.md`
+
+For **code-review** without PR_NUMBER:
 1. Run `git diff HEAD` and `git diff` (staged + unstaged) → write to `/tmp/counsel-review/{task-id}/changeset.diff`
 2. Run `git log --oneline -10` → write to `/tmp/counsel-review/{task-id}/recent-commits.txt`
 3. Run `git diff --stat` → include in context for file-level overview
@@ -114,7 +124,8 @@ Q2. ...
 1. **Analyze** the incoming review request (plan review or code review) and detect input mode
 2. **Create output directory**: `mkdir -p /tmp/counsel-review/{task-id}/{gemini,codex}`
 3. **Gather data** (automated mode only):
-   - Code-review: run `git diff HEAD`, `git diff`, `git log --oneline -10`, `git diff --stat` → write to `/tmp/counsel-review/{task-id}/`
+   - Code-review with PR_NUMBER: run `gh pr diff`, `gh pr view`, `gh pr diff --name-only`, `git log` → write to `/tmp/counsel-review/{task-id}/`
+   - Code-review without PR_NUMBER: run `git diff HEAD`, `git diff`, `git log --oneline -10`, `git diff --stat` → write to `/tmp/counsel-review/{task-id}/`
    - Plan-review: read plan file → write to `/tmp/counsel-review/{task-id}/plan.md`
 4. **Write context file**: Write Claude's conversational context (requirements, intent, constraints) → `/tmp/counsel-review/{task-id}/context.md`
 5. **Construct prompts** for both Gemini 3 and Codex — reference files in `/tmp/counsel-review/{task-id}/` instead of embedding large content inline
@@ -150,7 +161,15 @@ cat > /tmp/counsel-review/{task-id}/context.md <<'CONTEXT_EOF'
 CONTEXT_EOF
 ```
 
-**For code-review — gather changeset:**
+**For code-review with PR_NUMBER — gather PR data:**
+```bash
+gh pr diff {PR_NUMBER} > /tmp/counsel-review/{task-id}/changeset.diff 2>/dev/null || true
+gh pr view {PR_NUMBER} --json title,body,labels,headRefName,baseRefName > /tmp/counsel-review/{task-id}/pr-metadata.json 2>/dev/null || true
+gh pr diff {PR_NUMBER} --name-only > /tmp/counsel-review/{task-id}/changed-files.txt 2>/dev/null || true
+git log --oneline -10 > /tmp/counsel-review/{task-id}/recent-commits.txt 2>/dev/null || true
+```
+
+**For code-review without PR_NUMBER — gather local changeset:**
 ```bash
 # Capture both staged and unstaged changes
 git diff HEAD > /tmp/counsel-review/{task-id}/changeset.diff 2>/dev/null || true
@@ -318,10 +337,32 @@ YOUR FOCUS AREAS:
 3. Cross-file consistency - Are conventions maintained?
 4. Integration issues - How does this affect other code?
 5. Maintainability - Is this easy to understand and change?
+6. CLAUDE.md compliance — If CLAUDE.md exists in the repo, check that changes
+   comply with project guidelines. Cite specific rules for violations.
+7. Code comment accuracy — Are comments in changed code accurate? Flag stale
+   comments that describe old behavior (comment rot).
+
+CONFIDENCE SCORING (MANDATORY):
+Score each finding 0-100. ONLY REPORT findings with confidence >= 80.
+- 0: False positive or pre-existing issue
+- 50: Real but nitpick, low-impact
+- 75: Likely real, directly impacts functionality
+- 100: Certain, double-checked, evidence confirms
+
+Output format per finding: [Confidence: XX] [P0/P1/P2/P3] Description — file:line
+
+IGNORE (false positives):
+- Pre-existing issues not introduced in this change
+- Issues linters/typecheckers/CI would catch
+- Pedantic nitpicks a senior engineer wouldn't flag
+- Issues on lines the user did not modify
+- Intentional functionality changes related to the broader change
 
 Provide analysis with specific file:line references:
 - Pattern violations
 - Architectural concerns
+- CLAUDE.md compliance issues (cite specific rules)
+- Comment accuracy issues
 - Consistency issues
 - Maintainability problems
 - Test gap hypotheses (what should be tested based on the diff)
@@ -355,19 +396,60 @@ REVIEW RULES:
 - Include specific file:line references for every finding.
 
 YOUR FOCUS AREAS:
-1. Bugs - Logic errors, off-by-one, null pointer, etc.
-2. Security - SQL injection, XSS, CSRF, auth bypass, etc.
-3. Race conditions - Concurrency bugs, deadlocks
-4. Error handling - Missing try/catch, unhandled errors
-5. Performance - Inefficient algorithms, memory leaks
-6. Missing tests - Critical paths not tested
 
-Provide:
-- Critical bugs (P0: must fix before shipping) with file:line
+1. Bugs — Logic errors, off-by-one, null/undefined dereference, wrong variable,
+   incorrect boolean logic, missing return, type coercion bugs
+
+2. Security Audit — For each changed file, check for:
+   SQL/NoSQL injection, XSS, CSRF, auth bypass, authorization gaps,
+   path traversal, secrets in code, insecure deserialization, SSRF,
+   race conditions in auth flows
+
+3. Silent Failure Hunting — For EVERY catch/fallback/error-handler in the diff:
+   a. Is the error logged with context (operation, IDs, state)?
+   b. Does the user get actionable feedback?
+   c. Could this catch block hide unrelated errors? List them.
+   d. Is a fallback masking the real problem?
+   e. Flag: empty catch blocks (P0), log-and-continue, return null on error,
+      optional chaining hiding failures, retry exhaustion without notification
+
+4. Error Handling — Missing try/catch around I/O, unhandled promise rejections,
+   generic error messages, missing cleanup in error paths
+
+5. Test Gaps — For each significant code path: is there a test? Rate criticality 1-10.
+   9-10: data loss, security, system failure
+   7-8: user-facing errors
+   5-6: edge case confusion
+   Focus on behavioral coverage and missing negative tests.
+
+6. Performance — O(n^2) where O(n) possible, memory leaks, N+1 queries,
+   missing pagination for large results
+
+CONFIDENCE SCORING (MANDATORY):
+Score each finding 0-100. ONLY REPORT findings with confidence >= 80.
+- 0: False positive or pre-existing issue
+- 50: Real but nitpick, low-impact
+- 75: Likely real, directly impacts functionality
+- 100: Certain, double-checked, evidence confirms
+
+Output format per finding:
+[Confidence: XX] [P0/P1/P2/P3] [category] Description — file:line
+Categories: bug | security | silent-failure | error-handling | test-gap | performance
+
+IGNORE (false positives):
+- Pre-existing issues not introduced in this changeset
+- Issues linters/typecheckers/CI would catch
+- Pedantic nitpicks a senior engineer wouldn't flag
+- Issues on lines the user did not modify
+- Intentional functionality changes related to the broader change
+- Issues silenced by lint-ignore comments
+
+Provide (confidence >= 80 only):
+- Critical bugs (P0) with file:line
 - Security vulnerabilities (with severity) with file:line
-- Logic errors with file:line
-- Missing error handling
-- Test gaps
+- Silent failures found with file:line
+- Error handling gaps
+- Test gaps with criticality ratings
 - Context sufficiency warnings
 ```
 
@@ -381,18 +463,30 @@ After both models complete, synthesize using weighted aggregation:
    CODEX_REVIEW=/tmp/counsel-review/{task-id}/codex/review.md
    ```
 
-2. **Categorize findings**:
-   - **Consensus Issues**: Both models identified (highest confidence)
-   - **Codex-specific**: Only Codex found (detailed analysis, security)
-   - **Gemini-specific**: Only Gemini found (architectural, patterns)
+2. **Extract and normalize findings**:
+   - Parse each finding: severity, confidence, description, file:line, category
+   - Discard any findings with confidence < 80
 
-3. **Weight by model strength**:
+3. **Apply consensus bonus**:
+   - If both models identify the same issue (same file:line, similar description):
+     mark as CONSENSUS, add +15 confidence (cap at 100)
+   - Consensus issues get highest priority in the final report
+
+4. **Categorize remaining findings**:
+   - **Consensus Issues**: Both models found (highest confidence)
+   - **Codex-specific**: Only Codex found (security, bugs, silent failures)
+   - **Gemini-specific**: Only Gemini found (patterns, compliance, architecture)
+
+5. **Weight by model strength**:
    - Architecture/patterns: Gemini 70%, Codex 30%
    - Security/bugs: Codex 80%, Gemini 20%
+   - Silent failures: Codex 80%, Gemini 20%
    - Logic errors: Codex 70%, Gemini 30%
    - Edge cases: Codex 60%, Gemini 40%
 
-4. **Create unified report**: See Response Format below
+6. **Sort by**: consensus first, then confidence descending, then severity P0>P1>P2>P3
+
+7. **Create unified report**: See Response Format below
 
 ## Response Format
 
@@ -416,10 +510,11 @@ Return ONLY this concise format to chat (~15-20 lines). All details go in the fi
 **Counsel Review Complete** — {plan-review | code-review}
 
 **Verdict**: {PASS | PASS WITH CONCERNS | REVISE}
-**Models**: Gemini 3 + Codex GPT-5.3 | Consensus: {X} issues, Codex-only: {Y}, Gemini-only: {Z}
+**Models**: Gemini 3 + Codex GPT-5.3
+**Findings**: {reported} issues (confidence >= 80) | {consensus} consensus | {codex_only} Codex-only | {gemini_only} Gemini-only
 
 **Critical Issues** ({count}):
-- [{severity}] {one-line description} {file:line if applicable}
+- [P{n}] [Confidence: {nn}] {one-line description} — {file:line}
 - ...
 
 **Requirements Gaps**: {list any MISSING or PARTIAL from R1..Rn, or "All covered"}

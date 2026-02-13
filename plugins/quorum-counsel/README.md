@@ -40,10 +40,22 @@ Delegates hard problems to OpenAI Codex via the `codex exec` CLI. Runs as a back
 ## Commands
 
 - `/review-plan` -- trigger a plan review with counsel-reviewer
+- `/review-pr [PR#] [aspects...]` -- trigger a code review with counsel-reviewer
+
+### /review-pr Usage
+
+```
+/review-pr                    # Review local git diff changes
+/review-pr 123                # Review GitHub PR #123
+/review-pr security errors    # Focus on security + error handling only
+/review-pr 123 bugs tests     # Review PR with specific focus
+```
+
+Review dimensions: `bugs`, `security`, `errors`, `tests`, `patterns`, `all` (default)
 
 ## Hooks
 
-- **bash-allow** -- PreToolUse hook that auto-approves safe bash commands (git read-only, gemini/codex CLI, `/tmp/` ops) for background subagents
+- **bash-allow** -- PreToolUse hook that auto-approves safe bash commands (git read-only, gh read-only, gemini/codex CLI, `/tmp/` ops) for background subagents
 - **review-gate** -- Stop hook that blocks Claude from stopping after Write/Edit/MultiEdit tool usage unless counsel-reviewer was already spawned. Greps the transcript JSONL for `"type": "tool_use"` + `"name": "Write|Edit|MultiEdit"` (Anthropic API format, not `"tool_name"`). Uses `stop_hook_active` field and a `/tmp/` session marker for loop prevention. See "Hook Development Gotchas" in the repo CLAUDE.md for transcript format details.
 
 ## Directory Structure
@@ -55,7 +67,8 @@ quorum-counsel/
 │   ├── counsel-reviewer.md    # Multi-model review orchestrator
 │   └── codex-solver.md        # Codex delegation agent
 ├── commands/
-│   └── review-plan.md         # Plan review command
+│   ├── review-plan.md         # Plan review command
+│   └── review-pr.md           # Code/PR review command
 └── hooks/
     ├── hooks.json             # Hook configuration
     ├── bash-allow.sh          # Bash command validation
