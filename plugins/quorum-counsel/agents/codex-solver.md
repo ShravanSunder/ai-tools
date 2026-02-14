@@ -54,7 +54,7 @@ codex exec \
 | Flag | Value | Purpose |
 |------|-------|---------|
 | `--model` | `gpt-5.3-codex` | Model to use for analysis |
-| `--sandbox` | `workspace-write` | Codex can read source + write to /tmp only. `read-only` blocks ALL writes including /tmp. Developer instructions restrict writes to `/tmp/codex-analysis/` only |
+| `--sandbox` | `workspace-write` | Codex can read source + write to /tmp only. Developer instructions restrict writes to `/tmp/codex-analysis/` only |
 | `--full-auto` | (no value) | Autonomous execution, no approval prompts |
 | `--json` | (no value) | Stream JSONL events to stdout for progress tracking |
 | `-o` | `/tmp/codex-analysis/{task}/result.md` | Capture final message to file |
@@ -171,11 +171,10 @@ For most tasks (exploration, review, impact), 10 minutes is sufficient. Use back
 
 ## Critical Rules
 
-- **ALWAYS** use `--sandbox workspace-write` - this allows /tmp writes while keeping source accessible. Note: `read-only` blocks ALL writes including /tmp, so it cannot be used
-- **ALWAYS** include developer instructions that forbid modifying source code and restrict writes to `/tmp/codex-analysis/` only
+- **ALWAYS** use `--sandbox workspace-write` for /tmp writes while keeping source accessible
+- **ALWAYS** include developer instructions that restrict writes to `/tmp/codex-analysis/` only
 - **ALWAYS** use `/tmp/codex-analysis/` as the ONLY output directory
 - **ALWAYS** include `--full-auto` to avoid interactive approval prompts
-- **NEVER** use `--sandbox danger-full-access`
 - If the incoming prompt includes a project path or cwd, pass it in the prompt context
 - If Codex fails or times out, report the failure with whatever partial output exists
 
