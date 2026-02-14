@@ -4,9 +4,9 @@ set -euo pipefail
 # review-gate.sh — Stop hook for automated counsel-reviewer
 #
 # Blocks Claude from stopping after code implementation unless
-# counsel-reviewer was already spawned. Claude provides only
-# conversational context (intent, requirements); reviewers gather
-# code data themselves via git diff and file reading.
+# counsel-reviewer was spawned AFTER the last implementation change.
+# Uses JSONL line-number ordering to track implementation vs review state —
+# no marker files, re-fires correctly after new implementation work.
 # Plan review is handled manually via /review-plan command.
 
 INPUT=$(cat)
@@ -19,34 +19,31 @@ TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty')
 # --- No transcript → nothing to check ---
 [ -z "$TRANSCRIPT_PATH" ] || [ ! -f "$TRANSCRIPT_PATH" ] && exit 0
 
-# --- Detect code implementation (Write/Edit/MultiEdit tools) ---
-# Transcript is JSONL using Anthropic API format: tool use entries have
-# "type": "tool_use" and "name": "Write" (NOT "tool_name")
-has_implementation=false
+# --- Find LAST implementation line (Write/Edit/MultiEdit) ---
+# Transcript is JSONL (Anthropic API format): tool_use entries have
+# "type": "tool_use" and "name": "Write" (NOT "tool_name").
+# grep -n gives line numbers; tail -1 gets the last occurrence.
+LAST_IMPL=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
+  | grep -E '"name"\s*:\s*"(Write|Edit|MultiEdit)"' \
+  | tail -1 | cut -d: -f1)
 
-if grep -E '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null | grep -qE '"name"\s*:\s*"(Write|Edit|MultiEdit)"'; then
-  has_implementation=true
-fi
+# No implementation → allow stop
+[ -z "$LAST_IMPL" ] && exit 0
 
-# Nothing worth reviewing
-[ "$has_implementation" = "false" ] && exit 0
+# --- Find LAST counsel-reviewer Task invocation line ---
+# Must match actual Task tool_use with subagent_type, not text mentions.
+# Handle both spellings: counsel-reviewer and council-reviewer.
+LAST_REVIEW=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
+  | grep -E '"subagent_type"\s*:\s*"[^"]*counc[ie]l-reviewer"' \
+  | tail -1 | cut -d: -f1)
 
-# --- Already reviewed → allow stop ---
-# Must match an actual Task tool invocation with subagent_type containing
-# counsel-reviewer, not just a text mention of the name in conversation.
-if grep -E '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null | grep -qE '"subagent_type"\s*:\s*"[^"]*counsel-reviewer"'; then
+# Review exists AND came after last implementation → allow stop
+if [ -n "$LAST_REVIEW" ] && [ "$LAST_REVIEW" -gt "$LAST_IMPL" ]; then
   exit 0
 fi
 
-# --- Session marker: already requested review → allow stop ---
-SESSION_HASH=$(echo "$TRANSCRIPT_PATH" | md5 -q 2>/dev/null || echo "$TRANSCRIPT_PATH" | md5sum 2>/dev/null | cut -c1-12)
-MARKER="/tmp/counsel-review-gate-${SESSION_HASH}"
-[ -f "$MARKER" ] && exit 0
-
 # --- Block and request review ---
-if [ "$has_implementation" = "true" ]; then
-  touch "$MARKER"
-  cat >&2 <<'FEEDBACK'
+cat >&2 <<'FEEDBACK'
 REVIEW REQUIRED — You MUST spawn counsel-reviewer as a BACKGROUND task (run_in_background: true) before stopping.
 
 Reviewers (Gemini + Codex) will run `git diff` and inspect the codebase themselves.
@@ -72,7 +69,4 @@ Q1. Are there bugs or logic errors in the changes?
 Q2. Are there security concerns?
 Q3. <Add questions specific to this change>
 FEEDBACK
-  exit 2
-fi
-
-exit 0
+exit 2
