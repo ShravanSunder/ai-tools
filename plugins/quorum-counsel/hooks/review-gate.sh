@@ -32,9 +32,8 @@ LAST_IMPL=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
 
 # --- Find LAST counsel-reviewer Task invocation line ---
 # Must match actual Task tool_use with subagent_type, not text mentions.
-# Handle both spellings: counsel-reviewer and council-reviewer.
 LAST_REVIEW=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
-  | grep -E '"subagent_type"\s*:\s*"[^"]*counc[ie]l-reviewer"' \
+  | grep -E '"subagent_type"\s*:\s*"[^"]*counsel-reviewer"' \
   | tail -1 | cut -d: -f1)
 
 # Review exists AND came after last implementation → allow stop
