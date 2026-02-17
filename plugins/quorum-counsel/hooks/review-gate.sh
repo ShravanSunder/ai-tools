@@ -25,7 +25,7 @@ TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // empty')
 # grep -n gives line numbers; tail -1 gets the last occurrence.
 LAST_IMPL=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
   | grep -E '"name"\s*:\s*"(Write|Edit|MultiEdit)"' \
-  | tail -1 | cut -d: -f1)
+  | tail -1 | cut -d: -f1 || true)
 
 # No implementation → allow stop
 [ -z "$LAST_IMPL" ] && exit 0
@@ -34,7 +34,7 @@ LAST_IMPL=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
 # Must match actual Task tool_use with subagent_type, not text mentions.
 LAST_REVIEW=$(grep -nE '"tool_use"' "$TRANSCRIPT_PATH" 2>/dev/null \
   | grep -E '"subagent_type"\s*:\s*"[^"]*counsel-reviewer"' \
-  | tail -1 | cut -d: -f1)
+  | tail -1 | cut -d: -f1 || true)
 
 # Review exists AND came after last implementation → allow stop
 if [ -n "$LAST_REVIEW" ] && [ "$LAST_REVIEW" -gt "$LAST_IMPL" ]; then
