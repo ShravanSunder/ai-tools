@@ -26,11 +26,15 @@ allow() {
   exit 0
 }
 
-# gemini CLI
-echo "$COMMAND" | grep -qE '(^|\s|\()gemini\s' && allow "quorum-counsel: gemini CLI"
+# gemini CLI (reject if chained with && or ;)
+if echo "$COMMAND" | grep -qE '(^|\s|\()gemini\s'; then
+  echo "$COMMAND" | grep -qE '(&&|;|\|\|)' || allow "quorum-counsel: gemini CLI"
+fi
 
-# codex CLI
-echo "$COMMAND" | grep -qE '(^|\s|\()codex\s' && allow "quorum-counsel: codex CLI"
+# codex CLI (reject if chained with && or ;)
+if echo "$COMMAND" | grep -qE '(^|\s|\()codex\s'; then
+  echo "$COMMAND" | grep -qE '(&&|;|\|\|)' || allow "quorum-counsel: codex CLI"
+fi
 
 # /tmp/counsel-review/ ops (exclude destructive)
 if echo "$COMMAND" | grep -qF '/tmp/counsel-review/'; then
@@ -55,6 +59,9 @@ echo "$COMMAND" | grep -qE '^git\s+(diff|log|show|status|describe)' && allow "qu
 
 # gh read-only (PR data gathering for counsel-reviewer)
 echo "$COMMAND" | grep -qE '^gh\s+(pr\s+(view|diff|list|checks)|issue\s+(view|list)|search)' && allow "quorum-counsel: gh read-only"
+
+# jq for JSON parsing (gemini-solver output extraction)
+echo "$COMMAND" | grep -qE '^\s*jq\s' && allow "quorum-counsel: jq"
 
 # wait (parallel job coordination)
 echo "$COMMAND" | grep -qE '^\s*wait(\s|$)' && allow "quorum-counsel: wait"
