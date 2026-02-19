@@ -40,7 +40,12 @@ ai-tools/
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
 │   ├── skill-peekaboo/               # macOS visual UI testing via Peekaboo CLI
 │   └── quorum-counsel/               # Multi-model review (counsel-reviewer + codex-solver)
-├── skills/                           # Pure skills (future, .gitkeep placeholder)
+├── skills/                           # Standalone Codex/common skills
+│   ├── claude-solver/                # Delegates to claude -p (Opus) for analysis
+│   ├── gemini-solver/                # Delegates to gemini -p for analysis
+│   └── counsel-reviewer/             # Orchestrates claude + gemini in parallel for review
+├── bin/                              # Discovery and sync scripts
+│   └── list-codex-skills.sh          # Lists all skill paths for Codex sync
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
@@ -48,8 +53,45 @@ ai-tools/
 │   ├── init_repo_sidecar.sh          # Initialize .agent_sidecar/ in repos
 │   ├── setup/                        # Firewall, init scripts, zsh config
 │   └── firewall-toggle-presets/      # Toggle preset domain lists
-└── CLAUDE.md
+├── agents.md                         # Agent instructions (this file)
+└── CLAUDE.md → agents.md             # Symlink for Claude Code
 ```
+
+## Skills (Codex / Cross-Tool)
+
+The `skills/` directory contains standalone skills that are NOT part of any Claude Code plugin. These are primarily used by Codex but use the same SKILL.md format that works across tools.
+
+### Skills vs Plugins
+
+- **Plugins** (`plugins/`): Claude Code-specific. Have agents, hooks, slash commands, and optionally skills. Installed via `claude plugin install`.
+- **Skills** (`skills/`): Tool-agnostic SKILL.md files. Delivered to Codex via `bin/list-codex-skills.sh` and the sync script in devfiles.
+
+### How Skills Get Delivered to Codex
+
+1. `bin/list-codex-skills.sh` discovers all skills (from `plugins/*/skills/*/` and `skills/*/`)
+2. `~/.codex/sync-skills.sh` (in devfiles) calls the discovery script
+3. Skills are symlinked into `~/.codex/skills/` for Codex to find
+
+### Current Skills
+
+| Skill | Location | Purpose |
+|-------|----------|---------|
+| claude-solver | `skills/claude-solver/` | Delegates to `claude -p` (Opus) for analysis — Codex-specific |
+| gemini-solver | `skills/gemini-solver/` | Delegates to `gemini -p` for large codebase analysis |
+| counsel-reviewer | `skills/counsel-reviewer/` | Orchestrates claude + gemini in parallel for code/plan review |
+| peekaboo | `plugins/skill-peekaboo/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
+| scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
+
+### Relationship to quorum-counsel
+
+The `skills/` versions of claude-solver, gemini-solver, and counsel-reviewer are the **Codex counterparts** of the Claude Code agents in `plugins/quorum-counsel/agents/`. Each skill's README.md documents the relationship and differences. The key difference: quorum-counsel agents call `codex exec` + `gemini -p` (Claude is orchestrator), while these skills call `claude -p` + `gemini -p` (Codex is orchestrator).
+
+### Adding a New Skill
+
+1. Create `skills/{skill-name}/SKILL.md` with YAML frontmatter (`name`, `description`)
+2. Add `skills/{skill-name}/README.md` documenting purpose and relationships
+3. Run `bin/list-codex-skills.sh` to verify it's discovered
+4. Run `~/.codex/sync-skills.sh` to symlink it
 
 ## Plugin Development
 

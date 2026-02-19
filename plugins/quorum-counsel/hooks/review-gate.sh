@@ -6,9 +6,9 @@ set -euo pipefail
 # Blocks Claude from stopping after substantial code implementation
 # unless counsel-reviewer was spawned AFTER the last implementation change.
 # Scoped to the current session run (ignores previous session history).
-# Requires 5+ edit tool uses since last review to trigger.
+# Requires 20+ edit tool uses since last hook trigger to fire again.
 
-IMPL_THRESHOLD=5
+IMPL_THRESHOLD=20
 
 INPUT=$(cat)
 STOP_HOOK_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
@@ -52,8 +52,8 @@ if [ -n "$LAST_REVIEW" ] && [ "$LAST_REVIEW" -gt "$LAST_IMPL" ]; then
   exit 0
 fi
 
-# --- Check threshold: count edits since last review (or session start) ---
-# Only fire for substantial work (5+ edits), not quick fixes.
+# --- Check threshold: count edits since last quorum fire (or session start) ---
+# Only fire for substantial work (20+ edits since last counsel-reviewer), not quick fixes.
 SINCE_LINE=${LAST_REVIEW:-$SESSION_START}
 IMPL_COUNT=$(echo "$IMPL_LINES" \
   | awk -v since="$SINCE_LINE" '$1 >= since' \
