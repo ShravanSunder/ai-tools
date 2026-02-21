@@ -8,7 +8,7 @@ set -uo pipefail
 #   2. skills/*/            (standalone skills — may be Codex-specific)
 #
 # Each line is an absolute path to a skill directory containing SKILL.md.
-# Used by devfiles/dot_codex/executable_sync-skills.sh to symlink into ~/.codex/skills/
+# Used by devfiles/dot_codex/executable_sync-skills.sh to symlink into ~/.agents/skills/
 
 AI_TOOLS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 

@@ -70,7 +70,7 @@ The `skills/` directory contains standalone skills that are NOT part of any Clau
 
 1. `bin/list-codex-skills.sh` discovers all skills (from `plugins/*/skills/*/` and `skills/*/`)
 2. `~/.codex/sync-skills.sh` (in devfiles) calls the discovery script
-3. Skills are symlinked into `~/.codex/skills/` for Codex to find
+3. Skills are symlinked into `~/.agents/skills/` for Codex to find
 
 ### Current Skills
 
@@ -91,7 +91,7 @@ The `skills/` versions of claude-solver, gemini-solver, and counsel-reviewer are
 1. Create `skills/{skill-name}/SKILL.md` with YAML frontmatter (`name`, `description`)
 2. Add `skills/{skill-name}/README.md` documenting purpose and relationships
 3. Run `bin/list-codex-skills.sh` to verify it's discovered
-4. Run `~/.codex/sync-skills.sh` to symlink it
+4. Run `~/.codex/sync-skills.sh` to symlink it (it writes into `~/.agents/skills/`)
 
 ## Plugin Development
 
