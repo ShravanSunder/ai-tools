@@ -119,12 +119,10 @@ linear issue relation add LUNA-336 blocked-by LUNA-335
 
 Update description checklists, mark completed items, adjust scope. If implementation revealed the model was wrong, update the architecture doc first, then align the ticket.
 
-## Additional Resources
+## Reference Files (read on demand)
 
-### Reference Files
+These files are NOT auto-loaded. Read them when you hit these situations:
 
-For detailed tool parameters, usage patterns, and examples:
-
-- **`references/mcp-tool-reference.md`** — MCP tool parameters, response shapes, and common patterns
-- **`references/cli-reference.md`** — CLI commands for gap operations (relations, deletion, issue start)
-- **`references/ticket-templates.md`** — Full ticket templates with doc references, checklists, and deferred items (based on real examples)
+- **`references/mcp-tool-reference.md`** — Read when you need exact parameter names, response shapes, or filter options for any MCP tool call.
+- **`references/cli-reference.md`** — Read when using CLI for relation management, deletion, or `issue start`. Contains exact command syntax.
+- **`references/ticket-templates.md`** — Read before creating your FIRST ticket in a session. Contains well-formed examples and anti-patterns to avoid.
