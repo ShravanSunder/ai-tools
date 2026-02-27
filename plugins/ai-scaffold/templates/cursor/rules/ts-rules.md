@@ -49,8 +49,8 @@ alwaysApply: true
 
 ## Formatting & Style
 
-- Use 2-space indentation (Biome default)
-- Follow Biome linting rules without exceptions
+- Use tabs for indentation (Oxfmt default)
+- Follow Oxlint strict category rules without exceptions
 - Use `const` by default; only use `let` when mutation is necessary
 - Prefer template literals over string concatenation
 
@@ -80,6 +80,8 @@ alwaysApply: true
 
 ## Tools
 
-- Use `biome check <path>` to check for errors and warnings in the given path.
-- Use `biome check --fix <path>` to fix errors and warnings in the given path.
+- Use `oxlint <path>` to check for lint errors and warnings in the given path.
+- Use `oxlint --fix <path>` to auto-fix lint issues in the given path.
+- Use `oxlint --type-aware` to run type-aware lint rules (no-floating-promises, etc.).
+- Use `oxfmt <path>` to format files. Use `oxfmt --check <path>` to verify formatting.
 - Use `pnpm vitest run <path>` to run the tests.

@@ -278,14 +278,16 @@ if [[ "$INCLUDE_TS" == "true" ]]; then
     echo "--- TypeScript configuration ---"
 
     if [[ "$IS_MONOREPO" == "true" ]]; then
-        copy_template "$TEMPLATES_DIR/typescript/monorepo/biome.json" "biome.json"
+        copy_template "$TEMPLATES_DIR/typescript/monorepo/.oxlintrc.json" ".oxlintrc.json"
+        copy_template "$TEMPLATES_DIR/typescript/monorepo/.oxfmtrc.json" ".oxfmtrc.json"
         copy_template "$TEMPLATES_DIR/typescript/monorepo/package.json.template" "package.json"
         if [[ "$INCLUDE_VITEST" == "true" ]]; then
             copy_template "$TEMPLATES_DIR/typescript/monorepo/vitest.config.ts.template" "vitest.config.ts"
             copy_template "$TEMPLATES_DIR/testing/vitest-setup.ts.template" "vitest.setup.ts"
         fi
     else
-        copy_template "$TEMPLATES_DIR/typescript/single/biome.json" "biome.json"
+        copy_template "$TEMPLATES_DIR/typescript/single/.oxlintrc.json" ".oxlintrc.json"
+        copy_template "$TEMPLATES_DIR/typescript/single/.oxfmtrc.json" ".oxfmtrc.json"
         copy_template "$TEMPLATES_DIR/typescript/single/tsconfig.json" "tsconfig.json"
         copy_template "$TEMPLATES_DIR/typescript/single/package.json.template" "package.json"
         if [[ "$INCLUDE_VITEST" == "true" ]]; then

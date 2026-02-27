@@ -20,14 +20,14 @@ Update the base templates in ai-tools with the latest tool standards and best pr
 ## Usage
 
 ```
-/scaffold-project-update-templates [biome|ruff|cursor|all]
+/scaffold-project-update-templates [oxc|ruff|cursor|all]
 ```
 
 ## Instructions
 
 Load the scaffold-project skill and follow its update-templates workflow:
 
-1. **Ask scope** - Which templates to update (biome, ruff, cursor rules, all)
+1. **Ask scope** - Which templates to update (oxc, ruff, cursor rules, all)
 2. **Research** - Look up latest standards using web search and deepwiki
 3. **Propose changes** - Show diffs with explanations for each change
 4. **Apply with approval** - User accepts/modifies/rejects each change
@@ -35,7 +35,8 @@ Load the scaffold-project skill and follow its update-templates workflow:
 
 ## Research Sources
 
-- Biome: https://biomejs.dev/reference/configuration/
+- Oxlint: https://oxc.rs/docs/guide/usage/linter/config
+- Oxfmt: https://oxc.rs/docs/guide/usage/formatter/config
 - Ruff: https://docs.astral.sh/ruff/configuration/
 - BasedPyright: https://docs.basedpyright.com/
 - Vitest: https://vitest.dev/config/
@@ -44,20 +45,20 @@ Load the scaffold-project skill and follow its update-templates workflow:
 
 ## Examples
 
-### Update biome config
+### Update OXC config
 ```
-/scaffold-project-update-templates biome
-> Researching latest biome recommendations...
+/scaffold-project-update-templates oxc
+> Researching latest oxlint/oxfmt recommendations...
 > Proposed changes:
->   + Add "noConsole": "warn" rule
->   + Update lineWidth to 120
+>   + Enable new correctness rule
+>   + Update category severity
 > Accept these changes? [y/n/modify]
 ```
 
 ### Update all templates
 ```
 /scaffold-project-update-templates all
-> Updating biome.json...
+> Updating .oxlintrc.json + .oxfmtrc.json...
 > Updating ruff.toml...
 > Updating cursor rules...
 > Commit changes? [y/n]

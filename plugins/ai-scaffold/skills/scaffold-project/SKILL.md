@@ -1,6 +1,6 @@
 ---
 name: scaffold-project
-description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python/Swift project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up biome, ruff, swiftlint, swiftformat, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
+description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python/Swift project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up oxlint, oxfmt, oxc, ruff, swiftlint, swiftformat, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
 version: 0.1.0
 ---
 
@@ -31,8 +31,8 @@ This skill guides through three modalities:
 
 | Category | TypeScript | Python | Swift |
 |----------|------------|--------|-------|
-| **Linter** | Biome | Ruff | SwiftLint (strict) |
-| **Formatter** | Biome | Ruff | SwiftFormat |
+| **Linter** | Oxlint (strict) | Ruff | SwiftLint (strict) |
+| **Formatter** | Oxfmt | Ruff | SwiftFormat |
 | **Type Checker** | TypeScript strict | BasedPyright | Swift compiler |
 | **Testing** | Vitest (+ browser mode, Playwright) | Pytest (+ marks) | Swift Testing |
 | **Package Manager** | pnpm | uv | SPM |
@@ -146,7 +146,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/scaffold/scaffold-project.sh \
 
 The script handles:
 - Creating directory structure (apps/, packages/, services/ for monorepos)
-- Copying linter configs (biome.json, ruff.toml, pyrightconfig.json)
+- Copying linter configs (.oxlintrc.json, .oxfmtrc.json, ruff.toml, pyrightconfig.json)
 - Setting up cursor rules (.cursor/rules/*.md with .mdc symlinks)
 - Creating cursor hooks (.cursor/hooks/)
 - Setting up Claude hooks (.claude/hooks/)
@@ -171,7 +171,8 @@ Show summary of what was created/skipped:
 
 ```
 Created:
-  - biome.json
+  - .oxlintrc.json
+  - .oxfmtrc.json
   - .cursor/rules/ts-rules.mdc
   - .cursor/hooks/after-edit.sh
   ...
@@ -202,7 +203,7 @@ To update base templates with latest tool standards:
 ### Step 1: Ask Scope
 
 Ask which templates to update:
-- Biome config (latest rules)
+- OXC config (oxlint + oxfmt rules)
 - Ruff config (latest rules)
 - Cursor rules (content updates)
 - All templates
@@ -210,7 +211,7 @@ Ask which templates to update:
 ### Step 2: Research Latest Standards
 
 Use web search and deepwiki to research:
-- Latest biome.json recommended rules
+- Latest oxlint/oxfmt recommended configuration
 - Latest ruff configuration best practices
 - TypeScript strict mode updates
 - BasedPyright configuration changes
@@ -220,9 +221,9 @@ Use web search and deepwiki to research:
 Show diff of proposed changes with explanations:
 
 ```diff
-# biome.json changes
-- "noExplicitAny": "error"
-+ "noExplicitAny": "warn"  # Relaxed for gradual adoption
+# .oxlintrc.json changes
+- "typescript/no-explicit-any": "error"
++ "typescript/no-explicit-any": "warn"  # Relaxed for gradual adoption
 ```
 
 ### Step 4: Apply with User Approval
@@ -249,7 +250,7 @@ All templates are in `${CLAUDE_PLUGIN_ROOT}/templates/`:
 ```
 templates/
 ├── common/           # CLAUDE.md, .gitignore, wt.toml
-├── typescript/       # biome.json, tsconfig.json, package.json, vitest
+├── typescript/       # .oxlintrc.json, .oxfmtrc.json, tsconfig.json, package.json, vitest
 │   ├── single/
 │   └── monorepo/
 ├── python/           # ruff.toml, pyrightconfig.json, pyproject.toml
@@ -350,9 +351,9 @@ TypeScript test files use naming to determine environment:
 ### Update Templates
 
 ```
-User: "Update the biome template to latest standards"
+User: "Update the oxlint/oxfmt template to latest standards"
 
-1. Research latest biome recommended configuration
+1. Research latest oxlint/oxfmt recommended configuration
 2. Show proposed changes with explanations
 3. Apply approved changes
 4. Commit to ai-tools

@@ -32,7 +32,8 @@ Worktrunk configuration for worktree management:
 
 | File | Purpose |
 |------|---------|
-| `biome.json` | Linter + formatter config with strict rules |
+| `.oxlintrc.json` | Oxlint linter config with strict category defaults + type-aware rules |
+| `.oxfmtrc.json` | Oxfmt formatter config (Prettier-compatible, import sorting) |
 | `tsconfig.json` | Strict TypeScript configuration |
 | `package.json.template` | Package manifest with dev dependencies |
 | `vitest.config.ts.template` | Vitest test runner configuration (colocated unit tests) |
@@ -41,7 +42,8 @@ Worktrunk configuration for worktree management:
 
 | File | Purpose |
 |------|---------|
-| `biome.json` | Monorepo-aware biome config with overrides |
+| `.oxlintrc.json` | Monorepo-aware oxlint config with overrides for generated files |
+| `.oxfmtrc.json` | Oxfmt formatter config with monorepo ignore patterns |
 | `package.json.template` | Root workspace config with pnpm workspaces |
 | `vitest.config.ts.template` | Root vitest configuration (colocated unit tests across packages) |
 
@@ -148,7 +150,7 @@ TypeScript coding standards:
 - Strict types everywhere
 - Descriptive naming
 - Zod schema derivation
-- Biome/vitest tool commands
+- Oxlint/Oxfmt/vitest tool commands
 
 ### rules/python-rules.md
 Python coding standards:
@@ -170,7 +172,7 @@ Cursor IDE hook configuration for afterFileEdit event.
 
 ### hooks/after-edit.sh.template
 Post-edit hook script that runs:
-- Biome check for TS/JS files
+- Oxlint check + Oxfmt format for TS/JS/JSON/CSS files
 - TypeScript type checking
 - Ruff + BasedPyright for Python files
 - SwiftFormat + SwiftLint for Swift files
@@ -179,7 +181,7 @@ Post-edit hook script that runs:
 
 ### hooks/check.sh.template
 PostToolUse hook for Claude Code:
-- Biome check with auto-fix
+- Oxlint check with auto-fix + Oxfmt format
 - TypeScript type checking summary
 - Ruff + BasedPyright for Python
 - SwiftFormat + SwiftLint for Swift
@@ -190,7 +192,7 @@ Claude Code configuration with permissions and hooks:
 **Permissions:**
 - Git operations
 - Package managers (pnpm, npm, uv)
-- Linting tools (biome, ruff, tsc)
+- Linting tools (oxlint, oxfmt, ruff, tsc)
 - Testing tools (vitest, pytest)
 - File operations (ls, cat, find, mkdir, etc.)
 - MCP tools (deepwiki, context7)
@@ -214,15 +216,25 @@ Placeholder for backend service projects.
 
 ## Linter Rule Details
 
-### Biome Rules
+### Oxlint Rules
 
-Key rules enabled:
-- `noExplicitAny`: error
-- `noUnusedImports`: warn
-- `noUnusedVariables`: warn
-- `noNonNullAssertion`: error
-- `useImportType`: warn (separatedType style)
-- `noRestrictedImports`: error (blocks relative imports in monorepo)
+Category defaults (strict with sanity):
+- `correctness`: error -- definitely wrong code
+- `suspicious`: warn -- likely wrong, some auto-fixable
+- `style`: warn -- auto-fixable on save
+- `perf`: warn -- performance advisory
+- `pedantic`/`restriction`/`nursery`: off
+
+Key rule overrides:
+- `typescript/no-explicit-any`: error
+- `typescript/no-non-null-assertion`: error
+- `typescript/no-floating-promises`: error (type-aware)
+- `typescript/await-thenable`: error (type-aware)
+- `typescript/explicit-function-return-type`: error
+- `typescript/consistent-type-imports`: warn (auto-fixable)
+- `typescript/no-unused-vars`: warn (ignores `_` prefixed)
+- `no-param-reassign`: error
+- `import/no-cycle`: error (monorepo only)
 
 ### Ruff Rules
 

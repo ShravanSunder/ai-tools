@@ -13,40 +13,36 @@ has_errors=0
 err() { printf "%s\n" "$*" 1>&2; }
 
 # Prefer local binaries over npx (faster, avoids supply-chain risk)
-get_biome() {
-  local local_bin="$proj/node_modules/.bin/biome"
-  if [[ -x "$local_bin" ]]; then
-    echo "$local_bin"
-  else
-    echo "npx -y @biomejs/biome"
-  fi
+get_oxlint() {
+  local local_bin="$proj/node_modules/.bin/oxlint"
+  if [[ -x "$local_bin" ]]; then echo "$local_bin"
+  else echo "npx -y oxlint"; fi
+}
+get_oxfmt() {
+  local local_bin="$proj/node_modules/.bin/oxfmt"
+  if [[ -x "$local_bin" ]]; then echo "$local_bin"
+  else echo "npx -y oxfmt"; fi
 }
 
-# Biome check (token-efficient: one-line hint)
+# OXC lint + format (token-efficient: one-line hint)
 case "$file_path" in
   *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.json|*.jsonc|*.css)
-    biome_cmd="$(get_biome)"
-    report="$(cd "$proj" && $biome_cmd check --reporter=json --max-diagnostics=50 "$file_path" 2>/dev/null || true)"
-    errors="$(jq -r '[.diagnostics[]? | select(.severity=="error")] | length' <<<"$report" 2>/dev/null || echo 0)"
+    oxlint_cmd="$(get_oxlint)"
+    oxfmt_cmd="$(get_oxfmt)"
+    report="$(cd "$proj" && $oxlint_cmd -f json --max-warnings=50 "$file_path" 2>/dev/null || true)"
+    errors="$(jq -r '[.[] | select(.severity == "error" or .severity == "deny")] | length' <<<"$report" 2>/dev/null || echo 0)"
     if (( errors > 0 )); then
       first="$(jq -r '
-        first(.diagnostics[]? | select(.severity=="error")) as $d
-        | [
-            ($d.code // "biome"),
-            ($d.message | gsub("[\\r\\n]+"; " ") | .[0:140]),
-            (
-              (($d.location.path // "'"$file_path"'") + ":" + ((($d.location.span.start.line // 1)|tostring)))
-              | sub("^/+"; "")
-            )
-          ]
-          | "\(.[0]) \(.[1]) @ \(.[2])"
-      ' <<<"$report" 2>/dev/null || echo "biome error")"
-      err "Hint: Biome found ${errors} error(s). ${first}"
+        first(.[] | select(.severity == "error" or .severity == "deny")) as $d
+        | [($d.code // "oxlint"), ($d.message | gsub("[\\r\\n]+"; " ") | .[0:140]), (($d.filename // "'"$file_path"'") + ":" + (($d.line // 1) | tostring))]
+        | "\(.[0]) \(.[1]) @ \(.[2])"
+      ' <<<"$report" 2>/dev/null || echo "oxlint error")"
+      err "Hint: Oxlint found ${errors} error(s). ${first}"
       has_errors=1
     else
-      # Silent auto-fix on success
-      cd "$proj" && $biome_cmd check --write "$file_path" >/dev/null 2>&1 || true
+      cd "$proj" && $oxlint_cmd --fix "$file_path" >/dev/null 2>&1 || true
     fi
+    cd "$proj" && $oxfmt_cmd "$file_path" >/dev/null 2>&1 || true
   ;;
 esac
 

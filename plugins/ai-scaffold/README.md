@@ -40,8 +40,8 @@ Just ask Claude:
 
 | Category | TypeScript | Python | Swift |
 |----------|------------|--------|-------|
-| **Linter** | Biome | Ruff | SwiftLint (strict) |
-| **Formatter** | Biome | Ruff | SwiftFormat |
+| **Linter** | Oxlint (strict) | Ruff | SwiftLint (strict) |
+| **Formatter** | Oxfmt | Ruff | SwiftFormat |
 | **Type Checker** | TypeScript strict | BasedPyright | Swift compiler |
 | **Testing** | Vitest (+browser, +Playwright) | Pytest (+marks) | Swift Testing |
 | **Package Manager** | pnpm | uv | SPM |
@@ -77,7 +77,8 @@ Just ask Claude:
 - `.claude/settings.local.json` - Permissions and hook config
 
 ### TypeScript
-- `biome.json` - Biome linter/formatter
+- `.oxlintrc.json` - Oxlint linter (strict categories + type-aware rules)
+- `.oxfmtrc.json` - Oxfmt formatter (Prettier-compatible)
 - `tsconfig.json` - Strict TypeScript config
 - `package.json` - Dependencies
 - `vitest.config.ts` - Test runner

@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "style": "warn",
+    "perf": "warn",
+    "pedantic": "off",
+    "restriction": "off",
+    "nursery": "off"
+  },
+  "rules": {
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "error",
+    "no-param-reassign": "error",
+    "no-void": ["error", { "allowAsStatement": true }],
+
+    "no-console": "warn",
+    "prefer-const": "warn",
+    "typescript/consistent-type-imports": ["warn", {
+      "prefer": "type-imports",
+      "disallowTypeAnnotations": false,
+      "fixStyle": "separate-type-imports"
+    }],
+    "typescript/no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "destructuredArrayIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+    "typescript/explicit-function-return-type": ["error", {
+      "allowExpressions": true,
+      "allowTypedFunctionExpressions": true,
+      "allowDirectConstAssertionInArrowFunctions": true,
+      "allowHigherOrderFunctions": true
+    }],
+
+    "typescript/no-floating-promises": ["error", { "ignoreVoid": true }],
+    "typescript/await-thenable": "error",
+    "typescript/no-unsafe-assignment": "warn",
+    "typescript/no-unsafe-return": "warn",
+    "typescript/no-unsafe-call": "warn"
+  },
+  "ignorePatterns": ["dist", "build", "coverage", "node_modules"]
+}
