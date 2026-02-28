@@ -221,7 +221,7 @@ Placeholder for backend service projects.
 Category defaults (strict with sanity):
 - `correctness`: error -- definitely wrong code
 - `suspicious`: warn -- likely wrong, some auto-fixable
-- `style`: warn -- auto-fixable on save
+- `style`: off -- too many noisy rules (197 total); specific rules enabled individually
 - `perf`: warn -- performance advisory
 - `pedantic`/`restriction`/`nursery`: off
 

@@ -29,7 +29,7 @@ This is the reference configuration that all scaffolded TS projects now use. Any
 |----------|----------|-----------|
 | correctness | error | Definitely wrong code -- block CI |
 | suspicious | warn | Likely wrong, some auto-fixable |
-| style | warn | Auto-fixable on save |
+| style | **off** | Too many noisy rules (197 total); enable specific style rules individually |
 | perf | warn | Performance advisory |
 | pedantic | off | Too noisy for most projects |
 | restriction | off | Overly restrictive, not needed |
@@ -82,10 +82,10 @@ This is the reference configuration that all scaffolded TS projects now use. Any
   "lint": "oxlint",
   "lint:fix": "oxlint --fix",
   "lint:types": "oxlint --type-aware",
-  "fmt": "oxfmt",
-  "fmt:check": "oxfmt --check",
-  "typecheck": "tsc --noEmit",
-  "check": "oxlint --type-aware && oxfmt --check && tsc --noEmit"
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "typecheck": "tsc --noEmit",
+    "check": "oxlint --type-aware && oxfmt --check . && tsc --noEmit"
 }
 ```
 
@@ -258,10 +258,10 @@ Replace any `biome check` / `biome check --fix` scripts with:
   "lint": "oxlint",
   "lint:fix": "oxlint --fix",
   "lint:types": "oxlint --type-aware",
-  "fmt": "oxfmt",
-  "fmt:check": "oxfmt --check",
-  "typecheck": "tsc --noEmit",
-  "check": "oxlint --type-aware && oxfmt --check && tsc --noEmit"
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "typecheck": "tsc --noEmit",
+    "check": "oxlint --type-aware && oxfmt --check . && tsc --noEmit"
 }
 ```
 
