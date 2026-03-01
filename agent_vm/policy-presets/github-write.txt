@@ -1,0 +1,4 @@
+github.com
+api.github.com
+uploads.github.com
+objects.githubusercontent.com

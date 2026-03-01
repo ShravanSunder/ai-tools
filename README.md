@@ -97,6 +97,23 @@ See [`agent_sidecar/`](agent_sidecar/) for full setup, architecture, and configu
 
 ---
 
+## Agent VM
+
+`agent_vm` is the VM-based control plane project for Gondolin-backed agent sessions.
+
+```bash
+pnpm --dir agent_vm install
+pnpm --dir agent_vm check
+```
+
+Key docs:
+
+- [`agent_vm/README.md`](agent_vm/README.md)
+- [`docs/plans/2026-03-01-agent-vm-full-parity.md`](docs/plans/2026-03-01-agent-vm-full-parity.md)
+- [`docs/architecture/agent-vm-architecture.md`](docs/architecture/agent-vm-architecture.md)
+
+---
+
 ## Repository Structure
 
 ```
@@ -105,6 +122,7 @@ ai-tools/
 │   ├── ai-scaffold/             # Project scaffolding
 │   ├── skill-peekaboo/          # macOS visual UI testing
 │   └── quorum-counsel/          # Multi-model review orchestration
+├── agent_vm/                    # Gondolin VM control plane
 ├── skills/                      # Pure skills (future)
 ├── agent_sidecar/               # Docker sidecar system
 └── CLAUDE.md                    # Agent instructions

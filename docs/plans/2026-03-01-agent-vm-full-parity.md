@@ -76,10 +76,13 @@ These inputs are used specifically for:
 │  │ Idle Timer   │  Unix socket: /tmp/agent-vm-{name}.sock      │
 │  └──────────────┘                                              │
 ├────────────────────────────────────────────────────────────────┤
-│  Gondolin SDK  (@earendil-works/gondolin, pinned)              │
-│  VM.create() · vm.exec() · vm.close() · vm.fs                 │
-│  createHttpHooks() · RealFSProvider · ReadonlyProvider         │
-│  ShadowProvider · MemoryProvider · buildAssets()               │
+│  Gondolin SDK  (@earendil-works/gondolin, version-pinned)      │
+│  VM: create/start/exec/shell/close · vm.fs · vm.enableSsh     │
+│  SandboxServer: openTcpStream (private via VM, needs accessor) │
+│  VFS: RealFS · Readonly · Shadow(predicate) · Memory           │
+│  Net: createHttpHooks({allowedHosts, secrets})                 │
+│  Session: registerSession · SessionIpcServer · connectToSession│
+│  Build: buildAssets · ensureGuestAssets · loadGuestAssets       │
 ├────────────────────────────────────────────────────────────────┤
 │  Guest VM  (Debian bookworm-slim via OCI + Alpine boot layer)  │
 │  Agent CLIs · Toolchain · Init scripts · qcow2 overlay state  │
@@ -167,7 +170,7 @@ New client connects before 10m:
 
 ### Gondolin OCI Build Config
 
-Base profile: `agent_vm/config/build.base.json`
+Base profile: `agent_vm/config/build.debian.json`
 
 ```json
 {
@@ -238,41 +241,71 @@ Rebuild only when build config hash changes or `--full-reset` is used.
 
 ## Guest Init and Shell Environment
 
-### What's baked into the image (build time)
+The init system has three tiers (matching the sidecar's Dockerfile / container CMD / docker exec split). `postBuild.commands` covers build-time only; boot-time and first-exec init are required for workspace-dependent setup.
+
+### Tier 1: Build-time (postBuild.commands)
+
+Baked into the image. Equivalent to Dockerfile RUN steps.
 
 | Category | Packages / Tools |
 |---|---|
-| Core | git, curl, wget, zsh, jq, unzip, ca-certificates |
+| Core | git, curl, wget, zsh, jq, unzip, less, ca-certificates |
 | Python | python3, python3-venv, uv |
 | Node | nodejs (24.x), pnpm (corepack), npm |
 | Agent CLIs | claude, codex (@openai/codex), gemini (@google/gemini-cli) |
-| Shell | zsh as default shell |
-| Browser | chromium, xvfb (for Playwright headed mode) |
+| Shell | zsh + oh-my-zsh + powerlevel10k + zsh-syntax-highlighting + zap |
+| Browser | chromium + playwright-wrapper.sh, xvfb |
+| Editors | micro, git-delta |
+| History | atuin |
+| Cloud | aws-cli v2 |
+| Custom | `build-extra.repo.sh` / `build-extra.local.sh` (per-repo, runs as root with full network) |
 
-### Boot-time init (rootfsInitExtra)
+### Tier 2: Boot-time init (vm.exec() after VM.create())
 
-Runs as root at VM boot, before any exec sessions:
+Runs as root, before accepting client connections. Cannot be prebaked — depends on mounted workspace and runtime config.
 
 ```text
 1. Start Xvfb (virtual display :99 for Playwright)
-2. Set up /workspace symlink → VFS mount point
-3. Create standard directories (/home/agent/.cache, /home/agent/.local)
-4. Apply environment overrides from config
-```
-
-### First-exec init (daemon runs after VM.create())
-
-Runs via `vm.exec()` as part of daemon startup, before accepting client connections:
-
-```text
-1. Detect workspace type (pnpm-workspace.yaml, package.json workspaces, pyproject.toml)
-2. Install/sync dependencies:
+2. Create standard directories (/home/agent/.cache, /home/agent/.local)
+3. Create host-path symlinks for config directories:
+     mkdir -p "$(dirname $HOST_CLAUDE_DIR)"
+     ln -s /home/agent/.claude  $HOST_CLAUDE_DIR
+     ln -s /home/agent/.codex   $HOST_CODEX_DIR
+     ln -s /home/agent/.gemini  $HOST_GEMINI_DIR
+4. Create dependency symlinks (symlink bridge):
+     ln -s /opt/deps/nm    $WORK_DIR/node_modules
+     ln -s /opt/deps/venv  $WORK_DIR/.venv
+5. Auth 1.B: copy credentials into VM state paths
+6. Apply environment overrides from config
+7. Detect workspace type and install/sync dependencies:
    - pnpm install --frozen-lockfile (if pnpm workspace)
    - npm ci (if package-lock.json)
    - uv sync (if pyproject.toml)
-3. Import shell history (if host history available via VFS)
-4. Auth 1.B: copy credentials into VM state paths
+8. Run init-background-extra.repo.sh / init-background-extra.local.sh (per-repo additive)
 ```
+
+### Tier 3: First-exec init (per-session, before shell prompt)
+
+Runs per client attach, in the user's shell context.
+
+```text
+1. Import shell history (atuin import, zsh_history)
+2. Source .zshrc (load zap plugins)
+3. Run init-foreground-extra.repo.sh / init-foreground-extra.local.sh (per-repo additive)
+```
+
+### Init Script Extensibility
+
+Same additive pattern as sidecar. Extra scripts run AFTER base init, not as replacements.
+
+| Script | Committed | Timing | Purpose |
+|---|---|---|---|
+| `build-extra.repo.sh` | Yes | Build | Custom packages, binaries (runs as root with network) |
+| `build-extra.local.sh` | No | Build | Personal build customization |
+| `init-background-extra.repo.sh` | Yes | Boot | Team background setup (services, watchers) |
+| `init-background-extra.local.sh` | No | Boot | Personal background setup |
+| `init-foreground-extra.repo.sh` | Yes | First-exec | Team shell init (env vars, aliases) |
+| `init-foreground-extra.local.sh` | No | First-exec | Personal shell init |
 
 ### Shell environment
 
@@ -280,72 +313,157 @@ Runs via `vm.exec()` as part of daemon startup, before accepting client connecti
 |---|---|---|
 | Shell | zsh | Default for all exec sessions |
 | DISPLAY | `:99` | Xvfb virtual display |
-| VIRTUAL_ENV | `/workspace/.venv` | If Python project detected |
+| WORK_DIR | Original host path | e.g., `/Users/me/dev/my-project` |
+| VIRTUAL_ENV | `$WORK_DIR/.venv` | If Python project detected |
 | PNPM_STORE_DIR | `/home/agent/.local/share/pnpm` | Persistent in qcow2 |
 | PATH | Includes `/home/agent/.local/bin` | For uv, pnpm global bins |
+| DEVCONTAINER | `true` | Signals VM environment to CLIs |
+| CLAUDE_CONFIG_DIR | `$HOST_CLAUDE_DIR` | Host-path for absolute path compat |
+| GIT safe.directory | `*` | Trust all git dirs in workspace |
 
 ## Filesystem and Dependency Isolation
 
 ### VFS Mount Architecture
 
+**Key constraint**: VFS is FUSE-based. The ShadowProvider's `writeMode: "tmpfs"` redirects writes to an in-memory MemoryProvider — ephemeral, lost on VM restart. For persistent Linux-native deps (node_modules, .venv), we use a **symlink bridge**: ShadowProvider hides host dirs and allows symlink creation via tmpfs, while the symlink target lives on the qcow2 overlay disk.
+
+**Host-path mounting**: The VFS mounts at the **original macOS host path** (e.g., `/Users/me/dev/my-project`), not `/workspace`. This preserves absolute path compatibility for `claude --continue`, plugin paths, Codex session resume, and any config that stores absolute references. This matches the sidecar pattern (`-v "$WORK_DIR":"$WORK_DIR"`). Config directories get host-path symlinks for the same reason.
+
 ```text
 Host filesystem (macOS)
   │
-  ├── /Users/me/dev/my-project/          (repo root)
-  │     ├── src/                          ─── RealFSProvider (rw) ──→ /workspace/src/
-  │     ├── package.json                  ─── RealFSProvider (rw) ──→ /workspace/package.json
-  │     ├── node_modules/                 ─── ShadowProvider ───────→ (hidden, empty)
-  │     ├── .venv/                        ─── ShadowProvider ───────→ (hidden, empty)
-  │     ├── .git/                         ─── ReadonlyProvider ─────→ /workspace/.git/ (ro)
-  │     ├── .agent_vm/                    ─── ShadowProvider ───────→ (hidden, empty)
-  │     └── dist/                         ─── ShadowProvider ───────→ (hidden, empty)
+  ├── /Users/me/dev/my-project/           (repo root = WORK_DIR)
+  │     ├── src/                           ─── RealFSProvider (rw) ──→ same path in guest
+  │     ├── package.json                   ─── RealFSProvider (rw) ──→ same path in guest
+  │     ├── node_modules/                  ─── ShadowProvider(tmpfs) → (hidden from guest)
+  │     ├── .venv/                         ─── ShadowProvider(tmpfs) → (hidden from guest)
+  │     ├── .git/                          ─── ReadonlyProvider ─────→ same path in guest (ro)
+  │     ├── .agent_vm/                     ─── ShadowProvider(deny) ─→ (hidden, writes blocked)
+  │     └── dist/                          ─── ShadowProvider(deny) ─→ (hidden, writes blocked)
   │
-  └── /Users/me/.claude/                  ─── (not mounted; 1.B copy-in/copy-back)
+  └── /Users/me/.claude/                   ─── (not mounted; 1.B copy-in/copy-back)
 
-Guest VM filesystem (Linux, qcow2 overlay)
+Guest VM filesystem (Linux)
   │
-  ├── /workspace/                          (VFS mount point)
-  │     ├── src/                           (live from host via RealFSProvider)
-  │     ├── package.json                   (live from host)
-  │     ├── node_modules/                  (VM-owned, Linux-native, qcow2)
-  │     ├── .venv/                         (VM-owned, Linux-native, qcow2)
-  │     └── .git/                          (readonly from host)
+  ├── /Users/me/dev/my-project/            (FUSE mount at original host path)
+  │     ├── src/                            (live from host via RealFSProvider)
+  │     ├── package.json                    (live from host)
+  │     ├── node_modules → /opt/deps/nm/   (symlink in tmpfs layer → qcow2 target)
+  │     ├── .venv → /opt/deps/venv/        (symlink in tmpfs layer → qcow2 target)
+  │     └── .git/                           (readonly from host)
   │
-  ├── /home/agent/.claude/                 (1.B copy-in at session start)
-  ├── /home/agent/.codex/                  (1.B copy-in at session start)
-  ├── /home/agent/.gemini/                 (1.B copy-in at session start)
-  └── /home/agent/.cache/                  (persistent in qcow2)
+  ├── /opt/deps/                            (qcow2 overlay, persistent)
+  │     ├── nm/                             (Linux-native node_modules)
+  │     └── venv/                           (Linux-native Python venv)
+  │
+  ├── /home/agent/.claude/                  (1.B copy-in at session start)
+  ├── /Users/me/.claude → /home/agent/.claude  (host-path symlink for absolute path compat)
+  ├── /home/agent/.codex/                   (1.B copy-in at session start)
+  ├── /Users/me/.codex → /home/agent/.codex    (host-path symlink)
+  ├── /home/agent/.gemini/                  (1.B copy-in at session start)
+  ├── /Users/me/.gemini → /home/agent/.gemini  (host-path symlink)
+  └── /home/agent/.cache/                   (persistent in qcow2)
 ```
 
-### VFS Provider Stack (Gondolin SDK)
+**Why host-path mounting matters**: Claude Code stores `workingDirectory: "/Users/me/dev/my-project"` in session files. Codex stores similar absolute paths. Plugins reference host-absolute paths in `.claude/settings.json`. Without host-path mounting, `--continue` and plugin loading fail silently.
+
+### Dependency Symlink Bridge
+
+The guest init script creates symlinks that bridge VFS and qcow2 storage:
+
+```text
+Boot sequence (WORK_DIR = /Users/me/dev/my-project):
+  1. VFS FUSE mounts at $WORK_DIR (ShadowProvider hides host node_modules/.venv)
+  2. Init script creates qcow2 dirs:
+       mkdir -p /opt/deps/nm /opt/deps/venv
+  3. Init script creates dep symlinks (in ShadowProvider tmpfs layer):
+       ln -s /opt/deps/nm    $WORK_DIR/node_modules
+       ln -s /opt/deps/venv  $WORK_DIR/.venv
+  4. Init script creates config host-path symlinks:
+       mkdir -p "$(dirname $HOST_CLAUDE_DIR)"
+       ln -s /home/agent/.claude  $HOST_CLAUDE_DIR    # e.g., /Users/me/.claude
+       ln -s /home/agent/.codex   $HOST_CODEX_DIR
+       ln -s /home/agent/.gemini  $HOST_GEMINI_DIR
+  5. pnpm install writes to /opt/deps/nm (persistent on qcow2)
+  6. uv sync writes to /opt/deps/venv (persistent on qcow2)
+
+Result:
+  - Workspace at original host path → session --continue works
+  - Config dirs at original host paths → plugin loading works
+  - Host macOS node_modules completely hidden
+  - Symlinks recreated on each boot (ephemeral in tmpfs, targets persist)
+```
+
+For **monorepo** workspaces, each package gets its own symlink:
+
+```text
+$WORK_DIR/packages/frontend/node_modules → /opt/deps/nm-frontend/
+$WORK_DIR/packages/backend/node_modules  → /opt/deps/nm-backend/
+```
+
+### VFS Provider Stack (Gondolin SDK — Verified API)
+
+ShadowProvider uses a **predicate callback**, not a simple list. The `createShadowPathPredicate()` helper converts a path array into the required predicate.
 
 ```typescript
-const vfs = {
-  fuseMount: "/workspace",
+import {
+  VM,
+  RealFSProvider,
+  ReadonlyProvider,
+  ShadowProvider,
+  createShadowPathPredicate,
+  MemoryProvider,
+} from "@earendil-works/gondolin";
+
+// Build shadow paths from workspace detection
+const shadowPaths = [
+  "node_modules",    // Root node_modules (macOS)
+  ".venv",           // Root Python venv (macOS)
+  ".agent_vm",       // Config dir (sensitive)
+  "dist",            // Build artifacts (platform-specific)
+  ".next",           // Next.js cache
+  "__pycache__",     // Python bytecode
+  // ... dynamically added per-package node_modules for monorepos
+];
+
+// repoRoot is the original host path, e.g., "/Users/me/dev/my-project"
+const vfs: VmVfsOptions = {
+  fuseMount: repoRoot,  // Mount at original host path for session/plugin compatibility
   mounts: {
-    "/workspace": new ShadowProvider(
+    [repoRoot]: new ShadowProvider(
       new RealFSProvider(repoRoot),
       {
-        hidden: [
-          "node_modules",
-          ".venv",
-          ".agent_vm",
-          "dist",
-          ".next",
-          "__pycache__",
-        ],
+        // Predicate-based: createShadowPathPredicate() is a convenience helper
+        shouldShadow: createShadowPathPredicate(shadowPaths),
+        // "tmpfs" allows guest to create symlinks at shadowed paths
+        // These symlinks point to /opt/deps/* on qcow2 for persistence
+        writeMode: "tmpfs",
+        // Block symlink bypass (guest can't ln -s .agent_vm x; cat x)
+        denySymlinkBypass: true,
       }
     ),
-    "/workspace/.git": new ReadonlyProvider(
+    [path.join(repoRoot, ".git")]: new ReadonlyProvider(
       new RealFSProvider(path.join(repoRoot, ".git"))
     ),
   },
 };
 ```
 
+**ShadowProvider API reference** (verified from source at `host/src/vfs/shadow.ts`):
+
+| Option | Type | Default | Purpose |
+|---|---|---|---|
+| `shouldShadow` | `(ctx: ShadowContext) => boolean` | Required | Predicate: return true to hide path |
+| `writeMode` | `"deny" \| "tmpfs"` | `"deny"` | deny = EACCES on write; tmpfs = redirect to MemoryProvider |
+| `tmpfs` | `VirtualProvider` | `new MemoryProvider()` | Upper layer for tmpfs writes |
+| `denySymlinkBypass` | `boolean` | `true` | Blocks `ln -s hidden_path alias; cat alias` |
+| `denyWriteErrno` | `number` | `EACCES` | Errno for denied writes |
+
+`createShadowPathPredicate(paths: string[])` — convenience helper that creates a predicate matching exact paths and their children via prefix.
+
 ### Monorepo Workspace Detection
 
-The daemon detects workspace packages at startup to know which directories to shadow:
+The daemon detects workspace packages at startup to build the shadow path list:
 
 | Signal | Detection | Shadow targets |
 |---|---|---|
@@ -353,7 +471,7 @@ The daemon detects workspace packages at startup to know which directories to sh
 | `package.json` workspaces | Parse `workspaces` field | Root + each package's `node_modules/` |
 | `pyproject.toml` | Presence check | `.venv/` at repo root |
 
-The `ShadowProvider` hidden list is dynamically built from detected workspace structure.
+The shadow list is dynamically built from detected workspace structure and passed to `createShadowPathPredicate()`.
 
 ### Persistence Model
 
@@ -414,13 +532,42 @@ Crash recovery:
 - If daemon crashes between periodic copies, at most 5 minutes of token refresh is lost
 - Old refresh token on host still works to obtain new access token
 
-### Supported auth sources
+### Full Credential and Config Inventory (v1 Parity)
 
-| CLI | Host auth location | Keychain extraction | Env var fallback |
+All items the sidecar mounts or copies. The VM uses 1.B copy-in/copy-back for auth dirs and host-path symlinks for absolute path compatibility.
+
+**Auth directories** (1.B copy-in/copy-back, bidirectional):
+
+| CLI | Host auth location | Keychain extraction | Env var fallback | VM path | Host-path symlink |
+|---|---|---|---|---|---|
+| Claude Code | `~/.claude/` | `security find-generic-password -s "Claude Code-credentials"` → `.credentials.json` | `ANTHROPIC_API_KEY` | `/home/agent/.claude/` | `$HOME/.claude → /home/agent/.claude` |
+| Claude alt auth | `~/.config/claude-code/auth.json` | Symlink to `.credentials.json` | — | Symlink created in VM | — |
+| Codex | `~/.codex/` | No (file-based) | `CODEX_API_KEY`, `OPENAI_API_KEY` | `/home/agent/.codex/` | `$HOME/.codex → /home/agent/.codex` |
+| Gemini | `~/.gemini/` | No (file-based) | `GEMINI_API_KEY`, `GOOGLE_API_KEY` | `/home/agent/.gemini/` | `$HOME/.gemini → /home/agent/.gemini` |
+| OpenCode | `~/.config/opencode/` | No (file-based) | — | `/home/agent/.opencode/` | `$HOME/.config/opencode → /home/agent/.opencode` |
+
+**Config files and keys** (1.B copy-in, read-write unless noted):
+
+| Item | Host source | VM path | Notes |
 |---|---|---|---|
-| Claude Code | `~/.claude/.credentials.json` | `security find-generic-password -s "Claude Code-credentials"` | `ANTHROPIC_API_KEY` |
-| Codex | `~/.codex/auth.json` | No (file-based) | `CODEX_API_KEY`, `OPENAI_API_KEY` |
-| Gemini | `~/.gemini/` | No (file-based) | `GEMINI_API_KEY`, `GOOGLE_API_KEY` |
+| Claude global settings | `~/.claude.json` | `/home/agent/.claude.json` + host-path symlink | Global Claude Code preferences |
+| AWS credentials | `~/.aws/` | `/home/agent/.aws/` (read-only copy) | Optional, for AWS CLI access |
+| SSH keys | `~/.ssh/` | `/home/agent/.ssh/` (copy-in, preserve 0600 perms) | Required for SSH-based git workflows. Copy-back NOT needed (keys don't change) |
+| Git global config | `~/.gitconfig` | `/home/agent/.gitconfig` | Git user.name, user.email, aliases. Copy file, not dir |
+
+**Shell history** (copy-in at boot, optional):
+
+| Item | Host source | VM path | Notes |
+|---|---|---|---|
+| Zsh history | `~/.zsh_history` | `/home/agent/.zsh_history` | Copied once at session start |
+| Atuin config | `~/.config/atuin/` | `/home/agent/.config/atuin/` | Persistent in qcow2 |
+| Atuin data | `~/.local/share/atuin/` | `/home/agent/.local/share/atuin/` | Persistent in qcow2 |
+
+**Config files** (read-only, optional):
+
+| Item | Host source | VM path | Notes |
+|---|---|---|---|
+| Micro editor config | `~/.config/micro/` | `/home/agent/.config/micro/` | Editor preferences |
 
 When an env var fallback is set, the daemon uses Gondolin secret injection instead of 1.B for that CLI.
 
@@ -496,6 +643,66 @@ Toggle via: `agent-vm-ctl policy allow notion` / `agent-vm-ctl policy block noti
 
 Timed toggle: `agent-vm-ctl policy allow-for 15m notion`
 
+### Playwright / Browser Security (Two-Layer Enforcement)
+
+Agents with browser access are a higher-risk threat model — they can write arbitrary code that drives Chromium, so any single enforcement layer is potentially bypassable. We use two complementary layers.
+
+**Why browsers need extra restrictions**: An agent can craft arbitrary HTTP requests via curl or node, but that traffic goes through Gondolin's `createHttpHooks` which enforces the allowlist. A browser, however, can execute JavaScript, follow redirects, render pages, and exfiltrate data through more subtle channels. Restricting browser access to localhost + explicitly allowed hosts is a safer default.
+
+#### Layer 1: Chromium `--host-rules` (Guest-Side — Primary Enforcement)
+
+Same pattern as sidecar. A `playwright-wrapper.sh` script intercepts Chromium launches:
+
+```bash
+# playwright-wrapper.sh (baked into image)
+HOST_RULES="MAP * 127.0.0.1, EXCLUDE localhost, EXCLUDE 127.0.0.1, EXCLUDE [::1]"
+
+# PLAYWRIGHT_EXTRA_HOSTS injected as env var by daemon
+if [ -n "$PLAYWRIGHT_EXTRA_HOSTS" ]; then
+    for host in $(echo "$PLAYWRIGHT_EXTRA_HOSTS" | tr ',' ' '); do
+        host=$(echo "$host" | xargs)
+        [ -n "$host" ] && HOST_RULES="$HOST_RULES, EXCLUDE $host"
+    done
+fi
+
+exec "$CHROMIUM_REAL" --host-rules="$HOST_RULES" "$@"
+```
+
+Default: browser can only reach `localhost`. Additional hosts opt-in via `PLAYWRIGHT_EXTRA_HOSTS` in `vm.repo.conf`.
+
+The real Chromium binary is moved to a non-standard path and only exposed through the wrapper. This prevents trivial bypass by direct binary invocation.
+
+#### Layer 2: Host-Side HTTP Hook (Defense in Depth)
+
+Gondolin's `createHttpHooks` cannot distinguish traffic by source process — all guest HTTP appears identical. However, we can use User-Agent–based heuristics as a second line:
+
+```typescript
+isRequestAllowed: (request) => {
+  const ua = request.headers.get("user-agent") ?? "";
+  const hostname = new URL(request.url).hostname;
+  const isLikelyBrowser = ua.includes("HeadlessChrome") || ua.includes("Playwright");
+
+  if (isLikelyBrowser) {
+    // Browser traffic: localhost + PLAYWRIGHT_EXTRA_HOSTS only
+    return playwrightAllowedHosts.has(hostname) || hostname === "localhost";
+  }
+
+  // CLI traffic: normal allowedHosts policy
+  return compiledAllowlist.has(hostname);
+};
+```
+
+**Limitation**: User-Agent is spoofable. An agent can craft `curl` or `node http.request()` calls that bypass UA detection. However, these non-browser requests are still subject to Gondolin's `createHttpHooks` allowlist enforcement at the network level — the agent can't reach hosts outside the compiled allowlist regardless of User-Agent. Layer 1 (Chromium's `--host-rules`) is the primary browser enforcement. Layer 2 is monitoring/visibility for browser-specific traffic. Gondolin's network-level allowlist is the actual fallback for all guest HTTP.
+
+#### Comparison with Sidecar
+
+| Aspect | Sidecar | VM |
+|---|---|---|
+| Primary enforcement | Chromium `--host-rules` | Chromium `--host-rules` (same) |
+| Secondary enforcement | iptables (OS-level, process-agnostic) | HTTP hooks with User-Agent heuristic |
+| Source differentiation | Same process model (all in one container) | Same limitation (all in one VM) |
+| Config key | `PLAYWRIGHT_EXTRA_HOSTS` | `PLAYWRIGHT_EXTRA_HOSTS` (same) |
+
 ## Tunnel Model
 
 ### Architecture
@@ -524,15 +731,43 @@ Redis      @ 127.0.0.1:6379  ◄──┐ │    (Node.js daemon in image)
 | PostgreSQL | `127.0.0.1:5432` | `127.0.0.1:15432` | `127.0.0.1:16000` | 8 |
 | Redis | `127.0.0.1:6379` | `127.0.0.1:16379` | `127.0.0.1:16001` | 4 |
 
+### `openTcpStream()` API Access (Verified — Stability Risk)
+
+`openTcpStream()` lives on `SandboxServerOps` (mixed into `SandboxServer`), **not on `VM`**. The VM stores it as `private server: SandboxServer | null` — no public getter.
+
+```typescript
+// SandboxServerOps.openTcpStream() signature (from host/src/sandbox/server-ops.ts:341)
+async openTcpStream(target: {
+  host: string;    // guest loopback address (usually "127.0.0.1")
+  port: number;    // guest port to connect to
+  timeoutMs?: number; // default: 5000ms
+}): Promise<Duplex>
+```
+
+**How it works**: Uses a dedicated virtio-serial port. Bypasses the guest network stack entirely. Returns a Node.js `Duplex` stream piped to a TCP socket inside the guest.
+
+**Access pattern for tunnel manager** (required since `server` is private on VM):
+
+```typescript
+// Option A: Index access (fragile, requires version pinning)
+const server = (vm as Record<string, unknown>)["server"] as SandboxServer;
+const stream = await server.openTcpStream({ host: "127.0.0.1", port: 16000 });
+
+// Option B: Capture server reference during VM construction (preferred)
+// If Gondolin adds a public getter or hook, migrate to that.
+```
+
+**Stability risk**: `openTcpStream()` is on an exported class (`SandboxServer`) but accessed through a private VM field. **Pin Gondolin to exact version** and test after every upgrade. Consider contributing a `vm.openTcpStream()` passthrough upstream.
+
 ### Tunnel Manager Lifecycle
 
 The tunnel manager runs inside the daemon process (same Node.js process as VM lifecycle):
 
 ```text
 Daemon starts VM
-  → TunnelManager.start(vm, tunnelConfig)
+  → TunnelManager.start(server, tunnelConfig)  // receives SandboxServer, not VM
   → For each service:
-      → Open desiredUplinks guest streams via vm.openTcpStream()
+      → Open desiredUplinks guest streams via server.openTcpStream()
       → Dial host target (127.0.0.1:5432 or :6379)
       → Pipe guest stream ↔ host socket bidirectionally
   → Monitor loop:
@@ -602,7 +837,7 @@ Wire format: newline-delimited JSON over Unix domain socket.
 |---|---|---|
 | `attach` | `{ type: "attach", command?: string }` | Request new exec session. If `command` omitted, opens interactive shell. |
 | `status` | `{ type: "status" }` | Request daemon status (VM state, tunnels, clients). |
-| `policy.reload` | `{ type: "policy.reload" }` | Recompile allowlist and apply to VM. |
+| `policy.reload` | `{ type: "policy.reload" }` | Recompile allowlist and recreate VM runtime to apply policy. |
 | `policy.update` | `{ type: "policy.update", action: "allow"\|"block"\|"clear", target: string }` | Toggle preset or domain. |
 | `tunnel.restart` | `{ type: "tunnel.restart", service?: string }` | Restart tunnel uplinks (all or specific service). |
 | `shutdown` | `{ type: "shutdown" }` | Graceful shutdown (copy-back auth, close tunnels, close VM). |
@@ -624,6 +859,140 @@ For `attach` sessions, stdin/stdout/stderr are relayed bidirectionally:
 
 ```text
 Terminal ←→ Unix socket ←→ Daemon ←→ vm.exec() ←→ Guest shell/agent
+```
+
+### `vm.shell()` and `vm.exec()` API Reference (Verified)
+
+The daemon uses `vm.shell()` for interactive sessions and `vm.exec()` for command execution.
+
+**`vm.shell(options?: ShellOptions): ExecProcess`** (from `host/src/vm/core.ts:680`)
+
+```typescript
+type ShellOptions = {
+  command?: string | string[];  // default: ["/bin/bash", "-i"]
+  env?: string[] | Record<string, string>;
+  cwd?: string;
+  signal?: AbortSignal;
+  attach?: boolean;  // default: process.stdin.isTTY (auto-detect)
+};
+```
+
+Internally calls `vm.exec(command, { stdin: true, pty: true, ... })`. When `attach: true` (default in TTY), connects process.stdin/stdout/stderr directly. **For daemon use, always set `attach: false`** and manually relay streams over the Unix socket.
+
+**`vm.exec(command, options?: ExecOptions): ExecProcess`** (from `host/src/vm/core.ts:653`)
+
+```typescript
+type ExecOptions = {
+  argv?: string[];
+  env?: string[] | Record<string, string>;
+  cwd?: string;
+  stdin?: boolean | string | Buffer | Readable | AsyncIterable<Buffer>;
+  pty?: boolean;
+  encoding?: BufferEncoding;  // default: "utf-8"
+  signal?: AbortSignal;
+  stdout?: "buffer" | "pipe" | "inherit" | "ignore" | WritableStream;
+  stderr?: "buffer" | "pipe" | "inherit" | "ignore" | WritableStream;
+};
+```
+
+`ExecProcess` is both `PromiseLike<ExecResult>` and `AsyncIterable<string>`. For interactive sessions (`pty: true`), use `proc.write()` for stdin and iterate for stdout.
+
+**Daemon attach flow**:
+
+```typescript
+// Interactive shell for attached client
+const proc = vm.shell({
+  attach: false,  // daemon manages streams, not process.stdin
+  cwd: "/workspace",
+  env: { TERM: clientTermType },
+});
+// Relay proc output → Unix socket → client terminal
+// Relay client terminal → Unix socket → proc.write()
+
+// Agent command execution
+const proc = vm.exec("claude --dangerously-skip-permissions --continue", {
+  stdin: true,
+  pty: true,
+  stdout: "pipe",
+  stderr: "pipe",
+  cwd: "/workspace",
+});
+```
+
+## Gondolin Session Registry (Potential Daemon Simplification)
+
+Gondolin ships a built-in session registry and IPC server that partially overlap with our planned daemon architecture. Documented here for Phase 3 design decisions.
+
+### What's Available (Verified from `host/src/session-registry.ts`)
+
+**Session Registry** — file-based session discovery at `~/.cache/gondolin/sessions/`:
+
+| Function | Purpose |
+|---|---|
+| `registerSession({ id, label })` | Write `{id}.json` metadata + return `{id}.sock` path |
+| `unregisterSession(id)` | Remove metadata + socket files |
+| `listSessions()` | Discover all sessions, check liveness (pid + socket probe) |
+| `findSession(query)` | Exact or prefix-match lookup |
+| `gcSessions()` | Clean stale entries (dead pid or unreachable socket) |
+
+**SessionIpcServer** — Unix socket server for multiplexed exec sessions:
+
+```typescript
+class SessionIpcServer {
+  constructor(
+    sockPath: string,
+    connectToSandbox: (onMessage, onClose?) => SandboxConnection,
+    handlers?: { onSnapshot? }
+  );
+  start(): void;
+  close(): Promise<void>;
+}
+```
+
+- Handles framed binary protocol (length-prefixed JSON + binary output frames)
+- Per-client request ID translation (each client gets independent ID space)
+- Supports `exec`, `stdin`, `pty_resize`, `exec_window`, `snapshot` messages
+- Automatically bridges each client to the SandboxServer via `connectToSandbox` callback
+
+**connectToSession** — client-side connector:
+
+```typescript
+function connectToSession(sockPath: string, callbacks: IpcClientCallbacks): {
+  send: (message: ClientMessage) => void;
+  close: () => void;
+}
+```
+
+### How This Relates to Our Daemon
+
+Our planned NDJSON-over-Unix-socket daemon protocol overlaps with `SessionIpcServer`. Key differences:
+
+| Feature | Our Daemon Plan | Gondolin SessionIpcServer |
+|---|---|---|
+| Wire format | NDJSON (newline-delimited JSON) | Length-prefixed frames (4-byte header + JSON or binary) |
+| Protocol | Custom messages (attach, status, policy, shutdown) | SandboxServer protocol (exec, stdin, pty_resize, snapshot) |
+| Client tracking | Manual count + idle timer | Per-client sockets, no lifecycle management |
+| Policy commands | Supported (policy.reload, policy.update) | Not supported |
+| Tunnel management | Supported (tunnel.restart) | Not supported |
+| Auth copy-back | Supported (on shutdown) | Not supported |
+| Session discovery | Custom (we manage socket files) | Built-in (registerSession/findSession) |
+
+### Recommendation for Phase 3
+
+**Use Gondolin's session registry for discovery, build our own daemon for lifecycle management.**
+
+- Use `registerSession()` / `findSession()` / `gcSessions()` for session metadata and stale cleanup — don't reinvent this.
+- Use `connectToSession()` as the transport layer for exec relay, instead of raw NDJSON. This gets us the binary frame protocol and request ID multiplexing for free.
+- Build our daemon layer on top for: idle timer, policy commands, tunnel management, auth copy-back, client counting.
+
+This means our daemon wraps `SessionIpcServer` for exec relay and adds a control channel for policy/tunnel/lifecycle commands.
+
+```text
+run-agent-vm (client)
+  │
+  ├─ Control channel: our NDJSON protocol for status/policy/tunnel/shutdown
+  │
+  └─ Exec channel: connectToSession() → SessionIpcServer → SandboxServer → guest
 ```
 
 ## Config Model (`.agent_vm/`)
@@ -676,7 +1045,7 @@ agent_vm/config/policy-allowlist.base.txt
 | Flag | Description |
 |---|---|
 | `--reload` | Recreate VM session from current config (preserves qcow2 state) |
-| `--full-reset` | Rebuild image assets + reset qcow2 overlay |
+| `--full-reset` | Rebuild image assets + recycle daemon session |
 | `--no-run` | Start daemon + VM + tunnels but don't open shell |
 | `--run <cmd>` | Run command in VM |
 | `--run-claude` | Launch Claude Code (`claude --dangerously-skip-permissions --continue`) |
@@ -696,7 +1065,7 @@ agent_vm/config/policy-allowlist.base.txt
 | `policy block <preset\|domain>` | Remove from toggle list |
 | `policy allow-for <duration> <target>` | Temporary access (e.g., `15m notion`) |
 | `policy clear` | Clear all toggle entries |
-| `policy reload` | Recompile and apply policy |
+| `policy reload` | Recompile policy and recreate VM runtime |
 | `policy presets` | List available presets |
 | `tunnels status` | Tunnel health per service |
 | `tunnels restart` | Restart all tunnel uplinks |
@@ -767,7 +1136,7 @@ All test code in TypeScript with Vitest.
 | Daemon lifecycle | Start daemon, verify socket, connect client, disconnect, verify idle timer | Socket created/removed, client count accurate |
 | Multi-client attach | Start daemon, connect 2 clients, disconnect 1, verify no idle | Idle timer only starts at count=0 |
 | IPC protocol | Send each message type, verify response format | All message types handled correctly |
-| Policy reload | Compile policy, update toggles, reload, verify new allowlist | Hot-reload without VM restart |
+| Policy reload | Compile policy, update toggles, reload, verify new allowlist | Runtime recreation (Gondolin hooks are create-time) |
 | Tunnel manager | Mock `openTcpStream`, simulate failures, verify reconnect | Backoff timing, health state transitions |
 | VFS policy | Configure ShadowProvider, verify hidden paths, readonly .git | Guest can't see node_modules, can't write .git |
 | Auth copy-in/back | Write test credentials, start daemon, verify copy-in, stop, verify copy-back | Atomic writes, no partial state |
@@ -799,6 +1168,7 @@ pnpm --dir agent_vm build         # tsc -p tsconfig.json
 **Rationale**: Everything depends on having a bootable VM to test against.
 
 - Scaffold `agent_vm` package: `package.json`, `tsconfig.json`, `vitest.config.ts`
+- **Lock `@earendil-works/gondolin` to exact version** in `package.json` (no `^` or `~` — non-public API access requires version pinning)
 - Set up biome for linting
 - Implement `buildAssets()` wrapper with Debian OCI build config
 - Verify: boot a VM from built assets, run `cat /etc/os-release` → Debian
@@ -815,10 +1185,12 @@ pnpm --dir agent_vm build         # tsc -p tsconfig.json
 ### Phase 3: Daemon + Session Control
 
 - Implement daemon process model (fork on first run, connect on subsequent)
-- Unix socket listener with NDJSON protocol
+- Use Gondolin `registerSession()` / `findSession()` / `gcSessions()` for session discovery
+- Use `SessionIpcServer` + `connectToSession()` for exec relay transport (binary framing, ID multiplexing)
+- Add control channel (NDJSON) for policy/tunnel/lifecycle commands alongside exec channel
+- **Design decision needed**: single-socket multiplexing (control + exec in one protocol) vs. dual-socket (separate control and exec channels). Dual-socket requires explicit coordination: idle timer vs. open exec sessions, policy reload vs. in-flight commands, shutdown sequencing. Single-socket is simpler but means custom framing instead of reusing `connectToSession()` directly.
 - Client attach/detach accounting
 - Idle timer state machine (10m default, configurable)
-- Exec session relay (stdin/stdout/stderr streaming over socket)
 - Integration tests for daemon lifecycle
 
 ### Phase 4: VM Adapter + VFS Policy
@@ -834,7 +1206,7 @@ pnpm --dir agent_vm build         # tsc -p tsconfig.json
 - Integrate `createHttpHooks()` with compiled policy
 - Implement secret injection for API key env vars
 - Implement toggle preset loading and `policy` CLI commands
-- Unit + integration tests for policy compilation and hot-reload
+- Unit + integration tests for policy compilation and runtime recreation behavior
 
 ### Phase 6: Tunnel Manager
 
@@ -903,3 +1275,46 @@ Phases 4-7 can partially overlap once Phase 3 is stable.
 | Linux host support | macOS-only for v1 (HVF acceleration) | When Linux KVM testing infra is available |
 | Gondolin checkpoint/snapshot | Useful but not day-1 parity | After core features stabilize |
 | Shell customization (p10k, atuin) | Nice-to-have, not parity-critical | Phase 8 polish or post-v1 |
+
+## Appendix: Verified Gondolin SDK API Reference
+
+All API details verified against Gondolin source code at `/Users/shravansunder/Documents/dev/open-source/vm/gondolin/host/src/`. Pin to exact version in `package.json` — these are internal class layouts, not guaranteed stable across releases.
+
+### Public Exports (`@earendil-works/gondolin`)
+
+| Export | Source | Category |
+|---|---|---|
+| `VM`, `VMOptions`, `VMState` | `vm/core.ts` | Core VM lifecycle |
+| `ExecOptions`, `ExecResult`, `ExecProcess` | `exec.ts` | Command execution |
+| `SandboxServer` | `sandbox/server.ts` | Low-level VM server (QEMU process) |
+| `RealFSProvider` | `vfs/node.ts` | Host filesystem passthrough |
+| `ReadonlyProvider` | `vfs/readonly.ts` | Read-only wrapper |
+| `ShadowProvider`, `createShadowPathPredicate` | `vfs/shadow.ts` | Path hiding + write redirect |
+| `MemoryProvider` | `vfs/node.ts` | In-memory VFS (tmpfs upper layer) |
+| `createHttpHooks` | `http/hooks.ts` | Network policy + secret injection |
+| `buildAssets`, `verifyAssets` | `build/index.ts` | Guest image build pipeline |
+| `ensureGuestAssets`, `loadGuestAssets` | `assets.ts` | Asset cache management |
+| `registerSession`, `unregisterSession` | `session-registry.ts` | Session metadata persistence |
+| `listSessions`, `findSession`, `gcSessions` | `session-registry.ts` | Session discovery + cleanup |
+| `SessionIpcServer`, `connectToSession` | `session-registry.ts` | Multiplexed exec relay over Unix socket |
+| `IngressGateway` | `ingress.ts` | HTTP/HTTPS ingress routing |
+
+### Non-Public APIs We Depend On
+
+| API | Location | Risk | Mitigation |
+|---|---|---|---|
+| `SandboxServer.openTcpStream()` | `sandbox/server-ops.ts:341` | On `SandboxServerOps` mixin, publicly exported class, but accessed through VM's private `server` field | Pin version, test after upgrades, contribute upstream PR for `vm.openTcpStream()` |
+| `VM.server` (private field) | `vm/core.ts:230` | Private, no public getter | Index access `(vm as any)["server"]`, or capture during construction |
+| `SandboxServer.connect()` | `sandbox/server-ops.ts:83` | Required by `SessionIpcServer` constructor's `connectToSandbox` callback | Same risk as above — needs server reference |
+
+### Key API Behaviors
+
+**`openTcpStream()`**: Allocates a stream ID, sends `tcp_open` command over virtio-serial (SSH bridge channel), waits for guest acknowledgment with configurable timeout (default 5s). Returns Node.js `Duplex`. The stream bypasses guest network stack — no firewall rules apply, no TLS interception. This is the correct channel for service tunnels.
+
+**`ShadowProvider`**: Predicate-based, not list-based. Evaluated on every VFS operation (readdir, stat, open). `writeMode: "tmpfs"` redirects writes to `MemoryProvider` — ephemeral, lost on restart. `denySymlinkBypass: true` prevents `ln -s hidden_path alias; cat alias` attacks (resolves symlinks before checking predicates).
+
+**`vm.shell()`**: Wrapper around `vm.exec()` with `{ stdin: true, pty: true }`. Default shell: `/bin/bash -i`. The `attach` option auto-detects TTY — **always pass `attach: false`** in daemon context to prevent hijacking the daemon's own stdin.
+
+**`SessionIpcServer`**: Manages per-client request ID namespaces. Each connected client gets independent ID space (external IDs remapped to internal IDs). Binary frames use `[type:u8][length:u32be][payload]` framing. JSON frames use `[length:u32be][payload]` framing. Client connections use `connectToSession()` which implements the complementary framing.
+
+**`buildAssets()`**: Accepts `BuildConfig` (JSON-serializable). Supports `oci.image` for Debian rootfs. Outputs: kernel (vmlinuz-virt), initramfs (lz4-compressed cpio), rootfs (ext4). `postBuild.commands` run inside the container at build time. Cache keyed by config content hash.

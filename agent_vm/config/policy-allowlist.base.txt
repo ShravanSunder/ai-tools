@@ -1,0 +1,15 @@
+anthropic.com
+api.anthropic.com
+console.anthropic.com
+openai.com
+api.openai.com
+auth.openai.com
+platform.openai.com
+accounts.google.com
+oauth2.googleapis.com
+generativelanguage.googleapis.com
+registry.npmjs.org
+pypi.org
+files.pythonhosted.org
+github.com
+api.github.com
