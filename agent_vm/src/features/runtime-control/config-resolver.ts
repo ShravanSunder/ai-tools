@@ -3,7 +3,10 @@ import path from 'node:path';
 
 import type { ResolvedRuntimeConfig, VmConfig } from '#src/core/models/config.js';
 import { getAgentVmRoot, getGeneratedStateDir } from '#src/core/platform/paths.js';
-import { compileAndPersistPolicy } from '#src/features/runtime-control/policy-manager.js';
+import {
+	compileAndPersistPolicy,
+	readPolicyState,
+} from '#src/features/runtime-control/policy-manager.js';
 import { loadTcpServiceConfig } from '#src/features/runtime-control/tcp-service-config.js';
 
 function parseList(value: string): string[] {
@@ -81,15 +84,7 @@ export function resolveRuntimeConfig(workDir: string): ResolvedRuntimeConfig {
 
 	const generatedStateDir = getGeneratedStateDir(workDir);
 	fs.mkdirSync(generatedStateDir, { recursive: true });
-
-	const togglePath = path.join(generatedStateDir, 'policy-toggle.entries.txt');
-	const toggleEntries = fs.existsSync(togglePath)
-		? fs
-				.readFileSync(togglePath, 'utf8')
-				.split(/\r?\n/u)
-				.map((line) => line.trim())
-				.filter((line) => line.length > 0)
-		: [];
+	const toggleEntries = readPolicyState(workDir).entries;
 
 	return {
 		vmConfig,

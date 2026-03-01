@@ -9,6 +9,7 @@ import { buildDebianGuestAssets } from '#src/build/build-assets.js';
 import { DaemonClient, waitForSocket } from '#src/core/infrastructure/daemon-client.js';
 import type { RunAgentVmOptions } from '#src/core/models/config.js';
 import type { DaemonResponse } from '#src/core/models/ipc.js';
+import { withFileLockAsync } from '#src/core/platform/file-lock.js';
 import { getAgentVmRoot } from '#src/core/platform/paths.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 import { resolveAgentPresetCommand } from '#src/features/runtime-control/agent-launcher.js';
@@ -159,7 +160,20 @@ async function maybeBuildGuestAssets(options: Pick<RunAgentVmOptions, 'fullReset
 	});
 }
 
-async function ensureDaemonRunning(socketPath: string, workDir: string): Promise<void> {
+function readDaemonLogTail(daemonLogPath: string, maxLines: number = 20): string {
+	if (!fs.existsSync(daemonLogPath)) {
+		return '';
+	}
+
+	const lines = fs.readFileSync(daemonLogPath, 'utf8').trim().split(/\r?\n/u);
+	return lines.slice(Math.max(lines.length - maxLines, 0)).join('\n');
+}
+
+async function ensureDaemonRunning(
+	socketPath: string,
+	daemonLogPath: string,
+	workDir: string,
+): Promise<void> {
 	if (fs.existsSync(socketPath)) {
 		try {
 			await waitForSocket(socketPath, 750);
@@ -179,28 +193,54 @@ async function ensureDaemonRunning(socketPath: string, workDir: string): Promise
 		);
 	}
 
-	const subprocess = execa(process.execPath, [daemonEntry, '--work-dir', workDir], {
-		detached: true,
-		stdio: 'ignore',
-	});
-	subprocess.unref();
+	const startupLockPath = `${socketPath}.startup.lock`;
+	await withFileLockAsync(
+		startupLockPath,
+		async () => {
+			if (fs.existsSync(socketPath)) {
+				await waitForSocket(socketPath, 30_000);
+				return;
+			}
 
-	// VM cold boots can exceed 5s; allow enough time for daemon start + VM ready.
-	await waitForSocket(socketPath, 30_000);
+			const subprocess = execa(process.execPath, [daemonEntry, '--work-dir', workDir], {
+				detached: true,
+				stdio: 'ignore',
+			});
+			subprocess.unref();
+
+			// VM cold boots can exceed 5s; allow enough time for daemon start + VM ready.
+			try {
+				await waitForSocket(socketPath, 30_000);
+			} catch (error: unknown) {
+				const daemonLogTail = readDaemonLogTail(daemonLogPath);
+				const logTailSuffix =
+					daemonLogTail.length > 0
+						? `\nDaemon log tail (${daemonLogPath}):\n${daemonLogTail}`
+						: `\nDaemon log path: ${daemonLogPath}`;
+				throw new Error(`Timed out waiting for daemon socket '${socketPath}'.${logTailSuffix}`, {
+					cause: error,
+				});
+			}
+		},
+		{ timeoutMs: 35_000, retryDelayMs: 100 },
+	);
 }
 
 function resolveRequestedCommand(options: RunAgentVmOptions): string | null {
-	if (options.runCommand) {
-		return options.runCommand;
+	switch (options.runMode.kind) {
+		case 'command': {
+			return options.runMode.command;
+		}
+		case 'preset': {
+			return resolveAgentPresetCommand(options.runMode.preset);
+		}
+		case 'no-run': {
+			return null;
+		}
+		case 'default': {
+			return '/bin/sh -lc "pwd"';
+		}
 	}
-	if (options.agentPreset) {
-		return resolveAgentPresetCommand(options.agentPreset);
-	}
-	if (options.noRun) {
-		return null;
-	}
-
-	return '/bin/sh -lc "pwd"';
 }
 
 async function requestAndCollect(
@@ -304,7 +344,11 @@ export async function runOrchestrator(
 	const identity = dependencies.deriveWorkspaceIdentity(workDir);
 	await dependencies.stopDaemonIfRequested(identity.daemonSocketPath, identity.workDir, options);
 	await dependencies.maybeBuildGuestAssets(options);
-	await dependencies.ensureDaemonRunning(identity.daemonSocketPath, identity.workDir);
+	await dependencies.ensureDaemonRunning(
+		identity.daemonSocketPath,
+		identity.daemonLogPath,
+		identity.workDir,
+	);
 
 	const command = resolveRequestedCommand(options);
 	const result = await dependencies.requestAndCollect(identity.daemonSocketPath, command);

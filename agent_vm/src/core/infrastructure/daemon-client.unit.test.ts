@@ -118,4 +118,19 @@ describe('daemon client', () => {
 
 		await expect(waitForSocket(socketPath, 2_000)).resolves.toBeUndefined();
 	});
+
+	it('throws when sending after socket close', async () => {
+		const fixture = await createSocketFixture(() => {});
+		const client = new DaemonClient(fixture.socketPath, {
+			onResponse: () => {},
+			onError: () => {},
+			onClose: () => {},
+		});
+		client.close();
+		await new Promise((resolve) => setTimeout(resolve, 10));
+
+		expect(() => client.send({ kind: 'status' })).toThrowError(
+			'Cannot send daemon request on closed socket',
+		);
+	});
 });

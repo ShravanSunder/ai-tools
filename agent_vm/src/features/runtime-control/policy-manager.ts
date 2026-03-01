@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { withFileLock } from '#src/core/platform/file-lock.js';
+import { normalizeHostname } from '#src/core/platform/hostname.js';
 import { getAgentVmRoot, getGeneratedStateDir } from '#src/core/platform/paths.js';
 
 export interface CompilePolicyInput {
@@ -10,16 +12,12 @@ export interface CompilePolicyInput {
 	toggles: readonly string[];
 }
 
-function normalizeHost(host: string): string {
-	return host.trim().toLowerCase();
-}
-
 export function dedupeStable(values: readonly string[]): string[] {
 	const seen = new Set<string>();
 	const result: string[] = [];
 
 	for (const value of values) {
-		const normalized = normalizeHost(value);
+		const normalized = normalizeHostname(value);
 		if (normalized.length === 0 || normalized.startsWith('#')) {
 			continue;
 		}
@@ -96,8 +94,8 @@ export function applyPolicyMutation(
 		return dedupeStable([...existing, ...targetEntries]);
 	}
 
-	const removeSet = new Set(targetEntries.map((entry) => normalizeHost(entry)));
-	return existing.filter((entry) => !removeSet.has(normalizeHost(entry)));
+	const removeSet = new Set(targetEntries.map((entry) => normalizeHostname(entry)));
+	return existing.filter((entry) => !removeSet.has(normalizeHostname(entry)));
 }
 
 export interface LoadedPolicySources {
@@ -127,4 +125,26 @@ export function compileAndPersistPolicy(workDir: string): string[] {
 	const compiledPath = path.join(generatedDir, 'policy-allowlist.compiled.txt');
 	fs.writeFileSync(compiledPath, `${compiled.join('\n')}\n`, 'utf8');
 	return compiled;
+}
+
+export interface PolicyMutationResult {
+	entries: string[];
+	compiled: string[];
+}
+
+export function mutateAndCompilePolicy(
+	workDir: string,
+	action: 'allow' | 'block' | 'clear',
+	target?: string,
+): PolicyMutationResult {
+	const generatedDir = getGeneratedStateDir(workDir);
+	const lockPath = path.join(generatedDir, 'policy-toggle.lock');
+
+	return withFileLock(lockPath, () => {
+		const existingEntries = readPolicyState(workDir).entries;
+		const nextEntries = applyPolicyMutation(existingEntries, action, target);
+		writePolicyState(workDir, { entries: nextEntries });
+		const compiled = compileAndPersistPolicy(workDir);
+		return { entries: nextEntries, compiled };
+	});
 }

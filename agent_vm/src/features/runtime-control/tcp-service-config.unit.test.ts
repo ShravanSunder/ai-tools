@@ -132,6 +132,41 @@ describe('tcp service config', () => {
 				}),
 			).toThrowError(/duplicate guest mapping/u);
 		});
+
+		it('accepts bracketed IPv6 upstream targets with explicit ports', () => {
+			const config = parseTcpServiceConfig({
+				services: {
+					postgres: {
+						upstreamTarget: '[::1]:15432',
+					},
+				},
+				allowedTargetHosts: ['127.0.0.1', 'localhost', '::1'],
+			});
+
+			expect(config.services.postgres?.upstreamTarget).toBe('[::1]:15432');
+		});
+
+		it('rejects upstream targets with out-of-range ports', () => {
+			expect(() =>
+				parseTcpServiceConfig({
+					services: {
+						postgres: {
+							upstreamTarget: '127.0.0.1:0',
+						},
+					},
+				}),
+			).toThrowError(/port must be in range 1\.\.65535/u);
+
+			expect(() =>
+				parseTcpServiceConfig({
+					services: {
+						postgres: {
+							upstreamTarget: '127.0.0.1:65536',
+						},
+					},
+				}),
+			).toThrowError(/port must be in range 1\.\.65535/u);
+		});
 	});
 
 	describe('validateTcpServiceTargets', () => {
@@ -386,6 +421,22 @@ describe('tcp service config', () => {
 			fs.writeFileSync(path.join(configDir, 'tcp-services.local.json'), '{bad-json');
 
 			expect(() => loadTcpServiceConfig(workDir)).toThrowError(/tcp-services\.local\.json/u);
+		});
+
+		it('throws when services key is not an object', () => {
+			const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-tcp-'));
+			const configDir = path.join(workDir, '.agent_vm');
+			fs.mkdirSync(configDir, { recursive: true });
+			fs.writeFileSync(
+				path.join(configDir, 'tcp-services.repo.json'),
+				JSON.stringify({
+					services: ['postgres'],
+				}),
+			);
+
+			expect(() => loadTcpServiceConfig(workDir)).toThrowError(
+				/repo tcp services config\.services must be a JSON object/u,
+			);
 		});
 	});
 });

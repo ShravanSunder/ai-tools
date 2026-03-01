@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const daemonStatusSchema = z.object({
+export const daemonStatusSchema = z.object({
 	sessionName: z.string(),
 	clients: z.number().int().nonnegative(),
 	idleTimeoutMinutes: z.number().int().positive(),
@@ -48,6 +48,7 @@ const daemonResponseSchema = z.discriminatedUnion('kind', [
 
 export type DaemonRequest = z.infer<typeof daemonRequestSchema>;
 export type DaemonResponse = z.infer<typeof daemonResponseSchema>;
+export type DaemonStatus = z.infer<typeof daemonStatusSchema>;
 
 export function parseDaemonRequestValue(value: unknown): DaemonRequest {
 	const parsed = daemonRequestSchema.safeParse(value);

@@ -10,9 +10,7 @@ describe('run orchestrator', () => {
 			{
 				reload: true,
 				fullReset: true,
-				noRun: true,
-				runCommand: null,
-				agentPreset: null,
+				runMode: { kind: 'no-run' },
 			},
 			'/tmp/workspace',
 			{
@@ -30,7 +28,7 @@ describe('run orchestrator', () => {
 				maybeBuildGuestAssets: vi.fn(async (options) => {
 					calls.push(`build:${String(options.fullReset)}`);
 				}),
-				ensureDaemonRunning: vi.fn(async () => {
+				ensureDaemonRunning: vi.fn(async (_socketPath, _daemonLogPath, _workDir) => {
 					calls.push('ensure-daemon');
 				}),
 				requestAndCollect: vi.fn(async (_socketPath, command) => {

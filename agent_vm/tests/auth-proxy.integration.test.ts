@@ -26,5 +26,24 @@ describe('auth sync manager', () => {
 
 		const updated = fs.readFileSync(path.join(claudePath, 'token.txt'), 'utf8');
 		expect(updated).toBe('new-token');
+
+		const backups = fs.readdirSync(fakeHome).filter((entry) => entry.startsWith('.claude.backup.'));
+		expect(backups.length).toBeGreaterThan(0);
+	});
+
+	it('recovers from stale auth lock files', () => {
+		const fakeHome = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-auth-lock-'));
+		const sessionRoot = path.join(fakeHome, '.cache', 'agent-vm', 'auth', 'stale-lock-session');
+		fs.mkdirSync(sessionRoot, { recursive: true });
+		fs.writeFileSync(
+			path.join(sessionRoot, '.sync.lock'),
+			JSON.stringify({ pid: 999_999, createdAtEpochMs: Date.now() }),
+		);
+
+		const manager = new AuthSyncManager(new NoopLogger(), fakeHome);
+		const state = manager.prepareSessionAuthMirror('stale-lock-session');
+
+		expect(state.sessionAuthRoot).toBe(sessionRoot);
+		expect(fs.existsSync(state.lockPath)).toBe(false);
 	});
 });

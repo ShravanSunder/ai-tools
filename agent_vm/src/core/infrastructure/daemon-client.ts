@@ -85,6 +85,9 @@ export class DaemonClient {
 	}
 
 	public send(request: DaemonRequest): void {
+		if (this.socket.destroyed || !this.socket.writable) {
+			throw new Error('Cannot send daemon request on closed socket');
+		}
 		const payload = `${JSON.stringify(request)}\n`;
 		this.socket.write(payload);
 	}

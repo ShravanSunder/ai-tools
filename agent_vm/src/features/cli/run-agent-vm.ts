@@ -1,6 +1,6 @@
 import { command, flag, option, optional, run, string } from 'cmd-ts';
 
-import type { RunAgentVmOptions } from '#src/core/models/config.js';
+import type { AgentPreset, RunAgentVmOptions } from '#src/core/models/config.js';
 import { runOrchestrator } from '#src/features/runtime-control/run-orchestrator.js';
 
 function buildOptionsFromFlags(input: {
@@ -14,7 +14,7 @@ function buildOptionsFromFlags(input: {
 	runOpencode: boolean;
 	runCursor: boolean;
 }): RunAgentVmOptions {
-	const agentPreset = input.runClaude
+	const agentPreset: AgentPreset | null = input.runClaude
 		? 'claude'
 		: input.runCodex
 			? 'codex'
@@ -26,12 +26,24 @@ function buildOptionsFromFlags(input: {
 						? 'cursor'
 						: null;
 
+	const runMode = input.noRun
+		? ({ kind: 'no-run' } as const)
+		: input.run
+			? ({
+					kind: 'command',
+					command: input.run,
+				} as const)
+			: agentPreset
+				? ({
+						kind: 'preset',
+						preset: agentPreset,
+					} as const)
+				: ({ kind: 'default' } as const);
+
 	return {
 		reload: input.reload,
 		fullReset: input.fullReset,
-		noRun: input.noRun,
-		runCommand: input.run ?? null,
-		agentPreset,
+		runMode,
 	};
 }
 

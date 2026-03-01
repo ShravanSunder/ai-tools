@@ -4,6 +4,7 @@ import path from 'node:path';
 import { z } from 'zod';
 
 import type { TcpServiceEntry, TcpServiceMap } from '#src/core/models/config.js';
+import { normalizeHostname } from '#src/core/platform/hostname.js';
 export type { TcpServiceEntry, TcpServiceMap } from '#src/core/models/config.js';
 
 const DEFAULT_ALLOWED_TARGET_HOSTS = ['127.0.0.1', 'localhost'] as const;
@@ -43,10 +44,6 @@ const DEFAULT_SERVICES: Record<string, TcpServiceEntry> = {
 interface ParsedHostPort {
 	host: string;
 	port: number | null;
-}
-
-function normalizeHost(host: string): string {
-	return host.trim().toLowerCase().replace(/\.+$/u, '');
 }
 
 function parseHostPort(
@@ -89,7 +86,7 @@ function parseHostPort(
 		}
 	}
 
-	host = normalizeHost(host);
+	host = normalizeHostname(host);
 	if (host.length === 0) {
 		throw new Error(`${options.context} host must not be empty: '${raw}'`);
 	}
@@ -165,28 +162,37 @@ function parseJsonConfigFile(filePath: string): unknown {
 }
 
 function asRecord(value: unknown, context: string): Record<string, unknown> {
-	if (!value || typeof value !== 'object' || Array.isArray(value)) {
+	if (!isRecord(value)) {
 		throw new Error(`${context} must be a JSON object`);
 	}
 
-	return value as Record<string, unknown>;
+	return value;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getServicesRecord(
+	config: Record<string, unknown>,
+	context: string,
+): Record<string, unknown> {
+	const services = config['services'];
+	if (services === undefined) {
+		return {};
+	}
+	if (!isRecord(services)) {
+		throw new Error(`${context}.services must be a JSON object`);
+	}
+	return services;
 }
 
 function deepMergeServiceOverrides(
 	repoConfig: Record<string, unknown>,
 	localConfig: Record<string, unknown>,
 ): Record<string, unknown> {
-	const repoServicesRaw = repoConfig['services'];
-	const localServicesRaw = localConfig['services'];
-
-	const repoServices =
-		repoServicesRaw && typeof repoServicesRaw === 'object' && !Array.isArray(repoServicesRaw)
-			? (repoServicesRaw as Record<string, unknown>)
-			: {};
-	const localServices =
-		localServicesRaw && typeof localServicesRaw === 'object' && !Array.isArray(localServicesRaw)
-			? (localServicesRaw as Record<string, unknown>)
-			: {};
+	const repoServices = getServicesRecord(repoConfig, 'repo tcp services config');
+	const localServices = getServicesRecord(localConfig, 'local tcp services config');
 
 	const serviceKeys = new Set<string>([
 		...Object.keys(repoServices),
@@ -197,14 +203,8 @@ function deepMergeServiceOverrides(
 	for (const serviceKey of serviceKeys) {
 		const repoEntry = repoServices[serviceKey];
 		const localEntry = localServices[serviceKey];
-		const repoRecord =
-			repoEntry && typeof repoEntry === 'object' && !Array.isArray(repoEntry)
-				? (repoEntry as Record<string, unknown>)
-				: {};
-		const localRecord =
-			localEntry && typeof localEntry === 'object' && !Array.isArray(localEntry)
-				? (localEntry as Record<string, unknown>)
-				: {};
+		const repoRecord = isRecord(repoEntry) ? repoEntry : {};
+		const localRecord = isRecord(localEntry) ? localEntry : {};
 
 		mergedServices[serviceKey] = {
 			...repoRecord,
@@ -267,7 +267,7 @@ export function validateTcpServiceTargets(config: TcpServiceMap): void {
 		return;
 	}
 
-	const allowedHostSet = new Set(config.allowedTargetHosts.map((host) => normalizeHost(host)));
+	const allowedHostSet = new Set(config.allowedTargetHosts.map((host) => normalizeHostname(host)));
 
 	for (const [serviceName, serviceEntry] of Object.entries(config.services)) {
 		if (!serviceEntry.enabled) {

@@ -23,16 +23,27 @@ async function main(): Promise<void> {
 	const daemon = new AgentVmDaemon(identity, logger);
 	await daemon.start();
 
+	let shuttingDown = false;
 	const shutdown = async (): Promise<void> => {
+		if (shuttingDown) {
+			return;
+		}
+		shuttingDown = true;
 		await daemon.stop();
 		process.exit(0);
 	};
 
 	process.on('SIGTERM', () => {
-		void shutdown();
+		shutdown().catch((error: unknown) => {
+			logger.log('error', 'daemon', 'SIGTERM shutdown failed', { error: String(error) });
+			process.exit(1);
+		});
 	});
 	process.on('SIGINT', () => {
-		void shutdown();
+		shutdown().catch((error: unknown) => {
+			logger.log('error', 'daemon', 'SIGINT shutdown failed', { error: String(error) });
+			process.exit(1);
+		});
 	});
 }
 

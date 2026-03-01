@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import { withFileLock } from '#src/core/platform/file-lock.js';
 import type { Logger } from '#src/core/platform/logger.js';
 
 export interface AuthSyncPaths {
@@ -10,9 +11,6 @@ export interface AuthSyncPaths {
 	codex: string;
 	gemini: string;
 }
-
-const LOCK_RETRY_DELAY_MS = 50;
-const LOCK_TIMEOUT_MS = 10_000;
 
 function pathExists(filePath: string): boolean {
 	return fs.existsSync(filePath);
@@ -28,43 +26,15 @@ function copyDir(sourcePath: string, destPath: string): boolean {
 	return true;
 }
 
-function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
-	return typeof error === 'object' && error !== null && 'code' in error;
-}
-
-function acquireLock(lockPath: string): number {
-	fs.mkdirSync(path.dirname(lockPath), { recursive: true });
-	const start = Date.now();
-	while (Date.now() - start < LOCK_TIMEOUT_MS) {
-		try {
-			return fs.openSync(lockPath, 'wx', 0o600);
-		} catch (error: unknown) {
-			if (!isErrnoException(error) || error.code !== 'EEXIST') {
-				throw new Error(`Failed to acquire auth lock at ${lockPath}: ${String(error)}`, {
-					cause: error,
-				});
-			}
-			Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, LOCK_RETRY_DELAY_MS);
-		}
-	}
-	throw new Error(`Timed out waiting for auth lock at ${lockPath}`);
-}
-
-function releaseLock(lockFd: number, lockPath: string): void {
-	fs.closeSync(lockFd);
-	fs.rmSync(lockPath, { force: true });
-}
-
 function withLock(lockPath: string, run: () => void): void {
-	const lockFd = acquireLock(lockPath);
-	try {
-		run();
-	} finally {
-		releaseLock(lockFd, lockPath);
-	}
+	withFileLock(lockPath, run);
 }
 
-function safeReplaceDirectory(sourcePath: string, targetPath: string): void {
+interface ReplaceDirectoryResult {
+	backupPath: string | null;
+}
+
+function safeReplaceDirectory(sourcePath: string, targetPath: string): ReplaceDirectoryResult {
 	if (!pathExists(sourcePath)) {
 		throw new Error(`Cannot replace directory from missing source: ${sourcePath}`);
 	}
@@ -79,7 +49,7 @@ function safeReplaceDirectory(sourcePath: string, targetPath: string): void {
 	);
 	const backupPath = path.join(
 		targetParent,
-		`.${targetName}.backup.${process.pid}.${Date.now().toString()}`,
+		`.${targetName}.backup.${new Date().toISOString().replaceAll(':', '-')}.${process.pid}`,
 	);
 	copyDir(sourcePath, stagingPath);
 
@@ -90,9 +60,7 @@ function safeReplaceDirectory(sourcePath: string, targetPath: string): void {
 			backupCreated = true;
 		}
 		fs.renameSync(stagingPath, targetPath);
-		if (backupCreated) {
-			fs.rmSync(backupPath, { recursive: true, force: true });
-		}
+		return { backupPath: backupCreated ? backupPath : null };
 	} catch (error: unknown) {
 		fs.rmSync(stagingPath, { recursive: true, force: true });
 		if (backupCreated && !pathExists(targetPath) && pathExists(backupPath)) {
@@ -143,6 +111,7 @@ export class AuthSyncManager {
 	}
 
 	public copyBackSessionAuthMirror(state: AuthSyncState): void {
+		const backupPaths: string[] = [];
 		withLock(state.lockPath, () => {
 			const host = this.getHostAuthPaths();
 			const claudeSource = path.join(state.sessionAuthRoot, '.claude');
@@ -150,18 +119,28 @@ export class AuthSyncManager {
 			const geminiSource = path.join(state.sessionAuthRoot, '.gemini');
 
 			if (pathExists(claudeSource)) {
-				safeReplaceDirectory(claudeSource, host.claude);
+				const result = safeReplaceDirectory(claudeSource, host.claude);
+				if (result.backupPath) {
+					backupPaths.push(result.backupPath);
+				}
 			}
 			if (pathExists(codexSource)) {
-				safeReplaceDirectory(codexSource, host.codex);
+				const result = safeReplaceDirectory(codexSource, host.codex);
+				if (result.backupPath) {
+					backupPaths.push(result.backupPath);
+				}
 			}
 			if (pathExists(geminiSource)) {
-				safeReplaceDirectory(geminiSource, host.gemini);
+				const result = safeReplaceDirectory(geminiSource, host.gemini);
+				if (result.backupPath) {
+					backupPaths.push(result.backupPath);
+				}
 			}
 		});
 
 		this.logger.log('info', 'auth-sync', 'copied back session auth mirror', {
 			sessionAuthRoot: state.sessionAuthRoot,
+			backupPaths,
 		});
 	}
 
@@ -172,17 +151,27 @@ export class AuthSyncManager {
 
 		const destinationPath = path.join(this.homeDir, '.claude', '.credentials.json');
 		const command = 'security find-generic-password -s "Claude Code-credentials" -w';
+		let output = '';
 		try {
-			const output = childProcess.execSync(command, {
+			output = childProcess.execSync(command, {
 				stdio: ['ignore', 'pipe', 'ignore'],
 				encoding: 'utf8',
 			});
+		} catch (error: unknown) {
+			this.logger.log('warn', 'auth-sync', 'Claude OAuth keychain export unavailable', {
+				error: String(error),
+			});
+			return;
+		}
+
+		try {
 			fs.mkdirSync(path.dirname(destinationPath), { recursive: true });
 			fs.writeFileSync(destinationPath, output, { mode: 0o600 });
 			this.logger.log('info', 'auth-sync', 'exported Claude OAuth from keychain');
 		} catch (error: unknown) {
-			this.logger.log('warn', 'auth-sync', 'Claude OAuth keychain export unavailable', {
+			this.logger.log('error', 'auth-sync', 'Failed to persist Claude OAuth to disk', {
 				error: String(error),
+				destinationPath,
 			});
 		}
 	}

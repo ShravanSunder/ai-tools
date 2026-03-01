@@ -6,6 +6,10 @@ export default defineConfig({
 	resolve: {
 		alias: [
 			{
+				find: /^#src\/(.*)\.js$/u,
+				replacement: path.resolve(__dirname, 'src/$1.ts'),
+			},
+			{
 				find: /^#src\/(.*)$/u,
 				replacement: path.resolve(__dirname, 'src/$1'),
 			},

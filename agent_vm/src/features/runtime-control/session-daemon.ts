@@ -4,12 +4,9 @@ import net from 'node:net';
 import path from 'node:path';
 
 import { createVmRuntime, type VmRuntime } from '#src/core/infrastructure/vm-adapter.js';
-import type {
-	DaemonStatus,
-	ResolvedRuntimeConfig,
-	WorkspaceIdentity,
-} from '#src/core/models/config.js';
+import type { ResolvedRuntimeConfig, WorkspaceIdentity } from '#src/core/models/config.js';
 import {
+	type DaemonStatus,
 	parseDaemonRequestValue,
 	type DaemonRequest,
 	type DaemonResponse,
@@ -18,10 +15,8 @@ import type { Logger } from '#src/core/platform/logger.js';
 import { AuthSyncManager, type AuthSyncState } from '#src/features/auth-proxy/auth-sync.js';
 import { resolveRuntimeConfig } from '#src/features/runtime-control/config-resolver.js';
 import {
-	applyPolicyMutation,
 	compileAndPersistPolicy,
-	readPolicyState,
-	writePolicyState,
+	mutateAndCompilePolicy,
 } from '#src/features/runtime-control/policy-manager.js';
 import {
 	buildTcpHostsRecord,
@@ -213,12 +208,14 @@ export class AgentVmDaemon {
 				let parsedLine: unknown;
 				try {
 					parsedLine = JSON.parse(line);
-				} catch (error: unknown) {
-					void this.sendResponse(socket, { kind: 'error', message: 'invalid-json' }).catch(() => {
-						this.logger.log('warn', 'daemon', 'failed to write invalid-json response', {
-							error: String(error),
-						});
-					});
+					} catch {
+					void this.sendResponse(socket, { kind: 'error', message: 'invalid-json' }).catch(
+						(writeError: unknown) => {
+							this.logger.log('warn', 'daemon', 'failed to write invalid-json response', {
+								error: String(writeError),
+							});
+						},
+					);
 					continue;
 				}
 
@@ -271,7 +268,15 @@ export class AgentVmDaemon {
 		const payload = `${JSON.stringify(response)}\n`;
 		const accepted = socket.write(payload, 'utf8');
 		if (!accepted) {
-			await once(socket, 'drain');
+			await Promise.race([
+				once(socket, 'drain'),
+				once(socket, 'close').then(() => {
+					throw new Error('socket-closed-before-drain');
+				}),
+				once(socket, 'error').then(([error]) => {
+					throw new Error(`socket-error-before-drain:${String(error)}`);
+				}),
+			]);
 		}
 	}
 
@@ -320,11 +325,12 @@ export class AgentVmDaemon {
 			}
 			case 'policy.allow':
 			case 'policy.block': {
-				const existing = readPolicyState(this.identity.workDir).entries;
 				const action = request.kind === 'policy.allow' ? 'allow' : 'block';
-				const nextEntries = applyPolicyMutation(existing, action, request.target);
-				writePolicyState(this.identity.workDir, { entries: nextEntries });
-				const compiled = compileAndPersistPolicy(this.identity.workDir);
+				const { entries: nextEntries, compiled } = mutateAndCompilePolicy(
+					this.identity.workDir,
+					action,
+					request.target,
+				);
 				this.runtimeConfig = {
 					...this.runtimeConfig,
 					allowedHosts: compiled,
@@ -337,12 +343,10 @@ export class AgentVmDaemon {
 				return;
 			}
 			case 'policy.clear': {
-				const nextEntries = applyPolicyMutation(
-					readPolicyState(this.identity.workDir).entries,
+				const { entries: nextEntries, compiled } = mutateAndCompilePolicy(
+					this.identity.workDir,
 					'clear',
 				);
-				writePolicyState(this.identity.workDir, { entries: nextEntries });
-				const compiled = compileAndPersistPolicy(this.identity.workDir);
 				this.runtimeConfig = {
 					...this.runtimeConfig,
 					allowedHosts: compiled,
@@ -377,7 +381,12 @@ export class AgentVmDaemon {
 		this.idleDeadlineEpochMs = Date.now() + timeoutMs;
 
 		this.idleTimer = setTimeout(() => {
-			void this.stop();
+			this.stop().catch((error: unknown) => {
+				this.logger.log('error', 'daemon', 'idle shutdown failed', {
+					error: String(error),
+				});
+				process.exit(1);
+			});
 		}, timeoutMs);
 
 		this.logger.log('info', 'daemon', 'idle timer started', {
