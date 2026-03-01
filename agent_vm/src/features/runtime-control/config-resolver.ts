@@ -4,22 +4,7 @@ import path from 'node:path';
 import type { ResolvedRuntimeConfig, VmConfig } from '#src/core/models/config.js';
 import { getAgentVmRoot, getGeneratedStateDir } from '#src/core/platform/paths.js';
 import { compileAndPersistPolicy } from '#src/features/runtime-control/policy-manager.js';
-import { loadTunnelConfig } from '#src/features/runtime-control/tunnel-config.js';
-
-function parseBoolean(value: string, defaultValue: boolean): boolean {
-	const trimmed = value.trim();
-	if (trimmed.length === 0) {
-		return defaultValue;
-	}
-	const normalized = trimmed.toLowerCase();
-	if (['1', 'true', 'yes', 'on'].includes(normalized)) {
-		return true;
-	}
-	if (['0', 'false', 'no', 'off'].includes(normalized)) {
-		return false;
-	}
-	throw new Error(`Invalid boolean value '${value}'`);
-}
+import { loadTcpServiceConfig } from '#src/features/runtime-control/tcp-service-config.js';
 
 function parseList(value: string): string[] {
 	return value
@@ -86,13 +71,12 @@ export function resolveVmConfig(workDir: string): VmConfig {
 		idleTimeoutMinutes,
 		extraAptPackages: parseList(merged['EXTRA_APT_PACKAGES'] ?? ''),
 		playwrightExtraHosts: parseList(merged['PLAYWRIGHT_EXTRA_HOSTS'] ?? ''),
-		tunnelEnabled: parseBoolean(merged['TUNNEL_ENABLED'] ?? 'true', true),
 	};
 }
 
 export function resolveRuntimeConfig(workDir: string): ResolvedRuntimeConfig {
 	const vmConfig = resolveVmConfig(workDir);
-	const tunnelConfig = loadTunnelConfig(workDir);
+	const tcpServiceMap = loadTcpServiceConfig(workDir);
 	const allowedHosts = compileAndPersistPolicy(workDir);
 
 	const generatedStateDir = getGeneratedStateDir(workDir);
@@ -109,7 +93,7 @@ export function resolveRuntimeConfig(workDir: string): ResolvedRuntimeConfig {
 
 	return {
 		vmConfig,
-		tunnelConfig,
+		tcpServiceMap,
 		allowedHosts,
 		toggleEntries,
 		generatedStateDir,

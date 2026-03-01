@@ -12,25 +12,12 @@ describe('config resolver', () => {
 		const configDir = path.join(workDir, '.agent_vm');
 		fs.mkdirSync(configDir, { recursive: true });
 
-		fs.writeFileSync(
-			path.join(configDir, 'vm.repo.conf'),
-			'IDLE_TIMEOUT_MINUTES=20\nTUNNEL_ENABLED=false\n',
-		);
+		fs.writeFileSync(path.join(configDir, 'vm.repo.conf'), 'IDLE_TIMEOUT_MINUTES=20\n');
 		fs.writeFileSync(path.join(configDir, 'vm.local.conf'), 'IDLE_TIMEOUT_MINUTES=7\n');
 
 		const resolved = resolveVmConfig(workDir);
 
 		expect(resolved.idleTimeoutMinutes).toBe(7);
-		expect(resolved.tunnelEnabled).toBe(false);
-	});
-
-	it('throws when boolean config values are invalid', () => {
-		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-config-invalid-bool-'));
-		const configDir = path.join(workDir, '.agent_vm');
-		fs.mkdirSync(configDir, { recursive: true });
-		fs.writeFileSync(path.join(configDir, 'vm.repo.conf'), 'TUNNEL_ENABLED=disabled\n');
-
-		expect(() => resolveVmConfig(workDir)).toThrowError(/Invalid boolean value/u);
 	});
 
 	it('throws when config contains malformed lines', () => {

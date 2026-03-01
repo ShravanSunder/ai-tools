@@ -185,7 +185,8 @@ async function ensureDaemonRunning(socketPath: string, workDir: string): Promise
 	});
 	subprocess.unref();
 
-	await waitForSocket(socketPath, 5_000);
+	// VM cold boots can exceed 5s; allow enough time for daemon start + VM ready.
+	await waitForSocket(socketPath, 30_000);
 }
 
 function resolveRequestedCommand(options: RunAgentVmOptions): string | null {

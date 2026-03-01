@@ -2,3 +2,5 @@
 .DS_Store
 tmp/
 .claude/settings.local.json
+*.diff
+agent_vm/.counsel-review-context.md

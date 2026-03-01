@@ -50,7 +50,15 @@ describe('e2e smoke', () => {
 							idleTimeoutMinutes: 10,
 							idleDeadlineEpochMs: null,
 							startedAtEpochMs: Date.now(),
-							tunnels: [],
+							tcpServices: [
+								{
+									name: 'postgres',
+									guestHostname: 'pg.vm.host',
+									guestPort: 5432,
+									upstreamTarget: '127.0.0.1:15432',
+									enabled: true,
+								},
+							],
 							vm: {
 								id: 'fake-e2e-vm',
 								running: false,

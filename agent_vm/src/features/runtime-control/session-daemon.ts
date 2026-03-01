@@ -3,7 +3,6 @@ import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
 
-import { TunnelManager } from '#src/core/infrastructure/tunnel-manager.js';
 import { createVmRuntime, type VmRuntime } from '#src/core/infrastructure/vm-adapter.js';
 import type {
 	DaemonStatus,
@@ -24,24 +23,22 @@ import {
 	readPolicyState,
 	writePolicyState,
 } from '#src/features/runtime-control/policy-manager.js';
+import {
+	buildTcpHostsRecord,
+	buildTcpServiceEnvVars,
+	validateTcpServiceTargets,
+} from '#src/features/runtime-control/tcp-service-config.js';
 
 export interface DaemonDependencies {
 	createRuntimeConfig: (workDir: string) => ResolvedRuntimeConfig;
 	createVmRuntime: typeof createVmRuntime;
 	createAuthSyncManager: (logger: Logger) => AuthSyncManager;
-	createTunnelManager: new (
-		opener: ConstructorParameters<typeof TunnelManager>[0],
-		config: ConstructorParameters<typeof TunnelManager>[1],
-		logger: Logger,
-		onStateChange: ConstructorParameters<typeof TunnelManager>[3],
-	) => TunnelManager;
 }
 
 const DEFAULT_DEPENDENCIES: DaemonDependencies = {
 	createRuntimeConfig: resolveRuntimeConfig,
 	createVmRuntime,
 	createAuthSyncManager: (logger) => new AuthSyncManager(logger),
-	createTunnelManager: TunnelManager,
 };
 
 interface ClientContext {
@@ -55,7 +52,6 @@ export class AgentVmDaemon {
 	private idleDeadlineEpochMs: number | null = null;
 	private readonly startedAtEpochMs = Date.now();
 	private vmRuntime: VmRuntime | null = null;
-	private tunnelManager: TunnelManager | null = null;
 	private runtimeConfig: ResolvedRuntimeConfig | null = null;
 	private authSyncState: AuthSyncState | null = null;
 	private runtimeRecreatePromise: Promise<void> | null = null;
@@ -74,17 +70,19 @@ export class AgentVmDaemon {
 		const authSync = this.dependencies.createAuthSyncManager(this.logger);
 		authSync.exportClaudeOauthFromKeychain();
 		this.authSyncState = authSync.prepareSessionAuthMirror(this.identity.sessionName);
+		const tcpRuntimeInputs = this.buildTcpRuntimeInputs(this.runtimeConfig);
 
 		this.vmRuntime = await this.dependencies.createVmRuntime({
 			workDir: this.identity.workDir,
 			allowedHosts: this.runtimeConfig.allowedHosts,
+			tcpHosts: tcpRuntimeInputs.tcpHosts,
+			tcpServiceEnvVars: tcpRuntimeInputs.tcpServiceEnvVars,
 			sessionLabel: this.identity.sessionName,
 			logger: this.logger,
 			sessionAuthRoot: this.authSyncState.sessionAuthRoot,
 		});
 
 		await this.listen();
-		await this.ensureTunnelManagerRunning();
 
 		this.logger.log('info', 'daemon', 'daemon started', {
 			socketPath: this.identity.daemonSocketPath,
@@ -124,33 +122,22 @@ export class AgentVmDaemon {
 		this.logger.log('info', 'daemon', 'daemon stopped');
 	}
 
-	private async ensureTunnelManagerRunning(): Promise<void> {
-		if (!this.runtimeConfig?.vmConfig.tunnelEnabled || !this.vmRuntime) {
-			return;
-		}
-
-		this.tunnelManager = new this.dependencies.createTunnelManager(
-			this.vmRuntime,
-			this.runtimeConfig.tunnelConfig,
-			this.logger,
-			() => {
-				this.logger.log('debug', 'daemon', 'tunnel state changed');
-			},
-		);
-
-		await this.tunnelManager.start();
-	}
-
 	private async stopRuntime(): Promise<void> {
-		if (this.tunnelManager) {
-			await this.tunnelManager.stop();
-			this.tunnelManager = null;
-		}
-
 		if (this.vmRuntime) {
 			await this.vmRuntime.close();
 			this.vmRuntime = null;
 		}
+	}
+
+	private buildTcpRuntimeInputs(runtimeConfig: ResolvedRuntimeConfig): {
+		tcpHosts: Record<string, string>;
+		tcpServiceEnvVars: Record<string, string>;
+	} {
+		validateTcpServiceTargets(runtimeConfig.tcpServiceMap);
+		return {
+			tcpHosts: buildTcpHostsRecord(runtimeConfig.tcpServiceMap),
+			tcpServiceEnvVars: buildTcpServiceEnvVars(runtimeConfig.tcpServiceMap),
+		};
 	}
 
 	private async recreateRuntime(reason: string): Promise<void> {
@@ -166,15 +153,17 @@ export class AgentVmDaemon {
 
 			this.logger.log('info', 'daemon', 'recreating vm runtime', { reason });
 			await this.stopRuntime();
+			const tcpRuntimeInputs = this.buildTcpRuntimeInputs(this.runtimeConfig);
 
 			this.vmRuntime = await this.dependencies.createVmRuntime({
 				workDir: this.identity.workDir,
 				allowedHosts: this.runtimeConfig.allowedHosts,
+				tcpHosts: tcpRuntimeInputs.tcpHosts,
+				tcpServiceEnvVars: tcpRuntimeInputs.tcpServiceEnvVars,
 				sessionLabel: this.identity.sessionName,
 				logger: this.logger,
 				sessionAuthRoot: this.authSyncState.sessionAuthRoot,
 			});
-			await this.ensureTunnelManagerRunning();
 		})();
 
 		try {
@@ -365,20 +354,6 @@ export class AgentVmDaemon {
 				});
 				return;
 			}
-			case 'tunnel.restart': {
-				if (!this.tunnelManager) {
-					await this.sendResponse(socket, { kind: 'error', message: 'tunnels-disabled' });
-					return;
-				}
-				await this.tunnelManager.restart(request.service);
-				await this.sendResponse(socket, {
-					kind: 'ack',
-					message: request.service
-						? `restarted tunnel ${request.service}`
-						: 'restarted all tunnels',
-				});
-				return;
-			}
 			case 'shutdown': {
 				await this.sendResponse(socket, { kind: 'ack', message: 'daemon shutting down' });
 				await this.stop();
@@ -419,7 +394,15 @@ export class AgentVmDaemon {
 	}
 
 	public getStatus(): DaemonStatus {
-		const tunnelStatus = this.tunnelManager?.getStatus() ?? [];
+		const tcpServices = this.runtimeConfig
+			? Object.entries(this.runtimeConfig.tcpServiceMap.services).map(([name, entry]) => ({
+					name,
+					guestHostname: entry.guestHostname,
+					guestPort: entry.guestPort,
+					upstreamTarget: entry.upstreamTarget,
+					enabled: entry.enabled,
+				}))
+			: [];
 
 		return {
 			sessionName: this.identity.sessionName,
@@ -427,7 +410,7 @@ export class AgentVmDaemon {
 			idleTimeoutMinutes: this.runtimeConfig?.vmConfig.idleTimeoutMinutes ?? 10,
 			idleDeadlineEpochMs: this.idleDeadlineEpochMs,
 			startedAtEpochMs: this.startedAtEpochMs,
-			tunnels: tunnelStatus,
+			tcpServices,
 			vm: {
 				id: this.vmRuntime?.getId() ?? 'none',
 				running: this.vmRuntime !== null,

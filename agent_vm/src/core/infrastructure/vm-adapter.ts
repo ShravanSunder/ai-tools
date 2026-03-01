@@ -1,8 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Duplex } from 'node:stream';
 
-import type { GuestLoopbackStreamOpener } from '#src/core/infrastructure/tunnel-manager.js';
 import type { Logger } from '#src/core/platform/logger.js';
 
 type GondolinModule = typeof import('@earendil-works/gondolin');
@@ -29,7 +27,7 @@ export interface VmExecResult {
 	stderr: string;
 }
 
-export interface VmRuntime extends GuestLoopbackStreamOpener {
+export interface VmRuntime {
 	getId(): string;
 	exec(command: string): Promise<VmExecResult>;
 	close(): Promise<void>;
@@ -38,13 +36,11 @@ export interface VmRuntime extends GuestLoopbackStreamOpener {
 export interface CreateVmRuntimeOptions {
 	workDir: string;
 	allowedHosts: readonly string[];
+	tcpHosts: Record<string, string>;
+	tcpServiceEnvVars: Record<string, string>;
 	sessionLabel: string;
 	logger: Logger;
 	sessionAuthRoot: string;
-}
-
-interface LoopbackStreamOpener {
-	openTcpStream(input: { host: string; port: number; timeoutMs?: number }): Promise<Duplex>;
 }
 
 interface SecretSpec {
@@ -62,12 +58,6 @@ interface GondolinModuleLike {
 		options: GondolinShadowProviderOptions,
 	): GondolinShadowProvider;
 	createShadowPathPredicate(paths: GondolinShadowPathPredicateInput): GondolinShadowPathPredicate;
-}
-
-interface GondolinVmWithPrivateLoopback {
-	server?: {
-		openTcpStream?: (input: { host: string; port: number; timeoutMs?: number }) => Promise<Duplex>;
-	};
 }
 
 function buildSecretSpecFromHostEnv(): Record<string, SecretSpec> {
@@ -133,34 +123,8 @@ function shellEscape(value: string): string {
 	return `'${value.replaceAll("'", "'\"'\"'")}'`;
 }
 
-function resolveLoopbackStreamOpener(vm: GondolinVm): LoopbackStreamOpener | null {
-	const vmWithPrivateLoopback = vm as unknown as GondolinVmWithPrivateLoopback;
-	const server = vmWithPrivateLoopback.server;
-	const boundOpenTcpStream = server?.openTcpStream?.bind(server);
-	if (!boundOpenTcpStream) {
-		return null;
-	}
-	return {
-		openTcpStream: async (input: {
-			host: string;
-			port: number;
-			timeoutMs?: number;
-		}): Promise<Duplex> => {
-			const stream = await boundOpenTcpStream(input);
-			if (!(stream instanceof Duplex)) {
-				throw new Error('Gondolin loopback bridge returned a non-Duplex stream');
-			}
-			return stream;
-		},
-	};
-}
-
 class GondolinVmRuntime implements VmRuntime {
-	public constructor(
-		private readonly vmHandle: GondolinVm,
-		private readonly streamOpener: LoopbackStreamOpener | null,
-		private readonly logger: Logger,
-	) {}
+	public constructor(private readonly vmHandle: GondolinVm) {}
 
 	public getId(): string {
 		return this.vmHandle.id;
@@ -173,28 +137,6 @@ class GondolinVmRuntime implements VmRuntime {
 			stdout: result.stdout ?? '',
 			stderr: result.stderr ?? '',
 		};
-	}
-
-	public async openGuestLoopbackStream(input: {
-		host?: '127.0.0.1' | 'localhost';
-		port: number;
-		timeoutMs?: number;
-	}): Promise<Duplex> {
-		if (!this.streamOpener) {
-			this.logger.log('error', 'vm-adapter', 'gondolin VM loopback bridge is unavailable');
-			throw new Error(
-				'Gondolin VM loopback bridge is unavailable. Pin @earendil-works/gondolin to a supported release.',
-			);
-		}
-
-		const openRequest: { host: string; port: number; timeoutMs?: number } = {
-			host: input.host ?? '127.0.0.1',
-			port: input.port,
-		};
-		if (typeof input.timeoutMs === 'number') {
-			openRequest.timeoutMs = input.timeoutMs;
-		}
-		return this.streamOpener.openTcpStream(openRequest);
 	}
 
 	public async close(): Promise<void> {
@@ -239,6 +181,8 @@ export async function createVmRuntime(options: CreateVmRuntimeOptions): Promise<
 		secrets: buildSecretSpecFromHostEnv(),
 	});
 
+	const hasTcpMappings = Object.keys(options.tcpHosts).length > 0;
+
 	const workspaceShellPath = shellEscape(options.workDir);
 	const vm = await gondolinModule.createVm({
 		sessionLabel: options.sessionLabel,
@@ -250,29 +194,23 @@ export async function createVmRuntime(options: CreateVmRuntimeOptions): Promise<
 			AGENT_VM_AUTH_ROOT: '/home/agent/.auth',
 			AGENT_VM_AUTH_SOURCE: options.sessionAuthRoot,
 			AGENT_VM_INIT_SCRIPT: `cd ${workspaceShellPath}`,
-			PGHOST: '127.0.0.1',
-			PGPORT: '15432',
-			REDIS_HOST: '127.0.0.1',
-			REDIS_PORT: '16379',
-			REDIS_URL: 'redis://127.0.0.1:16379/0',
+			...options.tcpServiceEnvVars,
 		},
 		httpHooks: hooks.httpHooks,
 		vfs: createWorkspaceVfsMount(options.workDir, gondolinModule),
+		...(hasTcpMappings
+			? {
+					dns: { mode: 'synthetic', syntheticHostMapping: 'per-host' as const },
+					tcp: { hosts: options.tcpHosts },
+				}
+			: {}),
 	});
-
-	const streamOpener = resolveLoopbackStreamOpener(vm);
-	if (!streamOpener) {
-		options.logger.log(
-			'warn',
-			'vm-adapter',
-			'gondolin VM object does not expose private server.openTcpStream bridge',
-		);
-	}
 
 	options.logger.log('info', 'vm-adapter', 'vm runtime created', {
 		vmId: vm.id,
 		workspacePath: options.workDir,
+		tcpMappings: Object.keys(options.tcpHosts).length,
 	});
 
-	return new GondolinVmRuntime(vm, streamOpener, options.logger);
+	return new GondolinVmRuntime(vm);
 }

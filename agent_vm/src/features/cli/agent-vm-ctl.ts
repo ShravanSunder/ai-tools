@@ -154,49 +154,6 @@ const policyCommand = subcommands({
 	},
 });
 
-const tunnelsCommand = subcommands({
-	name: 'tunnels',
-	cmds: {
-		status: command({
-			name: 'status',
-			args: {
-				workDir: workDirOption,
-			},
-			handler: async (args) => {
-				await connectAndCollect({ kind: 'status' }, resolveWorkDir(args.workDir));
-			},
-		}),
-		restart: command({
-			name: 'restart',
-			args: {
-				service: option({
-					long: 'service',
-					type: optional(string),
-					defaultValue: () => undefined,
-					defaultValueIsSerializable: true,
-				}),
-				workDir: workDirOption,
-			},
-			handler: async (args) => {
-				if (args.service) {
-					if (args.service !== 'postgres' && args.service !== 'redis') {
-						throw new Error(`Invalid --service '${args.service}'. Expected postgres or redis.`);
-					}
-
-					const service = args.service;
-					await connectAndCollect(
-						{ kind: 'tunnel.restart', service },
-						resolveWorkDir(args.workDir),
-					);
-					return;
-				}
-
-				await connectAndCollect({ kind: 'tunnel.restart' }, resolveWorkDir(args.workDir));
-			},
-		}),
-	},
-});
-
 const daemonCommand = subcommands({
 	name: 'daemon',
 	cmds: {
@@ -217,7 +174,6 @@ export const agentVmCtlCommand = subcommands({
 	cmds: {
 		status: statusCommand,
 		policy: policyCommand,
-		tunnels: tunnelsCommand,
 		daemon: daemonCommand,
 	},
 });

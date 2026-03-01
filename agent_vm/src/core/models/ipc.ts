@@ -1,24 +1,19 @@
 import { z } from 'zod';
 
-import { TUNNEL_HEALTH_STATES, TUNNEL_SERVICE_NAMES } from '#src/core/models/config.js';
-
 const daemonStatusSchema = z.object({
 	sessionName: z.string(),
 	clients: z.number().int().nonnegative(),
 	idleTimeoutMinutes: z.number().int().positive(),
 	idleDeadlineEpochMs: z.number().int().nonnegative().nullable(),
 	startedAtEpochMs: z.number().int().nonnegative(),
-	tunnels: z
+	tcpServices: z
 		.array(
 			z.object({
 				name: z.string(),
-				desiredUplinks: z.number().int().nonnegative(),
-				openUplinks: z.number().int().nonnegative(),
-				hostTarget: z.object({
-					host: z.string(),
-					port: z.number().int().positive(),
-				}),
-				state: z.enum(TUNNEL_HEALTH_STATES),
+				guestHostname: z.string(),
+				guestPort: z.number().int().positive(),
+				upstreamTarget: z.string(),
+				enabled: z.boolean(),
 			}),
 		)
 		.readonly(),
@@ -35,10 +30,6 @@ const daemonRequestSchema = z.discriminatedUnion('kind', [
 	z.object({ kind: z.literal('policy.allow'), target: z.string().min(1) }),
 	z.object({ kind: z.literal('policy.block'), target: z.string().min(1) }),
 	z.object({ kind: z.literal('policy.clear') }),
-	z.object({
-		kind: z.literal('tunnel.restart'),
-		service: z.enum(TUNNEL_SERVICE_NAMES).optional(),
-	}),
 	z.object({ kind: z.literal('shutdown') }),
 ]);
 

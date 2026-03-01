@@ -5,7 +5,7 @@ import path from 'node:path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import type { ResolvedRuntimeConfig } from '#src/core/models/config.js';
+import type { ResolvedRuntimeConfig, TcpServiceMap } from '#src/core/models/config.js';
 import { NoopLogger } from '#src/core/platform/logger.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 import type { AuthSyncManager, AuthSyncState } from '#src/features/auth-proxy/auth-sync.js';
@@ -35,6 +35,56 @@ function connectAndSend(socketPath: string, payload: string): Promise<string> {
 	});
 }
 
+function createDefaultTcpServiceMap(): TcpServiceMap {
+	return {
+		services: {
+			postgres: {
+				guestHostname: 'pg.vm.host',
+				guestPort: 5432,
+				upstreamTarget: '127.0.0.1:15432',
+				enabled: true,
+			},
+			redis: {
+				guestHostname: 'redis.vm.host',
+				guestPort: 6379,
+				upstreamTarget: '127.0.0.1:16379',
+				enabled: true,
+			},
+		},
+		strictMode: true,
+		allowedTargetHosts: ['127.0.0.1', 'localhost'],
+	};
+}
+
+function createFakeConfig(workDir: string): ResolvedRuntimeConfig {
+	return {
+		vmConfig: {
+			idleTimeoutMinutes: 10,
+			extraAptPackages: [],
+			playwrightExtraHosts: [],
+		},
+		tcpServiceMap: createDefaultTcpServiceMap(),
+		allowedHosts: ['api.openai.com'],
+		toggleEntries: [],
+		generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
+	};
+}
+
+function createAuthSyncStub(workDir: string): AuthSyncManager {
+	const stub: Pick<
+		AuthSyncManager,
+		'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
+	> = {
+		exportClaudeOauthFromKeychain: () => {},
+		prepareSessionAuthMirror: (): AuthSyncState => ({
+			sessionAuthRoot: path.join(workDir, '.tmp-auth'),
+			lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
+		}),
+		copyBackSessionAuthMirror: () => {},
+	};
+	return stub as AuthSyncManager;
+}
+
 afterEach(() => {
 	for (const socketPath of socketsToCleanup.splice(0)) {
 		fs.rmSync(socketPath, { force: true });
@@ -49,68 +99,14 @@ describe('daemon lifecycle', () => {
 		const identity = deriveWorkspaceIdentity(workDir);
 		socketsToCleanup.push(identity.daemonSocketPath);
 
-		const fakeConfig: ResolvedRuntimeConfig = {
-			vmConfig: {
-				idleTimeoutMinutes: 10,
-				extraAptPackages: [],
-				playwrightExtraHosts: [],
-				tunnelEnabled: false,
-			},
-			tunnelConfig: {
-				services: {
-					postgres: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 5432 },
-						guestClientPort: 15432,
-						guestUplinkPort: 16000,
-						desiredUplinks: 1,
-					},
-					redis: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 6379 },
-						guestClientPort: 16379,
-						guestUplinkPort: 16001,
-						desiredUplinks: 1,
-					},
-				},
-			},
-			allowedHosts: ['api.openai.com'],
-			toggleEntries: [],
-			generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
-		};
-
 		const fakeDependencies: DaemonDependencies = {
-			createRuntimeConfig: () => fakeConfig,
+			createRuntimeConfig: () => createFakeConfig(workDir),
 			createVmRuntime: async () => ({
 				getId: () => 'fake-vm',
 				exec: async () => ({ exitCode: 0, stdout: 'ok\n', stderr: '' }),
 				close: async () => {},
-				openGuestLoopbackStream: async () => {
-					throw new Error('not-implemented');
-				},
 			}),
-			createAuthSyncManager: () => {
-				const stub: Pick<
-					AuthSyncManager,
-					'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
-				> = {
-					exportClaudeOauthFromKeychain: () => {},
-					prepareSessionAuthMirror: (): AuthSyncState => ({
-						sessionAuthRoot: path.join(workDir, '.tmp-auth'),
-						lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
-					}),
-					copyBackSessionAuthMirror: () => {},
-				};
-				return stub as AuthSyncManager;
-			},
-			createTunnelManager: class {
-				public async start(): Promise<void> {}
-				public async stop(): Promise<void> {}
-				public async restart(): Promise<void> {}
-				public getStatus(): [] {
-					return [];
-				}
-			} as unknown as DaemonDependencies['createTunnelManager'],
+			createAuthSyncManager: () => createAuthSyncStub(workDir),
 		};
 
 		const daemon = new AgentVmDaemon(identity, new NoopLogger(), fakeDependencies);
@@ -121,6 +117,7 @@ describe('daemon lifecycle', () => {
 			JSON.stringify({ kind: 'status' }),
 		);
 		expect(statusRaw).toContain('status.response');
+		expect(statusRaw).toContain('tcpServices');
 
 		const shutdownRaw = await connectAndSend(
 			identity.daemonSocketPath,
@@ -130,81 +127,39 @@ describe('daemon lifecycle', () => {
 		expect((daemon as unknown as { idleTimer: NodeJS.Timeout | null }).idleTimer).toBeNull();
 	});
 
-	it('fails daemon startup when tunnel manager startup fails', async () => {
-		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-daemon-tunnel-start-'));
+	it('fails daemon startup when tcp service validation fails', async () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-daemon-tcp-validation-'));
 		fs.mkdirSync(path.join(workDir, '.agent_vm'), { recursive: true });
 
 		const identity = deriveWorkspaceIdentity(workDir);
 		socketsToCleanup.push(identity.daemonSocketPath);
 
-		const fakeConfig: ResolvedRuntimeConfig = {
-			vmConfig: {
-				idleTimeoutMinutes: 10,
-				extraAptPackages: [],
-				playwrightExtraHosts: [],
-				tunnelEnabled: true,
-			},
-			tunnelConfig: {
-				services: {
-					postgres: {
-						enabled: true,
-						hostTarget: { host: '127.0.0.1', port: 5432 },
-						guestClientPort: 15432,
-						guestUplinkPort: 16000,
-						desiredUplinks: 1,
-					},
-					redis: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 6379 },
-						guestClientPort: 16379,
-						guestUplinkPort: 16001,
-						desiredUplinks: 1,
-					},
+		const invalidConfig = createFakeConfig(workDir);
+		invalidConfig.tcpServiceMap = {
+			services: {
+				postgres: {
+					guestHostname: 'pg.vm.host',
+					guestPort: 5432,
+					upstreamTarget: '10.0.0.5:5432',
+					enabled: true,
 				},
 			},
-			allowedHosts: ['api.openai.com'],
-			toggleEntries: [],
-			generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
+			strictMode: true,
+			allowedTargetHosts: ['127.0.0.1', 'localhost'],
 		};
 
 		const fakeDependencies: DaemonDependencies = {
-			createRuntimeConfig: () => fakeConfig,
+			createRuntimeConfig: () => invalidConfig,
 			createVmRuntime: async () => ({
 				getId: () => 'fake-vm',
 				exec: async () => ({ exitCode: 0, stdout: 'ok\n', stderr: '' }),
 				close: async () => {},
-				openGuestLoopbackStream: async () => {
-					throw new Error('not-implemented');
-				},
 			}),
-			createAuthSyncManager: () => {
-				const stub: Pick<
-					AuthSyncManager,
-					'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
-				> = {
-					exportClaudeOauthFromKeychain: () => {},
-					prepareSessionAuthMirror: (): AuthSyncState => ({
-						sessionAuthRoot: path.join(workDir, '.tmp-auth'),
-						lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
-					}),
-					copyBackSessionAuthMirror: () => {},
-				};
-				return stub as AuthSyncManager;
-			},
-			createTunnelManager: class {
-				public async start(): Promise<void> {
-					throw new Error('tunnel-start-failed');
-				}
-				public async stop(): Promise<void> {}
-				public async restart(): Promise<void> {}
-				public getStatus(): [] {
-					return [];
-				}
-			} as unknown as DaemonDependencies['createTunnelManager'],
+			createAuthSyncManager: () => createAuthSyncStub(workDir),
 		};
 
 		const daemon = new AgentVmDaemon(identity, new NoopLogger(), fakeDependencies);
-		await expect(daemon.start()).rejects.toThrowError(/tunnel-start-failed/u);
+		await expect(daemon.start()).rejects.toThrowError(/allowedTargetHosts/u);
 	});
 
 	it('recreates vm runtime on policy reload', async () => {
@@ -215,71 +170,17 @@ describe('daemon lifecycle', () => {
 		socketsToCleanup.push(identity.daemonSocketPath);
 
 		let createVmRuntimeCalls = 0;
-		const fakeConfig: ResolvedRuntimeConfig = {
-			vmConfig: {
-				idleTimeoutMinutes: 10,
-				extraAptPackages: [],
-				playwrightExtraHosts: [],
-				tunnelEnabled: false,
-			},
-			tunnelConfig: {
-				services: {
-					postgres: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 5432 },
-						guestClientPort: 15432,
-						guestUplinkPort: 16000,
-						desiredUplinks: 1,
-					},
-					redis: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 6379 },
-						guestClientPort: 16379,
-						guestUplinkPort: 16001,
-						desiredUplinks: 1,
-					},
-				},
-			},
-			allowedHosts: ['api.openai.com'],
-			toggleEntries: [],
-			generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
-		};
-
 		const fakeDependencies: DaemonDependencies = {
-			createRuntimeConfig: () => fakeConfig,
+			createRuntimeConfig: () => createFakeConfig(workDir),
 			createVmRuntime: async () => {
 				createVmRuntimeCalls += 1;
 				return {
 					getId: () => `fake-vm-${createVmRuntimeCalls}`,
 					exec: async () => ({ exitCode: 0, stdout: 'ok\n', stderr: '' }),
 					close: async () => {},
-					openGuestLoopbackStream: async () => {
-						throw new Error('not-implemented');
-					},
 				};
 			},
-			createAuthSyncManager: () => {
-				const stub: Pick<
-					AuthSyncManager,
-					'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
-				> = {
-					exportClaudeOauthFromKeychain: () => {},
-					prepareSessionAuthMirror: (): AuthSyncState => ({
-						sessionAuthRoot: path.join(workDir, '.tmp-auth'),
-						lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
-					}),
-					copyBackSessionAuthMirror: () => {},
-				};
-				return stub as AuthSyncManager;
-			},
-			createTunnelManager: class {
-				public async start(): Promise<void> {}
-				public async stop(): Promise<void> {}
-				public async restart(): Promise<void> {}
-				public getStatus(): [] {
-					return [];
-				}
-			} as unknown as DaemonDependencies['createTunnelManager'],
+			createAuthSyncManager: () => createAuthSyncStub(workDir),
 		};
 
 		const daemon = new AgentVmDaemon(identity, new NoopLogger(), fakeDependencies);
@@ -311,71 +212,17 @@ describe('daemon lifecycle', () => {
 		socketsToCleanup.push(identity.daemonSocketPath);
 
 		let createVmRuntimeCalls = 0;
-		const fakeConfig: ResolvedRuntimeConfig = {
-			vmConfig: {
-				idleTimeoutMinutes: 10,
-				extraAptPackages: [],
-				playwrightExtraHosts: [],
-				tunnelEnabled: false,
-			},
-			tunnelConfig: {
-				services: {
-					postgres: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 5432 },
-						guestClientPort: 15432,
-						guestUplinkPort: 16000,
-						desiredUplinks: 1,
-					},
-					redis: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 6379 },
-						guestClientPort: 16379,
-						guestUplinkPort: 16001,
-						desiredUplinks: 1,
-					},
-				},
-			},
-			allowedHosts: ['api.openai.com'],
-			toggleEntries: [],
-			generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
-		};
-
 		const fakeDependencies: DaemonDependencies = {
-			createRuntimeConfig: () => fakeConfig,
+			createRuntimeConfig: () => createFakeConfig(workDir),
 			createVmRuntime: async () => {
 				createVmRuntimeCalls += 1;
 				return {
 					getId: () => `fake-vm-${createVmRuntimeCalls}`,
 					exec: async () => ({ exitCode: 0, stdout: 'ok\n', stderr: '' }),
 					close: async () => {},
-					openGuestLoopbackStream: async () => {
-						throw new Error('not-implemented');
-					},
 				};
 			},
-			createAuthSyncManager: () => {
-				const stub: Pick<
-					AuthSyncManager,
-					'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
-				> = {
-					exportClaudeOauthFromKeychain: () => {},
-					prepareSessionAuthMirror: (): AuthSyncState => ({
-						sessionAuthRoot: path.join(workDir, '.tmp-auth'),
-						lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
-					}),
-					copyBackSessionAuthMirror: () => {},
-				};
-				return stub as AuthSyncManager;
-			},
-			createTunnelManager: class {
-				public async start(): Promise<void> {}
-				public async stop(): Promise<void> {}
-				public async restart(): Promise<void> {}
-				public getStatus(): [] {
-					return [];
-				}
-			} as unknown as DaemonDependencies['createTunnelManager'],
+			createAuthSyncManager: () => createAuthSyncStub(workDir),
 		};
 
 		const daemon = new AgentVmDaemon(identity, new NoopLogger(), fakeDependencies);
@@ -402,68 +249,14 @@ describe('daemon lifecycle', () => {
 		const identity = deriveWorkspaceIdentity(workDir);
 		socketsToCleanup.push(identity.daemonSocketPath);
 
-		const fakeConfig: ResolvedRuntimeConfig = {
-			vmConfig: {
-				idleTimeoutMinutes: 10,
-				extraAptPackages: [],
-				playwrightExtraHosts: [],
-				tunnelEnabled: false,
-			},
-			tunnelConfig: {
-				services: {
-					postgres: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 5432 },
-						guestClientPort: 15432,
-						guestUplinkPort: 16000,
-						desiredUplinks: 1,
-					},
-					redis: {
-						enabled: false,
-						hostTarget: { host: '127.0.0.1', port: 6379 },
-						guestClientPort: 16379,
-						guestUplinkPort: 16001,
-						desiredUplinks: 1,
-					},
-				},
-			},
-			allowedHosts: ['api.openai.com'],
-			toggleEntries: [],
-			generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
-		};
-
 		const fakeDependencies: DaemonDependencies = {
-			createRuntimeConfig: () => fakeConfig,
+			createRuntimeConfig: () => createFakeConfig(workDir),
 			createVmRuntime: async () => ({
 				getId: () => 'fake-vm',
 				exec: async () => ({ exitCode: 0, stdout: 'ok\n', stderr: '' }),
 				close: async () => {},
-				openGuestLoopbackStream: async () => {
-					throw new Error('not-implemented');
-				},
 			}),
-			createAuthSyncManager: () => {
-				const stub: Pick<
-					AuthSyncManager,
-					'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
-				> = {
-					exportClaudeOauthFromKeychain: () => {},
-					prepareSessionAuthMirror: (): AuthSyncState => ({
-						sessionAuthRoot: path.join(workDir, '.tmp-auth'),
-						lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
-					}),
-					copyBackSessionAuthMirror: () => {},
-				};
-				return stub as AuthSyncManager;
-			},
-			createTunnelManager: class {
-				public async start(): Promise<void> {}
-				public async stop(): Promise<void> {}
-				public async restart(): Promise<void> {}
-				public getStatus(): [] {
-					return [];
-				}
-			} as unknown as DaemonDependencies['createTunnelManager'],
+			createAuthSyncManager: () => createAuthSyncStub(workDir),
 		};
 
 		const daemon = new AgentVmDaemon(identity, new NoopLogger(), fakeDependencies);
