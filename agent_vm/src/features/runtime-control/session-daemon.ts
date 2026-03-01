@@ -208,7 +208,7 @@ export class AgentVmDaemon {
 				let parsedLine: unknown;
 				try {
 					parsedLine = JSON.parse(line);
-					} catch {
+				} catch {
 					void this.sendResponse(socket, { kind: 'error', message: 'invalid-json' }).catch(
 						(writeError: unknown) => {
 							this.logger.log('warn', 'daemon', 'failed to write invalid-json response', {

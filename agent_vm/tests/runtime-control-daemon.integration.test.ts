@@ -35,6 +35,45 @@ function connectAndSend(socketPath: string, payload: string): Promise<string> {
 	});
 }
 
+function connectAndCollectResponses(
+	socketPath: string,
+	payload: string,
+): Promise<readonly Record<string, unknown>[]> {
+	return new Promise((resolve, reject) => {
+		const socket = net.createConnection({ path: socketPath });
+		socket.setEncoding('utf8');
+		let buffer = '';
+		const responses: Record<string, unknown>[] = [];
+
+		socket.once('connect', () => {
+			socket.write(`${payload}\n`);
+		});
+
+		socket.on('data', (chunk) => {
+			buffer += chunk;
+			while (true) {
+				const newlineIndex = buffer.indexOf('\n');
+				if (newlineIndex < 0) {
+					break;
+				}
+				const line = buffer.slice(0, newlineIndex).trim();
+				buffer = buffer.slice(newlineIndex + 1);
+				if (line.length === 0) {
+					continue;
+				}
+				const parsed = JSON.parse(line) as Record<string, unknown>;
+				responses.push(parsed);
+				if (parsed['kind'] === 'stream.exit') {
+					socket.end();
+					resolve(responses);
+					return;
+				}
+			}
+		});
+		socket.once('error', reject);
+	});
+}
+
 function createDefaultTcpServiceMap(): TcpServiceMap {
 	return {
 		services: {
@@ -267,6 +306,53 @@ describe('daemon lifecycle', () => {
 			JSON.stringify({ kind: 'policy.allow' }),
 		);
 		expect(malformedResponse).toContain('invalid-request');
+
+		const shutdownRaw = await connectAndSend(
+			identity.daemonSocketPath,
+			JSON.stringify({ kind: 'shutdown' }),
+		);
+		expect(shutdownRaw).toContain('daemon shutting down');
+	});
+
+	it('streams stdout/stderr and exit for attach requests', async () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-daemon-attach-'));
+		fs.mkdirSync(path.join(workDir, '.agent_vm'), { recursive: true });
+
+		const identity = deriveWorkspaceIdentity(workDir);
+		socketsToCleanup.push(identity.daemonSocketPath);
+
+		const fakeDependencies: DaemonDependencies = {
+			createRuntimeConfig: () => createFakeConfig(workDir),
+			createVmRuntime: async () => ({
+				getId: () => 'fake-vm',
+				exec: async () => ({ exitCode: 7, stdout: 'hello stdout\n', stderr: 'hello stderr\n' }),
+				close: async () => {},
+			}),
+			createAuthSyncManager: () => createAuthSyncStub(workDir),
+		};
+
+		const daemon = new AgentVmDaemon(identity, new NoopLogger(), fakeDependencies);
+		await daemon.start();
+
+		const responses = await connectAndCollectResponses(
+			identity.daemonSocketPath,
+			JSON.stringify({ kind: 'attach', command: '/bin/sh -lc "echo hi"' }),
+		);
+
+		expect(responses.some((response) => response['kind'] === 'attached')).toBe(true);
+		expect(
+			responses.some(
+				(response) => response['kind'] === 'stream.stdout' && response['data'] === 'hello stdout\n',
+			),
+		).toBe(true);
+		expect(
+			responses.some(
+				(response) => response['kind'] === 'stream.stderr' && response['data'] === 'hello stderr\n',
+			),
+		).toBe(true);
+		expect(
+			responses.some((response) => response['kind'] === 'stream.exit' && response['code'] === 7),
+		).toBe(true);
 
 		const shutdownRaw = await connectAndSend(
 			identity.daemonSocketPath,

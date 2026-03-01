@@ -41,15 +41,16 @@ function safeReplaceDirectory(sourcePath: string, targetPath: string): ReplaceDi
 
 	const targetParent = path.dirname(targetPath);
 	const targetName = path.basename(targetPath);
+	const hiddenTargetName = targetName.startsWith('.') ? targetName : `.${targetName}`;
 	fs.mkdirSync(targetParent, { recursive: true });
 
 	const stagingPath = path.join(
 		targetParent,
-		`.${targetName}.staging.${process.pid}.${Date.now().toString()}`,
+		`${hiddenTargetName}.staging.${process.pid}.${Date.now().toString()}`,
 	);
 	const backupPath = path.join(
 		targetParent,
-		`.${targetName}.backup.${new Date().toISOString().replaceAll(':', '-')}.${process.pid}`,
+		`${hiddenTargetName}.backup.${new Date().toISOString().replaceAll(':', '-')}.${process.pid}`,
 	);
 	copyDir(sourcePath, stagingPath);
 
