@@ -24,8 +24,6 @@ const hasGondolinRuntime = commandSucceeds(process.execPath, [
 	'await import("@earendil-works/gondolin")',
 ]);
 
-const describeIfRuntimeAvailable = hasDockerDaemon && hasGondolinRuntime ? describe : describe.skip;
-
 function buildDockerContainerName(prefix: string): string {
 	const randomSuffix = Math.random().toString(36).slice(2, 8);
 	return `${prefix}-${Date.now()}-${randomSuffix}`;
@@ -153,8 +151,17 @@ afterEach(async () => {
 	);
 });
 
-describeIfRuntimeAvailable('e2e tcp.hosts docker connectivity', () => {
+describe('e2e tcp.hosts docker connectivity', () => {
 	it('reaches host docker postgres + redis via tcp.hosts and optionally runs protocol checks', async () => {
+		expect(
+			hasDockerDaemon,
+			'Docker daemon is required for tests/e2e/tcp-hosts-docker.e2e.test.ts',
+		).toBe(true);
+		expect(
+			hasGondolinRuntime,
+			'@earendil-works/gondolin is required for tests/e2e/tcp-hosts-docker.e2e.test.ts',
+		).toBe(true);
+
 		const postgresContainerName = buildDockerContainerName('agent-vm-e2e-pg');
 		const redisContainerName = buildDockerContainerName('agent-vm-e2e-redis');
 		dockerContainerNamesToCleanup.push(postgresContainerName, redisContainerName);

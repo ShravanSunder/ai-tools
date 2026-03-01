@@ -1,0 +1,172 @@
+{
+	"$id": "vm-runtime",
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"properties": {
+		"rootfsMode": {
+			"type": "string",
+			"enum": [
+				"readonly",
+				"memory",
+				"cow"
+			]
+		},
+		"memory": {
+			"type": "integer",
+			"exclusiveMinimum": 0,
+			"maximum": 9007199254740991
+		},
+		"cpus": {
+			"type": "integer",
+			"exclusiveMinimum": 0,
+			"maximum": 9007199254740991
+		},
+		"idleTimeoutMinutes": {
+			"type": "integer",
+			"exclusiveMinimum": 0,
+			"maximum": 9007199254740991
+		},
+		"env": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {
+				"type": "string"
+			}
+		},
+		"volumes": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {
+				"type": "object",
+				"properties": {
+					"guestPath": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"required": [
+					"guestPath"
+				],
+				"additionalProperties": false
+			}
+		},
+		"shadows": {
+			"type": "object",
+			"properties": {
+				"deny": {
+					"default": [],
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"tmpfs": {
+					"default": [],
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"readonlyMounts": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {
+				"type": "string"
+			}
+		},
+		"extraMounts": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string"
+			},
+			"additionalProperties": {
+				"type": "string"
+			}
+		},
+		"monorepoDiscovery": {
+			"type": "boolean"
+		},
+		"initScripts": {
+			"type": "object",
+			"properties": {
+				"background": {
+					"default": null,
+					"anyOf": [
+						{
+							"type": "string",
+							"minLength": 1
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"foreground": {
+					"default": null,
+					"anyOf": [
+						{
+							"type": "string",
+							"minLength": 1
+						},
+						{
+							"type": "null"
+						}
+					]
+				}
+			},
+			"additionalProperties": false
+		},
+		"shell": {
+			"type": "object",
+			"properties": {
+				"zshrcExtra": {
+					"default": null,
+					"anyOf": [
+						{
+							"type": "string",
+							"minLength": 1
+						},
+						{
+							"type": "null"
+						}
+					]
+				},
+				"atuin": {
+					"default": {
+						"importOnFirstRun": true
+					},
+					"type": "object",
+					"properties": {
+						"importOnFirstRun": {
+							"default": true,
+							"type": "boolean"
+						}
+					},
+					"required": [
+						"importOnFirstRun"
+					],
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"playwrightExtraHosts": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false
+}

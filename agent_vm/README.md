@@ -24,6 +24,16 @@ Run from your target repository root:
 
 This creates `.agent_vm/` with repo/local config separation.
 
+## Host Prerequisites
+
+Use the project bootstrap so host tooling is reproducible:
+
+```bash
+/Users/shravansunder/dev/ai-tools/agent_vm/bootstrap.sh
+```
+
+`bootstrap.sh` installs formulas from [`Brewfile`](/Users/shravansunder/dev/ai-tools/agent_vm/Brewfile) (including `e2fsprogs` for `mke2fs`) and then builds `agent_vm`.
+
 ## Test Pyramid
 
 - Unit: `tests/unit`

@@ -1,0 +1,153 @@
+{
+	"$id": "build-config",
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"properties": {
+		"arch": {
+			"type": "string",
+			"enum": [
+				"aarch64",
+				"x86_64"
+			]
+		},
+		"distro": {
+			"type": "string",
+			"enum": [
+				"alpine",
+				"nixos"
+			]
+		},
+		"env": {
+			"anyOf": [
+				{
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				{
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {
+						"type": "string"
+					}
+				}
+			]
+		},
+		"oci": {
+			"type": "object",
+			"properties": {
+				"image": {
+					"type": "string",
+					"minLength": 1
+				},
+				"runtime": {
+					"type": "string",
+					"enum": [
+						"docker",
+						"podman"
+					]
+				},
+				"platform": {
+					"type": "string",
+					"minLength": 1
+				},
+				"pullPolicy": {
+					"type": "string",
+					"enum": [
+						"if-not-present",
+						"always",
+						"never"
+					]
+				}
+			},
+			"required": [
+				"image"
+			],
+			"additionalProperties": false
+		},
+		"postBuild": {
+			"type": "object",
+			"properties": {
+				"commands": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"init": {
+			"type": "object",
+			"properties": {
+				"rootfsInit": {
+					"type": "string",
+					"minLength": 1
+				},
+				"initramfsInit": {
+					"type": "string",
+					"minLength": 1
+				},
+				"rootfsInitExtra": {
+					"type": "string",
+					"minLength": 1
+				}
+			},
+			"additionalProperties": false
+		},
+		"rootfs": {
+			"type": "object",
+			"properties": {
+				"label": {
+					"type": "string",
+					"minLength": 1
+				},
+				"sizeMb": {
+					"type": "integer",
+					"exclusiveMinimum": 0,
+					"maximum": 9007199254740991
+				}
+			},
+			"additionalProperties": false
+		},
+		"runtimeDefaults": {
+			"type": "object",
+			"properties": {
+				"rootfsMode": {
+					"type": "string",
+					"enum": [
+						"readonly",
+						"memory",
+						"cow"
+					]
+				}
+			},
+			"additionalProperties": false
+		},
+		"container": {
+			"type": "object",
+			"properties": {
+				"force": {
+					"type": "boolean"
+				},
+				"image": {
+					"type": "string",
+					"minLength": 1
+				},
+				"runtime": {
+					"type": "string",
+					"enum": [
+						"docker",
+						"podman"
+					]
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"additionalProperties": false
+}

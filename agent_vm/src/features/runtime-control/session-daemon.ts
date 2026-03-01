@@ -3,7 +3,13 @@ import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
 
+import { resolveVolumeCacheDir } from '#src/build/build-assets.js';
 import { createVmRuntime, type VmRuntime } from '#src/core/infrastructure/vm-adapter.js';
+import {
+	resolveVolumeDirs,
+	type ResolvedVolume,
+	type VolumeConfigEntry,
+} from '#src/core/infrastructure/volume-manager.js';
 import type { ResolvedRuntimeConfig, WorkspaceIdentity } from '#src/core/models/config.js';
 import {
 	type DaemonStatus,
@@ -15,29 +21,49 @@ import type { Logger } from '#src/core/platform/logger.js';
 import { AuthSyncManager, type AuthSyncState } from '#src/features/auth-proxy/auth-sync.js';
 import { resolveRuntimeConfig } from '#src/features/runtime-control/config-resolver.js';
 import {
+	discoverNodeModulesPaths,
+	volumeNameForNodeModulesPath,
+} from '#src/features/runtime-control/monorepo-discovery.js';
+import {
 	compileAndPersistPolicy,
 	mutateAndCompilePolicy,
 } from '#src/features/runtime-control/policy-manager.js';
+import { ensureAtuinImportedOnFirstRun } from '#src/features/runtime-control/shell-setup.js';
 import {
 	buildTcpHostsRecord,
 	buildTcpServiceEnvVars,
 	validateTcpServiceTargets,
 } from '#src/features/runtime-control/tcp-service-config.js';
 
+export interface DaemonRuntimeOptions {
+	readonly imagePath: string;
+	readonly scratchpad: boolean;
+}
+
 export interface DaemonDependencies {
-	createRuntimeConfig: (workDir: string) => ResolvedRuntimeConfig;
-	createVmRuntime: typeof createVmRuntime;
-	createAuthSyncManager: (logger: Logger) => AuthSyncManager;
+	readonly createRuntimeConfig: (workDir: string) => ResolvedRuntimeConfig;
+	readonly createVmRuntime: typeof createVmRuntime;
+	readonly createAuthSyncManager: (logger: Logger) => AuthSyncManager;
+	readonly resolveVolumeDirs: typeof resolveVolumeDirs;
+	readonly resolveVolumeCacheDir: typeof resolveVolumeCacheDir;
+	readonly discoverNodeModulesPaths: typeof discoverNodeModulesPaths;
+	readonly volumeNameForNodeModulesPath: typeof volumeNameForNodeModulesPath;
+	readonly ensureAtuinImportedOnFirstRun: typeof ensureAtuinImportedOnFirstRun;
 }
 
 const DEFAULT_DEPENDENCIES: DaemonDependencies = {
 	createRuntimeConfig: resolveRuntimeConfig,
 	createVmRuntime,
 	createAuthSyncManager: (logger) => new AuthSyncManager(logger),
+	resolveVolumeDirs,
+	resolveVolumeCacheDir,
+	discoverNodeModulesPaths,
+	volumeNameForNodeModulesPath,
+	ensureAtuinImportedOnFirstRun,
 };
 
 interface ClientContext {
-	socket: net.Socket;
+	readonly socket: net.Socket;
 }
 
 export class AgentVmDaemon {
@@ -51,10 +77,12 @@ export class AgentVmDaemon {
 	private authSyncState: AuthSyncState | null = null;
 	private runtimeRecreatePromise: Promise<void> | null = null;
 	private stopping = false;
+	private resolvedVolumes: Record<string, ResolvedVolume> = {};
 
 	public constructor(
 		private readonly identity: WorkspaceIdentity,
 		private readonly logger: Logger,
+		private readonly runtimeOptions: DaemonRuntimeOptions,
 		private readonly dependencies: DaemonDependencies = DEFAULT_DEPENDENCIES,
 	) {}
 
@@ -65,22 +93,18 @@ export class AgentVmDaemon {
 		const authSync = this.dependencies.createAuthSyncManager(this.logger);
 		authSync.exportClaudeOauthFromKeychain();
 		this.authSyncState = authSync.prepareSessionAuthMirror(this.identity.sessionName);
-		const tcpRuntimeInputs = this.buildTcpRuntimeInputs(this.runtimeConfig);
 
-		this.vmRuntime = await this.dependencies.createVmRuntime({
-			workDir: this.identity.workDir,
-			allowedHosts: this.runtimeConfig.allowedHosts,
-			tcpHosts: tcpRuntimeInputs.tcpHosts,
-			tcpServiceEnvVars: tcpRuntimeInputs.tcpServiceEnvVars,
-			sessionLabel: this.identity.sessionName,
-			logger: this.logger,
-			sessionAuthRoot: this.authSyncState.sessionAuthRoot,
-		});
+		this.resolvedVolumes = this.resolveConfiguredVolumes(this.runtimeConfig);
+		this.maybeInitializeShellHistoryVolume(this.runtimeConfig, this.resolvedVolumes);
 
+		await this.createVmRuntimeFromCurrentConfig('startup');
+		await this.runInitPipeline();
 		await this.listen();
 
 		this.logger.log('info', 'daemon', 'daemon started', {
 			socketPath: this.identity.daemonSocketPath,
+			imagePath: this.runtimeOptions.imagePath,
+			scratchpad: this.runtimeOptions.scratchpad,
 		});
 	}
 
@@ -117,6 +141,113 @@ export class AgentVmDaemon {
 		this.logger.log('info', 'daemon', 'daemon stopped');
 	}
 
+	private resolveConfiguredVolumes(config: ResolvedRuntimeConfig): Record<string, ResolvedVolume> {
+		const volumeDefinitions: Record<string, VolumeConfigEntry> = {
+			...config.runtimeConfig.volumes,
+		};
+		if (config.runtimeConfig.monorepoDiscovery) {
+			for (const nodeModulesPath of this.dependencies.discoverNodeModulesPaths(
+				this.identity.workDir,
+			)) {
+				if (Object.values(volumeDefinitions).some((entry) => entry.guestPath === nodeModulesPath)) {
+					continue;
+				}
+				const volumeName = this.dependencies.volumeNameForNodeModulesPath(nodeModulesPath);
+				volumeDefinitions[volumeName] = { guestPath: nodeModulesPath };
+			}
+		}
+
+		return this.dependencies.resolveVolumeDirs(
+			this.dependencies.resolveVolumeCacheDir(),
+			this.identity.dirHash,
+			volumeDefinitions,
+		);
+	}
+
+	private maybeInitializeShellHistoryVolume(
+		config: ResolvedRuntimeConfig,
+		volumes: Record<string, ResolvedVolume>,
+	): void {
+		if (!config.runtimeConfig.shell.atuin.importOnFirstRun) {
+			return;
+		}
+		const shellHistoryVolume = volumes.shellHistory;
+		if (!shellHistoryVolume) {
+			return;
+		}
+		this.dependencies.ensureAtuinImportedOnFirstRun(shellHistoryVolume.hostDir);
+	}
+
+	private async createVmRuntimeFromCurrentConfig(reason: string): Promise<void> {
+		if (!this.runtimeConfig || !this.authSyncState) {
+			throw new Error('runtime-config-unavailable');
+		}
+
+		const tcpRuntimeInputs = this.buildTcpRuntimeInputs(this.runtimeConfig);
+		this.logger.log('info', 'daemon', 'creating vm runtime', {
+			reason,
+			imagePath: this.runtimeOptions.imagePath,
+			scratchpad: this.runtimeOptions.scratchpad,
+		});
+		this.vmRuntime = await this.dependencies.createVmRuntime({
+			workDir: this.identity.workDir,
+			imagePath: this.runtimeOptions.imagePath,
+			runtimeConfig: this.runtimeConfig.runtimeConfig,
+			buildConfig: this.runtimeConfig.buildConfig,
+			allowedHosts: this.runtimeConfig.allowedHosts,
+			tcpHosts: tcpRuntimeInputs.tcpHosts,
+			tcpServiceEnvVars: tcpRuntimeInputs.tcpServiceEnvVars,
+			resolvedVolumes: this.resolvedVolumes,
+			sessionLabel: this.identity.sessionName,
+			logger: this.logger,
+			sessionAuthRoot: this.authSyncState.sessionAuthRoot,
+			scratchpad: this.runtimeOptions.scratchpad,
+		});
+	}
+
+	private async runInitPipeline(): Promise<void> {
+		if (!this.vmRuntime || !this.runtimeConfig) {
+			return;
+		}
+
+		const ensureHomeDirectoryResult = await this.vmRuntime.exec(
+			"/bin/sh -lc 'mkdir -p /home/agent'",
+		);
+		if (ensureHomeDirectoryResult.exitCode !== 0) {
+			throw new Error(`failed to ensure /home/agent exists: ${ensureHomeDirectoryResult.stderr}`);
+		}
+
+		const backgroundScriptPath = this.runtimeConfig.runtimeConfig.initScripts.background;
+		if (backgroundScriptPath) {
+			void this.vmRuntime
+				.exec(`/bin/sh -lc '${backgroundScriptPath}'`)
+				.then((backgroundResult) => {
+					if (backgroundResult.exitCode !== 0) {
+						this.logger.log('warn', 'daemon', 'background init script failed', {
+							scriptPath: backgroundScriptPath,
+							stderr: backgroundResult.stderr,
+						});
+					}
+				})
+				.catch((error: unknown) => {
+					this.logger.log('warn', 'daemon', 'background init script crashed', {
+						scriptPath: backgroundScriptPath,
+						error: String(error),
+					});
+				});
+		}
+
+		const foregroundScriptPath = this.runtimeConfig.runtimeConfig.initScripts.foreground;
+		if (foregroundScriptPath) {
+			const foregroundResult = await this.vmRuntime.exec(`/bin/sh -lc '${foregroundScriptPath}'`);
+			if (foregroundResult.exitCode !== 0) {
+				throw new Error(
+					`foreground init script failed (${foregroundScriptPath}): ${foregroundResult.stderr}`,
+				);
+			}
+		}
+	}
+
 	private async stopRuntime(): Promise<void> {
 		if (this.vmRuntime) {
 			await this.vmRuntime.close();
@@ -142,23 +273,9 @@ export class AgentVmDaemon {
 		}
 
 		this.runtimeRecreatePromise = (async () => {
-			if (!this.runtimeConfig || !this.authSyncState) {
-				throw new Error('runtime-config-unavailable');
-			}
-
 			this.logger.log('info', 'daemon', 'recreating vm runtime', { reason });
 			await this.stopRuntime();
-			const tcpRuntimeInputs = this.buildTcpRuntimeInputs(this.runtimeConfig);
-
-			this.vmRuntime = await this.dependencies.createVmRuntime({
-				workDir: this.identity.workDir,
-				allowedHosts: this.runtimeConfig.allowedHosts,
-				tcpHosts: tcpRuntimeInputs.tcpHosts,
-				tcpServiceEnvVars: tcpRuntimeInputs.tcpServiceEnvVars,
-				sessionLabel: this.identity.sessionName,
-				logger: this.logger,
-				sessionAuthRoot: this.authSyncState.sessionAuthRoot,
-			});
+			await this.createVmRuntimeFromCurrentConfig(reason);
 		})();
 
 		try {
@@ -188,31 +305,30 @@ export class AgentVmDaemon {
 		this.clearIdleTimer();
 
 		socket.setEncoding('utf8');
-
-		let buffer = '';
+		let readBuffer = '';
 		socket.on('data', (chunk: string) => {
-			buffer += chunk;
+			readBuffer += chunk;
 
 			while (true) {
-				const newlineIndex = buffer.indexOf('\n');
+				const newlineIndex = readBuffer.indexOf('\n');
 				if (newlineIndex < 0) {
 					break;
 				}
-
-				const line = buffer.slice(0, newlineIndex).trim();
-				buffer = buffer.slice(newlineIndex + 1);
+				const line = readBuffer.slice(0, newlineIndex).trim();
+				readBuffer = readBuffer.slice(newlineIndex + 1);
 				if (line.length === 0) {
 					continue;
 				}
 
-				let parsedLine: unknown;
+				let parsedRequestPayload: unknown;
 				try {
-					parsedLine = JSON.parse(line);
-				} catch {
+					parsedRequestPayload = JSON.parse(line) as unknown;
+				} catch (error: unknown) {
 					void this.sendResponse(socket, { kind: 'error', message: 'invalid-json' }).catch(
 						(writeError: unknown) => {
 							this.logger.log('warn', 'daemon', 'failed to write invalid-json response', {
 								error: String(writeError),
+								parseError: String(error),
 							});
 						},
 					);
@@ -221,7 +337,7 @@ export class AgentVmDaemon {
 
 				let request: DaemonRequest;
 				try {
-					request = parseDaemonRequestValue(parsedLine);
+					request = parseDaemonRequestValue(parsedRequestPayload);
 				} catch (error: unknown) {
 					void this.sendResponse(socket, {
 						kind: 'error',
@@ -238,11 +354,13 @@ export class AgentVmDaemon {
 					this.logger.log('warn', 'daemon', 'request handling failed', {
 						error: String(error),
 					});
-					void this.sendResponse(socket, { kind: 'error', message: 'request-failed' }).catch(() => {
-						this.logger.log('warn', 'daemon', 'failed to write request-failed response', {
-							error: String(error),
-						});
-					});
+					void this.sendResponse(socket, { kind: 'error', message: 'request-failed' }).catch(
+						(writeError: unknown) => {
+							this.logger.log('warn', 'daemon', 'failed to write request-failed response', {
+								error: String(writeError),
+							});
+						},
+					);
 				});
 			}
 		});
@@ -251,7 +369,6 @@ export class AgentVmDaemon {
 			this.clients.delete(clientContext);
 			this.maybeStartIdleTimer();
 		};
-
 		socket.on('close', onClose);
 		socket.on('error', (error: unknown) => {
 			this.logger.log('warn', 'daemon', 'client socket error', {
@@ -265,6 +382,7 @@ export class AgentVmDaemon {
 		if (socket.destroyed || !socket.writable) {
 			throw new Error('socket-not-writable');
 		}
+
 		const payload = `${JSON.stringify(response)}\n`;
 		const accepted = socket.write(payload, 'utf8');
 		if (!accepted) {
@@ -367,19 +485,12 @@ export class AgentVmDaemon {
 	}
 
 	private maybeStartIdleTimer(): void {
-		if (this.stopping) {
-			return;
-		}
-		if (!this.runtimeConfig) {
-			return;
-		}
-		if (this.clients.size > 0) {
+		if (this.stopping || !this.runtimeConfig || this.clients.size > 0) {
 			return;
 		}
 
-		const timeoutMs = this.runtimeConfig.vmConfig.idleTimeoutMinutes * 60 * 1000;
-		this.idleDeadlineEpochMs = Date.now() + timeoutMs;
-
+		const timeoutMilliseconds = this.runtimeConfig.runtimeConfig.idleTimeoutMinutes * 60 * 1000;
+		this.idleDeadlineEpochMs = Date.now() + timeoutMilliseconds;
 		this.idleTimer = setTimeout(() => {
 			this.stop().catch((error: unknown) => {
 				this.logger.log('error', 'daemon', 'idle shutdown failed', {
@@ -387,10 +498,10 @@ export class AgentVmDaemon {
 				});
 				process.exit(1);
 			});
-		}, timeoutMs);
+		}, timeoutMilliseconds);
 
 		this.logger.log('info', 'daemon', 'idle timer started', {
-			timeoutMinutes: this.runtimeConfig.vmConfig.idleTimeoutMinutes,
+			timeoutMinutes: this.runtimeConfig.runtimeConfig.idleTimeoutMinutes,
 		});
 	}
 
@@ -416,7 +527,7 @@ export class AgentVmDaemon {
 		return {
 			sessionName: this.identity.sessionName,
 			clients: this.clients.size,
-			idleTimeoutMinutes: this.runtimeConfig?.vmConfig.idleTimeoutMinutes ?? 10,
+			idleTimeoutMinutes: this.runtimeConfig?.runtimeConfig.idleTimeoutMinutes ?? 10,
 			idleDeadlineEpochMs: this.idleDeadlineEpochMs,
 			startedAtEpochMs: this.startedAtEpochMs,
 			tcpServices,

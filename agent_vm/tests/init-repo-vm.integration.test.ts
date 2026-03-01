@@ -11,11 +11,15 @@ describe('init_repo_vm', () => {
 		await execa('git', ['init'], { cwd: tempRepo });
 
 		const scriptPath = path.resolve('init_repo_vm.sh');
-		await execa(scriptPath, [], { cwd: tempRepo });
+		await execa(scriptPath, ['--default'], { cwd: tempRepo });
 
-		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm.repo.conf'))).toBe(true);
-		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm.local.conf'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'build.project.json'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm-runtime.repo.json'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm-runtime.local.json'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'tcp-services.repo.json'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'tcp-services.local.json'))).toBe(true);
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', '.gitignore'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'INSTRUCTIONS.md'))).toBe(true);
 
 		const gitignore = fs.readFileSync(path.join(tempRepo, '.agent_vm', '.gitignore'), 'utf8');
 		expect(gitignore).toContain('*.local.*');

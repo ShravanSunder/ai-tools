@@ -1,18 +1,34 @@
 import fs from 'node:fs';
 import net from 'node:net';
-import os from 'node:os';
 import path from 'node:path';
 
 import { execa } from 'execa';
 
-import { buildDebianGuestAssets } from '#src/build/build-assets.js';
+import {
+	buildGuestAssets,
+	resolveVolumeCacheDir,
+	resolveWorkspaceImageDir,
+} from '#src/build/build-assets.js';
 import { DaemonClient, waitForSocket } from '#src/core/infrastructure/daemon-client.js';
+import { wipeVolumeDirs } from '#src/core/infrastructure/volume-manager.js';
 import type { RunAgentVmOptions } from '#src/core/models/config.js';
 import type { DaemonResponse } from '#src/core/models/ipc.js';
 import { withFileLockAsync } from '#src/core/platform/file-lock.js';
 import { getAgentVmRoot } from '#src/core/platform/paths.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 import { resolveAgentPresetCommand } from '#src/features/runtime-control/agent-launcher.js';
+import { loadBuildConfig } from '#src/features/runtime-control/build-config-loader.js';
+
+interface EnsureDaemonOptions {
+	readonly socketPath: string;
+	readonly daemonLogPath: string;
+	readonly workDir: string;
+	readonly imagePath: string;
+	readonly scratchpad: boolean;
+}
+
+const DAEMON_SOCKET_START_TIMEOUT_MS = 120_000;
+const DAEMON_START_LOCK_TIMEOUT_MS = DAEMON_SOCKET_START_TIMEOUT_MS + 5_000;
 
 function assertNever(value: never): never {
 	throw new Error(`Unhandled daemon response variant: ${JSON.stringify(value)}`);
@@ -56,12 +72,12 @@ async function probeSocketState(
 }
 
 async function waitForSocketRemoved(socketPath: string, timeoutMs: number): Promise<void> {
-	const started = Date.now();
+	const startedAt = Date.now();
 	while (true) {
 		if (!fs.existsSync(socketPath)) {
 			return;
 		}
-		if (Date.now() - started >= timeoutMs) {
+		if (Date.now() - startedAt >= timeoutMs) {
 			throw new Error(`Timed out waiting for daemon shutdown: ${socketPath}`);
 		}
 		// oxlint-disable-next-line eslint/no-await-in-loop
@@ -121,9 +137,9 @@ async function requestAck(socketPath: string, request: { kind: 'shutdown' }): Pr
 async function stopDaemonIfRequested(
 	socketPath: string,
 	workDir: string,
-	options: Pick<RunAgentVmOptions, 'reload' | 'fullReset'>,
+	options: Pick<RunAgentVmOptions, 'reload' | 'fullReset' | 'wipeVolumes' | 'scratchpad'>,
 ): Promise<void> {
-	if (!options.reload && !options.fullReset) {
+	if (!options.reload && !options.fullReset && !options.wipeVolumes && !options.scratchpad) {
 		return;
 	}
 
@@ -148,18 +164,6 @@ async function stopDaemonIfRequested(
 	);
 }
 
-async function maybeBuildGuestAssets(options: Pick<RunAgentVmOptions, 'fullReset'>): Promise<void> {
-	if (!options.fullReset) {
-		return;
-	}
-
-	const outputDir = path.join(os.homedir(), '.cache', 'agent-vm', 'images', 'default');
-	await buildDebianGuestAssets({
-		outputDir,
-		fullReset: true,
-	});
-}
-
 function readDaemonLogTail(daemonLogPath: string, maxLines: number = 20): string {
 	if (!fs.existsSync(daemonLogPath)) {
 		return '';
@@ -169,18 +173,22 @@ function readDaemonLogTail(daemonLogPath: string, maxLines: number = 20): string
 	return lines.slice(Math.max(lines.length - maxLines, 0)).join('\n');
 }
 
-async function ensureDaemonRunning(
-	socketPath: string,
-	daemonLogPath: string,
-	workDir: string,
-): Promise<void> {
-	if (fs.existsSync(socketPath)) {
+function daemonLaunchArgs(workDir: string, imagePath: string, scratchpad: boolean): string[] {
+	const args = ['--work-dir', workDir, '--image-path', imagePath];
+	if (scratchpad) {
+		args.push('--scratchpad');
+	}
+	return args;
+}
+
+async function ensureDaemonRunning(options: EnsureDaemonOptions): Promise<void> {
+	if (fs.existsSync(options.socketPath)) {
 		try {
-			await waitForSocket(socketPath, 750);
+			await waitForSocket(options.socketPath, 750);
 			return;
 		} catch (error: unknown) {
 			throw new Error(
-				`Daemon socket exists but is not reachable: ${socketPath}. Run 'run-agent-vm --reload' to recover. ${String(error)}`,
+				`Daemon socket exists but is not reachable: ${options.socketPath}. Run 'run-agent-vm --reload' to recover. ${String(error)}`,
 				{ cause: error },
 			);
 		}
@@ -193,36 +201,42 @@ async function ensureDaemonRunning(
 		);
 	}
 
-	const startupLockPath = `${socketPath}.startup.lock`;
+	const startupLockPath = `${options.socketPath}.startup.lock`;
 	await withFileLockAsync(
 		startupLockPath,
 		async () => {
-			if (fs.existsSync(socketPath)) {
-				await waitForSocket(socketPath, 30_000);
+			if (fs.existsSync(options.socketPath)) {
+				await waitForSocket(options.socketPath, DAEMON_SOCKET_START_TIMEOUT_MS);
 				return;
 			}
 
-			const subprocess = execa(process.execPath, [daemonEntry, '--work-dir', workDir], {
-				detached: true,
-				stdio: 'ignore',
-			});
+			const subprocess = execa(
+				process.execPath,
+				[daemonEntry, ...daemonLaunchArgs(options.workDir, options.imagePath, options.scratchpad)],
+				{
+					detached: true,
+					stdio: 'ignore',
+				},
+			);
 			subprocess.unref();
 
-			// VM cold boots can exceed 5s; allow enough time for daemon start + VM ready.
 			try {
-				await waitForSocket(socketPath, 30_000);
+				await waitForSocket(options.socketPath, DAEMON_SOCKET_START_TIMEOUT_MS);
 			} catch (error: unknown) {
-				const daemonLogTail = readDaemonLogTail(daemonLogPath);
+				const daemonLogTail = readDaemonLogTail(options.daemonLogPath);
 				const logTailSuffix =
 					daemonLogTail.length > 0
-						? `\nDaemon log tail (${daemonLogPath}):\n${daemonLogTail}`
-						: `\nDaemon log path: ${daemonLogPath}`;
-				throw new Error(`Timed out waiting for daemon socket '${socketPath}'.${logTailSuffix}`, {
-					cause: error,
-				});
+						? `\nDaemon log tail (${options.daemonLogPath}):\n${daemonLogTail}`
+						: `\nDaemon log path: ${options.daemonLogPath}`;
+				throw new Error(
+					`Timed out waiting for daemon socket '${options.socketPath}'.${logTailSuffix}`,
+					{
+						cause: error,
+					},
+				);
 			}
 		},
-		{ timeoutMs: 35_000, retryDelayMs: 100 },
+		{ timeoutMs: DAEMON_START_LOCK_TIMEOUT_MS, retryDelayMs: 100 },
 	);
 }
 
@@ -320,20 +334,51 @@ async function requestAndCollect(
 	});
 }
 
+function cleanupStaleCacheDirs(cacheDirectoryPath: string, olderThanDays: number): number {
+	if (!fs.existsSync(cacheDirectoryPath)) {
+		return 0;
+	}
+	let removedCount = 0;
+	const thresholdEpochMilliseconds = Date.now() - olderThanDays * 24 * 60 * 60 * 1000;
+	for (const entry of fs.readdirSync(cacheDirectoryPath, { withFileTypes: true })) {
+		if (!entry.isDirectory()) {
+			continue;
+		}
+		const targetPath = path.join(cacheDirectoryPath, entry.name);
+		const stat = fs.statSync(targetPath);
+		if (stat.mtimeMs >= thresholdEpochMilliseconds) {
+			continue;
+		}
+		fs.rmSync(targetPath, { recursive: true, force: true });
+		removedCount += 1;
+	}
+	return removedCount;
+}
+
 interface RunOrchestratorDependencies {
-	deriveWorkspaceIdentity: typeof deriveWorkspaceIdentity;
-	stopDaemonIfRequested: typeof stopDaemonIfRequested;
-	maybeBuildGuestAssets: typeof maybeBuildGuestAssets;
-	ensureDaemonRunning: typeof ensureDaemonRunning;
-	requestAndCollect: typeof requestAndCollect;
+	readonly deriveWorkspaceIdentity: typeof deriveWorkspaceIdentity;
+	readonly stopDaemonIfRequested: typeof stopDaemonIfRequested;
+	readonly ensureDaemonRunning: typeof ensureDaemonRunning;
+	readonly requestAndCollect: typeof requestAndCollect;
+	readonly loadBuildConfig: typeof loadBuildConfig;
+	readonly buildGuestAssets: typeof buildGuestAssets;
+	readonly wipeVolumeDirs: typeof wipeVolumeDirs;
+	readonly resolveWorkspaceImageDir: typeof resolveWorkspaceImageDir;
+	readonly resolveVolumeCacheDir: typeof resolveVolumeCacheDir;
+	readonly cleanupStaleCacheDirs: typeof cleanupStaleCacheDirs;
 }
 
 const DEFAULT_DEPENDENCIES: RunOrchestratorDependencies = {
 	deriveWorkspaceIdentity,
 	stopDaemonIfRequested,
-	maybeBuildGuestAssets,
 	ensureDaemonRunning,
 	requestAndCollect,
+	loadBuildConfig,
+	buildGuestAssets,
+	wipeVolumeDirs,
+	resolveWorkspaceImageDir,
+	resolveVolumeCacheDir,
+	cleanupStaleCacheDirs,
 };
 
 export async function runOrchestrator(
@@ -342,13 +387,40 @@ export async function runOrchestrator(
 	dependencies: RunOrchestratorDependencies = DEFAULT_DEPENDENCIES,
 ): Promise<number> {
 	const identity = dependencies.deriveWorkspaceIdentity(workDir);
+
+	if (options.cleanup) {
+		const imagesDir = path.join(
+			path.dirname(dependencies.resolveWorkspaceImageDir(identity.dirHash)),
+		);
+		const volumeCacheDir = dependencies.resolveVolumeCacheDir();
+		const removedImages = dependencies.cleanupStaleCacheDirs(imagesDir, 30);
+		const removedVolumes = dependencies.cleanupStaleCacheDirs(volumeCacheDir, 30);
+		process.stdout.write(
+			`cleanup complete: removed ${String(removedImages)} image cache dirs and ${String(removedVolumes)} volume cache dirs\n`,
+		);
+		return 0;
+	}
+
 	await dependencies.stopDaemonIfRequested(identity.daemonSocketPath, identity.workDir, options);
-	await dependencies.maybeBuildGuestAssets(options);
-	await dependencies.ensureDaemonRunning(
-		identity.daemonSocketPath,
-		identity.daemonLogPath,
-		identity.workDir,
-	);
+	if (options.wipeVolumes) {
+		dependencies.wipeVolumeDirs(dependencies.resolveVolumeCacheDir(), identity.dirHash);
+	}
+
+	const buildConfig = dependencies.loadBuildConfig(identity.workDir);
+	const imageOutputDir = dependencies.resolveWorkspaceImageDir(identity.dirHash);
+	const buildResult = await dependencies.buildGuestAssets({
+		buildConfig,
+		outputDir: imageOutputDir,
+		fullReset: options.fullReset || options.wipeVolumes,
+	});
+
+	await dependencies.ensureDaemonRunning({
+		socketPath: identity.daemonSocketPath,
+		daemonLogPath: identity.daemonLogPath,
+		workDir: identity.workDir,
+		imagePath: buildResult.imagePath,
+		scratchpad: options.scratchpad,
+	});
 
 	const command = resolveRequestedCommand(options);
 	const result = await dependencies.requestAndCollect(identity.daemonSocketPath, command);

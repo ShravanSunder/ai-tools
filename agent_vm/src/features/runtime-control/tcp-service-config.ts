@@ -18,7 +18,7 @@ const tcpServiceEntrySchema = z.object({
 
 const tcpServiceEntryPartialSchema = tcpServiceEntrySchema.partial();
 
-const tcpServiceConfigInputSchema = z.object({
+export const tcpServiceConfigInputSchema = z.object({
 	services: z.record(z.string().min(1), tcpServiceEntryPartialSchema).optional(),
 	strictMode: z.boolean().optional(),
 	allowedTargetHosts: z.array(z.string().min(1)).optional(),

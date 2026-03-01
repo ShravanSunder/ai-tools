@@ -1,0 +1,41 @@
+{
+	"$schema": "../schemas/vm-runtime.schema.json",
+	"rootfsMode": "memory",
+	"memory": 2048,
+	"cpus": 2,
+	"idleTimeoutMinutes": 10,
+	"env": {
+		"HOME": "/home/agent",
+		"VIRTUAL_ENV": "${WORKSPACE}/.venv",
+		"PNPM_STORE_DIR": "/home/agent/.local/share/pnpm"
+	},
+	"volumes": {
+		"venv": { "guestPath": "${WORKSPACE}/.venv" },
+		"nodeModulesRoot": { "guestPath": "${WORKSPACE}/node_modules" },
+		"pnpmStore": { "guestPath": "/home/agent/.local/share/pnpm" },
+		"npmCache": { "guestPath": "/home/agent/.cache" },
+		"uvCache": { "guestPath": "/home/agent/.local/share/uv" },
+		"shellHistory": { "guestPath": "/commandhistory" }
+	},
+	"shadows": {
+		"deny": [".agent_vm", ".git", "dist", ".next", "__pycache__"],
+		"tmpfs": [".venv", "node_modules"]
+	},
+	"readonlyMounts": {
+		".git": "${WORKSPACE}/.git",
+		"/home/agent/.aws": "${HOST_HOME}/.aws"
+	},
+	"extraMounts": {},
+	"monorepoDiscovery": true,
+	"initScripts": {
+		"background": null,
+		"foreground": null
+	},
+	"shell": {
+		"zshrcExtra": null,
+		"atuin": {
+			"importOnFirstRun": true
+		}
+	},
+	"playwrightExtraHosts": []
+}

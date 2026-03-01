@@ -6,6 +6,9 @@ import { runOrchestrator } from '#src/features/runtime-control/run-orchestrator.
 function buildOptionsFromFlags(input: {
 	reload: boolean;
 	fullReset: boolean;
+	wipeVolumes: boolean;
+	scratchpad: boolean;
+	cleanup: boolean;
 	noRun: boolean;
 	run: string | undefined;
 	runClaude: boolean;
@@ -43,6 +46,9 @@ function buildOptionsFromFlags(input: {
 	return {
 		reload: input.reload,
 		fullReset: input.fullReset,
+		wipeVolumes: input.wipeVolumes,
+		scratchpad: input.scratchpad,
+		cleanup: input.cleanup,
 		runMode,
 	};
 }
@@ -55,6 +61,18 @@ export const runAgentVmCommand = command({
 		fullReset: flag({
 			long: 'full-reset',
 			description: 'Rebuild guest assets and recycle daemon session',
+		}),
+		wipeVolumes: flag({
+			long: 'wipe-volumes',
+			description: 'Wipe persistent volume cache before rebuilding image',
+		}),
+		scratchpad: flag({
+			long: 'scratchpad',
+			description: 'Use in-memory workspace mount instead of host workspace',
+		}),
+		cleanup: flag({
+			long: 'cleanup',
+			description: 'Prune stale image and volume cache directories',
 		}),
 		noRun: flag({ long: 'no-run', description: 'Start daemon/session without running command' }),
 		run: option({

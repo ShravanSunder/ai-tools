@@ -9,6 +9,7 @@
 **Why this exists:** agent_vm wraps Gondolin (a QEMU-based micro-VM runtime) to provide sandboxed coding environments. Currently, image building, mount paths, env vars, shadow paths, and resource limits are all hardcoded. The sidecar (Docker-based equivalent at `agent_sidecar/`) has a rich config surface that agent_vm needs to match.
 
 **Architecture:**
+
 - Three config file types: build JSON, runtime JSON, tcp-services JSON — plus firewall `.txt` allowlists
 - Build config is two-tier (base + project). Runtime config is three-tier (base < repo < local precedence). Deep merge.
 - Per-project images cached at `~/.cache/agent-vm/images/{workspace-hash}/` with build fingerprint invalidation
@@ -20,6 +21,7 @@
 **Tech Stack:** TypeScript (strict mode, ES modules), Zod v4 for validation, Gondolin VFS providers (RealFSProvider, ReadonlyProvider, ShadowProvider, MemoryProvider), vitest for testing.
 
 **Critical Constraints (non-negotiable):**
+
 1. `VM.create()` must always receive explicit `sandbox.imagePath` — without it, rebuilt images may be ignored at runtime
 2. macOS + OCI builds do NOT support `postBuild.commands` — Gondolin hard-fails this (`build/index.ts:74`). Config loader must throw, not warn. Package customization uses pre-built custom OCI images.
 3. Build cache invalidation uses fingerprint of merged config + Gondolin version, not just workspace hash
@@ -27,15 +29,19 @@
 5. Script paths must be resolved relative to owning config file with traversal prevention
 6. `${WORKSPACE}` and `${HOST_HOME}` are host-path interpolation tokens; guest `HOME` in `env` is a literal value, not an interpolation token
 7. `/home/agent` must be guaranteed to exist in guest (init scripts depend on it)
+8. `tcp.hosts` mappings are raw TCP tunnels — they bypass HTTP hooks and secret substitution. DNS must be `synthetic` with `per-host` mapping when tcp.hosts is used (Gondolin enforces this via `assertTcpDnsConfig()`). Use `TcpOptions` type from `@earendil-works/gondolin` for type safety.
 
 **Design Doc:** `agent_vm/docs/plans/2026-03-01-agent-vm-config-surface-design.md` — contains full schema examples, mount matrix, merge semantics, verification matrix, and resolved decisions.
 
 **Reference Links:**
+
 - Gondolin VFS: https://earendil-works.github.io/gondolin/vfs/
 - Gondolin Custom Images: https://earendil-works.github.io/gondolin/custom-images/
 - Gondolin Snapshots: https://earendil-works.github.io/gondolin/snapshots/
 - Gondolin SDK VM: https://earendil-works.github.io/gondolin/sdk-vm/
 - Gondolin SDK Storage: https://earendil-works.github.io/gondolin/sdk-storage/
+- Gondolin SDK Network (mapped TCP `tcp.hosts` API): https://earendil-works.github.io/gondolin/sdk-network/ — see "Mapped TCP Egress (Optional)"
+- Gondolin Security (egress capability matrix): https://earendil-works.github.io/gondolin/security/
 - Sidecar mount/volume logic: `agent_sidecar/run-agent-sidecar.sh` (lines 440-600)
 - Sidecar init repo: `agent_sidecar/init_repo_sidecar.sh`
 - Existing TCP service config (Zod pattern to follow): `agent_vm/src/features/runtime-control/tcp-service-config.ts`
@@ -48,6 +54,7 @@
 ### Task 1: Create build config Zod schema
 
 **Files:**
+
 - Create: `agent_vm/src/core/models/build-config.ts`
 - Test: `agent_vm/src/core/models/build-config.unit.test.ts`
 
@@ -213,20 +220,13 @@ export function mergeBuildConfigs(
 	return {
 		arch: project.arch ?? base.arch,
 		distro: project.distro ?? base.distro,
-		oci: project.oci
-			? { ...base.oci, ...project.oci }
-			: base.oci,
+		oci: project.oci ? { ...base.oci, ...project.oci } : base.oci,
 		postBuild: {
-			commands: [
-				...(base.postBuild?.commands ?? []),
-				...(project.postBuild?.commands ?? []),
-			],
+			commands: [...(base.postBuild?.commands ?? []), ...(project.postBuild?.commands ?? [])],
 		},
 		env: { ...base.env, ...project.env },
 		init: project.init ?? base.init,
-		rootfs: project.rootfs
-			? { ...base.rootfs, ...project.rootfs }
-			: base.rootfs,
+		rootfs: project.rootfs ? { ...base.rootfs, ...project.rootfs } : base.rootfs,
 		runtimeDefaults: project.runtimeDefaults
 			? { ...base.runtimeDefaults, ...project.runtimeDefaults }
 			: base.runtimeDefaults,
@@ -251,6 +251,7 @@ git commit -m "feat(agent_vm): add build config Zod schema with merge support"
 ### Task 2: Create runtime config Zod schema
 
 **Files:**
+
 - Create: `agent_vm/src/core/models/vm-runtime-config.ts`
 - Test: `agent_vm/src/core/models/vm-runtime-config.unit.test.ts`
 
@@ -410,9 +411,7 @@ export function mergeVmRuntimeConfigs(
 			...layer,
 			env: { ...result.env, ...layer.env },
 			volumes: { ...result.volumes, ...layer.volumes },
-			shadows: layer.shadows
-				? { ...result.shadows, ...layer.shadows }
-				: result.shadows,
+			shadows: layer.shadows ? { ...result.shadows, ...layer.shadows } : result.shadows,
 			readonlyMounts: { ...result.readonlyMounts, ...layer.readonlyMounts },
 			extraMounts: { ...result.extraMounts, ...layer.extraMounts },
 		};
@@ -439,6 +438,7 @@ git commit -m "feat(agent_vm): add runtime config Zod schema with three-tier mer
 ### Task 3: JSON Schema generation build step
 
 **Files:**
+
 - Create: `agent_vm/src/build/generate-schemas.ts`
 - Create: `agent_vm/schemas/` (output directory)
 - Modify: `agent_vm/package.json` (add `generate:schemas` script)
@@ -463,10 +463,7 @@ function writeSchema(filename: string, zodSchema: unknown, title: string): void 
 		$refStrategy: 'none',
 	});
 	fs.mkdirSync(SCHEMA_DIR, { recursive: true });
-	fs.writeFileSync(
-		path.join(SCHEMA_DIR, filename),
-		JSON.stringify(jsonSchema, null, '\t') + '\n',
-	);
+	fs.writeFileSync(path.join(SCHEMA_DIR, filename), JSON.stringify(jsonSchema, null, '\t') + '\n');
 }
 
 writeSchema('build-config.schema.json', buildConfigSchema, 'BuildConfig');
@@ -487,6 +484,7 @@ Change `const tcpServiceConfigInputSchema` to `export const tcpServiceConfigInpu
 **Step 4: Add package.json script**
 
 Add to `agent_vm/package.json` scripts:
+
 ```json
 "generate:schemas": "node dist/build/generate-schemas.js",
 "build": "tsc -p tsconfig.json && pnpm generate:schemas"
@@ -511,6 +509,7 @@ git commit -m "feat(agent_vm): generate JSON Schemas from Zod for editor autocom
 ### Task 4: Build config loader (two-tier: base + project)
 
 **Files:**
+
 - Create: `agent_vm/src/features/runtime-control/build-config-loader.ts`
 - Test: `agent_vm/src/features/runtime-control/build-config-loader.unit.test.ts`
 
@@ -612,6 +611,7 @@ describe('loadBuildConfig', () => {
 The loader reads `agent_vm/config/build.base.json` and `.agent_vm/build.project.json`, parses each with Zod, merges with `mergeBuildConfigs()`.
 
 The loader MUST validate platform constraints:
+
 - If `process.platform === 'darwin'` AND merged config has `oci` AND `postBuild.commands` is non-empty, **throw a validation error** (not a warning). Gondolin's build pipeline hard-fails this combination on non-Linux (`build/index.ts:74`). The error message must be actionable: "postBuild.commands is not supported with OCI builds on macOS. Use a pre-built custom OCI image instead — see agent_vm/docs/plans/2026-03-01-agent-vm-config-surface-design.md#macos--oci-package-customization-strategy"
 
 See https://earendil-works.github.io/gondolin/custom-images/ for Gondolin's build behavior.
@@ -629,6 +629,7 @@ git commit -m "feat(agent_vm): add two-tier build config loader"
 ### Task 5: Runtime config loader (three-tier: base < repo < local)
 
 **Files:**
+
 - Create: `agent_vm/src/features/runtime-control/vm-runtime-loader.ts`
 - Test: `agent_vm/src/features/runtime-control/vm-runtime-loader.unit.test.ts`
 
@@ -645,6 +646,7 @@ git commit -m "feat(agent_vm): add three-tier runtime config loader"
 ### Task 6: Rewrite config-resolver to use new loaders
 
 **Files:**
+
 - Modify: `agent_vm/src/features/runtime-control/config-resolver.ts`
 - Modify: `agent_vm/src/features/runtime-control/config-resolver.unit.test.ts`
 - Modify: `agent_vm/src/core/models/config.ts` (update `VmConfig` → use `VmRuntimeConfig`, update `ResolvedRuntimeConfig`)
@@ -670,6 +672,7 @@ export interface ResolvedRuntimeConfig {
 **Step 2: Update config-resolver.ts**
 
 Replace `parseConf`/`loadConf`/`resolveVmConfigMap`/`resolveVmConfig` with calls to:
+
 - `loadBuildConfig(workDir)` from build-config-loader
 - `loadVmRuntimeConfig(workDir)` from vm-runtime-loader
 
@@ -699,10 +702,12 @@ git commit -m "refactor(agent_vm): rewrite config-resolver to use JSON+Zod loade
 ### Task 6b: Config interpolation and path resolution
 
 **Files:**
+
 - Create: `agent_vm/src/features/runtime-control/config-interpolation.ts`
 - Test: `agent_vm/src/features/runtime-control/config-interpolation.unit.test.ts`
 
 **Context:** The design doc defines two interpolation domains that MUST NOT be confused:
+
 - `${WORKSPACE}` — host workspace path (used for mount source resolution)
 - `${HOST_HOME}` — host user home path (used for host-side mount sources like `.aws`)
 - Guest `HOME` in `env` is a literal value (`/home/agent`), NOT an interpolation token
@@ -723,7 +728,9 @@ describe('interpolateConfigValue', () => {
 	const context = { WORKSPACE: '/Users/dev/my-project', HOST_HOME: '/Users/dev' };
 
 	it('replaces ${WORKSPACE} token', () => {
-		expect(interpolateConfigValue('${WORKSPACE}/.venv', context)).toBe('/Users/dev/my-project/.venv');
+		expect(interpolateConfigValue('${WORKSPACE}/.venv', context)).toBe(
+			'/Users/dev/my-project/.venv',
+		);
 	});
 
 	it('replaces ${HOST_HOME} token', () => {
@@ -777,7 +784,9 @@ export interface InterpolationContext {
 export function interpolateConfigValue(value: string, context: InterpolationContext): string {
 	return value.replace(TOKEN_PATTERN, (match, token: string) => {
 		if (!ALLOWED_TOKENS.has(token)) {
-			throw new Error(`Unknown interpolation token: \${${token}}. Allowed: ${[...ALLOWED_TOKENS].join(', ')}`);
+			throw new Error(
+				`Unknown interpolation token: \${${token}}. Allowed: ${[...ALLOWED_TOKENS].join(', ')}`,
+			);
 		}
 		return context[token as keyof InterpolationContext];
 	});
@@ -812,6 +821,7 @@ git commit -m "feat(agent_vm): config interpolation tokens and safe script path 
 ### Task 7: Delete old conf files and stale templates
 
 **Files:**
+
 - Delete: `agent_vm/config/vm.base.conf`
 - Delete: `agent_vm/templates/.agent_vm/vm.repo.conf`
 - Delete: `agent_vm/templates/.agent_vm/vm.local.conf`
@@ -823,6 +833,7 @@ git commit -m "feat(agent_vm): config interpolation tokens and safe script path 
 **Step 1: Create base config files**
 
 `config/build.base.json` (NO `postBuild.commands` — macOS + OCI builds don't support them; use custom OCI images instead):
+
 ```json
 {
 	"$schema": "../schemas/build-config.schema.json",
@@ -842,6 +853,7 @@ git commit -m "feat(agent_vm): config interpolation tokens and safe script path 
 ```
 
 `config/vm-runtime.base.json`:
+
 ```json
 {
 	"$schema": "../schemas/vm-runtime.schema.json",
@@ -908,6 +920,7 @@ git commit -m "refactor(agent_vm): replace conf files with JSON configs, delete 
 ### Task 8: Per-project image caching in build-assets.ts
 
 **Files:**
+
 - Modify: `agent_vm/src/build/build-assets.ts`
 - Modify: `agent_vm/src/features/runtime-control/run-orchestrator.ts`
 - Test: existing orchestrator tests should still pass
@@ -919,7 +932,7 @@ Change `buildDebianGuestAssets` to accept a `BuildConfig` (resolved from loader)
 ```typescript
 export interface BuildAssetsOptions {
 	buildConfig: BuildConfig;
-	outputDir: string;  // now: ~/.cache/agent-vm/images/{workspace-hash}/
+	outputDir: string; // now: ~/.cache/agent-vm/images/{workspace-hash}/
 	fullReset: boolean;
 }
 ```
@@ -933,6 +946,7 @@ The orchestrator passes `outputDir` based on `identity.workDir` hash (from `deri
 **Step 3: Implement build fingerprinting**
 
 Compute a deterministic fingerprint from:
+
 - Merged build config JSON (canonical serialization)
 - Gondolin package version (from `node_modules/@aspect-build/gondolin/package.json` or equivalent)
 - agent_vm build schema version constant
@@ -955,6 +969,7 @@ export function computeBuildFingerprint(
 **Step 4: Update run-orchestrator.ts**
 
 `maybeBuildGuestAssets` now:
+
 1. Loads build config via `loadBuildConfig(workDir)`
 2. Computes output dir: `~/.cache/agent-vm/images/{dirHash}/`
 3. Computes build fingerprint from merged config + gondolin version
@@ -996,6 +1011,7 @@ git commit -m "feat(agent_vm): per-project image building with fingerprint inval
 ### Task 9: Volume manager — host-backed opaque directories
 
 **Files:**
+
 - Create: `agent_vm/src/core/infrastructure/volume-manager.ts`
 - Test: `agent_vm/src/core/infrastructure/volume-manager.unit.test.ts`
 
@@ -1063,7 +1079,11 @@ export interface ResolvedVolume {
 	readonly guestPath: string;
 }
 
-export function ensureVolumeDir(cacheBase: string, workspaceHash: string, volumeName: string): string {
+export function ensureVolumeDir(
+	cacheBase: string,
+	workspaceHash: string,
+	volumeName: string,
+): string {
 	const dir = path.join(cacheBase, workspaceHash, volumeName);
 	fs.mkdirSync(dir, { recursive: true });
 	return dir;
@@ -1103,6 +1123,7 @@ git commit -m "feat(agent_vm): add volume manager for host-backed persistent dir
 ### Task 10: Monorepo node_modules discovery
 
 **Files:**
+
 - Create: `agent_vm/src/features/runtime-control/monorepo-discovery.ts`
 - Test: `agent_vm/src/features/runtime-control/monorepo-discovery.unit.test.ts`
 
@@ -1121,6 +1142,7 @@ git commit -m "feat(agent_vm): monorepo node_modules discovery for volume mounts
 ### Task 11: Rewrite vm-adapter to be config-driven
 
 **Files:**
+
 - Modify: `agent_vm/src/core/infrastructure/vm-adapter.ts`
 - Modify: `agent_vm/src/core/infrastructure/vm-adapter.unit.test.ts`
 
@@ -1191,6 +1213,31 @@ VM.create({
 
 Without explicit `imagePath`, the VM may boot from a default/stale image instead of the per-project build from Task 8. See https://earendil-works.github.io/gondolin/sdk-vm/ for the `sandbox.imagePath` API.
 
+**Step 10b: Wire `tcp.hosts` with DNS configuration**
+
+When `tcpHosts` is non-empty, the adapter MUST set both `tcp` and `dns` options:
+
+```typescript
+import type { TcpOptions } from '@earendil-works/gondolin'; // officially exported since PR #61
+
+const hasTcpMappings = Object.keys(options.tcpHosts).length > 0;
+VM.create({
+	// ...
+	...(hasTcpMappings
+		? {
+				dns: { mode: 'synthetic', syntheticHostMapping: 'per-host' },
+				tcp: { hosts: options.tcpHosts } satisfies TcpOptions,
+			}
+		: {}),
+});
+```
+
+Key constraints (enforced by Gondolin at construction time via `assertTcpDnsConfig()`):
+- `tcp.hosts` requires `dns.mode: "synthetic"` — Gondolin throws if `dns.mode` is `"trusted"` or absent
+- `tcp.hosts` requires `dns.syntheticHostMapping: "per-host"` — Gondolin throws if `"single"`
+- Mapped TCP flows are **raw tunnels**: no HTTP hooks, no secret substitution (see Gondolin [SDK Network docs](https://earendil-works.github.io/gondolin/sdk-network/) "Mapped TCP Egress" section)
+- Our `buildTcpHostsRecord()` produces `HOST:PORT` keys (port-specific), not host-only keys, for narrower security surface
+
 **Step 11: Update tests**
 
 Update `vm-adapter.unit.test.ts` to pass the new options shape. Include a test that asserts `imagePath` is passed through to `VM.create`.
@@ -1213,6 +1260,7 @@ git commit -m "refactor(agent_vm): config-driven vm-adapter with volumes, shadow
 ### Task 12: Wire daemon to use new config chain
 
 **Files:**
+
 - Modify: `agent_vm/src/features/runtime-control/session-daemon.ts`
 - Modify: `agent_vm/src/features/runtime-control/run-orchestrator.ts`
 
@@ -1231,6 +1279,7 @@ git commit -m "refactor(agent_vm): config-driven vm-adapter with volumes, shadow
 **Step 3: Add new CLI flags**
 
 Add to `run-agent-vm.ts`:
+
 ```typescript
 scratchpad: flag({ long: 'scratchpad', description: 'Ephemeral workspace (MemoryProvider)' }),
 wipeVolumes: flag({ long: 'wipe-volumes', description: 'Wipe all persistent volumes and rebuild image (scorched-earth)' }),
@@ -1260,7 +1309,7 @@ it('fullReset rebuilds image but does NOT wipe volumes', async () => {
 
 	// Act: run orchestrator with fullReset=true
 	// (mock buildDebianGuestAssets to avoid actual build)
-	await maybeBuildGuestAssets({ workDir: '/tmp/test', fullReset: true, /* ... */ });
+	await maybeBuildGuestAssets({ workDir: '/tmp/test', fullReset: true /* ... */ });
 
 	// Assert: volume dir still exists with marker
 	expect(fs.existsSync(path.join(volumeDir, '.marker'))).toBe(true);
@@ -1294,6 +1343,7 @@ git commit -m "feat(agent_vm): wire daemon and orchestrator to new config chain 
 ### Task 13: Init script execution at daemon start + HOME guarantee
 
 **Files:**
+
 - Modify: `agent_vm/src/features/runtime-control/session-daemon.ts`
 
 After VM boots and before accepting client connections:
@@ -1315,9 +1365,11 @@ git commit -m "feat(agent_vm): init script pipeline with HOME guarantee, backgro
 ### Task 14: Shell history (Atuin import on first run)
 
 **Files:**
+
 - Create: `agent_vm/src/features/runtime-control/shell-setup.ts`
 
 On first volume creation for `shellHistory` (detect via marker file in volume dir), if `shell.atuin.importOnFirstRun` is true:
+
 1. Copy host `~/.config/atuin/` and `~/.local/share/atuin/` into the volume dir
 2. Create marker file `.initialized`
 
@@ -1334,6 +1386,7 @@ git commit -m "feat(agent_vm): atuin history import on first shell history volum
 ### Task 15: Create new template files
 
 **Files:**
+
 - Create: `agent_vm/templates/.agent_vm/build.project.json`
 - Create: `agent_vm/templates/.agent_vm/vm-runtime.repo.json`
 - Create: `agent_vm/templates/.agent_vm/vm-runtime.local.json`
@@ -1354,9 +1407,11 @@ git commit -m "feat(agent_vm): create JSON config templates with schema referenc
 ### Task 16: Rewrite init_repo_vm.sh (sidecar parity)
 
 **Files:**
+
 - Rewrite: `agent_vm/init_repo_vm.sh`
 
 Match `init_repo_sidecar.sh` features:
+
 - Modes: `--default`, `--repo-only`, `--local-only`, `--sync-docs`
 - `--override` flag
 - `--help` flag
@@ -1377,6 +1432,7 @@ git commit -m "feat(agent_vm): rewrite init_repo_vm.sh with sidecar-parity featu
 ### Task 17: Create bootstrap.sh
 
 **Files:**
+
 - Create: `agent_vm/bootstrap.sh`
 
 ```bash
@@ -1411,6 +1467,7 @@ git commit -m "feat(agent_vm): add bootstrap.sh for first-time setup"
 ### Task 18: Update INSTRUCTIONS.md
 
 **Files:**
+
 - Modify: `agent_vm/INSTRUCTIONS.md`
 
 Document the new config surface, file layout, JSON schema references, and CLI flags.
@@ -1426,6 +1483,7 @@ git commit -m "docs(agent_vm): update INSTRUCTIONS.md with new config surface"
 ### Task 19: Update CLAUDE.md
 
 **Files:**
+
 - Modify: `agent_vm/CLAUDE.md`
 
 Update commands section, key patterns, and constraints to reflect JSON config model.
@@ -1446,20 +1504,22 @@ git commit -m "docs(agent_vm): update CLAUDE.md for JSON config model"
 
 Search the test files and confirm each of these has at least one passing test. **If any test is missing, you MUST write it before proceeding to Step 2.** Do not skip — this is the verification gate.
 
-| Requirement | Test location | What to verify |
-|------------|--------------|----------------|
-| Config merge: base < repo < local | `vm-runtime-config.unit.test.ts` | Three-tier merge with correct precedence |
-| Config merge: base + project (build) | `build-config.unit.test.ts` | Two-tier merge, `postBuild.commands` concatenation |
-| Schema validation errors include file path | `build-config-loader.unit.test.ts`, `vm-runtime-loader.unit.test.ts` | Error message contains filename |
-| Build fingerprint triggers rebuild | `build-assets` or `run-orchestrator` test | Changed fingerprint → rebuild; same → skip |
-| VFS mount planner: shadows | `vm-adapter.unit.test.ts` | `shadows.deny` paths produce `ShadowProvider(deny)` |
-| VFS mount planner: volumes | `vm-adapter.unit.test.ts` | Each volume → `RealFSProvider(hostDir)` at `guestPath` |
-| VFS mount planner: readonly | `vm-adapter.unit.test.ts` | `readonlyMounts` → `ReadonlyProvider(RealFSProvider(...))` |
-| VFS mount planner: extra | `vm-adapter.unit.test.ts` | `extraMounts` → `RealFSProvider(hostPath)` |
-| Script path resolution | `config-interpolation.unit.test.ts` | Relative resolution + traversal rejection |
-| Interpolation tokens | `config-interpolation.unit.test.ts` | `${WORKSPACE}`, `${HOST_HOME}` resolve; unknown rejected |
-| macOS postBuild hard error | `build-config-loader.unit.test.ts` | Darwin + OCI + postBuild → validation error thrown |
-| Scratchpad mode | `vm-adapter.unit.test.ts` | `scratchpad: true` → `MemoryProvider` for workspace |
+| Requirement                                | Test location                                                        | What to verify                                             |
+| ------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Config merge: base < repo < local          | `vm-runtime-config.unit.test.ts`                                     | Three-tier merge with correct precedence                   |
+| Config merge: base + project (build)       | `build-config.unit.test.ts`                                          | Two-tier merge, `postBuild.commands` concatenation         |
+| Schema validation errors include file path | `build-config-loader.unit.test.ts`, `vm-runtime-loader.unit.test.ts` | Error message contains filename                            |
+| Build fingerprint triggers rebuild         | `build-assets` or `run-orchestrator` test                            | Changed fingerprint → rebuild; same → skip                 |
+| VFS mount planner: shadows                 | `vm-adapter.unit.test.ts`                                            | `shadows.deny` paths produce `ShadowProvider(deny)`        |
+| VFS mount planner: volumes                 | `vm-adapter.unit.test.ts`                                            | Each volume → `RealFSProvider(hostDir)` at `guestPath`     |
+| VFS mount planner: readonly                | `vm-adapter.unit.test.ts`                                            | `readonlyMounts` → `ReadonlyProvider(RealFSProvider(...))` |
+| VFS mount planner: extra                   | `vm-adapter.unit.test.ts`                                            | `extraMounts` → `RealFSProvider(hostPath)`                 |
+| Script path resolution                     | `config-interpolation.unit.test.ts`                                  | Relative resolution + traversal rejection                  |
+| Interpolation tokens                       | `config-interpolation.unit.test.ts`                                  | `${WORKSPACE}`, `${HOST_HOME}` resolve; unknown rejected   |
+| macOS postBuild hard error                 | `build-config-loader.unit.test.ts`                                   | Darwin + OCI + postBuild → validation error thrown         |
+| Scratchpad mode                            | `vm-adapter.unit.test.ts`                                            | `scratchpad: true` → `MemoryProvider` for workspace        |
+| TCP mapping DNS config                     | `vm-adapter.unit.test.ts`                                            | Non-empty `tcpHosts` → `dns.mode: 'synthetic'` + `syntheticHostMapping: 'per-host'` set on VM.create |
+| TCP mapping key format                     | `tcp-service-config.unit.test.ts`                                    | `buildTcpHostsRecord()` produces `HOST:PORT` keys (port-specific, not host-only) |
 
 If any test is missing, write it before proceeding.
 
@@ -1472,6 +1532,9 @@ Use `grep`/search to confirm:
 - [ ] `tcp-services` strict mode defaults are preserved (check `tcp-service-config.ts` defaults)
 - [ ] `/home/agent` creation is guaranteed in daemon init (Task 13's `mkdir -p` step)
 - [ ] No path interpolation token leaks: search for `${HOME}` in mount resolution code — it should not appear (only `${WORKSPACE}` and `${HOST_HOME}` are valid host-path tokens)
+- [ ] TCP mapping DNS wiring: when `tcpHosts` is non-empty, `VM.create` receives `dns: { mode: 'synthetic', syntheticHostMapping: 'per-host' }` and `tcp: { hosts: ... }`. Gondolin's `assertTcpDnsConfig()` enforces this at construction time — omitting the DNS config will throw.
+- [ ] `TcpOptions` type from `@earendil-works/gondolin` is used (or `satisfies TcpOptions`) for the `tcp` option to catch shape mismatches at compile time
+- [ ] `buildTcpHostsRecord()` output keys always include port (`HOST:PORT` format) — verify no host-only keys are produced
 
 **Step 3: Run full validation gate**
 

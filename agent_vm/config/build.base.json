@@ -1,9 +1,15 @@
 {
+	"$schema": "../schemas/build-config.schema.json",
 	"arch": "aarch64",
 	"distro": "alpine",
 	"oci": {
 		"image": "docker.io/library/debian:bookworm-slim",
-		"runtime": "docker",
 		"pullPolicy": "if-not-present"
+	},
+	"env": {
+		"LANG": "C.UTF-8"
+	},
+	"runtimeDefaults": {
+		"rootfsMode": "memory"
 	}
 }

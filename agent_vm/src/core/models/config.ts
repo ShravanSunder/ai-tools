@@ -1,3 +1,6 @@
+import type { BuildConfig } from '#src/core/models/build-config.js';
+import type { VmRuntimeConfig } from '#src/core/models/vm-runtime-config.js';
+
 export type AgentPreset = 'claude' | 'codex' | 'gemini' | 'opencode' | 'cursor';
 
 export type RunMode =
@@ -9,6 +12,9 @@ export type RunMode =
 export interface RunAgentVmOptions {
 	readonly reload: boolean;
 	readonly fullReset: boolean;
+	readonly wipeVolumes: boolean;
+	readonly scratchpad: boolean;
+	readonly cleanup: boolean;
 	readonly runMode: RunMode;
 }
 
@@ -19,12 +25,6 @@ export interface WorkspaceIdentity {
 	readonly sessionName: string;
 	readonly daemonSocketPath: string;
 	readonly daemonLogPath: string;
-}
-
-export interface VmConfig {
-	readonly idleTimeoutMinutes: number;
-	readonly extraAptPackages: readonly string[];
-	readonly playwrightExtraHosts: readonly string[];
 }
 
 export interface TcpServiceEntry {
@@ -41,7 +41,8 @@ export interface TcpServiceMap {
 }
 
 export interface ResolvedRuntimeConfig {
-	readonly vmConfig: VmConfig;
+	readonly runtimeConfig: VmRuntimeConfig;
+	readonly buildConfig: BuildConfig;
 	readonly tcpServiceMap: TcpServiceMap;
 	readonly allowedHosts: readonly string[];
 	readonly toggleEntries: readonly string[];
