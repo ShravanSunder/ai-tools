@@ -11,7 +11,7 @@
       "name": "ai-scaffold",
       "source": "./plugins/ai-scaffold",
       "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
-      "version": "0.1.0"
+      "version": "0.3.0"
     },
     {
       "name": "skill-peekaboo",

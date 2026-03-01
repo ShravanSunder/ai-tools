@@ -25,7 +25,7 @@ Claude Code plugins distributed via the [ai-tools marketplace](../.claude-plugin
 
 ### [ai-scaffold](ai-scaffold/)
 
-Project scaffolding with standard dev configs. Supports TypeScript (biome, vitest, Playwright), Python (ruff, basedpyright, pytest), and Swift (swiftlint, swiftformat). Includes cursor rules and claude hooks.
+Project scaffolding with standard dev configs. Supports TypeScript (oxlint, oxfmt, vitest, Playwright), Python (ruff, basedpyright, pytest), and Swift (swiftlint, swift-format). Includes cursor rules and claude hooks.
 
 - `/scaffold-project` -- scaffold a new project or retrofit an existing one
 - `/scaffold-project-update-templates` -- update templates with latest standards
