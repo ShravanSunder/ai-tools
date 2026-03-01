@@ -15,7 +15,9 @@
 
 ## Essential Paths
 
-- Plan: `docs/plans/2026-03-01-agent-vm-full-parity.md`
+- Plans:
+  - `agent_vm/docs/plans/2026-03-01-agent-vm-config-surface-design.md`
+  - `agent_vm/docs/plans/2026-03-01-agent-vm-config-implementation.md`
 - Architecture: `docs/architecture/agent-vm-architecture.md`
 - Base config: `agent_vm/config/vm.base.conf`
 - Debian build profile: `agent_vm/config/build.debian.json`

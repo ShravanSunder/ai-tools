@@ -109,7 +109,8 @@ pnpm --dir agent_vm check
 Key docs:
 
 - [`agent_vm/README.md`](agent_vm/README.md)
-- [`docs/plans/2026-03-01-agent-vm-full-parity.md`](docs/plans/2026-03-01-agent-vm-full-parity.md)
+- [`agent_vm/docs/plans/2026-03-01-agent-vm-config-surface-design.md`](agent_vm/docs/plans/2026-03-01-agent-vm-config-surface-design.md)
+- [`agent_vm/docs/plans/2026-03-01-agent-vm-config-implementation.md`](agent_vm/docs/plans/2026-03-01-agent-vm-config-implementation.md)
 - [`docs/architecture/agent-vm-architecture.md`](docs/architecture/agent-vm-architecture.md)
 
 ---

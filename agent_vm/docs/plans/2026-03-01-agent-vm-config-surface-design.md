@@ -288,8 +288,12 @@ Build triggered:
 |------|-------|-----------|---------|----------|
 | (no flag) | Reuse (build if missing) | Reuse existing | Reuse | Day-to-day re-entry |
 | `--reload` | Reuse | Recreate | Survive | Pick up config changes |
-| `--full-reset` | Rebuild | Recreate | Wiped | Update packages, fresh start |
+| `--full-reset` | Rebuild | Recreate | Survive | Update packages, rebuild image |
+| `--wipe-volumes` | Rebuild | Recreate | Wiped | Scorched-earth reset |
 | `--scratchpad` | Reuse | Create with MemoryProvider workspace | Survive | Ephemeral experimentation |
+| `--cleanup` | N/A | N/A | N/A | List/prune stale caches and volumes (no VM started) |
+
+**`--full-reset` preserves volumes** because dependency caches (.venv, node_modules, pnpm store) are the most expensive to rebuild. Packages are baked into the OCI image at build time, so `--full-reset` rebuilds that image — volumes contain runtime-installed deps that complement the image. `--wipe-volumes` is the escape hatch when volumes themselves are corrupted or stale.
 
 ## Bootstrap (`bootstrap.sh`)
 
@@ -305,11 +309,13 @@ On daemon start, after VM boots:
 ```
 1. rootfsInitExtra (build-time, baked into image init script before sandboxd)
      ↓
-2. initScripts.background (vm.exec, async, non-blocking)
+2. Guarantee /home/agent exists (mkdir -p, chown — all env defaults and volume guestPaths depend on this)
      ↓
-3. initScripts.foreground (vm.exec, blocking)
+3. initScripts.background (vm.exec, async, non-blocking)
      ↓
-4. Agent command runs (attach)
+4. initScripts.foreground (vm.exec, blocking)
+     ↓
+5. Agent command runs (attach)
 ```
 
 ## `init_repo_vm.sh`
@@ -370,8 +376,11 @@ Discovery runs at daemon startup when `monorepoDiscovery: true`.
    - `${WORKSPACE}` (host workspace path)
    - `${HOST_HOME}` (host user home path)
    - no implicit reuse of guest env vars for host mount resolution
-9. Update `init_repo_vm.sh` templates to JSON config model.
-10. Update operator docs/INSTRUCTIONS to match actual config surface and migration.
+9. **Hard-fail** `postBuild.commands` on macOS: if `process.platform === 'darwin'` AND merged config has `oci` AND `postBuild.commands` is non-empty, throw a validation error (not a warning). Gondolin's build pipeline hard-fails this combination (`build/index.ts:74`). The error message must point to the custom OCI image strategy (see "macOS + OCI Package Customization Strategy" section above).
+10. Guarantee `/home/agent` exists in guest: either via rootfs init script or foreground init. All `env` defaults and volume `guestPath` values referencing `/home/agent/` depend on this.
+11. Add `--wipe-volumes` and `--cleanup` CLI flags.
+12. Update `init_repo_vm.sh` templates to JSON config model.
+13. Update operator docs/INSTRUCTIONS to match actual config surface and migration.
 
 ## Verification Matrix (Required)
 
@@ -387,6 +396,9 @@ Discovery runs at daemon startup when `monorepoDiscovery: true`.
 4. Script path resolution:
    - relative path resolution from config location
    - rejection of invalid traversal/path escapes
+5. Platform-constraint validation:
+   - on macOS, merged `oci` + non-empty `postBuild.commands` throws hard validation error
+   - error message includes remediation (custom OCI image strategy)
 
 ### Integration
 
@@ -397,16 +409,19 @@ Discovery runs at daemon startup when `monorepoDiscovery: true`.
    - `.venv`
    - `node_modules`
    - pnpm/uv/cache/history directories
+5. macOS constraint path:
+   - daemon startup fails before build when `oci + postBuild.commands` is configured
 
 ### E2E (Automated)
 
 1. Tmp workspace provisioning in OS tmp dir.
-2. Start Docker postgres + redis containers on host loopback with ephemeral ports.
-3. Generate `.agent_vm/tcp-services.local.json` mapping to discovered host ports.
-4. Execute `run-agent-vm --run "<check-command>"` and assert:
+2. Start Docker postgres + redis containers on host loopback with **ephemeral ports** (`docker run -p 127.0.0.1::5432`). Never use fixed host ports — they collide on busy hosts.
+3. Discover assigned ports via `docker port <container> <containerPort>/tcp | cut -d: -f2`.
+4. Generate `.agent_vm/tcp-services.local.json` mapping to discovered ephemeral host ports.
+5. Execute `run-agent-vm --run "<check-command>"` and assert:
    - `nc` connectivity to `pg.vm.host:5432` and `redis.vm.host:6379`
    - optional protocol checks (`psql`, `redis-cli`) when tools exist in guest image
-5. Stop daemon and clean tmp workspace + test containers.
+6. Stop daemon and clean tmp workspace + test containers (always, even on failure).
 
 ### Full Validation Gate (before completion)
 
@@ -416,11 +431,35 @@ Discovery runs at daemon startup when `monorepoDiscovery: true`.
 4. `pnpm --dir agent_vm test`
 5. `pnpm --dir agent_vm test:e2e`
 
-## Open Decisions (Must Resolve Before Build)
+## Resolved Decisions
 
-1. **`--full-reset` volume semantics**: current table says volumes are wiped. Confirm if that is intentional, or whether `--full-reset` should rebuild image/runtime while preserving volumes by default.
-2. **Default `rootfsMode`**: current runtime default is `memory` for safety/ephemerality. Confirm whether default should stay `memory` or move to `cow` for better out-of-the-box persistence.
-3. **Cache and volume garbage collection policy**: define when to prune stale image caches, old checkpoints, and workspace volume dirs.
+1. **`--full-reset` preserves volumes. (LOCKED INVARIANT — do not regress.)** Volumes survive `--full-reset` because dependency caches (.venv, node_modules, pnpm store) are the most expensive to rebuild. A separate `--wipe-volumes` flag wipes volumes + rebuilds image for scorched-earth resets. Matches sidecar behavior where Docker named volumes survive `--full-reset` (see `agent_sidecar/INSTRUCTIONS.md:152`). This parity must be maintained — add a test that asserts `--full-reset` does NOT call `wipeVolumeDirs()`.
+2. **Default `rootfsMode` stays `memory`.** Packages are baked into the OCI image at build time, so the rootfs overlay is scratch space (temp files, apt cache during init). `memory` keeps it ephemeral and clean — no drift accumulation across restarts. `cow` is available for users who install packages at runtime and want persistence.
+3. **No automatic GC. Manual `--cleanup` command.** `run-agent-vm --cleanup` lists stale image caches and volume dirs (workspace no longer exists or hasn't been used in 30+ days) and prompts for confirmation before deletion. Same pattern as `sidecar-ctl cleanup`. Automatic GC is risky; disk cost is bounded (one image + volumes per project).
+
+## Reference Links
+
+### Gondolin Documentation
+- **VFS Providers** (RealFSProvider, ShadowProvider, MemoryProvider, ReadonlyProvider): https://earendil-works.github.io/gondolin/vfs/
+- **Custom Images** (OCI builds, postBuild, rootfs modes): https://earendil-works.github.io/gondolin/custom-images/
+- **Snapshots & Checkpoints** (what persists, what doesn't): https://earendil-works.github.io/gondolin/snapshots/
+- **SDK Storage** (host-backed dirs, volume patterns): https://earendil-works.github.io/gondolin/sdk-storage/
+- **SDK VM API** (VM.create, sandbox.imagePath, tcp.hosts): https://earendil-works.github.io/gondolin/sdk-vm/
+
+### Sidecar Reference (parity target)
+- **Main launch script** (Docker volumes, mount logic): `agent_sidecar/run-agent-sidecar.sh` (lines 440-600 for mount/volume inventory)
+- **Init repo script** (template copying, modes): `agent_sidecar/init_repo_sidecar.sh`
+- **Firewall system**: `agent_sidecar/setup/firewall.sh`
+- **Sidecar config model**: `agent_sidecar/sidecar.base.conf`
+
+### Existing agent_vm Code (modification targets)
+- **VM adapter** (hardcoded shadows, env, mounts): `agent_vm/src/core/infrastructure/vm-adapter.ts`
+- **Config resolver** (bash conf parser to replace): `agent_vm/src/features/runtime-control/config-resolver.ts`
+- **Build assets** (single image builder): `agent_vm/src/build/build-assets.ts`
+- **Session daemon** (DI, startup flow): `agent_vm/src/features/runtime-control/session-daemon.ts`
+- **Run orchestrator** (CLI entry, build trigger): `agent_vm/src/features/runtime-control/run-orchestrator.ts`
+- **TCP service config** (existing Zod pattern to follow): `agent_vm/src/features/runtime-control/tcp-service-config.ts`
+- **Gondolin vendored types**: `agent_vm/src/core/types/gondolin/` (VFS providers, VM options, build config)
 
 ## Post-Implementation Documentation Task
 
