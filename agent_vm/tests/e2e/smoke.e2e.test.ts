@@ -6,7 +6,7 @@ import path from 'node:path';
 import { execa } from 'execa';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { deriveWorkspaceIdentity } from '../../src/core/workspace.js';
+import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 
 const servers: net.Server[] = [];
 const pathsToCleanup: string[] = [];

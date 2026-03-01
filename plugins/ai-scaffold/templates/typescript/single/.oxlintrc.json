@@ -24,7 +24,7 @@
 
     "no-console": "warn",
     "prefer-const": "warn",
-    "id-length": ["warn", { "min": 3, "exceptions": ["_", "i"] }],
+    "id-length": ["warn", { "min": 2, "exceptions": ["_", "i"] }],
     "typescript/consistent-type-imports": ["warn", {
       "prefer": "type-imports",
       "disallowTypeAnnotations": false,

@@ -2,9 +2,9 @@
 
 import path from 'node:path';
 
-import { JsonLineLogger } from '../core/logger.js';
-import { AgentVmDaemon } from '../core/session-daemon.js';
-import { deriveWorkspaceIdentity } from '../core/workspace.js';
+import { JsonLineLogger } from '#src/core/platform/logger.js';
+import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
+import { AgentVmDaemon } from '#src/features/runtime-control/session-daemon.js';
 
 function parseWorkDir(argv: readonly string[]): string {
 	const index = argv.indexOf('--work-dir');

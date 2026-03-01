@@ -24,6 +24,9 @@
 				"allowHigherOrderFunctions": true
 			}
 		],
+		"no-console": "warn",
+		"prefer-const": "warn",
+		"id-length": ["warn", { "min": 2, "exceptions": ["_", "i"] }],
 		"typescript/consistent-type-imports": [
 			"warn",
 			{
@@ -32,8 +35,34 @@
 				"fixStyle": "separate-type-imports"
 			}
 		],
+		"typescript/no-unused-vars": [
+			"warn",
+			{
+				"argsIgnorePattern": "^_",
+				"destructuredArrayIgnorePattern": "^_",
+				"varsIgnorePattern": "^_"
+			}
+		],
+		"typescript/array-type": "warn",
+		"typescript/consistent-generic-constructors": "warn",
+		"typescript/prefer-function-type": "warn",
+		"unicorn/throw-new-error": "warn",
+		"unicorn/prefer-optional-catch-binding": "warn",
+		"unicorn/catch-error-name": "warn",
+		"no-var": "warn",
+		"unicorn/prefer-node-protocol": "warn",
+		"eqeqeq": "warn",
+		"no-fallthrough": "error",
+		"no-self-compare": "error",
+		"array-callback-return": "warn",
+		"typescript/prefer-nullish-coalescing": "warn",
+		"typescript/switch-exhaustiveness-check": "error",
+		"typescript/no-misused-promises": "error",
 		"typescript/no-floating-promises": ["error", { "ignoreVoid": true }],
-		"typescript/await-thenable": "error"
+		"typescript/await-thenable": "error",
+		"typescript/no-unsafe-assignment": "warn",
+		"typescript/no-unsafe-return": "warn",
+		"typescript/no-unsafe-call": "warn"
 	},
 	"ignorePatterns": ["dist", "build", "coverage", "node_modules"]
 }

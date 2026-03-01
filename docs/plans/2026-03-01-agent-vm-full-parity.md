@@ -1233,6 +1233,7 @@ pnpm --dir agent_vm build         # tsc -p tsconfig.json
 - Add `daemon gc` (clean stale sessions, old image caches)
 - Complete parity checklist against sidecar features
 - Write operator docs (README.md, INSTRUCTIONS.md)
+- Add smoke validation task: launch and control `agent_vm` from a fresh temporary repo directory
 - Run full quality gates
 
 ### Phase 9: Architecture Documentation (Post-Implementation)
