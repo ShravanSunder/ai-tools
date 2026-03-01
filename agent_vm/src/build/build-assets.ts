@@ -10,6 +10,23 @@ export interface BuildAssetsOptions {
 	fullReset: boolean;
 }
 
+function resolveGondolinBinPath(): string {
+	const root = getAgentVmRoot();
+	const localBin = path.join(root, 'node_modules', '.bin', 'gondolin');
+	if (fs.existsSync(localBin)) {
+		return localBin;
+	}
+
+	const hoistedBin = path.resolve(root, '..', 'node_modules', '.bin', 'gondolin');
+	if (fs.existsSync(hoistedBin)) {
+		return hoistedBin;
+	}
+
+	throw new Error(
+		'gondolin CLI not found. Install @earendil-works/gondolin and run pnpm install.',
+	);
+}
+
 export async function buildDebianGuestAssets(options: BuildAssetsOptions): Promise<void> {
 	const root = getAgentVmRoot();
 	const configPath = path.join(root, 'config', 'build.debian.json');
@@ -20,7 +37,8 @@ export async function buildDebianGuestAssets(options: BuildAssetsOptions): Promi
 
 	fs.mkdirSync(options.outputDir, { recursive: true });
 
-	await execa('gondolin', ['build', '--config', configPath, '--output', options.outputDir], {
+	const gondolinBin = resolveGondolinBinPath();
+	await execa(gondolinBin, ['build', '--config', configPath, '--output', options.outputDir], {
 		stdio: 'inherit',
 	});
 }

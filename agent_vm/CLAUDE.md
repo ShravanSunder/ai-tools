@@ -56,3 +56,4 @@ pnpm check             # All checks: lint + fmt + typecheck + test + e2e
 - TypeScript strict mode with all strict flags enabled
 - No `any` types — use generics or explicit types
 - `noPropertyAccessFromIndexSignature: false` (deliberate — config objects use index access)
+- **Package manager**: `pnpm` only. Use `pnpm dlx` for one-off binary execution (never `npx`). Gondolin CLI is resolved from local `node_modules/.bin/` at runtime — never rely on bare PATH lookup.

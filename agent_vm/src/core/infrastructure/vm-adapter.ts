@@ -135,8 +135,9 @@ function shellEscape(value: string): string {
 
 function resolveLoopbackStreamOpener(vm: GondolinVm): LoopbackStreamOpener | null {
 	const vmWithPrivateLoopback = vm as unknown as GondolinVmWithPrivateLoopback;
-	const openTcpStream = vmWithPrivateLoopback.server?.openTcpStream;
-	if (!openTcpStream) {
+	const server = vmWithPrivateLoopback.server;
+	const boundOpenTcpStream = server?.openTcpStream?.bind(server);
+	if (!boundOpenTcpStream) {
 		return null;
 	}
 	return {
@@ -145,7 +146,7 @@ function resolveLoopbackStreamOpener(vm: GondolinVm): LoopbackStreamOpener | nul
 			port: number;
 			timeoutMs?: number;
 		}): Promise<Duplex> => {
-			const stream = await openTcpStream(input);
+			const stream = await boundOpenTcpStream(input);
 			if (!(stream instanceof Duplex)) {
 				throw new Error('Gondolin loopback bridge returned a non-Duplex stream');
 			}
