@@ -10,7 +10,7 @@
 - Per-workspace daemon with Unix socket attach model
 - 10-minute idle shutdown only when no clients are attached
 - Policy compilation from base + repo + local + toggles (policy changes trigger VM runtime recreation)
-- Host Docker service tunnels exposed as VM loopback ports
+- Host Docker services mapped via Gondolin tcp.hosts with synthetic DNS hostnames (e.g. pg.vm.host, redis.vm.host)
 - OAuth mode `1.B` using session mirror copy-in/copy-back
 
 ## Essential Paths

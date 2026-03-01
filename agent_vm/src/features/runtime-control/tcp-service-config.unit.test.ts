@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
 	buildTcpHostsRecord,
+	buildTcpServiceEnvVars,
 	loadTcpServiceConfig,
 	parseTcpServiceConfig,
 	validateTcpServiceTargets,
@@ -286,6 +287,54 @@ describe('tcp service config', () => {
 			};
 
 			expect(() => buildTcpHostsRecord(config)).toThrowError(/duplicate guest mapping/u);
+		});
+	});
+
+	describe('buildTcpServiceEnvVars', () => {
+		it('produces PGHOST, PGPORT, REDIS_HOST, REDIS_PORT, REDIS_URL from defaults', () => {
+			const config = parseTcpServiceConfig({});
+			const envVars = buildTcpServiceEnvVars(config);
+
+			expect(envVars.PGHOST).toBe('pg.vm.host');
+			expect(envVars.PGPORT).toBe('5432');
+			expect(envVars.REDIS_HOST).toBe('redis.vm.host');
+			expect(envVars.REDIS_PORT).toBe('6379');
+			expect(envVars.REDIS_URL).toBe('redis://redis.vm.host:6379/0');
+		});
+
+		it('omits PG env vars when postgres is disabled', () => {
+			const config = parseTcpServiceConfig({
+				services: { postgres: { enabled: false } },
+			});
+			const envVars = buildTcpServiceEnvVars(config);
+
+			expect(envVars.PGHOST).toBeUndefined();
+			expect(envVars.PGPORT).toBeUndefined();
+			expect(envVars.REDIS_HOST).toBe('redis.vm.host');
+		});
+
+		it('omits REDIS env vars when redis is disabled', () => {
+			const config = parseTcpServiceConfig({
+				services: { redis: { enabled: false } },
+			});
+			const envVars = buildTcpServiceEnvVars(config);
+
+			expect(envVars.REDIS_HOST).toBeUndefined();
+			expect(envVars.REDIS_PORT).toBeUndefined();
+			expect(envVars.REDIS_URL).toBeUndefined();
+			expect(envVars.PGHOST).toBe('pg.vm.host');
+		});
+
+		it('returns empty record when all services are disabled', () => {
+			const config = parseTcpServiceConfig({
+				services: {
+					postgres: { enabled: false },
+					redis: { enabled: false },
+				},
+			});
+			const envVars = buildTcpServiceEnvVars(config);
+
+			expect(Object.keys(envVars)).toHaveLength(0);
 		});
 	});
 

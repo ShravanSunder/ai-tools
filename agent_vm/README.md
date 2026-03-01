@@ -12,7 +12,6 @@
 - `run-agent-vm --run "<command>"`
 - `agent-vm-ctl status --work-dir <repo>`
 - `agent-vm-ctl policy allow --target linear --work-dir <repo>`
-- `agent-vm-ctl tunnels status --work-dir <repo>`
 - `agent-vm-ctl daemon stop --work-dir <repo>`
 
 ## Repo Setup
