@@ -620,6 +620,119 @@ git commit -m "refactor(agent_vm): rewrite config-resolver to use JSON+Zod loade
 
 ---
 
+### Task 6b: Config interpolation and path resolution
+
+**Files:**
+- Create: `agent_vm/src/features/runtime-control/config-interpolation.ts`
+- Test: `agent_vm/src/features/runtime-control/config-interpolation.unit.test.ts`
+
+**Context:** The design doc defines two interpolation domains that MUST NOT be confused:
+- `${WORKSPACE}` — host workspace path (used for mount source resolution)
+- `${HOST_HOME}` — host user home path (used for host-side mount sources like `.aws`)
+- Guest `HOME` in `env` is a literal value (`/home/agent`), NOT an interpolation token
+
+**Step 1: Write failing test**
+
+```typescript
+import path from 'node:path';
+
+import { describe, expect, it } from 'vitest';
+
+import {
+	interpolateConfigValue,
+	resolveScriptPath,
+} from '#src/features/runtime-control/config-interpolation.js';
+
+describe('interpolateConfigValue', () => {
+	const context = { WORKSPACE: '/Users/dev/my-project', HOST_HOME: '/Users/dev' };
+
+	it('replaces ${WORKSPACE} token', () => {
+		expect(interpolateConfigValue('${WORKSPACE}/.venv', context)).toBe('/Users/dev/my-project/.venv');
+	});
+
+	it('replaces ${HOST_HOME} token', () => {
+		expect(interpolateConfigValue('${HOST_HOME}/.aws', context)).toBe('/Users/dev/.aws');
+	});
+
+	it('leaves literal strings unchanged', () => {
+		expect(interpolateConfigValue('/home/agent', context)).toBe('/home/agent');
+	});
+
+	it('rejects unknown tokens', () => {
+		expect(() => interpolateConfigValue('${UNKNOWN}/path', context)).toThrow(/unknown.*token/iu);
+	});
+});
+
+describe('resolveScriptPath', () => {
+	it('resolves relative path from config file location', () => {
+		const configDir = '/Users/dev/my-project/.agent_vm';
+		const result = resolveScriptPath('./init/setup.sh', configDir);
+
+		expect(result).toBe(path.join(configDir, 'init', 'setup.sh'));
+	});
+
+	it('rejects path traversal escaping config dir', () => {
+		const configDir = '/Users/dev/my-project/.agent_vm';
+		expect(() => resolveScriptPath('../../etc/passwd', configDir)).toThrow(/traversal/iu);
+	});
+
+	it('rejects absolute paths', () => {
+		const configDir = '/Users/dev/my-project/.agent_vm';
+		expect(() => resolveScriptPath('/etc/passwd', configDir)).toThrow(/absolute/iu);
+	});
+});
+```
+
+**Step 2: Run → FAIL**
+
+**Step 3: Implement**
+
+```typescript
+import path from 'node:path';
+
+const ALLOWED_TOKENS = new Set(['WORKSPACE', 'HOST_HOME']);
+const TOKEN_PATTERN = /\$\{(\w+)\}/gu;
+
+export interface InterpolationContext {
+	readonly WORKSPACE: string;
+	readonly HOST_HOME: string;
+}
+
+export function interpolateConfigValue(value: string, context: InterpolationContext): string {
+	return value.replace(TOKEN_PATTERN, (match, token: string) => {
+		if (!ALLOWED_TOKENS.has(token)) {
+			throw new Error(`Unknown interpolation token: \${${token}}. Allowed: ${[...ALLOWED_TOKENS].join(', ')}`);
+		}
+		return context[token as keyof InterpolationContext];
+	});
+}
+
+export function resolveScriptPath(scriptPath: string, configDir: string): string {
+	if (path.isAbsolute(scriptPath)) {
+		throw new Error(`Script paths must be relative, not absolute: ${scriptPath}`);
+	}
+
+	const resolved = path.resolve(configDir, scriptPath);
+	const normalized = path.normalize(resolved);
+
+	if (!normalized.startsWith(configDir)) {
+		throw new Error(`Path traversal detected: ${scriptPath} resolves outside ${configDir}`);
+	}
+
+	return normalized;
+}
+```
+
+**Step 4: Run → PASS**
+
+**Step 5: Commit**
+
+```bash
+git commit -m "feat(agent_vm): config interpolation tokens and safe script path resolution"
+```
+
+---
+
 ### Task 7: Delete old conf files and stale templates
 
 **Files:**
@@ -633,7 +746,7 @@ git commit -m "refactor(agent_vm): rewrite config-resolver to use JSON+Zod loade
 
 **Step 1: Create base config files**
 
-`config/build.base.json`:
+`config/build.base.json` (NO `postBuild.commands` — macOS + OCI builds don't support them; use custom OCI images instead):
 ```json
 {
 	"$schema": "../schemas/build-config.schema.json",
@@ -642,11 +755,6 @@ git commit -m "refactor(agent_vm): rewrite config-resolver to use JSON+Zod loade
 	"oci": {
 		"image": "docker.io/library/debian:bookworm-slim",
 		"pullPolicy": "if-not-present"
-	},
-	"postBuild": {
-		"commands": [
-			"apt-get update && apt-get install -y --no-install-recommends git curl zsh ca-certificates"
-		]
 	},
 	"env": {
 		"LANG": "C.UTF-8"
@@ -684,7 +792,7 @@ git commit -m "refactor(agent_vm): rewrite config-resolver to use JSON+Zod loade
 	},
 	"readonlyMounts": {
 		".git": "${WORKSPACE}/.git",
-		".aws": "${HOME}/.aws"
+		".aws": "${HOST_HOME}/.aws"
 	},
 	"extraMounts": {},
 	"monorepoDiscovery": true,
@@ -746,27 +854,63 @@ The orchestrator passes `outputDir` based on `identity.workDir` hash (from `deri
 
 `buildDebianGuestAssets` writes the merged `BuildConfig` to a temp JSON file, passes that to `gondolin build --config <temp> --output <dir>`.
 
-**Step 3: Update run-orchestrator.ts**
+**Step 3: Implement build fingerprinting**
+
+Compute a deterministic fingerprint from:
+- Merged build config JSON (canonical serialization)
+- Gondolin package version (from `node_modules/@aspect-build/gondolin/package.json` or equivalent)
+- agent_vm build schema version constant
+
+Write fingerprint to `{outputDir}/.build-fingerprint`. On subsequent runs, compare fingerprint — rebuild if changed.
+
+```typescript
+import crypto from 'node:crypto';
+
+export function computeBuildFingerprint(
+	mergedConfig: BuildConfig,
+	gondolinVersion: string,
+	schemaVersion: string,
+): string {
+	const content = JSON.stringify({ config: mergedConfig, gondolinVersion, schemaVersion });
+	return crypto.createHash('sha256').update(content).digest('hex').slice(0, 16);
+}
+```
+
+**Step 4: Update run-orchestrator.ts**
 
 `maybeBuildGuestAssets` now:
 1. Loads build config via `loadBuildConfig(workDir)`
 2. Computes output dir: `~/.cache/agent-vm/images/{dirHash}/`
-3. Checks if image already exists (manifest.json present) — skip if yes and not `fullReset`
-4. Calls `buildDebianGuestAssets` with merged config
+3. Computes build fingerprint from merged config + gondolin version
+4. Checks cached fingerprint — skip build only if fingerprint matches AND not `fullReset`
+5. Calls `buildDebianGuestAssets` with merged config
+6. Writes fingerprint file after successful build
 
-**Step 4: Update ensureDaemonRunning and daemon to use per-project image path**
+**Step 5: Wire `sandbox.imagePath` into daemon**
 
-The daemon needs to know the image path. Pass it via the workspace identity or a new field.
+The resolved image directory MUST be passed to `VM.create()` as `sandbox.imagePath`. Add `imagePath: string` to the daemon dependencies / workspace identity so the adapter can set:
 
-**Step 5: Run full test suite**
+```typescript
+VM.create({
+	sandbox: {
+		imagePath: resolvedImageDir,
+		// ...
+	},
+	// ...
+});
+```
+
+This is a non-negotiable constraint — without explicit `imagePath`, the built image may not be used.
+
+**Step 6: Run full test suite**
 
 Run: `pnpm --dir agent_vm test`
 Expected: All PASS
 
-**Step 6: Commit**
+**Step 7: Commit**
 
 ```bash
-git commit -m "feat(agent_vm): per-project image building with layered build config"
+git commit -m "feat(agent_vm): per-project image building with fingerprint invalidation and sandbox.imagePath"
 ```
 
 ---
@@ -1163,17 +1307,37 @@ git commit -m "docs(agent_vm): update CLAUDE.md for JSON config model"
 
 ---
 
-### Task 20: Full verification
+### Task 20: Full verification (design doc verification matrix)
 
-**Step 1: Run all checks**
+**Step 1: Verify unit test coverage against design doc matrix**
+
+Required unit test assertions (from design doc "Verification Matrix"):
+- [ ] Config merge precedence: base < repo < local semantics
+- [ ] Invalid JSON/schema errors include file path context
+- [ ] Build fingerprint changes trigger rebuild; unchanged config reuses image
+- [ ] VFS mount planner: shadows, readonly, volume mounts, extra mounts, longest-prefix routing
+- [ ] Script path resolution: relative from config location, rejection of traversal/escape
+- [ ] Interpolation: `${WORKSPACE}` and `${HOST_HOME}` resolve correctly, unknown tokens rejected, guest `HOME` is literal
+
+**Step 2: Run full validation gate**
 
 ```bash
-pnpm --dir agent_vm check
+pnpm --dir agent_vm lint
+pnpm --dir agent_vm fmt:check
+pnpm --dir agent_vm typecheck
+pnpm --dir agent_vm test
 ```
 
-Expected: lint + fmt + typecheck + test + e2e all PASS.
+All must exit 0.
 
-**Step 2: Manual smoke test**
+**Step 3: Verify critical constraints are encoded**
+
+- [ ] `sandbox.imagePath` is always set in `VM.create` — search for `VM.create` calls, confirm none omit `imagePath`
+- [ ] `build.base.json` has NO `postBuild.commands` (macOS constraint)
+- [ ] `tcp-services` strict mode defaults are preserved
+- [ ] `/home/agent` creation is guaranteed (check rootfs init or image contents)
+
+**Step 4: Manual smoke test**
 
 ```bash
 # Initialize a test repo
@@ -1191,7 +1355,7 @@ cat .agent_vm/vm-runtime.repo.json
 run-agent-vm --no-run
 ```
 
-**Step 3: Final commit if needed**
+**Step 5: Final commit if needed**
 
 ```bash
 git commit -m "chore(agent_vm): final verification pass"
