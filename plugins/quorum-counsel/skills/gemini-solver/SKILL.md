@@ -1,6 +1,6 @@
 ---
 name: gemini-solver
-description: Delegate problems to Google Gemini via the `gemini -p` CLI for large-scale codebase understanding, architecture analysis, or a different model's perspective. Gemini excels at massive context (1M+ tokens), system-wide pattern recognition, and clear explanations. Use when you need to understand a large codebase, trace cross-cutting concerns, or want a second opinion. Provide EXTENSIVE context for quality results. Takes 2-10 minutes.
+description: "**Not for use from Gemini.** This skill calls `gemini -p`. Gemini cannot self-nest via CLI. Delegate problems to Google Gemini via the `gemini -p` CLI for large-scale codebase understanding, architecture analysis, or a different model's perspective. Gemini excels at massive context (1M+ tokens), system-wide pattern recognition, and clear explanations. Use when you need to understand a large codebase, trace cross-cutting concerns, or want a second opinion. Provide EXTENSIVE context for quality results. Takes 2-10 minutes."
 ---
 
 # Gemini Solver

@@ -215,6 +215,8 @@ Use web search and deepwiki to research:
 - Latest ruff configuration best practices
 - TypeScript strict mode updates
 - BasedPyright configuration changes
+- Latest swift-format rules (Apple's toolchain formatter — check `swift-format --version` output and Apple Swift Evolution proposals)
+- Latest SwiftLint opt_in_rules (check swiftlint's CHANGELOG for newly promoted rules)
 
 ### Step 3: Propose Changes
 

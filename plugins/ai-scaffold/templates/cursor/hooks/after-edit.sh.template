@@ -96,12 +96,12 @@ case "$abs" in
   ;;
 esac
 
-# --- Swift: SwiftFormat + SwiftLint ---
+# --- Swift: swift-format + SwiftLint ---
 case "$abs" in
   *.swift)
-    if command -v swiftformat >/dev/null 2>&1; then
-      if ! swiftformat "$abs" --quiet 2>&1; then
-        err "Hint: SwiftFormat failed for $abs"
+    if command -v swift-format >/dev/null 2>&1; then
+      if ! swift-format format --in-place "$abs" 2>&1; then
+        err "Hint: swift-format failed for $abs"
         has_errors=1
       fi
     fi

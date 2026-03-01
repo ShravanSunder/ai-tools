@@ -78,12 +78,12 @@ case "$file_path" in
   ;;
 esac
 
-# Swift: SwiftFormat + SwiftLint
+# Swift: swift-format + SwiftLint
 case "$file_path" in
   *.swift)
-    if command -v swiftformat >/dev/null 2>&1; then
-      if ! swiftformat "$file_path" --quiet 2>&1; then
-        err "Hint: SwiftFormat failed for $file_path"
+    if command -v swift-format >/dev/null 2>&1; then
+      if ! swift-format format --in-place "$file_path" 2>&1; then
+        err "Hint: swift-format failed for $file_path"
         has_errors=1
       fi
     fi

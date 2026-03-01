@@ -130,8 +130,8 @@ packages/py_core/
 | File | Purpose |
 |------|---------|
 | `Package.swift.template` | SPM manifest with test target |
-| `.swiftlint.yml` | SwiftLint strict config with SwiftUI rules |
-| `.swiftformat` | SwiftFormat config (4-space indent, Swift 6.0) |
+| `.swiftlint.yml` | SwiftLint strict config — 45+ opt_in_rules, Swift 6 custom_rules (enforce @Observable, Task/@MainActor, async streams), disabled_rules for swift-format overlap |
+| `.swift-format` | Apple's swift-format JSON config (4-space indent, 120 char line length, strict semantic rules) |
 
 ## Cursor Templates
 
@@ -263,12 +263,14 @@ Configuration:
 - Line length: warning 160, error 200
 - Function body length: warning 50, error 100
 
-### SwiftFormat Rules
+### swift-format Rules (Apple's official formatter)
 
-Configuration:
-- `--indent 4` - 4-space indentation
-- `--self remove` - Remove explicit self
-- `--swiftversion 6.0` - Swift 6.0 syntax
-- `--maxwidth 160` - Maximum line width
-- `--wraparguments preserve` - Preserve manual wrapping in view builders
-- `--wrapcollections preserve` - Preserve collection formatting
+Configuration (`.swift-format` JSON):
+- `lineLength: 120` - Maximum line width
+- `indentation: { spaces: 4 }` - 4-space indentation
+- `respectsExistingLineBreaks: true` - Preserves manual wrapping in SwiftUI view builders
+- `OrderedImports: true` - Alphabetical import ordering
+- `ReplaceForEachWithForLoop: true` - Enforces `for x in y` over `.forEach`
+- `FileScopedDeclarationPrivacy: true` - `private` over `fileprivate` at file scope
+- `NeverForceUnwrap/NeverUseForceTry/NeverUseImplicitlyUnwrappedOptionals: true` - Strict default; set to `false` for AppKit/ObjC projects
+- Semantic Swift 6 rules: `NoBlockComments`, `NoAssignmentInExpressions`, `AvoidRetroactiveConformances`, etc.

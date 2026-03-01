@@ -49,6 +49,11 @@ Do not create any `__init__.py` files unless the user asks. They are specificall
 - Python rules are in `@.cursor/rules/python-rules.mdc`
 - TS rules are in `@.cursor/rules/ts-rules.mdc`
 
+## TypeScript Configuration
+
+The monorepo root intentionally has **no root `tsconfig.json`**. Each workspace package owns its own `tsconfig.json` in its own directory. The root `package.json` is a pnpm workspace manifest only — it does not drive TypeScript compilation. Do not create a root `tsconfig.json`.
+
 ## Boundaries
 
-- Do not edit `tsconfig.json` or `ruff.toml` or `pyrightconfig.json` or `ruff.toml` without explicit permission.
+- Do not edit `ruff.toml` or `pyrightconfig.json` without explicit permission.
+- Do not create a root `tsconfig.json` — each package in `apps/`, `packages/`, `services/` has its own.
