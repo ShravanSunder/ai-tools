@@ -1,0 +1,23 @@
+{
+  "services": [
+    {
+      "name": "postgres",
+      "clientListen": { "host": "127.0.0.1", "port": 15432 },
+      "uplinkListen": { "host": "127.0.0.1", "port": 16000 },
+      "waitForUplinkMs": 5000,
+      "maxQueuedUplinks": 16
+    },
+    {
+      "name": "redis",
+      "clientListen": { "host": "127.0.0.1", "port": 16379 },
+      "uplinkListen": { "host": "127.0.0.1", "port": 16001 },
+      "waitForUplinkMs": 5000,
+      "maxQueuedUplinks": 16
+    }
+  ],
+  "metrics": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 19090
+  }
+}
