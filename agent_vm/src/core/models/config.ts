@@ -1,6 +1,9 @@
-import type { SocketAddress } from 'node:net';
-
 export type AgentPreset = 'claude' | 'codex' | 'gemini' | 'opencode' | 'cursor';
+export const TUNNEL_SERVICE_NAMES = ['postgres', 'redis'] as const;
+export type TunnelServiceName = (typeof TUNNEL_SERVICE_NAMES)[number];
+
+export const TUNNEL_HEALTH_STATES = ['healthy', 'degraded', 'unhealthy'] as const;
+export type TunnelHealthState = (typeof TUNNEL_HEALTH_STATES)[number];
 
 export interface RunAgentVmOptions {
 	reload: boolean;
@@ -47,8 +50,8 @@ export interface VmConfig {
 export interface ResolvedRuntimeConfig {
 	vmConfig: VmConfig;
 	tunnelConfig: TunnelConfig;
-	allowedHosts: string[];
-	toggleEntries: string[];
+	allowedHosts: readonly string[];
+	toggleEntries: readonly string[];
 	generatedStateDir: string;
 }
 
@@ -62,8 +65,8 @@ export interface DaemonStatus {
 		name: string;
 		desiredUplinks: number;
 		openUplinks: number;
-		hostTarget: SocketAddress | { host: string; port: number };
-		state: 'healthy' | 'degraded' | 'unhealthy';
+		hostTarget: { host: string; port: number };
+		state: TunnelHealthState;
 	}[];
 	vm: {
 		id: string;

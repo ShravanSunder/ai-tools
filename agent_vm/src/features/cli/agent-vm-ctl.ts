@@ -4,6 +4,10 @@ import { DaemonClient, waitForSocket } from '#src/core/infrastructure/daemon-cli
 import type { DaemonRequest, DaemonResponse } from '#src/core/models/ipc.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 
+function assertNever(value: never): never {
+	throw new Error(`Unhandled daemon response variant: ${JSON.stringify(value)}`);
+}
+
 async function connectAndCollect(
 	request: DaemonRequest,
 	workDir: string,
@@ -33,23 +37,31 @@ async function connectAndCollect(
 			onResponse: (response) => {
 				responses.push(response);
 
-				if (response.type === 'status.response') {
-					process.stdout.write(`${JSON.stringify(response.status, null, 2)}\n`);
-					finish(responses);
-					client.close();
-					return;
-				}
-
-				if (response.type === 'ack') {
-					process.stdout.write(`${response.message}\n`);
-					finish(responses);
-					client.close();
-					return;
-				}
-
-				if (response.type === 'error') {
-					fail(new Error(response.message));
-					client.close();
+				switch (response.kind) {
+					case 'status.response': {
+						process.stdout.write(`${JSON.stringify(response.status, null, 2)}\n`);
+						finish(responses);
+						client.close();
+						return;
+					}
+					case 'ack': {
+						process.stdout.write(`${response.message}\n`);
+						finish(responses);
+						client.close();
+						return;
+					}
+					case 'error': {
+						fail(new Error(response.message));
+						client.close();
+						return;
+					}
+					case 'attached':
+					case 'stream.stdout':
+					case 'stream.stderr':
+					case 'stream.exit':
+						return;
+					default:
+						assertNever(response);
 				}
 			},
 			onError: (error) => fail(error),
@@ -81,7 +93,7 @@ const statusCommand = command({
 		workDir: workDirOption,
 	},
 	handler: async (args) => {
-		await connectAndCollect({ type: 'status' }, resolveWorkDir(args.workDir));
+		await connectAndCollect({ kind: 'status' }, resolveWorkDir(args.workDir));
 	},
 });
 
@@ -94,7 +106,7 @@ const policyCommand = subcommands({
 				workDir: workDirOption,
 			},
 			handler: async (args) => {
-				await connectAndCollect({ type: 'policy.reload' }, resolveWorkDir(args.workDir));
+				await connectAndCollect({ kind: 'policy.reload' }, resolveWorkDir(args.workDir));
 			},
 		}),
 		allow: command({
@@ -105,7 +117,7 @@ const policyCommand = subcommands({
 			},
 			handler: async (args) => {
 				await connectAndCollect(
-					{ type: 'policy.update', action: 'allow', target: args.target },
+					{ kind: 'policy.allow', target: args.target },
 					resolveWorkDir(args.workDir),
 				);
 			},
@@ -118,7 +130,7 @@ const policyCommand = subcommands({
 			},
 			handler: async (args) => {
 				await connectAndCollect(
-					{ type: 'policy.update', action: 'block', target: args.target },
+					{ kind: 'policy.block', target: args.target },
 					resolveWorkDir(args.workDir),
 				);
 			},
@@ -129,10 +141,7 @@ const policyCommand = subcommands({
 				workDir: workDirOption,
 			},
 			handler: async (args) => {
-				await connectAndCollect(
-					{ type: 'policy.update', action: 'clear' },
-					resolveWorkDir(args.workDir),
-				);
+				await connectAndCollect({ kind: 'policy.clear' }, resolveWorkDir(args.workDir));
 			},
 		}),
 		presets: command({
@@ -154,7 +163,7 @@ const tunnelsCommand = subcommands({
 				workDir: workDirOption,
 			},
 			handler: async (args) => {
-				await connectAndCollect({ type: 'status' }, resolveWorkDir(args.workDir));
+				await connectAndCollect({ kind: 'status' }, resolveWorkDir(args.workDir));
 			},
 		}),
 		restart: command({
@@ -176,13 +185,13 @@ const tunnelsCommand = subcommands({
 
 					const service = args.service;
 					await connectAndCollect(
-						{ type: 'tunnel.restart', service },
+						{ kind: 'tunnel.restart', service },
 						resolveWorkDir(args.workDir),
 					);
 					return;
 				}
 
-				await connectAndCollect({ type: 'tunnel.restart' }, resolveWorkDir(args.workDir));
+				await connectAndCollect({ kind: 'tunnel.restart' }, resolveWorkDir(args.workDir));
 			},
 		}),
 	},
@@ -197,7 +206,7 @@ const daemonCommand = subcommands({
 				workDir: workDirOption,
 			},
 			handler: async (args) => {
-				await connectAndCollect({ type: 'shutdown' }, resolveWorkDir(args.workDir));
+				await connectAndCollect({ kind: 'shutdown' }, resolveWorkDir(args.workDir));
 			},
 		}),
 	},

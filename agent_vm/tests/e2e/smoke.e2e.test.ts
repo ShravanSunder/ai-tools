@@ -37,13 +37,13 @@ describe('e2e smoke', () => {
 		const server = net.createServer((socket) => {
 			socket.setEncoding('utf8');
 			socket.on('data', (chunk: string) => {
-				if (!chunk.includes('"type":"status"')) {
+				if (!chunk.includes('"kind":"status"')) {
 					return;
 				}
 
 				socket.write(
 					`${JSON.stringify({
-						type: 'status.response',
+						kind: 'status.response',
 						status: {
 							sessionName: identity.sessionName,
 							clients: 0,

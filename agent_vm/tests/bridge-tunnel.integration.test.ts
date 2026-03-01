@@ -6,6 +6,7 @@ import {
 	TunnelManager,
 	type GuestLoopbackStreamOpener,
 } from '#src/core/infrastructure/tunnel-manager.js';
+import { NoopLogger } from '#src/core/platform/logger.js';
 
 const servers: net.Server[] = [];
 
@@ -91,6 +92,7 @@ describe('tunnel manager', () => {
 					},
 				},
 			},
+			new NoopLogger(),
 			() => {},
 		);
 
@@ -138,6 +140,7 @@ describe('tunnel manager', () => {
 					},
 				},
 			},
+			new NoopLogger(),
 			() => {},
 		);
 

@@ -11,13 +11,17 @@ Gondolin-based VM control plane with sidecar parity. Manages sandboxed container
 ```
 src/
   bin/          # CLI entry points (agent-vm-ctl, agent-vm-daemon, run-agent-vm)
-  cli/          # CLI command implementations
-  core/         # Core business logic (config, policy, tunnels, orchestration)
-  types/        # Shared type definitions
+  core/
+    infrastructure/  # VM adapter, daemon client, tunnel manager
+    models/          # Runtime config + IPC contracts
+    platform/        # Logger, paths, workspace identity
+  features/
+    auth-proxy/      # OAuth mirror sync + keychain export
+    cli/             # cmd-ts command surfaces
+    runtime-control/ # Daemon, orchestrator, policy/config/tunnel controls
   build/        # Build utilities
 tests/
-  unit/         # Fast, isolated unit tests
-  integration/  # Daemon lifecycle, auth sync, tunnel tests
+  *.integration.test.ts # Integration suite
   e2e/          # Smoke tests against compiled binaries
 config/         # Runtime configuration files
 templates/      # Template files for repo initialization
@@ -44,7 +48,7 @@ pnpm check             # All checks: lint + fmt + typecheck + test + e2e
 - **CLI framework**: `cmd-ts` for type-safe CLI argument parsing
 - **Process execution**: `execa` for subprocess management
 - **Schema validation**: `zod` for runtime config validation
-- **IPC**: Unix domain sockets for daemon communication (`types/ipc.ts`)
+- **IPC**: Unix domain sockets for daemon communication (`core/models/ipc.ts`)
 
 ## Constraints
 

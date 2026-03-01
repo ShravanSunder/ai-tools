@@ -13,6 +13,10 @@ import { getAgentVmRoot } from '#src/core/platform/paths.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 import { resolveAgentPresetCommand } from '#src/features/runtime-control/agent-launcher.js';
 
+function assertNever(value: never): never {
+	throw new Error(`Unhandled daemon response variant: ${JSON.stringify(value)}`);
+}
+
 function daemonScriptPath(): string {
 	return path.join(getAgentVmRoot(), 'dist', 'bin', 'agent-vm-daemon.js');
 }
@@ -52,21 +56,19 @@ async function probeSocketState(
 
 async function waitForSocketRemoved(socketPath: string, timeoutMs: number): Promise<void> {
 	const started = Date.now();
-	const poll = async (): Promise<void> => {
+	while (true) {
 		if (!fs.existsSync(socketPath)) {
 			return;
 		}
 		if (Date.now() - started >= timeoutMs) {
 			throw new Error(`Timed out waiting for daemon shutdown: ${socketPath}`);
 		}
+		// oxlint-disable-next-line eslint/no-await-in-loop
 		await new Promise((resolve) => setTimeout(resolve, 100));
-		await poll();
-	};
-
-	await poll();
+	}
 }
 
-async function requestAck(socketPath: string, request: { type: 'shutdown' }): Promise<void> {
+async function requestAck(socketPath: string, request: { kind: 'shutdown' }): Promise<void> {
 	await new Promise<void>((resolve, reject) => {
 		let settled = false;
 		const finishOk = (): void => {
@@ -86,14 +88,25 @@ async function requestAck(socketPath: string, request: { type: 'shutdown' }): Pr
 
 		const client = new DaemonClient(socketPath, {
 			onResponse: (response) => {
-				if (response.type === 'ack') {
-					finishOk();
-					client.close();
-					return;
-				}
-				if (response.type === 'error') {
-					client.close();
-					finishErr(new Error(response.message));
+				switch (response.kind) {
+					case 'ack': {
+						finishOk();
+						client.close();
+						return;
+					}
+					case 'error': {
+						client.close();
+						finishErr(new Error(response.message));
+						return;
+					}
+					case 'attached':
+					case 'status.response':
+					case 'stream.stdout':
+					case 'stream.stderr':
+					case 'stream.exit':
+						return;
+					default:
+						assertNever(response);
 				}
 			},
 			onError: (error) => finishErr(error),
@@ -119,7 +132,7 @@ async function stopDaemonIfRequested(
 
 	const state = await probeSocketState(socketPath);
 	if (state === 'connected') {
-		await requestAck(socketPath, { type: 'shutdown' });
+		await requestAck(socketPath, { kind: 'shutdown' });
 		await waitForSocketRemoved(socketPath, 5_000);
 		return;
 	}
@@ -151,9 +164,10 @@ async function ensureDaemonRunning(socketPath: string, workDir: string): Promise
 		try {
 			await waitForSocket(socketPath, 750);
 			return;
-		} catch {
+		} catch (error: unknown) {
 			throw new Error(
-				`Daemon socket exists but is not reachable: ${socketPath}. Run 'run-agent-vm --reload' to recover.`,
+				`Daemon socket exists but is not reachable: ${socketPath}. Run 'run-agent-vm --reload' to recover. ${String(error)}`,
+				{ cause: error },
 			);
 		}
 	}
@@ -215,24 +229,38 @@ async function requestAndCollect(
 			onResponse: (response) => {
 				responses.push(response);
 
-				if (response.type === 'stream.stdout') {
-					process.stdout.write(response.data);
-				}
-				if (response.type === 'stream.stderr') {
-					process.stderr.write(response.data);
-				}
-				if (response.type === 'stream.exit') {
-					finish({ exitCode: response.code, responses });
-					client.close();
-				}
-				if (response.type === 'status.response' && command === null) {
-					process.stdout.write(`${JSON.stringify(response.status, null, 2)}\n`);
-					finish({ exitCode: 0, responses });
-					client.close();
-				}
-				if (response.type === 'error') {
-					fail(new Error(response.message));
-					client.close();
+				switch (response.kind) {
+					case 'stream.stdout': {
+						process.stdout.write(response.data);
+						return;
+					}
+					case 'stream.stderr': {
+						process.stderr.write(response.data);
+						return;
+					}
+					case 'stream.exit': {
+						finish({ exitCode: response.code, responses });
+						client.close();
+						return;
+					}
+					case 'status.response': {
+						if (command === null) {
+							process.stdout.write(`${JSON.stringify(response.status, null, 2)}\n`);
+							finish({ exitCode: 0, responses });
+							client.close();
+						}
+						return;
+					}
+					case 'error': {
+						fail(new Error(response.message));
+						client.close();
+						return;
+					}
+					case 'attached':
+					case 'ack':
+						return;
+					default:
+						assertNever(response);
 				}
 			},
 			onError: (error) => fail(error),
@@ -244,9 +272,9 @@ async function requestAndCollect(
 		});
 
 		if (command === null) {
-			client.send({ type: 'status' });
+			client.send({ kind: 'status' });
 		} else {
-			client.send({ type: 'attach', command });
+			client.send({ kind: 'attach', command });
 		}
 	});
 }

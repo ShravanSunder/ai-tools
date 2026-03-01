@@ -4,9 +4,16 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	resolve: {
-		alias: {
-			'#src': path.resolve(__dirname, 'src'),
-		},
+		alias: [
+			{
+				find: /^#src\/(.*)$/u,
+				replacement: path.resolve(__dirname, 'src/$1'),
+			},
+			{
+				find: '#src',
+				replacement: path.resolve(__dirname, 'src'),
+			},
+		],
 	},
 	test: {
 		environment: 'node',

@@ -3,70 +3,109 @@ import path from 'node:path';
 
 import { z } from 'zod';
 
-import type { TunnelConfig } from '#src/core/models/config.js';
+import type { TunnelConfig, TunnelServiceConfig } from '#src/core/models/config.js';
 
 const serviceConfigSchema = z.object({
-	enabled: z.boolean().default(true),
+	enabled: z.boolean().optional(),
 	hostTarget: z
 		.object({
-			host: z.string().default('127.0.0.1'),
-			port: z.number().int().positive(),
+			host: z.string().optional(),
+			port: z.number().int().positive().optional(),
 		})
-		.default({ host: '127.0.0.1', port: 5432 }),
-	guestClientPort: z.number().int().positive(),
-	guestUplinkPort: z.number().int().positive(),
-	desiredUplinks: z.number().int().positive(),
+		.optional(),
+	guestClientPort: z.number().int().positive().optional(),
+	guestUplinkPort: z.number().int().positive().optional(),
+	desiredUplinks: z.number().int().positive().optional(),
 });
 
 export const tunnelConfigSchema = z.object({
 	services: z
 		.object({
-			postgres: serviceConfigSchema.default({
-				enabled: true,
-				hostTarget: { host: '127.0.0.1', port: 5432 },
-				guestClientPort: 15432,
-				guestUplinkPort: 16000,
-				desiredUplinks: 8,
-			}),
-			redis: serviceConfigSchema.default({
-				enabled: true,
-				hostTarget: { host: '127.0.0.1', port: 6379 },
-				guestClientPort: 16379,
-				guestUplinkPort: 16001,
-				desiredUplinks: 4,
-			}),
+			postgres: serviceConfigSchema.optional(),
+			redis: serviceConfigSchema.optional(),
 		})
-		.default({}),
+		.optional(),
 });
+
+const DEFAULT_TUNNEL_CONFIG = {
+	services: {
+		postgres: {
+			enabled: true,
+			hostTarget: { host: '127.0.0.1', port: 5432 },
+			guestClientPort: 15432,
+			guestUplinkPort: 16000,
+			desiredUplinks: 8,
+		},
+		redis: {
+			enabled: true,
+			hostTarget: { host: '127.0.0.1', port: 6379 },
+			guestClientPort: 16379,
+			guestUplinkPort: 16001,
+			desiredUplinks: 4,
+		},
+	},
+} satisfies TunnelConfig;
+
+function mergeServiceConfig(
+	defaults: TunnelServiceConfig,
+	override: z.infer<typeof serviceConfigSchema> | undefined,
+): TunnelServiceConfig {
+	return {
+		enabled: override?.enabled ?? defaults.enabled,
+		hostTarget: {
+			host: override?.hostTarget?.host ?? defaults.hostTarget.host,
+			port: override?.hostTarget?.port ?? defaults.hostTarget.port,
+		},
+		guestClientPort: override?.guestClientPort ?? defaults.guestClientPort,
+		guestUplinkPort: override?.guestUplinkPort ?? defaults.guestUplinkPort,
+		desiredUplinks: override?.desiredUplinks ?? defaults.desiredUplinks,
+	};
+}
 
 function parseJsonFile(filePath: string): unknown {
 	if (!fs.existsSync(filePath)) {
 		return {};
 	}
 	const contents = fs.readFileSync(filePath, 'utf8');
-	return JSON.parse(contents) as unknown;
+	try {
+		return JSON.parse(contents) as unknown;
+	} catch (error: unknown) {
+		throw new Error(`Invalid JSON in ${filePath}: ${String(error)}`, { cause: error });
+	}
 }
 
-function asRecord(value: unknown): Record<string, unknown> {
+function asRecord(value: unknown, label: string, filePath: string): Record<string, unknown> {
 	if (!value || typeof value !== 'object' || Array.isArray(value)) {
-		return {};
+		throw new Error(`Expected ${label} object in ${filePath}`);
 	}
 	return value as Record<string, unknown>;
 }
 
 export function parseTunnelConfig(source: unknown): TunnelConfig {
 	const parsed = tunnelConfigSchema.parse(source);
-	return parsed;
+	const postgresOverride = parsed.services?.postgres;
+	const redisOverride = parsed.services?.redis;
+
+	return {
+		services: {
+			postgres: mergeServiceConfig(DEFAULT_TUNNEL_CONFIG.services.postgres, postgresOverride),
+			redis: mergeServiceConfig(DEFAULT_TUNNEL_CONFIG.services.redis, redisOverride),
+		},
+	};
 }
 
 export function loadTunnelConfig(workDir: string): TunnelConfig {
 	const repoPath = path.join(workDir, '.agent_vm', 'tunnels.repo.json');
 	const localPath = path.join(workDir, '.agent_vm', 'tunnels.local.json');
 
-	const repo = asRecord(parseJsonFile(repoPath));
-	const local = asRecord(parseJsonFile(localPath));
-	const repoServices = asRecord(repo['services']);
-	const localServices = asRecord(local['services']);
+	const repoRaw = parseJsonFile(repoPath);
+	const localRaw = parseJsonFile(localPath);
+	const repo = asRecord(repoRaw, 'tunnels.repo', repoPath);
+	const local = asRecord(localRaw, 'tunnels.local', localPath);
+	const repoServices =
+		repo['services'] === undefined ? {} : asRecord(repo['services'], 'services', repoPath);
+	const localServices =
+		local['services'] === undefined ? {} : asRecord(local['services'], 'services', localPath);
 
 	return parseTunnelConfig({
 		...repo,

@@ -1,11 +1,30 @@
 import net from 'node:net';
 
-import type { DaemonRequest, DaemonResponse } from '#src/core/models/ipc.js';
+import {
+	parseDaemonResponseValue,
+	type DaemonRequest,
+	type DaemonResponse,
+} from '#src/core/models/ipc.js';
 
 export interface DaemonClientCallbacks {
 	onResponse: (response: DaemonResponse) => void;
-	onError?: (error: Error) => void;
-	onClose?: () => void;
+	onError: (error: Error) => void;
+	onClose: () => void;
+}
+
+interface NodeErrorLike {
+	code?: string;
+}
+
+function toError(input: unknown, context: string): Error {
+	if (input instanceof Error) {
+		return input;
+	}
+	return new Error(`${context}: ${String(input)}`);
+}
+
+function isNodeErrorLike(input: unknown): input is NodeErrorLike {
+	return typeof input === 'object' && input !== null && 'code' in input;
 }
 
 export class DaemonClient {
@@ -31,21 +50,37 @@ export class DaemonClient {
 					continue;
 				}
 
+				let parsedLine: unknown;
 				try {
-					const parsed = JSON.parse(line) as DaemonResponse;
+					parsedLine = JSON.parse(line);
+				} catch (error: unknown) {
+					callbacks.onError(toError(error, 'Failed to parse daemon response JSON'));
+					continue;
+				}
+
+				let parsedResponse: DaemonResponse;
+				try {
+					parsedResponse = parseDaemonResponseValue(parsedLine);
+				} catch (error: unknown) {
+					callbacks.onError(toError(error, 'Failed to validate daemon response payload'));
+					continue;
+				}
+
+				try {
+					const parsed = parsedResponse;
 					callbacks.onResponse(parsed);
-				} catch (error) {
-					callbacks.onError?.(error as Error);
+				} catch (error: unknown) {
+					callbacks.onError(toError(error, 'Daemon response callback failed'));
 				}
 			}
 		});
 
 		this.socket.on('error', (error) => {
-			callbacks.onError?.(error);
+			callbacks.onError(toError(error, 'Daemon socket error'));
 		});
 
 		this.socket.on('close', () => {
-			callbacks.onClose?.();
+			callbacks.onClose();
 		});
 	}
 
@@ -61,27 +96,30 @@ export class DaemonClient {
 
 export async function waitForSocket(socketPath: string, timeoutMs: number): Promise<void> {
 	const start = Date.now();
-
-	const probe = async (): Promise<void> => {
+	while (true) {
 		if (Date.now() - start >= timeoutMs) {
 			throw new Error(`Timed out waiting for daemon socket: ${socketPath}`);
 		}
 
 		try {
+			// oxlint-disable-next-line eslint/no-await-in-loop
 			await new Promise<void>((resolve, reject) => {
 				const socket = net.createConnection({ path: socketPath });
 				socket.once('connect', () => {
 					socket.end();
 					resolve();
 				});
-				socket.once('error', reject);
+				socket.once('error', (error) => reject(toError(error, 'daemon socket probe failed')));
 			});
 			return;
-		} catch {
+		} catch (error: unknown) {
+			const transient =
+				isNodeErrorLike(error) && (error.code === 'ENOENT' || error.code === 'ECONNREFUSED');
+			if (!transient) {
+				throw toError(error, 'Non-transient daemon socket probe error');
+			}
+			// oxlint-disable-next-line eslint/no-await-in-loop
 			await new Promise((resolve) => setTimeout(resolve, 100));
-			await probe();
 		}
-	};
-
-	await probe();
+	}
 }

@@ -23,4 +23,25 @@ describe('config resolver', () => {
 		expect(resolved.idleTimeoutMinutes).toBe(7);
 		expect(resolved.tunnelEnabled).toBe(false);
 	});
+
+	it('throws when boolean config values are invalid', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-config-invalid-bool-'));
+		const configDir = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDir, { recursive: true });
+		fs.writeFileSync(path.join(configDir, 'vm.repo.conf'), 'TUNNEL_ENABLED=disabled\n');
+
+		expect(() => resolveVmConfig(workDir)).toThrowError(/Invalid boolean value/u);
+	});
+
+	it('throws when config contains malformed lines', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-config-malformed-'));
+		const configDir = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDir, { recursive: true });
+		fs.writeFileSync(
+			path.join(configDir, 'vm.repo.conf'),
+			'export IDLE_TIMEOUT_MINUTES=5\nBROKEN_LINE\n',
+		);
+
+		expect(() => resolveVmConfig(workDir)).toThrowError(/Invalid config line/u);
+	});
 });

@@ -7,17 +7,18 @@ import { compileAndPersistPolicy } from '#src/features/runtime-control/policy-ma
 import { loadTunnelConfig } from '#src/features/runtime-control/tunnel-config.js';
 
 function parseBoolean(value: string, defaultValue: boolean): boolean {
-	if (value.trim().length === 0) {
+	const trimmed = value.trim();
+	if (trimmed.length === 0) {
 		return defaultValue;
 	}
-	const normalized = value.trim().toLowerCase();
+	const normalized = trimmed.toLowerCase();
 	if (['1', 'true', 'yes', 'on'].includes(normalized)) {
 		return true;
 	}
 	if (['0', 'false', 'no', 'off'].includes(normalized)) {
 		return false;
 	}
-	return defaultValue;
+	throw new Error(`Invalid boolean value '${value}'`);
 }
 
 function parseList(value: string): string[] {
@@ -27,21 +28,25 @@ function parseList(value: string): string[] {
 		.filter((entry) => entry.length > 0);
 }
 
-function parseConf(content: string): Record<string, string> {
+function parseConf(content: string, filePath: string): Record<string, string> {
 	const result: Record<string, string> = {};
-	for (const line of content.split(/\r?\n/u)) {
+	const lines = content.split(/\r?\n/u);
+	for (const [index, line] of lines.entries()) {
 		const trimmed = line.trim();
 		if (trimmed.length === 0 || trimmed.startsWith('#')) {
 			continue;
 		}
-		const match = trimmed.match(/^([A-Z0-9_]+)=(.*)$/u);
+		const withoutExport = trimmed.startsWith('export ')
+			? trimmed.slice('export '.length).trim()
+			: trimmed;
+		const match = withoutExport.match(/^([A-Z0-9_]+)=(.*)$/u);
 		if (!match) {
-			continue;
+			throw new Error(`Invalid config line ${index + 1} in ${filePath}: '${line}'`);
 		}
 		const key = match[1];
 		const value = match[2] ?? '';
 		if (!key) {
-			continue;
+			throw new Error(`Invalid empty key at line ${index + 1} in ${filePath}`);
 		}
 		result[key] = value;
 	}
@@ -53,7 +58,7 @@ function loadConf(filePath: string): Record<string, string> {
 		return {};
 	}
 	const content = fs.readFileSync(filePath, 'utf8');
-	return parseConf(content);
+	return parseConf(content, filePath);
 }
 
 function resolveVmConfigMap(workDir: string): Record<string, string> {
@@ -71,10 +76,14 @@ function resolveVmConfigMap(workDir: string): Record<string, string> {
 
 export function resolveVmConfig(workDir: string): VmConfig {
 	const merged = resolveVmConfigMap(workDir);
-	const idleTimeoutMinutes = Number.parseInt(merged['IDLE_TIMEOUT_MINUTES'] ?? '10', 10);
+	const idleTimeoutRaw = merged['IDLE_TIMEOUT_MINUTES'] ?? '10';
+	const idleTimeoutMinutes = Number.parseInt(idleTimeoutRaw, 10);
+	if (!Number.isFinite(idleTimeoutMinutes) || idleTimeoutMinutes <= 0) {
+		throw new Error(`Invalid IDLE_TIMEOUT_MINUTES value '${idleTimeoutRaw}'`);
+	}
 
 	return {
-		idleTimeoutMinutes: Number.isFinite(idleTimeoutMinutes) ? idleTimeoutMinutes : 10,
+		idleTimeoutMinutes,
 		extraAptPackages: parseList(merged['EXTRA_APT_PACKAGES'] ?? ''),
 		playwrightExtraHosts: parseList(merged['PLAYWRIGHT_EXTRA_HOSTS'] ?? ''),
 		tunnelEnabled: parseBoolean(merged['TUNNEL_ENABLED'] ?? 'true', true),

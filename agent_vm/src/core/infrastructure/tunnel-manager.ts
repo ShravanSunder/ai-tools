@@ -1,7 +1,13 @@
 import net from 'node:net';
 import type { Duplex } from 'node:stream';
 
-import type { TunnelConfig } from '#src/core/models/config.js';
+import type {
+	TunnelConfig,
+	TunnelHealthState,
+	TunnelServiceName,
+} from '#src/core/models/config.js';
+import { TUNNEL_SERVICE_NAMES } from '#src/core/models/config.js';
+import type { Logger } from '#src/core/platform/logger.js';
 
 export interface GuestLoopbackStreamOpener {
 	openGuestLoopbackStream(input: {
@@ -16,7 +22,7 @@ export interface TunnelHealthStatus {
 	desiredUplinks: number;
 	openUplinks: number;
 	hostTarget: { host: string; port: number };
-	state: 'healthy' | 'degraded' | 'unhealthy';
+	state: TunnelHealthState;
 }
 
 function delay(ms: number): Promise<void> {
@@ -42,18 +48,34 @@ class UplinkBinding {
 	private closed = false;
 
 	public constructor(
+		private readonly serviceName: string,
 		private readonly guestStream: Duplex,
 		private readonly hostSocket: net.Socket,
+		private readonly logger: Logger,
 		private readonly onClosed: () => void,
 	) {
 		this.guestStream.pipe(this.hostSocket);
 		this.hostSocket.pipe(this.guestStream);
 
+		this.guestStream.on('error', (error: unknown) => {
+			this.logger.log('warn', 'tunnel-manager', 'guest tunnel stream error', {
+				service: this.serviceName,
+				error: String(error),
+			});
+			this.close();
+		});
+
+		this.hostSocket.on('error', (error: unknown) => {
+			this.logger.log('warn', 'tunnel-manager', 'host tunnel socket error', {
+				service: this.serviceName,
+				error: String(error),
+			});
+			this.close();
+		});
+
 		const close = (): void => this.close();
 		this.guestStream.on('close', close);
-		this.guestStream.on('error', close);
 		this.hostSocket.on('close', close);
-		this.hostSocket.on('error', close);
 	}
 
 	public close(): void {
@@ -85,6 +107,7 @@ class ServiceTunnelPool {
 	public constructor(
 		private readonly opener: GuestLoopbackStreamOpener,
 		private readonly config: ServiceTunnelPoolConfig,
+		private readonly logger: Logger,
 		private readonly onStateChange: () => void,
 	) {
 		this.reconnectDelayMs = config.reconnectDelayMs;
@@ -118,7 +141,7 @@ class ServiceTunnelPool {
 		const activeFillPromise = this.fillPromise;
 		this.fillPromise = null;
 		if (activeFillPromise) {
-			await activeFillPromise.catch(() => undefined);
+			await activeFillPromise;
 		}
 		for (const binding of this.bindings) {
 			binding.close();
@@ -157,16 +180,29 @@ class ServiceTunnelPool {
 						break;
 					}
 
-					const binding = new UplinkBinding(guestStream, hostSocket, () => {
-						this.bindings.delete(binding);
-						this.onStateChange();
-						void this.fill();
-					});
+					const binding = new UplinkBinding(
+						this.config.name,
+						guestStream,
+						hostSocket,
+						this.logger,
+						() => {
+							this.bindings.delete(binding);
+							this.onStateChange();
+							void this.fill();
+						},
+					);
 
 					this.bindings.add(binding);
 					this.reconnectDelayMs = this.config.reconnectDelayMs;
 					this.onStateChange();
-				} catch {
+				} catch (error: unknown) {
+					this.logger.log('warn', 'tunnel-manager', 'tunnel uplink attempt failed', {
+						service: this.config.name,
+						host: this.config.hostTarget.host,
+						port: this.config.hostTarget.port,
+						error: String(error),
+						retryDelayMs: this.reconnectDelayMs,
+					});
 					this.onStateChange();
 					// oxlint-disable-next-line eslint/no-await-in-loop
 					await delay(this.reconnectDelayMs);
@@ -185,14 +221,15 @@ class ServiceTunnelPool {
 }
 
 export class TunnelManager {
-	private readonly pools = new Map<string, ServiceTunnelPool>();
+	private readonly pools = new Map<TunnelServiceName, ServiceTunnelPool>();
 
 	public constructor(
 		opener: GuestLoopbackStreamOpener,
 		config: TunnelConfig,
+		private readonly logger: Logger,
 		onStateChange: () => void,
 	) {
-		for (const serviceName of ['postgres', 'redis'] as const) {
+		for (const serviceName of TUNNEL_SERVICE_NAMES) {
 			const service = config.services[serviceName];
 			if (!service.enabled) {
 				continue;
@@ -210,6 +247,7 @@ export class TunnelManager {
 						reconnectDelayMs: 500,
 						maxReconnectDelayMs: 5_000,
 					},
+					this.logger,
 					onStateChange,
 				),
 			);
@@ -217,23 +255,24 @@ export class TunnelManager {
 	}
 
 	public async start(): Promise<void> {
-		await Promise.all([...this.pools.values()].map(async (pool) => pool.start()));
+		await Promise.all([...this.pools.values()].map((pool) => pool.start()));
 	}
 
 	public async stop(): Promise<void> {
-		await Promise.all([...this.pools.values()].map(async (pool) => pool.stop()));
+		await Promise.all([...this.pools.values()].map((pool) => pool.stop()));
 	}
 
-	public async restart(serviceName?: string): Promise<void> {
+	public async restart(serviceName?: TunnelServiceName): Promise<void> {
 		if (serviceName) {
 			const pool = this.pools.get(serviceName);
-			if (pool) {
-				await pool.restart();
+			if (!pool) {
+				throw new Error(`Tunnel service is not configured or enabled: ${serviceName}`);
 			}
+			await pool.restart();
 			return;
 		}
 
-		await Promise.all([...this.pools.values()].map(async (pool) => pool.restart()));
+		await Promise.all([...this.pools.values()].map((pool) => pool.restart()));
 	}
 
 	public getStatus(): TunnelHealthStatus[] {

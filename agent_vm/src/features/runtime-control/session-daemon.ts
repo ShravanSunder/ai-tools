@@ -1,3 +1,4 @@
+import { once } from 'node:events';
 import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
@@ -9,7 +10,11 @@ import type {
 	ResolvedRuntimeConfig,
 	WorkspaceIdentity,
 } from '#src/core/models/config.js';
-import type { DaemonRequest, DaemonResponse } from '#src/core/models/ipc.js';
+import {
+	parseDaemonRequestValue,
+	type DaemonRequest,
+	type DaemonResponse,
+} from '#src/core/models/ipc.js';
 import type { Logger } from '#src/core/platform/logger.js';
 import { AuthSyncManager, type AuthSyncState } from '#src/features/auth-proxy/auth-sync.js';
 import { resolveRuntimeConfig } from '#src/features/runtime-control/config-resolver.js';
@@ -24,7 +29,12 @@ export interface DaemonDependencies {
 	createRuntimeConfig: (workDir: string) => ResolvedRuntimeConfig;
 	createVmRuntime: typeof createVmRuntime;
 	createAuthSyncManager: (logger: Logger) => AuthSyncManager;
-	createTunnelManager: typeof TunnelManager;
+	createTunnelManager: new (
+		opener: ConstructorParameters<typeof TunnelManager>[0],
+		config: ConstructorParameters<typeof TunnelManager>[1],
+		logger: Logger,
+		onStateChange: ConstructorParameters<typeof TunnelManager>[3],
+	) => TunnelManager;
 }
 
 const DEFAULT_DEPENDENCIES: DaemonDependencies = {
@@ -74,7 +84,7 @@ export class AgentVmDaemon {
 		});
 
 		await this.listen();
-		this.ensureTunnelManagerRunning();
+		await this.ensureTunnelManagerRunning();
 
 		this.logger.log('info', 'daemon', 'daemon started', {
 			socketPath: this.identity.daemonSocketPath,
@@ -114,7 +124,7 @@ export class AgentVmDaemon {
 		this.logger.log('info', 'daemon', 'daemon stopped');
 	}
 
-	private ensureTunnelManagerRunning(): void {
+	private async ensureTunnelManagerRunning(): Promise<void> {
 		if (!this.runtimeConfig?.vmConfig.tunnelEnabled || !this.vmRuntime) {
 			return;
 		}
@@ -122,16 +132,13 @@ export class AgentVmDaemon {
 		this.tunnelManager = new this.dependencies.createTunnelManager(
 			this.vmRuntime,
 			this.runtimeConfig.tunnelConfig,
+			this.logger,
 			() => {
 				this.logger.log('debug', 'daemon', 'tunnel state changed');
 			},
 		);
 
-		void this.tunnelManager.start().catch((error: unknown) => {
-			this.logger.log('warn', 'daemon', 'tunnel manager start failed', {
-				error: String(error),
-			});
-		});
+		await this.tunnelManager.start();
 	}
 
 	private async stopRuntime(): Promise<void> {
@@ -167,7 +174,7 @@ export class AgentVmDaemon {
 				logger: this.logger,
 				sessionAuthRoot: this.authSyncState.sessionAuthRoot,
 			});
-			this.ensureTunnelManagerRunning();
+			await this.ensureTunnelManagerRunning();
 		})();
 
 		try {
@@ -214,11 +221,30 @@ export class AgentVmDaemon {
 					continue;
 				}
 
+				let parsedLine: unknown;
+				try {
+					parsedLine = JSON.parse(line);
+				} catch (error: unknown) {
+					void this.sendResponse(socket, { kind: 'error', message: 'invalid-json' }).catch(() => {
+						this.logger.log('warn', 'daemon', 'failed to write invalid-json response', {
+							error: String(error),
+						});
+					});
+					continue;
+				}
+
 				let request: DaemonRequest;
 				try {
-					request = JSON.parse(line) as DaemonRequest;
-				} catch {
-					this.sendResponse(socket, { type: 'error', message: 'invalid-json' });
+					request = parseDaemonRequestValue(parsedLine);
+				} catch (error: unknown) {
+					void this.sendResponse(socket, {
+						kind: 'error',
+						message: `invalid-request:${String(error)}`,
+					}).catch((writeError: unknown) => {
+						this.logger.log('warn', 'daemon', 'failed to write invalid-request response', {
+							error: String(writeError),
+						});
+					});
 					continue;
 				}
 
@@ -226,7 +252,11 @@ export class AgentVmDaemon {
 					this.logger.log('warn', 'daemon', 'request handling failed', {
 						error: String(error),
 					});
-					this.sendResponse(socket, { type: 'error', message: 'request-failed' });
+					void this.sendResponse(socket, { kind: 'error', message: 'request-failed' }).catch(() => {
+						this.logger.log('warn', 'daemon', 'failed to write request-failed response', {
+							error: String(error),
+						});
+					});
 				});
 			}
 		});
@@ -237,87 +267,122 @@ export class AgentVmDaemon {
 		};
 
 		socket.on('close', onClose);
-		socket.on('error', onClose);
+		socket.on('error', (error: unknown) => {
+			this.logger.log('warn', 'daemon', 'client socket error', {
+				error: String(error),
+			});
+			onClose();
+		});
 	}
 
-	private sendResponse(socket: net.Socket, response: DaemonResponse): void {
-		socket.write(`${JSON.stringify(response)}\n`);
+	private async sendResponse(socket: net.Socket, response: DaemonResponse): Promise<void> {
+		if (socket.destroyed || !socket.writable) {
+			throw new Error('socket-not-writable');
+		}
+		const payload = `${JSON.stringify(response)}\n`;
+		const accepted = socket.write(payload, 'utf8');
+		if (!accepted) {
+			await once(socket, 'drain');
+		}
 	}
 
 	private async handleRequest(socket: net.Socket, request: DaemonRequest): Promise<void> {
-		if (request.type === 'status') {
-			this.sendResponse(socket, {
-				type: 'status.response',
+		if (request.kind === 'status') {
+			await this.sendResponse(socket, {
+				kind: 'status.response',
 				status: this.getStatus(),
 			});
 			return;
 		}
 
 		if (!this.vmRuntime || !this.runtimeConfig) {
-			this.sendResponse(socket, { type: 'error', message: 'vm-not-ready' });
+			await this.sendResponse(socket, { kind: 'error', message: 'vm-not-ready' });
 			return;
 		}
 
-		switch (request.type) {
+		switch (request.kind) {
 			case 'attach': {
 				const sessionId = `${Date.now()}`;
-				this.sendResponse(socket, { type: 'attached', sessionId });
+				await this.sendResponse(socket, { kind: 'attached', sessionId });
 
-				const command = request.command ?? '/bin/sh -lc "pwd"';
+				const command = request.command ?? `/bin/sh -lc 'cd "$WORKSPACE" && pwd'`;
 				const result = await this.vmRuntime.exec(command);
 				if (result.stdout.length > 0) {
-					this.sendResponse(socket, { type: 'stream.stdout', data: result.stdout });
+					await this.sendResponse(socket, { kind: 'stream.stdout', data: result.stdout });
 				}
 				if (result.stderr.length > 0) {
-					this.sendResponse(socket, { type: 'stream.stderr', data: result.stderr });
+					await this.sendResponse(socket, { kind: 'stream.stderr', data: result.stderr });
 				}
-				this.sendResponse(socket, { type: 'stream.exit', code: result.exitCode });
-				break;
+				await this.sendResponse(socket, { kind: 'stream.exit', code: result.exitCode });
+				return;
 			}
 			case 'policy.reload': {
 				const compiled = compileAndPersistPolicy(this.identity.workDir);
-				this.runtimeConfig.allowedHosts = compiled;
+				this.runtimeConfig = {
+					...this.runtimeConfig,
+					allowedHosts: compiled,
+				};
 				await this.recreateRuntime('policy.reload');
-				this.sendResponse(socket, {
-					type: 'ack',
+				await this.sendResponse(socket, {
+					kind: 'ack',
 					message: `policy reloaded (${compiled.length} entries); vm runtime restarted`,
 				});
-				break;
+				return;
 			}
-			case 'policy.update': {
+			case 'policy.allow':
+			case 'policy.block': {
 				const existing = readPolicyState(this.identity.workDir).entries;
-				const nextEntries = applyPolicyMutation(existing, request.action, request.target);
+				const action = request.kind === 'policy.allow' ? 'allow' : 'block';
+				const nextEntries = applyPolicyMutation(existing, action, request.target);
 				writePolicyState(this.identity.workDir, { entries: nextEntries });
 				const compiled = compileAndPersistPolicy(this.identity.workDir);
-				this.runtimeConfig.allowedHosts = compiled;
+				this.runtimeConfig = {
+					...this.runtimeConfig,
+					allowedHosts: compiled,
+				};
 				await this.recreateRuntime('policy.update');
-				this.sendResponse(socket, {
-					type: 'ack',
+				await this.sendResponse(socket, {
+					kind: 'ack',
 					message: `policy updated (${nextEntries.length} toggle entries); vm runtime restarted`,
 				});
-				break;
+				return;
+			}
+			case 'policy.clear': {
+				const nextEntries = applyPolicyMutation(
+					readPolicyState(this.identity.workDir).entries,
+					'clear',
+				);
+				writePolicyState(this.identity.workDir, { entries: nextEntries });
+				const compiled = compileAndPersistPolicy(this.identity.workDir);
+				this.runtimeConfig = {
+					...this.runtimeConfig,
+					allowedHosts: compiled,
+				};
+				await this.recreateRuntime('policy.update');
+				await this.sendResponse(socket, {
+					kind: 'ack',
+					message: `policy updated (${nextEntries.length} toggle entries); vm runtime restarted`,
+				});
+				return;
 			}
 			case 'tunnel.restart': {
 				if (!this.tunnelManager) {
-					this.sendResponse(socket, { type: 'error', message: 'tunnels-disabled' });
-					break;
+					await this.sendResponse(socket, { kind: 'error', message: 'tunnels-disabled' });
+					return;
 				}
 				await this.tunnelManager.restart(request.service);
-				this.sendResponse(socket, {
-					type: 'ack',
+				await this.sendResponse(socket, {
+					kind: 'ack',
 					message: request.service
 						? `restarted tunnel ${request.service}`
 						: 'restarted all tunnels',
 				});
-				break;
+				return;
 			}
 			case 'shutdown': {
-				this.sendResponse(socket, { type: 'ack', message: 'daemon shutting down' });
+				await this.sendResponse(socket, { kind: 'ack', message: 'daemon shutting down' });
 				await this.stop();
-				break;
-			}
-			default: {
-				this.sendResponse(socket, { type: 'error', message: 'unsupported-request' });
+				return;
 			}
 		}
 	}

@@ -36,4 +36,7 @@ async function main(): Promise<void> {
 	});
 }
 
-void main();
+void main().catch((error: unknown) => {
+	process.stderr.write(`agent-vm-daemon startup failed: ${String(error)}\n`);
+	process.exit(1);
+});
