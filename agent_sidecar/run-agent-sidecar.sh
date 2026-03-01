@@ -55,6 +55,7 @@ LOCAL_ZSH_HISTORY="$HOME/.zsh_history"
 LOCAL_CLAUDE_JSON="$HOME/.claude.json"
 LOCAL_GEMINI_DIR="$HOME/.gemini"
 LOCAL_CODEX_DIR="$HOME/.codex"
+LOCAL_AGENTS_DIR="$HOME/.agents"
 LOCAL_OPENCODE_DIR="$HOME/.config/opencode"
 
 # Parse arguments
@@ -534,6 +535,9 @@ docker volume create "$PNPM_STORE_VOLUME" >/dev/null
 docker volume create "$CACHE_VOLUME" >/dev/null
 docker volume create "$UV_CACHE_VOLUME" >/dev/null
 
+# Ensure host agent-shared settings directory exists before bind-mounting.
+mkdir -p "$LOCAL_AGENTS_DIR"
+
 # 5. Handle container state
 # Remove container if it exists but isn't running (crashed/stopped)
 EXISTING_CONTAINER=$(docker ps -aq -f name="^${CONTAINER_NAME}$")
@@ -575,6 +579,8 @@ if [ -z "$EXISTING_CONTAINER" ]; then
         -v "$LOCAL_GEMINI_DIR":"$LOCAL_GEMINI_DIR" \
         -v "$LOCAL_CODEX_DIR":/home/node/.codex \
         -v "$LOCAL_CODEX_DIR":"$LOCAL_CODEX_DIR" \
+        -v "$LOCAL_AGENTS_DIR":/home/node/.agents \
+        -v "$LOCAL_AGENTS_DIR":"$LOCAL_AGENTS_DIR" \
         -v "$LOCAL_OPENCODE_DIR":/home/node/.opencode \
         -v "$LOCAL_OPENCODE_DIR":"$LOCAL_OPENCODE_DIR" \
         -v "$HISTORY_VOLUME":/commandhistory \
@@ -614,7 +620,7 @@ docker cp "$LOCAL_ZSH_HISTORY" "$CONTAINER_NAME":/home/node/.zsh_history
 echo "🔓 Ensuring permissions..."
 docker exec -u root "$CONTAINER_NAME" chown node:node /home/node/.zsh_history /home/node/.claude.json "$LOCAL_CLAUDE_JSON"
 # Chown other directories normally
-docker exec -u root "$CONTAINER_NAME" chown -R node:node /commandhistory /home/node/.config/atuin /home/node/.local/share/atuin /home/node/.claude "$LOCAL_CLAUDE_DIR" /home/node/.gemini "$LOCAL_GEMINI_DIR" /home/node/.codex "$LOCAL_CODEX_DIR" /home/node/.opencode "$LOCAL_OPENCODE_DIR"
+docker exec -u root "$CONTAINER_NAME" chown -R node:node /commandhistory /home/node/.config/atuin /home/node/.local/share/atuin /home/node/.claude "$LOCAL_CLAUDE_DIR" /home/node/.gemini "$LOCAL_GEMINI_DIR" /home/node/.codex "$LOCAL_CODEX_DIR" /home/node/.agents "$LOCAL_AGENTS_DIR" /home/node/.opencode "$LOCAL_OPENCODE_DIR"
 # Ensure the parent directories of the mirrored configs exist and are owned by node
 docker exec -u root "$CONTAINER_NAME" mkdir -p "$(dirname "$LOCAL_CLAUDE_DIR")" "$(dirname "$LOCAL_OPENCODE_DIR")"
 docker exec -u root "$CONTAINER_NAME" chown node:node "$(dirname "$LOCAL_CLAUDE_DIR")" "$(dirname "$LOCAL_OPENCODE_DIR")"
