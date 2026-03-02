@@ -1,6 +1,6 @@
 ---
 name: claude-solver
-description: Delegate problems to Claude (Opus) via the `claude -p` CLI for a second opinion, deep analysis, or when stuck. Use when you need a different model's perspective on debugging, architecture design, codebase exploration, or impact analysis. Provide EXTENSIVE context — exact file paths, code snippets, error messages, what you've tried — for quality results. Takes 2-10 minutes.
+description: "**Not for use from Claude.** This skill calls `claude -p`. Claude cannot self-nest via CLI; use Claude's native subagent capabilities instead. Delegate problems to Claude (Opus) via the `claude -p` CLI for a second opinion, deep analysis, or when stuck. Use when you need a different model's perspective on debugging, architecture design, codebase exploration, or impact analysis. Provide EXTENSIVE context — exact file paths, code snippets, error messages, what you've tried — for quality results. Takes 2-10 minutes."
 ---
 
 # Claude Solver

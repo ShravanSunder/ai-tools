@@ -24,8 +24,8 @@ alwaysApply: true
 ## Formatting
 
 - Indent code with 4 spaces
-- Follow SwiftFormat defaults (configured in `.swiftformat`)
-- Maximum line length: 160 characters
+- Follow swift-format defaults (configured in `.swift-format`)
+- Maximum line length: 120 characters
 - Use trailing closures for single-closure parameters
 
 ## SwiftUI Patterns
@@ -85,6 +85,7 @@ Do not run random commands for linting and testing. You MUST follow the ones bel
 
 - `swiftlint --strict` to run linting
 
-### SwiftFormat
+### swift-format
 
-- `swiftformat .` to format code
+- `swift-format format --in-place --recursive Sources/ Tests/` to format code
+- `swift-format lint --recursive Sources/ Tests/` to lint formatting

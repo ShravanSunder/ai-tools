@@ -1,7 +1,7 @@
 ---
 name: scaffold-project
-description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python/Swift project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up oxlint, oxfmt, oxc, ruff, swiftlint, swiftformat, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
-version: 0.1.0
+description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python/Swift project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up oxlint, oxfmt, oxc, ruff, swiftlint, swift-format, swiftformat, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
+version: 0.3.0
 ---
 
 # Project Scaffolding
@@ -215,6 +215,8 @@ Use web search and deepwiki to research:
 - Latest ruff configuration best practices
 - TypeScript strict mode updates
 - BasedPyright configuration changes
+- Latest swift-format rules (Apple's toolchain formatter — check `swift-format --version` output and Apple Swift Evolution proposals)
+- Latest SwiftLint opt_in_rules (check swiftlint's CHANGELOG for newly promoted rules)
 
 ### Step 3: Propose Changes
 
@@ -256,7 +258,7 @@ templates/
 ├── python/           # ruff.toml, pyrightconfig.json, pyproject.toml
 │   ├── single/
 │   └── monorepo/
-├── swift/            # Package.swift, .swiftlint.yml, .swiftformat
+├── swift/            # Package.swift, .swiftlint.yml, .swift-format
 │   └── single/
 ├── testing/          # vitest-browser, playwright configs
 ├── monorepo/         # apps/, packages/, services/ structure

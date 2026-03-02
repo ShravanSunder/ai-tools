@@ -26,8 +26,6 @@ exclude = [
   "node_modules",
   "site-packages",
   "venv",
-  ".ts",
-  ".tsx",
   ".venv"
 ]
 

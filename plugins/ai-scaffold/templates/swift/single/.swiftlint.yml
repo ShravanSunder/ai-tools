@@ -1,9 +1,23 @@
-# SwiftLint configuration — strict mode with industry-standard safety rules
+# SwiftLint configuration — strict Swift 6, swift-format compatible
+# swift-format handles: line_length, opening_brace, trailing_whitespace,
+#   indentation_width, trailing_comma — those are disabled below to avoid overlap.
 strict: true
 
-# Default rules enabled plus safety opt-ins
+included:
+  - Sources
+  - Tests
+
+excluded:
+  - .build
+  - vendor
+
+# Default rules enabled plus opt-ins for Swift 6 quality
 opt_in_rules:
-  # Safety
+  # Concurrency
+  - unhandled_throwing_task
+  # Safety — kept in opt_in for strict SPM/SwiftUI projects.
+  # AppKit/ObjC projects: move force_cast, force_try, implicitly_unwrapped_optional
+  # to disabled_rules to accommodate Objective-C interop.
   - force_unwrapping
   - force_cast
   - implicitly_unwrapped_optional
@@ -11,13 +25,100 @@ opt_in_rules:
   - private_swiftui_state
   - accessibility_label_for_image
   - accessibility_trait_for_button
+  # Style
+  - closure_spacing
+  - collection_alignment
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  - discouraged_none_name
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - enum_case_associated_values_count
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - file_name_no_space
+  - first_where
+  - flatmap_over_map_reduce
+  - identical_operands
+  - implicit_return
+  - joined_default_parameter
+  - last_where
+  - legacy_multiple
+  - lower_acl_than_parent
+  - number_separator
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prefer_self_in_static_references
+  - prefer_self_type_over_type_of_self
+  - prefer_zero_over_explicit_init
+  - private_action
+  - private_outlet
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - redundant_type_annotation
+  - return_value_from_void_function
+  - shorthand_optional_binding
+  - sorted_first_last
+  - toggle_bool
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
 
-disabled_rules: []
+disabled_rules:
+  # Handled by swift-format — disable to avoid conflicts
+  - opening_brace
+  - trailing_whitespace
+  - line_length
+  - indentation_width
+  - trailing_comma
+  # TODOs are legitimate during development
+  - todo
+  # for_where has many false positives with complex predicates
+  - for_where
+  # Allow file-level swiftlint:disable for legacy files
+  - blanket_disable_command
+
+custom_rules:
+  no_observable_object_protocol:
+    name: "No ObservableObject inheritance"
+    regex: "^\\s*(?:final\\s+)?class\\b[^\\n]*:\\s*[^/\\n]*ObservableObject\\b"
+    message: "Use @Observable instead of ObservableObject."
+    severity: error
+  no_published_wrapper:
+    name: "No @Published"
+    regex: "^\\s*@Published\\b"
+    message: "Replace @Published with @Observable-backed properties."
+    severity: error
+  no_observed_property_wrappers:
+    name: "No legacy property wrappers for object views"
+    regex: "^\\s*@(ObservedObject|StateObject|EnvironmentObject)\\b"
+    message: "Prefer @Bindable for @Observable-annotated dependencies."
+    severity: error
+  no_dispatch_queue_main:
+    name: "No DispatchQueue.main.async/sync"
+    regex: "DispatchQueue\\.main\\.(async|sync)"
+    message: "Use Task/@MainActor instead of DispatchQueue.main."
+    severity: warning
+  no_task_detached:
+    name: "No Task.detached"
+    regex: "Task\\.detached"
+    message: "Prefer Task {} (inherits actor isolation) over Task.detached. Disable with inline justification if detached is specifically needed."
+    severity: warning
+  no_notification_center_selector:
+    name: "No selector-based NotificationCenter observation"
+    regex: "addObserver\\([^)\\n]*selector:"
+    message: "Use NotificationCenter.notifications(named:) async stream instead of selector-based observation. (Note: only catches single-line addObserver calls.)"
+    severity: warning
 
 # Thresholds
 line_length:
-  warning: 160
-  error: 200
+  warning: 120
+  error: 160
 
 type_body_length:
   warning: 300
@@ -30,6 +131,27 @@ file_length:
 function_body_length:
   warning: 50
   error: 100
+
+function_parameter_count:
+  warning: 6
+  error: 8
+
+cyclomatic_complexity:
+  warning: 15
+  error: 30
+
+nesting:
+  type_level:
+    warning: 3
+  function_level:
+    warning: 5
+
+large_tuple:
+  warning: 3
+  error: 4
+
+number_separator:
+  minimum_length: 5
 
 identifier_name:
   min_length:
@@ -45,5 +167,18 @@ identifier_name:
     - z
     - i
     - j
+    - ok
+    - fd
+    - to
+    - a
+    - b
+
+type_name:
+  min_length:
+    warning: 3
+    error: 2
+  max_length:
+    warning: 50
+    error: 60
 
 reporter: xcode

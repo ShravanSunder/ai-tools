@@ -92,7 +92,7 @@ Just ask Claude:
 ### Swift
 - `Package.swift` - Swift Package Manager manifest
 - `.swiftlint.yml` - SwiftLint strict configuration
-- `.swiftformat` - SwiftFormat configuration
+- `.swift-format` - swift-format configuration (Apple's official formatter)
 
 ## Testing Conventions
 

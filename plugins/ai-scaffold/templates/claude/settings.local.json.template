@@ -13,7 +13,7 @@
       "Bash(tsc *)",
       "Bash(swift *)",
       "Bash(swiftlint *)",
-      "Bash(swiftformat *)",
+      "Bash(swift-format *)",
       "Bash(ls *)",
       "Bash(cat *)",
       "Bash(head *)",

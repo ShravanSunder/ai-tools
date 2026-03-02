@@ -49,7 +49,7 @@ The container automatically mounts:
 | `.venv/` | `$WORK_DIR/.venv` | rw | Persistent named volume |
 | `node_modules/` | per-package | rw | Persistent named volumes |
 | `~/.aws` | `/home/node/.aws` | ro | AWS credentials |
-| `~/.claude`, `~/.codex`, `~/.gemini` | `/home/node/.{tool}` | rw | Agent CLI configs |
+| `~/.claude`, `~/.codex`, `~/.gemini`, `~/.agents` | `/home/node/.{tool}` | rw | Agent CLI configs and shared hooks/skills |
 | pnpm store, uv cache, npm cache | `/home/node/.local/share/...` | rw | Persistent named volumes |
 
 **`EXTRA_MOUNTS`** adds to these (does not replace). Use standard Docker `-v` syntax. Prefer `:ro` unless the agent needs write access.

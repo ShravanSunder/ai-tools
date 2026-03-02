@@ -1,0 +1,5 @@
+brew "cpio"
+brew "e2fsprogs"
+brew "lz4"
+brew "qemu"
+brew "zig"

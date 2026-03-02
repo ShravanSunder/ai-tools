@@ -348,7 +348,7 @@ if [[ "$INCLUDE_SWIFT" == "true" ]]; then
 
     copy_template "$TEMPLATES_DIR/swift/single/Package.swift.template" "Package.swift"
     copy_template "$TEMPLATES_DIR/swift/single/.swiftlint.yml" ".swiftlint.yml"
-    copy_template "$TEMPLATES_DIR/swift/single/.swiftformat" ".swiftformat"
+    copy_template "$TEMPLATES_DIR/swift/single/.swift-format" ".swift-format"
 
     # Create SPM directory structure
     mkdir -p "Sources/$PROJECT_NAME"

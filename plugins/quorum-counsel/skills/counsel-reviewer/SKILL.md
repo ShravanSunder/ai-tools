@@ -1,13 +1,11 @@
 ---
 name: counsel-reviewer
-description: Orchestrate parallel code review or plan review using both Claude (Opus) and Gemini. Use after creating implementation plans (plan review) or after completing implementation (code review). Spawns both models in parallel, then synthesizes findings with confidence scoring and consensus detection. Provides 42-48% better bug detection vs single model. Use for substantial work — not quick fixes.
+description: "**Not for use from Claude or Gemini.** This skill calls `claude -p` + `gemini -p`. Neither can self-nest via CLI. Claude should use the `counsel-reviewer` agent instead. Orchestrate parallel code review or plan review using both Claude (Opus) and Gemini. Use after creating implementation plans (plan review) or after completing implementation (code review). Spawns both models in parallel, then synthesizes findings with confidence scoring and consensus detection. Use for substantial work — not quick fixes."
 ---
 
 # Counsel Reviewer
 
-Orchestrate parallel review from Claude (Opus) and Gemini, then synthesize findings into a unified review with confidence scoring.
-
-> **Codex-specific version.** The Claude Code counterpart lives in `plugins/quorum-counsel/agents/counsel-reviewer.md` and calls `codex exec` + `gemini -p`. This version calls `claude -p` + `gemini -p` since Codex is the orchestrator.
+Orchestrate parallel review from Claude (Opus) and Gemini, then synthesize findings into a unified review with confidence scoring. This skill calls `claude -p` + `gemini -p`. The plugin also provides an agent version (`counsel-reviewer` agent) that calls `codex exec` + `gemini -p` for use from Claude's Task tool.
 
 ## Review Types
 

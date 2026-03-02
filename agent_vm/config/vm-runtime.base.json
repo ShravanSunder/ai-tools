@@ -1,0 +1,62 @@
+{
+	"$schema": "../schemas/vm-runtime.schema.json",
+	"rootfsMode": "cow",
+	"memory": 2048,
+	"cpus": 2,
+	"idleTimeoutMinutes": 10,
+	"env": {
+		"HOME": "/home/agent",
+		"VIRTUAL_ENV": "${WORKSPACE}/.venv",
+		"PNPM_STORE_DIR": "/home/agent/.local/share/pnpm"
+	},
+	"volumes": {
+		"venv": { "guestPath": "${WORKSPACE}/.venv" },
+		"nodeModulesRoot": { "guestPath": "${WORKSPACE}/node_modules" },
+		"pnpmStore": { "guestPath": "/home/agent/.local/share/pnpm" },
+		"npmCache": { "guestPath": "/home/agent/.cache" },
+		"uvCache": { "guestPath": "/home/agent/.local/share/uv" },
+		"shellHistory": { "guestPath": "/commandhistory" }
+	},
+	"shadows": {
+		"deny": [".agent_vm", ".git", "dist", ".next", "__pycache__"],
+		"tmpfs": [".venv", "node_modules"]
+	},
+	"readonlyMounts": {
+		".git": "${WORKSPACE}/.git",
+		"/home/agent/.aws": "${HOST_HOME}/.aws",
+		"/home/agent/.claude": "${HOST_HOME}/.claude",
+		"/home/agent/.codex": "${HOST_HOME}/.codex",
+		"/home/agent/.gemini": "${HOST_HOME}/.gemini"
+	},
+	"extraMounts": {},
+	"monorepoDiscovery": true,
+	"initScripts": {
+		"background": null,
+		"foreground": null
+	},
+	"shell": {
+		"zshrcExtra": null,
+		"atuin": {
+			"importOnFirstRun": true
+		}
+	},
+	"tcp": {
+		"strictMode": true,
+		"allowedTargetHosts": ["127.0.0.1", "localhost"],
+		"services": {
+			"postgres": {
+				"guestHostname": "pg.vm.host",
+				"guestPort": 5432,
+				"upstreamTarget": "127.0.0.1:15432",
+				"enabled": true
+			},
+			"redis": {
+				"guestHostname": "redis.vm.host",
+				"guestPort": 6379,
+				"upstreamTarget": "127.0.0.1:16379",
+				"enabled": true
+			}
+		}
+	},
+	"playwrightExtraHosts": []
+}
