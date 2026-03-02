@@ -18,8 +18,8 @@ describe('init-agent-vm', () => {
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'build.project.json'))).toBe(true);
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm-runtime.repo.json'))).toBe(true);
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm-runtime.local.json'))).toBe(true);
-		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'tcp-services.repo.json'))).toBe(true);
-		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'tcp-services.local.json'))).toBe(true);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'tcp-services.repo.json'))).toBe(false);
+		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'tcp-services.local.json'))).toBe(false);
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', '.gitignore'))).toBe(true);
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'INSTRUCTIONS.md'))).toBe(true);
 

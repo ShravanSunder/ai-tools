@@ -16,6 +16,30 @@ describe('loadVmRuntimeConfig', () => {
 		expect(config.memory).toBe(2048);
 	});
 
+	it('parses tcp services embedded in vm runtime config', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
+		const configDirectory = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDirectory, { recursive: true });
+
+		fs.writeFileSync(
+			path.join(configDirectory, 'vm-runtime.repo.json'),
+			JSON.stringify({
+				tcp: {
+					services: {
+						postgres: {
+							upstreamTarget: '127.0.0.1:25432',
+						},
+					},
+				},
+			}),
+			'utf8',
+		);
+
+		const config = loadVmRuntimeConfig(workDir);
+		expect(config.tcp.services.postgres?.guestHostname).toBe('pg.vm.host');
+		expect(config.tcp.services.postgres?.upstreamTarget).toBe('127.0.0.1:25432');
+	});
+
 	it('merges base < repo < local with expected precedence', () => {
 		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
 		const configDirectory = path.join(workDir, '.agent_vm');

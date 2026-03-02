@@ -95,4 +95,27 @@ describe('loadBuildConfig', () => {
 		const config = loadBuildConfig(workDir);
 		expect(config.init?.rootfsInitExtra).toBe(path.join(configDir, 'init', 'rootfs-extra.sh'));
 	});
+
+	it('resolves ociOverlay paths relative to workspace root', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-'));
+		const configDir = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDir, { recursive: true });
+		fs.writeFileSync(
+			path.join(configDir, 'build.project.json'),
+			JSON.stringify({
+				ociOverlay: {
+					baseImage: 'docker.io/library/debian:bookworm-slim',
+					dockerfile: '.agent_vm/overlay.repo.dockerfile',
+					contextDir: '.',
+				},
+			}),
+			'utf8',
+		);
+
+		const config = loadBuildConfig(workDir);
+		expect(config.ociOverlay?.dockerfile).toBe(
+			path.join(workDir, '.agent_vm', 'overlay.repo.dockerfile'),
+		);
+		expect(config.ociOverlay?.contextDir).toBe(workDir);
+	});
 });

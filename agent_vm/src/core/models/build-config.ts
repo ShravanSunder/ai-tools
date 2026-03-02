@@ -15,6 +15,22 @@ const ociRootfsSchema = z.object({
 	pullPolicy: pullPolicySchema.optional(),
 });
 
+const ociOverlaySchema = z.object({
+	baseImage: z.string().trim().min(1),
+	dockerfile: z.string().trim().min(1),
+	contextDir: z.string().trim().min(1).default('.'),
+	target: z.string().trim().min(1).optional(),
+	buildArgs: z.record(z.string(), z.string()).default({}),
+});
+
+const ociOverlayInputSchema = z.object({
+	baseImage: z.string().trim().min(1).optional(),
+	dockerfile: z.string().trim().min(1).optional(),
+	contextDir: z.string().trim().min(1).optional(),
+	target: z.string().trim().min(1).optional(),
+	buildArgs: z.record(z.string(), z.string()).optional(),
+});
+
 const postBuildSchema = z.object({
 	commands: z.array(z.string().trim().min(1)).optional(),
 });
@@ -45,6 +61,7 @@ export const buildConfigInputSchema = z.object({
 	distro: distroSchema.optional(),
 	env: envInputSchema.optional(),
 	oci: ociRootfsSchema.optional(),
+	ociOverlay: ociOverlayInputSchema.optional(),
 	postBuild: postBuildSchema.optional(),
 	init: initSchema.optional(),
 	rootfs: rootfsSchema.optional(),
@@ -55,6 +72,7 @@ export const buildConfigInputSchema = z.object({
 export const buildConfigSchema = buildConfigInputSchema.extend({
 	arch: architectureSchema,
 	distro: distroSchema,
+	ociOverlay: ociOverlaySchema.optional(),
 });
 
 export type BuildConfigInput = z.input<typeof buildConfigInputSchema>;
@@ -108,6 +126,9 @@ export function mergeBuildConfigs(
 		distro: project.distro ?? base.distro,
 		env: mergeEnvInput(base.env, project.env),
 		oci: project.oci ? { ...base.oci, ...project.oci } : base.oci,
+		ociOverlay: project.ociOverlay
+			? { ...base.ociOverlay, ...project.ociOverlay }
+			: base.ociOverlay,
 		postBuild:
 			mergedCommands.length > 0
 				? {

@@ -13,12 +13,14 @@
 - Policy compilation from base + repo + local + toggles (policy changes trigger VM runtime recreation)
 - Host Docker services mapped via Gondolin tcp.hosts with synthetic DNS hostnames (e.g. pg.vm.host, redis.vm.host)
 - Host OAuth directories mounted readonly into VM (no copy-back)
+- Global by-fingerprint image cache (`~/.cache/agent-vm/images/by-fingerprint`)
+- Optional local OCI overlay builds from `build.project.json.ociOverlay`
 
 ## Essential Paths
 
 - Plans:
-  - `agent_vm/docs/plans/2026-03-02-agent-vm-sidecar-requirements-spec.md`
-- Architecture: `docs/architecture/agent-vm-architecture.md`
+  - `agent_vm/docs/plans/2026-03-02-agent-vm-c-plus-consolidated-spec.md`
+- Architecture: `agent_vm/docs/architecture/agent-vm-architecture.md`
 - Base runtime config: `agent_vm/config/vm-runtime.base.json`
 - Base build config: `agent_vm/config/build.base.json`
 

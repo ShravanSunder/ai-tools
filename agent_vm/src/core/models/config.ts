@@ -27,23 +27,9 @@ export interface WorkspaceIdentity {
 	readonly daemonLogPath: string;
 }
 
-export interface TcpServiceEntry {
-	readonly guestHostname: string;
-	readonly guestPort: number;
-	readonly upstreamTarget: string;
-	readonly enabled: boolean;
-}
-
-export interface TcpServiceMap {
-	readonly services: Readonly<Record<string, TcpServiceEntry>>;
-	readonly strictMode: boolean;
-	readonly allowedTargetHosts: readonly string[];
-}
-
 export interface ResolvedRuntimeConfig {
 	readonly runtimeConfig: VmRuntimeConfig;
 	readonly buildConfig: BuildConfig;
-	readonly tcpServiceMap: TcpServiceMap;
 	readonly allowedHosts: readonly string[];
 	readonly toggleEntries: readonly string[];
 	readonly generatedStateDir: string;

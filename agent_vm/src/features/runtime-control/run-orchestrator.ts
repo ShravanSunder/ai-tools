@@ -4,12 +4,8 @@ import path from 'node:path';
 
 import { execa } from 'execa';
 
-import {
-	buildGuestAssets,
-	resolveGondolinBinPath,
-	resolveVolumeCacheDir,
-	resolveWorkspaceImageDir,
-} from '#src/build/build-assets.js';
+import { buildGuestAssets, resolveGondolinBinPath } from '#src/build/build-assets.js';
+import { resolveFingerprintImageCacheDir, resolveVolumeCacheDir } from '#src/build/image-cache.js';
 import { DaemonClient, waitForSocket } from '#src/core/infrastructure/daemon-client.js';
 import { wipeVolumeDirs } from '#src/core/infrastructure/volume-manager.js';
 import type { RunAgentVmOptions } from '#src/core/models/config.js';
@@ -485,7 +481,7 @@ interface RunOrchestratorDependencies {
 	readonly loadBuildConfig: typeof loadBuildConfig;
 	readonly buildGuestAssets: typeof buildGuestAssets;
 	readonly wipeVolumeDirs: typeof wipeVolumeDirs;
-	readonly resolveWorkspaceImageDir: typeof resolveWorkspaceImageDir;
+	readonly resolveFingerprintImageCacheDir: typeof resolveFingerprintImageCacheDir;
 	readonly resolveVolumeCacheDir: typeof resolveVolumeCacheDir;
 	readonly cleanupStaleCacheDirs: typeof cleanupStaleCacheDirs;
 	readonly acquireDaemonLease: typeof acquireDaemonLease;
@@ -500,7 +496,7 @@ const DEFAULT_DEPENDENCIES: RunOrchestratorDependencies = {
 	loadBuildConfig,
 	buildGuestAssets,
 	wipeVolumeDirs,
-	resolveWorkspaceImageDir,
+	resolveFingerprintImageCacheDir,
 	resolveVolumeCacheDir,
 	cleanupStaleCacheDirs,
 	acquireDaemonLease,
@@ -515,9 +511,7 @@ export async function runOrchestrator(
 	const identity = dependencies.deriveWorkspaceIdentity(workDir);
 
 	if (options.cleanup) {
-		const imagesDir = path.join(
-			path.dirname(dependencies.resolveWorkspaceImageDir(identity.dirHash)),
-		);
+		const imagesDir = dependencies.resolveFingerprintImageCacheDir();
 		const volumeCacheDir = dependencies.resolveVolumeCacheDir();
 		const removedImages = dependencies.cleanupStaleCacheDirs(imagesDir, 30);
 		const removedVolumes = dependencies.cleanupStaleCacheDirs(volumeCacheDir, 30);
@@ -533,10 +527,9 @@ export async function runOrchestrator(
 	}
 
 	const buildConfig = dependencies.loadBuildConfig(identity.workDir);
-	const imageOutputDir = dependencies.resolveWorkspaceImageDir(identity.dirHash);
 	const buildResult = await dependencies.buildGuestAssets({
 		buildConfig,
-		outputDir: imageOutputDir,
+		workspaceHash: identity.dirHash,
 		fullReset: options.fullReset || options.wipeVolumes,
 	});
 

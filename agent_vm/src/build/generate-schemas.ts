@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 import { buildConfigInputSchema } from '#src/core/models/build-config.js';
 import { vmRuntimeConfigInputSchema } from '#src/core/models/vm-runtime-config.js';
-import { tcpServiceConfigInputSchema } from '#src/features/runtime-control/tcp-service-config.js';
 
 const thisFilePath = fileURLToPath(import.meta.url);
 const thisDirectoryPath = path.dirname(thisFilePath);
@@ -27,7 +26,6 @@ function writeSchemaFile(fileName: string, schema: z.ZodTypeAny, id: string): vo
 function main(): void {
 	writeSchemaFile('build-config.schema.json', buildConfigInputSchema, 'build-config');
 	writeSchemaFile('vm-runtime.schema.json', vmRuntimeConfigInputSchema, 'vm-runtime');
-	writeSchemaFile('tcp-services.schema.json', tcpServiceConfigInputSchema, 'tcp-services');
 }
 
 main();

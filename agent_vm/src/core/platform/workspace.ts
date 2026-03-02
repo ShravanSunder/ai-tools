@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -22,7 +23,18 @@ function toSessionSafeRepoSegment(repoName: string): string {
 }
 
 export function deriveWorkspaceIdentity(workDir: string): WorkspaceIdentity {
-	const normalized = path.resolve(workDir);
+	const resolved = path.resolve(workDir);
+	const normalized = (() => {
+		try {
+			return fs.realpathSync.native(resolved);
+		} catch {
+			try {
+				return fs.realpathSync(resolved);
+			} catch {
+				return resolved;
+			}
+		}
+	})();
 	const repoName = sanitizeRepoName(path.basename(normalized));
 	const dirHash = crypto.createHash('md5').update(normalized).digest('hex').slice(0, 8);
 	const sessionRepoSegment = toSessionSafeRepoSegment(repoName);

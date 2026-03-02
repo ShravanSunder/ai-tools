@@ -28,16 +28,18 @@ describe('config resolver', () => {
 		expect(resolved.memory).toBe(5120);
 	});
 
-	it('returns build, runtime, tcp and policy bundle from resolveRuntimeConfig', () => {
+	it('returns build, runtime and policy bundle from resolveRuntimeConfig', () => {
 		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-config-'));
 		const configDir = path.join(workDir, '.agent_vm');
 		fs.mkdirSync(configDir, { recursive: true });
 
 		fs.writeFileSync(
-			path.join(configDir, 'tcp-services.repo.json'),
+			path.join(configDir, 'vm-runtime.repo.json'),
 			JSON.stringify({
-				services: {
-					postgres: { upstreamTarget: '127.0.0.1:25432' },
+				tcp: {
+					services: {
+						postgres: { upstreamTarget: '127.0.0.1:25432' },
+					},
 				},
 			}),
 			'utf8',
@@ -46,8 +48,17 @@ describe('config resolver', () => {
 		const resolved = resolveRuntimeConfig(workDir);
 		expect(resolved.runtimeConfig.idleTimeoutMinutes).toBe(10);
 		expect(resolved.buildConfig.arch).toBe('aarch64');
-		expect(resolved.tcpServiceMap.services.postgres?.upstreamTarget).toBe('127.0.0.1:25432');
+		expect(resolved.runtimeConfig.tcp.services.postgres?.upstreamTarget).toBe('127.0.0.1:25432');
 		expect(Array.isArray(resolved.allowedHosts)).toBe(true);
 		expect(resolved.generatedStateDir).toContain(path.join('.agent_vm', '.generated'));
+	});
+
+	it('throws hard cutover error when removed tcp-services config file is present', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-config-removed-'));
+		const configDir = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDir, { recursive: true });
+		fs.writeFileSync(path.join(configDir, 'tcp-services.repo.json'), '{}', 'utf8');
+
+		expect(() => resolveRuntimeConfig(workDir)).toThrowError(/Hard cutover/u);
 	});
 });

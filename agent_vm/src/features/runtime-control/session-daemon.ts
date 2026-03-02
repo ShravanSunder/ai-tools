@@ -17,6 +17,11 @@ import {
 	type DaemonRequest,
 	type DaemonResponse,
 } from '#src/core/models/ipc.js';
+import {
+	buildRuntimeTcpHostsRecord,
+	buildRuntimeTcpServiceEnvVars,
+	validateRuntimeTcpTargets,
+} from '#src/core/models/vm-runtime-config.js';
 import type { Logger } from '#src/core/platform/logger.js';
 import { AuthSyncManager } from '#src/features/auth-proxy/auth-sync.js';
 import { resolveRuntimeConfig } from '#src/features/runtime-control/config-resolver.js';
@@ -29,11 +34,6 @@ import {
 	mutateAndCompilePolicy,
 } from '#src/features/runtime-control/policy-manager.js';
 import { ensureAtuinImportedOnFirstRun } from '#src/features/runtime-control/shell-setup.js';
-import {
-	buildTcpHostsRecord,
-	buildTcpServiceEnvVars,
-	validateTcpServiceTargets,
-} from '#src/features/runtime-control/tcp-service-config.js';
 
 export interface DaemonRuntimeOptions {
 	readonly imagePath: string;
@@ -255,10 +255,10 @@ export class AgentVmDaemon {
 		tcpHosts: Record<string, string>;
 		tcpServiceEnvVars: Record<string, string>;
 	} {
-		validateTcpServiceTargets(runtimeConfig.tcpServiceMap);
+		validateRuntimeTcpTargets(runtimeConfig.runtimeConfig.tcp);
 		return {
-			tcpHosts: buildTcpHostsRecord(runtimeConfig.tcpServiceMap),
-			tcpServiceEnvVars: buildTcpServiceEnvVars(runtimeConfig.tcpServiceMap),
+			tcpHosts: buildRuntimeTcpHostsRecord(runtimeConfig.runtimeConfig.tcp),
+			tcpServiceEnvVars: buildRuntimeTcpServiceEnvVars(runtimeConfig.runtimeConfig.tcp),
 		};
 	}
 
@@ -511,7 +511,7 @@ export class AgentVmDaemon {
 
 	public getStatus(): DaemonStatus {
 		const tcpServices = this.runtimeConfig
-			? Object.entries(this.runtimeConfig.tcpServiceMap.services).map(([name, entry]) => ({
+			? Object.entries(this.runtimeConfig.runtimeConfig.tcp.services).map(([name, entry]) => ({
 					name,
 					guestHostname: entry.guestHostname,
 					guestPort: entry.guestPort,

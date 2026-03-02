@@ -5,14 +5,25 @@ import path from 'node:path';
 
 import { execa } from 'execa';
 
+import {
+	resolveFingerprintBuildLockPath,
+	resolveFingerprintImageDir,
+	resolveVolumeCacheDir,
+	writeWorkspaceImageRef,
+} from '#src/build/image-cache.js';
+import {
+	buildOverlayImageAndResolveDigest,
+	type OverlayBuildResult,
+} from '#src/build/oci-overlay-builder.js';
 import type { BuildConfig } from '#src/core/models/build-config.js';
+import { withFileLockAsync } from '#src/core/platform/file-lock.js';
 import { getAgentVmRoot } from '#src/core/platform/paths.js';
 
-const BUILD_SCHEMA_VERSION = '2026-03-01-config-surface-v1';
+const BUILD_SCHEMA_VERSION = '2026-03-02-c-plus-v1';
 
 export interface BuildAssetsOptions {
 	readonly buildConfig: BuildConfig;
-	readonly outputDir: string;
+	readonly workspaceHash: string;
 	readonly fullReset: boolean;
 }
 
@@ -21,6 +32,18 @@ export interface BuildAssetsResult {
 	readonly fingerprint: string;
 	readonly built: boolean;
 }
+
+interface BuildAssetsDependencies {
+	buildOverlayImageAndResolveDigest: typeof buildOverlayImageAndResolveDigest;
+	buildAssetsIntoDir: (outputDir: string, config: BuildConfig) => Promise<void>;
+}
+
+const DEFAULT_DEPENDENCIES: BuildAssetsDependencies = {
+	buildOverlayImageAndResolveDigest,
+	buildAssetsIntoDir: async (outputDir: string, config: BuildConfig): Promise<void> => {
+		await buildAssetsIntoDir(outputDir, config);
+	},
+};
 
 export function resolveGondolinBinPath(agentVmRoot: string): string {
 	const localBinPath = path.join(agentVmRoot, 'node_modules', '.bin', 'gondolin');
@@ -81,7 +104,9 @@ async function ensureGondolinGuestDirectory(agentVmRoot: string): Promise<string
 }
 
 function resolveBuildPathEnvironment(currentEnvironment: NodeJS.ProcessEnv): string {
-	const pathSegments = (currentEnvironment.PATH ?? '').split(path.delimiter).filter((segment) => segment.length > 0);
+	const pathSegments = (currentEnvironment.PATH ?? '')
+		.split(path.delimiter)
+		.filter((segment) => segment.length > 0);
 	const toolPathSegments = [
 		'/opt/homebrew/opt/e2fsprogs/sbin',
 		'/opt/homebrew/opt/e2fsprogs/bin',
@@ -116,16 +141,14 @@ async function ensureHostBuildPrerequisites(agentVmRoot: string): Promise<string
 
 	const brewfilePath = path.join(agentVmRoot, 'Brewfile');
 	if (!fs.existsSync(brewfilePath)) {
-		throw new Error(
-			`Missing required host tool 'mke2fs' and no Brewfile found at ${brewfilePath}.`,
-		);
+		throw new Error(`Missing required host tool 'mke2fs' and no Brewfile found at ${brewfilePath}.`);
 	}
 
 	await execa('brew', ['bundle', '--file', brewfilePath], { stdio: 'inherit' });
 	resolvedPath = resolveBuildPathEnvironment(process.env);
 	if (!hasCommandInPath('mke2fs', resolvedPath)) {
 		throw new Error(
-			`Required host tool 'mke2fs' is still unavailable after brew bundle. Ensure e2fsprogs is installed and accessible.`,
+			"Required host tool 'mke2fs' is still unavailable after brew bundle. Ensure e2fsprogs is installed and accessible.",
 		);
 	}
 	return resolvedPath;
@@ -179,7 +202,7 @@ function stableSerialize(value: unknown): string {
 }
 
 export function computeBuildFingerprint(
-	mergedConfig: BuildConfig,
+	mergedConfig: unknown,
 	gondolinVersion: string,
 	schemaVersion: string = BUILD_SCHEMA_VERSION,
 ): string {
@@ -197,22 +220,23 @@ function hasBuiltAssets(outputDirectoryPath: string): boolean {
 	);
 }
 
-function readFingerprint(outputDirectoryPath: string): string | null {
-	const fingerprintPath = path.join(outputDirectoryPath, '.build-fingerprint');
-	if (!fs.existsSync(fingerprintPath)) {
-		return null;
-	}
-	return fs.readFileSync(fingerprintPath, 'utf8').trim();
-}
-
 function writeFingerprint(outputDirectoryPath: string, fingerprint: string): void {
 	fs.writeFileSync(path.join(outputDirectoryPath, '.build-fingerprint'), `${fingerprint}\n`, 'utf8');
+}
+
+function toGondolinBuildConfig(config: BuildConfig): Record<string, unknown> {
+	const { ociOverlay: _unusedOverlay, ...gondolinConfig } = config;
+	return gondolinConfig;
 }
 
 function writeTempBuildConfig(config: BuildConfig): { path: string; cleanup: () => void } {
 	const tempDirectoryPath = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-config-'));
 	const tempConfigPath = path.join(tempDirectoryPath, 'build.config.json');
-	fs.writeFileSync(tempConfigPath, `${JSON.stringify(config, null, '\t')}\n`, 'utf8');
+	fs.writeFileSync(
+		tempConfigPath,
+		`${JSON.stringify(toGondolinBuildConfig(config), null, '\t')}\n`,
+		'utf8',
+	);
 	return {
 		path: tempConfigPath,
 		cleanup: () => {
@@ -221,61 +245,105 @@ function writeTempBuildConfig(config: BuildConfig): { path: string; cleanup: () 
 	};
 }
 
-export async function buildGuestAssets(options: BuildAssetsOptions): Promise<BuildAssetsResult> {
+async function resolveEffectiveBuildConfig(
+	baseConfig: BuildConfig,
+	fingerprintSeed: string,
+	dependencies: BuildAssetsDependencies,
+): Promise<{ effectiveConfig: BuildConfig; overlay: OverlayBuildResult | null }> {
+	if (!baseConfig.ociOverlay) {
+		return { effectiveConfig: baseConfig, overlay: null };
+	}
+
+	const overlay = await dependencies.buildOverlayImageAndResolveDigest({
+		overlayConfig: baseConfig.ociOverlay,
+		fingerprintSeed,
+	});
+	const effectiveConfig: BuildConfig = {
+		...baseConfig,
+		oci: {
+			...baseConfig.oci,
+			image: overlay.imageRef,
+		},
+	};
+	return { effectiveConfig, overlay };
+}
+
+async function buildAssetsIntoDir(
+	outputDir: string,
+	config: BuildConfig,
+): Promise<void> {
 	const agentVmRoot = getAgentVmRoot();
-	const gondolinVersion = resolveGondolinVersion(agentVmRoot);
-	const fingerprint = computeBuildFingerprint(options.buildConfig, gondolinVersion);
-
-	if (
-		!options.fullReset &&
-		hasBuiltAssets(options.outputDir) &&
-		readFingerprint(options.outputDir) === fingerprint
-	) {
-		return {
-			imagePath: options.outputDir,
-			fingerprint,
-			built: false,
-		};
-	}
-
-	if (options.fullReset && fs.existsSync(options.outputDir)) {
-		fs.rmSync(options.outputDir, { recursive: true, force: true });
-	}
-	fs.mkdirSync(options.outputDir, { recursive: true });
-
 	const gondolinBinPath = resolveGondolinBinPath(agentVmRoot);
 	const gondolinGuestDirectoryPath = await ensureGondolinGuestDirectory(agentVmRoot);
 	const buildPathEnvironment = await ensureHostBuildPrerequisites(agentVmRoot);
-	const tempBuildConfig = writeTempBuildConfig(options.buildConfig);
+	const tempBuildConfig = writeTempBuildConfig(config);
 	try {
-		await execa(
-			gondolinBinPath,
-			['build', '--config', tempBuildConfig.path, '--output', options.outputDir],
-			{
-				stdio: 'inherit',
-				env: {
-					...process.env,
-					PATH: buildPathEnvironment,
-					GONDOLIN_GUEST_SRC: gondolinGuestDirectoryPath,
-				},
+		await execa(gondolinBinPath, ['build', '--config', tempBuildConfig.path, '--output', outputDir], {
+			stdio: 'inherit',
+			env: {
+				...process.env,
+				PATH: buildPathEnvironment,
+				GONDOLIN_GUEST_SRC: gondolinGuestDirectoryPath,
 			},
-		);
+		});
 	} finally {
 		tempBuildConfig.cleanup();
 	}
+}
 
-	writeFingerprint(options.outputDir, fingerprint);
+export async function buildGuestAssets(
+	options: BuildAssetsOptions,
+	dependencies: BuildAssetsDependencies = DEFAULT_DEPENDENCIES,
+): Promise<BuildAssetsResult> {
+	const agentVmRoot = getAgentVmRoot();
+	const gondolinVersion = resolveGondolinVersion(agentVmRoot);
+
+	const overlayFingerprintSeed = computeBuildFingerprint(
+		options.buildConfig,
+		gondolinVersion,
+		`${BUILD_SCHEMA_VERSION}-overlay`,
+	);
+	const effectiveBuild = await resolveEffectiveBuildConfig(
+		options.buildConfig,
+		overlayFingerprintSeed,
+		dependencies,
+	);
+
+	const fingerprintPayload = {
+		...toGondolinBuildConfig(effectiveBuild.effectiveConfig),
+		overlayDigest: effectiveBuild.overlay?.digest ?? null,
+	};
+	const finalFingerprint = computeBuildFingerprint(fingerprintPayload, gondolinVersion);
+	const outputDir = resolveFingerprintImageDir(finalFingerprint);
+
+	const lockPath = resolveFingerprintBuildLockPath(finalFingerprint);
+	let built = false;
+	await withFileLockAsync(lockPath, async () => {
+		const shouldRebuild = options.fullReset || !hasBuiltAssets(outputDir);
+		if (!shouldRebuild) {
+			return;
+		}
+
+		if (fs.existsSync(outputDir)) {
+			fs.rmSync(outputDir, { recursive: true, force: true });
+		}
+		fs.mkdirSync(outputDir, { recursive: true });
+
+		await dependencies.buildAssetsIntoDir(outputDir, effectiveBuild.effectiveConfig);
+		writeFingerprint(outputDir, finalFingerprint);
+		built = true;
+	});
+
+	writeWorkspaceImageRef(options.workspaceHash, {
+		fingerprint: finalFingerprint,
+		imagePath: outputDir,
+	});
+
 	return {
-		imagePath: options.outputDir,
-		fingerprint,
-		built: true,
+		imagePath: outputDir,
+		fingerprint: finalFingerprint,
+		built,
 	};
 }
 
-export function resolveWorkspaceImageDir(workspaceHash: string): string {
-	return path.join(os.homedir(), '.cache', 'agent-vm', 'images', workspaceHash);
-}
-
-export function resolveVolumeCacheDir(): string {
-	return path.join(os.homedir(), '.cache', 'agent-vm', 'volumes');
-}
+export { resolveVolumeCacheDir };

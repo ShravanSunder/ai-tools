@@ -11,6 +11,7 @@ Gondolin-based VM control plane with sidecar parity. Manages sandboxed VM sessio
 ```
 src/
   bin/          # CLI entry points (agent-vm, agent-vm-daemon)
+  build/        # Guest build pipeline, OCI overlay builder, image cache utilities
   core/
     infrastructure/  # VM adapter, daemon client
     models/          # Runtime config + IPC contracts
@@ -18,8 +19,7 @@ src/
   features/
     auth-proxy/      # Readonly auth mount resolution + keychain export
     cli/             # cmd-ts command surfaces
-    runtime-control/ # Daemon, orchestrator, policy/config/tcp-service controls
-  build/        # Build utilities
+    runtime-control/ # Daemon, orchestrator, policy/config/runtime controls
 tests/
   *.integration.test.ts # Integration suite
   e2e/          # Smoke tests against compiled binaries
@@ -45,10 +45,12 @@ pnpm check             # All checks: lint + fmt + typecheck + test + e2e
 ## Key Patterns
 
 - **Configuration hierarchy**: local (.local.) > repo (.repo.) > base (.base.) — resolved by `config-resolver.ts`
+- **Config contract**: 2 JSON configs (`build.project.json`, `vm-runtime.*.json`) + policy TXT allowlists
 - **CLI framework**: `cmd-ts` for type-safe CLI argument parsing
 - **Process execution**: `execa` for subprocess management
 - **Schema validation**: `zod` for runtime config validation
 - **IPC**: Unix domain sockets for daemon communication (`core/models/ipc.ts`)
+- **Image cache**: global by-fingerprint guest assets with per-workspace references in `~/.cache/agent-vm/images/workspaces/`
 
 ## Constraints
 

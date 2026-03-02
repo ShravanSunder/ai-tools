@@ -1,3 +1,21 @@
 {
-	"$schema": "../../agent_vm/schemas/vm-runtime.schema.json"
+	"$schema": "../../agent_vm/schemas/vm-runtime.schema.json",
+	"tcp": {
+		"strictMode": true,
+		"allowedTargetHosts": ["127.0.0.1", "localhost"],
+		"services": {
+			"postgres": {
+				"guestHostname": "pg.vm.host",
+				"guestPort": 5432,
+				"upstreamTarget": "127.0.0.1:15432",
+				"enabled": true
+			},
+			"redis": {
+				"guestHostname": "redis.vm.host",
+				"guestPort": 6379,
+				"upstreamTarget": "127.0.0.1:16379",
+				"enabled": true
+			}
+		}
+	}
 }

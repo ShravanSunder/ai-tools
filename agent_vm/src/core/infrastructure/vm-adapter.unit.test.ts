@@ -80,6 +80,24 @@ const DEFAULT_RUNTIME_CONFIG: VmRuntimeConfig = {
 	monorepoDiscovery: true,
 	initScripts: { background: null, foreground: null },
 	shell: { zshrcExtra: null, atuin: { importOnFirstRun: true } },
+	tcp: {
+		strictMode: true,
+		allowedTargetHosts: ['127.0.0.1', 'localhost'],
+		services: {
+			postgres: {
+				guestHostname: 'pg.vm.host',
+				guestPort: 5432,
+				upstreamTarget: '127.0.0.1:15432',
+				enabled: true,
+			},
+			redis: {
+				guestHostname: 'redis.vm.host',
+				guestPort: 6379,
+				upstreamTarget: '127.0.0.1:16379',
+				enabled: true,
+			},
+		},
+	},
 	playwrightExtraHosts: [],
 };
 

@@ -30,11 +30,17 @@ describe('build config schema', () => {
 			},
 			env: { LANG: 'C.UTF-8' },
 			runtimeDefaults: { rootfsMode: 'memory' },
+			ociOverlay: {
+				baseImage: 'docker.io/library/debian:bookworm-slim',
+				dockerfile: '.agent_vm/overlay.repo.dockerfile',
+			},
 		});
 
 		expect(config.oci?.image).toBe('docker.io/library/debian:bookworm-slim');
 		expect(config.postBuild?.commands).toEqual(['apt-get update && apt-get install -y git']);
 		expect(config.env).toEqual({ LANG: 'C.UTF-8' });
+		expect(config.ociOverlay?.contextDir).toBe('.');
+		expect(config.ociOverlay?.buildArgs).toEqual({});
 	});
 
 	it('rejects invalid arch', () => {
@@ -91,5 +97,29 @@ describe('mergeBuildConfigs', () => {
 		const merged = mergeBuildConfigs(base, project);
 
 		expect(merged.env).toEqual(['LANG=C.UTF-8', 'FOO=bar']);
+	});
+
+	it('merges ociOverlay fields from project over base', () => {
+		const base: BuildConfigInput = {
+			ociOverlay: {
+				baseImage: 'docker.io/library/debian:bookworm-slim',
+				dockerfile: '.agent_vm/overlay.repo.dockerfile',
+				buildArgs: { BASE: '1' },
+			},
+		};
+		const project: BuildConfigInput = {
+			ociOverlay: {
+				contextDir: '.agent_vm',
+				buildArgs: { EXTRA: '2' },
+			},
+		};
+
+		const merged = mergeBuildConfigs(base, project);
+		expect(merged.ociOverlay).toEqual({
+			baseImage: 'docker.io/library/debian:bookworm-slim',
+			dockerfile: '.agent_vm/overlay.repo.dockerfile',
+			contextDir: '.agent_vm',
+			buildArgs: { EXTRA: '2' },
+		});
 	});
 });

@@ -47,12 +47,7 @@ function copyTemplateOrDefault(
 }
 
 const DEFAULT_VM_RUNTIME_LOCAL_TEMPLATE = `{
-	"$schema": "../../agent_vm/schemas/vm-runtime.schema.json"
-}
-`;
-
-const DEFAULT_TCP_SERVICES_LOCAL_TEMPLATE = `{
-	"$schema": "../../agent_vm/schemas/tcp-services.schema.json"
+\t"$schema": "../../agent_vm/schemas/vm-runtime.schema.json"
 }
 `;
 
@@ -71,11 +66,6 @@ function syncRepoFiles(templateRoot: string, targetRoot: string, override: boole
 		override,
 	);
 	copyTemplate(
-		path.join(templateRoot, 'tcp-services.repo.json'),
-		path.join(targetRoot, 'tcp-services.repo.json'),
-		override,
-	);
-	copyTemplate(
 		path.join(templateRoot, 'policy-allowlist-extra.repo.txt'),
 		path.join(targetRoot, 'policy-allowlist-extra.repo.txt'),
 		override,
@@ -88,12 +78,6 @@ function syncLocalFiles(templateRoot: string, targetRoot: string, override: bool
 		path.join(targetRoot, 'vm-runtime.local.json'),
 		override,
 		DEFAULT_VM_RUNTIME_LOCAL_TEMPLATE,
-	);
-	copyTemplateOrDefault(
-		path.join(templateRoot, 'tcp-services.local.json'),
-		path.join(targetRoot, 'tcp-services.local.json'),
-		override,
-		DEFAULT_TCP_SERVICES_LOCAL_TEMPLATE,
 	);
 	copyTemplateOrDefault(
 		path.join(templateRoot, 'policy-allowlist-extra.local.txt'),

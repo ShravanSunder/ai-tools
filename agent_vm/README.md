@@ -2,6 +2,18 @@
 
 `agent_vm` is a Gondolin-based VM control plane that mirrors key `agent_sidecar` affordances while using a VM sandbox.
 
+## Config Contract
+
+`agent_vm` uses only these user-editable config files:
+
+- `.agent_vm/build.project.json`
+- `.agent_vm/vm-runtime.repo.json`
+- `.agent_vm/vm-runtime.local.json` (optional, gitignored)
+- `.agent_vm/policy-allowlist-extra.repo.txt`
+- `.agent_vm/policy-allowlist-extra.local.txt` (optional, gitignored)
+
+Hard cutover: `tcp-services.*.json` is unsupported.
+
 ## Commands
 
 - `agent_vm.sh init --default`
@@ -14,6 +26,14 @@
 - `agent_vm.sh ctl status --work-dir <repo>`
 - `agent_vm.sh ctl policy allow --target linear --work-dir <repo>`
 - `agent_vm.sh ctl daemon stop --work-dir <repo>`
+
+## C+ Image Architecture
+
+- Optional OCI overlay build from `build.project.json.ociOverlay` (Docker/OrbStack)
+- Global content-addressed guest asset cache:
+  - `~/.cache/agent-vm/images/by-fingerprint/<fingerprint>/...`
+  - `~/.cache/agent-vm/images/workspaces/<workspace-hash>.json`
+- Identical build inputs across repos reuse one image directory
 
 ## Repo Setup
 
@@ -50,3 +70,7 @@ pnpm --dir agent_vm check
 ## Policy Runtime Behavior
 
 Gondolin network hooks are fixed at VM creation time. `agent_vm.sh ctl policy ...` recompiles policy and then recreates the VM runtime so new allowlist entries are actually enforced.
+
+## Architecture Doc
+
+- [`docs/architecture/agent-vm-architecture.md`](/Users/shravansunder/dev/ai-tools/agent_vm/docs/architecture/agent-vm-architecture.md)

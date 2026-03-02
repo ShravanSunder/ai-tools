@@ -7,8 +7,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import type { ResolvedVolume, VolumeConfigEntry } from '#src/core/infrastructure/volume-manager.js';
 import type { BuildConfig } from '#src/core/models/build-config.js';
-import type { ResolvedRuntimeConfig, TcpServiceMap } from '#src/core/models/config.js';
-import type { VmRuntimeConfig } from '#src/core/models/vm-runtime-config.js';
+import type { ResolvedRuntimeConfig } from '#src/core/models/config.js';
+import type { VmRuntimeConfig, VmRuntimeTcpConfig } from '#src/core/models/vm-runtime-config.js';
 import { NoopLogger } from '#src/core/platform/logger.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 import type { AuthSyncManager } from '#src/features/auth-proxy/auth-sync.js';
@@ -77,8 +77,10 @@ function connectAndCollectResponses(
 	});
 }
 
-function createDefaultTcpServiceMap(): TcpServiceMap {
+function createDefaultTcpConfig(): VmRuntimeTcpConfig {
 	return {
+		strictMode: true,
+		allowedTargetHosts: ['127.0.0.1', 'localhost'],
 		services: {
 			postgres: {
 				guestHostname: 'pg.vm.host',
@@ -93,8 +95,6 @@ function createDefaultTcpServiceMap(): TcpServiceMap {
 				enabled: true,
 			},
 		},
-		strictMode: true,
-		allowedTargetHosts: ['127.0.0.1', 'localhost'],
 	};
 }
 
@@ -113,6 +113,7 @@ function createFakeConfig(workDir: string): ResolvedRuntimeConfig {
 		initScripts: { background: null, foreground: null },
 		shell: { zshrcExtra: null, atuin: { importOnFirstRun: false } },
 		playwrightExtraHosts: [],
+		tcp: createDefaultTcpConfig(),
 	};
 	const buildConfig: BuildConfig = {
 		arch: 'aarch64',
@@ -121,7 +122,6 @@ function createFakeConfig(workDir: string): ResolvedRuntimeConfig {
 	return {
 		runtimeConfig,
 		buildConfig,
-		tcpServiceMap: createDefaultTcpServiceMap(),
 		allowedHosts: ['api.openai.com'],
 		toggleEntries: [],
 		generatedStateDir: path.join(workDir, '.agent_vm', '.generated'),
@@ -221,7 +221,7 @@ describe('daemon lifecycle', () => {
 		socketsToCleanup.push(identity.daemonSocketPath);
 
 		const invalidConfig = createFakeConfig(workDir);
-		invalidConfig.tcpServiceMap = {
+		invalidConfig.runtimeConfig.tcp = {
 			services: {
 				postgres: {
 					guestHostname: 'pg.vm.host',

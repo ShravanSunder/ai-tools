@@ -72,7 +72,7 @@ async function waitForContainerCommandSuccess(
 	await runAttempt(1);
 }
 
-function writeTcpServicesConfig(
+function writeVmRuntimeTcpConfig(
 	workDir: string,
 	postgresHostPort: number,
 	redisHostPort: number,
@@ -81,25 +81,28 @@ function writeTcpServicesConfig(
 	fs.mkdirSync(configDirectory, { recursive: true });
 
 	const config = {
-		strictMode: true,
-		services: {
-			postgres: {
-				guestHostname: 'pg.vm.host',
-				guestPort: 5432,
-				upstreamTarget: `127.0.0.1:${postgresHostPort}`,
-				enabled: true,
-			},
-			redis: {
-				guestHostname: 'redis.vm.host',
-				guestPort: 6379,
-				upstreamTarget: `127.0.0.1:${redisHostPort}`,
-				enabled: true,
+		tcp: {
+			strictMode: true,
+			allowedTargetHosts: ['127.0.0.1', 'localhost'],
+			services: {
+				postgres: {
+					guestHostname: 'pg.vm.host',
+					guestPort: 5432,
+					upstreamTarget: `127.0.0.1:${postgresHostPort}`,
+					enabled: true,
+				},
+				redis: {
+					guestHostname: 'redis.vm.host',
+					guestPort: 6379,
+					upstreamTarget: `127.0.0.1:${redisHostPort}`,
+					enabled: true,
+				},
 			},
 		},
 	};
 
 	fs.writeFileSync(
-		path.join(configDirectory, 'tcp-services.local.json'),
+		path.join(configDirectory, 'vm-runtime.local.json'),
 		`${JSON.stringify(config)}\n`,
 		'utf8',
 	);
@@ -226,7 +229,7 @@ describe('e2e tcp.hosts docker connectivity', () => {
 
 		const tempWorkDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-e2e-tcp-hosts-'));
 		workDirectoriesToCleanup.push(tempWorkDir);
-		writeTcpServicesConfig(tempWorkDir, postgresLoopbackPort, redisLoopbackPort);
+		writeVmRuntimeTcpConfig(tempWorkDir, postgresLoopbackPort, redisLoopbackPort);
 
 		const agentVmRoot = process.cwd();
 		const runBinaryPath = path.join(agentVmRoot, 'dist', 'bin', 'agent-vm.js');

@@ -53,7 +53,7 @@ describe('run orchestrator', () => {
 				wipeVolumeDirs: vi.fn(() => {
 					calls.push('wipe-volumes');
 				}),
-				resolveWorkspaceImageDir: vi.fn(() => '/tmp/image'),
+				resolveFingerprintImageCacheDir: vi.fn(() => '/tmp/image-cache/by-fingerprint'),
 				resolveVolumeCacheDir: vi.fn(() => '/tmp/volumes'),
 				cleanupStaleCacheDirs: vi.fn(() => 0),
 				acquireDaemonLease: vi.fn(async () => ({
@@ -113,7 +113,7 @@ describe('run orchestrator', () => {
 				wipeVolumeDirs: vi.fn(() => {
 					calls.push('wipe-volumes');
 				}),
-				resolveWorkspaceImageDir: vi.fn(() => '/tmp/image'),
+				resolveFingerprintImageCacheDir: vi.fn(() => '/tmp/image-cache/by-fingerprint'),
 				resolveVolumeCacheDir: vi.fn(() => '/tmp/volumes'),
 				cleanupStaleCacheDirs: vi.fn(() => 0),
 				acquireDaemonLease: vi.fn(async () => ({
@@ -168,7 +168,7 @@ describe('run orchestrator', () => {
 					built: false,
 				})),
 				wipeVolumeDirs: vi.fn(() => {}),
-				resolveWorkspaceImageDir: vi.fn(() => '/tmp/image'),
+				resolveFingerprintImageCacheDir: vi.fn(() => '/tmp/image-cache/by-fingerprint'),
 				resolveVolumeCacheDir: vi.fn(() => '/tmp/volumes'),
 				cleanupStaleCacheDirs: vi.fn(() => 0),
 				acquireDaemonLease: vi.fn(async () => ({
@@ -237,7 +237,7 @@ describe('run orchestrator', () => {
 					built: false,
 				})),
 				wipeVolumeDirs: vi.fn(() => {}),
-				resolveWorkspaceImageDir: vi.fn(() => '/tmp/image'),
+				resolveFingerprintImageCacheDir: vi.fn(() => '/tmp/image-cache/by-fingerprint'),
 				resolveVolumeCacheDir: vi.fn(() => '/tmp/volumes'),
 				cleanupStaleCacheDirs: vi.fn(() => 0),
 				acquireDaemonLease,
