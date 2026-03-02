@@ -22,7 +22,7 @@ export interface BuildAssetsResult {
 	readonly built: boolean;
 }
 
-function resolveGondolinBinPath(agentVmRoot: string): string {
+export function resolveGondolinBinPath(agentVmRoot: string): string {
 	const localBinPath = path.join(agentVmRoot, 'node_modules', '.bin', 'gondolin');
 	if (fs.existsSync(localBinPath)) {
 		return localBinPath;

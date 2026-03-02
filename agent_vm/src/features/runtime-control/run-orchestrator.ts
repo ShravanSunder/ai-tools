@@ -6,13 +6,18 @@ import { execa } from 'execa';
 
 import {
 	buildGuestAssets,
+	resolveGondolinBinPath,
 	resolveVolumeCacheDir,
 	resolveWorkspaceImageDir,
 } from '#src/build/build-assets.js';
 import { DaemonClient, waitForSocket } from '#src/core/infrastructure/daemon-client.js';
 import { wipeVolumeDirs } from '#src/core/infrastructure/volume-manager.js';
 import type { RunAgentVmOptions } from '#src/core/models/config.js';
-import type { DaemonResponse } from '#src/core/models/ipc.js';
+import {
+	parseDaemonResponseValue,
+	type DaemonResponse,
+	type DaemonStatus,
+} from '#src/core/models/ipc.js';
 import { withFileLockAsync } from '#src/core/platform/file-lock.js';
 import { getAgentVmRoot } from '#src/core/platform/paths.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
@@ -252,9 +257,126 @@ function resolveRequestedCommand(options: RunAgentVmOptions): string | null {
 			return null;
 		}
 		case 'default': {
-			return '/bin/sh -lc "pwd"';
+			return '__interactive-shell__';
 		}
 	}
+}
+
+function shellEscape(value: string): string {
+	return `'${value.replaceAll("'", "'\"'\"'")}'`;
+}
+
+interface DaemonLease {
+	readonly status: DaemonStatus;
+	release(): Promise<void>;
+}
+
+async function acquireDaemonLease(socketPath: string): Promise<DaemonLease> {
+	return await new Promise((resolve, reject) => {
+		const socket = net.createConnection({ path: socketPath });
+		socket.setEncoding('utf8');
+		let settled = false;
+		let readBuffer = '';
+
+		const fail = (error: Error): void => {
+			if (settled) {
+				return;
+			}
+			settled = true;
+			socket.destroy();
+			reject(error);
+		};
+
+		const finish = (status: DaemonStatus): void => {
+			if (settled) {
+				return;
+			}
+			settled = true;
+			resolve({
+				status,
+				release: async (): Promise<void> => {
+					if (socket.destroyed) {
+						return;
+					}
+					socket.end();
+					await new Promise<void>((releaseResolve) => {
+						socket.once('close', () => releaseResolve());
+						socket.once('error', () => releaseResolve());
+					});
+				},
+			});
+		};
+
+		socket.once('connect', () => {
+			socket.write(`${JSON.stringify({ kind: 'status' })}\n`);
+		});
+
+		socket.on('data', (chunk: string) => {
+			readBuffer += chunk;
+
+			while (true) {
+				const newlineIndex = readBuffer.indexOf('\n');
+				if (newlineIndex < 0) {
+					break;
+				}
+				const line = readBuffer.slice(0, newlineIndex).trim();
+				readBuffer = readBuffer.slice(newlineIndex + 1);
+				if (line.length === 0) {
+					continue;
+				}
+
+				let parsedPayload: unknown;
+				try {
+					parsedPayload = JSON.parse(line) as unknown;
+				} catch (error: unknown) {
+					fail(new Error(`invalid daemon response json: ${String(error)}`));
+					return;
+				}
+
+				let response: DaemonResponse;
+				try {
+					response = parseDaemonResponseValue(parsedPayload);
+				} catch (error: unknown) {
+					fail(new Error(`invalid daemon response payload: ${String(error)}`));
+					return;
+				}
+
+				if (response.kind === 'status.response') {
+					finish(response.status);
+					return;
+				}
+
+				if (response.kind === 'error') {
+					fail(new Error(response.message));
+					return;
+				}
+			}
+		});
+
+		socket.once('error', (error: Error) => {
+			fail(error);
+		});
+
+		socket.once('close', () => {
+			if (!settled) {
+				fail(new Error('daemon connection closed before status response'));
+			}
+		});
+	});
+}
+
+async function runInteractiveShell(vmId: string, workDir: string): Promise<number> {
+	const gondolinBinPath = resolveGondolinBinPath(getAgentVmRoot());
+	const shellCommand = `cd ${shellEscape(workDir)} && exec /bin/sh -l`;
+	const result = await execa(
+		gondolinBinPath,
+		['attach', vmId, '--', '/bin/sh', '-lc', shellCommand],
+		{
+			stdio: 'inherit',
+			reject: false,
+		},
+	);
+	return result.exitCode ?? 0;
 }
 
 async function requestAndCollect(
@@ -366,6 +488,8 @@ interface RunOrchestratorDependencies {
 	readonly resolveWorkspaceImageDir: typeof resolveWorkspaceImageDir;
 	readonly resolveVolumeCacheDir: typeof resolveVolumeCacheDir;
 	readonly cleanupStaleCacheDirs: typeof cleanupStaleCacheDirs;
+	readonly acquireDaemonLease: typeof acquireDaemonLease;
+	readonly runInteractiveShell: typeof runInteractiveShell;
 }
 
 const DEFAULT_DEPENDENCIES: RunOrchestratorDependencies = {
@@ -379,6 +503,8 @@ const DEFAULT_DEPENDENCIES: RunOrchestratorDependencies = {
 	resolveWorkspaceImageDir,
 	resolveVolumeCacheDir,
 	cleanupStaleCacheDirs,
+	acquireDaemonLease,
+	runInteractiveShell,
 };
 
 export async function runOrchestrator(
@@ -423,6 +549,14 @@ export async function runOrchestrator(
 	});
 
 	const command = resolveRequestedCommand(options);
+	if (command === '__interactive-shell__') {
+		const daemonLease = await dependencies.acquireDaemonLease(identity.daemonSocketPath);
+		try {
+			return await dependencies.runInteractiveShell(daemonLease.status.vm.id, identity.workDir);
+		} finally {
+			await daemonLease.release();
+		}
+	}
 	const result = await dependencies.requestAndCollect(identity.daemonSocketPath, command);
 	return result.exitCode;
 }
