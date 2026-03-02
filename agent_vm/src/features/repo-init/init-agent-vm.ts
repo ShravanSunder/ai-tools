@@ -25,6 +25,40 @@ function copyTemplate(sourcePath: string, targetPath: string, override: boolean)
 	fs.cpSync(sourcePath, targetPath);
 }
 
+function writeTemplate(targetPath: string, content: string, override: boolean): void {
+	if (!override && fs.existsSync(targetPath)) {
+		return;
+	}
+	fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+	fs.writeFileSync(targetPath, content, 'utf8');
+}
+
+function copyTemplateOrDefault(
+	sourcePath: string,
+	targetPath: string,
+	override: boolean,
+	defaultContent: string,
+): void {
+	if (fs.existsSync(sourcePath)) {
+		copyTemplate(sourcePath, targetPath, override);
+		return;
+	}
+	writeTemplate(targetPath, defaultContent, override);
+}
+
+const DEFAULT_VM_RUNTIME_LOCAL_TEMPLATE = `{
+	"$schema": "../../agent_vm/schemas/vm-runtime.schema.json"
+}
+`;
+
+const DEFAULT_TCP_SERVICES_LOCAL_TEMPLATE = `{
+	"$schema": "../../agent_vm/schemas/tcp-services.schema.json"
+}
+`;
+
+const DEFAULT_POLICY_ALLOWLIST_LOCAL_TEMPLATE = `# Personal policy additions (gitignored)
+`;
+
 function syncRepoFiles(templateRoot: string, targetRoot: string, override: boolean): void {
 	copyTemplate(
 		path.join(templateRoot, 'build.project.json'),
@@ -49,20 +83,23 @@ function syncRepoFiles(templateRoot: string, targetRoot: string, override: boole
 }
 
 function syncLocalFiles(templateRoot: string, targetRoot: string, override: boolean): void {
-	copyTemplate(
+	copyTemplateOrDefault(
 		path.join(templateRoot, 'vm-runtime.local.json'),
 		path.join(targetRoot, 'vm-runtime.local.json'),
 		override,
+		DEFAULT_VM_RUNTIME_LOCAL_TEMPLATE,
 	);
-	copyTemplate(
+	copyTemplateOrDefault(
 		path.join(templateRoot, 'tcp-services.local.json'),
 		path.join(targetRoot, 'tcp-services.local.json'),
 		override,
+		DEFAULT_TCP_SERVICES_LOCAL_TEMPLATE,
 	);
-	copyTemplate(
+	copyTemplateOrDefault(
 		path.join(templateRoot, 'policy-allowlist-extra.local.txt'),
 		path.join(targetRoot, 'policy-allowlist-extra.local.txt'),
 		override,
+		DEFAULT_POLICY_ALLOWLIST_LOCAL_TEMPLATE,
 	);
 }
 

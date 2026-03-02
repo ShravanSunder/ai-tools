@@ -5,7 +5,7 @@ import path from 'node:path';
 import { execa } from 'execa';
 import { describe, expect, it } from 'vitest';
 
-describe('init_repo_vm', () => {
+describe('init-agent-vm', () => {
 	it('creates .agent_vm templates with repo/local separation', async () => {
 		const tempRepo = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-init-'));
 		await execa('git', ['init'], { cwd: tempRepo });

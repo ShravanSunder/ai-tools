@@ -1,6 +1,6 @@
 # agent_vm
 
-Gondolin-based VM control plane with sidecar parity. Manages sandboxed containers for AI coding assistants with network isolation, firewall policies, and tcp service mappings.
+Gondolin-based VM control plane with sidecar parity. Manages sandboxed VM sessions for AI coding assistants with network isolation, policy controls, and tcp service mappings.
 
 ## Rules
 

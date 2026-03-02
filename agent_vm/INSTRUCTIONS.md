@@ -17,8 +17,7 @@
 ## Essential Paths
 
 - Plans:
-  - `agent_vm/docs/plans/2026-03-01-agent-vm-config-surface-design.md`
-  - `agent_vm/docs/plans/2026-03-01-agent-vm-config-implementation.md`
+  - `agent_vm/docs/plans/2026-03-02-agent-vm-sidecar-requirements-spec.md`
 - Architecture: `docs/architecture/agent-vm-architecture.md`
 - Base runtime config: `agent_vm/config/vm-runtime.base.json`
 - Base build config: `agent_vm/config/build.base.json`

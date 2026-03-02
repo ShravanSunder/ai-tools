@@ -37,9 +37,9 @@ Use the project bootstrap so host tooling is reproducible:
 
 ## Test Pyramid
 
-- Unit: `tests/unit`
-- Integration: `tests/integration`
-- E2E smoke (compiled CLI binary + live Unix socket): `tests/e2e`
+- Unit: colocated `src/**/*.unit.test.ts`
+- Integration: `tests/*.integration.test.ts`
+- E2E smoke (compiled CLI binary + live Unix socket): `tests/e2e/*.e2e.test.ts`
 
 Run all gates:
 
