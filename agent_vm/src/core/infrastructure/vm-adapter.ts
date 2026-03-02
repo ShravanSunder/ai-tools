@@ -46,7 +46,7 @@ export interface CreateVmRuntimeOptions {
 	readonly resolvedVolumes: Record<string, ResolvedVolume>;
 	readonly sessionLabel: string;
 	readonly logger: Logger;
-	readonly sessionAuthRoot: string;
+	readonly authReadonlyMounts: Readonly<Record<string, string>>;
 	readonly scratchpad: boolean;
 }
 
@@ -176,6 +176,15 @@ function createVfsMountMap(
 		);
 	}
 
+	for (const [guestPath, hostPath] of Object.entries(options.authReadonlyMounts)) {
+		if (!path.isAbsolute(guestPath) || !path.isAbsolute(hostPath) || !fs.existsSync(hostPath)) {
+			continue;
+		}
+		mounts[guestPath] = gondolinModule.createReadonlyProvider(
+			gondolinModule.createRealFsProvider(hostPath),
+		);
+	}
+
 	for (const [mountKey, hostPath] of Object.entries(options.runtimeConfig.extraMounts)) {
 		if (!path.isAbsolute(hostPath) || !fs.existsSync(hostPath)) {
 			continue;
@@ -269,8 +278,6 @@ function createVmEnv(
 		...options.runtimeConfig.env,
 		WORKSPACE: options.workDir,
 		PWD: options.workDir,
-		AGENT_VM_AUTH_ROOT: '/home/agent/.auth',
-		AGENT_VM_AUTH_SOURCE: options.sessionAuthRoot,
 		AGENT_VM_INIT_SCRIPT: `cd ${workspaceShellPath}`,
 		...options.tcpServiceEnvVars,
 	};

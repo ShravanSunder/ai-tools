@@ -1,5 +1,4 @@
-export { runAgentVmCtlCli } from '#src/features/cli/agent-vm-ctl.js';
-export { runRunAgentVmCli } from '#src/features/cli/run-agent-vm.js';
+export { runAgentVmCli } from '#src/features/cli/agent-vm.js';
 
 export { resolveAgentPresetCommand } from '#src/features/runtime-control/agent-launcher.js';
 export {

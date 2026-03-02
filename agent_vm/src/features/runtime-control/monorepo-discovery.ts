@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -148,6 +149,6 @@ export function discoverNodeModulesPaths(workDir: string): string[] {
 
 export function volumeNameForNodeModulesPath(nodeModulesPath: string): string {
 	const normalized = path.resolve(nodeModulesPath);
-	const hashSeed = Buffer.from(normalized).toString('base64url').slice(0, 12);
+	const hashSeed = crypto.createHash('sha256').update(normalized).digest('hex').slice(0, 16);
 	return `nm-${hashSeed}`;
 }

@@ -10,13 +10,13 @@ Gondolin-based VM control plane with sidecar parity. Manages sandboxed container
 
 ```
 src/
-  bin/          # CLI entry points (agent-vm-ctl, agent-vm-daemon, run-agent-vm)
+  bin/          # CLI entry points (agent-vm, agent-vm-daemon)
   core/
     infrastructure/  # VM adapter, daemon client
     models/          # Runtime config + IPC contracts
     platform/        # Logger, paths, workspace identity
   features/
-    auth-proxy/      # OAuth mirror sync + keychain export
+    auth-proxy/      # Readonly auth mount resolution + keychain export
     cli/             # cmd-ts command surfaces
     runtime-control/ # Daemon, orchestrator, policy/config/tcp-service controls
   build/        # Build utilities

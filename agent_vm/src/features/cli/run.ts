@@ -53,8 +53,8 @@ function buildOptionsFromFlags(input: {
 	};
 }
 
-export const runAgentVmCommand = command({
-	name: 'run-agent-vm',
+export const runCommand = command({
+	name: 'run',
 	description: 'Start/reuse agent_vm daemon and run an agent command inside VM',
 	args: {
 		reload: flag({ long: 'reload', description: 'Recreate VM session from current config' }),
@@ -97,6 +97,6 @@ export const runAgentVmCommand = command({
 	},
 });
 
-export async function runRunAgentVmCli(argv: readonly string[]): Promise<void> {
-	await run(runAgentVmCommand, [...argv]);
+export async function runRunCli(argv: readonly string[]): Promise<void> {
+	await run(runCommand, [...argv]);
 }

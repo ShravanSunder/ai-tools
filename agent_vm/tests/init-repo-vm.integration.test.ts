@@ -10,8 +10,10 @@ describe('init_repo_vm', () => {
 		const tempRepo = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-init-'));
 		await execa('git', ['init'], { cwd: tempRepo });
 
-		const scriptPath = path.resolve('init_repo_vm.sh');
-		await execa(scriptPath, ['--default'], { cwd: tempRepo });
+		const binaryPath = path.resolve('dist', 'bin', 'agent-vm.js');
+		await execa(process.execPath, [binaryPath, 'init', '--default', '--work-dir', tempRepo], {
+			cwd: tempRepo,
+		});
 
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'build.project.json'))).toBe(true);
 		expect(fs.existsSync(path.join(tempRepo, '.agent_vm', 'vm-runtime.repo.json'))).toBe(true);

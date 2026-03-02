@@ -169,8 +169,8 @@ const daemonCommand = subcommands({
 	},
 });
 
-export const agentVmCtlCommand = subcommands({
-	name: 'agent-vm-ctl',
+export const ctlCommand = subcommands({
+	name: 'ctl',
 	cmds: {
 		status: statusCommand,
 		policy: policyCommand,
@@ -178,6 +178,6 @@ export const agentVmCtlCommand = subcommands({
 	},
 });
 
-export async function runAgentVmCtlCli(argv: readonly string[]): Promise<void> {
-	await run(agentVmCtlCommand, [...argv]);
+export async function runCtlCli(argv: readonly string[]): Promise<void> {
+	await run(ctlCommand, [...argv]);
 }

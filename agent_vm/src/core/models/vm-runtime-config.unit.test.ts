@@ -10,7 +10,7 @@ describe('vm runtime config schema', () => {
 	it('parses empty input with all defaults', () => {
 		const config = parseVmRuntimeConfig({});
 
-		expect(config.rootfsMode).toBe('memory');
+		expect(config.rootfsMode).toBe('cow');
 		expect(config.memory).toBe(2048);
 		expect(config.cpus).toBe(2);
 		expect(config.idleTimeoutMinutes).toBe(10);

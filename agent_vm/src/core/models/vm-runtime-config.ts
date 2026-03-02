@@ -42,7 +42,7 @@ export const vmRuntimeConfigInputSchema = z.object({
 });
 
 export const vmRuntimeConfigSchema = z.object({
-	rootfsMode: rootfsModeSchema.default('memory'),
+	rootfsMode: rootfsModeSchema.default('cow'),
 	memory: z.number().int().positive().default(2048),
 	cpus: z.number().int().positive().default(2),
 	idleTimeoutMinutes: z.number().int().positive().default(10),

@@ -1,6 +1,6 @@
 {
 	"$schema": "../schemas/vm-runtime.schema.json",
-	"rootfsMode": "memory",
+	"rootfsMode": "cow",
 	"memory": 2048,
 	"cpus": 2,
 	"idleTimeoutMinutes": 10,
@@ -23,7 +23,10 @@
 	},
 	"readonlyMounts": {
 		".git": "${WORKSPACE}/.git",
-		"/home/agent/.aws": "${HOST_HOME}/.aws"
+		"/home/agent/.aws": "${HOST_HOME}/.aws",
+		"/home/agent/.claude": "${HOST_HOME}/.claude",
+		"/home/agent/.codex": "${HOST_HOME}/.codex",
+		"/home/agent/.gemini": "${HOST_HOME}/.gemini"
 	},
 	"extraMounts": {},
 	"monorepoDiscovery": true,

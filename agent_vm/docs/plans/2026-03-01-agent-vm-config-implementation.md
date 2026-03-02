@@ -1233,6 +1233,7 @@ VM.create({
 ```
 
 Key constraints (enforced by Gondolin at construction time via `assertTcpDnsConfig()`):
+
 - `tcp.hosts` requires `dns.mode: "synthetic"` — Gondolin throws if `dns.mode` is `"trusted"` or absent
 - `tcp.hosts` requires `dns.syntheticHostMapping: "per-host"` — Gondolin throws if `"single"`
 - Mapped TCP flows are **raw tunnels**: no HTTP hooks, no secret substitution (see Gondolin [SDK Network docs](https://earendil-works.github.io/gondolin/sdk-network/) "Mapped TCP Egress" section)
@@ -1504,22 +1505,22 @@ git commit -m "docs(agent_vm): update CLAUDE.md for JSON config model"
 
 Search the test files and confirm each of these has at least one passing test. **If any test is missing, you MUST write it before proceeding to Step 2.** Do not skip — this is the verification gate.
 
-| Requirement                                | Test location                                                        | What to verify                                             |
-| ------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Config merge: base < repo < local          | `vm-runtime-config.unit.test.ts`                                     | Three-tier merge with correct precedence                   |
-| Config merge: base + project (build)       | `build-config.unit.test.ts`                                          | Two-tier merge, `postBuild.commands` concatenation         |
-| Schema validation errors include file path | `build-config-loader.unit.test.ts`, `vm-runtime-loader.unit.test.ts` | Error message contains filename                            |
-| Build fingerprint triggers rebuild         | `build-assets` or `run-orchestrator` test                            | Changed fingerprint → rebuild; same → skip                 |
-| VFS mount planner: shadows                 | `vm-adapter.unit.test.ts`                                            | `shadows.deny` paths produce `ShadowProvider(deny)`        |
-| VFS mount planner: volumes                 | `vm-adapter.unit.test.ts`                                            | Each volume → `RealFSProvider(hostDir)` at `guestPath`     |
-| VFS mount planner: readonly                | `vm-adapter.unit.test.ts`                                            | `readonlyMounts` → `ReadonlyProvider(RealFSProvider(...))` |
-| VFS mount planner: extra                   | `vm-adapter.unit.test.ts`                                            | `extraMounts` → `RealFSProvider(hostPath)`                 |
-| Script path resolution                     | `config-interpolation.unit.test.ts`                                  | Relative resolution + traversal rejection                  |
-| Interpolation tokens                       | `config-interpolation.unit.test.ts`                                  | `${WORKSPACE}`, `${HOST_HOME}` resolve; unknown rejected   |
-| macOS postBuild hard error                 | `build-config-loader.unit.test.ts`                                   | Darwin + OCI + postBuild → validation error thrown         |
-| Scratchpad mode                            | `vm-adapter.unit.test.ts`                                            | `scratchpad: true` → `MemoryProvider` for workspace        |
+| Requirement                                | Test location                                                        | What to verify                                                                                       |
+| ------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Config merge: base < repo < local          | `vm-runtime-config.unit.test.ts`                                     | Three-tier merge with correct precedence                                                             |
+| Config merge: base + project (build)       | `build-config.unit.test.ts`                                          | Two-tier merge, `postBuild.commands` concatenation                                                   |
+| Schema validation errors include file path | `build-config-loader.unit.test.ts`, `vm-runtime-loader.unit.test.ts` | Error message contains filename                                                                      |
+| Build fingerprint triggers rebuild         | `build-assets` or `run-orchestrator` test                            | Changed fingerprint → rebuild; same → skip                                                           |
+| VFS mount planner: shadows                 | `vm-adapter.unit.test.ts`                                            | `shadows.deny` paths produce `ShadowProvider(deny)`                                                  |
+| VFS mount planner: volumes                 | `vm-adapter.unit.test.ts`                                            | Each volume → `RealFSProvider(hostDir)` at `guestPath`                                               |
+| VFS mount planner: readonly                | `vm-adapter.unit.test.ts`                                            | `readonlyMounts` → `ReadonlyProvider(RealFSProvider(...))`                                           |
+| VFS mount planner: extra                   | `vm-adapter.unit.test.ts`                                            | `extraMounts` → `RealFSProvider(hostPath)`                                                           |
+| Script path resolution                     | `config-interpolation.unit.test.ts`                                  | Relative resolution + traversal rejection                                                            |
+| Interpolation tokens                       | `config-interpolation.unit.test.ts`                                  | `${WORKSPACE}`, `${HOST_HOME}` resolve; unknown rejected                                             |
+| macOS postBuild hard error                 | `build-config-loader.unit.test.ts`                                   | Darwin + OCI + postBuild → validation error thrown                                                   |
+| Scratchpad mode                            | `vm-adapter.unit.test.ts`                                            | `scratchpad: true` → `MemoryProvider` for workspace                                                  |
 | TCP mapping DNS config                     | `vm-adapter.unit.test.ts`                                            | Non-empty `tcpHosts` → `dns.mode: 'synthetic'` + `syntheticHostMapping: 'per-host'` set on VM.create |
-| TCP mapping key format                     | `tcp-service-config.unit.test.ts`                                    | `buildTcpHostsRecord()` produces `HOST:PORT` keys (port-specific, not host-only) |
+| TCP mapping key format                     | `tcp-service-config.unit.test.ts`                                    | `buildTcpHostsRecord()` produces `HOST:PORT` keys (port-specific, not host-only)                     |
 
 If any test is missing, write it before proceeding.
 

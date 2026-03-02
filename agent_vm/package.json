@@ -4,9 +4,7 @@
 	"private": true,
 	"description": "Gondolin-based VM control plane with sidecar parity",
 	"bin": {
-		"agent-vm-ctl": "./dist/bin/agent-vm-ctl.js",
-		"agent-vm-daemon": "./dist/bin/agent-vm-daemon.js",
-		"run-agent-vm": "./dist/bin/run-agent-vm.js"
+		"agent-vm": "./dist/bin/agent-vm.js"
 	},
 	"type": "module",
 	"imports": {

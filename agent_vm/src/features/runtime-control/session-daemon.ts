@@ -18,7 +18,7 @@ import {
 	type DaemonResponse,
 } from '#src/core/models/ipc.js';
 import type { Logger } from '#src/core/platform/logger.js';
-import { AuthSyncManager, type AuthSyncState } from '#src/features/auth-proxy/auth-sync.js';
+import { AuthSyncManager } from '#src/features/auth-proxy/auth-sync.js';
 import { resolveRuntimeConfig } from '#src/features/runtime-control/config-resolver.js';
 import {
 	discoverNodeModulesPaths,
@@ -74,7 +74,7 @@ export class AgentVmDaemon {
 	private readonly startedAtEpochMs = Date.now();
 	private vmRuntime: VmRuntime | null = null;
 	private runtimeConfig: ResolvedRuntimeConfig | null = null;
-	private authSyncState: AuthSyncState | null = null;
+	private authReadonlyMounts: Readonly<Record<string, string>> = {};
 	private runtimeRecreatePromise: Promise<void> | null = null;
 	private stopping = false;
 	private resolvedVolumes: Record<string, ResolvedVolume> = {};
@@ -92,7 +92,8 @@ export class AgentVmDaemon {
 
 		const authSync = this.dependencies.createAuthSyncManager(this.logger);
 		authSync.exportClaudeOauthFromKeychain();
-		this.authSyncState = authSync.prepareSessionAuthMirror(this.identity.sessionName);
+		authSync.cleanupLegacyAuthCache();
+		this.authReadonlyMounts = authSync.getReadonlyAuthMounts();
 
 		this.resolvedVolumes = this.resolveConfiguredVolumes(this.runtimeConfig);
 		this.maybeInitializeShellHistoryVolume(this.runtimeConfig, this.resolvedVolumes);
@@ -128,12 +129,7 @@ export class AgentVmDaemon {
 		}
 
 		await this.stopRuntime();
-
-		if (this.authSyncState) {
-			const authSync = this.dependencies.createAuthSyncManager(this.logger);
-			authSync.copyBackSessionAuthMirror(this.authSyncState);
-			this.authSyncState = null;
-		}
+		this.authReadonlyMounts = {};
 
 		fs.rmSync(this.identity.daemonSocketPath, { force: true });
 		this.clearIdleTimer();
@@ -179,7 +175,7 @@ export class AgentVmDaemon {
 	}
 
 	private async createVmRuntimeFromCurrentConfig(reason: string): Promise<void> {
-		if (!this.runtimeConfig || !this.authSyncState) {
+		if (!this.runtimeConfig) {
 			throw new Error('runtime-config-unavailable');
 		}
 
@@ -200,7 +196,7 @@ export class AgentVmDaemon {
 			resolvedVolumes: this.resolvedVolumes,
 			sessionLabel: this.identity.sessionName,
 			logger: this.logger,
-			sessionAuthRoot: this.authSyncState.sessionAuthRoot,
+			authReadonlyMounts: this.authReadonlyMounts,
 			scratchpad: this.runtimeOptions.scratchpad,
 		});
 	}

@@ -124,7 +124,7 @@ describe('vm adapter', () => {
 			resolvedVolumes: {},
 			sessionLabel: 'session-no-tcp',
 			logger: new NoopLogger(),
-			sessionAuthRoot: '/tmp/session-auth',
+			authReadonlyMounts: {},
 			scratchpad: false,
 		});
 
@@ -149,7 +149,7 @@ describe('vm adapter', () => {
 			resolvedVolumes: {},
 			sessionLabel: 'session-tcp',
 			logger: new NoopLogger(),
-			sessionAuthRoot: '/tmp/session-auth',
+			authReadonlyMounts: {},
 			scratchpad: false,
 		});
 
@@ -181,7 +181,7 @@ describe('vm adapter', () => {
 			},
 			sessionLabel: 'session-vfs',
 			logger: new NoopLogger(),
-			sessionAuthRoot: '/tmp/session-auth',
+			authReadonlyMounts: {},
 			scratchpad: false,
 		});
 
@@ -191,6 +191,35 @@ describe('vm adapter', () => {
 		expect(vfs).toBeDefined();
 		expect(Object.keys(vfs.mounts)).toContain(workDir);
 		expect(Object.keys(vfs.mounts)).toContain(path.join(workDir, '.venv'));
+	});
+
+	it('mounts host auth directories as readonly mounts', async () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-adapter-'));
+		const hostClaudePath = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-auth-'));
+		directoriesToCleanup.push(workDir, hostClaudePath);
+
+		await createVmRuntime({
+			workDir,
+			imagePath: '/tmp/agent-vm-image',
+			runtimeConfig: DEFAULT_RUNTIME_CONFIG,
+			buildConfig: DEFAULT_BUILD_CONFIG,
+			allowedHosts: ['api.openai.com'],
+			tcpHosts: {},
+			tcpServiceEnvVars: {},
+			resolvedVolumes: {},
+			sessionLabel: 'session-auth-mounts',
+			logger: new NoopLogger(),
+			authReadonlyMounts: {
+				'/home/agent/.claude': hostClaudePath,
+			},
+			scratchpad: false,
+		});
+
+		const vfs = gondolinMockState.lastCreateVmOptions?.vfs as {
+			mounts: Record<string, { provider?: { rootPath?: string } }>;
+		};
+		expect(vfs.mounts['/home/agent/.claude']).toBeDefined();
+		expect(vfs.mounts['/home/agent/.claude']?.provider?.rootPath).toBe(hostClaudePath);
 	});
 
 	it('uses MemoryProvider for workspace mount when scratchpad is enabled', async () => {
@@ -208,7 +237,7 @@ describe('vm adapter', () => {
 			resolvedVolumes: {},
 			sessionLabel: 'session-scratchpad',
 			logger: new NoopLogger(),
-			sessionAuthRoot: '/tmp/session-auth',
+			authReadonlyMounts: {},
 			scratchpad: true,
 		});
 
@@ -237,7 +266,7 @@ describe('vm adapter', () => {
 			resolvedVolumes: {},
 			sessionLabel: 'session-secrets',
 			logger: new NoopLogger(),
-			sessionAuthRoot: '/tmp/session-auth',
+			authReadonlyMounts: {},
 			scratchpad: false,
 		});
 

@@ -160,7 +160,7 @@ async function stopDaemonIfRequested(
 	}
 
 	throw new Error(
-		`Refusing to reuse uncertain daemon socket state at ${socketPath}; run 'agent-vm-ctl daemon stop --work-dir ${workDir}'`,
+		`Refusing to reuse uncertain daemon socket state at ${socketPath}; run 'agent_vm.sh ctl daemon stop --work-dir ${workDir}'`,
 	);
 }
 
@@ -188,7 +188,7 @@ async function ensureDaemonRunning(options: EnsureDaemonOptions): Promise<void> 
 			return;
 		} catch (error: unknown) {
 			throw new Error(
-				`Daemon socket exists but is not reachable: ${options.socketPath}. Run 'run-agent-vm --reload' to recover. ${String(error)}`,
+				`Daemon socket exists but is not reachable: ${options.socketPath}. Run 'agent_vm.sh run --reload' to recover. ${String(error)}`,
 				{ cause: error },
 			);
 		}

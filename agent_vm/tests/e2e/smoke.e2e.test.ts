@@ -26,7 +26,7 @@ afterEach(async () => {
 });
 
 describe('e2e smoke', () => {
-	it('runs built agent-vm-ctl binary against a live unix socket daemon', async () => {
+	it('runs built agent-vm binary against a live unix socket daemon', async () => {
 		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-e2e-'));
 		pathsToCleanup.push(workDir);
 
@@ -75,10 +75,14 @@ describe('e2e smoke', () => {
 		});
 		servers.push(server);
 
-		const binPath = path.join(process.cwd(), 'dist', 'bin', 'agent-vm-ctl.js');
-		const result = await execa(process.execPath, [binPath, 'status', '--work-dir', workDir], {
-			reject: false,
-		});
+		const binPath = path.join(process.cwd(), 'dist', 'bin', 'agent-vm.js');
+		const result = await execa(
+			process.execPath,
+			[binPath, 'ctl', 'status', '--work-dir', workDir],
+			{
+				reject: false,
+			},
+		);
 
 		expect(result.exitCode).toBe(0);
 		expect(result.stdout).toContain(identity.sessionName);

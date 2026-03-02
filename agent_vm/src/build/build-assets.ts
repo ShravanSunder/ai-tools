@@ -36,6 +36,101 @@ function resolveGondolinBinPath(agentVmRoot: string): string {
 	throw new Error('gondolin CLI not found. Install @earendil-works/gondolin and run pnpm install.');
 }
 
+function isGondolinGuestDirectory(candidatePath: string): boolean {
+	return fs.existsSync(path.join(candidatePath, 'build.zig'));
+}
+
+function resolveKnownGuestDirectoryCandidates(agentVmRoot: string): readonly string[] {
+	return [
+		...(process.env.GONDOLIN_GUEST_SRC ? [process.env.GONDOLIN_GUEST_SRC] : []),
+		path.join(agentVmRoot, 'vendor', 'gondolin', 'guest'),
+		path.resolve(agentVmRoot, '..', 'gondolin', 'guest'),
+		path.resolve(agentVmRoot, '..', '..', 'gondolin', 'guest'),
+		path.join(os.homedir(), '.cache', 'agent-vm', 'gondolin-source', 'guest'),
+	];
+}
+
+async function ensureGondolinGuestDirectory(agentVmRoot: string): Promise<string> {
+	for (const candidatePath of resolveKnownGuestDirectoryCandidates(agentVmRoot)) {
+		if (isGondolinGuestDirectory(candidatePath)) {
+			return candidatePath;
+		}
+	}
+
+	const checkoutPath = path.join(os.homedir(), '.cache', 'agent-vm', 'gondolin-source');
+	const guestPath = path.join(checkoutPath, 'guest');
+	if (isGondolinGuestDirectory(guestPath)) {
+		return guestPath;
+	}
+
+	if (fs.existsSync(checkoutPath)) {
+		fs.rmSync(checkoutPath, { recursive: true, force: true });
+	}
+	fs.mkdirSync(path.dirname(checkoutPath), { recursive: true });
+
+	await execa('git', ['clone', '--depth', '1', 'https://github.com/earendil-works/gondolin.git', checkoutPath], {
+		stdio: 'inherit',
+	});
+
+	if (!isGondolinGuestDirectory(guestPath)) {
+		throw new Error(
+			`Failed to prepare Gondolin guest source at ${guestPath}. Expected to find build.zig after cloning.`,
+		);
+	}
+	return guestPath;
+}
+
+function resolveBuildPathEnvironment(currentEnvironment: NodeJS.ProcessEnv): string {
+	const pathSegments = (currentEnvironment.PATH ?? '').split(path.delimiter).filter((segment) => segment.length > 0);
+	const toolPathSegments = [
+		'/opt/homebrew/opt/e2fsprogs/sbin',
+		'/opt/homebrew/opt/e2fsprogs/bin',
+		'/usr/local/opt/e2fsprogs/sbin',
+		'/usr/local/opt/e2fsprogs/bin',
+	].filter((segment) => fs.existsSync(segment));
+
+	const mergedPathSegments = [...toolPathSegments, ...pathSegments];
+	const dedupedPathSegments = [...new Set(mergedPathSegments)];
+	return dedupedPathSegments.join(path.delimiter);
+}
+
+function hasCommandInPath(commandName: string, pathValue: string): boolean {
+	const pathSegments = pathValue.split(path.delimiter).filter((segment) => segment.length > 0);
+	for (const pathSegment of pathSegments) {
+		const commandPath = path.join(pathSegment, commandName);
+		try {
+			fs.accessSync(commandPath, fs.constants.X_OK);
+			return true;
+		} catch {
+			// continue
+		}
+	}
+	return false;
+}
+
+async function ensureHostBuildPrerequisites(agentVmRoot: string): Promise<string> {
+	let resolvedPath = resolveBuildPathEnvironment(process.env);
+	if (hasCommandInPath('mke2fs', resolvedPath)) {
+		return resolvedPath;
+	}
+
+	const brewfilePath = path.join(agentVmRoot, 'Brewfile');
+	if (!fs.existsSync(brewfilePath)) {
+		throw new Error(
+			`Missing required host tool 'mke2fs' and no Brewfile found at ${brewfilePath}.`,
+		);
+	}
+
+	await execa('brew', ['bundle', '--file', brewfilePath], { stdio: 'inherit' });
+	resolvedPath = resolveBuildPathEnvironment(process.env);
+	if (!hasCommandInPath('mke2fs', resolvedPath)) {
+		throw new Error(
+			`Required host tool 'mke2fs' is still unavailable after brew bundle. Ensure e2fsprogs is installed and accessible.`,
+		);
+	}
+	return resolvedPath;
+}
+
 function resolveGondolinVersion(agentVmRoot: string): string {
 	const gondolinPackageJsonPath = path.join(
 		agentVmRoot,
@@ -149,6 +244,8 @@ export async function buildGuestAssets(options: BuildAssetsOptions): Promise<Bui
 	fs.mkdirSync(options.outputDir, { recursive: true });
 
 	const gondolinBinPath = resolveGondolinBinPath(agentVmRoot);
+	const gondolinGuestDirectoryPath = await ensureGondolinGuestDirectory(agentVmRoot);
+	const buildPathEnvironment = await ensureHostBuildPrerequisites(agentVmRoot);
 	const tempBuildConfig = writeTempBuildConfig(options.buildConfig);
 	try {
 		await execa(
@@ -156,6 +253,11 @@ export async function buildGuestAssets(options: BuildAssetsOptions): Promise<Bui
 			['build', '--config', tempBuildConfig.path, '--output', options.outputDir],
 			{
 				stdio: 'inherit',
+				env: {
+					...process.env,
+					PATH: buildPathEnvironment,
+					GONDOLIN_GUEST_SRC: gondolinGuestDirectoryPath,
+				},
 			},
 		);
 	} finally {

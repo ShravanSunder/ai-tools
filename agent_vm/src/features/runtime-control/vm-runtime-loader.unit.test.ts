@@ -11,7 +11,7 @@ describe('loadVmRuntimeConfig', () => {
 		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
 		const config = loadVmRuntimeConfig(workDir);
 
-		expect(config.rootfsMode).toBe('memory');
+		expect(config.rootfsMode).toBe('cow');
 		expect(config.idleTimeoutMinutes).toBe(10);
 		expect(config.memory).toBe(2048);
 	});

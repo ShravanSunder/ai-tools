@@ -11,7 +11,7 @@ import type { ResolvedRuntimeConfig, TcpServiceMap } from '#src/core/models/conf
 import type { VmRuntimeConfig } from '#src/core/models/vm-runtime-config.js';
 import { NoopLogger } from '#src/core/platform/logger.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
-import type { AuthSyncManager, AuthSyncState } from '#src/features/auth-proxy/auth-sync.js';
+import type { AuthSyncManager } from '#src/features/auth-proxy/auth-sync.js';
 import {
 	AgentVmDaemon,
 	type DaemonDependencies,
@@ -131,14 +131,13 @@ function createFakeConfig(workDir: string): ResolvedRuntimeConfig {
 function createAuthSyncStub(workDir: string): AuthSyncManager {
 	const stub: Pick<
 		AuthSyncManager,
-		'exportClaudeOauthFromKeychain' | 'prepareSessionAuthMirror' | 'copyBackSessionAuthMirror'
+		'exportClaudeOauthFromKeychain' | 'cleanupLegacyAuthCache' | 'getReadonlyAuthMounts'
 	> = {
 		exportClaudeOauthFromKeychain: () => {},
-		prepareSessionAuthMirror: (): AuthSyncState => ({
-			sessionAuthRoot: path.join(workDir, '.tmp-auth'),
-			lockPath: path.join(workDir, '.tmp-auth', '.sync.lock'),
+		cleanupLegacyAuthCache: () => {},
+		getReadonlyAuthMounts: () => ({
+			'/home/agent/.claude': path.join(workDir, '.host-auth', '.claude'),
 		}),
-		copyBackSessionAuthMirror: () => {},
 	};
 	return stub as AuthSyncManager;
 }
@@ -379,7 +378,12 @@ describe('daemon lifecycle', () => {
 
 		const fakeDependencies = createDaemonDependencies(workDir, async () => ({
 			getId: () => 'fake-vm',
-			exec: async () => ({ exitCode: 7, stdout: 'hello stdout\n', stderr: 'hello stderr\n' }),
+			exec: async (command: string) => {
+				if (command.includes('mkdir -p /home/agent')) {
+					return { exitCode: 0, stdout: '', stderr: '' };
+				}
+				return { exitCode: 7, stdout: 'hello stdout\n', stderr: 'hello stderr\n' };
+			},
 			close: async () => {},
 		}));
 

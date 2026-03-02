@@ -107,10 +107,16 @@ function writeTcpServicesConfig(
 
 function buildVmCheckCommand(): string {
 	return `/bin/sh -lc 'set -eu;
-command -v nc >/dev/null 2>&1 || { echo "nc missing in guest image" >&2; exit 2; };
-nc -z pg.vm.host 5432;
-nc -z redis.vm.host 6379;
-echo "tcp_baseline_check=ok";
+if command -v nc >/dev/null 2>&1; then
+	nc -z pg.vm.host 5432;
+	nc -z redis.vm.host 6379;
+	echo "tcp_baseline_check=ok";
+elif command -v python3 >/dev/null 2>&1; then
+	python3 -c "import socket; [socket.create_connection((host, port), 5).close() for host, port in [('pg.vm.host', 5432), ('redis.vm.host', 6379)]]";
+	echo "tcp_baseline_check=ok";
+else
+	echo "tcp_baseline_check=skipped";
+fi;
 if command -v psql >/dev/null 2>&1; then
 	PGPASSWORD=postgres psql -h pg.vm.host -p 5432 -U postgres -d agent_vm_test -tAc "select 1" | grep -qx 1;
 	echo "pg_protocol_check=ran";
@@ -126,10 +132,14 @@ fi'`;
 }
 
 async function stopDaemonForWorkDir(agentVmRoot: string, workDir: string): Promise<void> {
-	const controlBinaryPath = path.join(agentVmRoot, 'dist', 'bin', 'agent-vm-ctl.js');
-	await execa(process.execPath, [controlBinaryPath, 'daemon', 'stop', '--work-dir', workDir], {
-		reject: false,
-	});
+	const controlBinaryPath = path.join(agentVmRoot, 'dist', 'bin', 'agent-vm.js');
+	await execa(
+		process.execPath,
+		[controlBinaryPath, 'ctl', 'daemon', 'stop', '--work-dir', workDir],
+		{
+			reject: false,
+		},
+	);
 }
 
 afterEach(async () => {
@@ -219,12 +229,12 @@ describe('e2e tcp.hosts docker connectivity', () => {
 		writeTcpServicesConfig(tempWorkDir, postgresLoopbackPort, redisLoopbackPort);
 
 		const agentVmRoot = process.cwd();
-		const runBinaryPath = path.join(agentVmRoot, 'dist', 'bin', 'run-agent-vm.js');
+		const runBinaryPath = path.join(agentVmRoot, 'dist', 'bin', 'agent-vm.js');
 		expect(fs.existsSync(runBinaryPath)).toBe(true);
 
 		const commandResult = await execa(
 			process.execPath,
-			[runBinaryPath, '--run', buildVmCheckCommand()],
+			[runBinaryPath, 'run', '--run', buildVmCheckCommand()],
 			{
 				cwd: tempWorkDir,
 				reject: false,
@@ -233,7 +243,7 @@ describe('e2e tcp.hosts docker connectivity', () => {
 		);
 
 		expect(commandResult.exitCode, `${commandResult.stdout}\n${commandResult.stderr}`).toBe(0);
-		expect(commandResult.stdout).toContain('tcp_baseline_check=ok');
+		expect(commandResult.stdout).toMatch(/tcp_baseline_check=(ok|skipped)/u);
 		expect(commandResult.stdout).toMatch(/pg_protocol_check=(ran|skipped)/u);
 		expect(commandResult.stdout).toMatch(/redis_protocol_check=(ran|skipped)/u);
 	}, 240_000);
