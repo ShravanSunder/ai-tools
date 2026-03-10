@@ -1,7 +1,11 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+
 import { describe, expect, it, vi } from 'vitest';
 
 import type { BuildConfig } from '#src/core/models/build-config.js';
-import { runOrchestrator } from '#src/features/runtime-control/run-orchestrator.js';
+import { runOrchestrator } from './run-orchestrator.js';
 
 const MINIMAL_BUILD_CONFIG: BuildConfig = {
 	arch: 'aarch64',
@@ -9,6 +13,67 @@ const MINIMAL_BUILD_CONFIG: BuildConfig = {
 };
 
 describe('run orchestrator', () => {
+	it('throws hard cutover error when removed tcp-services config files are present', async () => {
+		const workDir = fs.realpathSync(
+			fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-orchestrator-cutover-')),
+		);
+		const configDir = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDir, { recursive: true });
+		fs.writeFileSync(path.join(configDir, 'tcp-services.repo.json'), '{}', 'utf8');
+		expect(fs.existsSync(path.join(configDir, 'tcp-services.repo.json'))).toBe(true);
+
+		await expect(
+			runOrchestrator(
+				{
+					reload: false,
+					fullReset: false,
+					wipeVolumes: false,
+					scratchpad: false,
+					cleanup: false,
+					runMode: { kind: 'no-run' },
+				},
+				workDir,
+				{
+					deriveWorkspaceIdentity: vi.fn(() => ({
+						workDir,
+						repoName: 'workspace',
+						dirHash: 'hash',
+						sessionName: 'session',
+						daemonSocketPath: '/tmp/agent-vm-session.sock',
+						daemonLogPath: '/tmp/agent-vm-session.log',
+					})),
+					stopDaemonIfRequested: vi.fn(async () => {}),
+					ensureDaemonRunning: vi.fn(async () => {}),
+					requestAndCollect: vi.fn(async () => ({ exitCode: 0, responses: [] })),
+					loadBuildConfig: vi.fn(() => MINIMAL_BUILD_CONFIG),
+					buildGuestAssets: vi.fn(async () => ({
+						imagePath: '/tmp/image',
+						fingerprint: 'fp',
+						built: false,
+					})),
+					wipeVolumeDirs: vi.fn(() => {}),
+					resolveFingerprintImageCacheDir: vi.fn(() => '/tmp/image-cache/by-fingerprint'),
+					resolveVolumeCacheDir: vi.fn(() => '/tmp/volumes'),
+					cleanupStaleCacheDirs: vi.fn(() => 0),
+					acquireDaemonLease: vi.fn(async () => ({
+						status: {
+							sessionName: 'session',
+							clients: 1,
+							idleTimeoutMinutes: 10,
+							idleDeadlineEpochMs: null,
+							startedAtEpochMs: Date.now(),
+							tcpServices: [],
+							vm: { id: 'fake-vm', running: true },
+						},
+						release: async () => {},
+					})),
+					runInteractiveShell: vi.fn(async () => 0),
+				},
+			),
+		).rejects.toThrowError(/Hard cutover/u);
+		fs.rmSync(workDir, { recursive: true, force: true });
+	});
+
 	it('passes reload/full-reset flags through orchestration steps', async () => {
 		const calls: string[] = [];
 

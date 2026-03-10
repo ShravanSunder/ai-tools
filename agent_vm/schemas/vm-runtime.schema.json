@@ -5,7 +5,11 @@
 	"properties": {
 		"rootfsMode": {
 			"type": "string",
-			"enum": ["readonly", "memory", "cow"]
+			"enum": [
+				"readonly",
+				"memory",
+				"cow"
+			]
 		},
 		"memory": {
 			"type": "integer",
@@ -44,7 +48,9 @@
 						"minLength": 1
 					}
 				},
-				"required": ["guestPath"],
+				"required": [
+					"guestPath"
+				],
 				"additionalProperties": false
 			}
 		},
@@ -87,6 +93,22 @@
 			"additionalProperties": {
 				"type": "string"
 			}
+		},
+		"mountControls": {
+			"type": "object",
+			"properties": {
+				"allowAuthWrite": {
+					"type": "boolean"
+				},
+				"writableAllowedGuestPrefixes": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"additionalProperties": false
 		},
 		"monorepoDiscovery": {
 			"type": "boolean"
@@ -147,7 +169,9 @@
 							"type": "boolean"
 						}
 					},
-					"required": ["importOnFirstRun"],
+					"required": [
+						"importOnFirstRun"
+					],
 					"additionalProperties": false
 				}
 			},

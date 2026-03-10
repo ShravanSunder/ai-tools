@@ -86,33 +86,63 @@ function resolveWorkspaceLocalPath(
 		);
 	}
 
-	return resolvedPath;
+	if (!fs.existsSync(resolvedPath)) {
+		throw new Error(
+			`Resolved path '${rawPath}' does not exist. Path must exist within '${normalizedWorkspaceRoot}'`,
+		);
+	}
+
+	const workspaceRealPath = fs.realpathSync(normalizedWorkspaceRoot);
+	const resolvedRealPath = fs.realpathSync(resolvedPath);
+	const realRelativePath = path.relative(workspaceRealPath, resolvedRealPath);
+	const resolvedToRealWorkspaceRoot = realRelativePath === '';
+	if (
+		realRelativePath.startsWith('..') ||
+		path.isAbsolute(realRelativePath) ||
+		(resolvedToRealWorkspaceRoot && !options.allowWorkspaceRoot)
+	) {
+		throw new Error(
+			`Path traversal detected for '${rawPath}'. Resolved path '${resolvedPath}' escapes '${normalizedWorkspaceRoot}' via symlink`,
+		);
+	}
+
+	return resolvedRealPath;
 }
 
 function applyOverlayPathResolution(
 	configLayer: BuildConfigInput,
-	workDir: string,
+	resolutionRoot: string,
 ): BuildConfigInput {
 	const ociOverlayConfig = configLayer.ociOverlay;
 	if (!ociOverlayConfig) {
 		return configLayer;
 	}
 
+	const resolvedOverlay: BuildConfigInput['ociOverlay'] = {
+		...ociOverlayConfig,
+	};
+	if (ociOverlayConfig.dockerfile !== undefined) {
+		resolvedOverlay.dockerfile = resolveWorkspaceLocalPath(
+			ociOverlayConfig.dockerfile,
+			resolutionRoot,
+			{
+				allowWorkspaceRoot: false,
+			},
+		);
+	}
+	if (ociOverlayConfig.contextDir !== undefined) {
+		resolvedOverlay.contextDir = resolveWorkspaceLocalPath(
+			ociOverlayConfig.contextDir,
+			resolutionRoot,
+			{
+				allowWorkspaceRoot: true,
+			},
+		);
+	}
+
 	return {
 		...configLayer,
-		ociOverlay: {
-			...ociOverlayConfig,
-			dockerfile: ociOverlayConfig.dockerfile
-				? resolveWorkspaceLocalPath(ociOverlayConfig.dockerfile, workDir, {
-						allowWorkspaceRoot: false,
-					})
-				: ociOverlayConfig.dockerfile,
-			contextDir: ociOverlayConfig.contextDir
-				? resolveWorkspaceLocalPath(ociOverlayConfig.contextDir, workDir, {
-						allowWorkspaceRoot: true,
-					})
-				: ociOverlayConfig.contextDir,
-		},
+		ociOverlay: resolvedOverlay,
 	};
 }
 
@@ -156,9 +186,9 @@ export function loadBuildConfig(workDir: string): BuildConfig {
 		throw new Error(`Missing base build config: ${baseConfigPath}`);
 	}
 
-	const baseLayer = applyRelativeScriptResolution(
-		maybeLoadBuildConfigLayer(baseConfigPath),
-		baseConfigPath,
+	const baseLayer = applyOverlayPathResolution(
+		applyRelativeScriptResolution(maybeLoadBuildConfigLayer(baseConfigPath), baseConfigPath),
+		agentVmRoot,
 	);
 	const projectLayer = applyOverlayPathResolution(
 		applyRelativeScriptResolution(maybeLoadBuildConfigLayer(projectConfigPath), projectConfigPath),

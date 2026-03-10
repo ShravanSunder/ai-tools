@@ -77,6 +77,10 @@ const DEFAULT_RUNTIME_CONFIG: VmRuntimeConfig = {
 	},
 	readonlyMounts: {},
 	extraMounts: {},
+	mountControls: {
+		allowAuthWrite: false,
+		writableAllowedGuestPrefixes: ['${WORKSPACE}', '/home/agent', '/tmp'],
+	},
 	monorepoDiscovery: true,
 	initScripts: { background: null, foreground: null },
 	shell: { zshrcExtra: null, atuin: { importOnFirstRun: true } },

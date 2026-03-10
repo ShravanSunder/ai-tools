@@ -15,6 +15,8 @@ describe('vm runtime config schema', () => {
 		expect(config.cpus).toBe(2);
 		expect(config.idleTimeoutMinutes).toBe(10);
 		expect(config.monorepoDiscovery).toBe(true);
+		expect(config.mountControls.allowAuthWrite).toBe(false);
+		expect(config.mountControls.writableAllowedGuestPrefixes).toContain('${WORKSPACE}');
 	});
 
 	it('parses full config with volumes and shadows', () => {
@@ -56,13 +58,23 @@ describe('mergeVmRuntimeConfigs', () => {
 				pnpmStore: { guestPath: '/home/agent/.local/share/pnpm' },
 			},
 			shadows: { deny: ['.agent_vm', '.git'], tmpfs: [] },
+			mountControls: {
+				allowAuthWrite: false,
+				writableAllowedGuestPrefixes: ['/workspace/safe'],
+			},
 		};
 		const repo: VmRuntimeConfigInput = {
 			memory: 4096,
 			env: { CUSTOM: 'value' },
+			mountControls: {
+				writableAllowedGuestPrefixes: ['/workspace/repo-safe'],
+			},
 		};
 		const local: VmRuntimeConfigInput = {
 			cpus: 4,
+			mountControls: {
+				allowAuthWrite: true,
+			},
 		};
 
 		const merged = mergeVmRuntimeConfigs(base, repo, local);
@@ -71,5 +83,7 @@ describe('mergeVmRuntimeConfigs', () => {
 		expect(merged.cpus).toBe(4);
 		expect(merged.env).toEqual({ HOME: '/home/agent', CUSTOM: 'value' });
 		expect(merged.volumes?.venv?.guestPath).toBe('${WORKSPACE}/.venv');
+		expect(merged.mountControls?.allowAuthWrite).toBe(true);
+		expect(merged.mountControls?.writableAllowedGuestPrefixes).toEqual(['/workspace/repo-safe']);
 	});
 });

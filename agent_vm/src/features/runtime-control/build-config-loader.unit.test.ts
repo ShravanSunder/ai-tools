@@ -2,9 +2,27 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { loadBuildConfig } from '#src/features/runtime-control/build-config-loader.js';
+
+const pathsToCleanup: string[] = [];
+const originalPath = process.env.PATH;
+
+beforeEach(() => {
+	const fakeBinDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-bin-'));
+	pathsToCleanup.push(fakeBinDir);
+	fs.writeFileSync(path.join(fakeBinDir, 'docker'), '#!/bin/sh\nexit 0\n', 'utf8');
+	fs.chmodSync(path.join(fakeBinDir, 'docker'), 0o755);
+	process.env.PATH = `${fakeBinDir}${path.delimiter}${originalPath ?? ''}`;
+});
+
+afterEach(() => {
+	process.env.PATH = originalPath;
+	for (const targetPath of pathsToCleanup.splice(0)) {
+		fs.rmSync(targetPath, { recursive: true, force: true });
+	}
+});
 
 describe('loadBuildConfig', () => {
 	it('loads base config when no project config exists', () => {
@@ -100,6 +118,7 @@ describe('loadBuildConfig', () => {
 		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-'));
 		const configDir = path.join(workDir, '.agent_vm');
 		fs.mkdirSync(configDir, { recursive: true });
+		fs.writeFileSync(path.join(configDir, 'overlay.repo.dockerfile'), 'FROM scratch\n', 'utf8');
 		fs.writeFileSync(
 			path.join(configDir, 'build.project.json'),
 			JSON.stringify({
@@ -114,8 +133,34 @@ describe('loadBuildConfig', () => {
 
 		const config = loadBuildConfig(workDir);
 		expect(config.ociOverlay?.dockerfile).toBe(
-			path.join(workDir, '.agent_vm', 'overlay.repo.dockerfile'),
+			fs.realpathSync(path.join(workDir, '.agent_vm', 'overlay.repo.dockerfile')),
 		);
-		expect(config.ociOverlay?.contextDir).toBe(workDir);
+		expect(config.ociOverlay?.contextDir).toBe(fs.realpathSync(workDir));
+	});
+
+	it('rejects ociOverlay paths that escape workspace via symlink', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-'));
+		const configDir = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDir, { recursive: true });
+
+		const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-outside-'));
+		pathsToCleanup.push(outsideDir);
+		fs.writeFileSync(path.join(outsideDir, 'overlay.dockerfile'), 'FROM scratch\n', 'utf8');
+
+		const escapeLink = path.join(workDir, 'escape-link');
+		fs.symlinkSync(outsideDir, escapeLink, 'dir');
+		fs.writeFileSync(
+			path.join(configDir, 'build.project.json'),
+			JSON.stringify({
+				ociOverlay: {
+					baseImage: 'docker.io/library/debian:bookworm-slim',
+					dockerfile: 'escape-link/overlay.dockerfile',
+					contextDir: '.',
+				},
+			}),
+			'utf8',
+		);
+
+		expect(() => loadBuildConfig(workDir)).toThrowError(/escapes.*symlink/u);
 	});
 });

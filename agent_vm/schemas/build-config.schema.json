@@ -5,11 +5,17 @@
 	"properties": {
 		"arch": {
 			"type": "string",
-			"enum": ["aarch64", "x86_64"]
+			"enum": [
+				"aarch64",
+				"x86_64"
+			]
 		},
 		"distro": {
 			"type": "string",
-			"enum": ["alpine", "nixos"]
+			"enum": [
+				"alpine",
+				"nixos"
+			]
 		},
 		"env": {
 			"anyOf": [
@@ -39,7 +45,10 @@
 				},
 				"runtime": {
 					"type": "string",
-					"enum": ["docker", "podman"]
+					"enum": [
+						"docker",
+						"podman"
+					]
 				},
 				"platform": {
 					"type": "string",
@@ -47,10 +56,16 @@
 				},
 				"pullPolicy": {
 					"type": "string",
-					"enum": ["if-not-present", "always", "never"]
+					"enum": [
+						"if-not-present",
+						"always",
+						"never"
+					]
 				}
 			},
-			"required": ["image"],
+			"required": [
+				"image"
+			],
 			"additionalProperties": false
 		},
 		"ociOverlay": {
@@ -135,7 +150,11 @@
 			"properties": {
 				"rootfsMode": {
 					"type": "string",
-					"enum": ["readonly", "memory", "cow"]
+					"enum": [
+						"readonly",
+						"memory",
+						"cow"
+					]
 				}
 			},
 			"additionalProperties": false
@@ -152,7 +171,10 @@
 				},
 				"runtime": {
 					"type": "string",
-					"enum": ["docker", "podman"]
+					"enum": [
+						"docker",
+						"podman"
+					]
 				}
 			},
 			"additionalProperties": false

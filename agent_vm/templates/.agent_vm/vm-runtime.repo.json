@@ -1,5 +1,9 @@
 {
 	"$schema": "../../agent_vm/schemas/vm-runtime.schema.json",
+	"mountControls": {
+		"allowAuthWrite": false,
+		"writableAllowedGuestPrefixes": ["${WORKSPACE}", "/home/agent", "/tmp"]
+	},
 	"tcp": {
 		"strictMode": true,
 		"allowedTargetHosts": ["127.0.0.1", "localhost"],

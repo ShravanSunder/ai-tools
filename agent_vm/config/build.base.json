@@ -6,6 +6,11 @@
 		"image": "docker.io/library/debian:bookworm-slim",
 		"pullPolicy": "if-not-present"
 	},
+	"ociOverlay": {
+		"baseImage": "agent-sidecar-base:node-py",
+		"dockerfile": "config/parity/agent-vm-parity.overlay.dockerfile",
+		"contextDir": "."
+	},
 	"env": {
 		"LANG": "C.UTF-8"
 	},

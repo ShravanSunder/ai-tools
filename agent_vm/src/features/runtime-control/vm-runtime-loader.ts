@@ -15,6 +15,7 @@ import {
 	type InterpolationContext,
 	resolveScriptPath,
 } from '#src/features/runtime-control/config-interpolation.js';
+import { validateRuntimeMountPolicy } from '#src/features/runtime-control/mount-policy.js';
 
 interface RuntimeLayer {
 	readonly configPath: string;
@@ -101,13 +102,22 @@ function applyInterpolation(
 
 	const interpolatedReadonlyMounts: Record<string, string> = {};
 	for (const [mountName, mountPath] of Object.entries(config.readonlyMounts)) {
-		interpolatedReadonlyMounts[mountName] = interpolateConfigValue(mountPath, interpolationContext);
+		interpolatedReadonlyMounts[interpolateConfigValue(mountName, interpolationContext)] =
+			interpolateConfigValue(mountPath, interpolationContext);
 	}
 
 	const interpolatedExtraMounts: Record<string, string> = {};
 	for (const [mountName, mountPath] of Object.entries(config.extraMounts)) {
-		interpolatedExtraMounts[mountName] = interpolateConfigValue(mountPath, interpolationContext);
+		interpolatedExtraMounts[interpolateConfigValue(mountName, interpolationContext)] =
+			interpolateConfigValue(mountPath, interpolationContext);
 	}
+
+	const interpolatedMountControls = {
+		...config.mountControls,
+		writableAllowedGuestPrefixes: config.mountControls.writableAllowedGuestPrefixes.map(
+			(guestPrefix) => interpolateConfigValue(guestPrefix, interpolationContext),
+		),
+	};
 
 	return {
 		...config,
@@ -115,6 +125,7 @@ function applyInterpolation(
 		volumes: interpolatedVolumes,
 		readonlyMounts: interpolatedReadonlyMounts,
 		extraMounts: interpolatedExtraMounts,
+		mountControls: interpolatedMountControls,
 	};
 }
 
@@ -134,8 +145,14 @@ export function loadVmRuntimeConfig(workDir: string): VmRuntimeConfig {
 
 	const mergedInput = mergeVmRuntimeConfigs(baseLayer, repoLayer, localLayer);
 	const resolvedConfig = parseVmRuntimeConfig(mergedInput);
-	return applyInterpolation(resolvedConfig, {
+	const hostHome = os.homedir();
+	const interpolatedConfig = applyInterpolation(resolvedConfig, {
 		WORKSPACE: path.resolve(workDir),
-		HOST_HOME: os.homedir(),
+		HOST_HOME: hostHome,
 	});
+	validateRuntimeMountPolicy(interpolatedConfig, {
+		workDir: path.resolve(workDir),
+		hostHome,
+	});
+	return interpolatedConfig;
 }

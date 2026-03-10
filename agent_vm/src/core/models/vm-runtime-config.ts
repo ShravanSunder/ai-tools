@@ -23,8 +23,19 @@ const shellSchema = z.object({
 	atuin: z
 		.object({
 			importOnFirstRun: z.boolean().default(true),
-		})
-		.default({ importOnFirstRun: true }),
+	})
+	.default({ importOnFirstRun: true }),
+});
+
+const mountControlsSchema = z.object({
+	allowAuthWrite: z.boolean().default(false),
+	writableAllowedGuestPrefixes: z
+		.array(z.string().trim().min(1))
+		.default(['${WORKSPACE}', '/home/agent', '/tmp']),
+});
+const mountControlsInputSchema = z.object({
+	allowAuthWrite: z.boolean().optional(),
+	writableAllowedGuestPrefixes: z.array(z.string().trim().min(1)).optional(),
 });
 
 const tcpServiceEntrySchema = z.object({
@@ -77,6 +88,7 @@ export const vmRuntimeConfigInputSchema = z.object({
 	shadows: shadowsSchema.partial().optional(),
 	readonlyMounts: z.record(z.string(), z.string()).optional(),
 	extraMounts: z.record(z.string(), z.string()).optional(),
+	mountControls: mountControlsInputSchema.optional(),
 	monorepoDiscovery: z.boolean().optional(),
 	initScripts: initScriptsSchema.partial().optional(),
 	shell: shellSchema.partial().optional(),
@@ -94,6 +106,10 @@ export const vmRuntimeConfigSchema = z.object({
 	shadows: shadowsSchema.default({ deny: [], tmpfs: [] }),
 	readonlyMounts: z.record(z.string(), z.string()).default({}),
 	extraMounts: z.record(z.string(), z.string()).default({}),
+	mountControls: mountControlsSchema.default({
+		allowAuthWrite: false,
+		writableAllowedGuestPrefixes: ['${WORKSPACE}', '/home/agent', '/tmp'],
+	}),
 	monorepoDiscovery: z.boolean().default(true),
 	initScripts: initScriptsSchema.default({ background: null, foreground: null }),
 	shell: shellSchema.default({
@@ -279,6 +295,20 @@ function mergeShellConfig(
 	};
 }
 
+function mergeMountControls(
+	baseControls: VmRuntimeConfigInput['mountControls'],
+	overlayControls: VmRuntimeConfigInput['mountControls'],
+): VmRuntimeConfigInput['mountControls'] {
+	if (!overlayControls) {
+		return baseControls;
+	}
+	return {
+		allowAuthWrite: overlayControls.allowAuthWrite ?? baseControls?.allowAuthWrite,
+		writableAllowedGuestPrefixes:
+			overlayControls.writableAllowedGuestPrefixes ?? baseControls?.writableAllowedGuestPrefixes,
+	};
+}
+
 export function parseVmRuntimeConfig(input: unknown): VmRuntimeConfig {
 	return vmRuntimeConfigSchema.parse(input);
 }
@@ -314,6 +344,7 @@ export function mergeVmRuntimeConfigs(
 			...merged.extraMounts,
 			...overlay.extraMounts,
 		};
+		merged.mountControls = mergeMountControls(merged.mountControls, overlay.mountControls);
 		merged.initScripts = mergeInitScripts(merged.initScripts, overlay.initScripts);
 		merged.shell = mergeShellConfig(merged.shell, overlay.shell);
 		merged.playwrightExtraHosts = overlay.playwrightExtraHosts ?? merged.playwrightExtraHosts;

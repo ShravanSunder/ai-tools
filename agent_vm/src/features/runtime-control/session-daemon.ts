@@ -23,6 +23,7 @@ import {
 	validateRuntimeTcpTargets,
 } from '#src/core/models/vm-runtime-config.js';
 import type { Logger } from '#src/core/platform/logger.js';
+import { shellEscape } from '#src/core/platform/shell-escape.js';
 import { AuthSyncManager } from '#src/features/auth-proxy/auth-sync.js';
 import { resolveRuntimeConfig } from '#src/features/runtime-control/config-resolver.js';
 import {
@@ -33,6 +34,7 @@ import {
 	compileAndPersistPolicy,
 	mutateAndCompilePolicy,
 } from '#src/features/runtime-control/policy-manager.js';
+import { wrapCommandForInteractiveShell } from '#src/features/runtime-control/shell-command.js';
 import { ensureAtuinImportedOnFirstRun } from '#src/features/runtime-control/shell-setup.js';
 
 export interface DaemonRuntimeOptions {
@@ -216,7 +218,7 @@ export class AgentVmDaemon {
 		const backgroundScriptPath = this.runtimeConfig.runtimeConfig.initScripts.background;
 		if (backgroundScriptPath) {
 			void this.vmRuntime
-				.exec(`/bin/sh -lc '${backgroundScriptPath}'`)
+				.exec(`/bin/sh -lc ${shellEscape(backgroundScriptPath)}`)
 				.then((backgroundResult) => {
 					if (backgroundResult.exitCode !== 0) {
 						this.logger.log('warn', 'daemon', 'background init script failed', {
@@ -235,7 +237,9 @@ export class AgentVmDaemon {
 
 		const foregroundScriptPath = this.runtimeConfig.runtimeConfig.initScripts.foreground;
 		if (foregroundScriptPath) {
-			const foregroundResult = await this.vmRuntime.exec(`/bin/sh -lc '${foregroundScriptPath}'`);
+			const foregroundResult = await this.vmRuntime.exec(
+				`/bin/sh -lc ${shellEscape(foregroundScriptPath)}`,
+			);
 			if (foregroundResult.exitCode !== 0) {
 				throw new Error(
 					`foreground init script failed (${foregroundScriptPath}): ${foregroundResult.stderr}`,
@@ -413,8 +417,9 @@ export class AgentVmDaemon {
 				const sessionId = `${Date.now()}`;
 				await this.sendResponse(socket, { kind: 'attached', sessionId });
 
-				const command = request.command ?? `/bin/sh -lc 'cd "$WORKSPACE" && pwd'`;
-				const result = await this.vmRuntime.exec(command);
+				const command = request.command ?? 'cd "$WORKSPACE" && pwd';
+				const wrappedCommand = wrapCommandForInteractiveShell(command);
+				const result = await this.vmRuntime.exec(wrappedCommand);
 				if (result.stdout.length > 0) {
 					await this.sendResponse(socket, { kind: 'stream.stdout', data: result.stdout });
 				}

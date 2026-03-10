@@ -94,6 +94,9 @@ describe('loadVmRuntimeConfig', () => {
 				readonlyMounts: {
 					aws: '${HOST_HOME}/.aws',
 				},
+				extraMounts: {
+					'${WORKSPACE}/.rw-cache': '${WORKSPACE}/.rw-cache',
+				},
 			}),
 			'utf8',
 		);
@@ -101,5 +104,80 @@ describe('loadVmRuntimeConfig', () => {
 		const config = loadVmRuntimeConfig(workDir);
 		expect(config.volumes.venv?.guestPath).toBe(path.join(workDir, '.venv'));
 		expect(config.readonlyMounts.aws).toBe(path.join(os.homedir(), '.aws'));
+		expect(config.extraMounts[path.join(workDir, '.rw-cache')]).toBe(
+			path.join(workDir, '.rw-cache'),
+		);
+	});
+
+	it('rejects writable mounts outside mountControls allowlist', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
+		const configDirectory = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDirectory, { recursive: true });
+		fs.writeFileSync(
+			path.join(configDirectory, 'vm-runtime.repo.json'),
+			JSON.stringify({
+				extraMounts: {
+					'/etc': '/tmp',
+				},
+			}),
+			'utf8',
+		);
+
+		expect(() => loadVmRuntimeConfig(workDir)).toThrowError(/outside writable allowlist/u);
+	});
+
+	it('allows auth writable mount only when mountControls.allowAuthWrite=true', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
+		const configDirectory = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDirectory, { recursive: true });
+		fs.writeFileSync(
+			path.join(configDirectory, 'vm-runtime.repo.json'),
+			JSON.stringify({
+				extraMounts: {
+					'/home/agent/.claude': '${HOST_HOME}/.claude',
+				},
+				mountControls: {
+					allowAuthWrite: true,
+				},
+			}),
+			'utf8',
+		);
+
+		const config = loadVmRuntimeConfig(workDir);
+		expect(config.extraMounts['/home/agent/.claude']).toBe(path.join(os.homedir(), '.claude'));
+	});
+
+	it('rejects writable remap of auth host directory when allowAuthWrite=false', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
+		const configDirectory = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDirectory, { recursive: true });
+		fs.writeFileSync(
+			path.join(configDirectory, 'vm-runtime.repo.json'),
+			JSON.stringify({
+				extraMounts: {
+					'/tmp/claude-remap': '${HOST_HOME}/.claude',
+				},
+			}),
+			'utf8',
+		);
+
+		expect(() => loadVmRuntimeConfig(workDir)).toThrowError(/auth host directory/u);
+	});
+
+	it('rejects writable remap when host path is ${HOST_HOME} ancestor', () => {
+		const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-runtime-loader-'));
+		const configDirectory = path.join(workDir, '.agent_vm');
+		fs.mkdirSync(configDirectory, { recursive: true });
+		fs.writeFileSync(
+			path.join(configDirectory, 'vm-runtime.repo.json'),
+			JSON.stringify({
+				extraMounts: {
+					'/tmp/home-rw': '${HOST_HOME}',
+				},
+			}),
+			'utf8',
+		);
+
+		expect(() => loadVmRuntimeConfig(workDir)).toThrowError(/auth host directory/u);
 	});
 });

@@ -87,6 +87,26 @@ function syncLocalFiles(templateRoot: string, targetRoot: string, override: bool
 	);
 }
 
+function warnUnsupportedTcpConfigFiles(targetRoot: string): void {
+	const removedConfigPaths = [
+		path.join(targetRoot, 'tcp-services.repo.json'),
+		path.join(targetRoot, 'tcp-services.local.json'),
+	];
+	const existingRemovedConfigs = removedConfigPaths.filter((removedPath) =>
+		fs.existsSync(removedPath),
+	);
+	if (existingRemovedConfigs.length === 0) {
+		return;
+	}
+
+	process.stdout.write(
+		'Warning: removed config files detected (hard cutover); move values into vm-runtime.*.json > tcp and delete these files:\n',
+	);
+	for (const removedPath of existingRemovedConfigs) {
+		process.stdout.write(`  - ${removedPath}\n`);
+	}
+}
+
 function resolveRepoRootFromWorkDir(workDir: string): string {
 	try {
 		const result = execaSync('git', ['rev-parse', '--show-toplevel'], {
@@ -129,6 +149,7 @@ export function initializeAgentVm(options: InitAgentVmOptions): void {
 		options.override,
 	);
 	fs.cpSync(docSourcePath, docTargetPath);
+	warnUnsupportedTcpConfigFiles(targetRoot);
 
 	process.stdout.write(`Initialized ${targetRoot} (${options.mode})\n`);
 	process.stdout.write('Next steps:\n');

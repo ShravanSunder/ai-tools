@@ -15,7 +15,7 @@ import type { AuthSyncManager } from '#src/features/auth-proxy/auth-sync.js';
 import {
 	AgentVmDaemon,
 	type DaemonDependencies,
-} from '#src/features/runtime-control/session-daemon.js';
+} from '../src/features/runtime-control/session-daemon.js';
 
 const socketsToCleanup: string[] = [];
 
@@ -375,6 +375,7 @@ describe('daemon lifecycle', () => {
 
 		const identity = deriveWorkspaceIdentity(workDir);
 		socketsToCleanup.push(identity.daemonSocketPath);
+		let executedAttachCommand = '';
 
 		const fakeDependencies = createDaemonDependencies(workDir, async () => ({
 			getId: () => 'fake-vm',
@@ -382,6 +383,7 @@ describe('daemon lifecycle', () => {
 				if (command.includes('mkdir -p /home/agent')) {
 					return { exitCode: 0, stdout: '', stderr: '' };
 				}
+				executedAttachCommand = command;
 				return { exitCode: 7, stdout: 'hello stdout\n', stderr: 'hello stderr\n' };
 			},
 			close: async () => {},
@@ -394,10 +396,11 @@ describe('daemon lifecycle', () => {
 			fakeDependencies,
 		);
 		await daemon.start();
+		const requestedCommand = `printf '%s' "O'Brien"`;
 
 		const responses = await connectAndCollectResponses(
 			identity.daemonSocketPath,
-			JSON.stringify({ kind: 'attach', command: '/bin/sh -lc "echo hi"' }),
+			JSON.stringify({ kind: 'attach', command: requestedCommand }),
 		);
 
 		expect(responses.some((response) => response['kind'] === 'attached')).toBe(true);
@@ -414,6 +417,10 @@ describe('daemon lifecycle', () => {
 		expect(
 			responses.some((response) => response['kind'] === 'stream.exit' && response['code'] === 7),
 		).toBe(true);
+		expect(executedAttachCommand).toContain('if [ -x /bin/zsh ]');
+		expect(executedAttachCommand).toContain('exec /bin/zsh -i -c');
+		expect(executedAttachCommand).toContain('exec /bin/sh -lc');
+		expect(executedAttachCommand).toContain(`'printf '"'"'%s'"'"' "O'"'"'Brien"'`);
 
 		const shutdownRaw = await connectAndSend(
 			identity.daemonSocketPath,

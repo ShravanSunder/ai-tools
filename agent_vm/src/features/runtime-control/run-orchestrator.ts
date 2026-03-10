@@ -19,6 +19,7 @@ import { getAgentVmRoot } from '#src/core/platform/paths.js';
 import { deriveWorkspaceIdentity } from '#src/core/platform/workspace.js';
 import { resolveAgentPresetCommand } from '#src/features/runtime-control/agent-launcher.js';
 import { loadBuildConfig } from '#src/features/runtime-control/build-config-loader.js';
+import { buildInteractiveShellCommand } from '#src/features/runtime-control/shell-command.js';
 
 interface EnsureDaemonOptions {
 	readonly socketPath: string;
@@ -30,6 +31,9 @@ interface EnsureDaemonOptions {
 
 const DAEMON_SOCKET_START_TIMEOUT_MS = 120_000;
 const DAEMON_START_LOCK_TIMEOUT_MS = DAEMON_SOCKET_START_TIMEOUT_MS + 5_000;
+
+const HARD_CUTOVER_TCP_ERROR_MESSAGE =
+	'Hard cutover: tcp-services.*.json is unsupported. Move tcp config into vm-runtime.*.json under tcp before running agent_vm.';
 
 function assertNever(value: never): never {
 	throw new Error(`Unhandled daemon response variant: ${JSON.stringify(value)}`);
@@ -182,6 +186,17 @@ function daemonLaunchArgs(workDir: string, imagePath: string, scratchpad: boolea
 	return args;
 }
 
+function assertNoRemovedTcpConfigFiles(workDir: string): void {
+	const removedConfigPaths = [
+		path.join(workDir, '.agent_vm', 'tcp-services.repo.json'),
+		path.join(workDir, '.agent_vm', 'tcp-services.local.json'),
+	];
+
+	if (removedConfigPaths.some((removedPath) => fs.existsSync(removedPath))) {
+		throw new Error(HARD_CUTOVER_TCP_ERROR_MESSAGE);
+	}
+}
+
 async function ensureDaemonRunning(options: EnsureDaemonOptions): Promise<void> {
 	if (fs.existsSync(options.socketPath)) {
 		try {
@@ -217,6 +232,7 @@ async function ensureDaemonRunning(options: EnsureDaemonOptions): Promise<void> 
 				{
 					detached: true,
 					stdio: 'ignore',
+					reject: false,
 				},
 			);
 			subprocess.unref();
@@ -256,10 +272,6 @@ function resolveRequestedCommand(options: RunAgentVmOptions): string | null {
 			return '__interactive-shell__';
 		}
 	}
-}
-
-function shellEscape(value: string): string {
-	return `'${value.replaceAll("'", "'\"'\"'")}'`;
 }
 
 interface DaemonLease {
@@ -363,7 +375,7 @@ async function acquireDaemonLease(socketPath: string): Promise<DaemonLease> {
 
 async function runInteractiveShell(vmId: string, workDir: string): Promise<number> {
 	const gondolinBinPath = resolveGondolinBinPath(getAgentVmRoot());
-	const shellCommand = `cd ${shellEscape(workDir)} && exec /bin/sh -l`;
+	const shellCommand = buildInteractiveShellCommand(workDir);
 	const result = await execa(
 		gondolinBinPath,
 		['attach', vmId, '--', '/bin/sh', '-lc', shellCommand],
@@ -520,6 +532,8 @@ export async function runOrchestrator(
 		);
 		return 0;
 	}
+
+	assertNoRemovedTcpConfigFiles(identity.workDir);
 
 	await dependencies.stopDaemonIfRequested(identity.daemonSocketPath, identity.workDir, options);
 	if (options.wipeVolumes) {

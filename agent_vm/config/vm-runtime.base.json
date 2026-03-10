@@ -29,6 +29,10 @@
 		"/home/agent/.gemini": "${HOST_HOME}/.gemini"
 	},
 	"extraMounts": {},
+	"mountControls": {
+		"allowAuthWrite": false,
+		"writableAllowedGuestPrefixes": ["${WORKSPACE}", "/home/agent", "/tmp"]
+	},
 	"monorepoDiscovery": true,
 	"initScripts": {
 		"background": null,

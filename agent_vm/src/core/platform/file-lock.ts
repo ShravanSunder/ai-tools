@@ -23,6 +23,12 @@ function sleepBlocking(delayMs: number): void {
 	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, delayMs);
 }
 
+function sleepAsync(delayMs: number): Promise<void> {
+	return new Promise((resolve) => {
+		setTimeout(resolve, delayMs);
+	});
+}
+
 function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
 	return typeof error === 'object' && error !== null && 'code' in error;
 }
@@ -105,6 +111,47 @@ function acquireFileLock(lockPath: string, options?: FileLockOptions): AcquiredF
 	);
 }
 
+async function acquireFileLockAsync(
+	lockPath: string,
+	options?: FileLockOptions,
+): Promise<AcquiredFileLock> {
+	const timeoutMs = options?.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
+	const started = Date.now();
+
+	fs.mkdirSync(path.dirname(lockPath), { recursive: true });
+
+	while (Date.now() - started < timeoutMs) {
+		try {
+			const lockFd = fs.openSync(lockPath, 'wx', 0o600);
+			writeOwnerMetadata(lockFd);
+			return {
+				fd: lockFd,
+				release: () => {
+					fs.closeSync(lockFd);
+					fs.rmSync(lockPath, { force: true });
+				},
+			};
+		} catch (error: unknown) {
+			if (!isErrnoException(error) || error.code !== 'EEXIST') {
+				throw new Error(`Failed to acquire lock '${lockPath}': ${String(error)}`, { cause: error });
+			}
+
+			const ownerPid = readOwnerPid(lockPath);
+			if (ownerPid !== null && !isPidAlive(ownerPid)) {
+				fs.rmSync(lockPath, { force: true });
+				continue;
+			}
+
+			await sleepAsync(retryDelayMs);
+		}
+	}
+
+	throw new Error(
+		`Timed out waiting for lock '${lockPath}'. If no process owns it, remove it manually: rm -f '${lockPath}'`,
+	);
+}
+
 export function withFileLock<TResult>(
 	lockPath: string,
 	run: () => TResult,
@@ -123,7 +170,7 @@ export async function withFileLockAsync<TResult>(
 	run: () => Promise<TResult>,
 	options?: FileLockOptions,
 ): Promise<TResult> {
-	const lock = acquireFileLock(lockPath, options);
+	const lock = await acquireFileLockAsync(lockPath, options);
 	try {
 		return await run();
 	} finally {

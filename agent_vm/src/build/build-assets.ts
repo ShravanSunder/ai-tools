@@ -15,6 +15,7 @@ import {
 	buildOverlayImageAndResolveDigest,
 	type OverlayBuildResult,
 } from '#src/build/oci-overlay-builder.js';
+import { ensureParityBaseImage, type EnsuredParityBaseImage } from '#src/build/parity-image.js';
 import type { BuildConfig } from '#src/core/models/build-config.js';
 import { withFileLockAsync } from '#src/core/platform/file-lock.js';
 import { getAgentVmRoot } from '#src/core/platform/paths.js';
@@ -35,11 +36,13 @@ export interface BuildAssetsResult {
 
 interface BuildAssetsDependencies {
 	buildOverlayImageAndResolveDigest: typeof buildOverlayImageAndResolveDigest;
+	ensureParityBaseImage: typeof ensureParityBaseImage;
 	buildAssetsIntoDir: (outputDir: string, config: BuildConfig) => Promise<void>;
 }
 
 const DEFAULT_DEPENDENCIES: BuildAssetsDependencies = {
 	buildOverlayImageAndResolveDigest,
+	ensureParityBaseImage,
 	buildAssetsIntoDir: async (outputDir: string, config: BuildConfig): Promise<void> => {
 		await buildAssetsIntoDir(outputDir, config);
 	},
@@ -229,6 +232,32 @@ function toGondolinBuildConfig(config: BuildConfig): Record<string, unknown> {
 	return gondolinConfig;
 }
 
+function normalizeMaybeRealPath(rawPath: string): string {
+	try {
+		return fs.realpathSync(rawPath);
+	} catch {
+		return path.resolve(rawPath);
+	}
+}
+
+function isManagedParityOverlay(config: BuildConfig, agentVmRoot: string): boolean {
+	const overlay = config.ociOverlay;
+	if (!overlay) {
+		return false;
+	}
+	if (overlay.baseImage !== 'agent-sidecar-base:node-py') {
+		return false;
+	}
+
+	const parityDockerfile = normalizeMaybeRealPath(
+		path.join(agentVmRoot, 'config', 'parity', 'agent-vm-parity.overlay.dockerfile'),
+	);
+	const parityContextDir = normalizeMaybeRealPath(agentVmRoot);
+	const overlayDockerfile = normalizeMaybeRealPath(overlay.dockerfile);
+	const overlayContextDir = normalizeMaybeRealPath(overlay.contextDir);
+	return overlayDockerfile === parityDockerfile && overlayContextDir === parityContextDir;
+}
+
 function writeTempBuildConfig(config: BuildConfig): { path: string; cleanup: () => void } {
 	const tempDirectoryPath = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-vm-build-config-'));
 	const tempConfigPath = path.join(tempDirectoryPath, 'build.config.json');
@@ -248,10 +277,27 @@ function writeTempBuildConfig(config: BuildConfig): { path: string; cleanup: () 
 async function resolveEffectiveBuildConfig(
 	baseConfig: BuildConfig,
 	fingerprintSeed: string,
+	agentVmRoot: string,
 	dependencies: BuildAssetsDependencies,
-): Promise<{ effectiveConfig: BuildConfig; overlay: OverlayBuildResult | null }> {
+): Promise<{
+	effectiveConfig: BuildConfig;
+	overlay: OverlayBuildResult | null;
+	parityBaseImage: EnsuredParityBaseImage | null;
+	useParitySourceHashForFingerprint: boolean;
+}> {
 	if (!baseConfig.ociOverlay) {
-		return { effectiveConfig: baseConfig, overlay: null };
+		return {
+			effectiveConfig: baseConfig,
+			overlay: null,
+			parityBaseImage: null,
+			useParitySourceHashForFingerprint: false,
+		};
+	}
+
+	const managedParityOverlay = isManagedParityOverlay(baseConfig, agentVmRoot);
+	let parityBaseImage: EnsuredParityBaseImage | null = null;
+	if (baseConfig.ociOverlay.baseImage === 'agent-sidecar-base:node-py') {
+		parityBaseImage = await dependencies.ensureParityBaseImage();
 	}
 
 	const overlay = await dependencies.buildOverlayImageAndResolveDigest({
@@ -263,9 +309,17 @@ async function resolveEffectiveBuildConfig(
 		oci: {
 			...baseConfig.oci,
 			image: overlay.imageRef,
+			// Overlay images are built locally and may not exist in any remote registry.
+			// Force local-only resolution to prevent unintended docker pull attempts.
+			pullPolicy: 'never',
 		},
 	};
-	return { effectiveConfig, overlay };
+	return {
+		effectiveConfig,
+		overlay,
+		parityBaseImage,
+		useParitySourceHashForFingerprint: managedParityOverlay,
+	};
 }
 
 async function buildAssetsIntoDir(
@@ -306,33 +360,48 @@ export async function buildGuestAssets(
 	const effectiveBuild = await resolveEffectiveBuildConfig(
 		options.buildConfig,
 		overlayFingerprintSeed,
+		agentVmRoot,
 		dependencies,
 	);
 
 	const fingerprintPayload = {
-		...toGondolinBuildConfig(effectiveBuild.effectiveConfig),
-		overlayDigest: effectiveBuild.overlay?.digest ?? null,
+		...toGondolinBuildConfig(options.buildConfig),
+		overlayFingerprintSeed: options.buildConfig.ociOverlay ? overlayFingerprintSeed : null,
+		overlayDigest: effectiveBuild.useParitySourceHashForFingerprint
+			? null
+			: (effectiveBuild.overlay?.digest ?? null),
+		paritySourceHash: effectiveBuild.parityBaseImage?.sourceHash ?? null,
 	};
 	const finalFingerprint = computeBuildFingerprint(fingerprintPayload, gondolinVersion);
 	const outputDir = resolveFingerprintImageDir(finalFingerprint);
 
 	const lockPath = resolveFingerprintBuildLockPath(finalFingerprint);
 	let built = false;
-	await withFileLockAsync(lockPath, async () => {
-		const shouldRebuild = options.fullReset || !hasBuiltAssets(outputDir);
-		if (!shouldRebuild) {
-			return;
-		}
+	await withFileLockAsync(
+		lockPath,
+		async () => {
+			const shouldRebuild =
+				options.fullReset || effectiveBuild.parityBaseImage?.rebuilt === true || !hasBuiltAssets(outputDir);
+			if (!shouldRebuild) {
+				return;
+			}
 
-		if (fs.existsSync(outputDir)) {
-			fs.rmSync(outputDir, { recursive: true, force: true });
-		}
-		fs.mkdirSync(outputDir, { recursive: true });
+			if (fs.existsSync(outputDir)) {
+				fs.rmSync(outputDir, { recursive: true, force: true });
+			}
+			fs.mkdirSync(outputDir, { recursive: true });
 
-		await dependencies.buildAssetsIntoDir(outputDir, effectiveBuild.effectiveConfig);
-		writeFingerprint(outputDir, finalFingerprint);
-		built = true;
-	});
+			await dependencies.buildAssetsIntoDir(outputDir, effectiveBuild.effectiveConfig);
+			writeFingerprint(outputDir, finalFingerprint);
+			built = true;
+		},
+		{
+			// First-time image builds can take more than the generic 10s lock timeout.
+			// Give concurrent runners enough time to wait for the in-flight build.
+			timeoutMs: 180_000,
+			retryDelayMs: 100,
+		},
+	);
 
 	writeWorkspaceImageRef(options.workspaceHash, {
 		fingerprint: finalFingerprint,

@@ -33,9 +33,7 @@ describe('oci overlay builder', () => {
 			{ runCommand },
 		);
 
-		expect(result.imageRef).toBe(
-			'agent-vm-overlay:abc123def4567890@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-		);
+		expect(result.imageRef).toBe('agent-vm-overlay:abc123def4567890');
 		expect(result.digest).toBe(
 			'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
 		);
@@ -119,9 +117,7 @@ describe('oci overlay builder', () => {
 			{ runCommand },
 		);
 
-		expect(result.imageRef).toBe(
-			'agent-vm-overlay:abc123def4567890@sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-		);
+		expect(result.imageRef).toBe('agent-vm-overlay:abc123def4567890');
 		expect(result.digest).toBe(
 			'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
 		);

@@ -80,7 +80,7 @@ function parseDockerImageId(raw: string): string {
 	return digest;
 }
 
-function parseRepoDigest(raw: string): { imageRef: string; digest: string } | null {
+function parseRepoDigest(raw: string): string | null {
 	const parsed = JSON.parse(raw) as unknown;
 	if (!Array.isArray(parsed)) {
 		return null;
@@ -98,10 +98,7 @@ function parseRepoDigest(raw: string): { imageRef: string; digest: string } | nu
 		if (!/^sha256:[a-f0-9]{64}$/u.test(digest)) {
 			continue;
 		}
-		return {
-			imageRef: entry,
-			digest,
-		};
+		return digest;
 	}
 
 	return null;
@@ -115,14 +112,9 @@ function parseInspectOutput(raw: string, fallbackTag: string): OverlayBuildResul
 
 	const repoDigestsRaw = raw.slice(0, separatorIndex).trim();
 	const imageIdRaw = raw.slice(separatorIndex + 1).trim();
-	const fromRepoDigest = parseRepoDigest(repoDigestsRaw);
-	if (fromRepoDigest) {
-		return fromRepoDigest;
-	}
-
-	const digest = parseDockerImageId(imageIdRaw);
+	const digest = parseRepoDigest(repoDigestsRaw) ?? parseDockerImageId(imageIdRaw);
 	return {
-		imageRef: `${fallbackTag}@${digest}`,
+		imageRef: fallbackTag,
 		digest,
 	};
 }
