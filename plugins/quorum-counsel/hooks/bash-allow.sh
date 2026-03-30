@@ -4,7 +4,7 @@ set -euo pipefail
 # bash-allow.sh — PreToolUse hook for quorum-counsel subagents
 #
 # Auto-approves specific safe Bash commands needed by counsel-reviewer,
-# codex-solver, and gemini-solver background subagents. Commands not
+# codex-solver, gemini-solver, and oracle-solver background subagents. Commands not
 # matched pass through to the normal permission system (which denies
 # in background subagent context).
 #
@@ -36,6 +36,11 @@ if echo "$COMMAND" | grep -qE '(^|\s|\()codex\s'; then
   echo "$COMMAND" | grep -qE '(&&|;|\|\|)' || allow "quorum-counsel: codex CLI"
 fi
 
+# pnpx oracle CLI (reject if chained with && or ;)
+if echo "$COMMAND" | grep -qE '(^|\s|\()pnpx\s+@steipete/oracle'; then
+  echo "$COMMAND" | grep -qE '(&&|;|\|\|)' || allow "quorum-counsel: oracle CLI (pnpx)"
+fi
+
 # /tmp/counsel-review/ ops (exclude destructive)
 if echo "$COMMAND" | grep -qF '/tmp/counsel-review/'; then
   echo "$COMMAND" | grep -qE '(^|\s)(rm\s|sudo\s|chmod\s|chown\s)' || allow "quorum-counsel: safe /tmp/counsel-review/ op"
@@ -49,6 +54,11 @@ fi
 # /tmp/gemini-analysis/ ops (exclude destructive)
 if echo "$COMMAND" | grep -qF '/tmp/gemini-analysis/'; then
   echo "$COMMAND" | grep -qE '(^|\s)(rm\s|sudo\s|chmod\s|chown\s)' || allow "quorum-counsel: safe /tmp/gemini-analysis/ op"
+fi
+
+# /tmp/oracle-analysis/ ops (exclude destructive)
+if echo "$COMMAND" | grep -qF '/tmp/oracle-analysis/'; then
+  echo "$COMMAND" | grep -qE '(^|\s)(rm\s|sudo\s|chmod\s|chown\s)' || allow "quorum-counsel: safe /tmp/oracle-analysis/ op"
 fi
 
 # mkdir -p /tmp/
