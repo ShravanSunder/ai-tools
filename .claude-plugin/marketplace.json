@@ -23,7 +23,7 @@
       "name": "quorum-counsel",
       "source": "./plugins/quorum-counsel",
       "description": "Multi-model review and analysis — counsel-reviewer, codex-solver, gemini-solver, and oracle-solver background agents with CLI permission hooks",
-      "version": "1.8.0"
+      "version": "1.9.0"
     },
     {
       "name": "presenting-information",
