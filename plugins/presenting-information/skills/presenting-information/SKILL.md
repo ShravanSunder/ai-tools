@@ -22,7 +22,7 @@ Visual-first presentation for design, comparisons, architecture, and explanation
 - **One-line insight.** After the caption, state the key tradeoff or decision in one sentence.
 - **Offer next move.** End with a concrete option the user can pick or redirect.
 - **Monospace-safe.** Assume no proportional rendering.
-- **Prefer vertical over wide.** 80-90 chars is a safe range; stack vertically when content wants more width.
+- **Prefer vertical over wide.** Max 80 chars per line; stack vertically when content wants more width.
 
 ## Character palette
 
