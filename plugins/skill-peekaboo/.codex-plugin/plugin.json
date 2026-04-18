@@ -1,0 +1,16 @@
+{
+  "name": "skill-peekaboo",
+  "version": "1.0.1",
+  "description": "Visual UI testing for macOS apps using Peekaboo CLI - an alternative to Playwright for native macOS testing",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": ["peekaboo", "visual-testing", "macos", "ui-automation", "accessibility", "headless"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Peekaboo",
+    "shortDescription": "Visual UI testing for macOS apps",
+    "developerName": "Shravan Sunder",
+    "category": "Coding"
+  }
+}

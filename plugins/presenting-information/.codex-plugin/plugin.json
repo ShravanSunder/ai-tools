@@ -1,0 +1,30 @@
+{
+  "name": "presenting-information",
+  "version": "1.0.0",
+  "description": "Always-on presentation skill: tables, diagrams, annotated components, and structured design-chat layout using Unicode box-drawing. Reach for this whenever explaining, comparing, or proposing design.",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": [
+    "presentation",
+    "diagrams",
+    "design",
+    "ascii",
+    "unicode",
+    "tables",
+    "architecture",
+    "comparison",
+    "visual"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Presenting Information",
+    "shortDescription": "Visual-first presentation: tables, diagrams, annotated components",
+    "longDescription": "Produce high-quality Unicode box-drawing presentations for design, comparisons, architecture, UI mockups, flows, and annotated components. Strong user preference — reach for this whenever explaining, comparing, or proposing design instead of dense prose.",
+    "developerName": "Shravan Sunder",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive"
+    ]
+  }
+}

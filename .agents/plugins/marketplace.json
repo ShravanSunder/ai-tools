@@ -1,0 +1,56 @@
+{
+  "name": "ai-tools",
+  "interface": {
+    "displayName": "AI Tools"
+  },
+  "plugins": [
+    {
+      "name": "scaffold-project",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ai-scaffold"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_FIRST_USE"
+      },
+      "category": "Coding"
+    },
+    {
+      "name": "skill-peekaboo",
+      "source": {
+        "source": "local",
+        "path": "./plugins/skill-peekaboo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_FIRST_USE"
+      },
+      "category": "Coding"
+    },
+    {
+      "name": "quorum-counsel",
+      "source": {
+        "source": "local",
+        "path": "./plugins/quorum-counsel"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_FIRST_USE"
+      },
+      "category": "Coding"
+    },
+    {
+      "name": "presenting-information",
+      "source": {
+        "source": "local",
+        "path": "./plugins/presenting-information"
+      },
+      "policy": {
+        "installation": "INSTALLED_BY_DEFAULT",
+        "authentication": "ON_FIRST_USE"
+      },
+      "category": "Coding"
+    }
+  ]
+}

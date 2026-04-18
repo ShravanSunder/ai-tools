@@ -1,0 +1,16 @@
+{
+  "name": "quorum-counsel",
+  "version": "1.8.0",
+  "description": "Multi-model review and analysis — agents for Claude (codex-solver, gemini-solver, oracle-solver, counsel-reviewer) and skills for Codex (claude-solver, gemini-solver, oracle-solver, counsel-reviewer) with confidence scoring, security auditing, and CLI permission hooks",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": ["review", "code-review", "pr-review", "multi-model", "gemini", "codex", "oracle", "counsel", "security"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Quorum Counsel",
+    "shortDescription": "Multi-model code review and analysis",
+    "developerName": "Shravan Sunder",
+    "category": "Coding"
+  }
+}
