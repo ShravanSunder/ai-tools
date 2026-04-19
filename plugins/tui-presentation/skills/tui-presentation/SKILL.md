@@ -1,5 +1,5 @@
 ---
-name: presenting-information
+name: tui-presentation
 description: MUST USE whenever presenting design, architecture, comparisons, options, tradeoffs, explanations, UI mockups, data flows, system structure, or any complex idea that benefits from visual clarity. Strong user preference — reach for tables, diagrams, annotated components, and structured layouts instead of dense prose. Triggers on "how would X look", "compare", "design", "architecture", "explain", "options", "proposal", "tradeoff", "structure", "flow", "layout", or whenever two or more items need comparison or a system needs to be shown.
 ---
 

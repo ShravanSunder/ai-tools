@@ -1,5 +1,5 @@
 {
-  "name": "presenting-information",
+  "name": "tui-presentation",
   "version": "1.0.0",
   "description": "Always-on presentation skill: tables, diagrams, annotated components, and structured design-chat layout using Unicode box-drawing. Reach for this whenever explaining, comparing, or proposing design.",
   "author": {

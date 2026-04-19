@@ -1,4 +1,4 @@
-# presenting-information
+# tui-presentation
 
 Always-on presentation skill for visual-first chat: tables, diagrams, annotated components, and structured design layouts using Unicode box-drawing.
 

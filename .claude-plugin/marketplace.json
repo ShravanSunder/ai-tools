@@ -26,8 +26,8 @@
       "version": "1.9.0"
     },
     {
-      "name": "presenting-information",
-      "source": "./plugins/presenting-information",
+      "name": "tui-presentation",
+      "source": "./plugins/tui-presentation",
       "description": "Always-on presentation skill: tables, diagrams, annotated components, and structured design-chat layout using Unicode box-drawing",
       "version": "1.0.0"
     }

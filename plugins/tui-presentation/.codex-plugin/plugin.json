@@ -1,5 +1,5 @@
 {
-  "name": "presenting-information",
+  "name": "tui-presentation",
   "version": "1.0.0",
   "description": "Always-on presentation skill: tables, diagrams, annotated components, and structured design-chat layout using Unicode box-drawing. Reach for this whenever explaining, comparing, or proposing design.",
   "author": {
@@ -18,7 +18,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Presenting Information",
+    "displayName": "TUI Presentation",
     "shortDescription": "Visual-first presentation: tables, diagrams, annotated components",
     "longDescription": "Produce high-quality Unicode box-drawing presentations for design, comparisons, architecture, UI mockups, flows, and annotated components. Strong user preference — reach for this whenever explaining, comparing, or proposing design instead of dense prose.",
     "developerName": "Shravan Sunder",
