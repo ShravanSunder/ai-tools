@@ -1,26 +1,30 @@
 {
   "name": "tui-presentation",
-  "version": "1.0.0",
-  "description": "Always-on presentation skill: tables, diagrams, annotated components, and structured design-chat layout using Unicode box-drawing. Reach for this whenever explaining, comparing, or proposing design.",
+  "version": "1.1.0",
+  "description": "TUI/chat presentation for agents: seven-shape vocabulary (framed card, sub-framed grid, ruled card, column-ruled, pipeline, state diagram, no-frame list), document structure with cordoning, and build discipline for alignment and overflow. Designed for rendering contexts where markdown does not render — Unicode box-drawing, whitespace, and alignment are the complete structural toolkit.",
   "author": {
     "name": "Shravan Sunder"
   },
   "keywords": [
+    "tui",
     "presentation",
+    "monospace",
     "diagrams",
     "design",
-    "ascii",
     "unicode",
     "tables",
     "architecture",
     "comparison",
-    "visual"
+    "visual",
+    "document-structure",
+    "build-discipline",
+    "cordoning"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "TUI Presentation",
-    "shortDescription": "Visual-first presentation: tables, diagrams, annotated components",
-    "longDescription": "Produce high-quality Unicode box-drawing presentations for design, comparisons, architecture, UI mockups, flows, and annotated components. Strong user preference — reach for this whenever explaining, comparing, or proposing design instead of dense prose.",
+    "shortDescription": "Seven-shape vocabulary, document structure, and build discipline for monospace chat output",
+    "longDescription": "Produce readable, aligned Unicode presentations for design, architecture, comparisons, tradeoffs, UI mockups, data flows, state machines, and multi-section explanations in rendering contexts where markdown does not render. Teaches seven shapes, document structure with cordoning, alignment mechanics, and overflow policy. Strong user preference — reach for this whenever explaining, comparing, or proposing design in chat or TUI output.",
     "developerName": "Shravan Sunder",
     "category": "Coding",
     "capabilities": [

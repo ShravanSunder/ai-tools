@@ -1,6 +1,13 @@
-# Sequence and state diagrams
+Sequence and State Diagrams
+══════════════════════════════════════════════════════════════════════
 
-## Sequence (actors + lifelines + messages)
+Deep-dive reference for time-ordered flows and state machines.  Use
+sequence diagrams when the STORY is "who talks to whom in what
+order."  Use state diagrams when the STORY is "what states exist
+and how do we transition between them."
+
+
+─── Sequence (actors + lifelines + messages) ────────────────────────
 
 ```
 Client          API           Auth          DB
@@ -13,9 +20,11 @@ Client          API           Auth          DB
   │◀── 201 ───── │             │             │
 ```
 
-Actors in a header row, vertical lifelines with `│`, horizontal messages with labeled arrows. Time flows top to bottom.
+Actors in a header row, vertical lifelines with │, horizontal
+messages with labeled arrows.  Time flows top to bottom.
 
-## State machine
+
+─── State machine ───────────────────────────────────────────────────
 
 ```
    ┌──────┐   start    ┌─────────┐   success   ┌────────┐
@@ -28,9 +37,11 @@ Actors in a header row, vertical lifelines with `│`, horizontal messages with 
                        └────────┘
 ```
 
-Boxes are states. Labeled arrows are transitions. Return arrows (`▲ │ └──`) for cycles.
+Boxes are states.  Labeled arrows are transitions.  Return arrows
+(▲ │ └──) for cycles.
 
-## Decision tree
+
+─── Decision tree ───────────────────────────────────────────────────
 
 ```
          ┌────────────────┐
@@ -52,9 +63,10 @@ Boxes are states. Labeled arrows are transitions. Return arrows (`▲ │ └─
  [handle]       └─────────┘
 ```
 
-Diamond-like split via labeled branches. Use `┬ ┴` for fork/merge.
+Diamond-like split via labeled branches.  Use ┬ ┴ for fork/merge.
 
-## Event timeline
+
+─── Event timeline ──────────────────────────────────────────────────
 
 ```
  t=0              t=1s            t=3s              t=5s
@@ -63,9 +75,11 @@ Diamond-like split via labeled branches. Use `┬ ┴` for fork/merge.
   start          parsed         validated         stored
 ```
 
-Horizontal line of events (`●`) with timestamps above and labels below.
+Horizontal line of events (●) with timestamps above and labels
+below.
 
-## State variants table
+
+─── State variants table ────────────────────────────────────────────
 
 ```
 ┌──────────┬──────────────────────────────────────┐

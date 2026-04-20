@@ -1,6 +1,12 @@
-# Tables
+Tables
+══════════════════════════════════════════════════════════════════════
 
-## Basic pros/cons (2-column)
+Deep-dive reference for table patterns.  All tables use Unicode box-
+drawing; no markdown pipe-tables.  For alignment arithmetic (cell
+widths, junctions, padding), see build-discipline.md.
+
+
+─── Basic pros/cons (2-column) ───────────────────────────────────────
 
 ```
 ┌──────────────────┬──────────────────────────────────────┐
@@ -13,7 +19,8 @@
 
 Shortest form when only one option is being evaluated.
 
-## Three-column with multi-line cells
+
+─── Three-column with multi-line cells ──────────────────────────────
 
 ```
 ┌─────────────┬─────────────────────────┬────────────────────────────────┐
@@ -27,9 +34,11 @@ Shortest form when only one option is being evaluated.
 └─────────────┴─────────────────────────┴────────────────────────────────┘
 ```
 
-Row separators (`├─┼─┤`) between entries when cells wrap. Pad shorter cells with spaces to match the row's line count.
+Row separators (├─┼─┤) between entries when cells wrap.  Pad shorter
+cells with spaces to match the row's line count.
 
-## Drift / diff table
+
+─── Drift / diff table ──────────────────────────────────────────────
 
 ```
 ┌────────────────────────────┬──────────────┬──────────────┐
@@ -42,9 +51,11 @@ Row separators (`├─┼─┤`) between entries when cells wrap. Pad shorter 
 └────────────────────────────┴──────────────┴──────────────┘
 ```
 
-Use `(missing)`, `(added)`, or `✓` to show state clearly. Avoid raw empty cells.
+Use (missing), (added), or ✓ to show state clearly.  Avoid raw
+empty cells.
 
-## Highlighted "sweet spot" row
+
+─── Highlighted "sweet spot" row ────────────────────────────────────
 
 ```
 ┌────────┬──────────────────────────┬───────────────────────────┐
@@ -56,9 +67,11 @@ Use `(missing)`, `(added)`, or `✓` to show state clearly. Avoid raw empty cell
 └────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Use `★` or similar marker to anchor the reader's eye on the recommendation.
+Use ★ or similar marker to anchor the reader's eye on the
+recommendation.
 
-## Feature matrix
+
+─── Feature matrix ──────────────────────────────────────────────────
 
 ```
 ┌────────────────┬──────────┬──────────┬──────────┐
@@ -71,11 +84,18 @@ Use `★` or similar marker to anchor the reader's eye on the recommendation.
 └────────────────┴──────────┴──────────┴──────────┘
 ```
 
-Markers: `✓` (yes), `✗` (no), `─` (n/a), `◐` (partial).
+Markers:
 
-## Column-width rules
+▸ ✓  yes
+▸ ✗  no
+▸ ─  n/a
+▸ ◐  partial
 
-- Header row sets the minimum column width
-- 1-space padding on each side of content minimum
-- Wrap long content to multiple lines rather than expanding a column
-- Align all row borders character-exact — a single off-by-one breaks the grid
+
+─── Column-width rules ──────────────────────────────────────────────
+
+▸ Header row sets the minimum column width
+▸ 1-space padding on each side of content minimum
+▸ Wrap long content to multiple lines rather than expanding a column
+▸ Align all row borders character-exact — a single off-by-one
+  breaks the grid

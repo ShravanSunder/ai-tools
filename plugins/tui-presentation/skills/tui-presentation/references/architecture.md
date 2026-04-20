@@ -1,6 +1,12 @@
-# Architecture diagrams
+Architecture Diagrams
+══════════════════════════════════════════════════════════════════════
 
-## Client → API → DB with labels
+Deep-dive reference for architecture-style diagrams.  Use these
+patterns for system overviews, data flows, and pipeline diagrams.
+For state machines and sequence diagrams, see sequence-and-state.md.
+
+
+─── Client → API → DB with labels ───────────────────────────────────
 
 ```
  ┌────────┐   HTTP    ┌────────┐   SQL     ┌──────────┐
@@ -11,7 +17,8 @@
 
 Bidirectional flow with labels on both directions.
 
-## Pub/sub fan-out
+
+─── Pub/sub fan-out ─────────────────────────────────────────────────
 
 ```
   ┌──────────┐
@@ -30,9 +37,10 @@ Bidirectional flow with labels on both directions.
    └─────────┘ └────────┘ └─────────┘
 ```
 
-One producer, multiple consumers. Fan-out via `├──┬──┐` junction.
+One producer, multiple consumers.  Fan-out via ├──┬──┐ junction.
 
-## Layered stack
+
+─── Layered stack ───────────────────────────────────────────────────
 
 ```
  ┌──────────────────────────────────────┐
@@ -50,9 +58,11 @@ One producer, multiple consumers. Fan-out via `├──┬──┐` junction.
  └──────────────────────────────────────┘
 ```
 
-Stacked rectangles sharing borders. Each layer labeled and briefly described.
+Stacked rectangles sharing borders.  Each layer labeled and briefly
+described.
 
-## Pipeline with branches
+
+─── Pipeline with branches ──────────────────────────────────────────
 
 ```
  ┌───────┐   ┌─────────┐   ┌─────────┐   ┌────────┐
@@ -67,7 +77,8 @@ Stacked rectangles sharing borders. Each layer labeled and briefly described.
 
 Main path horizontal, branch drops down on condition.
 
-## Request roundtrip
+
+─── Request roundtrip ───────────────────────────────────────────────
 
 ```
  Browser          CDN            Origin         DB
@@ -81,4 +92,5 @@ Main path horizontal, branch drops down on condition.
    │               │── cache ──    │            │
 ```
 
-Time flows down. Lifelines vertical. Dashed tail (`──`) for async post-response work.
+Time flows down.  Lifelines vertical.  Dashed tail for async post-
+response work.
