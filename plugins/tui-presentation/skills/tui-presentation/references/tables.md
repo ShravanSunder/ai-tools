@@ -87,15 +87,21 @@ recommendation.
 Markers:
 
 ▸ ✓  yes
+
 ▸ ✗  no
+
 ▸ ─  n/a
+
 ▸ ◐  partial
 
 
 ─── Column-width rules ──────────────────────────────────────────────
 
 ▸ Header row sets the minimum column width
+
 ▸ 1-space padding on each side of content minimum
+
 ▸ Wrap long content to multiple lines rather than expanding a column
+
 ▸ Align all row borders character-exact — a single off-by-one
   breaks the grid

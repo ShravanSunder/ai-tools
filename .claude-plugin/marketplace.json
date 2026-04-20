@@ -28,8 +28,8 @@
     {
       "name": "tui-presentation",
       "source": "./plugins/tui-presentation",
-      "description": "TUI/chat presentation for agents: seven-shape vocabulary, document structure with cordoning, and build discipline. For rendering contexts where markdown does not render — Unicode box-drawing is the structural toolkit.",
-      "version": "1.1.0"
+      "description": "TUI/chat presentation for agents: seven-shape vocabulary, document structure, cordoning, indentation, and build discipline. Includes six framed-card applications (phase-sequence, Q&A rationale, review findings, dual-tag status, scope inventory, file-tree). For rendering contexts where markdown does not render — Unicode box-drawing is the structural toolkit.",
+      "version": "1.2.0"
     }
   ]
 }

@@ -1,6 +1,6 @@
 ---
 name: tui-presentation
-description: MUST USE for any response rendered in chat/TUI (no markdown renderer — `#`, `**bold**`, `| col |` all render literally). Teaches seven shape-vocabulary patterns, document structure, cordoning, and build discipline for design, architecture, comparisons, tradeoffs, UI mockups, flows, state machines, and multi-section explanations. Triggers on "draw it out", "show me", "compare", "design", "architecture", "explain", "structure", "flow", "layout", "tradeoff", "how would X look", or any response with a diagram, table, or more than one section.
+description: MUST USE for VISUAL / EXPLANATORY chat responses where no markdown renderer exists — design, architecture, comparisons, tradeoffs, UI mockups, flows, state machines, debugging narratives, multi-section explanations that benefit from diagrams. Teaches seven-shape vocabulary, document structure, cordoning, indentation, and build discipline using Unicode box-drawing (chat has no markdown parser; `#`, `**bold**`, `| col |` render literally). DO NOT use when user requested a specific format (JSON, YAML, markdown, code block), response is schema-bound or machine-readable, response is code/config generation, or response is a single terse answer. User-specified format always wins over this skill's defaults. Triggers on "draw it out", "show me", "compare", "design", "architecture", "explain", "structure", "flow", "layout", "tradeoff", "how would X look".
 ---
 
 TUI Presentation
@@ -16,12 +16,31 @@ work faster.
 
 ─── When to use ──────────────────────────────────────────────────────
 
-▸ Any response containing a diagram, table, or more than one section
+Use for:
+
 ▸ "Draw / show / compare / explain / design" prompts
+
 ▸ Architecture proposals, state machines, data flows, pipelines
+
 ▸ Tradeoff analyses, review syntheses, debugging explanations
+
+▸ Multi-section explanations that benefit from visual structure
+
 ▸ Any sequential process (lifecycle, close-pipeline, build order)
-▸ NOT for: single-line answers, simple Q&A — over-application hurts
+
+Do NOT use for:
+
+▸ User-requested specific format (JSON, YAML, markdown, code block)
+
+▸ Schema-bound or machine-readable output (API specs, config files)
+
+▸ Code or config generation — let the code speak
+
+▸ Single-line answers, simple Q&A — over-application hurts
+
+▸ Terse reviews or status updates where plain prose is enough
+
+User-specified format ALWAYS wins over this skill's defaults.
 
 
 ─── Rendering reality ────────────────────────────────────────────────
@@ -66,11 +85,17 @@ it.  Full worked examples in references/build-discipline.md.
 Picker cheat-sheet:
 
 ▸ Scoped concept with a title?         →  1  Framed card
+
 ▸ Multiple things side-by-side?        →  2  Sub-framed grid
+
 ▸ Multiple findings/concerns?          →  3  Ruled card
+
 ▸ Comparing states at time N / N+1?    →  4  Column-ruled
+
 ▸ Walking through numbered steps?      →  5  Pipeline box
+
 ▸ State machine with transitions?      →  6  State diagram
+
 ▸ Plain list, aligned columns?         →  7  No-frame list
 
 Anti-pattern: reaching for one big ╔═╗ box and cramming a flow +
@@ -146,12 +171,17 @@ for our domain.  Option A pays the wrong cost on the wrong path.
 What the example teaches:
 
 ▸ Title line + ═══ underline (H1-style), framing prose below
+
 ▸ ─── Section label ─── carries separator + heading (no stacked ---)
+
 ▸ Framed card (context) — prose body, title-in-border, breathing
+
 ▸ Column-ruled (comparison) — no vertical borders, whitespace gaps,
   ───── under each header, content stacks below
+
 ▸ Pipeline box (decision flow) — numbered steps with ├──┤ separators,
   sub-items indented with ──► arrows
+
 ▸ Closing "My read" synthesis — prose paragraph, not a frame
 
 
@@ -212,10 +242,20 @@ A diagram sitting loose in prose gets lost.  Cordon it off.
 Spacing rules:
 
 ▸ Around a frame: blank line before, blank line after
+
 ▸ Inside a frame: blank row after ┌─┐, blank row before └─┘
+
 ▸ Between items in a frame: blank row between semantic groups
-▸ Between sections: --- rule OR ─── label ─── with blanks around
-▸ Inside prose: no extra spacing; prose flows
+
+▸ Between sections: ─── label ─── with blank lines above and below
+
+▸ Between paragraphs: always a blank line — prose never stacks
+  directly against prose
+
+▸ Between bullets in a list: blank line when items are substantial
+  (>1 line each); no blank when items are single short lines
+
+▸ After a bullet list: blank line before the next paragraph or block
 
 Cramped output is unreadable.  Whitespace IS cognitive rest.  Pay
 the tokens — breathing is always worth it.
@@ -223,11 +263,67 @@ the tokens — breathing is always worth it.
 Skim test (run before finishing):
 
 ▸ Can each section boundary be identified at a glance?
+
 ▸ Do diagrams visually separate from surrounding prose?
+
 ▸ Do parallel concepts look parallel (aligned widths and positions)?
+
 ▸ Does one concept end clearly before the next begins?
 
 Any "no" → add cordoning.
+
+
+─── Indentation — the horizontal hierarchy axis ─────────────────────
+
+Vertical structure uses rules, frames, and blank lines.  Horizontal
+structure uses indentation.  Both matter equally.  A response with
+correct vertical structure but flat indentation collapses hierarchy
+— the reader can't tell what's a label, what's sub-content, what's
+continuation.
+
+Indent rules:
+
+▸ Label → content: indent content 2 spaces under the label
+
+     What you expect:
+
+       drawer drag
+         → only drawer rearrange active
+         → main panes stay inert
+
+▸ Continuation of a wrapped line: hang-indent 2-4 spaces under the
+  first content character
+
+     Problem: the drawer pane publishes frames into both the
+       drawer-local map AND the main tab container map, which
+       explains the hover leak.
+
+▸ Code/identifier inline with prose: indent 4 spaces to set it off
+
+     In PaneLeafContainer, when a pane is in the drawer:
+
+         useDrawerFramePreference == true
+
+     and it publishes both DrawerPaneFramePreferenceKey and
+     PaneFramePreferenceKey.
+
+▸ Nested sub-items: indent 2 more spaces per nesting level
+
+     Current ownership:
+
+       drag starts on drawer pane
+         ├── drawer overlay receives updates
+         │     → DrawerSplitContainerDropCaptureOverlay
+         └── main tab overlay receives updates
+               → SplitContainerDropCaptureOverlay
+
+▸ Inside a frame: content indents 2 spaces from the left │ (already
+  embedded in framed-card alignment)
+
+Indent is load-bearing.  Without it, "What you expect:" and the
+expected behavior look like two unrelated lines instead of
+heading → body.  Pay the 2-4 characters — the cognitive savings
+for the reader are enormous.
 
 
 ─── Diagram structure — alignment mechanics ──────────────────────────
@@ -319,10 +415,13 @@ Rules:
 
 ▸ One shape per block, one heading per section.  Want a second
   diagram?  Start a new section.
+
 ▸ Sections separated by ─── label ─── (labeled, preferred) OR ---
   (unlabeled).  Pick one style per response — don't stack.
+
 ▸ Max 6 top-level sections.  7+ → break into a follow-up or ask
   what to drill into.
+
 ▸ Closing synthesis ("My read" or summary frame) is mandatory for
   long responses.
 
@@ -339,33 +438,46 @@ Rules:
 │  5.  One shape per block.  One heading per section.                 │
 │  6.  Arrows: ──► ◄── ▼.  Never mix with → ⇒ ->.                     │
 │  7.  Breathing: blank after ┌─┐, before └─┘, between item groups.   │
-│  8.  Identifiers never truncate mid-token.  Prefer wrap or widen.   │
+│  8.  Identifiers never truncate mid-token.  Wrap to next line.      │
+│  9.  Indent content under its label.  2 spaces minimum.  Continua-  │
+│      tion lines hang-indent.  Sub-items nest deeper.                │
+│ 10.  Every diagram / flow / code block is cordoned — framed, OR     │
+│      bracketed with ─── rules above/below, OR indented 4 spaces     │
+│      under its label.  Never loose in prose.                        │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
 
 ─── Overflow policy ──────────────────────────────────────────────────
 
-When content exceeds a cell width, choose (in preference order):
+Canvas width is non-negotiable.  Every row ends at column 70 (or
+whatever canvas is committed for the block).  When content exceeds
+a cell width, choose one of (in preference order):
 
-1. Shorten with `…` — preferred, no reflow
-   `tabLayoutAtom.removePaneFromLayout` → `tabLayoutAtom.removePane…`
+1. Shorten non-identifier prose with `…` — preferred, no reflow
 
-2. Wrap to next line — when the identifier can't be shortened
+     "a very long descriptive phrase"  →  "a very long descriptive…"
+
+2. Wrap to next line — required when an identifier is present or
+   prose is too long to shorten meaningfully
 
    ```
-   │ Very long description that doesn't fit        │
-   │   continuation, hanging-indented under the    │
-   │   first content character                     │
+   │ Problem: the drawer pane publishes frames into both the     │
+   │   drawer-local map AND the main tab container map, which    │
+   │   explains the hover leak.                                  │
    ```
+
+   Continuation hang-indents 2-4 spaces under the first content
+   character of the wrapped line.
 
 3. Widen the column — reflow the whole block, only if shorten
-   loses meaning
+   loses meaning AND wrap is ugly
 
 Identifier rule: code identifiers (function names, file:line refs,
-type names) are NEVER truncated mid-token.  Prefer wrap, or accept
-a ragged right edge where the identifier extends past the frame.
-Geometry serves the identifier, not the other way around.
+type names) are NEVER truncated mid-token.  Wrap them onto the next
+line so canvas width stays intact.  Do NOT let an identifier extend
+past the right border — that breaks the frame contract.  Geometry
+stays fixed; wrap the identifier instead.
 
 
 ─── Character palette ────────────────────────────────────────────────
@@ -388,9 +500,17 @@ For deeper work, load the matching reference:
 
 ▸ references/build-discipline.md — full worked examples per shape,
   build procedure with snapshots, alignment recipes, overflow
-  recipes, verification checklist
+  recipes, verification checklist.  Also six framed-card applica-
+  tions: phase-sequence, Q&A rationale, review findings w/ severity,
+  dual-tag title band, scope inventory w/ subsections, file-tree
+  content pattern.
+
 ▸ references/tables.md — table patterns deep-dive
+
 ▸ references/ui-layouts.md — sidebar/main, tiled, modal, nested
+
 ▸ references/architecture.md — client/API/DB, pub/sub, layered
+
 ▸ references/sequence-and-state.md — sequences, state machines
+
 ▸ references/annotations-and-specs.md — callouts, variants, specs
