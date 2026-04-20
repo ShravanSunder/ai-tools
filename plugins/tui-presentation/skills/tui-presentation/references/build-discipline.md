@@ -191,6 +191,10 @@ Don't use when:
   ▸ Items need visual separation beyond a rule (use framed cards)
   ▸ Content is 1-2 lines per item (use a no-frame list)
 
+See also in peer references:
+
+  ▸ tables.md — drift/diff table, highlighted row, feature matrix
+
 
 ─── Shape 4 — Column-ruled ──────────────────────────────────────────
 
@@ -236,6 +240,11 @@ Don't use when:
   ▸ Content fits a bordered table (use framed table instead)
   ▸ More than 4 columns at canvas 70 — too cramped
   ▸ Reader needs row-by-row comparison rather than column-by-column
+
+See also in peer references:
+
+  ▸ tables.md — when a bordered table IS better than column-ruled
+  ▸ sequence-and-state.md — sequence diagrams with lifelines
 
 
 ─── Shape 5 — Pipeline box ──────────────────────────────────────────
@@ -290,6 +299,11 @@ Don't use when:
   ▸ Steps are independent, not sequential (use ruled cards)
   ▸ Individual step content is large — pipeline forces thin strips
 
+See also in peer references:
+
+  ▸ architecture.md — pipeline with branches, pub/sub fan-out,
+    client → API → DB flows
+
 
 ─── Shape 6 — State diagram ─────────────────────────────────────────
 
@@ -341,6 +355,11 @@ Don't use when:
   ▸ Linear flow with no branching (use pipeline box)
   ▸ States are just labels with no real transitions (use a list)
   ▸ Transitions more important than states (use sequence diagram)
+
+See also in peer references:
+
+  ▸ sequence-and-state.md — state machine, sequence diagram,
+    decision tree, event timeline, state variants table
 
 
 ─── Shape 7 — No-frame list ─────────────────────────────────────────
