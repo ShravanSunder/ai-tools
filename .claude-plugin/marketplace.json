@@ -28,8 +28,8 @@
     {
       "name": "tui-presentation",
       "source": "./plugins/tui-presentation",
-      "description": "Always-on presentation skill: tables, diagrams, annotated components, and structured design-chat layout using Unicode box-drawing",
-      "version": "1.0.0"
+      "description": "TUI/chat presentation for agents: seven-shape vocabulary, document structure with cordoning, and build discipline. For rendering contexts where markdown does not render — Unicode box-drawing is the structural toolkit.",
+      "version": "1.1.0"
     }
   ]
 }
