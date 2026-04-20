@@ -9,9 +9,10 @@ and how do we transition between them."
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ build-discipline.md → Shape 6 (State diagram) — full state-
-    machine worked example with re-entry arm; Alignment recipes —
-    positioning lifelines and arrow landings
+  ▸ shape-catalog.md → Shape 6 (State diagram) — full state-machine
+    worked example with re-entry arm
+  ▸ build-discipline.md → Alignment recipes — positioning lifelines,
+    arrow landings, junction selection
   ▸ architecture.md — pipeline with branches, pub/sub fan-out,
     request roundtrip
 

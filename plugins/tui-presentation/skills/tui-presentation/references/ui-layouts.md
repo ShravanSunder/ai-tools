@@ -8,8 +8,10 @@ overlays.
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ build-discipline.md → Shape 1 (Framed card) and Shape 2 (Sub-
-    framed grid) — alignment mechanics, geometry for nested frames
+  ▸ shape-catalog.md → Shape 1 (Framed card) and Shape 2 (Sub-framed
+    grid) — worked examples and geometry for nested frames
+  ▸ build-discipline.md → Alignment recipes — mechanics for multi-
+    cell frames and sub-frame sizing
   ▸ annotations-and-specs.md — callouts on mockups, visual specs
     with measurements
 

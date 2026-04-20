@@ -7,9 +7,11 @@ patterns for system overviews, data flows, and pipeline diagrams.
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ build-discipline.md → Shape 5 (Pipeline box) — bordered pipeline
+  ▸ shape-catalog.md → Shape 5 (Pipeline box) — bordered pipeline
     with numbered steps; Shape 6 (State diagram) — full state-machine
     worked example
+  ▸ build-discipline.md → Alignment recipes — positioning lifelines,
+    arrow landings, junction characters
   ▸ sequence-and-state.md — state machines, sequence diagrams,
     decision trees, event timelines
 

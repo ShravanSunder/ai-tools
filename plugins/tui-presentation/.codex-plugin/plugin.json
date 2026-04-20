@@ -1,6 +1,6 @@
 {
   "name": "tui-presentation",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "TUI/chat presentation for agents: seven-shape vocabulary (framed card, sub-framed grid, ruled card, column-ruled, pipeline, state diagram, no-frame list), document structure with cordoning, and build discipline for alignment and overflow. Designed for rendering contexts where markdown does not render — Unicode box-drawing, whitespace, and alignment are the complete structural toolkit.",
   "author": {
     "name": "Shravan Sunder"

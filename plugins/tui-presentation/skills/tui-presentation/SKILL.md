@@ -60,7 +60,7 @@ table is broken columns.  Structure with Unicode rules and frames
 ─── Shape vocabulary ─────────────────────────────────────────────────
 
 Seven shapes.  Each does one job.  Pick by content type, then fill
-it.  Full worked examples in references/build-discipline.md.
+it.  Full worked examples in references/shape-catalog.md.
 
 ┌───┬──────────────────┬──────────────────────────┬──────────────────┐
 │ # │ Shape            │ Use when                 │ Recognizable     │
@@ -92,10 +92,10 @@ table + prose inside it.  Pick the shape per content type.  One
 shape per block.
 
 Progressive disclosure: for per-shape worked examples with geometry
-commentary, see build-discipline.md → Shape catalog.  For six
+commentary, see shape-catalog.md → Shape catalog.  For six
 compositional applications (phase-sequence, Q&A rationale, review
 findings with severity, dual-tag title band, scope inventory with
-subsections, file-tree content pattern), see build-discipline.md →
+subsections, file-tree content pattern), see shape-catalog.md →
 Shape variants and applications.
 
 
@@ -274,7 +274,7 @@ Any "no" → add cordoning.
 
 Progressive disclosure: for a WRONG/RIGHT comparison showing what
 over-framing looks like vs. splitting into appropriate shapes, see
-build-discipline.md → Shape anti-patterns.
+shape-catalog.md → Shape anti-patterns.
 
 
 ─── Indentation — the horizontal hierarchy axis ─────────────────────
@@ -592,12 +592,19 @@ focal-emphasis block in a response.  Prefer single.
 
 For deeper work, load the matching reference:
 
-  ▸ references/build-discipline.md — full worked examples per shape,
-    build procedure with snapshots, alignment recipes, overflow
-    recipes, verification checklist.  Also six framed-card applica-
-    tions: phase-sequence, Q&A rationale, review findings w/ severity,
-    dual-tag title band, scope inventory w/ subsections, file-tree
-    content pattern.
+  ▸ references/shape-catalog.md — full worked examples per shape
+    (7 shapes: framed card, sub-framed grid, ruled card, column-
+    ruled, pipeline box, state diagram, no-frame list), shape
+    anti-patterns, and six compositional applications (phase-
+    sequence, Q&A rationale, review findings with severity, dual-
+    tag title band, scope inventory with subsections, file-tree
+    content pattern).
+
+  ▸ references/build-discipline.md — build mechanics: step-by-step
+    procedure with output snapshots, alignment recipes (cell-width
+    arithmetic, junctions, drift repair), indentation recipes
+    (WRONG/RIGHT examples), overflow recipes (shorten/wrap/widen),
+    and verification checklist.
 
   ▸ references/tables.md — table patterns deep-dive
   ▸ references/ui-layouts.md — sidebar/main, tiled, modal, nested

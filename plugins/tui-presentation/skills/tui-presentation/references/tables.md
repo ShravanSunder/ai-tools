@@ -7,10 +7,10 @@ box-drawing; no markdown pipe-tables.
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ shape-catalog.md → Shape 4 (Column-ruled) — when to use a table
+    with borders vs. column-ruled (no-border) style
   ▸ build-discipline.md → Alignment recipes — cell-width arithmetic,
     junction characters, padding, before/after drift repair
-  ▸ build-discipline.md → Shape 4 (Column-ruled) — when to use a
-    table with borders vs. column-ruled (no-border) style
 
 
 ─── Basic pros/cons (2-column) ───────────────────────────────────────

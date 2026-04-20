@@ -8,8 +8,9 @@ for design proposals.
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, character palette
-  ▸ build-discipline.md → Shape 1 (Framed card) — title-in-top-
-    border pattern for titled frames
+  ▸ shape-catalog.md → Shape 1 (Framed card) — title-in-top-border
+    pattern for titled frames; Shape 1 applications (dual-tag,
+    scope inventory) for richer frame title treatments
   ▸ ui-layouts.md — UI mockup patterns that annotations live under
 
 
