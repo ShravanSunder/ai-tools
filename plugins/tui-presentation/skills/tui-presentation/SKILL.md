@@ -87,6 +87,22 @@ Picker cheat-sheet:
   ▸ State machine with transitions?      →  6  State diagram
   ▸ Plain list, aligned columns?         →  7  No-frame list
 
+Mermaid translations (when user asks for a Mermaid diagram — chat
+has no Mermaid renderer, translate to the TUI equivalent):
+
+```
+User's ask                  TUI shape to use
+─────────────────────       ─────────────────────────────────
+flowchart (linear)          Shape 5 Pipeline box
+flowchart (branching)       Shape 6 State diagram
+graph LR / TD (system)      architecture.md patterns
+sequenceDiagram             sequence-and-state.md → Sequence
+stateDiagram                Shape 6 State diagram
+classDiagram                Shape 1 Framed card w/ fields
+erDiagram                   Shape 1 Framed card per entity
+C4 / architecture           architecture.md → layered / fan-out
+```
+
 Anti-pattern: reaching for one big ╔═╗ box and cramming a flow +
 table + prose inside it.  Pick the shape per content type.  One
 shape per block.
@@ -177,6 +193,15 @@ What the example teaches:
     sub-items indented with ──► arrows
 
   ▸ Closing "My read" synthesis — prose paragraph, not a frame
+
+Important — the title is YOUR response's topic, not the skill's name.
+Never emit "TUI Presentation" as a title — that's the skill file's
+own H1 (reference header), not a template for your response's
+opening line.
+
+  Wrong:  response begins with "TUI Presentation\n═══════..."
+  Right:  response begins with your actual topic, e.g.
+          "How we're handling the cache-invalidation race\n═══════..."
 
 
 ─── Separation & cordoning ───────────────────────────────────────────
@@ -402,6 +427,22 @@ Section rule.  "My read:" triggers rule 9 (indent content 2 spaces).
 For closing synthesis, always use Pattern 1 — `─── My read ───`
 with flush-left prose below.
 
+Common failure — prose-label with arrow sub-items:
+
+  WRONG (ASCII `->` + no indent under label — rules 6 and 9 both):
+
+    main pane
+    -> grab handle
+    -> live target appears immediately
+    -> drop reorders / splits
+
+  RIGHT (──► arrow + 2-space indent):
+
+    main pane
+      ──► grab handle
+      ──► live target appears immediately
+      ──► drop reorders / splits
+
 Progressive disclosure: for WRONG/RIGHT worked examples of each
 indent pattern (label → content, nested sub-items, code snippet
 inline, continuation hang-indent), see build-discipline.md →
@@ -423,52 +464,28 @@ Pre-commit before drawing:
   2. Alignment columns — the exact columns where structural chars land
   3. Cell widths that sum to fit between alignment columns
 
-Per-shape alignment spec:
+Per-shape alignment at a glance (full geometry in shape-catalog.md
+worked examples):
 
 ```
-Framed card (canvas N):
-  Alignment cols:  0 and N-1  (the │ borders)
-  Top border:      ┌─[title]─...─┐     exactly N chars
-  Content row:     │ content...  │     │ at col 0, │ at col N-1
-  Bottom border:   └─...─┘              exactly N chars
-
-Table (K cells, cell widths w1..wK):
-  Constraint:   w1 + w2 + ... + wK + (K+1) = N
-                                     ↑ K+1 separator chars (│)
-  Alignment cols: 0, w1+1, w1+w2+2, ..., N-1
-  Every │ and ┼ in the block lands at these exact columns.
-
-Pipeline box:
-  Step numbers all same width: "1. ", "2. ", ..., "9. "  (3 chars)
-  If ≥10 steps, pad single digits: " 1. ", ..., "10. "   (4 chars)
-  Dividers ├───┤ at col 0 and col N-1, ─ fills between.
-
-Column-ruled (C columns):
-  Pick a start column for each header; content stacks below
-  ───── under each header is ≥ the header text width
-  Gap between columns: 2-4 chars whitespace, consistent
-  No │ borders — whitespace is the separator
-
-State diagram:
-  All state boxes the same width for visual rhythm
-  Vertical connector │ / ▼ at one fixed column
-  Lateral re-entry arm uses the left margin
-
-Sub-framed grid (K sub-frames across):
-  Sub-frame widths all equal: Ns
-  Gap between sub-frames:     gap (3-4 chars)
-  Parent inside width:        (Ns × K) + (K-1)·gap + 2·padding
-  Parent frame width:         inside + 2 (for left/right │)
+Framed card      │ at col 0 and col N-1
+Table            w1 + w2 + ... + wK + (K+1) = N
+Pipeline box     ├──┤ at col 0 and col N-1; step nums same
+                 width ("1. " = 3 chars, " 10. " = 4)
+Column-ruled     no │ borders; whitespace separates cols
+State diagram    state boxes same width; │/▼ at fixed col
+Sub-framed grid  (Ns × K) + (K-1)·gap + 2·padding = inside
 ```
 
 When in doubt: count characters.  If row 1's right edge is at col
 70 and row 2's is at col 68, content drifted — pad with spaces or
 trim with `…`.  Never silently ship mismatched widths.
 
-Progressive disclosure: for cell-width arithmetic, junction-character
-selection, padding rules, consistency-rule enforcement, and a
-Before/After drift-repair example, see build-discipline.md →
-Alignment recipes.
+Progressive disclosure: for per-shape alignment drilled through
+worked examples, see shape-catalog.md → Shape catalog.  For cell-
+width arithmetic, junction selection, padding rules, consistency-
+rule enforcement, and a Before/After drift-repair example, see
+build-discipline.md → Alignment recipes.
 
 
 ─── Document skeleton ────────────────────────────────────────────────

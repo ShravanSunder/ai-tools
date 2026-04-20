@@ -11,9 +11,16 @@ See also:
     picker (quick reference)
   ▸ build-discipline.md — mechanics (build procedure, alignment
     recipes, indentation recipes, overflow, verification checklist)
-  ▸ Peer references — deeper per-shape pattern catalogs:
-    tables.md, ui-layouts.md, architecture.md, sequence-and-state.md,
-    annotations-and-specs.md
+
+Peer reference map (per shape — for deeper variants of the pattern):
+
+  Shape 1 Framed card         →  ui-layouts.md, annotations-and-specs.md
+  Shape 2 Sub-framed grid     →  ui-layouts.md
+  Shape 3 Ruled card          →  ui-layouts.md
+  Shape 4 Column-ruled        →  tables.md
+  Shape 5 Pipeline box        →  architecture.md
+  Shape 6 State diagram       →  sequence-and-state.md
+  Shape 7 No-frame list       →  (no dedicated peer ref)
 
 All examples below use canvas width 70 unless noted.
 
@@ -80,12 +87,6 @@ Don't use when:
   ▸ Several parallel concepts deserve equal billing (use sub-framed
     grid)
 
-See also in peer references:
-
-  ▸ ui-layouts.md — titled frames nested in parent frames
-  ▸ annotations-and-specs.md — titled frames for design proposals
-
-
 ─── Shape 2 — Sub-framed grid ───────────────────────────────────────
 
 ```
@@ -139,11 +140,6 @@ Don't use when:
   ▸ Concepts have sequential relationship (use pipeline or state)
   ▸ One concept much bigger than others (use separate framed cards)
   ▸ Readability suffers at canvas 70 — consider stacking vertically
-
-See also in peer references:
-
-  ▸ ui-layouts.md — nested cards, tiled panes, modal overlay layouts
-
 
 ─── Shape 3 — Ruled card ────────────────────────────────────────────
 
@@ -199,11 +195,6 @@ Don't use when:
   ▸ Items need visual separation beyond a rule (use framed cards)
   ▸ Content is 1-2 lines per item (use a no-frame list)
 
-See also in peer references:
-
-  ▸ tables.md — drift/diff table, highlighted row, feature matrix
-
-
 ─── Shape 4 — Column-ruled ──────────────────────────────────────────
 
 ```
@@ -248,12 +239,6 @@ Don't use when:
   ▸ Content fits a bordered table (use framed table instead)
   ▸ More than 4 columns at canvas 70 — too cramped
   ▸ Reader needs row-by-row comparison rather than column-by-column
-
-See also in peer references:
-
-  ▸ tables.md — when a bordered table IS better than column-ruled
-  ▸ sequence-and-state.md — sequence diagrams with lifelines
-
 
 ─── Shape 5 — Pipeline box ──────────────────────────────────────────
 
@@ -307,12 +292,6 @@ Don't use when:
   ▸ Steps are independent, not sequential (use ruled cards)
   ▸ Individual step content is large — pipeline forces thin strips
 
-See also in peer references:
-
-  ▸ architecture.md — pipeline with branches, pub/sub fan-out,
-    client → API → DB flows
-
-
 ─── Shape 6 — State diagram ─────────────────────────────────────────
 
 ```
@@ -363,12 +342,6 @@ Don't use when:
   ▸ Linear flow with no branching (use pipeline box)
   ▸ States are just labels with no real transitions (use a list)
   ▸ Transitions more important than states (use sequence diagram)
-
-See also in peer references:
-
-  ▸ sequence-and-state.md — state machine, sequence diagram,
-    decision tree, event timeline, state variants table
-
 
 ─── Shape 7 — No-frame list ─────────────────────────────────────────
 
