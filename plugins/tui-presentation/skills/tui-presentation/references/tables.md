@@ -1,9 +1,16 @@
 Tables
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for table patterns.  All tables use Unicode box-
-drawing; no markdown pipe-tables.  For alignment arithmetic (cell
-widths, junctions, padding), see build-discipline.md.
+Deep-dive reference for table patterns.  All tables use Unicode
+box-drawing; no markdown pipe-tables.
+
+See also:
+
+  ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ build-discipline.md → Alignment recipes — cell-width arithmetic,
+    junction characters, padding, before/after drift repair
+  ▸ build-discipline.md → Shape 4 (Column-ruled) — when to use a
+    table with borders vs. column-ruled (no-border) style
 
 
 ─── Basic pros/cons (2-column) ───────────────────────────────────────
@@ -86,21 +93,16 @@ recommendation.
 
 Markers:
 
-▸ ✓  yes
-
-▸ ✗  no
-
-▸ ─  n/a
-
-▸ ◐  partial
+  ▸ ✓  yes
+  ▸ ✗  no
+  ▸ ─  n/a
+  ▸ ◐  partial
 
 
 ─── Column-width rules ──────────────────────────────────────────────
 
 ▸ Header row sets the minimum column width
-
 ▸ 1-space padding on each side of content minimum
-
 ▸ Wrap long content to multiple lines rather than expanding a column
 
 ▸ Align all row borders character-exact — a single off-by-one

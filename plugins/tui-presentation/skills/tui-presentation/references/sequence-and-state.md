@@ -6,6 +6,15 @@ sequence diagrams when the STORY is "who talks to whom in what
 order."  Use state diagrams when the STORY is "what states exist
 and how do we transition between them."
 
+See also:
+
+  ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ build-discipline.md → Shape 6 (State diagram) — full state-
+    machine worked example with re-entry arm; Alignment recipes —
+    positioning lifelines and arrow landings
+  ▸ architecture.md — pipeline with branches, pub/sub fan-out,
+    request roundtrip
+
 
 ─── Sequence (actors + lifelines + messages) ────────────────────────
 

@@ -3,8 +3,15 @@ UI Layouts
 
 Deep-dive reference for UI mockup layouts.  Use these patterns when
 describing interface composition, panel arrangements, and modal
-overlays.  For general frame alignment mechanics, see
-build-discipline.md.
+overlays.
+
+See also:
+
+  ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ build-discipline.md → Shape 1 (Framed card) and Shape 2 (Sub-
+    framed grid) — alignment mechanics, geometry for nested frames
+  ▸ annotations-and-specs.md — callouts on mockups, visual specs
+    with measurements
 
 
 ─── Sidebar + main content ──────────────────────────────────────────

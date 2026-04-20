@@ -3,7 +3,15 @@ Architecture Diagrams
 
 Deep-dive reference for architecture-style diagrams.  Use these
 patterns for system overviews, data flows, and pipeline diagrams.
-For state machines and sequence diagrams, see sequence-and-state.md.
+
+See also:
+
+  ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ build-discipline.md → Shape 5 (Pipeline box) — bordered pipeline
+    with numbered steps; Shape 6 (State diagram) — full state-machine
+    worked example
+  ▸ sequence-and-state.md — state machines, sequence diagrams,
+    decision trees, event timelines
 
 
 ─── Client → API → DB with labels ───────────────────────────────────

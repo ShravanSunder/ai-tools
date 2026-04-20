@@ -5,6 +5,13 @@ Deep-dive reference for annotation patterns — callouts on mockups,
 variant series, visual specs with measurements, and titled frames
 for design proposals.
 
+See also:
+
+  ▸ SKILL.md — core rules, canvas-width discipline, character palette
+  ▸ build-discipline.md → Shape 1 (Framed card) — title-in-top-
+    border pattern for titled frames
+  ▸ ui-layouts.md — UI mockup patterns that annotations live under
+
 
 ─── Component with callouts from below ──────────────────────────────
 
