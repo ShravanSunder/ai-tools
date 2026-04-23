@@ -29,7 +29,7 @@
       "name": "tui-presentation",
       "source": "./plugins/tui-presentation",
       "description": "TUI/chat presentation for agents: seven-shape vocabulary, document structure, cordoning, indentation, and build discipline.  References split across shape-catalog.md (7 shapes + 6 applications + anti-patterns) and build-discipline.md (mechanics: procedure, alignment, overflow, verification) for targeted progressive disclosure.  For rendering contexts where markdown does not render.",
-      "version": "1.3.1"
+      "version": "1.4.0"
     }
   ]
 }

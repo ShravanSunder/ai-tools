@@ -14,13 +14,13 @@ See also:
 
 Peer reference map (per shape — for deeper variants of the pattern):
 
-  Shape 1 Framed card         →  ui-layouts.md, annotations-and-specs.md
-  Shape 2 Sub-framed grid     →  ui-layouts.md
-  Shape 3 Ruled card          →  ui-layouts.md
-  Shape 4 Column-ruled        →  tables.md
-  Shape 5 Pipeline box        →  architecture.md
-  Shape 6 State diagram       →  sequence-and-state.md
-  Shape 7 No-frame list       →  (no dedicated peer ref)
+  Shape 1 Framed card         ──►  ui-layouts, annotations-and-specs
+  Shape 2 Sub-framed grid     ──►  ui-layouts.md
+  Shape 3 Ruled card          ──►  ui-layouts.md
+  Shape 4 Column-ruled        ──►  tables.md
+  Shape 5 Pipeline box        ──►  architecture.md
+  Shape 6 State diagram       ──►  sequence-and-state.md
+  Shape 7 No-frame list       ──►  (no dedicated peer ref)
 
 All examples below use canvas width 70 unless noted.
 
@@ -320,7 +320,7 @@ Geometry choices:
 
   ▸ State boxes all 14 wide for visual rhythm.
 
-  ▸ Main flow down the right column (no slot → LIVE → ORPHANED →
+  ▸ Main flow down the right column (no slot ──► LIVE ──► ORPHANED ──►
     RETIRED).
 
   ▸ Re-entry arm on the left — back to `no slot` via `finalize`.
@@ -436,7 +436,7 @@ rigid                 complex                 coupled
 Option B — flexibility matters more than implementation cost here.
 ```
 
-Three concerns → three sections → three shapes.  Comparison uses
+Three concerns ──► three sections ──► three shapes.  Comparison uses
 column-ruled (parallel data).  Flow uses pipeline box (sequential
 steps).  Synthesis uses prose (single-paragraph conclusion).  One
 shape per block.  One heading per section.

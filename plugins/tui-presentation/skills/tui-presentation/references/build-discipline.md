@@ -108,7 +108,7 @@ Cell-width arithmetic for tables.  For a K-cell row at canvas N:
                        plus the two │ borders
 ```
 
-Example: 3-cell table at canvas 70 → `w1 + w2 + w3 + 4 = 70` → sum
+Example: 3-cell table at canvas 70 ──► `w1 + w2 + w3 + 4 = 70` ──► sum
 of cell widths = 66.  Distribute: e.g. 20 / 30 / 16, or 15 / 25 / 26.
 
 Junction character selection.  Pick by which sides connect:
@@ -188,7 +188,7 @@ Inside framed card              2 spaces from left │
 Worked examples.  For each common pattern, the WRONG and RIGHT
 side-by-side.
 
-Label → content:
+Label ──► content:
 
 ```
 WRONG                            RIGHT
@@ -335,5 +335,5 @@ Run this before shipping a response.  Every item must pass.
   [ ] Single borders (╔═╗ used only for rare focal emphasis)?
 ```
 
-Any "no" → fix before shipping.  The difference between readable
+Any "no" ──► fix before shipping.  The difference between readable
 TUI output and unreadable mess is this checklist.

@@ -76,16 +76,16 @@ it.  Full worked examples in references/shape-catalog.md.
 
 Picker cheat-sheet:
 
-  ▸ Scoped concept with a title?         →  1  Framed card
-  ▸ Multiple things side-by-side?        →  2  Sub-framed grid
-  ▸ Multiple findings/concerns?          →  3  Ruled card
+  ▸ Scoped concept with a title?         ──►  1  Framed card
+  ▸ Multiple things side-by-side?        ──►  2  Sub-framed grid
+  ▸ Multiple findings/concerns?          ──►  3  Ruled card
 
-  ▸ Comparing options, alternatives, or  →  4  Column-ruled
+  ▸ Comparing options, alternatives, or  ──►  4  Column-ruled
     states at time N / N+1?
 
-  ▸ Walking through numbered steps?      →  5  Pipeline box
-  ▸ State machine with transitions?      →  6  State diagram
-  ▸ Plain list, aligned columns?         →  7  No-frame list
+  ▸ Walking through numbered steps?      ──►  5  Pipeline box
+  ▸ State machine with transitions?      ──►  6  State diagram
+  ▸ Plain list, aligned columns?         ──►  7  No-frame list
 
 Mermaid translations (when user asks for a Mermaid diagram — chat
 has no Mermaid renderer, translate to the TUI equivalent):
@@ -108,10 +108,10 @@ table + prose inside it.  Pick the shape per content type.  One
 shape per block.
 
 Progressive disclosure: for per-shape worked examples with geometry
-commentary, see shape-catalog.md → Shape catalog.  For six
+commentary, see shape-catalog.md ──► Shape catalog.  For six
 compositional applications (phase-sequence, Q&A rationale, review
 findings with severity, dual-tag title band, scope inventory with
-subsections, file-tree content pattern), see shape-catalog.md →
+subsections, file-tree content pattern), see shape-catalog.md ──►
 Shape variants and applications.
 
 
@@ -295,11 +295,11 @@ Skim test (run before finishing):
   ▸ Do parallel concepts look parallel (aligned widths and positions)?
   ▸ Does one concept end clearly before the next begins?
 
-Any "no" → add cordoning.
+Any "no" ──► add cordoning.
 
 Progressive disclosure: for a WRONG/RIGHT comparison showing what
 over-framing looks like vs. splitting into appropriate shapes, see
-shape-catalog.md → Shape anti-patterns.
+shape-catalog.md ──► Shape anti-patterns.
 
 
 ─── Indentation — the horizontal hierarchy axis ─────────────────────
@@ -312,7 +312,7 @@ continuation.
 
 Indent rules:
 
-  ▸ Label → PROSE content: indent content 2 spaces under the label
+  ▸ Label ──► PROSE content: indent content 2 spaces under the label
 
        What you expect:
 
@@ -375,7 +375,7 @@ What's EXEMPT from rule 9 (doesn't need the +2):
 
 Indent is load-bearing.  Without it, "What you expect:" and the
 expected behavior look like two unrelated lines instead of
-heading → body.  Pay the 2-4 characters — the cognitive savings
+heading ──► body.  Pay the 2-4 characters — the cognitive savings
 for the reader are enormous.
 
 Three label patterns — don't conflate them:
@@ -444,9 +444,157 @@ Common failure — prose-label with arrow sub-items:
       ──► drop reorders / splits
 
 Progressive disclosure: for WRONG/RIGHT worked examples of each
-indent pattern (label → content, nested sub-items, code snippet
-inline, continuation hang-indent), see build-discipline.md →
+indent pattern (label ──► content, nested sub-items, code snippet
+inline, continuation hang-indent), see build-discipline.md ──►
 Indentation recipes.
+
+
+─── Structural elements — atoms of a section ────────────────────────
+
+Inside a section (between ─── label ─── rules) or inside a frame,
+content uses one of these structural atoms.  Each has its own
+indent, wrap, and arrow conventions.  Pick the atom by content
+type — forcing one form when another fits better produces
+choppy or flat output.
+
+Prose paragraph — DEFAULT for flowing argument or narrative.
+
+  Full sentences, multi-clause OK, wrap at canvas 70.  Continuation
+  at the same indent as the paragraph's start.  Blank line between
+  paragraphs.  Use when the content is a connected argument or
+  explanation — don't fragment an argument into label+bullet form
+  just to look structured.
+
+Glossary entry — term + indented definition, for name-value pairs.
+
+  allowRepoResources
+    controls whether controller reads `.agent-vm/resources.json`
+    from repo
+
+  externalResources
+    trusted static registry compiled into Gondolin tcpHosts
+
+  Term at col N.  Definition at col N+2.  Wrap continues at col N+2.
+  Blank line between entries.  Use when defining multiple named
+  things briefly.
+
+Labeled callout — `Label:` + indented content, for a named section.
+
+  Current limitation:
+    convention-only.  No Zod manifest.  No catalog permission.
+    No task selection.
+
+  Label ends with `:`.  Content at col+2.  Content may be prose,
+  glossary entries, lists, or a mix.  Use when naming a concept
+  and providing its associated content.
+
+Arrow-chain — label + sequence of causally-linked items.  Two
+render forms:
+
+  Form 1: Inline (compact)
+
+    main pane
+      ──► grab handle
+      ──► live target appears immediately
+      ──► drop reorders / splits
+
+    Label at col N.  Arrow items at col N+2.  Wrap continues at
+    the content char after the arrow (col N+6).  Use when 3-6
+    short single-line items, compact context.
+
+  Form 2: Vertical flow (breathing)
+
+    task asks for resources
+           │
+           ▼
+    delegator / upstream resolves them
+           │
+           ▼
+    controller compiles boot overlay
+           │
+           ▼
+    Gondolin boots
+
+    Each step at col N on its own line.  `│` connector at a
+    fixed column (pick one, stay consistent), `▼` on next line
+    at same column.  Blank-line breathing between steps.  Use
+    when 3-8 steps, longer descriptions, narrative-of-a-process
+    that needs visual breathing.
+
+  Never use `↓ ↑ → ⇒ ->` — see rule 6.  Always `▼ ──►`.
+
+Bulleted list — `▸ item` at consistent indent.  See spacing rules.
+
+Numbered list — `1. 2. 3.` with consistent-width numbers.  See
+spacing rules.
+
+
+─── When ──► is called for (vs. plain item) ─────────────────────────
+
+Use `──►` (or `▼` for Form 2) when the item represents FLOW,
+SEQUENCE, RESULT, or CONSEQUENCE.  Don't use for plain enumeration.
+
+  With arrow (sequence):           Without arrow (property/fact):
+
+    main pane                        main pane
+      ──► grab handle                  has a grab handle
+      ──► drop reorders panes          supports drop-to-reorder
+
+If removing the arrow would lose the causal or sequential reading,
+keep it.  If the item is just a property, use `▸` bullet or plain
+indent.
+
+
+─── Vertical flow WRONG / RIGHT ─────────────────────────────────────
+
+```
+WRONG (single-char ↓, no connector, ambiguous grouping):
+
+  task asks for resources
+    ↓
+  delegator / upstream resolves them
+    ↓
+  controller receives resolved manifest
+
+RIGHT (proper ▼ with │ connector and breathing):
+
+  task asks for resources
+         │
+         ▼
+  delegator / upstream resolves them
+         │
+         ▼
+  controller receives resolved manifest
+```
+
+
+─── Wrap rules — indent under first content char ────────────────────
+
+When a line wraps, the continuation lands under the first content
+character of the original line:
+
+  Prose paragraph       ──►  continuation at same indent as start
+  Bullet (▸ item)       ──►  continuation under "i" of "item" (col+2)
+  Arrow item (──► x)    ──►  continuation under "x" (col+6 from ──►)
+  Labeled callout body  ──►  continuation stays at body indent
+  Glossary definition   ──►  continuation stays at definition indent
+
+
+─── Why this matters ────────────────────────────────────────────────
+
+Same content can use multiple atoms, but one is always best:
+
+  ▸ Connected argument or narrative       ──►  prose paragraph
+  ▸ Definitions of named things           ──►  glossary entry
+  ▸ Named section with mixed content      ──►  labeled callout
+  ▸ Sequence or causal chain (short)      ──►  arrow-chain Form 1
+  ▸ Sequence or causal chain (breathing)  ──►  arrow-chain Form 2
+  ▸ Discrete items at same level          ──►  bulleted list
+  ▸ Ordered steps                         ──►  numbered list
+
+Pick by content type, not by what "feels structured."  An
+argument forced into arrow-chain form reads choppy.  Definitions
+written as prose bury what the reader wants to find.
 
 
 ─── Diagram structure — alignment mechanics ──────────────────────────
@@ -482,10 +630,10 @@ When in doubt: count characters.  If row 1's right edge is at col
 trim with `…`.  Never silently ship mismatched widths.
 
 Progressive disclosure: for per-shape alignment drilled through
-worked examples, see shape-catalog.md → Shape catalog.  For cell-
+worked examples, see shape-catalog.md ──► Shape catalog.  For cell-
 width arithmetic, junction selection, padding rules, consistency-
 rule enforcement, and a Before/After drift-repair example, see
-build-discipline.md → Alignment recipes.
+build-discipline.md ──► Alignment recipes.
 
 
 ─── Document skeleton ────────────────────────────────────────────────
@@ -523,7 +671,7 @@ Rules:
   ▸ Sections separated by ─── label ─── (labeled, preferred) OR ---
     (unlabeled).  Pick one style per response — don't stack.
 
-  ▸ Max 6 top-level sections.  7+ → break into a follow-up or ask
+  ▸ Max 6 top-level sections.  7+ ──► break into a follow-up or ask
     what to drill into.
 
   ▸ Closing synthesis ("My read" or summary frame) is mandatory for
@@ -543,7 +691,8 @@ Rules:
 │  3.  Commit alignment columns BEFORE writing content.  Pad to them. │
 │  4.  Single borders.  ┌─┐ only.  ╔═╗ almost never.                  │
 │  5.  One shape per block.  One heading per section.                 │
-│  6.  Arrows: ──► ◄── ▼.  Never mix with → ⇒ ->.                     │
+│  6.  Arrows: ──► ◄── ▼.  Never use `→ ⇒ -> ↓ ↑` or any other       │
+│      single-char substitute.                                        │
 │  7.  Breathing: blank after ┌─┐, before └─┘, between item groups.   │
 │  8.  Identifiers never truncate mid-token.  Wrap to next line.      │
 │  9.  Indent content under its label.  2 spaces minimum.  Continua-  │
@@ -563,7 +712,7 @@ a cell width, choose one of (in preference order):
 
   1. Shorten non-identifier prose with `…` — preferred, no reflow
 
-       "a very long descriptive phrase"  →  "a very long descriptive…"
+       "a very long descriptive phrase"  ──►  "a very long descriptive…"
 
   2. Wrap to next line — required when an identifier is present or
      prose is too long to shorten meaningfully
@@ -588,21 +737,44 @@ stays fixed; wrap the identifier instead.
 
 Progressive disclosure: for worked shorten / wrap / widen examples
 and the identifier-wrap before/after demonstration, see
-build-discipline.md → Overflow recipes.
+build-discipline.md ──► Overflow recipes.
 
 
 ─── Character palette ────────────────────────────────────────────────
 
+ALLOWED characters.  Anything outside this list violates rule 6 or
+rule 4.  Keep this palette strict — every character earns its place.
+
 ```
-Single borders   ┌ ─ ┐ │ └ ┘ ├ ┤ ┬ ┴ ┼
-Arrows           ──► ◄── ▼ │
-Markers          ✓ ✗ • ● ○ ◆ ▸
-Section rules    ═══   ───   ──────   ---
-Callout arrow    ◄──   (always inline with data)
+Single borders    ┌ ─ ┐ │ └ ┘ ├ ┤ ┬ ┴ ┼
+Double borders    ╔ ═ ╗ ║ ╚ ╝ ╠ ╣ ╦ ╩ ╬   (rare focal emphasis only)
+Arrows            ──► ◄── ▼ │             (3-char horizontal, 1-char
+                                           vertical connector + head)
+Callout arrow     ◄──                      (always inline with data)
+Markers           ✓ ✗ • ● ○ ◆ ▸ ▹ ★
+Section rules     ═══   ───   ──────   ---
+Overflow          …                         (ellipsis for shortening)
 ```
 
-Double borders (╔ ═ ╗ ║ ╚ ╝ ╠ ╣) — rare use only, reserved for one
-focal-emphasis block in a response.  Prefer single.
+FORBIDDEN — common mistakes that violate the palette:
+
+```
+→ ⇒ -> ↓ ↑ ∨ ∧ ⟶ ⟵         wrong arrows.  Use ──► ◄── ▼
++ - (ASCII) for borders      wrong table chars.  Use ┌ ─ ┐ │ ...
+# ## ###                     markdown headings.  Use ═══ or ───
+**bold** *italic*            markdown emphasis.  Drop it OR frame it
+- bullet                     ASCII bullet.  Use ▸ or • or 1.
+| col | col |                markdown pipe-table.  Use ┌─┬─┐
+` backtick` for emphasis     use framed callout or plain prose
+```
+
+Double borders (╔ ═ ╗ ║ ╚ ╝ ╠ ╣ ╦ ╩ ╬) — rare use only.  Reserved
+for a single focal-emphasis block per response (e.g. one design
+proposal that must stand apart).  Prefer single borders otherwise.
+
+Keep the palette strict: if a character isn't on the ALLOWED list,
+don't use it.  The vocabulary is small on purpose — a closed
+vocabulary is scannable.
 
 
 ─── Progressive disclosure ───────────────────────────────────────────
