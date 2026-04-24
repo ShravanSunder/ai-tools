@@ -1,6 +1,6 @@
 ---
 name: tui-presentation
-description: MUST USE for VISUAL / EXPLANATORY chat responses where no markdown renderer exists — design, architecture, comparisons, tradeoffs, UI mockups, flows, state machines, debugging narratives, multi-section explanations that benefit from diagrams. Teaches seven-shape vocabulary, document structure, cordoning, indentation, and build discipline using Unicode box-drawing (chat has no markdown parser; `#`, `**bold**`, `| col |` render literally). DO NOT use when user requested a specific format (JSON, YAML, markdown, code block), response is schema-bound or machine-readable, response is code/config generation, or response is a single terse answer. User-specified format always wins over this skill's defaults. Triggers on "draw it out", "show me", "compare", "design", "architecture", "explain", "structure", "flow", "layout", "tradeoff", "how would X look".
+description: Use for in-chat design and explanatory responses on chat or TUI surfaces where markdown does not render — `#`, `**bold**`, `| col |`, and `- bullet` appear as literal text. Codex: MUST load for in-chat design. Covers design proposals, architecture, comparisons and tradeoffs, UI mockups, flows, state machines, debugging narratives, and multi-section explanations. Teaches a seven-shape Unicode vocabulary with cordoning, indentation, and alignment discipline. Skip for JSON/YAML/code-only output, schema-bound replies, or terse answers.
 ---
 
 TUI Presentation
