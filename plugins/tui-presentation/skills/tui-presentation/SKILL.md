@@ -1,6 +1,7 @@
 ---
 name: tui-presentation
-description: Use for in-chat design and explanatory responses on chat or TUI surfaces where markdown does not render — `#`, `**bold**`, `| col |`, and `- bullet` appear as literal text. Codex: MUST load for in-chat design. Covers design proposals, architecture, comparisons and tradeoffs, UI mockups, flows, state machines, debugging narratives, and multi-section explanations. Teaches a seven-shape Unicode vocabulary with cordoning, indentation, and alignment discipline. Skip for JSON/YAML/code-only output, schema-bound replies, or terse answers.
+description: >-
+  Use for in-chat design and explanatory responses on chat or TUI surfaces where markdown does not render — `#`, `**bold**`, `| col |`, and `- bullet` appear as literal text. Codex: MUST load for in-chat design. Covers design proposals, architecture, comparisons and tradeoffs, UI mockups, flows, state machines, debugging narratives, and multi-section explanations. Teaches a seven-shape Unicode vocabulary with cordoning, indentation, and alignment discipline. Skip for JSON/YAML/code-only output, schema-bound replies, or terse answers.
 ---
 
 TUI Presentation
