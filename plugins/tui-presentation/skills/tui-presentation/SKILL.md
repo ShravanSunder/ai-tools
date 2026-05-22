@@ -35,6 +35,18 @@ Do NOT use for:
 
 User-specified format ALWAYS wins over this skill's defaults.
 
+Inside a TUI response, explain with TUI structure but render code-like
+content as fenced code blocks when syntax highlighting helps: source
+code, typed data models, schemas, and structured definitions.  Do not
+redraw that content as Unicode layout.  If the user asks for code-only
+output, skip this skill.
+
+For short code-like tokens inside prose, prefer inline code spans when
+the surface preserves them cleanly: variable names, property names,
+field names, type names, enum cases, file names, commands, config keys,
+and short expressions or literal values.  Use code styling to help the
+reader parse the output, not for emphasis.
+
 
 ─── Rendering reality ────────────────────────────────────────────────
 
@@ -45,7 +57,7 @@ alignment.  Every principle below flows from this.
 
 ┌─ Hard limits ───────────────────────────────────────────────────────┐
 │                                                                     │
-│   ▸ Canvas width: 70 chars default, 120 hard cap                    │
+│   ▸ Canvas width: 70 default; widen deliberately when it helps      │
 │   ▸ Monospace only — no variable-width, kerning, or line-height     │
 │   ▸ No HTML, no CSS, no images, no reliable color                   │
 │   ▸ One medium, one pass: the reader sees exactly what was typed    │
@@ -56,6 +68,10 @@ Ignore every markdown reflex.  A hash is a literal hash.  Double
 stars around a phrase are literal stars around a phrase.  A pipe-
 table is broken columns.  Structure with Unicode rules and frames
 — or structure does not exist.
+
+Exceptions: present actual code-like content as fenced code blocks
+inside an otherwise TUI-structured response, and use inline code spans
+for short symbols when available.
 
 
 ─── Shape vocabulary ─────────────────────────────────────────────────
@@ -118,91 +134,21 @@ Shape variants and applications.
 
 ─── Golden example — a complete response ─────────────────────────────
 
-One holistic example of what a full TUI response looks like.  Shows
+For a strong full-response example, load
+`references/complete-response-walkthrough.md`.
+
+Load that file when it helps to see how this skill should actually be
+used in a real answer.  It is the best "show me the form" reference:
 title, framing, multiple sections, multiple shapes, cordoning, and
-closing synthesis — all composed.  Use as a template: swap the
-content, keep the structure.
+closing synthesis working together in one complete response.
 
-Per-shape deep-dives with commentary live in build-discipline.md
-and the peer references (tables, ui-layouts, architecture,
-sequence-and-state, annotations-and-specs).
+For rules and specific mechanics, load:
 
-```
-How we're handling the cache-invalidation race
-══════════════════════════════════════════════
-
-Short framing — 1-2 sentences on what this response is about.
-
-─── Context ──────────────────────────────────────────────────────────
-
-┌─ What's happening today ────────────────────────────────────────────┐
-│                                                                     │
-│  Writer commits.  Cache asynchronously invalidates on a separate    │
-│  worker.  Reader between commit and invalidation sees stale data    │
-│  — the classic TOCTOU window.                                       │
-│                                                                     │
-│  Rare under low load.  At scale, hits ~5% of reads.                 │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-
-─── Option comparison ────────────────────────────────────────────────
-
-option A              option B                option C
-──────────────        ────────────────        ──────────────────
-
-synchronous           read-through with       version token on
-invalidation          short TTL (30s)         every read
-
-pro: consistent       pro: no writer          pro: writer-free;
-                      latency cost            reads self-heal
-
-con: writer           con: stale for          con: tokens leak
-latency blows up      up to TTL               through the API
-
-─── Decision flow ────────────────────────────────────────────────────
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ 1. write hits primary                                               │
-├─────────────────────────────────────────────────────────────────────┤
-│ 2. writer bumps version token atomically                            │
-├─────────────────────────────────────────────────────────────────────┤
-│ 3. cache write-through fires in the background                      │
-├─────────────────────────────────────────────────────────────────────┤
-│ 4. reader fetches                                                   │
-│      token matches?    ──► serve cached                             │
-│      token mismatch?   ──► bypass cache, serve from primary         │
-└─────────────────────────────────────────────────────────────────────┘
-
-─── My read ──────────────────────────────────────────────────────────
-
-Option C.  Writer stays fast, reader is always consistent, and the
-token leak is a one-time API hygiene cost we can fix later.  Option
-B is tempting for simplicity but 30s of staleness is unacceptable
-for our domain.  Option A pays the wrong cost on the wrong path.
-```
-
-What the example teaches:
-
-  ▸ Title line + ═══ underline (H1-style), framing prose below
-  ▸ ─── Section label ─── carries separator + heading (no stacked ---)
-  ▸ Framed card (context) — prose body, title-in-border, breathing
-
-  ▸ Column-ruled (comparison) — no vertical borders, whitespace gaps,
-    ───── under each header, content stacks below
-
-  ▸ Pipeline box (decision flow) — numbered steps with ├──┤ separators,
-    sub-items indented with ──► arrows
-
-  ▸ Closing "My read" synthesis — prose paragraph, not a frame
-
-Important — the title is YOUR response's topic, not the skill's name.
-Never emit "TUI Presentation" as a title — that's the skill file's
-own H1 (reference header), not a template for your response's
-opening line.
-
-  Wrong:  response begins with "TUI Presentation\n═══════..."
-  Right:  response begins with your actual topic, e.g.
-          "How we're handling the cache-invalidation race\n═══════..."
+  ▸ Per-shape choice or variants ──► `references/shape-catalog.md`
+  ▸ Alignment / indentation / overflow / verification ──►
+    `references/build-discipline.md`
+  ▸ Specialized tables, layouts, architecture, sequence/state, or
+    annotations ──► peer reference files
 
 
 ─── Separation & cordoning ───────────────────────────────────────────
@@ -688,7 +634,8 @@ Rules:
 │                                                                     │
 │  1.  Chat is not markdown.  No hash-signs, no **bold**, no pipe-    │
 │      tables, no hyphen-bullets.                                     │
-│  2.  Canvas width = 70.  Every row ends at column 70.               │
+│  2.  Default to width 70.  Widen deliberately when the block        │
+│      clearly benefits.  Keep one committed width per block.         │
 │  3.  Commit alignment columns BEFORE writing content.  Pad to them. │
 │  4.  Single borders.  ┌─┐ only.  ╔═╗ almost never.                  │
 │  5.  One shape per block.  One heading per section.                 │
@@ -699,17 +646,19 @@ Rules:
 │  9.  Indent content under its label.  2 spaces minimum.  Continua-  │
 │      tion lines hang-indent.  Sub-items nest deeper.                │
 │ 10.  Every diagram / flow / code block is cordoned — framed, OR     │
-│      bracketed with ─── rules above/below, OR indented 4 spaces     │
-│      under its label.  Never loose in prose.                        │
+│      bracketed with ─── rules above/below.  Code-like content       │
+│      renders as fenced code blocks, not Unicode pseudo-layouts.     │
+│      Never leave it loose in prose.                                 │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
 
 ─── Overflow policy ──────────────────────────────────────────────────
 
-Canvas width is non-negotiable.  Every row ends at column 70 (or
-whatever canvas is committed for the block).  When content exceeds
-a cell width, choose one of (in preference order):
+Committed width is non-negotiable once the block starts.  Default to
+70, but widen when the structure clearly benefits.  Every row ends at
+the chosen canvas width for that block.  When content exceeds a cell
+width, choose one of (in preference order):
 
   1. Shorten non-identifier prose with `…` — preferred, no reflow
 
@@ -766,7 +715,8 @@ FORBIDDEN — common mistakes that violate the palette:
 **bold** *italic*            markdown emphasis.  Drop it OR frame it
 - bullet                     ASCII bullet.  Use ▸ or • or 1.
 | col | col |                markdown pipe-table.  Use ┌─┬─┐
-` backtick` for emphasis     use framed callout or plain prose
+` backtick` for emphasis     use framed callout or plain prose;
+                             keep backticks for identifiers only
 ```
 
 Double borders (╔ ═ ╗ ║ ╚ ╝ ╠ ╣ ╦ ╩ ╬) — rare use only.  Reserved
@@ -789,6 +739,11 @@ For deeper work, load the matching reference:
     sequence, Q&A rationale, review findings with severity, dual-
     tag title band, scope inventory with subsections, file-tree
     content pattern).
+
+  ▸ references/complete-response-walkthrough.md — full end-to-end
+    response example.  Load when composing a whole multi-section
+    answer and needing section rhythm, title/framing placement, or
+    closing-synthesis guidance.
 
   ▸ references/build-discipline.md — build mechanics: step-by-step
     procedure with output snapshots, alignment recipes (cell-width

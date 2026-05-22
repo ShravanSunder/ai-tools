@@ -671,8 +671,8 @@ Geometry choices:
     per the cordoning rule).
 
   ▸ Proposed fixes live OUTSIDE the finding frame — below it,
-    indented 4 spaces as code blocks, with a prose lead-in.  Fixes
-    are NOT part of the finding itself.
+    shown as fenced code blocks with a prose lead-in.  Fixes are
+    NOT part of the finding itself.
 
   ▸ Blank line between findings.  Findings are independent — one
     can be accepted without the other.

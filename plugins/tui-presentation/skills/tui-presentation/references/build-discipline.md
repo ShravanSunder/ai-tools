@@ -23,10 +23,11 @@ All examples below use canvas width 70 unless noted.
 Follow this procedure when drawing a framed card.  Other shapes use
 the same discipline with shape-specific adjustments.
 
-Canvas = 70.
+Canvas = 70 by default.
 
 Step 1 — Commit canvas width.  State the width (or keep it in a
-mental note).  Default 70.  Do not change mid-block.
+mental note).  Default 70.  Widen deliberately when the block clearly
+benefits.  Do not change mid-block.
 
 Output so far: (nothing)
 
@@ -230,6 +231,37 @@ useDrawerFramePreference             useDrawerFramePreference
 and it publishes both keys.      and it publishes both keys.
 ```
 
+Actual code-like block:
+
+Use inline snippet treatment for short code-like tokens or tiny
+expressions inside prose.  Prefer inline code spans when the surface
+preserves them cleanly: variable names, property names, field names,
+type names, enum cases, file names, commands, config keys, and short
+expressions or literal values.  Switch to a fenced code block as soon as
+the reader would reasonably treat the content as code-like structure to
+copy, scan, or run: source code, typed data models, schemas, or
+structured definitions.  Do not redraw that content as a Unicode
+layout.
+
+```
+WRONG                            RIGHT
+─────                            ─────
+
+Implementation:                 Implementation:
+
+  handler() {                     ```ts
+    if (!ready) {                 function handler(): void {
+      return;                       if (!ready) {
+    }                                  return;
+  }                                }
+                                   }
+                                 ```
+```
+
+Fence the code block cleanly under its label or between section rules.
+Keep the surrounding explanation in TUI form; keep the code-like
+content itself in its native fenced form.
+
 Continuation hang-indent:
 
 ```
@@ -328,6 +360,7 @@ Run this before shipping a response.  Every item must pass.
       between semantic groups)?
   [ ] One shape per block (no nested nesting beyond sub-framed grid)?
   [ ] Shape choice matches content type from the vocabulary picker?
+  [ ] Actual code-like content shown as fenced block when appropriate?
   [ ] Sections have heading → block → heading rhythm?
   [ ] Closing synthesis ("My read" or summary) present for long
       responses?
