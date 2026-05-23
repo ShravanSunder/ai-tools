@@ -11,13 +11,13 @@
       "name": "ai-scaffold",
       "source": "./plugins/ai-scaffold",
       "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
-      "version": "0.1.0"
+      "version": "0.2.0"
     },
     {
       "name": "skill-peekaboo",
       "source": "./plugins/skill-peekaboo",
       "description": "Visual UI testing for macOS apps using Peekaboo CLI - alternative to Playwright for native macOS testing",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     {
       "name": "quorum-counsel",
