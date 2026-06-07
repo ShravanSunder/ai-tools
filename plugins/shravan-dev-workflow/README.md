@@ -17,11 +17,12 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 
 Runs a structured review swarm:
 
-1. Build a shared review packet from the requested scope.
-2. Dispatch read-only specialist Codex subagents.
-3. Add `agy` counsel as an independent input.
-4. Optionally add Claude or Gemini when explicitly requested.
-5. Synthesize, verify, dedupe, and rank findings.
+1. Build a shared review packet from the requested mode, scope, git range, intent, and constraints.
+2. Run spec compliance first for implementation or plan-backed reviews.
+3. Dispatch read-only specialist Codex subagent lanes.
+4. Add `agy` counsel as an independent input for substantial reviews when available.
+5. Optionally add Claude or extra Gemini/agy when explicitly requested.
+6. Verify, dedupe, rank findings, and report a verdict with coverage.
 
 The reducer treats all reviewer outputs as evidence, not truth. Findings must include file or symbol evidence, a concrete failure scenario, and a smallest useful fix.
 
@@ -39,12 +40,12 @@ After installing or refreshing the plugin and restarting Codex, verify the plugi
 
 1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:subagent-review`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:linear-work`.
 2. Ask for a small local review: `Use subagent-review to review the last change.`
-3. Confirm Codex builds a shared review packet and dispatches read-only Codex reviewer lanes.
+3. Confirm Codex builds a shared review packet, runs spec compliance when applicable, and dispatches read-only Codex reviewer lanes.
 4. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
 5. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
 6. Run one review request that includes external adversarial counsel: `Use subagent-review and include Gemini/agy adversarial review.`
 7. Run one review request that includes Claude explicitly: `Use subagent-review and include Claude adversarial review.`
-8. Confirm the final report includes swarm coverage, skipped inputs if any, and only verified findings.
+8. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
 
 Behavioral pass criteria:
 

@@ -7,6 +7,17 @@ description: Use when requesting a multi-agent code review, review swarm, advers
 
 Use this skill to run a review swarm where Codex remains the orchestrator and reducer. The swarm is review-only: subagents and external counsel inspect, report, and challenge; the parent session decides what is real.
 
+Core pipeline:
+
+```text
+review packet
+  -> spec compliance reviewer
+  -> Codex reviewer lanes
+  -> optional external counsel
+  -> reducer verification
+  -> verdict, findings, and coverage
+```
+
 ## Operating Model
 
 - Default reviewers are Codex subagents.
@@ -14,6 +25,22 @@ Use this skill to run a review swarm where Codex remains the orchestrator and re
 - Include Claude or additional `agy` adversarial counsel only when the user explicitly asks for them. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
+- Keep the swarm shallow: direct child reviewer agents only. Do not ask reviewer agents to spawn deeper review swarms.
+- Keep orchestration skill-native. Scripts and schemas can support shape and validation, but the parent Codex session owns dispatch and reduction.
+
+## Review Modes
+
+Pick one mode before dispatch:
+
+- `implementation`: completed local work against a request, plan, or task.
+- `diff`: uncommitted, staged, or branch diff without a separate plan.
+- `pr`: pull request review.
+- `commit`: one commit or commit range.
+- `plan`: review a design, implementation plan, spec, or prompt before code.
+- `files`: named files or directories.
+- `adversarial`: challenge a design or implementation decision.
+
+For implementation reviews, run spec compliance before broader quality lanes. For broad PR or diff reviews, lanes can run in parallel, but intent/spec findings take priority in reduction.
 
 ## Scope
 
@@ -28,11 +55,21 @@ If the scope is ambiguous and cannot be inferred safely from git state or the pr
 
 ## Shared Review Packet
 
-Give every reviewer the same packet:
+Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet.
 
 ```text
+Mode:
+<implementation | diff | pr | commit | plan | files | adversarial>
+
 Review scope:
 <diff command, PR number, commit range, plan path, or file list>
+
+Git range:
+base_sha: <sha or "not applicable">
+head_sha: <sha or "working tree">
+diff_stat_command: <command or "not applicable">
+diff_command: <command or "not applicable">
+changed_files: <paths or "not applicable">
 
 Intent:
 <what the change is supposed to accomplish>
@@ -48,12 +85,48 @@ Return findings only. Do not edit files. For each finding include severity,
 evidence, failure scenario, smallest fix, proof/test, and confidence.
 ```
 
+Reviewers must not trust implementation summaries, previous agent reports, test claims, or other reviewer outputs. They must read the actual artifacts in scope.
+
+## Pipeline
+
+1. Scope builder
+   - Determine mode, base/head, changed files, relevant instructions, and user intent.
+   - Prefer explicit user scope. Otherwise infer from git state and current request.
+   - If base/head cannot be inferred safely, ask one concise question before dispatch.
+
+2. Spec compliance gate
+   - For implementation and plan-backed reviews, dispatch a spec compliance reviewer first or mark why it was skipped.
+   - The reviewer checks that the actual artifact matches the request: nothing missing, nothing extra, no misread requirement.
+   - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
+
+3. Reviewer swarm
+   - Dispatch independent read-only Codex reviewer lanes.
+   - For small changes, run `spec_compliance` plus one general/adversarial lane.
+   - For substantial changes, run all default lanes.
+
+4. External counsel
+   - Add `agy` for substantial reviews when available, unless skipped by user or environment.
+   - Add Claude or extra Gemini/agy only when explicitly requested.
+   - External counsel is advisory and must be recorded in coverage.
+
+5. Reducer verification
+   - Verify every candidate against code, diff, tests, or cited plan text.
+   - Reject claims that cannot be proven from current artifacts.
+   - Deduplicate by root cause.
+
+6. Verdict
+   - `ready`: no accepted blocker/important findings and no decision-relevant open questions.
+   - `ready_with_fixes`: accepted issues exist but are bounded and non-blocking.
+   - `not_ready`: accepted blocker/important findings, failed spec compliance, or unresolved decision-critical scope.
+
 ## Codex Subagent Lanes
 
 Dispatch independent read-only Codex subagents in parallel when the tool surface supports it. Prefer the `reviewer` role when available. Use the prompts in `references/reviewer-prompts.md`.
 
 Default lanes:
 
+- Spec compliance reviewer
+- Code quality reviewer
 - Intent and regression reviewer
 - Security and trust-boundary reviewer
 - Reliability and performance reviewer
@@ -93,6 +166,7 @@ After reviewers return:
 4. Drop speculative findings that lack a concrete failure path.
 5. Preserve meaningful disagreement as an open question only when it changes the decision.
 6. Rank accepted findings as blocker, important, follow-up, or nit.
+7. Record rejected or unverified candidate counts when useful for explaining the verdict.
 
 Accepted findings must include:
 
@@ -104,13 +178,19 @@ Accepted findings must include:
 - Confidence
 - Which reviewers raised it
 
+Rejected findings should not be listed by default. Mention them only when a rejected high-severity claim might otherwise confuse the user.
+
 ## Report Shape
 
-Start with findings, ordered by severity. If no findings survive verification, say that clearly and list any skipped reviewers or test gaps.
+Start with verdict and findings, ordered by severity. If no findings survive verification, say that clearly and list any skipped reviewers or test gaps.
 
 Use this compact structure:
 
 ```text
+Verdict
+<ready | ready_with_fixes | not_ready>
+Reason: <one or two concrete reasons>
+
 Findings
 1. [severity] title
    Evidence: file:line or symbol
@@ -123,7 +203,7 @@ Open questions
 <only decision-relevant questions>
 
 Swarm coverage
-<reviewed scope, lanes run, external counsel status, skipped inputs>
+<reviewed scope, lanes run, lanes skipped, external counsel status, verification notes>
 ```
 
 ## Common Mistakes
@@ -133,3 +213,5 @@ Swarm coverage
 - Do not hide skipped external counsel.
 - Do not run Claude or Gemini unless the user asked.
 - Do not let review turn into implementation unless the user explicitly switches scope.
+- Do not let external counsel failure fail the whole review.
+- Do not let a sidecar reviewer become the critical path when the parent can continue reducing available evidence.

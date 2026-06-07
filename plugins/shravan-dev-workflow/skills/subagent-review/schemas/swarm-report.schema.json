@@ -4,11 +4,66 @@
   "title": "Shravan Dev Workflow Report",
   "type": "object",
   "additionalProperties": false,
-  "required": ["scope", "findings", "open_questions", "coverage"],
+  "required": [
+    "mode",
+    "verdict",
+    "scope",
+    "review_packet",
+    "findings",
+    "open_questions",
+    "coverage"
+  ],
   "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["implementation", "diff", "pr", "commit", "plan", "files", "adversarial"]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["ready", "ready_with_fixes", "not_ready"]
+    },
     "scope": {
       "type": "string",
       "minLength": 1
+    },
+    "review_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent", "constraints", "git_range", "changed_files"],
+      "properties": {
+        "intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "constraints": {
+          "type": "string"
+        },
+        "git_range": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["base_sha", "head_sha", "diff_stat_command", "diff_command"],
+          "properties": {
+            "base_sha": {
+              "type": "string"
+            },
+            "head_sha": {
+              "type": "string"
+            },
+            "diff_stat_command": {
+              "type": "string"
+            },
+            "diff_command": {
+              "type": "string"
+            }
+          }
+        },
+        "changed_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "findings": {
       "type": "array",
@@ -25,9 +80,24 @@
     "coverage": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["codex_lanes", "external_counsel", "skipped_inputs"],
+      "required": [
+        "lanes_run",
+        "lanes_skipped",
+        "external_counsel",
+        "skipped_inputs",
+        "verification_notes",
+        "candidate_count",
+        "accepted_count",
+        "rejected_count"
+      ],
       "properties": {
-        "codex_lanes": {
+        "lanes_run": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lanes_skipped": {
           "type": "array",
           "items": {
             "type": "string"
@@ -44,6 +114,24 @@
           "items": {
             "type": "string"
           }
+        },
+        "verification_notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "accepted_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rejected_count": {
+          "type": "integer",
+          "minimum": 0
         }
       }
     }

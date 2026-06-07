@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Codex-first development workflow plugin with evidence-backed review orchestration, TUI presentation guidance, and Linear work organization.",
   "author": {
     "name": "Shravan Sunder"

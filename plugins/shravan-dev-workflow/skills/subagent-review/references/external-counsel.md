@@ -50,7 +50,8 @@ git diff <base>...<head> | claude --print \
   --model opus \
   --effort xhigh \
   --no-session-persistence \
-  --tools "" \
+  --permission-mode plan \
+  --disallowedTools "Edit Write NotebookEdit Bash" \
   --output-format json \
   --append-system-prompt "You are an external adversarial counsel reviewer for a Codex-led review swarm. Read-only. Findings only. Do not edit files." \
   "Review the piped diff. Return at most 5 concrete findings with severity, evidence, scenario, smallest fix, proof, and confidence. If no high-confidence findings, say No findings."
@@ -62,9 +63,13 @@ Cheap smoke-test default:
 printf '%s\n' "Return exactly: CLAUDE_HAIKU_HARNESS_OK" | claude --print \
   --model haiku \
   --no-session-persistence \
-  --tools "" \
+  --permission-mode plan \
   --output-format json
 ```
+
+Inspect `modelUsage` in the JSON result. Claude Code aliases can resolve to a
+different available model than the requested shorthand; record the actual model
+in swarm coverage when Claude is used.
 
 Use the same shared packet and the same findings-only contract. Prefer piping the diff or review packet through stdin so Claude does not need filesystem tools. Do not use Claude as an implementation agent from this skill.
 
