@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Codex-first development workflow plugin with evidence-backed review orchestration, plan handoffs, TUI presentation guidance, and Linear work organization.",
   "author": {
     "name": "Shravan Sunder"
@@ -18,6 +18,7 @@
     "plan",
     "handoff",
     "execution",
+    "implementation-handoff",
     "tui",
     "presentation",
     "semantic-markdown"
@@ -26,7 +27,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Codex-first workflow with review, plan handoff, TUI presentation, and Linear planning",
-    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, package copy-pasteable plan handoffs for other agents, validate and execute written plans with controller-owned verification, and use agy as external counsel for substantial reviews. It also includes TUI presentation guidance for structured chat output and Linear work organization for projects, milestones, issues, and dependencies.",
+    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, package copy-pasteable plan and implementation handoffs for other agents, validate and execute written plans with controller-owned verification, and use agy as external counsel for substantial reviews. It also includes TUI presentation guidance for structured chat output and Linear work organization for projects, milestones, issues, and dependencies.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -36,6 +37,7 @@
     "defaultPrompt": [
       "Run subagent-review on this change.",
       "Prepare a plan handoff.",
+      "Prepare an implementation handoff.",
       "Review this plan adversarially.",
       "Validate and execute this plan."
     ]

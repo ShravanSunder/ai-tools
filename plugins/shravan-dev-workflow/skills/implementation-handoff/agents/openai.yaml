@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation Handoff"
+  short_description: "Package implementation state for another agent"
+  default_prompt: "Prepare an implementation handoff for this work."

@@ -28,8 +28,8 @@
     {
       "name": "shravan-dev-workflow",
       "source": "./plugins/shravan-dev-workflow",
-      "description": "Development workflow skills for subagent review, plan handoff/review/execution, TUI presentation, and Linear work organization",
-      "version": "1.5.2"
+      "description": "Development workflow skills for subagent review, plan and implementation handoff/review/execution, TUI presentation, and Linear work organization",
+      "version": "1.5.3"
     }
   ]
 }
