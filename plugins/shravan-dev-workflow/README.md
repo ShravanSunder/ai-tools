@@ -1,6 +1,6 @@
 # Shravan Dev Workflow
 
-Codex-first development workflow plugin for evidence-backed code and plan review, TUI presentation guidance for structured chat output, and Linear work organization.
+Codex-first development workflow plugin for evidence-backed code and plan review, copy-pasteable plan handoffs, validated plan execution, TUI presentation guidance for structured chat output, and Linear work organization.
 
 This plugin intentionally replaces the older broad counsel pattern with a narrower workflow:
 
@@ -8,6 +8,7 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 - One `agy` pass is used as an external counsel input for substantial reviews when available, preferring Gemini Pro/High.
 - Claude or extra `agy` adversarial lanes are opt-in when the user explicitly asks for them. Claude uses only the Claude Code CLI harness.
 - Oracle is never part of this workflow.
+- Plans and handoffs are first-class workflow skills: read the full artifact, prove coverage, verify against live repo state, and keep subagents bounded.
 - TUI presentation guidance is bundled here so structured design, comparison, architecture, and multi-section responses share one workflow plugin.
 - Linear work guidance is bundled here so project, milestone, issue, and dependency workflows are plugin-native instead of sync-script delivered.
 
@@ -26,6 +27,18 @@ Runs a structured review swarm:
 
 The reducer treats all reviewer outputs as evidence, not truth. Findings must include file or symbol evidence, a concrete failure scenario, and a smallest useful fix.
 
+### `plan-handoff`
+
+Packages a plan, design, spec, or implementation brief for another agent, CLI, machine, or future session. It writes repo-local temp artifacts such as `plan-handoff.md` and `copy-paste-prompt.md`, and also prints the copy-paste prompt in the response so the user can pass it directly to another agent.
+
+### `review-plan`
+
+Runs a read-only adversarial plan review before implementation. It requires whole-artifact coverage for plan files, checks major claims against live code/docs/package state, and reports blockers, important issues, questions, and nits with evidence.
+
+### `validate-execute-plan`
+
+Executes written plans only after validating them against the current repo. It can use subagents for bounded parallel slices, but the parent agent owns task packets, integration, diff review, verification, and final completion claims.
+
 ### `tui-presentation`
 
 Presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for fenced code blocks, inline technical tokens, file links, URLs, and runnable/copyable snippets.
@@ -38,7 +51,7 @@ Organizes Linear projects, milestones, issues, and dependencies using the docs-a
 
 After installing or refreshing the plugin and restarting Codex, verify the plugin in the live session:
 
-1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:subagent-review`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:linear-work`.
+1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:subagent-review`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:review-plan`, `shravan-dev-workflow:validate-execute-plan`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:linear-work`.
 2. Ask for a small local review: `Use subagent-review to review the last change.`
 3. Confirm Codex builds a shared review packet, runs spec compliance when applicable, and dispatches read-only Codex reviewer lanes.
 4. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.

@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.5.1",
-  "description": "Codex-first development workflow plugin with evidence-backed review orchestration, TUI presentation guidance, and Linear work organization.",
+  "version": "1.5.2",
+  "description": "Codex-first development workflow plugin with evidence-backed review orchestration, plan handoffs, TUI presentation guidance, and Linear work organization.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -15,6 +15,9 @@
     "code-review",
     "security",
     "adversarial",
+    "plan",
+    "handoff",
+    "execution",
     "tui",
     "presentation",
     "semantic-markdown"
@@ -22,8 +25,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Shravan Dev Workflow",
-    "shortDescription": "Codex-first workflow with review, TUI presentation, and Linear planning",
-    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, agy as external counsel for substantial reviews, and optional Claude or Gemini adversarial lanes only when explicitly requested. It also includes TUI presentation guidance for structured chat output and Linear work organization for projects, milestones, issues, and dependencies.",
+    "shortDescription": "Codex-first workflow with review, plan handoff, TUI presentation, and Linear planning",
+    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, package copy-pasteable plan handoffs for other agents, validate and execute written plans with controller-owned verification, and use agy as external counsel for substantial reviews. It also includes TUI presentation guidance for structured chat output and Linear work organization for projects, milestones, issues, and dependencies.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -31,7 +34,10 @@
       "Read"
     ],
     "defaultPrompt": [
-      "Run subagent-review on this change."
+      "Run subagent-review on this change.",
+      "Prepare a plan handoff.",
+      "Review this plan adversarially.",
+      "Validate and execute this plan."
     ]
   }
 }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Handoff"
+  short_description: "Package a plan for another agent"
+  default_prompt: "Prepare a copy-pasteable handoff for this plan."

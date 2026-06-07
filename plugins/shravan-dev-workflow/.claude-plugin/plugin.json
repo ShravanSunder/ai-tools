@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.5.1",
-  "description": "Development workflow skills for subagent review, TUI presentation, and Linear work organization.",
+  "version": "1.5.2",
+  "description": "Development workflow skills for subagent review, plan handoff/review/execution, TUI presentation, and Linear work organization.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -15,6 +15,9 @@
     "code-review",
     "security",
     "adversarial",
+    "plan",
+    "handoff",
+    "execution",
     "tui",
     "presentation"
   ]
