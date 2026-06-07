@@ -10,8 +10,8 @@ Use this skill to run a review swarm where Codex remains the orchestrator and re
 ## Operating Model
 
 - Default reviewers are Codex subagents.
-- Include one `agy` counsel pass for substantial reviews when available, unless the user asks to skip external counsel.
-- Include Claude, Gemini, or additional `agy` adversarial counsel only when the user explicitly asks for them.
+- Include one `agy` counsel pass for substantial reviews when available, preferring the latest Gemini Pro/High model exposed by `agy models`, unless the user asks to skip external counsel.
+- Include Claude or additional `agy` adversarial counsel only when the user explicitly asks for them. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
 
@@ -66,8 +66,8 @@ For small changes, run fewer lanes but keep at least one normal reviewer and one
 
 The default adversarial reviewer is a Codex subagent. When the user asks for a specific outside model, add that model as an adversarial counsel lane:
 
-- "include Gemini" means add a Gemini-flavored adversarial counsel pass. Use `agy` when Gemini is routed through Antigravity in the local environment.
-- "include Claude" means add Claude as an adversarial counsel pass if the user explicitly requested it and accepts any separate CLI cost.
+- "include Gemini" means add a Gemini-flavored adversarial counsel pass through `agy`, preferring the latest Gemini Pro/High model available from `agy models`.
+- "include Claude" means add Claude as an adversarial counsel pass through the Claude Code CLI harness if the user explicitly requested it and accepts any separate CLI cost.
 - "include agy" means add an additional `agy` adversarial counsel pass even for smaller reviews.
 
 External adversarial counsel still follows the same rule: it produces candidate findings only. The reducer verifies before accepting anything.
@@ -76,9 +76,9 @@ External adversarial counsel still follows the same rule: it produces candidate 
 
 Use `references/external-counsel.md` for command shapes and safety rules.
 
-- `agy`: include by default for substantial reviews when available; record skipped or failed counsel explicitly.
-- Claude: include only when the user explicitly asks for Claude, often as an adversarial lane.
-- Gemini: include only when the user explicitly asks for Gemini, often as an adversarial lane; use `agy` when that is the local Gemini/Antigravity path.
+- `agy`: include by default for substantial reviews when available; prefer Gemini Pro/High; record skipped or failed counsel explicitly.
+- Claude: include only when the user explicitly asks for Claude, often as an adversarial lane; use only the Claude Code CLI harness.
+- Gemini: include only when the user explicitly asks for Gemini, often as an adversarial lane; use `agy` as the local Gemini/Antigravity path.
 - Oracle: do not invoke, suggest, or route to Oracle from this skill.
 
 External counsel should receive the same packet and be told to write findings to an output file when the CLI supports it. Do not treat a failed external CLI as a failed review; continue with Codex subagents and report the missing input.
