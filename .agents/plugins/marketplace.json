@@ -3,7 +3,7 @@
   "interface": {
     "displayName": "AI Tools",
     "shortDescription": "Personal Codex plugins and skills for review, scaffolding, UI testing, and agent workflows",
-    "longDescription": "AI Tools is Shravan Sunder's personal Codex marketplace for reusable agent workflows, including project scaffolding, native UI testing, multi-model counsel, TUI presentation helpers, and Codex-first development workflows."
+    "longDescription": "AI Tools is Shravan Sunder's personal Codex marketplace for reusable agent workflows, including project scaffolding, native UI testing, multi-model counsel, and Codex-first development workflows with TUI presentation guidance."
   },
   "plugins": [
     {
@@ -47,18 +47,6 @@
       "source": {
         "source": "local",
         "path": "./plugins/shravan-dev-workflow"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_USE"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "tui-presentation",
-      "source": {
-        "source": "local",
-        "path": "./plugins/tui-presentation"
       },
       "policy": {
         "installation": "INSTALLED_BY_DEFAULT",

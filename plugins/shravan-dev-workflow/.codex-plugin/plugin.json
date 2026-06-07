@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "0.1.0",
-  "description": "Codex-first review swarm skill that coordinates Codex subagents with agy counsel and optional Claude or Gemini inputs, then synthesizes evidence-backed findings.",
+  "version": "1.4.4",
+  "description": "Codex-first development workflow plugin with evidence-backed review orchestration and TUI presentation guidance for structured chat output.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -13,13 +13,16 @@
     "agy",
     "code-review",
     "security",
-    "adversarial"
+    "adversarial",
+    "tui",
+    "presentation",
+    "semantic-markdown"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Shravan Dev Workflow",
-    "shortDescription": "Codex-first development workflow with subagent review",
-    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, agy as external counsel for substantial reviews, and optional Claude or Gemini adversarial lanes only when explicitly requested. The reducer verifies every candidate finding against the repository before reporting it.",
+    "shortDescription": "Codex-first workflow with review and TUI presentation",
+    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, agy as external counsel for substantial reviews, and optional Claude or Gemini adversarial lanes only when explicitly requested. It also includes TUI presentation guidance for structured chat output where markdown is unreliable for document layout but semantic markdown still belongs to code, links, paths, URLs, and technical tokens.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [

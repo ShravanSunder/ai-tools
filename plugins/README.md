@@ -51,5 +51,6 @@ Multi-model review orchestration. Provides:
 Shravan's Codex-first development workflow plugin. Provides:
 
 - **subagent-review** skill -- orchestrates read-only Codex reviewer lanes, includes `agy` counsel for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
+- **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle
