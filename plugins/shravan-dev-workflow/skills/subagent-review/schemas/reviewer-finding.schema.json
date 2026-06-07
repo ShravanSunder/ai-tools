@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ai-tools.local/subagent-swarm/reviewer-finding.schema.json",
-  "title": "Subagent Swarm Reviewer Finding",
+  "$id": "https://ai-tools.local/shravan-dev-workflow/reviewer-finding.schema.json",
+  "title": "Shravan Dev Workflow Reviewer Finding",
   "type": "object",
   "additionalProperties": false,
   "required": [

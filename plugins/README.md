@@ -46,9 +46,9 @@ Multi-model review orchestration. Provides:
 - `/review-plan` command -- trigger plan review
 - CLI permission hooks for bash commands
 
-### [subagent-swarm](subagent-swarm/)
+### [shravan-dev-workflow](shravan-dev-workflow/)
 
-Codex-first review swarm. Provides:
+Shravan's Codex-first development workflow plugin. Provides:
 
 - **subagent-review** skill -- orchestrates read-only Codex reviewer lanes, includes `agy` counsel for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo

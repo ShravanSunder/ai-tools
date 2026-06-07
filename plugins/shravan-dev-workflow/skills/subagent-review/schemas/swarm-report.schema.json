@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ai-tools.local/subagent-swarm/swarm-report.schema.json",
-  "title": "Subagent Swarm Report",
+  "$id": "https://ai-tools.local/shravan-dev-workflow/swarm-report.schema.json",
+  "title": "Shravan Dev Workflow Report",
   "type": "object",
   "additionalProperties": false,
   "required": ["scope", "findings", "open_questions", "coverage"],

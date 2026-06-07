@@ -1,6 +1,6 @@
-# Subagent Swarm
+# Shravan Dev Workflow
 
-Codex-first review swarm plugin for evidence-backed code and plan review.
+Codex-first development workflow plugin for evidence-backed code and plan review.
 
 This plugin intentionally replaces the older broad counsel pattern with a narrower workflow:
 
@@ -27,7 +27,7 @@ The reducer treats all reviewer outputs as evidence, not truth. Findings must in
 
 After installing or refreshing the plugin and restarting Codex, verify the plugin in the live session:
 
-1. Confirm the skill appears in the available skill list as `subagent-swarm:subagent-review`.
+1. Confirm the skill appears in the available skill list as `shravan-dev-workflow:subagent-review`.
 2. Ask for a small local review: `Use subagent-review to review the last change.`
 3. Confirm Codex builds a shared review packet and dispatches read-only Codex reviewer lanes.
 4. Confirm `agy` availability with `command -v agy` and `agy --version`.

@@ -27,8 +27,8 @@ and confidence. If no findings, say "No findings."
 When the CLI supports print mode, prefer a temp prompt file and an output file so stdout truncation or formatting bugs do not lose the review:
 
 ```shell
-prompt_file="$(mktemp /tmp/subagent-swarm-agy-prompt.XXXXXX)"
-output_file="$(mktemp /tmp/subagent-swarm-agy-output.XXXXXX)"
+prompt_file="$(mktemp /tmp/shravan-dev-workflow-agy-prompt.XXXXXX)"
+output_file="$(mktemp /tmp/shravan-dev-workflow-agy-output.XXXXXX)"
 
 # Write the shared review packet plus the prompt additions into $prompt_file.
 # In the prompt, instruct agy to write its final answer to $output_file.
