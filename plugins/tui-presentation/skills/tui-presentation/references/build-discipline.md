@@ -90,7 +90,7 @@ Step 7 — Verify.
 
 ▸ Every row's right edge lands at col 69 (the │ or ┐ or ┘)
 ▸ Total line length = 70 chars
-▸ No markdown syntax inside
+▸ No markdown-as-layout inside
 ▸ Single borders only (no ╔═╗ mixed in)
 ▸ Identifier content not truncated mid-token
 
@@ -262,6 +262,36 @@ Fence the code block cleanly under its label or between section rules.
 Keep the surrounding explanation in TUI form; keep the code-like
 content itself in its native fenced form.
 
+Semantic markdown boundary:
+
+Use semantic markdown for technical meaning, navigation, copying, and
+syntax highlighting.  Do not use it as decoration.
+
+Good inline-code atoms:
+
+  ▸ files and paths: `SKILL.md`, `references/build-discipline.md`
+  ▸ commands and flags: `claude plugin validate .`, `--show-passed`
+  ▸ packages, models, versions, hashes, branches, and release tags
+  ▸ type names, data model names, enum values, config keys, event
+    kinds, protocol fields, tool names, and API names
+
+Bad inline-code atoms:
+
+  ▸ emphasis words: `important`, `recommended`, `safe`, `blocked`
+  ▸ arbitrary nouns the writer wants to color
+  ▸ whole sentences or labels that are not technical identifiers
+
+Use clickable file links when navigation matters, especially when
+citing local code or docs with a useful line number.  Use markdown URL
+links when anchor text improves scanning.  Use a bare URL when the
+exact URL is itself the thing to inspect, copy, or verify.
+
+Avoid inline markdown inside fixed-width framed/table rows when the row
+depends on exact right-edge padding.  Renderers may hide backticks while
+the agent counted them, causing the visible right border to drift.  For
+code/link-heavy content, prefer no-frame lists, prose, or links placed
+immediately before or after the framed block.
+
 Continuation hang-indent:
 
 ```
@@ -276,6 +306,33 @@ explains the leak.
 
 Indent is always worth the characters.  Flat output is unreadable;
 indented output reveals hierarchy at a glance.
+
+Vertical-flow geometry:
+
+Use vertical `│` / `▼` flow only when each step is short enough to
+visually own the connector column.  If the first or widest step is
+long, the connector detaches from the phrase and reads like stray
+punctuation.
+
+```
+WRONG (long first step, detached connector):
+
+prompt asks for design / explanation / comparison / architecture
+│
+▼
+skill metadata triggers
+
+RIGHT (compact arrow-chain owns the long labels):
+
+prompt asks for design / explanation / comparison / architecture
+  ──► skill metadata triggers
+  ──► agent loads core TUI rules
+  ──► agent picks one shape
+```
+
+For a longer step-by-step process, use a pipeline box instead of
+vertical flow.  Pick the shape that preserves visual ownership of the
+sequence.
 
 
 ─── Overflow recipes ────────────────────────────────────────────────
@@ -354,7 +411,11 @@ Run this before shipping a response.  Every item must pass.
   [ ] Every rule/border exactly canvas-width?
   [ ] Every content row right-padded to the right alignment column?
   [ ] Right edges line up when you scan vertically?
-  [ ] No markdown syntax inside (#, **bold**, | col |, - bullet)?
+  [ ] No markdown-as-layout inside (#, **bold**, | col |, - bullet)?
+  [ ] Semantic markdown preserved for code, technical atoms, files,
+      URLs, and runnable/copyable snippets?
+  [ ] Inline markdown avoided in fixed-width rows when hidden markup
+      could shift visible padding?
   [ ] No identifier truncated mid-token?
   [ ] Breathing room present (blank row after ┌─┐, before └─┘,
       between semantic groups)?
@@ -365,6 +426,8 @@ Run this before shipping a response.  Every item must pass.
   [ ] Closing synthesis ("My read" or summary) present for long
       responses?
   [ ] Arrows consistent (──► ◄── ▼ only; no → ⇒ -> mixing)?
+  [ ] Vertical flow used only when connector columns visually belong
+      to each step?
   [ ] Single borders (╔═╗ used only for rare focal emphasis)?
 ```
 

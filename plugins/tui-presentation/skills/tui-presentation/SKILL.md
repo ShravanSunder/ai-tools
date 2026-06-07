@@ -1,18 +1,18 @@
 ---
 name: tui-presentation
 description: >-
-  Use for in-chat design and explanatory responses on chat or TUI surfaces where markdown does not render — `#`, `**bold**`, `| col |`, and `- bullet` appear as literal text. Codex: MUST load for in-chat design. Covers design proposals, architecture, comparisons and tradeoffs, UI mockups, flows, state machines, debugging narratives, and multi-section explanations. Teaches a seven-shape Unicode vocabulary with cordoning, indentation, and alignment discipline. Skip for JSON/YAML/code-only output, schema-bound replies, or terse answers.
+  Use for in-chat design and explanatory responses where markdown is unreliable for document structure. Codex: MUST load for in-chat design. Covers design proposals, architecture, comparisons/tradeoffs, UI mockups, flows, state machines, debugging narratives, and multi-section explanations. Teaches seven Unicode shapes plus semantic markdown boundaries for code, file links, URLs, and technical tokens. Skip for JSON/YAML/code-only output, schema-bound replies, or terse answers.
 ---
 
 TUI Presentation
 ══════════════════════════════════════════════════════════════════════
 
-Visual-first presentation for chat/TUI output where no markdown
-renderer exists.  Unicode box-drawing, whitespace, and alignment
-are the complete structural toolkit.  This skill teaches seven
-shapes, document structure, cordoning, and build discipline —
-enough to produce output that reads cleanly and helps the reader
-work faster.
+Visual-first presentation for chat/TUI output where markdown is
+unreliable for document structure.  Unicode box-drawing, whitespace,
+and alignment own layout.  Semantic markdown owns code, file links,
+URLs, and technical tokens.  This skill teaches seven shapes,
+cordoning, and build discipline — enough to produce output that reads
+cleanly and helps the reader work faster.
 
 
 ─── When to use ──────────────────────────────────────────────────────
@@ -35,25 +35,30 @@ Do NOT use for:
 
 User-specified format ALWAYS wins over this skill's defaults.
 
-Inside a TUI response, explain with TUI structure but render code-like
-content as fenced code blocks when syntax highlighting helps: source
-code, typed data models, schemas, and structured definitions.  Do not
-redraw that content as Unicode layout.  If the user asks for code-only
-output, skip this skill.
+Inside a TUI response, preserve semantic markdown for code,
+navigation, and technical tokens.  Render code-like content as fenced
+code blocks when syntax highlighting helps: source code, typed data
+models, schemas, and structured definitions.  Do not redraw that
+content as Unicode layout.  If the user asks for code-only output,
+skip this skill.
 
 For short code-like tokens inside prose, prefer inline code spans when
 the surface preserves them cleanly: variable names, property names,
 field names, type names, enum cases, file names, commands, config keys,
-and short expressions or literal values.  Use code styling to help the
-reader parse the output, not for emphasis.
+model names, package names, version strings, hashes, branches, event
+kinds, protocol fields, API names, and short expressions or literal
+values.  Use code styling to help the reader parse technical atoms,
+not for emphasis.
 
 
 ─── Rendering reality ────────────────────────────────────────────────
 
-Chat output has no markdown renderer.  Hash-signs, double-asterisks,
-pipe-tables, and hyphen-bullets all render as literal characters.
-The only structural tools are Unicode box-drawing, whitespace, and
-alignment.  Every principle below flows from this.
+Chat output does not reliably render markdown as document structure.
+Hash-sign headings, double-asterisk emphasis, pipe-tables, and
+hyphen-bullets often render literally or flatten the scan path.  Use
+Unicode box-drawing, whitespace, and alignment for structure.  Use
+semantic markdown for code blocks, inline code, file links, markdown
+URL links, and bare URLs when the exact URL matters.
 
 ┌─ Hard limits ───────────────────────────────────────────────────────┐
 │                                                                     │
@@ -64,14 +69,14 @@ alignment.  Every principle below flows from this.
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
-Ignore every markdown reflex.  A hash is a literal hash.  Double
-stars around a phrase are literal stars around a phrase.  A pipe-
-table is broken columns.  Structure with Unicode rules and frames
-— or structure does not exist.
+Ignore markdown-as-layout reflexes.  Hash headings, double-star
+emphasis, and pipe-tables are not structure.  Structure with Unicode
+rules and frames — or structure does not exist.
 
 Exceptions: present actual code-like content as fenced code blocks
-inside an otherwise TUI-structured response, and use inline code spans
-for short symbols when available.
+inside an otherwise TUI-structured response, use inline code spans for
+technical tokens, and use links for files and URLs when navigation
+matters.
 
 
 ─── Shape vocabulary ─────────────────────────────────────────────────
@@ -632,8 +637,10 @@ Rules:
 
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
-│  1.  Chat is not markdown.  No hash-signs, no **bold**, no pipe-    │
-│      tables, no hyphen-bullets.                                     │
+│  1.  TUI owns layout; semantic markdown owns code and links.  No    │
+│      # headings, **bold**, pipe-tables, or hyphen-bullets as        │
+│      structure.  Keep fenced code, inline code, file links, and     │
+│      URLs when they carry technical meaning.                        │
 │  2.  Default to width 70.  Widen deliberately when the block        │
 │      clearly benefits.  Keep one committed width per block.         │
 │  3.  Commit alignment columns BEFORE writing content.  Pad to them. │
@@ -718,6 +725,15 @@ FORBIDDEN — common mistakes that violate the palette:
 ` backtick` for emphasis     use framed callout or plain prose;
                              keep backticks for identifiers only
 ```
+
+ALLOWED semantic markdown:
+
+  ▸ Fenced code blocks with language tags for source, config,
+    schemas, and typed models
+  ▸ Inline code spans for technical atoms, not emphasis words
+  ▸ Markdown file links for local navigation when the file matters
+  ▸ Markdown URL links when link text improves scan
+  ▸ Bare URLs when the exact URL matters
 
 Double borders (╔ ═ ╗ ║ ╚ ╝ ╠ ╣ ╦ ╩ ╬) — rare use only.  Reserved
 for a single focal-emphasis block per response (e.g. one design
