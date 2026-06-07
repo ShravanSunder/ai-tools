@@ -1,22 +1,24 @@
 # AI Tools
 
-Claude Code plugins and sandboxed Docker environments for AI coding assistants.
+Codex and Claude Code plugins plus sandboxed Docker environments for AI coding assistants.
 
-## Claude Code Plugins
+## Plugins
 
-Install via the Claude Code marketplace:
+Install through the local ai-tools marketplaces.
 
 ```bash
+codex plugin marketplace add ~/dev/ai-tools
 /plugin marketplace add ShravanSunder/ai-tools
 ```
 
-Then install individual plugins with `/plugin install <name>@ai-tools`.
+Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex or `/plugin install <name>@ai-tools` in Claude Code.
 
 | Plugin | Description |
 |--------|-------------|
 | [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
 | [`skill-peekaboo`](plugins/skill-peekaboo/) | Visual UI testing for macOS apps using Peekaboo CLI |
 | [`quorum-counsel`](plugins/quorum-counsel/) | Multi-model review orchestration -- counsel-reviewer and codex-solver background agents |
+| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first subagent review, TUI presentation, and Linear work organization |
 
 See [`plugins/`](plugins/) for full details.
 
@@ -101,11 +103,11 @@ See [`agent_sidecar/`](agent_sidecar/) for full setup, architecture, and configu
 
 ```
 ai-tools/
-├── plugins/                     # Claude Code plugins
+├── plugins/                     # Codex and Claude Code plugins
 │   ├── ai-scaffold/             # Project scaffolding
 │   ├── skill-peekaboo/          # macOS visual UI testing
-│   └── quorum-counsel/          # Multi-model review orchestration
-├── skills/                      # Pure skills (future)
+│   ├── quorum-counsel/          # Manual multi-model counsel
+│   └── shravan-dev-workflow/    # Review, TUI, Linear workflow skills
 ├── agent_sidecar/               # Docker sidecar system
 └── CLAUDE.md                    # Agent instructions
 ```

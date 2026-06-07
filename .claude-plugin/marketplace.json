@@ -24,6 +24,12 @@
       "source": "./plugins/quorum-counsel",
       "description": "Multi-model review and analysis — counsel-reviewer, codex-solver, gemini-solver, and oracle-solver background agents with CLI permission hooks",
       "version": "1.9.0"
+    },
+    {
+      "name": "shravan-dev-workflow",
+      "source": "./plugins/shravan-dev-workflow",
+      "description": "Development workflow skills for subagent review, TUI presentation, and Linear work organization",
+      "version": "1.5.0"
     }
   ]
 }

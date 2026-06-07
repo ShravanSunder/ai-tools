@@ -1,10 +1,10 @@
 # AI Tools - Agent Instructions
 
-This repository contains Claude Code plugins and the Agent Sidecar system for running AI coding assistants in sandboxed Docker containers.
+This repository contains personal Codex and Claude Code plugins plus the Agent Sidecar system for running AI coding assistants in sandboxed Docker containers.
 
 ## Repository Overview
 
-**Purpose**: AI development tools distributed as Claude Code plugins, plus isolated Docker environments for AI agents.
+**Purpose**: AI development tools distributed through local plugin marketplaces, plus isolated Docker environments for AI agents.
 
 ## Repository Variants
 
@@ -35,17 +35,13 @@ The repos are maintained separately. When making changes to shared sidecar funct
 
 ```
 ai-tools/
-├── .claude-plugin/marketplace.json   # Plugin marketplace manifest
-├── plugins/                          # Claude Code plugins
+├── .agents/plugins/marketplace.json  # Codex plugin marketplace manifest
+├── .claude-plugin/marketplace.json   # Claude Code plugin marketplace manifest
+├── plugins/                          # Plugin sources
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
 │   ├── skill-peekaboo/               # macOS visual UI testing via Peekaboo CLI
-│   └── quorum-counsel/               # Multi-model review (counsel-reviewer + codex-solver)
-├── skills/                           # Standalone Codex/common skills
-│   ├── claude-solver/                # Delegates to claude -p (Opus) for analysis
-│   ├── gemini-solver/                # Delegates to gemini -p for analysis
-│   └── counsel-reviewer/             # Orchestrates claude + gemini in parallel for review
-├── bin/                              # Discovery and sync scripts
-│   └── list-codex-skills.sh          # Lists all skill paths for Codex sync
+│   ├── quorum-counsel/               # Manual multi-model counsel stack
+│   └── shravan-dev-workflow/         # Review, TUI, and Linear workflow skills
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
@@ -57,51 +53,60 @@ ai-tools/
 └── CLAUDE.md → agents.md             # Symlink for Claude Code
 ```
 
-## Skills (Codex / Cross-Tool)
+## Plugin Skills
 
-The `skills/` directory contains standalone skills that are NOT part of any Claude Code plugin. These are primarily used by Codex but use the same SKILL.md format that works across tools.
+Codex skills are delivered by installed Codex plugins. Do not add sync scripts or symlink-based delivery back into this repo.
 
-### Skills vs Plugins
+Claude Code can load the same skill tree when a plugin also has `.claude-plugin/plugin.json`. Keep shared workflow skills under the plugin that owns them.
 
-- **Plugins** (`plugins/`): Claude Code-specific. Have agents, hooks, slash commands, and optionally skills. Installed via `claude plugin install`.
-- **Skills** (`skills/`): Tool-agnostic SKILL.md files. Delivered to Codex via `bin/list-codex-skills.sh` and the Codex sync script.
-
-### How Skills Get Delivered to Codex
-
-1. `bin/list-codex-skills.sh` discovers all skills (from `plugins/*/skills/*/` and `skills/*/`)
-2. `~/.agents/sync-skills.sh` (invoked by your Codex sync script) calls the discovery script
-3. Skills are symlinked into `~/.agents/skills/` for Codex to find
-
-### Current Skills
+### Current Plugin Skills
 
 | Skill | Location | Purpose |
 |-------|----------|---------|
-| claude-solver | `skills/claude-solver/` | Delegates to `claude -p` (Opus) for analysis — Codex-specific |
-| gemini-solver | `skills/gemini-solver/` | Delegates to `gemini -p` for large codebase analysis |
-| counsel-reviewer | `skills/counsel-reviewer/` | Orchestrates claude + gemini in parallel for code/plan review |
+| subagent-review | `plugins/shravan-dev-workflow/skills/subagent-review/` | Codex-first review swarm using read-only Codex subagents, default `agy` counsel for substantial reviews, and explicit opt-in Claude/Gemini adversarial lanes |
+| tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
+| linear-work | `plugins/shravan-dev-workflow/skills/linear-work/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/skill-peekaboo/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
+**Config locations**:
+- Claude agents: `dot_claude/private_agents/*.md`
+- Codex agent roles: `dot_codex/agents/*.toml.tmpl` (analyst, reviewer, browser) — spawned in-session via `spawn_agent`
+- Codex profiles: `dot_codex/private_config.toml.tmpl` (`[profiles.spark]`, `[profiles.researcher]`) — invoked via `codex --profile X`
+- Codex role/profile prompts (shared): `dot_codex/instructions/*.md`
+
+Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
+
 ### Relationship to quorum-counsel
 
-The `skills/` versions of claude-solver, gemini-solver, and counsel-reviewer are the **Codex counterparts** of the Claude Code agents in `plugins/quorum-counsel/agents/`. Each skill's README.md documents the relationship and differences. The key difference: quorum-counsel agents call `codex exec` + `gemini -p` (Claude is orchestrator), while these skills call `claude -p` + `gemini -p` (Codex is orchestrator).
+`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:subagent-review` for Codex reviews. That skill keeps Codex subagents as the primary reviewers, uses `agy` counsel for substantial reviews when available, and includes Claude or additional Gemini/agy lanes only when the user explicitly asks.
+
+Oracle is manual-only. Do not invoke it from normal review workflows.
 
 ### Adding a New Skill
 
-1. Create `skills/{skill-name}/SKILL.md` with YAML frontmatter (`name`, `description`)
-2. Add `skills/{skill-name}/README.md` documenting purpose and relationships
-3. Run `bin/list-codex-skills.sh` to verify it's discovered
-4. Run `~/.agents/sync-skills.sh` to symlink it into `~/.agents/skills/`.
+1. Choose the owning plugin under `plugins/<plugin-name>/`.
+2. Create `plugins/<plugin-name>/skills/{skill-name}/SKILL.md` with YAML frontmatter (`name`, `description`).
+3. Add references, scripts, or README files inside that skill directory as needed.
+4. Bump the owning plugin version.
+5. Update `.agents/plugins/marketplace.json` for Codex availability when adding a new plugin.
+6. Update `.claude-plugin/marketplace.json` and add `.claude-plugin/plugin.json` only if Claude Code should load the same plugin.
 
 ## Plugin Development
 
 ### Marketplace
 
-Plugins are distributed via `.claude-plugin/marketplace.json`. Each plugin entry needs a `name` and `source` (relative path to the plugin directory).
+Plugins are distributed through both marketplace manifests when they support both tools:
+
+- Codex: `.agents/plugins/marketplace.json`
+- Claude Code: `.claude-plugin/marketplace.json`
 
 ```bash
-# Validate marketplace manifest
+# Validate Claude marketplace manifest
 claude plugin validate .
+
+# Inspect Codex marketplace state
+codex plugin list --marketplace ai-tools --available --json
 ```
 
 ### Plugin Structure
@@ -110,6 +115,7 @@ Each plugin lives under `plugins/` and follows the standard Claude Code plugin l
 
 ```
 plugins/<plugin-name>/
+├── .codex-plugin/plugin.json     # Codex plugin manifest (when supported)
 ├── .claude-plugin/plugin.json    # Plugin manifest (name, version, description)
 ├── commands/                     # Slash commands (*.md files)
 ├── agents/                       # Agent definitions (*.md with YAML frontmatter)
@@ -123,11 +129,11 @@ plugins/<plugin-name>/
 
 ### Key Rules
 
-- Plugin `source` paths in `marketplace.json` must use `./plugins/<name>` format (explicit relative paths)
+- Plugin `source` paths in marketplace manifests must use `./plugins/<name>` format (explicit relative paths)
 - `${CLAUDE_PLUGIN_ROOT}` resolves to the cached install path at runtime -- use it in hooks and scripts
 - Path traversal (`..`) is NOT allowed in source paths
 - Plugin `name` is the cache key for consumers -- changing it breaks existing installs
-- Run `claude plugin validate .` after any marketplace changes
+- Run `claude plugin validate .` after Claude marketplace changes and `codex plugin list --marketplace ai-tools --available --json` after Codex marketplace changes
 
 ### Hook Development Gotchas
 
@@ -139,12 +145,12 @@ plugins/<plugin-name>/
 
 ### Adding a New Plugin
 
-1. Create `plugins/<name>/` with `.claude-plugin/plugin.json`
+1. Create `plugins/<name>/` with `.codex-plugin/plugin.json` for Codex and `.claude-plugin/plugin.json` for Claude Code if needed
 2. Add commands, agents, skills, or hooks as needed
-3. Add an entry to `.claude-plugin/marketplace.json`
+3. Add an entry to the matching marketplace manifest
 4. Add a `README.md` in the plugin directory
 5. Update `plugins/README.md` with the new plugin listing
-6. Validate: `claude plugin validate .`
+6. Validate with the relevant plugin CLI
 
 ## Agent Sidecar
 

@@ -1,6 +1,6 @@
 # linear-work
 
-Standalone skill for organizing work in Linear following the **docs-are-truth, tickets-are-tracking** paradigm.
+Plugin skill for organizing work in Linear following the **docs-are-truth, tickets-are-tracking** paradigm.
 
 ## Purpose
 
@@ -25,7 +25,7 @@ linear-work/
 
 ## Relationship to Other Skills
 
-This is a standalone skill (not part of any Claude Code plugin). It is delivered to Codex via `bin/list-codex-skills.sh` and works in any tool that supports SKILL.md format.
+This skill is owned by the `shravan-dev-workflow` plugin. Codex loads it through the ai-tools Codex marketplace, and Claude Code loads the same skill tree through the ai-tools Claude marketplace.
 
 ## Prerequisites
 

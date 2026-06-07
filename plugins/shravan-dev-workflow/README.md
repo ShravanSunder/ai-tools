@@ -1,6 +1,6 @@
 # Shravan Dev Workflow
 
-Codex-first development workflow plugin for evidence-backed code and plan review, plus TUI presentation guidance for structured chat output.
+Codex-first development workflow plugin for evidence-backed code and plan review, TUI presentation guidance for structured chat output, and Linear work organization.
 
 This plugin intentionally replaces the older broad counsel pattern with a narrower workflow:
 
@@ -9,6 +9,7 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 - Claude or extra `agy` adversarial lanes are opt-in when the user explicitly asks for them. Claude uses only the Claude Code CLI harness.
 - Oracle is never part of this workflow.
 - TUI presentation guidance is bundled here so structured design, comparison, architecture, and multi-section responses share one workflow plugin.
+- Linear work guidance is bundled here so project, milestone, issue, and dependency workflows are plugin-native instead of sync-script delivered.
 
 ## Skills
 
@@ -28,11 +29,15 @@ The reducer treats all reviewer outputs as evidence, not truth. Findings must in
 
 Presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for fenced code blocks, inline technical tokens, file links, URLs, and runnable/copyable snippets.
 
+### `linear-work`
+
+Organizes Linear projects, milestones, issues, and dependencies using the docs-are-truth, tickets-are-tracking paradigm. Use MCP tools for normal Linear operations and the Linear CLI only for gap operations such as surgical relation changes, deletion, or issue start.
+
 ## Post-Restart Smoke Test
 
 After installing or refreshing the plugin and restarting Codex, verify the plugin in the live session:
 
-1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:subagent-review` and `shravan-dev-workflow:tui-presentation`.
+1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:subagent-review`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:linear-work`.
 2. Ask for a small local review: `Use subagent-review to review the last change.`
 3. Confirm Codex builds a shared review packet and dispatches read-only Codex reviewer lanes.
 4. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
