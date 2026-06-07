@@ -1,0 +1,33 @@
+{
+  "name": "subagent-swarm",
+  "version": "0.1.0",
+  "description": "Codex-first review swarm skill that coordinates Codex subagents with agy counsel and optional Claude or Gemini inputs, then synthesizes evidence-backed findings.",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": [
+    "review",
+    "subagents",
+    "swarm",
+    "codex",
+    "agy",
+    "code-review",
+    "security",
+    "adversarial"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Subagent Swarm",
+    "shortDescription": "Codex-first multi-agent review swarm",
+    "longDescription": "Use Subagent Swarm to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, agy as external counsel for substantial reviews, and optional Claude or Gemini adversarial lanes only when explicitly requested. The reducer verifies every candidate finding against the repository before reporting it.",
+    "developerName": "Shravan Sunder",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "defaultPrompt": [
+      "Run a subagent review swarm on this change."
+    ]
+  }
+}

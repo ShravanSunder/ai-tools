@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-tools.local/subagent-swarm/swarm-report.schema.json",
+  "title": "Subagent Swarm Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope", "findings", "open_questions", "coverage"],
+  "properties": {
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "./reviewer-finding.schema.json"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["codex_lanes", "external_counsel", "skipped_inputs"],
+      "properties": {
+        "codex_lanes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "external_counsel": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipped_inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

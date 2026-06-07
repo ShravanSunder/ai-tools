@@ -1,6 +1,9 @@
 # Plugins
 
-Claude Code plugins distributed via the [ai-tools marketplace](../.claude-plugin/marketplace.json).
+AI tools distributed through the local marketplaces in this repository.
+
+- Codex plugins: [`.agents/plugins/marketplace.json`](../.agents/plugins/marketplace.json)
+- Claude Code plugins: [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)
 
 ## Installation
 
@@ -42,3 +45,11 @@ Multi-model review orchestration. Provides:
 - **codex-solver** agent -- delegates hard problems to OpenAI Codex as a background task
 - `/review-plan` command -- trigger plan review
 - CLI permission hooks for bash commands
+
+### [subagent-swarm](subagent-swarm/)
+
+Codex-first review swarm. Provides:
+
+- **subagent-review** skill -- orchestrates read-only Codex reviewer lanes, includes `agy` counsel for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
+- Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
+- Oracle exclusion -- this workflow never invokes or suggests Oracle
