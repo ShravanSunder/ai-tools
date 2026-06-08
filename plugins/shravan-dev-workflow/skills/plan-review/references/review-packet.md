@@ -10,6 +10,7 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Review target: <plan path or handoff packet>
 Coverage from controller: <line count + chunk ranges, or packet files>
+Lane: <spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-counsel>
 
 Plan summary:
 <brief neutral summary>
@@ -23,6 +24,9 @@ Relevant files/docs to inspect:
 - <path>: <why>
 
 Focus:
+<lane-specific focus from the controller>
+
+Always check:
 - stale assumptions
 - missing cutovers
 - API/contract mismatch
@@ -31,8 +35,9 @@ Focus:
 - ownership gaps between controller, subagents, and implementer
 
 Return:
+- Lane: <lane name>
 - Verdict: ready | needs revision | blocked
 - Findings grouped as blocker | important | question | nit
-- For each finding: evidence, failure scenario, smallest fix, proof/test
+- For each finding: evidence, failure scenario, smallest plan edit, proof/test
 - Do not include speculative findings without evidence
 ```

@@ -14,7 +14,7 @@ Package actual implementation state so another agent can review, continue, or au
 - Always write a file artifact and also print the copy-paste prompt in the response.
 - Ground the handoff in current repo state: branch, diff, commits, changed files, validation commands, and known risks.
 - Separate proven facts from claims, guesses, and unfinished work.
-- Do not run reviewers automatically. This skill prepares the packet; `subagent-review` or a manual Claude/Gemini/Codex paste can consume it.
+- Do not run reviewers automatically. This skill prepares the packet; `implementation-subagent-review` or a manual Claude/Gemini/Codex paste can consume it.
 - If the handoff asks another agent to review only, the prompt must say "do not edit files".
 
 ## Workflow

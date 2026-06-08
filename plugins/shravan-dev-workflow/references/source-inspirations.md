@@ -1,0 +1,15 @@
+# Source Inspirations
+
+This plugin contains original Shravan workflow skills. These upstream skills are references for best practices, trigger design, failure shields, and output shapes; do not copy their text wholesale.
+
+| Local skill | Source inspirations | Borrowed mechanics | Shravan adaptation |
+| --- | --- | --- | --- |
+| `implementation-subagent-review` | OpenAI `codex-plugin-cc`, Anthropic PR review toolkit, Dimillian `review-swarm`, Steipete `codex-review`, Sentry `code-review`, Obra `receiving-code-review` | adversarial review, read-only reviewer lanes, reducer verification, severity-first findings, verify-before-fix review reception | Codex subagents are primary; `agy` is optional counsel; Claude is explicit opt-in through the Claude Code harness; accepted current-session findings are fixed after validation; Oracle is excluded |
+| `plan-review` | Obra `writing-plans`, Obra subagent review prompts, Codex adversarial review, Obra `receiving-code-review` | whole-artifact loading, adversarial holes, spec/code comparison, validate-before-addressing feedback | plan review uses bounded subagent lanes by default for substantial plans, then revises accepted plan issues without implementing code |
+| `plan-validate-execute` | Obra `executing-plans`, Obra `subagent-driven-development`, Obra `verification-before-completion` | controller packets, bounded implementer slices, review after slices, verification before done | parent agent owns integration, validation scope, and final completion claims |
+| `plan-handoff` | Matt Pocock handoff patterns, Obra planning workflows | copy-pasteable context packet, explicit target audience, temp artifacts | writes repo-local temp handoff plus prints the paste prompt in chat |
+| `implementation-handoff` | Matt Pocock handoff patterns, review closeout workflows | implementation-state packet, changed-files context, reviewer prompt | works at planned, in-progress, pre-review, post-review, or blocked stages |
+| `debug-investigation` | Obra `systematic-debugging`, Dimillian `bug-hunt-swarm`, Matt Pocock `diagnose`/`triage` | no fixes before root cause, bug packet, read-only investigation lanes, fastest proof path | narrows incident triage into diagnosis-first debugging with main-agent ownership |
+| `skill-audit` | Dimillian `project-skill-audit`, Obra `writing-skills`, Sentry `skill-scanner`/`skill-writer` | evidence-backed candidates, update-before-new, pressure-test mindset, concise skill anatomy | audits Shravan session patterns and admired upstream skills before recommending plugin-native changes |
+| `tui-presentation` | Shravan TUI output preferences and prior terminal presentation work | visual structure, alignment discipline, diagram-first explanation | bundled here so design/review/debug responses share the same presentation contract |
+| `pm-linear-work` | Shravan Linear project organization preferences | docs as truth, tickets as tracking, dependency hygiene | keeps Linear operations plugin-native and separate from review workflows |

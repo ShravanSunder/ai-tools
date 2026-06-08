@@ -1,9 +1,9 @@
 ---
-name: subagent-review
-description: Use when requesting a multi-agent code review, review swarm, adversarial review, PR or diff review, or review synthesis across Codex subagents and optional external counsel before merge.
+name: implementation-subagent-review
+description: Use when requesting a multi-agent implementation review, code review swarm, adversarial review, PR or diff review, or review synthesis across Codex subagents and optional external counsel before merge.
 ---
 
-# Subagent Review
+# Implementation Subagent Review
 
 Use this skill to run a review swarm where Codex remains the orchestrator and reducer. The swarm is review-only: subagents and external counsel inspect, report, and challenge; the parent session decides what is real.
 
@@ -15,7 +15,9 @@ review packet
   -> Codex reviewer lanes
   -> optional external counsel
   -> reducer verification
-  -> verdict, findings, and coverage
+  -> receive findings
+  -> address accepted implementation issues when in-scope
+  -> verdict, findings, fixes, and coverage
 ```
 
 ## Operating Model
@@ -25,6 +27,10 @@ review packet
 - Include Claude or additional `agy` adversarial counsel only when the user explicitly asks for them. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
+- After review, receive findings rigorously: read, understand, verify against codebase reality, evaluate, then address accepted findings.
+- When reviewing current-session implementation work, fix accepted blocker and important findings by default unless the user explicitly asked for report-only review.
+- Do not blindly implement reviewer suggestions. Reject unsupported, technically wrong, out-of-scope, or YAGNI findings with evidence.
+- If feedback is unclear, conflicts with user decisions, or expands scope, ask before editing.
 - Keep the swarm shallow: direct child reviewer agents only. Do not ask reviewer agents to spawn deeper review swarms.
 - Keep orchestration skill-native. Scripts and schemas can support shape and validation, but the parent Codex session owns dispatch and reduction.
 
@@ -114,7 +120,15 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Reject claims that cannot be proven from current artifacts.
    - Deduplicate by root cause.
 
-6. Verdict
+6. Review reception and fix loop
+   - Read all accepted and disputed findings before editing.
+   - For each accepted blocker/important finding, make one focused fix at a time when the current workflow owns implementation.
+   - Run the smallest relevant proof after each fix or batch of tightly related fixes.
+   - For PR review comments or review threads, resolve threads only after validating that they are stale or after fixing the real issue they identified.
+   - Re-run focused review or verification when a finding was subtle or high risk.
+   - If the user asked for review-only, return findings and exact fix guidance instead of editing.
+
+7. Verdict
    - `ready`: no accepted blocker/important findings and no decision-relevant open questions.
    - `ready_with_fixes`: accepted issues exist but are bounded and non-blocking.
    - `not_ready`: accepted blocker/important findings, failed spec compliance, or unresolved decision-critical scope.
@@ -180,6 +194,41 @@ Accepted findings must include:
 
 Rejected findings should not be listed by default. Mention them only when a rejected high-severity claim might otherwise confuse the user.
 
+## Addressing Accepted Findings
+
+Implementation review includes review reception when the parent agent owns the implementation.
+
+Default behavior:
+
+- If invoked as part of finishing current implementation work, validate and fix accepted blocker/important findings without waiting for a separate user prompt.
+- If invoked for PR/report-only review, external review, or when the user says not to edit, keep the review read-only and return exact fix guidance.
+
+Fix loop:
+
+1. Understand the finding in your own technical terms.
+2. Verify it against current code, diff, tests, and user intent.
+3. Decide: accept, reject, defer, or clarify.
+4. Fix accepted in-scope findings one at a time or in a tightly related batch.
+5. Test each fix with the smallest meaningful proof, then broader relevant checks.
+6. Inspect the final diff and ensure no unrelated cleanup slipped in.
+7. For PR/review-thread workflows, close or reply to validated review threads when that is part of readiness.
+8. Report accepted, rejected, deferred, and unresolved findings.
+
+Stop and ask before editing when:
+
+- the finding changes product/design scope
+- the finding conflicts with prior user decisions
+- the required fix touches unrelated infrastructure or validation tooling
+- the finding is plausible but cannot be verified from available evidence
+
+PR thread rule:
+
+- Do not assume pushed code closes review threads.
+- Inspect thread state when PR readiness depends on it.
+- Resolve stale or misleading threads only after verifying them against current code/tests.
+- Resolve valid threads only after the fix lands and the relevant proof passes.
+- Leave unresolved threads open when the finding needs a user decision or cannot be verified.
+
 ## Report Shape
 
 Start with verdict and findings, ordered by severity. If no findings survive verification, say that clearly and list any skipped reviewers or test gaps.
@@ -204,6 +253,9 @@ Open questions
 
 Swarm coverage
 <reviewed scope, lanes run, lanes skipped, external counsel status, verification notes>
+
+Fix follow-through
+<accepted findings fixed, rejected/deferred findings, PR threads resolved or left open, commands run, remaining blockers>
 ```
 
 ## Common Mistakes
@@ -212,6 +264,6 @@ Swarm coverage
 - Do not accept findings just because multiple agents agreed.
 - Do not hide skipped external counsel.
 - Do not run Claude or Gemini unless the user asked.
-- Do not let review turn into implementation unless the user explicitly switches scope.
+- Do not leave accepted current-session implementation blockers unfixed unless the user asked for report-only review or the fix needs a decision.
 - Do not let external counsel failure fail the whole review.
 - Do not let a sidecar reviewer become the critical path when the parent can continue reducing available evidence.

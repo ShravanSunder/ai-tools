@@ -1,4 +1,4 @@
 interface:
-  display_name: "Review Plan"
+  display_name: "Plan Review"
   short_description: "Adversarially review a plan"
   default_prompt: "Review this plan adversarially before implementation."

@@ -1,6 +1,5 @@
 ---
-name: linear-work
-version: 1.0.0
+name: pm-linear-work
 description: >
   This skill should be used when the user asks to "create linear tickets",
   "organize work in linear", "set up a linear project", "create milestones",
@@ -10,7 +9,7 @@ description: >
   Provides the docs-are-truth/tickets-are-tracking paradigm with MCP and CLI tool routing.
 ---
 
-# Linear Work Organization
+# PM Linear Work Organization
 
 Manage Linear projects, milestones, and issues following the **docs-are-truth, tickets-are-tracking** paradigm. Architecture documents in the repo are the source of truth for design and plans. Linear tickets track progress, dependencies, and what's blocked.
 

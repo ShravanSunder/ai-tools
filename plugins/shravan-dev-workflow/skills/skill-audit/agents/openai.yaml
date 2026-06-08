@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Audit"
+  short_description: "Audit skills from evidence"
+  default_prompt: "Audit these skills against session evidence and upstream inspirations; recommend create, update, merge, or skip."

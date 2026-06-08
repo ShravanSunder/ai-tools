@@ -1,0 +1,4 @@
+interface:
+  display_name: "Debug Investigation"
+  short_description: "Root-cause bugs before fixes"
+  default_prompt: "Investigate this bug, prove the likely root cause, and do not edit files yet."

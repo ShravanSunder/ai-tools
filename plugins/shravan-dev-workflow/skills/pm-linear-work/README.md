@@ -1,4 +1,4 @@
-# linear-work
+# pm-linear-work
 
 Plugin skill for organizing work in Linear following the **docs-are-truth, tickets-are-tracking** paradigm.
 
@@ -14,7 +14,7 @@ Provides procedural knowledge for managing Linear projects, milestones, and issu
 ## Structure
 
 ```
-linear-work/
+pm-linear-work/
 ├── SKILL.md                              # Core paradigm, tool routing, common workflows
 ├── README.md                             # This file
 └── references/

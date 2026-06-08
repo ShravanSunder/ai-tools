@@ -63,9 +63,15 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 
 | Skill | Location | Purpose |
 |-------|----------|---------|
-| subagent-review | `plugins/shravan-dev-workflow/skills/subagent-review/` | Codex-first review swarm using read-only Codex subagents, default `agy` counsel for substantial reviews, and explicit opt-in Claude/Gemini adversarial lanes |
+| implementation-subagent-review | `plugins/shravan-dev-workflow/skills/implementation-subagent-review/` | Codex-first implementation review swarm using read-only Codex subagents, default `agy` counsel for substantial reviews, and explicit opt-in Claude/Gemini adversarial lanes |
+| plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable plan/design/spec handoff packets for other agents, CLIs, machines, or future sessions |
+| implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Stage-aware implementation-state packets for manual reviewers or continuation agents |
+| plan-review | `plugins/shravan-dev-workflow/skills/plan-review/` | Read-only adversarial plan/design/spec review with whole-artifact loading and live repo validation |
+| plan-validate-execute | `plugins/shravan-dev-workflow/skills/plan-validate-execute/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
+| debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging for bugs, failures, flaky behavior, regressions, and unexpected behavior before fixes |
+| skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed skill audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
-| linear-work | `plugins/shravan-dev-workflow/skills/linear-work/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
+| pm-linear-work | `plugins/shravan-dev-workflow/skills/pm-linear-work/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/skill-peekaboo/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
@@ -79,7 +85,7 @@ Sync rule: when role behavior changes, update the Claude agent AND the matching 
 
 ### Relationship to quorum-counsel
 
-`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:subagent-review` for Codex reviews. That skill keeps Codex subagents as the primary reviewers, uses `agy` counsel for substantial reviews when available, and includes Claude or additional Gemini/agy lanes only when the user explicitly asks.
+`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:implementation-subagent-review` for Codex reviews. That skill keeps Codex subagents as the primary reviewers, uses `agy` counsel for substantial reviews when available, and includes Claude or additional Gemini/agy lanes only when the user explicitly asks.
 
 Oracle is manual-only. Do not invoke it from normal review workflows.
 

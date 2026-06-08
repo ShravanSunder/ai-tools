@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.5.3",
-  "description": "Codex-first development workflow plugin with evidence-backed review orchestration, plan handoffs, TUI presentation guidance, and Linear work organization.",
+  "version": "1.5.7",
+  "description": "Codex-first development workflow plugin with implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -16,9 +16,16 @@
     "security",
     "adversarial",
     "plan",
+    "plan-review",
+    "plan-validate-execute",
     "handoff",
     "execution",
     "implementation-handoff",
+    "implementation-subagent-review",
+    "debugging",
+    "bug-hunt",
+    "skill-audit",
+    "pm-linear-work",
     "tui",
     "presentation",
     "semantic-markdown"
@@ -26,8 +33,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Shravan Dev Workflow",
-    "shortDescription": "Codex-first workflow with review, plan handoff, TUI presentation, and Linear planning",
-    "longDescription": "Use Shravan Dev Workflow to run evidence-backed code and plan reviews with Codex subagents as the primary reviewers, package copy-pasteable plan and implementation handoffs for other agents, validate and execute written plans with controller-owned verification, and use agy as external counsel for substantial reviews. It also includes TUI presentation guidance for structured chat output and Linear work organization for projects, milestones, issues, and dependencies.",
+    "shortDescription": "Codex-first workflow with implementation review, plan flows, debugging, TUI, and PM",
+    "longDescription": "Use Shravan Dev Workflow to run evidence-backed implementation reviews with Codex subagents as the primary reviewers, validate and address accepted review findings, package copy-pasteable plan and implementation handoffs for other agents, run plan-review swarms or validate-execute written plans with controller-owned verification, investigate bugs before fixes, audit skills from real session evidence, and use agy as external counsel for substantial reviews. It also includes TUI presentation guidance for structured chat output and PM Linear work organization for projects, milestones, issues, and dependencies.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -35,11 +42,13 @@
       "Read"
     ],
     "defaultPrompt": [
-      "Run subagent-review on this change.",
+      "Run implementation-subagent-review on this change.",
       "Prepare a plan handoff.",
       "Prepare an implementation handoff.",
-      "Review this plan adversarially.",
-      "Validate and execute this plan."
+      "Run plan-review on this plan.",
+      "Run plan-validate-execute on this plan.",
+      "Investigate this bug before fixing it.",
+      "Audit these skills against session evidence."
     ]
   }
 }
