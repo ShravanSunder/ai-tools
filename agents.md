@@ -64,7 +64,7 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 | Skill | Location | Purpose |
 |-------|----------|---------|
 | spec-design-swarm | `plugins/shravan-dev-workflow/skills/spec-design-swarm/` | Pre-plan design formation with bounded codebase explorer, architecture, security, and adversarial lanes |
-| grill-interview | `plugins/shravan-dev-workflow/skills/grill-interview/` | Manual-only one-question-at-a-time grill/interview workflow for specs, designs, plans, and source-of-truth decisions |
+| discuss-with-me | `plugins/shravan-dev-workflow/skills/discuss-with-me/` | Manual lifecycle alignment for design, spec, plan, implementation-direction, and docs decisions before editing files |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Reconcile docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against current code and decisions |
 | spec-review-council | `plugins/shravan-dev-workflow/skills/spec-review-council/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
 | security-router | `plugins/shravan-dev-workflow/skills/security-router/` | Routes authorized security scans to the official Codex Security workflows |

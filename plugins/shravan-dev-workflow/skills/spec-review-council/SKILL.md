@@ -57,7 +57,7 @@ draft spec/design
    - execution readiness
 4. Verify major claims against code/docs/tests before dispatch where cheap.
 5. Dispatch council lanes for substantial artifacts.
-6. Run a decision-tree grill for unresolved branches that block readiness.
+6. Run a decision discussion for unresolved branches that block readiness.
 7. Verify and reduce findings:
    - accepted: technically valid and actionable
    - contested: real tradeoff or unclear user/product decision

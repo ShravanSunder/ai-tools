@@ -36,7 +36,7 @@ Use when code, docs, README, AGENTS, tickets, or plans disagree.
 
 1. State the disagreement precisely.
 2. Identify which source should drive.
-3. If unclear, ask the user with `grill-interview`.
+3. If unclear, ask the user with `discuss-with-me`.
 4. Patch the non-driving source.
 5. Add a changelog note when the discrepancy taught a durable repo rule.
 

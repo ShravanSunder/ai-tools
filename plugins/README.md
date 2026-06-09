@@ -52,7 +52,7 @@ Multi-model review orchestration. Provides:
 Shravan's Codex-first development workflow plugin. Provides:
 
 - **spec-design-swarm** skill -- shapes specs/designs with bounded codebase explorer, architecture, security, and adversarial lanes before implementation planning
-- **grill-interview** skill -- manual one-question-at-a-time grill/interview workflow for ideas, specs, designs, plans, and source-of-truth decisions
+- **discuss-with-me** skill -- manual lifecycle alignment for design, spec, plan, implementation-direction, and docs decisions before editing files
 - **docs-maintain** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
 - **spec-review-council** skill -- attacks drafted specs/designs with adversarial council lanes and accepted/contested/open synthesis before execution
 - **security-router** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning

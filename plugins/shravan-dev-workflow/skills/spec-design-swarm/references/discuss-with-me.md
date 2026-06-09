@@ -1,14 +1,15 @@
-# Grill And Interview Mechanics
+# Discuss With Me Mechanics
 
 Use this reference when a spec/design needs user decisions before it can converge.
 
 ## Rules
 
-- Ask one blocking question at a time.
+- Ask one material question at a time.
 - Include the agent's current guess or recommended answer.
 - Explain what changes if the user chooses differently.
 - Inspect code/docs before asking if the answer is discoverable.
 - Do not accept vague approval as convergence when a material branch remains.
+- Keep the discussion scoped to design/spec/plan/implementation/docs decisions; route review, debug, security, and execution work to their own skills.
 
 ## Question Shape
 
@@ -20,7 +21,7 @@ My current read:
 <recommended answer and confidence>
 
 Why it matters:
-<what architecture, scope, security, or validation changes>
+<what architecture, scope, validation, docs, or implementation direction changes>
 
 Question:
 <single question>

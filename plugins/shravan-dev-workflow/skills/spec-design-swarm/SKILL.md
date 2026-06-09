@@ -1,6 +1,6 @@
 ---
 name: spec-design-swarm
-description: Use when shaping a new spec, design, or architecture before an implementation plan exists, especially when the user asks to use subagents to research, brainstorm, compare approaches, grill assumptions, or create a design direction.
+description: Use when shaping a new spec, design, or architecture before an implementation plan exists, especially when the user asks to use subagents to research, brainstorm, compare approaches, pressure-test assumptions, or create a design direction.
 ---
 
 # Spec Design Swarm
@@ -14,7 +14,7 @@ fuzzy goal or design question
   -> intent and current-state scan
   -> bounded research/explorer lanes
   -> competing architecture lanes
-  -> decision-tree grill for unresolved branches
+  -> decision discussion for unresolved branches
   -> parent synthesis
   -> design direction, non-goals, open questions
   -> optional handoff to plan-review or plan-handoff
@@ -59,7 +59,7 @@ fuzzy goal or design question
    - Verify important claims against source files or docs.
    - Deduplicate by decision, not by lane.
    - Preserve real disagreement as an open decision branch.
-6. Grill unresolved branches:
+6. Discuss unresolved branches:
    - Ask one blocking question at a time.
    - Include the parent agent's recommended answer.
    - Explain the cost of each option.
@@ -90,7 +90,7 @@ For tiny design questions, run local versions of the relevant lanes and state wh
 ## Progressive Disclosure
 
 - Load `references/swarm-packets.md` before spawning design, research, or architecture subagents.
-- Load `references/grill-interview.md` when intent is unclear or design branches need user decisions.
+- Load `references/discuss-with-me.md` when intent is unclear or design branches need user decisions.
 - Load `references/source-inspirations.md` when updating this skill, explaining source practices, or comparing against admired upstream skills.
 
 ## Output Shape

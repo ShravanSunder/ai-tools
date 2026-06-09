@@ -28,8 +28,8 @@
     {
       "name": "shravan-dev-workflow",
       "source": "./plugins/shravan-dev-workflow",
-      "description": "Development workflow skills for spec design swarms, manual grill interviews, docs maintenance, adversarial council review, security scan routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, TUI presentation, and PM Linear work",
-      "version": "1.6.1"
+      "description": "Development workflow skills for spec design swarms, discuss-with-me lifecycle alignment, docs maintenance, adversarial council review, security scan routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, TUI presentation, and PM Linear work",
+      "version": "1.6.2"
     }
   ]
 }
