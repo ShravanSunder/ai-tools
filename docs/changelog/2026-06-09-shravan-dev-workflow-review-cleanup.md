@@ -48,8 +48,8 @@ Addressed a full-suite skill review focused on trigger ambiguity, progressive di
 - `git diff --check` passed.
 - `codex plugin add shravan-dev-workflow@ai-tools --json` refreshed Codex cache to `1.6.3`.
 - `codex plugin list --marketplace ai-tools --available --json` reports `shravan-dev-workflow@ai-tools` installed at `1.6.3`.
-- `claude plugin update shravan-dev-workflow@ai-tools` refreshed Claude from `1.6.1` to latest published `1.6.2`; `1.6.3` requires publishing this source update to the GitHub-backed `ai-tools` marketplace before Claude can update again.
-- Claude cache `1.6.2` and Codex cache `1.6.3` both contain `skills/discuss-with-me`; neither contains `grill-interview`.
+- `claude plugin update shravan-dev-workflow@ai-tools` refreshed Claude to `1.6.3` after publishing this source update to the GitHub-backed `ai-tools` marketplace.
+- Claude cache `1.6.3` and Codex cache `1.6.3` both contain `skills/discuss-with-me`; neither contains `grill-interview`.
 - Active source and refreshed Codex cache have no stale skill names: `maintain-docs`, `security-scan-router`, `implementation-subagent-review`, `spec-adversarial-council-design`, `plan-validate-execute`, or `Spec Adversarial Council`.
 - No per-skill `references/source-inspirations.md` or old `references/stage-*.md` files remain.
 - Trigger eval files now exist at:
