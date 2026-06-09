@@ -1,6 +1,6 @@
 # Shravan Dev Workflow
 
-Codex-first development workflow plugin for spec design swarms, adversarial spec council review, security scan routing, evidence-backed code and plan review, copy-pasteable plan and implementation handoffs, validated plan execution, diagnosis-first debugging, skill audits, TUI presentation guidance for structured chat output, and Linear work organization.
+Codex-first development workflow plugin for spec design swarms, manual grill interviews, docs maintenance, adversarial spec council review, security scan routing, evidence-backed code and plan review, copy-pasteable plan and implementation handoffs, validated plan execution, diagnosis-first debugging, skill audits, TUI presentation guidance for structured chat output, and Linear work organization.
 
 This plugin intentionally replaces the older broad counsel pattern with a narrower workflow:
 
@@ -11,6 +11,8 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 - Oracle is never part of this workflow.
 - Plans and handoffs are first-class workflow skills: read the full artifact when a source file exists, prove coverage, verify against live repo state, and keep subagents bounded.
 - Spec/design formation is subagent-aware: explorer, architecture, security, and adversarial lanes provide evidence while the parent owns synthesis.
+- Manual grill/interview is available as an explicit trigger for one-question-at-a-time clarification across spec workflows.
+- Docs maintenance is a first-class workflow: keep `AGENTS.md` compact, README human-facing, and changelog/runbook references durable.
 - Explicit security scans are routed to the official Codex Security workflows instead of reimplemented in normal review skills.
 - Debugging is diagnosis-first: prove the root cause before fixing, and use subagents only for bounded read-only investigation slices.
 - Skill creation is evidence-backed: audit current skills, sessions, and upstream inspirations before adding new workflow surface.
@@ -41,6 +43,14 @@ Packages a plan, design, spec, or implementation brief for another agent, CLI, m
 ### `spec-design-swarm`
 
 Shapes a new spec, design, or architecture before an implementation plan exists. It uses bounded codebase explorer, prior-art, architecture-pressure, security, and adversarial lanes, then synthesizes a recommended direction, tradeoffs, non-goals, and open decisions.
+
+### `grill-interview`
+
+Manual-only interview and design grill. It asks one material question at a time, includes the agent's recommended answer and tradeoff, checks code/docs before asking when possible, and hands off to the right spec, plan, review, or docs workflow when the decision is explicit.
+
+### `maintain-docs`
+
+Maintains docs as durable memory for humans and agents. It inventories doc roles, reconciles code/docs/plan drift, proposes stale-plan cleanup before destructive edits, keeps `AGENTS.md` short, and stores meta-workflow history in `docs/changelog`.
 
 ### `spec-adversarial-council-design`
 
@@ -82,25 +92,31 @@ Organizes Linear projects, milestones, issues, and dependencies using the docs-a
 
 This plugin keeps concise provenance in [`references/source-inspirations.md`](references/source-inspirations.md). Use that file as a best-practice map, not as copied upstream text.
 
+## Release Notes
+
+Public release notes live in [`../../docs/changelog/`](../../docs/changelog/). Use [`../../docs/changelog/references/plugin-release-checklist.md`](../../docs/changelog/references/plugin-release-checklist.md) for version, marketplace, cache refresh, and smoke validation rules.
+
 ## Post-Restart Smoke Test
 
 After installing or refreshing the plugin and restarting Codex, verify the plugin in the live session:
 
-1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:implementation-subagent-review`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:implementation-handoff`, `shravan-dev-workflow:spec-design-swarm`, `shravan-dev-workflow:spec-adversarial-council-design`, `shravan-dev-workflow:security-scan-router`, `shravan-dev-workflow:plan-review`, `shravan-dev-workflow:plan-validate-execute`, `shravan-dev-workflow:debug-investigation`, `shravan-dev-workflow:skill-audit`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:pm-linear-work`.
+1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:implementation-subagent-review`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:implementation-handoff`, `shravan-dev-workflow:spec-design-swarm`, `shravan-dev-workflow:grill-interview`, `shravan-dev-workflow:maintain-docs`, `shravan-dev-workflow:spec-adversarial-council-design`, `shravan-dev-workflow:security-scan-router`, `shravan-dev-workflow:plan-review`, `shravan-dev-workflow:plan-validate-execute`, `shravan-dev-workflow:debug-investigation`, `shravan-dev-workflow:skill-audit`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:pm-linear-work`.
 2. Ask for a small local review: `Use implementation-subagent-review to review the last change.`
 3. Confirm Codex builds a shared review packet, runs spec compliance when applicable, and dispatches read-only reviewer lanes, normally backed by Codex subagents.
 4. Ask for a plan review: `Use plan-review on this plan and include Gemini/agy adversarial counsel.`
 5. Confirm substantial plan reviews run bounded plan-review lanes and record skipped or completed external model lanes.
 6. Ask for a design pass: `Use spec-design-swarm to shape this feature before writing a plan.`
-7. Ask for a spec council pass: `Use spec-adversarial-council-design to attack this spec before implementation.`
-8. Ask for scan routing: `Use security-scan-router for this authorized PR security scan.`
-9. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
-10. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
-11. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
-12. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
-13. Run one review request that includes an external adversarial model lane: `Use implementation-subagent-review and include Gemini/agy adversarial review.`
-14. Run one review request that includes Claude explicitly: `Use implementation-subagent-review and include Claude adversarial review.`
-15. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
+7. Ask for a manual grill: `Use grill-interview to grill me on this design one question at a time.`
+8. Ask for docs maintenance: `Use maintain-docs to reconcile this README and AGENTS.md with current plugin state.`
+9. Ask for a spec council pass: `Use spec-adversarial-council-design to attack this spec before implementation.`
+10. Ask for scan routing: `Use security-scan-router for this authorized PR security scan.`
+11. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
+12. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
+13. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
+14. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
+15. Run one review request that includes an external adversarial model lane: `Use implementation-subagent-review and include Gemini/agy adversarial review.`
+16. Run one review request that includes Claude explicitly: `Use implementation-subagent-review and include Claude adversarial review.`
+17. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
 
 Behavioral pass criteria:
 
@@ -114,6 +130,8 @@ Behavioral pass criteria:
 - Plan review uses bounded read-only subagents by default for substantial plans, and skips them only with a stated reason.
 - Plan review updates writable current-session plans for accepted blocker/important findings, but does not implement code.
 - Spec-design-swarm does not implement code and records security context when sensitive surfaces are touched.
+- Grill-interview triggers only when explicitly requested and asks one question at a time.
+- Maintain-docs identifies source-of-truth drift before editing and keeps detailed history in docs, not `AGENTS.md`.
 - Spec-adversarial-council-design preserves accepted, contested, and open findings instead of forcing fake consensus.
 - Security-scan-router routes explicit scans to official Codex Security workflows and does not claim audit coverage from a normal review lane.
 - Debug investigation does not implement fixes until the diagnosis is proven or uncertainty is explicitly accepted.

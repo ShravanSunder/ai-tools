@@ -4,6 +4,7 @@ AI tools distributed through the local marketplaces in this repository.
 
 - Codex plugins: [`.agents/plugins/marketplace.json`](../.agents/plugins/marketplace.json)
 - Claude Code plugins: [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)
+- Release notes: [`../docs/changelog/`](../docs/changelog/)
 
 ## Installation
 
@@ -51,6 +52,8 @@ Multi-model review orchestration. Provides:
 Shravan's Codex-first development workflow plugin. Provides:
 
 - **spec-design-swarm** skill -- shapes specs/designs with bounded codebase explorer, architecture, security, and adversarial lanes before implementation planning
+- **grill-interview** skill -- manual one-question-at-a-time grill/interview workflow for ideas, specs, designs, plans, and source-of-truth decisions
+- **maintain-docs** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
 - **spec-adversarial-council-design** skill -- attacks drafted specs/designs with adversarial council lanes and accepted/contested/open synthesis before execution
 - **security-scan-router** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
 - **implementation-subagent-review** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes

@@ -18,9 +18,11 @@ Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex
 | [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
 | [`skill-peekaboo`](plugins/skill-peekaboo/) | Visual UI testing for macOS apps using Peekaboo CLI |
 | [`quorum-counsel`](plugins/quorum-counsel/) | Multi-model review orchestration -- counsel-reviewer and codex-solver background agents |
-| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first implementation review, plan handoff/review/execution, debugging, skill audit, TUI presentation, and PM Linear work |
+| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec design, grill interviews, docs maintenance, implementation review, plan workflows, debugging, TUI presentation, and PM Linear work |
 
 See [`plugins/`](plugins/) for full details.
+
+Release notes live in [`docs/changelog/`](docs/changelog/).
 
 ---
 
@@ -107,7 +109,7 @@ ai-tools/
 │   ├── ai-scaffold/             # Project scaffolding
 │   ├── skill-peekaboo/          # macOS visual UI testing
 │   ├── quorum-counsel/          # Manual multi-model counsel
-│   └── shravan-dev-workflow/    # Review, TUI, Linear workflow skills
+│   └── shravan-dev-workflow/    # Spec, review, docs, TUI, Linear workflow skills
 ├── agent_sidecar/               # Docker sidecar system
 └── CLAUDE.md                    # Agent instructions
 ```

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grill Interview"
+  short_description: "Manual one-question design grill"
+  default_prompt: "Use grill-interview to grill me on this idea one question at a time."
