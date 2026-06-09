@@ -1,4 +1,4 @@
 interface:
-  display_name: "Plan Validate Execute"
+  display_name: "Plan Execute"
   short_description: "Validate then execute a plan"
   default_prompt: "Validate this plan fully, then execute it with owned verification."

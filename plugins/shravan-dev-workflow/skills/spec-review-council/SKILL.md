@@ -1,9 +1,9 @@
 ---
-name: spec-adversarial-council-design
+name: spec-review-council
 description: Use when adversarially reviewing a drafted spec, design, architecture proposal, or plan before execution, especially when the user wants a council of subagents to poke holes, compare perspectives, and synthesize accepted, contested, and open issues.
 ---
 
-# Spec Adversarial Council Design
+# Spec Review Council
 
 Run a post-draft, pre-execution council review over a spec or design. This is not implementation and not a normal code review. It attacks claims, assumptions, contracts, security context, plan-readiness, and unresolved decision branches.
 
@@ -100,4 +100,4 @@ Return:
 - Open questions.
 - Smallest spec/plan edits or owner-facing handoff.
 - Security threat-model status.
-- Next step: usually `plan-review`, `plan-handoff`, `plan-validate-execute`, or `security-scan-router`.
+- Next step: usually `plan-review`, `plan-handoff`, `plan-execute`, or `security-router`.

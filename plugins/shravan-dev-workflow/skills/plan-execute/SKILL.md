@@ -1,9 +1,9 @@
 ---
-name: plan-validate-execute
+name: plan-execute
 description: Use when executing a written plan or design after first validating it against the current repo, especially when the user asks to validate and execute, implement a plan, continue from a handoff, or use subagents for bounded implementation slices.
 ---
 
-# Plan Validate Execute
+# Plan Execute
 
 Validate first, then execute. The main agent owns correctness even when subagents do bounded work.
 

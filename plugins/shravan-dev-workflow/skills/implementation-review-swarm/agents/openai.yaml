@@ -1,4 +1,4 @@
 interface:
-  display_name: "Implementation Subagent Review"
+  display_name: "Implementation Review Swarm"
   short_description: "Run a verified review swarm"
   default_prompt: "Review this implementation with read-only subagents and verify findings before reporting."

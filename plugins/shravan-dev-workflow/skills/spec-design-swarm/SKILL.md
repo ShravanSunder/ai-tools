@@ -103,4 +103,4 @@ Return:
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.
 - Decisions needed from the user.
-- Suggested next skill: usually `spec-adversarial-council-design`, `plan-handoff`, or `plan-review`.
+- Suggested next skill: usually `spec-review-council`, `plan-handoff`, or `plan-review`.

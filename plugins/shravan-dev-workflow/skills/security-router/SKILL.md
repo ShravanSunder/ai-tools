@@ -1,20 +1,20 @@
 ---
-name: security-scan-router
-description: Use when the user asks for a security scan, security audit, threat model, vulnerability review, security diff scan, or remediation of one security finding; route to the official Codex Security plugin when available instead of recreating a scanner.
+name: security-router
+description: Use when the user asks for a security scan, security audit, threat model, vulnerability review, security diff scan, or remediation of one security finding; route to the installed official Codex Security plugin instead of recreating a scanner.
 ---
 
-# Security Scan Router
+# Security Router
 
-Route security work to the narrowest appropriate official Codex Security workflow. This skill is a router and handoff layer, not a replacement scanner.
+Route security-primary work to the narrowest appropriate official Codex Security workflow. This skill is a router and handoff layer, not a replacement scanner.
 
 Core pipeline:
 
 ```text
 security request
   -> authorization and scope check
-  -> choose official Codex Security skill
+  -> choose installed Codex Security skill
   -> prepare threat-model / scan packet
-  -> invoke or provide copy-paste prompt
+  -> invoke official skill or provide copy-paste prompt
   -> preserve report paths and remediation handoff
 ```
 
@@ -22,8 +22,8 @@ security request
 
 - Only scan repositories, diffs, paths, or systems the user is authorized to assess.
 - Keep scans read-only unless the user explicitly asks to fix one reviewed finding.
-- Use the official Codex Security plugin when installed and available.
-- Do not fold full security scanning into `plan-review` or `implementation-subagent-review`.
+- Use the installed official Codex Security plugin when available in the current runtime.
+- Do not fold full security scanning into `plan-review` or `implementation-review-swarm`.
 - For ordinary plan or implementation review, use those skills' security lanes. Route here only when the user asks for a scan, audit, threat model, or security-specific remediation.
 - Choose the narrowest scan that answers the request.
 - Treat security findings as review inputs. Validate before fixing or merging.

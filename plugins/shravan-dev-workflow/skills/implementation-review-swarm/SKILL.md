@@ -1,9 +1,9 @@
 ---
-name: implementation-subagent-review
+name: implementation-review-swarm
 description: Use when requesting a multi-agent implementation review, code review swarm, adversarial review, PR or diff review, or review synthesis across bounded reviewer lanes, Codex subagents, and optional external model lanes before merge.
 ---
 
-# Implementation Subagent Review
+# Implementation Review Swarm
 
 Use this skill to run a review swarm where the parent session remains the orchestrator and reducer. The swarm is review-only: subagents and external model lanes inspect, report, and challenge; the parent session decides what is real.
 

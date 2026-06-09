@@ -30,7 +30,7 @@ user asks to be grilled/interviewed
 - Keep confidence visible when intent is still unclear.
 - Use `tui-presentation` when explaining a decision tree, alternatives, or a multi-section synthesis.
 - Do not accept "whatever you think" as convergence. Offer two concrete defaults and ask the user to choose.
-- If the interview produces a durable decision, suggest the next workflow: `spec-design-swarm`, `spec-adversarial-council-design`, `plan-handoff`, `plan-review`, or `maintain-docs`.
+- If the interview produces a durable decision, suggest the next workflow: `spec-design-swarm`, `spec-review-council`, `plan-handoff`, `plan-review`, or `docs-maintain`.
 
 ## Workflow
 

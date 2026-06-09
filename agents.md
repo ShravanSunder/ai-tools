@@ -65,14 +65,14 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 |-------|----------|---------|
 | spec-design-swarm | `plugins/shravan-dev-workflow/skills/spec-design-swarm/` | Pre-plan design formation with bounded codebase explorer, architecture, security, and adversarial lanes |
 | grill-interview | `plugins/shravan-dev-workflow/skills/grill-interview/` | Manual-only one-question-at-a-time grill/interview workflow for specs, designs, plans, and source-of-truth decisions |
-| maintain-docs | `plugins/shravan-dev-workflow/skills/maintain-docs/` | Reconcile docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against current code and decisions |
-| spec-adversarial-council-design | `plugins/shravan-dev-workflow/skills/spec-adversarial-council-design/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
-| security-scan-router | `plugins/shravan-dev-workflow/skills/security-scan-router/` | Routes authorized security scans to the official Codex Security workflows |
-| implementation-subagent-review | `plugins/shravan-dev-workflow/skills/implementation-subagent-review/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, default `agy` external model lane for substantial reviews, and explicit opt-in Claude/Gemini adversarial lanes |
+| docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Reconcile docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against current code and decisions |
+| spec-review-council | `plugins/shravan-dev-workflow/skills/spec-review-council/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
+| security-router | `plugins/shravan-dev-workflow/skills/security-router/` | Routes authorized security scans to the official Codex Security workflows |
+| implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, default `agy` external model lane for substantial reviews, and explicit opt-in Claude/Gemini adversarial lanes |
 | plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable plan/design/spec handoff packets for other agents, CLIs, machines, or future sessions |
 | implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Stage-aware implementation-state packets for manual reviewers or continuation agents |
 | plan-review | `plugins/shravan-dev-workflow/skills/plan-review/` | Read-only adversarial plan/design/spec review with whole-artifact loading and live repo validation |
-| plan-validate-execute | `plugins/shravan-dev-workflow/skills/plan-validate-execute/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
+| plan-execute | `plugins/shravan-dev-workflow/skills/plan-execute/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging for bugs, failures, flaky behavior, regressions, and unexpected behavior before fixes |
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed skill audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
@@ -90,7 +90,7 @@ Sync rule: when role behavior changes, update the Claude agent AND the matching 
 
 ### Relationship to quorum-counsel
 
-`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:implementation-subagent-review` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend, uses `agy` as an external model lane for substantial reviews when available, and includes Claude or additional Gemini/agy lanes only when the user explicitly asks.
+`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:implementation-review-swarm` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend, uses `agy` as an external model lane for substantial reviews when available, and includes Claude or additional Gemini/agy lanes only when the user explicitly asks.
 
 Oracle is manual-only. Do not invoke it from normal review workflows.
 

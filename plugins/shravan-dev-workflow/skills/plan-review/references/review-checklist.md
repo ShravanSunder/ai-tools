@@ -33,7 +33,7 @@ Load this for large, risky, stale, or implementation-facing plans.
 - Entry points, untrusted inputs, trust boundaries, sensitive data, privileged
   actions, invariants, and non-goals are explicit.
 - Security validation proves behavior, not only "reviewed for security".
-- If the user requested a scan or audit, route to `security-scan-router`
+- If the user requested a scan or audit, route to `security-router`
   instead of treating the normal review lane as exhaustive.
 
 ## Adversarial Questions

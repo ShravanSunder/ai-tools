@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Development workflow skills for spec design swarms, manual grill interviews, docs maintenance, adversarial council review, security scan routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, TUI presentation, and PM Linear work.",
   "author": {
     "name": "Shravan Sunder"
@@ -19,16 +19,16 @@
     "spec-design",
     "spec-review",
     "grill-interview",
-    "maintain-docs",
+    "docs-maintain",
     "docs",
     "changelog",
-    "security-scan-router",
+    "security-router",
     "plan-review",
-    "plan-validate-execute",
+    "plan-execute",
     "handoff",
     "execution",
     "implementation-handoff",
-    "implementation-subagent-review",
+    "implementation-review-swarm",
     "debugging",
     "bug-hunt",
     "skill-audit",

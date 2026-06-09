@@ -53,10 +53,10 @@ Shravan's Codex-first development workflow plugin. Provides:
 
 - **spec-design-swarm** skill -- shapes specs/designs with bounded codebase explorer, architecture, security, and adversarial lanes before implementation planning
 - **grill-interview** skill -- manual one-question-at-a-time grill/interview workflow for ideas, specs, designs, plans, and source-of-truth decisions
-- **maintain-docs** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
-- **spec-adversarial-council-design** skill -- attacks drafted specs/designs with adversarial council lanes and accepted/contested/open synthesis before execution
-- **security-scan-router** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
-- **implementation-subagent-review** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
+- **docs-maintain** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
+- **spec-review-council** skill -- attacks drafted specs/designs with adversarial council lanes and accepted/contested/open synthesis before execution
+- **security-router** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
+- **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 - **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens

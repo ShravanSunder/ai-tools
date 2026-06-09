@@ -1,4 +1,0 @@
-interface:
-  display_name: "Maintain Docs"
-  short_description: "Reconcile docs and source truth"
-  default_prompt: "Use maintain-docs to audit and update these repo docs without letting stale plans drive the work."

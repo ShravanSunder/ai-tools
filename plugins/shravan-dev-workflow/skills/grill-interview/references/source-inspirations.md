@@ -11,6 +11,6 @@ These are best-practice references, not text sources to copy.
 Shravan adaptation:
 
 - Manual trigger only.
-- Integrates with `spec-design-swarm`, `spec-adversarial-council-design`, `plan-review`, `plan-validate-execute`, and `maintain-docs`.
+- Integrates with `spec-design-swarm`, `spec-review-council`, `plan-review`, `plan-execute`, and `docs-maintain`.
 - Uses `tui-presentation` only when visual structure materially helps.
 - Produces decisions and next workflow, not speculative plans.

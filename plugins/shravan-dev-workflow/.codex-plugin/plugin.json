@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Codex-first development workflow plugin with spec design swarms, manual grill interviews, docs maintenance, adversarial council review, security scan routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
   "author": {
     "name": "Shravan Sunder"
@@ -19,16 +19,16 @@
     "spec-design",
     "spec-review",
     "grill-interview",
-    "maintain-docs",
+    "docs-maintain",
     "docs",
     "changelog",
-    "security-scan-router",
+    "security-router",
     "plan-review",
-    "plan-validate-execute",
+    "plan-execute",
     "handoff",
     "execution",
     "implementation-handoff",
-    "implementation-subagent-review",
+    "implementation-review-swarm",
     "debugging",
     "bug-hunt",
     "skill-audit",
@@ -49,16 +49,16 @@
       "Read"
     ],
     "defaultPrompt": [
-      "Run implementation-subagent-review on this change.",
+      "Run implementation-review-swarm on this change.",
       "Prepare a plan handoff.",
       "Prepare an implementation handoff.",
       "Run plan-review on this plan.",
       "Use spec-design-swarm to shape this design before planning.",
       "Use grill-interview to grill me on this idea one question at a time.",
-      "Use maintain-docs to reconcile these docs with current code and plans.",
-      "Use spec-adversarial-council-design to attack this spec before implementation.",
-      "Use security-scan-router to choose the right Codex Security scan.",
-      "Run plan-validate-execute on this plan.",
+      "Use docs-maintain to reconcile these docs with current code and plans.",
+      "Use spec-review-council to attack this spec before implementation.",
+      "Use security-router to choose the right Codex Security scan.",
+      "Run plan-execute on this plan.",
       "Investigate this bug before fixing it.",
       "Audit these skills against session evidence."
     ]

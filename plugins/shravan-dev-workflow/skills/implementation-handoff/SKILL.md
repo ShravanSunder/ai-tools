@@ -15,7 +15,7 @@ Package actual implementation state so another agent can review, continue, or au
 - Ground the handoff in current repo state: branch, diff, commits, changed files, validation commands, and known risks.
 - Preserve security state when the implementation touches sensitive surfaces: changed trust boundaries, fixed findings, unvalidated risks, security proofs, report paths, and accepted risks.
 - Separate proven facts from claims, guesses, and unfinished work.
-- Do not run reviewers automatically. This skill prepares the packet; `implementation-subagent-review` or a manual Claude/Gemini/Codex paste can consume it.
+- Do not run reviewers automatically. This skill prepares the packet; `implementation-review-swarm` or a manual Claude/Gemini/Codex paste can consume it.
 - If the handoff asks another agent to review only, the prompt must say "do not edit files".
 
 ## Workflow

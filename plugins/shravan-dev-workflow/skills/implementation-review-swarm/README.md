@@ -1,4 +1,4 @@
-# Implementation Subagent Review
+# Implementation Review Swarm
 
 Codex-first review swarm skill.
 

@@ -11,7 +11,7 @@ before design
 
 during design
   -> resolve branches, terms, ownership, security assumptions
-  -> next: spec-adversarial-council-design
+  -> next: spec-review-council
 
 after draft spec/plan
   -> ask crux questions only
@@ -19,11 +19,11 @@ after draft spec/plan
 
 before execution
   -> confirm source of truth and stopping conditions
-  -> next: plan-validate-execute
+  -> next: plan-execute
 
 during docs maintenance
   -> choose whether code or docs should drive a correction
-  -> next: maintain-docs
+  -> next: docs-maintain
 ```
 
 ## TUI Use

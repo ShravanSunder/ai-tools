@@ -21,7 +21,7 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 
 ## Skills
 
-### `implementation-subagent-review`
+### `implementation-review-swarm`
 
 Runs a structured review swarm with review reception:
 
@@ -48,15 +48,15 @@ Shapes a new spec, design, or architecture before an implementation plan exists.
 
 Manual-only interview and design grill. It asks one material question at a time, includes the agent's recommended answer and tradeoff, checks code/docs before asking when possible, and hands off to the right spec, plan, review, or docs workflow when the decision is explicit.
 
-### `maintain-docs`
+### `docs-maintain`
 
 Maintains docs as durable memory for humans and agents. It inventories doc roles, reconciles code/docs/plan drift, proposes stale-plan cleanup before destructive edits, keeps `AGENTS.md` short, and stores meta-workflow history in `docs/changelog`.
 
-### `spec-adversarial-council-design`
+### `spec-review-council`
 
 Runs a post-draft, pre-execution council review over a spec, design, or architecture proposal. It loads the full artifact, dispatches adversarial lanes, and reduces outputs into accepted, contested, open, and rejected issues with parent-owned verification.
 
-### `security-scan-router`
+### `security-router`
 
 Routes explicit security scans to the official Codex Security workflows: `security-diff-scan`, `security-scan`, `deep-security-scan`, `fix-finding`, or `threat-model`. Normal review skills keep lightweight security lanes; this skill handles audit-grade routing and handoff.
 
@@ -68,7 +68,7 @@ Packages actual implementation state at any stage: planned, in-progress, pre-rev
 
 Runs an adversarial plan review swarm before implementation. It requires whole-artifact coverage for plan files, dispatches bounded reviewer lanes for substantial plans, optionally includes user-requested Claude/Gemini/`agy` external model lanes, checks major claims against live code/docs/package state, validates candidate findings, and revises writable current-session plans for accepted blocker/important findings without implementing code.
 
-### `plan-validate-execute`
+### `plan-execute`
 
 Executes written plans only after validating them against the current repo. It can use subagents for bounded parallel slices, but the parent agent owns task packets, integration, diff review, verification, and final completion claims.
 
@@ -100,22 +100,22 @@ Public release notes live in [`../../docs/changelog/`](../../docs/changelog/). U
 
 After installing or refreshing the plugin and restarting Codex, verify the plugin in the live session:
 
-1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:implementation-subagent-review`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:implementation-handoff`, `shravan-dev-workflow:spec-design-swarm`, `shravan-dev-workflow:grill-interview`, `shravan-dev-workflow:maintain-docs`, `shravan-dev-workflow:spec-adversarial-council-design`, `shravan-dev-workflow:security-scan-router`, `shravan-dev-workflow:plan-review`, `shravan-dev-workflow:plan-validate-execute`, `shravan-dev-workflow:debug-investigation`, `shravan-dev-workflow:skill-audit`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:pm-linear-work`.
-2. Ask for a small local review: `Use implementation-subagent-review to review the last change.`
+1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:implementation-review-swarm`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:implementation-handoff`, `shravan-dev-workflow:spec-design-swarm`, `shravan-dev-workflow:grill-interview`, `shravan-dev-workflow:docs-maintain`, `shravan-dev-workflow:spec-review-council`, `shravan-dev-workflow:security-router`, `shravan-dev-workflow:plan-review`, `shravan-dev-workflow:plan-execute`, `shravan-dev-workflow:debug-investigation`, `shravan-dev-workflow:skill-audit`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:pm-linear-work`.
+2. Ask for a small local review: `Use implementation-review-swarm to review the last change.`
 3. Confirm Codex builds a shared review packet, runs spec compliance when applicable, and dispatches read-only reviewer lanes, normally backed by Codex subagents.
 4. Ask for a plan review: `Use plan-review on this plan and include Gemini/agy adversarial counsel.`
 5. Confirm substantial plan reviews run bounded plan-review lanes and record skipped or completed external model lanes.
 6. Ask for a design pass: `Use spec-design-swarm to shape this feature before writing a plan.`
 7. Ask for a manual grill: `Use grill-interview to grill me on this design one question at a time.`
-8. Ask for docs maintenance: `Use maintain-docs to reconcile this README and AGENTS.md with current plugin state.`
-9. Ask for a spec council pass: `Use spec-adversarial-council-design to attack this spec before implementation.`
-10. Ask for scan routing: `Use security-scan-router for this authorized PR security scan.`
+8. Ask for docs maintenance: `Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.`
+9. Ask for a spec council pass: `Use spec-review-council to attack this spec before implementation.`
+10. Ask for scan routing: `Use security-router for this authorized PR security scan.`
 11. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
 12. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
 13. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
 14. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
-15. Run one review request that includes an external adversarial model lane: `Use implementation-subagent-review and include Gemini/agy adversarial review.`
-16. Run one review request that includes Claude explicitly: `Use implementation-subagent-review and include Claude adversarial review.`
+15. Run one review request that includes an external adversarial model lane: `Use implementation-review-swarm and include Gemini/agy adversarial review.`
+16. Run one review request that includes Claude explicitly: `Use implementation-review-swarm and include Claude adversarial review.`
 17. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
 
 Behavioral pass criteria:

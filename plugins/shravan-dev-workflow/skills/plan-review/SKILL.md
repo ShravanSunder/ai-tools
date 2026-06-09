@@ -139,14 +139,14 @@ If the current agent authored the plan, or the plan artifact is in the current w
 
 If the user explicitly asked for read-only/report-only review, or the plan belongs to another agent and should not be changed, do not edit. Return exact plan edits for the owner to apply.
 
-Never convert plan review into code implementation. Accepted findings change the plan; `plan-validate-execute` handles code execution.
+Never convert plan review into code implementation. Accepted findings change the plan; `plan-execute` handles code execution.
 
 ## Progressive Disclosure
 
 - Load `references/review-packet.md` before dispatching subagents or writing a copy-paste review prompt.
 - Load `references/review-checklist.md` when the plan is large, risky, or implementation-facing.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
-- Load `../security-scan-router/references/threat-model-context.md` when packaging or reviewing security-sensitive plans.
+- Load `../security-router/references/threat-model-context.md` when packaging or reviewing security-sensitive plans.
 
 ## Output Shape
 
