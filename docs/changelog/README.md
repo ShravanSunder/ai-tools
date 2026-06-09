@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-09 Shravan Dev Workflow review cleanup](2026-06-09-shravan-dev-workflow-review-cleanup.md)
 - [2026-06-09 Discuss-with-me lifecycle alignment](2026-06-09-discuss-with-me-lifecycle-alignment.md)
 - [2026-06-09 Shravan Dev Workflow skill renames](2026-06-09-shravan-dev-workflow-skill-renames.md)
 - [2026-06-09 Shravan Dev Workflow skill system](2026-06-09-shravan-dev-workflow-skill-system.md)

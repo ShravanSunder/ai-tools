@@ -1,11 +1,11 @@
 ---
 name: spec-review-council
-description: Use when adversarially reviewing a drafted spec, design, architecture proposal, or plan before execution, especially when the user wants a council of subagents to poke holes, compare perspectives, and synthesize accepted, contested, and open issues.
+description: Use when adversarially reviewing a drafted spec, design, or architecture proposal before an implementation plan exists, especially when the user asks for a council, critique, or assumption attack.
 ---
 
 # Spec Review Council
 
-Run a post-draft, pre-execution council review over a spec or design. This is not implementation and not a normal code review. It attacks claims, assumptions, contracts, security context, plan-readiness, and unresolved decision branches.
+Run a post-draft, pre-plan council review over a spec, design, or architecture proposal. This is not implementation, not implementation-plan review, and not a normal code review. It attacks claims, assumptions, contracts, security context, and unresolved decision branches.
 
 Core pipeline:
 
@@ -17,13 +17,13 @@ draft spec/design
   -> optional external counsel when requested
   -> parent verification
   -> accepted / contested / open synthesis
-  -> smallest spec/plan edits or owner-facing handoff
+  -> smallest spec/design edits or owner-facing handoff
 ```
 
 ## Core Rules
 
 - Review only; do not implement code.
-- If a spec or plan file exists, run `wc -l` and read every chunk before judging.
+- If a spec or design file exists, run `wc -l` and read every chunk before judging.
 - Treat the artifact as claims to verify, not truth.
 - Build one shared council packet before dispatching lanes.
 - Do not pass author confidence or previous agent praise as evidence.
@@ -40,8 +40,6 @@ draft spec/design
 1. Resolve target:
    - spec file
    - design doc
-   - implementation plan
-   - handoff packet
    - chat-only draft
 2. Establish coverage:
    - line count and chunks for files
@@ -54,7 +52,7 @@ draft spec/design
    - security/trust-boundary claims
    - data flow and state ownership
    - validation strategy
-   - execution readiness
+   - plan constraints or open planning inputs
 4. Verify major claims against code/docs/tests before dispatch where cheap.
 5. Dispatch council lanes for substantial artifacts.
 6. Run a decision discussion for unresolved branches that block readiness.
@@ -64,7 +62,7 @@ draft spec/design
    - open: missing evidence or decision needed
    - rejected: unsupported, wrong, or out of scope
 8. Address accepted issues:
-   - edit only the owned spec/plan artifact, or
+   - edit only the owned spec/design artifact, or
    - produce exact owner-facing edits when the artifact belongs to another agent.
 9. Return council report and next-step recommendation.
 
@@ -75,8 +73,8 @@ Default lanes for substantial specs:
 - `contract-and-scope`: checks goal, non-goals, requirements, and output contract.
 - `architecture-boundaries`: challenges ownership, module boundaries, dependency direction, and source of truth.
 - `security-threat-model`: checks assets, entry points, untrusted inputs, trust boundaries, sensitive data, and privileged actions.
-- `validation-and-testability`: checks whether the plan can prove behavior and catch regressions.
-- `execution-readiness`: checks task slicing, sequencing, cutovers, migrations, and blockers.
+- `validation-and-testability`: checks whether the proposed validation strategy can prove behavior and catch regressions.
+- `planning-readiness`: checks whether enough decisions exist for a later implementation plan.
 - `adversarial-crux`: asks the few crux questions that could invalidate the design.
 
 For tiny artifacts, run a local adversarial pass and state why the full council was skipped.
@@ -85,7 +83,7 @@ For tiny artifacts, run a local adversarial pass and state why the full council 
 
 - Load `references/council-packet.md` before dispatching council lanes or writing a copy-paste prompt.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.
-- Load `references/source-inspirations.md` when updating this skill or explaining source practices.
+- Use `../../references/source-inspirations.md` when updating this skill or explaining source practices.
 
 ## Output Shape
 
@@ -98,6 +96,6 @@ Return:
 - Accepted findings.
 - Contested design choices.
 - Open questions.
-- Smallest spec/plan edits or owner-facing handoff.
+- Smallest spec/design edits or owner-facing handoff.
 - Security threat-model status.
-- Next step: usually `plan-review`, `plan-handoff`, `plan-execute`, or `security-router`.
+- Next step: usually `plan-handoff`, `plan-review` after a plan exists, or `security-router`.

@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Codex-first development workflow plugin with spec design swarms, discuss-with-me lifecycle alignment, docs maintenance, adversarial council review, security scan routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
   "author": {
     "name": "Shravan Sunder"

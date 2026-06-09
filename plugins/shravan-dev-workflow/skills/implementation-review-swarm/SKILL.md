@@ -1,6 +1,6 @@
 ---
 name: implementation-review-swarm
-description: Use when requesting a multi-agent implementation review, code review swarm, adversarial review, PR or diff review, or review synthesis across bounded reviewer lanes, Codex subagents, and optional external model lanes before merge.
+description: Use when requesting a multi-agent review of implementation code, branch diffs, PRs, commits, or named files across bounded reviewer lanes before merge or handoff.
 ---
 
 # Implementation Review Swarm
@@ -43,9 +43,10 @@ Pick one mode before dispatch:
 - `diff`: uncommitted, staged, or branch diff without a separate plan.
 - `pr`: pull request review.
 - `commit`: one commit or commit range.
-- `plan`: review a design, implementation plan, spec, or prompt before code.
 - `files`: named files or directories.
-- `adversarial`: challenge a design or implementation decision.
+- `adversarial`: challenge an implementation decision in code, diff, PR, commit, or named files.
+
+Route design, spec, implementation-plan, prompt, or handoff text to `spec-review-council` or `plan-review` instead of this skill unless those artifacts are only context for reviewing code.
 
 For implementation reviews, run spec compliance before broader quality lanes. For broad PR or diff reviews, lanes can run in parallel, but intent/spec findings take priority in reduction.
 
@@ -53,7 +54,7 @@ For implementation reviews, run spec compliance before broader quality lanes. Fo
 
 Before dispatching reviewers, identify exactly what is being reviewed:
 
-- Current uncommitted diff, staged diff, branch against base, commit range, PR, plan, or named files.
+- Current uncommitted diff, staged diff, branch against base, commit range, PR, or named files.
 - The user request and intended behavior.
 - Local instructions that apply to the repo.
 - Review focus, such as security, reliability, tests, contracts, architecture, or adversarial design.
@@ -62,39 +63,7 @@ If the scope is ambiguous and cannot be inferred safely from git state or the pr
 
 ## Shared Review Packet
 
-Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet.
-
-```text
-Mode:
-<implementation | diff | pr | commit | plan | files | adversarial>
-
-Review scope:
-<diff command, PR number, commit range, plan path, or file list>
-
-Git range:
-base_sha: <sha or "not applicable">
-head_sha: <sha or "working tree">
-diff_stat_command: <command or "not applicable">
-diff_command: <command or "not applicable">
-changed_files: <paths or "not applicable">
-
-Intent:
-<what the change is supposed to accomplish>
-
-Constraints:
-<repo instructions, product constraints, compatibility rules, user preferences>
-
-Threat model / security context:
-<changed attack surface, sensitive data, privileged actions, trust boundaries,
-security validation already run, proof gaps, or "not security-sensitive">
-
-Focus:
-<requested focus areas, or "full review">
-
-Output contract:
-Return findings only. Do not edit files. For each finding include severity,
-evidence, failure scenario, smallest fix, proof/test, and confidence.
-```
+Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet. Use `references/reviewer-prompts.md` for the packet template and lane prompts.
 
 Reviewers must not trust implementation summaries, previous agent reports, test claims, or other reviewer outputs. They must read the actual artifacts in scope.
 
@@ -127,12 +96,7 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Deduplicate by root cause.
 
 6. Review reception and fix loop
-   - Read all accepted and disputed findings before editing.
-   - For each accepted blocker/important finding, make one focused fix at a time when the current workflow owns implementation.
-   - Run the smallest relevant proof after each fix or batch of tightly related fixes.
-   - For PR review comments or review threads, resolve threads only after validating that they are stale or after fixing the real issue they identified.
-   - Re-run focused review or verification when a finding was subtle or high risk.
-   - If the user asked for review-only, return findings and exact fix guidance instead of editing.
+   - Load `references/review-reception.md` to receive accepted findings, decide what this workflow owns, and manage PR/review-thread follow-through.
 
 7. Verdict
    - `ready`: no accepted blocker/important findings and no decision-relevant open questions.
@@ -163,26 +127,9 @@ Default lanes:
 
 For small changes, run fewer lanes but keep at least one normal reviewer and one adversarial reviewer.
 
-## Cross-Model Adversarial Lanes
-
-The default adversarial reviewer is a Codex subagent. When the user asks for a specific outside model, add that model as an adversarial model lane:
-
-- "include Gemini" means add a Gemini-flavored adversarial lane through `agy`, preferring the latest Gemini Pro/High model available from `agy models`.
-- "include Claude" means add Claude as an adversarial lane through the Claude Code CLI harness if the user explicitly requested it and accepts any separate CLI cost.
-- "include agy" means add an additional `agy` adversarial lane even for smaller reviews.
-
-External adversarial lanes still follow the same rule: they produce candidate findings only. The reducer verifies before accepting anything.
-
 ## External Model Lanes
 
-Use `references/external-counsel.md` for command shapes and safety rules.
-
-- `agy`: include by default for substantial reviews when available; prefer Gemini Pro/High; record skipped or failed lanes explicitly.
-- Claude: include only when the user explicitly asks for Claude, often as an adversarial lane; use only the Claude Code CLI harness.
-- Gemini: include only when the user explicitly asks for Gemini, often as an adversarial lane; use `agy` as the local Gemini/Antigravity path.
-- Oracle: do not invoke, suggest, or route to Oracle from this skill.
-
-External model lanes should receive the same packet and be told to write findings to an output file when the CLI supports it. Do not treat a failed external CLI as a failed review; continue with available reviewer lanes and report the missing input.
+Use `references/external-counsel.md` for command shapes, model routing, and safety rules. External lanes receive the same packet, produce candidate findings only, and never decide the verdict. Do not treat a failed external CLI as a failed review; continue with available reviewer lanes and report the missing input.
 
 ## Reduction
 
@@ -211,38 +158,13 @@ Rejected findings should not be listed by default. Mention them only when a reje
 
 ## Addressing Accepted Findings
 
-Implementation review includes review reception when the parent agent owns the implementation.
+Implementation review includes review reception when the parent agent owns the implementation. Load `references/review-reception.md` before editing, replying to review threads, or closing PR conversations.
 
-Default behavior:
+## Progressive Disclosure
 
-- If invoked as part of finishing current implementation work, validate and fix accepted blocker/important findings without waiting for a separate user prompt.
-- If invoked for PR/report-only review, external review, or when the user says not to edit, keep the review read-only and return exact fix guidance.
-
-Fix loop:
-
-1. Understand the finding in your own technical terms.
-2. Verify it against current code, diff, tests, and user intent.
-3. Decide: accept, reject, defer, or clarify.
-4. Fix accepted in-scope findings one at a time or in a tightly related batch.
-5. Test each fix with the smallest meaningful proof, then broader relevant checks.
-6. Inspect the final diff and ensure no unrelated cleanup slipped in.
-7. For PR/review-thread workflows, close or reply to validated review threads when that is part of readiness.
-8. Report accepted, rejected, deferred, and unresolved findings.
-
-Stop and ask before editing when:
-
-- the finding changes product/design scope
-- the finding conflicts with prior user decisions
-- the required fix touches unrelated infrastructure or validation tooling
-- the finding is plausible but cannot be verified from available evidence
-
-PR thread rule:
-
-- Do not assume pushed code closes review threads.
-- Inspect thread state when PR readiness depends on it.
-- Resolve stale or misleading threads only after verifying them against current code/tests.
-- Resolve valid threads only after the fix lands and the relevant proof passes.
-- Leave unresolved threads open when the finding needs a user decision or cannot be verified.
+- Load `references/reviewer-prompts.md` before dispatching reviewers or writing a copy-paste review prompt.
+- Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
+- Load `references/review-reception.md` before addressing accepted findings or managing PR review threads.
 
 ## Report Shape
 

@@ -1,6 +1,6 @@
 ---
 name: docs-maintain
-description: Use when the user asks to update, clean up, reconcile, audit, purge, or maintain project docs, AGENTS.md, README.md, specs, plans, changelogs, runbooks, or architecture documentation. Identifies source-of-truth drift before editing and uses progressive disclosure for create, update, cleanup, and discrepancy workflows.
+description: Use when the user asks to update, clean up, reconcile, audit, purge, or maintain project docs, AGENTS.md, README.md, specs, plans, changelogs, runbooks, or architecture documentation.
 ---
 
 # Docs Maintain
@@ -77,7 +77,7 @@ docs request
 - Load `references/workflows.md` for create, update, cleanup, and discrepancy workflows.
 - Load `references/staleness-and-purge.md` before deleting, archiving, or rewriting stale plans/specs.
 - Load `references/changelog-runbooks.md` when adding `docs/changelog` or reference excerpts.
-- Load `references/source-inspirations.md` when updating this skill or explaining source practices.
+- Load `../../references/source-inspirations.md` when updating this skill or explaining source practices.
 
 ## Output Shape
 

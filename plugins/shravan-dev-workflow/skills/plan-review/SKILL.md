@@ -1,6 +1,6 @@
 ---
 name: plan-review
-description: Use when adversarially reviewing a plan, design, spec, implementation proposal, or handoff before code changes, especially when the user asks to validate, poke holes, challenge assumptions, or review a plan without executing it.
+description: Use when adversarially reviewing an implementation plan or handoff before code changes, especially when the user asks to validate, poke holes in, or review a plan without executing it.
 ---
 
 # Plan Review
@@ -41,7 +41,7 @@ plan artifact
 ## Workflow
 
 1. Identify the review target and mode:
-   - `plan-file`: source plan/spec path exists.
+   - `plan-file`: source implementation plan path exists.
    - `handoff-packet`: reviewing a packet prepared by another agent.
    - `chat-plan`: reviewing a plan only present in the conversation.
 2. Establish coverage:
@@ -62,10 +62,7 @@ plan artifact
 7. Add optional external model adversarial lanes when requested.
 8. Verify, dedupe, and rank candidate findings.
 9. Receive and address findings:
-   - read all feedback before reacting
-   - understand each finding in technical terms
-   - verify it against plan text and repo reality
-   - accept, reject, defer, or ask for clarification
+   - load `references/review-checklist.md` for review reception rules
    - revise the plan for accepted blocker/important findings when the plan artifact is writable
 10. Re-check revised plan sections when edits were made.
 11. Write a review report in chat. If useful or requested, also write it under the plan workflow temp directory.
@@ -126,18 +123,7 @@ After lanes return:
 
 ## Addressing Accepted Findings
 
-Plan review includes review reception. Reviewer output is not done when the swarm reports back.
-
-If the current agent authored the plan, or the plan artifact is in the current writable workspace:
-
-1. Validate each candidate finding before acting.
-2. Reject technically incorrect or unsupported findings with a short reason.
-3. Clarify ambiguous findings before editing when ambiguity changes the plan.
-4. Apply accepted blocker and important findings to the plan one at a time.
-5. Re-read the edited sections and verify the edit resolves the finding without changing implementation scope.
-6. Report which findings were accepted, rejected, deferred, or need user decision.
-
-If the user explicitly asked for read-only/report-only review, or the plan belongs to another agent and should not be changed, do not edit. Return exact plan edits for the owner to apply.
+Plan review includes review reception. Load `references/review-checklist.md` before editing a plan, returning owner edits, or deciding whether feedback needs a user decision.
 
 Never convert plan review into code implementation. Accepted findings change the plan; `plan-execute` handles code execution.
 
@@ -146,7 +132,7 @@ Never convert plan review into code implementation. Accepted findings change the
 - Load `references/review-packet.md` before dispatching subagents or writing a copy-paste review prompt.
 - Load `references/review-checklist.md` when the plan is large, risky, or implementation-facing.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
-- Load `../security-router/references/threat-model-context.md` when packaging or reviewing security-sensitive plans.
+- Load `../security-router/references/threat-model-context.md` when packaging or reviewing security-sensitive plans. This cross-skill reference is load-bearing; keep it in sync with `security-router` if that reference moves.
 
 ## Output Shape
 

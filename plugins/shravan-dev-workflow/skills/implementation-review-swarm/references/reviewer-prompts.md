@@ -28,6 +28,42 @@ For each finding use this shape:
 If you have no high-confidence findings, say "No findings." Do not pad.
 ```
 
+## Shared Review Packet Template
+
+Give every reviewer this same curated packet. Do not substitute the parent session transcript.
+
+```text
+Mode:
+<implementation | diff | pr | commit | files | adversarial>
+
+Review scope:
+<diff command, PR number, commit range, or file list>
+
+Git range:
+base_sha: <sha or "not applicable">
+head_sha: <sha or "working tree">
+diff_stat_command: <command or "not applicable">
+diff_command: <command or "not applicable">
+changed_files: <paths or "not applicable">
+
+Intent:
+<what the change is supposed to accomplish>
+
+Constraints:
+<repo instructions, product constraints, compatibility rules, user preferences>
+
+Threat model / security context:
+<changed attack surface, sensitive data, privileged actions, trust boundaries,
+security validation already run, proof gaps, or "not security-sensitive">
+
+Focus:
+<requested focus areas, or "full review">
+
+Output contract:
+Return findings only. Do not edit files. For each finding include severity,
+evidence, failure scenario, smallest fix, proof/test, and confidence.
+```
+
 ## Spec Compliance Reviewer
 
 ```text

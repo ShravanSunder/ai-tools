@@ -25,6 +25,9 @@ drafted spec/design needs adversarial pressure
 plan needs read-only validation
   -> plan-review
 
+plan needs to be authored
+  -> normal agent planning work; no dedicated skill owns plan writing
+
 validated written plan should be implemented
   -> plan-execute
 

@@ -91,7 +91,7 @@ For tiny design questions, run local versions of the relevant lanes and state wh
 
 - Load `references/swarm-packets.md` before spawning design, research, or architecture subagents.
 - Load `references/discuss-with-me.md` when intent is unclear or design branches need user decisions.
-- Load `references/source-inspirations.md` when updating this skill, explaining source practices, or comparing against admired upstream skills.
+- Load `../../references/source-inspirations.md` when updating this skill, explaining source practices, or comparing against admired upstream skills.
 
 ## Output Shape
 
@@ -103,4 +103,4 @@ Return:
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.
 - Decisions needed from the user.
-- Suggested next skill: usually `spec-review-council`, `plan-handoff`, or `plan-review`.
+- Suggested next skill: usually `spec-review-council` or `plan-handoff`; use `plan-review` only after an implementation plan exists.

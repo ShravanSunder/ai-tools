@@ -52,3 +52,16 @@ Load this for large, risky, stale, or implementation-facing plans.
 - Rank findings by execution risk.
 - Ask questions only when the answer changes implementation.
 - Keep the review read-only.
+
+## Review Reception
+
+If the current agent authored the plan, or the plan artifact is in the current writable workspace:
+
+1. Validate each candidate finding before acting.
+2. Reject technically incorrect or unsupported findings with a short reason.
+3. Clarify ambiguous findings before editing when ambiguity changes the plan.
+4. Apply accepted blocker and important findings to the plan one at a time.
+5. Re-read the edited sections and verify the edit resolves the finding without changing implementation scope.
+6. Report which findings were accepted, rejected, deferred, or need user decision.
+
+If the user explicitly asked for read-only/report-only review, or the plan belongs to another agent and should not be changed, do not edit. Return exact plan edits for the owner to apply.

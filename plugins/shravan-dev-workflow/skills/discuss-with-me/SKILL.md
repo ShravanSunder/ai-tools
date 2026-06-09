@@ -65,15 +65,11 @@ Do not use as the primary workflow for:
 
 ## Progressive Disclosure
 
-- Load `references/stage-design.md` for idea shaping, audience, success, alternatives, and non-goals.
-- Load `references/stage-spec.md` for contracts, boundaries, source-of-truth decisions, and edge cases.
-- Load `references/stage-plan.md` for sequencing, validation, rollback, dependencies, and execution readiness.
-- Load `references/stage-implementation.md` when implementation reveals a model break or unstated assumption.
-- Load `references/stage-docs.md` for durable docs/source-of-truth decisions before docs maintenance.
+- Load `references/stages.md` for stage-specific focus, preferred questions, and stop conditions.
 - Load `references/question-patterns.md` before asking when the question is broad, high-stakes, or politically/technically loaded.
 - Load `references/workflow-handoff-map.md` when deciding which skill should own the next step.
 - Load `references/trigger-evals.md` when testing or updating this skill's trigger behavior.
-- Load `references/source-inspirations.md` only when updating this skill or explaining what it borrows from admired skill sources.
+- Load `../../references/source-inspirations.md` only when updating this skill or explaining source practices.
 
 ## Output Shape
 

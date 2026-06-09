@@ -54,7 +54,7 @@ Maintains docs as durable memory for humans and agents. It inventories doc roles
 
 ### `spec-review-council`
 
-Runs a post-draft, pre-execution council review over a spec, design, or architecture proposal. It loads the full artifact, dispatches adversarial lanes, and reduces outputs into accepted, contested, open, and rejected issues with parent-owned verification.
+Runs a post-draft, pre-plan council review over a spec, design, or architecture proposal. It loads the full artifact, dispatches adversarial lanes, and reduces outputs into accepted, contested, open, and rejected issues with parent-owned verification.
 
 ### `security-router`
 
@@ -108,7 +108,7 @@ After installing or refreshing the plugin and restarting Codex, verify the plugi
 6. Ask for a design pass: `Use spec-design-swarm to shape this feature before writing a plan.`
 7. Ask for lifecycle alignment: `Use discuss-with-me to talk through this design decision before editing files.`
 8. Ask for docs maintenance: `Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.`
-9. Ask for a spec council pass: `Use spec-review-council to attack this spec before implementation.`
+9. Ask for a spec council pass: `Use spec-review-council to attack this spec before planning.`
 10. Ask for scan routing: `Use security-router for this authorized PR security scan.`
 11. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
 12. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
@@ -131,8 +131,8 @@ Behavioral pass criteria:
 - Plan review updates writable current-session plans for accepted blocker/important findings, but does not implement code.
 - Spec-design-swarm does not implement code and records security context when sensitive surfaces are touched.
 - Discuss-with-me triggers only when explicitly requested, stays scoped to design/spec/plan/implementation/docs decisions, and asks one question at a time when evidence cannot answer.
-- Maintain-docs identifies source-of-truth drift before editing and keeps detailed history in docs, not `AGENTS.md`.
-- Spec-adversarial-council-design preserves accepted, contested, and open findings instead of forcing fake consensus.
-- Security-scan-router routes explicit scans to official Codex Security workflows and does not claim audit coverage from a normal review lane.
+- docs-maintain identifies source-of-truth drift before editing and keeps detailed history in docs, not `AGENTS.md`.
+- spec-review-council preserves accepted, contested, and open findings instead of forcing fake consensus.
+- security-router routes explicit scans to official Codex Security workflows and does not claim audit coverage from a normal review lane.
 - Debug investigation does not implement fixes until the diagnosis is proven or uncertainty is explicitly accepted.
 - Skill audit recommends updates before new skills and cites evidence or upstream inspiration for every recommendation.

@@ -6,7 +6,6 @@ description: >
   "set dependencies", "break down into linear issues", "what's unblocked",
   "what tickets are blocked", "update ticket status", "plan tickets from architecture doc",
   "delete tickets", "move issues between milestones", or any Linear project management task.
-  Provides the docs-are-truth/tickets-are-tracking paradigm with MCP and CLI tool routing.
 ---
 
 # PM Linear Work Organization
