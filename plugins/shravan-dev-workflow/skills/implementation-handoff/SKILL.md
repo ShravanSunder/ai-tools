@@ -13,6 +13,7 @@ Package actual implementation state so another agent can review, continue, or au
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/review-handoffs/<yyyy-mm-dd>-<repo>-<branch>-<slug>/`.
 - Always write a file artifact and also print the copy-paste prompt in the response.
 - Ground the handoff in current repo state: branch, diff, commits, changed files, validation commands, and known risks.
+- Preserve security state when the implementation touches sensitive surfaces: changed trust boundaries, fixed findings, unvalidated risks, security proofs, report paths, and accepted risks.
 - Separate proven facts from claims, guesses, and unfinished work.
 - Do not run reviewers automatically. This skill prepares the packet; `implementation-subagent-review` or a manual Claude/Gemini/Codex paste can consume it.
 - If the handoff asks another agent to review only, the prompt must say "do not edit files".
@@ -63,3 +64,4 @@ Package actual implementation state so another agent can review, continue, or au
 - Giving a reviewer prompt that does not say read-only.
 - Forgetting to print the copy-paste prompt in chat.
 - Asking the next agent to infer current state from branch name alone.
+- Omitting changed trust boundaries or unvalidated security risks from a handoff.

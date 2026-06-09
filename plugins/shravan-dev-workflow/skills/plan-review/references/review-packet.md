@@ -10,7 +10,12 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Review target: <plan path or handoff packet>
 Coverage from controller: <line count + chunk ranges, or packet files>
-Lane: <spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-counsel>
+Lane: <spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-model>
+Backend: <Codex subagent | Claude Code CLI | agy/Gemini | other requested reviewer>
+
+Threat model / security context:
+<assets, entry points, untrusted inputs, trust boundaries, sensitive data,
+privileged actions, invariants, non-goals, required proof, or "not provided">
 
 Plan summary:
 <brief neutral summary>
@@ -32,12 +37,15 @@ Always check:
 - API/contract mismatch
 - untestable or vague steps
 - hidden security/reliability failure modes
+- missing or stale threat model when sensitive surfaces are touched
 - ownership gaps between controller, subagents, and implementer
 
 Return:
 - Lane: <lane name>
+- Backend: <backend used>
 - Verdict: ready | needs revision | blocked
 - Findings grouped as blocker | important | question | nit
 - For each finding: evidence, failure scenario, smallest plan edit, proof/test
+- For security findings: validation status as validated | unvalidated with proof gap | rejected
 - Do not include speculative findings without evidence
 ```

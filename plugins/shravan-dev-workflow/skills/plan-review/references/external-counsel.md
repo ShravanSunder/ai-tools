@@ -1,10 +1,10 @@
-# Plan Review External Counsel
+# Plan Review External Model Lanes
 
-External counsel is opt-in for `plan-review`. It challenges the plan as an outside adversarial reviewer and returns candidate findings only.
+External model lanes are opt-in for `plan-review`. They challenge the plan from another model family or CLI harness and return candidate findings only.
 
 ## Agy / Gemini
 
-Use when the user asks to include Gemini, `agy`, or outside model counsel for the plan review.
+Use when the user asks to include Gemini, `agy`, or an outside model lane for the plan review.
 
 Before invoking:
 
@@ -17,7 +17,7 @@ agy models
 Prompt addition:
 
 ```text
-You are an external adversarial plan reviewer for a Codex-led plan-review swarm.
+You are an external adversarial plan reviewer for a parent-agent-led plan-review swarm.
 Review only. Do not edit files. Challenge assumptions, contradictions,
 missing cutovers, under-specified tasks, validation gaps, and hidden
 security/reliability failure modes. Return findings only.
@@ -29,7 +29,7 @@ If no high-confidence findings, say "No findings."
 
 Prefer writing the shared packet to a temp prompt file and asking `agy` to write its final response to an output file when the CLI supports it.
 
-Record skipped or failed `agy` counsel in swarm coverage and continue with Codex subagents.
+Record skipped or failed `agy` lanes in swarm coverage and continue with available reviewer lanes.
 
 ## Claude
 
@@ -45,13 +45,13 @@ claude --print \
   --permission-mode plan \
   --disallowedTools "Edit Write NotebookEdit Bash" \
   --output-format json \
-  --append-system-prompt "You are an external adversarial plan reviewer for a Codex-led plan-review swarm. Read-only. Findings only. Do not edit files." \
+  --append-system-prompt "You are an external adversarial plan reviewer for a parent-agent-led plan-review swarm. Read-only. Findings only. Do not edit files." \
   "$(cat "$prompt_file")"
 ```
 
 Do not use Anthropic API calls, SDK calls, or programmatic tool-calling APIs from this skill.
 
-Record the actual model and any skipped/failed Claude counsel in swarm coverage.
+Record the actual model and any skipped/failed Claude lane in swarm coverage.
 
 ## Oracle
 

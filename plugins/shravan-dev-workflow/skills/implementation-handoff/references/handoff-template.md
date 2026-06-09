@@ -37,6 +37,13 @@ What is not proven
 Known risks
 - <risk>: <review focus or mitigation>
 
+Security state
+- Changed trust boundaries: <or "none known">
+- Security findings fixed: <or "none">
+- Unvalidated security risks: <or "none known">
+- Security commands/proofs/reports: <or "none run">
+- Accepted risks / non-goals: <or "none">
+
 Do not change
 - <path/scope boundary>
 
@@ -68,6 +75,7 @@ Do not redo
 ```text
 Reviewer focus
 - <risk or contract>
+- <security invariant or proof gap, when applicable>
 
 Diff command
 <git diff command>

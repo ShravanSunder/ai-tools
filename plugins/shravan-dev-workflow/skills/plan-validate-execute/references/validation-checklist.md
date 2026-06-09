@@ -9,6 +9,7 @@ Use this before execution and before completion claims.
 - Branch/worktree state known.
 - Relevant project instructions loaded.
 - Major plan claims checked against live code/docs.
+- Security assumptions checked against live code/docs when sensitive surfaces are touched.
 - Scope and write boundaries clear.
 - Validation commands identified.
 - Stop conditions considered.
@@ -18,6 +19,7 @@ Use this before execution and before completion claims.
 - Task is bounded and self-contained.
 - Write set is disjoint or subagent is read-only.
 - Packet includes full task text; subagent does not need the whole plan.
+- Packet includes security invariants and forbidden permission/network broadening when applicable.
 - Expected output and status vocabulary are explicit.
 - Controller has a local non-overlapping next step.
 
@@ -36,4 +38,7 @@ Use this before execution and before completion claims.
 - Run full relevant project validation when feasible.
 - Report command, exit code, and result.
 - Label verification precisely: unit, integration, real VM integration, and smoke/e2e are not interchangeable.
+- For sensitive changes, report authz regression, secret non-exposure,
+  command/path safety, dependency/package-script safety, and scan/report status
+  when applicable.
 - Separate fixed now, blockers, and follow-ups.

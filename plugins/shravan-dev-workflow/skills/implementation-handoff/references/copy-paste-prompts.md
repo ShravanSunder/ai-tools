@@ -31,11 +31,18 @@ Validation already run:
 Known risks / focus:
 - <risk>
 
+Security context:
+- Changed trust boundaries: <or "none known">
+- Sensitive data / privileged actions: <or "not applicable">
+- Security validation already run: <or "none">
+- Proof gaps: <or "none known">
+
 Review requirements:
 - Verify against actual code, not this summary.
 - Look for correctness, regression, security, test, and scope issues.
 - Separate blocker / important / nit.
 - Include exact file evidence and smallest safe fix.
+- For security findings, include exploit/misuse path and validation status.
 ```
 
 ## Continuation Prompt

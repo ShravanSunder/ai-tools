@@ -13,8 +13,8 @@ Core pipeline:
 plan artifact
   -> whole-artifact coverage
   -> shared plan review packet
-  -> Codex plan-review lanes
-  -> optional external adversarial counsel
+  -> bounded plan-review lanes
+  -> optional external model lanes
   -> parent verification and synthesis
   -> receive findings
   -> address accepted plan issues
@@ -28,11 +28,11 @@ plan artifact
 - Treat the plan as a claim, not truth. Verify major claims against current code, docs, package metadata, tests, and branch state.
 - Separate blocker, important, question, and nit findings.
 - Include evidence: file path, symbol or section, failure scenario, smallest fix, and proof/test.
-- For substantial plans, dispatch bounded read-only Codex subagent lanes by default. Skip subagents only for tiny plans, missing tool support, or explicit user request.
-- Give subagents curated packets. Do not rely on inherited session context.
-- Subagent packets must explicitly say "do not edit files"; check the diff after they return if the tool surface permits edits.
-- Include Claude, Gemini, or extra `agy` adversarial counsel only when the user explicitly asks. Use the Claude Code CLI harness for Claude and `agy` for Gemini.
-- Treat subagent and external counsel output as candidate findings only. The parent reviewer verifies and owns synthesis.
+- For substantial plans, dispatch bounded read-only reviewer lanes by default. Codex subagents are the normal backend because most sessions run in Codex, but the lane contract is not Codex-only.
+- Give every lane a curated packet. Do not rely on inherited session context.
+- Lane packets must explicitly say "do not edit files"; check the diff after they return if the tool surface permits edits.
+- Include Claude, Gemini, or extra `agy` adversarial lanes only when the user explicitly asks. Use the Claude Code CLI harness for Claude and `agy` for Gemini.
+- Treat subagent and external model output as candidate findings only. The parent reviewer verifies and owns synthesis.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
 - When reviewing a plan the current agent authored or can edit, address accepted blocker and important findings by revising the plan unless the user explicitly asked for report-only review.
 - If a finding is unclear, conflicts with user decisions, or would change code scope rather than plan text, stop and ask before changing the plan.
@@ -54,11 +54,12 @@ plan artifact
    - API contracts
    - execution order
    - tests and validation gates
+   - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
 5. Build a shared plan review packet.
-6. Dispatch Codex plan-review lanes for substantial plans.
-7. Add optional external adversarial counsel when requested.
+6. Dispatch bounded plan-review lanes for substantial plans.
+7. Add optional external model adversarial lanes when requested.
 8. Verify, dedupe, and rank candidate findings.
 9. Receive and address findings:
    - read all feedback before reacting
@@ -69,9 +70,17 @@ plan artifact
 10. Re-check revised plan sections when edits were made.
 11. Write a review report in chat. If useful or requested, also write it under the plan workflow temp directory.
 
-## Codex Plan-Review Lanes
+## Plan-Review Lanes
 
-For substantial plans, spawn bounded read-only Codex subagents in parallel when the tool surface supports it.
+For substantial plans, spawn bounded read-only reviewer lanes in parallel when the tool surface supports it.
+
+Backend rules:
+
+- Use Codex subagents for most lanes by default.
+- Use another available agent system only when explicitly requested, when the harness is already available, or when the current tool surface makes that lane safer than spawning a Codex child.
+- Claude lanes must use the Claude Code CLI harness, not Anthropic API or SDK calls.
+- Gemini lanes use `agy` as the local Gemini/Antigravity path.
+- Regardless of backend, the lane is read-only and advisory.
 
 Default lanes:
 
@@ -84,22 +93,24 @@ Default lanes:
 
 For tiny plans, run at least one local adversarial pass and state why the full swarm was skipped.
 
-Each subagent receives the same shared packet plus one lane focus. It must return:
+Each lane receives the same shared packet plus one lane focus. It must return:
 
 - lane name
+- backend used
 - verdict: ready, needs revision, or blocked
 - findings grouped as blocker, important, question, or nit
 - evidence, failure scenario, smallest plan edit, proof/test, and confidence
+- for security findings: validation status as `validated`, `unvalidated with proof gap`, or `rejected`
 
-## External Counsel
+## External Model Lanes
 
-Load `references/external-counsel.md` when the user asks to include Claude, Gemini, or `agy` in the plan review.
+Load `references/external-counsel.md` when the user asks to include Claude, Gemini, `agy`, or another outside model in the plan review.
 
-- `agy` / Gemini: optional external adversarial counsel when explicitly requested for plan review.
-- Claude: optional external adversarial counsel only when explicitly requested; use `claude --print` / `claude -p`, not API calls.
+- `agy` / Gemini: optional external adversarial model lane when explicitly requested for plan review.
+- Claude: optional external adversarial model lane only when explicitly requested; use `claude --print` / `claude -p`, not API calls.
 - Oracle: excluded.
 
-External counsel receives the shared plan review packet and produces candidate findings only. Parent verification still decides what is accepted.
+External model lanes receive the shared plan review packet and produce candidate findings only. Parent verification still decides what is accepted.
 
 ## Reduction
 
@@ -134,7 +145,8 @@ Never convert plan review into code implementation. Accepted findings change the
 
 - Load `references/review-packet.md` before dispatching subagents or writing a copy-paste review prompt.
 - Load `references/review-checklist.md` when the plan is large, risky, or implementation-facing.
-- Load `references/external-counsel.md` when user-requested Claude, Gemini, or `agy` counsel is included.
+- Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
+- Load `../security-scan-router/references/threat-model-context.md` when packaging or reviewing security-sensitive plans.
 
 ## Output Shape
 
@@ -146,5 +158,5 @@ Return:
 - Questions that must be answered before execution.
 - Suggested smallest plan edits.
 - Accepted/rejected/deferred findings and any plan edits applied.
-- Swarm coverage: lanes run, lanes skipped, external counsel status, and verification notes.
+- Swarm coverage: lanes run, lanes skipped, backend used for each lane, external model lane status, and verification notes.
 - Explicit "do not implement code yet" note unless the user changes scope.

@@ -11,6 +11,7 @@ Package a plan so another agent can start with the right context instead of reco
 
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, line count, coverage, referenced code/docs, open questions, and exact requested task.
+- Include security context when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
 - If a plan file is available, read it end to end before packaging. Show `wc -l` and chunk coverage.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
 - Show the copy-paste prompt in the final response and write the same prompt to a file.
@@ -43,3 +44,4 @@ Load `references/handoff-template.md` when writing the actual artifact or copy-p
 - The plan is summarized from headings without full-file coverage.
 - The handoff hides uncertainty instead of listing exact open questions.
 - The packet is overbroad and asks the next agent to understand the entire repo.
+- Sensitive trust-boundary assumptions are omitted, forcing the next agent to invent a threat model.

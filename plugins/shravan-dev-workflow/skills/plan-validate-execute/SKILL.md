@@ -12,6 +12,7 @@ Validate first, then execute. The main agent owns correctness even when subagent
 - Read the whole plan before execution. Show line count and chunk coverage for plan files.
 - Validate against the current repo before editing: branch, diff, code paths, package layout, tests, and instructions.
 - Stop before editing if the plan has critical gaps, stale assumptions, unsafe scope, or unclear ownership.
+- Stop before editing if security assumptions or threat boundaries are missing or stale for sensitive work.
 - Use subagents for parallelizable bounded slices only. The main agent remains responsible for context, integration, verification, and final claims.
 - Do not ask subagents to read the giant plan. The controller extracts exact task packets and gives each subagent only what it needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
@@ -24,6 +25,7 @@ Validate first, then execute. The main agent owns correctness even when subagent
    - Run `wc -l` for plan files.
    - Read all chunks and record coverage.
    - Compare major claims to live repo evidence.
+   - Compare security assumptions to live repo evidence when sensitive surfaces are touched.
 2. Decide execution mode.
    - Inline: tightly coupled work or no subagent support.
    - Sequential subagents: tasks share context or write surfaces.
@@ -75,6 +77,7 @@ Stop and report instead of continuing when:
 - the required write scope is broader than the user approved
 - subagents disagree on a blocker that requires design judgment
 - validation reveals unrelated infrastructure failures
+- execution would broaden permissions, network, filesystem, subprocess, plugin, MCP, or agent boundaries beyond the validated plan
 - tests cannot be run and no substitute proof exists
 
 ## Final Report

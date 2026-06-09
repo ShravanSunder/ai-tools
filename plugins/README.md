@@ -50,7 +50,10 @@ Multi-model review orchestration. Provides:
 
 Shravan's Codex-first development workflow plugin. Provides:
 
-- **implementation-subagent-review** skill -- orchestrates read-only Codex reviewer lanes, includes `agy` counsel for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
+- **spec-design-swarm** skill -- shapes specs/designs with bounded codebase explorer, architecture, security, and adversarial lanes before implementation planning
+- **spec-adversarial-council-design** skill -- attacks drafted specs/designs with adversarial council lanes and accepted/contested/open synthesis before execution
+- **security-scan-router** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
+- **implementation-subagent-review** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 - **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens

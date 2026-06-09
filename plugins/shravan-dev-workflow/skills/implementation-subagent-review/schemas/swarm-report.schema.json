@@ -83,7 +83,7 @@
       "required": [
         "lanes_run",
         "lanes_skipped",
-        "external_counsel",
+        "external_model_lanes",
         "skipped_inputs",
         "verification_notes",
         "candidate_count",
@@ -103,7 +103,7 @@
             "type": "string"
           }
         },
-        "external_counsel": {
+        "external_model_lanes": {
           "type": "array",
           "items": {
             "type": "string"

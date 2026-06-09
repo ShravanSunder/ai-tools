@@ -1,6 +1,6 @@
 # Reviewer Prompts
 
-These prompts are inputs for Codex subagents. Each reviewer is read-only and reports candidate findings. The parent session is the reducer.
+These prompts are inputs for read-only reviewer lanes. Codex subagents are the normal backend, but the same lane contracts can be sent to another requested reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports candidate findings. The parent session is the reducer.
 
 ## Common Contract
 
@@ -108,6 +108,11 @@ Look for:
 
 Every finding needs an exploit or misuse path. Do not report theoretical risk
 without a concrete path through the current code.
+
+Also state validation status for each security finding:
+- validated
+- unvalidated with proof gap
+- rejected
 ```
 
 ## Reliability And Performance Reviewer

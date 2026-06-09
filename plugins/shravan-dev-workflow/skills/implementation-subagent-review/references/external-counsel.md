@@ -1,10 +1,10 @@
-# External Counsel
+# External Model Lanes
 
-External counsel gives the reducer a different model family or tool runtime. It is never the source of truth. Most external counsel should be adversarial: challenge assumptions, hidden failure modes, and weak boundaries instead of repeating the default review.
+External model lanes give the reducer a different model family or tool runtime. They are never the source of truth. Most external model lanes should be adversarial: challenge assumptions, hidden failure modes, and weak boundaries instead of repeating the default review.
 
 ## Agy / Gemini
 
-Include one `agy` pass for substantial reviews when available, unless the user asks to skip external counsel. Prefer the latest Gemini Pro/High model exposed by `agy models`. On this machine, that is currently `Gemini 3.1 Pro (High)`.
+Include one `agy` pass for substantial reviews when available, unless the user asks to skip external model lanes. Prefer the latest Gemini Pro/High model exposed by `agy models`. On this machine, that is currently `Gemini 3.1 Pro (High)`.
 
 Before invoking:
 
@@ -17,7 +17,7 @@ agy models
 Recommended prompt additions:
 
 ```text
-You are an external adversarial counsel reviewer for a Codex-led review swarm.
+You are an external adversarial reviewer for a parent-agent-led review swarm.
 Do not edit files. Treat this as read-only review.
 Challenge the implementation, trust boundaries, tests, and assumptions.
 Write your complete answer to the requested output file if one is provided.
@@ -37,7 +37,7 @@ agy --model "Gemini 3.1 Pro (High)" --print "$(cat "$prompt_file")"
 cat "$output_file"
 ```
 
-If the preferred Gemini Pro/High model is unavailable, choose the newest available Gemini Pro model from `agy models`; if no Gemini Pro model is available, run `agy` without a model override and record the actual model source in swarm coverage. If `agy` is missing, unauthenticated, noninteractive, or times out, record that as skipped or failed counsel and continue with Codex subagents.
+If the preferred Gemini Pro/High model is unavailable, choose the newest available Gemini Pro model from `agy models`; if no Gemini Pro model is available, run `agy` without a model override and record the actual model source in swarm coverage. If `agy` is missing, unauthenticated, noninteractive, or times out, record that as a skipped or failed external model lane and continue with available reviewer lanes.
 
 ## Claude
 
@@ -53,7 +53,7 @@ git diff <base>...<head> | claude --print \
   --permission-mode plan \
   --disallowedTools "Edit Write NotebookEdit Bash" \
   --output-format json \
-  --append-system-prompt "You are an external adversarial counsel reviewer for a Codex-led review swarm. Read-only. Findings only. Do not edit files." \
+  --append-system-prompt "You are an external adversarial reviewer for a parent-agent-led review swarm. Read-only. Findings only. Do not edit files." \
   "Review the piped diff. Return at most 5 concrete findings with severity, evidence, scenario, smallest fix, proof, and confidence. If no high-confidence findings, say No findings."
 ```
 

@@ -25,6 +25,17 @@ Load this for large, risky, stale, or implementation-facing plans.
 - Validation gates prove behavior, not only formatting.
 - Scope is narrow enough for one execution pass or clearly split.
 
+## Security Context
+
+- Threat model exists when the plan touches auth, parsing, filesystem, network,
+  secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies,
+  agents, or external services.
+- Entry points, untrusted inputs, trust boundaries, sensitive data, privileged
+  actions, invariants, and non-goals are explicit.
+- Security validation proves behavior, not only "reviewed for security".
+- If the user requested a scan or audit, route to `security-scan-router`
+  instead of treating the normal review lane as exhaustive.
+
 ## Adversarial Questions
 
 - What breaks if the branch is stale?

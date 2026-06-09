@@ -1,19 +1,19 @@
 ---
 name: implementation-subagent-review
-description: Use when requesting a multi-agent implementation review, code review swarm, adversarial review, PR or diff review, or review synthesis across Codex subagents and optional external counsel before merge.
+description: Use when requesting a multi-agent implementation review, code review swarm, adversarial review, PR or diff review, or review synthesis across bounded reviewer lanes, Codex subagents, and optional external model lanes before merge.
 ---
 
 # Implementation Subagent Review
 
-Use this skill to run a review swarm where Codex remains the orchestrator and reducer. The swarm is review-only: subagents and external counsel inspect, report, and challenge; the parent session decides what is real.
+Use this skill to run a review swarm where the parent session remains the orchestrator and reducer. The swarm is review-only: subagents and external model lanes inspect, report, and challenge; the parent session decides what is real.
 
 Core pipeline:
 
 ```text
 review packet
   -> spec compliance reviewer
-  -> Codex reviewer lanes
-  -> optional external counsel
+  -> bounded reviewer lanes
+  -> optional external model lanes
   -> reducer verification
   -> receive findings
   -> address accepted implementation issues when in-scope
@@ -22,9 +22,10 @@ review packet
 
 ## Operating Model
 
-- Default reviewers are Codex subagents.
-- Include one `agy` counsel pass for substantial reviews when available, preferring the latest Gemini Pro/High model exposed by `agy models`, unless the user asks to skip external counsel.
-- Include Claude or additional `agy` adversarial counsel only when the user explicitly asks for them. Claude must use the Claude Code CLI harness, not Anthropic API calls.
+- Default reviewers are Codex subagents because current sessions mostly run in Codex.
+- The lane contract is not Codex-only: another agent system may back a bounded read-only lane when the user requests it, when the harness is already available, or when that backend is the point of the review.
+- Include one `agy` external model lane for substantial reviews when available, preferring the latest Gemini Pro/High model exposed by `agy models`, unless the user asks to skip it.
+- Include Claude or additional `agy` adversarial lanes only when the user explicitly asks for them. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
 - After review, receive findings rigorously: read, understand, verify against codebase reality, evaluate, then address accepted findings.
@@ -32,7 +33,7 @@ review packet
 - Do not blindly implement reviewer suggestions. Reject unsupported, technically wrong, out-of-scope, or YAGNI findings with evidence.
 - If feedback is unclear, conflicts with user decisions, or expands scope, ask before editing.
 - Keep the swarm shallow: direct child reviewer agents only. Do not ask reviewer agents to spawn deeper review swarms.
-- Keep orchestration skill-native. Scripts and schemas can support shape and validation, but the parent Codex session owns dispatch and reduction.
+- Keep orchestration skill-native. Scripts and schemas can support shape and validation, but the parent session owns dispatch and reduction.
 
 ## Review Modes
 
@@ -83,6 +84,10 @@ Intent:
 Constraints:
 <repo instructions, product constraints, compatibility rules, user preferences>
 
+Threat model / security context:
+<changed attack surface, sensitive data, privileged actions, trust boundaries,
+security validation already run, proof gaps, or "not security-sensitive">
+
 Focus:
 <requested focus areas, or "full review">
 
@@ -106,14 +111,15 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
 
 3. Reviewer swarm
-   - Dispatch independent read-only Codex reviewer lanes.
+   - Dispatch independent read-only reviewer lanes.
    - For small changes, run `spec_compliance` plus one general/adversarial lane.
    - For substantial changes, run all default lanes.
+   - For any sensitive-surface change, run the security and trust-boundary lane even when the change is small.
 
-4. External counsel
+4. External model lanes
    - Add `agy` for substantial reviews when available, unless skipped by user or environment.
    - Add Claude or extra Gemini/agy only when explicitly requested.
-   - External counsel is advisory and must be recorded in coverage.
+   - External model lanes are advisory and must be recorded in coverage.
 
 5. Reducer verification
    - Verify every candidate against code, diff, tests, or cited plan text.
@@ -133,9 +139,17 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - `ready_with_fixes`: accepted issues exist but are bounded and non-blocking.
    - `not_ready`: accepted blocker/important findings, failed spec compliance, or unresolved decision-critical scope.
 
-## Codex Subagent Lanes
+## Reviewer Lanes
 
-Dispatch independent read-only Codex subagents in parallel when the tool surface supports it. Prefer the `reviewer` role when available. Use the prompts in `references/reviewer-prompts.md`.
+Dispatch independent read-only reviewer lanes in parallel when the tool surface supports it. Prefer Codex `reviewer` subagents for most lanes when available. Use the prompts in `references/reviewer-prompts.md`.
+
+Backend rules:
+
+- Codex subagents are the default and should handle the majority of lanes.
+- Claude, `agy`/Gemini, or another available reviewer can back a lane only when requested, explicitly selected, or already required by this skill.
+- Claude lanes must use the Claude Code CLI harness, not Anthropic API or SDK calls.
+- Gemini lanes use `agy` as the local Gemini/Antigravity path.
+- Every lane remains read-only and advisory, regardless of backend.
 
 Default lanes:
 
@@ -151,24 +165,24 @@ For small changes, run fewer lanes but keep at least one normal reviewer and one
 
 ## Cross-Model Adversarial Lanes
 
-The default adversarial reviewer is a Codex subagent. When the user asks for a specific outside model, add that model as an adversarial counsel lane:
+The default adversarial reviewer is a Codex subagent. When the user asks for a specific outside model, add that model as an adversarial model lane:
 
-- "include Gemini" means add a Gemini-flavored adversarial counsel pass through `agy`, preferring the latest Gemini Pro/High model available from `agy models`.
-- "include Claude" means add Claude as an adversarial counsel pass through the Claude Code CLI harness if the user explicitly requested it and accepts any separate CLI cost.
-- "include agy" means add an additional `agy` adversarial counsel pass even for smaller reviews.
+- "include Gemini" means add a Gemini-flavored adversarial lane through `agy`, preferring the latest Gemini Pro/High model available from `agy models`.
+- "include Claude" means add Claude as an adversarial lane through the Claude Code CLI harness if the user explicitly requested it and accepts any separate CLI cost.
+- "include agy" means add an additional `agy` adversarial lane even for smaller reviews.
 
-External adversarial counsel still follows the same rule: it produces candidate findings only. The reducer verifies before accepting anything.
+External adversarial lanes still follow the same rule: they produce candidate findings only. The reducer verifies before accepting anything.
 
-## External Counsel
+## External Model Lanes
 
 Use `references/external-counsel.md` for command shapes and safety rules.
 
-- `agy`: include by default for substantial reviews when available; prefer Gemini Pro/High; record skipped or failed counsel explicitly.
+- `agy`: include by default for substantial reviews when available; prefer Gemini Pro/High; record skipped or failed lanes explicitly.
 - Claude: include only when the user explicitly asks for Claude, often as an adversarial lane; use only the Claude Code CLI harness.
 - Gemini: include only when the user explicitly asks for Gemini, often as an adversarial lane; use `agy` as the local Gemini/Antigravity path.
 - Oracle: do not invoke, suggest, or route to Oracle from this skill.
 
-External counsel should receive the same packet and be told to write findings to an output file when the CLI supports it. Do not treat a failed external CLI as a failed review; continue with Codex subagents and report the missing input.
+External model lanes should receive the same packet and be told to write findings to an output file when the CLI supports it. Do not treat a failed external CLI as a failed review; continue with available reviewer lanes and report the missing input.
 
 ## Reduction
 
@@ -191,6 +205,7 @@ Accepted findings must include:
 - Test or proof that would catch it
 - Confidence
 - Which reviewers raised it
+- For security findings: validation status as `validated`, `unvalidated with proof gap`, or `rejected`
 
 Rejected findings should not be listed by default. Mention them only when a rejected high-severity claim might otherwise confuse the user.
 
@@ -246,13 +261,13 @@ Findings
    Scenario: concrete failure path
    Fix: smallest useful change
    Proof: test or command
-   Sources: reviewer lanes or counsel tools
+   Sources: reviewer lanes and model backends
 
 Open questions
 <only decision-relevant questions>
 
 Swarm coverage
-<reviewed scope, lanes run, lanes skipped, external counsel status, verification notes>
+<reviewed scope, lanes run, lanes skipped, backend used for each lane, external model lane status, verification notes>
 
 Fix follow-through
 <accepted findings fixed, rejected/deferred findings, PR threads resolved or left open, commands run, remaining blockers>
@@ -262,8 +277,8 @@ Fix follow-through
 
 - Do not paste raw subagent transcripts as the review.
 - Do not accept findings just because multiple agents agreed.
-- Do not hide skipped external counsel.
+- Do not hide skipped external model lanes.
 - Do not run Claude or Gemini unless the user asked.
 - Do not leave accepted current-session implementation blockers unfixed unless the user asked for report-only review or the fix needs a decision.
-- Do not let external counsel failure fail the whole review.
+- Do not let external model lane failure fail the whole review.
 - Do not let a sidecar reviewer become the critical path when the parent can continue reducing available evidence.

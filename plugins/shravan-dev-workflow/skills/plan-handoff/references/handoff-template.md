@@ -32,6 +32,13 @@ Do first
 Context
 <short domain model, current branch state, prior decisions>
 
+Security context
+- Entry points / untrusted inputs: <or "not security-sensitive">
+- Trust boundaries / auth assumptions: <or "not applicable">
+- Sensitive data / privileged actions: <or "not applicable">
+- Security invariants and non-goals: <or "not applicable">
+- Required security proof: <or "not applicable">
+
 Open questions
 - <question and why it matters>
 
@@ -60,6 +67,8 @@ Constraints:
 - Do not rely on prior chat history.
 - Do not change code unless this prompt explicitly asks for implementation.
 - Verify plan claims against current files before conclusions.
+- Preserve listed security invariants. If the plan touches sensitive surfaces
+  but no threat model is provided, flag that as a plan defect.
 - Keep findings evidence-backed with exact paths.
 
 Return:

@@ -13,6 +13,10 @@ Task:
 Context:
 <where this fits, dependencies, relevant architecture>
 
+Security invariants:
+- <assets, entry points, untrusted inputs, trust boundaries, sensitive data,
+  privileged actions, forbidden permission/network broadening, or "not security-sensitive">
+
 Allowed write scope:
 - <path or directory>
 
@@ -24,6 +28,7 @@ Relevant files to read:
 
 Tests/verification:
 - <command and expected result>
+- <security proof command or manual check when applicable>
 
 Before starting, ask if the task is unclear. If implementation reveals a plan gap, stop and report NEEDS_CONTEXT or BLOCKED.
 
@@ -70,6 +75,7 @@ Focus:
 <spec compliance | code quality | security | tests>
 
 Verify by reading code and tests. Do not trust the implementer report.
+For security review, include validation status: validated | unvalidated with proof gap | rejected.
 
 Return:
 - Verdict
