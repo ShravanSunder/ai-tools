@@ -137,6 +137,7 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Cross-reference other skills by skill name, not fragile installed-cache paths.
 - Treat skill writing like TDD for process documentation: first identify or create a pressure scenario where the agent fails without the skill, then write the smallest wording that prevents that failure, then retest and close loopholes.
 - Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.
+- For `shravan-dev-workflow` skill changes, add or update pressure scenarios under `tests/skills/pressure-scenarios/` and run `tests/skills/run-skill-pressure-tests.sh --fast` before rollout.
 - Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.
 - Keep artifact ownership explicit: spec, plan, research, and debug skills create their lane artifacts for clear substantial work unless the user asks for chat-only/no-files; `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation after artifacts exist.
 - Keep parent/subagent ownership explicit: subagents produce bounded evidence or candidate findings; the parent agent verifies, reduces, and owns the final claim.
