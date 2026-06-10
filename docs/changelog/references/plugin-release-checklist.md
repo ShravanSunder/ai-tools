@@ -11,5 +11,5 @@ Use this when changing plugin skills, commands, hooks, manifests, or README file
 7. Validate the plugin with `validate_plugin.py <plugin-path>`.
 8. Validate skills with `quick_validate.py <skill-path>`.
 9. Inspect Codex marketplace state with `codex plugin list --marketplace ai-tools --available --json`.
-10. Refresh or reinstall the plugin before claiming the installed Codex session sees the change.
+10. Refresh or reinstall the plugin with `codex plugin add <plugin>@<marketplace>` before claiming the installed Codex session sees the change.
 11. Run the relevant post-restart smoke from the plugin README.

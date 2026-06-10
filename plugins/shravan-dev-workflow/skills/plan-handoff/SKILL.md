@@ -5,7 +5,7 @@ description: Use when preparing a plan, design, spec, or implementation brief fo
 
 # Plan Handoff
 
-Package a plan so another agent can start with the right context instead of reconstructing it from chat history. The output must be useful both as a file artifact and as a copy-paste prompt shown in the response.
+Package a plan so another agent can start with the right context instead of reconstructing it from chat history. This is a handoff packet: a continuity artifact carrying evidence, constraints, coverage, and next action. The output must be useful both as a file artifact and as a copy-paste prompt shown in the response.
 
 ## Core Rules
 

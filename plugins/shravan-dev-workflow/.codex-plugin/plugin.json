@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.3",
-  "description": "Codex-first development workflow plugin with spec design swarms, discuss-with-me lifecycle alignment, docs maintenance, adversarial council review, security scan routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
+  "version": "1.6.5",
+  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, discuss-with-me lifecycle alignment, docs maintenance, adversarial council review, security scan routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -18,6 +18,8 @@
     "plan",
     "spec-design",
     "spec-review",
+    "goal",
+    "orchestrate-goal",
     "discuss-with-me",
     "docs-maintain",
     "docs",
@@ -41,7 +43,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Codex-first workflow with spec design, review, security routing, debugging, TUI, and PM",
-    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, align on design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and changelog runbooks, adversarially review drafted specs with council lanes, route explicit security audits to the official Codex Security workflows, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, optional Claude or Gemini/agy lanes when requested, and agy as an external model lane for substantial reviews. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review swarms or validate-execute written plans with controller-owned verification, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus PM Linear work organization.",
+    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, align on unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and changelog runbooks, adversarially review drafted specs with council lanes, route explicit security audits to the official Codex Security workflows, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, optional Claude or Gemini/agy lanes when requested, and agy as an external model lane for substantial reviews. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review swarms or validate-execute written plans with controller-owned verification, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus PM Linear work organization.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -55,6 +57,7 @@
       "Run plan-review on this plan.",
       "Use spec-design-swarm to shape this design before planning.",
       "Use discuss-with-me to talk through this design decision before editing files.",
+      "Use orchestrate-goal to turn this into a verifiable long-horizon goal.",
       "Use docs-maintain to reconcile these docs with current code and plans.",
       "Use spec-review-council to attack this spec before implementation.",
       "Use security-router to choose the right Codex Security scan.",

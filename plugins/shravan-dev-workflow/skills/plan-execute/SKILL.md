@@ -5,7 +5,7 @@ description: Use when executing a written plan or design after first validating 
 
 # Plan Execute
 
-Validate first, then execute. The main agent owns correctness even when subagents do bounded work.
+Validate first, then execute. This is controller-owned execution: subagents may do bounded worker slices, but the main agent validates the plan against reality, integrates results, and owns correctness.
 
 ## Core Rules
 
@@ -31,7 +31,7 @@ Validate first, then execute. The main agent owns correctness even when subagent
    - Sequential subagents: tasks share context or write surfaces.
    - Parallel subagents: tasks are independent with disjoint write sets, or are read-only research/review lanes.
 3. Create a controller brief under:
-   - `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/validate-execute-brief.md`
+   - `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/plan-execute-brief.md`
 4. Slice tasks.
    - Extract full task text.
    - Add scene-setting context.

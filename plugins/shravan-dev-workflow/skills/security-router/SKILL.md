@@ -5,7 +5,7 @@ description: Use when the user asks for a security scan, security audit, threat 
 
 # Security Router
 
-Route security-primary work to the narrowest appropriate official Codex Security workflow. This skill is a router and handoff layer, not a replacement scanner.
+Route security-primary work to the narrowest appropriate official Codex Security workflow. This is an audit boundary: review lanes can notice security risks, but explicit scans belong to the official security workflows. This skill is a router and handoff layer, not a replacement scanner.
 
 Core pipeline:
 

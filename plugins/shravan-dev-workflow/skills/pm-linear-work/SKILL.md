@@ -1,11 +1,6 @@
 ---
 name: pm-linear-work
-description: >
-  This skill should be used when the user asks to "create linear tickets",
-  "organize work in linear", "set up a linear project", "create milestones",
-  "set dependencies", "break down into linear issues", "what's unblocked",
-  "what tickets are blocked", "update ticket status", "plan tickets from architecture doc",
-  "delete tickets", "move issues between milestones", or any Linear project management task.
+description: Use when the user asks to create, organize, update, delete, or inspect Linear projects, milestones, issues, dependencies, ticket breakdowns, blocked/unblocked work, or tickets generated from architecture docs.
 ---
 
 # PM Linear Work Organization

@@ -5,12 +5,13 @@ description: Use when investigating bugs, failing tests, flaky behavior, crashes
 
 # Debug Investigation
 
-Investigate before fixing. The main agent must find and prove the likely root cause before proposing code changes.
+Investigate before fixing. This is systematic debugging: build evidence, rank hypotheses, prove a likely root cause, then change code. The main agent owns that loop even when subagents inspect bounded slices.
 
 ## Core Rules
 
 - No fixes before root-cause investigation.
 - Treat logs, stack traces, failing tests, current code, recent diffs, and runtime state as evidence.
+- Use hypothesis-driven debugging: each theory must name supporting evidence, missing evidence, and the smallest proof step.
 - Use subagents only for bounded investigation slices. The main agent owns synthesis, evidence checking, and the final diagnosis.
 - Keep investigation read-only until the user explicitly asks to fix or a validated fix phase begins.
 - If 3+ fix attempts already failed, stop and question the design or architecture before trying another patch.

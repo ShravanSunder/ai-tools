@@ -5,7 +5,7 @@ description: Use when auditing existing skills, comparing admired upstream skill
 
 # Skill Audit
 
-Audit real workflows before creating skills. Prefer updating an existing skill over creating a duplicate.
+Audit real workflows before creating skills. Skills encode judgment and house style, not task history; create or update one only when the wording teaches behavior a smart model would otherwise shortcut. Prefer updating an existing skill over creating a duplicate.
 
 ## Core Rules
 

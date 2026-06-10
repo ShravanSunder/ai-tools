@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrate Goal"
+  short_description: "Compile clear /goal contracts and route phase work"
+  default_prompt: "Use orchestrate-goal to turn this into a verifiable long-horizon goal."

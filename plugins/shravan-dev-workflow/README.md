@@ -1,6 +1,6 @@
 # Shravan Dev Workflow
 
-Codex-first development workflow plugin for spec design swarms, discuss-with-me lifecycle alignment, docs maintenance, adversarial spec council review, security scan routing, evidence-backed code and plan review, copy-pasteable plan and implementation handoffs, validated plan execution, diagnosis-first debugging, skill audits, TUI presentation guidance for structured chat output, and Linear work organization.
+Codex-first development workflow plugin for goal orchestration, spec design swarms, discuss-with-me lifecycle alignment, docs maintenance, adversarial spec council review, security scan routing, evidence-backed code and plan review, copy-pasteable plan and implementation handoffs, validated plan execution, diagnosis-first debugging, skill audits, TUI presentation guidance for structured chat output, and Linear work organization.
 
 This plugin intentionally replaces the older broad counsel pattern with a narrower workflow:
 
@@ -12,6 +12,7 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 - Plans and handoffs are first-class workflow skills: read the full artifact when a source file exists, prove coverage, verify against live repo state, and keep subagents bounded.
 - Spec/design formation is subagent-aware: explorer, architecture, security, and adversarial lanes provide evidence while the parent owns synthesis.
 - Discuss-with-me is available as an explicit trigger for lifecycle alignment across design, spec, plan, implementation-direction, and docs decisions.
+- Orchestrate-goal is a thin long-horizon controller: clear goals become verifiable Codex/Claude `/goal` contracts; unclear goals route to `discuss-with-me`.
 - Docs maintenance is a first-class workflow: keep `AGENTS.md` compact, README human-facing, and changelog/runbook references durable.
 - Explicit security scans are routed to the official Codex Security workflows instead of reimplemented in normal review skills.
 - Debugging is diagnosis-first: prove the root cause before fixing, and use subagents only for bounded read-only investigation slices.
@@ -47,6 +48,10 @@ Shapes a new spec, design, or architecture before an implementation plan exists.
 ### `discuss-with-me`
 
 Manual-only lifecycle alignment for design, spec, plan, implementation-direction, and docs decisions. It classifies the stage, checks code/docs before asking when possible, asks one material question at a time with the agent's recommended answer, and hands off to the right workflow when discussion becomes review, debugging, security, docs editing, broad research, or execution.
+
+### `orchestrate-goal`
+
+Compiles clear long-horizon work into a verifiable Codex or Claude `/goal` contract, then routes the first phase to the right workflow skill. If objective, scope, proof gates, or stop conditions are unclear, it routes to `discuss-with-me` instead of setting a fuzzy goal.
 
 ### `docs-maintain`
 
@@ -100,23 +105,26 @@ Public release notes live in [`../../docs/changelog/`](../../docs/changelog/). U
 
 After installing or refreshing the plugin and restarting Codex, verify the plugin in the live session:
 
-1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:implementation-review-swarm`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:implementation-handoff`, `shravan-dev-workflow:spec-design-swarm`, `shravan-dev-workflow:discuss-with-me`, `shravan-dev-workflow:docs-maintain`, `shravan-dev-workflow:spec-review-council`, `shravan-dev-workflow:security-router`, `shravan-dev-workflow:plan-review`, `shravan-dev-workflow:plan-execute`, `shravan-dev-workflow:debug-investigation`, `shravan-dev-workflow:skill-audit`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:pm-linear-work`.
+1. Confirm the skills appear in the available skill list as `shravan-dev-workflow:implementation-review-swarm`, `shravan-dev-workflow:plan-handoff`, `shravan-dev-workflow:implementation-handoff`, `shravan-dev-workflow:spec-design-swarm`, `shravan-dev-workflow:discuss-with-me`, `shravan-dev-workflow:orchestrate-goal`, `shravan-dev-workflow:docs-maintain`, `shravan-dev-workflow:spec-review-council`, `shravan-dev-workflow:security-router`, `shravan-dev-workflow:plan-review`, `shravan-dev-workflow:plan-execute`, `shravan-dev-workflow:debug-investigation`, `shravan-dev-workflow:skill-audit`, `shravan-dev-workflow:tui-presentation`, and `shravan-dev-workflow:pm-linear-work`.
 2. Ask for a small local review: `Use implementation-review-swarm to review the last change.`
 3. Confirm Codex builds a shared review packet, runs spec compliance when applicable, and dispatches read-only reviewer lanes, normally backed by Codex subagents.
 4. Ask for a plan review: `Use plan-review on this plan and include Gemini/agy adversarial counsel.`
 5. Confirm substantial plan reviews run bounded plan-review lanes and record skipped or completed external model lanes.
 6. Ask for a design pass: `Use spec-design-swarm to shape this feature before writing a plan.`
 7. Ask for lifecycle alignment: `Use discuss-with-me to talk through this design decision before editing files.`
-8. Ask for docs maintenance: `Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.`
-9. Ask for a spec council pass: `Use spec-review-council to attack this spec before planning.`
-10. Ask for scan routing: `Use security-router for this authorized PR security scan.`
-11. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
-12. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
-13. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
-14. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
-15. Run one review request that includes an external adversarial model lane: `Use implementation-review-swarm and include Gemini/agy adversarial review.`
-16. Run one review request that includes Claude explicitly: `Use implementation-review-swarm and include Claude adversarial review.`
-17. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
+8. Ask for a goal contract: `Use orchestrate-goal to turn the already-discussed plugin release into a verifiable /goal.`
+9. Ask for a fuzzy goal: `Use orchestrate-goal to make my workflow better.`
+10. Confirm the clear case compiles a goal contract and the fuzzy case routes to `discuss-with-me`.
+11. Ask for docs maintenance: `Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.`
+12. Ask for a spec council pass: `Use spec-review-council to attack this spec before planning.`
+13. Ask for scan routing: `Use security-router for this authorized PR security scan.`
+14. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
+15. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
+16. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
+17. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
+18. Run one review request that includes an external adversarial model lane: `Use implementation-review-swarm and include Gemini/agy adversarial review.`
+19. Run one review request that includes Claude explicitly: `Use implementation-review-swarm and include Claude adversarial review.`
+20. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
 
 Behavioral pass criteria:
 
@@ -131,6 +139,7 @@ Behavioral pass criteria:
 - Plan review updates writable current-session plans for accepted blocker/important findings, but does not implement code.
 - Spec-design-swarm does not implement code and records security context when sensitive surfaces are touched.
 - Discuss-with-me triggers only when explicitly requested, stays scoped to design/spec/plan/implementation/docs decisions, and asks one question at a time when evidence cannot answer.
+- Orchestrate-goal uses only two paths: clear goals become contracts; unclear goals route to discuss-with-me.
 - docs-maintain identifies source-of-truth drift before editing and keeps detailed history in docs, not `AGENTS.md`.
 - spec-review-council preserves accepted, contested, and open findings instead of forcing fake consensus.
 - security-router routes explicit scans to official Codex Security workflows and does not claim audit coverage from a normal review lane.

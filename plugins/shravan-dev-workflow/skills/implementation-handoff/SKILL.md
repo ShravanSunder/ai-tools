@@ -5,7 +5,7 @@ description: Use when packaging implementation state for another agent, reviewer
 
 # Implementation Handoff
 
-Package actual implementation state so another agent can review, continue, or audit the work without relying on chat history.
+Package actual implementation state so another agent can review, continue, or audit the work without relying on chat history. This is an evidence packet, not a status update: preserve facts, claims, risks, validation, and the exact next decision.
 
 ## Core Rules
 
