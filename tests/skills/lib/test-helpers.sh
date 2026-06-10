@@ -75,7 +75,8 @@ run_codex_pressure_case() {
     printf -- '- artifact_expected: %s\n' "$artifact_meta"
     printf -- '- In fast read-only pressure runs, set artifact_created false unless you actually created an artifact.\n'
     printf -- '- If a skill would normally write an artifact, explain that in decision/coverage_evidence while keeping artifact_created false.\n'
-    printf -- '- Put the full text of your live response to the operator (the response the user would see) in the decision field, followed by a short report of what you did.\n\n'
+    printf -- '- Put the full text of your live response to the operator (the response the user would see) in the decision field, followed by a short report of what you did.\n'
+    printf -- '- In the report part, name the specific skill rules that drove your response, using the skill'"'"'s own terms for its required artifacts, gates, and stop conditions.\n\n'
     printf 'Operator prompt:\n\n'
     printf '%s\n' "$prompt_body"
   } > "$prompt_file"
@@ -93,22 +94,28 @@ run_codex_pressure_case() {
   printf '%s\n' "$final_file"
 }
 
+# Metadata lives only in the header block before the first "## " heading;
+# stop there so rubric prose can never become a live assertion.
 metadata_value() {
   local file="$1"
   local key="$2"
-  awk -F ': ' -v key="$key" '$1 == key { print substr($0, length(key) + 3); exit }' "$file"
+  awk -F ': ' -v key="$key" '/^## /{exit} $1 == key { print substr($0, length(key) + 3); exit }' "$file"
 }
 
 metadata_values() {
   local file="$1"
   local key="$2"
-  awk -F ': ' -v key="$key" '$1 == key { print substr($0, length(key) + 3) }' "$file"
+  awk -F ': ' -v key="$key" '/^## /{exit} $1 == key { print substr($0, length(key) + 3) }' "$file"
 }
 
 assert_json_contains() {
   local file="$1"
   local pattern="$2"
   local name="$3"
+  if [[ ! -f "$file" ]]; then
+    printf '  [FAIL] %s (missing output file — codex run failed or timed out)\n' "$name"
+    return 1
+  fi
   if grep -qE "$pattern" "$file"; then
     printf '  [PASS] %s\n' "$name"
   else
@@ -123,6 +130,9 @@ assert_json_contains() {
 # Extract the user-visible live response (.decision) so decision/proof
 # assertions cannot be satisfied by mentions in coverage_evidence,
 # rationalizations_rejected, or other report-only fields.
+# Output is lowercased; expect_decision_regex / expect_proof_regex patterns
+# must therefore be written in lowercase. This removes the whole
+# case/sentence-start flake class without per-pattern (P|p) alternations.
 extract_decision_field() {
   local final_file="$1"
   local out_file="$2"
@@ -131,14 +141,33 @@ extract_decision_field() {
     return 0
   fi
   if command -v jq >/dev/null 2>&1; then
-    jq -r '.decision // empty' "$final_file" > "$out_file" 2>/dev/null || : > "$out_file"
+    jq -r '.decision // empty' "$final_file" 2>/dev/null | tr '[:upper:]' '[:lower:]' > "$out_file" || : > "$out_file"
   else
     python3 -c 'import json,sys
 try:
-    print(json.load(open(sys.argv[1])).get("decision",""))
+    print(json.load(open(sys.argv[1])).get("decision","").lower())
 except Exception:
     pass' "$final_file" > "$out_file" 2>/dev/null || : > "$out_file"
   fi
+}
+
+# Rubric-leak lint: if the operator prompt itself can satisfy a proof regex,
+# the scenario cannot distinguish skill-taught behavior from prompt echo.
+# This is the exact bug class that produced false-green proof assertions.
+assert_prompt_does_not_leak() {
+  local scenario_file="$1"
+  shift
+  local prompt_body
+  prompt_body="$(awk '/^## Prompt$/{found=1; next} /^## /{if (found) exit} found' "$scenario_file" | tr '[:upper:]' '[:lower:]')"
+  local leaked=0
+  local regex
+  for regex in "$@"; do
+    if printf '%s\n' "$prompt_body" | grep -qE "$regex"; then
+      printf '  [FAIL] rubric leak: prompt text satisfies proof regex: %s\n' "$regex"
+      leaked=1
+    fi
+  done
+  return "$leaked"
 }
 
 run_pressure_scenario_file() {
@@ -167,6 +196,10 @@ run_pressure_scenario_file() {
   [[ -n "$expect_artifact" ]] || expect_artifact="false"
   [[ -n "$expect_decision_regex" ]] || expect_decision_regex="."
 
+  if [[ "${#expect_proof_regexes[@]}" -gt 0 ]]; then
+    assert_prompt_does_not_leak "$scenario_file" "${expect_proof_regexes[@]}" || return 1
+  fi
+
   local artifact_dir
   local final_file
   artifact_dir="$(skill_test_artifact_dir "$scenario_id")"
@@ -176,6 +209,18 @@ run_pressure_scenario_file() {
   local decision_file="$artifact_dir/decision.txt"
   extract_decision_field "$final_file" "$decision_file"
 
+  # Proof assertions run against the whole final.json (lowercased): the live
+  # response plus the model's self-report of which skill rules it applied.
+  # Live-response phrasing varies run to run; the rule citations are stable.
+  # Parroting is guarded upstream: the rubric is never shown to the model and
+  # the rubric-leak lint rejects prompts that satisfy a proof regex.
+  local proof_scope_file="$artifact_dir/proof-scope.txt"
+  if [[ -f "$final_file" ]]; then
+    tr '[:upper:]' '[:lower:]' < "$final_file" > "$proof_scope_file"
+  else
+    : > "$proof_scope_file"
+  fi
+
   assert_json_contains "$final_file" "\"scenario_id\"[[:space:]]*:[[:space:]]*\"$scenario_id\"" "scenario id" || failed=$((failed + 1))
   assert_json_contains "$final_file" "\"skill_under_test\"[[:space:]]*:[[:space:]]*\"$skill_under_test\"" "skill named" || failed=$((failed + 1))
   assert_json_contains "$final_file" '"skill_invoked"[[:space:]]*:[[:space:]]*true' "skill invoked" || failed=$((failed + 1))
@@ -184,7 +229,7 @@ run_pressure_scenario_file() {
   assert_json_contains "$final_file" '"shortcut_resisted"[[:space:]]*:[[:space:]]*true' "resisted shortcut" || failed=$((failed + 1))
   assert_json_contains "$decision_file" "$expect_decision_regex" "decision shape" || failed=$((failed + 1))
   for index in "${!expect_proof_regexes[@]}"; do
-    assert_json_contains "$decision_file" "${expect_proof_regexes[$index]}" "proof assertion $((index + 1))" || failed=$((failed + 1))
+    assert_json_contains "$proof_scope_file" "${expect_proof_regexes[$index]}" "proof assertion $((index + 1))" || failed=$((failed + 1))
   done
 
   if [[ "$failed" -gt 0 ]]; then

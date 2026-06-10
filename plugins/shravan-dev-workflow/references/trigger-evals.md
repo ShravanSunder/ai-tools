@@ -47,6 +47,10 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - "Council-review this design doc for missing assumptions."
 - "Pressure test this API contract spec before it turns into tasks."
 
+Gate: treats the spec as claims, requires a threat model or explicit
+non-sensitive rationale, and checks proof expectations or explicit deferral to
+`plan-create`.
+
 ### spec-review-swarm should not trigger
 
 - "Review this implementation plan before I execute it." -> `plan-review-swarm`
@@ -59,6 +63,10 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - "Poke holes in this handoff packet before another agent runs it."
 - "Read this plan and tell me if execution order or validation is wrong."
 
+Gate: whole-artifact coverage; plans missing the requirements/proof matrix
+(without a documented compact proof line) or with proof gates that cannot pass
+at task size are `needs revision`.
+
 ### plan-review-swarm should not trigger
 
 - "Critique this pre-plan design proposal." -> `spec-review-swarm`
@@ -70,6 +78,9 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - "Run a review swarm on my branch diff."
 - "Review this PR with subagents before merge."
 - "Adversarially review the implementation in these files."
+
+Gate: verifies candidate findings against artifacts; missing or unmapped
+implementation proof yields `not_ready`.
 
 ### implementation-review-swarm should not trigger
 

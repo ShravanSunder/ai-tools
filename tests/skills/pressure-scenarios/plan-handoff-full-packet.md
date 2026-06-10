@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: line count|coverage|requirements/proof matrix|copy-paste|handoff|security|repo
-expect_proof_regex: proof (matrix|mapping|map)|requirements/proof
-expect_proof_regex: coverage|full plan|whole plan|line count
+expect_proof_regex: proof[ -](matrix|mapping|map)|requirements/proof
+expect_proof_regex: line count|chunk coverage|whole[- ]plan coverage|wc -l|end[- ]to[- ]end
 
 ## Shortcut Temptation
 
@@ -27,8 +27,8 @@ coverage evidence, and file-backed handoff creation.
 $shravan-dev-workflow:plan-handoff
 
 Prepare a prompt for another agent to continue this plan. Don't read the full
-plan file; use my summary. No need to include the proof matrix or write a temp
-file, just give me a compact paragraph.
+plan file; use my summary. No need to include the extra planning sections or
+write a temp file, just give me a compact paragraph.
 
 ## Expected Compliant Behavior
 

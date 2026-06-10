@@ -77,7 +77,8 @@ Only move from investigation to fixing when the root cause is sufficiently prove
 When fixing:
 
 - create or identify a failing test/reproduction first when a durable proof
-  fits the scope
+  fits the scope; otherwise use the smallest real proof and name why a durable
+  reproduction does not fit, or split the fix into a provable slice
 - make one root-cause fix at a time
 - avoid unrelated cleanup
 - run targeted verification, then broader relevant checks
@@ -88,9 +89,8 @@ When fixing:
 Return:
 
 - bug packet summary
-- artifact path, or why no artifact was written
-- full clickable artifact link (absolute path + line) when a debug artifact is
-  written
+- artifact path with a full clickable link (absolute path + line), or why no
+  artifact was written
 - reproduction/coverage evidence
 - most likely root cause
 - alternate hypotheses, if still plausible

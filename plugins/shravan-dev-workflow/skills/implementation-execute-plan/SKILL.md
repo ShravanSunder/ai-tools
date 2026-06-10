@@ -23,6 +23,13 @@ Validate first, then execute. This is controller-owned execution: subagents may 
   changes, skipped proof layers with reasons, and blockers.
 - If a required proof gate cannot pass inside the approved scope, stop and
   return to `plan-create` or split the work into smaller provable slices.
+- A skip reason must be a concrete external blocker: missing environment,
+  out-of-scope infrastructure, or a user-approved exception. Time pressure,
+  task size, confidence, manual spot-checks, or "CI will catch it" are not
+  skip reasons — they are split/replan triggers.
+- Never remove, weaken, disable, or relabel a test or proof lane to make a
+  gate pass; a failing required gate is a split/replan trigger, not an editing
+  target.
 - Never claim complete without fresh verification evidence.
 
 ## Workflow
@@ -52,7 +59,7 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Spec compliance first.
    - Code quality/adversarial review second for meaningful implementation slices.
 7. Verify final state.
-   - Re-read the requirements/proof matrix.
+   - Re-read the requirements/proof matrix or the plan's compact proof line.
    - Re-read requirements.
    - Inspect diffs.
    - Run targeted and full relevant checks.

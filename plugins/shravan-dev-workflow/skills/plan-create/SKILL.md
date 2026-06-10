@@ -7,7 +7,9 @@ description: Use when turning a spec, design, architecture decision, or product 
 
 Create an implementation plan from spec/design context. This is a planning
 boundary: it turns "what should be true" into "how we will change the repo and
-prove it." It does not execute the plan.
+prove it." It does not execute the plan. Non-trivial plans carry a
+requirements/proof matrix; tasks whose required proof cannot pass at their size
+are split before execution.
 
 ## Core Rules
 
@@ -23,7 +25,10 @@ prove it." It does not execute the plan.
 - Include a requirements/proof matrix for non-trivial plans: requirement or
   claim, owning task, proof gate, proof layer, whether red/green evidence is
   required, and whether the task is sized so that proof can pass inside the
-  approved scope.
+  approved scope. Tiny plans may use a compact proof line and say why it is
+  sufficient.
+- A red/green exception is valid only when recorded in the matrix with the
+  user's explicit approval noted; an agent-authored waiver is not an exception.
 - If a task's required proof cannot pass at its current size, split the task
   before execution instead of documenting skipped proof.
 - Capture security assumptions when the plan touches auth, secrets, parsing,
@@ -53,7 +58,7 @@ prove it." It does not execute the plan.
 4. Write or prepare the implementation plan:
    - goal and non-goals
    - requirement/spec source coverage
-   - requirements/proof matrix
+   - requirements/proof matrix, or compact proof line for tiny plans
    - task sequence
    - files/modules likely touched
    - validation gates by layer
@@ -72,7 +77,7 @@ Return:
 
 - source coverage
 - implementation plan path or chat-only plan
-- requirements/proof matrix
+- requirements/proof matrix, or compact proof line for tiny plans
 - task sequence
 - write surfaces
 - validation gates

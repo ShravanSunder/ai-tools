@@ -104,4 +104,6 @@ Return:
 - Full clickable artifact links (absolute path + line) for review reports,
   spec/design artifacts, or handoffs the human is expected to open.
 - Security threat-model status.
+- Proof expectations status: present in the spec, or explicitly deferred to
+  `plan-create` with open proof gaps named.
 - Next step: usually `plan-handoff`, `plan-review-swarm` after a plan exists, or `ops-security-review`.

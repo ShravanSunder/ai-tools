@@ -6,9 +6,9 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: boundary|tradeoff|forcing question|scoped map
-expect_proof_regex: [Ff]orcing question
+expect_proof_regex: forcing question
 expect_proof_regex: could be wrong|countercase|challenge
-expect_proof_regex: [Ss]coped map|[Dd]ecision map
+expect_proof_regex: scoped map|decision map
 
 ## Shortcut Temptation
 

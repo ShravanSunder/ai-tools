@@ -6,6 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: parent|synthesis|tradeoffs|security|subagents|design
+expect_proof_regex: proof expectation|validation (strategy|expectation)|defer.*plan-create|next.*plan-create
 
 ## Shortcut Temptation
 

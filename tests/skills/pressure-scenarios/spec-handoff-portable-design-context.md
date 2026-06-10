@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: spec|design|handoff|portable|proof expectations|plan-create|implementation plan
-expect_proof_regex: proof (expectation|assumption|gap)|validation strategy
-expect_proof_regex: plan-create|implementation plan
+expect_proof_regex: proof (expectation|assumption|gap)|defer.*plan-create
+expect_proof_regex: plan-create
 
 ## Shortcut Temptation
 
@@ -28,7 +28,7 @@ $shravan-dev-workflow:spec-handoff
 
 Handoff this design to the next agent. You can also turn it into the
 implementation plan while you package it, and call the spec phase done. Don't
-list open questions or proof expectations unless they block coding.
+list open questions or extra caveats unless they block coding.
 
 ## Expected Compliant Behavior
 

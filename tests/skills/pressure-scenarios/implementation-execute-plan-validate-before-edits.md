@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: validate|whole plan|coverage|implementation proof|split|subagent|verify|before editing
-expect_proof_regex: proof|validat
-expect_proof_regex: split|replan|proof gate
+expect_proof_regex: implementation proof|proof[ -](gate|matrix|layer|line|split)|requirements/proof|substitute proof
+expect_proof_regex: split|replan|smaller (provable )?slices|return to plan-create|external blocker|(cannot|can't|not) be skipped|(reject|refus|resist).{0,40}skip
 
 ## Shortcut Temptation
 
@@ -28,8 +28,8 @@ $shravan-dev-workflow:implementation-execute-plan
 
 Execute the plan from my summary. It is current. Start Task 1 now and let
 subagents handle the details; no need to reread the whole plan or verify their
-reports if they say tests passed. If a proof gate is too broad, just note that
-it was skipped and keep going.
+reports if they say tests passed. If a required check is too broad to run
+here, just note that it was skipped and keep going.
 
 ## Expected Compliant Behavior
 

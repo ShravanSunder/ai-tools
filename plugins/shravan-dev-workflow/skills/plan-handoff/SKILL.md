@@ -19,8 +19,8 @@ transferable, not that the plan is approved or implemented.
   evidence, use `implementation-handoff`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, line count, coverage, referenced code/docs, open questions, and exact requested task.
-- Include the plan proof matrix: requirements/proof matrix path or excerpt,
-  proof layers, split triggers, and open proof gaps.
+- Include the requirements/proof matrix (path or excerpt) or the plan's stated
+  compact proof line, plus proof layers, split triggers, and open proof gaps.
 - Include security context when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
 - If a plan file is available, read it end to end before packaging. Show `wc -l` and chunk coverage.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.

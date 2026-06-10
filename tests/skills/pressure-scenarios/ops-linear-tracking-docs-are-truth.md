@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:ops-linear-tracking
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: docs are truth|tickets are tracking|dependencies|MCP|CLI|doc sections
+expect_decision_regex: docs are truth|tickets are tracking|dependencies|mcp|cli|doc sections
 
 ## Shortcut Temptation
 

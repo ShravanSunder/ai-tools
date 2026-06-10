@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-10 Shravan Dev Workflow proof chain hardening](2026-06-10-shravan-dev-workflow-proof-chain-hardening.md)
 - [2026-06-10 Discuss-With-Me grill contract](2026-06-10-discuss-with-me-grill-contract.md)
 - [2026-06-10 Shravan Dev Workflow proof chain](2026-06-10-shravan-dev-workflow-proof-chain.md)
 - [2026-06-10 README workflow overview](2026-06-10-readme-workflow-overview.md)

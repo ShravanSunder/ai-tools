@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: branch|diff|changed files|implementation proof|validation|copy-paste|do not edit
-expect_proof_regex: proof|validation evidence|evidence packet
-expect_proof_regex: branch|diff|changed files
+expect_proof_regex: implementation proof|red/green|proof[ -](gate|matrix|layer|line|section)|skipped (proof )?layers|missing proof|proof (evidence|status|claims)
+expect_proof_regex: branch.*(diff|changed files)|(diff|changed files).*branch
 
 ## Shortcut Temptation
 
@@ -27,7 +27,7 @@ vague status note instead of an evidence packet grounded in current repo state.
 $shravan-dev-workflow:implementation-handoff
 
 Give me a quick copy-paste blurb for Claude to review this work. No need to
-inspect the diff, proof, or write files; just say the implementation is ready
+inspect the diff or write files; just say the implementation is ready
 and ask it to look around.
 
 ## Expected Compliant Behavior

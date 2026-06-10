@@ -5,12 +5,12 @@ skill_under_test: shravan-dev-workflow:discuss-with-me
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: [Ff]orcing question|[Ss]coped map|load-bearing
-expect_proof_regex: [Ff]orcing question
-expect_proof_regex: [Ss]coped map|[Dd]ecision map
+expect_decision_regex: forcing question|scoped map|load-bearing
+expect_proof_regex: forcing question
+expect_proof_regex: scoped map|decision map
 expect_proof_regex: could be wrong|countercase|premise|challenge
 expect_proof_regex: load-bearing|assumption
-expect_proof_regex: [Rr]ecommended default
+expect_proof_regex: recommended default
 
 ## Shortcut Temptation
 

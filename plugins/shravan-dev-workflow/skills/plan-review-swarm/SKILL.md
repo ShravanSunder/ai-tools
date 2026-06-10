@@ -57,7 +57,7 @@ plan artifact
    - API contracts
    - execution order
    - tests and validation gates
-   - requirements/proof mapping and proof layer sizing
+   - requirements/proof matrix coverage and proof layer sizing
    - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
@@ -130,8 +130,9 @@ After lanes return:
 6. Rank accepted findings by execution risk.
 7. Produce smallest plan edits, not implementation patches.
 
-Plans with missing proof mapping are `needs revision`, not ready for
-`implementation-execute-plan`.
+Plans missing a requirements/proof matrix are `needs revision`, not ready for
+`implementation-execute-plan`, unless the plan documents why a compact proof
+line is sufficient for its size.
 
 Plans with required proof gates that cannot pass at the proposed task size are
 `needs revision` until split into smaller provable slices.

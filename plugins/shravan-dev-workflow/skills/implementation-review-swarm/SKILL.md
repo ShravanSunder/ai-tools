@@ -82,14 +82,18 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
 
 3. Implementation proof gate
-   - Verify that claimed proof maps back to requirements, spec, or plan.
-   - Produce review proof: the reducer's verified judgment that implementation
-     proof was checked, mapped, and not weakened.
-   - If an `implementation-handoff` packet exists, consume its Implementation
-     proof section instead of reconstructing proof from chat.
+   - Collect the claimed implementation proof into the shared packet and check
+     that it maps back to requirements, spec, or plan.
+   - If an `implementation-handoff` packet exists, use its Implementation
+     proof section as the claim inventory, then verify each claim against
+     diffs, tests, command output, and artifacts.
+   - The Implementation proof reviewer lane plus reducer acceptance produce
+     the review proof: the verified judgment that implementation proof was
+     checked, mapped, and not weakened. Record it in the report.
    - Treat missing required proof, relabeled proof layers, unverified
      red/green evidence, or weakened proof lanes as `not_ready` unless an
-     explicit user-approved exception is documented.
+     exception recorded with explicit user approval is documented; an
+     agent-authored waiver is not an exception.
 
 4. Reviewer swarm
    - Dispatch independent read-only reviewer lanes.
@@ -203,6 +207,11 @@ Findings
 
 Open questions
 <only decision-relevant questions>
+
+Review proof
+<implementation proof checked and mapped to requirements/spec/plan, weakened
+or relabeled proof lanes found or "none", red/green evidence status, exceptions
+and their approval source>
 
 Swarm coverage
 <reviewed scope, lanes run, lanes skipped, backend used for each lane, external model lane status, verification notes>

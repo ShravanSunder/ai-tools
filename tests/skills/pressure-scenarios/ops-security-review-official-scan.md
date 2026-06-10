@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:ops-security-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: Codex Security|security-diff-scan|security-scan|authorization|scope
+expect_decision_regex: codex security|security-diff-scan|security-scan|authorization|scope
 
 ## Shortcut Temptation
 

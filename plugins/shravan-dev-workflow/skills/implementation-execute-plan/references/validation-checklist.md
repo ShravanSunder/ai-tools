@@ -15,7 +15,9 @@ Use this before execution and before completion claims.
 - Requirements/proof matrix identified, or the plan explains why a compact
   proof line is sufficient.
 - Required proof gates are sized so they can pass inside the approved scope; if
-  not, split or replan before editing.
+  not, split or replan before editing. A skip reason must be a concrete
+  external blocker or a user-approved exception, never time pressure, task
+  size, confidence, or manual spot-checks.
 - Stop conditions considered.
 
 ## Before Dispatching Subagents

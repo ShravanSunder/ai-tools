@@ -23,7 +23,7 @@ Allowed write scope:
 Proof gates:
 <commands, artifacts, review state, screenshots, docs, or other evidence>
 
-Proof map:
+Requirements/proof matrix:
 <requirement or claim -> proof gate or "must be defined by plan-create">
 
 Stop condition:

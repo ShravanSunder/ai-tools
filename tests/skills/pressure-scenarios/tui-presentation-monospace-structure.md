@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:tui-presentation
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: Unicode|monospace|markdown|shape|structure|code
+expect_decision_regex: unicode|monospace|markdown|shape|structure|code
 
 ## Shortcut Temptation
 

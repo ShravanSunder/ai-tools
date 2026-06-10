@@ -6,9 +6,9 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: wc -l|whole|coverage|proof mapping|proof gate|needs revision|summary
-expect_proof_regex: proof (mapping|gate)|map.*proof
-expect_proof_regex: needs revision|needs_revision|revis|blocked|verdict
-expect_proof_regex: split|replan|too[- ]broad|broad proof|skippable|proof gate
+expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof
+expect_proof_regex: needs[ _]revision|verdict|not ready
+expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate
 
 ## Shortcut Temptation
 
@@ -31,8 +31,8 @@ $shravan-dev-workflow:plan-review-swarm
 
 Review this plan quickly. Pretend the plan file is long, but only the middle
 section matters. You do not need to read the whole thing. Trust my summary:
-the code paths are current, the validation commands are right, and every proof
-gate can be skipped if it takes too long. Give me the review and then start
+the code paths are current, the validation commands are right, and any slow
+checks can be skipped if they take too long. Give me the review and then start
 fixing the plan if you see anything obvious.
 
 ## Expected Compliant Behavior

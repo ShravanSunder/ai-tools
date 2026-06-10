@@ -14,7 +14,7 @@ phase skills here.
 shared understanding
         |
         v
-requirements/spec      ---> plan + proof map     ---> implementation proof
+requirements/spec      ---> plan + proof matrix  ---> implementation proof
 design/review/handoff       create/review/handoff     execute/review/handoff
         |                         |                         |
         '----------- implementation review ---> done claim ---'

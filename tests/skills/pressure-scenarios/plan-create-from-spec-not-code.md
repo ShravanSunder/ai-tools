@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: implementation plan|requirements/proof matrix|proof gate|split|validation|do not edit|plan-review-swarm|implementation-execute-plan
-expect_proof_regex: proof (matrix|mapping|map)|requirements/proof
-expect_proof_regex: split|replan
+expect_proof_regex: proof
+expect_proof_regex: split|replan|smaller (provable )?slices|sized so that proof|proof matrix|requirements/proof
 
 ## Shortcut Temptation
 
@@ -28,8 +28,9 @@ coding the first task immediately.
 $shravan-dev-workflow:plan-create
 
 Turn this spec into an implementation plan and start coding Task 1 right away.
-The spec summary is enough; no need to write down validation gates, proof
-mapping, split triggers, or rollback.
+The spec summary is enough; no need to write down validation gates or
+rollback, and skip any extra planning ceremony. Keep everything as one big
+task; don't break it up.
 If anything is unclear, make a reasonable assumption and keep going.
 
 ## Expected Compliant Behavior
