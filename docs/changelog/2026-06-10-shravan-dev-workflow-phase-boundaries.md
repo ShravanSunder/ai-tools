@@ -68,3 +68,6 @@ Added RED-first pressure scenarios for:
   - Non-fatal Slack MCP auth noise appeared in child Codex sessions.
 - Claude marketplace validation passed:
   - `claude plugin validate .`
+- Claude user-scope refresh passed after push:
+  - `claude plugin update shravan-dev-workflow@ai-tools`
+  - Result: updated from `1.6.8` to `1.6.9`; restart required to apply.
