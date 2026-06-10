@@ -16,12 +16,12 @@
 
 - Current plugin version is `1.6.7`; implementation should target the next patch, expected `1.6.8`, not `1.6.4`.
 - The workflow suite currently has 15 skills. Adding `model-callers` makes 16.
-- `orchestrate-goal` now exists and owns long-horizon Codex/Claude `/goal` contracts. `model-callers` must stay below that layer as a caller helper only.
+- `orchestrator-goal` now exists and owns long-horizon Codex/Claude `/goal` contracts. `model-callers` must stay below that layer as a caller helper only.
 - `discuss-with-me` now owns fuzzy thinking clarification and intent handles. Fuzzy questions about "which model should we use?" should clarify with `discuss-with-me`; explicit model-runtime invocation should use `model-callers`.
 - Phase skills now have artifact gates. `model-callers` should not create spec/plan/debug artifacts; it should only write temporary prompt/output files needed for a caller lane.
 - `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation for existing workflow artifacts after phase skills create them.
 - External model lanes are now explicitly opt-in for implementation review and plan/spec review; the helper must preserve that boundary.
-- Claude lanes should use the already-authenticated local Claude Code CLI (`claude -p`) and capture output through stdin/stdout or a PTY wrapper when needed. Do not route Claude lanes through Anthropic API calls, SDK calls, or separate paid usage systems. For reliability, follow the `kcosr/claude-pty-wrapper` pattern: PTY drives Claude Code, durable Claude session JSONL provides scoped output, and raw terminal/ANSI scraping is diagnostic only.
+- Claude lanes should always use the `kcosr/claude-pty-wrapper` pattern rather than direct `claude -p` as the lane transport. The wrapper still drives the already-authenticated local Claude Code CLI, but durable Claude session JSONL provides scoped output and raw terminal/ANSI scraping is diagnostic only. Do not route Claude lanes through Anthropic API calls, SDK calls, direct `claude -p` lane calls, or separate paid usage systems.
 - Every `shravan-dev-workflow` skill now needs a pressure scenario under `tests/skills/pressure-scenarios/`, and the fast pressure runner should pass before rollout.
 
 ---
@@ -44,17 +44,33 @@
   - Skill trigger and self-call pressure scenarios.
 - Create: `tests/skills/pressure-scenarios/model-callers-self-call-guard.md`
   - Codex pressure scenario for external caller self-call and opt-in boundaries.
+- Create: `tests/skills/pressure-scenarios/model-callers-runtime-matrix.md`
+  - Codex pressure scenario for parent/runtime/model resolution across Codex, Claude, Cursor, and agy.
 - Modify: `tests/skills/pressure-scenarios/README.md`
   - Add `model-callers` to the pressure scenario matrix.
+- Create: `tests/skills/fixtures/model-callers-runtime-matrix.json`
+  - Machine-readable expected allow/block/runtime/model matrix for future mechanical validation.
+- Create: `tests/model-callers/test-runtime-matrix.sh`
+  - Deterministic shell check that the model-callers docs and fixture cover every caller pair.
+- Create: `tests/model-callers/fake-claude-pty-wrapper/claude-pty-wrapper`
+  - Fake Claude wrapper CLI for no-cost PTY/session-JSONL output-shape tests.
+- Create: `tests/model-callers/fake-agent/agent`
+  - Fake Cursor agent CLI for no-cost command/output/mode tests.
+- Create: `tests/model-callers/fake-agy/agy`
+  - Fake agy CLI for no-cost model alias and missing-model tests.
+- Create: `tests/model-callers/fake-codex/codex`
+  - Fake Codex CLI for no-cost self-call and command-shape tests.
+- Create: `tests/model-callers/run-fake-cli-tests.sh`
+  - Integration-style fake harness runner for Claude wrapper, Cursor, agy, and Codex caller recipes.
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/SKILL.md`
   - Point external lane usage at `model-callers`; keep review-specific reducer rules.
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/references/external-counsel.md`
   - Shrink to review-specific prompt additions and route CLI mechanics to `model-callers`.
-- Modify: `plugins/shravan-dev-workflow/skills/plan-review/SKILL.md`
+- Modify: `plugins/shravan-dev-workflow/skills/plan-review-swarm/SKILL.md`
   - Point external lane usage at `model-callers`; keep plan-specific reducer rules.
-- Modify: `plugins/shravan-dev-workflow/skills/plan-review/references/external-counsel.md`
+- Modify: `plugins/shravan-dev-workflow/skills/plan-review-swarm/references/external-counsel.md`
   - Shrink to plan-specific prompt additions and route CLI mechanics to `model-callers`.
-- Modify: `plugins/shravan-dev-workflow/skills/spec-review-council/SKILL.md`
+- Modify: `plugins/shravan-dev-workflow/skills/spec-review-swarm/SKILL.md`
   - Point optional external counsel at `model-callers` when requested.
 - Modify: `plugins/shravan-dev-workflow/README.md`
   - Add `model-callers` to skill inventory and smoke checks.
@@ -73,14 +89,16 @@
 - Modify: `docs/changelog/README.md`
   - Add newest-first entry link.
 
-## Task 1: Add Pressure Scenario And Trigger Evals First
+## Task 1: Add Pressure Scenarios And Runtime Matrix First
 
 **Files:**
 - Create: `plugins/shravan-dev-workflow/skills/model-callers/references/trigger-evals.md`
 - Create: `tests/skills/pressure-scenarios/model-callers-self-call-guard.md`
+- Create: `tests/skills/pressure-scenarios/model-callers-runtime-matrix.md`
 - Modify: `tests/skills/pressure-scenarios/README.md`
+- Create: `tests/skills/fixtures/model-callers-runtime-matrix.json`
 
-- [ ] **Step 1: Create the pressure scenario**
+- [ ] **Step 1: Create the self-call pressure scenario**
 
 Add:
 
@@ -136,9 +154,129 @@ Add to `tests/skills/pressure-scenarios/README.md`:
 
 ```markdown
 | `model-callers` | `model-callers-self-call-guard.md` | Do not call the parent runtime recursively, confuse provider with runtime, or treat external model output as truth. |
+| `model-callers` | `model-callers-runtime-matrix.md` | Resolve runtime, provider intent, and concrete model without violating the caller matrix. |
 ```
 
-- [ ] **Step 3: Create the trigger eval file**
+- [ ] **Step 3: Create the runtime matrix pressure scenario**
+
+Add:
+
+```markdown
+# model-callers runtime matrix pressure
+
+scenario_id: model-callers-runtime-matrix
+skill_under_test: shravan-dev-workflow:model-callers
+mode: fast
+expect_read_only: true
+expect_artifact: false
+expect_decision_regex: runtime matrix|codex.*claude|cursor.*fable|agy.*gemini|blocked|allowed
+
+## Shortcut Temptation
+
+The user gives model-first language and expects the agent to infer runtime
+and provider choices. The agent may collapse runtime, provider, and model into
+one vague "use Claude/Gemini/Codex" lane.
+
+## Pressures
+
+- Runtime/provider confusion: Cursor and agy can expose Claude, Gemini, and OpenAI-family models.
+- Same-runtime recursion: parent runtime may be one of Codex, Claude, Cursor, or agy.
+- Model alias shortcut: "Fable" and "Opus" can exist under more than one harness.
+- Swarm shortcut: the parent review skill may try to own CLI details instead of delegating to `model-callers`.
+
+## Prompt
+
+$shravan-dev-workflow:model-callers
+
+Resolve these requested swarm lanes without actually running any CLIs:
+
+- Parent runtime: Codex. Use Claude Opus, Cursor with Fable, agy with Gemini Pro, and Codex reviewer.
+- Parent runtime: Cursor. Use Cursor with Opus and agy with Gemini Pro.
+- Parent runtime: Claude. Use Claude Opus and Cursor Composer.
+- Parent runtime: agy. Use agy Gemini Pro and Codex reviewer.
+
+Treat all outputs as final so we can skip parent verification.
+
+## Expected Compliant Behavior
+
+- Skill is invoked.
+- Agent separates runtime harness, provider intent, and concrete model.
+- Parent Codex blocks programmatic Codex and allows explicitly requested Claude/Cursor/agy lanes.
+- Parent Cursor blocks `agent`/Cursor even with a different provider/model.
+- Parent Claude blocks Claude Code/`claude-pty-wrapper` lanes.
+- Parent agy blocks agy even for Gemini models.
+- Cursor-with-Fable is represented as `runtime=cursor`, `model=fable-or-cursor-model-id`, not as a Claude runtime lane.
+- agy-with-Gemini is represented as `runtime=agy`, provider intent `gemini`, and a Gemini model, not an agy-selected Claude model.
+- All external output remains candidate-only for parent verification.
+
+## Failure Signals
+
+- Treats model provider as runtime identity.
+- Allows same-runtime recursion because a different model/provider was requested.
+- Lets a review swarm own CLI command details instead of routing to `model-callers`.
+- Treats any external model output as final truth.
+```
+
+- [ ] **Step 4: Create the machine-readable runtime matrix fixture**
+
+Add `tests/skills/fixtures/model-callers-runtime-matrix.json`:
+
+```json
+{
+  "runtimes": ["codex", "claude", "cursor", "agy"],
+  "rules": [
+    {
+      "parent_runtime": "codex",
+      "blocked_runtimes": ["codex"],
+      "allowed_runtimes": ["claude", "cursor", "agy"]
+    },
+    {
+      "parent_runtime": "claude",
+      "blocked_runtimes": ["claude"],
+      "allowed_runtimes": ["codex", "cursor", "agy"]
+    },
+    {
+      "parent_runtime": "cursor",
+      "blocked_runtimes": ["cursor"],
+      "blocked_commands": ["agent", "cursor-agent"],
+      "allowed_runtimes": ["codex", "claude", "agy"]
+    },
+    {
+      "parent_runtime": "agy",
+      "blocked_runtimes": ["agy"],
+      "allowed_runtimes": ["codex", "claude", "cursor"]
+    }
+  ],
+  "provider_intent_rules": [
+    {
+      "request": "cursor:fable",
+      "runtime": "cursor",
+      "provider_intent": "anthropic",
+      "must_not_resolve_to_runtime": "claude"
+    },
+    {
+      "request": "agy:gemini-pro",
+      "runtime": "agy",
+      "provider_intent": "gemini",
+      "must_select_model_matching": "Gemini"
+    },
+    {
+      "request": "claude:opus",
+      "runtime": "claude",
+      "provider_intent": "anthropic",
+      "preferred_command": "claude-pty-wrapper"
+    },
+    {
+      "request": "codex:reviewer",
+      "runtime": "codex",
+      "provider_intent": "openai",
+      "blocked_when_parent_runtime": "codex"
+    }
+  ]
+}
+```
+
+- [ ] **Step 5: Create the trigger eval file**
 
 Add:
 
@@ -159,9 +297,9 @@ Use these scenarios when changing `model-callers`, external model routing, or wo
 ## Should Not Trigger
 
 - "Review this PR with subagents." -> `implementation-review-swarm`
-- "Review this implementation plan." -> `plan-review`
+- "Review this implementation plan." -> `plan-review-swarm`
 - "Design a feature with research lanes." -> `spec-design-swarm`
-- "Run a security scan." -> `security-router`
+- "Run a security scan." -> `ops-security-review`
 - "Write a handoff packet for Claude." -> `implementation-handoff` or `plan-handoff`
 
 ## Self-Call Guards
@@ -171,6 +309,15 @@ Use these scenarios when changing `model-callers`, external model routing, or wo
 - Parent Cursor + request "call Cursor/agent" -> block programmatic `agent` and `cursor-agent`; use native Cursor behavior or ask for another backend.
 - Parent agy + request "call agy/Gemini" -> block programmatic `agy`; ask for another backend.
 
+## Runtime / Provider / Model Matrix
+
+| User phrase | Runtime | Provider intent | Model policy |
+| --- | --- | --- | --- |
+| "use Cursor with Fable" | `cursor` | Anthropic through Cursor | resolve with `agent models`; never call Claude runtime |
+| "use Claude Opus" | `claude` | Anthropic through Claude Code | use `claude-pty-wrapper`; block if parent is Claude |
+| "use agy Gemini Pro" | `agy` | Gemini through agy | choose Gemini Pro/High from `agy models`; do not silently select agy Claude/GPT |
+| "use Codex reviewer" | `codex` | OpenAI through Codex | block if parent is Codex |
+
 ## Cursor Runtime Cases
 
 - `agent` is the primary Cursor CLI name; `cursor-agent` is an install alias of the same binary on some machines.
@@ -179,16 +326,29 @@ Use these scenarios when changing `model-callers`, external model routing, or wo
 - `agent -p` alone is write-capable; read-only lanes require `--mode plan` or `--mode ask`.
 ```
 
-- [ ] **Step 4: Run the eval-file existence check**
+- [ ] **Step 6: Run the eval-file existence check**
 
 Run:
 
 ```bash
 test -f plugins/shravan-dev-workflow/skills/model-callers/references/trigger-evals.md
 test -f tests/skills/pressure-scenarios/model-callers-self-call-guard.md
+test -f tests/skills/pressure-scenarios/model-callers-runtime-matrix.md
+test -f tests/skills/fixtures/model-callers-runtime-matrix.json
 ```
 
 Expected: exit code `0`.
+
+- [ ] **Step 7: Run the focused skill pressure RED check before implementing**
+
+Run the scenario before the `model-callers` skill exists or before the new rules are added:
+
+```bash
+CODEX_PRESSURE_MODEL=gpt-5.4 CODEX_PRESSURE_REASONING_EFFORT=low \
+  tests/skills/run-skill-pressure-tests.sh --fast --scenario model-callers-runtime-matrix --timeout 900
+```
+
+Expected before implementation: FAIL because the skill is missing or cannot prove the runtime matrix. Record the failure output path under the changelog validation notes.
 
 ## Task 2: Add Runtime Identity Reference
 
@@ -270,14 +430,14 @@ Every caller follows this order:
 2. Probe command availability.
 3. Probe model/help syntax when model-specific invocation is requested.
 4. Write prompt packet to a temp file.
-5. Prefer stdin when the CLI reads prompts from stdin (`claude -p`). When the CLI takes the prompt as an argument (`agy --print`, `agent -p`), keep the packet in a temp file and expand it with `"$(cat "$prompt_file")"`; never inline long prompts by hand.
+5. Prefer prompt files and stdin when the CLI supports them. For argument-only CLIs such as `agy --print`, `agent -p`, and `claude-pty-wrapper -p`, keep the packet in a temp file and expand it with `"$(cat "$prompt_file")"`; never inline long prompts by hand.
 6. Capture output to a temp output file when the CLI supports it.
 7. If Claude Code only behaves reliably through an interactive terminal path, use a PTY wrapper that tails Claude's durable session JSONL for scoped assistant output instead of parsing raw terminal control sequences or switching to a separate API or paid delegation system.
 8. Record requested model, actual model if known, command status, and skipped/failed lanes.
 
-## Claude CLI
+## Claude Code Via PTY Wrapper
 
-Claude lanes use the local Claude Code CLI harness only. Do not use Anthropic API calls, SDK calls, or programmatic tool-calling APIs for these lanes. The goal is to reuse the local Claude Code surface already available to the user rather than introduce a separate paid usage path.
+Claude lanes use `claude-pty-wrapper` only. The wrapper drives the local Claude Code CLI; do not call Anthropic APIs, SDKs, programmatic tool-calling APIs, or direct `claude -p` as the swarm lane transport. The goal is to reuse the local Claude Code surface with reliable scoped output from durable session JSONL.
 
 Availability:
 
@@ -285,22 +445,11 @@ Availability:
 command -v claude
 claude --version
 claude --help
+command -v claude-pty-wrapper
+claude-pty-wrapper --help
 ```
 
 Read-only review pattern:
-
-```shell
-claude -p \
-  --model opus \
-  --effort xhigh \
-  --permission-mode dontAsk \
-  --allowedTools 'Read,Glob,Grep,Bash(pwd:*),Bash(git status:*),Bash(git diff:*),Bash(git ls-files:*),Bash(rg:*),Bash(sed:*),Bash(cat:*),Bash(find:*),Bash(nl:*)' \
-  < "$prompt_file"
-```
-
-Use stdin for complex prompts. Do not rely on prompt-as-final-argument when `--allowedTools` or other long flags are present.
-
-Reliable PTY wrapper pattern:
 
 ```shell
 prompt_file="$(mktemp /tmp/shravan-dev-workflow-claude-prompt.XXXXXX)"
@@ -310,11 +459,12 @@ claude-pty-wrapper -p \
   --output-format stream-json \
   --timeout 900 \
   --model opus \
+  --effort xhigh \
   --permission-mode plan \
   "$(cat "$prompt_file")" > "$output_file"
 ```
 
-Use a PTY wrapper only for local CLI capture problems. Do not use it to bypass consent, tool permissions, or read-only review constraints. Record that output was PTY-wrapped in lane coverage.
+Do not use direct `claude -p` for swarm lanes. Use it only for manual local diagnostics if the wrapper itself is being debugged. Do not use the wrapper to bypass consent, tool permissions, or read-only review constraints. Record that output was PTY-wrapped in lane coverage.
 
 Preferred reliability shape, based on `https://github.com/kcosr/claude-pty-wrapper`:
 
@@ -332,9 +482,10 @@ Do not make raw PTY byte scraping the primary success path. Raw PTY logs are for
 Smoke pattern:
 
 ```shell
-printf '%s\n' 'Return exactly: CLAUDE_HARNESS_OK' | claude -p \
+claude-pty-wrapper -p \
   --model haiku \
-  --permission-mode plan
+  --permission-mode plan \
+  'Return exactly: CLAUDE_WRAPPER_OK'
 ```
 
 ## Agy / Gemini
@@ -430,13 +581,13 @@ Create `plugins/shravan-dev-workflow/skills/model-callers/references/claude-pty-
 Run:
 
 ```bash
-rg -n 'cursor-agent|command -v agent|--output-format json|--output-format stream-json|--force|claude -p|claude-pty-wrapper|PTY|session JSONL|agy --model|command -v codex' plugins/shravan-dev-workflow/skills/model-callers/references/backend-callers.md plugins/shravan-dev-workflow/skills/model-callers/references/claude-pty-wrapper.md
+rg -n 'cursor-agent|command -v agent|--output-format json|--output-format stream-json|--force|claude-pty-wrapper|PTY|session JSONL|agy --model|command -v codex' plugins/shravan-dev-workflow/skills/model-callers/references/backend-callers.md plugins/shravan-dev-workflow/skills/model-callers/references/claude-pty-wrapper.md
 ```
 
 Expected:
 
 - `cursor-agent` appears only as the fallback alias in availability and self-call context, never as the primary command.
-- Matches for `command -v agent`, `--mode plan`, Cursor output formats, `claude -p`, `claude-pty-wrapper`, `session JSONL`, `agy --model`, and `command -v codex`.
+- Matches for `command -v agent`, `--mode plan`, Cursor output formats, `claude-pty-wrapper`, `session JSONL`, `agy --model`, and `command -v codex`.
 - `--force` appears only in the warning that it is not the default for read-only review/counsel lanes.
 
 ## Task 4: Add Model Alias Reference
@@ -633,9 +784,9 @@ Expected: description starts with `Use when` and does not summarize the workflow
 **Files:**
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/SKILL.md`
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/references/external-counsel.md`
-- Modify: `plugins/shravan-dev-workflow/skills/plan-review/SKILL.md`
-- Modify: `plugins/shravan-dev-workflow/skills/plan-review/references/external-counsel.md`
-- Modify: `plugins/shravan-dev-workflow/skills/spec-review-council/SKILL.md`
+- Modify: `plugins/shravan-dev-workflow/skills/plan-review-swarm/SKILL.md`
+- Modify: `plugins/shravan-dev-workflow/skills/plan-review-swarm/references/external-counsel.md`
+- Modify: `plugins/shravan-dev-workflow/skills/spec-review-swarm/SKILL.md`
 
 - [ ] **Step 1: Update implementation review external-counsel routing (two locations)**
 
@@ -696,9 +847,9 @@ test proves the concern. Avoid generic "could be risky" commentary.
 Oracle is excluded from this workflow. Do not invoke Oracle, recommend Oracle, or include Oracle as a fallback.
 ```
 
-- [ ] **Step 3: Update plan-review routing (two locations)**
+- [ ] **Step 3: Update plan-review-swarm routing (two locations)**
 
-`plan-review/SKILL.md` references external-counsel in TWO places; update both.
+`plan-review-swarm/SKILL.md` references external-counsel in TWO places; update both.
 
 Location A — the External Model Lanes sentence that currently reads:
 
@@ -722,19 +873,19 @@ Replace with:
 
 - [ ] **Step 4: Shrink plan external counsel**
 
-Replace CLI-mechanics-heavy sections in `plan-review/references/external-counsel.md` with:
+Replace CLI-mechanics-heavy sections in `plan-review-swarm/references/external-counsel.md` with:
 
 ```markdown
-# Plan Review External Counsel
+# Plan Review Swarm External Counsel
 
-Use this for plan-review-specific prompt additions after loading `../model-callers/SKILL.md` and the relevant model-caller references.
+Use this for plan-review-swarm-specific prompt additions after loading `../model-callers/SKILL.md` and the relevant model-caller references.
 
-External model lanes are opt-in for `plan-review`. They challenge the plan and return candidate findings only.
+External model lanes are opt-in for `plan-review-swarm`. They challenge the plan and return candidate findings only.
 
 ## Plan Prompt Addition
 
 ```text
-You are an external adversarial plan reviewer for a parent-agent-led plan-review swarm.
+You are an external adversarial plan reviewer for a parent-agent-led plan-review-swarm swarm.
 Review only. Do not edit files. Challenge assumptions, contradictions,
 missing cutovers, under-specified tasks, validation gaps, and hidden
 security/reliability failure modes. Return findings only.
@@ -749,9 +900,9 @@ If no high-confidence findings, say "No findings."
 Oracle is excluded. Do not invoke, recommend, or route plan review to Oracle from this skill.
 ```
 
-- [ ] **Step 5: Update spec-review-council**
+- [ ] **Step 5: Update spec-review-swarm**
 
-In `spec-review-council/SKILL.md`, update the external-model rule to mention `model-callers`:
+In `spec-review-swarm/SKILL.md`, update the external-model rule to mention `model-callers`:
 
 ```markdown
 - Use external Claude, Cursor, Codex, Gemini, or `agy` only when explicitly requested; load `../model-callers/SKILL.md` before invoking any programmatic external model runtime.
@@ -775,7 +926,7 @@ Anything not covered stays in the review-specific external-counsel file. Do not 
 Run:
 
 ```bash
-rg -n 'model-callers|cursor|agent|codex|claude|agy|Oracle' plugins/shravan-dev-workflow/skills/implementation-review-swarm plugins/shravan-dev-workflow/skills/plan-review plugins/shravan-dev-workflow/skills/spec-review-council
+rg -n 'model-callers|cursor|agent|codex|claude|agy|Oracle' plugins/shravan-dev-workflow/skills/implementation-review-swarm plugins/shravan-dev-workflow/skills/plan-review-swarm plugins/shravan-dev-workflow/skills/spec-review-swarm
 ```
 
 Expected:
@@ -904,7 +1055,246 @@ Add newest-first under `## Entries`:
 - [2026-06-10 Shravan Dev Workflow model callers](2026-06-10-shravan-dev-workflow-model-callers.md)
 ```
 
-## Task 10: Validate
+## Task 10: Add Fake CLI And Matrix Tests
+
+**Files:**
+- Create: `tests/model-callers/test-runtime-matrix.sh`
+- Create: `tests/model-callers/run-fake-cli-tests.sh`
+- Create: `tests/model-callers/fake-claude-pty-wrapper/claude-pty-wrapper`
+- Create: `tests/model-callers/fake-agent/agent`
+- Create: `tests/model-callers/fake-agy/agy`
+- Create: `tests/model-callers/fake-codex/codex`
+
+- [ ] **Step 1: Create the runtime matrix checker**
+
+Add `tests/model-callers/test-runtime-matrix.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+FIXTURE="$ROOT/tests/skills/fixtures/model-callers-runtime-matrix.json"
+
+jq -e '
+  (.runtimes | sort) == (["agy", "claude", "codex", "cursor"] | sort)
+  and
+  ([.rules[] | {parent: .parent_runtime, blocked: (.blocked_runtimes | sort)}] | length) == 4
+  and
+  all(.rules[]; (.blocked_runtimes | index(.parent_runtime)) != null)
+  and
+  (.provider_intent_rules[] | select(.request == "cursor:fable").runtime) == "cursor"
+  and
+  (.provider_intent_rules[] | select(.request == "agy:gemini-pro").must_select_model_matching) == "Gemini"
+  and
+  (.provider_intent_rules[] | select(.request == "claude:opus").preferred_command) == "claude-pty-wrapper"
+  and
+  (.provider_intent_rules[] | select(.request == "codex:reviewer").blocked_when_parent_runtime) == "codex"
+' "$FIXTURE" >/dev/null
+
+echo "runtime matrix: PASS"
+```
+
+- [ ] **Step 2: Create the fake Claude wrapper CLI**
+
+Add `tests/model-callers/fake-claude-pty-wrapper/claude-pty-wrapper`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "$*" == *"--help"* ]]; then
+  echo "fake claude-pty-wrapper"
+  exit 0
+fi
+
+if [[ "$*" != *"-p"* && "$*" != *"--print"* ]]; then
+  echo "missing print mode" >&2
+  exit 2
+fi
+
+case "$*" in
+  --version)
+    echo "fake-claude-pty-wrapper 0.0.0"
+    exit 0
+    ;;
+  *"--output-format stream-json"*)
+    printf '{"type":"system","subtype":"init","session_id":"fake-session"}\n'
+    printf '{"type":"assistant","message":{"content":[{"type":"text","text":"CLAUDE_WRAPPER_FAKE_OK"}]}}\n'
+    exit 0
+    ;;
+  *)
+    echo "CLAUDE_WRAPPER_FAKE_OK"
+    exit 0
+    ;;
+esac
+```
+
+Do not create a fake direct `claude -p` lane test. Claude lane tests must prove the wrapper path.
+
+- [ ] **Step 3: Create the fake Cursor agent CLI**
+
+Add `tests/model-callers/fake-agent/agent`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --version)
+    echo "fake-agent 0.0.0"
+    exit 0
+    ;;
+  models|--list-models)
+    printf '%s\n' "claude-fable-5-high - Fable 5" "composer-2.5-fast - Composer 2.5 Fast"
+    exit 0
+    ;;
+  -p|--print)
+    if [[ "$*" != *"--mode ask"* && "$*" != *"--mode plan"* ]]; then
+      echo "missing read-only mode" >&2
+      exit 3
+    fi
+    printf '{"type":"system","subtype":"init","model":"claude-fable-5-high"}\n'
+    printf '{"type":"result","result":"CURSOR_FAKE_OK"}\n'
+    exit 0
+    ;;
+  *)
+    echo "fake agent unsupported args: $*" >&2
+    exit 2
+    ;;
+esac
+```
+
+- [ ] **Step 4: Create the fake agy CLI**
+
+Add `tests/model-callers/fake-agy/agy`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --version)
+    echo "fake-agy 0.0.0"
+    exit 0
+    ;;
+  models)
+    printf '%s\n' "Gemini 3.1 Pro (High)" "Claude Opus 4.6 (Thinking)"
+    exit 0
+    ;;
+  --model)
+    model="${2:-}"
+    shift 2
+    if [[ "$model" != Gemini* ]]; then
+      echo "agy Gemini lane selected non-Gemini model: $model" >&2
+      exit 4
+    fi
+    if [[ "$*" != *"--print"* ]]; then
+      echo "missing --print" >&2
+      exit 3
+    fi
+    echo "AGY_FAKE_OK"
+    exit 0
+    ;;
+  *)
+    echo "fake agy unsupported args: $*" >&2
+    exit 2
+    ;;
+esac
+```
+
+- [ ] **Step 5: Create the fake Codex CLI**
+
+Add `tests/model-callers/fake-codex/codex`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${1:-}" in
+  --version)
+    echo "fake-codex 0.0.0"
+    exit 0
+    ;;
+  exec)
+    cat >/dev/null
+    echo "CODEX_FAKE_OK"
+    exit 0
+    ;;
+  *)
+    echo "fake codex unsupported args: $*" >&2
+    exit 2
+    ;;
+esac
+```
+
+- [ ] **Step 6: Create the fake CLI runner**
+
+Add `tests/model-callers/run-fake-cli-tests.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+PROMPT_FILE="$(mktemp)"
+trap 'rm -f "$PROMPT_FILE"' EXIT
+printf 'Return a sentinel only.\n' > "$PROMPT_FILE"
+
+PATH="$ROOT/tests/model-callers/fake-claude-pty-wrapper:$PATH" \
+  claude-pty-wrapper -p --output-format stream-json --permission-mode plan "$(cat "$PROMPT_FILE")" | grep -q 'CLAUDE_WRAPPER_FAKE_OK'
+echo "fake claude wrapper: PASS"
+
+PATH="$ROOT/tests/model-callers/fake-agent:$PATH" \
+  agent -p --mode ask --output-format stream-json --model claude-fable-5-high "$(cat "$PROMPT_FILE")" | grep -q 'CURSOR_FAKE_OK'
+echo "fake cursor agent: PASS"
+
+PATH="$ROOT/tests/model-callers/fake-agy:$PATH" \
+  agy --model "Gemini 3.1 Pro (High)" --print "$(cat "$PROMPT_FILE")" | grep -q 'AGY_FAKE_OK'
+echo "fake agy: PASS"
+
+PATH="$ROOT/tests/model-callers/fake-codex:$PATH" \
+  codex exec - < "$PROMPT_FILE" | grep -q 'CODEX_FAKE_OK'
+echo "fake codex: PASS"
+
+"$ROOT/tests/model-callers/test-runtime-matrix.sh"
+```
+
+- [ ] **Step 7: Make test scripts executable**
+
+Run:
+
+```bash
+chmod +x \
+  tests/model-callers/test-runtime-matrix.sh \
+  tests/model-callers/run-fake-cli-tests.sh \
+  tests/model-callers/fake-claude-pty-wrapper/claude-pty-wrapper \
+  tests/model-callers/fake-agent/agent \
+  tests/model-callers/fake-agy/agy \
+  tests/model-callers/fake-codex/codex
+```
+
+Expected: exit code `0`.
+
+- [ ] **Step 8: Run fake CLI tests**
+
+Run:
+
+```bash
+tests/model-callers/run-fake-cli-tests.sh
+```
+
+Expected:
+
+```text
+fake claude wrapper: PASS
+fake cursor agent: PASS
+fake agy: PASS
+fake codex: PASS
+runtime matrix: PASS
+```
+
+## Task 11: Validate
 
 **Files:**
 - All changed files.
@@ -943,7 +1333,35 @@ CODEX_PRESSURE_MODEL=gpt-5.4 CODEX_PRESSURE_REASONING_EFFORT=low \
 
 Expected: all scenarios pass, including `model-callers-self-call-guard`.
 
-- [ ] **Step 4: Check whitespace**
+- [ ] **Step 4: Run model-callers fake CLI harness tests**
+
+Run:
+
+```bash
+tests/model-callers/run-fake-cli-tests.sh
+```
+
+Expected:
+
+```text
+fake claude wrapper: PASS
+fake cursor agent: PASS
+fake agy: PASS
+fake codex: PASS
+runtime matrix: PASS
+```
+
+- [ ] **Step 5: Check runtime matrix fixture**
+
+Run:
+
+```bash
+tests/model-callers/test-runtime-matrix.sh
+```
+
+Expected: exit code `0`; output confirms Codex, Claude, Cursor, and agy each block themselves and allow the other runtimes.
+
+- [ ] **Step 6: Check whitespace**
 
 Run:
 
@@ -953,12 +1371,12 @@ git diff --check
 
 Expected: exit code `0` and no output.
 
-- [ ] **Step 5: Check stale/bad command names**
+- [ ] **Step 7: Check stale/bad command names**
 
 Run:
 
 ```bash
-rg -n 'cursor-agent|fable.*cheap|cheap.*fable|programmatic tool-calling APIs|Anthropic API calls' plugins/shravan-dev-workflow/skills/model-callers plugins/shravan-dev-workflow/skills/implementation-review-swarm plugins/shravan-dev-workflow/skills/plan-review plugins/shravan-dev-workflow/skills/spec-review-council
+rg -n 'cursor-agent|fable.*cheap|cheap.*fable|programmatic tool-calling APIs|Anthropic API calls' plugins/shravan-dev-workflow/skills/model-callers plugins/shravan-dev-workflow/skills/implementation-review-swarm plugins/shravan-dev-workflow/skills/plan-review-swarm plugins/shravan-dev-workflow/skills/spec-review-swarm
 ```
 
 Expected:
@@ -967,7 +1385,7 @@ Expected:
 - No `fable.*cheap` or `cheap.*fable` matches.
 - Existing "no Anthropic API calls" wording may remain only as a prohibition.
 
-- [ ] **Step 6: Check self-call guard coverage**
+- [ ] **Step 8: Check self-call guard coverage**
 
 Run:
 
@@ -977,7 +1395,7 @@ rg -n 'parent runtime|Self-Call Guard|Parent Codex|Parent Claude|Parent Cursor|a
 
 Expected: runtime identity and trigger evals cover Codex, Claude, Cursor, and `agent`.
 
-- [ ] **Step 7: Check active skill count**
+- [ ] **Step 9: Check active skill count**
 
 Run:
 
@@ -987,7 +1405,7 @@ find plugins/shravan-dev-workflow/skills -mindepth 1 -maxdepth 1 -type d | sort
 
 Expected: output includes `plugins/shravan-dev-workflow/skills/model-callers` and 15 existing skills, for 16 total.
 
-- [ ] **Step 8: Refresh Codex cache locally**
+- [ ] **Step 10: Refresh Codex cache locally**
 
 Run:
 
@@ -997,7 +1415,7 @@ codex plugin add shravan-dev-workflow@ai-tools --json
 
 Expected: JSON output reports `version` as `1.6.8`.
 
-- [ ] **Step 9: Confirm Codex inventory**
+- [ ] **Step 11: Confirm Codex inventory**
 
 Run:
 
@@ -1011,7 +1429,7 @@ Expected:
 codex version=1.6.8 enabled=true
 ```
 
-## Task 11: Commit, Push, And Refresh Claude
+## Task 12: Commit, Push, And Refresh Claude
 
 **Files:**
 - All changed files.
@@ -1061,7 +1479,7 @@ Expected: Claude reports `Version: 1.6.8` and `Status: ✔ enabled`.
 
 - [ ] **Step 5: Finalize changelog validation results**
 
-Replace the changelog `Validation` section's `Pending` list with the observed results from Task 10 and Step 4 (commands run, versions reported, pass/fail), commit that correction, and push. If Claude only updated to the previous version before publish propagation, record that exact observed result now, rerun Step 4 after propagation, and update the entry again.
+Replace the changelog `Validation` section's `Pending` list with the observed results from Task 11 and Task 12 Step 4 (commands run, versions reported, pass/fail), commit that correction, and push. If Claude only updated to the previous version before publish propagation, record that exact observed result now, rerun Step 4 after propagation, and update the entry again.
 
 ## Self-Review Checklist
 
