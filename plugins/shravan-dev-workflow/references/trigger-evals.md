@@ -19,6 +19,17 @@ These are objective gates, not soft rules. If the answer to the gate question is
   report the blocker instead of editing unrelated infrastructure?
 - Runtime visibility gate: after a plugin release, does `codex plugin list`
   report the same installed version as source?
+- Proof-chain gate: if implementation is reviewed or called done, does the
+  proof map back to requirements/spec/plan?
+- Red/green gate: for behavior changes, did the proof include
+  failing-before-passing evidence or a documented approved exception?
+- Plan proof gate: before execution, does the plan map each material
+  requirement to a proof layer?
+- Split proof gate: if the required proof cannot pass at the current scope, does
+  the workflow split or replan instead of weakening proof?
+- Artifact-link gate: when a spec, plan, review report, changelog, handoff,
+  debug artifact, or other human-openable file is reported, is there a full
+  clickable artifact link (absolute path + line)?
 - Goal clarity gate: if objective, scope, proof, or stop condition is unclear,
   did `orchestrator-goal` route to `discuss-with-me` instead of setting a fuzzy
   long-horizon goal?
@@ -142,7 +153,8 @@ as audit coverage.
 - "Package this existing implementation plan for a fresh session."
 
 Gate: an implementation plan exists; writes a repo-local handoff file and prints
-the copy-paste prompt in chat.
+the copy-paste prompt in chat. The packet carries the requirements/proof matrix
+and any open proof gaps.
 
 ### spec-handoff should trigger
 
@@ -151,6 +163,8 @@ the copy-paste prompt in chat.
 
 Gate: packages spec/design context, decisions, non-goals, open questions, and
 evidence without creating an implementation plan or calling the spec complete.
+The packet carries spec proof expectations or explicitly defers proof definition
+to `plan-create`.
 
 ### plan-create should trigger
 
@@ -158,7 +172,9 @@ evidence without creating an implementation plan or calling the spec complete.
 - "Create the task sequence and validation plan from this design."
 
 Gate: stays read-only, creates a written implementation plan, and routes review
-to `plan-review-swarm` or execution to `implementation-execute-plan`.
+to `plan-review-swarm` or execution to `implementation-execute-plan`. The plan
+maps material requirements to proof gates and splits work whose proof cannot
+pass at the proposed scope.
 
 ### implementation-handoff should trigger
 
@@ -166,7 +182,8 @@ to `plan-review-swarm` or execution to `implementation-execute-plan`.
 - "Give me a copy-paste handoff for another agent to continue or audit this work."
 
 Gate: current branch, diff, changed files, validation, risks, and stage are
-captured; prompt is printed and written to a file.
+captured; implementation proof is included; prompt is printed and written to a
+file.
 
 ### implementation-execute-plan should trigger
 
@@ -174,7 +191,8 @@ captured; prompt is printed and written to a file.
 - "Continue from this handoff and use subagents for bounded slices."
 
 Gate: plan is validated against live repo before edits; subagent slices have
-bounded write sets; final claim includes fresh verification.
+bounded write sets; final claim includes fresh implementation proof. If proof
+cannot pass inside the approved scope, split or replan.
 
 ### debug-investigation should trigger
 

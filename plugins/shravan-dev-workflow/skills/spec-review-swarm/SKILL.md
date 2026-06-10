@@ -52,6 +52,7 @@ draft spec/design
    - security/trust-boundary claims
    - data flow and state ownership
    - validation strategy
+   - proof expectations, or explicit deferral to `plan-create`
    - plan constraints or open planning inputs
 4. Verify major claims against code/docs/tests before dispatch where cheap.
 5. Dispatch review lanes for substantial artifacts.
@@ -73,7 +74,10 @@ Default lanes for substantial specs:
 - `contract-and-scope`: checks goal, non-goals, requirements, and output contract.
 - `architecture-boundaries`: challenges ownership, module boundaries, dependency direction, and source of truth.
 - `security-threat-model`: checks assets, entry points, untrusted inputs, trust boundaries, sensitive data, and privileged actions.
-- `validation-and-testability`: checks whether the proposed validation strategy can prove behavior and catch regressions.
+- `validation-and-testability`: checks whether the proposed validation strategy
+  can prove behavior and catch regressions, and whether the spec can feed a
+  later requirements/proof matrix or explicitly defers proof definition to
+  `plan-create` with open proof gaps named.
 - `planning-readiness`: checks whether enough decisions exist for a later implementation plan.
 - `adversarial-crux`: asks the few crux questions that could invalidate the design.
 
@@ -97,5 +101,7 @@ Return:
 - Contested design choices.
 - Open questions.
 - Smallest spec/design edits or owner-facing handoff.
+- Full clickable artifact links (absolute path + line) for review reports,
+  spec/design artifacts, or handoffs the human is expected to open.
 - Security threat-model status.
 - Next step: usually `plan-handoff`, `plan-review-swarm` after a plan exists, or `ops-security-review`.

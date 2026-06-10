@@ -40,7 +40,7 @@ while [[ $# -gt 0 ]]; do
 Usage: tests/skills/run-skill-pressure-tests.sh [--fast|--integration] [--scenario NAME] [--timeout SECONDS] [--jobs N|--serial]
 
 Environment:
-  CODEX_PRESSURE_MODEL              default: gpt-5.4
+  CODEX_PRESSURE_MODEL              default: gpt-5.5
   CODEX_PRESSURE_REASONING_EFFORT   default: low
   CODEX_PRESSURE_JOBS               default: 4 for full-suite runs
 USAGE
@@ -75,7 +75,7 @@ fi
 
 echo "Skill pressure tests"
 echo "Mode: $mode"
-echo "Model: ${CODEX_PRESSURE_MODEL:-gpt-5.4}"
+echo "Model: ${CODEX_PRESSURE_MODEL:-gpt-5.5}"
 echo "Reasoning effort: ${CODEX_PRESSURE_REASONING_EFFORT:-low}"
 echo "Jobs: $jobs"
 echo ""

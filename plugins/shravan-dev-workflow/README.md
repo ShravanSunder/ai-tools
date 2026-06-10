@@ -14,10 +14,10 @@ phase skills here.
 shared understanding
         |
         v
-      spec ----------------> plan ----------------> implementation
- design/review/handoff       create/review/handoff  execute/review/handoff
+requirements/spec      ---> plan + proof map     ---> implementation proof
+design/review/handoff       create/review/handoff     execute/review/handoff
         |                         |                         |
-        '----------- evidence, decisions, and boundaries ---'
+        '----------- implementation review ---> done claim ---'
 ```
 
 `handoff` means portability. It does not mean the phase is approved, complete,
@@ -96,7 +96,10 @@ flowchart LR
 
 Use `discuss-with-me` when the work is still a conversation: reflecting back,
 stress-testing a decision, naming tradeoffs, or clarifying whether the next
-artifact should be a spec, plan, implementation, or docs update.
+artifact should be a spec, plan, implementation, or docs update. It makes the
+shared model prove itself before action: every live response states the user's
+model, maps the decision branches, names the strongest countercase, and asks
+one forcing question.
 
 Use `orchestrator-goal` when the objective is long-running and already clear
 enough to become a verifiable Codex or Claude `/goal` contract. If the goal is
@@ -121,7 +124,9 @@ context, and open questions without creating an implementation plan.
 Use `plan-create` to turn spec/design context into a written implementation
 plan. It stays read-only against product code and captures task sequence, write
 surfaces, validation gates, rollback or recovery notes, risks, and open
-questions.
+questions. Non-trivial plans include a requirements/proof matrix; if proof
+cannot pass at the planned scope, the plan should split or replan before
+execution.
 
 Use `plan-review-swarm` to review a written implementation plan before code
 changes. It checks the whole artifact, verifies claims against the repo, and can
@@ -135,12 +140,13 @@ CLI, machine, or future session. If no plan exists yet, use `spec-handoff` or
 
 Use `implementation-execute-plan` to validate and execute a written plan. It may
 coordinate bounded subagent slices, but the parent owns integration,
-verification, and completion claims.
+verification, implementation proof, and completion claims.
 
 Use `implementation-review-swarm` to review code, diffs, commits, PRs, or named
 files. Codex reviewer lanes are the default; Claude or Gemini/`agy` lanes are
 explicit opt-in external counsel. Reviewer outputs are candidates, not truth,
-and accepted findings are verified before edits.
+and accepted findings are verified before edits. Implementation review verifies
+that proof maps back to requirements/spec/plan before a ready verdict.
 
 Use `implementation-handoff` when real implementation state exists: branch,
 diff, changed files, commits, validation output, failed commands, blockers, or
@@ -185,7 +191,7 @@ Oracle is excluded from `shravan-dev-workflow` review swarms.
 Examples:
 
 ```text
-Use discuss-with-me to talk through this design decision before editing files.
+Use discuss-with-me to pressure-test this design decision before editing files.
 Use spec-design-swarm to shape this feature before writing a plan.
 Use spec-review-swarm to attack this architecture spec before planning.
 Use spec-handoff to package this design for another agent without creating a plan.

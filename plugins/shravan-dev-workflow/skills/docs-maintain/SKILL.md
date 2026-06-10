@@ -95,4 +95,6 @@ Return:
 - changes made or proposed
 - stale docs preserved, moved, or left alone
 - links/references updated
+- full clickable artifact links (absolute path + line) for docs or artifacts
+  the human is expected to open
 - validation performed

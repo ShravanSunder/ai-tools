@@ -57,6 +57,9 @@ Before dispatching reviewers, identify exactly what is being reviewed:
 - The user request and intended behavior.
 - Local instructions that apply to the repo.
 - Review focus, such as security, reliability, tests, contracts, architecture, or adversarial design.
+- Implementation proof: requirements or plan items claimed complete, proof
+  gates claimed, commands and exit codes, red/green evidence for behavior
+  changes or explicit exception, proof layers not run, and stated blockers.
 
 If the scope is ambiguous and cannot be inferred safely from git state or the prompt, ask one concise question before spawning reviewers.
 
@@ -78,28 +81,42 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - The reviewer checks that the actual artifact matches the request: nothing missing, nothing extra, no misread requirement.
    - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
 
-3. Reviewer swarm
+3. Implementation proof gate
+   - Verify that claimed proof maps back to requirements, spec, or plan.
+   - Produce review proof: the reducer's verified judgment that implementation
+     proof was checked, mapped, and not weakened.
+   - If an `implementation-handoff` packet exists, consume its Implementation
+     proof section instead of reconstructing proof from chat.
+   - Treat missing required proof, relabeled proof layers, unverified
+     red/green evidence, or weakened proof lanes as `not_ready` unless an
+     explicit user-approved exception is documented.
+
+4. Reviewer swarm
    - Dispatch independent read-only reviewer lanes.
    - For small changes, run `spec_compliance` plus one general/adversarial lane.
    - For substantial changes, run all default lanes.
    - For any sensitive-surface change, run the security and trust-boundary lane even when the change is small.
 
-4. External model lanes
+5. External model lanes
    - Add Claude, Gemini, `agy`, or another outside model lane only when explicitly requested.
    - External model lanes are advisory and must be recorded in coverage.
 
-5. Reducer verification
+6. Reducer verification
    - Verify every candidate against code, diff, tests, or cited plan text.
    - Reject claims that cannot be proven from current artifacts.
    - Deduplicate by root cause.
 
-6. Review reception and fix loop
+7. Review reception and fix loop
    - Load `references/review-reception.md` to receive accepted findings, decide what this workflow owns, and manage PR/review-thread follow-through.
 
-7. Verdict
+8. Verdict
    - `ready`: no accepted blocker/important findings and no decision-relevant open questions.
    - `ready_with_fixes`: accepted issues exist but are bounded and non-blocking.
-   - `not_ready`: accepted blocker/important findings, failed spec compliance, or unresolved decision-critical scope.
+   - `not_ready`: accepted blocker/important findings, failed spec compliance,
+     missing required implementation proof, proof that does not map back to
+     requirements/spec/plan, missing red/green evidence for behavior changes
+     without an approved exception, tests/proof lanes weakened without explicit
+     approval, or unresolved decision-critical scope.
 
 ## Reviewer Lanes
 
@@ -116,6 +133,7 @@ Backend rules:
 Default lanes:
 
 - Spec compliance reviewer
+- Implementation proof reviewer
 - Code quality reviewer
 - Intent and regression reviewer
 - Security and trust-boundary reviewer
@@ -191,6 +209,10 @@ Swarm coverage
 
 Fix follow-through
 <accepted findings fixed, rejected/deferred findings, PR threads resolved or left open, commands run, remaining blockers>
+
+Artifact links
+<full clickable artifact links (absolute path + line) for reports, handoffs, or
+other files the human is expected to open>
 ```
 
 ## Common Mistakes

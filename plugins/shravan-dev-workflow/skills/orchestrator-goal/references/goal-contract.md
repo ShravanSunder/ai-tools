@@ -14,11 +14,17 @@ Non-goals / scope boundary:
 Required reading:
 <files, plans, specs, tickets, PRs, docs, or "none">
 
+Requirement/spec source:
+<chat, spec file, ticket, PRD, repo instructions, or "not yet known">
+
 Allowed write scope:
 <repo paths or "read-only">
 
 Proof gates:
 <commands, artifacts, review state, screenshots, docs, or other evidence>
+
+Proof map:
+<requirement or claim -> proof gate or "must be defined by plan-create">
 
 Stop condition:
 <the exact state where the goal is complete>
@@ -63,6 +69,8 @@ Treat the goal as a contract made of rules and gates:
 - Gates decide whether the work may proceed or be called complete.
 - A gate must be inspectable through files, commands, artifacts, or transcript
   evidence.
+- If the required proof cannot pass at the current scope, split or replan
+  instead of weakening the gate.
 
 ## Parent Ownership
 

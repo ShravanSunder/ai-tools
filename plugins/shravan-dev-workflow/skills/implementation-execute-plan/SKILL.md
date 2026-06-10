@@ -18,6 +18,11 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 - Use subagents for parallelizable bounded slices only. The main agent remains responsible for context, integration, verification, and final claims.
 - Do not ask subagents to read the giant plan. The controller extracts exact task packets and gives each subagent only what it needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
+- Preserve implementation proof as you work: requirement/task coverage, changed
+  files, proof commands with exit codes, red/green evidence for behavior
+  changes, skipped proof layers with reasons, and blockers.
+- If a required proof gate cannot pass inside the approved scope, stop and
+  return to `plan-create` or split the work into smaller provable slices.
 - Never claim complete without fresh verification evidence.
 
 ## Workflow
@@ -47,10 +52,12 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Spec compliance first.
    - Code quality/adversarial review second for meaningful implementation slices.
 7. Verify final state.
+   - Re-read the requirements/proof matrix.
    - Re-read requirements.
    - Inspect diffs.
    - Run targeted and full relevant checks.
-   - Report commands, exit codes, and remaining blockers.
+   - Report commands, exit codes, red/green evidence or exception, skipped
+     proof layers, proof split status, and remaining blockers.
 
 ## Subagent Ownership
 
@@ -91,5 +98,11 @@ Include:
 - files changed
 - subagents used and what they contributed
 - verification commands with results
+- implementation proof: requirement/task coverage, commands, exit codes,
+  red/green evidence or exception, skipped proof layers, blockers
+- proof split status: all required proof passed, or the work was
+  split/replanned because proof could not pass at the current scope
 - accepted risks and follow-ups
 - exact blockers if incomplete
+- full clickable artifact links (absolute path + line) for any plans, reports,
+  handoffs, or artifacts the human is expected to open

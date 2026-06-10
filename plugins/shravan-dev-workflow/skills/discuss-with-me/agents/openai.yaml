@@ -1,4 +1,4 @@
 interface:
   display_name: "Discuss With Me"
   short_description: "Clarify thinking with reflect-back, steelman, and stress-test"
-  default_prompt: "Use discuss-with-me to clarify and pressure-test this decision before we edit files."
+  default_prompt: "Use discuss-with-me to make the shared model prove itself before we edit files: challenge my read, map the decision branches, and ask one forcing question."

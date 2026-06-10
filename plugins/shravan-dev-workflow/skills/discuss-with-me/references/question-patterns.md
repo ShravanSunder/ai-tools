@@ -4,27 +4,33 @@ Load this before asking a live question when the decision is broad, high-stakes,
 
 ## Universal Form
 
+This mirrors the Grill Contract in `SKILL.md`. Every element appears; obvious
+cases may compress an element to one line.
+
 ```text
-Stage:
-<design / spec / plan / implementation / docs>
+What I think you mean:
+<the user's model, one or two sentences>
 
-Intent handle:
-<reflect-back / grill-me / steelman / stress-test / assumption-check / boundary-check / source-of-truth / reconverge>
+Scoped map:
+<branches/meanings in play, or one line naming the single scope>
 
-Current model:
-<one sentence>
+What could be wrong:
+<strongest countercase>
 
-Evidence checked:
-<code/docs/session artifacts>
+Boundary or assumption under pressure:
+<what must be true; what breaks if false>
 
-Confidence:
-<high / medium / low> - missing: <one material variable>
+Evidence checked / missing:
+<read this turn / could not verify; "none — answering from session memory" if nothing was read>
 
-My recommended default:
+Recommended default:
 <answer and why>
 
-Question:
-<single focused question>
+Forcing question:
+<one question selecting between named branches>
+
+Stage / intent:
+<design / spec / plan / implementation / docs> / <intent handle>
 ```
 
 ## Steelman

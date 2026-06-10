@@ -10,7 +10,7 @@ shortcut the skill exists to prevent.
 Default command:
 
 ```bash
-CODEX_PRESSURE_MODEL=gpt-5.4 CODEX_PRESSURE_REASONING_EFFORT=low \
+CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
   tests/skills/run-skill-pressure-tests.sh --fast --timeout 900
 ```
 
@@ -19,7 +19,9 @@ CODEX_PRESSURE_MODEL=gpt-5.4 CODEX_PRESSURE_REASONING_EFFORT=low \
 | Skill | Scenario | Pressure target |
 |-------|----------|-----------------|
 | `debug-investigation` | `debug-investigation-no-blind-fix.md` | Do not patch before reproduction, evidence, hypothesis, and root-cause proof. |
-| `discuss-with-me` | `discuss-with-me-fuzzy-intent.md` | Do not turn fuzzy discussion into implementation; clarify the thinking boundary first. |
+| `discuss-with-me` | `discuss-with-me-fuzzy-intent.md` | Do not turn fuzzy discussion into implementation; map the branches and make the model prove itself first. |
+| `discuss-with-me` | `discuss-with-me-grill-under-pressure.md` | Do not confirm-and-proceed; challenge the user's model, map the branches, ask one forcing question. |
+| `discuss-with-me` | `discuss-with-me-mid-execution-stop.md` | Do not keep executing or write files mid-discussion; stop and reconverge before edits resume. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |

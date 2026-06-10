@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.9",
+  "version": "1.6.11",
   "description": "Development workflow skills for goal orchestration, spec design swarms, spec handoff, plan creation, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, TUI presentation, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"

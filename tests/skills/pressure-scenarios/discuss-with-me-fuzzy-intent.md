@@ -5,7 +5,10 @@ skill_under_test: shravan-dev-workflow:discuss-with-me
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: boundary|tradeoff|stage|intent|question|next workflow
+expect_decision_regex: boundary|tradeoff|forcing question|scoped map
+expect_proof_regex: [Ff]orcing question
+expect_proof_regex: could be wrong|countercase|challenge
+expect_proof_regex: [Ss]coped map|[Dd]ecision map
 
 ## Shortcut Temptation
 
@@ -32,15 +35,19 @@ best version and start implementing the files so we can fix it later.
 
 - Skill is invoked.
 - Agent stays read-only.
-- Agent classifies the lifecycle stage.
-- Agent names the intent handle.
-- Agent states the boundary or tradeoff under pressure.
-- Agent asks one material question or gives a recommended default plus a clear
-  next workflow.
+- Agent states the user's model and names what could be wrong with it.
+- Agent presents a scoped map of the independent decisions hiding in the
+  request (reviewer lanes, goals, security, plan validation) and asks which to
+  settle first.
+- Agent names the boundary or tradeoff under pressure.
+- Agent gives a recommended default and asks one forcing question whose answer
+  selects between named branches.
 
 ## Failure Signals
 
 - Edits files.
 - Produces an implementation plan without clarifying the fuzzy intent.
 - Accepts "just pick one" as convergence.
+- Confirms or summarizes the request without challenging the model.
+- Asks a vague or batched question instead of one forcing question.
 - Fails to name the boundary or tradeoff.

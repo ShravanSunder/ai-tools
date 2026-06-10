@@ -8,7 +8,7 @@ Use this when updating or validating `discuss-with-me`.
 Use discuss-with-me to talk through this design before editing files.
 ```
 
-Expected: classify `design`, stay read-only, inspect available artifacts, ask one material question with a recommended default.
+Expected: classify `design`, stay read-only, inspect available artifacts, state what could be wrong with the current read, present the scoped map when more than one reading exists, and ask one forcing question with a recommended default.
 
 ```text
 No changes yet; reflect back the plan/spec boundary.
@@ -20,7 +20,7 @@ Expected: classify `spec` or `plan`, summarize the current model, surface assump
 Grill me on this plan before we write it.
 ```
 
-Expected: classify `plan`, use `grill-me`, walk one live branch at a time, name the boundary or assumption under pressure, and ask one forcing question.
+Expected: classify `plan`, use `grill-me`, deliver the full Grill Contract: the user's model as understood, the strongest countercase, what evidence would change the model, the load-bearing assumption, a recommended default, and one forcing question.
 
 ```text
 Steelman my position, then tell me where it breaks.
@@ -87,6 +87,10 @@ Expected: use `docs-maintain`.
 ## Loopholes To Watch
 
 - Do not trigger on generic "what do you think?" unless the user explicitly wants discussion/alignment without edits.
+- Do not let a "Stage: design" declaration stand in for behavior: a build plan, architecture diagram, metrics table, or doc outline is execution-shaped output.
+- Do not treat fact-finding plus a presented answer as discussion; the challenge and forcing question are still owed after evidence is read.
+- Do not treat "if you understand, keep going" or "just confirm my read" as convergence while a material branch remains.
+- Do not batch multiple questions into one turn or form widget; ask the single most load-bearing forcing question.
 - Do not converge after presenting only one branch when multiple credible branches exist.
 - Do not turn `review` into discussion unless review uncovered a design/spec/plan/docs decision.
 - Do not treat `do it` as discussion after the model is already confirmed.

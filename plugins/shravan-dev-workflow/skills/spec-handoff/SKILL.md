@@ -14,7 +14,7 @@ next phase is complete.
 
 - Use this only before an implementation plan exists.
 - Package decisions, non-goals, open questions, source evidence, contracts,
-  tradeoffs, and security context.
+  tradeoffs, security context, and spec proof expectations.
 - Preserve uncertainty. Do not hide open questions to make the packet feel done.
 - Do not create an implementation plan here. Use `plan-create` for that.
 - Do not review the spec here. Use `spec-review-swarm` for adversarial review.
@@ -44,6 +44,8 @@ next phase is complete.
    - open questions
    - recommended next skill: usually `plan-create`, `spec-review-swarm`, or
      `docs-maintain`
+   - full clickable artifact links (absolute path + line) for handoff artifacts
+     the human is expected to open
 
 ## Packet Contents
 
@@ -53,6 +55,8 @@ next phase is complete.
 - Contracts, interfaces, data flow, and ownership boundaries
 - Tradeoffs and who pays their cost
 - Security context or reason it is not security-sensitive
+- Spec proof expectations: validation strategy, proof assumptions, explicit
+  deferrals to `plan-create`, or open proof gaps
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent

@@ -68,3 +68,5 @@ Return:
 - deliberate skips
 - source inspirations used
 - priority order
+- full clickable artifact links (absolute path + line) for any audit artifacts
+  or referenced files the human is expected to open

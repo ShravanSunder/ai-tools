@@ -19,6 +19,8 @@ transferable, not that the plan is approved or implemented.
   evidence, use `implementation-handoff`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, line count, coverage, referenced code/docs, open questions, and exact requested task.
+- Include the plan proof matrix: requirements/proof matrix path or excerpt,
+  proof layers, split triggers, and open proof gaps.
 - Include security context when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
 - If a plan file is available, read it end to end before packaging. Show `wc -l` and chunk coverage.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
@@ -39,6 +41,7 @@ transferable, not that the plan is approved or implemented.
    - `copy-paste-prompt.md`
 7. Print a TUI-friendly response with:
    - artifact path
+   - full clickable artifact links (absolute path + line)
    - coverage evidence
    - copy-paste prompt
    - what the next agent should inspect first
@@ -56,3 +59,5 @@ Load `references/handoff-template.md` when writing the actual artifact or copy-p
 - The handoff hides uncertainty instead of listing exact open questions.
 - The packet is overbroad and asks the next agent to understand the entire repo.
 - Sensitive trust-boundary assumptions are omitted, forcing the next agent to invent a threat model.
+- The requirements/proof matrix is omitted, forcing the next agent to infer
+  how the plan will be proven.

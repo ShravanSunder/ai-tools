@@ -75,4 +75,6 @@ Return:
 - Threat-model context used or missing.
 - Exact prompt/invocation for the official Codex Security skill.
 - Expected reports or handoff paths.
+- Full clickable artifact links (absolute path + line) for reports or handoffs
+  the human is expected to open.
 - What not to broaden.

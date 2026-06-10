@@ -57,6 +57,7 @@ plan artifact
    - API contracts
    - execution order
    - tests and validation gates
+   - requirements/proof mapping and proof layer sizing
    - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
@@ -87,7 +88,11 @@ Default lanes:
 
 - `spec-compliance`: checks whether the plan satisfies the stated goal, user constraints, and source artifact.
 - `architecture-assumptions`: challenges module boundaries, ownership, data flow, dependency direction, and hidden coupling.
-- `testability-validation`: checks whether the proposed tests and commands actually prove behavior and catch likely failures.
+- `testability-validation`: checks whether the proposed tests and commands
+  actually prove behavior and catch likely failures. It also checks whether
+  every material requirement has a proof gate, every proof gate maps to a
+  layer, behavior changes name whether red/green evidence is required, and
+  manual proof is justified when durable automated proof is not suitable.
 - `security-reliability`: looks for trust-boundary, secret/token, race, cleanup, rollback, observability, and partial-failure gaps.
 - `execution-scope`: checks ordering, cutovers, migration completeness, ambiguous task packets, and overbroad or under-specified work.
 - `adversarial-design`: pokes holes in assumptions, contradictions, tradeoffs, and simpler alternatives.
@@ -125,6 +130,12 @@ After lanes return:
 6. Rank accepted findings by execution risk.
 7. Produce smallest plan edits, not implementation patches.
 
+Plans with missing proof mapping are `needs revision`, not ready for
+`implementation-execute-plan`.
+
+Plans with required proof gates that cannot pass at the proposed task size are
+`needs revision` until split into smaller provable slices.
+
 ## Addressing Accepted Findings
 
 Plan review includes review reception. Load `references/review-checklist.md` before editing a plan, returning owner edits, or deciding whether feedback needs a user decision.
@@ -150,4 +161,6 @@ Return:
 - Accepted/rejected/deferred findings and any plan edits applied.
 - Swarm coverage: lanes run, lanes skipped, backend used for each lane, external model lane status, and verification notes.
 - Artifact path, or why no artifact was written.
+- Full clickable artifact links (absolute path + line) for review reports,
+  plans, or artifacts the human is expected to open.
 - Explicit "do not implement code yet" note unless the user changes scope.

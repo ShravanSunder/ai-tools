@@ -12,6 +12,10 @@ Use this before execution and before completion claims.
 - Security assumptions checked against live code/docs when sensitive surfaces are touched.
 - Scope and write boundaries clear.
 - Validation commands identified.
+- Requirements/proof matrix identified, or the plan explains why a compact
+  proof line is sufficient.
+- Required proof gates are sized so they can pass inside the approved scope; if
+  not, split or replan before editing.
 - Stop conditions considered.
 
 ## Before Dispatching Subagents
@@ -34,6 +38,7 @@ Use this before execution and before completion claims.
 ## Before Final Answer
 
 - Re-read original plan requirements.
+- Re-read the requirements/proof matrix.
 - Run targeted tests.
 - Run full relevant project validation when feasible.
 - Report command, exit code, and result.
@@ -42,3 +47,6 @@ Use this before execution and before completion claims.
   command/path safety, dependency/package-script safety, and scan/report status
   when applicable.
 - Separate fixed now, blockers, and follow-ups.
+- Report implementation proof: requirement/task coverage, changed files,
+  red/green evidence or exception, skipped proof layers, blockers, and proof
+  split status.

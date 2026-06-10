@@ -21,18 +21,24 @@ There are only two paths:
 Do not run a mini interview inside this skill. Goals are heavy, long-running
 horizon processes; fuzzy goals need shared-understanding work first.
 
+The goal contract names the durable outcome and gates. It does not replace
+requirements discovery, spec design, plan creation, execution, or review. It
+routes to those phase skills and preserves the proof chain across them.
+
 ## Clarity Gate
 
 The goal is clear only when these are known:
 
 - objective
 - non-goals or scope boundary
+- requirement/spec source, or explicit statement that chat is the source
 - required reading or source artifacts
 - allowed write scope
-- proof gates or validation evidence
+- proof gates by layer where known
 - stop condition
 - blocked condition
 - checkpoint or handoff rhythm
+- next workflow owner
 
 If any of these materially affect the work and are missing, route to
 `discuss-with-me`.
@@ -63,6 +69,8 @@ If any of these materially affect the work and are missing, route to
    and the host surface supports it. Otherwise, prepare the goal prompt or
    contract artifact.
 6. Report the contract, selected workflow, and first verification checkpoint.
+   When returning artifact paths, include full clickable artifact links
+   (absolute path + line). Do not rely only on relative paths.
 
 ## Host Rules
 

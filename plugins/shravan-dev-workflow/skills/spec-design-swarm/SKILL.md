@@ -73,6 +73,7 @@ fuzzy goal or design question
    - boundaries and ownership
    - security context and non-goals
    - validation strategy
+   - proof expectations, or explicit deferral to `plan-create`
    - open questions
    - next skill to use
 8. Write the artifact when appropriate:
@@ -107,6 +108,8 @@ Return:
 - Current-state evidence inspected.
 - Lanes run and skipped.
 - Artifact path, or why no artifact was written.
+- Full clickable artifact links (absolute path + line) for any spec/design
+  artifacts the human is expected to open.
 - Recommended design direction.
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.

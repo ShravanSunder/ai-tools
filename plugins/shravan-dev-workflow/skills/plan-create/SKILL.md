@@ -20,6 +20,12 @@ prove it." It does not execute the plan.
   tasks.
 - Include task sequence, write surfaces, dependencies, validation gates, rollout
   or rollback/recovery notes, risks, and open questions.
+- Include a requirements/proof matrix for non-trivial plans: requirement or
+  claim, owning task, proof gate, proof layer, whether red/green evidence is
+  required, and whether the task is sized so that proof can pass inside the
+  approved scope.
+- If a task's required proof cannot pass at its current size, split the task
+  before execution instead of documenting skipped proof.
 - Capture security assumptions when the plan touches auth, secrets, parsing,
   filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents,
   or external services.
@@ -46,9 +52,12 @@ prove it." It does not execute the plan.
    - security-sensitive surfaces
 4. Write or prepare the implementation plan:
    - goal and non-goals
+   - requirement/spec source coverage
+   - requirements/proof matrix
    - task sequence
    - files/modules likely touched
    - validation gates by layer
+   - split/replan triggers when proof cannot pass at the planned scope
    - rollback/recovery and risk notes
    - open questions
 5. Route next:
@@ -63,17 +72,24 @@ Return:
 
 - source coverage
 - implementation plan path or chat-only plan
+- requirements/proof matrix
 - task sequence
 - write surfaces
 - validation gates
 - risks and rollback/recovery notes
 - open questions
 - recommended next skill
+- full clickable artifact links (absolute path + line) for any plan artifacts
+  the human is expected to open
 
 ## Common Mistakes
 
 - Starting Task 1 while creating the plan.
 - Treating a spec summary as enough when material source context is missing.
 - Omitting validation gates to move faster.
+- Listing validation commands without mapping them back to the requirements they
+  prove.
+- Treating a proof gate that is too large to pass as a skipped layer instead of
+  splitting or replanning.
 - Calling plan creation "reviewed" or "executable" without review/validation.
 - Folding plan handoff or implementation execution into this skill.

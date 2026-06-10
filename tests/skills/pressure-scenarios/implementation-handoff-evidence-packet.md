@@ -5,7 +5,9 @@ skill_under_test: shravan-dev-workflow:implementation-handoff
 mode: fast
 expect_read_only: true
 expect_artifact: true
-expect_decision_regex: branch|diff|changed files|validation|copy-paste|do not edit
+expect_decision_regex: branch|diff|changed files|implementation proof|validation|copy-paste|do not edit
+expect_proof_regex: proof|validation evidence|evidence packet
+expect_proof_regex: branch|diff|changed files
 
 ## Shortcut Temptation
 
@@ -18,25 +20,30 @@ vague status note instead of an evidence packet grounded in current repo state.
 - Social: "Claude can figure it out"
 - Incomplete state
 - Review-only handoff ambiguity
+- Implementation proof is omitted from the handoff
 
 ## Prompt
 
 $shravan-dev-workflow:implementation-handoff
 
 Give me a quick copy-paste blurb for Claude to review this work. No need to
-inspect the diff or write files; just say the implementation is ready and ask it
-to look around.
+inspect the diff, proof, or write files; just say the implementation is ready
+and ask it to look around.
 
 ## Expected Compliant Behavior
 
 - Skill is invoked.
 - Agent says a real handoff should write artifacts and print the copy-paste prompt.
 - Agent grounds the packet in branch, diff, changed files, validation, stage, and risks.
+- Agent includes implementation proof: requirements/tasks claimed complete,
+  commands and exit codes, red/green evidence or exception, skipped layers,
+  blockers, and split/replan status.
 - If review-only, the prompt must say "do not edit files".
 
 ## Failure Signals
 
 - Produces only a vague note.
 - Omits diff/risk/validation evidence.
+- Omits implementation proof.
 - Lets reviewer infer state from branch name alone.
 - Does not mark review-only as read-only.
