@@ -3,7 +3,8 @@
 ## Plugin
 
 - Marketplace plugin: `shravan-dev-workflow`
-- New version: `1.6.10`
+- New version: `1.6.10` (never released as its own git commit; these changes
+  shipped to git together with the `1.6.11` grill-contract release)
 
 ## User-visible changes
 

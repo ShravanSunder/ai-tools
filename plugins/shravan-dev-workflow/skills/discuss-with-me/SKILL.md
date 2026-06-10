@@ -32,8 +32,9 @@ cases an element may be one line, but none may be absent:
    play. Required whenever more than one plausible reading exists; otherwise
    one line naming the single scope. The map shows alternatives that need
    different evidence — never the components of one already-chosen solution.
-3. **What could be wrong** — the strongest countercase to the user's model.
-   Name it even when you agree with the model.
+3. **What could be wrong** — the strongest countercase to the user's model,
+   not a restatement of their position with a hedge. State what would actually
+   break the model or the recommendation. Name it even when you agree.
 4. **Boundary or load-bearing assumption under pressure** — what must be
    true, and what breaks if it is false.
 5. **Evidence checked / missing** — what you actually read this turn and what
@@ -59,18 +60,21 @@ or C (needs E3)?" These do not qualify:
   most load-bearing question first; the answer reshapes the rest.
 - A detail question that leaves the user's frame unchallenged.
 
-If no real branches exist and the assumption survives the countercase, say so
-and close out — do not invent questions to perform rigor.
+If no real branches exist and the assumption survives a genuinely stated
+countercase, say so and make the forcing question a convergence check: ask the
+user to confirm the recommended default as their decision. Do not invent extra
+branches to perform rigor, and do not skip the question — convergence is the
+user's call, not yours.
 
 ## Core Rules
 
 - Manual trigger only. Do not invoke just because a request is vague.
-- Invocation interrupts. Stop in-flight execution and queued edits before anything else; this contract owns the turn even when other skills are loaded alongside it.
+- Invocation interrupts. Stop in-flight execution and queued edits before anything else; this contract owns the turn even when other skills are loaded alongside it. Reading evidence for the scoped map and countercase is part of the interrupt response; resuming edits is not.
 - Stay read-only unless the user explicitly switches to artifact creation or implementation.
 - Prefer code/docs/session evidence over asking when the answer is discoverable — and evidence serves the challenge: after reading, you still owe elements 3 and 7. Fact-finding followed by a presented answer is not discussion.
 - Use lightweight intent handles: `reflect-back`, `grill-me`, `steelman`, `stress-test`, `assumption-check`, `boundary-check`, `source-of-truth`, and `reconverge`.
 - When multiple real branches exist, steelman the strongest competing path before converging.
-- Do not accept "whatever you think", "just confirm my read", or "if you understand, keep going" as convergence while a material branch remains.
+- Do not accept "whatever you think", "just confirm my read", or "if you understand, keep going" as convergence while a material branch remains. If the user dismisses the forcing question, restate the recommended default as the pending decision and ask for explicit confirmation of that default; dismissal is not consent.
 - Do not hand off to another workflow (`spec-design-swarm`, `plan-create`, review swarms, `orchestrator-goal`) until the forcing question is answered or the user explicitly overrides. Post the closeout block before handing off: the next workflow starts from the closeout, not from scattered conversation.
 - If this skill's text is not loadable in-session, load `SKILL.md` from disk and follow it fully; do not improvise a lighter version.
 - Keep uncertainty visible with a short confidence note when the model is still forming.
@@ -87,6 +91,8 @@ and close out — do not invent questions to perform rigor.
 | "I'll ask all my questions at once to save time" | Batched questions let the user click through without thinking. One forcing question. |
 | "Discussion is basically done; I'll route to the next skill" | Routing before the fork is resolved exports the confusion to the next workflow. |
 | "I'll write this up in tmp/ to be helpful" | Stay read-only until the user explicitly switches to artifact creation. |
+| "I wrote a caveat, so the countercase is covered" | A hedge is not a countercase. State what would actually break the model. |
+| "I listed the user's components as the scoped map" | Subdivisions of one chosen path are not branches. Branches are alternatives that need different evidence. |
 
 ## Scope
 
@@ -180,3 +186,7 @@ Open:
 Next workflow:
 <skill or action, if any>
 ```
+
+A closeout is valid only when `Open` contains no material branch or
+load-bearing assumption. If it does, the discussion is not converged: stay in
+the live shape and ask the forcing question instead.

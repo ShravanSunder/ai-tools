@@ -1,7 +1,10 @@
 # 2026-06-10 Discuss-With-Me Grill Contract
 
 Plugin: `shravan-dev-workflow`
-Version: `1.6.11`
+Version: `1.6.11`, then `1.6.12` after review-swarm fixes (countercase
+anti-hedge wording, convergence-check forcing question when no branches
+survive, dismissal-is-not-consent rule, interrupt/evidence sequencing,
+closeout validity gate, two new red-flag rows)
 
 ## Summary
 
