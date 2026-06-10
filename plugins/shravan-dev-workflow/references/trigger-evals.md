@@ -84,7 +84,9 @@ context, and next workflow.
 - "Talk through this design decision before editing files."
 
 Gate: one material question at a time, with a recommended answer and no file
-edits.
+edits. When multiple credible branches exist, the opposing branch is
+steelmanned and the boundary, tradeoff, or assumption under pressure is named
+before asking the user to decide.
 
 ### orchestrate-goal should trigger
 

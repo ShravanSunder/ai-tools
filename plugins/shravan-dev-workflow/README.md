@@ -47,7 +47,7 @@ Shapes a new spec, design, or architecture before an implementation plan exists.
 
 ### `discuss-with-me`
 
-Manual-only lifecycle alignment for design, spec, plan, implementation-direction, and docs decisions. It classifies the stage, checks code/docs before asking when possible, asks one material question at a time with the agent's recommended answer, and hands off to the right workflow when discussion becomes review, debugging, security, docs editing, broad research, or execution.
+Manual-only thinking clarification for design, spec, plan, implementation-direction, and docs decisions. It teaches back the current model, uses lightweight handles such as `reflect-back`, `grill-me`, `steelman`, `stress-test`, `assumption-check`, and `boundary-check`, asks one material question at a time with the agent's recommended answer, and hands off when discussion becomes review, debugging, security, docs editing, broad research, or execution.
 
 ### `orchestrate-goal`
 

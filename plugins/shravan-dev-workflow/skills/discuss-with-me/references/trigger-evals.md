@@ -17,6 +17,30 @@ No changes yet; reflect back the plan/spec boundary.
 Expected: classify `spec` or `plan`, summarize the current model, surface assumptions, do not edit.
 
 ```text
+Grill me on this plan before we write it.
+```
+
+Expected: classify `plan`, use `grill-me`, walk one live branch at a time, name the boundary or assumption under pressure, and ask one forcing question.
+
+```text
+Steelman my position, then tell me where it breaks.
+```
+
+Expected: use `steelman` or `stress-test`, state the strongest version of the user's position, name the strongest opposing case or failure mode, and ask one user-owned decision question.
+
+```text
+Stress-test the assumptions in this design.
+```
+
+Expected: classify `design` or `spec`, name a load-bearing assumption, describe what breaks if it is false, give a recommended default, and ask whether to keep, revise, or make it explicit.
+
+```text
+Reflect back the source-of-truth boundary.
+```
+
+Expected: use `source-of-truth` or `boundary-check`, compare candidate sources, recommend the driver source, and stay read-only.
+
+```text
 Implementation surprised us; discuss whether the plan is wrong.
 ```
 
@@ -63,6 +87,7 @@ Expected: use `docs-maintain`.
 ## Loopholes To Watch
 
 - Do not trigger on generic "what do you think?" unless the user explicitly wants discussion/alignment without edits.
+- Do not converge after presenting only one branch when multiple credible branches exist.
 - Do not turn `review` into discussion unless review uncovered a design/spec/plan/docs decision.
 - Do not treat `do it` as discussion after the model is already confirmed.
 - Do not let `discuss-with-me` spawn subagents by default; route broad research to `spec-design-swarm`.

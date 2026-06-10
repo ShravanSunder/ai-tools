@@ -1,4 +1,4 @@
 interface:
   display_name: "Discuss With Me"
-  short_description: "Align on design, spec, plan, implementation, or docs decisions"
-  default_prompt: "Use discuss-with-me to talk through this design decision before we edit files."
+  short_description: "Clarify thinking with reflect-back, steelman, and stress-test"
+  default_prompt: "Use discuss-with-me to clarify and pressure-test this decision before we edit files."

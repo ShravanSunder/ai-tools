@@ -1,17 +1,17 @@
 ---
 name: discuss-with-me
-description: Use when the user explicitly asks to discuss, talk through, reflect back, or align on design, spec, plan, implementation direction, or docs decisions without immediately editing files.
+description: Use when the user explicitly asks to discuss, talk through, reflect back, grill, steelman, stress-test, clarify thinking, or align on design, spec, plan, implementation direction, or docs decisions without immediately editing files.
 ---
 
 # Discuss With Me
 
-Use this skill as a manual shared-understanding layer across the software artifact lifecycle:
+Use this skill as a manual thinking-clarifier across the software artifact lifecycle:
 
 ```text
 design -> spec -> plan -> implementation -> docs
 ```
 
-This skill does not write code, specs, plans, or docs by itself. Its output is a clearer model, a decision, a narrowed question, or the next workflow to invoke.
+Its job is to help the model teach back, stress, and clarify the user's thinking before action. It does not write code, specs, plans, or docs by itself. Its output is a sharper shared model, a user-owned decision, a narrowed question, or the next workflow to invoke.
 
 ## Core Rules
 
@@ -21,6 +21,9 @@ This skill does not write code, specs, plans, or docs by itself. Its output is a
 - Prefer code/docs/session evidence over asking when the answer is discoverable.
 - Ask one material question at a time, and include the current recommended answer.
 - Keep uncertainty visible with a short confidence note when the model is still forming.
+- Use lightweight intent handles: `reflect-back`, `grill-me`, `steelman`, `stress-test`, `assumption-check`, `boundary-check`, `source-of-truth`, and `reconverge`.
+- When multiple real branches exist, steelman the strongest competing path before converging.
+- Name the boundary, tradeoff, or load-bearing assumption under pressure before asking the user to decide.
 - Do not accept "whatever you think" as convergence when a material branch remains.
 - Use `tui-presentation` only when comparing options, showing a decision tree, or presenting multi-section synthesis.
 - Hand off to the specific workflow skill when discussion becomes execution, review, security, debugging, or docs maintenance.
@@ -55,13 +58,16 @@ Do not use as the primary workflow for:
    - implementation
    - docs
 2. Build the starting model:
+   - intent handle
    - current read
    - confidence
    - what evidence was checked
    - what is still missing
-3. Load the stage reference only if stage-specific guidance is needed.
-4. Ask one material question if the next decision cannot be inferred from evidence.
-5. Stop when the decision, assumption, non-goal, or next workflow is explicit.
+3. If the request hides multiple independent decisions, ask which decision to settle first instead of grilling all of them at once.
+4. Load the stage reference only if stage-specific guidance is needed.
+5. Load question patterns when the answer needs steelman, stress-test, assumption, terminology, or boundary pressure.
+6. Ask one material question if the next decision cannot be inferred from evidence.
+7. Stop when the decision, assumption, non-goal, or next workflow is explicit.
 
 ## Progressive Disclosure
 
@@ -79,11 +85,17 @@ For a live discussion:
 Stage:
 <design / spec / plan / implementation / docs>
 
+Intent handle:
+<reflect-back / grill-me / steelman / stress-test / assumption-check / boundary-check / source-of-truth / reconverge>
+
 Current model:
 <one sentence>
 
 Confidence:
 <high / medium / low, and what is missing>
+
+Boundary or assumption under pressure:
+<what must be true, what is excluded, or who pays the tradeoff cost>
 
 My recommended default:
 <answer and why>
@@ -100,6 +112,9 @@ Confirmed:
 
 Assumptions:
 <load-bearing assumptions>
+
+Boundary / tradeoff:
+<what was accepted, rejected, or left outside scope>
 
 Non-goals:
 <what we are not doing>
