@@ -4,25 +4,34 @@
 
 **Status:** Paused design/spec artifact. Do not implement until the user explicitly resumes this work.
 
-**Last refreshed:** 2026-06-10 against `shravan-dev-workflow` `1.6.7`.
+**Last refreshed:** 2026-06-10 against `shravan-dev-workflow` `1.6.9`.
 
 **Goal:** Add a reusable `model-callers` helper skill that documents safe programmatic invocation of Claude, agy/Gemini, Cursor `agent`, and Codex CLI backends for other workflow skills.
 
-**Architecture:** Keep review/design/debug skills as orchestrators and reducers. Add one helper skill that owns runtime identity, model aliases, CLI probes, prompt-file/stdin invocation patterns, self-call guards, and lane output contracts. Existing swarm skills load the helper only when they need programmatic external model execution.
+**Architecture:** Keep review/design/debug skills as orchestrators and reducers. Add one helper skill plus one typed TypeScript runner package. The skill owns invocation judgment and progressive disclosure; the runner owns brittle mechanics: runtime identity, model aliases, CLI probes, prompt-file/stdin invocation patterns, self-call guards, progress events, PTY/session extraction, and lane output contracts. Existing swarm skills load the helper only when they need programmatic external model execution.
 
-**Tech Stack:** Markdown skills under `plugins/shravan-dev-workflow/skills/`, plugin manifests JSON, `rg`, `jq`, `claude plugin validate`, Codex/Claude plugin cache refresh.
+**Tech Stack:** Markdown skills under `plugins/shravan-dev-workflow/skills/`, TypeScript helpers under `packages/model-callers/`, `tsdown` runner builds, Node subprocess/PTY utilities, plugin manifests JSON, `rg`, `jq`, `claude plugin validate`, Codex/Claude plugin cache refresh.
 
 **Current source-of-truth deltas since this plan was drafted:**
 
-- Current plugin version is `1.6.7`; implementation should target the next patch, expected `1.6.8`, not `1.6.4`.
-- The workflow suite currently has 15 skills. Adding `model-callers` makes 16.
+- Current plugin version is `1.6.9`; implementation should target the next patch, expected `1.6.10`, not `1.6.8` or earlier.
+- The workflow suite currently has 18 skills. Adding `model-callers` makes 19.
 - `orchestrator-goal` now exists and owns long-horizon Codex/Claude `/goal` contracts. `model-callers` must stay below that layer as a caller helper only.
 - `discuss-with-me` now owns fuzzy thinking clarification and intent handles. Fuzzy questions about "which model should we use?" should clarify with `discuss-with-me`; explicit model-runtime invocation should use `model-callers`.
 - Phase skills now have artifact gates. `model-callers` should not create spec/plan/debug artifacts; it should only write temporary prompt/output files needed for a caller lane.
 - `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation for existing workflow artifacts after phase skills create them.
 - External model lanes are now explicitly opt-in for implementation review and plan/spec review; the helper must preserve that boundary.
-- Claude lanes should always use the `kcosr/claude-pty-wrapper` pattern rather than direct `claude -p` as the lane transport. The wrapper still drives the already-authenticated local Claude Code CLI, but durable Claude session JSONL provides scoped output and raw terminal/ANSI scraping is diagnostic only. Do not route Claude lanes through Anthropic API calls, SDK calls, direct `claude -p` lane calls, or separate paid usage systems.
+- Claude lanes should always use our own Claude PTY wrapper implementation rather than direct `claude -p` as the lane transport. The wrapper may learn from the public `kcosr/claude-pty-wrapper` pattern, but this repo must own and test the implementation. It still drives the already-authenticated local Claude Code CLI, but durable Claude session JSONL provides scoped output and raw terminal/ANSI scraping is diagnostic only. Do not route Claude lanes through Anthropic API calls, SDK calls, direct `claude -p` lane calls, or separate paid usage systems.
 - Every `shravan-dev-workflow` skill now needs a pressure scenario under `tests/skills/pressure-scenarios/`, and the fast pressure runner should pass before rollout.
+- Session-log evidence showed recurring external-agent failure modes to design against: brittle `claude -p` prompt parsing around `--allowedTools`, stale cached pre-rename skill names, Cursor command-name drift (`agent` vs `cursor-agent`), read/write mode ambiguity for Cursor `agent -p`, and long-running external lanes that leave the caller without progress updates.
+
+**Session-log failure inventory to cover with tests:**
+
+- Direct Claude prompt-as-argument calls can fail or misparse when mixed with long option lists such as `--allowedTools`; swarm lanes should use the owned wrapper and tested prompt/session handling.
+- External lane CLIs drift by machine: Cursor uses `agent` as the primary command, while `cursor-agent` may exist as an alias only on some installs.
+- Cursor `agent -p` is not inherently read-only; review lanes must prove `--mode ask` or `--mode plan`.
+- Cached plugin names can lag after renames; validation must check current source names and refreshed inventory.
+- Long-running external lanes need heartbeat/status events so parent agents and users are not left waiting without context.
 
 ---
 
@@ -40,8 +49,40 @@
   - Stable aliases, cost policy, explicit-only models, smoke-only models.
 - Create: `plugins/shravan-dev-workflow/skills/model-callers/references/lane-output-contract.md`
   - Required structured output and coverage fields for callers.
+- Create: `plugins/shravan-dev-workflow/skills/model-callers/references/progress-events.md`
+  - Status-event contract for external lanes so parent agents and lane-manager subagents can report useful progress while CLIs run.
 - Create: `plugins/shravan-dev-workflow/skills/model-callers/references/trigger-evals.md`
   - Skill trigger and self-call pressure scenarios.
+- Create: `package.json`
+  - Minimal repo package scripts for TypeScript build/test of model caller helpers.
+- Create: `pnpm-workspace.yaml`
+  - Workspace membership for `packages/*`.
+- Create: `tsconfig.base.json`
+  - Shared strict TypeScript compiler defaults for helper packages.
+- Create: `packages/model-callers/package.json`
+  - Typed helper package with `tsdown`, `tsx`, and `vitest` scripts.
+- Create: `packages/model-callers/tsconfig.json`
+  - Package TypeScript config extending the repo base.
+- Create: `packages/model-callers/tsdown.config.ts`
+  - Builds CLI runners and reusable library entrypoints.
+- Create: `packages/model-callers/src/types.ts`
+  - `Runtime`, `ProviderIntent`, `ModelLaneRequest`, `ModelLaneResult`, `CallerProgressEvent`, and related discriminated unions.
+- Create: `packages/model-callers/src/runtime-matrix.ts`
+  - Typed self-call guard and provider/runtime resolution.
+- Create: `packages/model-callers/src/progress.ts`
+  - Progress-event emitter, heartbeat helpers, and JSONL status sink.
+- Create: `packages/model-callers/src/process-runner.ts`
+  - Typed child-process runner with timeout, exit status, stdout/stderr capture, and streaming progress hooks.
+- Create: `packages/model-callers/src/claude-pty-wrapper.ts`
+  - Owned Claude Code PTY/session JSONL wrapper implementation; do not vendor `kcosr/claude-pty-wrapper`.
+- Create: `packages/model-callers/src/backends/{claude,cursor,agy,codex}.ts`
+  - Backend-specific adapters that convert typed lane requests into command invocations.
+- Create: `packages/model-callers/src/index.ts`
+  - Re-export public typed helpers for tests and future workflow scripts.
+- Create: `packages/model-callers/src/cli.ts`
+  - CLI runner entrypoint for `model-callers run`, `model-callers probe`, and `model-callers matrix`.
+- Create: `packages/model-callers/tests/*.test.ts`
+  - Unit and fake-CLI integration tests for runtime matrix, status events, command shaping, timeout behavior, and output contracts.
 - Create: `tests/skills/pressure-scenarios/model-callers-self-call-guard.md`
   - Codex pressure scenario for external caller self-call and opt-in boundaries.
 - Create: `tests/skills/pressure-scenarios/model-callers-runtime-matrix.md`
@@ -62,6 +103,8 @@
   - Fake Codex CLI for no-cost self-call and command-shape tests.
 - Create: `tests/model-callers/run-fake-cli-tests.sh`
   - Integration-style fake harness runner for Claude wrapper, Cursor, agy, and Codex caller recipes.
+- Create: `tests/model-callers/run-live-smoke-tests.sh`
+  - Opt-in low-thinking/fast-model smoke runner guarded by `MODEL_CALLERS_LIVE=1`.
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/SKILL.md`
   - Point external lane usage at `model-callers`; keep review-specific reducer rules.
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/references/external-counsel.md`
@@ -79,7 +122,7 @@
 - Modify: `agents.md`
   - Add `model-callers` to the Current Plugin Skills table so repo instructions match installed plugin shape.
 - Modify: `plugins/shravan-dev-workflow/.codex-plugin/plugin.json`
-  - Bump `shravan-dev-workflow` from `1.6.7` to the next patch version.
+  - Bump `shravan-dev-workflow` from `1.6.9` to the next patch version.
 - Modify: `plugins/shravan-dev-workflow/.claude-plugin/plugin.json`
   - Bump `shravan-dev-workflow` to the same patch version.
 - Modify: `.claude-plugin/marketplace.json`
@@ -437,7 +480,7 @@ Every caller follows this order:
 
 ## Claude Code Via PTY Wrapper
 
-Claude lanes use `claude-pty-wrapper` only. The wrapper drives the local Claude Code CLI; do not call Anthropic APIs, SDKs, programmatic tool-calling APIs, or direct `claude -p` as the swarm lane transport. The goal is to reuse the local Claude Code surface with reliable scoped output from durable session JSONL.
+Claude lanes use the repo-owned `claude-pty-wrapper` runner built from `packages/model-callers/src/claude-pty-wrapper.ts`. The wrapper drives the local Claude Code CLI; do not call Anthropic APIs, SDKs, programmatic tool-calling APIs, or direct `claude -p` as the swarm lane transport. The goal is to reuse the local Claude Code surface with reliable scoped output from durable session JSONL.
 
 Availability:
 
@@ -466,7 +509,7 @@ claude-pty-wrapper -p \
 
 Do not use direct `claude -p` for swarm lanes. Use it only for manual local diagnostics if the wrapper itself is being debugged. Do not use the wrapper to bypass consent, tool permissions, or read-only review constraints. Record that output was PTY-wrapped in lane coverage.
 
-Preferred reliability shape, based on `https://github.com/kcosr/claude-pty-wrapper`:
+Preferred reliability shape, inspired by `https://github.com/kcosr/claude-pty-wrapper` but implemented and tested in this repo:
 
 - run Claude Code in a wrapper-owned PTY
 - use `-p/--print` for wrapper-managed text, JSON, or stream JSON output
@@ -565,7 +608,8 @@ Pattern is profile-gated. Probe current CLI help before selecting profiles or mo
 
 Create `plugins/shravan-dev-workflow/skills/model-callers/references/claude-pty-wrapper.md` with these design constraints:
 
-- Use `https://github.com/kcosr/claude-pty-wrapper` as the upstream pattern and source inspiration.
+- Use `https://github.com/kcosr/claude-pty-wrapper` as source inspiration only; do not vendor it, wrap it, or depend on it.
+- Implement the wrapper in `packages/model-callers/src/claude-pty-wrapper.ts` and build it with `tsdown`.
 - The wrapper is for Claude Code CLI reliability, not for Anthropic API usage.
 - PTY drives the local Claude Code process; durable session JSONL is the source for assistant output.
 - Output modes should include text, JSON, stream-json, and raw session JSONL diagnostics.
@@ -653,10 +697,11 @@ rg -n 'fable|explicit-only|cheap|premium' plugins/shravan-dev-workflow/skills/mo
 
 Expected: output states Fable is explicit-only/premium and does not call it cheap.
 
-## Task 5: Add Lane Output Contract
+## Task 5: Add Lane Output And Progress Contracts
 
 **Files:**
 - Create: `plugins/shravan-dev-workflow/skills/model-callers/references/lane-output-contract.md`
+- Create: `plugins/shravan-dev-workflow/skills/model-callers/references/progress-events.md`
 
 - [ ] **Step 1: Create output contract reference**
 
@@ -701,17 +746,329 @@ Output location:
 Findings produced by the model must remain candidate findings until the calling workflow verifies them against repo reality.
 ```
 
-- [ ] **Step 2: Verify coverage fields**
+- [ ] **Step 2: Create progress event reference**
+
+Create `plugins/shravan-dev-workflow/skills/model-callers/references/progress-events.md`:
+
+```markdown
+# Progress Events
+
+External model lanes can run for minutes. The caller must not leave the parent agent or user staring at silence.
+
+## Event Contract
+
+The TypeScript runner emits JSONL progress events. Human-facing swarm skills may summarize those events, but must not invent status.
+
+Required event types:
+
+- `lane_started`
+- `availability_checked`
+- `model_resolved`
+- `heartbeat`
+- `output_seen`
+- `freshness_prompt_sent`
+- `lane_completed`
+
+## Lane Manager Pattern
+
+A subagent may act as a lane manager for external models when that saves the parent agent's focus. The lane manager may run `model-callers`, watch the progress JSONL, and report concise status updates back to the parent. The lane manager does not verify findings or make final decisions.
+
+Parent workflow responsibilities:
+
+- decide whether external lanes are allowed
+- pass the prompt packet and model request
+- receive progress summaries
+- verify candidate output against repo reality
+- own final accepted findings or decisions
+
+## Update Cadence
+
+- Send an initial status when a lane starts.
+- Send a heartbeat summary at least every 30 seconds while a lane is active.
+- Send a terminal status with completed, skipped, failed, or timed-out result.
+- Include the output path when available.
+```
+
+- [ ] **Step 3: Verify coverage fields and progress events**
 
 Run:
 
 ```bash
 rg -n 'Parent runtime|Backend runtime|Requested alias/model|Actual model|Status' plugins/shravan-dev-workflow/skills/model-callers/references/lane-output-contract.md
+rg -n 'lane_started|heartbeat|lane_completed|lane manager|30 seconds' plugins/shravan-dev-workflow/skills/model-callers/references/progress-events.md
 ```
 
-Expected: all required fields appear.
+Expected: all required fields and progress events appear.
 
-## Task 6: Add `model-callers` Skill Entrypoint
+## Task 6: Add Typed Model Caller Runner Package
+
+**Files:**
+- Create: `package.json`
+- Create: `pnpm-workspace.yaml`
+- Create: `tsconfig.base.json`
+- Create: `packages/model-callers/package.json`
+- Create: `packages/model-callers/tsconfig.json`
+- Create: `packages/model-callers/tsdown.config.ts`
+- Create: `packages/model-callers/src/types.ts`
+- Create: `packages/model-callers/src/runtime-matrix.ts`
+- Create: `packages/model-callers/src/progress.ts`
+- Create: `packages/model-callers/src/process-runner.ts`
+- Create: `packages/model-callers/src/claude-pty-wrapper.ts`
+- Create: `packages/model-callers/src/backends/claude.ts`
+- Create: `packages/model-callers/src/backends/cursor.ts`
+- Create: `packages/model-callers/src/backends/agy.ts`
+- Create: `packages/model-callers/src/backends/codex.ts`
+- Create: `packages/model-callers/src/index.ts`
+- Create: `packages/model-callers/src/cli.ts`
+- Create: `packages/model-callers/tests/runtime-matrix.test.ts`
+- Create: `packages/model-callers/tests/progress.test.ts`
+- Create: `packages/model-callers/tests/fake-backends.test.ts`
+
+- [ ] **Step 1: Add the minimal TypeScript workspace**
+
+Create a root `package.json` with only repository helper scripts:
+
+```json
+{
+  "name": "ai-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:model-callers": "pnpm --filter @shravan-dev-workflow/model-callers build",
+    "test:model-callers": "pnpm --filter @shravan-dev-workflow/model-callers test",
+    "typecheck:model-callers": "pnpm --filter @shravan-dev-workflow/model-callers typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
+  }
+}
+```
+
+Create `pnpm-workspace.yaml`:
+
+```yaml
+packages:
+  - packages/*
+```
+
+Create `tsconfig.base.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+- [ ] **Step 2: Add the model-callers package**
+
+Create `packages/model-callers/package.json`:
+
+```json
+{
+  "name": "@shravan-dev-workflow/model-callers",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "model-callers": "./dist/cli.js",
+    "claude-pty-wrapper": "./dist/claude-pty-wrapper.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "node-pty": "^1.1.0"
+  },
+  "devDependencies": {
+    "tsdown": "^0.22.2"
+  }
+}
+```
+
+Create `packages/model-callers/tsconfig.json`:
+
+```json
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}
+```
+
+Create `packages/model-callers/tsdown.config.ts`:
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+    cli: "src/cli.ts",
+    "claude-pty-wrapper": "src/claude-pty-wrapper.ts"
+  },
+  format: ["esm"],
+  dts: true,
+  sourcemap: true,
+  clean: true,
+  minify: false,
+  target: "node22"
+});
+```
+
+- [ ] **Step 3: Define typed contracts first**
+
+Create `packages/model-callers/src/types.ts` with discriminated unions:
+
+```typescript
+export type Runtime = "codex" | "claude" | "cursor" | "agy";
+
+export type ProviderIntent = "openai" | "anthropic" | "gemini" | "unknown";
+
+export type LaneStatus = "pending" | "running" | "completed" | "skipped" | "failed" | "timed_out";
+
+export interface ModelLaneRequest {
+  readonly laneId: string;
+  readonly parentRuntime: Runtime | "unknown";
+  readonly backendRuntime: Runtime;
+  readonly providerIntent: ProviderIntent;
+  readonly requestedModel: string;
+  readonly promptFile: string;
+  readonly workingDirectory: string;
+  readonly timeoutMs: number;
+  readonly readOnly: boolean;
+}
+
+export interface ModelLaneResult {
+  readonly laneId: string;
+  readonly backendRuntime: Runtime;
+  readonly requestedModel: string;
+  readonly actualModel: string | null;
+  readonly status: Exclude<LaneStatus, "pending" | "running">;
+  readonly outputPath: string | null;
+  readonly stdout: string;
+  readonly stderr: string;
+  readonly exitCode: number | null;
+  readonly reason: string | null;
+}
+
+export type CallerProgressEvent =
+  | { readonly type: "lane_started"; readonly laneId: string; readonly backendRuntime: Runtime; readonly timestamp: string }
+  | { readonly type: "availability_checked"; readonly laneId: string; readonly command: string; readonly available: boolean; readonly timestamp: string }
+  | { readonly type: "model_resolved"; readonly laneId: string; readonly requestedModel: string; readonly actualModel: string | null; readonly timestamp: string }
+  | { readonly type: "heartbeat"; readonly laneId: string; readonly elapsedMs: number; readonly timestamp: string }
+  | { readonly type: "output_seen"; readonly laneId: string; readonly bytes: number; readonly timestamp: string }
+  | { readonly type: "freshness_prompt_sent"; readonly laneId: string; readonly timestamp: string }
+  | { readonly type: "lane_completed"; readonly laneId: string; readonly status: ModelLaneResult["status"]; readonly timestamp: string };
+```
+
+- [ ] **Step 4: Add runtime matrix and progress tests before implementation**
+
+Create `packages/model-callers/tests/runtime-matrix.test.ts` to verify every parent blocks its own runtime and provider intent does not override runtime identity. Expected RED before `runtime-matrix.ts` exists: module import fails.
+
+Create `packages/model-callers/tests/progress.test.ts` to verify long-running fake lanes emit `lane_started`, at least one `heartbeat`, `output_seen`, and terminal `lane_completed`. Expected RED before `progress.ts` exists: module import fails.
+
+- [ ] **Step 5: Implement typed runtime matrix and progress helpers**
+
+Implement:
+
+```text
+packages/model-callers/src/runtime-matrix.ts
+packages/model-callers/src/progress.ts
+```
+
+Required behavior:
+
+- `assertAllowedRuntime(request)` blocks same-runtime programmatic calls.
+- `resolveProviderIntent(request)` never turns `cursor:fable` into Claude runtime or `agy:gemini` into a non-Gemini agy model.
+- `createProgressSink({ jsonlPath, heartbeatMs })` writes one JSON object per progress event.
+- Heartbeats are driven by bounded intervals and always cleared when the lane settles.
+
+- [ ] **Step 6: Add process runner and backend adapters**
+
+Implement:
+
+```text
+packages/model-callers/src/process-runner.ts
+packages/model-callers/src/backends/claude.ts
+packages/model-callers/src/backends/cursor.ts
+packages/model-callers/src/backends/agy.ts
+packages/model-callers/src/backends/codex.ts
+```
+
+Required behavior:
+
+- All adapters accept `ModelLaneRequest` and return `Promise<ModelLaneResult>`.
+- Cursor adapter prefers `agent`, falls back to `cursor-agent`, and requires `--mode ask` or `--mode plan` for read-only lanes.
+- agy adapter verifies selected model starts with or contains `Gemini` when provider intent is `gemini`.
+- Codex adapter refuses to run when parent runtime is `codex`.
+- Claude adapter calls only the owned wrapper entrypoint, not direct `claude -p`.
+- Process runner streams progress events while the command runs and preserves exit code, timeout, stdout, and stderr.
+
+- [ ] **Step 7: Add owned Claude PTY wrapper**
+
+Implement `packages/model-callers/src/claude-pty-wrapper.ts`.
+
+Requirements:
+
+- Use `node-pty` or a tested Node PTY abstraction; do not vendor or shell out to the GitHub wrapper repo.
+- Spawn the local `claude` CLI in a wrapper-owned PTY.
+- Scope assistant output by recording the Claude session JSONL file offset before invocation and reading only newly appended events.
+- Support text, JSON, stream-json, and `--session-jsonl` diagnostic modes.
+- Preserve child exit status, timeout state, and stderr diagnostics.
+- Treat raw terminal screen/ANSI scraping as diagnostics only, not the primary result.
+- Never log prompt text outside the normal Claude/session output path.
+
+- [ ] **Step 8: Add CLI entrypoints**
+
+Implement `packages/model-callers/src/cli.ts` with:
+
+```text
+model-callers matrix
+model-callers probe --runtime <runtime>
+model-callers run --request-json <path> --progress-jsonl <path>
+claude-pty-wrapper -p [claude flags...] <prompt>
+```
+
+The CLI must emit status events to `--progress-jsonl` while a lane runs so the parent workflow or lane-manager subagent can report progress instead of appearing stuck.
+
+- [ ] **Step 9: Run typed helper checks**
+
+Run:
+
+```bash
+pnpm install
+pnpm run typecheck:model-callers
+pnpm run test:model-callers
+pnpm run build:model-callers
+```
+
+Expected: all commands exit `0`, `packages/model-callers/dist/cli.js` and `packages/model-callers/dist/claude-pty-wrapper.js` exist.
+
+## Task 7: Add `model-callers` Skill Entrypoint
 
 **Files:**
 - Create: `plugins/shravan-dev-workflow/skills/model-callers/SKILL.md`
@@ -739,6 +1096,7 @@ Use this helper skill to call model runtimes safely. It is not a reviewer, reduc
 - Probe help/model syntax before model-specific calls.
 - Treat all model output as candidate output for the calling workflow to verify.
 - Record requested model, actual model when known, command status, and skipped/failed lanes.
+- Emit progress events while external lanes run; never leave the calling workflow without status.
 - Do not invoke Oracle from this skill.
 
 ## Runtime Commands
@@ -754,6 +1112,7 @@ Use this helper skill to call model runtimes safely. It is not a reviewer, reduc
 - Load `references/backend-callers.md` before invoking a CLI.
 - Load `references/model-aliases.md` when choosing or validating model aliases.
 - Load `references/lane-output-contract.md` before returning caller output to another workflow.
+- Load `references/progress-events.md` before running long-lived external lanes or delegating lane management to a subagent.
 - Load `references/trigger-evals.md` when editing this skill or its trigger boundaries.
 
 ## Output Shape
@@ -764,6 +1123,7 @@ Return:
 - Availability checks run.
 - Requested alias/model and actual model if known.
 - Command status.
+- Progress event path or status summary.
 - Output path or captured output summary.
 - Skipped/failed reason when applicable.
 - Reminder that the calling workflow must verify candidate output.
@@ -779,7 +1139,7 @@ sed -n '1,8p' plugins/shravan-dev-workflow/skills/model-callers/SKILL.md
 
 Expected: description starts with `Use when` and does not summarize the workflow in detail.
 
-## Task 7: Route Existing Workflow Skills To `model-callers`
+## Task 8: Route Existing Workflow Skills To `model-callers`
 
 **Files:**
 - Modify: `plugins/shravan-dev-workflow/skills/implementation-review-swarm/SKILL.md`
@@ -935,7 +1295,7 @@ Expected:
 - `agent` appears only as Cursor command context or in model-caller references.
 - Oracle exclusion remains present.
 
-## Task 8: Update Plugin Metadata And Docs
+## Task 9: Update Plugin Metadata And Docs
 
 **Files:**
 - Modify: `plugins/shravan-dev-workflow/README.md`
@@ -990,19 +1350,19 @@ plugins/shravan-dev-workflow/.claude-plugin/plugin.json
 .claude-plugin/marketplace.json
 ```
 
-Expected next version after `1.6.7`: `1.6.8`.
+Expected next version after `1.6.9`: `1.6.10`.
 
 - [ ] **Step 6: Verify metadata mentions model-callers**
 
 Run:
 
 ```bash
-rg -n 'model-callers|1\.6\.8' agents.md plugins/shravan-dev-workflow .claude-plugin/marketplace.json
+rg -n 'model-callers|1\.6\.10' agents.md plugins/shravan-dev-workflow .claude-plugin/marketplace.json
 ```
 
-Expected: `model-callers` appears in README, `agents.md`, source inspirations, and relevant skill references; `1.6.8` appears in plugin manifests and Claude marketplace.
+Expected: `model-callers` appears in README, `agents.md`, source inspirations, and relevant skill references; `1.6.10` appears in plugin manifests and Claude marketplace.
 
-## Task 9: Add Changelog Entry
+## Task 10: Add Changelog Entry
 
 **Files:**
 - Create: `docs/changelog/2026-06-10-shravan-dev-workflow-model-callers.md`
@@ -1016,7 +1376,7 @@ Add:
 # 2026-06-10 Shravan Dev Workflow Model Callers
 
 Plugin: `shravan-dev-workflow`
-Version: `1.6.8`
+Version: `1.6.10`
 
 ## Summary
 
@@ -1026,9 +1386,11 @@ Added `model-callers`, a helper skill for safe programmatic model/runtime invoca
 
 - Added runtime identity and self-call guard documentation.
 - Added backend caller patterns for `claude`, `agy`, `agent`, and `codex`.
-- Added Claude Code PTY wrapper guidance based on `kcosr/claude-pty-wrapper`: local Claude Code driving, durable session JSONL extraction, and fake-Claude reliability tests.
+- Added an owned TypeScript runner package with `tsdown` builds, strict types, fake-CLI tests, progress events, and opt-in low-cost live smoke tests.
+- Added Claude Code PTY wrapper guidance inspired by `kcosr/claude-pty-wrapper`: local Claude Code driving, durable session JSONL extraction, and fake-Claude reliability tests without vendoring the external repo.
 - Added model alias and cost policy, including Fable as explicit-only premium.
 - Added lane output contract for caller coverage.
+- Added progress-event contract so long-running external lanes can report status while they work.
 - Routed implementation review, plan review, and spec council external model usage through `model-callers`.
 - Kept review skills responsible for orchestration, reduction, and verification.
 - Added `model-callers` pressure scenario coverage to the Codex skill pressure matrix.
@@ -1040,6 +1402,11 @@ Pending:
 
 - JSON manifest parse
 - `claude plugin validate .`
+- `pnpm run typecheck:model-callers`
+- `pnpm run test:model-callers`
+- `pnpm run build:model-callers`
+- `tests/model-callers/run-fake-cli-tests.sh`
+- `MODEL_CALLERS_LIVE=1 tests/model-callers/run-live-smoke-tests.sh` when explicitly authorized
 - `tests/skills/run-skill-pressure-tests.sh --fast`
 - stale command/name sweeps
 - `git diff --check`
@@ -1055,7 +1422,7 @@ Add newest-first under `## Entries`:
 - [2026-06-10 Shravan Dev Workflow model callers](2026-06-10-shravan-dev-workflow-model-callers.md)
 ```
 
-## Task 10: Add Fake CLI And Matrix Tests
+## Task 11: Add Fake CLI And Matrix Tests
 
 **Files:**
 - Create: `tests/model-callers/test-runtime-matrix.sh`
@@ -1064,6 +1431,7 @@ Add newest-first under `## Entries`:
 - Create: `tests/model-callers/fake-agent/agent`
 - Create: `tests/model-callers/fake-agy/agy`
 - Create: `tests/model-callers/fake-codex/codex`
+- Create: `tests/model-callers/run-live-smoke-tests.sh`
 
 - [ ] **Step 1: Create the runtime matrix checker**
 
@@ -1262,12 +1630,77 @@ echo "fake codex: PASS"
 
 - [ ] **Step 7: Make test scripts executable**
 
+- [ ] **Step 7: Create the opt-in live smoke runner**
+
+Add `tests/model-callers/run-live-smoke-tests.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${MODEL_CALLERS_LIVE:-}" != "1" ]]; then
+  echo "live smoke skipped: set MODEL_CALLERS_LIVE=1 to run"
+  exit 0
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+PROMPT_FILE="$(mktemp)"
+trap 'rm -f "$PROMPT_FILE"' EXIT
+printf 'Return exactly the sentinel requested. Do not edit files.\n' > "$PROMPT_FILE"
+
+if command -v claude-pty-wrapper >/dev/null 2>&1; then
+  claude-pty-wrapper -p --model haiku --permission-mode plan \
+    'Return exactly: CLAUDE_LIVE_SMOKE_OK' | grep -q 'CLAUDE_LIVE_SMOKE_OK'
+  echo "live claude wrapper smoke: PASS"
+else
+  echo "live claude wrapper smoke: SKIP missing claude-pty-wrapper"
+fi
+
+if command -v agent >/dev/null 2>&1 || command -v cursor-agent >/dev/null 2>&1; then
+  agent_bin="$(command -v agent || command -v cursor-agent)"
+  "$agent_bin" -p --mode ask --output-format text --model composer-2.5-fast \
+    'Return exactly: CURSOR_LIVE_SMOKE_OK' | grep -q 'CURSOR_LIVE_SMOKE_OK'
+  echo "live cursor agent smoke: PASS"
+else
+  echo "live cursor agent smoke: SKIP missing agent"
+fi
+
+if command -v agy >/dev/null 2>&1; then
+  agy_model="$(agy models | rg -i 'Gemini.*(Flash|Low)' | head -1 || true)"
+  if [[ -n "$agy_model" ]]; then
+    agy --model "$agy_model" --print 'Return exactly: AGY_LIVE_SMOKE_OK' | grep -q 'AGY_LIVE_SMOKE_OK'
+    echo "live agy smoke: PASS"
+  else
+    echo "live agy smoke: SKIP no low-cost Gemini model found"
+  fi
+else
+  echo "live agy smoke: SKIP missing agy"
+fi
+
+if command -v codex >/dev/null 2>&1; then
+  codex exec -m gpt-5.3-codex-spark 'Return exactly: CODEX_LIVE_SMOKE_OK' | grep -q 'CODEX_LIVE_SMOKE_OK'
+  echo "live codex smoke: PASS"
+else
+  echo "live codex smoke: SKIP missing codex"
+fi
+```
+
+Rules:
+
+- This script is opt-in only; never run it unless the user explicitly approves live external agent calls.
+- Use low-thinking/fast/cheap models and sentinel prompts only.
+- The implementation may adjust exact model ids after probing local `--help`/`models`, but must keep the low-cost smoke intent.
+- If a backend is unavailable, report `SKIP`, not failure.
+
+- [ ] **Step 8: Make test scripts executable**
+
 Run:
 
 ```bash
 chmod +x \
   tests/model-callers/test-runtime-matrix.sh \
   tests/model-callers/run-fake-cli-tests.sh \
+  tests/model-callers/run-live-smoke-tests.sh \
   tests/model-callers/fake-claude-pty-wrapper/claude-pty-wrapper \
   tests/model-callers/fake-agent/agent \
   tests/model-callers/fake-agy/agy \
@@ -1276,7 +1709,7 @@ chmod +x \
 
 Expected: exit code `0`.
 
-- [ ] **Step 8: Run fake CLI tests**
+- [ ] **Step 9: Run fake CLI tests**
 
 Run:
 
@@ -1294,7 +1727,7 @@ fake codex: PASS
 runtime matrix: PASS
 ```
 
-## Task 11: Validate
+## Task 12: Validate
 
 **Files:**
 - All changed files.
@@ -1333,7 +1766,19 @@ CODEX_PRESSURE_MODEL=gpt-5.4 CODEX_PRESSURE_REASONING_EFFORT=low \
 
 Expected: all scenarios pass, including `model-callers-self-call-guard`.
 
-- [ ] **Step 4: Run model-callers fake CLI harness tests**
+- [ ] **Step 4: Run TypeScript helper checks**
+
+Run:
+
+```bash
+pnpm run typecheck:model-callers
+pnpm run test:model-callers
+pnpm run build:model-callers
+```
+
+Expected: all commands exit `0`; `packages/model-callers/dist/cli.js` and `packages/model-callers/dist/claude-pty-wrapper.js` exist.
+
+- [ ] **Step 5: Run model-callers fake CLI harness tests**
 
 Run:
 
@@ -1351,7 +1796,31 @@ fake codex: PASS
 runtime matrix: PASS
 ```
 
-- [ ] **Step 5: Check runtime matrix fixture**
+- [ ] **Step 6: Check opt-in live smoke runner skip path**
+
+Run:
+
+```bash
+tests/model-callers/run-live-smoke-tests.sh
+```
+
+Expected:
+
+```text
+live smoke skipped: set MODEL_CALLERS_LIVE=1 to run
+```
+
+- [ ] **Step 7: Run opt-in low-cost live smoke tests when explicitly authorized**
+
+Only run after the user approves live external agent calls:
+
+```bash
+MODEL_CALLERS_LIVE=1 tests/model-callers/run-live-smoke-tests.sh
+```
+
+Expected: each available backend returns its sentinel with a low-thinking/fast model, and unavailable backends report `SKIP`. Do not fail the rollout for a missing local backend; fail only if an available backend cannot complete its smoke.
+
+- [ ] **Step 8: Check runtime matrix fixture**
 
 Run:
 
@@ -1361,7 +1830,7 @@ tests/model-callers/test-runtime-matrix.sh
 
 Expected: exit code `0`; output confirms Codex, Claude, Cursor, and agy each block themselves and allow the other runtimes.
 
-- [ ] **Step 6: Check whitespace**
+- [ ] **Step 9: Check whitespace**
 
 Run:
 
@@ -1371,7 +1840,7 @@ git diff --check
 
 Expected: exit code `0` and no output.
 
-- [ ] **Step 7: Check stale/bad command names**
+- [ ] **Step 10: Check stale/bad command names**
 
 Run:
 
@@ -1385,17 +1854,42 @@ Expected:
 - No `fable.*cheap` or `cheap.*fable` matches.
 - Existing "no Anthropic API calls" wording may remain only as a prohibition.
 
-- [ ] **Step 8: Check self-call guard coverage**
+- [ ] **Step 11: Check self-call guard coverage**
 
 Run:
 
 ```bash
-rg -n 'parent runtime|Self-Call Guard|Parent Codex|Parent Claude|Parent Cursor|agent is the Cursor' plugins/shravan-dev-workflow/skills/model-callers
+rg -n 'parent runtime|Self-Call Guard|Parent Codex|Parent Claude|Parent Cursor|Parent agy|agent is the Cursor' plugins/shravan-dev-workflow/skills/model-callers
 ```
 
-Expected: runtime identity and trigger evals cover Codex, Claude, Cursor, and `agent`.
+Expected: runtime identity and trigger evals cover Codex, Claude, Cursor, `agent`, and agy.
 
-- [ ] **Step 9: Check active skill count**
+- [ ] **Step 12: Check progress-event coverage**
+
+Run:
+
+```bash
+rg -n 'lane_started|heartbeat|lane_completed|progress-jsonl|progress event|30 seconds' plugins/shravan-dev-workflow/skills/model-callers packages/model-callers/src packages/model-callers/tests
+```
+
+Expected: output shows docs, typed event definitions, runner code, and tests for progress reporting.
+
+- [ ] **Step 13: Check session-log regression coverage**
+
+Run:
+
+```bash
+rg -n 'allowedTools|Input must be provided either through stdin|cursor-agent|agent -p|--force|--yolo|stale cache|heartbeat|progress' docs/superpowers/plans/2026-06-09-model-callers-skill.md plugins/shravan-dev-workflow/skills/model-callers packages/model-callers/tests
+```
+
+Expected:
+
+- `allowedTools` / `Input must be provided...` are documented only as known failure modes, not as recommended direct `claude -p` lane commands.
+- `cursor-agent` appears only as an alias/fallback and self-call block.
+- bare `agent -p` appears only in write-capable warnings or explicit non-review examples.
+- progress/heartbeat coverage appears in docs and tests.
+
+- [ ] **Step 14: Check active skill count**
 
 Run:
 
@@ -1403,9 +1897,9 @@ Run:
 find plugins/shravan-dev-workflow/skills -mindepth 1 -maxdepth 1 -type d | sort
 ```
 
-Expected: output includes `plugins/shravan-dev-workflow/skills/model-callers` and 15 existing skills, for 16 total.
+Expected: output includes `plugins/shravan-dev-workflow/skills/model-callers` and 18 existing skills, for 19 total.
 
-- [ ] **Step 10: Refresh Codex cache locally**
+- [ ] **Step 15: Refresh Codex cache locally**
 
 Run:
 
@@ -1413,9 +1907,9 @@ Run:
 codex plugin add shravan-dev-workflow@ai-tools --json
 ```
 
-Expected: JSON output reports `version` as `1.6.8`.
+Expected: JSON output reports `version` as `1.6.10`.
 
-- [ ] **Step 11: Confirm Codex inventory**
+- [ ] **Step 16: Confirm Codex inventory**
 
 Run:
 
@@ -1426,10 +1920,10 @@ codex plugin list --marketplace ai-tools --available --json | jq -r '.installed[
 Expected:
 
 ```text
-codex version=1.6.8 enabled=true
+codex version=1.6.10 enabled=true
 ```
 
-## Task 12: Commit, Push, And Refresh Claude
+## Task 13: Commit, Push, And Refresh Claude
 
 **Files:**
 - All changed files.
@@ -1450,7 +1944,7 @@ Expected: only intended plugin, pressure-scenario, changelog, and `agents.md` fi
 Run:
 
 ```bash
-git add agents.md .claude-plugin/marketplace.json docs/changelog/README.md docs/changelog/2026-06-10-shravan-dev-workflow-model-callers.md tests/skills/pressure-scenarios plugins/shravan-dev-workflow
+git add package.json pnpm-workspace.yaml tsconfig.base.json packages/model-callers agents.md .claude-plugin/marketplace.json docs/changelog/README.md docs/changelog/2026-06-10-shravan-dev-workflow-model-callers.md tests/skills/pressure-scenarios tests/model-callers plugins/shravan-dev-workflow
 git commit -m "Add model callers workflow helper"
 ```
 
@@ -1475,11 +1969,11 @@ claude plugin update shravan-dev-workflow@ai-tools
 claude plugin list | rg -A3 'shravan-dev-workflow@ai-tools'
 ```
 
-Expected: Claude reports `Version: 1.6.8` and `Status: ✔ enabled`.
+Expected: Claude reports `Version: 1.6.10` and `Status: ✔ enabled`.
 
 - [ ] **Step 5: Finalize changelog validation results**
 
-Replace the changelog `Validation` section's `Pending` list with the observed results from Task 11 and Task 12 Step 4 (commands run, versions reported, pass/fail), commit that correction, and push. If Claude only updated to the previous version before publish propagation, record that exact observed result now, rerun Step 4 after propagation, and update the entry again.
+Replace the changelog `Validation` section's `Pending` list with the observed results from Task 12 and Task 13 Step 4 (commands run, versions reported, pass/fail), commit that correction, and push. If Claude only updated to the previous version before publish propagation, record that exact observed result now, rerun Step 4 after propagation, and update the entry again.
 
 ## Self-Review Checklist
 
@@ -1489,5 +1983,7 @@ Replace the changelog `Validation` section's `Pending` list with the observed re
 - [ ] Cursor read-only: every review/counsel `agent` pattern includes `--mode plan` or `--mode ask`; bare `agent -p` appears only as the explicitly write-capable pattern.
 - [ ] Model aliases: Fable is explicit-only premium, not cheap.
 - [ ] Existing workflows: review skills still own orchestration, reduction, verification.
-- [ ] Progressive disclosure: main skill is lean; CLI details live in references.
+- [ ] Progressive disclosure: main skill is lean; judgment lives in references; brittle execution mechanics live in typed runners.
+- [ ] Status updates: long-running external lanes emit progress events and heartbeat summaries.
+- [ ] Live smoke: fake tests are default; low-cost live smoke tests are opt-in only.
 - [ ] No placeholders: every task names exact files, commands, and expected outputs.
