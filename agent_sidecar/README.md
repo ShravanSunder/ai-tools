@@ -1,6 +1,13 @@
 # Agent Sidecar
 
-Sandboxed Docker containers for AI coding assistants (Claude Code, Codex, Gemini CLI) with network isolation via iptables/dnsmasq firewall.
+Sandboxed Docker containers for AI coding assistants (Claude Code, Codex,
+Gemini CLI, OpenCode, Cursor) with network isolation via an iptables/dnsmasq
+firewall.
+
+This is the authoritative sidecar reference. It covers setup, architecture,
+configuration hierarchy, firewall allowlists and presets, per-project
+customization, launch options, lifecycle, security boundaries, and debugging.
+For the top-level project overview, see [`../README.md`](../README.md).
 
 ## Setup
 
@@ -30,7 +37,7 @@ run-agent-sidecar.sh --run-claude
 │  └─────────────────┘    │  │ firewall.sh (iptables/dnsmasq) ││ │
 │                         │  └─────────────────────────────────┘│ │
 │  ┌─────────────────┐    │  ┌─────────────────────────────────┐│ │
-│  │ run-agent-      │───▶│  │ AI Agent (claude/codex/gemini) ││ │
+│  │ run-agent-      │───▶│  │ AI Agent (claude/codex/etc.)   ││ │
 │  │ sidecar.sh      │    │  └─────────────────────────────────┘│ │
 │  └─────────────────┘    │  ┌─────────────────────────────────┐│ │
 │                         │  │ Mounted: /workspace, volumes    ││ │
