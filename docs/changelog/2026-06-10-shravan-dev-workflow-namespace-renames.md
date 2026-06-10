@@ -47,6 +47,9 @@ candidate outputs.
   Codex plugin cache to `1.6.8`.
 - `codex plugin list --marketplace ai-tools --available --json` reported
   `shravan-dev-workflow` installed and enabled at `1.6.8`.
+- After pushing `master`, `claude plugin update shravan-dev-workflow@ai-tools`
+  updated the user-scope Claude plugin from `1.6.3` to `1.6.8`; Claude Code
+  needs a restart to apply the refreshed plugin.
 - `validate_plugin.py` and `quick_validate.py` were attempted from the installed
   system skill/plugin validators. They require `PyYAML`; the local Python lacks
   it, and `uv run --with pyyaml ...` could not fetch it because
