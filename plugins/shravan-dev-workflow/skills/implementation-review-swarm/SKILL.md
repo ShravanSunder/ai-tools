@@ -45,7 +45,7 @@ Pick one mode before dispatch:
 - `files`: named files or directories.
 - `adversarial`: challenge an implementation decision in code, diff, PR, commit, or named files.
 
-Route design, spec, implementation-plan, prompt, or handoff text to `spec-review-council` or `plan-review` instead of this skill unless those artifacts are only context for reviewing code.
+Route design, spec, implementation-plan, prompt, or handoff text to `spec-review-swarm` or `plan-review-swarm` instead of this skill unless those artifacts are only context for reviewing code.
 
 For implementation reviews, run spec compliance before broader quality lanes. For broad PR or diff reviews, lanes can run in parallel, but intent/spec findings take priority in reduction.
 

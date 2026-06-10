@@ -41,9 +41,9 @@ Use for:
 Do not use as the primary workflow for:
 
 - debugging or root-cause work: use `debug-investigation`
-- security scans or threat models: use `security-router`
+- security scans or threat models: use `ops-security-review`
 - code/diff review: use `implementation-review-swarm`
-- adversarial plan/spec review: use `plan-review` or `spec-review-council`
+- adversarial plan/spec review: use `plan-review-swarm` or `spec-review-swarm`
 - broad design research with subagents: use `spec-design-swarm`
 - docs editing: use `docs-maintain`
 - skill audits: use `skill-audit`

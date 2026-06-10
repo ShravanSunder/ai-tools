@@ -67,16 +67,16 @@ Run implementation-review-swarm on this diff.
 Expected: use `implementation-review-swarm`.
 
 ```text
-Use security-router for this authorized PR security scan.
+Use ops-security-review for this authorized PR security scan.
 ```
 
-Expected: use `security-router`.
+Expected: use `ops-security-review`.
 
 ```text
 Implement the approved plan.
 ```
 
-Expected: use `plan-execute` or normal execution flow, not `discuss-with-me`.
+Expected: use `implementation-execute-plan` or normal execution flow, not `discuss-with-me`.
 
 ```text
 Update README and AGENTS to match the new plugin state.

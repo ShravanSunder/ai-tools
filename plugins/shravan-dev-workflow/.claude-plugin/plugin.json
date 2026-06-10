@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.7",
-  "description": "Development workflow skills for goal orchestration, spec design swarms, discuss-with-me thinking clarification, docs maintenance, adversarial council review, security scan routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, TUI presentation, and PM Linear work.",
+  "version": "1.6.8",
+  "description": "Development workflow skills for goal orchestration, spec design swarms, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, TUI presentation, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -19,14 +19,14 @@
     "spec-design",
     "spec-review",
     "goal",
-    "orchestrate-goal",
+    "orchestrator-goal",
     "discuss-with-me",
     "docs-maintain",
     "docs",
     "changelog",
-    "security-router",
-    "plan-review",
-    "plan-execute",
+    "ops-security-review",
+    "plan-review-swarm",
+    "implementation-execute-plan",
     "handoff",
     "execution",
     "implementation-handoff",
@@ -34,7 +34,7 @@
     "debugging",
     "bug-hunt",
     "skill-audit",
-    "pm-linear-work",
+    "ops-linear-tracking",
     "tui",
     "presentation"
   ]

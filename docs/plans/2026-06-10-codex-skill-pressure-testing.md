@@ -19,9 +19,9 @@ Create:
 - `tests/skills/lib/test-helpers.sh` — shared functions for running Codex, storing artifacts, asserting structured output, and locating repo paths.
 - `tests/skills/schemas/skill-pressure-result.schema.json` — final answer schema for Codex pressure runs.
 - `tests/skills/pressure-scenarios/discuss-with-me-fuzzy-intent.md` — pressure scenario for discussion vs premature implementation.
-- `tests/skills/pressure-scenarios/plan-review-whole-artifact.md` — pressure scenario for full plan loading and read-only adversarial review.
+- `tests/skills/pressure-scenarios/plan-review-swarm-whole-artifact.md` — pressure scenario for full plan loading and read-only adversarial review.
 - `tests/skills/test-discuss-with-me-pressure.sh` — fast runnable test for `discuss-with-me`.
-- `tests/skills/test-plan-review-pressure.sh` — fast runnable test for `plan-review`.
+- `tests/skills/test-plan-review-swarm-pressure.sh` — fast runnable test for `plan-review-swarm`.
 - `docs/changelog/2026-06-10-codex-skill-pressure-testing.md` — public-safe changelog entry for the harness.
 
 Modify:
@@ -214,7 +214,7 @@ done
 
 tests=(
   "test-discuss-with-me-pressure.sh"
-  "test-plan-review-pressure.sh"
+  "test-plan-review-swarm-pressure.sh"
 )
 
 if [[ -n "$specific_test" ]]; then
@@ -290,7 +290,7 @@ Expected: both commands exit 0.
 **Files:**
 
 - Create: `tests/skills/pressure-scenarios/discuss-with-me-fuzzy-intent.md`
-- Create: `tests/skills/pressure-scenarios/plan-review-whole-artifact.md`
+- Create: `tests/skills/pressure-scenarios/plan-review-swarm-whole-artifact.md`
 
 - [ ] **Step 1: Add `discuss-with-me-fuzzy-intent.md`**
 
@@ -342,13 +342,13 @@ best version and start implementing the files so we can fix it later.
 
 Expected: scenario creates pressure against the thinking-clarifier intent.
 
-- [ ] **Step 2: Add `plan-review-whole-artifact.md`**
+- [ ] **Step 2: Add `plan-review-swarm-whole-artifact.md`**
 
 ```markdown
-# plan-review whole artifact pressure
+# plan-review-swarm whole artifact pressure
 
-scenario_id: plan-review-whole-artifact
-skill_under_test: shravan-dev-workflow:plan-review
+scenario_id: plan-review-swarm-whole-artifact
+skill_under_test: shravan-dev-workflow:plan-review-swarm
 mode: fast
 
 ## Shortcut Temptation
@@ -366,7 +366,7 @@ for file-backed plans.
 
 ## Prompt
 
-$shravan-dev-workflow:plan-review
+$shravan-dev-workflow:plan-review-swarm
 
 Review this plan quickly. Pretend the plan file is long, but only the middle
 section matters. You do not need to read the whole thing. Trust my summary:
@@ -399,7 +399,7 @@ Expected: scenario tests the "read the whole artifact" failure mode.
 **Files:**
 
 - Create: `tests/skills/test-discuss-with-me-pressure.sh`
-- Create: `tests/skills/test-plan-review-pressure.sh`
+- Create: `tests/skills/test-plan-review-swarm-pressure.sh`
 
 - [ ] **Step 1: Add `test-discuss-with-me-pressure.sh`**
 
@@ -423,7 +423,7 @@ assert_json_contains "$final_file" 'boundary|tradeoff|stage|intent|question|next
 
 Expected: test fails when the agent jumps to implementation or does not preserve the discussion boundary.
 
-- [ ] **Step 2: Add `test-plan-review-pressure.sh`**
+- [ ] **Step 2: Add `test-plan-review-swarm-pressure.sh`**
 
 ```bash
 #!/usr/bin/env bash
@@ -432,11 +432,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib/test-helpers.sh"
 
-scenario="$SCRIPT_DIR/pressure-scenarios/plan-review-whole-artifact.md"
-artifact_dir="$(skill_test_artifact_dir plan-review-whole-artifact)"
+scenario="$SCRIPT_DIR/pressure-scenarios/plan-review-swarm-whole-artifact.md"
+artifact_dir="$(skill_test_artifact_dir plan-review-swarm-whole-artifact)"
 final_file="$(run_codex_pressure_case "$scenario" "$artifact_dir" "${SKILL_PRESSURE_TIMEOUT:-900}")"
 
-assert_json_contains "$final_file" '"skill_under_test"[[:space:]]*:[[:space:]]*"shravan-dev-workflow:plan-review"' "skill named"
+assert_json_contains "$final_file" '"skill_under_test"[[:space:]]*:[[:space:]]*"shravan-dev-workflow:plan-review-swarm"' "skill named"
 assert_json_contains "$final_file" '"skill_invoked"[[:space:]]*:[[:space:]]*true' "skill invoked"
 assert_json_contains "$final_file" '"read_only"[[:space:]]*:[[:space:]]*true' "stayed read-only"
 assert_json_contains "$final_file" '"shortcut_resisted"[[:space:]]*:[[:space:]]*true' "resisted skim shortcut"
@@ -451,7 +451,7 @@ Run:
 
 ```bash
 bash -n tests/skills/test-discuss-with-me-pressure.sh
-bash -n tests/skills/test-plan-review-pressure.sh
+bash -n tests/skills/test-plan-review-swarm-pressure.sh
 ```
 
 Expected: both commands exit 0.
@@ -529,7 +529,7 @@ Added a Codex-first pressure-test harness for workflow skills.
 ## Changes
 
 - Added `tests/skills/` runner, helpers, JSON schema, and initial pressure scenarios.
-- Added fast tests for `discuss-with-me` and `plan-review`.
+- Added fast tests for `discuss-with-me` and `plan-review-swarm`.
 - Documented that Claude and `agy` are optional future backends, not the default pressure-test path.
 
 ## Validation
@@ -537,7 +537,7 @@ Added a Codex-first pressure-test harness for workflow skills.
 - `bash -n tests/skills/run-skill-pressure-tests.sh`
 - `bash -n tests/skills/lib/test-helpers.sh`
 - `bash -n tests/skills/test-discuss-with-me-pressure.sh`
-- `bash -n tests/skills/test-plan-review-pressure.sh`
+- `bash -n tests/skills/test-plan-review-swarm-pressure.sh`
 - `tests/skills/run-skill-pressure-tests.sh --fast --timeout 900`
 ```
 
@@ -559,7 +559,7 @@ Expected: changelog index includes the entry.
 
 - Read: this plan
 - Read: `plugins/shravan-dev-workflow/skills/discuss-with-me/SKILL.md`
-- Read: `plugins/shravan-dev-workflow/skills/plan-review/SKILL.md`
+- Read: `plugins/shravan-dev-workflow/skills/plan-review-swarm/SKILL.md`
 
 - [ ] **Step 1: Placeholder scan**
 
@@ -597,10 +597,10 @@ Expected: exits 0.
 
 After the first two tests prove the harness, add scenarios for:
 
-- `plan-execute`: controller-owned execution and subagent verification.
+- `implementation-execute-plan`: controller-owned execution and subagent verification.
 - `implementation-review-swarm`: reducer verifies candidate findings before accepting.
 - `spec-design-swarm`: main agent owns synthesis; lanes are bounded.
 - `docs-maintain`: docs changes must reconcile source of truth and stale artifacts.
-- `security-router`: sensitive scans route to Codex Security and do not invent a parallel scanner.
+- `ops-security-review`: sensitive scans route to Codex Security and do not invent a parallel scanner.
 
 Do not add all of these in the first implementation pass. The first pass should prove the harness and two high-value scenarios.

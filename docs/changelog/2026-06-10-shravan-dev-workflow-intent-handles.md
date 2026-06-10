@@ -12,11 +12,11 @@ act as behavior handles instead of broad motivational prose.
 
 - Added `systematic debugging` and `hypothesis-driven debugging` framing to
   `debug-investigation`.
-- Added `controller-owned execution` framing to `plan-execute`.
+- Added `controller-owned execution` framing to `implementation-execute-plan`.
 - Added `handoff packet` / `continuity artifact` framing to `plan-handoff`.
 - Added `evidence packet` framing to `implementation-handoff`.
 - Added `skills encode judgment and house style` framing to `skill-audit`.
-- Added `audit boundary` framing to `security-router`.
+- Added `audit boundary` framing to `ops-security-review`.
 - Bumped Codex and Claude plugin manifests plus marketplace metadata to `1.6.5`.
 
 ## Validation To Run

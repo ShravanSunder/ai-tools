@@ -9,21 +9,21 @@ Addressed a full-suite skill review focused on trigger ambiguity, progressive di
 
 ## Affected Skills
 
-- `spec-review-council`
-- `plan-review`
+- `spec-review-swarm`
+- `plan-review-swarm`
 - `implementation-review-swarm`
 - `discuss-with-me`
 - `docs-maintain`
 - `spec-design-swarm`
 - `tui-presentation`
-- `pm-linear-work`
-- `security-router`
+- `ops-linear-tracking`
+- `ops-security-review`
 
 ## Changes
 
 - Narrowed review-trio ownership:
-  - `spec-review-council`: drafted specs/designs/architecture before a plan exists.
-  - `plan-review`: implementation plans and handoffs before execution.
+  - `spec-review-swarm`: drafted specs/designs/architecture before a plan exists.
+  - `plan-review-swarm`: implementation plans and handoffs before execution.
   - `implementation-review-swarm`: code, diff, PR, commit, and file review only.
 - Added plugin-level `references/trigger-evals.md` for review-trio routing scenarios.
 - Collapsed five `discuss-with-me` stage references into `references/stages.md`.
@@ -31,9 +31,9 @@ Addressed a full-suite skill review focused on trigger ambiguity, progressive di
 - Removed private-project-flavored provenance from the public source-inspiration map.
 - Shrunk `tui-presentation/SKILL.md` into a compact trigger/rules/picker/disclosure entrypoint.
 - Moved implementation-review packet and review-reception details into reference files.
-- Moved plan-review reception detail into the existing review checklist reference.
-- Fixed stale README skill names and aligned `spec-review-council` display name.
-- Added load-bearing notes for the cross-skill `plan-review` to `security-router` threat-model reference.
+- Moved plan-review-swarm reception detail into the existing review checklist reference.
+- Fixed stale README skill names and aligned `spec-review-swarm` display name.
+- Added load-bearing notes for the cross-skill `plan-review-swarm` to `ops-security-review` threat-model reference.
 
 ## Manifests
 

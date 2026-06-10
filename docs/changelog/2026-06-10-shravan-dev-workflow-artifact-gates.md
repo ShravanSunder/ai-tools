@@ -8,7 +8,7 @@ Date: `2026-06-10`
 
 Aligned workflow skills around phase-owned artifacts and docs-owned lifecycle:
 
-- `spec-design-swarm`, `plan-review`, and `debug-investigation` now write lane artifacts by default for clear substantial work unless the user asks for chat-only/no-files output.
+- `spec-design-swarm`, `plan-review-swarm`, and `debug-investigation` now write lane artifacts by default for clear substantial work unless the user asks for chat-only/no-files output.
 - `docs-maintain` now owns cleanup, archival, promotion, and source-of-truth reconciliation for existing workflow artifacts; active spec/plan/debug work stays with the phase skill.
 - `implementation-review-swarm` now treats Claude, Gemini, `agy`, and other outside counsel as explicit opt-in lanes.
 - Plugin metadata, README, source inspirations, trigger evals, and marketplace version were updated to `1.6.7`.

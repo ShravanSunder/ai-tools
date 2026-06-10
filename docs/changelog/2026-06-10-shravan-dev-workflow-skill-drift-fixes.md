@@ -6,15 +6,15 @@ Version: `1.6.4`
 ## Summary
 
 Fixed the first follow-up issues from the full skill audit: stale installed-cache
-visibility, stale private prompt references, a renamed plan-execute artifact, and
+visibility, stale private prompt references, a renamed implementation-execute-plan artifact, and
 uneven trigger-eval coverage.
 
 ## Changes
 
 - Added full-suite routing and gate checks to `references/trigger-evals.md`.
-- Renamed the `plan-execute` controller brief from `validate-execute-brief.md`
-  to `plan-execute-brief.md`.
-- Tightened `pm-linear-work` frontmatter to a direct `Use when...` trigger.
+- Renamed the `implementation-execute-plan` controller brief from `validate-execute-brief.md`
+  to `implementation-execute-plan-brief.md`.
+- Tightened `ops-linear-tracking` frontmatter to a direct `Use when...` trigger.
 - Bumped Codex and Claude plugin manifests to `1.6.4`.
 - Updated the Claude marketplace entry for `shravan-dev-workflow` to `1.6.4`.
 

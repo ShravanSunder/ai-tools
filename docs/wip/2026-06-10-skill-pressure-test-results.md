@@ -26,15 +26,15 @@ Skills covered:
 - `docs-maintain`
 - `implementation-handoff`
 - `implementation-review-swarm`
-- `orchestrate-goal`
-- `plan-execute`
+- `orchestrator-goal`
+- `implementation-execute-plan`
 - `plan-handoff`
-- `plan-review`
-- `pm-linear-work`
-- `security-router`
+- `plan-review-swarm`
+- `ops-linear-tracking`
+- `ops-security-review`
 - `skill-audit`
 - `spec-design-swarm`
-- `spec-review-council`
+- `spec-review-swarm`
 - `tui-presentation`
 
 ## Performance Notes

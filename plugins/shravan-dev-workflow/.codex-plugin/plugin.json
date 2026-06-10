@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.7",
-  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, discuss-with-me thinking clarification, docs maintenance, adversarial council review, security scan routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
+  "version": "1.6.8",
+  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -19,14 +19,14 @@
     "spec-design",
     "spec-review",
     "goal",
-    "orchestrate-goal",
+    "orchestrator-goal",
     "discuss-with-me",
     "docs-maintain",
     "docs",
     "changelog",
-    "security-router",
-    "plan-review",
-    "plan-execute",
+    "ops-security-review",
+    "plan-review-swarm",
+    "implementation-execute-plan",
     "handoff",
     "execution",
     "implementation-handoff",
@@ -34,7 +34,7 @@
     "debugging",
     "bug-hunt",
     "skill-audit",
-    "pm-linear-work",
+    "ops-linear-tracking",
     "tui",
     "presentation",
     "semantic-markdown"
@@ -43,7 +43,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Codex-first workflow with spec design, review, security routing, debugging, TUI, and PM",
-    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, clarify and pressure-test unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and workflow artifact lifecycle, adversarially review drafted specs with council lanes, route explicit security audits to the official Codex Security workflows, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review swarms or validate-execute written plans with controller-owned verification, writes lane artifacts for clear spec/plan/debug work unless chat-only/no-files was requested, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus PM Linear work organization.",
+    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, clarify and pressure-test unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and workflow artifact lifecycle, adversarially review drafted specs with review lanes, route explicit security audits to the official Codex Security workflows through ops-security-review, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review-swarm for implementation-plan review, executes written plans with implementation-execute-plan controller-owned verification, writes lane artifacts for clear spec/plan/debug work unless chat-only/no-files was requested, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus operations Linear tracking.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -54,14 +54,14 @@
       "Run implementation-review-swarm on this change.",
       "Prepare a plan handoff.",
       "Prepare an implementation handoff.",
-      "Run plan-review on this plan.",
+      "Run plan-review-swarm on this plan.",
       "Use spec-design-swarm to shape this design before planning.",
       "Use discuss-with-me to clarify and pressure-test this decision before editing files.",
-      "Use orchestrate-goal to turn this into a verifiable long-horizon goal.",
+      "Use orchestrator-goal to turn this into a verifiable long-horizon goal.",
       "Use docs-maintain to reconcile these docs with current code and plans.",
-      "Use spec-review-council to attack this spec before implementation.",
-      "Use security-router to choose the right Codex Security scan.",
-      "Run plan-execute on this plan.",
+      "Use spec-review-swarm to attack this spec before implementation.",
+      "Use ops-security-review to choose the right Codex Security scan.",
+      "Run implementation-execute-plan on this plan.",
       "Investigate this bug before fixing it.",
       "Audit these skills against session evidence."
     ]

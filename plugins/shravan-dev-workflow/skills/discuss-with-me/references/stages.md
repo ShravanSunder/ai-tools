@@ -18,7 +18,7 @@ Use when turning a design direction into precise behavior.
 - Focus: contracts, boundaries, source of truth, data ownership, success/failure states, edge cases, validation expectations.
 - Pressure: surface the assumption, success criterion, or source-of-truth boundary that would make the spec wrong if left implicit.
 - Preferred question: "Should <boundary/source/behavior> be part of the spec contract, or should it stay an implementation detail?"
-- Stop when the contract, source of truth, success criteria, and notable non-goals are explicit enough for `spec-review-council` or planning.
+- Stop when the contract, source of truth, success criteria, and notable non-goals are explicit enough for `spec-review-swarm` or planning.
 
 ## Plan
 
@@ -27,7 +27,7 @@ Use when sequencing work after a design/spec direction exists.
 - Focus: task order, ownership boundaries, validation gates, rollback/recovery, dependencies, scope cuts, pre-edit checks.
 - Pressure: identify the first risk to prove, the rollback boundary, and any ask-first or never-do constraints.
 - Preferred question: "Should the first step prove <risk>, or is there a different dependency that should lead?"
-- Stop when the plan has a clear first executable step, validation gates, and a known handoff to `plan-review` or `plan-execute`.
+- Stop when the plan has a clear first executable step, validation gates, and a known handoff to `plan-review-swarm` or `implementation-execute-plan`.
 
 ## Implementation
 

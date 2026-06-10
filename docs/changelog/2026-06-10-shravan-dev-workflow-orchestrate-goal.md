@@ -1,16 +1,16 @@
-# 2026-06-10 Shravan Dev Workflow Orchestrate Goal
+# 2026-06-10 Shravan Dev Workflow Orchestrator Goal
 
 Plugin: `shravan-dev-workflow`
 Version: `1.6.5`
 
 ## Summary
 
-Added `orchestrate-goal`, a thin long-horizon goal controller for Codex and
+Added `orchestrator-goal`, a thin long-horizon goal controller for Codex and
 Claude goal-backed workflows.
 
 ## Changes
 
-- Added `skills/orchestrate-goal/` with progressive-disclosure references for:
+- Added `skills/orchestrator-goal/` with progressive-disclosure references for:
   - reusable goal contracts
   - Codex `/goal` semantics
   - Claude `/goal` semantics
@@ -21,7 +21,7 @@ Claude goal-backed workflows.
   - unclear goals route to `discuss-with-me`
 - Updated plugin README, source-inspiration notes, and trigger evals.
 - Updated Codex and Claude plugin metadata for version `1.6.5`.
-- Updated agent instructions to prefer `orchestrate-goal` for long-horizon
+- Updated agent instructions to prefer `orchestrator-goal` for long-horizon
   `/goal` setup, resume, audit, and handoff workflows.
 
 ## Validation To Run

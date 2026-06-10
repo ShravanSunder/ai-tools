@@ -54,12 +54,12 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **spec-design-swarm** skill -- shapes specs/designs with bounded codebase explorer, architecture, security, and adversarial lanes before implementation planning
 - **discuss-with-me** skill -- manual lifecycle alignment for design, spec, plan, implementation-direction, and docs decisions before editing files
 - **docs-maintain** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
-- **spec-review-council** skill -- attacks drafted specs/designs with adversarial council lanes and accepted/contested/open synthesis before execution
-- **security-router** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
+- **spec-review-swarm** skill -- attacks drafted specs/designs with adversarial review lanes and accepted/contested/open synthesis before execution
+- **ops-security-review** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
 - **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 - **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens
-- **pm-linear-work** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
+- **ops-linear-tracking** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle

@@ -17,7 +17,7 @@ fuzzy goal or design question
   -> decision discussion for unresolved branches
   -> parent synthesis
   -> design direction, non-goals, open questions
-  -> optional handoff to plan-review or plan-handoff
+  -> optional handoff to plan-review-swarm or plan-handoff
 ```
 
 ## Core Rules
@@ -111,4 +111,4 @@ Return:
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.
 - Decisions needed from the user.
-- Suggested next skill: usually `spec-review-council` or `plan-handoff`; use `plan-review` only after an implementation plan exists.
+- Suggested next skill: usually `spec-review-swarm` or `plan-handoff`; use `plan-review-swarm` only after an implementation plan exists.

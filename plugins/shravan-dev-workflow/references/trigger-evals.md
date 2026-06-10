@@ -20,7 +20,7 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - Runtime visibility gate: after a plugin release, does `codex plugin list`
   report the same installed version as source?
 - Goal clarity gate: if objective, scope, proof, or stop condition is unclear,
-  did `orchestrate-goal` route to `discuss-with-me` instead of setting a fuzzy
+  did `orchestrator-goal` route to `discuss-with-me` instead of setting a fuzzy
   long-horizon goal?
 - Artifact gate: if clear spec/plan/debug work ran and the user did not ask for
   chat-only/no-files output, did the phase skill write its lane artifact?
@@ -30,29 +30,29 @@ These are objective gates, not soft rules. If the answer to the gate question is
 
 ## Review Trio Routing
 
-### spec-review-council should trigger
+### spec-review-swarm should trigger
 
 - "Attack this drafted architecture spec before we plan the implementation."
 - "Council-review this design doc for missing assumptions."
 - "Pressure test this API contract spec before it turns into tasks."
 
-### spec-review-council should not trigger
+### spec-review-swarm should not trigger
 
-- "Review this implementation plan before I execute it." -> `plan-review`
+- "Review this implementation plan before I execute it." -> `plan-review-swarm`
 - "Review this PR diff for bugs." -> `implementation-review-swarm`
 - "Help me write the plan." -> normal agent planning work
 
-### plan-review should trigger
+### plan-review-swarm should trigger
 
 - "Validate this implementation plan against the repo before coding."
 - "Poke holes in this handoff packet before another agent runs it."
 - "Read this plan and tell me if execution order or validation is wrong."
 
-### plan-review should not trigger
+### plan-review-swarm should not trigger
 
-- "Critique this pre-plan design proposal." -> `spec-review-council`
+- "Critique this pre-plan design proposal." -> `spec-review-swarm`
 - "Run reviewers over this PR." -> `implementation-review-swarm`
-- "Execute this validated plan." -> `plan-execute`
+- "Execute this validated plan." -> `implementation-execute-plan`
 
 ### implementation-review-swarm should trigger
 
@@ -62,8 +62,8 @@ These are objective gates, not soft rules. If the answer to the gate question is
 
 ### implementation-review-swarm should not trigger
 
-- "Review this implementation plan before code." -> `plan-review`
-- "Attack this spec before planning." -> `spec-review-council`
+- "Review this implementation plan before code." -> `plan-review-swarm`
+- "Attack this spec before planning." -> `spec-review-swarm`
 - "Discuss whether this should be a feature at all." -> `discuss-with-me`
 
 ## Boundary Invariants
@@ -93,7 +93,7 @@ edits. When multiple credible branches exist, the opposing branch is
 steelmanned and the boundary, tradeoff, or assumption under pressure is named
 before asking the user to decide.
 
-### orchestrate-goal should trigger
+### orchestrator-goal should trigger
 
 - "Use /goal for this already-discussed release and make the completion gates explicit."
 - "Turn this clear migration objective into a Claude goal prompt with proof gates."
@@ -103,15 +103,15 @@ Gate: clear goals compile a contract with objective, scope, required reading,
 proof gates, stop condition, blocked condition, checkpoint rhythm, and next
 workflow.
 
-### orchestrate-goal should not trigger
+### orchestrator-goal should not trigger
 
 - "Make my workflow better." -> `discuss-with-me`
 - "Let's discuss whether this should be a long-running goal." -> `discuss-with-me`
 - "Review this PR." -> `implementation-review-swarm`
-- "Execute this plan." -> `plan-execute`
+- "Execute this plan." -> `implementation-execute-plan`
 
 Gate: unclear goals route to `discuss-with-me`; there is no inline mini
-interview path inside `orchestrate-goal`.
+interview path inside `orchestrator-goal`.
 
 ### docs-maintain should trigger
 
@@ -122,7 +122,7 @@ Gate: source of truth is named before edits; destructive cleanup is proposed
 before applying. Existing specs, plans, debug notes, and handoffs are classified
 for cleanup, archival, or promotion; active phase work remains with its phase skill.
 
-### security-router should trigger
+### ops-security-review should trigger
 
 - "Run an authorized security scan on this PR."
 - "Route this repository-wide security audit to the right Codex Security skill."
@@ -145,7 +145,7 @@ Gate: writes a repo-local handoff file and prints the copy-paste prompt in chat.
 Gate: current branch, diff, changed files, validation, risks, and stage are
 captured; prompt is printed and written to a file.
 
-### plan-execute should trigger
+### implementation-execute-plan should trigger
 
 - "Validate this plan and execute it."
 - "Continue from this handoff and use subagents for bounded slices."
@@ -178,7 +178,7 @@ source inspiration.
 Gate: output is visually structured for monospace chat, while code and config
 remain copyable.
 
-### pm-linear-work should trigger
+### ops-linear-tracking should trigger
 
 - "Create Linear milestones and issues from this architecture doc."
 - "Show what tickets are blocked or unblocked."

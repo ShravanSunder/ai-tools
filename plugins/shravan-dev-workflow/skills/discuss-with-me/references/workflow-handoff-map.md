@@ -20,16 +20,16 @@ new design needs research/subagents
   -> spec-design-swarm
 
 drafted spec/design needs adversarial pressure
-  -> spec-review-council
+  -> spec-review-swarm
 
 plan needs read-only validation
-  -> plan-review
+  -> plan-review-swarm
 
 plan needs to be authored
   -> normal agent planning work; no dedicated skill owns plan writing
 
 validated written plan should be implemented
-  -> plan-execute
+  -> implementation-execute-plan
 
 implementation diff/code needs review
   -> implementation-review-swarm
@@ -38,7 +38,7 @@ bug or failure needs root cause
   -> debug-investigation
 
 explicit security scan/audit/threat model
-  -> security-router
+  -> ops-security-review
 
 docs should be edited/reconciled
   -> docs-maintain

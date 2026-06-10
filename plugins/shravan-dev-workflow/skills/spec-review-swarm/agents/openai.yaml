@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Review Swarm"
+  short_description: "Attack specs before planning"
+  default_prompt: "Use spec-review-swarm to review this spec with adversarial review lanes before planning."

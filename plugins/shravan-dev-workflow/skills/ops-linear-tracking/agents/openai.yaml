@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operations Linear Tracking"
+  short_description: "Organize Linear project work"
+  default_prompt: "Organize this work in Linear using docs as truth and tickets as tracking."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Spec Review Council"
-  short_description: "Attack specs before planning"
-  default_prompt: "Use spec-review-council to review this spec with adversarial council lanes before planning."
