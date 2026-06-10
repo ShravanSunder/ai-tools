@@ -4,7 +4,7 @@ External model lanes give the reducer a different model family or tool runtime. 
 
 ## Agy / Gemini
 
-Include one `agy` pass for substantial reviews when available, unless the user asks to skip external model lanes. Prefer the latest Gemini Pro/High model exposed by `agy models`. On this machine, that is currently `Gemini 3.1 Pro (High)`.
+Use `agy` only when the user explicitly asks to include Gemini/agy or outside adversarial counsel. Prefer the latest Gemini Pro/High model exposed by `agy models`. On this machine, that is currently `Gemini 3.1 Pro (High)`.
 
 Before invoking:
 
@@ -75,7 +75,7 @@ Use the same shared packet and the same findings-only contract. Prefer piping th
 
 ## Gemini
 
-Gemini is opt-in as an extra adversarial lane. The default substantial-review `agy` pass may already use Gemini Pro/High; if the user explicitly asks for Gemini, label it as a user-requested Gemini/agy adversarial lane and include the actual `agy` model in coverage.
+Gemini is opt-in as an adversarial lane. If the user explicitly asks for Gemini, label it as a user-requested Gemini/agy adversarial lane and include the actual `agy` model in coverage.
 
 Use the same shared packet and the same findings-only contract.
 

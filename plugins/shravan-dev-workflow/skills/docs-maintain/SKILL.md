@@ -1,11 +1,11 @@
 ---
 name: docs-maintain
-description: Use when the user asks to update, clean up, reconcile, audit, purge, or maintain project docs, AGENTS.md, README.md, specs, plans, changelogs, runbooks, or architecture documentation.
+description: Use when the user asks to update, clean up, reconcile, audit, purge, archive, promote, or maintain project docs, AGENTS.md, README.md, changelogs, runbooks, architecture docs, or existing spec/plan/debug artifacts.
 ---
 
 # Docs Maintain
 
-Maintain docs as durable working memory for humans and agents. This skill keeps repo docs, `AGENTS.md`, `README.md`, specs, plans, changelogs, and runbooks aligned with current code and decisions.
+Maintain docs as durable working memory for humans and agents. This skill owns document lifecycle: keeping repo docs, `AGENTS.md`, `README.md`, changelogs, runbooks, architecture docs, and existing workflow artifacts aligned with current code and decisions.
 
 Core pipeline:
 
@@ -24,11 +24,13 @@ docs request
 
 - Treat docs as claims. Verify important claims against current code, config, tests, release artifacts, or accepted plans.
 - Separate docs for agents from docs for humans:
-  - `AGENTS.md` is durable operating guidance for agents.
-  - `README.md` is the human-facing advertisement and quick orientation.
-  - architecture docs, specs, plans, runbooks, and changelogs carry working context.
+   - `AGENTS.md` is durable operating guidance for agents.
+   - `README.md` is the human-facing advertisement and quick orientation.
+   - architecture docs, runbooks, and changelogs carry durable working context.
+   - specs, plans, debug notes, research packets, and handoffs are stage artifacts until this skill classifies them as durable, archived, or disposable.
 - Keep `AGENTS.md` short. Move runbook detail to docs and link it.
-- Do not let old plans/specs displace current architecture by inertia.
+- Do not let old plans/specs/debug notes displace current source-of-truth docs by inertia.
+- Do not replace phase skills for active artifact work: `spec-design-swarm`, `spec-review-council`, `plan-review`, `plan-execute`, and `debug-investigation` own their lanes.
 - Before purging or rewriting docs, propose the change and say what will be preserved.
 - When code and docs disagree, identify the driver and ask the user if it is not obvious.
 - Use subagents for bounded inventory or stale-doc research in large repos, but the parent owns final edits.
@@ -48,11 +50,13 @@ docs request
    - `docs/specs` or `docs/superpowers/specs`
    - `docs/plans` or `docs/superpowers/plans`
    - `docs/wip`
+   - `tmp/*-workflows`
    - `docs/changelog`
 3. Classify the job:
    - create new docs
    - update existing docs
    - clean up/purge stale docs
+   - classify workflow artifacts as current, historical, disposable, or promotion candidates
    - reconcile discrepancies
    - add changelog/runbook references
 4. Verify source-of-truth:

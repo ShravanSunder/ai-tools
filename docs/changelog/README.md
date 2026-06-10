@@ -12,6 +12,8 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-10 Shravan Dev Workflow artifact gates](2026-06-10-shravan-dev-workflow-artifact-gates.md)
+- [2026-06-10 Skill authoring guidance](2026-06-10-skill-authoring-guidance.md)
 - [2026-06-10 Shravan Dev Workflow discuss thinking clarifier](2026-06-10-shravan-dev-workflow-discuss-thinking-clarifier.md)
 - [2026-06-10 Shravan Dev Workflow orchestrate goal](2026-06-10-shravan-dev-workflow-orchestrate-goal.md)
 - [2026-06-10 Shravan Dev Workflow intent handles](2026-06-10-shravan-dev-workflow-intent-handles.md)

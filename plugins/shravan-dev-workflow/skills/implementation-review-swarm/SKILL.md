@@ -24,8 +24,7 @@ review packet
 
 - Default reviewers are Codex subagents because current sessions mostly run in Codex.
 - The lane contract is not Codex-only: another agent system may back a bounded read-only lane when the user requests it, when the harness is already available, or when that backend is the point of the review.
-- Include one `agy` external model lane for substantial reviews when available, preferring the latest Gemini Pro/High model exposed by `agy models`, unless the user asks to skip it.
-- Include Claude or additional `agy` adversarial lanes only when the user explicitly asks for them. Claude must use the Claude Code CLI harness, not Anthropic API calls.
+- Include Claude, Gemini, `agy`, or another external adversarial lane only when the user explicitly asks for that outside counsel. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
 - After review, receive findings rigorously: read, understand, verify against codebase reality, evaluate, then address accepted findings.
@@ -86,8 +85,7 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - For any sensitive-surface change, run the security and trust-boundary lane even when the change is small.
 
 4. External model lanes
-   - Add `agy` for substantial reviews when available, unless skipped by user or environment.
-   - Add Claude or extra Gemini/agy only when explicitly requested.
+   - Add Claude, Gemini, `agy`, or another outside model lane only when explicitly requested.
    - External model lanes are advisory and must be recorded in coverage.
 
 5. Reducer verification
@@ -110,7 +108,7 @@ Dispatch independent read-only reviewer lanes in parallel when the tool surface 
 Backend rules:
 
 - Codex subagents are the default and should handle the majority of lanes.
-- Claude, `agy`/Gemini, or another available reviewer can back a lane only when requested, explicitly selected, or already required by this skill.
+- Claude, `agy`/Gemini, or another available reviewer can back a lane only when requested or explicitly selected.
 - Claude lanes must use the Claude Code CLI harness, not Anthropic API or SDK calls.
 - Gemini lanes use `agy` as the local Gemini/Antigravity path.
 - Every lane remains read-only and advisory, regardless of backend.
@@ -201,6 +199,7 @@ Fix follow-through
 - Do not accept findings just because multiple agents agreed.
 - Do not hide skipped external model lanes.
 - Do not run Claude or Gemini unless the user asked.
+- Do not run `agy` unless the user asked for Gemini/agy or outside adversarial counsel.
 - Do not leave accepted current-session implementation blockers unfixed unless the user asked for report-only review or the fix needs a decision.
 - Do not let external model lane failure fail the whole review.
 - Do not let a sidecar reviewer become the critical path when the parent can continue reducing available evidence.

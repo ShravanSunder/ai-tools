@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, discuss-with-me thinking clarification, docs maintenance, adversarial council review, security scan routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and PM Linear work.",
   "author": {
     "name": "Shravan Sunder"
@@ -43,7 +43,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Codex-first workflow with spec design, review, security routing, debugging, TUI, and PM",
-    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, clarify and pressure-test unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and changelog runbooks, adversarially review drafted specs with council lanes, route explicit security audits to the official Codex Security workflows, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, optional Claude or Gemini/agy lanes when requested, and agy as an external model lane for substantial reviews. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review swarms or validate-execute written plans with controller-owned verification, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus PM Linear work organization.",
+    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, clarify and pressure-test unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and workflow artifact lifecycle, adversarially review drafted specs with council lanes, route explicit security audits to the official Codex Security workflows, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review swarms or validate-execute written plans with controller-owned verification, writes lane artifacts for clear spec/plan/debug work unless chat-only/no-files was requested, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus PM Linear work organization.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [

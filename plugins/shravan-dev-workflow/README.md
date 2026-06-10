@@ -6,14 +6,13 @@ This plugin intentionally replaces the older broad counsel pattern with a narrow
 
 - Codex subagents are the default and majority reviewer backend because most sessions run in Codex.
 - Reviewer lanes are backend-aware: Claude, `agy`/Gemini, or another available harness can back a bounded lane when explicitly requested or required by the skill.
-- One `agy` pass is used as an external model input for substantial reviews when available, preferring Gemini Pro/High.
-- Claude or extra `agy` adversarial lanes are opt-in when the user explicitly asks for them. Claude uses only the Claude Code CLI harness.
+- Claude, Gemini/`agy`, or another outside adversarial lane is opt-in when the user explicitly asks for external counsel. Claude uses only the Claude Code CLI harness.
 - Oracle is never part of this workflow.
-- Plans and handoffs are first-class workflow skills: read the full artifact when a source file exists, prove coverage, verify against live repo state, and keep subagents bounded.
+- Plans, specs, debug investigations, and handoffs are first-class workflow skills: read the full artifact when a source file exists, prove coverage, write the lane artifact unless chat-only/no-files was requested, verify against live repo state, and keep subagents bounded.
 - Spec/design formation is subagent-aware: explorer, architecture, security, and adversarial lanes provide evidence while the parent owns synthesis.
 - Discuss-with-me is available as an explicit trigger for lifecycle alignment across design, spec, plan, implementation-direction, and docs decisions.
 - Orchestrate-goal is a thin long-horizon controller: clear goals become verifiable Codex/Claude `/goal` contracts; unclear goals route to `discuss-with-me`.
-- Docs maintenance is a first-class workflow: keep `AGENTS.md` compact, README human-facing, and changelog/runbook references durable.
+- Docs maintenance is a first-class workflow: keep `AGENTS.md` compact, README human-facing, changelog/runbook references durable, and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after the phase skill creates them.
 - Explicit security scans are routed to the official Codex Security workflows instead of reimplemented in normal review skills.
 - Debugging is diagnosis-first: prove the root cause before fixing, and use subagents only for bounded read-only investigation slices.
 - Skill creation is evidence-backed: audit current skills, sessions, and upstream inspirations before adding new workflow surface.
@@ -29,11 +28,10 @@ Runs a structured review swarm with review reception:
 1. Build a shared review packet from the requested mode, scope, git range, intent, and constraints.
 2. Run spec compliance first for implementation or plan-backed reviews.
 3. Dispatch read-only specialist reviewer lanes, normally backed by Codex subagents.
-4. Add an `agy` external model lane as an independent input for substantial reviews when available.
-5. Optionally add Claude or extra Gemini/agy when explicitly requested.
-6. Verify, dedupe, and rank candidate findings.
-7. For current-session implementation work, fix accepted blocker/important findings unless the user asked for report-only review.
-8. Report a verdict with coverage, fix follow-through, PR thread state when applicable, and remaining blockers.
+4. Optionally add Claude, Gemini/agy, or another external adversarial lane when explicitly requested.
+5. Verify, dedupe, and rank candidate findings.
+6. For current-session implementation work, fix accepted blocker/important findings unless the user asked for report-only review.
+7. Report a verdict with coverage, fix follow-through, PR thread state when applicable, and remaining blockers.
 
 The reducer treats all reviewer outputs as evidence, not truth. Findings must include file or symbol evidence, a concrete failure scenario, and a smallest useful fix. Accepted findings are validated before any edit.
 
@@ -43,7 +41,7 @@ Packages a plan, design, spec, or implementation brief for another agent, CLI, m
 
 ### `spec-design-swarm`
 
-Shapes a new spec, design, or architecture before an implementation plan exists. It uses bounded codebase explorer, prior-art, architecture-pressure, security, and adversarial lanes, then synthesizes a recommended direction, tradeoffs, non-goals, and open decisions.
+Shapes a new spec, design, or architecture before an implementation plan exists. It uses bounded codebase explorer, prior-art, architecture-pressure, security, and adversarial lanes, then synthesizes a recommended direction, tradeoffs, non-goals, and open decisions. For clear substantial work, it writes a lane artifact unless the user asked for chat-only/no-files output.
 
 ### `discuss-with-me`
 
@@ -55,7 +53,7 @@ Compiles clear long-horizon work into a verifiable Codex or Claude `/goal` contr
 
 ### `docs-maintain`
 
-Maintains docs as durable memory for humans and agents. It inventories doc roles, reconciles code/docs/plan drift, proposes stale-plan cleanup before destructive edits, keeps `AGENTS.md` short, and stores meta-workflow history in `docs/changelog`.
+Maintains docs as durable memory for humans and agents. It inventories doc roles, reconciles code/docs/artifact drift, proposes cleanup before destructive edits, classifies existing specs/plans/debug artifacts as current, historical, disposable, or promotion candidates, keeps `AGENTS.md` short, and stores meta-workflow history in `docs/changelog`.
 
 ### `spec-review-council`
 
@@ -71,7 +69,7 @@ Packages actual implementation state at any stage: planned, in-progress, pre-rev
 
 ### `plan-review`
 
-Runs an adversarial plan review swarm before implementation. It requires whole-artifact coverage for plan files, dispatches bounded reviewer lanes for substantial plans, optionally includes user-requested Claude/Gemini/`agy` external model lanes, checks major claims against live code/docs/package state, validates candidate findings, and revises writable current-session plans for accepted blocker/important findings without implementing code.
+Runs an adversarial plan review swarm before implementation. It requires whole-artifact coverage for plan files, dispatches bounded reviewer lanes for substantial plans, writes a temp review report unless chat-only/no-files was requested, optionally includes user-requested Claude/Gemini/`agy` external model lanes, checks major claims against live code/docs/package state, validates candidate findings, and revises writable current-session plans for accepted blocker/important findings without implementing code.
 
 ### `plan-execute`
 
@@ -79,7 +77,7 @@ Executes written plans only after validating them against the current repo. It c
 
 ### `debug-investigation`
 
-Investigates bugs, failing tests, flaky behavior, crashes, regressions, build failures, and unexpected behavior before fixes. It builds a bug packet, traces code and evidence, optionally dispatches bounded read-only subagent lanes, and returns a ranked diagnosis plus fastest proof path.
+Investigates bugs, failing tests, flaky behavior, crashes, regressions, build failures, and unexpected behavior before fixes. It builds a bug packet, writes a debug investigation artifact unless chat-only/no-files was requested, traces code and evidence, optionally dispatches bounded read-only subagent lanes, and returns a ranked diagnosis plus fastest proof path.
 
 ### `skill-audit`
 
@@ -120,11 +118,11 @@ After installing or refreshing the plugin and restarting Codex, verify the plugi
 13. Ask for scan routing: `Use security-router for this authorized PR security scan.`
 14. Ask for a read-only debug pass: `Use debug-investigation to investigate this failing test without editing files.`
 15. Ask for an audit pass: `Use skill-audit to inspect shravan-dev-workflow and recommend only high-confidence skill updates.`
-16. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models`.
-17. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke.
+16. Confirm `agy` availability with `command -v agy`, `agy --version`, and `agy models` only before a user-requested Gemini/agy lane.
+17. Confirm Claude Code harness availability with `claude --version` and a Haiku smoke only before a user-requested Claude lane.
 18. Run one review request that includes an external adversarial model lane: `Use implementation-review-swarm and include Gemini/agy adversarial review.`
 19. Run one review request that includes Claude explicitly: `Use implementation-review-swarm and include Claude adversarial review.`
-20. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, and only verified findings.
+20. Confirm the final report includes a verdict, swarm coverage, skipped inputs if any, candidate counts, artifact paths where expected, and only verified findings.
 
 Behavioral pass criteria:
 
@@ -133,15 +131,18 @@ Behavioral pass criteria:
 - Current-session implementation reviews fix accepted blocker/important findings unless explicitly report-only.
 - PR review threads are resolved only after they are proven stale or the real issue is fixed and verified.
 - Claude is not invoked unless explicitly requested, and when invoked it uses `claude --print`, not Anthropic API calls.
+- Gemini/agy is not invoked unless explicitly requested.
 - Oracle is not mentioned or invoked.
 - Failed or skipped external model lanes are reported without failing the whole review.
 - Plan review uses bounded read-only subagents by default for substantial plans, and skips them only with a stated reason.
+- Plan review writes a temp report for substantial reviews unless chat-only/no-files was requested.
 - Plan review updates writable current-session plans for accepted blocker/important findings, but does not implement code.
-- Spec-design-swarm does not implement code and records security context when sensitive surfaces are touched.
+- Spec-design-swarm does not implement code, writes an artifact for clear substantial design/spec work unless chat-only/no-files was requested, and records security context when sensitive surfaces are touched.
 - Discuss-with-me triggers only when explicitly requested, stays scoped to design/spec/plan/implementation/docs decisions, and asks one question at a time when evidence cannot answer.
 - Orchestrate-goal uses only two paths: clear goals become contracts; unclear goals route to discuss-with-me.
-- docs-maintain identifies source-of-truth drift before editing and keeps detailed history in docs, not `AGENTS.md`.
+- docs-maintain identifies source-of-truth drift before editing, owns cleanup/promotion of existing workflow artifacts, and keeps detailed history in docs, not `AGENTS.md`.
 - spec-review-council preserves accepted, contested, and open findings instead of forcing fake consensus.
 - security-router routes explicit scans to official Codex Security workflows and does not claim audit coverage from a normal review lane.
 - Debug investigation does not implement fixes until the diagnosis is proven or uncertainty is explicitly accepted.
+- Debug investigation writes a debug artifact for real debugging unless chat-only/no-files was requested.
 - Skill audit recommends updates before new skills and cites evidence or upstream inspiration for every recommendation.

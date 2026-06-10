@@ -66,15 +66,15 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 | spec-design-swarm | `plugins/shravan-dev-workflow/skills/spec-design-swarm/` | Pre-plan design formation with bounded codebase explorer, architecture, security, and adversarial lanes |
 | discuss-with-me | `plugins/shravan-dev-workflow/skills/discuss-with-me/` | Manual lifecycle alignment for design, spec, plan, implementation-direction, and docs decisions before editing files |
 | orchestrate-goal | `plugins/shravan-dev-workflow/skills/orchestrate-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals to discuss-with-me |
-| docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Reconcile docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against current code and decisions |
+| docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-review-council | `plugins/shravan-dev-workflow/skills/spec-review-council/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
 | security-router | `plugins/shravan-dev-workflow/skills/security-router/` | Routes authorized security scans to the official Codex Security workflows |
-| implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, default `agy` external model lane for substantial reviews, and explicit opt-in Claude/Gemini adversarial lanes |
+| implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, and explicit opt-in Claude/Gemini/agy adversarial lanes |
 | plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable plan/design/spec handoff packets for other agents, CLIs, machines, or future sessions |
 | implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Stage-aware implementation-state packets for manual reviewers or continuation agents |
-| plan-review | `plugins/shravan-dev-workflow/skills/plan-review/` | Read-only adversarial plan/design/spec review with whole-artifact loading and live repo validation |
+| plan-review | `plugins/shravan-dev-workflow/skills/plan-review/` | Read-only adversarial plan review with whole-artifact loading, live repo validation, bounded reviewer lanes, and temp review artifacts for substantial reviews |
 | plan-execute | `plugins/shravan-dev-workflow/skills/plan-execute/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
-| debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging for bugs, failures, flaky behavior, regressions, and unexpected behavior before fixes |
+| debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed skill audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
 | pm-linear-work | `plugins/shravan-dev-workflow/skills/pm-linear-work/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
@@ -91,7 +91,7 @@ Sync rule: when role behavior changes, update the Claude agent AND the matching 
 
 ### Relationship to quorum-counsel
 
-`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:implementation-review-swarm` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend, uses `agy` as an external model lane for substantial reviews when available, and includes Claude or additional Gemini/agy lanes only when the user explicitly asks.
+`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:implementation-review-swarm` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend and includes Claude, Gemini/agy, or another outside adversarial lane only when the user explicitly asks.
 
 Oracle is manual-only. Do not invoke it from normal review workflows.
 
@@ -99,7 +99,22 @@ Oracle is manual-only. Do not invoke it from normal review workflows.
 
 When a plugin or sidecar change is user-visible, update `docs/changelog/` in the same changeset.
 
-For plugin changes, record the marketplace-facing plugin name, version, affected skills/commands/hooks, manifests touched, validation commands, and refresh/reinstall status. Keep entries public-safe: `~/dev/ai-tools` is public; do not include credentials, private machine config, work-fork details, or local cache hashes. Put evidence snippets and longer validation notes under `docs/changelog/references/`.
+For plugin changes, record:
+
+- marketplace-facing plugin name and new version
+- affected skills, commands, hooks, manifests, marketplace entries, and README sections
+- user-visible behavior change
+- validation commands and results
+- refresh/reinstall status for Codex and Claude when applicable
+
+Keep entries public-safe: `~/dev/ai-tools` is public; do not include credentials, private machine config, work-fork details, or local cache hashes. Put evidence snippets and longer validation notes under `docs/changelog/references/`.
+
+Use the changelog system as the durable release memory:
+
+- add one dated entry under `docs/changelog/`
+- add that entry to `docs/changelog/README.md` newest-first
+- use `docs/changelog/references/` only for longer evidence, excerpts, or validation notes
+- do not bury release behavior only in chat, commits, or plugin README text
 
 ### Adding a New Skill
 
@@ -109,6 +124,22 @@ For plugin changes, record the marketplace-facing plugin name, version, affected
 4. Bump the owning plugin version.
 5. Update `.agents/plugins/marketplace.json` for Codex availability when adding a new plugin.
 6. Update `.claude-plugin/marketplace.json` and add `.claude-plugin/plugin.json` only if Claude Code should load the same plugin.
+
+### Skill Authoring Discipline
+
+Skills encode judgment, house style, and repeatable failure prevention. Prefer improving an existing skill over adding a near-duplicate.
+
+- When creating, editing, auditing, or pressure-testing skills, load and follow `superpowers:writing-skills`. For substantial behavior-changing skills, treat intent as the core artifact: what judgment should the future agent apply, what failure mode are we preventing, and what shortcut must it resist?
+- Name skills with active, searchable verbs in hyphen-case.
+- Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
+- Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
+- Do not add README files inside skill folders unless a consuming tool requires them.
+- Cross-reference other skills by skill name, not fragile installed-cache paths.
+- Treat skill writing like TDD for process documentation: first identify or create a pressure scenario where the agent fails without the skill, then write the smallest wording that prevents that failure, then retest and close loopholes.
+- Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.
+- Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.
+- Keep artifact ownership explicit: spec, plan, research, and debug skills create their lane artifacts for clear substantial work unless the user asks for chat-only/no-files; `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation after artifacts exist.
+- Keep parent/subagent ownership explicit: subagents produce bounded evidence or candidate findings; the parent agent verifies, reduces, and owns the final claim.
 
 ## Plugin Development
 

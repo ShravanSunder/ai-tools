@@ -31,14 +31,17 @@ fuzzy goal or design question
 - When asking a design question, include the current guess or recommended answer and why.
 - Produce explicit tradeoffs, not a single happy path.
 - Record security context when the design touches auth, secrets, parsing, filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents, or external services.
-- If a design artifact is requested, write decisions and technical rationale, not process history.
+- If substantial design/spec work is clear and the user did not ask for chat-only output, write a lane artifact by default.
+- If the desired design/spec output is unclear, do not create files yet; use `discuss-with-me` or ask one material question first.
+- Design artifacts contain decisions and technical rationale, not process history. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
 ## Workflow
 
 1. Establish design mode:
    - Restate the goal and success shape.
    - Name assumptions and unknowns.
-   - Resolve whether the output is a chat design, a spec artifact, or a handoff packet.
+   - Resolve whether the output is chat-only, a design/spec artifact, or a handoff packet.
+   - If the output is unclear, stop before writing files and clarify the intent.
 2. Inspect current state:
    - Read relevant code/docs.
    - Search for adjacent implementations and prior plans.
@@ -72,6 +75,10 @@ fuzzy goal or design question
    - validation strategy
    - open questions
    - next skill to use
+8. Write the artifact when appropriate:
+   - For clear substantial design/spec work, create a repo-local temp or requested spec artifact unless the user said chat-only/no-files.
+   - For chat-only or unclear design work, return the synthesis in chat and do not create files.
+   - Do not decide long-term document lifecycle here; route cleanup or promotion to `docs-maintain`.
 
 ## Lane Set
 
@@ -99,6 +106,7 @@ Return:
 
 - Current-state evidence inspected.
 - Lanes run and skipped.
+- Artifact path, or why no artifact was written.
 - Recommended design direction.
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.

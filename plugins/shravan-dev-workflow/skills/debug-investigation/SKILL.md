@@ -15,6 +15,9 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
 - Use subagents only for bounded investigation slices. The main agent owns synthesis, evidence checking, and the final diagnosis.
 - Keep investigation read-only until the user explicitly asks to fix or a validated fix phase begins.
 - If 3+ fix attempts already failed, stop and question the design or architecture before trying another patch.
+- For real debugging work, write a repo-local debug artifact by default unless the user explicitly asked for chat-only/no-files output.
+- If the symptom, target, or reproduction surface is unclear, do not create files yet; ask one material question or build the missing bug packet first.
+- Debug artifacts are disposable investigation outputs. Later cleanup, preservation, or promotion belongs to `docs-maintain`.
 
 ## Workflow
 
@@ -25,22 +28,27 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
    - reproduction steps or why reproduction is not yet proven
    - scope of impact
    - evidence already available
-2. Reproduce or bound the failure:
+   - artifact path, or why no artifact is being written yet
+2. Create the debug artifact when appropriate:
+   - Use `<repo-root>/tmp/debug-workflows/<yyyy-mm-dd>-<repo>-<branch>-<bug-slug>/debug-investigation.md`.
+   - Keep it updated with evidence, hypotheses, proof steps, and commands.
+   - Skip file creation only for chat-only/no-files requests or unclear debugging scope.
+3. Reproduce or bound the failure:
    - exact command, UI path, input, or event sequence
    - deterministic, flaky, environment-specific, or not yet reproduced
    - smallest known failing surface
-3. Trace the code path:
+4. Trace the code path:
    - read the failing boundary and callers
    - identify where expected and actual behavior diverge
    - separate source cause from downstream symptom
-4. Check recent changes and working examples:
+5. Check recent changes and working examples:
    - git diff, recent commits, changed config, dependency or schema drift
    - nearby working code that follows the intended pattern
-5. Form ranked hypotheses:
+6. Form ranked hypotheses:
    - state one concrete root-cause hypothesis at a time
    - list supporting evidence and missing evidence
    - name the smallest proof step
-6. Recommend next action:
+7. Recommend next action:
    - prove now
    - fix next
    - follow up later
@@ -79,6 +87,7 @@ When fixing:
 Return:
 
 - bug packet summary
+- artifact path, or why no artifact was written
 - reproduction/coverage evidence
 - most likely root cause
 - alternate hypotheses, if still plausible

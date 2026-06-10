@@ -22,6 +22,11 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - Goal clarity gate: if objective, scope, proof, or stop condition is unclear,
   did `orchestrate-goal` route to `discuss-with-me` instead of setting a fuzzy
   long-horizon goal?
+- Artifact gate: if clear spec/plan/debug work ran and the user did not ask for
+  chat-only/no-files output, did the phase skill write its lane artifact?
+- Artifact lifecycle gate: if cleanup, archival, promotion, or source-of-truth
+  reconciliation is needed, did `docs-maintain` own that lifecycle decision
+  instead of the phase skill?
 
 ## Review Trio Routing
 
@@ -114,7 +119,8 @@ interview path inside `orchestrate-goal`.
 - "Audit stale plans and tell me what should be purged or preserved."
 
 Gate: source of truth is named before edits; destructive cleanup is proposed
-before applying.
+before applying. Existing specs, plans, debug notes, and handoffs are classified
+for cleanup, archival, or promotion; active phase work remains with its phase skill.
 
 ### security-router should trigger
 
@@ -153,7 +159,8 @@ bounded write sets; final claim includes fresh verification.
 - "Investigate why this build started failing."
 
 Gate: diagnosis is evidence-backed before fix phase; failed hypotheses do not
-stack into blind patching.
+stack into blind patching. Real debugging writes a debug artifact unless
+chat-only/no-files was requested or the bug packet is not clear enough yet.
 
 ### skill-audit should trigger
 

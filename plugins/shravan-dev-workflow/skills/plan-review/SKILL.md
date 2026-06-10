@@ -37,6 +37,9 @@ plan artifact
 - When reviewing a plan the current agent authored or can edit, address accepted blocker and important findings by revising the plan unless the user explicitly asked for report-only review.
 - If a finding is unclear, conflicts with user decisions, or would change code scope rather than plan text, stop and ask before changing the plan.
 - If this skill is itself running inside a subagent, stay shallow: do not spawn another swarm unless the parent explicitly asked for nested review.
+- For substantial plan reviews, write a repo-local temp review artifact by default unless the user explicitly asked for chat-only/no-files output.
+- If the plan target or review goal is unclear, do not create files yet; clarify first.
+- Review artifacts are lane outputs. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
 ## Workflow
 
@@ -65,7 +68,8 @@ plan artifact
    - load `references/review-checklist.md` for review reception rules
    - revise the plan for accepted blocker/important findings when the plan artifact is writable
 10. Re-check revised plan sections when edits were made.
-11. Write a review report in chat. If useful or requested, also write it under the plan workflow temp directory.
+11. Write a review report in chat.
+12. For substantial reviews, also write the report under the plan workflow temp directory unless the user asked for chat-only/no-files output.
 
 ## Plan-Review Lanes
 
@@ -145,4 +149,5 @@ Return:
 - Suggested smallest plan edits.
 - Accepted/rejected/deferred findings and any plan edits applied.
 - Swarm coverage: lanes run, lanes skipped, backend used for each lane, external model lane status, and verification notes.
+- Artifact path, or why no artifact was written.
 - Explicit "do not implement code yet" note unless the user changes scope.
