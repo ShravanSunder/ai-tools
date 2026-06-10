@@ -52,20 +52,20 @@ tui-*                structured chat presentation  tui-presentation
 
 ```mermaid
 flowchart LR
-    discuss["discuss-with-me\nshared understanding"]
-    goal["orchestrator-goal\ncoordination contract"]
+    discuss["discuss-with-me<br/>shared understanding"]
+    goal["orchestrator-goal<br/>coordination contract"]
 
-    specDesign["spec-design-swarm\ndesign formation"]
-    specReview["spec-review-swarm\nadversarial review"]
-    specHandoff["spec-handoff\nportable spec context"]
+    specDesign["spec-design-swarm<br/>design formation"]
+    specReview["spec-review-swarm<br/>adversarial review"]
+    specHandoff["spec-handoff<br/>portable spec context"]
 
-    planCreate["plan-create\nimplementation plan"]
-    planReview["plan-review-swarm\nadversarial review"]
-    planHandoff["plan-handoff\nportable plan context"]
+    planCreate["plan-create<br/>implementation plan"]
+    planReview["plan-review-swarm<br/>adversarial review"]
+    planHandoff["plan-handoff<br/>portable plan context"]
 
-    implExecute["implementation-execute-plan\nexecute written plan"]
-    implReview["implementation-review-swarm\nreview code/diff/PR"]
-    implHandoff["implementation-handoff\nportable code state"]
+    implExecute["implementation-execute-plan<br/>execute written plan"]
+    implReview["implementation-review-swarm<br/>review code/diff/PR"]
+    implHandoff["implementation-handoff<br/>portable code state"]
 
     discuss --> specDesign
     discuss --> planCreate
@@ -74,16 +74,19 @@ flowchart LR
     goal --> implExecute
 
     specDesign --> specReview
+    specDesign --> specHandoff
     specReview --> specHandoff
     specReview --> planCreate
     specHandoff --> planCreate
 
     planCreate --> planReview
+    planCreate --> planHandoff
     planReview --> planHandoff
     planReview --> implExecute
     planHandoff --> implExecute
 
     implExecute --> implReview
+    implExecute --> implHandoff
     implReview --> implHandoff
 ```
 
@@ -149,8 +152,8 @@ risk. It is for continuation, audit, or manual review of work already in motion.
   failing tests, flaky behavior, crashes, regressions, build failures, or
   unexpected behavior.
 - `docs-maintain`: durable documentation maintenance after source-of-truth drift
-  is identified. It keeps README human-facing, `agents.md` compact, and workflow
-  history in changelog/runbook docs.
+  is identified. It keeps README human-facing, `AGENTS.md` compact (`agents.md`
+  in this repo), and workflow history in changelog/runbook docs.
 - `ops-security-review`: routes explicit authorized security scans to the
   official Codex Security plugin workflows.
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and
@@ -191,7 +194,7 @@ Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.
 Use implementation-review-swarm to review this diff and include Claude counsel.
 Use implementation-handoff to package this branch for another agent to continue.
-Use docs-maintain to reconcile this README and agents.md with current plugin state.
+Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.
 ```
 
 ## References
@@ -199,5 +202,6 @@ Use docs-maintain to reconcile this README and agents.md with current plugin sta
 - Skill source: [`skills/`](skills/)
 - Trigger and routing evals: [`references/trigger-evals.md`](references/trigger-evals.md)
 - Source inspirations: [`references/source-inspirations.md`](references/source-inspirations.md)
+- Release smoke and behavioral checks: [`../../docs/changelog/references/shravan-dev-workflow-smoke.md`](../../docs/changelog/references/shravan-dev-workflow-smoke.md)
 - Release notes: [`../../docs/changelog/`](../../docs/changelog/)
 - Maintainer guidance: [`../../agents.md`](../../agents.md)

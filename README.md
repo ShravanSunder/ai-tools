@@ -31,13 +31,12 @@ The main workflow plugin is organized by namespace and phase boundary:
 
 ```mermaid
 flowchart LR
-    discuss["discuss-with-me\nshared understanding"]
-    goal["orchestrator-goal\nlong-horizon coordination"]
+    discuss["discuss-with-me<br/>shared understanding"]
+    goal["orchestrator-goal<br/>long-horizon coordination"]
 
-    spec["spec-*\ndesign, review, handoff"]
-    plan["plan-*\ncreate, review, handoff"]
-    impl["implementation-*\nexecute, review, handoff"]
-    ops["ops-*\nsecurity and Linear"]
+    spec["spec-*<br/>design, review, handoff"]
+    plan["plan-*<br/>create, review, handoff"]
+    impl["implementation-*<br/>execute, review, handoff"]
 
     discuss --> spec
     discuss --> plan
@@ -46,8 +45,10 @@ flowchart LR
     goal --> impl
     spec --> plan
     plan --> impl
-    impl --> ops
 ```
+
+Operations skills such as `ops-security-review` and `ops-linear-tracking` sit
+outside the main phase path.
 
 Start with [`plugins/shravan-dev-workflow/README.md`](plugins/shravan-dev-workflow/)
 for the full workflow map, phase diagrams, and skill boundaries.

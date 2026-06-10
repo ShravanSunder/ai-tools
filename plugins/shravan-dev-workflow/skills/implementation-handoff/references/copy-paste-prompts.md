@@ -17,7 +17,7 @@ User request:
 <original request>
 
 Stage:
-<planned | in-progress | pre-review | post-review | blocked>
+<in-progress | pre-review | post-review | blocked>
 
 Implementation summary:
 <what changed>

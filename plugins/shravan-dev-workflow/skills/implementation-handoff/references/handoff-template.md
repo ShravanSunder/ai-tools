@@ -7,7 +7,7 @@ Use this when writing `implementation-handoff.md`.
 ```text
 Implementation handoff
 Date: <yyyy-mm-dd>
-Stage: <planned | in-progress | pre-review | post-review | blocked>
+Stage: <in-progress | pre-review | post-review | blocked>
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Base: <base branch/sha or not established>
@@ -25,8 +25,8 @@ Current state
 - <committed/uncommitted/staged/dirty>
 - <important branch or PR state>
 
-Changed or intended files
-- <path>: <what changed or should change>
+Changed files
+- <path>: <what changed>
 
 What is proven
 - <command/evidence>: <result>
@@ -52,13 +52,6 @@ Recommended next action
 ```
 
 ## Stage Additions
-
-### planned
-
-```text
-First safe step
-<what the next agent should do first>
-```
 
 ### in-progress
 

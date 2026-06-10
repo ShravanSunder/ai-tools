@@ -20,6 +20,10 @@ Run:
 tests/skills/run-skill-pressure-tests.sh --fast
 ```
 
+Full-suite runs execute scenarios in parallel by default (`CODEX_PRESSURE_JOBS=4`).
+Use `--jobs N` to tune concurrency or `--serial` when debugging runner output.
+Focused `--scenario NAME` runs stay serial.
+
 Artifacts are written under `tmp/skill-pressure-tests/`.
 
 Use `--integration` only for slower tests that create temporary projects or
