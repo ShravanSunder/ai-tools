@@ -4,7 +4,7 @@ Local Codex and Claude Code plugins for AI-assisted development workflows. This
 repo also includes Agent Sidecar, a Docker-based sandbox for running coding
 agents with network isolation.
 
-## Plugins
+## Core Plugins
 
 Install through the local ai-tools marketplaces.
 
@@ -17,14 +17,47 @@ Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex
 
 | Plugin | Description |
 |--------|-------------|
+| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
 | [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
 | [`skill-peekaboo`](plugins/skill-peekaboo/) | Visual UI testing for macOS apps using Peekaboo CLI |
-| [`quorum-counsel`](plugins/quorum-counsel/) | Multi-model review orchestration -- counsel-reviewer and codex-solver background agents |
-| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
 
 See [`plugins/`](plugins/) for full details.
 
 Release notes live in [`docs/changelog/`](docs/changelog/).
+
+### Shravan Dev Workflow
+
+The main workflow plugin is organized by namespace and phase boundary:
+
+```mermaid
+flowchart LR
+    discuss["discuss-with-me\nshared understanding"]
+    goal["orchestrator-goal\nlong-horizon coordination"]
+
+    spec["spec-*\ndesign, review, handoff"]
+    plan["plan-*\ncreate, review, handoff"]
+    impl["implementation-*\nexecute, review, handoff"]
+    ops["ops-*\nsecurity and Linear"]
+
+    discuss --> spec
+    discuss --> plan
+    goal --> spec
+    goal --> plan
+    goal --> impl
+    spec --> plan
+    plan --> impl
+    impl --> ops
+```
+
+Start with [`plugins/shravan-dev-workflow/README.md`](plugins/shravan-dev-workflow/)
+for the full workflow map, phase diagrams, and skill boundaries.
+
+### Manual Counsel
+
+[`quorum-counsel`](plugins/quorum-counsel/) remains available for manual
+multi-model counsel, but it is not the default review path. Prefer
+`shravan-dev-workflow` review swarms for day-to-day implementation, plan, and
+spec review.
 
 ---
 
@@ -60,10 +93,11 @@ concise file copied into repos that initialize sidecar support.
 ```
 ai-tools/
 ├── plugins/                     # Codex and Claude Code plugins
+│   ├── shravan-dev-workflow/    # Spec, plan, implementation, review, handoff workflows
 │   ├── ai-scaffold/             # Project scaffolding
 │   ├── skill-peekaboo/          # macOS visual UI testing
-│   ├── quorum-counsel/          # Manual multi-model counsel
-│   └── shravan-dev-workflow/    # Spec, review, docs, TUI, Linear workflow skills
+│   └── quorum-counsel/          # Optional manual multi-model counsel
 ├── agent_sidecar/               # Docker sidecar system
-└── CLAUDE.md                    # Agent instructions
+├── agents.md                    # Maintainer and agent instructions
+└── CLAUDE.md                    # Claude Code alias for agents.md
 ```
