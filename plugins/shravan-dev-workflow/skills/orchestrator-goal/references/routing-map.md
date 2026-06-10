@@ -10,7 +10,9 @@ the next phase.
 | Goal itself is unclear | `discuss-with-me` | Shared model must be clear before a long-running goal starts. |
 | Need design direction before a plan exists | `spec-design-swarm` | Research and design lanes shape the architecture. |
 | Drafted spec/design needs critique | `spec-review-swarm` | Adversarial review swarms pre-plan design. |
-| Need a portable packet for another agent | `plan-handoff` | Writes temp artifacts and copy-paste prompt. |
+| Spec/design context needs a portable packet | `spec-handoff` | Packages pre-plan decisions, non-goals, open questions, and evidence. |
+| Need to turn spec/design into an implementation plan | `plan-create` | Creates task sequence, write surfaces, validation gates, and risks without editing code. |
+| Existing implementation plan needs a portable packet | `plan-handoff` | Writes temp artifacts and copy-paste prompt for the plan. |
 | Implementation plan needs attack before coding | `plan-review-swarm` | Reads full plan, validates claims, and revises accepted plan issues. |
 | Plan is validated and should be executed | `implementation-execute-plan` | Validates then implements with parent-owned subagent slices. |
 | Code/diff/PR/commit needs review | `implementation-review-swarm` | Runs implementation reviewer lanes and verifies findings. |

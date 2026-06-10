@@ -1,6 +1,6 @@
 ---
 name: implementation-execute-plan
-description: Use when executing a written plan or design after first validating it against the current repo, especially when the user asks to validate and execute, implement a plan, continue from a handoff, or use subagents for bounded implementation slices.
+description: Use when executing a written implementation plan after first validating it against the current repo, especially when the user asks to validate and execute, implement a plan, continue from a plan handoff, or use subagents for bounded implementation slices.
 ---
 
 # Implementation Execute Plan
@@ -9,7 +9,9 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 
 ## Core Rules
 
-- Read the whole plan before execution. Show line count and chunk coverage for plan files.
+- Read the whole implementation plan before execution. Show line count and chunk coverage for plan files.
+- Do not execute directly from a spec or design. Use `plan-create` first when
+  no written implementation plan exists.
 - Validate against the current repo before editing: branch, diff, code paths, package layout, tests, and instructions.
 - Stop before editing if the plan has critical gaps, stale assumptions, unsafe scope, or unclear ownership.
 - Stop before editing if security assumptions or threat boundaries are missing or stale for sensitive work.
@@ -21,7 +23,7 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 ## Workflow
 
 1. Load and validate the plan.
-   - Resolve plan path or handoff packet.
+   - Resolve implementation plan path or plan handoff packet.
    - Run `wc -l` for plan files.
    - Read all chunks and record coverage.
    - Compare major claims to live repo evidence.

@@ -68,10 +68,12 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 | orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals to discuss-with-me |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-review-swarm | `plugins/shravan-dev-workflow/skills/spec-review-swarm/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
+| spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
+| plan-create | `plugins/shravan-dev-workflow/skills/plan-create/` | Create written implementation plans from spec/design context without editing code |
 | ops-security-review | `plugins/shravan-dev-workflow/skills/ops-security-review/` | Routes authorized security scans to the official Codex Security workflows |
 | implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, and explicit opt-in Claude/Gemini/agy adversarial lanes |
-| plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable plan/design/spec handoff packets for other agents, CLIs, machines, or future sessions |
-| implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Stage-aware implementation-state packets for manual reviewers or continuation agents |
+| plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable existing implementation-plan packets for other agents, CLIs, machines, or future sessions |
+| implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Implementation-state packets for manual reviewers or continuation agents |
 | plan-review-swarm | `plugins/shravan-dev-workflow/skills/plan-review-swarm/` | Read-only adversarial plan review with whole-artifact loading, live repo validation, bounded reviewer lanes, and temp review artifacts for substantial reviews |
 | implementation-execute-plan | `plugins/shravan-dev-workflow/skills/implementation-execute-plan/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |

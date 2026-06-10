@@ -22,11 +22,17 @@ new design needs research/subagents
 drafted spec/design needs adversarial pressure
   -> spec-review-swarm
 
+spec/design context should be packaged for another agent/session
+  -> spec-handoff
+
+implementation plan needs to be authored from spec/design
+  -> plan-create
+
 plan needs read-only validation
   -> plan-review-swarm
 
-plan needs to be authored
-  -> normal agent planning work; no dedicated skill owns plan writing
+existing implementation plan should be packaged for another agent/session
+  -> plan-handoff
 
 validated written plan should be implemented
   -> implementation-execute-plan
@@ -46,8 +52,8 @@ docs should be edited/reconciled
 skill surface should be audited
   -> skill-audit
 
-state should be packaged for another agent/session
-  -> plan-handoff or implementation-handoff
+implementation state should be packaged for another agent/session
+  -> implementation-handoff
 ```
 
 ## Boundary Rule

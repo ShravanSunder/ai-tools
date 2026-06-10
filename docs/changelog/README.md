@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-10 Shravan Dev Workflow phase boundaries](2026-06-10-shravan-dev-workflow-phase-boundaries.md)
 - [2026-06-10 Shravan Dev Workflow namespace renames](2026-06-10-shravan-dev-workflow-namespace-renames.md)
 - [2026-06-10 Codex Skill Pressure Testing](2026-06-10-codex-skill-pressure-testing.md)
 - [2026-06-10 Shravan Dev Workflow artifact gates](2026-06-10-shravan-dev-workflow-artifact-gates.md)

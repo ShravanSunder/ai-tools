@@ -48,7 +48,9 @@ If any of these materially affect the work and are missing, route to
 3. If clear, compile the goal contract.
 4. Select the next workflow:
    - early design or architecture: `spec-design-swarm`
-   - plan/design/spec packet for another agent: `plan-handoff`
+   - spec/design packet for another agent: `spec-handoff`
+   - implementation plan creation: `plan-create`
+   - implementation plan packet for another agent: `plan-handoff`
    - adversarial plan review: `plan-review-swarm`
    - validated implementation from a plan: `implementation-execute-plan`
    - code, diff, branch, commit, or PR review: `implementation-review-swarm`

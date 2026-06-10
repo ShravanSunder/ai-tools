@@ -1,14 +1,22 @@
 ---
 name: plan-handoff
-description: Use when preparing a plan, design, spec, or implementation brief for another agent, CLI, machine, or future session, especially when the user asks for a copy-paste prompt, handoff, next-agent context, or portable review packet.
+description: Use when packaging an existing implementation plan for another agent, CLI, machine, or future session, especially when the user asks for a copy-paste prompt, next-agent context, or portable plan packet.
 ---
 
 # Plan Handoff
 
-Package a plan so another agent can start with the right context instead of reconstructing it from chat history. This is a handoff packet: a continuity artifact carrying evidence, constraints, coverage, and next action. The output must be useful both as a file artifact and as a copy-paste prompt shown in the response.
+Package an existing implementation plan so another agent can review, execute, or
+continue planning without reconstructing the conversation. This is a portability
+boundary, not a completion boundary: handoff means the plan context is
+transferable, not that the plan is approved or implemented.
 
 ## Core Rules
 
+- Use only when an implementation plan or plan artifact exists.
+- If the source is spec/design context without an implementation plan, use
+  `spec-handoff` for portability or `plan-create` to write the plan.
+- If the source is branch, diff, changed files, commits, validation, or blocker
+  evidence, use `implementation-handoff`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, line count, coverage, referenced code/docs, open questions, and exact requested task.
 - Include security context when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
@@ -20,7 +28,9 @@ Package a plan so another agent can start with the right context instead of reco
 ## Workflow
 
 1. Resolve the repo root with `git rev-parse --show-toplevel` when possible.
-2. Resolve the source artifact: plan/spec/design file, chat summary, or current task state.
+2. Resolve the source plan artifact or plan packet.
+   - If no implementation plan exists, route to `spec-handoff` or
+     `plan-create` instead of pretending a plan exists.
 3. If a source file exists, count lines and read the whole file in chunks before summarizing.
 4. Inspect only the secondary code/docs needed to make the handoff grounded.
 5. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.
@@ -41,6 +51,7 @@ Load `references/handoff-template.md` when writing the actual artifact or copy-p
 
 - Handoff only says "continue from here" and omits source files.
 - Chat response links the file but does not show the prompt the user can copy.
+- Design/spec context is mislabeled as an existing implementation plan.
 - The plan is summarized from headings without full-file coverage.
 - The handoff hides uncertainty instead of listing exact open questions.
 - The packet is overbroad and asks the next agent to understand the entire repo.

@@ -45,6 +45,8 @@ Do not use as the primary workflow for:
 - code/diff review: use `implementation-review-swarm`
 - adversarial plan/spec review: use `plan-review-swarm` or `spec-review-swarm`
 - broad design research with subagents: use `spec-design-swarm`
+- spec/design portability: use `spec-handoff`
+- implementation plan creation: use `plan-create`
 - docs editing: use `docs-maintain`
 - skill audits: use `skill-audit`
 - commit, push, PR, or merge work: use the execution/publishing workflow requested by the user

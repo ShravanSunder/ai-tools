@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Create"
+  short_description: "Create implementation plans"
+  default_prompt: "Turn this spec or design into a written implementation plan without editing code."

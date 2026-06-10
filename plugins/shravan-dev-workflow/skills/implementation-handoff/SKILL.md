@@ -9,7 +9,12 @@ Package actual implementation state so another agent can review, continue, or au
 
 ## Core Rules
 
-- Works at any stage: `planned`, `in-progress`, `pre-review`, `post-review`, or `blocked`.
+- Use only when implementation state exists: branch/diff/changed files,
+  commits, failed commands, validation evidence, blocker evidence, or
+  implementation risk.
+- If no implementation state exists, use `plan-handoff` instead.
+- Works at any implementation stage: `in-progress`, `pre-review`,
+  `post-review`, or `blocked`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/review-handoffs/<yyyy-mm-dd>-<repo>-<branch>-<slug>/`.
 - Always write a file artifact and also print the copy-paste prompt in the response.
 - Ground the handoff in current repo state: branch, diff, commits, changed files, validation commands, and known risks.
@@ -21,7 +26,6 @@ Package actual implementation state so another agent can review, continue, or au
 ## Workflow
 
 1. Identify stage:
-   - `planned`: intended implementation slice exists but work has not started.
    - `in-progress`: partial changes exist and another agent may continue.
    - `pre-review`: implementation is believed ready for review.
    - `post-review`: review feedback was addressed or needs another pass.
@@ -46,7 +50,6 @@ Package actual implementation state so another agent can review, continue, or au
 
 ## Stage Guidance
 
-- `planned`: focus on intended files, constraints, and first action. Prefer `plan-handoff` if no implementation state exists.
 - `in-progress`: include what changed, what is incomplete, what not to redo, and how to continue safely.
 - `pre-review`: include diff range, changed files, tests run, review focus, and known risks.
 - `post-review`: include reviewer feedback addressed, remaining disputed items, and what needs re-checking.
@@ -60,6 +63,7 @@ Package actual implementation state so another agent can review, continue, or au
 ## Common Mistakes
 
 - Producing a vague "please review this" note without diff range or changed files.
+- Producing an implementation handoff before implementation state exists.
 - Hiding test failures or calling unverified work done.
 - Giving a reviewer prompt that does not say read-only.
 - Forgetting to print the copy-paste prompt in chat.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Handoff"
+  short_description: "Package spec or design context"
+  default_prompt: "Prepare a copy-pasteable spec/design handoff without creating an implementation plan."

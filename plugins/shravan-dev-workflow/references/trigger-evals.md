@@ -40,7 +40,7 @@ These are objective gates, not soft rules. If the answer to the gate question is
 
 - "Review this implementation plan before I execute it." -> `plan-review-swarm`
 - "Review this PR diff for bugs." -> `implementation-review-swarm`
-- "Help me write the plan." -> normal agent planning work
+- "Help me write the plan from this spec." -> `plan-create`
 
 ### plan-review-swarm should trigger
 
@@ -71,7 +71,13 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - Specs/designs are reviewed before plans exist.
 - Plans/handoffs are reviewed after a design/spec direction exists and before execution.
 - Code/diffs/PRs/commits/files are reviewed by the implementation swarm.
-- Plan authoring is normal agent work, not a dedicated skill.
+- Spec/design handoff packages pre-plan context; it does not create the plan.
+- Plan creation turns spec/design context into a written implementation plan; it
+  does not execute code.
+- Plan handoff packages an existing implementation plan; it does not package
+  raw spec/design context as though a plan exists.
+- Implementation handoff requires implementation state such as branch, diff,
+  changed files, validation, failed commands, or blocker evidence.
 
 ## Full Suite Routing
 
@@ -133,9 +139,26 @@ as audit coverage.
 ### plan-handoff should trigger
 
 - "Prepare a copy-paste prompt so another agent can review this plan."
-- "Package this design/spec state for a fresh session."
+- "Package this existing implementation plan for a fresh session."
 
-Gate: writes a repo-local handoff file and prints the copy-paste prompt in chat.
+Gate: an implementation plan exists; writes a repo-local handoff file and prints
+the copy-paste prompt in chat.
+
+### spec-handoff should trigger
+
+- "Package this design/spec state for a fresh session."
+- "Prepare a copy-paste handoff for this architecture proposal before planning."
+
+Gate: packages spec/design context, decisions, non-goals, open questions, and
+evidence without creating an implementation plan or calling the spec complete.
+
+### plan-create should trigger
+
+- "Turn this reviewed spec into an implementation plan."
+- "Create the task sequence and validation plan from this design."
+
+Gate: stays read-only, creates a written implementation plan, and routes review
+to `plan-review-swarm` or execution to `implementation-execute-plan`.
 
 ### implementation-handoff should trigger
 
