@@ -13,6 +13,12 @@ design -> spec -> plan -> implementation -> docs
 
 Its job is to help the model teach back, stress, and clarify the user's thinking before action. It does not write code, specs, plans, or docs by itself. Its output is a sharper shared model, a user-owned decision, a narrowed question, or the next workflow to invoke.
 
+Take a step back before trying to solve. The user may not have the full
+picture yet, and you may not either, so slow down enough to understand the
+problem, the environment, the systems involved, and where each person's model
+differs. Build shared understanding first: what is known, what is assumed,
+what is still unclear, and what decision needs to happen next.
+
 ## Core Rules
 
 - Manual trigger only. Do not invoke just because a request is vague.
