@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Improve Repo"
+  short_description: "Audit repos into executable improvement plans"
+  default_prompt: "Audit this repo for high-leverage improvements and write executable plans without editing source code."

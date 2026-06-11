@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.13",
-  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, spec handoff, plan creation, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and operations Linear tracking.",
+  "version": "1.6.14",
+  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, spec handoff, plan creation, repo improvement planning, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -16,6 +16,7 @@
     "security",
     "adversarial",
     "plan",
+    "plan-improve-repo",
     "spec-design",
     "spec-review",
     "spec-handoff",
@@ -64,6 +65,7 @@
       "Use spec-review-swarm to attack this spec before implementation.",
       "Use spec-handoff to package this design for another agent.",
       "Use plan-create to turn this spec into an implementation plan.",
+      "Use plan-improve-repo to audit this repo and write executable improvement plans.",
       "Use ops-security-review to choose the right Codex Security scan.",
       "Run implementation-execute-plan on this plan.",
       "Investigate this bug before fixing it.",
