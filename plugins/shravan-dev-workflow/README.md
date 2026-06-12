@@ -1,7 +1,8 @@
 # Shravan Dev Workflow
 
-Codex-first workflow skills for moving from shared understanding to spec, plan,
-implementation, review, handoff, debugging, docs, and operations work.
+Shravan's development workflow skills for moving from shared understanding to
+spec, plan, implementation, review, handoff, debugging, docs, and operations
+work.
 
 The plugin is built around one idea: each workflow phase should have a clear
 owner, a clear artifact boundary, and a clear next handoff. Broad counsel still
@@ -30,11 +31,13 @@ future agent, another CLI, or another machine can continue without guessing.
 Namespace            Concern                      Skills
 -------------------  ---------------------------  ----------------------------
 discuss-*            shared understanding          discuss-with-me
+research-*           evidence gathering            research-swarm
 orchestrator-*       long-horizon coordination     orchestrator-goal
 spec-*               design/spec boundary          spec-design-swarm
                                                   spec-review-swarm
                                                   spec-handoff
 plan-*               implementation-plan boundary  plan-create
+                                                  plan-improve-repo
                                                   plan-review-swarm
                                                   plan-handoff
 implementation-*     code/change boundary          implementation-execute-plan
@@ -99,7 +102,14 @@ stress-testing a decision, naming tradeoffs, or clarifying whether the next
 artifact should be a spec, plan, implementation, or docs update. It makes the
 shared model prove itself before action: every live response states the user's
 model, maps the decision branches, names the strongest countercase, and asks
-one forcing question.
+one forcing question. It may inspect enough evidence to sharpen that question,
+but broad information gathering belongs to `research-swarm`.
+
+Use `research-swarm` when the next step is to gather evidence: local code/docs,
+sibling repos, DeepWiki-style repository research, current web/docs, Reader
+sources, memory, or session logs. It frames bounded research questions, routes
+source-specific lanes, labels claim quality, and writes tmp research ledgers for
+substantial runs.
 
 Use `orchestrator-goal` when the objective is long-running and already clear
 enough to become a verifiable Codex or Claude `/goal` contract. If the goal is
@@ -110,6 +120,8 @@ fuzzy, it routes back to `discuss-with-me`.
 Use `spec-design-swarm` to shape a design, architecture, or product direction
 before an implementation plan exists. It can use bounded explorer, security,
 architecture, and adversarial lanes, but the parent agent owns the synthesis.
+When design depends on mixed outside evidence, use `research-swarm` first and
+consume its ledger.
 
 Use `spec-review-swarm` to attack a drafted spec/design before planning. It
 keeps accepted, contested, and open findings separate instead of forcing fake
@@ -127,6 +139,11 @@ surfaces, validation gates, rollback or recovery notes, risks, and open
 questions. Non-trivial plans include a requirements/proof matrix; if proof
 cannot pass at the planned scope, the plan should split or replan before
 execution.
+
+Use `plan-improve-repo` to audit a repo for high-leverage improvements and
+write executable plans without editing source. It supports quick, deep, focus,
+branch, next, validate-plan, and reconcile flows, and validates plan readiness
+before routing to review, handoff, or execution.
 
 Use `plan-review-swarm` to review a written implementation plan before code
 changes. It checks the whole artifact, verifies claims against the repo, and can
@@ -197,7 +214,9 @@ Use discuss-with-me to pressure-test this design decision before editing files.
 Use spec-design-swarm to shape this feature before writing a plan.
 Use spec-review-swarm to attack this architecture spec before planning.
 Use spec-handoff to package this design for another agent without creating a plan.
+Use research-swarm to gather source-grounded evidence into a tmp ledger.
 Use plan-create to turn this spec into an implementation plan.
+Use plan-improve-repo to audit this repo and write executable improvement plans.
 Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.
 Use implementation-review-swarm to review this diff and include Claude counsel.

@@ -12,6 +12,7 @@ Repo: <absolute path>
 Lane: <lane name>
 Question: <bounded audit question>
 Parent needs: evidence-backed candidates only
+Flow: quick | deep | focus | branch
 
 Inspect:
 - <paths or commands>
@@ -23,6 +24,7 @@ Return:
 - why this matters
 - smallest useful plan scope
 - proof gate that would validate the improvement
+- validation commands or checks the parent must confirm
 - confidence: high | medium | low
 ```
 
@@ -41,3 +43,12 @@ Return:
   maintainers.
 
 For small repos, run these locally instead of spawning every lane.
+
+## Flow Selection
+
+- `quick`: run correctness, tests-proof, and one obvious project-specific lane.
+- `deep`: run all lanes that match the repo.
+- `focus`: run only the requested lane plus correctness or tests-proof if they
+  are needed to prove the result.
+- `branch`: audit changed files first, then inspect adjacent tests and ownership
+  boundaries.

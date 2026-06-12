@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-12 Research Swarm Boundary](2026-06-12-research-swarm-boundary.md)
 - [2026-06-12 Debug Investigation Background Monitoring](2026-06-12-debug-investigation-background-monitoring.md)
 - [2026-06-10 Shravan Dev Workflow proof chain hardening](2026-06-10-shravan-dev-workflow-proof-chain-hardening.md)
 - [2026-06-10 Discuss-With-Me grill contract](2026-06-10-discuss-with-me-grill-contract.md)

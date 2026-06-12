@@ -121,6 +121,27 @@ edits. When multiple credible branches exist, the opposing branch is
 steelmanned and the boundary, tradeoff, or assumption under pressure is named
 before asking the user to decide.
 
+Gate: broad evidence gathering, prior-art research, current docs/web research,
+Reader research, memory mining, and session-log searches are routed to
+`research-swarm` after the decision boundary is named.
+
+### research-swarm should trigger
+
+- "Research the prior art and write a tmp evidence ledger."
+- "Use subagents to look through code, docs, DeepWiki, Reader, and session logs."
+- "Find source-grounded evidence before we decide the design."
+
+Gate: research questions are framed before lane dispatch; local re-anchor happens
+before external comparison when a repo is involved; claims are labeled as direct
+observation, cited source summary, user-memory evidence, inference, or
+unresolved.
+
+### research-swarm should not trigger
+
+- "Grill my understanding before we decide." -> `discuss-with-me`
+- "Shape the architecture from this evidence." -> `spec-design-swarm`
+- "Review this implementation plan." -> `plan-review-swarm`
+
 ### orchestrator-goal should trigger
 
 - "Use /goal for this already-discussed release and make the completion gates explicit."
@@ -186,6 +207,22 @@ Gate: stays read-only, creates a written implementation plan, and routes review
 to `plan-review-swarm` or execution to `implementation-execute-plan`. The plan
 maps material requirements to proof gates and splits work whose proof cannot
 pass at the proposed scope.
+
+### plan-improve-repo should trigger
+
+- "Audit this repo and make plans for high-leverage improvements."
+- "Find the next refactors worth doing, but do not code them."
+- "Validate the improvement backlog and tell me what is ready to execute."
+
+Gate: stays read-only against source, vets candidates against files, writes one
+focused plan per accepted improvement, validates plan readiness, and routes
+execution to `implementation-execute-plan`.
+
+### plan-improve-repo should not trigger
+
+- "Turn this spec into an implementation plan." -> `plan-create`
+- "Execute this existing plan." -> `implementation-execute-plan`
+- "Review this plan for holes." -> `plan-review-swarm`
 
 ### implementation-handoff should trigger
 

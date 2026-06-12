@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Swarm"
+  short_description: "Gather evidence with bounded research lanes"
+  default_prompt: "Use research-swarm to turn this into sharp research questions, gather source-grounded evidence, and write a tmp research ledger."

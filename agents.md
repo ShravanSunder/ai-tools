@@ -65,6 +65,7 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 |-------|----------|---------|
 | spec-design-swarm | `plugins/shravan-dev-workflow/skills/spec-design-swarm/` | Pre-plan design formation with bounded codebase explorer, architecture, security, and adversarial lanes |
 | discuss-with-me | `plugins/shravan-dev-workflow/skills/discuss-with-me/` | Manual pressure-test that makes the shared model prove itself before action: scoped decision map, challenge to the user's read, and one forcing question for design/spec/plan/implementation/docs decisions |
+| research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
 | orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals to discuss-with-me |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-review-swarm | `plugins/shravan-dev-workflow/skills/spec-review-swarm/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |

@@ -52,6 +52,9 @@ fuzzy goal or design question
    - external prior-art or docs lane
    - UX/API/CLI surface lane when relevant
    - security/trust-boundary lane for sensitive designs
+   - if source gathering is substantial or depends on mixed source classes,
+     route that phase through `research-swarm` and consume its ledger before
+     making design recommendations
 4. Build architecture pressure lanes:
    - minimal-change approach
    - clean-boundary approach
@@ -99,6 +102,9 @@ For tiny design questions, run local versions of the relevant lanes and state wh
 
 - Load `references/swarm-packets.md` before spawning design, research, or architecture subagents.
 - Load `references/discuss-with-me.md` when intent is unclear or design branches need user decisions.
+- Use `research-swarm` when the design depends on external prior art, current
+  web/docs, DeepWiki-style repository research, saved-reader sources, memory,
+  session logs, or a portable evidence ledger.
 - Load `../../references/source-inspirations.md` when updating this skill, explaining source practices, or comparing against admired upstream skills.
 
 ## Output Shape

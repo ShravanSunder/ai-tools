@@ -17,9 +17,9 @@ manually: they are asking to be pressure-tested, not facilitated. Politely
 summarizing the request and asking a soft question is a failure even when the
 summary is accurate.
 
-It does not write code, specs, plans, or docs by itself. Its output is a
-sharper shared model, a user-owned decision, and a next workflow only after
-the decision fork is resolved.
+It does not write code, specs, plans, docs, or research packets by itself. Its
+output is a sharper shared model, a user-owned decision, and a next workflow
+only after the decision fork is resolved.
 
 ## The Grill Contract
 
@@ -72,6 +72,7 @@ user's call, not yours.
 - Invocation interrupts. Stop in-flight execution and queued edits before anything else; this contract owns the turn even when other skills are loaded alongside it. Reading evidence for the scoped map and countercase is part of the interrupt response; resuming edits is not.
 - Stay read-only unless the user explicitly switches to artifact creation or implementation.
 - Prefer code/docs/session evidence over asking when the answer is discoverable — and evidence serves the challenge: after reading, you still owe elements 3 and 7. Fact-finding followed by a presented answer is not discussion.
+- Keep evidence gathering bounded to what sharpens the forcing question. If the next useful output is source discovery, prior-art comparison, current web/docs research, memory/session mining, or an evidence ledger, stop the discussion loop and route to `research-swarm` after a closeout.
 - Use lightweight intent handles: `reflect-back`, `grill-me`, `steelman`, `stress-test`, `assumption-check`, `boundary-check`, `source-of-truth`, and `reconverge`.
 - When multiple real branches exist, steelman the strongest competing path before converging.
 - Do not accept "whatever you think", "just confirm my read", or "if you understand, keep going" as convergence while a material branch remains. If the user dismisses the forcing question, restate the recommended default as the pending decision and ask for explicit confirmation of that default; dismissal is not consent.
@@ -86,6 +87,7 @@ user's call, not yours.
 |-----------------|---------|
 | "I declared Stage: design, so I'm in discussion mode" | Mode declarations do not count; output shape does. A build plan, architecture diagram, metrics table, or doc outline is execution-shaped output. |
 | "I gathered the evidence and presented the answer" | Fact-finding without elements 3 and 7 is a failed discussion. Evidence sharpens the challenge; it does not replace it. |
+| "I should research this before asking the question" | Broad information gathering belongs to `research-swarm`. This skill may inspect enough evidence to frame the decision, then must stop and hand off. |
 | "The user said it's simple / don't overcomplicate" | Anchoring is the exact pressure this skill exists to resist. Challenge the premise before accepting it. |
 | "The user said 'if you understand, keep going'" | Conditional consent is not convergence. Deliver the contract, then let the user select the branch. |
 | "I'll ask all my questions at once to save time" | Batched questions let the user click through without thinking. One forcing question. |
@@ -111,6 +113,8 @@ Do not use as the primary workflow for:
 - code/diff review: use `implementation-review-swarm`
 - adversarial plan/spec review: use `plan-review-swarm` or `spec-review-swarm`
 - broad design research with subagents: use `spec-design-swarm`
+- broad information gathering, prior-art research, current web/docs research,
+  memory/session mining, or evidence ledgers: use `research-swarm`
 - spec/design portability: use `spec-handoff`
 - implementation plan creation: use `plan-create`
 - docs editing: use `docs-maintain`
@@ -120,12 +124,17 @@ Do not use as the primary workflow for:
 ## Workflow
 
 1. Stop any in-flight execution, then classify the stage (`design` / `spec` / `plan` / `implementation` / `docs`) and the intent handle.
-2. Read the discoverable evidence the question depends on.
+2. Read only the bounded discoverable evidence needed to build the scoped map
+   and countercase.
 3. Build the scoped map: which systems, meanings, or decision branches could this be about?
 4. If the request hides multiple independent decisions, the forcing question becomes which decision to settle first.
 5. Load the stage reference or question patterns when the question is broad, high-stakes, or technically loaded.
-6. Respond with the Grill Contract shape.
-7. Stop when the decision, assumption, non-goal, or next workflow is explicit — confirmed by the user, not assumed.
+6. If the answer requires a research packet, source map, external prior-art
+   sweep, session-history mining, or subagent evidence lanes, close out the
+   decision boundary and hand off to `research-swarm` instead of gathering the
+   information inline.
+7. Respond with the Grill Contract shape.
+8. Stop when the decision, assumption, non-goal, or next workflow is explicit — confirmed by the user, not assumed.
 
 ## Progressive Disclosure
 
