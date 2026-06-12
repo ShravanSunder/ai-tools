@@ -1,6 +1,6 @@
 ---
 name: debug-investigation
-description: Use when investigating bugs, failing tests, flaky behavior, crashes, regressions, build failures, unexpected behavior, or requests to debug/root-cause a problem before implementing fixes.
+description: Use when investigating bugs, failing tests, flaky behavior, crashes, regressions, build failures, unexpected behavior, long-running monitor/watch requests, or requests to debug/root-cause a problem before implementing fixes.
 ---
 
 # Debug Investigation
@@ -18,6 +18,10 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
 - For real debugging work, write a repo-local debug artifact by default unless the user explicitly asked for chat-only/no-files output.
 - If the symptom, target, or reproduction surface is unclear, do not create files yet; ask one material question or build the missing bug packet first.
 - Debug artifacts are disposable investigation outputs. Later cleanup, preservation, or promotion belongs to `docs-maintain`.
+- For long-running shell, service, or infra monitoring, load
+  `references/background-monitoring.md` before proposing watcher shape,
+  background jobs, JSONL/state files, helper agents, restarts, or secret
+  handling.
 
 ## Workflow
 
@@ -33,22 +37,25 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
    - Use `<repo-root>/tmp/debug-workflows/<yyyy-mm-dd>-<repo>-<branch>-<bug-slug>/debug-investigation.md`.
    - Keep it updated with evidence, hypotheses, proof steps, and commands.
    - Skip file creation only for chat-only/no-files requests or unclear debugging scope.
-3. Reproduce or bound the failure:
+3. If a long-running monitor is needed, load
+   `references/background-monitoring.md` and keep the watcher read-only,
+   harness-visible, cancellable, stateful, and redacted.
+4. Reproduce or bound the failure:
    - exact command, UI path, input, or event sequence
    - deterministic, flaky, environment-specific, or not yet reproduced
    - smallest known failing surface
-4. Trace the code path:
+5. Trace the code path:
    - read the failing boundary and callers
    - identify where expected and actual behavior diverge
    - separate source cause from downstream symptom
-5. Check recent changes and working examples:
+6. Check recent changes and working examples:
    - git diff, recent commits, changed config, dependency or schema drift
    - nearby working code that follows the intended pattern
-6. Form ranked hypotheses:
+7. Form ranked hypotheses:
    - state one concrete root-cause hypothesis at a time
    - list supporting evidence and missing evidence
    - name the smallest proof step
-7. Recommend next action:
+8. Recommend next action:
    - prove now
    - fix next
    - follow up later

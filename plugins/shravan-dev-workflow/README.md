@@ -156,7 +156,9 @@ risk. It is for continuation, audit, or manual review of work already in motion.
 
 - `debug-investigation`: diagnosis-first debugging before fixes. Use it for
   failing tests, flaky behavior, crashes, regressions, build failures, or
-  unexpected behavior.
+  unexpected behavior. For long-running infra or batch monitoring, it loads a
+  background-monitoring reference for redacted JSONL/state watchers that are
+  cheap, cancellable, and visible through the agent harness when available.
 - `docs-maintain`: durable documentation maintenance after source-of-truth drift
   is identified. It keeps README human-facing, `AGENTS.md` compact (`agents.md`
   in this repo), and workflow history in changelog/runbook docs.
