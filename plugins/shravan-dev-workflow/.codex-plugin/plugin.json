@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.15",
-  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, spec handoff, plan creation, repo improvement planning, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, implementation review orchestration, plan workflows, debugging, skill audits, TUI presentation guidance, and operations Linear tracking.",
+  "version": "1.6.16",
+  "description": "Codex-first development workflow plugin with goal orchestration, spec design swarms, spec handoff, plan creation, repo improvement planning, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, implementation review orchestration, PR wrap-up, plan workflows, debugging, skill audits, TUI presentation guidance, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -34,6 +34,7 @@
     "execution",
     "implementation-handoff",
     "implementation-review-swarm",
+    "implementation-pr-wrapup",
     "debugging",
     "bug-hunt",
     "skill-audit",
@@ -46,7 +47,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Codex-first workflow with spec design, review, security routing, debugging, TUI, and PM",
-    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, package spec/design context with spec-handoff, create written implementation plans with plan-create, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, clarify and pressure-test unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and workflow artifact lifecycle, adversarially review drafted specs with review lanes, route explicit security audits to the official Codex Security workflows through ops-security-review, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested. It also validates and addresses accepted review findings, packages copy-pasteable plan and implementation handoffs, runs plan-review-swarm for implementation-plan review, executes written plans with implementation-execute-plan controller-owned verification, writes lane artifacts for clear spec/plan/debug work unless chat-only/no-files was requested, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus operations Linear tracking.",
+    "longDescription": "Use Shravan Dev Workflow to shape specs with bounded design swarms, package spec/design context with spec-handoff, create written implementation plans with plan-create, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, clarify and pressure-test unclear design/spec/plan/implementation/docs decisions with discuss-with-me, maintain docs and workflow artifact lifecycle, adversarially review drafted specs with review lanes, route explicit security audits to the official Codex Security workflows through ops-security-review, and run evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested. It also validates and addresses accepted review findings, wraps up PRs with checks/comments/review-thread/merge gates through implementation-pr-wrapup, packages copy-pasteable plan and implementation handoffs, runs plan-review-swarm for implementation-plan review, executes written plans with implementation-execute-plan controller-owned verification, writes lane artifacts for clear spec/plan/debug work unless chat-only/no-files was requested, investigates bugs before fixes, audits skills from real session evidence, and includes TUI presentation guidance plus operations Linear tracking.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -68,6 +69,7 @@
       "Use plan-improve-repo to audit this repo and write executable improvement plans.",
       "Use ops-security-review to choose the right Codex Security scan.",
       "Run implementation-execute-plan on this plan.",
+      "Use implementation-pr-wrapup to finish this PR.",
       "Investigate this bug before fixing it.",
       "Audit these skills against session evidence."
     ]

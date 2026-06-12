@@ -17,7 +17,7 @@ Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex
 
 | Plugin | Description |
 |--------|-------------|
-| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
+| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, PR wrap-up, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
 | [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
 | [`skill-peekaboo`](plugins/skill-peekaboo/) | Visual UI testing for macOS apps using Peekaboo CLI |
 
@@ -36,7 +36,7 @@ flowchart LR
 
     spec["spec-*<br/>design, review, handoff"]
     plan["plan-*<br/>create, review, handoff"]
-    impl["implementation-*<br/>execute, review, handoff"]
+    impl["implementation-*<br/>execute, review, PR wrap-up, handoff"]
 
     discuss --> spec
     discuss --> plan

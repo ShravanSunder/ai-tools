@@ -111,7 +111,11 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Deduplicate by root cause.
 
 7. Review reception and fix loop
-   - Load `references/review-reception.md` to receive accepted findings, decide what this workflow owns, and manage PR/review-thread follow-through.
+   - Load `../../references/review-reception.md` to receive accepted findings,
+     decide what this workflow owns, and handle feedback produced or validated
+     by this review.
+   - Pure follow-through on existing GitHub PR comments or review threads
+     belongs to `implementation-pr-wrapup`.
 
 8. Verdict
    - `ready`: no accepted blocker/important findings and no decision-relevant open questions.
@@ -178,13 +182,18 @@ Rejected findings should not be listed by default. Mention them only when a reje
 
 ## Addressing Accepted Findings
 
-Implementation review includes review reception when the parent agent owns the implementation. Load `references/review-reception.md` before editing, replying to review threads, or closing PR conversations.
+Implementation review includes review reception when the parent agent owns the
+implementation. Load `../../references/review-reception.md` before editing,
+replying to review findings produced by this review, or closing threads for
+accepted findings from this review. Existing PR comment/thread follow-through
+belongs to `implementation-pr-wrapup`.
 
 ## Progressive Disclosure
 
 - Load `references/reviewer-prompts.md` before dispatching reviewers or writing a copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
-- Load `references/review-reception.md` before addressing accepted findings or managing PR review threads.
+- Load `../../references/review-reception.md` before addressing accepted
+  findings from this review.
 
 ## Report Shape
 

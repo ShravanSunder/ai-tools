@@ -39,6 +39,7 @@ plan-*               implementation-plan boundary  plan-create
                                                   plan-handoff
 implementation-*     code/change boundary          implementation-execute-plan
                                                   implementation-review-swarm
+                                                  implementation-pr-wrapup
                                                   implementation-handoff
 ops-*                external operational systems  ops-security-review
                                                   ops-linear-tracking
@@ -65,6 +66,7 @@ flowchart LR
 
     implExecute["implementation-execute-plan<br/>execute written plan"]
     implReview["implementation-review-swarm<br/>review code/diff/PR"]
+    implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
     discuss --> specDesign
@@ -86,8 +88,11 @@ flowchart LR
     planHandoff --> implExecute
 
     implExecute --> implReview
+    implExecute --> implWrap
+    implReview --> implWrap
     implExecute --> implHandoff
     implReview --> implHandoff
+    implWrap --> implHandoff
 ```
 
 ## Core Phase Skills
@@ -148,6 +153,12 @@ explicit opt-in external counsel. Reviewer outputs are candidates, not truth,
 and accepted findings are verified before edits. Implementation review verifies
 that proof maps back to requirements/spec/plan before a ready verdict.
 
+Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after
+implementation work exists: push/open/update the PR, monitor checks and
+comments, process existing review threads, prove merge readiness with fresh
+state, and merge only when user authorization exists. Fresh code-review
+discovery still belongs to `implementation-review-swarm`.
+
 Use `implementation-handoff` when real implementation state exists: branch,
 diff, changed files, commits, validation output, failed commands, blockers, or
 risk. It is for continuation, audit, or manual review of work already in motion.
@@ -201,6 +212,7 @@ Use plan-create to turn this spec into an implementation plan.
 Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.
 Use implementation-review-swarm to review this diff and include Claude counsel.
+Use implementation-pr-wrapup to handle existing PR comments and merge when ready.
 Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.
 ```
