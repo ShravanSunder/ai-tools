@@ -122,3 +122,32 @@ Subagents may own slices. The parent owns the contract:
 - integrate conflicts
 - rerun proof gates
 - decide complete or blocked
+
+## Closeout Audit
+
+Use this status set when auditing or closing a goal:
+
+```text
+done | not-applicable | open | blocked
+```
+
+Closeout rows use this shape:
+
+```text
+Gate:
+<spec/design, plan matrix, review cycle, implementation proof, docs/release, parent verification, or matrix row>
+
+Status:
+<done | not-applicable | open | blocked>
+
+Evidence:
+<artifact path, command output, transcript note, user assertion, or none>
+
+Next:
+<none, next workflow, or blocker>
+```
+
+`done` requires an evidence pointer. If the only evidence is that the user says
+a review or work cycle already happened, write `user assertion in this chat`.
+Do not rerun already-completed lifecycle skills merely because the closeout
+checklist is mandatory; account for them and route only open or blocked rows.

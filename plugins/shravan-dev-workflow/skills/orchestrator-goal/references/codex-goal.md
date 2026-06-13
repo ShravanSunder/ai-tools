@@ -36,6 +36,10 @@ When available, use the goal tools consistently with host rules:
   exists.
 - `update_goal` with `complete` only after proof gates pass.
 - `update_goal` with `blocked` only when the host blocked threshold is met.
+- Before `update_goal` with `complete` or `blocked`, report the Goal Closeout
+  Audit with gate/status/evidence/next rows. Use only `done`,
+  `not-applicable`, `open`, or `blocked`. A `done` row requires an evidence
+  pointer.
 
 Do not use goal state as a substitute for plan review, implementation review,
 or verification commands.

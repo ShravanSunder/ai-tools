@@ -86,6 +86,8 @@ If any of these materially affect the work and are missing, route to
 7. Report the contract, selected workflow, and first verification checkpoint.
    When returning artifact paths, include full clickable artifact links
    (absolute path + line). Do not rely only on relative paths.
+8. When auditing, closing, or marking a goal complete/blocked, produce the
+   mandatory Goal Closeout Audit before any completion claim or host goal update.
 
 ## Host Rules
 
@@ -131,6 +133,53 @@ Completion is parent-owned. A subagent, reviewer, UI driver, or observability
 query can satisfy a row only after the parent inspects the returned evidence and
 reruns or cross-checks the required proof gate when feasible.
 
+## Goal Closeout Audit
+
+Every goal closeout must account for lifecycle gates from the orchestration
+viewpoint. This is mandatory, but it is not a command to rerun every workflow.
+If spec review, plan review, implementation review, or another cycle already
+happened, mark it `done` with an evidence pointer. If a cycle does not apply to
+the goal, mark it `not-applicable`.
+
+Allowed statuses are exactly:
+
+```text
+done | not-applicable | open | blocked
+```
+
+Each closeout row must include:
+
+- gate: spec/design, plan matrix, plan review, implementation proof,
+  implementation review, docs/release, parent verification, or a goal-specific
+  matrix row
+- status: one of the allowed statuses
+- evidence: artifact path, command output, transcript note, user assertion, or
+  `none`
+- next: `none`, the next workflow, or the blocker
+
+`done` is allowed only when the row has an evidence pointer. The evidence may be
+`user assertion in this chat`, but it must be explicit. Rows with no evidence are
+`open` or `blocked`, not `done`.
+
+The final closeout must include:
+
+```text
+Goal closeout checklist:
+- Gate: <gate or matrix row>
+  Status: <done | not-applicable | open | blocked>
+  Evidence: <path/command/transcript/user assertion/none>
+  Next: <none | workflow | blocker>
+
+Matrix closeout:
+Done: <rows/gates>
+Left: <open or blocked rows/gates>
+Review/work cycles: <spec, plan, implementation, review, docs cycles accounted for>
+Completion decision: <complete | not complete | blocked>
+```
+
+Only mark the host goal complete when every material row is `done` or
+`not-applicable`. Mark it blocked only under the host blocked-state rules.
+
 ## Progressive Disclosure
 
 - Load `references/goal-contract.md` when writing or auditing the contract.
@@ -172,4 +221,17 @@ Missing:
 
 Next workflow:
 shravan-dev-workflow:discuss-with-me
+```
+
+For goal closeout:
+
+```text
+Goal closeout checklist:
+<gate/status/evidence/next rows using only done, not-applicable, open, blocked>
+
+Matrix closeout:
+Done: <rows/gates completed>
+Left: <rows/gates open or blocked>
+Review/work cycles: <cycles accounted for>
+Completion decision: <complete | not complete | blocked>
 ```

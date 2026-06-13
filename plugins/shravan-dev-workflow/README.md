@@ -122,6 +122,9 @@ fuzzy, it routes back to `discuss-with-me`. For substantial goals, the contract
 carries a requirements/proof matrix and parent-owned completion gate; child
 agents, reviewers, UI drivers, and observability queries produce evidence, not
 completion by themselves.
+At closeout, `orchestrator-goal` accounts for lifecycle gates with the simple
+statuses `done`, `not-applicable`, `open`, and `blocked`; `done` requires an
+evidence pointer and does not imply rerunning already-completed review cycles.
 
 ### Spec boundary
 
