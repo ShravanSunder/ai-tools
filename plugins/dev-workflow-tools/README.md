@@ -11,20 +11,6 @@ Currently includes the Peekaboo skill for native macOS UI automation via the
 /plugin install dev-workflow-tools@ai-tools
 ```
 
-If `skill-peekaboo` is already installed, uninstall it first. The move to
-`dev-workflow-tools` changes the plugin ID, so a normal install does not replace
-the old plugin automatically.
-
-```bash
-codex plugin remove skill-peekaboo@ai-tools
-codex plugin add dev-workflow-tools@ai-tools
-```
-
-```text
-/plugin uninstall skill-peekaboo@ai-tools
-/plugin install dev-workflow-tools@ai-tools
-```
-
 ## What It Does
 
 The `peekaboo` skill teaches agents how to use Peekaboo for macOS app

@@ -29,9 +29,6 @@ safer snapshot-scoped interaction, and deeper reference routing.
   scenarios.
 - Replaced marketplace entries for standalone `skill-peekaboo` with
   `dev-workflow-tools` in the Codex and Claude marketplaces.
-- Documented the migration requirement: remove `skill-peekaboo` before
-  installing `dev-workflow-tools`, because the plugin ID changed and a normal
-  install does not replace the old plugin automatically.
 
 ## Validation
 
@@ -45,10 +42,6 @@ safer snapshot-scoped interaction, and deeper reference routing.
 - Codex cache refresh before final pressure proof:
   `codex plugin add dev-workflow-tools@ai-tools --json` installed
   `dev-workflow-tools` `0.1.0`.
-- Codex old-plugin cleanup:
-  `codex plugin remove skill-peekaboo@ai-tools --json` removed the old
-  standalone plugin ID, and the cache check showed only
-  `~/.codex/plugins/cache/ai-tools/dev-workflow-tools` afterward.
 - GREEN pressure proof against installed `dev-workflow-tools` `0.1.0`:
   `tests/skills/run-skill-pressure-tests.sh --fast --scenario peekaboo-progressive-disclosure --timeout 900 --serial`
   passed with `Passed: 1`, `Failed: 0`.
@@ -71,5 +64,3 @@ safer snapshot-scoped interaction, and deeper reference routing.
   - `claude plugin list` still reports the previously installed
     `skill-peekaboo@ai-tools` `1.0.1` until the GitHub-backed Claude
     marketplace sees the pushed `dev-workflow-tools` entry and is refreshed.
-    After that, Claude users should uninstall `skill-peekaboo@ai-tools` and
-    install `dev-workflow-tools@ai-tools`.

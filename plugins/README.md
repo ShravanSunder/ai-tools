@@ -16,19 +16,6 @@ AI tools distributed through the local marketplaces in this repository.
 /plugin install <plugin-name>@ai-tools
 ```
 
-`skill-peekaboo` was replaced by `dev-workflow-tools`. If the old plugin is
-installed, remove it before installing the new common plugin:
-
-```bash
-codex plugin remove skill-peekaboo@ai-tools
-codex plugin add dev-workflow-tools@ai-tools
-```
-
-```text
-/plugin uninstall skill-peekaboo@ai-tools
-/plugin install dev-workflow-tools@ai-tools
-```
-
 ### Managing Plugins
 
 ```bash

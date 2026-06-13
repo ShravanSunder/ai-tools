@@ -15,20 +15,6 @@ codex plugin marketplace add ~/dev/ai-tools
 
 Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex or `/plugin install <name>@ai-tools` in Claude Code.
 
-If you previously installed `skill-peekaboo`, remove it before installing
-`dev-workflow-tools`; the plugin rename is a hard cutover, not an in-place
-upgrade.
-
-```bash
-codex plugin remove skill-peekaboo@ai-tools
-codex plugin add dev-workflow-tools@ai-tools
-```
-
-```text
-/plugin uninstall skill-peekaboo@ai-tools
-/plugin install dev-workflow-tools@ai-tools
-```
-
 | Plugin | Description |
 |--------|-------------|
 | [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, PR wrap-up, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
