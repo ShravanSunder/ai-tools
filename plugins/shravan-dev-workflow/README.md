@@ -113,7 +113,10 @@ substantial runs.
 
 Use `orchestrator-goal` when the objective is long-running and already clear
 enough to become a verifiable Codex or Claude `/goal` contract. If the goal is
-fuzzy, it routes back to `discuss-with-me`.
+fuzzy, it routes back to `discuss-with-me`. For substantial goals, the contract
+carries a requirements/proof matrix and parent-owned completion gate; child
+agents, reviewers, UI drivers, and observability queries produce evidence, not
+completion by themselves.
 
 ### Spec boundary
 

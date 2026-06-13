@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-13 Orchestrator Goal Proof Matrix](2026-06-13-orchestrator-goal-proof-matrix.md)
 - [2026-06-12 TUI Progressive Disclosure](2026-06-12-tui-progressive-disclosure.md)
 - [2026-06-12 Research Swarm Boundary](2026-06-12-research-swarm-boundary.md)
 - [2026-06-12 Debug Investigation Background Monitoring](2026-06-12-debug-investigation-background-monitoring.md)

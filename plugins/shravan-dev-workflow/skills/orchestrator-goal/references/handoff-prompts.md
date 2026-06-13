@@ -20,6 +20,9 @@ Required reading:
 Proof gates:
 <commands, artifacts, review state, docs, screenshots>
 
+Requirements/proof matrix:
+<requirement or claim -> proof gate, owner, and stale-proof guard>
+
 Stop condition:
 <exact completion state>
 
@@ -29,7 +32,8 @@ Blocked condition:
 Checkpoint rhythm:
 <when to report or write handoff>
 
-After setting the goal, use <next workflow skill> for the first phase.
+After setting the goal, use <next workflow skill> for the first phase. The
+parent agent must verify subagent or driver evidence before claiming completion.
 ```
 
 ## Claude Prompt
@@ -42,6 +46,10 @@ Stay within:
 
 Before claiming completion, make the proof visible in the transcript:
 <commands with exit codes, files/artifacts, review or PR state, blockers>
+
+Carry the requirements/proof matrix in the transcript or cite the artifact that
+contains it. Treat subagent, reviewer, UI-driver, and telemetry output as
+evidence for the parent to verify, not completion by itself.
 
 If the goal becomes unclear, stop and ask for shared-understanding work instead
 of broadening scope.
@@ -66,6 +74,9 @@ Required reading:
 
 Proof gates:
 <evidence>
+
+Requirements/proof matrix:
+<requirement or claim -> proof gate, owner, and stale-proof guard>
 
 Stop condition:
 <completion>

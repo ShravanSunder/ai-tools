@@ -35,6 +35,7 @@ The goal is clear only when these are known:
 - required reading or source artifacts
 - allowed write scope
 - proof gates by layer where known
+- requirements/proof matrix, or who must define it next
 - stop condition
 - blocked condition
 - checkpoint or handoff rhythm
@@ -86,6 +87,26 @@ The parent agent owns the goal. Subagents can perform bounded research,
 implementation, or review slices, but their outputs are evidence to verify, not
 completion by themselves.
 
+## Proof Matrix Discipline
+
+For non-trivial goals, compile a requirements/proof matrix before routing the
+next phase. The matrix may point to an existing plan/spec, or it may say
+`must be defined by plan-create` when the goal starts before an implementation
+plan exists.
+
+Rows should name:
+
+- requirement or claim
+- proof source: command, artifact, review result, UI/control evidence,
+  observability query, or transcript-visible evidence
+- owner: parent, phase skill, subagent lane, external reviewer, or app-specific
+  verifier
+- stale-proof guard where relevant
+
+Completion is parent-owned. A subagent, reviewer, UI driver, or observability
+query can satisfy a row only after the parent inspects the returned evidence and
+reruns or cross-checks the required proof gate when feasible.
+
 ## Progressive Disclosure
 
 - Load `references/goal-contract.md` when writing or auditing the contract.
@@ -104,7 +125,7 @@ For a clear goal:
 
 ```text
 Goal contract:
-<objective, scope, proof, stop, blocked, checkpoint>
+<objective, scope, proof matrix, stop, blocked, checkpoint>
 
 Host:
 <Codex / Claude / copy-paste / audit>
