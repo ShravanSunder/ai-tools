@@ -85,19 +85,30 @@ Failure policy:
 - ordinary app startup must not crash if the collector is absent
 - explicit observability launchers should fail fast with `Run: mise run observability:up`
 - collector scrubbing is defense-in-depth; producers still must avoid emitting secrets
+- shared local mode accepts only loopback OTLP endpoints and loopback health URLs
+- repo launchers and doctors must fail on non-loopback overrides
 
 Retention policy:
 
 - VictoriaMetrics: `15d` retention plus a `10GiB` minimum-free-disk safety stop
-- VictoriaLogs: `15d` retention plus `10GiB` max disk retention cap
-- VictoriaTraces: `15d` retention plus `10GiB` max disk retention cap
+- VictoriaLogs: `15d` retention plus `10GiB` target disk retention cap
+- VictoriaTraces: `15d` retention plus `10GiB` target disk retention cap
 - Metrics disk safety is not the same as old-data max-size retention; document that caveat.
+- Logs/traces may exceed the target while preserving recent partitions; document that caveat.
+
+Cleanup policy:
+
+- `observability-stack down` stops compose services only
+- never use `docker compose down -v`
+- never delete the shared data root from routine helpers
+- repo-local adapters must not call shared `down` or `restart` automatically
 
 ## Source Notes
 
 - VictoriaLogs OTLP ingestion treats resource labels as stream fields by default; use `VL-Stream-Fields` to restrict stream cardinality.
 - VictoriaLogs ingestion supports `VL-Ignore-Fields` to drop sensitive fields at ingestion.
 - VictoriaTraces accepts OpenTelemetry traces through OTLP, so the shared collector can route traces alongside logs and metrics.
+- OpenTelemetry Collector processors can delete or redact attributes across logs, traces, and metrics before export.
 
 References:
 
@@ -110,10 +121,11 @@ References:
 | Requirement | Task | Proof Gate | Layer |
 | --- | --- | --- | --- |
 | Shared stack lives in `ai-tools/observability` | 1, 2 | `bash tests/observability/test-observability-stack.sh` | static/unit |
-| Stack ports are loopback-only and data is in one shared data root | 2 | `docker compose --file observability/docker-compose.yml config` | integration config |
-| Stack smoke proves logs, metrics, traces, and sensitive canary scrub | 2 | `observability/observability-stack up`; `observability/observability-stack smoke` | smoke |
-| Query/debug knowledge lives in the skill | 3 | pressure scenario asserts no app-local query docs/scripts | workflow |
-| App repos remain producers only | 3, 4 | skill pressure test plus README ownership wording | workflow/docs |
+| Stack ports are loopback-only and data is in one shared data root | 1, 2 | static test parses rendered compose config | integration config |
+| Retention flags match signal-specific Victoria semantics | 1, 2 | static test asserts rendered Victoria flags | integration config |
+| Stack smoke proves logs, metrics, traces, and sensitive canary scrub across all signals | 2 | `observability/observability-stack up`; `observability/observability-stack smoke` | smoke |
+| Query/debug knowledge lives in the skill | 3 | pressure scenarios assert no app-local generic query cookbook | workflow |
+| App repos remain producers only | 3, 4 | AgentStudio and Agent VM pressure scenarios plus README ownership wording | workflow/docs |
 
 ## File Structure
 
@@ -131,6 +143,7 @@ Create:
 - `plugins/shravan-dev-workflow/skills/ops-observability-stack/references/agent-vm-loop.md` - Agent VM / `shravan-claw-beta` external-stack loop.
 - `plugins/shravan-dev-workflow/skills/ops-observability-stack/references/victoria-queries.md` - reusable Victoria query recipes.
 - `tests/skills/pressure-scenarios/ops-observability-stack-boundary.md` - shortcut-pressure scenario.
+- `tests/skills/pressure-scenarios/ops-observability-agent-vm-boundary.md` - managed-vs-external shortcut-pressure scenario.
 - `docs/changelog/2026-06-12-shared-observability-stack.md` - public-safe changelog.
 
 Modify:
@@ -167,7 +180,14 @@ Create `tests/observability/test-observability-stack.sh` with assertions for:
 - no stack file contains `devfiles`
 - default collector URL is `http://127.0.0.1:4318`
 - compose binds collector and Victoria ports to `127.0.0.1`
+- rendered compose config has no non-loopback published ports
+- rendered compose config mounts a single shared data root under the helper data dir
+- VictoriaMetrics args include `-retentionPeriod=${RETENTION_PERIOD}` and `-storage.minFreeDiskSpaceBytes=${METRICS_MIN_FREE_BYTES}`
+- VictoriaLogs args include `-retentionPeriod=${RETENTION_PERIOD}` and `-retention.maxDiskSpaceUsageBytes=${LOGS_MAX_BYTES}`
+- VictoriaTraces args include `-retentionPeriod=${RETENTION_PERIOD}` and `-retention.maxDiskSpaceUsageBytes=${TRACES_MAX_BYTES}`
 - collector config includes `VL-Stream-Fields`, `VL-Ignore-Fields`, and Victoria OTLP exporter endpoints
+- collector config includes collector-side deletion/redaction processors for logs, traces, and metrics before export
+- helper contains no `down -v` and no routine shared-data-root deletion
 - `observability-stack env` prints generic OTLP producer env
 
 Use this exact command shape inside the test:
@@ -176,7 +196,11 @@ Use this exact command shape inside the test:
 bash -n "$STACK"
 "$STACK" collector-url | grep -Fx 'http://127.0.0.1:4318' >/dev/null
 "$STACK" env | grep -Fx 'OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318' >/dev/null
-docker compose --file "$COMPOSE" config >/dev/null
+rendered_config="$(docker compose --file "$COMPOSE" config)"
+printf '%s\n' "$rendered_config" | grep -F '127.0.0.1:' >/dev/null
+printf '%s\n' "$rendered_config" | grep -F -- '-retentionPeriod=15d' >/dev/null
+printf '%s\n' "$rendered_config" | grep -F -- '-storage.minFreeDiskSpaceBytes=10737418240' >/dev/null
+printf '%s\n' "$rendered_config" | grep -F -- '-retention.maxDiskSpaceUsageBytes=10737418240' >/dev/null
 ```
 
 - [ ] **Step 3: Run red**
@@ -237,6 +261,15 @@ Make the script executable:
 chmod +x observability/observability-stack
 ```
 
+Helper semantics:
+
+- reject non-loopback bind, collector, and health URL overrides
+- `down` stops compose services only
+- `restart` is an explicit operator command and must not delete volumes
+- never run `docker compose down -v`
+- never delete `${DATA_DIR}` from routine commands
+- `env` prints only loopback OTLP producer endpoints
+
 - [ ] **Step 2: Create Compose**
 
 Create `observability/docker-compose.yml` with services:
@@ -249,13 +282,20 @@ ai-tools-victoria-traces
 ```
 
 All published ports must be loopback-only. Do not use app-specific service names.
+The rendered compose config must pass signal-specific retention flags:
+
+```text
+ai-tools-victoria-metrics: -retentionPeriod=${RETENTION_PERIOD}, -storage.minFreeDiskSpaceBytes=${METRICS_MIN_FREE_BYTES}
+ai-tools-victoria-logs:    -retentionPeriod=${RETENTION_PERIOD}, -retention.maxDiskSpaceUsageBytes=${LOGS_MAX_BYTES}
+ai-tools-victoria-traces:  -retentionPeriod=${RETENTION_PERIOD}, -retention.maxDiskSpaceUsageBytes=${TRACES_MAX_BYTES}
+```
 
 - [ ] **Step 3: Create collector config**
 
 Create `observability/otel-collector.yaml` with:
 
 - OTLP gRPC and HTTP receivers
-- resource/attribute deletion for known sensitive fields
+- resource/attribute deletion for known sensitive fields across logs, traces, and metrics
 - batch processor
 - VictoriaMetrics exporter: `http://ai-tools-victoria-metrics:8428/opentelemetry/v1/metrics`
 - VictoriaLogs exporter: `http://ai-tools-victoria-logs:9428/insert/opentelemetry/v1/logs`
@@ -263,7 +303,10 @@ Create `observability/otel-collector.yaml` with:
 - `VL-Stream-Fields` limited to stable low-cardinality fields
 - `VL-Ignore-Fields` for tokens, secrets, payloads, raw errors, and raw paths
 
-Compose must pass the retention policy through product-specific Victoria flags.
+`VL-Stream-Fields` must not include branch names, run markers, proof markers,
+process ids, raw paths, prompts, payloads, tokens, raw errors, or high-cardinality
+product ids. VictoriaLogs headers are defense-in-depth; the collector still owns
+cross-signal deletion before export.
 
 - [ ] **Step 4: Create concise stack README**
 
@@ -314,7 +357,9 @@ observability/observability-stack up
 observability/observability-stack smoke
 ```
 
-Expected: smoke sends logs, metrics, and traces and proves the sensitive log canary is not queryable.
+Expected: smoke sends logs, metrics, and traces and proves sensitive canaries are
+not queryable as log fields, span/span-event attributes, metric labels, or
+resource attributes.
 
 ## Task 3: Add The Skill
 
@@ -326,6 +371,7 @@ Expected: smoke sends logs, metrics, and traces and proves the sensitive log can
 - Create: `plugins/shravan-dev-workflow/skills/ops-observability-stack/references/agent-vm-loop.md`
 - Create: `plugins/shravan-dev-workflow/skills/ops-observability-stack/references/victoria-queries.md`
 - Create: `tests/skills/pressure-scenarios/ops-observability-stack-boundary.md`
+- Create: `tests/skills/pressure-scenarios/ops-observability-agent-vm-boundary.md`
 - Modify: `plugins/shravan-dev-workflow/README.md`
 - Modify: `plugins/shravan-dev-workflow/.codex-plugin/plugin.json`
 - Modify: `plugins/shravan-dev-workflow/.claude-plugin/plugin.json`
@@ -347,13 +393,20 @@ App repos are telemetry producers. Ordinary app startup must not crash when the
 collector is absent. Explicit observability launchers are strict and should tell
 the operator to run the stack first. Query recipes and inspection guidance live
 in this skill, not in app repos.
+
+Choose the loop before giving commands:
+
+- stack lifecycle only: use `observability/README.md`
+- AgentStudio debug or beta: load `references/agentstudio-loop.md`
+- Agent VM or `shravan-claw-beta` external mode: load `references/agent-vm-loop.md`
+- query/proof only: load `references/resource-naming.md` and `references/victoria-queries.md`
 ```
 
 - [ ] **Step 2: Create references**
 
 Create references with these responsibilities:
 
-- `resource-naming.md`: stack env names, Docker service names, `service.name`, `dev.repo.hash`, `dev.worktree.hash`, `dev.branch.name`, `dev.runtime.flavor`, and state-file conventions.
+- `resource-naming.md`: stack env names, Docker service names, stable resource attributes, proof-only log/span attributes, forbidden stream fields, and portable state-file keys.
 - `producer-contract.md`: producer labels, fail-open behavior, scrub boundaries, cardinality rules.
 - `agentstudio-loop.md`: launch debug/beta, read state file, PID targeting, cleanup.
 - `agent-vm-loop.md`: Agent VM external mode, `shravan-claw-beta` start sequence, managed-vs-external boundary.
@@ -369,6 +422,17 @@ Create `tests/skills/pressure-scenarios/ops-observability-stack-boundary.md` whe
 - put query recipes in the skill
 - preserve strict observability launchers while keeping ordinary runtime fail-open
 
+Also create `tests/skills/pressure-scenarios/ops-observability-agent-vm-boundary.md`
+where the prompt asks an agent to add managed Docker/query docs to Agent VM
+external-mode guidance. Expected behavior:
+
+- load `ops-observability-stack`
+- explain managed mode vs external mode as separate ownership choices
+- keep managed mode deployment-owned by Agent VM
+- keep shared local external mode pointed at `~/dev/ai-tools/observability/observability-stack`
+- put Victoria query recipes in the skill
+- require `dev.repo.hash` and `dev.worktree.hash` for shared local producers
+
 - [ ] **Step 4: Update plugin metadata**
 
 Update skill list docs and bump `shravan-dev-workflow` patch version in both plugin manifests. Do not change unrelated plugin metadata.
@@ -379,6 +443,7 @@ Run:
 
 ```bash
 tests/skills/run-skill-pressure-tests.sh --fast --scenario ops-observability-stack-boundary
+tests/skills/run-skill-pressure-tests.sh --fast --scenario ops-observability-agent-vm-boundary
 tests/skills/run-skill-pressure-tests.sh --fast
 git diff --check
 ```
@@ -418,6 +483,7 @@ Run:
 ```bash
 bash tests/observability/test-observability-stack.sh
 tests/skills/run-skill-pressure-tests.sh --fast --scenario ops-observability-stack-boundary
+tests/skills/run-skill-pressure-tests.sh --fast --scenario ops-observability-agent-vm-boundary
 git diff --check
 ```
 

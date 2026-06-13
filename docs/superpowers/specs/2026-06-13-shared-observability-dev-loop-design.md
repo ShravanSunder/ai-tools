@@ -94,22 +94,24 @@ VictoriaTraces: 127.0.0.1:10428
 Retention policy:
 
 ```text
-VictoriaMetrics: 15d retention plus disk safety stop
-VictoriaLogs:    15d retention plus 10GiB max disk retention cap
-VictoriaTraces:  15d retention plus 10GiB max disk retention cap
+VictoriaMetrics: 15d retention plus 10GiB minimum-free-disk safety stop
+VictoriaLogs:    15d retention plus 10GiB target disk retention cap
+VictoriaTraces:  15d retention plus 10GiB target disk retention cap
 ```
 
-Metrics caveat: VictoriaMetrics does not provide the same old-data
+Disk caveat: VictoriaMetrics does not provide the same old-data
 `retention.maxDiskSpaceUsageBytes` cap as VictoriaLogs/VictoriaTraces in the
-local OSS single-node shape. The metrics disk setting is a safety stop, not a
-promise to keep the metrics directory below 10GiB.
+local OSS single-node shape. Its disk setting is a safety stop, not a promise to
+keep the metrics directory below 10GiB. VictoriaLogs and VictoriaTraces can also
+exceed the configured disk threshold while preserving recent partitions; treat
+the 10GiB value as an aggressive local target, not a hard filesystem ceiling.
 
-## Shared Resource Schema
+## Telemetry Identity Schema
 
 Every producer should attach enough low-cardinality context for agents to
 separate repos, worktrees, branches, debug/beta/release runtime, and proof runs.
 
-Required baseline:
+Stable resource attributes:
 
 ```text
 service.name
@@ -121,7 +123,13 @@ dev.runtime.flavor
 dev.release.channel
 ```
 
-Run/proof markers:
+Rules:
+
+- `dev.repo.hash` and `dev.worktree.hash` are the main shared-stack grouping keys
+- `dev.branch.name` is searchable context, but must not be a VictoriaLogs stream field
+- raw paths, raw UUIDs, prompts, payloads, tokens, and raw errors must not be resource attributes
+
+Proof-only log/span attributes:
 
 ```text
 agent.run.marker
@@ -129,9 +137,74 @@ agent.proof.marker
 agent.process.pid
 ```
 
+Rules:
+
+- markers and process ids may be log/span attributes for proof attribution
+- markers and process ids must never be metric resource labels
+- markers and process ids must never be included in `VL-Stream-Fields`
+
+State-file-only fields:
+
+```text
+OBSERVABILITY_STATE_FILE
+OBSERVABILITY_APP_PATH
+OBSERVABILITY_LOG_PATH
+OBSERVABILITY_DATA_DIR
+OBSERVABILITY_RUNTIME_DIR
+```
+
+These local paths are useful to agents and must stay local unless a producer
+first converts them to a safe deterministic hash.
+
 Product-specific attributes should live under the product namespace, such as
 `agentstudio.*`, and must be scrubbed or omitted when they expose sensitive IDs,
 paths, payloads, tokens, or raw errors.
+
+## Portable State File Contract
+
+Observable launchers should write a dotenv-compatible state file under
+`tmp/<runtime>-observability/latest-observability.env`. Product-specific aliases
+may be present, but the generic keys below are required so the shared skill can
+reattach to any repo without knowing product internals:
+
+```text
+OBSERVABILITY_MARKER
+OBSERVABILITY_QUERY_START
+OBSERVABILITY_PID
+OBSERVABILITY_SERVICE_NAME
+OBSERVABILITY_RUNTIME_FLAVOR
+OBSERVABILITY_RELEASE_CHANNEL
+OBSERVABILITY_OTLP_ENDPOINT
+OBSERVABILITY_BACKEND
+OBSERVABILITY_REPO_HASH
+OBSERVABILITY_WORKTREE_HASH
+OBSERVABILITY_BRANCH_NAME
+OBSERVABILITY_APP_PATH
+OBSERVABILITY_LOG_PATH
+OBSERVABILITY_DATA_DIR
+OBSERVABILITY_RUNTIME_DIR
+```
+
+If a field is not meaningful for a repo, write the key with an empty value and
+document the absence in that repo's loop reference. The state file may contain
+raw local paths because it stays on the developer machine; those values must not
+be exported as telemetry fields.
+
+## Security And Trust Boundaries
+
+This shared stack is local single-user infrastructure. It is not a production
+multi-user observability service.
+
+- all published collector and Victoria ports must bind to `127.0.0.1`
+- shared local mode accepts only loopback HTTP OTLP endpoints and loopback health URLs
+- repo launchers and doctors must fail on non-loopback overrides
+- producers must omit known-sensitive fields before emit
+- the collector must delete or redact sensitive fields across logs, traces, and metrics before any exporter
+- VictoriaLogs `VL-Ignore-Fields` is defense-in-depth, not the only privacy boundary
+- `observability-stack down` stops compose services only
+- helpers must never run `docker compose down -v` or delete the shared data root
+- destructive cleanup, if ever needed, must be a separate explicit command
+- repo-local adapters must never call shared `down` or `restart` automatically
 
 ## Development Loop DAG
 
@@ -206,6 +279,12 @@ Explicit observability launchers should fail fast when the collector is down.
 Ordinary app startup must fail open and must not crash if the collector is
 absent.
 
+V1 runtime decision: ordinary debug/beta startup may emit a safe, low-detail
+fail-open baseline to the loopback collector when the collector is reachable.
+Strict observable launchers are the only full-tag marker/proof path and must
+fail fast when the collector is missing. Stable/release startup stays disabled
+unless tracing is explicitly requested by that repo's contract.
+
 ## Proof Contract
 
 Victoria-backed proof is the default when the shared stack exists.
@@ -247,13 +326,12 @@ Exact command names can follow the repo's toolchain (`mise`, `pnpm`, `npm`,
 - no hidden build output for the sake of quiet logs
 - no pretending VictoriaMetrics has the same disk-cap semantics as VictoriaLogs or VictoriaTraces
 
-## Open Design Questions
+## Resolved V1 Decisions
 
-1. Should debug/beta app startup automatically emit OTLP when the collector is
-   reachable, or should strict observable launchers remain the only full-tag
-   telemetry path?
-2. Should the shared skill define one portable state-file schema for all repos,
-   or should each repo keep product-specific state files with a small required
-   key set?
-3. Should ai-tools provide a tiny adapter template generator for new repos, or
-   should the skill teach humans/agents to add adapters manually?
+1. Ordinary debug/beta startup may emit safe fail-open baseline telemetry to the
+   loopback collector, but strict observable launchers remain the only full-tag
+   marker/proof path.
+2. The shared skill defines the portable state-file keys above. Repo-specific
+   aliases may coexist, but observable launchers must write the generic keys.
+3. ai-tools will not ship an adapter generator in v1. The skill teaches the
+   adapter contract and pressure tests the boundaries first.

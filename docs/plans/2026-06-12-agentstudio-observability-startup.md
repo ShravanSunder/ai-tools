@@ -29,7 +29,8 @@ AgentStudio should contain:
 
 - `mise` commands for stack start/status/smoke/down
 - debug and beta launch helpers that require the collector to already be healthy
-- state files with marker, PID, app path, log path, backend, endpoint, and data dir
+- thin app-specific verifier scripts that prove the launched app emitted to Victoria by marker
+- state files with portable generic keys plus AgentStudio aliases
 - minimal `AGENTS.md` pointer to the skill
 
 AgentStudio should not contain:
@@ -39,16 +40,23 @@ AgentStudio should not contain:
 - duplicated sensitive-field query recipes
 - long local docs explaining how Victoria works
 
+App-specific proof scripts are allowed when they validate AgentStudio behavior
+by marker, process, runtime flavor, and worktree hash. Generic query recipes and
+operator debugging guidance still live in `ops-observability-stack`.
+
 ## Requirements / Proof Matrix
 
 | Requirement | Task | Proof Gate | Layer |
 | --- | --- | --- | --- |
 | AgentStudio points to `ai-tools/observability` | 1 | `swift test --filter ObservabilityScriptsTests` | unit/static |
-| `observability:up` is the only command that starts/checks the stack | 1 | script-content test | unit/static |
-| Debug helper launches with persisted debug data by default and strict OTLP | 2 | state file inspection after `mise run run-debug-observability -- --detach` | smoke |
-| Launch state is reattachable by another agent | 2 | state file includes marker, PID, app path, log, backend, endpoint, data dir | smoke |
-| Beta helper is strict OTLP and has a reliable path around bundle-wrapper hangs | 3 | script test plus `bash -n scripts/create-local-beta-bundle.sh` | unit/static |
-| Query recipes live in the skill | 4 | `rg` finds no Victoria query cookbook in AgentStudio docs/scripts | static |
+| `observability:up` is the only command allowed to start the stack | 1 | script-content test | unit/static |
+| Observable launchers may health-check but never call stack `up` | 1 | script-content test | unit/static |
+| Observable launchers reject non-loopback collector overrides | 1 | `ObservabilityScriptsTests` | unit/static |
+| Debug helper launches with isolated per-worktree data/runtime roots and strict OTLP | 2 | `mise run run-debug-observability -- --detach`; state file inspection | smoke |
+| Launch state is reattachable by another agent | 2 | state file includes generic portable keys plus AgentStudio aliases | smoke |
+| Debug proof reaches Victoria without stale logs | 2 | `mise run verify-debug-observability` checks marker + process + worktree hash | smoke |
+| Beta helper is strict OTLP and has a reliable visible-output bundle path | 3 | `mise run create-beta-app-bundle`; `mise run run-beta-observability -- --detach`; `mise run verify-beta-observability` | smoke |
+| Query recipes live in the skill | 4 | `rg` finds no Victoria query cookbook in AgentStudio docs or launch helpers | static |
 
 ## Shared Resource Contract
 
@@ -67,6 +75,10 @@ dev.release.channel=debug|beta
 ```
 
 Do not create AgentStudio-specific Victoria services or stack data roots.
+AgentStudio launch helpers must reject non-loopback collector endpoint or health
+URL overrides. Ordinary debug/beta startup may keep safe fail-open baseline
+telemetry; strict `run-*-observability` helpers are the only full-tag proof path
+and must fail fast when the collector is down.
 
 ## Task 1: Retarget AgentStudio To ai-tools
 
@@ -74,6 +86,8 @@ Do not create AgentStudio-specific Victoria services or stack data roots.
 - Modify: `/Users/shravansunder/Documents/dev/project-dev/agent-studio.ai-tools-observability-agentstudio/.mise.toml`
 - Modify: `/Users/shravansunder/Documents/dev/project-dev/agent-studio.ai-tools-observability-agentstudio/scripts/run-debug-observability.sh`
 - Modify: `/Users/shravansunder/Documents/dev/project-dev/agent-studio.ai-tools-observability-agentstudio/scripts/run-beta-observability.sh`
+- Modify: `/Users/shravansunder/Documents/dev/project-dev/agent-studio.ai-tools-observability-agentstudio/scripts/verify-debug-observability.sh`
+- Modify: `/Users/shravansunder/Documents/dev/project-dev/agent-studio.ai-tools-observability-agentstudio/scripts/verify-beta-observability.sh`
 - Modify: `/Users/shravansunder/Documents/dev/project-dev/agent-studio.ai-tools-observability-agentstudio/Tests/AgentStudioTests/Scripts/ObservabilityScriptsTests.swift`
 
 - [ ] **Step 1: Add script wiring test**
@@ -84,6 +98,9 @@ Update `ObservabilityScriptsTests.swift` to assert:
 .mise.toml contains ~/dev/ai-tools/observability/observability-stack
 run-debug-observability.sh contains ~/dev/ai-tools/observability/observability-stack
 run-beta-observability.sh contains ~/dev/ai-tools/observability/observability-stack
+verify-debug-observability.sh uses AI_TOOLS_OBSERVABILITY_* defaults
+verify-beta-observability.sh uses AI_TOOLS_OBSERVABILITY_* defaults
+debug/beta launchers reject non-loopback collector endpoint and health URL overrides
 none of those files contain devfiles/shared/observability
 ```
 
@@ -119,10 +136,12 @@ observability:smoke
 observability:down
 ```
 
-Do not add query tasks. Querying belongs to `ops-observability-stack`.
+Do not add generic query tasks. Existing app-specific verifier tasks are allowed
+only when they validate AgentStudio behavior by marker/process/worktree hash.
 
-`observability:up` owns stack startup. `run-debug-observability` and
-`run-beta-observability` must not call `observability-stack up`.
+`observability:up` is the only command allowed to start the shared stack.
+`run-debug-observability`, `run-beta-observability`, and verifier scripts may
+health-check the collector but must not call `observability-stack up`.
 
 - [ ] **Step 5: Validate**
 
@@ -132,7 +151,9 @@ Run:
 swift test --filter ObservabilityScriptsTests
 bash -n scripts/run-debug-observability.sh
 bash -n scripts/run-beta-observability.sh
-rg -n "devfiles/shared/observability|select/logsql/query|api/v1/query|jaeger/api/traces" .mise.toml scripts AGENTS.md
+bash -n scripts/verify-debug-observability.sh
+bash -n scripts/verify-beta-observability.sh
+rg -n "devfiles/shared/observability|Victoria query cookbook|generic Victoria|jaeger/api/traces" .mise.toml scripts/run-* scripts/create-* AGENTS.md docs
 ```
 
 Expected: Swift and shell syntax pass; `rg` exits nonzero because no stale path or query cookbook exists in the launch surface.
@@ -148,6 +169,21 @@ Expected: Swift and shell syntax pass; `rg` exits nonzero because no stale path 
 Add a test asserting `run-debug-observability.sh` writes these keys:
 
 ```text
+OBSERVABILITY_MARKER
+OBSERVABILITY_QUERY_START
+OBSERVABILITY_PID
+OBSERVABILITY_SERVICE_NAME
+OBSERVABILITY_RUNTIME_FLAVOR
+OBSERVABILITY_RELEASE_CHANNEL
+OBSERVABILITY_OTLP_ENDPOINT
+OBSERVABILITY_BACKEND
+OBSERVABILITY_REPO_HASH
+OBSERVABILITY_WORKTREE_HASH
+OBSERVABILITY_BRANCH_NAME
+OBSERVABILITY_APP_PATH
+OBSERVABILITY_LOG_PATH
+OBSERVABILITY_DATA_DIR
+OBSERVABILITY_RUNTIME_DIR
 AGENTSTUDIO_OBSERVABILITY_MARKER
 AGENTSTUDIO_OBSERVABILITY_QUERY_START
 AGENTSTUDIO_OBSERVABILITY_PID
@@ -174,10 +210,13 @@ Update `scripts/run-debug-observability.sh` so `tmp/debug-observability/latest-o
 
 Default data behavior:
 
-- Do not set `AGENTSTUDIO_DATA_DIR` unless the caller supplied it.
-- Record `AGENTSTUDIO_DATA_DIR=$HOME/.agentstudio-db` as the effective default.
+- Compute a short deterministic worktree code from the worktree path hash.
+- If the caller did not supply `AGENTSTUDIO_DATA_DIR`, set it to `~/.agentstudio-db/<worktree-code>`.
+- Use an isolated zmx/runtime dir under `~/.agentstudio-db/<worktree-code>/z`.
+- Record the effective data and runtime roots in generic and AgentStudio-specific state keys.
+- Refuse a duplicate observable debug launch for the same worktree identity unless the previous PID is gone.
 - Set `AGENTSTUDIO_TRACE_BACKEND=otlp`.
-- Check the collector before build/launch.
+- Check the collector before build/launch and reject non-loopback overrides.
 - If the collector is absent, print `OTLP collector is not healthy at ...` and `Run: mise run observability:up`, then exit nonzero.
 - Do not fall back to JSONL in this helper.
 
@@ -188,16 +227,21 @@ Run:
 ```bash
 mise run observability:up
 mise run run-debug-observability -- --detach
-cat tmp/debug-observability/latest-observability.env
+mise run verify-debug-observability
 ```
 
-Expected: app launches, state file is complete, and PID belongs to the launched process. Use the skill to query Victoria by marker.
+Expected: app launches, state file is complete, PID belongs to the launched
+process, data/runtime roots are per-worktree isolated, and verifier proves
+Victoria records for `service.name + marker + dev.worktree.hash + PID` inside a
+bounded query window.
 
 ## Task 3: Make Beta Launch Reattachable And Reliable
 
 **Files:**
+- Modify: `.mise.toml`
 - Modify: `scripts/run-beta-observability.sh`
 - Modify: `scripts/create-local-beta-bundle.sh`
+- Modify: `scripts/verify-beta-observability.sh`
 - Modify: `Tests/AgentStudioTests/Scripts/ObservabilityScriptsTests.swift`
 
 - [ ] **Step 1: Add beta state-file test**
@@ -220,8 +264,9 @@ using prebuilt release binary:
 
 - [ ] **Step 3: Implement beta state**
 
-Update `run-beta-observability.sh` to write a complete beta state file, set
-`AGENTSTUDIO_TRACE_BACKEND=otlp`, require a healthy collector, and exit nonzero
+Update `run-beta-observability.sh` to write a complete beta state file with the
+generic keys and AgentStudio aliases, set `AGENTSTUDIO_TRACE_BACKEND=otlp`,
+require a healthy collector, reject non-loopback overrides, and exit nonzero
 with `Run: mise run observability:up` if the collector is unavailable. Do not
 fall back to JSONL in this helper.
 
@@ -229,7 +274,27 @@ fall back to JSONL in this helper.
 
 Update `create-local-beta-bundle.sh` so `AGENTSTUDIO_RELEASE_BINARY` skips the nested build wrapper and packages the provided executable. Fail fast if the path does not exist or is not executable.
 
-- [ ] **Step 5: Validate**
+Wire the real `mise run create-beta-app-bundle` path so build and packaging
+output remains visible. Do not pipe Swift build output through fragile filters
+that can hide a hang. If the escape hatch is used, the task must print
+`using prebuilt release binary:` before packaging.
+
+- [ ] **Step 5: Prove the real beta path**
+
+Run:
+
+```bash
+mise run observability:up
+mise run create-beta-app-bundle
+mise run run-beta-observability -- --detach
+mise run verify-beta-observability
+```
+
+Expected: build output is visible, bundle creation exits, beta launches, and
+verifier proves Victoria records for `service.name + marker + dev.worktree.hash
++ PID` inside a bounded query window.
+
+- [ ] **Step 6: Validate**
 
 Run:
 
@@ -237,6 +302,7 @@ Run:
 swift test --filter ObservabilityScriptsTests
 bash -n scripts/run-beta-observability.sh
 bash -n scripts/create-local-beta-bundle.sh
+bash -n scripts/verify-beta-observability.sh
 ```
 
 Expected: tests pass and scripts are syntactically valid.
@@ -252,9 +318,11 @@ Replace any long local observability explanation with this concise pointer:
 
 ```markdown
 AgentStudio is an observability producer only. Use `mise run observability:up`,
-`mise run run-debug-observability -- --detach`, or
+then `mise run run-debug-observability -- --detach` or
 `mise run run-beta-observability -- --detach` to launch with shared local
-observability. Load `shravan-dev-workflow:ops-observability-stack` for Victoria
+observability. Use `mise run verify-debug-observability` or
+`mise run verify-beta-observability` for AgentStudio-specific marker proof.
+Load `shravan-dev-workflow:ops-observability-stack` for generic Victoria
 queries, sensitive-field checks, and debugging recipes.
 ```
 
@@ -263,12 +331,13 @@ queries, sensitive-field checks, and debugging recipes.
 Run:
 
 ```bash
-rg -n "select/logsql/query|api/v1/query|jaeger/api/traces|VictoriaLogs query" AGENTS.md docs scripts
+rg -n "select/logsql/query|api/v1/query|jaeger/api/traces|VictoriaLogs query" AGENTS.md docs scripts/run-* scripts/create-*
 ```
 
 Expected: command exits nonzero. Health-check `curl` may exist in launch
-scripts, but query endpoints and Victoria cookbook content do not belong in
-AgentStudio docs.
+scripts, and thin app-specific verifier scripts may query Victoria by marker.
+Query endpoints and Victoria cookbook content do not belong in AgentStudio docs
+or launch helpers.
 
 ## Task 5: Final Proof And PR
 
@@ -281,6 +350,8 @@ swift test --filter ObservabilityScriptsTests
 bash -n scripts/run-debug-observability.sh
 bash -n scripts/run-beta-observability.sh
 bash -n scripts/create-local-beta-bundle.sh
+bash -n scripts/verify-debug-observability.sh
+bash -n scripts/verify-beta-observability.sh
 ```
 
 - [ ] **Step 2: Run smoke proof**
@@ -290,10 +361,14 @@ Run:
 ```bash
 mise run observability:up
 mise run run-debug-observability -- --detach
-cat tmp/debug-observability/latest-observability.env
+mise run verify-debug-observability
+mise run create-beta-app-bundle
+mise run run-beta-observability -- --detach
+mise run verify-beta-observability
 ```
 
-Use `ops-observability-stack` to query Victoria by marker. Do not add the query to AgentStudio docs.
+Use `ops-observability-stack` only for extra investigation or generic query
+guidance. Do not add generic Victoria query recipes to AgentStudio docs.
 
 - [ ] **Step 3: Open PR**
 
