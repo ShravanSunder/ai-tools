@@ -19,10 +19,10 @@
       "category": "Coding"
     },
     {
-      "name": "skill-peekaboo",
+      "name": "dev-workflow-tools",
       "source": {
         "source": "local",
-        "path": "./plugins/skill-peekaboo"
+        "path": "./plugins/dev-workflow-tools"
       },
       "policy": {
         "installation": "AVAILABLE",

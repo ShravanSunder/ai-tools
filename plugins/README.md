@@ -16,6 +16,19 @@ AI tools distributed through the local marketplaces in this repository.
 /plugin install <plugin-name>@ai-tools
 ```
 
+`skill-peekaboo` was replaced by `dev-workflow-tools`. If the old plugin is
+installed, remove it before installing the new common plugin:
+
+```bash
+codex plugin remove skill-peekaboo@ai-tools
+codex plugin add dev-workflow-tools@ai-tools
+```
+
+```text
+/plugin uninstall skill-peekaboo@ai-tools
+/plugin install dev-workflow-tools@ai-tools
+```
+
 ### Managing Plugins
 
 ```bash
@@ -34,9 +47,13 @@ Project scaffolding with standard dev configs. Supports TypeScript (biome, vites
 - `/scaffold-project` -- scaffold a new project or retrofit an existing one
 - `/scaffold-project-update-templates` -- update templates with latest standards
 
-### [skill-peekaboo](skill-peekaboo/)
+### [dev-workflow-tools](dev-workflow-tools/)
 
-Visual UI testing for macOS apps using [Peekaboo CLI](https://github.com/openclaw/Peekaboo). An alternative to Playwright for native macOS app automation via the Accessibility API. Uses live CLI discovery, snapshot-scoped interaction, and progressive references for troubleshooting and headless mode.
+Common development tool skills that work across Codex and Claude Code.
+Currently includes `peekaboo`, an alternative to Playwright for native macOS
+app automation via the Accessibility API. The Peekaboo skill uses live CLI
+discovery, snapshot-scoped interaction, and progressive references for
+troubleshooting and headless mode.
 
 ### [quorum-counsel](quorum-counsel/)
 

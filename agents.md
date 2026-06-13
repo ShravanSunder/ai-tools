@@ -39,7 +39,7 @@ ai-tools/
 ├── .claude-plugin/marketplace.json   # Claude Code plugin marketplace manifest
 ├── plugins/                          # Plugin sources
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
-│   ├── skill-peekaboo/               # macOS visual UI testing via Peekaboo CLI
+│   ├── dev-workflow-tools/           # Common tool skills, including Peekaboo UI testing
 │   ├── quorum-counsel/               # Manual multi-model counsel stack
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
@@ -91,7 +91,7 @@ or generic Victoria query docs into app repos.
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed skill audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
-| peekaboo | `plugins/skill-peekaboo/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
+| peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
 **Config locations**:

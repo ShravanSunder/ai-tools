@@ -1,17 +1,34 @@
-# Skill: Peekaboo
+# Dev Workflow Tools
 
-Visual UI testing skill for macOS apps using [Peekaboo CLI](https://github.com/openclaw/Peekaboo). An alternative to Playwright for native macOS app automation via the Accessibility API.
+Common development tool skills that are useful across Codex and Claude Code.
+Currently includes the Peekaboo skill for native macOS UI automation via the
+[Peekaboo CLI](https://github.com/openclaw/Peekaboo).
 
 ## Installation
 
 ```bash
 /plugin marketplace add ShravanSunder/ai-tools
-/plugin install skill-peekaboo@ai-tools
+/plugin install dev-workflow-tools@ai-tools
+```
+
+If `skill-peekaboo` is already installed, uninstall it first. The move to
+`dev-workflow-tools` changes the plugin ID, so a normal install does not replace
+the old plugin automatically.
+
+```bash
+codex plugin remove skill-peekaboo@ai-tools
+codex plugin add dev-workflow-tools@ai-tools
+```
+
+```text
+/plugin uninstall skill-peekaboo@ai-tools
+/plugin install dev-workflow-tools@ai-tools
 ```
 
 ## What It Does
 
-Teaches Claude how to use Peekaboo for macOS app automation:
+The `peekaboo` skill teaches agents how to use Peekaboo for macOS app
+automation:
 
 - Capture UI state and screenshots
 - Click elements, type text, send keyboard shortcuts
@@ -57,7 +74,7 @@ documentation.
 ## Directory Structure
 
 ```
-skill-peekaboo/
+dev-workflow-tools/
 ├── .codex-plugin/plugin.json
 ├── .claude-plugin/plugin.json
 └── skills/

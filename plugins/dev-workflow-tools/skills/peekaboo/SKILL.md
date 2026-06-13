@@ -76,11 +76,14 @@ syntax, or close apps as cleanup:
 1. Refuse the stale or destructive shortcut.
 2. Name the live discovery source: `peekaboo --help`, `peekaboo learn`, or
    `peekaboo tools`.
-3. Disambiguate the target window.
-4. Use private per-run temp artifacts for UI JSON or screenshots.
+3. Disambiguate the target window by naming `peekaboo list windows`,
+   `--window-id`, `--window-title`, or `peekaboo window focus`.
+4. Use private per-run temp artifacts by naming `umask 077`, `mktemp`, and
+   cleanup of current-run UI JSON or screenshots.
 5. Use the safe interaction slice with a fresh `see --json` snapshot.
-6. Route deeper needs through the reference router instead of dumping every
-   recipe inline.
+6. Route deeper needs by naming the relevant reference path:
+   `references/visual-testing-patterns.md`, `references/troubleshooting.md`, or
+   `references/headless-automation.md`.
 
 ## Safe Interaction Slice
 

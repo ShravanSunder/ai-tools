@@ -14,10 +14,10 @@
       "version": "0.2.0"
     },
     {
-      "name": "skill-peekaboo",
-      "source": "./plugins/skill-peekaboo",
-      "description": "Visual UI testing for macOS apps using Peekaboo CLI - progressive native macOS automation guidance",
-      "version": "1.0.2"
+      "name": "dev-workflow-tools",
+      "source": "./plugins/dev-workflow-tools",
+      "description": "Common development tool skills, including progressive native macOS UI automation with Peekaboo CLI",
+      "version": "0.1.0"
     },
     {
       "name": "quorum-counsel",

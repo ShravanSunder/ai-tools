@@ -15,11 +15,25 @@ codex plugin marketplace add ~/dev/ai-tools
 
 Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex or `/plugin install <name>@ai-tools` in Claude Code.
 
+If you previously installed `skill-peekaboo`, remove it before installing
+`dev-workflow-tools`; the plugin rename is a hard cutover, not an in-place
+upgrade.
+
+```bash
+codex plugin remove skill-peekaboo@ai-tools
+codex plugin add dev-workflow-tools@ai-tools
+```
+
+```text
+/plugin uninstall skill-peekaboo@ai-tools
+/plugin install dev-workflow-tools@ai-tools
+```
+
 | Plugin | Description |
 |--------|-------------|
 | [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, PR wrap-up, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
+| [`dev-workflow-tools`](plugins/dev-workflow-tools/) | Common development tool skills, including native macOS UI testing with Peekaboo CLI |
 | [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
-| [`skill-peekaboo`](plugins/skill-peekaboo/) | Visual UI testing for macOS apps using Peekaboo CLI |
 
 See [`plugins/`](plugins/) for full details.
 
@@ -102,8 +116,8 @@ concise file copied into repos that initialize sidecar support.
 ai-tools/
 ├── plugins/                     # Codex and Claude Code plugins
 │   ├── shravan-dev-workflow/    # Spec, plan, implementation, review, handoff workflows
+│   ├── dev-workflow-tools/      # Common tool skills, including Peekaboo UI testing
 │   ├── ai-scaffold/             # Project scaffolding
-│   ├── skill-peekaboo/          # macOS visual UI testing
 │   └── quorum-counsel/          # Optional manual multi-model counsel
 ├── agent_sidecar/               # Docker sidecar system
 ├── observability/               # Shared local OTel/Victoria stack

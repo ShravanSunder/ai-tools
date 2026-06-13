@@ -1,0 +1,9 @@
+{
+  "name": "dev-workflow-tools",
+  "version": "0.1.0",
+  "description": "Common development tool skills, including progressive native macOS UI automation with Peekaboo CLI",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": ["dev-workflow-tools", "peekaboo", "visual-testing", "macos", "ui-automation", "accessibility", "headless"]
+}

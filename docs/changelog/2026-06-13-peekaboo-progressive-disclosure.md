@@ -1,14 +1,19 @@
-# 2026-06-13 Peekaboo Progressive Disclosure
+# 2026-06-13 Dev Workflow Tools Peekaboo
 
 ## Summary
 
-Updated `skill-peekaboo` to version `1.0.2` with an upstream-inspired
-progressive-disclosure skill shape: compact top-level guidance, live CLI
-discovery, safer snapshot-scoped interaction, and deeper reference routing.
+Created `dev-workflow-tools` version `0.1.0` as the common tool-skill plugin
+and moved the Peekaboo skill into it. The skill now uses an upstream-inspired
+progressive-disclosure shape: compact top-level guidance, live CLI discovery,
+safer snapshot-scoped interaction, and deeper reference routing.
 
 ## Changes
 
-- Rewrote `plugins/skill-peekaboo/skills/peekaboo/SKILL.md` as a compact
+- Created `plugins/dev-workflow-tools/` with Codex and Claude plugin
+  manifests.
+- Moved `peekaboo` from standalone `skill-peekaboo` into
+  `plugins/dev-workflow-tools/skills/peekaboo/`.
+- Rewrote `plugins/dev-workflow-tools/skills/peekaboo/SKILL.md` as a compact
   loading surface with `peekaboo --help`, `peekaboo learn`, and
   `peekaboo tools` as live discovery paths.
 - Preserved and clarified safety rules for fresh `see --json` captures,
@@ -17,13 +22,16 @@ discovery, safer snapshot-scoped interaction, and deeper reference routing.
 - Moved deeper snapshot targeting, UIAX/synthetic input probes, debug-build
   targeting, wrong-app diagnostics, headless socket trust, and artifact hygiene
   into reference files.
-- Updated `plugins/skill-peekaboo/README.md` and `plugins/README.md` to avoid
-  stale targeting guidance.
+- Updated `plugins/dev-workflow-tools/README.md`, `plugins/README.md`,
+  `README.md`, and `agents.md` to point at the new common plugin home.
 - Added `tests/skills/pressure-scenarios/peekaboo-progressive-disclosure.md`
   and broadened the pressure-test docs to allow plugin-specific skill
   scenarios.
-- Bumped `skill-peekaboo` manifests and Claude marketplace entry from `1.0.1`
-  to `1.0.2`.
+- Replaced marketplace entries for standalone `skill-peekaboo` with
+  `dev-workflow-tools` in the Codex and Claude marketplaces.
+- Documented the migration requirement: remove `skill-peekaboo` before
+  installing `dev-workflow-tools`, because the plugin ID changed and a normal
+  install does not replace the old plugin automatically.
 
 ## Validation
 
@@ -31,10 +39,17 @@ discovery, safer snapshot-scoped interaction, and deeper reference routing.
   `tests/skills/run-skill-pressure-tests.sh --fast --scenario peekaboo-progressive-disclosure --timeout 900 --serial`
   exited `1`, with proof assertions failing for live `peekaboo learn/tools`
   guidance and reference routing.
-- Codex cache refresh:
-  `codex plugin add skill-peekaboo@ai-tools --json` installed
-  `skill-peekaboo` `1.0.2`.
-- GREEN pressure proof against installed `skill-peekaboo` `1.0.2`:
+- Review-tightened RED pressure proof against the intermediate installed skill
+  exited `1`, failing proof assertions for concrete window disambiguation and
+  private per-run temp artifacts.
+- Codex cache refresh before final pressure proof:
+  `codex plugin add dev-workflow-tools@ai-tools --json` installed
+  `dev-workflow-tools` `0.1.0`.
+- Codex old-plugin cleanup:
+  `codex plugin remove skill-peekaboo@ai-tools --json` removed the old
+  standalone plugin ID, and the cache check showed only
+  `~/.codex/plugins/cache/ai-tools/dev-workflow-tools` afterward.
+- GREEN pressure proof against installed `dev-workflow-tools` `0.1.0`:
   `tests/skills/run-skill-pressure-tests.sh --fast --scenario peekaboo-progressive-disclosure --timeout 900 --serial`
   passed with `Passed: 1`, `Failed: 0`.
 - Static checks:
@@ -46,14 +61,15 @@ discovery, safer snapshot-scoped interaction, and deeper reference routing.
 - Plugin checks:
   - `claude plugin validate .`: passed.
   - `codex plugin list --marketplace ai-tools --available --json` reports
-    installed `skill-peekaboo` `1.0.2`.
+    installed `dev-workflow-tools` `0.1.0`.
   - `codex plugin list --json` reports installed and enabled
-    `skill-peekaboo@ai-tools` `1.0.2`.
+    `dev-workflow-tools@ai-tools` `0.1.0`.
 - Optional helper checks:
   - `validate_plugin.py`: unavailable on PATH.
   - `quick_validate.py`: unavailable on PATH.
 - Claude cache status:
-  - `claude plugin list` reports installed `skill-peekaboo@ai-tools`
-    `1.0.1`. The local marketplace validates, but Claude's `ai-tools`
-    marketplace is GitHub-backed in this environment, so the installed Claude
-    cache cannot see unpublished local `1.0.2` changes yet.
+  - `claude plugin list` still reports the previously installed
+    `skill-peekaboo@ai-tools` `1.0.1` until the GitHub-backed Claude
+    marketplace sees the pushed `dev-workflow-tools` entry and is refreshed.
+    After that, Claude users should uninstall `skill-peekaboo@ai-tools` and
+    install `dev-workflow-tools@ai-tools`.

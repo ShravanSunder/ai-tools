@@ -6,7 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: peekaboo|macos|ui|automation
-expect_proof_regex: peekaboo learn|peekaboo tools|tool catalog|agent-oriented guide
+expect_proof_regex: peekaboo --help
+expect_proof_regex: peekaboo learn|peekaboo tools
 expect_proof_regex: respect.*desktop|avoid destructive|destructive desktop action|do not quit|explicit target/action|unsafe cleanup
 expect_proof_regex: recapture|fresh.*see --json|see --json.*fresh
 expect_proof_regex: list windows|window-id|window-title|window focus

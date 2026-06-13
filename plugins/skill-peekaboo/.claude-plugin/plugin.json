@@ -1,9 +1,0 @@
-{
-  "name": "skill-peekaboo",
-  "version": "1.0.2",
-  "description": "Visual UI testing for macOS apps using Peekaboo CLI - progressive native macOS automation guidance",
-  "author": {
-    "name": "Shravan Sunder"
-  },
-  "keywords": ["peekaboo", "visual-testing", "macos", "ui-automation", "accessibility", "headless"]
-}
