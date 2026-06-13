@@ -69,7 +69,9 @@ If any of these materially affect the work and are missing, route to
 5. Set the goal only when the user explicitly asked for a goal-backed session
    and the host surface supports it. Otherwise, prepare the goal prompt or
    contract artifact.
-6. Report the contract, selected workflow, and first verification checkpoint.
+6. When routing to `plan-create`, carry any known requirements/proof matrix rows
+   and mark missing implementation proof rows as `must be defined by plan-create`.
+7. Report the contract, selected workflow, and first verification checkpoint.
    When returning artifact paths, include full clickable artifact links
    (absolute path + line). Do not rely only on relative paths.
 
@@ -93,6 +95,12 @@ For non-trivial goals, compile a requirements/proof matrix before routing the
 next phase. The matrix may point to an existing plan/spec, or it may say
 `must be defined by plan-create` when the goal starts before an implementation
 plan exists.
+
+Use the exact label `requirements/proof matrix` in goal contracts and handoff
+prompts. Do not hand all verification detail to `plan-create` as a blank slate:
+seed every requirement, scope boundary, stop condition, and known proof source
+from the goal, then mark only genuinely missing implementation rows as
+`must be defined by plan-create`.
 
 Rows should name:
 

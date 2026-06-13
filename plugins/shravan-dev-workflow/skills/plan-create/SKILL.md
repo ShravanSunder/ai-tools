@@ -23,10 +23,13 @@ are split before execution.
 - Include task sequence, write surfaces, dependencies, validation gates, rollout
   or rollback/recovery notes, risks, and open questions.
 - Include a requirements/proof matrix for non-trivial plans: requirement or
-  claim, owning task, proof gate, proof layer, whether red/green evidence is
-  required, and whether the task is sized so that proof can pass inside the
-  approved scope. Tiny plans may use a compact proof line and say why it is
-  sufficient.
+  claim, owning task, proof owner, proof gate, proof layer, stale-proof guard,
+  whether red/green evidence is required, and whether the task is sized so that
+  proof can pass inside the approved scope. Tiny plans may use a compact proof
+  line and say why it is sufficient.
+- If the source is a goal contract, preserve known matrix rows from that
+  contract and define any missing implementation rows here instead of leaving
+  proof ownership to the executor.
 - A red/green exception is valid only when recorded in the matrix with the
   user's explicit approval noted; an agent-authored waiver is not an exception.
 - If a task's required proof cannot pass at its current size, split the task
@@ -59,6 +62,7 @@ are split before execution.
    - goal and non-goals
    - requirement/spec source coverage
    - requirements/proof matrix, or compact proof line for tiny plans
+   - proof owners and stale-proof guards for each non-trivial row
    - task sequence
    - files/modules likely touched
    - validation gates by layer
@@ -77,7 +81,8 @@ Return:
 
 - source coverage
 - implementation plan path or chat-only plan
-- requirements/proof matrix, or compact proof line for tiny plans
+- requirements/proof matrix with owners and stale-proof guards, or compact proof
+  line for tiny plans
 - task sequence
 - write surfaces
 - validation gates
@@ -94,6 +99,8 @@ Return:
 - Omitting validation gates to move faster.
 - Listing validation commands without mapping them back to the requirements they
   prove.
+- Dropping proof owners or stale-proof guards that came from a goal contract,
+  spec, prior plan, or app-specific verifier.
 - Treating a proof gate that is too large to pass as a skipped layer instead of
   splitting or replanning.
 - Calling plan creation "reviewed" or "executable" without review/validation.

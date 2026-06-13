@@ -20,7 +20,8 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 - Verify subagent reports by inspecting changed files, diffs, and test output.
 - Preserve implementation proof as you work: requirement/task coverage, changed
   files, proof commands with exit codes, red/green evidence for behavior
-  changes, skipped proof layers with reasons, and blockers.
+  changes, proof owners, stale-proof guards, skipped proof layers with reasons,
+  and blockers.
 - If a required proof gate cannot pass inside the approved scope, stop and
   return to `plan-create` or split the work into smaller provable slices.
 - A skip reason must be a concrete external blocker: missing environment,
@@ -63,6 +64,8 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Re-read requirements.
    - Inspect diffs.
    - Run targeted and full relevant checks.
+   - Verify each matrix row's owner, gate, and stale-proof guard before treating
+     it as satisfied.
    - Report commands, exit codes, red/green evidence or exception, skipped
      proof layers, proof split status, and remaining blockers.
 
@@ -78,6 +81,8 @@ The main agent must:
 - reject unsupported claims
 - integrate conflicting results
 - rerun validation
+- cross-check matrix rows whose evidence came from subagents, reviewers, UI
+  drivers, telemetry, or stale artifacts
 - decide whether the plan is complete
 
 ## Progressive Disclosure
@@ -106,7 +111,8 @@ Include:
 - subagents used and what they contributed
 - verification commands with results
 - implementation proof: requirement/task coverage, commands, exit codes,
-  red/green evidence or exception, skipped proof layers, blockers
+  red/green evidence or exception, proof owners, stale-proof guards, skipped
+  proof layers, blockers
 - proof split status: all required proof passed, or the work was
   split/replanned because proof could not pass at the current scope
 - accepted risks and follow-ups

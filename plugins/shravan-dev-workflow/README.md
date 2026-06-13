@@ -141,7 +141,8 @@ plan. It stays read-only against product code and captures task sequence, write
 surfaces, validation gates, rollback or recovery notes, risks, and open
 questions. Non-trivial plans include a requirements/proof matrix; if proof
 cannot pass at the planned scope, the plan should split or replan before
-execution.
+execution. Goal-seeded matrix rows must keep proof owners and stale-proof guards
+through planning, handoff, and execution.
 
 Use `plan-improve-repo` to audit a repo for high-leverage improvements and
 write executable plans without editing source. It supports quick, deep, focus,

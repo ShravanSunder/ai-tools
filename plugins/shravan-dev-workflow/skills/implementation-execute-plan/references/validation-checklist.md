@@ -14,6 +14,7 @@ Use this before execution and before completion claims.
 - Validation commands identified.
 - Requirements/proof matrix identified, or the plan explains why a compact
   proof line is sufficient.
+- Proof owners and stale-proof guards identified for non-trivial matrix rows.
 - Required proof gates are sized so they can pass inside the approved scope; if
   not, split or replan before editing. A skip reason must be a concrete
   external blocker or a user-approved exception, never time pressure, task
@@ -34,6 +35,8 @@ Use this before execution and before completion claims.
 - Read the returned summary.
 - Inspect changed files and diff.
 - Verify tests or evidence independently.
+- Cross-check the relevant matrix rows before treating subagent, reviewer,
+  UI-driver, telemetry, or other delegated evidence as complete.
 - Resolve conflicts between subagent outputs.
 - Do not accept DONE_WITH_CONCERNS as done until concerns are evaluated.
 
@@ -41,6 +44,7 @@ Use this before execution and before completion claims.
 
 - Re-read original plan requirements.
 - Re-read the requirements/proof matrix.
+- Confirm proof owners, stale-proof guards, and open proof gaps.
 - Run targeted tests.
 - Run full relevant project validation when feasible.
 - Report command, exit code, and result.
@@ -50,5 +54,5 @@ Use this before execution and before completion claims.
   when applicable.
 - Separate fixed now, blockers, and follow-ups.
 - Report implementation proof: requirement/task coverage, changed files,
-  red/green evidence or exception, skipped proof layers, blockers, and proof
-  split status.
+  red/green evidence or exception, proof owners, stale-proof guards, skipped
+  proof layers, blockers, and proof split status.

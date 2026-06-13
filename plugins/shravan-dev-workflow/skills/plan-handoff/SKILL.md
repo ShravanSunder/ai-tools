@@ -20,7 +20,9 @@ transferable, not that the plan is approved or implemented.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, line count, coverage, referenced code/docs, open questions, and exact requested task.
 - Include the requirements/proof matrix (path or excerpt) or the plan's stated
-  compact proof line, plus proof layers, split triggers, and open proof gaps.
+  compact proof line, plus proof owners, stale-proof guards, proof layers, split
+  triggers, open proof gaps, and the parent-verification rule for any downstream
+  subagent/reviewer/driver evidence.
 - Include security context when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
 - If a plan file is available, read it end to end before packaging. Show `wc -l` and chunk coverage.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
@@ -61,3 +63,5 @@ Load `references/handoff-template.md` when writing the actual artifact or copy-p
 - Sensitive trust-boundary assumptions are omitted, forcing the next agent to invent a threat model.
 - The requirements/proof matrix is omitted, forcing the next agent to infer
   how the plan will be proven.
+- The handoff drops proof owners, stale-proof guards, or parent-owned
+  verification, letting the next agent treat delegated evidence as completion.
