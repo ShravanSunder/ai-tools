@@ -7,10 +7,41 @@ box-drawing; no markdown pipe-tables.
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ progressive-disclosure.md — use ledgers after the first map/slice
   ▸ shape-catalog.md ──► Shape 4 (Column-ruled) — when to use a table
     with borders vs. column-ruled (no-border) style
   ▸ build-discipline.md ──► Alignment recipes — cell-width arithmetic,
     junction characters, padding, before/after drift repair
+
+
+─── Named-target ledger ─────────────────────────────────────────────
+
+Use a ledger when the reader needs state, not a full table.
+
+```
+target      current read
+skill       router stays small
+reference   examples move out of SKILL.md
+proof       red/green pressure scenario
+open        installed-cache refresh status
+```
+
+Keep rows short.  If cells need paragraphs, switch to a ruled list.
+
+
+─── Research lane board ────────────────────────────────────────────
+
+Render research lanes you are handed; do not claim TUI runs the
+research or decides acceptance.
+
+```
+lane          evidence          parent status
+code          current files      accepted
+logs          prior sessions     needs freshness check
+outside view  taste concern      open
+```
+
+Use this after orchestration skills have produced lane outputs.
 
 
 ─── Basic pros/cons (2-column) ───────────────────────────────────────

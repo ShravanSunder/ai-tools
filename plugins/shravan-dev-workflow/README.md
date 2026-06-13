@@ -186,7 +186,9 @@ risk. It is for continuation, audit, or manual review of work already in motion.
 - `skill-audit`: audits current skills, session evidence, and upstream
   inspirations before recommending updates or new skills.
 - `tui-presentation`: gives agents a shared structure for readable chat/TUI
-  explanations, diagrams, comparisons, and multi-section responses.
+  explanations, diagrams, comparisons, and multi-section responses. It teaches
+  disclosure sequence and visual-family selection while preserving semantic
+  markdown for code, paths, URLs, and technical tokens.
 
 ## External Counsel
 

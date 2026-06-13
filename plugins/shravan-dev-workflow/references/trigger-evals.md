@@ -263,9 +263,13 @@ source inspiration.
 
 - "Draw out this architecture."
 - "Compare these designs in chat."
+- "Show me the research lanes and what is still open."
+- "Explain this without one giant diagram."
 
-Gate: output is visually structured for monospace chat, while code and config
-remain copyable.
+Gate: output is visually structured for monospace chat, uses disclosure
+sequence or visual-family selection when useful, does not turn TUI into a
+Mermaid catalog, and keeps code, config, paths, URLs, and technical tokens in
+semantic markdown.
 
 ### ops-linear-tracking should trigger
 

@@ -61,7 +61,7 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
-- **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens
+- **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with progressive Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens
 - **ops-linear-tracking** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle
