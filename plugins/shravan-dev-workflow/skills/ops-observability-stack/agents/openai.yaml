@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ops Observability Stack"
+  short_description: "Shared local OTel and Victoria stack workflows"
+  default_prompt: "Use the shared local observability stack to start, verify, or query local OTLP producers."

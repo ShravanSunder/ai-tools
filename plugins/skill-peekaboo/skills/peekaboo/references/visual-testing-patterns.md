@@ -2,23 +2,88 @@
 
 Detailed patterns for using Peekaboo in visual testing workflows.
 
+## Snapshot Targeting Pattern
+
+Use this pattern when an action depends on an accessibility element ID:
+
+```bash
+umask 077
+UI_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui.XXXXXX.json")
+trap 'rm -f "$UI_JSON"' EXIT
+
+peekaboo app switch --to "MyApp"
+peekaboo list windows --app "MyApp" --json
+peekaboo window focus --app "MyApp" --window-title "Window Title"
+peekaboo see --app "MyApp" --window-title "Window Title" --json > "$UI_JSON"
+SNAPSHOT=$(jq -r '.data.snapshot_id' "$UI_JSON")
+jq '.data.ui_elements[] | {id, label, role: .role_description}' "$UI_JSON"
+peekaboo click --snapshot "$SNAPSHOT" --on elem_5 --json
+```
+
+Element IDs are snapshot-specific. If the UI changes, capture again before
+using the next `elem_*` ID. For a snapshot-backed click, pass `--snapshot` and
+the element ID; do not add `--app` to that click. The snapshot already carries
+the app/window context needed for stable targeting.
+
+For multi-window apps, select a specific `--window-id` or `--window-title`, or
+focus that window explicitly before capture. Use private per-run temp files for
+UI JSON because captures can include window titles and text.
+
+## Input Path Probes
+
+Use input-path probes when a click appears to resolve the right element but the
+app does not respond as expected.
+
+```bash
+umask 077
+CALC_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-calc.XXXXXX.json")
+trap 'rm -f "$CALC_JSON"' EXIT
+
+peekaboo click --help | rg 'input-strategy|actionOnly|synthOnly'
+peekaboo see --app Calculator --json > "$CALC_JSON"
+SNAPSHOT=$(jq -r '.data.snapshot_id' "$CALC_JSON")
+
+# Accessibility action path.
+peekaboo click --on elem_8 --snapshot "$SNAPSHOT" --input-strategy actionOnly --json --no-auto-focus
+
+# Direct accessibility action.
+peekaboo perform-action --on elem_8 --action AXPress --snapshot "$SNAPSHOT" --json
+
+# Synthetic pointer event path.
+peekaboo click --on elem_20 --snapshot "$SNAPSHOT" --input-strategy synthOnly --json
+```
+
+Interpretation:
+
+- `actionOnly` success proves live AX re-resolution and action invocation.
+- `synthOnly` success proves coordinate resolution and event delivery; verify
+  app state independently.
+- `perform-action AXPress` is the cleanest UIAX smoke test.
+- Coordinates cannot prove `actionOnly`; use coordinates only as a fallback when
+  Accessibility metadata is unavailable.
+
 ## Before/After State Capture
 
 Capture UI state before and after actions to verify changes:
 
 ```bash
+umask 077
+UI_BEFORE_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui-before.XXXXXX.json")
+UI_AFTER_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui-after.XXXXXX.json")
+trap 'rm -f "$UI_BEFORE_JSON" "$UI_AFTER_JSON"' EXIT
+
 # Capture before state
 peekaboo app switch --to "MyApp"
-peekaboo see --app "MyApp" --json > /tmp/ui_before.json
-BEFORE_COUNT=$(jq '.data.element_count' /tmp/ui_before.json)
+peekaboo see --app "MyApp" --json > "$UI_BEFORE_JSON"
+BEFORE_COUNT=$(jq '.data.element_count' "$UI_BEFORE_JSON")
 
 # Perform action
-SNAPSHOT=$(jq -r '.data.snapshot_id' /tmp/ui_before.json)
+SNAPSHOT=$(jq -r '.data.snapshot_id' "$UI_BEFORE_JSON")
 peekaboo click --snapshot "$SNAPSHOT" --on elem_5
 
 # Capture after state
-peekaboo see --app "MyApp" --json > /tmp/ui_after.json
-AFTER_COUNT=$(jq '.data.element_count' /tmp/ui_after.json)
+peekaboo see --app "MyApp" --json > "$UI_AFTER_JSON"
+AFTER_COUNT=$(jq '.data.element_count' "$UI_AFTER_JSON")
 
 # Compare
 echo "Elements before: $BEFORE_COUNT, after: $AFTER_COUNT"
@@ -109,20 +174,30 @@ echo "Test complete!"
 
 ### Save reference screenshots
 ```bash
+umask 077
+REFERENCE_IMAGE=$(mktemp "${TMPDIR:-/tmp}/peekaboo-reference.XXXXXX.png")
+CURRENT_IMAGE=$(mktemp "${TMPDIR:-/tmp}/peekaboo-current.XXXXXX.png")
+DIFF_IMAGE=$(mktemp "${TMPDIR:-/tmp}/peekaboo-diff.XXXXXX.png")
+trap 'rm -f "$REFERENCE_IMAGE" "$CURRENT_IMAGE" "$DIFF_IMAGE"' EXIT
+
 # Capture reference image
-peekaboo image --app "MyApp" --path /tmp/reference.png
+peekaboo image --app "MyApp" --path "$REFERENCE_IMAGE"
 
 # Later, capture current state
-peekaboo image --app "MyApp" --path /tmp/current.png
+peekaboo image --app "MyApp" --path "$CURRENT_IMAGE"
 
 # Compare using ImageMagick (if installed)
-compare -metric AE /tmp/reference.png /tmp/current.png /tmp/diff.png 2>&1
+compare -metric AE "$REFERENCE_IMAGE" "$CURRENT_IMAGE" "$DIFF_IMAGE" 2>&1
 ```
 
 ### Annotated screenshots for debugging
 ```bash
+umask 077
+ANNOTATED_IMAGE=$(mktemp "${TMPDIR:-/tmp}/peekaboo-annotated.XXXXXX.png")
+trap 'rm -f "$ANNOTATED_IMAGE"' EXIT
+
 # Capture with element annotations
-peekaboo see --app "MyApp" --annotate --path /tmp/annotated.png
+peekaboo see --app "MyApp" --annotate --path "$ANNOTATED_IMAGE"
 ```
 
 ## Waiting for UI Changes

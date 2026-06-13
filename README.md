@@ -50,6 +50,13 @@ flowchart LR
 Operations skills such as `ops-security-review` and `ops-linear-tracking` sit
 outside the main phase path.
 
+### Shared Observability
+
+`observability/` owns the shared local OpenTelemetry collector plus
+VictoriaMetrics, VictoriaLogs, and VictoriaTraces stack. Use
+`shravan-dev-workflow:ops-observability-stack` for producer boundaries,
+AgentStudio and Agent VM loops, resource naming, and Victoria query recipes.
+
 Start with [`plugins/shravan-dev-workflow/README.md`](plugins/shravan-dev-workflow/)
 for the full workflow map, phase diagrams, and skill boundaries.
 
@@ -99,6 +106,7 @@ ai-tools/
 │   ├── skill-peekaboo/          # macOS visual UI testing
 │   └── quorum-counsel/          # Optional manual multi-model counsel
 ├── agent_sidecar/               # Docker sidecar system
+├── observability/               # Shared local OTel/Victoria stack
 ├── agents.md                    # Maintainer and agent instructions
 └── CLAUDE.md                    # Claude Code alias for agents.md
 ```

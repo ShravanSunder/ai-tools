@@ -1,7 +1,8 @@
-# Shravan Dev Workflow Pressure Scenario Matrix
+# Skill Pressure Scenario Matrix
 
-This directory contains fast Codex pressure scenarios for every
-`shravan-dev-workflow` skill.
+This directory contains fast Codex pressure scenarios for skill behavior. Most
+scenarios cover `shravan-dev-workflow`; plugin-specific scenarios may live here
+when they need the same shortcut-resistance harness.
 
 The goal is not to test whether a model can summarize each skill. The goal is to
 test whether the model still follows the skill when prompted to take the exact
@@ -41,6 +42,7 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `plan-review-swarm` | `plan-review-swarm-whole-artifact.md` | Do not skim or trust the summary; require whole-artifact coverage for file-backed plans. |
 | `ops-linear-tracking` | `ops-linear-tracking-docs-are-truth.md` | Do not make Linear the design source of truth or clobber dependency relations. |
 | `ops-security-review` | `ops-security-review-official-scan.md` | Do not invent a security scanner; route explicit scans to official Codex Security workflows. |
+| `peekaboo` | `peekaboo-progressive-disclosure.md` | Do not reuse stale element IDs, skip live command discovery, or perform destructive desktop cleanup. |
 | `skill-audit` | `skill-audit-evidence-first.md` | Do not create broad skills from vibes; audit evidence and classify update/create/merge/skip. |
 | `spec-design-swarm` | `spec-design-swarm-parent-synthesis.md` | Do not outsource the mental model or implement before design synthesis. |
 | `spec-handoff` | `spec-handoff-portable-design-context.md` | Do not turn spec/design portability into plan creation or phase completion. |

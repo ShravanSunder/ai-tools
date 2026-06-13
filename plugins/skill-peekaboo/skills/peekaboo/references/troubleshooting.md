@@ -68,6 +68,28 @@ peekaboo see --app "MyApp" --json
 - Use the latest snapshot_id
 - For dynamic UIs, capture immediately before clicking
 
+### Snapshot-backed action resolves in the wrong app
+
+**Symptom**: `click --snapshot "$SNAPSHOT" --on elem_5` appears to target the
+wrong app or window.
+
+**Checks**:
+```bash
+umask 077
+UI_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui.XXXXXX.json")
+trap 'rm -f "$UI_JSON"' EXIT
+
+peekaboo list windows --app "MyApp" --json
+peekaboo see --app "MyApp" --window-title "Window Title" --json > "$UI_JSON"
+jq '.data | {snapshot_id, app_name, window_title, windowContext}' "$UI_JSON"
+```
+
+**Solutions**:
+- Recapture after focusing the intended app/window.
+- Inspect whether the saved snapshot preserved the expected app/window context.
+- Avoid adding `--app` to a click that already uses `--snapshot`; instead,
+  create a fresh snapshot for the correct target.
+
 ## Element Not Found
 
 ### Element ID not found
@@ -124,10 +146,14 @@ peekaboo see --app "MyApp" --json
 # Use PID for debug builds
 PID=$(pgrep -x "MyApp")
 peekaboo app switch --to "PID:$PID"
+peekaboo see --app "PID:$PID" --json
 
 # Use keyboard navigation
 peekaboo press down down return
 ```
+
+When the target is a debug build without a stable bundle ID, PID targeting or
+keyboard navigation is often safer than fuzzy click targeting.
 
 ### Window in different Space
 
@@ -179,6 +205,9 @@ peekaboo bridge status
 
 # Restart Peekaboo.app if needed
 ```
+
+If this happens after the UI changed, recapture first. Retrying with stale
+element IDs often repeats the wrong action.
 
 ### Bridge socket not found
 
@@ -263,14 +292,19 @@ peekaboo hotkey cmd,s
 ## Getting More Debug Info
 
 ```bash
+umask 077
+UI_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui.XXXXXX.json")
+DEBUG_IMAGE=$(mktemp "${TMPDIR:-/tmp}/peekaboo-debug.XXXXXX.png")
+trap 'rm -f "$UI_JSON" "$DEBUG_IMAGE"' EXIT
+
 # Verbose output
 peekaboo see --app "MyApp" --verbose
 
 # JSON output for parsing
-peekaboo see --app "MyApp" --json
+peekaboo see --app "MyApp" --json > "$UI_JSON"
 
 # Annotated screenshot
-peekaboo see --app "MyApp" --annotate --path /tmp/debug.png
+peekaboo see --app "MyApp" --annotate --path "$DEBUG_IMAGE"
 
 # Check daemon logs
 cat ~/.peekaboo/daemon.log

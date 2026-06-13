@@ -42,6 +42,7 @@ ai-tools/
 │   ├── skill-peekaboo/               # macOS visual UI testing via Peekaboo CLI
 │   ├── quorum-counsel/               # Manual multi-model counsel stack
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
+├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
@@ -58,6 +59,13 @@ ai-tools/
 Codex skills are delivered by installed Codex plugins. Do not add sync scripts or symlink-based delivery back into this repo.
 
 Claude Code can load the same skill tree when a plugin also has `.claude-plugin/plugin.json`. Keep shared workflow skills under the plugin that owns them.
+
+## System Observability Ownership
+
+`observability/` owns the shared local OpenTelemetry and Victoria stack.
+`shravan-dev-workflow:ops-observability-stack` owns agent-facing query and debugging guidance. Do not
+move this stack into `devfiles`, and do not duplicate Docker Compose, collector,
+or generic Victoria query docs into app repos.
 
 ### Current Plugin Skills
 
@@ -77,6 +85,7 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 | implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Implementation-state packets for manual reviewers or continuation agents |
 | plan-review-swarm | `plugins/shravan-dev-workflow/skills/plan-review-swarm/` | Read-only adversarial plan review with whole-artifact loading, live repo validation, bounded reviewer lanes, and temp review artifacts for substantial reviews |
 | implementation-execute-plan | `plugins/shravan-dev-workflow/skills/implementation-execute-plan/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
+| ops-observability-stack | `plugins/shravan-dev-workflow/skills/ops-observability-stack/` | Shared local OTel and Victoria stack operations, producer boundaries, resource naming, and debug/beta query loops |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed skill audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |

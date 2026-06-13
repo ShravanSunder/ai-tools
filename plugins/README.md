@@ -36,7 +36,7 @@ Project scaffolding with standard dev configs. Supports TypeScript (biome, vites
 
 ### [skill-peekaboo](skill-peekaboo/)
 
-Visual UI testing for macOS apps using [Peekaboo CLI](https://github.com/nickthedude/peekaboo). An alternative to Playwright for native macOS app automation via the Accessibility API. Supports headless mode for CI/CD.
+Visual UI testing for macOS apps using [Peekaboo CLI](https://github.com/openclaw/Peekaboo). An alternative to Playwright for native macOS app automation via the Accessibility API. Uses live CLI discovery, snapshot-scoped interaction, and progressive references for troubleshooting and headless mode.
 
 ### [quorum-counsel](quorum-counsel/)
 
@@ -58,6 +58,7 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **spec-handoff** skill -- packages spec/design context for another agent before an implementation plan exists
 - **plan-create** skill -- turns spec/design context into a written implementation plan without editing code
 - **ops-security-review** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
+- **ops-observability-stack** skill -- guides shared local OpenTelemetry/Victoria stack use, producer boundaries, AgentStudio and Agent VM loops, resource naming, and Victoria proof queries
 - **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions

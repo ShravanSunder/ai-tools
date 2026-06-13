@@ -1,6 +1,6 @@
 # Skill: Peekaboo
 
-Visual UI testing skill for macOS apps using [Peekaboo CLI](https://github.com/nickthedude/peekaboo). An alternative to Playwright for native macOS app automation via the Accessibility API.
+Visual UI testing skill for macOS apps using [Peekaboo CLI](https://github.com/openclaw/Peekaboo). An alternative to Playwright for native macOS app automation via the Accessibility API.
 
 ## Installation
 
@@ -17,7 +17,8 @@ Teaches Claude how to use Peekaboo for macOS app automation:
 - Click elements, type text, send keyboard shortcuts
 - Switch between apps and windows
 - Headless mode for CI/CD pipelines
-- Correct targeting patterns (window-based, not app-based)
+- Live command discovery with `peekaboo --help`, `peekaboo learn`, and `peekaboo tools`
+- Snapshot-scoped targeting patterns for safer desktop interaction
 
 ## When to Use
 
@@ -28,25 +29,36 @@ Teaches Claude how to use Peekaboo for macOS app automation:
 
 ## Key Concepts
 
-Peekaboo uses a **window-based targeting pattern**:
+Peekaboo automation should start from current target and UI state, then use the
+fresh snapshot for element actions:
 
 ```bash
-# 1. Focus the app window
-peekaboo window --focus "Window Title"
+# 1. Bring the intended app/window into view
+peekaboo app switch --to "MyApp"
+peekaboo list windows --app "MyApp" --json
+peekaboo window focus --app "MyApp" --window-title "Window Title"
 
-# 2. Capture current state
-peekaboo see
+# 2. Capture current state and snapshot id into a private per-run file
+umask 077
+UI_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui.XXXXXX.json")
+peekaboo see --app "MyApp" --window-title "Window Title" --json > "$UI_JSON"
+SNAPSHOT=$(jq -r '.data.snapshot_id' "$UI_JSON")
 
-# 3. Interact using element IDs from capture
-peekaboo click --on elem_5
+# 3. Interact through the snapshot context
+peekaboo click --snapshot "$SNAPSHOT" --on elem_5 --json
 ```
 
-See [`skills/peekaboo/SKILL.md`](skills/peekaboo/SKILL.md) for the full skill documentation with targeting patterns, headless mode, and troubleshooting.
+The top-level skill stays compact and routes deeper material to references for
+visual testing patterns, troubleshooting, and headless automation.
+
+See [`skills/peekaboo/SKILL.md`](skills/peekaboo/SKILL.md) for the full skill
+documentation.
 
 ## Directory Structure
 
 ```
 skill-peekaboo/
+├── .codex-plugin/plugin.json
 ├── .claude-plugin/plugin.json
 └── skills/
     └── peekaboo/

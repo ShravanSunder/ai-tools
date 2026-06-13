@@ -16,8 +16,8 @@
     {
       "name": "skill-peekaboo",
       "source": "./plugins/skill-peekaboo",
-      "description": "Visual UI testing for macOS apps using Peekaboo CLI - alternative to Playwright for native macOS testing",
-      "version": "1.0.1"
+      "description": "Visual UI testing for macOS apps using Peekaboo CLI - progressive native macOS automation guidance",
+      "version": "1.0.2"
     },
     {
       "name": "quorum-counsel",
@@ -28,8 +28,8 @@
     {
       "name": "shravan-dev-workflow",
       "source": "./plugins/shravan-dev-workflow",
-      "description": "Development workflow skills for goal orchestration, research swarms, spec design swarms, spec handoff, plan creation, repo improvement planning, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, progressive TUI presentation, and operations Linear tracking",
-      "version": "1.6.20"
+      "description": "Development workflow skills for goal orchestration, research swarms, spec design swarms, spec handoff, plan creation, repo improvement planning, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security routing, observability proof loops, bounded subagent review lanes, plan handoff/review/execution, implementation handoff, debugging, skill audits, progressive TUI presentation, and operations Linear tracking",
+      "version": "1.6.21"
     }
   ]
 }

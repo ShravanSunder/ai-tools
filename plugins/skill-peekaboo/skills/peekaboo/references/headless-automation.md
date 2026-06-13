@@ -165,6 +165,10 @@ peekaboo daemon start
 peekaboo bridge status
 ```
 
+Treat the bridge socket as a local trust boundary. Avoid enabling unsigned
+socket clients unless a task explicitly requires it and the caller accepts that
+broader local IPC surface.
+
 ## Daemon Configuration Options
 
 When starting the daemon:
@@ -224,7 +228,9 @@ cat ~/.peekaboo/daemon.log
 
 export PEEKABOO_VISUAL_FEEDBACK=false
 export PEEKABOO_LOG_LEVEL=info
-export PEEKABOO_LOG_FILE=/tmp/peekaboo-ci.log
+umask 077
+export PEEKABOO_LOG_FILE
+PEEKABOO_LOG_FILE=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ci.XXXXXX.log")
 
 # Start daemon
 peekaboo daemon start --wait 5
@@ -233,3 +239,9 @@ peekaboo daemon start --wait 5
 peekaboo daemon status
 peekaboo permissions status
 ```
+
+## Artifact Hygiene
+
+Headless runs can create screenshots, UI JSON, and logs containing sensitive
+window titles, text, or clipboard-adjacent data. Prefer temporary paths, redact
+artifacts before sharing, and clean up only files created by the current run.

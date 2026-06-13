@@ -1,186 +1,128 @@
 ---
 name: peekaboo
-description: Visual UI testing for macOS apps using Peekaboo CLI. Use when testing app UI states, verifying visual elements, automating macOS app interactions, debugging native macOS apps, or replacing Playwright for native macOS testing. Supports headless mode for CI/CD. Ideal for verifying debug builds without bundle IDs where click targeting can fail.
+description: Use when testing, inspecting, or automating native macOS UI with Peekaboo; checking screen/UI state; interacting with apps, windows, menus, text, or clipboard; troubleshooting Screen Recording or Accessibility permissions; or replacing web-only browser tools for desktop app workflows.
 ---
 
 # Peekaboo Visual Testing
 
-Peekaboo is a macOS automation tool for high-fidelity screen capture, AI analysis, and GUI automation. Use it to test macOS app UIs, verify visual elements, and automate interactions.
+Peekaboo is a macOS automation CLI for screenshots, UI maps, and native desktop
+interaction. Treat its live CLI help as the source of truth because command
+surfaces move faster than copied examples.
 
-## Help Discovery (Use CLI Help for Current Options)
+## Start Here
 
-Peekaboo CLI is self-documenting. **Always discover current commands and flags via help** - this prevents outdated assumptions:
+1. Confirm the target app/window and current permissions.
+
+   ```bash
+   peekaboo permissions status
+   peekaboo list apps --json
+   peekaboo list windows --app "MyApp" --json
+   ```
+
+2. Discover current commands before automation.
+
+   ```bash
+   peekaboo --help
+   peekaboo <command> --help
+   ```
+
+3. Use live progressive-disclosure guides when available.
+
+   ```bash
+   peekaboo learn
+   peekaboo tools
+   ```
+
+4. Capture current UI before element actions.
+
+   ```bash
+   umask 077
+   UI_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui.XXXXXX.json")
+   peekaboo see --app "MyApp" --window-title "Window Title" --json > "$UI_JSON"
+   ```
+
+## Operating Rules
+
+- Use `peekaboo see --json` before element interactions so element IDs and
+  snapshot IDs are fresh.
+- Prefer element IDs from `see`; use coordinates only when Accessibility
+  metadata is unavailable.
+- Use `--json` whenever another tool, script, or agent needs to parse output.
+- Check `peekaboo permissions status` before treating capture or interaction
+  failures as CLI bugs.
+- Respect the user's desktop. Do not quit apps, close windows, move windows,
+  modify clipboard contents, or perform other destructive desktop actions
+  unless the user explicitly asked for that target and action.
+- If the UI may have changed, recapture with `peekaboo see --json` before
+  retrying an interaction.
+- Element IDs are snapshot-specific. Do not reuse `elem_*` IDs from older
+  captures without verifying the current snapshot.
+- For apps with multiple windows, list windows and select `--window-id`,
+  `--window-title`, or an explicit `peekaboo window focus` target before
+  mutating UI.
+- For snapshot-backed clicks, use the snapshot context. Do not add `--app` to a
+  click that already uses `--snapshot`; if targeting is ambiguous, recapture and
+  inspect the snapshot/app/window context first.
+- UI JSON, screenshots, and logs can contain sensitive data. Use `umask 077`
+  plus `mktemp` for redirected artifacts and clean up only current-run files.
+- `--no-auto-focus` can prove background behavior, but some apps ignore
+  synthetic clicks until focus is allowed.
+
+## Shortcut Pressure Response
+
+When a user asks to skip setup, reuse old element IDs, rely on remembered
+syntax, or close apps as cleanup:
+
+1. Refuse the stale or destructive shortcut.
+2. Name the live discovery source: `peekaboo --help`, `peekaboo learn`, or
+   `peekaboo tools`.
+3. Disambiguate the target window.
+4. Use private per-run temp artifacts for UI JSON or screenshots.
+5. Use the safe interaction slice with a fresh `see --json` snapshot.
+6. Route deeper needs through the reference router instead of dumping every
+   recipe inline.
+
+## Safe Interaction Slice
 
 ```bash
-peekaboo --help                    # All commands
-peekaboo <command> --help          # Command options
-peekaboo <command> <sub> --help    # Subcommand options
-```
+umask 077
+UI_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui.XXXXXX.json")
+UI_AFTER_JSON=$(mktemp "${TMPDIR:-/tmp}/peekaboo-ui-after.XXXXXX.json")
+trap 'rm -f "$UI_JSON" "$UI_AFTER_JSON"' EXIT
 
-### Key Help Categories
-| Category | Help Command | Use For |
-|----------|--------------|---------|
-| Vision | `peekaboo see --help` | Capture UI state, get element IDs |
-| Capture | `peekaboo image --help` | Save screenshots |
-| Click | `peekaboo click --help` | Click elements |
-| Type | `peekaboo type --help` | Send text input |
-| Keys | `peekaboo press --help`, `peekaboo hotkey --help` | Keyboard navigation |
-| App | `peekaboo app --help` | Switch, launch, quit apps |
-| Window | `peekaboo window --help` | Focus, list windows |
-| Daemon | `peekaboo daemon --help` | Headless mode |
-
-## The Correct Targeting Pattern (Critical!)
-
-### WRONG patterns that cause errors:
-
-```bash
-# WRONG - click with --app causes bridge errors
-peekaboo see --app "MyApp"
-peekaboo click --app "MyApp" --on elem_5     # Bridge error!
-
-# WRONG - click without snapshot targets FRONTMOST window, not your app
-peekaboo see --app "MyApp"
-peekaboo click --on elem_5                    # Clicks wrong window!
-```
-
-### CORRECT pattern: switch -> see -> click with snapshot
-
-```bash
-# 1. Switch to app (brings it to front)
 peekaboo app switch --to "MyApp"
-
-# 2. Capture UI and get snapshot_id
-SNAPSHOT=$(peekaboo see --app "MyApp" --json | jq -r '.data.snapshot_id')
-
-# 3. Click using ONLY --snapshot (no --app flag)
-peekaboo click --snapshot "$SNAPSHOT" --on elem_5
+peekaboo list windows --app "MyApp" --json
+peekaboo window focus --app "MyApp" --window-title "Window Title"
+peekaboo see --app "MyApp" --window-title "Window Title" --json > "$UI_JSON"
+SNAPSHOT=$(jq -r '.data.snapshot_id' "$UI_JSON")
+jq '.data.ui_elements[] | {id, label, role: .role_description}' "$UI_JSON"
+peekaboo click --snapshot "$SNAPSHOT" --on elem_5 --json
+peekaboo see --app "MyApp" --window-title "Window Title" --json > "$UI_AFTER_JSON"
 ```
 
-### Why this works:
-- `app switch` brings the target window to front
-- `see --app` captures that specific app's UI, returns `snapshot_id`
-- The snapshot contains: app context, window info, element positions
-- `click --snapshot` uses the snapshot context - **do not add --app**
+Why this shape:
 
-## Core Workflow: See -> Interact -> Verify
+- `app switch` makes the intended target visible.
+- `list windows` and `window focus` prevent same-app, wrong-window actions.
+- `mktemp` plus `umask 077` keeps sensitive captures private to the run.
+- `see --json` records fresh UI state and a `snapshot_id`.
+- `click --snapshot` uses the captured context instead of the frontmost app by
+  accident.
+- The final capture verifies the real UI changed.
 
-### 1. See: Capture UI State
-```bash
-peekaboo app switch --to "MyApp"
-peekaboo see --app "MyApp" --json > ui.json
-# Extract snapshot_id for subsequent commands
-SNAPSHOT=$(jq -r '.data.snapshot_id' ui.json)
-```
+## Progressive Reference Router
 
-### 2. Interact: Click, Type, or Navigate
-```bash
-# Click by element ID
-peekaboo click --snapshot "$SNAPSHOT" --on elem_3
+Read only the reference needed for the current failure mode:
 
-# Type text
-peekaboo type --snapshot "$SNAPSHOT" "hello world"
+| Need | Reference |
+| --- | --- |
+| Multi-step visual tests, waits, screenshot comparison, form flows, input-path probes | `references/visual-testing-patterns.md` |
+| Permissions, stale snapshots, wrong app/window, bridge errors, focus, debug builds | `references/troubleshooting.md` |
+| Daemon mode, MCP mode, CI/headless setup, sockets, logs | `references/headless-automation.md` |
 
-# Keyboard navigation (often more reliable)
-peekaboo press down down return
-peekaboo hotkey cmd,s
-```
+## Security Notes
 
-### 3. Verify: Re-capture and Compare
-```bash
-peekaboo see --app "MyApp" --json > ui_after.json
-# Compare element counts, labels, check for expected changes
-```
-
-## Element Targeting Options
-
-Check `peekaboo click --help` for current options. Common patterns:
-
-| Method | Syntax | When to Use |
-|--------|--------|-------------|
-| Element ID | `--on elem_12` | Most reliable when IDs are stable |
-| Fuzzy query | `"Submit"` | When label text is unique |
-| Coordinates | `--coords 100,200` | Fallback, no snapshot needed |
-
-**Important**: Element IDs are snapshot-specific. `elem_12` from one `see` command is NOT the same as `elem_12` from another capture.
-
-## Debugging Apps (Debug Builds Without Bundle IDs)
-
-Debug builds and unsigned apps often lack bundle IDs, causing click targeting to fail or hit the wrong app.
-
-### Option 1: Target by PID
-```bash
-PID=$(pgrep -x "MyDebugApp")
-peekaboo app switch --to "PID:$PID"
-peekaboo see --app "PID:$PID" --json
-```
-
-### Option 2: Keyboard Navigation (Often More Reliable)
-```bash
-peekaboo app switch --to "MyDebugApp"
-peekaboo press down down down return    # Arrow keys + Return
-peekaboo hotkey cmd,shift,o              # Keyboard shortcuts
-peekaboo type "search text" --return     # Type + Enter
-```
-
-### When to Use Keyboard Over Clicks
-- Debug builds without bundle IDs
-- List/tree navigation (arrow keys work better)
-- Form fields (Tab between, Return to submit)
-- Unstable element IDs that change between captures
-
-### Keyboard Commands Reference
-```bash
-peekaboo press tab tab return           # Tab navigation + activate
-peekaboo press down down down return    # Arrow navigation + activate
-peekaboo press up                       # Single arrow key
-peekaboo hotkey cmd,a                   # Select all
-peekaboo hotkey cmd,c                   # Copy
-peekaboo hotkey cmd,v                   # Paste
-peekaboo type "text" --return           # Type then press Enter
-peekaboo type "text" --tab 2            # Type then press Tab twice
-```
-
-## Headless Mode Basics
-
-For CI/CD or background automation:
-
-```bash
-# Start daemon
-peekaboo daemon start
-peekaboo daemon status
-
-# MCP mode auto-starts daemon
-peekaboo mcp
-```
-
-For detailed headless setup, environment variables, and CI/CD integration: See `references/headless-automation.md`
-
-## Permissions Checklist
-
-Peekaboo requires macOS permissions:
-- **Screen Recording**: System Settings > Privacy > Screen Recording
-- **Accessibility**: System Settings > Privacy > Accessibility
-
-Check status:
-```bash
-peekaboo permissions status
-```
-
-## Error Recovery
-
-| Error | Solution |
-|-------|----------|
-| `SNAPSHOT_NOT_FOUND` | Re-run `peekaboo see` to get fresh snapshot |
-| Element not found | Check element IDs with `see --json`, verify UI hasn't changed |
-| Bridge error | Check `peekaboo bridge status`, ensure Peekaboo.app is running |
-| Focus issues | Use `peekaboo app switch` before capture |
-| Click going to wrong app | Use PID targeting or keyboard navigation |
-| Timeout | Increase `--focus-timeout` or add waits between commands |
-
-## When to Read Reference Files
-
-| Need | Reference File |
-|------|---------------|
-| Complex testing patterns, multi-step sequences | `references/visual-testing-patterns.md` |
-| CI/CD and daemon setup, environment variables | `references/headless-automation.md` |
-| Debugging errors, Space switching issues | `references/troubleshooting.md` |
+Peekaboo operates through macOS Screen Recording and Accessibility. UI JSON,
+screenshots, logs, clipboard contents, window titles, and daemon sockets can
+contain sensitive data. Keep artifacts in temporary paths, redact before
+sharing, and avoid broad desktop actions when a narrower target action will do.

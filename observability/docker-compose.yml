@@ -1,0 +1,72 @@
+name: ai-tools-observability
+
+services:
+  ai-tools-otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: ai-tools-otel-collector
+    command:
+      - --config=/etc/otelcol-contrib/config.yaml
+    volumes:
+      - ./otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${COLLECTOR_HTTP_PORT:-4318}:4318"
+      - "${BIND_ADDRESS:-127.0.0.1}:${COLLECTOR_GRPC_PORT:-4317}:4317"
+      - "${BIND_ADDRESS:-127.0.0.1}:${COLLECTOR_HEALTH_PORT:-13133}:13133"
+    depends_on:
+      ai-tools-victoria-metrics:
+        condition: service_healthy
+      ai-tools-victoria-logs:
+        condition: service_healthy
+      ai-tools-victoria-traces:
+        condition: service_healthy
+
+  ai-tools-victoria-metrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: ai-tools-victoria-metrics
+    command:
+      - -storageDataPath=/storage
+      - -retentionPeriod=${RETENTION_PERIOD:-15d}
+      - -storage.minFreeDiskSpaceBytes=${METRICS_MIN_FREE_BYTES:-10737418240}
+    volumes:
+      - ${AI_TOOLS_OBSERVABILITY_DATA_DIR:-~/.local/share/ai-tools-observability}/metrics:/storage
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${METRICS_PORT:-8428}:8428"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8428/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ai-tools-victoria-logs:
+    image: victoriametrics/victoria-logs:latest
+    container_name: ai-tools-victoria-logs
+    command:
+      - -storageDataPath=/storage
+      - -retentionPeriod=${RETENTION_PERIOD:-15d}
+      - -retention.maxDiskSpaceUsageBytes=${LOGS_MAX_BYTES:-10737418240}
+    volumes:
+      - ${AI_TOOLS_OBSERVABILITY_DATA_DIR:-~/.local/share/ai-tools-observability}/logs:/storage
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${LOGS_PORT:-9428}:9428"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:9428/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ai-tools-victoria-traces:
+    image: victoriametrics/victoria-traces:latest
+    container_name: ai-tools-victoria-traces
+    command:
+      - -storageDataPath=/storage
+      - -retentionPeriod=${RETENTION_PERIOD:-15d}
+      - -retention.maxDiskSpaceUsageBytes=${TRACES_MAX_BYTES:-10737418240}
+    volumes:
+      - ${AI_TOOLS_OBSERVABILITY_DATA_DIR:-~/.local/share/ai-tools-observability}/traces:/storage
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${TRACES_PORT:-10428}:10428"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:10428/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20

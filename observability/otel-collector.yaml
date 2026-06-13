@@ -1,0 +1,101 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+    spike_limit_mib: 64
+  resource/scrub:
+    attributes:
+      - key: token
+        action: delete
+      - key: secret
+        action: delete
+      - key: api_key
+        action: delete
+      - key: password
+        action: delete
+      - key: prompt
+        action: delete
+      - key: payload
+        action: delete
+      - key: raw.path
+        action: delete
+      - key: error.raw
+        action: delete
+      - key: secret.token
+        action: delete
+  attributes/scrub:
+    actions:
+      - key: token
+        action: delete
+      - key: secret
+        action: delete
+      - key: api_key
+        action: delete
+      - key: password
+        action: delete
+      - key: prompt
+        action: delete
+      - key: payload
+        action: delete
+      - key: raw.path
+        action: delete
+      - key: error.raw
+        action: delete
+      - key: secret.token
+        action: delete
+  redaction/sensitive:
+    allow_all_keys: true
+    redact_all_types: true
+    blocked_key_patterns:
+      - "(?i).*token.*"
+      - "(?i).*secret.*"
+      - "(?i).*api.?key.*"
+      - "(?i).*password.*"
+      - "(?i).*prompt.*"
+      - "(?i).*payload.*"
+      - "(?i).*raw.*"
+    blocked_values:
+      - "(?i)(bearer|token|secret|api[_-]?key|password)[=: ][^ ]+"
+    summary: silent
+  batch:
+    timeout: 1s
+
+exporters:
+  otlp_http/victoriametrics:
+    metrics_endpoint: http://ai-tools-victoria-metrics:8428/opentelemetry/v1/metrics
+  otlp_http/victorialogs:
+    logs_endpoint: http://ai-tools-victoria-logs:9428/insert/opentelemetry/v1/logs
+    headers:
+      VL-Stream-Fields: service.name,dev.repo.hash,dev.worktree.hash,dev.runtime.flavor,dev.release.channel
+      VL-Ignore-Fields: token,secret,secret.*,api_key,password,prompt,payload,payload.*,raw.*,error.raw,path,*.path
+      X-AI-Tools-Redact-Policy: redact-before-export
+  otlp_http/victoriatraces:
+    traces_endpoint: http://ai-tools-victoria-traces:10428/insert/opentelemetry/v1/traces
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/scrub, attributes/scrub, redaction/sensitive, batch]
+      exporters: [otlp_http/victoriametrics]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/scrub, attributes/scrub, redaction/sensitive, batch]
+      exporters: [otlp_http/victorialogs]
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/scrub, attributes/scrub, redaction/sensitive, batch]
+      exporters: [otlp_http/victoriatraces]

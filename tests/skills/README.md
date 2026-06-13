@@ -1,6 +1,8 @@
 # Skill Pressure Tests
 
-This harness pressure-tests `shravan-dev-workflow` skills through Codex.
+This harness pressure-tests Codex skills through Codex. Most scenarios cover
+`shravan-dev-workflow`; plugin-specific skill scenarios may live here when they
+need the same shortcut-resistance harness.
 
 Default backend: `codex exec`
 

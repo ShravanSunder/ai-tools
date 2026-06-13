@@ -12,6 +12,8 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-13 Shared Observability Stack](2026-06-13-shared-observability-stack.md)
+- [2026-06-13 Peekaboo Progressive Disclosure](2026-06-13-peekaboo-progressive-disclosure.md)
 - [2026-06-13 Orchestrator Goal Prompt Anchoring](2026-06-13-orchestrator-goal-prompt-anchoring.md)
 - [2026-06-13 Workflow Matrix Chain](2026-06-13-workflow-matrix-chain.md)
 - [2026-06-13 Orchestrator Goal Proof Matrix](2026-06-13-orchestrator-goal-proof-matrix.md)

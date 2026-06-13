@@ -1,0 +1,395 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
+COLLECTOR_CONFIG="$SCRIPT_DIR/otel-collector.yaml"
+
+PROJECT_NAME="${AI_TOOLS_OBSERVABILITY_PROJECT_NAME:-ai-tools-observability}"
+DATA_DIR="${AI_TOOLS_OBSERVABILITY_DATA_DIR:-${HOME}/.local/share/ai-tools-observability}"
+BIND_ADDRESS="${AI_TOOLS_OBSERVABILITY_BIND_ADDRESS:-127.0.0.1}"
+COLLECTOR_HTTP_PORT="${AI_TOOLS_OBSERVABILITY_COLLECTOR_HTTP_PORT:-4318}"
+COLLECTOR_GRPC_PORT="${AI_TOOLS_OBSERVABILITY_COLLECTOR_GRPC_PORT:-4317}"
+COLLECTOR_HEALTH_PORT="${AI_TOOLS_OBSERVABILITY_COLLECTOR_HEALTH_PORT:-13133}"
+METRICS_PORT="${AI_TOOLS_OBSERVABILITY_METRICS_PORT:-8428}"
+LOGS_PORT="${AI_TOOLS_OBSERVABILITY_LOGS_PORT:-9428}"
+TRACES_PORT="${AI_TOOLS_OBSERVABILITY_TRACES_PORT:-10428}"
+RETENTION_PERIOD="${AI_TOOLS_OBSERVABILITY_RETENTION_PERIOD:-15d}"
+LOGS_MAX_BYTES="${AI_TOOLS_OBSERVABILITY_LOGS_MAX_BYTES:-10737418240}"
+TRACES_MAX_BYTES="${AI_TOOLS_OBSERVABILITY_TRACES_MAX_BYTES:-10737418240}"
+METRICS_MIN_FREE_BYTES="${AI_TOOLS_OBSERVABILITY_METRICS_MIN_FREE_BYTES:-10737418240}"
+
+COLLECTOR_URL="http://${BIND_ADDRESS}:${COLLECTOR_HTTP_PORT}"
+COLLECTOR_HEALTH_URL="http://${BIND_ADDRESS}:${COLLECTOR_HEALTH_PORT}/"
+METRICS_URL="http://${BIND_ADDRESS}:${METRICS_PORT}"
+LOGS_URL="http://${BIND_ADDRESS}:${LOGS_PORT}"
+TRACES_URL="http://${BIND_ADDRESS}:${TRACES_PORT}"
+
+die() {
+  echo "observability-stack: $*" >&2
+  exit 1
+}
+
+usage() {
+  cat <<'USAGE'
+Usage: observability-stack <command>
+
+Commands:
+  up             Start the shared local collector and Victoria services.
+  down           Stop services without deleting shared data.
+  restart        Restart services without deleting shared data.
+  status         Show compose status and health probes.
+  logs [args...] Show docker compose logs.
+  smoke          Verify OTLP logs, metrics, traces, and scrubbed canaries.
+  env            Print loopback OTLP producer environment.
+  collector-url  Print the OTLP HTTP collector base URL.
+USAGE
+}
+
+require_loopback_address() {
+  case "$BIND_ADDRESS" in
+    127.0.0.1|localhost) ;;
+    *) die "non-loopback bind address refused: $BIND_ADDRESS" ;;
+  esac
+}
+
+require_loopback_url() {
+  local url="$1"
+  case "$url" in
+    http://127.0.0.1:*|http://localhost:*) ;;
+    *) die "non-loopback local URL refused: $url" ;;
+  esac
+}
+
+export_compose_env() {
+  export AI_TOOLS_OBSERVABILITY_DATA_DIR="$DATA_DIR"
+  export BIND_ADDRESS
+  export COLLECTOR_HTTP_PORT
+  export COLLECTOR_GRPC_PORT
+  export COLLECTOR_HEALTH_PORT
+  export METRICS_PORT
+  export LOGS_PORT
+  export TRACES_PORT
+  export RETENTION_PERIOD
+  export LOGS_MAX_BYTES
+  export TRACES_MAX_BYTES
+  export METRICS_MIN_FREE_BYTES
+}
+
+compose() {
+  export_compose_env
+  docker compose --file "$COMPOSE_FILE" --project-name "$PROJECT_NAME" "$@"
+}
+
+prepare_data_dirs() {
+  mkdir -p "$DATA_DIR/metrics" "$DATA_DIR/logs" "$DATA_DIR/traces"
+}
+
+curl_health() {
+  local name="$1"
+  local url="$2"
+  curl --fail --silent --show-error --max-time 2 "$url" >/dev/null ||
+    die "$name is not healthy at $url"
+}
+
+wait_for_url() {
+  local name="$1"
+  local url="$2"
+  local attempts="${3:-60}"
+  local index
+  for ((index = 1; index <= attempts; index++)); do
+    if curl --fail --silent --show-error --max-time 2 "$url" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+  die "$name did not become healthy at $url"
+}
+
+wait_for_stack() {
+  wait_for_url "collector" "$COLLECTOR_HEALTH_URL"
+  wait_for_url "VictoriaMetrics" "$METRICS_URL/health"
+  wait_for_url "VictoriaLogs" "$LOGS_URL/health"
+  wait_for_url "VictoriaTraces" "$TRACES_URL/health"
+}
+
+print_env() {
+  cat <<ENV
+OTEL_EXPORTER_OTLP_ENDPOINT=$COLLECTOR_URL
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+AI_TOOLS_OBSERVABILITY_STACK_HELPER=$SCRIPT_DIR/observability-stack
+AI_TOOLS_OBSERVABILITY_COLLECTOR_HEALTH_URL=$COLLECTOR_HEALTH_URL
+ENV
+}
+
+nanoseconds_now() {
+  date +%s000000000
+}
+
+random_hex() {
+  local bytes="$1"
+  if command -v openssl >/dev/null 2>&1; then
+    openssl rand -hex "$bytes"
+  else
+    printf '%0*d' "$((bytes * 2))" "$RANDOM"
+  fi
+}
+
+post_json() {
+  local path="$1"
+  local payload="$2"
+  curl --fail --silent --show-error --max-time 5 \
+    -H 'Content-Type: application/json' \
+    --data-binary "$payload" \
+    "$COLLECTOR_URL/$path" >/dev/null
+}
+
+post_json_file() {
+  local path="$1"
+  local payload_file="$2"
+  curl --fail --silent --show-error --max-time 5 \
+    -H 'Content-Type: application/json' \
+    --data-binary "@$payload_file" \
+    "$COLLECTOR_URL/$path" >/dev/null
+}
+
+query_logs_until_contains() {
+  local name="$1"
+  local base_url="$2"
+  local query="$3"
+  local expected="$4"
+  local attempts="${5:-20}"
+  local response=""
+  local index
+  echo "[wait] $name"
+  for ((index = 1; index <= attempts; index++)); do
+    response="$(curl --silent --show-error --max-time 3 "$base_url/select/logsql/query" --data-urlencode "query=$query" || true)"
+    if printf '%s\n' "$response" | grep -F "$expected" >/dev/null; then
+      echo "[ok] $name"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "$response" >&2
+  die "$name did not contain expected value: $expected"
+}
+
+query_logs_until_absent() {
+  local name="$1"
+  local base_url="$2"
+  local query="$3"
+  local forbidden="$4"
+  local attempts="${5:-10}"
+  local response=""
+  local index
+  echo "[wait] $name"
+  for ((index = 1; index <= attempts; index++)); do
+    response="$(curl --silent --show-error --max-time 3 "$base_url/select/logsql/query" --data-urlencode "query=$query" || true)"
+    if ! printf '%s\n' "$response" | grep -F "$forbidden" >/dev/null; then
+      echo "[ok] $name"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "$response" >&2
+  die "$name still exposed forbidden value: $forbidden"
+}
+
+query_metrics_until_contains() {
+  local name="$1"
+  local match="$2"
+  local expected="$3"
+  local attempts="${4:-20}"
+  local response=""
+  local index
+  echo "[wait] $name"
+  for ((index = 1; index <= attempts; index++)); do
+    response="$(curl --silent --show-error --max-time 3 "$METRICS_URL/api/v1/export" --data-urlencode "match[]=$match" || true)"
+    if printf '%s\n' "$response" | grep -F "$expected" >/dev/null; then
+      echo "[ok] $name"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "$response" >&2
+  die "$name did not contain expected value: $expected"
+}
+
+query_metrics_until_absent() {
+  local name="$1"
+  local match="$2"
+  local forbidden="$3"
+  local attempts="${4:-10}"
+  local response=""
+  local index
+  echo "[wait] $name"
+  for ((index = 1; index <= attempts; index++)); do
+    response="$(curl --get --silent --show-error --max-time 3 "$METRICS_URL/api/v1/series" --data-urlencode "match[]=$match" || true)"
+    if ! printf '%s\n' "$response" | grep -F "$forbidden" >/dev/null; then
+      echo "[ok] $name"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "$response" >&2
+  die "$name still exposed forbidden value: $forbidden"
+}
+
+query_traces_until_contains() {
+  local name="$1"
+  local expected="$2"
+  local attempts="${3:-20}"
+  local response=""
+  local index
+  echo "[wait] $name"
+  for ((index = 1; index <= attempts; index++)); do
+    response="$(curl --silent --show-error --max-time 3 "$TRACES_URL/select/logsql/query" --data-urlencode "query=\"span_attr:agent.proof.marker\":\"$expected\"" || true)"
+    if printf '%s\n' "$response" | grep -F "$expected" >/dev/null; then
+      echo "[ok] $name"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "$response" >&2
+  die "$name did not contain expected value: $expected"
+}
+
+query_traces_until_absent() {
+  local name="$1"
+  local forbidden="$2"
+  local attempts="${3:-10}"
+  local response=""
+  local resource_response=""
+  local index
+  echo "[wait] $name"
+  for ((index = 1; index <= attempts; index++)); do
+    response="$(curl --silent --show-error --max-time 3 "$TRACES_URL/select/logsql/query" --data-urlencode "query=\"span_attr:token\":\"$forbidden\"" || true)"
+    resource_response="$(curl --silent --show-error --max-time 3 "$TRACES_URL/select/logsql/query" --data-urlencode "query=\"resource_attr:secret.token\":\"$forbidden\"" || true)"
+    if ! printf '%s\n%s\n' "$response" "$resource_response" | grep -F "$forbidden" >/dev/null; then
+      echo "[ok] $name"
+      return 0
+    fi
+    sleep 1
+  done
+  printf '%s\n%s\n' "$response" "$resource_response" >&2
+  die "$name still exposed forbidden value: $forbidden"
+}
+
+smoke_payload_logs() {
+  local marker="$1"
+  local secret="$2"
+  local timestamp="$3"
+  printf '{"resourceLogs":[{"resource":{"attributes":[{"key":"service.name","value":{"stringValue":"ai-tools-observability-smoke"}},{"key":"service.version","value":{"stringValue":"0.0.0-smoke"}},{"key":"dev.repo.hash","value":{"stringValue":"smoke-repo"}},{"key":"dev.worktree.hash","value":{"stringValue":"smoke-worktree"}},{"key":"dev.runtime.flavor","value":{"stringValue":"smoke"}},{"key":"dev.release.channel","value":{"stringValue":"local"}},{"key":"secret.token","value":{"stringValue":"%s"}}]},"scopeLogs":[{"scope":{"name":"ai-tools-observability-smoke"},"logRecords":[{"timeUnixNano":"%s","severityText":"INFO","body":{"stringValue":"ai-tools observability smoke %s"},"attributes":[{"key":"agent.proof.marker","value":{"stringValue":"%s"}},{"key":"token","value":{"stringValue":"%s"}},{"key":"raw.path","value":{"stringValue":"/tmp/%s"}}]}]}]}]}\n' \
+    "$secret" "$timestamp" "$marker" "$marker" "$secret" "$secret"
+}
+
+smoke_payload_metrics() {
+  local metric_value="$1"
+  local secret="$2"
+  local timestamp="$3"
+  printf '{"resourceMetrics":[{"resource":{"attributes":[{"key":"service.name","value":{"stringValue":"ai-tools-observability-smoke"}},{"key":"service.version","value":{"stringValue":"0.0.0-smoke"}},{"key":"dev.repo.hash","value":{"stringValue":"smoke-repo"}},{"key":"dev.worktree.hash","value":{"stringValue":"smoke-worktree"}},{"key":"dev.runtime.flavor","value":{"stringValue":"smoke"}},{"key":"dev.release.channel","value":{"stringValue":"local"}},{"key":"secret.token","value":{"stringValue":"%s"}}]},"scopeMetrics":[{"scope":{"name":"ai-tools-observability-smoke"},"metrics":[{"name":"ai_tools_observability_smoke_metric","description":"ai-tools local observability smoke metric","unit":"1","gauge":{"dataPoints":[{"timeUnixNano":"%s","asDouble":%s,"attributes":[{"key":"token","value":{"stringValue":"%s"}}]}]}}]}]}]}\n' \
+    "$secret" "$timestamp" "$metric_value" "$secret"
+}
+
+smoke_payload_traces() {
+  local marker="$1"
+  local secret="$2"
+  local timestamp="$3"
+  local trace_id
+  local span_id
+  trace_id="$(random_hex 16)"
+  span_id="$(random_hex 8)"
+  printf '{"resourceSpans":[{"resource":{"attributes":[{"key":"service.name","value":{"stringValue":"ai-tools-observability-smoke"}},{"key":"service.version","value":{"stringValue":"0.0.0-smoke"}},{"key":"dev.repo.hash","value":{"stringValue":"smoke-repo"}},{"key":"dev.worktree.hash","value":{"stringValue":"smoke-worktree"}},{"key":"dev.runtime.flavor","value":{"stringValue":"smoke"}},{"key":"dev.release.channel","value":{"stringValue":"local"}},{"key":"secret.token","value":{"stringValue":"%s"}}]},"scopeSpans":[{"scope":{"name":"ai-tools-observability-smoke"},"spans":[{"traceId":"%s","spanId":"%s","name":"ai-tools-observability-smoke-span","kind":1,"startTimeUnixNano":"%s","endTimeUnixNano":"%s","attributes":[{"key":"agent.proof.marker","value":{"stringValue":"%s"}},{"key":"token","value":{"stringValue":"%s"}},{"key":"raw.path","value":{"stringValue":"/tmp/%s"}}]}]}]}]}\n' \
+    "$secret" "$trace_id" "$span_id" "$timestamp" "$((timestamp + 1000000))" "$marker" "$secret" "$secret"
+}
+
+run_smoke() {
+  wait_for_stack
+
+  local marker
+  local secret
+  local timestamp
+  local metric_value
+  local payload_dir
+  marker="ai-tools-smoke-$(date +%s)-$$"
+  secret="secret-canary-$(date +%s)-$$"
+  timestamp="$(nanoseconds_now)"
+  metric_value="$(date +%s)"
+  payload_dir="$(mktemp -d "${TMPDIR:-/tmp}/ai-tools-observability-smoke.XXXXXX")"
+
+  echo "smoke marker: $marker"
+  smoke_payload_logs "$marker" "$secret" "$timestamp" > "$payload_dir/logs.json"
+  smoke_payload_metrics "$metric_value" "$secret" "$timestamp" > "$payload_dir/metrics.json"
+  smoke_payload_traces "$marker" "$secret" "$timestamp" > "$payload_dir/traces.json"
+
+  echo "[send] logs"
+  post_json_file "v1/logs" "$payload_dir/logs.json"
+  echo "[send] metrics"
+  post_json_file "v1/metrics" "$payload_dir/metrics.json"
+  echo "[send] traces"
+  post_json_file "v1/traces" "$payload_dir/traces.json"
+
+  query_logs_until_contains "VictoriaLogs marker" "$LOGS_URL" "agent.proof.marker:${marker}" "$marker"
+  query_metrics_until_contains "VictoriaMetrics metric" "ai_tools_observability_smoke_metric" "$metric_value"
+  query_traces_until_contains "VictoriaTraces marker" "$marker"
+  query_logs_until_absent "VictoriaLogs sensitive canary scrub" "$LOGS_URL" "$secret" "$secret"
+  query_traces_until_absent "VictoriaTraces sensitive canary scrub" "$secret"
+  query_metrics_until_absent "VictoriaMetrics sensitive canary scrub" "ai_tools_observability_smoke_metric" "$secret"
+}
+
+main() {
+  local command="${1:-}"
+  if [ -z "$command" ]; then
+    usage
+    exit 2
+  fi
+  shift || true
+
+  require_loopback_address
+  require_loopback_url "$COLLECTOR_URL"
+  require_loopback_url "$COLLECTOR_HEALTH_URL"
+
+  case "$command" in
+    up)
+      prepare_data_dirs
+      compose up --detach
+      wait_for_stack
+      ;;
+    down)
+      compose down
+      ;;
+    restart)
+      prepare_data_dirs
+      compose restart "$@"
+      wait_for_stack
+      ;;
+    status)
+      compose ps
+      curl_health "collector" "$COLLECTOR_HEALTH_URL"
+      curl_health "VictoriaMetrics" "$METRICS_URL/health"
+      curl_health "VictoriaLogs" "$LOGS_URL/health"
+      curl_health "VictoriaTraces" "$TRACES_URL/health"
+      ;;
+    logs)
+      compose logs "$@"
+      ;;
+    smoke)
+      run_smoke
+      ;;
+    env)
+      print_env
+      ;;
+    collector-url)
+      printf '%s\n' "$COLLECTOR_URL"
+      ;;
+    --help|-h|help)
+      usage
+      ;;
+    *)
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+main "$@"
