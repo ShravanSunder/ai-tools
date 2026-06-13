@@ -82,7 +82,9 @@ GREEN and release validation:
   --json`; installed version is `1.6.17`.
 - `codex plugin list --json` reports installed `shravan-dev-workflow@ai-tools`
   version `1.6.17`.
-- Claude marketplace validation passed locally, but the installed Claude cache
-  still reports `1.6.16` before this release commit is pushed. The Claude
-  marketplace is GitHub-backed, so local Claude refresh requires updating the
-  marketplace after the pushed commit is available.
+- Claude marketplace refreshed with `claude plugin marketplace update ai-tools`;
+  update completed successfully.
+- Claude cache refreshed with `claude plugin update
+  shravan-dev-workflow@ai-tools --scope user`; installed version is `1.6.17`.
+- `claude plugin list --json` reports installed
+  `shravan-dev-workflow@ai-tools` version `1.6.17`.
