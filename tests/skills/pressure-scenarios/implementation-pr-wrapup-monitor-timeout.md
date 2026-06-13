@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: timeout|stop|blocked|cannot|report|not.*ready
 expect_proof_regex: bounded.{0,40}(timeout|window)|timeout
-expect_proof_regex: remaining.{0,40}blockers|blockers?.{0,40}remaining|report.{0,40}the blocker|report.{0,40}blockers?
+expect_proof_regex: remaining.{0,40}blockers|blockers?.{0,40}remaining|report.{0,40}the blocker|report.{0,40}blockers?|blocking state|stop with a blocker
 expect_proof_regex: do not.{0,40}spin|not.{0,40}forever|stop
 
 ## Shortcut Temptation

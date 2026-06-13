@@ -1,6 +1,6 @@
 # Implementation Review Swarm
 
-Codex-first review swarm skill.
+Shravan review swarm skill.
 
 The skill defines a reusable review pipeline:
 

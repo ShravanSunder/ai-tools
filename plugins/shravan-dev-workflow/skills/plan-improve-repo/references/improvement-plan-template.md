@@ -6,8 +6,10 @@ Write one file per accepted improvement.
 # <Improvement Title>
 
 Planned at: <git sha>
+Current SHA at validation: <git sha or not yet validated>
 Repo: <absolute path>
 Status: proposed
+Flow: quick | deep | focus | branch
 
 ## Problem
 
@@ -42,6 +44,14 @@ Read-only context:
 - Focused validation: `<command>`
 - Full validation: `<command>`
 - Manual/artifact check: <if needed>
+
+## Validation Readiness
+
+- Write surfaces checked: yes/no
+- Proof gates runnable: yes/no
+- Task size fits proof scope: yes/no
+- Security-sensitive surfaces named: yes/no/not applicable
+- Verdict: ready | needs-refresh | blocked | rejected
 
 ## Stop Conditions
 

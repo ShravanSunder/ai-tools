@@ -3,7 +3,7 @@
 ## Plugin
 
 - Marketplace plugin: `shravan-dev-workflow`
-- New version: `1.6.16`
+- New version: `1.6.18`
 
 ## Why
 
@@ -58,7 +58,8 @@ Green checks alone are not a sufficient merge-readiness proof.
   - `implementation-pr-wrapup-wrong-base-branch`
 - Full pressure suite passed:
   `tests/skills/run-skill-pressure-tests.sh --fast --timeout 900`
-  exited `0` with `36 passed / 0 failed` after implementation review fixes.
+  exited `0` with `43 passed / 0 failed` after merge conflict resolution and
+  post-merge pressure-test fixes.
 - Static validation passed:
   `git diff --check`
 - Manifest validation passed:
@@ -70,13 +71,14 @@ Green checks alone are not a sufficient merge-readiness proof.
 
 ## Refresh status
 
-- Source version updated to `1.6.16`.
+- Source version updated to `1.6.18` after merging over the remote
+  `1.6.17` research-swarm/TUI release.
 - Local Codex plugin refresh completed:
   `codex plugin add shravan-dev-workflow@ai-tools --json`
-  installed `1.6.16`.
+  installed `1.6.16` before the merge; rerun after merge installed `1.6.18`.
 - Installed/enabled proof passed:
-  `codex plugin list | rg 'shravan-dev-workflow|1\.6\.16'`
-  showed `shravan-dev-workflow@ai-tools` installed and enabled at `1.6.16`.
+  `codex plugin list | rg 'shravan-dev-workflow|1\.6\.18'`
+  showed `shravan-dev-workflow@ai-tools` installed and enabled at `1.6.18`.
 
 ## Implementation review follow-up
 

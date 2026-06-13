@@ -19,6 +19,10 @@ Stay in `discuss-with-me` when the next useful output is:
 new design needs research/subagents
   -> spec-design-swarm
 
+source gathering, prior-art comparison, current docs/web research, saved-reader
+research, or memory/session-log mining is needed before the decision can be made
+  -> research-swarm
+
 drafted spec/design needs adversarial pressure
   -> spec-review-swarm
 

@@ -9,6 +9,7 @@ and how do we transition between them."
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ visual-family-selection.md — choose sequence vs. state before drawing
   ▸ shape-catalog.md ──► Shape 6 (State diagram) — full state-machine
     worked example with re-entry arm
   ▸ build-discipline.md ──► Alignment recipes — positioning lifelines,
@@ -33,6 +34,16 @@ Client          API           Auth          DB
 Actors in a header row, vertical lifelines with │, horizontal
 messages with labeled arrows.  Time flows top to bottom.
 
+Use sequence when participants matter.  Each message should answer:
+
+  ▸ who sends?
+  ▸ who receives?
+  ▸ what is the message?
+  ▸ what returns, retries, or fails?
+
+If a retry changes ownership, draw the retry as a real message, not a
+footnote.
+
 
 ─── State machine ───────────────────────────────────────────────────
 
@@ -49,6 +60,15 @@ messages with labeled arrows.  Time flows top to bottom.
 
 Boxes are states.  Labeled arrows are transitions.  Return arrows
 (▲ │ └──) for cycles.
+
+Each state diagram should identify:
+
+  ▸ entry state
+  ▸ transition labels
+  ▸ terminal states
+  ▸ recovery path, if one exists
+
+Do not use a state diagram for a simple call order; use sequence.
 
 
 ─── Decision tree ───────────────────────────────────────────────────

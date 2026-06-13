@@ -8,8 +8,8 @@ expect_artifact: true
 expect_decision_regex: watcher|jsonl|pid|state|anomaly|completion|debug artifact
 expect_proof_regex: machine watches.*model adjudicates|model adjudicates.*machine watches
 expect_proof_regex: deterministic watcher|watcher.*jsonl|jsonl.*watcher
-expect_proof_regex: bounded.*subagent|subagent.*bounded|no steady-state model polling|no helper model|not a model babysitting loop|not make a helper model poll
-expect_proof_regex: deterministic watcher|harness-managed cancellable watcher|harness-visible cancellable background job|harness-visible cancellable background watcher|not a model babysitting loop
+expect_proof_regex: bounded.*subagent|subagent.*bounded|bounded.*helper|helper agents bounded|no steady-state model polling|not.*steady-state model polling|no helper model|not a model loop|not a model babysitting loop|helper[- ]agent babysitting|helper agent babysitter|not make a helper model poll|not be the polling loop|not.*polling loop
+expect_proof_regex: deterministic watcher|deterministic harness-visible background watcher|harness-managed cancellable watcher|harness-visible cancellable background job|harness-visible cancellable background watcher|not a model babysitting loop
 expect_proof_regex: raw log|bounded.*tail|bounded redacted|redact before persistence|land raw
 expect_proof_regex: debug-investigation.*monitor|monitor.*debug-investigation
 expect_proof_regex: path.*probe|tool.*probe|safe path|probe first|probe safe tools|verify required tools|read-only access|credential access first

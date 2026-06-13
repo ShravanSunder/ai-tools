@@ -7,6 +7,8 @@ patterns for system overviews, data flows, and pipeline diagrams.
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
+  ▸ progressive-disclosure.md — map first, then selected slice
+  ▸ visual-family-selection.md — choose topology vs. flow vs. 2D map
   ▸ shape-catalog.md ──► Shape 5 (Pipeline box) — bordered pipeline
     with numbered steps; Shape 6 (State diagram) — full state-machine
     worked example
@@ -14,6 +16,56 @@ See also:
     arrow landings, junction characters
   ▸ sequence-and-state.md — state machines, sequence diagrams,
     decision trees, event timelines
+
+
+─── Canonical path first ────────────────────────────────────────────
+
+Show the normal path before exceptions.  This gives the reader a stable
+spine for later detail.
+
+```
+user asks
+  ──► controller chooses skill
+  ──► skill routes to one reference
+  ──► answer preserves markdown atoms
+  ──► terminal surface renders readable structure
+```
+
+After the spine is clear, add one branch or failure state.
+
+
+─── Boundary / ownership map ────────────────────────────────────────
+
+Use topology when the question is "who owns what?"
+
+```
+┌──────────────┐     layout contract      ┌──────────────┐
+│ TUI skill    │─────────────────────────▶│ chat surface │
+└──────┬───────┘                          └──────▲───────┘
+       │       semantic atoms stay markdown       │
+       └──────────────────────────────────────────┘
+```
+
+Keep ownership labels on arrows.  Do not imply a data flow where the
+real point is responsibility.
+
+
+─── Two-axis map ────────────────────────────────────────────────────
+
+Use a 2D map when two independent concerns explain the choice.
+
+```
+                     more visual structure
+                              ▲
+                              │
+ compact explanation ◄────────┼────────► richer explanation
+                              │
+                              ▼
+                     less visual structure
+```
+
+Axes must name real tradeoffs.  If the axes are vague, use a table or
+boundary map instead.
 
 
 ─── Client ──► API ──► DB with labels ─────────────────────────────

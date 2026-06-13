@@ -265,7 +265,8 @@ content itself in its native fenced form.
 Semantic markdown boundary:
 
 Use semantic markdown for technical meaning, navigation, copying, and
-syntax highlighting.  Do not use it as decoration.
+syntax highlighting.  Do not use it as decoration.  TUI owns
+structure; semantic markdown owns technical atoms.
 
 Good inline-code atoms:
 

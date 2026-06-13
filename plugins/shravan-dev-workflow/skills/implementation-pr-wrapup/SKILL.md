@@ -26,6 +26,8 @@ bugs" to `implementation-review-swarm`.
 2. Sanitize public PR/release artifacts before create/update.
 3. Inspect or create/update the PR.
 4. Monitor checks, comments, review threads, mergeability, and PR head SHA.
+   Paginate review-thread connections and collect unresolved thread node IDs
+   before readiness decisions.
 5. Use `../../references/review-reception.md` for existing PR feedback.
 6. Fix, reply, ask, or route unresolved feedback.
 7. Require a quiet poll and final re-fetch before readiness or merge.
