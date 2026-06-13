@@ -20,6 +20,8 @@ There are only two paths:
 
 Do not run a mini interview inside this skill. Goals are heavy, long-running
 horizon processes; fuzzy goals need shared-understanding work first.
+For unclear goals, respond with the load-bearing unknowns and an explicit next
+workflow that names `shravan-dev-workflow:discuss-with-me`.
 
 The goal contract names the durable outcome and gates. It does not replace
 requirements discovery, spec design, plan creation, execution, or review. It
@@ -33,6 +35,7 @@ The goal is clear only when these are known:
 - non-goals or scope boundary
 - requirement/spec source, or explicit statement that chat is the source
 - required reading or source artifacts
+- exact plan file and related files when they exist
 - allowed write scope
 - proof gates by layer where known
 - requirements/proof matrix, or who must define it next
@@ -53,6 +56,15 @@ If any of these materially affect the work and are missing, route to
    - current-session goal audit or resume
 2. Run the clarity gate.
 3. If clear, compile the goal contract.
+   - Include the exact skill name `shravan-dev-workflow:orchestrator-goal` in
+     copy-paste goal text so a future model knows to use this skill.
+   - Include exact plan/spec/source file paths and related files when known. Do
+     not replace a known plan file with a generic phrase such as "the plan".
+   - Use the exact labels `Required workflow skill:` and `Required reading:`
+     when preparing copy-paste goal text.
+   - `Required workflow skill:` is always `shravan-dev-workflow:orchestrator-goal`.
+     Put the phase skill (`plan-create`, `implementation-execute-plan`, etc.)
+     under `Next workflow:`, not in the required-skill field.
 4. Select the next workflow:
    - early design or architecture: `spec-design-swarm`
    - spec/design packet for another agent: `spec-handoff`
@@ -107,9 +119,13 @@ Rows should name:
 - requirement or claim
 - proof source: command, artifact, review result, UI/control evidence,
   observability query, or transcript-visible evidence
-- owner: parent, phase skill, subagent lane, external reviewer, or app-specific
-  verifier
+- proof owner: parent, phase skill, subagent lane, external reviewer, or
+  app-specific verifier
 - stale-proof guard where relevant
+
+When emitting matrix rows, use the literal row labels `proof owner:` and
+`stale-proof guard:` for non-trivial rows. Do not rely on nearby prose such as
+"owned by" or "current enough" to carry those gates.
 
 Completion is parent-owned. A subagent, reviewer, UI driver, or observability
 query can satisfy a row only after the parent inspects the returned evidence and
@@ -133,7 +149,7 @@ For a clear goal:
 
 ```text
 Goal contract:
-<objective, scope, proof matrix, stop, blocked, checkpoint>
+<objective, required skill name, exact files, scope, proof matrix, stop, blocked, checkpoint>
 
 Host:
 <Codex / Claude / copy-paste / audit>
@@ -155,5 +171,5 @@ Missing:
 <load-bearing unknowns>
 
 Next workflow:
-discuss-with-me
+shravan-dev-workflow:discuss-with-me
 ```

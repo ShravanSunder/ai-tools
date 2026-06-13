@@ -8,6 +8,10 @@ agent, or CLI.
 ```text
 /goal <objective>
 
+Required workflow skill:
+Use `shravan-dev-workflow:orchestrator-goal` to honor this contract before
+routing to the next workflow.
+
 Scope:
 <allowed write/read scope>
 
@@ -15,7 +19,7 @@ Non-goals:
 <what not to do>
 
 Required reading:
-<files, docs, plans, tickets>
+<exact plan/spec/handoff file paths and related files; do not say only "the plan">
 
 Proof gates:
 <commands, artifacts, review state, docs, screenshots>
@@ -32,8 +36,9 @@ Blocked condition:
 Checkpoint rhythm:
 <when to report or write handoff>
 
-After setting the goal, use <next workflow skill> for the first phase. The
-parent agent must verify subagent or driver evidence before claiming completion.
+After setting the goal, use `shravan-dev-workflow:orchestrator-goal` to keep the
+contract active, then use <next workflow skill> for the first phase. The parent
+agent must verify subagent or driver evidence before claiming completion.
 ```
 
 ## Claude Prompt
@@ -41,8 +46,15 @@ parent agent must verify subagent or driver evidence before claiming completion.
 ```text
 /goal <objective>
 
+Required workflow skill:
+Use `shravan-dev-workflow:orchestrator-goal` to honor this contract before
+routing to the next workflow.
+
 Stay within:
 <scope and non-goals>
+
+Required reading:
+<exact plan/spec/handoff file paths and related files>
 
 Before claiming completion, make the proof visible in the transcript:
 <commands with exit codes, files/artifacts, review or PR state, blockers>
@@ -63,6 +75,10 @@ Use <next workflow skill or manual workflow> for the first phase.
 You are taking over a long-running goal. Do not rely on prior chat. Use this
 contract as the source of truth.
 
+Required workflow skill:
+Use `shravan-dev-workflow:orchestrator-goal` to honor this contract before
+routing to the next workflow.
+
 Objective:
 <objective>
 
@@ -70,7 +86,7 @@ Scope and non-goals:
 <scope>
 
 Required reading:
-<artifacts>
+<exact plan/spec/handoff file paths and related files>
 
 Proof gates:
 <evidence>

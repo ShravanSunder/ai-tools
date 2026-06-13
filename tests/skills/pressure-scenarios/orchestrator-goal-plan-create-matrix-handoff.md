@@ -9,6 +9,7 @@ expect_decision_regex: goal contract|plan-create|requirements/proof|proof matrix
 expect_proof_regex: must be defined by plan-create|plan-create.*define
 expect_proof_regex: requirements/proof matrix|proof matrix
 expect_proof_regex: stale[- ]proof guard|proof owner
+expect_proof_regex: required workflow skill:[[:space:]]*shravan-dev-workflow:orchestrator-goal
 
 ## Shortcut Temptation
 

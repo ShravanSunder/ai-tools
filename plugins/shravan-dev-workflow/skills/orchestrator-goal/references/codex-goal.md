@@ -8,8 +8,9 @@ Use this reference for Codex `/goal` or the Codex goal tools.
 - The agent should create goal state only when the user explicitly asks for a
   goal-backed workflow or the current task is clearly a goal setup.
 - Do not add a token budget unless the user explicitly provides one.
-- A goal should include objective, scope, required reading, proof gates, stop
-  condition, blocked condition, and checkpoint rhythm.
+- A goal should include objective, scope, required workflow skill, exact required
+  reading files, proof gates, stop condition, blocked condition, and checkpoint
+  rhythm.
 - Completion requires current verification evidence.
 - Blocked means the same blocking condition has recurred under the host's
   blocked-state rules, not merely that the work is hard or waiting on a
@@ -19,7 +20,9 @@ Use this reference for Codex `/goal` or the Codex goal tools.
 
 ```text
 /goal <objective>. Scope: <allowed scope>. Non-goals: <non-goals>.
-Required reading: <files/docs>. Proof gates: <commands/artifacts>.
+Required workflow skill: use `shravan-dev-workflow:orchestrator-goal`.
+Required reading: <exact plan/spec/handoff paths and related files>.
+Proof gates: <commands/artifacts>.
 Complete only when <stop condition>. Treat as blocked only when <blocked
 condition>. Checkpoint by <checkpoint rhythm>.
 ```

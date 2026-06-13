@@ -14,6 +14,9 @@ Non-goals / scope boundary:
 Required reading:
 <files, plans, specs, tickets, PRs, docs, or "none">
 
+Required workflow skill:
+`shravan-dev-workflow:orchestrator-goal`
+
 Requirement/spec source:
 <chat, spec file, ticket, PRD, repo instructions, or "not yet known">
 
@@ -61,6 +64,19 @@ Make the workflow better.
 This does not name the expected state, allowed scope, validation, or stopping
 condition. Route it to `discuss-with-me`.
 
+## Required Files
+
+Goal text must name the actual source files when they are known:
+
+- implementation plan file
+- spec/design file
+- handoff packet
+- related source files or docs the next workflow must read
+
+Do not collapse known artifacts into vague wording like "the plan", "the docs",
+or "related files". Use repo-relative paths or absolute paths when portability
+requires them.
+
 ## Rules and Gates
 
 Treat the goal as a contract made of rules and gates:
@@ -83,12 +99,15 @@ Requirement / claim:
 Proof source:
 <command, artifact, review result, screenshot, observability query, or transcript evidence>
 
-Owner:
+Proof owner:
 <parent, phase skill, subagent lane, external reviewer, or app-specific verifier>
 
 Stale-proof guard:
 <marker, process/worktree identity, bounded time window, current diff, or "not applicable">
 ```
+
+Use the exact labels `Proof owner:` and `Stale-proof guard:` when writing rows.
+Do not encode them only in prose.
 
 Use `must be defined by plan-create` only when the goal is clear but the
 implementation proof shape does not exist yet.
