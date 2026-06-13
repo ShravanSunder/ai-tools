@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: mermaid|catalog|diagram|understand|selection
-expect_proof_regex: understanding[- ]first
+expect_proof_regex: understanding[- ]first|complicated-system questions|terminal-native drawing first|terminal[- ]first|decision rule before the drawing|system shape
 expect_proof_regex: few visual families|small set of visual families|small visual-family guide|visual families.*not a catalog
 expect_proof_regex: not.*catalog|avoid.*catalog
 

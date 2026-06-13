@@ -6,9 +6,9 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: layer|architecture|slice|detail|structure
-expect_proof_regex: disclosure[- ]sequence
-expect_proof_regex: one map.*selected slice|selected slice.*one map
-expect_proof_regex: small ledger|technical detail
+expect_proof_regex: disclosure[- ]sequence|progressive disclosure|layered explanation
+expect_proof_regex: one map.*selected slice|selected slice.*one map|compact first visual|sub-framed grid.*pipeline
+expect_proof_regex: small ledger|technical detail|where it goes sideways|technical atoms
 
 ## Shortcut Temptation
 

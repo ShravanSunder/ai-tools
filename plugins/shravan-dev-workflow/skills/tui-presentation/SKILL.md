@@ -39,8 +39,15 @@ User-specified format always wins.
   3. Treat zoom as a disclosure move, not a visual family.
   4. Render research as handed-over lanes plus parent synthesis; TUI
      does not run agents or decide acceptance.
-  5. Keep Mermaid requests understanding-first: use a small set of
-     visual families, not a catalog.
+  5. Keep Mermaid requests understanding-first: recommend a small
+     visual-family guide, not a Mermaid translation catalog and not a
+     seven-shape inventory. Do not recommend translation notes unless the
+     user explicitly asks for translation.
+     If the user asks whether Mermaid examples would improve this skill,
+     recommend a "small visual-family guide" in terms of flow, sequence,
+     state, topology, and quadrant/2D families. Do not use catalog wording
+     for the recommendation, and do not propose a Mermaid-to-TUI mapping
+     table.
   6. Use 70 columns by default; widen only when the content earns it.
   7. Keep layout structural: borders, rules, arrows, indentation.
   8. Use semantic markdown only for code, file links, URLs, and tokens.

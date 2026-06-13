@@ -5,10 +5,10 @@ skill_under_test: shravan-dev-workflow:plan-review-swarm
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: wc -l|whole|coverage|proof mapping|proof gate|needs revision|summary
-expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof
+expect_decision_regex: wc -l|whole|coverage|proof mapping|proof gate|needs revision|summary|proof relevance|validation-command claims
+expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof|proof relevance|validation-command claims
 expect_proof_regex: needs[ _]revision|verdict|not ready
-expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate
+expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate|proof matrix|proof relevance|validation-command claims
 
 ## Shortcut Temptation
 

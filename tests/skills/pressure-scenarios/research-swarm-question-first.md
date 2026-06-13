@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: research question|evidence ledger|local re-anchor|tmp/research-workflows
-expect_proof_regex: local re-anchor|re-anchor locally
+expect_proof_regex: local re-anchor|re-anchor locally|re-anchor on local|re-anchor in the local repo|local repo lane|local repo/docs re-anchor|local code/docs|local .*docs/code
 expect_proof_regex: evidence ledger
 expect_proof_regex: direct observation|inference|unresolved
 

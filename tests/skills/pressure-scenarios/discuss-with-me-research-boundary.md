@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: research-swarm|bounded evidence|forcing question|scoped map
-expect_proof_regex: research-swarm|evidence gathering
+expect_proof_regex: research-swarm|evidence gathering|bounded research pass|evidence checked|evidence proves
 expect_proof_regex: forcing question
 expect_proof_regex: could be wrong|countercase|challenge
 

@@ -17,6 +17,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - [2026-06-13 Orchestrator Goal Prompt Anchoring](2026-06-13-orchestrator-goal-prompt-anchoring.md)
 - [2026-06-13 Workflow Matrix Chain](2026-06-13-workflow-matrix-chain.md)
 - [2026-06-13 Orchestrator Goal Proof Matrix](2026-06-13-orchestrator-goal-proof-matrix.md)
+- [2026-06-12 Implementation PR Wrap-up](2026-06-12-implementation-pr-wrapup.md)
 - [2026-06-12 TUI Progressive Disclosure](2026-06-12-tui-progressive-disclosure.md)
 - [2026-06-12 Research Swarm Boundary](2026-06-12-research-swarm-boundary.md)
 - [2026-06-12 Debug Investigation Background Monitoring](2026-06-12-debug-investigation-background-monitoring.md)

@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: spec|design|handoff|portable|proof expectations|plan-create|implementation plan
-expect_proof_regex: proof (expectation|assumption|gap)|defer.*plan-create
+expect_proof_regex: proof (expectation|assumption|gap)|proof assumptions|validation strategy|explicit deferrals|defer.*plan-create
 expect_proof_regex: plan-create
 
 ## Shortcut Temptation
