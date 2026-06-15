@@ -11,6 +11,19 @@ Use this reference for Codex `/goal` or the Codex goal tools.
 - A goal should include objective, scope, required workflow skill, exact required
   reading files, proof gates, stop condition, blocked condition, and checkpoint
   rhythm.
+- For multi-phase goal-backed work, the goal should also include `goal_id`,
+  `Current workflow`, `Next workflow`, `Terminal condition`, `State details:
+  tmp/workflow-state/<goal_id>/details.md`, and `Transition log:
+  tmp/workflow-state/<goal_id>/events.jsonl`.
+- Keep exact spec, plan, review/report, and handoff paths in `/goal` when they
+  are known. Do not move key paths to `details.md` only.
+- `orchestrator-goal` is the only official transition writer. Phase skills
+  return `phase_result`, `evidence`, `recommended_next_workflow`, and
+  `recommended_transition_reason`; the orchestrator verifies evidence and
+  records the transition.
+- If `/goal`, `details.md`, and `events.jsonl` disagree, `/goal` owns scope and
+  key artifact paths, the latest valid orchestrator event in `events.jsonl`
+  owns workflow transition state, and `details.md` owns expanded context.
 - Completion requires current verification evidence.
 - Blocked means the same blocking condition has recurred under the host's
   blocked-state rules, not merely that the work is hard or waiting on a
@@ -19,9 +32,13 @@ Use this reference for Codex `/goal` or the Codex goal tools.
 ## Suggested Codex Goal Prompt
 
 ```text
-/goal <objective>. Scope: <allowed scope>. Non-goals: <non-goals>.
+/goal <objective>. Goal id: <yyyy-mm-dd-slug>. Scope: <allowed scope>. Non-goals: <non-goals>.
 Required workflow skill: use `shravan-dev-workflow:orchestrator-goal`.
 Required reading: <exact plan/spec/handoff paths and related files>.
+Current workflow: <skill-or-state>. Next workflow: <skill-or-terminal>.
+Terminal condition: <exact complete condition>.
+State details: tmp/workflow-state/<goal_id>/details.md.
+Transition log: tmp/workflow-state/<goal_id>/events.jsonl.
 Proof gates: <commands/artifacts>.
 Complete only when <stop condition>. Treat as blocked only when <blocked
 condition>. Checkpoint by <checkpoint rhythm>.
@@ -40,6 +57,11 @@ When available, use the goal tools consistently with host rules:
   Audit with gate/status/evidence/next rows. Use only `done`,
   `not-applicable`, `open`, or `blocked`. A `done` row requires an evidence
   pointer.
+- Before `update_goal` with `complete`, include the workflow state block
+  (`goal_id`, current workflow, next workflow, terminal condition, state
+  details, transition log, latest transition source). If implementation remains
+  in scope after plan review, the goal is not complete; route next to
+  `implementation-execute-plan`.
 
 Do not use goal state as a substitute for plan review, implementation review,
 or verification commands.

@@ -8,6 +8,9 @@ Use this reference when writing, auditing, or copy-pasting a goal contract.
 Objective:
 <the durable outcome, not a task list>
 
+Goal id:
+<yyyy-mm-dd-short-slug reused in goal text, details, events, and handoffs>
+
 Non-goals / scope boundary:
 <what this goal must not expand into>
 
@@ -16,6 +19,21 @@ Required reading:
 
 Required workflow skill:
 `shravan-dev-workflow:orchestrator-goal`
+
+Current workflow:
+<skill-or-state>
+
+Next workflow:
+<skill-or-terminal>
+
+Terminal condition:
+<exact condition that makes the goal complete>
+
+State details:
+tmp/workflow-state/<goal_id>/details.md
+
+Transition log:
+tmp/workflow-state/<goal_id>/events.jsonl
 
 Requirement/spec source:
 <chat, spec file, ticket, PRD, repo instructions, or "not yet known">
@@ -76,6 +94,62 @@ Goal text must name the actual source files when they are known:
 Do not collapse known artifacts into vague wording like "the plan", "the docs",
 or "related files". Use repo-relative paths or absolute paths when portability
 requires them.
+
+Do not create `files.md` as a separate source of truth for key files. The
+critical spec, plan, review/report, and handoff paths stay in the goal text.
+Put secondary files and expanded context in `details.md`.
+
+## Workflow State Files
+
+For a multi-phase goal, use:
+
+```text
+tmp/workflow-state/<goal_id>/details.md
+tmp/workflow-state/<goal_id>/events.jsonl
+```
+
+`details.md` owns expanded context: proof matrix, blockers, secondary files,
+accepted findings, phase recommendations, and stale-proof notes.
+
+`events.jsonl` owns append-only transition history. Each official transition
+event is written by `orchestrator-goal`, not by a phase skill.
+
+Minimum transition event fields:
+
+```json
+{
+  "goal_id": "<id>",
+  "from_workflow": "<skill-or-state>",
+  "to_workflow": "<skill-or-terminal>",
+  "phase_result": "complete|blocked|needs_revision|not_applicable",
+  "evidence": ["<path or transcript note>"],
+  "decision": "<why this transition was accepted>",
+  "written_by": "shravan-dev-workflow:orchestrator-goal"
+}
+```
+
+Precedence rule:
+
+1. `/goal` owns scope, non-goals, required workflow skill, `goal_id`, and exact
+   key artifact paths.
+2. The latest valid orchestrator-written event in `events.jsonl` owns current
+   workflow, next workflow, and transition decision.
+3. `details.md` owns expanded context and phase recommendations.
+
+If the pointers are missing, renamed, or contradictory, stop and report the
+broken state instead of continuing from chat memory.
+
+## Phase Recommendation Footer
+
+Phase skills can recommend, not decide, the next transition. In goal-backed
+flows, ask for or preserve this footer:
+
+```text
+phase_result: complete | blocked | needs_revision | not_applicable
+evidence: <paths, commands, findings, or transcript notes>
+recommended_next_workflow: <shravan-dev-workflow skill or terminal>
+recommended_transition_reason: <one sentence>
+```
 
 ## Rules and Gates
 

@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-15 Orchestrator Goal State Transitions](2026-06-15-orchestrator-goal-state-transitions.md)
 - [2026-06-13 Orchestrator Goal Closeout Audit](2026-06-13-orchestrator-goal-closeout-audit.md)
 - [2026-06-13 Shared Observability Stack](2026-06-13-shared-observability-stack.md)
 - [2026-06-13 Dev Workflow Tools Peekaboo](2026-06-13-peekaboo-progressive-disclosure.md)

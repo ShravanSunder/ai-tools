@@ -25,3 +25,19 @@ the next phase.
 
 `orchestrator-goal` owns the goal contract, not the phase work. Once the contract
 is clear, hand off to the narrowest phase skill.
+
+For goal-backed multi-phase work, the phase skill returns evidence and a
+recommendation only:
+
+```text
+phase_result: complete | blocked | needs_revision | not_applicable
+evidence: <paths, commands, findings, or transcript notes>
+recommended_next_workflow: <shravan-dev-workflow skill or terminal>
+recommended_transition_reason: <one sentence>
+```
+
+`orchestrator-goal` verifies that footer and writes the official transition. The
+latest valid orchestrator-written event in `events.jsonl` is the transition
+source of truth. Do not let phase skills directly mutate the official workflow
+state. When rejecting direct phase-skill state mutation, say this precedence
+rule explicitly so the next agent does not infer a multi-writer shortcut.

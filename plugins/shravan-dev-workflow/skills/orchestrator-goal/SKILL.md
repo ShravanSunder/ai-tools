@@ -27,6 +27,70 @@ The goal contract names the durable outcome and gates. It does not replace
 requirements discovery, spec design, plan creation, execution, or review. It
 routes to those phase skills and preserves the proof chain across them.
 
+## Goal-Backed Workflow State
+
+For long-horizon goals that pass through multiple workflow skills, keep a tiny
+state contract in the goal text and expandable details outside it.
+
+Use a stable `goal_id` for every goal-backed workflow. Prefer
+`<yyyy-mm-dd>-<short-slug>` and reuse it in the goal text, state directory,
+handoffs, and review reports.
+
+The `/goal` text is the compact classifier anchor. It must carry:
+
+- `goal_id`
+- `Required workflow skill: shravan-dev-workflow:orchestrator-goal`
+- exact spec, plan, review/report, or handoff paths that already exist
+- `Current workflow: <skill-or-state>`
+- `Next workflow: <skill-or-terminal>`
+- `Terminal condition: <exact condition for complete>`
+- `State details: tmp/workflow-state/<goal_id>/details.md`
+- `Transition log: tmp/workflow-state/<goal_id>/events.jsonl`
+- scope, non-goals, blocked condition, and proof/stop rules
+
+Do not create `files.md` or `state.md` as separate sources of truth. The key
+files belong directly in `/goal`; expanded context belongs in `details.md`;
+official transitions belong in `events.jsonl`.
+
+When goal text approaches the host limit, preserve required workflow skill,
+`goal_id`, exact key files, `Current workflow`, `Next workflow`,
+`Terminal condition`, `details.md`, and `events.jsonl` before lifecycle prose.
+Compress explanation before dropping anchors.
+
+## Transition Ownership
+
+`orchestrator-goal` is the only official workflow transition writer. Phase
+skills may do phase work and recommend a next state, but they do not mutate the
+official workflow state.
+
+When a user asks to let phase skills update or advance goal state directly,
+reject that shape and explicitly state the precedence rule: the latest valid
+orchestrator-written event in `events.jsonl` wins for `Current workflow`,
+`Next workflow`, and transition decision.
+
+Ask phase skills in goal-backed workflows to return this footer:
+
+```text
+phase_result: complete | blocked | needs_revision | not_applicable
+evidence: <paths, commands, findings, or transcript notes>
+recommended_next_workflow: <shravan-dev-workflow skill or terminal>
+recommended_transition_reason: <one sentence>
+```
+
+The parent orchestrator verifies the phase evidence, chooses one official
+transition, and records it. If `/goal`, `details.md`, and `events.jsonl`
+disagree, use this precedence:
+
+1. `/goal` owns scope, non-goals, required workflow skill, `goal_id`, and exact
+   key artifact paths.
+2. The latest valid orchestrator-written event in `events.jsonl` owns
+   `Current workflow`, `Next workflow`, and transition decision.
+3. `details.md` owns expanded context, proof matrix, blockers, secondary files,
+   and phase recommendations.
+
+Fail loudly before continuing when required pointers are missing, renamed, or
+contradict one another. Do not silently reconstruct state from chat.
+
 ## Clarity Gate
 
 The goal is clear only when these are known:
@@ -36,6 +100,9 @@ The goal is clear only when these are known:
 - requirement/spec source, or explicit statement that chat is the source
 - required reading or source artifacts
 - exact plan file and related files when they exist
+- `goal_id` and workflow-state pointers for goal-backed multi-phase work
+- current workflow, next workflow, and terminal condition when resuming or
+  closing a multi-phase goal
 - allowed write scope
 - proof gates by layer where known
 - requirements/proof matrix, or who must define it next
@@ -46,6 +113,17 @@ The goal is clear only when these are known:
 
 If any of these materially affect the work and are missing, route to
 `discuss-with-me`.
+
+Known artifact paths make a compact goal more clear, not less. Do not route to
+`discuss-with-me` solely because a known plan/spec file has not been reloaded in
+the current pressure run or handoff context. Instead, emit a corrected contract
+that keeps `Required workflow skill:` and `Required reading:` labels, lists the
+exact files, and makes the first checkpoint load/validate those artifacts.
+
+When the user asks to omit the orchestrator skill name, exact files, or required
+labels for compactness, resist the shortcut by including the required anchors in
+the corrected goal contract. Do not stop at "unclear" unless a material target,
+scope boundary, or terminal condition is genuinely missing.
 
 ## Workflow
 
@@ -60,6 +138,9 @@ If any of these materially affect the work and are missing, route to
      copy-paste goal text so a future model knows to use this skill.
    - Include exact plan/spec/source file paths and related files when known. Do
      not replace a known plan file with a generic phrase such as "the plan".
+   - For goal-backed multi-phase work, include `goal_id`,
+     `Current workflow:`, `Next workflow:`, `Terminal condition:`,
+     `State details:`, and `Transition log:`.
    - Use the exact labels `Required workflow skill:` and `Required reading:`
      when preparing copy-paste goal text.
    - `Required workflow skill:` is always `shravan-dev-workflow:orchestrator-goal`.
@@ -83,10 +164,14 @@ If any of these materially affect the work and are missing, route to
    contract artifact.
 6. When routing to `plan-create`, carry any known requirements/proof matrix rows
    and mark missing implementation proof rows as `must be defined by plan-create`.
-7. Report the contract, selected workflow, and first verification checkpoint.
+7. When a phase finishes in a goal-backed workflow, read its
+   `phase_result`, `evidence`, `recommended_next_workflow`, and
+   `recommended_transition_reason`; verify the evidence; then either record the
+   next official transition or leave the goal open/blocked.
+8. Report the contract, selected workflow, and first verification checkpoint.
    When returning artifact paths, include full clickable artifact links
    (absolute path + line). Do not rely only on relative paths.
-8. When auditing, closing, or marking a goal complete/blocked, produce the
+9. When auditing, closing, or marking a goal complete/blocked, produce the
    mandatory Goal Closeout Audit before any completion claim or host goal update.
 
 ## Host Rules
@@ -102,6 +187,12 @@ If any of these materially affect the work and are missing, route to
 The parent agent owns the goal. Subagents can perform bounded research,
 implementation, or review slices, but their outputs are evidence to verify, not
 completion by themselves.
+
+Phase completion is not goal completion. A finished spec review, plan creation,
+plan review, or implementation slice updates the workflow state only after the
+orchestrator records the verified transition. If implementation remains in
+scope after plan review, `Next workflow:` is
+`shravan-dev-workflow:implementation-execute-plan`, not terminal.
 
 ## Proof Matrix Discipline
 
@@ -161,6 +252,22 @@ Each closeout row must include:
 `user assertion in this chat`, but it must be explicit. Rows with no evidence are
 `open` or `blocked`, not `done`.
 
+Closeout for a goal-backed multi-phase workflow must also report:
+
+```text
+Workflow state:
+goal_id: <id>
+Current workflow: <skill-or-state>
+Next workflow: <skill-or-terminal>
+Terminal condition: <exact condition>
+State details: tmp/workflow-state/<goal_id>/details.md
+Transition log: tmp/workflow-state/<goal_id>/events.jsonl
+Latest transition source: <event id/path or none>
+```
+
+If any workflow state pointer is missing, mark parent verification `open` or
+`blocked`; do not mark the goal complete from chat memory.
+
 The final closeout must include:
 
 ```text
@@ -198,7 +305,7 @@ For a clear goal:
 
 ```text
 Goal contract:
-<objective, required skill name, exact files, scope, proof matrix, stop, blocked, checkpoint>
+<objective, goal_id, required skill name, exact files, current workflow, next workflow, terminal condition, state details, transition log, scope, proof matrix, stop, blocked, checkpoint>
 
 Host:
 <Codex / Claude / copy-paste / audit>
