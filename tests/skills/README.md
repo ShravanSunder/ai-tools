@@ -22,11 +22,34 @@ Run:
 tests/skills/run-skill-pressure-tests.sh --fast
 ```
 
+Opt-in Vitest eval runner:
+
+```bash
+tests/skills/run-skill-pressure-tests.sh --vitest --scenario orchestrator-goal-closeout-audit
+```
+
+The Vitest runner lives in this directory as a standalone test package. Run its
+unit checks with:
+
+```bash
+pnpm --dir tests/skills exec vitest run lib --config vitest.config.ts
+pnpm --dir tests/skills exec tsc --noEmit
+```
+
+Use the fake backend for cheap harness/report plumbing proof without invoking a
+live agent:
+
+```bash
+SKILL_PRESSURE_BACKEND=fake \
+tests/skills/run-skill-pressure-tests.sh --vitest --scenario orchestrator-goal-closeout-audit
+```
+
 Full-suite runs execute scenarios in parallel by default (`CODEX_PRESSURE_JOBS=4`).
 Use `--jobs N` to tune concurrency or `--serial` when debugging runner output.
 Focused `--scenario NAME` runs stay serial.
 
 Artifacts are written under `tmp/skill-pressure-tests/`.
+Vitest eval artifacts are written under `tmp/skill-pressure-evals/`.
 
 The model under test sees only the scenario's `## Prompt` section plus the
 minimal metadata needed for its JSON report. `Expected Compliant Behavior`,
@@ -45,3 +68,7 @@ Limitations:
 Use `--integration` only for slower tests that create temporary projects or
 exercise real files. Claude and `agy` are optional future backends, not the
 default harness.
+
+The Vitest eval path stores Codex event streams raw in the first implementation.
+Deterministic assertions remain the pass/fail source of truth; model judges are
+not part of the first runner.
