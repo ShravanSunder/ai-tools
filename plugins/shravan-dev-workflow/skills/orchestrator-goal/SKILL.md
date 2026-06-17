@@ -27,6 +27,48 @@ The goal contract names the durable outcome and gates. It does not replace
 requirements discovery, spec design, plan creation, execution, or review. It
 routes to those phase skills and preserves the proof chain across them.
 
+## Default Implementation Lifecycle
+
+For implementation goals, default to the whole delivery lifecycle. If the user
+wanted only planning, only review, only PR work, or another subset, they can
+call those phase skills directly. Do not infer a smaller terminal condition
+just because the goal starts from a spec, plan, diff, or existing PR.
+
+Only the starting point is mutable. Choose `Current workflow` and
+`Next workflow` from the first unproven lifecycle gate:
+
+- no shared design/spec: `spec-design-swarm`
+- design/spec drafted but unreviewed: `spec-review-swarm`
+- accepted spec/design exists, no implementation plan: `plan-create`
+- implementation plan exists but is unreviewed: `plan-review-swarm`
+- reviewed plan exists, implementation is not proven: `implementation-execute-plan`
+- implementation proof exists, review is not done or findings are unresolved:
+  `implementation-review-swarm`
+- implementation review is addressed, PR is not created or readiness is not
+  proven: `implementation-pr-wrapup`
+
+Default implementation terminal: PR created or updated and proven ready, but not
+merged. Completion normally requires implementation complete, required proof
+gates passing or explicitly not-applicable, the full proof loop captured,
+implementation review findings addressed or explicitly rejected, PR checks and
+review-thread state freshly reported, mergeability/readiness stated, and merge
+left out of scope unless the user explicitly authorizes it.
+
+The pr-ready non-merge boundary is mandatory: `implementation-pr-wrapup` means
+open/update/monitor/prove the PR, not merge it. Merge is a separate authorized
+action.
+
+The full proof loop must use the highest proof layer the goal implies. For
+ready-to-use behavior, screenshots, visual proof, manual verification, app
+runtime checks, benchmarks, or metrics, do not replace those with lower-layer
+tests. Mark a proof gate `not-applicable` only with an explicit reason.
+
+Checkpoint commit rule: when scoped files changed and repo policy permits,
+commit at verified lifecycle checkpoints. Good checkpoint commits are accepted
+spec/plan artifacts, implementation slices after proof, accepted review-finding
+fixes, and PR-ready wrapup. Do not stage unrelated files, and do not treat a
+commit as proof.
+
 ## Goal-Backed Workflow State
 
 For long-horizon goals that pass through multiple workflow skills, keep a tiny
@@ -141,6 +183,10 @@ scope boundary, or terminal condition is genuinely missing.
    - For goal-backed multi-phase work, include `goal_id`,
      `Current workflow:`, `Next workflow:`, `Terminal condition:`,
      `State details:`, and `Transition log:`.
+   - For implementation goals, include an `Orchestration rules applied:` line
+     naming the relevant durable rules: `default implementation terminal`,
+     `mutable starting point`, `pr-ready non-merge boundary`, `full proof loop`,
+     and `checkpoint commit rule`.
    - Use the exact labels `Required workflow skill:` and `Required reading:`
      when preparing copy-paste goal text.
    - `Required workflow skill:` is always `shravan-dev-workflow:orchestrator-goal`.
@@ -148,12 +194,15 @@ scope boundary, or terminal condition is genuinely missing.
      under `Next workflow:`, not in the required-skill field.
 4. Select the next workflow:
    - early design or architecture: `spec-design-swarm`
+   - drafted spec/design needs critique: `spec-review-swarm`
    - spec/design packet for another agent: `spec-handoff`
    - implementation plan creation: `plan-create`
    - implementation plan packet for another agent: `plan-handoff`
    - adversarial plan review: `plan-review-swarm`
    - validated implementation from a plan: `implementation-execute-plan`
    - code, diff, branch, commit, or PR review: `implementation-review-swarm`
+   - PR open/update, checks/comments, review-thread state, and readiness proof:
+     `implementation-pr-wrapup`
    - continuation or reviewer packet after implementation work:
      `implementation-handoff`
    - docs/source-of-truth cleanup: `docs-maintain`
@@ -193,6 +242,30 @@ plan review, or implementation slice updates the workflow state only after the
 orchestrator records the verified transition. If implementation remains in
 scope after plan review, `Next workflow:` is
 `shravan-dev-workflow:implementation-execute-plan`, not terminal.
+
+## Terminal Intent Guard
+
+Do not let an old or narrow terminal condition outrank the user's actual intent.
+When later user messages broaden the goal, the stale terminal condition must be
+audited before any completion claim.
+
+If the user mentions implementation, testing, screenshots, visual proof, manual
+verification, benchmarking, implementation review, PR, merge, merge readiness,
+or ready-to-use behavior, the terminal condition cannot be a plan, spec, or
+review artifact unless the user explicitly says `planning only`,
+`review only`, or that the remaining lifecycle is out of scope.
+
+This is a terminal intent guard, not a request to implement everything at once.
+It means the closeout must mark the still-scoped lifecycle gates `open` or
+`blocked`, name the official next workflow, and leave the host goal not
+complete.
+
+Apply the next-workflow completion blocker before any host `update_goal
+complete`: never mark complete while `Next workflow:` is
+`implementation-execute-plan`, `implementation-review-swarm`,
+`implementation-pr-wrapup`, visual proof, benchmarking, manual verification, PR,
+merge, or release readiness unless each such gate is `done` with evidence or
+explicitly `not-applicable`.
 
 ## Proof Matrix Discipline
 
@@ -266,7 +339,12 @@ Latest transition source: <event id/path or none>
 ```
 
 If any workflow state pointer is missing, mark parent verification `open` or
-`blocked`; do not mark the goal complete from chat memory.
+`blocked`; do not mark the goal complete from chat memory. Still print the
+literal `Workflow state:` block above and fill unknown fields with `missing`.
+Do not replace `Current workflow:`, `Terminal condition:`, `State details:
+tmp/workflow-state/<goal_id>/details.md`, or `Transition log:
+tmp/workflow-state/<goal_id>/events.jsonl` with prose such as "state pointers
+are missing"; the exact labels are classifier anchors.
 
 The final closeout must include:
 

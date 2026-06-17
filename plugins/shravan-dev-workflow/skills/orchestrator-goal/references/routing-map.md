@@ -16,6 +16,7 @@ the next phase.
 | Implementation plan needs attack before coding | `plan-review-swarm` | Reads full plan, validates claims, and revises accepted plan issues. |
 | Plan is validated and should be executed | `implementation-execute-plan` | Validates then implements with parent-owned subagent slices. |
 | Code/diff/PR/commit needs review | `implementation-review-swarm` | Runs implementation reviewer lanes and verifies findings. |
+| Implementation review is addressed, but PR is missing or readiness is unproven | `implementation-pr-wrapup` | Opens/updates the PR, checks CI/comments/review threads, proves readiness, and does not merge without user authorization. |
 | Implementation state needs transfer or reviewer prompt | `implementation-handoff` | Packages current diff, validation, risks, and next task. |
 | Docs/source of truth must be reconciled | `docs-maintain` | Updates docs with current code and decisions. |
 | Explicit security audit or scan | `ops-security-review` | Routes to official Codex Security workflows. |
@@ -24,7 +25,20 @@ the next phase.
 ## Routing Rule
 
 `orchestrator-goal` owns the goal contract, not the phase work. Once the contract
-is clear, hand off to the narrowest phase skill.
+is clear, hand off to the narrowest phase skill for the first unproven lifecycle
+gate.
+
+For implementation goals, the default lifecycle continues until the default
+implementation terminal: PR created or updated and proven ready, but not merged.
+Only the starting point is mutable. Existing spec, plan, code, review, or PR
+artifacts move the route forward; they do not by themselves narrow the terminal
+condition.
+
+Use the full proof loop before terminal completion: scoped tests and quality
+checks, app/runtime or visual/manual evidence where relevant, metrics or
+benchmarks when requested, implementation review disposition, and fresh PR
+checks/review-thread/mergeability state. Use checkpoint commit boundaries after
+verified lifecycle checkpoints when scoped files changed and repo policy permits.
 
 For goal-backed multi-phase work, the phase skill returns evidence and a
 recommendation only:

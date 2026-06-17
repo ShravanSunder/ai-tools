@@ -21,6 +21,14 @@ Use this reference for Codex `/goal` or the Codex goal tools.
   return `phase_result`, `evidence`, `recommended_next_workflow`, and
   `recommended_transition_reason`; the orchestrator verifies evidence and
   records the transition.
+- For implementation goals, only the starting point is mutable. Existing spec,
+  plan, diff, or PR artifacts move `Current workflow` to the first unproven
+  lifecycle gate; they do not shrink the terminal condition by themselves.
+- The default implementation terminal is PR created or updated and proven ready,
+  not merged. This pr-ready non-merge boundary requires implementation proof,
+  the full proof loop, implementation review disposition, fresh PR
+  checks/review-thread/mergeability state, and explicit no-merge handling unless
+  the user authorizes merge.
 - If `/goal`, `details.md`, and `events.jsonl` disagree, `/goal` owns scope and
   key artifact paths, the latest valid orchestrator event in `events.jsonl`
   owns workflow transition state, and `details.md` owns expanded context.
@@ -40,8 +48,10 @@ Terminal condition: <exact complete condition>.
 State details: tmp/workflow-state/<goal_id>/details.md.
 Transition log: tmp/workflow-state/<goal_id>/events.jsonl.
 Proof gates: <commands/artifacts>.
-Complete only when <stop condition>. Treat as blocked only when <blocked
-condition>. Checkpoint by <checkpoint rhythm>.
+Complete only when <stop condition; for implementation goals, default to PR
+created/updated and proven ready, not merged>. Treat as blocked only when
+<blocked condition>. Checkpoint by <checkpoint rhythm, including checkpoint
+commits when scoped files changed and repo policy permits>.
 ```
 
 ## Current-Session Tooling
@@ -62,6 +72,12 @@ When available, use the goal tools consistently with host rules:
   details, transition log, latest transition source). If implementation remains
   in scope after plan review, the goal is not complete; route next to
   `implementation-execute-plan`.
+- Before `update_goal` with `complete` for an implementation goal, prove the
+  terminal is the default implementation terminal or an explicitly smaller user
+  scope. If `implementation-execute-plan`, `implementation-review-swarm`,
+  `implementation-pr-wrapup`, app/runtime proof, metrics, visual/manual proof,
+  PR readiness, or review-thread/check state remains open, leave the goal not
+  complete and name the next workflow.
 
 Do not use goal state as a substitute for plan review, implementation review,
 or verification commands.

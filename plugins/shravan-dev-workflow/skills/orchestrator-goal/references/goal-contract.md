@@ -27,7 +27,10 @@ Next workflow:
 <skill-or-terminal>
 
 Terminal condition:
-<exact condition that makes the goal complete>
+<exact condition that makes the goal complete; for implementation goals, default to PR ready/proven and not merged>
+
+Orchestration rules applied:
+<for implementation goals: default implementation terminal; mutable starting point; pr-ready non-merge boundary; full proof loop; checkpoint commit rule>
 
 State details:
 tmp/workflow-state/<goal_id>/details.md
@@ -54,7 +57,7 @@ Blocked condition:
 <what counts as blocked and what evidence proves it>
 
 Checkpoint rhythm:
-<when to report, write handoff, or revalidate>
+<when to report, commit verified checkpoints, write handoff, or revalidate>
 
 Next workflow:
 <one of the shravan-dev-workflow phase skills>
@@ -70,6 +73,42 @@ add the orchestrator-goal skill, update marketplace metadata and docs,
 validate plugin installation, refresh the Codex cache, and stop when
 the live plugin list reports 1.6.5 with the new skill visible.
 ```
+
+## Default Implementation Terminal
+
+For implementation goals, the default implementation terminal is not a spec,
+plan, review report, or implementation-only checkpoint. It is:
+
+```text
+PR created or updated and proven ready, implementation review findings
+addressed or explicitly rejected, required proof gates captured, current PR
+checks/review-thread/mergeability state reported, and merge not performed unless
+the user explicitly authorized it.
+```
+
+Only the starting point is mutable. Existing artifacts decide the first
+unproven lifecycle gate:
+
+- no accepted spec/design: start at `spec-design-swarm` or `spec-review-swarm`
+- accepted spec/design but no plan: start at `plan-create`
+- unreviewed plan: start at `plan-review-swarm`
+- reviewed plan but no implementation proof: start at `implementation-execute-plan`
+- implementation proof but unresolved implementation review: start at
+  `implementation-review-swarm`
+- review addressed but no PR readiness proof: start at `implementation-pr-wrapup`
+
+This is the pr-ready non-merge boundary: `implementation-pr-wrapup` proves PR
+readiness and does not imply merge permission.
+
+The full proof loop should name the highest required proof layers from the goal:
+tests, type/lint/build, app/runtime behavior, screenshots or visual proof,
+manual verification, benchmarks, metrics, PR checks, review threads, or release
+artifacts. Do not let a lower proof layer silently stand in for a requested
+higher layer.
+
+Checkpoint commit guidance belongs in the goal when implementation is in scope:
+commit at verified lifecycle checkpoints when scoped files changed and repo
+policy permits; never stage unrelated files or use a commit as proof.
 
 ## Bad Goal Shape
 
@@ -225,3 +264,21 @@ Next:
 a review or work cycle already happened, write `user assertion in this chat`.
 Do not rerun already-completed lifecycle skills merely because the closeout
 checklist is mandatory; account for them and route only open or blocked rows.
+
+For goal-backed multi-phase closeout, always include the literal workflow-state
+block:
+
+```text
+Workflow state:
+goal_id: <id or missing>
+Current workflow: <skill-or-state or missing>
+Next workflow: <skill-or-terminal or missing>
+Terminal condition: <exact condition or missing>
+State details: tmp/workflow-state/<goal_id>/details.md
+Transition log: tmp/workflow-state/<goal_id>/events.jsonl
+Latest transition source: <event id/path or none/missing>
+```
+
+If the pointers are missing, keep the exact labels and fill missing fields with
+`missing`; do not collapse them into prose. Missing workflow-state pointers make
+parent verification `open` or `blocked`, never `done`.
