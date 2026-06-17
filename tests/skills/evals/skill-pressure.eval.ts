@@ -4,6 +4,7 @@ import { describeEval } from "vitest-evals";
 import { expect } from "vitest";
 import { evaluatePressureAssertions } from "../lib/pressure-assertions.js";
 import { parseScenarioMarkdown } from "../lib/scenario-parser.js";
+import { shouldRunSkillPressureCase } from "../lib/scenario-selection.js";
 import {
   createSkillPressureHarness,
   type SkillPressureCase,
@@ -13,6 +14,7 @@ import {
 const repoRoot = join(import.meta.dirname, "../../..");
 const scenarioDirectory = join(repoRoot, "tests/skills/pressure-scenarios");
 const selectedScenario = process.env["SKILL_PRESSURE_SCENARIO"];
+const selectedMode = process.env["SKILL_PRESSURE_MODE"];
 const backend = process.env["SKILL_PRESSURE_BACKEND"] ?? "codex";
 
 const scenarios = readdirSync(scenarioDirectory)
@@ -31,7 +33,14 @@ const scenarios = readdirSync(scenarioDirectory)
         markdown: readFileSync(filePath, "utf8"),
       }),
     };
-  });
+  })
+  .filter((skillPressureCase) =>
+    shouldRunSkillPressureCase({
+      skillPressureCase,
+      selectedMode,
+      selectedScenario,
+    }),
+  );
 
 describeEval(
   "skill pressure",

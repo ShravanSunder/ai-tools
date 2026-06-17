@@ -107,6 +107,35 @@ describe("evaluatePressureAssertions", () => {
     ]);
   });
 
+  test("reports invalid regexes as assertion failures", () => {
+    const invalidRegexScenario = parseScenarioMarkdown({
+      filePath: "/repo/tests/skills/pressure-scenarios/invalid-regex.md",
+      markdown: `scenario_id: invalid-regex
+skill_under_test: shravan-dev-workflow:test-skill
+expect_proof_regex: (
+
+## Prompt
+
+Ask the agent to use the skill.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: invalidRegexScenario,
+      result: {
+        ...validResult,
+        scenario_id: "invalid-regex",
+      },
+      renderedPrompt: "Ask the agent to use the skill.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual([
+      expect.stringContaining("invalid proof regex 1"),
+    ]);
+  });
+
   test("accumulates identity and expectation failures", () => {
     const result = evaluatePressureAssertions({
       scenario,

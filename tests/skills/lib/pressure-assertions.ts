@@ -105,9 +105,15 @@ interface AppendRegexFailuresProps {
 
 function appendRegexFailures(props: AppendRegexFailuresProps): void {
   props.regexes.forEach((regexText, index) => {
-    const regex = new RegExp(regexText);
-    const matches = regex.test(props.text);
     const regexNumber = index + 1;
+    let matches: boolean;
+    try {
+      matches = new RegExp(regexText).test(props.text);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      props.failures.push(`invalid ${props.label} ${regexNumber} "${regexText}": ${message}`);
+      return;
+    }
     if (props.shouldMatch && !matches) {
       props.failures.push(`${props.label} ${regexNumber} did not match: ${regexText}`);
     }

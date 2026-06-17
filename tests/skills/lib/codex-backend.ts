@@ -145,6 +145,7 @@ async function runProcess(request: ProcessRunRequest): Promise<ProcessRunResult>
     }, request.timeoutMs);
 
     child.stdout.pipe(stdout);
+    child.stdin.on("error", () => {});
     child.stderr.on("data", (chunk: Buffer) => {
       stderr += chunk.toString("utf8");
     });

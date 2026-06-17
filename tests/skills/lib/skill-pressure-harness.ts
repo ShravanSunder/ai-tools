@@ -74,11 +74,20 @@ export function createSkillPressureHarness(
         model: process.env["CODEX_PRESSURE_MODEL"] ?? "gpt-5.5",
         reasoningEffort:
           process.env["CODEX_PRESSURE_REASONING_EFFORT"] ?? "low",
-        timeoutSeconds: Number.parseInt(
-          process.env["SKILL_PRESSURE_TIMEOUT_SECONDS"] ?? "900",
-          10,
+        timeoutSeconds: parseSkillPressureTimeoutSeconds(
+          process.env["SKILL_PRESSURE_TIMEOUT_SECONDS"],
         ),
       });
+      if (codexRun.timedOut) {
+        throw new Error(
+          `Codex pressure run timed out. Stderr:\n${codexRun.stderr}`,
+        );
+      }
+      if (codexRun.exitCode !== 0) {
+        throw new Error(
+          `Codex pressure run failed with exit code ${codexRun.exitCode}. Stderr:\n${codexRun.stderr}`,
+        );
+      }
       const finalJsonText = readFileSync(codexRun.finalJsonPath, "utf8");
       const finalJson = JSON.parse(finalJsonText) as unknown;
       const validation = validateSkillPressureResult(finalJson);
@@ -114,7 +123,7 @@ export function createSkillPressureHarness(
         },
         artifacts: {
           backend,
-        artifactPaths: [...codexRun.artifactPaths],
+          artifactPaths: [...codexRun.artifactPaths],
           exitCode: codexRun.exitCode,
           timedOut: codexRun.timedOut,
         },
@@ -122,6 +131,16 @@ export function createSkillPressureHarness(
       };
     },
   });
+}
+
+export function parseSkillPressureTimeoutSeconds(
+  value: string | undefined,
+): number {
+  const parsedValue = Number.parseInt(value ?? "900", 10);
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return 900;
+  }
+  return parsedValue;
 }
 
 function createFakeHarnessOutput(props: {

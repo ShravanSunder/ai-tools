@@ -68,4 +68,13 @@ describe("findPromptRegexLeaks", () => {
 
     expect(leaks).toEqual(["full proof loop"]);
   });
+
+  test("ignores invalid regexes during prompt leak detection", () => {
+    const leaks = findPromptRegexLeaks({
+      prompt: "The operator prompt says FULL PROOF LOOP.",
+      regexes: ["(", "full proof loop"],
+    });
+
+    expect(leaks).toEqual(["full proof loop"]);
+  });
 });

@@ -77,8 +77,8 @@ function parseMetadata(markdown: string): Map<string, string[]> {
     if (separatorIndex === -1) {
       continue;
     }
-    const key = line.slice(0, separatorIndex);
-    const value = line.slice(separatorIndex + 2);
+    const key = line.slice(0, separatorIndex).trim();
+    const value = line.slice(separatorIndex + 2).trim();
     const existingValues = metadata.get(key) ?? [];
     existingValues.push(value);
     metadata.set(key, existingValues);

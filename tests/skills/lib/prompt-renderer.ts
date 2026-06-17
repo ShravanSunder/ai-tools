@@ -45,7 +45,10 @@ export function findPromptRegexLeaks(
 ): readonly string[] {
   const lowercasedPrompt = props.prompt.toLowerCase();
   return props.regexes.filter((regexText) => {
-    const regex = new RegExp(regexText);
-    return regex.test(lowercasedPrompt);
+    try {
+      return new RegExp(regexText).test(lowercasedPrompt);
+    } catch {
+      return false;
+    }
   });
 }

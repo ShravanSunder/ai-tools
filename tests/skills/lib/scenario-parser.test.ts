@@ -75,6 +75,24 @@ Stay read-only.
     expect(scenario.failureSignals).toContain("only follows one expectation");
   });
 
+  test("trims metadata keys and values", () => {
+    const scenario = parseScenarioMarkdown({
+      filePath: "/repo/tests/skills/pressure-scenarios/trimmed.md",
+      markdown: `scenario_id : trimmed-scenario
+skill_under_test: shravan-dev-workflow:test-skill
+mode: fast
+expect_decision_regex: ${"trimmed decision  "}
+
+## Prompt
+
+Use the skill.
+`,
+    });
+
+    expect(scenario.scenarioId).toBe("trimmed-scenario");
+    expect(scenario.expectDecisionRegexes).toEqual(["trimmed decision"]);
+  });
+
   test("rejects scenarios without required identity metadata", () => {
     expect(() =>
       parseScenarioMarkdown({
