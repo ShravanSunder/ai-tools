@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: wait|poll|re.?check|not.*merge|hold|reset
 expect_proof_regex: quiet.{0,20}poll|quiet.{0,20}period|full.{0,20}poll
-expect_proof_regex: new.{0,40}(comment|review|bot)|comment.{0,40}reset|asynchronous.{0,40}event.{0,40}reset|feedback.{0,40}reset|late code-quality bot comment risk|late.*bot|bot comment risk|readiness reset|delayed bot comments|service may post
+expect_proof_regex: new.{0,40}(comment|review|bot)|comment.{0,40}reset|asynchronous.{0,40}event.{0,40}reset|feedback.{0,40}reset|late code-quality bot comment risk|late.*bot|bot comment risk|readiness reset|delayed bot comments|service may post|delayed note|code-quality service can post
 expect_proof_regex: final.{0,20}re-fetch|re-fetch.{0,40}(comments|threads|checks)
 
 ## Shortcut Temptation

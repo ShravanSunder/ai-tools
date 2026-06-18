@@ -15,6 +15,51 @@ Use `gh pr view --json` for:
 
 Use `gh pr checks` or `gh pr status` for check summaries.
 
+## API Budget And Cache State
+
+Use REST first when it can answer the question. Reach for GraphQL only for
+narrow state REST cannot expose, especially review-thread resolution state.
+
+For repeated PR monitoring:
+
+- store REST `ETag` values and use `If-None-Match` on supported `GET` requests;
+- store `Last-Modified` values and use `If-Modified-Since` when that is the
+  available validator;
+- treat `304 Not Modified` as usable only with a same-key cached payload;
+- record `x-ratelimit-limit`, `x-ratelimit-remaining`, `x-ratelimit-used`,
+  `x-ratelimit-reset`, and `x-ratelimit-resource` from responses;
+- serialize GitHub requests instead of running parallel polling loops;
+- stop or back off at primary and secondary rate-limit boundaries.
+
+Key persisted cache, cursor, and last-seen state by:
+
+- HTTP method;
+- owner/repo;
+- PR number;
+- full REST request target, including endpoint path, query parameters,
+  pagination cursor/page, and `per_page` when present;
+- representation-affecting headers such as API version or media type;
+- GraphQL operation plus variables, including pagination cursors;
+- auth identity when relevant;
+- PR head SHA when readiness depends on the payload.
+
+Store validators per exact request page or cursor. Do not reuse an ETag or
+cached payload across pages, different `per_page` values, changed filters,
+different GraphQL variables, or different representation headers.
+
+Invalidate or bypass cached state on:
+
+- PR head SHA changes;
+- new comments, reviews, or review threads;
+- check restarts or conclusion changes;
+- mergeability becoming unknown or stale;
+- missing cached payload for a conditional response;
+- rate-limit reset boundaries or secondary-limit responses.
+
+Final readiness cannot rest on old cache. Use a fresh fetch, or a validated
+same-key `304 Not Modified` response paired with the current cached payload,
+then apply the PR wrapup readiness gates.
+
 ## Comments And Threads
 
 `gh pr view --comments` is not enough for inline review-thread readiness.
