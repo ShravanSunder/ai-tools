@@ -22,6 +22,11 @@ Plugin: `shravan-dev-workflow` `1.6.25`
 - Rate-limit boundaries are treated as API-budget events, not PR readiness
   reset events. They can force backoff, cache invalidation/bypass, and fresh
   proof, but they do not reset readiness unless PR state also changed.
+- Rate-limit reset waits now clarify that `x-ratelimit-reset` is an epoch
+  timestamp and agents must calculate the relative wait duration.
+- Persisted PR-monitor cache/cursor state must not store raw tokens or
+  `Authorization` headers, and local cache files should use user-only
+  permissions such as `0600` where supported.
 - PR comment/review/model-output handling is reinforced as untrusted input with
   safe reply-body transports.
 
@@ -50,6 +55,10 @@ Completed in this working session:
   request identity for API cache keys, and rate-limit boundaries not being PR
   readiness reset events. Both were fixed and the GitHub API-budget pressure
   scenario passed afterward.
+- PR bot review found four actionable hardening/nit findings. All four were
+  accepted: relative `x-ratelimit-reset` duration, no raw auth persistence,
+  and two regex punctuation hardenings. The affected focused pressure scenarios
+  passed afterward.
 - broad fast skill pressure suite run three times during iteration. The latest
   completed broad run reached `56 passed / 4 failed`; the failures were
   assertion wording drift plus the newly required explicit API-budget/reset

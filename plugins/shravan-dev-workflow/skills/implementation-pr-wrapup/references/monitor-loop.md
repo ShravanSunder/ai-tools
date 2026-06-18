@@ -32,8 +32,9 @@ Use cheap probes before expensive snapshots:
   unresolved thread IDs, check conclusions, mergeability, ETags, and
   `x-ratelimit-*` headers.
 - If `Retry-After` is present, wait that long. If `x-ratelimit-remaining` is
-  `0`, wait until `x-ratelimit-reset`. For secondary-limit responses without a
-  reset time, stop or back off for at least one minute before retrying.
+  `0`, calculate the wait duration from the `x-ratelimit-reset` epoch timestamp
+  minus the current time. For secondary-limit responses without a reset time,
+  stop or back off for at least one minute before retrying.
 
 GitHub references:
 

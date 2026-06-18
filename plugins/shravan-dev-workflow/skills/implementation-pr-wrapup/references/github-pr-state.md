@@ -40,8 +40,12 @@ Key persisted cache, cursor, and last-seen state by:
   pagination cursor/page, and `per_page` when present;
 - representation-affecting headers such as API version or media type;
 - GraphQL operation plus variables, including pagination cursors;
-- auth identity when relevant;
+- auth identity when relevant, without storing raw tokens or `Authorization`
+  header values;
 - PR head SHA when readiness depends on the payload.
+
+Store local PR-monitor cache, cursor, and last-seen files with user-only
+permissions, such as `0600`, when the filesystem supports it.
 
 Store validators per exact request page or cursor. Do not reuse an ETag or
 cached payload across pages, different `per_page` values, changed filters,

@@ -14,7 +14,7 @@ expect_proof_regex: graphql.{0,60}(narrow|sparingly|only|review-thread|thread re
 expect_proof_regex: cache.{0,90}(owner/repo|pr number|endpoint|query|head sha|auth|pagination|cursor|variables|per_page)|key.{0,90}(owner/repo|pr number|endpoint|query|head sha|auth|pagination|cursor|variables|per_page)
 expect_proof_regex: invalidate|bypass cache|head sha changes|new comments|check restarts|unknown mergeability
 expect_proof_regex: final.{0,30}re-fetch|fresh.{0,40}proof|304.{0,40}cached payload
-expect_proof_regex: rate-limit.{0,80}not.{0,80}(readiness reset|pr readiness)|not.{0,80}pr readiness.{0,80}reset|api-budget event
+expect_proof_regex: rate-limit.{0,80}not.{0,80}(readiness[- ]reset|pr readiness)|not.{0,80}pr readiness.{0,80}reset|api-budget event
 
 ## Shortcut Temptation
 
