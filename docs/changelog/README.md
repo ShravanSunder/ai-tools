@@ -13,6 +13,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 ## Entries
 
 - [2026-06-18 Local Monitoring and PR API Budget](2026-06-18-local-monitoring-pr-api-budget.md)
+- [2026-06-17 Vitest Evals Skill Runner](2026-06-17-vitest-evals-skill-runner.md)
 - [2026-06-17 Orchestrator Goal PR-Ready Terminal](2026-06-17-orchestrator-goal-pr-ready-terminal.md)
 - [2026-06-15 Orchestrator Goal State Transitions](2026-06-15-orchestrator-goal-state-transitions.md)
 - [2026-06-13 Orchestrator Goal Closeout Audit](2026-06-13-orchestrator-goal-closeout-audit.md)

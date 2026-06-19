@@ -303,9 +303,9 @@ Run one focused scenario per command; the runner accepts `--scenario NAME`, not
 positional scenario file paths:
 
 ```bash
-tests/skills/run-skill-pressure-tests.sh --fast --scenario local-monitoring-no-detached-process --timeout 900 --serial
-tests/skills/run-skill-pressure-tests.sh --fast --scenario local-monitoring-no-model-polling --timeout 900 --serial
-tests/skills/run-skill-pressure-tests.sh --fast --scenario implementation-pr-wrapup-github-api-budget --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario local-monitoring-no-detached-process --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario local-monitoring-no-model-polling --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario implementation-pr-wrapup-github-api-budget --timeout 900 --serial
 ```
 
 Before relying on these commands, confirm the runner contract with:
@@ -395,10 +395,10 @@ Implementation constraints:
 Run targeted GREEN scenarios first:
 
 ```bash
-tests/skills/run-skill-pressure-tests.sh --fast --scenario debug-investigation-background-monitoring --timeout 900 --serial
-tests/skills/run-skill-pressure-tests.sh --fast --scenario implementation-pr-wrapup-monitor-timeout --timeout 900 --serial
-tests/skills/run-skill-pressure-tests.sh --fast --scenario implementation-pr-wrapup-bot-comment-quiet-period --timeout 900 --serial
-tests/skills/run-skill-pressure-tests.sh --fast --scenario implementation-pr-wrapup-stale-success-claim --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario debug-investigation-background-monitoring --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario implementation-pr-wrapup-monitor-timeout --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario implementation-pr-wrapup-bot-comment-quiet-period --timeout 900 --serial
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario implementation-pr-wrapup-stale-success-claim --timeout 900 --serial
 ```
 
 Also run the new scenarios added in Task 1.
@@ -406,7 +406,7 @@ Also run the new scenarios added in Task 1.
 Then run the broader skill gate:
 
 ```bash
-tests/skills/run-skill-pressure-tests.sh --fast --timeout 900
+tests/skills/run-skill-pressure-tests.sh --fast --vitest --timeout 900
 ```
 
 Run static/public plugin validation:

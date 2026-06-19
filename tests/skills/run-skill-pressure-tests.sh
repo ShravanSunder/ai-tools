@@ -8,6 +8,7 @@ mode="fast"
 specific_scenario=""
 timeout_seconds=900
 jobs="${CODEX_PRESSURE_JOBS:-4}"
+use_vitest="false"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -23,6 +24,10 @@ while [[ $# -gt 0 ]]; do
       specific_scenario="$2"
       shift 2
       ;;
+    --vitest)
+      use_vitest="true"
+      shift
+      ;;
     --timeout)
       timeout_seconds="$2"
       shift 2
@@ -37,12 +42,16 @@ while [[ $# -gt 0 ]]; do
       ;;
     --help|-h)
       cat <<'USAGE'
-Usage: tests/skills/run-skill-pressure-tests.sh [--fast|--integration] [--scenario NAME] [--timeout SECONDS] [--jobs N|--serial]
+Usage: tests/skills/run-skill-pressure-tests.sh [--fast|--integration] [--scenario NAME] [--timeout SECONDS] [--jobs N|--serial] [--vitest]
 
 Environment:
   CODEX_PRESSURE_MODEL              default: gpt-5.5
   CODEX_PRESSURE_REASONING_EFFORT   default: low
   CODEX_PRESSURE_JOBS               default: 4 for full-suite runs
+
+Vitest mode:
+  --vitest                         Run the opt-in vitest-evals runner.
+  SKILL_PRESSURE_BACKEND=fake       Use fake backend for harness plumbing tests.
 USAGE
       exit 0
       ;;
@@ -52,6 +61,20 @@ USAGE
       ;;
   esac
 done
+
+if [[ "$use_vitest" == "true" ]]; then
+  export SKILL_PRESSURE_MODE="$mode"
+  export SKILL_PRESSURE_TIMEOUT_SECONDS="$timeout_seconds"
+  if [[ -n "$specific_scenario" ]]; then
+    if [[ "$specific_scenario" == *.md ]]; then
+      export SKILL_PRESSURE_SCENARIO="${specific_scenario%.md}"
+    else
+      export SKILL_PRESSURE_SCENARIO="$specific_scenario"
+    fi
+  fi
+
+  exec pnpm --dir "$SCRIPT_DIR" exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts
+fi
 
 mapfile -t scenarios < <(find "$SCRIPT_DIR/pressure-scenarios" -maxdepth 1 -type f -name '*.md' ! -name 'README.md' | sort)
 
