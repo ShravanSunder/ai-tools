@@ -13,6 +13,10 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 - Recommend new skills only for repeated workflows with stable inputs, a repeatable procedure, and a clear output.
 - Keep recommendations narrow. Do not turn themes into vague mega-skills.
 - Separate create, update, merge, and skip.
+- For update/create recommendations, include the trigger and ownership fit, the
+  compact `SKILL.md` boundary, whether depth belongs in `references/`, whether
+  deterministic mechanics belong in `scripts/`, and the pressure-coverage
+  status: exists, update needed, new scenario needed, or explicitly not needed.
 - Use source inspirations as best-practice inputs, not text to copy wholesale.
 
 ## Workflow
@@ -36,12 +40,19 @@ Audit real workflows before creating skills. Skills encode judgment and house st
    - `create`: missing distinct workflow with repeated evidence
    - `merge`: overlapping skills should become one clearer workflow
    - `skip`: one-off, vague, sensitive, or already covered
-5. Produce the audit:
+5. Shape every update/create recommendation:
+   - trigger and ownership fit
+   - what stays in compact `SKILL.md`
+   - what moves to `references/`
+   - what belongs in `scripts/`
+   - pressure coverage to add, update, reuse, or skip with reason
+6. Produce the audit:
    - candidate name
    - evidence and dates when available
    - source inspirations
    - why it helps
    - smallest useful change
+   - progressive shape and proof recommendation for update/create items
    - priority
 
 ## Source Inspiration Map
@@ -56,6 +67,9 @@ Do not add per-skill provenance docs unless a skill needs a task-specific refere
 - Do not propose a new skill when an existing skill can be tightened.
 - Do not cite upstream inspiration without saying what local behavior it improves.
 - Do not make broad marketplace or agent-instruction edits unless the audit explicitly finds drift.
+- Do not recommend a skill change without saying how the skill remains compact
+  and how the behavior should be pressure-tested, or why pressure proof is not
+  needed.
 - Do not mutate files during an audit unless the user explicitly asks to implement the recommendations.
 
 ## Output Shape
@@ -66,6 +80,7 @@ Return:
 - suggested updates
 - suggested new skills
 - deliberate skips
+- progressive shape and pressure-coverage recommendation for each update/create
 - source inspirations used
 - priority order
 - full clickable artifact links (absolute path + line) for any audit artifacts

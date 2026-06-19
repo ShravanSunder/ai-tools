@@ -60,6 +60,44 @@ Codex skills are delivered by installed Codex plugins. Do not add sync scripts o
 
 Claude Code can load the same skill tree when a plugin also has `.claude-plugin/plugin.json`. Keep shared workflow skills under the plugin that owns them.
 
+## Skill Work SOP
+
+`agents.md` is the repo operating map for skill work. It should tell agents how
+to work here, which skill owns the next decision, and where deeper instructions
+live. It should not duplicate the full manuals from meta-skills.
+
+When creating, editing, auditing, or pressure-testing skills in this repo:
+
+1. Start from a concrete need, repeated failure mode, or user-approved workflow
+   change.
+2. Use `shravan-dev-workflow:skill-audit` to inspect the existing skill surface
+   before deciding what to carve. Prefer updating an existing skill over adding a
+   near-duplicate.
+3. Classify the outcome as `update`, `create`, `merge`, or `skip`.
+4. Use `superpowers:writing-skills` for pressure-first skill design and
+   rationalization traps.
+5. Use `skill-creator` for Codex skill structure, metadata, and
+   `references/`, `scripts/`, or `assets/` layout.
+6. Keep `SKILL.md` compact and progressive. Put depth in `references/` and
+   deterministic mechanics in `scripts/`.
+7. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios
+   under `tests/skills/pressure-scenarios/` and run
+   `tests/skills/run-skill-pressure-tests.sh --fast`.
+8. For user-visible plugin behavior changes, update `docs/changelog/`, bump
+   plugin version metadata, and refresh installed Codex/Claude caches when
+   applicable.
+
+Detailed mechanics stay in the owning skills and references:
+
+- `skill-audit` owns evidence-backed recommendations about what to update,
+  create, merge, or skip.
+- `superpowers:writing-skills` owns pressure-first skill design and testing
+  discipline.
+- `skill-creator` owns Codex skill anatomy and generated metadata.
+- `tests/skills/README.md` owns the local pressure-test runner contract.
+- `docs-maintain` owns cleanup, archival, promotion, and durable docs
+  reconciliation after artifacts exist.
+
 ## System Observability Ownership
 
 `observability/` owns the shared local OpenTelemetry and Victoria stack.
@@ -142,6 +180,8 @@ Use the changelog system as the durable release memory:
 
 Skills encode judgment, house style, and repeatable failure prevention. Prefer improving an existing skill over adding a near-duplicate.
 
+- Treat this section as repo-local guardrails. Use `Skill Work SOP` above to
+  route to the owning meta-skill before relying on these bullets.
 - When creating, editing, auditing, or pressure-testing skills, load and follow `superpowers:writing-skills`. For substantial behavior-changing skills, treat intent as the core artifact: what judgment should the future agent apply, what failure mode are we preventing, and what shortcut must it resist?
 - Name skills with active, searchable verbs in hyphen-case.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
