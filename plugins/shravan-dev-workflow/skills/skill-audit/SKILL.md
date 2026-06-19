@@ -17,6 +17,12 @@ Audit real workflows before creating skills. Skills encode judgment and house st
   compact `SKILL.md` boundary, whether depth belongs in `references/`, whether
   deterministic mechanics belong in `scripts/`, and the pressure-coverage
   status: exists, update needed, new scenario needed, or explicitly not needed.
+  This applies to tentative recommendations too. If evidence is insufficient,
+  say no update/create recommendation is being made yet instead of naming a
+  likely update path without its shape and proof. Avoid phrases like `likely
+  update`, `probably create`, or `candidate update` unless the recommendation
+  includes the required `SKILL.md`, `references/`, `scripts/`, and pressure
+  coverage labels.
 - Use source inspirations as best-practice inputs, not text to copy wholesale.
 
 ## Workflow
@@ -42,10 +48,13 @@ Audit real workflows before creating skills. Skills encode judgment and house st
    - `skip`: one-off, vague, sensitive, or already covered
 5. Shape every update/create recommendation:
    - trigger and ownership fit
-   - what stays in compact `SKILL.md`
-   - what moves to `references/`
-   - what belongs in `scripts/`
-   - pressure coverage to add, update, reuse, or skip with reason
+   - `SKILL.md`: what stays in the compact core instructions
+   - `references/`: what deeper detail, examples, rubrics, or templates move out
+     of the core instructions
+   - `scripts/`: what deterministic mechanics belong in scripts, or `not
+     needed`
+   - pressure coverage: exists, reuse, update, new scenario needed, or not
+     needed with reason
 6. Produce the audit:
    - candidate name
    - evidence and dates when available
@@ -80,7 +89,8 @@ Return:
 - suggested updates
 - suggested new skills
 - deliberate skips
-- progressive shape and pressure-coverage recommendation for each update/create
+- progressive shape and pressure-coverage recommendation for each update/create,
+  using `SKILL.md`, `references/`, `scripts/`, and pressure coverage labels
 - source inspirations used
 - priority order
 - full clickable artifact links (absolute path + line) for any audit artifacts

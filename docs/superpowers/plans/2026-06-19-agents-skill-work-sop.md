@@ -5,10 +5,10 @@ Status: reviewed plan
 
 ## Goal
 
-Make `agents.md` / `AGENTS.md` explain how agents should do skill work in this
-repo at the SOP / table-of-contents level. The docs should route future agents
-to the right meta-skills and proof surfaces without duplicating the full manuals
-inside the repo instructions.
+Make tracked `agents.md` explain how agents should do skill work in this repo at
+the SOP / table-of-contents level, with tracked `CLAUDE.md` continuing to point
+at it. The docs should route future agents to the right meta-skills and proof
+surfaces without duplicating the full manuals inside the repo instructions.
 
 The intended mental model:
 
@@ -20,7 +20,9 @@ skill need / failure mode
   -> write compact progressive skills
   -> add or update pressure proof
   -> validate locally
-  -> changelog / plugin refresh when user-visible
+  -> implementation review
+  -> PR wrapup / merge-ready proof
+  -> post-push plugin refresh when user-visible
 ```
 
 ## Non-Goals
@@ -45,8 +47,9 @@ skill need / failure mode
   table of contents for how to work here and should reference required skills
   rather than inline full manuals.
 - `agents.md`: 398 lines read in chunks `1-220` and `221-398`.
-- `AGENTS.md`: 398 lines; byte-identical to `agents.md` at planning time.
-- `CLAUDE.md`: symlink to `agents.md`.
+- `CLAUDE.md`: tracked symlink to `agents.md`.
+- Local `AGENTS.md`: observed as byte-identical / same-inode with `agents.md`,
+  but not tracked by Git and not a shipped repo artifact.
 - `plugins/shravan-dev-workflow/skills/skill-audit/SKILL.md`: 72 lines read.
 - `tests/skills/README.md`: 74 lines read.
 - `plugins/README.md`: 72 lines read.
@@ -77,7 +80,7 @@ skill need / failure mode
 
 | Requirement / Claim | Owning Task | Proof Owner | Proof Gate | Proof Layer | Stale-Proof Guard | Red/Green Required | Sized To Pass |
 |---|---|---|---|---|---|---|---|
-| `agents.md` / `AGENTS.md` teach skill work as repo SOP / table of contents, not as a buried checklist. | T1 | executor | inspect headings and section placement | docs static | re-read both files after patch; confirm they remain identical | no; docs orientation change | yes |
+| tracked `agents.md` teaches skill work as repo SOP / table of contents, not as a buried checklist; `CLAUDE.md` remains a symlink to it. | T1 | executor | inspect headings and section placement | docs static | re-read tracked file after patch; confirm symlink target | no; docs orientation change | yes |
 | The docs route to `skill-audit`, `superpowers:writing-skills`, `skill-creator`, and `tests/skills/README.md` by ownership. | T1 | executor | `rg` for each skill/reference and review surrounding text | docs static | verify no cache-path references are introduced | no | yes |
 | The docs preserve boundary: `agents.md` owns routing and durable repo rules; skills own detailed mechanics. | T1 | executor + reviewer | read changed section for duplication / over-specific procedure | docs review | compare against `writing-skills` and `skill-creator` triggers before implementation | no | yes |
 | The docs keep local pressure proof local-only and do not imply CI. | T1 | executor | `rg -n "GitHub Actions|CI|workflow|local"` around changed docs | docs static | re-read `tests/skills/README.md` before final wording | no | yes |
@@ -112,9 +115,12 @@ files and stale branch state, then get it current without deleting user files.
 Before edits, confirm the implementation worktree is on a named branch and that
 `git diff --name-only` is either empty or limited to this plan artifact.
 
-### T1. Rework `agents.md` / `AGENTS.md` Skill SOP Structure
+### T1. Rework Tracked `agents.md` Skill SOP Structure
 
-Update both files identically.
+Update tracked `agents.md`. Preserve `CLAUDE.md` as a symlink to `agents.md`.
+If a local `AGENTS.md` hardlink exists, it may mirror the content on this
+machine, but do not treat it as a versioned write surface unless it is added to
+Git intentionally.
 
 Recommended structure:
 
@@ -129,8 +135,12 @@ Recommended structure:
   - For deciding what to carve/update/merge/skip, use `skill-audit`.
   - For substantial `shravan-dev-workflow` behavior changes, add or update
     pressure scenarios and run local pressure proof.
-  - For user-visible plugin behavior changes, update changelog and refresh
-    installed plugin caches as applicable.
+  - For user-visible plugin behavior changes, update changelog and record
+    installed plugin cache refresh status.
+  - For implemented skill-work changes, route through
+    `implementation-review-swarm` and `implementation-pr-wrapup` before any
+    done claim; cache refresh is post-push/release proof, not a substitute for
+    merge-ready PR proof.
 - Keep the existing `Adding a New Skill` mechanics, but make it subordinate to
   the SOP rather than the main mental model.
 - Preserve existing plugin/marketplace/sidecar content unless a heading move
@@ -209,8 +219,8 @@ record the decision in the changelog.
 
 ### T4. Add Changelog Entry
 
-If implementation changes `agents.md`, `AGENTS.md`, `skill-audit`, pressure
-scenarios, or plugin behavior, add a public-safe changelog entry:
+If implementation changes `agents.md`, `skill-audit`, pressure scenarios, or
+plugin behavior, add a public-safe changelog entry:
 
 ```text
 docs/changelog/2026-06-19-agents-skill-work-sop.md
@@ -234,13 +244,14 @@ manifest/marketplace changes required by repo rules.
 Minimum validation for docs-only T1/T4:
 
 ```bash
-cmp -s agents.md AGENTS.md
 test "$(readlink CLAUDE.md)" = "agents.md"
-rg -n "^## Skill Work SOP$" agents.md AGENTS.md
-rg -n "skill-audit" agents.md AGENTS.md
-rg -n "superpowers:writing-skills" agents.md AGENTS.md
-rg -n "skill-creator" agents.md AGENTS.md
-rg -n "tests/skills/run-skill-pressure-tests.sh --fast" agents.md AGENTS.md
+git ls-files --stage agents.md CLAUDE.md
+rg -n "^## Skill Work SOP$" agents.md
+rg -n "skill-audit" agents.md
+rg -n "superpowers:writing-skills" agents.md
+rg -n "skill-creator" agents.md
+rg -n "tests/skills/run-skill-pressure-tests.sh --fast" agents.md
+rg -n "implementation-review-swarm|implementation-pr-wrapup" agents.md
 git diff --name-only
 ```
 
@@ -296,7 +307,6 @@ proof.
 Primary:
 
 - `agents.md`
-- `AGENTS.md`
 
 Conditional:
 
@@ -319,8 +329,8 @@ No expected changes:
 
 ## Rollback / Recovery
 
-- Docs-only rollback: revert the changed `agents.md` / `AGENTS.md` sections and
-  changelog entry.
+- Docs-only rollback: revert the changed `agents.md` section and changelog
+  entry.
 - Skill behavior rollback: revert `skill-audit` wording and its pressure
   scenario together so the proof surface does not describe behavior no longer
   required.
@@ -340,8 +350,9 @@ No expected changes:
 - Proof theater risk: adding a pressure scenario that only checks for generic
   JSON compliance. Mitigation: require an independent proof regex tied to the
   actual failure mode.
-- Drift risk: editing only `agents.md` or only `AGENTS.md`. Mitigation: validate
-  `cmp -s agents.md AGENTS.md`.
+- Drift risk: relying on a local untracked `AGENTS.md` hardlink as if it were a
+  shipped file. Mitigation: validate tracked `agents.md` plus the `CLAUDE.md`
+  symlink, and do not claim `AGENTS.md` as a versioned artifact.
 - Detached-worktree risk: starting from `origin/master` without `-b` produces a
   poor PR surface. Mitigation: require a named branch and branch/HEAD proof
   before edits.

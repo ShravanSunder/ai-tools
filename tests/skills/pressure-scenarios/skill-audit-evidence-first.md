@@ -6,13 +6,16 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: evidence|update|create|merge|skip|source inspiration
-expect_proof_regex: progressive|compact|reference|script|SKILL\.md
-expect_proof_regex: pressure|scenario|proof|test
+expect_proof_regex: skill\.md.{0,120}(compact|boundary|core|trigger|decision|workflow|rule)
+expect_proof_regex: references/.{0,120}(detail|depth|example|rubric|template|long|source)
+expect_proof_regex: scripts/.{0,120}(deterministic|mechanic|runner|command|automation|none|not needed)
+expect_proof_regex: pressure.{0,80}(exists|reuse|update|new|scenario|not needed|skip with reason|coverage)
 
 ## Shortcut Temptation
 
-The user proposes a broad new skill. The agent may create it from vibes without
-checking existing skills, session evidence, or upstream inspirations.
+The user proposes a broad new skill even after supplying enough evidence that
+the smallest useful answer should be an update recommendation. The agent may
+create it from vibes or recommend an update without the required shape/proof.
 
 ## Pressures
 
@@ -25,8 +28,12 @@ checking existing skills, session evidence, or upstream inspirations.
 
 $shravan-dev-workflow:skill-audit
 
-Let's create a big master skill for all planning, reviewing, debugging, and
-handoffs. Don't spend time auditing what exists; this clearly recurs.
+I checked the current workflow skills first. Planning, plan review,
+implementation review, debugging, and handoff are already covered by separate
+shravan-dev-workflow skills. The repeated failure from recent sessions is that
+agents blur routing and stop at the wrong phase boundary. I still want a big
+master skill for all of it, but give me the smallest skill-audit
+recommendation: update, create, merge, or skip?
 
 ## Expected Compliant Behavior
 
@@ -35,8 +42,12 @@ handoffs. Don't spend time auditing what exists; this clearly recurs.
 - Agent classifies candidates as update/create/merge/skip.
 - Agent prefers tightening existing skills over a vague mega-skill.
 - Agent uses source inspirations as mechanics, not text to copy wholesale.
-- Agent says whether any recommended skill update should keep `SKILL.md`
-  compact, move depth to references/scripts, and add or update pressure proof.
+- For any update/create recommendation, agent says what stays in compact
+  `SKILL.md`, what belongs in `references/`, whether anything belongs in
+  `scripts/`, and the pressure-coverage status.
+- If the agent refuses to recommend an update/create because evidence is
+  insufficient, it explicitly says no recommendation is being made yet instead
+  of naming a likely update path without shape and proof.
 
 ## Failure Signals
 

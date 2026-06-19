@@ -84,8 +84,13 @@ When creating, editing, auditing, or pressure-testing skills in this repo:
    under `tests/skills/pressure-scenarios/` and run
    `tests/skills/run-skill-pressure-tests.sh --fast`.
 8. For user-visible plugin behavior changes, update `docs/changelog/`, bump
-   plugin version metadata, and refresh installed Codex/Claude caches when
-   applicable.
+   plugin version metadata, and record refresh / reinstall status.
+9. Before calling skill-work changes complete, route the changed surface through
+   `shravan-dev-workflow:implementation-review-swarm`, then
+   `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks /
+   review-thread / merge-readiness proof. Refresh installed Codex/Claude caches
+   only as an explicit post-push or release proof step; it is a home-level
+   mutation and not a substitute for PR readiness.
 
 Detailed mechanics stay in the owning skills and references:
 
@@ -97,6 +102,8 @@ Detailed mechanics stay in the owning skills and references:
 - `tests/skills/README.md` owns the local pressure-test runner contract.
 - `docs-maintain` owns cleanup, archival, promotion, and durable docs
   reconciliation after artifacts exist.
+- `implementation-review-swarm` and `implementation-pr-wrapup` own the final
+  review and merge-ready PR proof for implemented skill-work changes.
 
 ## System Observability Ownership
 
