@@ -8,7 +8,7 @@ mode="fast"
 specific_scenario=""
 timeout_seconds=900
 jobs="${CODEX_PRESSURE_JOBS:-4}"
-use_vitest="false"
+use_vitest="true"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -28,6 +28,10 @@ while [[ $# -gt 0 ]]; do
       use_vitest="true"
       shift
       ;;
+    --legacy-shell)
+      use_vitest="false"
+      shift
+      ;;
     --timeout)
       timeout_seconds="$2"
       shift 2
@@ -42,15 +46,17 @@ while [[ $# -gt 0 ]]; do
       ;;
     --help|-h)
       cat <<'USAGE'
-Usage: tests/skills/run-skill-pressure-tests.sh [--fast|--integration] [--scenario NAME] [--timeout SECONDS] [--jobs N|--serial] [--vitest]
+Usage: tests/skills/run-skill-pressure-tests.sh [--fast|--integration] [--scenario NAME] [--timeout SECONDS] [--jobs N|--serial] [--legacy-shell]
 
 Environment:
   CODEX_PRESSURE_MODEL              default: gpt-5.5
   CODEX_PRESSURE_REASONING_EFFORT   default: low
   CODEX_PRESSURE_JOBS               default: 4 for full-suite runs
 
-Vitest mode:
-  --vitest                         Run the opt-in vitest-evals runner.
+Runner:
+  default                           Run through the Vitest eval runner.
+  --vitest                          Compatibility no-op; Vitest is the default.
+  --legacy-shell                    Run the pre-Vitest shell reducer.
   SKILL_PRESSURE_BACKEND=fake       Use fake backend for harness plumbing tests.
 USAGE
       exit 0

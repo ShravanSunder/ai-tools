@@ -49,7 +49,7 @@ Plugin: `shravan-dev-workflow` `1.6.25`
 Completed in this working session:
 
 - after merging `origin/master`, this PR's pressure-proof commands were switched
-  to the opt-in Vitest eval runner with `--vitest`;
+  to the default Vitest eval runner;
 - targeted RED/GREEN pressure scenarios for no-detach monitoring, no model
   polling, GitHub API budget, untrusted comment safety, and existing PR/debug
   regressions;
@@ -75,10 +75,10 @@ Completed in this working session:
   `shravan-dev-workflow@ai-tools` version `1.6.25`;
 - Codex plugin cache refresh to `1.6.25`.
 - `PATH=/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
-  tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario
+  tests/skills/run-skill-pressure-tests.sh --fast --scenario
   implementation-pr-wrapup-github-api-budget --timeout 900 --serial`;
 - `PATH=/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
-  tests/skills/run-skill-pressure-tests.sh --fast --vitest --scenario
+  tests/skills/run-skill-pressure-tests.sh --fast --scenario
   local-monitoring-no-detached-process --timeout 900 --serial`.
 
 Claude plugin update status: the configured Claude marketplace updated the

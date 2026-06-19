@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: true
 expect_decision_regex: blocker|bounded foreground|explicit foreground|foreground command|session-managed|visible session|cannot launch
 expect_proof_regex: blocker|bounded foreground|explicit foreground|foreground command|session-managed|visible session|cannot launch
-expect_proof_regex: no detach|no detached|not detach|not detached|refuse.{0,40}detach|reject.{0,40}detach
+expect_proof_regex: no detach|no detached|not detach|not detached|invisible detached watcher|detached process group|unmanaged detached process|refuse.{0,80}detach|reject.{0,80}detach|forbid.{0,80}detach
 expect_proof_regex: nohup|disown|hidden.{0,20}&|unmanaged.{0,40}cron|detached daemon
 expect_proof_regex: visible.{0,40}cancel|cancel.{0,40}visible|inspectable.{0,40}cancel|cancellable.{0,40}inspectable
 

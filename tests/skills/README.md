@@ -16,16 +16,16 @@ The goal is not to ask whether an agent can summarize a skill. The goal is to
 test whether it still follows the skill when the prompt pressures it to take a
 shortcut.
 
-Run:
+Run through the Vitest eval runner:
 
 ```bash
 tests/skills/run-skill-pressure-tests.sh --fast
 ```
 
-Opt-in Vitest eval runner:
+Run one scenario:
 
 ```bash
-tests/skills/run-skill-pressure-tests.sh --vitest --scenario orchestrator-goal-closeout-audit
+tests/skills/run-skill-pressure-tests.sh --scenario orchestrator-goal-closeout-audit
 ```
 
 The Vitest runner lives in this directory as a standalone test package. Run its
@@ -41,15 +41,17 @@ live agent:
 
 ```bash
 SKILL_PRESSURE_BACKEND=fake \
-tests/skills/run-skill-pressure-tests.sh --vitest --scenario orchestrator-goal-closeout-audit
+tests/skills/run-skill-pressure-tests.sh --scenario orchestrator-goal-closeout-audit
 ```
+
+Use `--legacy-shell` only when debugging the old shell reducer.
 
 Full-suite runs execute scenarios in parallel by default (`CODEX_PRESSURE_JOBS=4`).
 Use `--jobs N` to tune concurrency or `--serial` when debugging runner output.
 Focused `--scenario NAME` runs stay serial.
 
-Artifacts are written under `tmp/skill-pressure-tests/`.
-Vitest eval artifacts are written under `tmp/skill-pressure-evals/`.
+Vitest eval artifacts are written under `tmp/skill-pressure-evals/`. Legacy
+shell artifacts are written under `tmp/skill-pressure-tests/`.
 
 The model under test sees only the scenario's `## Prompt` section plus the
 minimal metadata needed for its JSON report. `Expected Compliant Behavior`,

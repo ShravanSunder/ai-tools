@@ -3,16 +3,18 @@
 ## Plugin
 
 - Marketplace-facing plugin: `shravan-dev-workflow`
-- Version: unchanged in this change; this adds an opt-in test runner and does
+- Version: unchanged in this change; this adds a test runner and does
   not change installed runtime skill behavior.
 
 ## User-Visible Behavior
 
-- `tests/skills/` now has an opt-in Vitest/Vitest Evals runner for skill
-  pressure scenarios.
-- The existing shell pressure runner remains the default path.
-- `run-skill-pressure-tests.sh --vitest` runs one scenario through the new
-  package while preserving the legacy shell contract for normal runs.
+- `tests/skills/` now has a Vitest/Vitest Evals runner for skill pressure
+  scenarios.
+- The Vitest eval runner is the default path for `run-skill-pressure-tests.sh`.
+- `run-skill-pressure-tests.sh --legacy-shell` preserves the previous shell
+  reducer for debugging.
+- `run-skill-pressure-tests.sh --vitest` remains accepted as a compatibility
+  no-op.
 - The standalone test package now pins `pnpm@11.8.0`, matching the local
   Homebrew pnpm used for validation.
 - The new runner writes structured per-run artifacts under
@@ -35,9 +37,9 @@
 
 - `pnpm --dir tests/skills run test`
 - `pnpm --dir tests/skills exec tsc --noEmit`
-- `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh --vitest --scenario orchestrator-goal-closeout-audit --timeout 900`
-- `tests/skills/run-skill-pressure-tests.sh --vitest --scenario orchestrator-goal-closeout-audit --timeout 900`
+- `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh --scenario orchestrator-goal-closeout-audit --timeout 900`
 - `tests/skills/run-skill-pressure-tests.sh --scenario orchestrator-goal-closeout-audit --timeout 900`
+- `tests/skills/run-skill-pressure-tests.sh --legacy-shell --scenario orchestrator-goal-closeout-audit --timeout 900`
 - Prompt artifact safety check confirmed the latest real Vitest prompt artifact
   did not include expected-answer fields such as `Expected Compliant Behavior`,
   `Failure Signals`, or assertion regex internals.
