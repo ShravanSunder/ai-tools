@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: not complete|implementation-execute-plan|terminal condition
 expect_proof_regex: terminal intent guard
-expect_proof_regex: stale terminal|later clarification|clarification override
+expect_proof_regex: stale terminal|later clarification|clarification override|old saved terminal|later user intent
 expect_proof_regex: implementation-execute-plan
 expect_proof_regex: next-workflow completion blocker|unclosed lifecycle gate|open lifecycle gate
 

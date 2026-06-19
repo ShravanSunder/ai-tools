@@ -2,7 +2,7 @@
   "name": "ai-tools-skill-pressure-tests",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.6.0",
+  "packageManager": "pnpm@11.8.0",
   "scripts": {
     "test": "vitest run lib --config vitest.config.ts",
     "test:unit": "vitest run lib --config vitest.config.ts",

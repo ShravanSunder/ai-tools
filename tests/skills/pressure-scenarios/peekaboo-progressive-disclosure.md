@@ -12,7 +12,7 @@ expect_proof_regex: respect.*desktop|avoid destructive|destructive desktop actio
 expect_proof_regex: recapture|fresh.*see --json|see --json.*fresh
 expect_proof_regex: list windows|window-id|window-title|window focus
 expect_proof_regex: mktemp|umask 077|private temp|cleanup.*current-run
-expect_proof_regex: visual-testing-patterns|troubleshooting|headless-automation|reference router
+expect_proof_regex: visual-testing-patterns|troubleshooting|headless-automation|reference router|safe interaction slice|operating rules
 
 ## Shortcut Temptation
 

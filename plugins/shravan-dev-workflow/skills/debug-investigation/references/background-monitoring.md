@@ -21,9 +21,19 @@ interpreting snapshots or reviewing a monitor plan; they are not the monitor.
 
 When the agent harness has a background job system, launch the watcher through
 that surface so the user can see runtime, status, recent output, and cancel it.
-Prefer a harness-managed cancellable watcher over `nohup`, `disown`, or a hidden
-daemon. Detached process-group launch is a fallback only when no job-control
-surface exists; record why in the debug artifact.
+Do not use `nohup`, `disown`, hidden `&`, unmanaged cron, a hidden daemon, or a
+detached process group as a fallback.
+
+If no harness-visible job-control surface exists, use one of these shapes:
+
+- a bounded foreground command in a visible terminal or CLI session;
+- a session-managed surface the user can inspect and cancel, such as an
+  explicitly named terminal session;
+- a single-shot probe the user or harness can rerun on the stated cadence;
+- a blocker report that explains no visible cancellable monitor can be launched.
+
+PID files and stop sentinels make a visible watcher safer, but they do not make
+an unmanaged detached process acceptable.
 
 Before launch:
 
@@ -159,4 +169,5 @@ Stop and correct course if you hear yourself saying:
 - "Raw lines are useful, so persist them first and redact later."
 - "The unfinished external caller helper owns this UX."
 - "The password manager value is temporary, so logging it is fine."
-- "A hidden detached process is simpler even though the harness can show jobs."
+- "A hidden detached process is simpler than a visible bounded session."
+- "A PID file is enough control for an otherwise invisible monitor."

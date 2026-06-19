@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: cannot|before|need|check|inspect|not.*merge|not.*ready
-expect_proof_regex: behavior gap|gap beyond|not enough|green checks alone|green checks.{0,40}one gate|ci success.{0,40}one gate|not merge readiness
+expect_proof_regex: behavior gap|gap beyond|not enough|not sufficient|green checks alone|green checks.{0,40}one gate|ci success.{0,40}one gate|not merge readiness
 expect_proof_regex: comments?.{0,80}threads?|threads?.{0,80}comments?
 expect_proof_regex: local.{0,40}(head|branch|worktree)|branch.{0,40}(remote|pr head)
 
