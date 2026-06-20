@@ -30,8 +30,8 @@ docs request
    - specs, plans, debug notes, research packets, and handoffs are stage artifacts until this skill classifies them as durable, archived, or disposable.
 - Keep `AGENTS.md` short. Move runbook detail to docs and link it.
 - Do not let old plans/specs/debug notes displace current source-of-truth docs by inertia.
-- Do not replace phase skills for active artifact work: `spec-design-swarm`,
-  `spec-review-swarm`, `spec-handoff`, `plan-create`, `plan-review-swarm`,
+- Do not replace phase skills for active artifact work: `spec-creation-swarm`,
+  `spec-review-swarm`, `spec-handoff`, `plan-creation-swarm`, `plan-review-swarm`,
   `plan-handoff`, `implementation-execute-plan`, `implementation-handoff`, and
   `debug-investigation` own their lanes.
 - Before purging or rewriting docs, propose the change and say what will be preserved.

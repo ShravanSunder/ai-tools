@@ -1,11 +1,27 @@
 ---
-name: spec-design-swarm
-description: Use when shaping a new spec, design, or architecture before an implementation plan exists, especially when the user asks to use subagents to research, brainstorm, compare approaches, pressure-test assumptions, or create a design direction.
+name: spec-creation-swarm
+description: Use when creating or revising a spec, design, or architecture contract before an implementation plan exists, especially when the work needs bounded subagents, current-state exploration, separability mapping, or assumption pressure.
 ---
 
-# Spec Design Swarm
+# Spec Creation Swarm
 
-Use this skill to form a design before writing an implementation plan. The parent session owns the mental model, synthesis, and recommendation. Subagents provide bounded research, exploration, and architectural pressure, not final decisions.
+Use this skill to create the spec/design contract before writing an
+implementation plan. The parent session owns the mental model, synthesis, and
+recommendation. Subagents provide bounded research, exploration, and
+architectural pressure, not final decisions.
+
+A spec may contain product intent, requirements, and technical design in one
+artifact. Keep those layers distinct:
+
+- Product intent / PRD: who this serves, why it exists, success criteria, and
+  product non-goals.
+- Requirements: testable obligations the system must satisfy.
+- Technical spec: the system contract that satisfies those requirements.
+
+The spec defines separability. It names boundaries, contracts, invariants,
+non-goals, security context, and proof expectations tied to requirements. It
+does not define task sequence, worker assignment, execution DAGs, implementation
+order, or exact pyramid test commands; those belong to `plan-creation-swarm`.
 
 Core pipeline:
 
@@ -16,17 +32,24 @@ fuzzy goal or design question
   -> competing architecture lanes
   -> decision discussion for unresolved branches
   -> parent synthesis
-  -> design direction, non-goals, open questions
-  -> optional handoff to spec-review-swarm, spec-handoff, or plan-create
+  -> product intent, requirements, spec boundary, separability map, open questions
+  -> optional handoff to spec-review-swarm, spec-handoff, or plan-creation-swarm
 ```
 
 ## Core Rules
 
 - Do not implement code from this skill.
 - Read current code, docs, prior specs, and logs before designing.
-- Use subagents for parallelizable research or codebase exploration when the question is broad enough to benefit from independent lanes.
+- Use subagents by default for substantial spec creation when research,
+  codebase exploration, architecture pressure, security review, or adversarial
+  assumptions can run as independent lanes. For tiny local decisions, state why
+  a full swarm was skipped.
 - Give every subagent a bounded packet. Do not ask subagents to "understand the whole repo" unless the user explicitly asks for a broad audit.
 - The parent must read key files returned by explorer lanes before recommending a design.
+- Keep sequencing out of the spec. Do not include worker order, task order,
+  implementation phases, execution DAGs, exact test commands, or validation
+  command sequence except as proof expectations tied to requirements that
+  `plan-creation-swarm` must later operationalize.
 - Ask the user only for material decisions that cannot be answered from code, docs, or repo evidence.
 - When asking a design question, include the current guess or recommended answer and why.
 - Produce explicit tradeoffs, not a single happy path.
@@ -71,12 +94,15 @@ fuzzy goal or design question
    - Explain the cost of each option.
 7. Produce the design output:
    - recommended direction
+   - product intent / PRD when product meaning is load-bearing
+   - requirements as testable obligations
    - alternatives considered
    - what we gain and pay
    - boundaries and ownership
+   - separability map and contracts
    - security context and non-goals
    - validation strategy
-   - proof expectations, or explicit deferral to `plan-create`
+   - proof expectations, or explicit deferral to `plan-creation-swarm`
    - open questions
    - next skill to use
 8. Write the artifact when appropriate:
@@ -98,6 +124,27 @@ Default lanes for substantial design work:
 
 For tiny design questions, run local versions of the relevant lanes and state why a full swarm was skipped.
 
+## Required Spec Diagram
+
+Every substantial spec artifact includes a boundary / separability map:
+
+```text
+Spec boundary / separability map
+
+surface A
+  owns: invariant X, source of truth X
+  exposes: contract A
+
+contract A <----> contract B
+
+surface B
+  owns: invariant Y, source of truth Y
+  exposes: contract B
+```
+
+If this diagram is not useful for the domain, replace it with an equivalent
+ownership map and explain why.
+
 ## Progressive Disclosure
 
 - Load `references/swarm-packets.md` before spawning design, research, or architecture subagents.
@@ -117,9 +164,11 @@ Return:
 - Full clickable artifact links (absolute path + line) for any spec/design
   artifacts the human is expected to open.
 - Recommended design direction.
+- Product intent / PRD, requirements, and technical contract when those layers
+  are load-bearing.
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.
 - Decisions needed from the user.
 - Suggested next skill: usually `spec-review-swarm`, `spec-handoff`, or
-  `plan-create`; use `plan-review-swarm` only after an implementation plan
+  `plan-creation-swarm`; use `plan-review-swarm` only after an implementation plan
   exists.

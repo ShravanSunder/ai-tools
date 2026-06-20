@@ -10,6 +10,9 @@ You are implementing one bounded slice from a validated plan.
 Task:
 <full task text extracted from the plan>
 
+Execution DAG position:
+<parallel lane, serial step, dependency, integration gate, and validation gate>
+
 Context:
 <where this fits, dependencies, relevant architecture>
 
@@ -31,6 +34,8 @@ Tests/verification:
 - <security proof command or manual check when applicable>
 
 Before starting, ask if the task is unclear. If implementation reveals a plan gap, stop and report NEEDS_CONTEXT or BLOCKED.
+Do not read the whole plan unless the controller explicitly says this slice
+requires it.
 
 Return:
 - Status: DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED

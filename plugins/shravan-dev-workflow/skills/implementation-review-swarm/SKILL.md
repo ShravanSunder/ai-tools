@@ -16,8 +16,8 @@ review packet
   -> optional external model lanes
   -> reducer verification
   -> receive findings
-  -> address accepted implementation issues when in-scope
-  -> verdict, findings, fixes, and coverage
+  -> route accepted implementation issues
+  -> verdict, findings, proof gaps, and coverage
 ```
 
 ## Operating Model
@@ -27,8 +27,13 @@ review packet
 - Include Claude, Gemini, `agy`, or another external adversarial lane only when the user explicitly asks for that outside counsel. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
-- After review, receive findings rigorously: read, understand, verify against codebase reality, evaluate, then address accepted findings.
-- When reviewing current-session implementation work, fix accepted blocker and important findings by default unless the user explicitly asked for report-only review.
+- After review, receive findings rigorously: read, understand, verify against
+  codebase reality, evaluate, then route accepted findings to the owning
+  workflow.
+- Accepted blocker and important implementation findings normally route back to
+  `implementation-execute-plan`. Only make tiny same-session review-fix edits
+  when they are explicitly scoped, remain inside the current implementation
+  scope, and carry the same proof discipline.
 - Do not blindly implement reviewer suggestions. Reject unsupported, technically wrong, out-of-scope, or YAGNI findings with evidence.
 - If feedback is unclear, conflicts with user decisions, or expands scope, ask before editing.
 - Keep the swarm shallow: direct child reviewer agents only. Do not ask reviewer agents to spawn deeper review swarms.
@@ -110,10 +115,13 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Reject claims that cannot be proven from current artifacts.
    - Deduplicate by root cause.
 
-7. Review reception and fix loop
+7. Review reception and routing
    - Load `../../references/review-reception.md` to receive accepted findings,
      decide what this workflow owns, and handle feedback produced or validated
      by this review.
+   - Route accepted blocker/important implementation findings to
+     `implementation-execute-plan` unless a tiny same-session review-fix is
+     explicitly scoped.
    - Pure follow-through on existing GitHub PR comments or review threads
      belongs to `implementation-pr-wrapup`.
 
@@ -183,7 +191,8 @@ Rejected findings should not be listed by default. Mention them only when a reje
 ## Addressing Accepted Findings
 
 Implementation review includes review reception when the parent agent owns the
-implementation. Load `../../references/review-reception.md` before editing,
+implementation. Load `../../references/review-reception.md` before routing
+accepted findings, making a tiny explicitly scoped same-session review-fix,
 replying to review findings produced by this review, or closing threads for
 accepted findings from this review. Existing PR comment/thread follow-through
 belongs to `implementation-pr-wrapup`.
@@ -193,7 +202,8 @@ belongs to `implementation-pr-wrapup`.
 - Load `references/reviewer-prompts.md` before dispatching reviewers or writing a copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../../references/review-reception.md` before addressing accepted
-  findings from this review.
+  findings from this review. Use the route-back rule unless a tiny
+  same-session review-fix is explicitly scoped.
 
 ## Report Shape
 
@@ -225,8 +235,10 @@ and their approval source>
 Swarm coverage
 <reviewed scope, lanes run, lanes skipped, backend used for each lane, external model lane status, verification notes>
 
-Fix follow-through
-<accepted findings fixed, rejected/deferred findings, PR threads resolved or left open, commands run, remaining blockers>
+Routing follow-through
+<accepted findings routed to implementation-execute-plan, tiny explicitly
+scoped same-session fixes if any, rejected/deferred findings, PR threads
+resolved or left open, commands run, remaining blockers>
 
 Artifact links
 <full clickable artifact links (absolute path + line) for reports, handoffs, or
@@ -240,6 +252,7 @@ other files the human is expected to open>
 - Do not hide skipped external model lanes.
 - Do not run Claude or Gemini unless the user asked.
 - Do not run `agy` unless the user asked for Gemini/agy or outside adversarial counsel.
-- Do not leave accepted current-session implementation blockers unfixed unless the user asked for report-only review or the fix needs a decision.
+- Do not bypass `implementation-execute-plan` for accepted blocker/important
+  findings unless a tiny same-session review-fix is explicitly scoped.
 - Do not let external model lane failure fail the whole review.
 - Do not let a sidecar reviewer become the critical path when the parent can continue reducing available evidence.

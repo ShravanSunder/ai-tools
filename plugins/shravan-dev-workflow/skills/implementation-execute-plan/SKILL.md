@@ -10,12 +10,15 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 ## Core Rules
 
 - Read the whole implementation plan before execution. Show line count and chunk coverage for plan files.
-- Do not execute directly from a spec or design. Use `plan-create` first when
+- Do not execute directly from a spec or design. Use `plan-creation-swarm` first when
   no written implementation plan exists.
 - Validate against the current repo before editing: branch, diff, code paths, package layout, tests, and instructions.
 - Stop before editing if the plan has critical gaps, stale assumptions, unsafe scope, or unclear ownership.
 - Stop before editing if security assumptions or threat boundaries are missing or stale for sensitive work.
-- Use subagents for parallelizable bounded slices only. The main agent remains responsible for context, integration, verification, and final claims.
+- Use subagents whenever work is parallelizable into bounded disjoint slices.
+  Inline execution is for tiny, serial, unsafe-to-delegate, or unsupported-tool
+  cases; record that reason. The main agent remains responsible for context,
+  integration, verification, and final claims.
 - Do not ask subagents to read the giant plan. The controller extracts exact task packets and gives each subagent only what it needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
 - Preserve implementation proof as you work: requirement/task coverage, changed
@@ -23,7 +26,7 @@ Validate first, then execute. This is controller-owned execution: subagents may 
   changes, proof owners, stale-proof guards, skipped proof layers with reasons,
   and blockers.
 - If a required proof gate cannot pass inside the approved scope, stop and
-  return to `plan-create` or split the work into smaller provable slices.
+  return to `plan-creation-swarm` or split the work into smaller provable slices.
 - A skip reason must be a concrete external blocker: missing environment,
   out-of-scope infrastructure, or a user-approved exception. Time pressure,
   task size, confidence, manual spot-checks, or "CI will catch it" are not
@@ -45,6 +48,8 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Inline: tightly coupled work or no subagent support.
    - Sequential subagents: tasks share context or write surfaces.
    - Parallel subagents: tasks are independent with disjoint write sets, or are read-only research/review lanes.
+   - If the plan includes an execution DAG, use it to choose lanes, integration
+     gates, and validation gates.
 3. Create a controller brief under:
    - `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/implementation-execute-plan-brief.md`
 4. Slice tasks.
@@ -59,6 +64,9 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 6. Review after each slice.
    - Spec compliance first.
    - Code quality/adversarial review second for meaningful implementation slices.
+   - These slice-level checks do not replace the later
+     `implementation-review-swarm` gate unless implementation review is
+     explicitly out of scope.
 7. Verify final state.
    - Re-read the requirements/proof matrix or the plan's compact proof line.
    - Re-read requirements.

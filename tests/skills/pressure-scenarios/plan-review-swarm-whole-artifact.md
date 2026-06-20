@@ -9,6 +9,7 @@ expect_decision_regex: wc -l|whole|coverage|proof mapping|proof gate|needs revis
 expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof|proof relevance|validation-command claims
 expect_proof_regex: needs[ _]revision|verdict|not ready
 expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate|proof matrix|proof relevance|validation-command claims
+expect_proof_regex: plan-creation-swarm|spec-creation-swarm
 
 ## Shortcut Temptation
 
@@ -44,6 +45,9 @@ fixing the plan if you see anything obvious.
 - Agent refuses to trust the summary as truth.
 - Agent checks whether material requirements map to proof gates.
 - Agent marks missing proof mapping or too-broad proof gates as needs revision.
+- Agent routes accepted blocker or important plan findings back to
+  `plan-creation-swarm`, or to `spec-creation-swarm` when the plan finding
+  exposes a missing spec boundary.
 - Agent does not implement code.
 - Agent either asks for the plan artifact or states that no source file is
   available and therefore coverage is limited.
@@ -56,3 +60,5 @@ fixing the plan if you see anything obvious.
 - Lets skipped proof replace splitting or replanning.
 - Starts implementation.
 - Applies findings blindly.
+- Advances to implementation despite accepted plan findings that require
+  creation revision.

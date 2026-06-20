@@ -71,14 +71,14 @@ or generic Victoria query docs into app repos.
 
 | Skill | Location | Purpose |
 |-------|----------|---------|
-| spec-design-swarm | `plugins/shravan-dev-workflow/skills/spec-design-swarm/` | Pre-plan design formation with bounded codebase explorer, architecture, security, and adversarial lanes |
+| spec-creation-swarm | `plugins/shravan-dev-workflow/skills/spec-creation-swarm/` | Pre-plan spec/design creation with bounded codebase explorer, architecture, security, separability, and adversarial lanes |
 | discuss-with-me | `plugins/shravan-dev-workflow/skills/discuss-with-me/` | Manual pressure-test that makes the shared model prove itself before action: scoped decision map, challenge to the user's read, and one forcing question for design/spec/plan/implementation/docs decisions |
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
 | orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals to discuss-with-me |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-review-swarm | `plugins/shravan-dev-workflow/skills/spec-review-swarm/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
-| plan-create | `plugins/shravan-dev-workflow/skills/plan-create/` | Create written implementation plans from spec/design context without editing code |
+| plan-creation-swarm | `plugins/shravan-dev-workflow/skills/plan-creation-swarm/` | Create written implementation plans from spec/design context with proof gates and parallel work lanes, without editing code |
 | ops-security-review | `plugins/shravan-dev-workflow/skills/ops-security-review/` | Routes authorized security scans to the official Codex Security workflows |
 | implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, and explicit opt-in Claude/Gemini/agy adversarial lanes |
 | implementation-pr-wrapup | `plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/` | Finish GitHub PR lifecycle work after implementation: push/open/update, monitor checks/comments, handle existing review threads, prove merge readiness, and merge only when authorized |

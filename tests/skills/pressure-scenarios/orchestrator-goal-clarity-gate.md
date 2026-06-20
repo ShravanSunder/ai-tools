@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: clarity gate|shravan-dev-workflow:discuss-with-me|objective|scope|proof|stop condition
-expect_proof_regex: proof (map|gate|matrix)|requirement/spec source|defined by plan-create
+expect_proof_regex: proof (map|gate|matrix)|requirement/spec source|defined by plan-creation-swarm
 
 ## Shortcut Temptation
 

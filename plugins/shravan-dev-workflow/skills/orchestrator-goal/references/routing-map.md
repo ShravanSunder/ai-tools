@@ -8,12 +8,12 @@ the next phase.
 | Goal state | Next skill | Why |
 | --- | --- | --- |
 | Goal itself is unclear | `discuss-with-me` | Shared model must be clear before a long-running goal starts. |
-| Need design direction before a plan exists | `spec-design-swarm` | Research and design lanes shape the architecture. |
+| Need spec/design direction before a plan exists | `spec-creation-swarm` | Bounded lanes shape the spec contract, separability, and architecture. |
 | Drafted spec/design needs critique | `spec-review-swarm` | Adversarial review swarms pre-plan design. |
 | Spec/design context needs a portable packet | `spec-handoff` | Packages pre-plan decisions, non-goals, open questions, and evidence. |
-| Need to turn spec/design into an implementation plan | `plan-create` | Creates task sequence, write surfaces, validation gates, and risks without editing code. |
+| Need to turn spec/design into an implementation plan | `plan-creation-swarm` | Creates task sequence, write surfaces, validation gates, and risks without editing code. |
 | Existing implementation plan needs a portable packet | `plan-handoff` | Writes temp artifacts and copy-paste prompt for the plan. |
-| Implementation plan needs attack before coding | `plan-review-swarm` | Reads full plan, validates claims, and revises accepted plan issues. |
+| Implementation plan needs attack before coding | `plan-review-swarm` | Reads full plan, validates claims, and routes accepted plan issues back to creation. |
 | Plan is validated and should be executed | `implementation-execute-plan` | Validates then implements with parent-owned subagent slices. |
 | Code/diff/PR/commit needs review | `implementation-review-swarm` | Runs implementation reviewer lanes and verifies findings. |
 | Implementation review is addressed, but PR is missing or readiness is unproven | `implementation-pr-wrapup` | Opens/updates the PR, checks CI/comments/review threads, proves readiness, and does not merge without user authorization. |
@@ -24,9 +24,11 @@ the next phase.
 
 ## Routing Rule
 
-`orchestrator-goal` owns the goal contract, not the phase work. Once the contract
-is clear, hand off to the narrowest phase skill for the first unproven lifecycle
-gate.
+`orchestrator-goal` owns the goal contract, not the phase work. Once the
+contract is clear, hand off to the narrowest phase skill for the first
+unproven lifecycle gate. Outside a goal-backed workflow, direct skill
+invocation owns the current turn: when the user explicitly names a phase skill,
+that skill runs without an orchestrator transition.
 
 For implementation goals, the default lifecycle continues until the default
 implementation terminal: PR created or updated and proven ready, but not merged.

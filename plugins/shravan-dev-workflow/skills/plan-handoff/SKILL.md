@@ -14,7 +14,7 @@ transferable, not that the plan is approved or implemented.
 
 - Use only when an implementation plan or plan artifact exists.
 - If the source is spec/design context without an implementation plan, use
-  `spec-handoff` for portability or `plan-create` to write the plan.
+  `spec-handoff` for portability or `plan-creation-swarm` to write the plan.
 - If the source is branch, diff, changed files, commits, validation, or blocker
   evidence, use `implementation-handoff`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
@@ -34,7 +34,7 @@ transferable, not that the plan is approved or implemented.
 1. Resolve the repo root with `git rev-parse --show-toplevel` when possible.
 2. Resolve the source plan artifact or plan packet.
    - If no implementation plan exists, route to `spec-handoff` or
-     `plan-create` instead of pretending a plan exists.
+     `plan-creation-swarm` instead of pretending a plan exists.
 3. If a source file exists, count lines and read the whole file in chunks before summarizing.
 4. Inspect only the secondary code/docs needed to make the handoff grounded.
 5. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.

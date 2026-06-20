@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Creation Swarm"
+  short_description: "Create specs with bounded lanes"
+  default_prompt: "Use spec-creation-swarm to create this spec with bounded subagents before writing an implementation plan."

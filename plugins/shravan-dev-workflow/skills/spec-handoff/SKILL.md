@@ -16,9 +16,9 @@ next phase is complete.
 - Package decisions, non-goals, open questions, source evidence, contracts,
   tradeoffs, security context, and proof expectations.
 - Always name proof expectations in the handoff response: validation strategy,
-  proof assumptions, explicit deferrals to `plan-create`, or open proof gaps.
+  proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps.
 - Preserve uncertainty. Do not hide open questions to make the packet feel done.
-- Do not create an implementation plan here. Use `plan-create` for that.
+- Do not create an implementation plan here. Use `plan-creation-swarm` for that.
 - Do not review the spec here. Use `spec-review-swarm` for adversarial review.
 - Do not package code, branch, diff, commits, or test state. Use
   `implementation-handoff` when implementation state exists.
@@ -45,7 +45,7 @@ next phase is complete.
    - decisions and non-goals
    - open questions
    - proof expectations or proof gaps
-   - recommended next skill: usually `plan-create`, `spec-review-swarm`, or
+   - recommended next skill: usually `plan-creation-swarm`, `spec-review-swarm`, or
      `docs-maintain`
    - full clickable artifact links (absolute path + line) for handoff artifacts
      the human is expected to open
@@ -59,7 +59,7 @@ next phase is complete.
 - Tradeoffs and who pays their cost
 - Security context or reason it is not security-sensitive
 - Proof expectations: validation strategy, proof assumptions, explicit
-  deferrals to `plan-create`, or open proof gaps
+  deferrals to `plan-creation-swarm`, or open proof gaps
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent

@@ -28,8 +28,8 @@ places where phase changes can happen.
 
 $shravan-dev-workflow:orchestrator-goal
 
-Set up the workflow so `spec-design-swarm`, `spec-review-swarm`,
-`plan-create`, `plan-review-swarm`, and `implementation-execute-plan` can each
+Set up the workflow so `spec-creation-swarm`, `spec-review-swarm`,
+`plan-creation-swarm`, `plan-review-swarm`, and `implementation-execute-plan` can each
 advance the goal state themselves after they finish. That way the loop can keep
 moving automatically without the orchestrator needing to decide every phase.
 Keep the design lightweight and do not add extra audit machinery.
