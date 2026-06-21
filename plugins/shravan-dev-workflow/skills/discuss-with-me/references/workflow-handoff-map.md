@@ -17,7 +17,7 @@ Stay in `discuss-with-me` when the next useful output is:
 
 ```text
 new design needs research/subagents
-  -> spec-design-swarm
+  -> spec-creation-swarm
 
 source gathering, prior-art comparison, current docs/web research, saved-reader
 research, or memory/session-log mining is needed before the decision can be made
@@ -30,7 +30,7 @@ spec/design context should be packaged for another agent/session
   -> spec-handoff
 
 implementation plan needs to be authored from spec/design
-  -> plan-create
+  -> plan-creation-swarm
 
 plan needs read-only validation
   -> plan-review-swarm

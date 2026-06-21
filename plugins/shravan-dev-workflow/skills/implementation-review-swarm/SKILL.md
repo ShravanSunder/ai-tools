@@ -29,7 +29,13 @@ review packet
 - Implementation-review lanes use high or xhigh reasoning effort according to
   change size, risk, and review depth. Security-sensitive, cross-module,
   plan-backed, or pre-merge reviews should use xhigh.
-- Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
+- Treat all reviewer output as raw candidate findings. Verify findings against
+  the repository before presenting them as accepted.
+- When a shortcut or missing artifact prevents dispatching lanes in the current
+  run, still name the substantial-lane packet shape: bounded question, decision
+  target, source-of-truth inputs, inspect list, non-goals, contradiction
+  handling, security context, output contract, completion receipt, and parent
+  verification.
 - After review, receive findings rigorously: read, understand, verify against
   codebase reality, evaluate, then route accepted findings to the owning
   workflow.
@@ -204,7 +210,9 @@ belongs to `implementation-pr-wrapup`.
 
 ## Progressive Disclosure
 
-- Load `references/reviewer-prompts.md` before dispatching reviewers or writing a copy-paste review prompt.
+- Load `../../references/lane-contract.md` and
+  `references/reviewer-prompts.md` before dispatching reviewers or writing a
+  copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../../references/review-reception.md` before addressing accepted
   findings from this review. Use the route-back rule unless a tiny

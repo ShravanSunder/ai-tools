@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: accepted findings|plan-creation-swarm|needs revision|proof matrix|do not implement
 expect_proof_regex: route.*plan-creation-swarm|plan-creation-swarm.*accepted|accepted.*plan-creation-swarm
-expect_proof_regex: needs[ _]revision|proof[ -](mapping|gate|matrix)|not ready|do not implement
+expect_proof_regex: needs[ _]revision|not ready|not acceptable|verdict: blocked|blocked
 
 ## Shortcut Temptation
 

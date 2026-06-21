@@ -1,10 +1,26 @@
 # Reviewer Prompts
 
-These prompts are inputs for read-only reviewer lanes. Codex subagents are the normal backend, but the same lane contracts can be sent to another requested reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports candidate findings. The parent session is the reducer.
+These prompts are inputs for read-only reviewer lanes. Codex subagents are the
+normal backend, but the same lane contracts can be sent to another requested
+reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports
+candidate findings. The parent session is the reducer.
 
-## Common Contract
+Consume `../../references/lane-contract.md` as the shared lane packet contract.
+This file only adds implementation-review overlays:
+high/xhigh read-only review expectations, implementation proof review,
+security/trust-boundary review, and parent-verified findings. It does not
+authorize implementation.
 
-Use this common contract at the end of every reviewer prompt:
+For substantial implementation-review swarms, the parent preserves an
+inspectable artifact trail in the existing review workflow home. If review
+artifacts live beside the source plan, PR, or implementation workflow instead,
+the parent ledger must point to that source workflow and to each parent-written
+lane artifact path. Lane outputs are candidate findings; only parent
+verification can accept, reject, contest, defer, or leave them open.
+
+## Reviewer Prompt Suffix
+
+Use this suffix at the end of every reviewer prompt:
 
 ```text
 You are a read-only reviewer. Do not edit files, run formatters, stage changes,
@@ -13,7 +29,8 @@ commit, or apply patches.
 Reasoning effort: <high | xhigh>
 
 Review the provided scope against the intent and constraints. Return only
-findings that are grounded in the repository, diff, tests, or cited plan text.
+candidate findings that are grounded in the repository, diff, tests, or cited
+plan text.
 
 Do not trust implementation summaries, test claims, previous agent reports, or
 other reviewer output. Verify by reading the actual artifacts in scope.
@@ -28,6 +45,9 @@ For each finding use this shape:
 - confidence: high | medium | low
 
 If you have no high-confidence findings, say "No findings." Do not pad.
+Return a completion receipt with source anchors and a proposed artifact path.
+Do not write files. Do not mark findings accepted; parent verification owns
+accepted truth.
 ```
 
 ## Shared Review Packet Template
@@ -38,8 +58,20 @@ Give every reviewer this same curated packet. Do not substitute the parent sessi
 Mode:
 <implementation | diff | pr | commit | files | adversarial>
 
+Role / mode:
+read-only implementation-review lane
+
+Edit boundary:
+read-only
+
 Review scope:
 <diff command, PR number, commit range, or file list>
+
+Bounded question:
+<the one review question this lane answers>
+
+Decision target:
+<verdict, finding class, proof gate, or readiness decision this lane informs>
 
 Git range:
 base_sha: <sha or "not applicable">
@@ -54,9 +86,15 @@ Intent:
 Constraints:
 <repo instructions, product constraints, compatibility rules, user preferences>
 
-Threat model / security context:
-<changed attack surface, sensitive data, privileged actions, trust boundaries,
-security validation already run, proof gaps, or "not security-sensitive">
+security context: <applicable | not applicable>
+- If not applicable: <short reason>
+- If applicable: <pointer to parent security context plus lane deltas, or
+  changed attack surface/assets/entry points/untrusted inputs/trust boundaries/
+  sensitive data/privileged actions/security non-goals/security validation
+  already run/proof gaps>
+- Forbidden broadening: no filesystem, network, subprocess, package-script, CI,
+  MCP, plugin, agent, external-model, auth, or secret-boundary broadening beyond
+  the reviewed scope.
 
 Implementation proof:
 <requirements or plan items claimed complete, commands and exit codes,
@@ -68,10 +106,24 @@ Source-of-truth inputs:
 Focus:
 <requested focus areas, or "full review">
 
+Inspect:
+- <path, diff, test output, plan section, or command evidence>: <why>
+
+Non-goals:
+- Do not edit files, broaden the review scope, decide final verdict, or accept
+  findings as truth.
+
+Contradiction handling:
+- Report conflicts with source artifacts, live repo evidence, proof claims, or
+  sibling-reviewer output; the parent reducer resolves them.
+
 Output contract:
-Return findings only. Do not edit files. For each finding include severity,
-evidence, failure scenario, smallest fix, proof/test, and confidence.
-Return a completion receipt: answered | blocked, with source anchors.
+Return candidate findings only. Do not edit files. For each finding include
+severity, evidence, failure scenario, smallest fix, proof/test, and confidence.
+Return a proposed artifact path and candidate lane-file content, or
+"chat-only/no-files exception: <reason>".
+Return a completion receipt: answered | blocked, with source anchors and
+proposed artifact path. The parent writes lane files for read-only reviewers.
 ```
 
 ## Spec Compliance Reviewer
@@ -261,6 +313,8 @@ Also report:
 - unavailable reviewers or failed counsel inputs
 - decision-relevant open questions
 - candidate counts when they help explain the verdict
+- parent ledger path or source-workflow pointer for substantial review swarms
+- artifact path for each lane whose candidate findings were considered
 
 Verdict values:
 - ready: no accepted blocker/important findings and no decision-relevant open questions

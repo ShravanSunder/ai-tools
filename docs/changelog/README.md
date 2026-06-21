@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-21 Shravan Dev Workflow Swarm Lane Contracts](2026-06-21-shravan-dev-workflow-swarm-lane-contracts.md)
 - [2026-06-20 Shravan Dev Workflow Lane Packets](2026-06-20-shravan-dev-workflow-lane-packets.md)
 - [2026-06-20 Shravan Dev Workflow Creation Swarms](2026-06-20-shravan-dev-workflow-creation-swarms.md)
 - [2026-06-18 Local Monitoring and PR API Budget](2026-06-18-local-monitoring-pr-api-budget.md)

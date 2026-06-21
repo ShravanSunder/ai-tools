@@ -36,7 +36,7 @@ Synthesis:
 - unresolved:
 
 Recommended Next Workflow:
-<discuss-with-me | spec-design-swarm | plan-create | review | docs-maintain>
+<discuss-with-me | spec-creation-swarm | plan-creation-swarm | spec-review-swarm | plan-review-swarm | implementation-review-swarm | docs-maintain>
 ```
 
 Always keep raw lane notes or copy-paste prompts in the same tmp folder when

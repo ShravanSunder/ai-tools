@@ -117,7 +117,10 @@ Use `research-swarm` when the next step is to gather evidence: local code/docs,
 sibling repos, DeepWiki-style repository research, current web/docs, Reader
 sources, memory, or session logs. It frames bounded research questions, routes
 source-specific lanes, labels claim quality, and writes tmp research ledgers for
-substantial runs.
+substantial runs. Substantial swarm lanes use explicit packet contracts with
+source anchors, security context, candidate-evidence labels, and completion
+receipts; parent ledgers reduce lane evidence before anything becomes accepted
+truth.
 
 Use `orchestrator-goal` when the objective is long-running and already clear
 enough to become a verifiable Codex or Claude `/goal` contract. If the goal is

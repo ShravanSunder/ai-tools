@@ -76,7 +76,7 @@ user's call, not yours.
 - Use lightweight intent handles: `reflect-back`, `grill-me`, `steelman`, `stress-test`, `assumption-check`, `boundary-check`, `source-of-truth`, and `reconverge`.
 - When multiple real branches exist, steelman the strongest competing path before converging.
 - Do not accept "whatever you think", "just confirm my read", or "if you understand, keep going" as convergence while a material branch remains. If the user dismisses the forcing question, restate the recommended default as the pending decision and ask for explicit confirmation of that default; dismissal is not consent.
-- Do not hand off to another workflow (`spec-design-swarm`, `plan-create`, review swarms, `orchestrator-goal`) until the forcing question is answered or the user explicitly overrides. Post the closeout block before handing off: the next workflow starts from the closeout, not from scattered conversation.
+- Do not hand off to another workflow (`spec-creation-swarm`, `plan-creation-swarm`, review swarms, `orchestrator-goal`) until the forcing question is answered or the user explicitly overrides. Post the closeout block before handing off: the next workflow starts from the closeout, not from scattered conversation.
 - If this skill's text is not loadable in-session, load `SKILL.md` from disk and follow it fully; do not improvise a lighter version.
 - Keep uncertainty visible with a short confidence note when the model is still forming.
 - Use `tui-presentation` when the scoped map needs a diagram, decision tree, or multi-section synthesis.
@@ -112,11 +112,11 @@ Do not use as the primary workflow for:
 - security scans or threat models: use `ops-security-review`
 - code/diff review: use `implementation-review-swarm`
 - adversarial plan/spec review: use `plan-review-swarm` or `spec-review-swarm`
-- broad design research with subagents: use `spec-design-swarm`
+- broad design creation with subagents: use `spec-creation-swarm`
 - broad information gathering, prior-art research, current web/docs research,
   memory/session mining, or evidence ledgers: use `research-swarm`
 - spec/design portability: use `spec-handoff`
-- implementation plan creation: use `plan-create`
+- implementation plan creation: use `plan-creation-swarm`
 - docs editing: use `docs-maintain`
 - skill audits: use `skill-audit`
 - commit, push, PR, or merge work: use the execution/publishing workflow requested by the user

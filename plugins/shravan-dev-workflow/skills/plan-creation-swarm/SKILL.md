@@ -31,10 +31,21 @@ gates, and evidence requirements.
   lanes can run independently. Plan-creation lanes use medium or high reasoning
   effort according to task complexity, latency cost, and risk. For tiny plans,
   name the smaller lane set used.
-- Give each subagent a self-contained lane packet: exact planning question,
-  source-of-truth inputs, files/docs to inspect, lane-specific focus, output
-  contract, and completion receipt. The parent reduces lane outputs into the
-  final plan.
+- Reject requests for low-effort planning lanes as a planning-quality shortcut.
+  In the live response or plan artifact, name the lane reasoning-effort policy:
+  medium for bounded/simple planning lanes, high for proof-heavy, security,
+  reliability, cross-module, or complex sequencing lanes.
+- Give each subagent a self-contained lane packet: role / mode, read-only or
+  allowed write scope, exact planning question, source-of-truth inputs,
+  files/docs to inspect, non-goals, lane-specific checklist, output schema,
+  uncertainty handling, confidence, the exact field
+  `security context: applicable | not applicable`, and completion receipt.
+  Lane outputs are candidate evidence until the parent verifies source anchors
+  and reduces them into the final plan.
+- For substantial plan creation, create a parent plan ledger and per-lane
+  artifacts unless the user asked for chat-only/no-files, the work is a single
+  tiny local lane, or the tool surface cannot write artifacts. Record the
+  exception in the completion receipt.
 - Include task sequence, dependency graph, parallel work lanes, disjoint write
   scopes, integration gates, validation gates, rollout or rollback/recovery
   notes, risks, and open questions.
@@ -51,7 +62,8 @@ gates, and evidence requirements.
 - Add the proof modalities required by the spec and product surface: automated
   tests, manual UX validation, visual evidence for visual systems, data or DB
   state checks, logs, traces, metrics, OTel queries, release artifacts, or
-  operational smoke proof.
+  operational smoke proof. Name these as concrete validation modalities when
+  planning or rejecting a shortcut that tries to collapse proof to one check.
 - Use TDD for behavior changes when feasible: identify or add the smallest
   failing proof tied to a requirement, watch it fail for the expected reason,
   implement, then make it pass and climb the proof pyramid only as needed.
@@ -65,6 +77,12 @@ gates, and evidence requirements.
 - Capture security assumptions when the plan touches auth, secrets, parsing,
   filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents,
   or external services.
+- When rejecting a shortcut that skips security or proof detail, still name
+  security assumptions or security context as part of the eventual plan.
+- When a shortcut prevents dispatching lanes in the current run, still name the
+  intended lane packet shape, medium/high reasoning effort assignment,
+  candidate evidence rule, parent synthesis rule, `implementation-plan.md`,
+  `plan-ledger.md`, and `lanes/<lane-name>.md` in the response.
 - Do not review the plan here. Use `plan-review-swarm`.
 - Do not execute the plan here. Use `implementation-execute-plan` after the plan
   exists and is validated.
@@ -100,7 +118,7 @@ gates, and evidence requirements.
    - rollback/recovery and risk notes
    - open questions
 5. Route next:
-   - `plan-review-swarm` when the plan needs adversarial review
+   - `plan-review-swarm` when the plan needs review
    - `plan-handoff` when another agent should consume the plan
    - `implementation-execute-plan` only after the written plan exists and is
      ready to validate against the repo
@@ -124,8 +142,9 @@ For substantial plans, dispatch bounded lanes where tool support exists:
 Subagents return evidence and candidate plan structure. The parent verifies
 claims and owns the final plan.
 
-Load `references/lane-packets.md` before dispatching planning lanes or writing
-copy-paste prompts for plan-creation subagents.
+Load `../../references/lane-contract.md` and `references/lane-packets.md`
+before dispatching planning lanes or writing copy-paste prompts for
+plan-creation subagents.
 
 ## Required Execution Diagram
 
@@ -165,9 +184,11 @@ Return:
   or compact proof line for tiny plans
 - task sequence
 - execution DAG and parallel work lanes, or a serial-work rationale
+- lane reasoning-effort assignments: medium/high by complexity and risk
 - write surfaces
 - validation gates
 - risks and rollback/recovery notes
+- security assumptions or security context when sensitive surfaces are touched
 - open questions
 - recommended next skill
 - full clickable artifact links (absolute path + line) for any plan artifacts

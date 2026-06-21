@@ -48,6 +48,14 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 
 When auditing `shravan-dev-workflow`, check `../../references/source-inspirations.md` for the concise plugin-level map of admired skills and borrowed mechanics.
 
+When auditing swarm lane packet duplication, also check
+`../../references/lane-contract.md` if it exists. Keep shared lane contracts to
+universal packet anatomy, security context, source anchors, completion
+receipts, candidate-evidence invariants, parent reducer invariants, and
+artifact state labels. Keep phase-specific lane names, review verdicts,
+execution statuses, route-backs, examples, and proof modality details in
+skill-local playbooks.
+
 Do not add per-skill provenance docs unless a skill needs a task-specific reference file for progressive disclosure.
 
 ## Failure Shields

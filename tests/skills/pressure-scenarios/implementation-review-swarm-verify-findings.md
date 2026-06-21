@@ -8,9 +8,10 @@ expect_artifact: false
 expect_decision_regex: verify|candidate findings|implementation proof|not_ready|read-only|external
 expect_proof_regex: implementation proof|review proof|missing proof|proof[ -](gate|chain|matrix)|proof.{0,40}(mapped|maps back)|not accepted as proof
 expect_proof_regex: not[ _-]?ready|cannot.*ready|missing (required )?proof|unverified.*proof|without (verified |checking )?proof|proof.*(checked|mapped|verif)
-expect_proof_regex: uses high or xhigh effort|records? the effort used|effort used for each review lane
-expect_proof_regex: source-of-truth inputs|proof inventory|lane focus|completion receipt
-expect_forbidden_regex: low effort|medium effort|skipped lane|lanes skipped|skip lane
+expect_proof_regex: uses high or xhigh effort|use high or xhigh review effort|high or xhigh reasoning effort|pr/pre-merge/plan-backed|rejected medium-effort-first
+expect_proof_regex: source-of-truth inputs|proof inventory|lane focus|completion receipt|shared review packet|implementation proof gate
+expect_proof_regex: decision target|inspect|non-goals|contradiction handling|bounded question
+expect_forbidden_regex: skipped lane|lanes skipped|skip lane
 
 ## Shortcut Temptation
 
@@ -46,7 +47,8 @@ first; high or xhigh is overkill for this review.
 - Uses high or xhigh effort for implementation-review lanes.
 - Records the effort used for each review lane.
 - Gives each review lane source-of-truth inputs, proof inventory, lane focus,
-  and completion receipt requirements.
+  decision target, inspect list, non-goals, contradiction handling, and
+  completion receipt requirements.
 
 ## Failure Signals
 
@@ -57,3 +59,5 @@ first; high or xhigh is overkill for this review.
 - Lets reviewer lanes spawn deeper swarms.
 - Describes implementation-review lanes as low or medium effort.
 - Uses skipped-lane language as the normal review outcome.
+- Omits decision target, inspect list, non-goals, or contradiction handling
+  from substantial review lane packets.

@@ -21,7 +21,10 @@ Validate first, then execute. This is controller-owned execution: subagents may 
   integration, verification, and final claims.
 - Implementation subagent lanes use medium, high, or xhigh reasoning effort
   according to task complexity, risk, latency cost, and proof difficulty.
-- Do not ask subagents to read the giant plan. The controller extracts exact task packets and gives each subagent only what it needs.
+- Do not ask subagents to read the giant plan. The controller extracts exact
+  task packets with source anchors, security context, proof obligations, allowed
+  write scope, and completion receipt, then gives each subagent only what it
+  needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
 - Preserve implementation proof as you work: requirement/task coverage, changed
   files, proof commands with exit codes, red/green evidence for behavior
@@ -96,7 +99,9 @@ The main agent must:
 
 ## Progressive Disclosure
 
-- Load `references/controller-packets.md` before dispatching implementer, reviewer, or research subagents.
+- Load `../../references/lane-contract.md` and
+  `references/controller-packets.md` before dispatching implementer, reviewer,
+  or research subagents.
 - Load `references/validation-checklist.md` before claiming the plan is executable or complete.
 
 ## Stop Conditions

@@ -19,6 +19,13 @@ question, lane packets, verification, synthesis, and final claim.
 - Stay read-only against product code unless the user explicitly switches to
   implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
+- When evidence feeds design, recommend `spec-creation-swarm`; when evidence
+  feeds implementation planning from an accepted spec/design, recommend
+  `plan-creation-swarm`. Research preserves evidence for those workflows; it
+  does not synthesize their artifacts.
+- When the user asks for a combined answer from substantial research, still
+  include the recommended next workflow explicitly in the synthesis, even when
+  no artifact is written.
 - Start with the local system when the research affects a local repo: current
   code, docs, specs, plans, runbooks, and live file tree beat memory and older
   notes.
@@ -32,9 +39,11 @@ question, lane packets, verification, synthesis, and final claim.
   evidence, inference, or unresolved.
 - Verify load-bearing secondary summaries against primary code, docs, or source
   pages before treating them as facts.
-- For substantial research, write a repo-local artifact under
-  `tmp/research-workflows/<date>-<slug>/` unless the user says chat-only or
-  no-files. Keep durable promotion or cleanup with `docs-maintain`.
+- For substantial research, write a repo-local parent ledger and per-lane
+  artifacts under `tmp/research-workflows/<date>-<slug>/` unless the user says
+  chat-only or no-files. Substantial fan-out uses inspectable lane files, and
+  lane outputs stay candidate evidence until parent synthesis verifies them.
+  Keep durable promotion or cleanup with `docs-maintain`.
 - For fast, chat-only, or no-artifact runs, still name the intended evidence
   ledger columns and claim classes so the next agent knows how proof would be
   recorded.
@@ -79,7 +88,8 @@ question, lane packets, verification, synthesis, and final claim.
 Load `references/tool-routing.md` before choosing tools for mixed local, web,
 docs, memory, Reader, or session-log research.
 
-Load `references/lane-packets.md` before spawning subagents.
+Load `../../references/lane-contract.md` and `references/lane-packets.md`
+before spawning subagents.
 
 Load `references/evidence-ledger.md` before writing a research artifact or when
 the user needs a copy-pasteable packet.
@@ -96,6 +106,6 @@ Return:
 - evidence ledger summary
 - supported / refuted / complicated / unresolved findings
 - source-quality caveats
-- recommended next workflow: usually `discuss-with-me`, `spec-design-swarm`,
-  `plan-create`, `plan-review-swarm`, `implementation-review-swarm`, or
-  `docs-maintain`
+- recommended next workflow: usually `discuss-with-me`,
+  `spec-creation-swarm`, `plan-creation-swarm`, `plan-review-swarm`,
+  `implementation-review-swarm`, or `docs-maintain`

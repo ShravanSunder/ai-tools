@@ -47,8 +47,16 @@ fuzzy goal or design question
   or crux-decision lanes. For tiny local decisions, name the smaller lane set
   used.
 - Give every subagent a bounded packet with a concrete question, exact source
-  inputs, lane-specific focus, and expected evidence. Broad repo audits use an
-  explicit broad-audit packet.
+  inputs, source-of-truth inputs, lane-specific focus, security context,
+  expected evidence, and completion receipt. Broad repo audits use an explicit
+  broad-audit packet.
+- When a shortcut prevents dispatching lanes in the current run, still name the
+  intended lane packet shape, high/xhigh reasoning effort, candidate evidence,
+  source anchors, completion receipt, `swarm-ledger.md`,
+  `lanes/<lane-name>.md`, parent verification and synthesis rule, and route to
+  `spec-review-swarm` for drafted-spec critique in the response.
+- Treat lane outputs as candidate evidence until the parent reducer verifies
+  source anchors and synthesizes accepted spec content.
 - The parent must read key files returned by explorer lanes before recommending a design.
 - Keep sequencing out of the spec. Do not include worker order, task order,
   implementation phases, execution DAGs, exact test commands, or validation
@@ -58,7 +66,8 @@ fuzzy goal or design question
 - When asking a design question, include the current guess or recommended answer and why.
 - Produce explicit tradeoffs, not a single happy path.
 - Record security context when the design touches auth, secrets, parsing, filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents, or external services.
-- If substantial design/spec work is clear and the user did not ask for chat-only output, write a lane artifact by default.
+- If substantial design/spec work is clear and the user did not ask for
+  chat-only output, write a parent ledger and lane artifacts by default.
 - If the desired design/spec output is unclear, do not create files yet; use `discuss-with-me` or ask one material question first.
 - Design artifacts contain decisions and technical rationale, not process history. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
@@ -152,7 +161,8 @@ ownership map and explain why.
 
 ## Progressive Disclosure
 
-- Load `references/swarm-packets.md` before spawning design, research, or architecture subagents.
+- Load `../../references/lane-contract.md` and `references/swarm-packets.md`
+  before spawning design, research, or architecture subagents.
 - Load `references/discuss-with-me.md` when intent is unclear or design branches need user decisions.
 - Use `research-swarm` when the design depends on external prior art, current
   web/docs, DeepWiki-style repository research, saved-reader sources, memory,

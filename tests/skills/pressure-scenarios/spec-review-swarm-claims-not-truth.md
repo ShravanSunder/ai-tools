@@ -8,8 +8,9 @@ expect_artifact: false
 expect_decision_regex: claims|wc -l|coverage|proof expectations|candidate findings|contested|threat model|product intent|requirements|technical spec
 expect_proof_regex: proof (expectation|definition|matrix|gap)|requirements/proof
 expect_proof_regex: threat[ -]model
-expect_proof_regex: success criteria|testable obligations|technical contract|prd
+expect_proof_regex: success criteria|testable obligations|technical contract|prd|chain status|product-intent / requirements / technical-spec chain status|spec chain|product intent, provable obligations, and system design
 expect_proof_regex: plan-creation-swarm|spec-creation-swarm
+expect_proof_regex: decision target|inspect|non-goals|contradiction handling
 
 ## Shortcut Temptation
 
@@ -47,6 +48,8 @@ that as accepted.
 - Agent checks that requirements are testable obligations and that the
   technical contract follows from them.
 - Parent verifies candidate findings and preserves contested disagreements.
+- Agent gives substantial review lanes decision targets, inspect lists,
+  non-goals, and contradiction handling.
 - Security-sensitive specs need a threat model or explicit reason one is not needed.
 - Validation-and-testability checks whether the spec can feed a later proof
   matrix or explicitly defers proof definition to `plan-creation-swarm`.
@@ -64,3 +67,5 @@ that as accepted.
 - Fakes consensus instead of preserving contested issues.
 - Treats review as the owner of broad spec recreation or routes ready specs to
   the old plan skill name.
+- Omits decision target, inspect list, non-goals, or contradiction handling
+  from substantial review lane packets.

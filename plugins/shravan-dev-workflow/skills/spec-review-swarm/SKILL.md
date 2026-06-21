@@ -29,7 +29,14 @@ draft spec/design
 - Spec-review lanes use high or xhigh reasoning effort according to artifact
   complexity, security sensitivity, and decision risk.
 - Do not pass author confidence or previous agent praise as evidence.
-- Subagents and external models produce candidate findings only.
+- Subagents and external models produce candidate findings only, with source
+  anchors and completion receipts. Parent verification decides accepted,
+  contested, open, rejected, or deferred findings.
+- When a shortcut or missing artifact prevents dispatching lanes in the current
+  run, still name the substantial-lane packet shape: bounded question, decision
+  target, source-of-truth inputs, inspect list, non-goals, contradiction
+  handling, security context, output contract, completion receipt, and parent
+  verification.
 - Parent owns verification, synthesis, and final recommendations.
 - Use external Claude, Gemini, or `agy` only when explicitly requested.
 - Keep lane ownership clean. Do not edit another agent's lane file or put words in another reviewer voice.
@@ -46,6 +53,11 @@ draft spec/design
    - spec file
    - design doc
    - chat-only draft
+   - if no artifact or draft is available, block with the required review
+     surfaces instead of proceeding: product intent / PRD, testable
+     obligations, technical contract, proof expectations, security threat
+     model, and substantial-lane packet fields including bounded question,
+     decision target, inspect list, non-goals, and contradiction handling
 2. Establish coverage:
    - line count and chunks for files
    - packet files for handoffs
@@ -100,7 +112,9 @@ lanes used.
 
 ## Progressive Disclosure
 
-- Load `references/review-packet.md` before dispatching review lanes or writing a copy-paste prompt.
+- Load `../../references/lane-contract.md` and
+  `references/review-packet.md` before dispatching review lanes or writing a
+  copy-paste prompt.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.
 - Use `../../references/source-inspirations.md` when updating this skill or explaining source practices.
 

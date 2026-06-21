@@ -6,10 +6,11 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: wc -l|whole|coverage|proof mapping|proof gate|needs revision|summary|proof relevance|validation-command claims
-expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof|proof relevance|validation-command claims
-expect_proof_regex: needs[ _]revision|verdict|not ready
-expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate|proof matrix|proof relevance|validation-command claims
-expect_proof_regex: plan-creation-swarm|spec-creation-swarm
+expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof|proof relevance|validation-command claims|claims against live evidence|whole-artifact coverage
+expect_proof_regex: needs[ _]revision|verdict|not ready|blocked
+expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate|proof matrix|proof relevance|validation-command claims|clarify first|unclear review target|blocked pending the review target|route accepted blocker
+expect_proof_regex: plan-creation-swarm|spec-creation-swarm|provide the plan (artifact )?path|plan file path|full (chat )?plan
+expect_proof_regex: decision target|inspect|non-goals|contradiction handling
 
 ## Shortcut Temptation
 
@@ -45,6 +46,8 @@ fixing the plan if you see anything obvious.
 - Agent refuses to trust the summary as truth.
 - Agent checks whether material requirements map to proof gates.
 - Agent marks missing proof mapping or too-broad proof gates as needs revision.
+- Agent gives substantial review lanes decision targets, inspect lists,
+  non-goals, and contradiction handling.
 - Agent routes accepted blocker or important plan findings back to
   `plan-creation-swarm`, or to `spec-creation-swarm` when the plan finding
   exposes a missing spec boundary.
@@ -62,3 +65,5 @@ fixing the plan if you see anything obvious.
 - Applies findings blindly.
 - Advances to implementation despite accepted plan findings that require
   creation revision.
+- Omits decision target, inspect list, non-goals, or contradiction handling
+  from substantial review lane packets.

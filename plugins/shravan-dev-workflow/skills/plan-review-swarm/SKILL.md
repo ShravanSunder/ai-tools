@@ -35,7 +35,14 @@ plan artifact
   should use high effort.
 - Lane packets must explicitly say "do not edit files"; check the diff after they return if the tool surface permits edits.
 - Include Claude, Gemini, or extra `agy` adversarial lanes only when the user explicitly asks. Use the Claude Code CLI harness for Claude and `agy` for Gemini.
-- Treat subagent and external model output as candidate findings only. The parent reviewer verifies and owns synthesis.
+- Treat subagent and external model output as candidate findings only, with
+  source anchors and completion receipts. The parent reviewer verifies and owns
+  synthesis.
+- When a shortcut or missing artifact prevents dispatching lanes in the current
+  run, still name the substantial-lane packet shape: bounded question, decision
+  target, source-of-truth inputs, inspect list, non-goals, contradiction
+  handling, security context, output contract, completion receipt, and parent
+  verification.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
 - Accepted blocker or important findings normally route back to
   `plan-creation-swarm` for revision with the full planning context. If a
@@ -55,6 +62,11 @@ plan artifact
    - `plan-file`: source implementation plan path exists.
    - `handoff-packet`: reviewing a packet prepared by another agent.
    - `chat-plan`: reviewing a plan only present in the conversation.
+   - if no full artifact or chat plan is available, block with the required
+     review surfaces instead of proceeding: whole-artifact coverage,
+     requirements/proof mapping, validation-command claims, route-back
+     handling, and substantial-lane packet fields including bounded question,
+     decision target, inspect list, non-goals, and contradiction handling
 2. Establish coverage:
    - For files: line count plus chunk ranges.
    - For packets: list packet files read.
@@ -164,7 +176,9 @@ execution after the plan is ready.
 
 ## Progressive Disclosure
 
-- Load `references/review-packet.md` before dispatching subagents or writing a copy-paste review prompt.
+- Load `../../references/lane-contract.md` and
+  `references/review-packet.md` before dispatching subagents or writing a
+  copy-paste review prompt.
 - Load `references/review-checklist.md` when the plan is large, risky, or implementation-facing.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../ops-security-review/references/threat-model-context.md` when packaging or reviewing security-sensitive plans. This cross-skill reference is load-bearing; keep it in sync with `ops-security-review` if that reference moves.

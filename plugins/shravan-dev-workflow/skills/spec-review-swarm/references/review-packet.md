@@ -2,6 +2,18 @@
 
 Use this for subagent prompts or copy-paste prompts.
 
+Consume `../../references/lane-contract.md` as the shared lane packet contract.
+This file only adds spec-review lane overlays:
+adversarial critique, spec/design verdicts, route-back semantics, and
+proof-readiness checks remain owned here.
+
+For substantial review swarms, the parent preserves an inspectable artifact
+trail in the existing review workflow home. If review artifacts live beside the
+source workflow instead, the parent ledger must point to that source workflow
+and to each parent-written lane artifact path. Lane files are candidate
+findings; the parent ledger is the reducer synthesis; the reviewed spec/design
+remains the accepted phase artifact only after parent verification.
+
 ```text
 You are an adversarial spec/design review swarmer.
 Review only; do not implement. Do not edit files.
@@ -12,6 +24,13 @@ Target artifact: <path or chat-only>
 Coverage from controller: <line count + chunk ranges, or packet files>
 Lane: <product-intent | requirements-testability | contract-and-scope | architecture-boundaries | security-threat-model | validation-and-testability | planning-readiness | adversarial-crux>
 Reasoning effort: high | xhigh
+Decision target: <spec readiness decision, finding class, proof expectation, or route-back decision this lane informs>
+
+Security context: <applicable | not applicable>
+- If not applicable: <short reason>
+- If applicable: <pointer to parent security context plus lane deltas, or
+  assets/entry points/untrusted inputs/trust boundaries/sensitive data/
+  privileged actions/security non-goals>
 
 Claim / artifact / contract:
 - Claim: <what the spec says>
@@ -27,19 +46,35 @@ Relevant files/docs:
 Focus:
 <lane-specific focus>
 
+Inspect:
+- <spec section, code path, source artifact, command output, or docs>: <why>
+
+Non-goals:
+- Do not edit files, implement code, decide accepted findings, or route the
+  final workflow state.
+
+Contradiction handling:
+- Report conflicts with source artifacts, live repo evidence, sibling-lane
+  findings, or user decisions; the parent reducer resolves them.
+
 Return:
 - lane name
 - verdict: ready | needs revision | blocked | decision-needed
-- accepted candidate findings
+- candidate findings only, grouped by blocker | important | question | nit
 - contested tradeoffs
 - open questions
 - evidence paths or sections
 - smallest spec/plan edit
 - proof expectation or validation evidence needed by a later plan
-- completion receipt: answered | blocked, with source anchors
+- proposed artifact path and candidate lane-file content, or
+  "chat-only/no-files exception: <reason>"
+- completion receipt: answered | blocked, with source anchors and proposed
+  artifact path; parent writes lane files for read-only lanes
 - confidence: high | medium | low
 
 Do not include speculative findings without a concrete failure path.
+Do not mark findings accepted. Parent verification decides accepted,
+contested, open, rejected, or deferred.
 ```
 
 ## Lane Overlays
