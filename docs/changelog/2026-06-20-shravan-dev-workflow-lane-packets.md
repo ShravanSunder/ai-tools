@@ -53,8 +53,8 @@ of relying on inherited session context:
   - `claude plugin validate .` passed.
   - `codex plugin list --marketplace ai-tools --available --json` succeeded
     and confirmed the live Codex marketplace still resolves
-    `shravan-dev-workflow` from `/Users/shravansunder/dev/ai-tools.agents-skill-work-sop`
-    at installed version `1.6.26`.
+    `shravan-dev-workflow` from a different local worktree at installed version
+    `1.6.26`.
 - Source sweeps:
   - `rg -n "adversarial-plan|assumption pressure|architecture pressure|proof owner|proof owners|skipped proof|skip proof|skipped lane|lanes skipped|skip lane" ...`
     returned only pressure-scenario forbidden-string checks and the unrelated
