@@ -133,7 +133,7 @@ evidence pointer and does not imply rerunning already-completed review cycles.
 
 Use `spec-creation-swarm` to create a design, architecture, or product spec
 before an implementation plan exists. It can use bounded explorer, security,
-architecture, and adversarial lanes, but the parent agent owns the synthesis.
+architecture, and risk/tradeoff lanes, but the parent agent owns the synthesis.
 Specs may contain product intent / PRD, requirements, and technical design in
 one artifact, but those layers stay distinct: product intent names who and why,
 requirements name testable obligations, and the technical spec names the system
@@ -159,13 +159,15 @@ sequence, dependency graph, parallel work lanes, write surfaces, validation
 gates, rollback or recovery notes, risks, and open questions. It preserves
 accepted product intent, requirements, and spec contracts as source context
 instead of redefining them. Non-trivial
-plans include a requirements/proof matrix; if proof
+plans include a requirements/proof matrix with source requirements, owning
+tasks, proof modalities, evidence sources, freshness guards, and proof layers;
+if proof
 cannot pass at the planned scope, the plan should split or replan before
 execution. Proof gates trace back to the spec's requirements and proof
 expectations, then use the testing pyramid and TDD shape: smallest useful
 red/green proof first, unit/integration/smoke/e2e/PR-release layers as required
-by risk, and no skipping lower layers merely because a higher layer exists.
-Goal-seeded matrix rows must keep proof owners and stale-proof guards through
+by risk, with lower layers kept explicit when higher layers exist.
+Goal-seeded matrix rows must keep evidence sources and freshness guards through
 planning, handoff, and execution.
 
 Use `plan-improve-repo` to audit a repo for high-leverage improvements and
@@ -187,20 +189,26 @@ CLI, machine, or future session. If no plan exists yet, use `spec-handoff` or
 Use `implementation-execute-plan` to validate and execute a written plan. It may
 coordinate bounded subagent slices and uses them whenever work is parallelizable
 into disjoint lanes, but the parent owns integration, verification,
-implementation proof, and completion claims.
+implementation proof, and completion claims. Worker packets cite exact plan
+tasks, requirement/proof rows, allowed write scopes, proof obligations, and
+completion receipts so subagent output can be reduced against the plan.
 
 Use `implementation-review-swarm` to review code, diffs, commits, PRs, or named
 files. Codex reviewer lanes are the default; Claude or Gemini/`agy` lanes are
 explicit opt-in external counsel. Reviewer outputs are candidates, not truth,
 and accepted findings are verified before edits. Implementation review verifies
-that proof maps back to requirements/spec/plan before a ready verdict. Accepted
+that proof maps back to requirements/spec/plan before a ready verdict. Reviewer
+packets include source-of-truth inputs, proof inventory, lane focus, and
+completion receipts so lanes produce different evidence instead of generic
+summaries. Accepted
 blocker/important findings normally route back to
 `implementation-execute-plan`.
 
 Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after
 implementation work exists: push/open/update the PR, monitor checks and
 comments, process existing review threads, prove merge readiness with fresh
-state, and merge only when user authorization exists. Fresh code-review
+state, and merge only when user authorization exists. This is a low-thinking
+workflow by default because state reads and gates carry the rigor. Fresh code-review
 discovery still belongs to `implementation-review-swarm`.
 
 Use `implementation-handoff` when real implementation state exists: branch,

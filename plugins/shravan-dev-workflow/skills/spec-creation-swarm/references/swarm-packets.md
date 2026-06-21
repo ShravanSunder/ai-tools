@@ -12,6 +12,9 @@ Repo: <absolute repo path>
 Question: <bounded question>
 Design stage: pre-plan design formation
 Parent needs: evidence, tradeoffs, and decision input
+Reasoning effort: high | xhigh
+Source-of-truth inputs:
+- <path, doc, log, issue, or code search>: <why this source constrains the lane>
 
 Inspect:
 - <path or docs query>: <why>
@@ -24,6 +27,7 @@ Return:
 - risks or hidden assumptions
 - security implications, if any
 - recommended next checks
+- completion receipt: answered | blocked, with source anchors
 - confidence: high | medium | low
 ```
 
@@ -39,15 +43,15 @@ Focus on:
 - tests and validation patterns
 - key files the parent must read before deciding
 
-Do not propose a design until you have cited the local files that constrain it.
+Design proposals should cite the local files that constrain them.
 ```
 
-## Architecture Pressure Lanes
+## Architecture Option Lanes
 
 Use one packet per stance.
 
 ```text
-Take this stance: <minimal-change | clean-boundary | pragmatic-balance>.
+Take this stance: <minimal-change | clean-boundary | pragmatic-balance | risk-and-tradeoff>.
 
 Argue for the strongest version of this approach. Name:
 - file/module boundaries

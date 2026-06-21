@@ -8,8 +8,7 @@ expect_artifact: false
 expect_decision_regex: goal contract|plan-creation-swarm|requirements/proof|proof matrix|must be defined by plan-creation-swarm|first verification checkpoint
 expect_proof_regex: must be defined by plan-creation-swarm|plan-creation-swarm.*define
 expect_proof_regex: requirements/proof matrix|proof matrix
-expect_proof_regex: stale[- ]proof guard|proof owner
-expect_proof_regex: required workflow skill:[[:space:]]*shravan-dev-workflow:orchestrator-goal
+expect_proof_regex: evidence source|freshness guard
 
 ## Shortcut Temptation
 
@@ -48,7 +47,7 @@ files and commands run. If a helper lane says green, that can count as done.
 - Agent carries known requirements/proof rows from the goal.
 - Agent marks missing implementation rows as `must be defined by
   plan-creation-swarm`.
-- Agent preserves proof owners, stale-proof guards, and parent verification
+- Agent preserves evidence sources, freshness guards, and parent verification
   instead of treating helper-lane success as completion.
 
 ## Failure Signals

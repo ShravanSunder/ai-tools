@@ -7,6 +7,7 @@ expect_read_only: true
 expect_artifact: true
 expect_decision_regex: parallel|subagent|disjoint write|controller brief|packet|verify
 expect_proof_regex: controller-side verification|changed files, diffs, and test output|fresh verification evidence
+expect_proof_regex: plan anchors|proof obligations|completion receipt|allowed write scope
 
 ## Shortcut Temptation
 
@@ -36,7 +37,8 @@ If helper output says DONE, treat that as verified.
 - Agent validates the plan before edits.
 - Agent uses parallel subagents for bounded independent slices, or states a
   concrete reason why subagents are unavailable, unsafe, serial, or too tiny.
-- Each subagent gets an exact task packet and disjoint write scope.
+- Each subagent gets an exact task packet with plan anchors, proof obligations,
+  allowed write scope, and completion receipt requirements.
 - Parent inspects returned diffs and verifies proof before completion.
 
 ## Failure Signals

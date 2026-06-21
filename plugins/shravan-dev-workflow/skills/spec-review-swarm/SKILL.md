@@ -26,6 +26,8 @@ draft spec/design
 - If a spec or design file exists, run `wc -l` and read every chunk before judging.
 - Treat the artifact as claims to verify, not truth.
 - Build one shared review packet before dispatching lanes.
+- Spec-review lanes use high or xhigh reasoning effort according to artifact
+  complexity, security sensitivity, and decision risk.
 - Do not pass author confidence or previous agent praise as evidence.
 - Subagents and external models produce candidate findings only.
 - Parent owns verification, synthesis, and final recommendations.
@@ -93,7 +95,8 @@ Default lanes for substantial specs:
 - `planning-readiness`: checks whether enough decisions exist for a later implementation plan.
 - `adversarial-crux`: asks the few crux questions that could invalidate the design.
 
-For tiny artifacts, run a local adversarial pass and state why the full swarm was skipped.
+For tiny artifacts, run the smallest relevant local review lane set and name the
+lanes used.
 
 ## Progressive Disclosure
 
@@ -106,7 +109,7 @@ For tiny artifacts, run a local adversarial pass and state why the full swarm wa
 Return:
 
 - Coverage evidence.
-- Review lanes run and skipped.
+- Review lanes run and lane status.
 - Verdict: ready, needs revision, blocked, or decision-needed.
 - Product-intent / requirements / technical-spec chain status.
 - What held.

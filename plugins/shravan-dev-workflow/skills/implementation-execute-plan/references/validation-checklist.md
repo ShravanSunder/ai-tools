@@ -14,11 +14,10 @@ Use this before execution and before completion claims.
 - Validation commands identified.
 - Requirements/proof matrix identified, or the plan explains why a compact
   proof line is sufficient.
-- Proof owners and stale-proof guards identified for non-trivial matrix rows.
+- Evidence sources and freshness guards identified for non-trivial matrix rows.
 - Required proof gates are sized so they can pass inside the approved scope; if
-  not, split or replan before editing. A skip reason must be a concrete
-  external blocker or a user-approved exception, never time pressure, task
-  size, confidence, or manual spot-checks.
+  not, split or replan before editing. Missing proof has either a concrete
+  external blocker, a user-approved exception, or a split/replan route.
 - Stop conditions considered.
 
 ## Before Dispatching Subagents
@@ -44,7 +43,7 @@ Use this before execution and before completion claims.
 
 - Re-read original plan requirements.
 - Re-read the requirements/proof matrix.
-- Confirm proof owners, stale-proof guards, and open proof gaps.
+- Confirm evidence sources, freshness guards, and open proof gaps.
 - Run targeted tests.
 - Run full relevant project validation when feasible.
 - Report command, exit code, and result.
@@ -54,5 +53,5 @@ Use this before execution and before completion claims.
   when applicable.
 - Separate fixed now, blockers, and follow-ups.
 - Report implementation proof: requirement/task coverage, changed files,
-  red/green evidence or exception, proof owners, stale-proof guards, skipped
-  proof layers, blockers, and proof split status.
+  red/green evidence or exception, evidence sources, freshness guards,
+  unsatisfied proof gates, blockers, and proof split status.

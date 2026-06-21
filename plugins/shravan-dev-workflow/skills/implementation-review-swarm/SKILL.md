@@ -26,6 +26,9 @@ review packet
 - The lane contract is not Codex-only: another agent system may back a bounded read-only lane when the user requests it, when the harness is already available, or when that backend is the point of the review.
 - Include Claude, Gemini, `agy`, or another external adversarial lane only when the user explicitly asks for that outside counsel. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
+- Implementation-review lanes use high or xhigh reasoning effort according to
+  change size, risk, and review depth. Security-sensitive, cross-module,
+  plan-backed, or pre-merge reviews should use xhigh.
 - Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
 - After review, receive findings rigorously: read, understand, verify against
   codebase reality, evaluate, then route accepted findings to the owning
@@ -64,7 +67,8 @@ Before dispatching reviewers, identify exactly what is being reviewed:
 - Review focus, such as security, reliability, tests, contracts, architecture, or adversarial design.
 - Implementation proof: requirements or plan items claimed complete, proof
   gates claimed, commands and exit codes, red/green evidence for behavior
-  changes or explicit exception, proof layers not run, and stated blockers.
+  changes or explicit exception, unsatisfied proof gates, evidence freshness,
+  and stated blockers.
 
 If the scope is ambiguous and cannot be inferred safely from git state or the prompt, ask one concise question before spawning reviewers.
 
@@ -82,7 +86,7 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - If base/head cannot be inferred safely, ask one concise question before dispatch.
 
 2. Spec compliance gate
-   - For implementation and plan-backed reviews, dispatch a spec compliance reviewer first or mark why it was skipped.
+   - For implementation and plan-backed reviews, dispatch a spec compliance reviewer first or record the scoped reason another lane covers it.
    - The reviewer checks that the actual artifact matches the request: nothing missing, nothing extra, no misread requirement.
    - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
 
@@ -157,7 +161,8 @@ Default lanes:
 - Contracts and tests reviewer
 - Adversarial design reviewer
 
-For small changes, run fewer lanes but keep at least one normal reviewer and one adversarial reviewer.
+For small changes, run the smallest relevant lane set while preserving intent
+and at least one challenge lane.
 
 ## External Model Lanes
 
@@ -207,7 +212,9 @@ belongs to `implementation-pr-wrapup`.
 
 ## Report Shape
 
-Start with verdict and findings, ordered by severity. If no findings survive verification, say that clearly and list any skipped reviewers or test gaps.
+Start with verdict and findings, ordered by severity. If no findings survive
+verification, say that clearly and list any unavailable reviewer inputs or test
+gaps.
 
 Use this compact structure:
 
@@ -233,7 +240,7 @@ or relabeled proof lanes found or "none", red/green evidence status, exceptions
 and their approval source>
 
 Swarm coverage
-<reviewed scope, lanes run, lanes skipped, backend used for each lane, external model lane status, verification notes>
+<reviewed scope, lanes run, lane status, backend used for each lane, external model lane status, verification notes>
 
 Routing follow-through
 <accepted findings routed to implementation-execute-plan, tiny explicitly
@@ -249,7 +256,7 @@ other files the human is expected to open>
 
 - Do not paste raw subagent transcripts as the review.
 - Do not accept findings just because multiple agents agreed.
-- Do not hide skipped external model lanes.
+- Record unavailable external model lanes as lane status, including the reason.
 - Do not run Claude or Gemini unless the user asked.
 - Do not run `agy` unless the user asked for Gemini/agy or outside adversarial counsel.
 - Do not bypass `implementation-execute-plan` for accepted blocker/important

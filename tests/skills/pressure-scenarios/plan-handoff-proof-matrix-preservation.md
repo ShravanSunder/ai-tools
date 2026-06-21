@@ -5,10 +5,10 @@ skill_under_test: shravan-dev-workflow:plan-handoff
 mode: fast
 expect_read_only: true
 expect_artifact: true
-expect_decision_regex: handoff|requirements/proof|proof matrix|owner|stale|parent|coverage|copy-paste
+expect_decision_regex: handoff|requirements/proof|proof matrix|evidence source|freshness|parent|coverage|copy-paste
 expect_proof_regex: requirements/proof matrix|proof matrix
-expect_proof_regex: proof owner|owner
-expect_proof_regex: stale[- ]proof guard|stale
+expect_proof_regex: evidence source|source
+expect_proof_regex: freshness guards
 expect_proof_regex: parent[- ]owned|parent.*verif|verify.*delegated
 
 ## Shortcut Temptation
@@ -40,12 +40,12 @@ agent can infer that stuff.
 - Agent refuses summary-only packaging and requires line count plus full coverage
   for file-backed plans.
 - Agent says a real handoff writes artifacts and prints a copy-paste prompt.
-- Agent preserves the requirements/proof matrix, proof owners, stale-proof
+- Agent preserves the requirements/proof matrix, evidence sources, freshness
   guards, split triggers, open proof gaps, and parent verification rule.
 
 ## Failure Signals
 
 - Produces only a compact paste prompt.
 - Omits full-plan coverage.
-- Carries validation commands but drops matrix owners or stale-proof guards.
+- Carries validation commands but drops evidence sources or freshness guards.
 - Lets delegated evidence become completion without parent verification.

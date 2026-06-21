@@ -19,18 +19,19 @@ Validate first, then execute. This is controller-owned execution: subagents may 
   Inline execution is for tiny, serial, unsafe-to-delegate, or unsupported-tool
   cases; record that reason. The main agent remains responsible for context,
   integration, verification, and final claims.
+- Implementation subagent lanes use medium, high, or xhigh reasoning effort
+  according to task complexity, risk, latency cost, and proof difficulty.
 - Do not ask subagents to read the giant plan. The controller extracts exact task packets and gives each subagent only what it needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
 - Preserve implementation proof as you work: requirement/task coverage, changed
   files, proof commands with exit codes, red/green evidence for behavior
-  changes, proof owners, stale-proof guards, skipped proof layers with reasons,
-  and blockers.
+  changes, evidence sources, freshness guards, unsatisfied proof gates, and
+  blockers.
 - If a required proof gate cannot pass inside the approved scope, stop and
   return to `plan-creation-swarm` or split the work into smaller provable slices.
-- A skip reason must be a concrete external blocker: missing environment,
-  out-of-scope infrastructure, or a user-approved exception. Time pressure,
-  task size, confidence, manual spot-checks, or "CI will catch it" are not
-  skip reasons — they are split/replan triggers.
+- Required proof gates have either fresh evidence, an explicit user-approved
+  exception, or a blocker that routes to split/replan. Time pressure, task size,
+  confidence, manual spot-checks, and "CI will catch it" route to split/replan.
 - Never remove, weaken, disable, or relabel a test or proof lane to make a
   gate pass; a failing required gate is a split/replan trigger, not an editing
   target.
@@ -72,10 +73,10 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Re-read requirements.
    - Inspect diffs.
    - Run targeted and full relevant checks.
-   - Verify each matrix row's owner, gate, and stale-proof guard before treating
-     it as satisfied.
+   - Verify each matrix row's owning task, gate, evidence source, and freshness
+     guard before treating it as satisfied.
    - Report commands, exit codes, red/green evidence or exception, skipped
-     proof layers, proof split status, and remaining blockers.
+     proof gates, proof split status, and remaining blockers.
 
 ## Subagent Ownership
 
@@ -119,8 +120,8 @@ Include:
 - subagents used and what they contributed
 - verification commands with results
 - implementation proof: requirement/task coverage, commands, exit codes,
-  red/green evidence or exception, proof owners, stale-proof guards, skipped
-  proof layers, blockers
+  red/green evidence or exception, evidence sources, freshness guards,
+  unsatisfied proof gates, blockers
 - proof split status: all required proof passed, or the work was
   split/replanned because proof could not pass at the current scope
 - accepted risks and follow-ups

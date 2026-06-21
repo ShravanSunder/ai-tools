@@ -293,13 +293,15 @@ Rows should name:
 - requirement or claim
 - proof source: command, artifact, review result, UI/control evidence,
   observability query, or transcript-visible evidence
-- proof owner: parent, phase skill, subagent lane, external reviewer, or
-  app-specific verifier
-- stale-proof guard where relevant
+- evidence source: parent-run check, phase skill result, subagent lane,
+  external reviewer, app-specific verifier, UI/control evidence, data/state
+  inspection, logs, traces, metrics, OTel query, release artifact, or manual UX
+  validation
+- freshness guard where relevant
 
-When emitting matrix rows, use the literal row labels `proof owner:` and
-`stale-proof guard:` for non-trivial rows. Do not rely on nearby prose such as
-"owned by" or "current enough" to carry those gates.
+When emitting matrix rows, use the literal row labels `evidence source:` and
+`freshness guard:` for non-trivial rows. Do not rely on nearby prose such as
+"checked by" or "current enough" to carry those gates.
 
 Completion is parent-owned. A subagent, reviewer, UI driver, or observability
 query can satisfy a row only after the parent inspects the returned evidence and

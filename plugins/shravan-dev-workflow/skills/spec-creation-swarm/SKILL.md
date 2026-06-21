@@ -1,6 +1,6 @@
 ---
 name: spec-creation-swarm
-description: Use when creating or revising a spec, design, or architecture contract before an implementation plan exists, especially when the work needs bounded subagents, current-state exploration, separability mapping, or assumption pressure.
+description: Use when creating or revising a spec, design, or architecture contract before an implementation plan exists, especially when the work needs bounded subagents, current-state exploration, separability mapping, or tradeoff clarification.
 ---
 
 # Spec Creation Swarm
@@ -8,7 +8,7 @@ description: Use when creating or revising a spec, design, or architecture contr
 Use this skill to create the spec/design contract before writing an
 implementation plan. The parent session owns the mental model, synthesis, and
 recommendation. Subagents provide bounded research, exploration, and
-architectural pressure, not final decisions.
+architecture comparison, not final decisions.
 
 A spec may contain product intent, requirements, and technical design in one
 artifact. Keep those layers distinct:
@@ -41,10 +41,14 @@ fuzzy goal or design question
 - Do not implement code from this skill.
 - Read current code, docs, prior specs, and logs before designing.
 - Use subagents by default for substantial spec creation when research,
-  codebase exploration, architecture pressure, security review, or adversarial
-  assumptions can run as independent lanes. For tiny local decisions, state why
-  a full swarm was skipped.
-- Give every subagent a bounded packet. Do not ask subagents to "understand the whole repo" unless the user explicitly asks for a broad audit.
+  codebase exploration, architecture comparison, security/trust-boundary
+  mapping, or risk/tradeoff mapping can run as independent lanes. Spec creation
+  lanes use high effort by default and xhigh effort for architecture, security,
+  or crux-decision lanes. For tiny local decisions, name the smaller lane set
+  used.
+- Give every subagent a bounded packet with a concrete question, exact source
+  inputs, lane-specific focus, and expected evidence. Broad repo audits use an
+  explicit broad-audit packet.
 - The parent must read key files returned by explorer lanes before recommending a design.
 - Keep sequencing out of the spec. Do not include worker order, task order,
   implementation phases, execution DAGs, exact test commands, or validation
@@ -78,11 +82,11 @@ fuzzy goal or design question
    - if source gathering is substantial or depends on mixed source classes,
      route that phase through `research-swarm` and consume its ledger before
      making design recommendations
-4. Build architecture pressure lanes:
+4. Build architecture option lanes:
    - minimal-change approach
    - clean-boundary approach
    - pragmatic/ship-first approach
-   - adversarial "what breaks this" approach
+   - risk-and-failure-mode approach
 5. Synthesize:
    - Read lane outputs.
    - Verify important claims against source files or docs.
@@ -120,9 +124,10 @@ Default lanes for substantial design work:
 - `architecture-clean-boundary`: argues for clearer separation of concerns and future-proof ownership.
 - `architecture-pragmatic`: argues for the most shippable balanced approach.
 - `security-trust-boundary`: identifies entry points, untrusted inputs, assets, auth assumptions, sensitive data, and privileged actions.
-- `adversarial-design`: attacks assumptions, future failure modes, and simpler alternatives.
+- `risk-and-tradeoff-design`: maps assumptions, future failure modes, and simpler alternatives.
 
-For tiny design questions, run local versions of the relevant lanes and state why a full swarm was skipped.
+For tiny design questions, run local versions of the relevant lanes and name the
+lane set used.
 
 ## Required Spec Diagram
 
@@ -159,7 +164,7 @@ ownership map and explain why.
 Return:
 
 - Current-state evidence inspected.
-- Lanes run and skipped.
+- Lanes run and lane status.
 - Artifact path, or why no artifact was written.
 - Full clickable artifact links (absolute path + line) for any spec/design
   artifacts the human is expected to open.

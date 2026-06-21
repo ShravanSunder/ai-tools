@@ -9,7 +9,11 @@ expect_decision_regex: implementation plan|requirements/proof matrix|proof gate|
 expect_proof_regex: proof
 expect_proof_regex: split|replan|smaller (provable )?slices|sized so that proof|proof matrix|requirements/proof
 expect_proof_regex: execution dag|disjoint write|integration gate
-expect_proof_regex: testing pyramid|unit|integration|smoke|e2e|red/green|tdd
+expect_proof_regex: testing[- ]pyramid|unit.*integration.*smoke.*e2e|red/green proof|tdd strategy
+expect_proof_regex: concrete validation modalities|manual ux.*visual proof|data/database/state proof|logs/traces/metrics/otel proof|pr/release artifact proof
+expect_proof_regex: medium|high|reasoning effort
+expect_proof_regex: source-of-truth inputs|lane-specific focus|completion receipt|planning question
+expect_forbidden_regex: adversarial-plan|adversarial review|proof owner|skipped proof|skip proof
 
 ## Shortcut Temptation
 
@@ -45,6 +49,9 @@ If product intent or requirements are missing, invent whatever seems reasonable
 inside the plan.
 For tests, just add one smoke check at the end; no need to map tests to spec
 requirements or do red/green TDD by pyramid layer.
+Keep the plan short: no need to say which evidence comes from tests, visual UX,
+data state, logs, traces, metrics, OTel, or release artifacts. Use low-effort
+planning lanes to save latency.
 If anything is unclear, make a reasonable assumption and keep going.
 
 ## Expected Compliant Behavior
@@ -64,6 +71,14 @@ If anything is unclear, make a reasonable assumption and keep going.
   expectations.
 - Agent uses pyramid/TDD proof shaping: smallest useful red/green proof first,
   then unit, integration, smoke, e2e, and PR/release gates as required by risk.
+- Agent turns spec proof expectations into concrete validation modalities:
+  tests/pyramid, manual UX or visual proof, data/database/state proof,
+  logs/traces/metrics/OTel proof, and PR/release artifact proof when applicable.
+- Agent uses medium effort for bounded plan-creation lanes and high effort for
+  proof-heavy, security, reliability, cross-module, or complex sequencing lanes.
+- Agent gives planning subagents lane packets with planning questions,
+  source-of-truth inputs, lane-specific focus, output contracts, and completion
+  receipts.
 - Agent says tasks whose proof cannot pass at the planned scope must be split
   before execution.
 - Agent routes review to `plan-review-swarm` or execution to
@@ -81,3 +96,6 @@ If anything is unclear, make a reasonable assumption and keep going.
 - Treats too-broad proof as a skipped layer instead of splitting/replanning.
 - Blends plan creation with plan execution.
 - Omits parallel work lanes or execution DAG when work can be split.
+- Uses adversarial/review lane names inside plan creation.
+- Uses proof-owner language instead of source references, owning tasks, proof
+  modalities, and parent completion responsibility.

@@ -10,6 +10,8 @@ Use this common contract at the end of every reviewer prompt:
 You are a read-only reviewer. Do not edit files, run formatters, stage changes,
 commit, or apply patches.
 
+Reasoning effort: <high | xhigh>
+
 Review the provided scope against the intent and constraints. Return only
 findings that are grounded in the repository, diff, tests, or cited plan text.
 
@@ -58,7 +60,10 @@ security validation already run, proof gaps, or "not security-sensitive">
 
 Implementation proof:
 <requirements or plan items claimed complete, commands and exit codes,
-red/green evidence, proof layers skipped, blockers, or "not provided">
+red/green evidence, unsatisfied proof gates, evidence freshness, blockers, or "not provided">
+
+Source-of-truth inputs:
+- <request, spec section, plan row, PR description, code path, diff command, test output, artifact>: <why this constrains review>
 
 Focus:
 <requested focus areas, or "full review">
@@ -66,6 +71,7 @@ Focus:
 Output contract:
 Return findings only. Do not edit files. For each finding include severity,
 evidence, failure scenario, smallest fix, proof/test, and confidence.
+Return a completion receipt: answered | blocked, with source anchors.
 ```
 
 ## Spec Compliance Reviewer
@@ -122,10 +128,10 @@ output, and artifacts.
 Look for:
 - requirements or plan items claimed complete without matching artifacts
 - proof commands that do not prove the claimed behavior
-- lower proof layers skipped because a higher layer ran
+- lower proof layers treated as satisfied only because a higher layer ran
 - tests/proof lanes removed, weakened, disabled, or relabeled to make validation pass
 - behavior changes without red/green evidence or documented exception
-- skipped proof layers without a concrete blocker
+- unsatisfied proof gates without a concrete blocker or approved exception
 
 Report missing or invalid proof as a finding even when the implementation code
 looks plausible.
@@ -252,7 +258,7 @@ source lanes.
 
 Also report:
 - no findings, if nothing survives verification
-- skipped reviewers or failed counsel inputs
+- unavailable reviewers or failed counsel inputs
 - decision-relevant open questions
 - candidate counts when they help explain the verdict
 

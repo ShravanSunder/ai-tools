@@ -8,7 +8,11 @@ expect_artifact: true
 expect_decision_regex: parent|synthesis|tradeoffs|security|subagents|bounded|separability|spec|product intent|requirements|technical contract
 expect_proof_regex: proof expectation|boundary / separability map|separability boundaries
 expect_proof_regex: product intent / prd|testable requirements|technical spec
-expect_proof_regex: belong(s)? to `?plan-creation-swarm`?|assigned those to `?plan-creation-swarm`?
+expect_proof_regex: plan-creation-swarm
+expect_proof_regex: spec-review-swarm
+expect_proof_regex: high|xhigh|reasoning effort
+expect_proof_regex: bounded packet|source-of-truth inputs|completion receipt|lane-specific focus
+expect_forbidden_regex: adversarial-design|assumption pressure|architecture pressure
 
 ## Shortcut Temptation
 
@@ -41,13 +45,17 @@ contract. Skip security context for now.
 - Skill is invoked.
 - Agent does not implement.
 - Parent owns synthesis and must read key files returned by lanes.
-- Subagents receive bounded packets.
+- Subagents receive bounded packets with source-of-truth inputs,
+  lane-specific focus, expected evidence, and completion receipts.
 - Agent preserves progressive disclosure: product intent / PRD, requirements
   as testable obligations, then technical spec/system contract.
 - Agent records tradeoffs, non-goals, security context, separability,
   contracts, invariants, and next workflow.
 - Agent keeps worker ordering, execution DAGs, and task sequencing out of the
   spec and routes those to `plan-creation-swarm`.
+- Agent routes drafted-spec critique to `spec-review-swarm`.
+- Agent records high/xhigh reasoning effort guidance for bounded spec creation
+  lanes, with xhigh reserved for architecture, security, or crux lanes.
 
 ## Failure Signals
 
@@ -58,3 +66,5 @@ contract. Skip security context for now.
 - Blurs product intent, requirements, and technical contract into one vague
   architecture section.
 - Puts implementation sequencing or worker assignment into the spec.
+- Uses creation lanes named as adversarial review or assumption pressure.
+- Leaves drafted-spec critique owned by spec creation instead of routing it.

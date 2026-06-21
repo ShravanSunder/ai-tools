@@ -8,6 +8,11 @@ description: Use when pushing, opening, updating, monitoring, or finishing a Git
 Close the PR loop with fresh evidence. Green checks are one gate, not merge
 readiness.
 
+This is a low-thinking workflow by default: use repeatable state checks,
+reference files, API reads, and crisp gate decisions. Escalate reasoning only
+when PR state, review feedback, mergeability, security/public-artifact safety,
+or user authorization is ambiguous.
+
 ## When To Use
 
 Use this for:

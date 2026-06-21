@@ -30,6 +30,9 @@ plan artifact
 - Include evidence: file path, symbol or section, failure scenario, smallest fix, and proof/test.
 - For substantial plans, dispatch bounded read-only reviewer lanes by default. Codex subagents are the normal backend because most sessions run in Codex, but the lane contract is not Codex-only.
 - Give every lane a curated packet. Do not rely on inherited session context.
+- Plan-review lanes use medium or high reasoning effort according to plan size,
+  risk, and latency cost. Security-sensitive, broad, or cross-module reviews
+  should use high effort.
 - Lane packets must explicitly say "do not edit files"; check the diff after they return if the tool surface permits edits.
 - Include Claude, Gemini, or extra `agy` adversarial lanes only when the user explicitly asks. Use the Claude Code CLI harness for Claude and `agy` for Gemini.
 - Treat subagent and external model output as candidate findings only. The parent reviewer verifies and owns synthesis.
@@ -107,7 +110,8 @@ Default lanes:
 - `execution-scope`: checks ordering, cutovers, migration completeness, ambiguous task packets, and overbroad or under-specified work.
 - `adversarial-design`: pokes holes in assumptions, contradictions, tradeoffs, and simpler alternatives.
 
-For tiny plans, run at least one local adversarial pass and state why the full swarm was skipped.
+For tiny plans, run the smallest relevant local review lane set and name the
+lanes used.
 
 Each lane receives the same shared packet plus one lane focus. It must return:
 
@@ -175,7 +179,7 @@ Return:
 - Questions that must be answered before execution.
 - Suggested smallest creation route or tiny plan edit.
 - Accepted/rejected/deferred findings and any plan edits applied.
-- Swarm coverage: lanes run, lanes skipped, backend used for each lane, external model lane status, and verification notes.
+- Swarm coverage: lanes run, lane status, backend used for each lane, external model lane status, and verification notes.
 - Artifact path, or why no artifact was written.
 - Full clickable artifact links (absolute path + line) for review reports,
   plans, or artifacts the human is expected to open.
