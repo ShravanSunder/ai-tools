@@ -32,9 +32,10 @@ review packet
 - Treat all reviewer output as raw candidate findings. Verify findings against
   the repository before presenting them as accepted.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
-  run, still name the substantial-lane packet shape: bounded question, decision
-  target, source-of-truth inputs, inspect list, non-goals, contradiction
-  handling, security context, output contract, completion receipt, and parent
+  run, still name the substantial-lane packet shape: role / mode, edit
+  boundary, bounded question, decision target, source-of-truth inputs, inspect
+  list, non-goals, lane-specific checklist, output schema, contradiction
+  handling, confidence, security context, completion receipt, and parent
   verification.
 - After review, receive findings rigorously: read, understand, verify against
   codebase reality, evaluate, then route accepted findings to the owning
@@ -81,6 +82,10 @@ If the scope is ambiguous and cannot be inferred safely from git state or the pr
 ## Shared Review Packet
 
 Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet. Use `references/reviewer-prompts.md` for the packet template and lane prompts.
+Each substantial lane packet identifies role / mode, edit boundary, bounded
+question, decision target, source-of-truth inputs, inspect list, non-goals,
+lane-specific checklist, output schema, contradiction handling, confidence,
+security context, and completion receipt.
 
 Reviewers must not trust implementation summaries, previous agent reports, test claims, or other reviewer outputs. They must read the actual artifacts in scope.
 
@@ -89,7 +94,12 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
 1. Scope builder
    - Determine mode, base/head, changed files, relevant instructions, and user intent.
    - Prefer explicit user scope. Otherwise infer from git state and current request.
-   - If base/head cannot be inferred safely, ask one concise question before dispatch.
+   - If base/head cannot be inferred safely, ask one concise question before
+     dispatch and name the substantial-lane packet shape required for the later
+     review: role / mode, edit boundary, bounded question, decision target,
+     source-of-truth inputs, inspect list, non-goals, lane-specific checklist,
+     output schema, contradiction handling, confidence, security context,
+     completion receipt, and parent verification.
 
 2. Spec compliance gate
    - For implementation and plan-backed reviews, dispatch a spec compliance reviewer first or record the scoped reason another lane covers it.

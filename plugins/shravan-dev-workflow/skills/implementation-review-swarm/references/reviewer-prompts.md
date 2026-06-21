@@ -45,7 +45,10 @@ For each finding use this shape:
 - confidence: high | medium | low
 
 If you have no high-confidence findings, say "No findings." Do not pad.
-Return a completion receipt with source anchors and a proposed artifact path.
+Always include lane-level Confidence: high | medium | low and Remaining
+uncertainty, including when there are no findings.
+Return a completion receipt with source anchors, proposed artifact path,
+confidence, and remaining uncertainty.
 Do not write files. Do not mark findings accepted; parent verification owns
 accepted truth.
 ```
@@ -113,17 +116,26 @@ Non-goals:
 - Do not edit files, broaden the review scope, decide final verdict, or accept
   findings as truth.
 
+Lane-specific checklist:
+- <checks this lane must perform before returning>
+
 Contradiction handling:
 - Report conflicts with source artifacts, live repo evidence, proof claims, or
   sibling-reviewer output; the parent reducer resolves them.
 
+Confidence:
+high | medium | low, with remaining uncertainty
+
 Output contract:
 Return candidate findings only. Do not edit files. For each finding include
 severity, evidence, failure scenario, smallest fix, proof/test, and confidence.
+If there are no findings, still return lane-level confidence and remaining
+uncertainty.
 Return a proposed artifact path and candidate lane-file content, or
 "chat-only/no-files exception: <reason>".
 Return a completion receipt: answered | blocked, with source anchors and
-proposed artifact path. The parent writes lane files for read-only reviewers.
+proposed artifact path, confidence, and remaining uncertainty. The parent writes
+lane files for read-only reviewers.
 ```
 
 ## Spec Compliance Reviewer

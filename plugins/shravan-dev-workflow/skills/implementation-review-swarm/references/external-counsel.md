@@ -4,7 +4,9 @@ External model lanes give the reducer a different model family or tool runtime. 
 
 ## Agy / Gemini
 
-Use `agy` only when the user explicitly asks to include Gemini/agy or outside adversarial counsel. Prefer the latest Gemini Pro/High model exposed by `agy models`. On this machine, that is currently `Gemini 3.1 Pro (High)`.
+Use `agy` only when the user explicitly asks to include Gemini/agy or outside
+adversarial counsel. Prefer the latest Gemini Pro/High model exposed by
+`agy models`; record the actual model selected in swarm coverage.
 
 Before invoking:
 
@@ -25,7 +27,9 @@ Return findings only, with severity, evidence, scenario, smallest fix, proof,
 and confidence. If no findings, say "No findings."
 ```
 
-When the CLI supports print mode, prefer a temp prompt file and an output file so stdout truncation or formatting bugs do not lose the review:
+When the CLI supports stdin, pipe the prompt file into the process so the full
+review packet does not appear in process argv. Prefer an output file so stdout
+truncation or formatting bugs do not lose the review:
 
 ```shell
 prompt_file="$(mktemp /tmp/shravan-dev-workflow-agy-prompt.XXXXXX)"
@@ -33,11 +37,16 @@ output_file="$(mktemp /tmp/shravan-dev-workflow-agy-output.XXXXXX)"
 
 # Write the shared review packet plus the prompt additions into $prompt_file.
 # In the prompt, instruct agy to write its final answer to $output_file.
-agy --model "Gemini 3.1 Pro (High)" --print "$(cat "$prompt_file")"
+agy --print < "$prompt_file"
 cat "$output_file"
 ```
 
-If the preferred Gemini Pro/High model is unavailable, choose the newest available Gemini Pro model from `agy models`; if no Gemini Pro model is available, run `agy` without a model override and record the actual model source in swarm coverage. If `agy` is missing, unauthenticated, noninteractive, or times out, record that as a skipped or failed external model lane and continue with available reviewer lanes.
+If a specific model is selected from `agy models`, pass it without embedding the
+review packet in argv, for example `agy --model "$selected_model" --print <
+"$prompt_file"`. If no Gemini Pro/High model is available, run `agy` without a
+model override and record the actual model source in swarm coverage. If `agy` is
+missing, unauthenticated, noninteractive, or times out, record that as a skipped
+or failed external model lane and continue with available reviewer lanes.
 
 ## Claude
 

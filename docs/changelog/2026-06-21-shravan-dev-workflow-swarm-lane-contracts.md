@@ -53,6 +53,9 @@ contracts instead of thin prompts:
 - `claude plugin validate .` passed.
 - Source-backed Codex refresh passed with `CODEX_HOME=tmp/codex-home-source-proof codex plugin add shravan-dev-workflow@ai-tools --json | jq '{name,version}'`: `shravan-dev-workflow` `1.6.28`.
 - Source-backed Codex marketplace proof showed `shravan-dev-workflow` `1.6.28` enabled from this repository source path.
+- The normal Codex home was not mutated; its `shravan-dev-workflow` install was
+  observed to point at a sibling worktree and older version, so final proof used
+  the repo-local temp source-backed `CODEX_HOME`.
 - Claude runtime refresh/load was not performed in this changeset. Claude
   source validation passed through `claude plugin validate .`; runtime cache
   refresh remains a recorded status, not a completed proof gate.
@@ -60,7 +63,9 @@ contracts instead of thin prompts:
   parent-owned artifact persistence for read-only lanes, portable
   `../../references/lane-contract.md` cross-references, explicit universal
   packet fields in review/execution templates, concrete research review routes,
-  and corrected public wording.
+  corrected public wording, full review-lane packet fields in SKILL.md
+  fast-paths, lane-level confidence/uncertainty requirements, and stdin-based
+  external-counsel examples that keep full packets out of process argv.
 - Targeted pressure scenarios passed after final source refresh:
   - `plan-creation-swarm-lane-packet-contract`
   - `research-swarm-substantial-stage-artifacts`
@@ -76,13 +81,25 @@ contracts instead of thin prompts:
   - `spec-review-swarm-claims-not-truth`
   - `plan-review-swarm-whole-artifact`
   - `implementation-review-swarm-verify-findings`
-- Full fast pressure suite was run with source-backed `CODEX_HOME`: 46 passed, 22 failed. The failures were broad existing suite drift outside the targeted changed surface, plus these changed-surface review scenarios that passed again in isolation immediately after the full-suite run:
-  - `spec-review-swarm-claims-not-truth`: `tmp/skill-pressure-evals/2026-06-21T150249379Z-spec-review-swarm-claims-not-truth/`
-  - `implementation-review-swarm-verify-findings`: `tmp/skill-pressure-evals/2026-06-21T150249380Z-implementation-review-swarm-verify-findings/`
+  - `discuss-with-me-research-boundary`
+  - `discuss-with-me-fuzzy-intent`
+- Full fast pressure suite was run with source-backed `CODEX_HOME`: 51 passed,
+  17 failed. The failures were broad existing suite drift outside the targeted
+  changed surface, plus one changed-surface pressure assertion that was too
+  narrow for compliant `plan-review-swarm-whole-artifact` output. That scenario
+  was corrected and passed again in isolation.
+- A later targeted `implementation-review-swarm-verify-findings` run exposed
+  that the implementation-review SKILL.md entrypoint did not itself name the
+  universal lane packet fields even though the reference packet did. The
+  entrypoint guardrail was added and the scenario passed in both the legacy
+  reducer and default Vitest runner.
 - After implementation review fixes, the targeted changed-surface pressure
   scenarios listed above were rerun and passed again. Static validation,
   manifest validation, tests, Claude marketplace validation, and source-backed
   Codex runtime proof also passed after those review fixes.
+- Final stricter pressure artifacts:
+  - `tmp/skill-pressure-evals/2026-06-21T174039572Z-plan-review-swarm-whole-artifact/`
+  - `tmp/skill-pressure-evals/2026-06-21T185133822Z-implementation-review-swarm-verify-findings/`
 
 ## Refresh Status
 

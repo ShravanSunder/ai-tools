@@ -39,9 +39,10 @@ plan artifact
   source anchors and completion receipts. The parent reviewer verifies and owns
   synthesis.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
-  run, still name the substantial-lane packet shape: bounded question, decision
-  target, source-of-truth inputs, inspect list, non-goals, contradiction
-  handling, security context, output contract, completion receipt, and parent
+  run, still name the substantial-lane packet shape: role / mode, edit
+  boundary, bounded question, decision target, source-of-truth inputs, inspect
+  list, non-goals, lane-specific checklist, output schema, contradiction
+  handling, confidence, security context, completion receipt, and parent
   verification.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
 - Accepted blocker or important findings normally route back to
@@ -65,8 +66,11 @@ plan artifact
    - if no full artifact or chat plan is available, block with the required
      review surfaces instead of proceeding: whole-artifact coverage,
      requirements/proof mapping, validation-command claims, route-back
-     handling, and substantial-lane packet fields including bounded question,
-     decision target, inspect list, non-goals, and contradiction handling
+     handling, and substantial-lane packet fields including role / mode, edit
+     boundary, bounded question, decision target, source-of-truth inputs,
+     inspect list, non-goals, lane-specific checklist, output schema,
+     contradiction handling, confidence, security context, completion receipt,
+     and parent verification
 2. Establish coverage:
    - For files: line count plus chunk ranges.
    - For packets: list packet files read.
@@ -132,6 +136,10 @@ Each lane receives the same shared packet plus one lane focus. It must return:
 - verdict: ready, needs revision, or blocked
 - findings grouped as blocker, important, question, or nit
 - evidence, failure scenario, smallest plan edit, proof/test, and confidence
+- lane-level confidence and remaining uncertainty, including when there are no
+  findings
+- completion receipt with source anchors, proposed artifact path, confidence,
+  and remaining uncertainty
 - for security findings: validation status as `validated`, `unvalidated with proof gap`, or `rejected`
 
 ## External Model Lanes

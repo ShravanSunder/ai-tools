@@ -23,9 +23,12 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Review target: <plan path or handoff packet>
 Coverage from controller: <line count + chunk ranges, or packet files>
+Role / mode: read-only plan-review lane
+Edit boundary: read-only
 Lane: <spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-model>
 Backend: <Codex subagent | Claude Code CLI | agy/Gemini | other requested reviewer>
 Reasoning effort: medium | high
+Bounded question: <the one review question this lane answers>
 Decision target: <plan readiness decision, finding class, proof gate, or route-back decision this lane informs>
 
 security context: <applicable | not applicable>
@@ -58,6 +61,9 @@ Non-goals:
 - Do not edit files, implement code, decide accepted findings, or route the
   final workflow state.
 
+Lane-specific checklist:
+- <checks this lane must perform before returning>
+
 Always check:
 - stale assumptions
 - missing cutovers
@@ -67,7 +73,10 @@ Always check:
 - missing or stale threat model when sensitive surfaces are touched
 - ownership gaps between controller, subagents, and implementer
 - contradictions with source artifacts, live repo evidence, sibling-lane
-  findings, or claimed validation; report them for parent reduction
+    findings, or claimed validation; report them for parent reduction
+
+Confidence:
+high | medium | low, with remaining uncertainty
 
 Return:
 - Lane: <lane name>
@@ -79,7 +88,8 @@ Return:
 - Proposed artifact path and candidate lane-file content, or
   "chat-only/no-files exception: <reason>"
 - completion receipt: answered | blocked, with source anchors and proposed
-  artifact path; parent writes lane files for read-only lanes
+  artifact path, confidence, and remaining uncertainty; parent writes lane files
+  for read-only lanes
 - Do not include speculative findings without evidence
 - Do not mark findings accepted. Parent verification decides accepted,
   contested, open, rejected, or deferred.

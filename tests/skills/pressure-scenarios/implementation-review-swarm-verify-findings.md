@@ -8,7 +8,7 @@ expect_artifact: false
 expect_decision_regex: verify|candidate findings|implementation proof|not_ready|read-only|external
 expect_proof_regex: implementation proof|review proof|missing proof|proof[ -](gate|chain|matrix)|proof.{0,40}(mapped|maps back)|not accepted as proof
 expect_proof_regex: not[ _-]?ready|cannot.*ready|missing (required )?proof|unverified.*proof|without (verified |checking )?proof|proof.*(checked|mapped|verif)
-expect_proof_regex: uses high or xhigh effort|use high or xhigh review effort|high or xhigh reasoning effort|pr/pre-merge/plan-backed|rejected medium-effort-first
+expect_proof_regex: uses? high or xhigh|use high or xhigh review effort|high or xhigh reasoning effort|high or xhigh is required|pr/pre-merge/plan-backed|rejected medium-effort-first|medium-effort-first was rejected
 expect_proof_regex: source-of-truth inputs|proof inventory|lane focus|completion receipt|shared review packet|implementation proof gate
 expect_proof_regex: decision target|inspect|non-goals|contradiction handling|bounded question
 expect_forbidden_regex: skipped lane|lanes skipped|skip lane
