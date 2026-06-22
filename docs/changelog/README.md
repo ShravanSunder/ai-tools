@@ -15,6 +15,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - [2026-06-21 Shravan Dev Workflow Swarm Lane Contracts](2026-06-21-shravan-dev-workflow-swarm-lane-contracts.md)
 - [2026-06-20 Shravan Dev Workflow Lane Packets](2026-06-20-shravan-dev-workflow-lane-packets.md)
 - [2026-06-20 Shravan Dev Workflow Creation Swarms](2026-06-20-shravan-dev-workflow-creation-swarms.md)
+- [2026-06-19 Agents Skill Work SOP](2026-06-19-agents-skill-work-sop.md)
 - [2026-06-18 Local Monitoring and PR API Budget](2026-06-18-local-monitoring-pr-api-budget.md)
 - [2026-06-17 Vitest Evals Skill Runner](2026-06-17-vitest-evals-skill-runner.md)
 - [2026-06-17 Orchestrator Goal PR-Ready Terminal](2026-06-17-orchestrator-goal-pr-ready-terminal.md)
