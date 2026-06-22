@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-19 Agents Skill Work SOP](2026-06-19-agents-skill-work-sop.md)
 - [2026-06-18 Local Monitoring and PR API Budget](2026-06-18-local-monitoring-pr-api-budget.md)
 - [2026-06-17 Vitest Evals Skill Runner](2026-06-17-vitest-evals-skill-runner.md)
 - [2026-06-17 Orchestrator Goal PR-Ready Terminal](2026-06-17-orchestrator-goal-pr-ready-terminal.md)
