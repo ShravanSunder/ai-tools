@@ -5,7 +5,14 @@ description: Use when adversarially reviewing a drafted spec, design, or archite
 
 # Spec Review Swarm
 
-Run a post-draft, pre-plan review swarm over a spec, design, or architecture proposal. This is not implementation, not implementation-plan review, and not a normal code review. It attacks product intent, requirements, claims, assumptions, contracts, security context, and unresolved decision branches.
+Run a post-draft, pre-plan review swarm over a spec, design, or architecture
+proposal. This is not implementation, not implementation-plan review, and not a
+normal code review. It pressure-tests product intent, requirements, claims,
+assumptions, contracts, security context, and unresolved decision branches.
+
+`spec-review-swarm` remains the phase name. Review means pressure-testing the
+spec. Refinement is the required output shape for every review lane, not a
+separate replacement phase or one isolated lane.
 
 Core pipeline:
 
@@ -13,10 +20,10 @@ Core pipeline:
 draft spec/design
   -> whole-artifact coverage
   -> claim / artifact / contract packet
-  -> adversarial review lanes
+  -> bounded review lanes
   -> optional external counsel when requested
   -> parent verification
-  -> accepted / contested / open synthesis
+  -> accepted / contested / open refinement inputs
   -> smallest spec/design edits or owner-facing handoff
 ```
 
@@ -32,6 +39,10 @@ draft spec/design
 - Subagents and external models produce candidate findings only, with source
   anchors and completion receipts. Parent verification decides accepted,
   contested, open, rejected, or deferred findings.
+- Every review lane returns refinement-shaped output within its scope: what is
+  fuzzy or missing, what boundary could drift, what the next agent would guess,
+  what should become sharper, inner-loop vs outer-loop route, and parent reducer
+  notes.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
   run, still name the substantial-lane packet shape: bounded question, decision
   target, source-of-truth inputs, inspect list, non-goals, contradiction
@@ -92,20 +103,25 @@ draft spec/design
 
 Default lanes for substantial specs:
 
-- `product-intent`: checks whether the PRD/product-intent layer is present when
-  product meaning is load-bearing, and whether requirements and spec contract
-  actually follow from it.
-- `requirements-testability`: checks whether requirements are testable,
-  unambiguous, and separable from implementation tasks.
-- `contract-and-scope`: checks goal, non-goals, requirements, and output contract.
-- `architecture-boundaries`: challenges ownership, module boundaries, dependency direction, and source of truth.
-- `security-threat-model`: checks assets, entry points, untrusted inputs, trust boundaries, sensitive data, and privileged actions.
-- `validation-and-testability`: checks whether the proposed validation strategy
-  can prove behavior and catch regressions, and whether the spec can feed a
-  later requirements/proof matrix or explicitly defers proof definition to
-  `plan-creation-swarm` with open proof gaps named.
-- `planning-readiness`: checks whether enough decisions exist for a later implementation plan.
-- `adversarial-crux`: asks the few crux questions that could invalidate the design.
+| Lane | Status | Reference | Why |
+| --- | --- | --- | --- |
+| `requirements-testability` | mandatory | `references/lanes/requirements-testability.md` | Ensures obligations are testable and not implementation tasks. |
+| `contract-and-scope` | mandatory | `references/lanes/contract-and-scope.md` | Checks goals, non-goals, ownership, invariants, and contract surfaces. |
+| `architecture-boundaries` | mandatory | `references/lanes/architecture-boundaries.md` | Challenges owners, sources of truth, dependency direction, and drift risks. |
+| `validation-and-testability` | mandatory | `references/lanes/validation-and-testability.md` | Checks proof expectations and future requirements/proof matrix readiness. |
+| `planning-readiness` | mandatory | `references/lanes/planning-readiness.md` | Checks whether enough decisions exist for plan creation without redefining the spec. |
+| `adversarial-crux` | mandatory | `references/lanes/adversarial-crux.md` | Names the few crux questions that could invalidate the design. |
+| `progressive-disclosure` | mandatory | `references/lanes/progressive-disclosure.md` | Checks primary spec vs slice spec vs evidence layering and routing. |
+
+Conditional lanes:
+
+| Lane | Status | Reference | Trigger |
+| --- | --- | --- | --- |
+| `product-intent` | conditional | `references/lanes/product-intent.md` | Product meaning is load-bearing, PRD is present, or requirements/spec traceability is unclear. |
+| `security-threat-model` | conditional | `references/lanes/security-threat-model.md` | The spec touches security-sensitive surfaces or claims security is out of scope. |
+| `harness-fit` | conditional | `references/lanes/harness-fit.md` | The spec constrains agents, skills, prompts, tools, sandboxing, approval modes, worktrees, CLIs, browsers, native UI, MCP, or cross-harness behavior. |
+| `spec-difference` | conditional | `references/lanes/spec-difference.md` | Current implementation, prototype, session log, trace, or behavior exists and may contain hidden decisions absent from the draft spec. |
+| `guardrail-codification` | conditional | `references/lanes/guardrail-codification.md` | A requirement or repeated failure mode may need lint, schema, structural tests, golden principles, quality docs, or tracker updates. |
 
 For tiny artifacts, run the smallest relevant local review lane set and name the
 lanes used.
@@ -115,6 +131,10 @@ lanes used.
 - Load `../../references/lane-contract.md` and
   `references/review-packet.md` before dispatching review lanes or writing a
   copy-paste prompt.
+- Load `references/finding-schema.md`; every review lane uses this exact
+  per-finding schema.
+- Load only the selected `references/lanes/*.md` files. Specialized lanes are
+  scoped review aspects; they do not own refinement alone.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.
 - Use `../../references/source-inspirations.md` when updating this skill or explaining source practices.
 
@@ -128,6 +148,7 @@ Return:
 - Product-intent / requirements / technical-spec chain status.
 - What held.
 - Accepted findings.
+- Refinement inputs and inner-loop vs outer-loop routing.
 - Contested design choices.
 - Open questions.
 - Accepted finding route: `spec-creation-swarm`, tiny same-session edit, or

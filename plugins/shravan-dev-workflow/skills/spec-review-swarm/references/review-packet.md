@@ -1,11 +1,14 @@
 # Review Packet
 
-Use this for subagent prompts or copy-paste prompts.
+Use this for shared spec-review subagent prompts or copy-paste prompts.
 
-Consume `../../references/lane-contract.md` as the shared lane packet contract.
-This file only adds spec-review lane overlays:
-adversarial critique, spec/design verdicts, route-back semantics, and
-proof-readiness checks remain owned here.
+Consume `../../references/lane-contract.md` as the shared lane packet contract,
+then load only the selected `references/lanes/*.md` files for lane-specific
+behavior. This file owns the shared spec-review packet anatomy, artifact
+coverage fields, refinement-shaped output contract, and parent reducer
+boundaries. It intentionally does not define named lane overlays. Use
+`references/finding-schema.md` as the canonical per-finding schema for every
+review lane.
 
 For substantial review swarms, the parent preserves an inspectable artifact
 trail in the existing review workflow home. If review artifacts live beside the
@@ -14,17 +17,33 @@ and to each parent-written lane artifact path. Lane files are candidate
 findings; the parent ledger is the reducer synthesis; the reviewed spec/design
 remains the accepted phase artifact only after parent verification.
 
+Do not pass accumulated session history as lane context. Give each lane a
+fresh, bounded packet with source anchors, source/file inventory, and the exact
+decision target. Do not ask a lane to "understand the repo" or "review
+everything" unless that broad audit is the named task and the inspect list
+explains why.
+
+Do not pre-judge findings for a lane. The parent packet must not tell a lane to
+treat a category as minor, avoid flagging a concern, or confirm the parent's
+preferred answer. Lanes return candidate findings; the parent reducer verifies
+and ranks them after reading the evidence.
+
+If a claim cannot be verified from the supplied artifact, source anchors, or one
+named focused check, return it as open or unresolved. Do not broaden into a repo
+crawl to rescue an under-specified spec.
+
 ```text
-You are an adversarial spec/design review swarmer.
+You are a spec/design review swarmer.
 Review only; do not implement. Do not edit files.
 
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Target artifact: <path or chat-only>
 Coverage from controller: <line count + chunk ranges, or packet files>
-Lane: <product-intent | requirements-testability | contract-and-scope | architecture-boundaries | security-threat-model | validation-and-testability | planning-readiness | adversarial-crux>
+Lane: <selected lane name>
+Selected lane reference: <references/lanes/<lane>.md>
 Reasoning effort: high | xhigh
-Decision target: <spec readiness decision, finding class, proof expectation, or route-back decision this lane informs>
+Decision target: <spec readiness decision, finding class, proof expectation, refinement input, or route-back decision this lane informs>
 
 Security context: <applicable | not applicable>
 - If not applicable: <short reason>
@@ -44,7 +63,7 @@ Relevant files/docs:
 - <path>: <why>
 
 Focus:
-<lane-specific focus>
+<lane-specific focus from references/lanes/<lane>.md>
 
 Inspect:
 - <spec section, code path, source artifact, command output, or docs>: <why>
@@ -61,10 +80,11 @@ Return:
 - lane name
 - verdict: ready | needs revision | blocked | decision-needed
 - candidate findings only, grouped by blocker | important | question | nit
+- for every substantive finding:
+  - use the exact schema in `references/finding-schema.md`
 - contested tradeoffs
 - open questions
 - evidence paths or sections
-- smallest spec/plan edit
 - proof expectation or validation evidence needed by a later plan
 - proposed artifact path and candidate lane-file content, or
   "chat-only/no-files exception: <reason>"
@@ -73,66 +93,10 @@ Return:
 - confidence: high | medium | low
 
 Do not include speculative findings without a concrete failure path.
+Prefer one strong finding over several weak findings.
 Do not mark findings accepted. Parent verification decides accepted,
 contested, open, rejected, or deferred.
 ```
 
-## Lane Overlays
-
-### product-intent
-
-Check whether the PRD/product-intent layer is present when product meaning is
-load-bearing. Verify user, problem, success criteria, product non-goals, and
-whether requirements follow from that intent.
-
-### requirements-testability
-
-Check whether requirements are testable, unambiguous, and separable from
-implementation tasks. Flag design prose that should be a requirement and task
-sequencing that should move to planning.
-
-### contract-and-scope
-
-Check goal, non-goals, invariants, ownership, output contract, and explicit
-boundaries. Findings should name the contract that would be violated.
-
-### architecture-boundaries
-
-Challenge module boundaries, source of truth, state ownership, dependency
-direction, and integration seams. Findings should name the future change or
-failure that the current boundary makes harder.
-
-## Security Threat Model Lane
-
-Include this focus when a spec touches sensitive surfaces:
-
-```text
-Check for a usable threat model:
-- assets and privileges
-- entry points
-- untrusted inputs
-- trust boundaries and auth assumptions
-- sensitive data paths
-- privileged actions
-- plugin/MCP/subagent/CI/package-script risk
-- explicit security non-goals
-
-If missing, report it as an important spec defect. Do not invent the threat model silently.
-```
-
-### validation-and-testability
-
-Check whether the spec gives enough proof expectation for planning. Consider
-automated tests, manual UX validation, visual proof, data/DB/state checks, logs,
-traces, metrics, OTel queries, smoke, e2e, CI, PR, or release artifact proof.
-
-### planning-readiness
-
-Check whether enough decisions exist for `plan-creation-swarm` to create task
-sequence, parallel lanes, write scopes, and proof gates without redefining the
-spec.
-
-### adversarial-crux
-
-Ask the few crux questions that could invalidate the design. Each crux must
-connect to a source claim, current repo evidence, or a missing product decision.
+Review means pressure-testing the spec. Refinement is the output shape for every
+lane, not a separate phase or one isolated lane.

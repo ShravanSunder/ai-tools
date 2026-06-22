@@ -1,13 +1,23 @@
 # Spec Creation Swarm Packets
 
-Use these packet shapes when dispatching read-only subagents. Also consume the
-shared contract in `../../references/lane-contract.md`;
-this file owns spec-creation lane names, design source classes, constructive
-challenge lanes, proof expectations, and next-workflow handoff.
+Use this file for the shared packet anatomy when dispatching read-only
+spec-creation subagents. Consume the universal lane contract in
+`../../references/lane-contract.md`, then load
+`references/creation-evidence-schema.md` and only the selected
+`references/lanes/*.md` files for lane-specific behavior.
+
+This file intentionally does not define named lane overlays. Stable lane
+behavior belongs in `references/lanes/<lane>.md`.
 
 The parent owns synthesis and decisions. Lane outputs are candidate evidence
 until the parent reducer verifies source anchors and folds accepted evidence
-into the spec artifact.
+into the primary spec artifact.
+
+Do not pass accumulated session history as lane context. Give each lane a
+fresh, bounded packet with source anchors, source/file inventory, and the exact
+decision target. Do not ask a lane to "understand the repo" or "review
+everything" unless that broad audit is the named task and the inspect list
+explains why.
 
 For substantial spec creation, create inspectable stage artifacts unless the
 user asked for chat-only/no-files, the work is a single tiny local lane, or the
@@ -20,13 +30,22 @@ Default artifact shape:
 
 ```text
 tmp/spec-workflows/<date>-<slug>/
-  swarm-ledger.md
+  <slug>.md                  # primary progressive-disclosure spec
+  swarm-ledger.md            # parent synthesis and evidence trace
   lanes/
-    <lane-name>.md
-  spec.md
+    <lane-name>.md           # candidate lane evidence
+  <slice-name>.md            # optional slice spec for real vertical slice
+  evidence-and-gaps.md       # optional evidence ledger, not required reading
 ```
 
-## Spec-Creation Packet Overlay
+The primary spec file carries product intent / PRD when load-bearing,
+requirements overview, technical contract, boundary map, slice routing map,
+proof expectations, non-goals, and open decisions. Slice specs are child specs
+for vertical slices, app protocols, ownership boundaries, domain boundaries, or
+shared lower-level contracts. Do not create appendix-style mini-doc sprawl.
+Every spec artifact file stays under 2000 lines.
+
+## Shared Spec-Creation Packet
 
 ```text
 You are a read-only design/research lane.
@@ -34,12 +53,24 @@ Do not edit files, stage changes, commit, or write implementation code.
 
 Repo: <absolute repo path>
 Question: <bounded question>
-Decision target: <spec decision, requirement, boundary, tradeoff, or proof expectation this evidence informs>
+Decision target: <spec decision, requirement, boundary, tradeoff, proof expectation, or slice route this evidence informs>
 Design stage: pre-plan design formation
-Parent needs: evidence, tradeoffs, and decision input
+Parent design packet:
+- problem / user / desired outcome
+- why now
+- current-state anchors
+- constraints and invariants
+- shared domain vocabulary
+- explicit non-goals / Not Doing
+- open unknowns
+- expected proof modality from this lane
+Selected lane reference: <references/lanes/<lane>.md>
+Creation evidence schema: references/creation-evidence-schema.md
 Reasoning effort: high | xhigh
 Source-of-truth inputs:
 - <path, doc, log, issue, or code search>: <why this source constrains the lane>
+Source/file inventory:
+- <path or source>: loaded | referenced | out of scope - <why it matters>
 Security context: applicable | not applicable
 - not applicable: <reason>
 - applicable: <pointer to parent security context plus lane deltas, or assets,
@@ -50,8 +81,12 @@ Inspect:
 - <path or docs query>: <why>
 
 Non-goals:
-- Do not choose implementation order, task sequence, worker assignment, execution DAGs, exact validation commands, or reviewer verdicts.
+- Do not choose implementation order, task sequence, worker assignment, execution DAGs, exact validation commands, reviewer verdicts, or final accepted design.
 - <lane-specific design decisions this lane must not own>
+
+Contradiction handling:
+- Report contradictions, missing requirements, unsupported assumptions, and
+  source gaps. Do not smooth them over.
 
 Return:
 - lane name
@@ -59,7 +94,7 @@ Return:
 - candidate evidence label
 - files/docs inspected
 - answer
-- design implications
+- evidence entries using `references/creation-evidence-schema.md`
 - risks or hidden assumptions
 - security implications, if any
 - proof expectations or proof modalities, not exact commands
@@ -75,10 +110,11 @@ Return:
 For substantial work, the parent `swarm-ledger.md` records:
 
 - source-of-truth inputs and lane packets issued
+- selected and omitted lanes with rationale
 - lane artifact paths under `lanes/`
 - candidate evidence accepted, contested, rejected, deferred, or left open
-- product intent, requirements, technical-contract, security, separability, and
-  proof-expectation decisions accepted into `spec.md`
+- product intent, requirements, technical-contract, security, separability,
+  slice-route, and proof-expectation decisions accepted into the primary spec
 - route to `spec-review-swarm` for drafted-spec critique, then
   `plan-creation-swarm` after accepted review feedback is folded in
 - completion receipt with source anchors, artifact paths, named exceptions, and
@@ -86,53 +122,5 @@ For substantial work, the parent `swarm-ledger.md` records:
 
 Spec creation stays pre-plan: it names proof expectations and modalities, but
 does not produce task sequencing, worker assignment, execution DAGs,
-implementation-plan rows, exact validation commands, or reviewer verdicts.
-
-## Codebase Explorer Lane
-
-```text
-Find adjacent implementation patterns for this design.
-
-Focus on:
-- similar features or flows
-- ownership boundaries
-- module interfaces
-- tests and validation patterns
-- key files the parent must read before deciding
-
-Design proposals should cite the local files that constrain them.
-```
-
-## Architecture Option Lanes
-
-Use one packet per stance.
-
-```text
-Take this stance: <minimal-change | clean-boundary | pragmatic-balance | risk-and-tradeoff-design>.
-
-Argue for the strongest version of this approach. Name:
-- file/module boundaries
-- what changes
-- what stays unchanged
-- what complexity is added or removed
-- risks
-- validation strategy
-- when this stance would be wrong
-```
-
-## Security Trust Boundary Lane
-
-```text
-Map the security-sensitive parts of this design.
-
-Identify:
-- assets and privileges
-- entry points
-- untrusted inputs
-- trust boundaries and auth assumptions
-- sensitive data paths
-- filesystem/network/subprocess/plugin/MCP/agent boundaries
-- explicit security non-goals
-
-Return missing threat-model questions only when the answer cannot be inferred from the repo.
-```
+implementation-plan rows, exact validation commands, reviewer verdicts, or
+implementation code.

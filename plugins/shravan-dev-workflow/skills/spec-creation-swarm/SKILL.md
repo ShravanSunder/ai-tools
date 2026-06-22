@@ -23,6 +23,11 @@ non-goals, security context, and proof expectations tied to requirements. It
 does not define task sequence, worker assignment, execution DAGs, implementation
 order, or exact pyramid test commands; those belong to `plan-creation-swarm`.
 
+Specs are clarity artifacts. They move fuzzy intent toward sharper product
+promise, requirements, boundaries, contracts, examples, non-goals, and proof
+expectations. The parent may leave unclear higher-level decisions named for the
+next refinement pass, but it must not hide them as implementation detail.
+
 Core pipeline:
 
 ```text
@@ -32,7 +37,8 @@ fuzzy goal or design question
   -> competing architecture lanes
   -> decision discussion for unresolved branches
   -> parent synthesis
-  -> product intent, requirements, spec boundary, separability map, open questions
+  -> primary spec file with product intent, requirements overview, spec boundary,
+     separability map, proof expectations, open questions, and slice routes
   -> optional handoff to spec-review-swarm, spec-handoff, or plan-creation-swarm
 ```
 
@@ -47,9 +53,9 @@ fuzzy goal or design question
   or crux-decision lanes. For tiny local decisions, name the smaller lane set
   used.
 - Give every subagent a bounded packet with a concrete question, exact source
-  inputs, source-of-truth inputs, lane-specific focus, security context,
-  expected evidence, and completion receipt. Broad repo audits use an explicit
-  broad-audit packet.
+  inputs, source-of-truth inputs, selected lane reference, lane-specific focus,
+  security context, expected evidence, and completion receipt. Broad repo
+  audits use an explicit broad-audit packet.
 - When a shortcut prevents dispatching lanes in the current run, still name the
   intended lane packet shape, high/xhigh reasoning effort, candidate evidence,
   source anchors, completion receipt, `swarm-ledger.md`,
@@ -58,6 +64,11 @@ fuzzy goal or design question
 - Treat lane outputs as candidate evidence until the parent reducer verifies
   source anchors and synthesizes accepted spec content.
 - The parent must read key files returned by explorer lanes before recommending a design.
+- For substantial specs, create a spec folder with one primary
+  `<descriptive-slug>.md` file. Use slice specs only for vertical slices, app
+  protocols, domain boundaries, ownership boundaries, or shared lower-level
+  contracts; do not create appendix-style mini-doc sprawl. Keep every spec
+  artifact file under 2000 lines.
 - Keep sequencing out of the spec. Do not include worker order, task order,
   implementation phases, execution DAGs, exact test commands, or validation
   command sequence except as proof expectations tied to requirements that
@@ -127,13 +138,21 @@ fuzzy goal or design question
 
 Default lanes for substantial design work:
 
-- `codebase-explorer`: finds similar features, ownership boundaries, and key files the parent must read.
-- `prior-art-researcher`: researches library/API/platform patterns with source citations.
-- `architecture-minimal`: argues for the smallest safe change.
-- `architecture-clean-boundary`: argues for clearer separation of concerns and future-proof ownership.
-- `architecture-pragmatic`: argues for the most shippable balanced approach.
-- `security-trust-boundary`: identifies entry points, untrusted inputs, assets, auth assumptions, sensitive data, and privileged actions.
-- `risk-and-tradeoff-design`: maps assumptions, future failure modes, and simpler alternatives.
+| Lane | Status | Reference | Why |
+| --- | --- | --- | --- |
+| `codebase-explorer` | mandatory | `references/lanes/codebase-explorer.md` | Grounds the spec in current repo boundaries and proof patterns. |
+| `architecture-minimal` | mandatory | `references/lanes/architecture-minimal.md` | Finds the smallest boundary-preserving design. |
+| `architecture-clean-boundary` | mandatory | `references/lanes/architecture-clean-boundary.md` | Protects ownership, source of truth, and future separability. |
+| `architecture-pragmatic` | mandatory | `references/lanes/architecture-pragmatic.md` | Balances delivery cost, maintainability, and proof. |
+| `risk-and-tradeoff-design` | mandatory | `references/lanes/risk-and-tradeoff-design.md` | Names assumptions, falsifying scenarios, and proof burden. |
+
+Conditional lanes:
+
+| Lane | Status | Reference | Trigger |
+| --- | --- | --- | --- |
+| `prior-art-researcher` | conditional | `references/lanes/prior-art-researcher.md` | External docs, library behavior, admired skill patterns, platform behavior, or current prior art constrain the design. |
+| `security-trust-boundary` | conditional | `references/lanes/security-trust-boundary.md` | Auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, MCP, CI, package-script, agent, or external-service surfaces are in scope. |
+| `ux-api-cli-surface` | conditional | `references/lanes/ux-api-cli-surface.md` | User-visible behavior, API/CLI ergonomics, visual systems, manual UX proof, logs, traces, metrics, data, DB, or state evidence are load-bearing. |
 
 For tiny design questions, run local versions of the relevant lanes and name the
 lane set used.
@@ -163,6 +182,10 @@ ownership map and explain why.
 
 - Load `../../references/lane-contract.md` and `references/swarm-packets.md`
   before spawning design, research, or architecture subagents.
+- Load `references/creation-evidence-schema.md`; every substantive creation
+  lane observation uses this schema before lane-specific context.
+- Load only the selected `references/lanes/*.md` files. Each selected lane
+  reference is a job contract; the parent still curates the task instance.
 - Load `references/discuss-with-me.md` when intent is unclear or design branches need user decisions.
 - Use `research-swarm` when the design depends on external prior art, current
   web/docs, DeepWiki-style repository research, saved-reader sources, memory,
@@ -181,6 +204,7 @@ Return:
 - Recommended design direction.
 - Product intent / PRD, requirements, and technical contract when those layers
   are load-bearing.
+- Primary spec artifact path and any slice-spec routing map.
 - Alternatives and tradeoffs.
 - Security context or "not security-sensitive" rationale.
 - Decisions needed from the user.

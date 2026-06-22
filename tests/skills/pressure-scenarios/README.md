@@ -52,9 +52,19 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `skill-audit` | `shared-lane-contract-no-phase-verdicts.md` | Do not let a shared lane contract absorb review verdicts, execution statuses, route-backs, or proof manuals. |
 | `research-swarm` | `research-swarm-substantial-stage-artifacts.md` | Do not collapse substantial fan-out research into chat-only summaries; require lane artifacts and parent synthesis. |
 | `spec-creation-swarm` | `spec-creation-swarm-parent-synthesis.md` | Do not outsource the mental model or let spec creation become implementation sequencing. |
+| `spec-creation-swarm` | `spec-creation-swarm-primary-spec-not-outline.md` | Do not label a research outline, lane dump, or table of contents as a primary spec. |
+| `spec-creation-swarm` | `spec-creation-swarm-spec-folder-chunking.md` | Do not split specs into appendices or mini-file sprawl; use one primary spec plus slice specs for real boundaries. |
+| `spec-creation-swarm` | `spec-creation-swarm-lane-prompts-not-generic.md` | Do not give creation subagents generic prompts; require selected lane refs and concrete packet fields. |
+| `spec-creation-swarm` | `spec-creation-swarm-no-session-dump-lanes.md` | Do not dump session history or whole-repo prompts into lanes; require fresh bounded packets and creation evidence schema. |
 | `spec-handoff` | `spec-handoff-portable-design-context.md` | Do not turn spec/design portability into plan creation or phase completion. |
 | `spec-review-swarm` | `spec-review-swarm-claims-not-truth.md` | Do not trust author confidence or reviewer consensus; verify claims and preserve contested issues. |
 | `spec-review-swarm` | `spec-review-swarm-routes-findings-to-spec-creation.md` | Do not turn spec review into broad spec recreation or planning when accepted findings should return to spec creation. |
+| `spec-review-swarm` | `spec-review-swarm-refinement-inputs.md` | Do not isolate refinement in one lane or return verdict-only critique; every review lane returns refinement-shaped output. |
+| `spec-review-swarm` | `spec-review-swarm-boundary-fidelity.md` | Do not let agents guess vague boundaries; require owners, source anchors, allowed/disallowed edges, and refinement inputs. |
+| `spec-review-swarm` | `spec-review-swarm-progressive-disclosure-lane.md` | Do not accept content scattered across appendices/evidence; verify primary spec, slice specs, evidence, routing, and line-cap layering. |
+| `spec-review-swarm` | `spec-review-swarm-spec-difference-lane.md` | Do not ignore or blindly trust prototypes; use implementation evidence to find hidden spec decisions. |
+| `spec-review-swarm` | `spec-review-swarm-lane-prompts-not-generic.md` | Do not give review subagents generic broad prompts; require selected lane refs and refinement-shaped packet fields. |
+| `spec-review-swarm` | `spec-review-swarm-no-prejudged-lanes.md` | Do not pre-judge review lane findings or broaden unverifiable claims into repo crawls. |
 | `tui-presentation` | `tui-presentation-monospace-structure.md` | Do not use markdown headings/pipe tables for TUI structure; use Unicode shape discipline. |
 | `tui-presentation` | `tui-presentation-progressive-disclosure.md` | Do not dump one giant diagram; use disclosure sequence with one map, selected slice, small ledger, and detail. |
 | `tui-presentation` | `tui-presentation-research-lane-board.md` | Do not claim TUI runs research; render handed-over lanes with parent synthesis boundaries. |
