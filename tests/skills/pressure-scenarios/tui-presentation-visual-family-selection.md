@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: flow|sequence|state|quadrant|topology|family
 expect_proof_regex: visual[- ]family|family choice
-expect_proof_regex: zoom.*disclosure move|disclosure move.*zoom|one primary visual family
+expect_proof_regex: zoom.*disclosure|disclosure.*zoom|one primary visual family|sequence as the primary family
 expect_proof_regex: sequence.*who talks to whom|state.*lifecycle|quadrant.*axes|topology.*boundaries
 
 ## Shortcut Temptation

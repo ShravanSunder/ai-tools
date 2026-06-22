@@ -1,7 +1,7 @@
 # Monitor Loop
 
-Use bounded monitoring for asynchronous PR state. Do not babysit forever and do
-not claim readiness from the first green state.
+Use bounded, API-budget aware monitoring for asynchronous PR state. Do not
+babysit forever and do not claim readiness from the first green state.
 
 ## Loop Shape
 
@@ -12,9 +12,38 @@ not claim readiness from the first green state.
 5. Re-fetch all gate state.
 6. Only then report readiness or proceed to merge authorization checks.
 
-Poll about once per minute unless repo instructions require a different cadence.
-Use a bounded timeout. If the window expires, report remaining blockers and
-stop.
+Default cadence for general checks/comments/review-state monitoring is about 2
+minutes. Use 30-60 seconds only for short active windows, such as a fresh push,
+checks starting, or quiet-poll confirmation. Use a bounded timeout. If the
+window expires, report remaining blockers and stop.
+
+## API Budget
+
+Use cheap probes before expensive snapshots:
+
+- REST first where it is sufficient for checks, PR metadata, comments, reviews,
+  and timestamps.
+- Conditional REST requests with saved `ETag`/`If-None-Match` or
+  `Last-Modified`/`If-Modified-Since` where the endpoint supports them.
+- Serialized requests; do not run concurrent GitHub polling loops.
+- GraphQL only for narrow state REST cannot provide, especially review-thread
+  resolution and unresolved thread node IDs.
+- Persist small cursor state: last head SHA, latest relevant timestamps,
+  unresolved thread IDs, check conclusions, mergeability, ETags, and
+  `x-ratelimit-*` headers.
+- If `Retry-After` is present, wait that long. If `x-ratelimit-remaining` is
+  `0`, calculate the wait duration from the `x-ratelimit-reset` epoch timestamp
+  minus the current time. For secondary-limit responses without a reset time,
+  stop or back off for at least one minute before retrying.
+
+GitHub references:
+
+- REST best practices:
+  https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
+- REST rate limits:
+  https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
+- GraphQL rate limits:
+  https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api
 
 ## Events That Reset Readiness
 
@@ -25,3 +54,20 @@ stop.
 - merge conflict or unknown mergeability;
 - PR head SHA changes;
 - local `HEAD` no longer matches PR head.
+
+Rate-limit resets and secondary-limit boundaries are API-budget events, not PR
+readiness events. They can invalidate or bypass cached proof and force backoff,
+but they do not reset readiness unless a PR lifecycle state also changed.
+
+## Readiness From Cache
+
+Cached state reduces polling cost; it does not replace readiness proof. Final
+readiness needs either a fresh authoritative fetch for every gate, or a
+validated `304 Not Modified` response against same-key cached payload that is
+current for the PR head and exact request identity, including query parameters,
+pagination, representation headers, and GraphQL variables/cursors.
+
+When a rate-limit boundary is reached, invalidate or bypass affected cached
+proof as needed, wait/back off according to GitHub headers, then re-establish
+the final proof path. Do not treat the rate-limit boundary itself as a PR
+comment, check, thread, mergeability, or head-SHA readiness reset.
