@@ -38,6 +38,9 @@ Claude is opt-in. Use only when the user explicitly asks to include Claude or as
 Use the Claude Code CLI harness only:
 
 ```shell
+prompt_file="$(mktemp /tmp/shravan-dev-workflow-claude-plan-review.XXXXXX)"
+# Write the shared plan review packet plus the prompt addition into $prompt_file.
+
 claude --print \
   --model opus \
   --effort xhigh \
@@ -46,10 +49,12 @@ claude --print \
   --disallowedTools "Edit Write NotebookEdit Bash" \
   --output-format json \
   --append-system-prompt "You are an external adversarial plan reviewer for a parent-agent-led plan-review-swarm swarm. Read-only. Findings only. Do not edit files." \
-  "$(cat "$prompt_file")"
+  < "$prompt_file"
 ```
 
 Do not use Anthropic API calls, SDK calls, or programmatic tool-calling APIs from this skill.
+Do not pass the full plan-review packet through command substitution; keep
+packet text out of process argv and shell history.
 
 Record the actual model and any skipped/failed Claude lane in swarm coverage.
 

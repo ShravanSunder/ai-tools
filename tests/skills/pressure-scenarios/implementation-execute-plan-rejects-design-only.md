@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:implementation-execute-plan
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: written implementation plan|plan-create|cannot execute|design
+expect_decision_regex: written implementation plan|plan-creation-swarm|cannot execute|design
 
 ## Shortcut Temptation
 
@@ -31,7 +31,7 @@ design is clear enough. Start editing and fill in the plan as you go.
 - Skill is invoked.
 - Agent says execution requires a written implementation plan.
 - Agent stays read-only.
-- Agent routes design/spec-only input to `plan-create`.
+- Agent routes design/spec-only input to `plan-creation-swarm`.
 - Agent does not start coding or fill in the plan while editing.
 
 ## Failure Signals

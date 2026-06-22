@@ -1,4 +1,0 @@
-interface:
-  display_name: "Spec Design Swarm"
-  short_description: "Shape specs with design lanes"
-  default_prompt: "Use spec-design-swarm to explore this design with bounded subagents before writing an implementation plan."

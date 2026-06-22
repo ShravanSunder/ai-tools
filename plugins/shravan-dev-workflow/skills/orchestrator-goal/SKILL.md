@@ -24,28 +24,35 @@ For unclear goals, respond with the load-bearing unknowns and an explicit next
 workflow that names `shravan-dev-workflow:discuss-with-me`.
 
 The goal contract names the durable outcome and gates. It does not replace
-requirements discovery, spec design, plan creation, execution, or review. It
+requirements discovery, spec creation, plan creation, execution, or review. It
 routes to those phase skills and preserves the proof chain across them.
 
 ## Default Implementation Lifecycle
 
 For implementation goals, default to the whole delivery lifecycle. If the user
-wanted only planning, only review, only PR work, or another subset, they can
-call those phase skills directly. Do not infer a smaller terminal condition
+wanted only planning, only review, only PR work, or another subset, direct skill
+invocation owns the current turn: when the user explicitly names a phase skill,
+that phase skill runs without needing `orchestrator-goal` to approve the route.
+Do not infer a smaller terminal condition
 just because the goal starts from a spec, plan, diff, or existing PR.
 
 Only the starting point is mutable. Choose `Current workflow` and
 `Next workflow` from the first unproven lifecycle gate:
 
-- no shared design/spec: `spec-design-swarm`
+- no shared design/spec: `spec-creation-swarm`
 - design/spec drafted but unreviewed: `spec-review-swarm`
-- accepted spec/design exists, no implementation plan: `plan-create`
+- accepted spec/design exists, no implementation plan: `plan-creation-swarm`
 - implementation plan exists but is unreviewed: `plan-review-swarm`
 - reviewed plan exists, implementation is not proven: `implementation-execute-plan`
 - implementation proof exists, review is not done or findings are unresolved:
   `implementation-review-swarm`
 - implementation review is addressed, PR is not created or readiness is not
   proven: `implementation-pr-wrapup`
+
+Review findings route back to the owning phase instead of skipping ahead:
+accepted spec findings return to `spec-creation-swarm`; accepted plan findings
+return to `plan-creation-swarm`; accepted implementation findings return to
+`implementation-execute-plan`.
 
 Default implementation terminal: PR created or updated and proven ready, but not
 merged. Completion normally requires implementation complete, required proof
@@ -190,13 +197,13 @@ scope boundary, or terminal condition is genuinely missing.
    - Use the exact labels `Required workflow skill:` and `Required reading:`
      when preparing copy-paste goal text.
    - `Required workflow skill:` is always `shravan-dev-workflow:orchestrator-goal`.
-     Put the phase skill (`plan-create`, `implementation-execute-plan`, etc.)
+     Put the phase skill (`plan-creation-swarm`, `implementation-execute-plan`, etc.)
      under `Next workflow:`, not in the required-skill field.
 4. Select the next workflow:
-   - early design or architecture: `spec-design-swarm`
+   - early spec, design, or architecture creation: `spec-creation-swarm`
    - drafted spec/design needs critique: `spec-review-swarm`
    - spec/design packet for another agent: `spec-handoff`
-   - implementation plan creation: `plan-create`
+   - implementation plan creation: `plan-creation-swarm`
    - implementation plan packet for another agent: `plan-handoff`
    - adversarial plan review: `plan-review-swarm`
    - validated implementation from a plan: `implementation-execute-plan`
@@ -211,8 +218,9 @@ scope boundary, or terminal condition is genuinely missing.
 5. Set the goal only when the user explicitly asked for a goal-backed session
    and the host surface supports it. Otherwise, prepare the goal prompt or
    contract artifact.
-6. When routing to `plan-create`, carry any known requirements/proof matrix rows
-   and mark missing implementation proof rows as `must be defined by plan-create`.
+6. When routing to `plan-creation-swarm`, carry any known
+   requirements/proof matrix rows and mark missing implementation proof rows as
+   `must be defined by plan-creation-swarm`.
 7. When a phase finishes in a goal-backed workflow, read its
    `phase_result`, `evidence`, `recommended_next_workflow`, and
    `recommended_transition_reason`; verify the evidence; then either record the
@@ -271,27 +279,29 @@ explicitly `not-applicable`.
 
 For non-trivial goals, compile a requirements/proof matrix before routing the
 next phase. The matrix may point to an existing plan/spec, or it may say
-`must be defined by plan-create` when the goal starts before an implementation
+`must be defined by plan-creation-swarm` when the goal starts before an implementation
 plan exists.
 
 Use the exact label `requirements/proof matrix` in goal contracts and handoff
-prompts. Do not hand all verification detail to `plan-create` as a blank slate:
+prompts. Do not hand all verification detail to `plan-creation-swarm` as a blank slate:
 seed every requirement, scope boundary, stop condition, and known proof source
 from the goal, then mark only genuinely missing implementation rows as
-`must be defined by plan-create`.
+`must be defined by plan-creation-swarm`.
 
 Rows should name:
 
 - requirement or claim
 - proof source: command, artifact, review result, UI/control evidence,
   observability query, or transcript-visible evidence
-- proof owner: parent, phase skill, subagent lane, external reviewer, or
-  app-specific verifier
-- stale-proof guard where relevant
+- evidence source: parent-run check, phase skill result, subagent lane,
+  external reviewer, app-specific verifier, UI/control evidence, data/state
+  inspection, logs, traces, metrics, OTel query, release artifact, or manual UX
+  validation
+- freshness guard where relevant
 
-When emitting matrix rows, use the literal row labels `proof owner:` and
-`stale-proof guard:` for non-trivial rows. Do not rely on nearby prose such as
-"owned by" or "current enough" to carry those gates.
+When emitting matrix rows, use the literal row labels `evidence source:` and
+`freshness guard:` for non-trivial rows. Do not rely on nearby prose such as
+"checked by" or "current enough" to carry those gates.
 
 Completion is parent-owned. A subagent, reviewer, UI driver, or observability
 query can satisfy a row only after the parent inspects the returned evidence and

@@ -6,6 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: evidence|update|create|merge|skip|source inspiration
+expect_proof_regex: evidence-backed|recurring workflow|existing skill|smallest useful change|priority
 expect_proof_regex: skill\.md.{0,120}(compact|boundary|core|trigger|decision|workflow|rule)
 expect_proof_regex: references/.{0,120}(detail|depth|example|rubric|template|long|source)
 expect_proof_regex: scripts/.{0,120}(deterministic|mechanic|runner|command|automation|none|not needed)
@@ -42,6 +43,10 @@ recommendation: update, create, merge, or skip?
 - Agent classifies candidates as update/create/merge/skip.
 - Agent prefers tightening existing skills over a vague mega-skill.
 - Agent uses source inspirations as mechanics, not text to copy wholesale.
+- Agent frames audit guidance declaratively: recommendations are evidence-backed,
+  new skills have recurring workflow evidence, existing skills are tightened
+  before new skills are proposed, and broad marketplace edits require explicit
+  drift evidence.
 - For any update/create recommendation, agent says what stays in compact
   `SKILL.md`, what belongs in `references/`, whether anything belongs in
   `scripts/`, and the pressure-coverage status.
@@ -55,4 +60,5 @@ recommendation: update, create, merge, or skip?
 - Skips evidence.
 - Does not classify update/create/merge/skip.
 - Duplicates existing skill behavior.
+- Relies on prohibition-heavy audit wording instead of positive criteria.
 - Omits progressive skill shape or pressure-proof recommendations.

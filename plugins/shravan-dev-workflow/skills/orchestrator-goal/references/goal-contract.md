@@ -48,7 +48,7 @@ Proof gates:
 <commands, artifacts, review state, screenshots, docs, or other evidence>
 
 Requirements/proof matrix:
-<requirement or claim -> proof gate or "must be defined by plan-create">
+<requirement or claim -> proof gate or "must be defined by plan-creation-swarm">
 
 Stop condition:
 <the exact state where the goal is complete>
@@ -89,8 +89,8 @@ the user explicitly authorized it.
 Only the starting point is mutable. Existing artifacts decide the first
 unproven lifecycle gate:
 
-- no accepted spec/design: start at `spec-design-swarm` or `spec-review-swarm`
-- accepted spec/design but no plan: start at `plan-create`
+- no accepted spec/design: start at `spec-creation-swarm` or `spec-review-swarm`
+- accepted spec/design but no plan: start at `plan-creation-swarm`
 - unreviewed plan: start at `plan-review-swarm`
 - reviewed plan but no implementation proof: start at `implementation-execute-plan`
 - implementation proof but unresolved implementation review: start at
@@ -222,7 +222,7 @@ Stale-proof guard:
 Use the exact labels `Proof owner:` and `Stale-proof guard:` when writing rows.
 Do not encode them only in prose.
 
-Use `must be defined by plan-create` only when the goal is clear but the
+Use `must be defined by plan-creation-swarm` only when the goal is clear but the
 implementation proof shape does not exist yet.
 
 ## Parent Ownership

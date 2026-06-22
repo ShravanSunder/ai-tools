@@ -1,9 +1,31 @@
 # Lane Packets
 
-Use these packet shapes for read-only subagents. The parent owns the question,
-verification, reduction, and final claim.
+Use these packet shapes for read-only subagents. Also consume the shared
+contract in `../../references/lane-contract.md`; this
+file owns research-specific lanes, source classes, route recommendations, and
+evidence expectations.
 
-## Common Packet
+The parent owns the question, verification, reduction, and final claim. Lane
+outputs are candidate evidence until parent synthesis verifies them against
+source anchors.
+
+For substantial research, create inspectable stage artifacts unless the user
+asked for chat-only/no-files, the work is a single tiny local lane, or the tool
+surface cannot write artifacts. Substantial means any of: more than one
+lane/subagent, output consumed by another workflow or phase, high/xhigh or
+security-sensitive lanes, or findings/decisions/proof obligations that need
+later inspection. Record any exception in the parent receipt.
+
+Default artifact shape:
+
+```text
+tmp/research-workflows/<date>-<slug>/
+  research-ledger.md
+  lanes/
+    <lane-name>.md
+```
+
+## Research Packet Overlay
 
 ```text
 You are a read-only research lane.
@@ -14,20 +36,50 @@ Parent question: <bounded question>
 Decision target: <what this evidence will help decide>
 Named targets: <repos/docs/tools/systems/articles to preserve>
 Source class: <local code | sibling repo | DeepWiki | web docs | Reader | memory/session>
+Security context: applicable | not applicable
+- not applicable: <reason>
+- applicable: <pointer to parent security context plus lane deltas, or assets,
+  entry points, untrusted inputs, trust boundaries, sensitive data, privileged
+  actions, and security non-goals>
 
 Inspect:
 - <path/url/repo/query>: <why>
 
+Non-goals:
+- <decisions, artifacts, or workflows this research lane must not own>
+
 Return:
 - lane name
+- status: answered | blocked
+- candidate evidence label
 - sources inspected
 - direct observations
 - cited source summaries
 - inferences
 - contradictions or stale assumptions
 - open questions
+- recommended route, if any: spec-creation-swarm | plan-creation-swarm | no route yet
+- proposed artifact path and candidate lane-file content, when artifacts are expected
+- completion receipt: answered | blocked, with source anchors and proposed
+  artifact paths; parent writes lane files for read-only lanes
 - confidence: high | medium | low
 ```
+
+## Parent Research Ledger
+
+For substantial work, the parent `research-ledger.md` records:
+
+- source-of-truth inputs and lane packets issued
+- lane artifact paths under `lanes/`
+- which observations the parent accepted, contested, rejected, or left open
+- contradictions and stale assumptions that affect the next phase
+- route recommendation to `spec-creation-swarm` or `plan-creation-swarm`, when
+  the evidence is ready for a creation or planning workflow
+- completion receipt with source anchors, artifact paths, named exceptions, and
+  remaining uncertainty
+
+Research ledgers do not create specs or implementation plans. They preserve
+evidence for the next parent reducer.
 
 ## Local Re-Anchor Lane
 

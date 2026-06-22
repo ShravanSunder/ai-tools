@@ -94,4 +94,4 @@ Expected: use `docs-maintain`.
 - Do not converge after presenting only one branch when multiple credible branches exist.
 - Do not turn `review` into discussion unless review uncovered a design/spec/plan/docs decision.
 - Do not treat `do it` as discussion after the model is already confirmed.
-- Do not let `discuss-with-me` spawn subagents by default; route broad research to `spec-design-swarm`.
+- Do not let `discuss-with-me` spawn subagents by default; route broad design creation to `spec-creation-swarm`.

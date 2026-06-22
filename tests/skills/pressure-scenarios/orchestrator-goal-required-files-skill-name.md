@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:orchestrator-goal
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: shravan-dev-workflow:orchestrator-goal|docs/plans/2026-06-12-agentstudio-observability-startup.md|docs/superpowers/specs/2026-06-13-shared-observability-dev-loop-design.md|plan-create|requirements/proof
+expect_decision_regex: shravan-dev-workflow:orchestrator-goal|docs/plans/2026-06-12-agentstudio-observability-startup.md|docs/superpowers/specs/2026-06-13-shared-observability-dev-loop-design.md|plan-creation-swarm|requirements/proof
 expect_proof_regex: required workflow skill
 expect_proof_regex: required reading
 expect_proof_regex: exact .*file|known artifacts
@@ -33,7 +33,7 @@ adapter plan. The plan file is
 source is
 `docs/superpowers/specs/2026-06-13-shared-observability-dev-loop-design.md`.
 Scope is only AgentStudio adapter planning and proof guidance, not the shared
-stack implementation. First workflow should be `plan-create` or plan execution
+stack implementation. First workflow should be `plan-creation-swarm` or plan execution
 depending on whether the plan is ready. Do not include the long file list or the
 orchestrator skill name in the goal text; the next model can infer those from
 context.

@@ -16,8 +16,8 @@ review packet
   -> optional external model lanes
   -> reducer verification
   -> receive findings
-  -> address accepted implementation issues when in-scope
-  -> verdict, findings, fixes, and coverage
+  -> route accepted implementation issues
+  -> verdict, findings, proof gaps, and coverage
 ```
 
 ## Operating Model
@@ -26,9 +26,24 @@ review packet
 - The lane contract is not Codex-only: another agent system may back a bounded read-only lane when the user requests it, when the harness is already available, or when that backend is the point of the review.
 - Include Claude, Gemini, `agy`, or another external adversarial lane only when the user explicitly asks for that outside counsel. Claude must use the Claude Code CLI harness, not Anthropic API calls.
 - Never include Oracle in this workflow.
-- Treat all reviewer output as raw input. Verify findings against the repository before presenting them as accepted.
-- After review, receive findings rigorously: read, understand, verify against codebase reality, evaluate, then address accepted findings.
-- When reviewing current-session implementation work, fix accepted blocker and important findings by default unless the user explicitly asked for report-only review.
+- Implementation-review lanes use high or xhigh reasoning effort according to
+  change size, risk, and review depth. Security-sensitive, cross-module,
+  plan-backed, or pre-merge reviews should use xhigh.
+- Treat all reviewer output as raw candidate findings. Verify findings against
+  the repository before presenting them as accepted.
+- When a shortcut or missing artifact prevents dispatching lanes in the current
+  run, still name the substantial-lane packet shape: role / mode, edit
+  boundary, bounded question, decision target, source-of-truth inputs, inspect
+  list, non-goals, lane-specific checklist, output schema, contradiction
+  handling, confidence, security context, completion receipt, and parent
+  verification.
+- After review, receive findings rigorously: read, understand, verify against
+  codebase reality, evaluate, then route accepted findings to the owning
+  workflow.
+- Accepted blocker and important implementation findings normally route back to
+  `implementation-execute-plan`. Only make tiny same-session review-fix edits
+  when they are explicitly scoped, remain inside the current implementation
+  scope, and carry the same proof discipline.
 - Do not blindly implement reviewer suggestions. Reject unsupported, technically wrong, out-of-scope, or YAGNI findings with evidence.
 - If feedback is unclear, conflicts with user decisions, or expands scope, ask before editing.
 - Keep the swarm shallow: direct child reviewer agents only. Do not ask reviewer agents to spawn deeper review swarms.
@@ -59,13 +74,18 @@ Before dispatching reviewers, identify exactly what is being reviewed:
 - Review focus, such as security, reliability, tests, contracts, architecture, or adversarial design.
 - Implementation proof: requirements or plan items claimed complete, proof
   gates claimed, commands and exit codes, red/green evidence for behavior
-  changes or explicit exception, proof layers not run, and stated blockers.
+  changes or explicit exception, unsatisfied proof gates, evidence freshness,
+  and stated blockers.
 
 If the scope is ambiguous and cannot be inferred safely from git state or the prompt, ask one concise question before spawning reviewers.
 
 ## Shared Review Packet
 
 Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet. Use `references/reviewer-prompts.md` for the packet template and lane prompts.
+Each substantial lane packet identifies role / mode, edit boundary, bounded
+question, decision target, source-of-truth inputs, inspect list, non-goals,
+lane-specific checklist, output schema, contradiction handling, confidence,
+security context, and completion receipt.
 
 Reviewers must not trust implementation summaries, previous agent reports, test claims, or other reviewer outputs. They must read the actual artifacts in scope.
 
@@ -74,10 +94,15 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
 1. Scope builder
    - Determine mode, base/head, changed files, relevant instructions, and user intent.
    - Prefer explicit user scope. Otherwise infer from git state and current request.
-   - If base/head cannot be inferred safely, ask one concise question before dispatch.
+   - If base/head cannot be inferred safely, ask one concise question before
+     dispatch and name the substantial-lane packet shape required for the later
+     review: role / mode, edit boundary, bounded question, decision target,
+     source-of-truth inputs, inspect list, non-goals, lane-specific checklist,
+     output schema, contradiction handling, confidence, security context,
+     completion receipt, and parent verification.
 
 2. Spec compliance gate
-   - For implementation and plan-backed reviews, dispatch a spec compliance reviewer first or mark why it was skipped.
+   - For implementation and plan-backed reviews, dispatch a spec compliance reviewer first or record the scoped reason another lane covers it.
    - The reviewer checks that the actual artifact matches the request: nothing missing, nothing extra, no misread requirement.
    - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
 
@@ -110,10 +135,13 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Reject claims that cannot be proven from current artifacts.
    - Deduplicate by root cause.
 
-7. Review reception and fix loop
+7. Review reception and routing
    - Load `../../references/review-reception.md` to receive accepted findings,
      decide what this workflow owns, and handle feedback produced or validated
      by this review.
+   - Route accepted blocker/important implementation findings to
+     `implementation-execute-plan` unless a tiny same-session review-fix is
+     explicitly scoped.
    - Pure follow-through on existing GitHub PR comments or review threads
      belongs to `implementation-pr-wrapup`.
 
@@ -149,7 +177,8 @@ Default lanes:
 - Contracts and tests reviewer
 - Adversarial design reviewer
 
-For small changes, run fewer lanes but keep at least one normal reviewer and one adversarial reviewer.
+For small changes, run the smallest relevant lane set while preserving intent
+and at least one challenge lane.
 
 ## External Model Lanes
 
@@ -183,21 +212,27 @@ Rejected findings should not be listed by default. Mention them only when a reje
 ## Addressing Accepted Findings
 
 Implementation review includes review reception when the parent agent owns the
-implementation. Load `../../references/review-reception.md` before editing,
+implementation. Load `../../references/review-reception.md` before routing
+accepted findings, making a tiny explicitly scoped same-session review-fix,
 replying to review findings produced by this review, or closing threads for
 accepted findings from this review. Existing PR comment/thread follow-through
 belongs to `implementation-pr-wrapup`.
 
 ## Progressive Disclosure
 
-- Load `references/reviewer-prompts.md` before dispatching reviewers or writing a copy-paste review prompt.
+- Load `../../references/lane-contract.md` and
+  `references/reviewer-prompts.md` before dispatching reviewers or writing a
+  copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../../references/review-reception.md` before addressing accepted
-  findings from this review.
+  findings from this review. Use the route-back rule unless a tiny
+  same-session review-fix is explicitly scoped.
 
 ## Report Shape
 
-Start with verdict and findings, ordered by severity. If no findings survive verification, say that clearly and list any skipped reviewers or test gaps.
+Start with verdict and findings, ordered by severity. If no findings survive
+verification, say that clearly and list any unavailable reviewer inputs or test
+gaps.
 
 Use this compact structure:
 
@@ -223,10 +258,12 @@ or relabeled proof lanes found or "none", red/green evidence status, exceptions
 and their approval source>
 
 Swarm coverage
-<reviewed scope, lanes run, lanes skipped, backend used for each lane, external model lane status, verification notes>
+<reviewed scope, lanes run, lane status, backend used for each lane, external model lane status, verification notes>
 
-Fix follow-through
-<accepted findings fixed, rejected/deferred findings, PR threads resolved or left open, commands run, remaining blockers>
+Routing follow-through
+<accepted findings routed to implementation-execute-plan, tiny explicitly
+scoped same-session fixes if any, rejected/deferred findings, PR threads
+resolved or left open, commands run, remaining blockers>
 
 Artifact links
 <full clickable artifact links (absolute path + line) for reports, handoffs, or
@@ -237,9 +274,10 @@ other files the human is expected to open>
 
 - Do not paste raw subagent transcripts as the review.
 - Do not accept findings just because multiple agents agreed.
-- Do not hide skipped external model lanes.
+- Record unavailable external model lanes as lane status, including the reason.
 - Do not run Claude or Gemini unless the user asked.
 - Do not run `agy` unless the user asked for Gemini/agy or outside adversarial counsel.
-- Do not leave accepted current-session implementation blockers unfixed unless the user asked for report-only review or the fix needs a decision.
+- Do not bypass `implementation-execute-plan` for accepted blocker/important
+  findings unless a tiny same-session review-fix is explicitly scoped.
 - Do not let external model lane failure fail the whole review.
 - Do not let a sidecar reviewer become the critical path when the parent can continue reducing available evidence.

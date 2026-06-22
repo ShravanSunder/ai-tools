@@ -68,18 +68,30 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 
 When auditing `shravan-dev-workflow`, check `../../references/source-inspirations.md` for the concise plugin-level map of admired skills and borrowed mechanics.
 
+When auditing swarm lane packet duplication, also check
+`../../references/lane-contract.md` if it exists. Keep shared lane contracts to
+universal packet anatomy, security context, source anchors, completion
+receipts, candidate-evidence invariants, parent reducer invariants, and
+artifact state labels. Keep phase-specific lane names, review verdicts,
+execution statuses, route-backs, examples, and proof modality details in
+skill-local playbooks.
+
 Do not add per-skill provenance docs unless a skill needs a task-specific reference file for progressive disclosure.
 
 ## Failure Shields
 
-- Do not create skills from one-off incidents unless recurrence is clearly likely and costly.
-- Do not propose a new skill when an existing skill can be tightened.
-- Do not cite upstream inspiration without saying what local behavior it improves.
-- Do not make broad marketplace or agent-instruction edits unless the audit explicitly finds drift.
-- Do not recommend a skill change without saying how the skill remains compact
-  and how the behavior should be pressure-tested, or why pressure proof is not
-  needed.
-- Do not mutate files during an audit unless the user explicitly asks to implement the recommendations.
+- New skill recommendations require recurrence that is clearly likely and
+  costly.
+- Existing skills are the preferred home when tighter wording can prevent the
+  observed failure mode.
+- Upstream inspiration belongs in the audit only with the local behavior it
+  improves.
+- Marketplace or agent-instruction edits belong in scope when the audit finds
+  concrete drift there.
+- Update/create recommendations include the compact `SKILL.md` boundary,
+  reference depth, script need, and pressure-proof status.
+- Audit output remains read-only until the user explicitly asks to implement a
+  narrow recommendation.
 
 ## Output Shape
 

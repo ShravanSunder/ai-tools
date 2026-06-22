@@ -41,7 +41,7 @@ Security context
 
 Requirements/proof matrix
 - Source: <path/section or compact proof line>
-- Rows carried forward: <requirement, proof owner, proof gate, stale-proof guard>
+- Rows carried forward: <requirement, evidence source, proof gate, freshness guard>
 - Open proof gaps or split triggers: <or "none">
 - Parent verification rule: downstream subagent, reviewer, UI-driver, telemetry,
   or other delegated evidence must be inspected or cross-checked before
@@ -77,7 +77,7 @@ Constraints:
 - Verify plan claims against current files before conclusions.
 - Preserve listed security invariants. If the plan touches sensitive surfaces
   but no threat model is provided, flag that as a plan defect.
-- Preserve the requirements/proof matrix, including proof owners, stale-proof
+- Preserve the requirements/proof matrix, including evidence sources, freshness
   guards, open proof gaps, split triggers, and parent-owned verification.
 - Keep findings evidence-backed with exact paths.
 

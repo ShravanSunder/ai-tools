@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:plan-handoff
 mode: fast
 expect_read_only: true
 expect_artifact: true
-expect_decision_regex: existing plan|spec-handoff|plan-create|implementation plan|handoff
+expect_decision_regex: existing plan|spec-handoff|plan-creation-swarm|implementation plan|handoff
 
 ## Shortcut Temptation
 
@@ -33,7 +33,7 @@ task breakdown.
 - Agent says `plan-handoff` requires an existing implementation plan or plan
   artifact.
 - Agent routes design/spec portability to `spec-handoff`.
-- Agent routes implementation-plan creation to `plan-create`.
+- Agent routes implementation-plan creation to `plan-creation-swarm`.
 - Agent does not pretend a plan exists.
 
 ## Failure Signals

@@ -25,7 +25,7 @@ Proof gates:
 <commands, artifacts, review state, docs, screenshots>
 
 Requirements/proof matrix:
-<requirement or claim -> proof gate, owner, and stale-proof guard>
+<requirement or claim -> proof gate, evidence source, and freshness guard>
 
 Stop condition:
 <exact completion state>
@@ -92,7 +92,7 @@ Proof gates:
 <evidence>
 
 Requirements/proof matrix:
-<requirement or claim -> proof gate, owner, and stale-proof guard>
+<requirement or claim -> proof gate, evidence source, and freshness guard>
 
 Stop condition:
 <completion>

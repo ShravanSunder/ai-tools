@@ -49,13 +49,13 @@ These are objective gates, not soft rules. If the answer to the gate question is
 
 Gate: treats the spec as claims, requires a threat model or explicit
 non-sensitive rationale, and checks proof expectations or explicit deferral to
-`plan-create`.
+`plan-creation-swarm`.
 
 ### spec-review-swarm should not trigger
 
 - "Review this implementation plan before I execute it." -> `plan-review-swarm`
 - "Review this PR diff for bugs." -> `implementation-review-swarm`
-- "Help me write the plan from this spec." -> `plan-create`
+- "Help me write the plan from this spec." -> `plan-creation-swarm`
 
 ### plan-review-swarm should trigger
 
@@ -65,7 +65,9 @@ non-sensitive rationale, and checks proof expectations or explicit deferral to
 
 Gate: whole-artifact coverage; plans missing the requirements/proof matrix
 (without a documented compact proof line) or with proof gates that cannot pass
-at task size are `needs revision`.
+at task size are `needs revision`. Accepted blocker/important findings route
+back to `plan-creation-swarm`; spec-boundary gaps route back to
+`spec-creation-swarm`.
 
 ### plan-review-swarm should not trigger
 
@@ -80,7 +82,9 @@ at task size are `needs revision`.
 - "Adversarially review the implementation in these files."
 
 Gate: verifies candidate findings against artifacts; missing or unmapped
-implementation proof yields `not_ready`.
+implementation proof yields `not_ready`. Accepted blocker/important findings
+route back to `implementation-execute-plan` unless a tiny same-session fix is
+explicitly scoped.
 
 ### implementation-review-swarm should not trigger
 
@@ -111,14 +115,17 @@ merge authorization before any readiness or merge claim.
 
 ## Boundary Invariants
 
-- Specs/designs are reviewed before plans exist.
-- Plans/handoffs are reviewed after a design/spec direction exists and before execution.
+- Specs/designs are created before plans exist; accepted spec review findings
+  return to `spec-creation-swarm`.
+- Plans/handoffs are reviewed after a design/spec direction exists and before
+  execution; accepted plan review findings return to `plan-creation-swarm`.
 - Code/diffs/PRs/commits/files are reviewed by the implementation swarm.
 - Existing PR feedback follow-through belongs to `implementation-pr-wrapup`;
   fresh code-review discovery belongs to `implementation-review-swarm`.
 - Spec/design handoff packages pre-plan context; it does not create the plan.
-- Plan creation turns spec/design context into a written implementation plan; it
-  does not execute code.
+- Plan creation turns spec/design context into a written implementation plan,
+  execution DAG, proof matrix, and parallel work lane map; it does not execute
+  code.
 - Plan handoff packages an existing implementation plan; it does not package
   raw spec/design context as though a plan exists.
 - Implementation handoff requires implementation state such as branch, diff,
@@ -126,13 +133,14 @@ merge authorization before any readiness or merge claim.
 
 ## Full Suite Routing
 
-### spec-design-swarm should trigger
+### spec-creation-swarm should trigger
 
 - "Use subagents to research this architecture before we write a plan."
 - "Brainstorm competing designs for this feature and pressure-test assumptions."
 
 Gate: no implementation diff; parent synthesis names evidence, tradeoffs, security
-context, and next workflow.
+context, separability, contracts, proof expectations, and next workflow. Task
+sequence and worker order are deferred to `plan-creation-swarm`.
 
 ### discuss-with-me should trigger
 
@@ -162,7 +170,7 @@ unresolved.
 ### research-swarm should not trigger
 
 - "Grill my understanding before we decide." -> `discuss-with-me`
-- "Shape the architecture from this evidence." -> `spec-design-swarm`
+- "Shape the architecture from this evidence." -> `spec-creation-swarm`
 - "Review this implementation plan." -> `plan-review-swarm`
 
 ### orchestrator-goal should trigger
@@ -219,14 +227,15 @@ and any open proof gaps.
 Gate: packages spec/design context, decisions, non-goals, open questions, and
 evidence without creating an implementation plan or calling the spec complete.
 The packet carries spec proof expectations or explicitly defers proof definition
-to `plan-create`.
+to `plan-creation-swarm`.
 
-### plan-create should trigger
+### plan-creation-swarm should trigger
 
 - "Turn this reviewed spec into an implementation plan."
 - "Create the task sequence and validation plan from this design."
 
-Gate: stays read-only, creates a written implementation plan, and routes review
+Gate: stays read-only, creates a written implementation plan, includes an
+execution DAG with parallel lanes or a serial-work rationale, and routes review
 to `plan-review-swarm` or execution to `implementation-execute-plan`. The plan
 maps material requirements to proof gates and splits work whose proof cannot
 pass at the proposed scope.
@@ -243,7 +252,7 @@ execution to `implementation-execute-plan`.
 
 ### plan-improve-repo should not trigger
 
-- "Turn this spec into an implementation plan." -> `plan-create`
+- "Turn this spec into an implementation plan." -> `plan-creation-swarm`
 - "Execute this existing plan." -> `implementation-execute-plan`
 - "Review this plan for holes." -> `plan-review-swarm`
 
