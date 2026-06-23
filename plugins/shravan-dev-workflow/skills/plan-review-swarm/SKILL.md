@@ -123,7 +123,9 @@ chat-only review.
    - execution order
    - tests and validation gates
    - requirements/proof matrix coverage, source requirement references, testing
-     pyramid coverage, TDD/red-green expectations, and proof layer sizing
+     pyramid coverage, proof rubrics per requirement/aspect/section,
+     TDD/red-green expectations, valuable-proof rationale, noise-test
+     exclusions, and proof layer sizing
    - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
@@ -170,11 +172,13 @@ Default lanes:
 - `architecture-assumptions`: challenges module boundaries, ownership, data flow, dependency direction, and hidden coupling.
 - `testability-validation`: checks whether the proposed tests and commands
   actually prove behavior and catch likely failures. It also checks whether
-  every material requirement traces back to the source spec/requirements, every
-  proof gate maps to a testing-pyramid layer, lower proof layers are not skipped
-  just because a higher layer exists, behavior changes name whether red/green
-  evidence is required, and manual proof is justified when durable automated
-  proof is not suitable.
+  every material requirement or plan section traces back to the source
+  spec/requirements, carries a proof rubric with risk/failure mode, why the
+  proof is valuable, selected testing-pyramid layer(s), expected signal,
+  freshness guard, red/green expectation where feasible, and noise-test
+  exclusions. It rejects rote "all pyramid layers for every ticket,"
+  positive/negative symmetry, and deleted-file/config assertions unless the
+  accepted source defines them as contracts or security invariants.
 - `security-reliability`: looks for trust-boundary, secret/token, race, cleanup, rollback, observability, and partial-failure gaps.
 - `execution-scope`: checks ordering, cutovers, migration completeness, ambiguous task packets, and overbroad or under-specified work.
 - `adversarial-design`: pokes holes in assumptions, contradictions, tradeoffs, and simpler alternatives.
@@ -223,10 +227,16 @@ After lanes return:
 7. Produce the smallest creation-route or owner-facing edit instruction, not
    implementation patches.
 
-Plans missing a requirements/proof matrix, source requirement references, or
+Plans missing a requirements/proof matrix, source requirement references,
+requirement/aspect-specific proof rubrics, valuable-proof rationale, or selected
 testing-pyramid proof layers are `needs revision`, not ready for
 `implementation-execute-plan`, unless the plan documents why a compact proof
 line is sufficient for its size.
+
+Plans that use "pyramid TDD" as a rote all-layer checklist, add symmetric
+positive/negative tests without distinct failure-mode value, or fossilize
+deleted files/configs or implementation shape without a source contract are
+`needs revision`.
 
 Plans with required proof gates that cannot pass at the proposed task size are
 `needs revision` until split into smaller provable slices.

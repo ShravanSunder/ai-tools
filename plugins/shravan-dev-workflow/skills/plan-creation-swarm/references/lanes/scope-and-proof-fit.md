@@ -7,6 +7,9 @@ Reject units of work that cannot be completed and proven in one owned execution
 pass. This lane checks whether candidate slices are small enough to execute,
 large enough to produce meaningful behavior, and paired with proof that can
 actually falsify the slice.
+For large specs, this can mean a parent plan package with several large
+independently provable tickets rather than many tiny plans or one unprovable
+epic.
 
 Trigger examples:
 - A slice combines many owners, subsystems, or proof surfaces.
@@ -39,9 +42,17 @@ Analysis method:
 For each slice, ask: what source obligation does it satisfy, what artifact does
 it change, what behavior/state can be observed after it, what proof will fail if
 the slice is wrong, and what dependency prevents it from standing alone.
+Check whether the ticket is meaningful enough to review as a product/system
+increment and bounded enough to prove in one execution pass.
 
 Prioritized smells / failure signals:
 - slice is a horizontal layer with no visible consumer or proof checkpoint;
+- parent plan is split into many unrelated mini-plans with no plan-set coverage
+  matrix or integration checkpoint;
+- ticket is so small that proof would be pedantic, such as testing only a
+  deleted implementation detail, absent config file, or mechanical rename;
+- ticket is so large that proof is postponed to a later "validate everything"
+  phase;
 - slice crosses unrelated owners and cannot be reviewed as one change;
 - proof gate only proves lint/build health, not the slice claim;
 - task says "validate" without expected signal or failure interpretation;
@@ -67,7 +78,8 @@ decision absent from the packet.
 
 Output extras:
 Return slice -> source obligation -> owned write surface -> observable result
--> proof gate -> hidden dependency -> split/replan recommendation.
+-> proof gate -> why this proof is valuable -> hidden dependency ->
+split/merge/replan recommendation.
 
 Advisory boundary:
 This lane recommends fit and splits. The parent agent owns final slice shape and

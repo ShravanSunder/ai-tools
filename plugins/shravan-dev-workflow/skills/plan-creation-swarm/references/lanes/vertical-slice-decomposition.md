@@ -7,6 +7,8 @@ Shape work into vertical slices that create a visible behavior, state change,
 API/protocol capability, data outcome, or operational proof. This lane resists
 horizontal phases unless a horizontal step is small, necessary, and consumed by
 a named later slice.
+For large specs, propose a parent plan package with large vertical tickets or
+slice artifacts when that preserves readability better than one giant plan.
 
 Trigger examples:
 - Work spans multiple files, layers, components, tests, or agents.
@@ -41,9 +43,17 @@ Group source obligations by observable increment. For each increment, name the
 minimal write set, proof signal, and integration point. If a horizontal task is
 unavoidable, name the later slice that consumes it and the checkpoint that keeps
 it from becoming open-ended infrastructure work.
+Favor tickets that deliver a meaningful product/system increment with their own
+proof rubric. Avoid shrinking slices until proof becomes about file churn rather
+than behavior, state, contract, or operational evidence.
 
 Prioritized smells / failure signals:
 - slices are named by layer instead of outcome;
+- slices are tiny mechanical tasks whose only proof is "file/config absent",
+  "renamed thing exists", or another implementation detail not required by the
+  source;
+- large-spec plan shape becomes many unrelated plan files instead of one parent
+  package with coverage and ticket/slice artifacts;
 - "setup" or "refactor" has no consuming slice and proof checkpoint;
 - one slice carries multiple unrelated source outcomes;
 - proof waits until after many slices have landed;
@@ -67,7 +77,8 @@ not available in the packet.
 
 Output extras:
 Return slice id -> outcome -> source anchors -> minimal write set -> proof
-signal -> horizontal exception/consumer -> checkpoint.
+signal -> why the slice is a meaningful proof unit -> horizontal
+exception/consumer -> checkpoint.
 
 Advisory boundary:
 This lane proposes slice candidates. The parent composes the final plan and

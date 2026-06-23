@@ -180,7 +180,11 @@ Check whether proof gates prove the stated requirements. Verify source
 requirement references, testing-pyramid layers, red/green requirements, proof
 modalities, evidence sources, and freshness guards. Include manual UX, visual,
 data/DB/state, logs, traces, metrics, OTel, smoke, e2e, CI, PR, and release
-artifact proof where the plan surface calls for them.
+artifact proof where the plan surface calls for them. Validate the proof rubric
+for each requirement, aspect, ticket, or section: risk/failure mode, why the
+proof is valuable, selected layer(s), expected signal, freshness guard, and
+noise-test exclusions. Reject rote all-layer pyramid checklists and tests that
+freeze deleted files/configs or implementation shape without a source contract.
 
 ### security-reliability
 

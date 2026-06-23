@@ -39,6 +39,8 @@ Core responsibilities:
   coherent together.
 - Check proof gates prove the right source requirements and remain attached to
   the work they validate.
+- Check each large ticket or plan section has a proof rubric that fits its
+  requirement/risk rather than inheriting a generic pyramid checklist.
 - Identify duplicated, missing, contradictory, too-broad, or unprovable plan
   units.
 
@@ -50,12 +52,18 @@ Evidence priority:
 
 Analysis method:
 Trace source artifact -> plan slice -> task/checkpoint -> proof gate. Then scan
-sideways across slices for contradictions, gaps, and dependency hazards.
+sideways across slices for contradictions, gaps, dependency hazards, and proof
+rubrics that are either missing, duplicated mechanically, or detached from the
+section they claim to validate.
 
 Prioritized smells / failure signals:
 - source obligation appears in no slice, matrix row, checkpoint, or proof gate;
 - two slices duplicate ownership or write surface;
 - proof gate validates a different claim than the slice implements;
+- proof rubric is absent for a material slice or is copied generically across
+  slices without requirement/risk-specific value;
+- parent plan package lacks a coverage matrix showing how ticket/slice proof
+  rows cover the whole accepted source;
 - parallel work depends on unresolved serial order;
 - accepted source non-goal is violated by the plan as a whole;
 - focused lanes are locally ready but their assumptions conflict.
@@ -77,7 +85,9 @@ runtime proof, or a source decision absent from the accepted artifact.
 
 Output extras:
 Include source-to-plan trace row, cross-slice issue, smallest plan edit, and
-focused lanes that should re-check the fix.
+focused lanes that should re-check the fix. For proof issues, include the
+affected requirement/section, missing or mismatched proof-rubric field, and why
+the gap affects whole-plan readiness.
 
 Advisory boundary:
 This lane returns candidate findings only. It does not accept findings, rewrite

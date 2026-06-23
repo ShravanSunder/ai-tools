@@ -20,12 +20,15 @@ the draft cheaply.
 
 Default scope:
 Accepted source artifact, working plan draft, slice map, requirement/proof
-matrix, checkpoints, spec-return items, human-decision items, non-goals,
-global constraints, and proof expectations.
+matrix, parent plan package, ticket/slice inventory, checkpoints,
+spec-return items, human-decision items, non-goals, global constraints, and
+proof expectations.
 
 Parent packet requirements:
 - accepted source artifact and source map;
 - working plan draft, slice map, or parent outline if one exists;
+- parent plan package or ticket/slice inventory when the plan is split across
+  large vertical artifacts;
 - known source route-backs and human decisions;
 - sibling lane outputs that propose slices, proof rows, or constraints.
 
@@ -39,10 +42,15 @@ Analysis method:
 Trace each material source item to a plan home: slice, matrix row, proof gate,
 global constraint, checkpoint, route-back, or human-decision item. Then scan the
 plan for invented obligations that do not trace to source or verified repo
-constraints.
+constraints. When the plan is a package, check the parent matrix against the
+full ticket set so coverage does not disappear inside a slice file.
 
 Prioritized smells / failure signals:
 - source requirement has no slice, proof row, checkpoint, or route-back;
+- source requirement appears in a ticket but is absent from the parent coverage
+  matrix or plan-set checkpoint;
+- ticket has a proof command but no source requirement, expected signal, or
+  valuable-proof rationale;
 - plan adds scope not present in source or repo evidence;
 - source non-goal is contradicted by a task;
 - proof expectation is detached from the source item it proves;
@@ -67,7 +75,8 @@ missing anchors, or judging coverage requires a human source decision.
 
 Output extras:
 Return source item -> current plan home -> missing/invented/deferred status ->
-smallest draft edit -> route-back or human decision.
+parent matrix/ticket coverage status -> smallest draft edit -> route-back or
+human decision.
 
 Advisory boundary:
 This lane does not declare the plan ready. It helps the parent keep the draft

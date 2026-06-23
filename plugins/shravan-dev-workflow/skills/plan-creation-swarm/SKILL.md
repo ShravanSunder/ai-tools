@@ -11,6 +11,11 @@ and prove it." It does not redefine product intent, rewrite requirements, or
 execute the plan. Non-trivial plans carry a
 requirements/proof matrix; tasks whose required proof cannot pass at their size
 are split before execution.
+Large specs may produce one parent plan package with multiple large vertical
+ticket or slice artifacts. The parent package owns whole-spec coverage and the
+requirements/proof matrix across the ticket set; each ticket is independently
+provable and carries source refs, write scope, proof rubric, advancement gate,
+and stop/replan conditions.
 
 The spec defines separability; this skill defines sequence. It turns accepted
 product intent, requirements, boundaries, and contracts into ordered tasks,
@@ -58,6 +63,11 @@ gates, and evidence requirements.
 - Include task sequence, dependency graph, parallel work lanes, disjoint write
   scopes, integration gates, validation gates, rollout or rollback/recovery
   notes, risks, and open questions.
+- For large specs, prefer one parent implementation-plan package with multiple
+  large independently provable vertical ticket/slice artifacts over many
+  unrelated plan files or tiny tickets. Each ticket must be big enough to
+  deliver meaningful behavior, state, artifact, or operational evidence and
+  small enough to prove in one execution pass.
 - Use `whole-plan-coverage` as a conditional creation-side coverage lane for
   high-risk, multi-slice, multi-artifact, or source-to-plan
   coverage-sensitive planning. It helps draft plan coverage; it does not review
@@ -69,10 +79,17 @@ gates, and evidence requirements.
   evidence is required, and whether the task is sized so that proof can pass
   inside the approved scope. Tiny plans may use a compact proof line and say why
   it is sufficient.
-- Use the testing pyramid as the default proof shape: unit for fast deterministic
-  logic, integration for real boundaries, smoke for the owned runnable surface,
-  e2e for full user/runtime paths, and PR/release gates for merge or artifact
-  readiness. Lower layers remain explicit when a higher layer exists.
+- Use the testing pyramid as proof vocabulary, not as a rote checklist. For
+  each requirement, aspect, or ticket, define a proof rubric: risk or failure
+  mode, why the proof is valuable, smallest useful red proof, selected pyramid
+  layer or layers, higher runtime/user/release proof when needed, expected
+  signal, freshness guard, and tests deliberately not written because they would
+  only freeze implementation details.
+- Select pyramid layers by the source requirement and risk. Unit tests fit fast
+  deterministic logic, integration tests fit real boundaries, smoke tests fit
+  the owned runnable surface, e2e fits full user/runtime paths, and PR/release
+  gates fit merge or artifact readiness. Lower layers remain explicit when a
+  higher layer exists, but not every ticket needs every layer.
 - Add the proof modalities required by the spec and product surface: automated
   tests, manual UX validation, visual evidence for visual systems, data or DB
   state checks, logs, traces, metrics, OTel queries, release artifacts, or
@@ -81,6 +98,11 @@ gates, and evidence requirements.
 - Use TDD for behavior changes when feasible: identify or add the smallest
   failing proof tied to a requirement, watch it fail for the expected reason,
   implement, then make it pass and climb the proof pyramid only as needed.
+- Valuable TDD proves behavior, contract, state, boundary, user-visible
+  outcome, or operational evidence. Reject proof rows that only assert
+  implementation shape, deleted files/configs, or symmetric positive/negative
+  cases unless the accepted spec makes that absence, shape, or branch a contract
+  or security invariant.
 - If the source is a goal contract, preserve known matrix rows from that
   contract and define any missing implementation rows here instead of leaving
   evidence definition to the executor.
@@ -122,8 +144,11 @@ gates, and evidence requirements.
    - goal and non-goals
    - product intent, requirements, and spec source coverage
    - requirements/proof matrix, or compact proof line for tiny plans
+   - plan package shape for large specs: parent plan plus large vertical tickets
+     or slice artifacts when that keeps coverage readable
    - evidence sources and freshness guards for each non-trivial row
-   - testing-pyramid/TDD strategy tied back to source requirements
+   - proof rubrics tied back to source requirements, selected pyramid layers,
+     and the reason each proof is valuable
    - task sequence
    - execution DAG with parallel lanes and integration gates
    - files/modules likely touched
@@ -146,16 +171,18 @@ For substantial plans, dispatch bounded lanes where tool support exists:
 - `global-constraints-and-interfaces`: extracts binding constraints and
   cross-slice interfaces from the accepted source and current repo.
 - `vertical-slice-decomposition`: proposes end-to-end slice boundaries and
-  flags horizontal chunks.
+  flags horizontal chunks; for large specs it can propose a parent plan package
+  with large independently provable ticket/slice artifacts.
 - `validation-proof`: maps source requirements to proof layers, red/green
-  needs, evidence sources, freshness guards, pyramid coverage, and split
-  triggers.
+  needs, proof rubrics, valuable evidence sources, freshness guards, pyramid
+  layer selection, noise-test rejection, and split triggers.
 - `execution-order`: proposes dependency order, parallel lanes, integration
   gates, and handoff points.
 - `codebase-boundary`: checks write surfaces, ownership, adjacent modules, and
   likely conflicts.
 - `scope-and-proof-fit`: checks whether task size, sequence, parallel lanes,
-  assumptions, and proof gates fit the accepted spec and approved scope.
+  assumptions, and proof gates fit the accepted spec and approved scope, and
+  whether tickets are neither unprovable epics nor pedantic microtasks.
 
 Conditional lanes:
 
@@ -213,11 +240,14 @@ Return:
 
 - source coverage
 - implementation plan path or chat-only plan
+- plan package shape when large specs become a parent plan plus ticket/slice
+  artifacts
 - source-truth packet status: primary sources loaded, supporting evidence used,
   parent summaries treated as routing only, and selected lane references loaded
 - requirements/proof matrix with source spec/requirement references, owning
-  tasks, proof modalities, evidence sources, proof layers, and freshness guards,
-  or compact proof line for tiny plans
+  tasks, proof modalities, evidence sources, selected proof layers, proof
+  rubrics, noise-test exclusions, and freshness guards, or compact proof line
+  for tiny plans
 - task sequence
 - execution DAG and parallel work lanes, or a serial-work rationale
 - lane reasoning-effort assignments: medium/high by complexity and risk
@@ -246,6 +276,11 @@ Return:
   prove.
 - Inventing a testing strategy that does not trace back to the spec's
   requirements and proof expectations.
+- Treating "pyramid TDD" as a command to add unit, integration, smoke, and e2e
+  tests for every ticket regardless of risk or value.
+- Adding positive/negative tests, deleted-config tests, or implementation-shape
+  tests that do not prove a source requirement, contract, boundary, user
+  behavior, state transition, or operational signal.
 - Treating one high-level smoke/e2e check as a substitute for lower pyramid
   layers without an explicit reason.
 - Dropping evidence requirements or freshness guards that came from a goal

@@ -55,6 +55,18 @@ boilerplate, and authoring/meta notes were removed from lane files; subagents
 load shared protocol references for mechanics and lane files for focused
 judgment.
 
+A fourth follow-up tightens plan proof design and plan review. Plan creation
+now treats "pyramid TDD" as requirement/aspect-specific proof rubrics rather
+than a rote all-layer checklist. Large accepted specs may become one parent
+plan package with large independently provable ticket/slice artifacts; the
+parent owns whole-plan coverage and requirements/proof matrix rows across the
+ticket set. Plan review now validates those rubrics per requirement, aspect,
+ticket, or section through `testability-validation` and checks parent package
+coverage through `whole-plan-cohesion`. Both creation and review reject noise
+tests that fossilize implementation details, deleted files/configs, or
+positive/negative symmetry unless the accepted source defines those facts as
+contracts or security invariants.
+
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
@@ -79,7 +91,7 @@ judgment.
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh`
   focused over 15 touched/remediation scenarios: pass
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh --fast`:
-  85 passed, 14 failed; the nine new lane-teaching scenarios passed, and the
+  87 passed, 14 failed; the new lane-teaching and proof-rubric scenarios passed, and the
   remaining failures are pre-existing/out-of-scope scenarios outside this
   remediation surface
 - `pnpm --dir tests/skills exec tsc --noEmit`: pass
@@ -108,7 +120,7 @@ Additional lane-teaching validation:
   skipped
 - direct full Vitest eval suite:
   `SKILL_PRESSURE_BACKEND=fake pnpm --dir tests/skills exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts`:
-  85 passed, 14 failed with the same pre-existing/out-of-scope baseline
+  87 passed, 14 failed with the same pre-existing/out-of-scope baseline
   failures as the shell wrapper
 - static lane-teaching field check across review lane refs: pass; every
   plan-review and spec-review lane reference contains `Evidence priority:`,
@@ -129,8 +141,21 @@ Additional lane-teaching validation:
   skipped
 - full direct Vitest eval suite:
   `SKILL_PRESSURE_BACKEND=fake pnpm --dir tests/skills exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts`:
-  85 passed, 14 failed with the same pre-existing/out-of-scope baseline
+  87 passed, 14 failed with the same pre-existing/out-of-scope baseline
   failures as the shell wrapper
+
+Additional proof-rubric validation:
+
+- focused shell pressure scenarios for
+  `plan-creation-swarm-proof-rubric-plan-package` and
+  `plan-review-swarm-proof-rubric-validation`: pass
+- focused direct Vitest evals over
+  `plan-creation-swarm-proof-rubric-plan-package`,
+  `plan-review-swarm-proof-rubric-validation`,
+  `plan-creation-swarm-from-spec-not-code`,
+  `plan-creation-swarm-lane-packet-contract`,
+  `plan-review-swarm-testability-validation-lane`, and
+  `plan-review-swarm-whole-plan-cohesion-lane`: pass
 
 Real installed-cache pressure was not claimed in this changeset because the
 normal Codex plugin installation still points at the live installed marketplace
