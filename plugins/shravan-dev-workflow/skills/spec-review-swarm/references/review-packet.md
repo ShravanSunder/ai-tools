@@ -23,6 +23,11 @@ decision target. Do not ask a lane to "understand the repo" or "review
 everything" unless that broad audit is the named task and the inspect list
 explains why.
 
+For substantial review, include a first-class `whole-spec-coverage` lane. It
+receives the target spec artifact, source anchors, research lane files or
+ledger entries, slice inventory when present, and the focused-lane decision
+surface. Focused lanes do not replace it.
+
 Do not pre-judge findings for a lane. The parent packet must not tell a lane to
 treat a category as minor, avoid flagging a concern, or confirm the parent's
 preferred answer. Lanes return candidate findings; the parent reducer verifies
@@ -32,6 +37,10 @@ If a claim cannot be verified from the supplied artifact, source anchors, or one
 named focused check, return it as open or unresolved. Do not broaden into a repo
 crawl to rescue an under-specified spec.
 
+If a shortcut or missing artifact prevents live dispatch, the parent still names
+the mandatory `whole-spec-coverage` lane in the blocked response. Do not
+describe it only as generic whole-picture or whole-artifact coverage.
+
 ```text
 You are a spec/design review swarmer.
 Review only; do not implement. Do not edit files.
@@ -40,6 +49,11 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Target artifact: <path or chat-only>
 Coverage from controller: <line count + chunk ranges, or packet files>
+Primary artifact inputs:
+- target spec/design artifact: <path, required sections, and coverage>
+- source/research artifacts: <research ledger, lane files, source docs, or not applicable with reason>
+Required source anchors:
+- <product intent / requirement / contract / boundary / proof expectation / slice route>: <why this constrains the lane>
 Lane: <selected lane name>
 Selected lane reference: <references/lanes/<lane>.md>
 Reasoning effort: high | xhigh

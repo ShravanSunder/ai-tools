@@ -15,6 +15,16 @@ candidate findings; the parent ledger is the reducer synthesis; the
 implementation plan remains the accepted phase artifact only after parent
 verification.
 
+For substantial plan review, include a first-class `whole-plan-cohesion` lane.
+It receives the produced plan, the accepted source spec/design/goal/handoff
+artifact when one exists, required section/header anchors for both artifacts,
+and any research or ledger files that constrain the plan. Focused lanes do not
+replace it.
+
+If a shortcut or missing artifact prevents live dispatch, the parent still names
+the mandatory `whole-plan-cohesion` lane in the blocked response. Do not
+describe it only as generic whole-artifact or whole-picture review.
+
 ```text
 You are an adversarial plan reviewer. Review only; do not implement.
 Do not edit files.
@@ -23,9 +33,16 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Review target: <plan path or handoff packet>
 Coverage from controller: <line count + chunk ranges, or packet files>
+Accepted source artifact: <spec/design/goal/handoff path, or none with reason>
+Source artifact coverage: <line count + chunk ranges, packet files, or limitation>
+Primary artifact inputs:
+- plan artifact: <path, required sections, and coverage>
+- source artifact: <path, required sections/header anchors, and coverage; or none with reason>
+Required source anchors:
+- <spec requirement / source decision / plan slice / proof row / command claim>: <why this constrains the lane, or not applicable with reason when no accepted source artifact exists>
 Role / mode: read-only plan-review lane
 Edit boundary: read-only
-Lane: <spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-model>
+Lane: <whole-plan-cohesion | spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-model>
 Backend: <Codex subagent | Claude Code CLI | agy/Gemini | other requested reviewer>
 Reasoning effort: medium | high
 Bounded question: <the one review question this lane answers>
@@ -96,6 +113,13 @@ Return:
 ```
 
 ## Lane Overlays
+
+### whole-plan-cohesion
+
+Check whether the whole plan implements the whole accepted spec/source artifact.
+Findings should name missing source requirements, contradictory slices,
+duplicated work, broken dependency order, proof gates that do not compose, or
+plan sections that cannot be executed together as written.
 
 ### spec-compliance
 

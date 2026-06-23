@@ -20,6 +20,7 @@ Core pipeline:
 draft spec/design
   -> whole-artifact coverage
   -> claim / artifact / contract packet
+  -> mandatory whole-spec-coverage lane
   -> bounded review lanes
   -> optional external counsel when requested
   -> parent verification
@@ -33,6 +34,9 @@ draft spec/design
 - If a spec or design file exists, run `wc -l` and read every chunk before judging.
 - Treat the artifact as claims to verify, not truth.
 - Build one shared review packet before dispatching lanes.
+- For substantial spec reviews, always dispatch a first-class
+  `whole-spec-coverage` lane. Focused lanes do not replace it; lighter review
+  belongs to another workflow or an explicit chat-only/lightweight exception.
 - Spec-review lanes use high or xhigh reasoning effort according to artifact
   complexity, security sensitivity, and decision risk.
 - Do not pass author confidence or previous agent praise as evidence.
@@ -46,8 +50,8 @@ draft spec/design
 - When a shortcut or missing artifact prevents dispatching lanes in the current
   run, still name the substantial-lane packet shape: bounded question, decision
   target, source-of-truth inputs, inspect list, non-goals, contradiction
-  handling, security context, output contract, completion receipt, and parent
-  verification.
+  handling, security context, output contract, completion receipt, mandatory
+  `whole-spec-coverage` lane, and parent verification.
 - Parent owns verification, synthesis, and final recommendations.
 - Use external Claude, Gemini, or `agy` only when explicitly requested.
 - Keep lane ownership clean. Do not edit another agent's lane file or put words in another reviewer voice.
@@ -68,7 +72,8 @@ draft spec/design
      surfaces instead of proceeding: product intent / PRD, testable
      obligations, technical contract, proof expectations, security threat
      model, and substantial-lane packet fields including bounded question,
-     decision target, inspect list, non-goals, and contradiction handling
+     decision target, inspect list, non-goals, contradiction handling, and the
+     mandatory `whole-spec-coverage` lane
 2. Establish coverage:
    - line count and chunks for files
    - packet files for handoffs
@@ -86,7 +91,8 @@ draft spec/design
    - proof expectations, or explicit deferral to `plan-creation-swarm`
    - plan constraints or open planning inputs
 4. Verify major claims against code/docs/tests before dispatch where cheap.
-5. Dispatch review lanes for substantial artifacts.
+5. Dispatch `whole-spec-coverage` and focused review lanes for substantial
+   artifacts.
 6. Run a decision discussion for unresolved branches that block readiness.
 7. Verify and reduce findings:
    - accepted: technically valid and actionable
@@ -105,6 +111,7 @@ Default lanes for substantial specs:
 
 | Lane | Status | Reference | Why |
 | --- | --- | --- | --- |
+| `whole-spec-coverage` | mandatory | `references/lanes/whole-spec-coverage.md` | Checks the full spec satisfies product intent, requirements, contract, boundaries, proof expectations, and slice coherence. |
 | `requirements-testability` | mandatory | `references/lanes/requirements-testability.md` | Ensures obligations are testable and not implementation tasks. |
 | `contract-and-scope` | mandatory | `references/lanes/contract-and-scope.md` | Checks goals, non-goals, ownership, invariants, and contract surfaces. |
 | `architecture-boundaries` | mandatory | `references/lanes/architecture-boundaries.md` | Challenges owners, sources of truth, dependency direction, and drift risks. |
@@ -135,6 +142,8 @@ lanes used.
   per-finding schema.
 - Load only the selected `references/lanes/*.md` files. Specialized lanes are
   scoped review aspects; they do not own refinement alone.
+- For substantial reviews, include `references/lanes/whole-spec-coverage.md`
+  as a selected lane even when other focused lanes look sufficient.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.
 - Use `../../references/source-inspirations.md` when updating this skill or explaining source practices.
 
@@ -144,6 +153,7 @@ Return:
 
 - Coverage evidence.
 - Review lanes run and lane status.
+- Whole-spec coverage status.
 - Verdict: ready, needs revision, blocked, or decision-needed.
 - Product-intent / requirements / technical-spec chain status.
 - What held.

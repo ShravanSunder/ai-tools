@@ -12,7 +12,9 @@ Core pipeline:
 ```text
 plan artifact
   -> whole-artifact coverage
+  -> source spec / accepted context coverage
   -> shared plan review packet
+  -> mandatory whole-plan-cohesion lane
   -> bounded plan-review-swarm lanes
   -> optional external model lanes
   -> parent verification and synthesis
@@ -30,6 +32,13 @@ plan artifact
 - Include evidence: file path, symbol or section, failure scenario, smallest fix, and proof/test.
 - For substantial plans, dispatch bounded read-only reviewer lanes by default. Codex subagents are the normal backend because most sessions run in Codex, but the lane contract is not Codex-only.
 - Give every lane a curated packet. Do not rely on inherited session context.
+- For substantial plan reviews, always dispatch a first-class
+  `whole-plan-cohesion` lane. Focused lanes do not replace it; lighter review
+  belongs to another workflow or an explicit chat-only/lightweight exception.
+- When a plan was created from a spec, design, goal contract, or handoff packet,
+  reviewer packets include both the plan artifact and the accepted source
+  artifact, with source anchors or section/header references that constrain the
+  review.
 - Plan-review lanes use medium or high reasoning effort according to plan size,
   risk, and latency cost. Security-sensitive, broad, or cross-module reviews
   should use high effort.
@@ -42,8 +51,8 @@ plan artifact
   run, still name the substantial-lane packet shape: role / mode, edit
   boundary, bounded question, decision target, source-of-truth inputs, inspect
   list, non-goals, lane-specific checklist, output schema, contradiction
-  handling, confidence, security context, completion receipt, and parent
-  verification.
+  handling, confidence, security context, completion receipt, mandatory
+  `whole-plan-cohesion` lane, and parent verification.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
 - Accepted blocker or important findings normally route back to
   `plan-creation-swarm` for revision with the full planning context. If a
@@ -70,11 +79,13 @@ plan artifact
      boundary, bounded question, decision target, source-of-truth inputs,
      inspect list, non-goals, lane-specific checklist, output schema,
      contradiction handling, confidence, security context, completion receipt,
-     and parent verification
+     mandatory `whole-plan-cohesion` lane, and parent verification
 2. Establish coverage:
    - For files: line count plus chunk ranges.
    - For packets: list packet files read.
    - For chat plans: state that no source file was available.
+   - For source artifacts: accepted spec/design/goal/handoff path, section
+     anchors, and coverage; if no source artifact exists, state the limitation.
 3. Extract major claims:
    - architecture
    - file/module boundaries
@@ -86,8 +97,10 @@ plan artifact
    - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
-5. Build a shared plan review packet.
-6. Dispatch bounded plan-review-swarm lanes for substantial plans.
+5. Build a shared plan review packet that includes the review target and the
+   accepted source artifact or explicit source limitation.
+6. Dispatch `whole-plan-cohesion` and bounded plan-review-swarm lanes for
+   substantial plans.
 7. Add optional external model adversarial lanes when requested.
 8. Verify, dedupe, and rank candidate findings.
 9. Receive and route findings:
@@ -113,6 +126,10 @@ Backend rules:
 
 Default lanes:
 
+- `whole-plan-cohesion`: checks whether the whole plan implements the whole
+  accepted spec/source artifact, whether vertical slices fit together, whether
+  proof gates are coherent across slices, and whether task scope, sequence, and
+  validation contradict each other.
 - `spec-compliance`: checks whether the plan satisfies the stated goal, user constraints, and source artifact.
 - `architecture-assumptions`: challenges module boundaries, ownership, data flow, dependency direction, and hidden coupling.
 - `testability-validation`: checks whether the proposed tests and commands
@@ -187,6 +204,8 @@ execution after the plan is ready.
 - Load `../../references/lane-contract.md` and
   `references/review-packet.md` before dispatching subagents or writing a
   copy-paste review prompt.
+- Load `references/lanes/whole-plan-cohesion.md` before dispatching the
+  mandatory whole-picture lane for a substantial plan review.
 - Load `references/review-checklist.md` when the plan is large, risky, or implementation-facing.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../ops-security-review/references/threat-model-context.md` when packaging or reviewing security-sensitive plans. This cross-skill reference is load-bearing; keep it in sync with `ops-security-review` if that reference moves.
@@ -202,6 +221,7 @@ Return:
 - Suggested smallest creation route or tiny plan edit.
 - Accepted/rejected/deferred findings and any plan edits applied.
 - Swarm coverage: lanes run, lane status, backend used for each lane, external model lane status, and verification notes.
+- Whole-plan cohesion status.
 - Artifact path, or why no artifact was written.
 - Full clickable artifact links (absolute path + line) for review reports,
   plans, or artifacts the human is expected to open.
