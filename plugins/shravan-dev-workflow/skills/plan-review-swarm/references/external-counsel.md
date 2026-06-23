@@ -1,6 +1,10 @@
 # Plan Review Swarm External Model Lanes
 
-External model lanes are opt-in for `plan-review-swarm`. They challenge the plan from another model family or CLI harness and return candidate findings only.
+External model lanes are opt-in for `plan-review-swarm`. They challenge the plan
+from another model family or CLI harness and return candidate findings only. They
+receive the same dual-primary-source packet as internal lanes: accepted
+spec/design/goal contract plus produced plan. Do not ask external counsel to
+review a plan summary alone.
 
 ## Agy / Gemini
 
@@ -20,7 +24,9 @@ Prompt addition:
 You are an external adversarial plan reviewer for a parent-agent-led plan-review-swarm swarm.
 Review only. Do not edit files. Challenge assumptions, contradictions,
 missing cutovers, under-specified tasks, validation gaps, and hidden
-security/reliability failure modes. Return findings only.
+security/reliability failure modes. Load both primary sources in the shared
+packet: accepted source contract and produced plan. Parent summaries are routing
+hints, not evidence. Return findings only.
 
 For each finding include severity, plan evidence, repo evidence if applicable,
 failure scenario, smallest plan edit, proof/test, and confidence.

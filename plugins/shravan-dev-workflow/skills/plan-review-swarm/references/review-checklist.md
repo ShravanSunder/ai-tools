@@ -10,6 +10,16 @@ Load this for large, risky, stale, or implementation-facing plans.
 - Tail chunk read.
 - Adjacent plans/worktrees explicitly excluded when out of scope.
 
+## Source Contract Coverage
+
+- Accepted spec/design/goal contract identified for non-trivial review.
+- `wc -l` captured for source files.
+- Source chunk coverage has no gaps.
+- Required source sections named: requirements, boundaries, non-goals, global
+  constraints, proof expectations, and open planning inputs.
+- Omitted source sections named with reason.
+- Freshness or drift risk named.
+
 ## Grounding
 
 - Current branch/base checked when branch freshness matters.
@@ -24,6 +34,25 @@ Load this for large, risky, stale, or implementation-facing plans.
 - Execution order is dependency-safe.
 - Validation gates prove behavior, not only formatting.
 - Scope is narrow enough for one execution pass or clearly split.
+
+## Traceability
+
+- Every accepted requirement, boundary, non-goal, global constraint, proof
+  expectation, and open planning input is represented as one of: implemented by
+  a plan slice, intentionally deferred with source-approved reason, routed to
+  `spec-creation-swarm`, routed to `plan-creation-swarm`, or identified as
+  invented by the plan.
+- Plan slices cite source anchors.
+- Requirements/proof matrix rows cite source anchors and slice IDs.
+- Command/manual proof rows map to matrix rows and checkpoints.
+
+## Whole-Picture Coverage
+
+- Substantial review has a whole-picture source-to-plan lane or explicit parent
+  coverage pass.
+- High-risk, multi-slice, or multi-artifact review has both.
+- Focused lanes report `cannot_verify_from_focused_packet` instead of guessing
+  about cross-slice or cross-artifact coverage.
 
 ## Security Context
 
@@ -49,6 +78,7 @@ Load this for large, risky, stale, or implementation-facing plans.
 ## Report Discipline
 
 - Separate what the plan says from what the repo proves.
+- Separate source truth from parent routing summaries and supporting evidence.
 - Rank findings by execution risk.
 - Ask questions only when the answer changes implementation.
 - Keep the review read-only.

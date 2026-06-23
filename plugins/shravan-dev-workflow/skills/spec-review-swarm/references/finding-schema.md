@@ -8,10 +8,14 @@ this schema.
 Finding:
 - severity: blocker | important | question | nit
 - summary: <one sentence>
+- primary source anchor: <draft spec/design section or source packet anchor>
+- supporting evidence: <research ledger, lane file, code/doc anchor, transcript note, command output, or none>
+- evidence class: primary source | supporting research | live repo check | parent routing context
 - evidence: <spec section, source path, code/doc anchor, transcript note, or command output>
 - failure path: <how the next planning or implementation agent could go wrong>
 - what is fuzzy / missing / contradicted / unverifiable / likely to drift:
 - what the next agent would guess:
+- cannot verify from focused packet: yes | no
 - refinement input: <requirement, boundary, contract, example, non-goal, proof signal, harness assumption, guardrail, or human decision that should become sharper>
 - loop route: inner loop to spec-creation-swarm | outer loop to discuss-with-me/human review
 - parent reducer note: <what the parent must verify before accepting this refinement input>
@@ -20,6 +24,9 @@ Finding:
 Rules:
 
 - Do not report speculative findings without a concrete failure path.
+- Findings whose only evidence is a parent summary or research ledger remain
+  `open` until the lane or parent verifies them against the draft spec/design
+  artifact.
 - Prefer one strong finding over several weak findings.
 - Do not mark findings accepted. Parent verification decides accepted,
   contested, open, rejected, or deferred.

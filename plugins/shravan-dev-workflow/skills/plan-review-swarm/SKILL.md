@@ -10,8 +10,8 @@ Run a read-only plan review swarm. Load the whole artifact, compare it to live c
 Core pipeline:
 
 ```text
-plan artifact
-  -> whole-artifact coverage
+accepted spec/design/goal contract + produced plan
+  -> dual whole-artifact coverage
   -> shared plan review packet
   -> bounded plan-review-swarm lanes
   -> optional external model lanes
@@ -25,11 +25,17 @@ plan artifact
 
 - Do not implement while reviewing.
 - If a plan file exists, run `wc -l` and read every chunk before judging it.
+- For non-trivial plan review, resolve the accepted spec/design/goal contract
+  that the plan claims to implement. Review lanes load both the accepted source
+  contract and the produced plan themselves.
 - Treat the plan as a claim, not truth. Verify major claims against current code, docs, package metadata, tests, and branch state.
 - Separate blocker, important, question, and nit findings.
 - Include evidence: file path, symbol or section, failure scenario, smallest fix, and proof/test.
 - For substantial plans, dispatch bounded read-only reviewer lanes by default. Codex subagents are the normal backend because most sessions run in Codex, but the lane contract is not Codex-only.
 - Give every lane a curated packet. Do not rely on inherited session context.
+- Lane packets include both primary source paths, coverage expectations for
+  both, compact binding excerpts from both, supporting evidence links, and the
+  sentence "parent summaries are routing hints, not evidence."
 - Plan-review lanes use medium or high reasoning effort according to plan size,
   risk, and latency cost. Security-sensitive, broad, or cross-module reviews
   should use high effort.
@@ -40,9 +46,11 @@ plan artifact
   synthesis.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
   run, still name the substantial-lane packet shape: role / mode, edit
-  boundary, bounded question, decision target, source-of-truth inputs, inspect
-  list, non-goals, lane-specific checklist, output schema, contradiction
-  handling, confidence, security context, completion receipt, and parent
+  boundary, bounded question, decision target, accepted source contract path,
+  produced plan path, compact binding excerpts, supporting evidence links,
+  inspect list, non-goals, lane-specific checklist, output schema,
+  `cannot_verify_from_focused_packet`, contradiction handling, confidence,
+  security context, `primary_sources_loaded`, completion receipt, and parent
   verification.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
 - Accepted blocker or important findings normally route back to
@@ -59,10 +67,12 @@ plan artifact
 
 ## Workflow
 
-1. Identify the review target and mode:
+1. Identify the review target, accepted source contract, and mode:
    - `plan-file`: source implementation plan path exists.
    - `handoff-packet`: reviewing a packet prepared by another agent.
    - `chat-plan`: reviewing a plan only present in the conversation.
+   - `source-contract`: accepted spec, design, product requirement, or goal
+     contract that constrains the plan.
    - if no full artifact or chat plan is available, block with the required
      review surfaces instead of proceeding: whole-artifact coverage,
      requirements/proof mapping, validation-command claims, route-back
@@ -71,8 +81,10 @@ plan artifact
      inspect list, non-goals, lane-specific checklist, output schema,
      contradiction handling, confidence, security context, completion receipt,
      and parent verification
+   - if the accepted source contract is unavailable for a non-trivial plan,
+     block or mark the review limited instead of reviewing the plan internally.
 2. Establish coverage:
-   - For files: line count plus chunk ranges.
+   - For source and plan files: line count plus chunk ranges.
    - For packets: list packet files read.
    - For chat plans: state that no source file was available.
 3. Extract major claims:
@@ -86,7 +98,9 @@ plan artifact
    - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
-5. Build a shared plan review packet.
+5. Build a shared plan review packet with accepted source contract, produced
+   plan, compact binding excerpts, supporting evidence, and source-to-plan trace
+   expectations.
 6. Dispatch bounded plan-review-swarm lanes for substantial plans.
 7. Add optional external model adversarial lanes when requested.
 8. Verify, dedupe, and rank candidate findings.
@@ -125,9 +139,16 @@ Default lanes:
 - `security-reliability`: looks for trust-boundary, secret/token, race, cleanup, rollback, observability, and partial-failure gaps.
 - `execution-scope`: checks ordering, cutovers, migration completeness, ambiguous task packets, and overbroad or under-specified work.
 - `adversarial-design`: pokes holes in assumptions, contradictions, tradeoffs, and simpler alternatives.
+- `whole-picture-source-to-plan`: checks full source-to-plan coverage across all
+  slices, proof rows, command/manual proof rows, checkpoints, spec-return items,
+  and human-decision items.
 
 For tiny plans, run the smallest relevant local review lane set and name the
 lanes used.
+
+Substantial reviews include a `whole-picture-source-to-plan` lane or explicit
+parent coverage pass. High-risk, multi-slice, or multi-artifact reviews use
+both.
 
 Each lane receives the same shared packet plus one lane focus. It must return:
 
@@ -140,6 +161,9 @@ Each lane receives the same shared packet plus one lane focus. It must return:
   findings
 - completion receipt with source anchors, proposed artifact path, confidence,
   and remaining uncertainty
+- `primary_sources_loaded` for the accepted source contract and produced plan
+- `cannot_verify_from_focused_packet` when the focused packet cannot verify a
+  cross-slice, cross-artifact, or unchanged-source obligation
 - for security findings: validation status as `validated`, `unvalidated with proof gap`, or `rejected`
 
 ## External Model Lanes
@@ -163,6 +187,14 @@ After lanes return:
 5. Preserve disagreement as an open question only when it changes implementation.
 6. Rank accepted findings by execution risk.
 7. Produce the smallest creation-route or tiny plan edit, not implementation patches.
+
+Revision-worthy findings include plan-only review without the accepted source
+contract, reviewer lanes that did not load both primary artifacts, missing
+source-to-plan correlation, missing whole-picture coverage for substantial
+multi-slice review, invented requirements, dropped accepted source obligations,
+missing global constraints, proof deferred to one final catch-all phase, vague
+commands without expected signals, and implementation needing lane artifacts or
+chat history to execute safely.
 
 Plans missing a requirements/proof matrix, source requirement references, or
 testing-pyramid proof layers are `needs revision`, not ready for
@@ -196,12 +228,16 @@ execution after the plan is ready.
 Return:
 
 - Coverage evidence.
+- Source contract coverage and plan coverage.
 - Verdict: ready, needs revision, or blocked.
 - Findings grouped by severity.
 - Questions that must be answered before execution.
 - Suggested smallest creation route or tiny plan edit.
 - Accepted/rejected/deferred findings and any plan edits applied.
 - Swarm coverage: lanes run, lane status, backend used for each lane, external model lane status, and verification notes.
+- Source-to-plan coverage: accepted source obligations covered, deferred with
+  source-approved reason, routed to spec creation, routed to plan creation, or
+  identified as invented by the plan.
 - Artifact path, or why no artifact was written.
 - Full clickable artifact links (absolute path + line) for review reports,
   plans, or artifacts the human is expected to open.

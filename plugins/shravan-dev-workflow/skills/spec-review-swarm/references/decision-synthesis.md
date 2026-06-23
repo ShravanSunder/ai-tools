@@ -12,6 +12,17 @@ Use this when reducing multiple review lanes.
 ## Reducer Rules
 
 - Verify findings against the artifact and repo before accepting.
+- Verify each substantial lane receipt lists the draft spec/design artifact or
+  full chat-only draft packet with stable anchors in `primary_sources_loaded`.
+- Treat summary-only packets as invalid for substantial review readiness.
+- Confirm a `whole-picture-spec-coverage` lane or explicit parent coverage pass
+  handled source coverage, traceability, contradictions, dropped/invented
+  obligations, and `cannot_verify_from_focused_packet` gaps.
+- Reject or mark open findings sourced only from parent routing summaries.
+- Treat research ledgers and prior lane files as corroboration, not source
+  truth.
+- Compare accepted findings back to primary source anchors and record coverage
+  gaps separately from lane opinions.
 - Merge duplicates by root cause.
 - Keep real disagreement visible.
 - Prefer smallest spec/plan edits over broad rewrites.
