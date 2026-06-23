@@ -2,9 +2,9 @@
 
 Status: mandatory.
 
-This lane follows `../../../../references/lane-judgment-cards.md`: use the
-shared spec-review packet and finding schema for mechanics, and use this file
-for requirements judgment.
+This lane follows `../lane-judgment-cards.md`: use the shared spec-review
+packet and finding schema for mechanics, and use this file for requirements
+judgment.
 
 ## Lens
 

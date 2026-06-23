@@ -50,6 +50,17 @@ Lane references own:
 - sibling boundaries only where they change lane judgment;
 - compact good and bad finding examples when useful.
 
+Skill-local judgment-card references own the phase-specific reviewer posture:
+
+- `spec-review-swarm/references/lane-judgment-cards.md` teaches
+  fuzzy-to-sharp spec refinement: product intent, requirements, contracts,
+  boundaries, acceptable ambiguity, proof expectations, and evidence that helps
+  the next spec-creation pass.
+- `plan-review-swarm/references/lane-judgment-cards.md` teaches
+  execution-readiness judgment: source-to-plan traceability, vertical slices,
+  repo anchors, parallel work, subagent packets, and proof gates attached to
+  each unit of work.
+
 Future lints or custom rules own:
 
 - required headings;
@@ -121,10 +132,11 @@ can be named, the requirement is not ready for planning.
 
 - The three target lane files read like expert briefs, not schema cards.
 - Common packet and receipt mechanics are referenced, not repeated.
+- The global lane-card reference is removed; spec review and plan review each
+  load their own local card because they sharpen different kinds of judgment.
 - Each target lane tells the reviewer where to look and how to decide whether a
   concern is real.
 - Each target lane returns evidence useful to the spec or plan creator, not just
   a verdict.
 - Pressure scenarios continue to prove source loading, lane focus, and
   cannot-verify behavior after the rewrite.
-

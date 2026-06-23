@@ -38,16 +38,21 @@ execution scope, adversarial design, harness fit, guardrail codification, and
 focused spec-review overlap / cannot-verify routing.
 
 A second follow-up establishes the lane judgment-card style. Shared packet
-references continue to own generic packet/receipt mechanics, while lane files
-are written as progressive expert briefs that teach where to look, how to
-analyze, how to classify findings, and what evidence helps the next creator fix
-the artifact. The first model lanes are `architecture-assumptions`,
-`requirements-testability`, and `testability-validation`.
+references continue to own generic packet/receipt mechanics, while each review
+skill now owns its own lane judgment-card reference. Spec review teaches
+fuzzy-to-sharp refinement of intent, requirements, contracts, and proof
+expectations; plan review teaches source-to-plan traceability, vertical slices,
+execution packets, and proof gates. Lane files are written as progressive
+expert briefs that teach where to look, how to analyze, how to classify
+findings, and what evidence helps the next creator fix the artifact. The first
+model lanes are `architecture-assumptions`, `requirements-testability`, and
+`testability-validation`.
 
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
-- `plugins/shravan-dev-workflow/references/lane-judgment-cards.md`
+- `plugins/shravan-dev-workflow/skills/spec-review-swarm/references/lane-judgment-cards.md`
+- `plugins/shravan-dev-workflow/skills/plan-review-swarm/references/lane-judgment-cards.md`
 - `plugins/shravan-dev-workflow/skills/spec-review-swarm/`
 - `plugins/shravan-dev-workflow/skills/plan-creation-swarm/`
 - `plugins/shravan-dev-workflow/skills/plan-review-swarm/`
@@ -69,7 +74,7 @@ the artifact. The first model lanes are `architecture-assumptions`,
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh`
   focused over 15 touched/remediation scenarios: pass
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh --fast`:
-  84 passed, 14 failed; the eight new lane-teaching scenarios passed, and the
+  85 passed, 14 failed; the nine new lane-teaching scenarios passed, and the
   remaining failures are pre-existing/out-of-scope scenarios outside this
   remediation surface
 - `pnpm --dir tests/skills exec tsc --noEmit`: pass
@@ -91,6 +96,15 @@ Additional lane-teaching validation:
   security/reliability, execution scope, adversarial design, harness fit, and
   guardrail codification, plus focused spec-review overlap /
   `cannot_verify_from_focused_packet` routing
+- direct Vitest evals over the focused judgment-card scenarios:
+  `plan-review-swarm-architecture-assumptions-lane`,
+  `plan-review-swarm-testability-validation-lane`, and
+  `spec-review-swarm-requirements-testability-lane`: pass, 3 passed / 96
+  skipped
+- direct full Vitest eval suite:
+  `SKILL_PRESSURE_BACKEND=fake pnpm --dir tests/skills exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts`:
+  85 passed, 14 failed with the same pre-existing/out-of-scope baseline
+  failures as the shell wrapper
 - static lane-teaching field check across review lane refs: pass; every
   plan-review and spec-review lane reference contains `Evidence priority:`,
   `Prioritized smells / failure signals:`, `Overlap boundary:`, and
