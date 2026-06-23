@@ -54,6 +54,8 @@ spec.
 Prioritized smells / failure signals:
 - implementation sequence is present but source contract is missing;
 - proof expectation deferred without enough requirement detail;
+- proof expectation deferred without enough proof intent or evidence shape for
+  the plan to build a requirements/proof matrix;
 - plan would need to choose product scope;
 - open question is hidden in a task-like phrase;
 - worker assignment appears in the spec as if it were design truth.

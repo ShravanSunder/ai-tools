@@ -48,6 +48,8 @@ For each material obligation, ask:
    missing meaning?
 4. Is the requirement stating a required truth, or is it describing how to build
    the system?
+5. Does the spec name why proof matters for this requirement and the evidence
+   shape a plan should later operationalize?
 
 Prioritized smells / failure signals:
 - requirement uses vague adjectives or verbs without observable behavior;
@@ -58,6 +60,8 @@ Prioritized smells / failure signals:
 - two requirements overlap with different semantics;
 - requirement depends on UI, data, log, metric, trace, state, or artifact
   behavior that is not named;
+- requirement punts proof meaning to planning without naming observable truth,
+  evidence shape, or failure/risk being guarded;
 - proof depends on product priority or acceptance criteria the spec has not
   decided.
 
@@ -85,8 +89,9 @@ missing from the focused packet.
 
 Output extras:
 Return requirement text -> implied obligation -> missing observer/proof signal
-or hidden product choice -> why a future plan would guess -> smallest rewrite,
-example, owner, measurable condition, or open question.
+or hidden product choice -> missing proof intent/evidence shape -> why a future
+plan would guess -> smallest rewrite, example, owner, measurable condition, or
+open question.
 
 Advisory boundary:
 This lane does not choose product direction or implementation mechanics. It

@@ -67,6 +67,13 @@ tests that fossilize implementation details, deleted files/configs, or
 positive/negative symmetry unless the accepted source defines those facts as
 contracts or security invariants.
 
+A fifth follow-up applies the same proof boundary to specs and spec review.
+Specs now own requirement-level proof intent: what must be provable, why it
+matters, and which observable evidence shape would count. Plan creation still
+owns selected pyramid layers, commands, gates, and execution sequencing. Spec
+review now treats "use pyramid TDD later" as insufficient when the spec leaves
+the plan to invent proof meaning for material requirements.
+
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
@@ -91,7 +98,8 @@ contracts or security invariants.
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh`
   focused over 15 touched/remediation scenarios: pass
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh --fast`:
-  87 passed, 14 failed; the new lane-teaching and proof-rubric scenarios passed, and the
+  89 passed, 14 failed; the new lane-teaching, proof-rubric, and spec
+  proof-intent scenarios passed, and the
   remaining failures are pre-existing/out-of-scope scenarios outside this
   remediation surface
 - `pnpm --dir tests/skills exec tsc --noEmit`: pass
@@ -120,7 +128,7 @@ Additional lane-teaching validation:
   skipped
 - direct full Vitest eval suite:
   `SKILL_PRESSURE_BACKEND=fake pnpm --dir tests/skills exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts`:
-  87 passed, 14 failed with the same pre-existing/out-of-scope baseline
+  89 passed, 14 failed with the same pre-existing/out-of-scope baseline
   failures as the shell wrapper
 - static lane-teaching field check across review lane refs: pass; every
   plan-review and spec-review lane reference contains `Evidence priority:`,
@@ -141,7 +149,7 @@ Additional lane-teaching validation:
   skipped
 - full direct Vitest eval suite:
   `SKILL_PRESSURE_BACKEND=fake pnpm --dir tests/skills exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts`:
-  87 passed, 14 failed with the same pre-existing/out-of-scope baseline
+  89 passed, 14 failed with the same pre-existing/out-of-scope baseline
   failures as the shell wrapper
 
 Additional proof-rubric validation:
@@ -156,6 +164,17 @@ Additional proof-rubric validation:
   `plan-creation-swarm-lane-packet-contract`,
   `plan-review-swarm-testability-validation-lane`, and
   `plan-review-swarm-whole-plan-cohesion-lane`: pass
+
+Additional spec proof-intent validation:
+
+- focused shell pressure scenarios for
+  `spec-creation-swarm-proof-intent-not-plan` and
+  `spec-review-swarm-proof-intent-validation`: pass
+- focused direct Vitest evals over
+  `spec-creation-swarm-proof-intent-not-plan`,
+  `spec-review-swarm-proof-intent-validation`,
+  `spec-review-swarm-requirements-testability-lane`, and
+  `spec-review-swarm-whole-spec-coverage-lane`: pass
 
 Real installed-cache pressure was not claimed in this changeset because the
 normal Codex plugin installation still points at the live installed marketplace

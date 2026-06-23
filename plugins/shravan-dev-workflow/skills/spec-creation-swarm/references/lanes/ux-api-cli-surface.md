@@ -32,7 +32,8 @@ Parent packet requirements:
 Core responsibilities:
 - Name user-visible contract and failure states.
 - Identify compatibility risks.
-- Name manual/visual/data/state proof expectations.
+- Name manual/visual/data/state proof expectations as requirement-level
+  evidence shapes, not plan commands.
 - Preserve out-of-scope behavior to prevent product creep.
 
 Analysis method:

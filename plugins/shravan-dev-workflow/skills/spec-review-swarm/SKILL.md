@@ -100,7 +100,8 @@ substantial unless the user explicitly asks for a lightweight chat-only review.
    - security/trust-boundary claims
    - data flow and state ownership
    - validation strategy
-   - proof expectations, or explicit deferral to `plan-creation-swarm`
+   - proof expectations: what must be provable, why it matters, observable
+     evidence shape, and any non-useful proof to avoid
    - plan constraints or open planning inputs
 4. Verify major claims against code/docs/tests before dispatch where cheap.
 5. Dispatch `whole-spec-coverage` and focused review lanes for substantial
@@ -181,7 +182,10 @@ Return:
   spec/design artifacts, or handoffs the human is expected to open.
 - Security threat-model status.
 - Proof expectations status: present in the spec, or explicitly deferred to
-  `plan-creation-swarm` with open proof gaps named.
+  `plan-creation-swarm` with open proof gaps named. A spec that leaves the plan
+  to invent what evidence would prove a material requirement is `needs
+  revision`; plan creation operationalizes proof, but the spec owns
+  requirement-level proof intent.
 - Next step: usually `plan-creation-swarm` when the spec is ready,
   `spec-creation-swarm` when accepted findings require revision,
   `spec-handoff` for portability, or `ops-security-review` for explicit

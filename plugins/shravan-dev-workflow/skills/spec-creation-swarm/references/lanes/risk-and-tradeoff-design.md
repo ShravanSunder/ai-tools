@@ -16,7 +16,7 @@ before planning.
 
 Default scope:
 Assumptions, scenario probes, failure containment, reversibility, missing
-requirements, and proof burden.
+requirements, requirement-level proof intent, and proof burden.
 
 Contract inheritance:
 The parent loads the shared lane contract named by `SKILL.md` before this lane file.
@@ -32,7 +32,8 @@ Core responsibilities:
 - Name hidden assumptions.
 - Invent 2-3 scenario probes that could falsify a weak design.
 - Check reversibility and failure containment.
-- Identify missing requirements and highest proof burden.
+- Identify missing requirements, highest proof burden, and the evidence shape
+  needed to prove each load-bearing risk later.
 
 Analysis method:
 - Treat risk as design input, not a verdict.
@@ -48,7 +49,7 @@ Use the canonical creation evidence schema in `references/creation-evidence-sche
 - failure mode
 - reversibility note
 - missing requirement
-- proof burden
+- proof burden and evidence shape
 - confidence blocker or STOP condition
 
 Advisory boundary:

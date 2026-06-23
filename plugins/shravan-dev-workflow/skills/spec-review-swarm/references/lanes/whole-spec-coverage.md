@@ -33,6 +33,8 @@ Parent packet requirements:
 Core responsibilities:
 - Check whether the full spec satisfies the intended product/user outcome.
 - Check requirements trace to the technical contract and proof expectations.
+- Check material proof expectations name what must be provable, why it matters,
+  and evidence shape without collapsing into plan commands or rote pyramid rows.
 - Check boundaries, non-goals, ownership, and invariants are coherent across
   all slices.
 - Identify missing global constraints that focused lanes could miss.
@@ -54,6 +56,9 @@ without inventing missing cross-slice meaning.
 Prioritized smells / failure signals:
 - product intent, requirement, contract, or proof expectation has no matching
   artifact home;
+- requirement has a contract home but no proof-intent/evidence-shape home;
+- proof expectation is delegated to planning so broadly that the plan would have
+  to invent the observable truth;
 - slice spec changes meaning without a primary-spec route;
 - evidence file is required to understand the contract;
 - focused lanes are locally ready but contradict each other globally;
