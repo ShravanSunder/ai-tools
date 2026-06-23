@@ -2,79 +2,147 @@
 
 Status: default focused lane for substantial plan review.
 
-Mission / stance:
-Disprove that the plan's proof gates actually prove the source requirements and
-implementation behavior they claim to prove.
+This lane follows `../../../../references/lane-judgment-cards.md`: use the
+shared plan-review packet for mechanics, and use this file for proof-strategy
+judgment.
 
-Trigger examples:
-- The plan has test commands, proof gates, manual checks, screenshots, metrics,
-  traces, release checks, or a requirements/proof matrix.
-- Behavior changes need red/green evidence.
-- The plan uses broad phrases like "run tests", "validate manually", or
-  "CI will catch it".
+## Lens
 
-Why this lane matters:
-Proof theater makes a plan feel safe while no gate would catch the failure the
-requirement cares about.
+Disprove that the plan's proof gates prove the behavior they claim to prove.
 
-Default scope:
-Accepted source artifact, produced plan, requirements/proof matrix, test
-commands, expected outputs, red/green expectations, manual proof procedures,
-smoke/e2e/CI/PR/release gates, and evidence freshness guards.
+This lane is not asking whether the plan has many commands. It is asking
+whether the proposed proof would fail when the source requirement is broken, and
+whether the plan names the expected signal clearly enough for implementation
+agents to know when a gate has actually proven something.
 
-Parent packet requirements:
-- accepted source proof expectations and requirements
-- produced plan proof rows and validation commands
-- expected signal for each proof gate when present
-- known unavailable proof layers and reasons
-- parent routing summary marked as non-evidence
+## Why This Exists
+
+Proof theater makes a plan feel safe. A command list can be long while still
+missing the failure mode that matters. Manual checks can replace durable proof
+without justification. Higher layers can hide missing lower-layer coverage. This
+lane protects the requirements/proof chain before implementation starts.
+
+## Where To Look
+
+Read in this order:
+
+1. Accepted source artifact:
+   - requirements;
+   - proof expectations;
+   - user-visible behavior, state, data, log, metric, trace, screenshot, manual
+     UX, CI, PR, or release proof expectations.
+2. Produced plan:
+   - requirements/proof matrix;
+   - slice proof gates;
+   - command tables;
+   - checkpoint definitions;
+   - manual validation steps and freshness guards.
+3. Repo validation surface:
+   - test scripts, package commands, smoke/e2e harnesses, CI/release checks, and
+     docs cited by the plan.
 
 Evidence priority:
 1. Source requirements and proof expectations.
-2. Plan proof matrix, validation gates, and command expected signals.
-3. Repo-local test/validation docs only when the plan cites them.
-4. Prior green results only with freshness guard; stale proof is not proof.
+2. Plan proof matrix, validation gates, and expected signals.
+3. Repo-local validation docs or scripts only when the plan cites them.
+4. Prior green results only with a freshness guard; stale proof is not proof.
 
-Analysis method:
-For each material requirement, ask: what failure would violate it, which proof
-gate would catch that failure, what signal would fail, and whether lower proof
-layers are skipped without reason.
+## How To Analyze
 
-Prioritized smells / failure signals:
-- command listed without expected pass/fail signal;
-- proof gate not mapped to a source requirement;
-- lower proof layer skipped because a higher layer exists;
-- manual proof used where durable automated proof is appropriate;
-- red/green evidence missing for behavior change;
-- screenshot, log, trace, metric, DB/state, or UX proof missing where source
-  expectations require it;
-- PR/CI/release proof relabeled as unit/integration/smoke proof.
+For each material requirement, build this proof chain:
 
-Escalation / materiality bar:
-- blocker: a load-bearing requirement has no proof gate or the claimed gate
-  would not catch its failure.
-- important: proof gate may catch failure but lacks expected signal, freshness
-  guard, or layer label.
-- question: source requirement is too vague to define proof without revising the
-  spec.
+```text
+source requirement
+  -> failure mode that would violate it
+  -> plan task or slice that changes it
+  -> proof gate assigned to that work
+  -> expected failing/passing signal
+  -> freshness guard or checkpoint
+```
+
+Then ask:
+
+- Would this proof fail if the requirement were broken?
+- Is the proof attached to the task that creates the risk?
+- Are lower proof layers present where they are useful, or skipped with a real
+  reason?
+- Does manual proof check something automation cannot reasonably check, or is it
+  replacing a durable gate?
+- Does the plan require red/green evidence for behavior changes where that is
+  feasible?
+
+Use this classification:
+
+| Classification | Meaning | Reviewer action |
+| --- | --- | --- |
+| Direct proof | The gate maps to a requirement, failure mode, and expected signal. | Usually fine. |
+| Proof theater | A command/check exists but would not catch the relevant failure. | Finding. |
+| Missing signal | The plan names a command/manual check but not what output/state proves success. | Finding. |
+| Layer gap | Unit/integration/smoke/e2e/manual/CI/release layers are skipped or mislabeled. | Finding if the gap affects confidence. |
+| Stale proof | Prior result is reused without head/worktree/data freshness. | Finding. |
+| Spec gap | Proof cannot be defined because the source requirement is vague. | Route source issue back to spec creation. |
+
+## Prioritized smells / failure signals:
+
+- "Run tests" appears without expected pass/fail signal.
+- Proof gate is not mapped to a source requirement or failure mode.
+- Unit/integration/smoke/e2e/manual/CI/release labels are used loosely.
+- Higher-layer proof is used to excuse missing lower-layer proof without reason.
+- Manual proof is used where durable automated proof is available.
+- Red/green evidence is missing for a behavior change where it is feasible.
+- Screenshot, log, trace, metric, DB/state, or UX proof is missing even though
+  the source requirement depends on that observable.
+- PR/CI/release proof is treated as implementation proof without local slice
+  evidence.
+
+## Judgment Calibration
+
+- Blocker: a load-bearing requirement has no proof gate, or the claimed proof
+  would not catch the requirement's failure.
+- Important: the proof may be suitable but lacks expected signal, freshness
+  guard, layer label, or attachment to the right slice.
+- Question: proof cannot be defined because the source requirement is too vague.
+- Noise: preference for a different command when the current proof already
+  catches the relevant failure and has a clear signal.
+
+## Useful Evidence To Return
+
+Return evidence that lets the plan creator repair the proof chain:
+
+- source requirement;
+- failure mode;
+- planned task/slice;
+- claimed proof gate;
+- why the gate does or does not catch the failure;
+- missing expected signal, layer, freshness guard, or smallest proof step.
+
+## Boundaries
 
 Overlap boundary:
-If the issue is missing source obligation, route to `spec-compliance`. If proof
-gaps come from task sizing or ordering, route to `execution-scope`. If the
-issue is cross-slice proof composition, route to `whole-plan-cohesion`.
+If the issue is missing source obligation coverage, hand it to
+`spec-compliance`. If proof gaps come from task sizing, checkpoint order, or
+parallel sequencing, hand it to `execution-scope`. If the issue is cross-slice
+proof composition, hand it to `whole-plan-cohesion`.
 
 Cannot-verify boundary:
-Return `cannot_verify_from_focused_packet` for final implementation readiness,
-full PR/release readiness, or whole-plan proof composition.
+Use `cannot_verify_from_focused_packet` for final implementation readiness,
+full PR/release readiness, whole-plan proof composition, or source/plan anchors
+missing from this lane's packet.
 
-Output extras:
-Include a proof row: requirement -> failure mode -> proof gate -> expected
-signal -> missing evidence or smallest proof step -> confidence.
+## Good / Bad Findings
 
-Advisory boundary:
-This lane does not run validation commands. It reviews whether the plan's proof
-strategy is capable of proving the work.
+Good finding:
 
-Parent handoff notes:
-Parent-accepted proof gaps route to `plan-creation-swarm`. If proof cannot be
-defined because the requirement is vague, route to `spec-creation-swarm`.
+```text
+The source requires quota fallback to choose a usable account before forwarding
+a Codex request. The plan's proof gate only runs unit tests for account ranking;
+it does not prove the forwarding path uses the selected account. Add an
+integration or smoke proof that sends a request through the router with one
+exhausted account and asserts the forwarded request uses the available account.
+```
+
+Bad finding:
+
+```text
+The validation plan should be stronger.
+```

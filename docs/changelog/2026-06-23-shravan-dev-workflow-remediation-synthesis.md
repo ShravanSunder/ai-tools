@@ -37,9 +37,17 @@ architecture assumptions, testability validation, security/reliability,
 execution scope, adversarial design, harness fit, guardrail codification, and
 focused spec-review overlap / cannot-verify routing.
 
+A second follow-up establishes the lane judgment-card style. Shared packet
+references continue to own generic packet/receipt mechanics, while lane files
+are written as progressive expert briefs that teach where to look, how to
+analyze, how to classify findings, and what evidence helps the next creator fix
+the artifact. The first model lanes are `architecture-assumptions`,
+`requirements-testability`, and `testability-validation`.
+
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
+- `plugins/shravan-dev-workflow/references/lane-judgment-cards.md`
 - `plugins/shravan-dev-workflow/skills/spec-review-swarm/`
 - `plugins/shravan-dev-workflow/skills/plan-creation-swarm/`
 - `plugins/shravan-dev-workflow/skills/plan-review-swarm/`

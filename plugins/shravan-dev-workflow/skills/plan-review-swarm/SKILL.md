@@ -246,6 +246,9 @@ execution after the plan is ready.
 - Load `../../references/lane-contract.md` and
   `references/review-packet.md` before dispatching subagents or writing a
   copy-paste review prompt.
+- When writing or refactoring durable lane references, load
+  `../../references/lane-judgment-cards.md`; do not load it for ordinary review
+  dispatch unless the lane text itself needs authoring/debugging.
 - Load `references/lanes/whole-plan-cohesion.md` before dispatching the
   mandatory whole-plan lane for a substantial plan review.
 - Load each selected focused lane reference before dispatching that lane:
