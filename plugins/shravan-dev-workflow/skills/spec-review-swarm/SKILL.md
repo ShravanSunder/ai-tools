@@ -33,6 +33,13 @@ draft spec/design
 - If a spec or design file exists, run `wc -l` and read every chunk before judging.
 - Treat the artifact as claims to verify, not truth.
 - Build one shared review packet before dispatching lanes.
+- Every substantial lane packet names the draft spec/design artifact as the
+  primary source artifact the lane must load directly. Parent summaries route
+  lanes; they are not evidence. Research ledgers and lane files are supporting
+  evidence only.
+- Summary-only packets are not valid source artifacts for substantial review.
+  Chat-only review is valid only when the full draft content is present in the
+  conversation or packet with stable anchors or section labels the lane can cite.
 - Spec-review lanes use high or xhigh reasoning effort according to artifact
   complexity, security sensitivity, and decision risk.
 - Do not pass author confidence or previous agent praise as evidence.
@@ -45,10 +52,15 @@ draft spec/design
   notes.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
   run, still name the substantial-lane packet shape: bounded question, decision
-  target, source-of-truth inputs, inspect list, non-goals, contradiction
-  handling, security context, output contract, completion receipt, and parent
-  verification.
+  target, primary source artifact paths, compact binding excerpts, supporting
+  evidence links, parent routing summary labeled as non-evidence, inspect list,
+  non-goals, contradiction handling, `cannot_verify_from_focused_packet`,
+  security context, output contract, `primary_sources_loaded`, completion
+  receipt, and parent verification.
 - Parent owns verification, synthesis, and final recommendations.
+- Substantial spec reviews include either a `whole-picture-spec-coverage` lane
+  or an explicit parent coverage pass. High-risk, multi-artifact, or
+  cross-slice reviews use both.
 - Use external Claude, Gemini, or `agy` only when explicitly requested.
 - Keep lane ownership clean. Do not edit another agent's lane file or put words in another reviewer voice.
 - Accepted blocker or important findings normally route back to
@@ -72,7 +84,9 @@ draft spec/design
 2. Establish coverage:
    - line count and chunks for files
    - packet files for handoffs
-   - state when no source artifact exists
+   - state when no source artifact exists; for substantial review, block lane
+     dispatch unless a full draft artifact or full chat-only draft packet with
+     stable anchors is available
 3. Extract claims:
    - product intent / PRD: user, problem, success criteria, and product non-goals
    - requirements: testable product, technical, security, UX, performance,
@@ -86,18 +100,23 @@ draft spec/design
    - proof expectations, or explicit deferral to `plan-creation-swarm`
    - plan constraints or open planning inputs
 4. Verify major claims against code/docs/tests before dispatch where cheap.
-5. Dispatch review lanes for substantial artifacts.
-6. Run a decision discussion for unresolved branches that block readiness.
-7. Verify and reduce findings:
+5. Build lane packets with primary artifact paths, compact binding excerpts,
+   supporting evidence links, lane focus, and receipt fields.
+6. Dispatch review lanes for substantial artifacts only after each lane can load
+   the draft artifact itself, or can cite a full chat-only draft packet with
+   stable anchors. Summary-only packets stay limited and cannot support
+   readiness.
+7. Run a decision discussion for unresolved branches that block readiness.
+8. Verify and reduce findings:
    - accepted: technically valid and actionable
    - contested: real tradeoff or unclear user/product decision
    - open: missing evidence or decision needed
    - rejected: unsupported, wrong, or out of scope
-8. Route accepted issues:
+9. Route accepted issues:
    - accepted blocker/important spec findings: `spec-creation-swarm`
    - tiny explicitly scoped copy edits: edit the owned spec/design artifact
    - owner-facing handoff: produce exact edits when the artifact belongs to another agent
-9. Return review report and next-step recommendation.
+10. Return review report and next-step recommendation.
 
 ## Review Lanes
 
@@ -112,6 +131,7 @@ Default lanes for substantial specs:
 | `planning-readiness` | mandatory | `references/lanes/planning-readiness.md` | Checks whether enough decisions exist for plan creation without redefining the spec. |
 | `adversarial-crux` | mandatory | `references/lanes/adversarial-crux.md` | Names the few crux questions that could invalidate the design. |
 | `progressive-disclosure` | mandatory | `references/lanes/progressive-disclosure.md` | Checks primary spec vs slice spec vs evidence layering and routing. |
+| `whole-picture-spec-coverage` | mandatory for substantial reviews unless an explicit parent coverage pass covers the same trace | `references/review-packet.md` | Checks full source coverage, traceability, contradiction, dropped/invented obligations, and unresolved focused-lane gaps. |
 
 Conditional lanes:
 
@@ -143,6 +163,9 @@ lanes used.
 Return:
 
 - Coverage evidence.
+- Source-truth packet status: draft artifact loaded, supporting evidence used,
+  parent summaries treated as routing only, lane receipts checked, and
+  whole-picture coverage lane or parent coverage pass completed.
 - Review lanes run and lane status.
 - Verdict: ready, needs revision, blocked, or decision-needed.
 - Product-intent / requirements / technical-spec chain status.

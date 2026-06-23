@@ -90,6 +90,50 @@ describe("evaluatePressureAssertions", () => {
     );
   });
 
+  test("fails source-truth packet scenarios when one required invariant is omitted", () => {
+    const sourceTruthScenario = parseScenarioMarkdown({
+      filePath: "/repo/tests/skills/pressure-scenarios/source-truth.md",
+      markdown: `scenario_id: source-truth
+skill_under_test: shravan-dev-workflow:plan-review-swarm
+expect_proof_regex: load.*accepted spec|accepted spec.*load
+expect_proof_regex: load.*plan|plan.*load|both artifacts
+expect_proof_regex: parent summaries.*route|routing hints
+expect_proof_regex: research ledger.*supporting evidence|supporting evidence.*research ledger
+expect_proof_regex: whole-picture|parent coverage
+expect_proof_regex: cannot verify from focused packet|cannot_verify_from_focused_packet
+
+## Prompt
+
+Review the plan quickly from my summary.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: sourceTruthScenario,
+      result: {
+        ...validResult,
+        scenario_id: "source-truth",
+        skill_under_test: "shravan-dev-workflow:plan-review-swarm",
+        coverage_evidence: [
+          "Load the plan locally.",
+          "Parent summaries route lanes as routing hints.",
+          "Use the research ledger as supporting evidence.",
+          "Run a whole-picture parent coverage pass.",
+        ],
+      },
+      renderedPrompt: "Review the plan quickly from my summary.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("proof regex 1"),
+        expect.stringContaining("proof regex 6"),
+      ]),
+    );
+  });
+
   test("fails when forbidden regexes match the proof surface", () => {
     const result = evaluatePressureAssertions({
       scenario,
