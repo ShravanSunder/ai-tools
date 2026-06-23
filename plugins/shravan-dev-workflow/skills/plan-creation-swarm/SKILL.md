@@ -24,6 +24,9 @@ gates, and evidence requirements.
 - Write a plan artifact unless the user explicitly asks for chat-only output.
 - Read the source spec/design/context before planning. If a source file exists,
   count lines and read all chunks.
+- Treat the accepted spec/design/goal contract as the primary source for
+  planning. Parent summaries are routing hints only; research ledgers, prior
+  lane files, code/docs, logs, and command output are supporting evidence.
 - Verify major assumptions against live repo evidence before turning them into
   tasks.
 - Use subagents by default for substantial plan creation when codebase boundary,
@@ -36,10 +39,16 @@ gates, and evidence requirements.
   medium for bounded/simple planning lanes, high for proof-heavy, security,
   reliability, cross-module, or complex sequencing lanes.
 - Give each subagent a self-contained lane packet: role / mode, read-only or
-  allowed write scope, exact planning question, source-of-truth inputs,
-  files/docs to inspect, non-goals, lane-specific checklist, output schema,
-  uncertainty handling, confidence, the exact field
-  `security context: applicable | not applicable`, and completion receipt.
+  allowed write scope, exact planning question, primary source artifact paths
+  the lane must load directly, compact binding excerpts, parent routing summary
+  labeled as non-evidence, supporting evidence links, files/docs to inspect,
+  decision target, non-goals, selected durable lane reference path, output
+  schema, contradiction handling, uncertainty handling, confidence, the exact field
+  `security context: applicable | not applicable`, and completion receipt with
+  status `answered | blocked`, `primary_sources_loaded`,
+  `supporting_evidence_checked`, `source_truth_distinction_checked`, `coverage_scope`,
+  `cannot_verify_from_focused_packet`, source anchors, proposed artifact path,
+  contradiction summary, confidence, and remaining uncertainty.
   Lane outputs are candidate evidence until the parent verifies source anchors
   and reduces them into the final plan.
 - For substantial plan creation, create a parent plan ledger and per-lane
@@ -49,6 +58,11 @@ gates, and evidence requirements.
 - Include task sequence, dependency graph, parallel work lanes, disjoint write
   scopes, integration gates, validation gates, rollout or rollback/recovery
   notes, risks, and open questions.
+- Use `whole-plan-coverage` as a conditional creation-side coverage lane for
+  high-risk, multi-slice, multi-artifact, or source-to-plan
+  coverage-sensitive planning. It helps draft plan coverage; it does not review
+  the produced plan and does not satisfy plan-review-swarm's
+  `whole-plan-cohesion` lane.
 - Include a requirements/proof matrix for non-trivial plans: requirement or
   claim, source spec/requirement reference, owning task, proof modality, proof
   gate, proof layer, evidence source, freshness guard, whether red/green
@@ -127,17 +141,34 @@ gates, and evidence requirements.
 
 For substantial plans, dispatch bounded lanes where tool support exists:
 
-- `codebase-boundary`: checks write surfaces, ownership, adjacent modules, and
-  likely conflicts.
+- `spec-intake-traceability`: verifies accepted spec coverage, freshness,
+  drift, source anchors, and missing planning inputs.
+- `global-constraints-and-interfaces`: extracts binding constraints and
+  cross-slice interfaces from the accepted source and current repo.
+- `vertical-slice-decomposition`: proposes end-to-end slice boundaries and
+  flags horizontal chunks.
 - `validation-proof`: maps source requirements to proof layers, red/green
   needs, evidence sources, freshness guards, pyramid coverage, and split
   triggers.
 - `execution-order`: proposes dependency order, parallel lanes, integration
   gates, and handoff points.
-- `security-reliability`: checks trust boundaries, secrets, permissions,
-  rollback, cleanup, races, and partial failures.
+- `codebase-boundary`: checks write surfaces, ownership, adjacent modules, and
+  likely conflicts.
 - `scope-and-proof-fit`: checks whether task size, sequence, parallel lanes,
   assumptions, and proof gates fit the accepted spec and approved scope.
+
+Conditional lanes:
+
+- `security-reliability`: required when auth, credentials, permissions, data
+  loss, network boundaries, concurrency, availability, or privacy are material.
+- `ux-manual-observability-proof`: required when proof depends on visual, UI,
+  state, logs, traces, metrics, or manual product behavior.
+- `migration-release-readiness`: required when the work changes data shape,
+  release artifacts, packaging, CI, deployment, or migration order.
+- `whole-plan-coverage`: required when planning is high-risk, multi-slice,
+  multi-artifact, or source-to-plan coverage-sensitive. This is creation-side
+  coverage and remains distinct from plan-review-swarm's
+  `whole-plan-cohesion` review lane.
 
 Subagents return evidence and candidate plan structure. The parent verifies
 claims and owns the final plan.
@@ -145,6 +176,9 @@ claims and owns the final plan.
 Load `../../references/lane-contract.md` and `references/lane-packets.md`
 before dispatching planning lanes or writing copy-paste prompts for
 plan-creation subagents.
+Load the durable reference file for each selected lane from
+`plugins/shravan-dev-workflow/skills/plan-creation-swarm/references/lanes/<lane>.md`.
+A lane is not valid for dispatch when its durable reference file is missing.
 
 ## Required Execution Diagram
 
@@ -179,6 +213,8 @@ Return:
 
 - source coverage
 - implementation plan path or chat-only plan
+- source-truth packet status: primary sources loaded, supporting evidence used,
+  parent summaries treated as routing only, and selected lane references loaded
 - requirements/proof matrix with source spec/requirement references, owning
   tasks, proof modalities, evidence sources, proof layers, and freshness guards,
   or compact proof line for tiny plans
@@ -200,6 +236,11 @@ Return:
 - Omitting the execution DAG and forcing the executor to invent
   parallelization later.
 - Treating a spec summary as enough when material source context is missing.
+- Letting planning lanes use a parent summary instead of loading the accepted
+  source artifact directly.
+- Advertising stable planning lanes without durable lane references.
+- Treating `whole-plan-coverage` as plan review or as a substitute for
+  `whole-plan-cohesion`.
 - Omitting validation gates to move faster.
 - Listing validation commands without mapping them back to the requirements they
   prove.
