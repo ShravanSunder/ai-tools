@@ -2,9 +2,6 @@
 
 Status: default focused lane for substantial plan review.
 
-Use the shared plan-review packet for mechanics. This file owns the
-`testability-validation` judgment for plan review.
-
 ## Lens
 
 Disprove that the plan's proof gates prove the behavior they claim to prove.
@@ -124,9 +121,9 @@ parallel sequencing, hand it to `execution-scope`. If the issue is cross-slice
 proof composition, hand it to `whole-plan-cohesion`.
 
 Cannot-verify boundary:
-Use `cannot_verify_from_focused_packet` for final implementation readiness,
-full PR/release readiness, whole-plan proof composition, or source/plan anchors
-missing from this lane's packet.
+Mark unresolved for final implementation readiness, full PR/release readiness,
+whole-plan proof composition, or source/plan anchors missing from this lane's
+packet.
 
 ## Good / Bad Findings
 

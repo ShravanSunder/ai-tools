@@ -18,10 +18,6 @@ Default scope:
 Goals, non-goals, owners, sources of truth, inputs, outputs, state, invariants,
 allowed/disallowed edges, and examples.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - contract claims
 - boundary map
@@ -69,14 +65,13 @@ Report issues that would cause a planning or implementation agent to invent
 contract details.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when the missing contract depends on
+Mark unresolved when the missing contract depends on
 product scope, current implementation behavior not cited by the spec, plan-level
 task sequencing, whole-spec coverage, or source anchors missing from the focused
 packet. Use generic unresolved/open output only for substantive uncertainty
 after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: contract surface, missing field, next-agent guess risk, smallest spec
 edit, and route-back.
 

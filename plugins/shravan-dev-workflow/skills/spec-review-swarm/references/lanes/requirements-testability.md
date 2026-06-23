@@ -1,132 +1,97 @@
 # requirements-testability
 
-Status: mandatory.
+Status: mandatory focused lane for spec review.
 
-Use the shared spec-review packet and finding schema for mechanics. This file
-owns the `requirements-testability` judgment for spec review.
+Mission / stance:
+Find requirements that are not yet provable obligations. This lane checks
+whether the spec says what must be true in a way a future plan can prove without
+inventing missing meaning.
 
-## Lens
+Trigger examples:
+- The spec has PRD/product intent, requirements, acceptance criteria, technical
+  contract claims, proof expectations, or validation language.
+- Requirements use broad verbs such as support, handle, improve, graceful,
+  robust, seamless, easy, safe, reliable, or compatible.
+- Design prose implies obligations that are not listed as requirements.
 
-Find requirements that are not yet provable obligations.
+Why this lane matters:
+If a requirement is vague, the plan invents proof. If a requirement is really a
+build step, the plan preserves the wrong abstraction. If a requirement lacks an
+observable signal, implementation can pass tests while missing the intended
+behavior.
 
-This lane asks whether the spec says what must be true in a way a future plan
-can prove. It is not looking for nicer wording. It is looking for wishes,
-adjectives, hidden product choices, duplicated obligations, and implementation
-tasks disguised as requirements.
+Default scope:
+Product intent, success criteria, requirements, acceptance criteria, technical
+contract sections, examples, non-goals, proof expectations, and any design prose
+that implies product, system, security, UX, performance, compatibility, or
+operational obligations.
 
-## Why This Exists
-
-If a requirement is vague, the plan will invent proof. If a requirement is
-actually an implementation step, the plan will preserve the wrong abstraction.
-If a requirement lacks an observable signal, implementation can pass tests while
-missing the user or system behavior the spec intended.
-
-## Where To Look
-
-Read in this order:
-
-1. Product intent / PRD:
-   - who the behavior serves;
-   - success criteria;
-   - product non-goals.
-2. Requirements:
-   - product, technical, security, UX, performance, compatibility, and
-     operational obligations.
-3. Technical contract:
-   - behavior, state, data, API, UI, or reliability claims that imply
-     requirements even if not listed as requirements.
-4. Proof expectations:
-   - only after the requirement itself is clear.
+Parent packet requirements:
+- full spec or focused spec sections with source anchors;
+- research/evidence links that informed requirements, when available;
+- known product decisions and open questions;
+- any parent summary marked as context rather than evidence.
 
 Evidence priority:
 1. Requirement and acceptance-criteria text.
 2. Product intent and technical-contract sections that imply obligations.
-3. Proof expectations only after the obligation is understandable.
-4. Supporting evidence only when it clarifies a requirement already present in
-   the spec.
+3. Examples, diagrams, and non-goals that clarify expected behavior.
+4. Proof expectations only after the obligation itself is understandable.
 
-## How To Analyze
+Analysis method:
+For each material obligation, ask:
 
-For each material requirement, answer four questions:
-
-1. What observable behavior must be true?
+1. What observable behavior, state, output, or invariant must be true?
 2. Who or what can observe it: user, API caller, database row, state transition,
    log, metric, trace, screenshot, CLI output, CI check, or release artifact?
-3. Could a future plan write a proof row for this without inventing missing
-   meaning?
-4. Is this requirement stating what must be true, or is it telling the
-   implementation how to build it?
+3. Could a future plan write a proof row from this spec without inventing
+   missing meaning?
+4. Is the requirement stating a required truth, or is it describing how to build
+   the system?
 
-Use this classification:
+Prioritized smells / failure signals:
+- requirement uses vague adjectives or verbs without observable behavior;
+- "support X" does not define working X;
+- requirement names a command, worker step, library, or implementation sequence
+  instead of a system truth;
+- design prose implies an obligation missing from the requirements section;
+- two requirements overlap with different semantics;
+- requirement depends on UI, data, log, metric, trace, state, or artifact
+  behavior that is not named;
+- proof depends on product priority or acceptance criteria the spec has not
+  decided.
 
-| Classification | Meaning | Reviewer action |
-| --- | --- | --- |
-| Testable obligation | Names behavior/state and an observer can be inferred from the spec. | Usually fine; cite only when tracing matters. |
-| Vague obligation | Uses words like robust, easy, graceful, good, seamless, support, or handle without observable meaning. | Finding: request a measurable condition or example. |
-| Missing signal | Says what should happen but not how success can be observed. | Finding: name the missing observer/proof signal. |
-| Hidden product choice | Proof depends on user/product behavior the spec has not decided. | Question or blocker depending on load-bearing scope. |
-| Implementation task | Describes a build step, library, worker sequence, or command instead of a required truth. | Finding: move build detail to plan input or rewrite as outcome. |
-| Unowned obligation | Requirement affects a boundary but does not name the responsible contract/owner. | Finding or route to boundary lane. |
-
-## Prioritized smells / failure signals:
-
-- Requirement uses vague verbs or adjectives without an observable outcome.
-- Requirement says "support X" but does not say what working X looks like.
-- Requirement names a proof command instead of a system truth.
-- Design prose implies an obligation that is absent from the requirements list.
-- Two requirements say similar things with different semantics.
-- Requirement depends on UI/data/log/metric/state behavior not named anywhere.
-- Requirement requires a product decision before proof can be defined.
-
-## Judgment Calibration
-
-- Blocker: a load-bearing requirement is missing, contradicted, or impossible to
-  prove from the spec.
-- Important: a requirement can become testable with a clearer signal, example,
-  owner, or measurable condition.
-- Question: the requirement depends on human product priority or acceptance of a
-  tradeoff not present in the artifact.
-- Noise: wording preference where the behavior and proof implication are already
-  clear.
-
-## Useful Evidence To Return
-
-Return evidence that helps the spec creator revise the spec:
-
-- exact requirement text;
-- product/contract section that gives or contradicts meaning;
-- why a future plan cannot prove it yet;
-- missing observable signal or hidden product choice;
-- smallest requirement rewrite, example, or open question.
-
-## Boundaries
+Escalation / materiality bar:
+- blocker: a load-bearing requirement is missing, contradicted, unowned, or
+  impossible to prove from the spec.
+- important: requirement can become testable with a clearer signal, owner,
+  example, measurable condition, or accepted non-goal.
+- question: requirement depends on human product priority, risk tolerance, or
+  tradeoff acceptance not present in the artifact.
+- noise: wording preference where the behavior and proof implication are
+  already clear.
 
 Overlap boundary:
-If the issue is owner, state, invariant, or allowed edge ambiguity, hand it to
-`contract-and-scope` or `architecture-boundaries`. If the issue is the proof
-modality after the requirement is already clear, hand it to
-`validation-and-testability`.
+Use `contract-and-scope` or `architecture-boundaries` for owner, state,
+invariant, allowed-edge, or boundary ambiguity. Use
+`validation-and-testability` when the requirement is clear but the proof
+modality or validation ladder is weak. This lane owns whether the requirement
+itself is a provable obligation.
 
 Cannot-verify boundary:
-Use `cannot_verify_from_focused_packet` when the obligation needs product
-choice, current behavior measurement, plan-level validation detail,
-whole-spec coverage, or source anchors missing from the focused packet. Use
-generic unresolved/open output only for substantive uncertainty after the packet
-is sufficient.
+Mark unresolved when the obligation needs product choice, current behavior
+measurement, plan-level proof detail, whole-spec coverage, or source anchors
+missing from the focused packet.
 
-## Good / Bad Findings
+Output extras:
+Return requirement text -> implied obligation -> missing observer/proof signal
+or hidden product choice -> why a future plan would guess -> smallest rewrite,
+example, owner, measurable condition, or open question.
 
-Good finding:
+Advisory boundary:
+This lane does not choose product direction or implementation mechanics. It
+names the requirement clarity needed before planning.
 
-```text
-The requirement says "handle expired quota gracefully," but the spec does not
-define the observable behavior. A future plan cannot know whether proof is a UI
-message, account fallback, retry behavior, metric, log, or hard failure. Add the
-required user/system outcome and at least one acceptable proof signal.
-```
-
-Bad finding:
-
-```text
-Requirements should be more testable.
-```
+Parent handoff notes:
+Accepted requirement defects route to `spec-creation-swarm`. Product-choice
+defects route to the human or outer loop before the spec is treated as ready.

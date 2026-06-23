@@ -18,10 +18,6 @@ Default scope:
 Requirements, invariants, boundaries, quality gaps, lints, schemas, structural
 tests, typed interfaces, golden principles, and tracker candidates.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - requirements and invariants
 - known failure modes
@@ -33,9 +29,10 @@ Core responsibilities:
 - Capture durable boundary debt as spec open decision or follow-up artifact.
 
 Evidence priority:
-1. Repeated failure modes named in the spec, research, review report, or memory.
+1. Repeated failure modes named in the spec, research packet, or review report.
 2. Requirements that protect future agent behavior.
-3. Existing lint/schema/test/quality-doc patterns in the repo.
+3. Existing lint/schema/test/quality-doc patterns in the repo when supplied or
+   directly relevant.
 
 Analysis method:
 Ask what could be enforced mechanically or tracked durably later, then classify
@@ -59,13 +56,12 @@ If the issue is mainly requirement clarity, route it to
 `architecture-boundaries`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when evaluating the guardrail requires
+Mark unresolved when evaluating the guardrail requires
 implementation, CI changes, repo policy, whole-spec coverage, or source anchors
 missing from the focused packet. Use generic unresolved/open output only for
 substantive uncertainty after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: repeated failure, candidate guardrail, owning artifact, smallest next
 step, and overfit risk.
 

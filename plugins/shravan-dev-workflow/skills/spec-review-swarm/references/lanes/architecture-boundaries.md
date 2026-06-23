@@ -17,10 +17,6 @@ Default scope:
 Ownership map, slice routes, dependency edges, cross-cutting entry points,
 state ownership, source-of-truth docs/code, and diagrams.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - architecture claims
 - relevant code/docs
@@ -63,14 +59,13 @@ If the issue is mainly missing contract fields, route it to
 `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when deciding the boundary requires
+Mark unresolved when deciding the boundary requires
 product intent not supplied, implementation diff review, plan sequencing,
 whole-spec coverage, or source anchors missing from the focused packet. Use
 generic unresolved/open output only for substantive uncertainty after the packet
 is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: boundary surface, current owner/source, missing or conflicting edge,
 smallest spec edit, and proof/enforcement implication.
 

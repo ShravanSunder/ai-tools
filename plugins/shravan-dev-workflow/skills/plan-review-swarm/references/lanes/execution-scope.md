@@ -62,7 +62,7 @@ is proof adequacy, route to `testability-validation`. If it is whole-plan slice
 composition, route to `whole-plan-cohesion`.
 
 Cannot-verify boundary:
-Return `cannot_verify_from_focused_packet` for final readiness, implementation
+Mark unresolved for final readiness, implementation
 diff correctness, or whole-plan composition.
 
 Output extras:

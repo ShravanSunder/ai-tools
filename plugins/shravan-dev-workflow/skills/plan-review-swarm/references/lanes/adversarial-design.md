@@ -61,7 +61,7 @@ Do not duplicate `spec-compliance`, `execution-scope`, or
 source, execution, architecture, proof, or security defects to the owning lane.
 
 Cannot-verify boundary:
-Return `cannot_verify_from_focused_packet` for whole-plan readiness or detailed
+Mark unresolved for whole-plan readiness or detailed
 implementation feasibility that requires code changes or full execution.
 
 Output extras:

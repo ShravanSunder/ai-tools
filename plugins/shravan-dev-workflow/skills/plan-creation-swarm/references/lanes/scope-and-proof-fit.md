@@ -1,38 +1,78 @@
 # scope-and-proof-fit
 
-Use when a plan might be too broad, too vague, or impossible to prove inside one
-execution pass. This lane checks whether task size and proof gates fit the
-accepted source and approved scope.
+Status: focused lane for slice size, ownership, and proofability.
 
-## Owns
+Mission / stance:
+Reject units of work that cannot be completed and proven in one owned execution
+pass. This lane checks whether candidate slices are small enough to execute,
+large enough to produce meaningful behavior, and paired with proof that can
+actually falsify the slice.
 
-- Scope/proof fit for each candidate slice.
-- Overbroad tasks, undersized proof, or hidden dependencies.
-- Split/replan recommendations.
+Trigger examples:
+- A slice combines many owners, subsystems, or proof surfaces.
+- Proof is much smaller than the work or much larger than the slice.
+- The plan has vague "cleanup", "wire everything", "finish integration", or
+  "validate" tasks.
 
-## Leaves To Parent
+Why this lane matters:
+An implementation agent needs work units that end in evidence, not phases that
+only make sense after all other phases are complete.
 
-- Final split decisions.
-- Human scope decisions.
-- Final plan ready/not-ready claim.
+Default scope:
+Accepted source obligations, candidate slices, proposed write scopes, proof
+expectations, stop conditions, manual checks, route-backs, and hidden
+dependencies.
 
-## Method
+Parent packet requirements:
+- accepted source artifact and proof expectations;
+- candidate slice list or draft plan;
+- known write surfaces and proof gates from sibling lanes when available;
+- approved scope and out-of-scope constraints.
 
-1. Load the accepted source artifact directly.
-2. Compare each candidate slice or requirement group to proof expectations.
-3. Identify work that cannot be proven at its current size.
-4. Check approved scope, disallowed surfaces, and stop conditions.
-5. Return smaller decompositions when they improve proof clarity.
+Evidence priority:
+1. Source obligations and proof expectations.
+2. Candidate slice objective, write surfaces, and expected output.
+3. Proof gates and observable signals attached to the slice.
+4. Hidden dependencies surfaced by repo or sibling-lane evidence.
 
-## Return Focus
+Analysis method:
+For each slice, ask: what source obligation does it satisfy, what artifact does
+it change, what behavior/state can be observed after it, what proof will fail if
+the slice is wrong, and what dependency prevents it from standing alone.
 
-- `primary_sources_loaded`
-- `supporting_evidence_checked`
-- `source_truth_distinction_checked`
-- candidate scope risks
-- proof-fit status
-- split/replan triggers
-- stop conditions
-- requested parent action
-- `coverage_scope`
-- `cannot_verify_from_focused_packet`
+Prioritized smells / failure signals:
+- slice is a horizontal layer with no visible consumer or proof checkpoint;
+- slice crosses unrelated owners and cannot be reviewed as one change;
+- proof gate only proves lint/build health, not the slice claim;
+- task says "validate" without expected signal or failure interpretation;
+- stop condition is "done" rather than a concrete artifact/proof state;
+- route-back issue is hidden inside implementation work.
+
+Escalation / materiality bar:
+- blocker: slice cannot be executed or proven as scoped and needs splitting or
+  source clarification.
+- important: slice is feasible but should add a sharper proof, checkpoint, or
+  ownership boundary.
+- question: human scope decision is needed to decide whether to split, defer, or
+  expand the work.
+
+Overlap boundary:
+Use `vertical-slice-decomposition` to propose better slices and
+`validation-proof` to design proof detail. This lane owns whether each unit is
+an executable, provable unit of work.
+
+Cannot-verify boundary:
+Mark unresolved when proofability depends on implementation details or a source
+decision absent from the packet.
+
+Output extras:
+Return slice -> source obligation -> owned write surface -> observable result
+-> proof gate -> hidden dependency -> split/replan recommendation.
+
+Advisory boundary:
+This lane recommends fit and splits. The parent agent owns final slice shape and
+scope negotiation.
+
+Parent handoff notes:
+Accepted fit gaps become slice rewrites before implementation. Source-level
+scope ambiguity routes to spec creation or human decision.

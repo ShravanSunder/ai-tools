@@ -75,13 +75,8 @@ Cannot-verify boundary:
 Return unresolved when a finding requires implementation diff review, live
 runtime proof, or a source decision absent from the accepted artifact.
 
-Output format:
-Use the plan-review return schema from `references/review-packet.md`, including
-`primary_sources_loaded`, `supporting_evidence_checked`,
-`source_truth_distinction_checked`, `coverage_scope`,
-`cannot_verify_from_focused_packet`, source anchors, proposed artifact path,
-confidence, and remaining uncertainty.
-Include: source-to-plan trace row, cross-slice issue, smallest plan edit, and
+Output extras:
+Include source-to-plan trace row, cross-slice issue, smallest plan edit, and
 focused lanes that should re-check the fix.
 
 Advisory boundary:

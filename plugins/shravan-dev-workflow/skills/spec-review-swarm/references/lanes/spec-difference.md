@@ -17,10 +17,6 @@ Default scope:
 Existing code, prototypes, traces, logs, session artifacts, generated outputs,
 or observed behavior assigned by the parent.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - implementation/prototype evidence
 - spec sections to compare
@@ -59,14 +55,13 @@ If the difference is mainly a missing contract field, route it to
 `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when behavior cannot be observed from
+Mark unresolved when behavior cannot be observed from
 provided anchors, requires executing the system outside review scope, needs
 whole-spec coverage, or depends on source anchors missing from the focused
 packet. Use generic unresolved/open output only for substantive uncertainty
 after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: observed behavior, spec claim, hidden decision, keep/change/drop
 recommendation, and proof route.
 

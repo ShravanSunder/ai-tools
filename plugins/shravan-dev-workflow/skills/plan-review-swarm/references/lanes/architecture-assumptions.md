@@ -2,9 +2,6 @@
 
 Status: default focused lane for substantial plan review.
 
-Use the shared plan-review packet for mechanics. This file owns the
-`architecture-assumptions` judgment for plan review.
-
 ## Lens
 
 Find places where the implementation plan depends on architecture facts that
@@ -120,9 +117,9 @@ authority, secret handling, or failure-mode reliability, hand it to
 `security-reliability`.
 
 Cannot-verify boundary:
-Use `cannot_verify_from_focused_packet` when the claim requires whole-plan slice
-composition, full dependency DAG analysis, implementation diff review, or source
-artifacts not supplied to this lane.
+Mark unresolved when the claim requires whole-plan slice composition, full
+dependency DAG analysis, implementation diff review, or source artifacts not
+supplied to this lane.
 
 ## Good / Bad Findings
 

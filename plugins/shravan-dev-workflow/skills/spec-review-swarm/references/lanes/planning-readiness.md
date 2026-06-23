@@ -18,10 +18,6 @@ Default scope:
 Product intent, requirements, boundary, contracts, proof expectations, open
 decisions, non-goals, slice routes, and planning inputs.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - full artifact coverage
 - open decisions
@@ -66,14 +62,13 @@ Calibration bar:
 Report gaps that would cause the plan to redesign, not minor wording issues.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when readiness depends on live
+Mark unresolved when readiness depends on live
 implementation feasibility, test runtime, whole-spec coverage, user product
 priority outside the spec, or source anchors missing from the focused packet.
 Use generic unresolved/open output only for substantive uncertainty after the
 packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: invention required from planner, missing source decision, smallest spec
 edit, and route-back.
 

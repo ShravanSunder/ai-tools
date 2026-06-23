@@ -23,10 +23,6 @@ Primary spec artifact, slice specs, product intent / PRD, requirements,
 technical contract, diagrams, boundaries, non-goals, proof expectations, open
 decisions, research ledger, lane evidence, and source anchors.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane
-file. This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - target spec/design artifact path and coverage
 - source anchors and research lane files or ledger entries that constrain the spec
@@ -75,16 +71,14 @@ whole-spec readiness. If a finding is purely local and already covered by one
 focused lane, cite that lane instead of duplicating it.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when whole-spec readiness depends on
+Mark unresolved when whole-spec readiness depends on
 implementation feasibility, plan sequencing, human product judgment not present
 in the artifact, or source anchors missing from the review packet. Use generic
 unresolved/open output only for substantive uncertainty after the packet is
 sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`.
-Return lane-specific context only after the schema fields.
-Include: trace row, cross-artifact contradiction or gap, smallest spec/slice
+Output extras:
+Include trace row, cross-artifact contradiction or gap, smallest spec/slice
 edit, affected focused lanes, and route-back.
 
 Advisory boundary:

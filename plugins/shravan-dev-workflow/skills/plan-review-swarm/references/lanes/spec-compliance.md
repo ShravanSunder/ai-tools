@@ -62,7 +62,7 @@ direction, route it to `architecture-assumptions`. If the issue is proof quality
 only, route it to `testability-validation`.
 
 Cannot-verify boundary:
-Return `cannot_verify_from_focused_packet` for whole-plan readiness, cross-slice
+Mark unresolved for whole-plan readiness, cross-slice
 ordering, or complete proof-ladder adequacy. Name the exact source anchors that
 the whole-plan lane must inspect.
 

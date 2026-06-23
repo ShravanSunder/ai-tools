@@ -18,10 +18,6 @@ Default scope:
 Assets, privileges, entry points, untrusted inputs, trust boundaries, sensitive
 data, privileged actions, and security non-goals.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - security context
 - sensitive surfaces
@@ -62,14 +58,13 @@ If the issue is mainly harness authority or tool availability, route it to
 route it to `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when validating an exploit, running a
+Mark unresolved when validating an exploit, running a
 scan, proving runtime security behavior, whole-spec coverage, or source anchors
 missing from the focused packet are required. Route explicit scans to
 `ops-security-review`. Use generic unresolved/open output only for substantive
 uncertainty after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: asset/boundary, misuse path, missing security requirement, smallest
 spec edit, and validation route.
 

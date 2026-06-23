@@ -18,10 +18,6 @@ Default scope:
 Codex, Claude Code, Copilot, OpenClaw, local shell, browser, native UI, MCP,
 tool names/args, sandbox, network, approvals, worktree, and platform assumptions.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - target harnesses
 - named tools and prompts
@@ -42,7 +38,7 @@ Evidence priority:
 
 Analysis method:
 Map instructions to actual harness capabilities and failure modes. Separate
-authoring assumptions from runtime guarantees.
+tooling assumptions from runtime guarantees.
 
 Prioritized smells / failure signals:
 - tool name appears without target harness support;
@@ -62,14 +58,13 @@ route it to `planning-readiness`. If it requires whole-artifact traceability,
 route it to `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when live harness execution,
+Mark unresolved when live harness execution,
 authentication, cache refresh, whole-spec coverage, or source anchors missing
 from the focused packet are required. Do not treat local availability as
 cross-harness proof. Use generic unresolved/open output only for substantive
 uncertainty after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: harness assumption, target surface, silent-degradation path, smallest
 spec edit, and proof needed.
 

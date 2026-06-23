@@ -63,7 +63,7 @@ issue is architecture ownership, route to `architecture-assumptions`. If the
 issue needs a full security scan, recommend `ops-security-review`.
 
 Cannot-verify boundary:
-Return `cannot_verify_from_focused_packet` for whole-system security posture or
+Mark unresolved for whole-system security posture or
 implementation vulnerability validation beyond plan evidence.
 
 Output extras:

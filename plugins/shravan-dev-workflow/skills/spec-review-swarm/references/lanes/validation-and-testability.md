@@ -17,10 +17,6 @@ Default scope:
 Proof expectations, tests, manual UX/visual proof, data/DB/state checks, logs,
 traces, metrics, smoke/e2e/CI/PR/release proof, and not-applicable rationale.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - requirements
 - proof expectations
@@ -62,13 +58,12 @@ checkpoint design, route it to `planning-readiness` or later
 `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when exact commands, worker sequencing,
+Mark unresolved when exact commands, worker sequencing,
 runtime validation, whole-spec proof coverage, or source anchors missing from
 the focused packet are required. Use generic unresolved/open output only for
 substantive uncertainty after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: requirement, proof modality, missing signal, future matrix implication,
 and smallest spec edit.
 

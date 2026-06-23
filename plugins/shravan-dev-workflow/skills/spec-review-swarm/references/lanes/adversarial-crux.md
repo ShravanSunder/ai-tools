@@ -16,10 +16,6 @@ Default scope:
 Product intent, requirements, diagrams, contracts, proof expectations, open
 decisions, contradictions, and falsifying scenarios.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - claimed design direction
 - known assumptions
@@ -42,7 +38,7 @@ failure path, smallest refinement input, and whether resolution belongs to the
 inner spec loop or outer human decision loop.
 
 Prioritized smells / failure signals:
-- plan or implementation depends on an unstated assumption;
+- later planning or implementation depends on an unstated assumption;
 - two spec sections imply different owners, contracts, or proof expectations;
 - a tradeoff has no cost, falsifier, or route-back;
 - proof expectations cannot falsify the design risk;
@@ -58,13 +54,12 @@ If the issue is mainly missing contract fields, route it to
 many sections or slices, route it to `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when the crux needs implementation
+Mark unresolved when the crux needs implementation
 proof, whole-plan execution analysis, whole-spec coverage, or source artifacts
 missing from the focused packet. Use generic unresolved/open output only for
 substantive uncertainty after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: crux assumption, falsifier, failure path, smallest artifact edit or
 decision needed, loop route, and confidence.
 

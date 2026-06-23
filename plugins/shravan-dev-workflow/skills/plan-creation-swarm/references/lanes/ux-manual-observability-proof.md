@@ -1,41 +1,81 @@
 # ux-manual-observability-proof
 
-Use when proof depends on visual behavior, UI state, manual UX validation,
-screenshots, DOM or accessibility state, app state, logs, traces, metrics, OTel,
-or another runtime signal that normal unit/integration tests cannot fully
-inspect.
+Status: focused lane for visual, manual, state, log, metric, and trace proof.
 
-## Owns
+Mission / stance:
+Make non-unit-test proof executable. This lane turns user-visible behavior,
+runtime state, screenshots, DOM/accessibility state, app data, logs, metrics,
+traces, spans, and OTel expectations into concrete evidence a future agent can
+collect and interpret.
 
-- Manual and observational proof procedures.
-- Expected screenshots, DOM/accessibility state, app data/state, logs, traces,
-  metrics, spans, and OTel queries.
-- Evidence freshness and product-surface fit.
+Trigger examples:
+- The source requires UI/UX behavior, visual state, manual validation,
+  screenshots, DOM/accessibility checks, app state, database rows, logs, traces,
+  metrics, spans, or release/runtime evidence.
+- Normal unit/integration tests cannot fully inspect the behavior.
+- The plan says "manually verify" or "check logs" without expected signals.
 
-## Leaves To Parent
+Why this lane matters:
+Manual and observational proof is where agents most often fake confidence. The
+plan needs enough detail that a capable executor knows where to look, what to
+capture, and what failure means.
 
-- Final command table and matrix placement.
-- Whether automation can replace manual proof.
-- UI/product design decisions.
+Default scope:
+Accepted source proof expectations, user-visible flows, app/runtime state,
+existing smoke/e2e/browser/native UI helpers, telemetry/log query surfaces,
+expected screenshots or DOM/accessibility states, freshness guards, and manual
+failure interpretation.
 
-## Method
+Parent packet requirements:
+- accepted source anchors for UX/manual/observability behavior;
+- candidate slices or draft plan proof rows;
+- repo anchors for app test helpers, browser/native tooling, telemetry, logs, or
+  state inspection;
+- environment constraints for local runtime proof.
 
-1. Load the accepted source artifact directly.
-2. Extract user-visible, state-visible, and operational proof expectations.
-3. Inspect existing app test, smoke, browser, native UI, telemetry, or log
-   helpers.
-4. Define concrete manual or observational procedures with expected signals.
-5. Flag proof that is too vague to execute.
+Evidence priority:
+1. Source behavior and proof expectations.
+2. Existing repo/manual/runtime validation helpers.
+3. Observable state, screenshot, DOM/accessibility, log, metric, or trace
+   surfaces.
+4. Parent assumptions only as hypotheses.
 
-## Return Focus
+Analysis method:
+For each non-automated or runtime-observed claim, name the observer, collection
+method, expected signal, freshness guard, and failure interpretation. Prefer a
+specific observable signal over a broad "inspect manually" instruction.
 
-- `primary_sources_loaded`
-- `supporting_evidence_checked`
-- `source_truth_distinction_checked`
-- manual proof procedures
-- visual/state/telemetry evidence sources
-- expected signals
-- freshness guards
-- proof gaps
-- `coverage_scope`
-- `cannot_verify_from_focused_packet`
+Prioritized smells / failure signals:
+- proof says "check UI" without a page/state/action and expected result;
+- log/metric/trace proof lacks query, span/event name, or freshness guard;
+- screenshot proof lacks viewport, state setup, or pass/fail criterion;
+- DB/state proof lacks row/key/state transition to inspect;
+- manual proof is detached from the slice that creates the behavior;
+- runtime evidence can be stale, cached, or from a different worktree.
+
+Escalation / materiality bar:
+- blocker: required UX/runtime behavior has no executable observation path.
+- important: observation path exists but lacks expected signal, freshness, or
+  failure interpretation.
+- question: human must decide whether visual/manual evidence is sufficient.
+
+Overlap boundary:
+Use `validation-proof` for the full testing pyramid and requirement-to-proof
+matrix. This lane owns manual, visual, state, log, metric, trace, and OTel proof
+shape.
+
+Cannot-verify boundary:
+Mark unresolved when proof requires a running app, external system, account,
+device, or product decision absent from the packet.
+
+Output extras:
+Return behavior -> observer -> setup/action -> evidence source -> expected
+signal -> freshness guard -> failure meaning.
+
+Advisory boundary:
+This lane does not replace automated proof where automation is sufficient. It
+fills the runtime evidence plan where code tests cannot see enough.
+
+Parent handoff notes:
+Accepted observation gaps become proof rows or slice checkpoints. Missing
+product acceptance criteria route back to spec creation or human decision.

@@ -17,10 +17,6 @@ Default scope:
 Primary spec file, slice specs, evidence ledgers, lane artifacts, routing map,
 and file sizes.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - artifact list
 - line counts
@@ -63,13 +59,12 @@ to `requirements-testability` or `validation-and-testability`. If it is a
 global cross-slice contradiction, route it to `whole-spec-coverage`.
 
 Cannot-verify boundary:
-Set `cannot_verify_from_focused_packet` when a split requires product/ownership
+Mark unresolved when a split requires product/ownership
 decisions, whole-spec coverage, a complete artifact inventory, or source anchors
 missing from the focused packet. Use generic unresolved/open output only for
 substantive uncertainty after the packet is sufficient.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output extras:
 Include: first-read path, missing routing, evidence-as-contract risk, smallest
 artifact reshape, and confidence.
 

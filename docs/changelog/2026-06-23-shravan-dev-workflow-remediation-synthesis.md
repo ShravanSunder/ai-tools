@@ -46,6 +46,15 @@ files teach source-to-plan traceability, vertical slices, execution packets,
 repo anchors, sequencing, and proof gates. Authoring guidance for how to write
 lane files is not carried inside runtime workflow skills.
 
+A third follow-up applies that boundary across the lane surface. Plan-creation
+lane references now use the same runtime judgment shape as the review lanes:
+mission, trigger examples, evidence priority, analysis method, prioritized
+smells, materiality, overlap, unresolved-boundary guidance, and lane-specific
+output extras. Repeated packet schemas, receipt-field lists, generic route
+boilerplate, and authoring/meta notes were removed from lane files; subagents
+load shared protocol references for mechanics and lane files for focused
+judgment.
+
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
@@ -104,8 +113,24 @@ Additional lane-teaching validation:
 - static lane-teaching field check across review lane refs: pass; every
   plan-review and spec-review lane reference contains `Evidence priority:`,
   `Prioritized smells / failure signals:`, `Overlap boundary:`, and
-  `Cannot-verify boundary:`; every spec-review lane reference also names
-  `cannot_verify_from_focused_packet`
+  `Cannot-verify boundary:`
+- static protocol/meta leakage check across plan-creation, plan-review, and
+  spec-review lane references: pass; no `Return Focus`, `Leaves To Parent`,
+  `Contract inheritance`, repeated receipt-field names, `lane-judgment-cards`,
+  `judgment card`, `authoring`, `Output format`, or canonical schema reminder
+  remains in lane files
+- focused shell pressure scenarios for the newly touched surface:
+  `plan-review-swarm-architecture-assumptions-lane`,
+  `plan-review-swarm-testability-validation-lane`,
+  `spec-review-swarm-requirements-testability-lane`,
+  `plan-creation-swarm-lane-packet-contract`, and
+  `workflow-remediation-durable-lane-ref-loading`: pass, 5/5
+- focused direct Vitest evals for the same five scenarios: pass, 5 passed / 94
+  skipped
+- full direct Vitest eval suite:
+  `SKILL_PRESSURE_BACKEND=fake pnpm --dir tests/skills exec vitest run evals/skill-pressure.eval.ts --config vitest.config.ts`:
+  85 passed, 14 failed with the same pre-existing/out-of-scope baseline
+  failures as the shell wrapper
 
 Real installed-cache pressure was not claimed in this changeset because the
 normal Codex plugin installation still points at the live installed marketplace
