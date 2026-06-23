@@ -42,13 +42,38 @@ Core responsibilities:
 - Identify duplicated, missing, contradictory, too-broad, or unprovable plan
   units.
 
+Evidence priority:
+1. Accepted source artifact and full produced plan.
+2. Requirements/proof matrix, vertical slices, DAG, checkpoints, and proof gates.
+3. Supporting repo evidence only where source or plan claims depend on it.
+4. Focused lane outputs only as candidate evidence to cross-check.
+
 Analysis method:
 Trace source artifact -> plan slice -> task/checkpoint -> proof gate. Then scan
 sideways across slices for contradictions, gaps, and dependency hazards.
 
+Prioritized smells / failure signals:
+- source obligation appears in no slice, matrix row, checkpoint, or proof gate;
+- two slices duplicate ownership or write surface;
+- proof gate validates a different claim than the slice implements;
+- parallel work depends on unresolved serial order;
+- accepted source non-goal is violated by the plan as a whole;
+- focused lanes are locally ready but their assumptions conflict.
+
 Calibration bar:
 Report candidate findings that affect whole-plan readiness, execution
 coherence, source-to-plan traceability, or proof correctness.
+
+Overlap boundary:
+Focused lanes own local dimension depth. This lane owns accepted-source to
+produced-plan coverage, cross-slice composition, dependency hazards, conflicting
+focused-lane assumptions, and whole-plan readiness. If a finding is purely local
+and already covered by one focused lane, cite that lane instead of duplicating
+it.
+
+Cannot-verify boundary:
+Return unresolved when a finding requires implementation diff review, live
+runtime proof, or a source decision absent from the accepted artifact.
 
 Output format:
 Use the plan-review return schema from `references/review-packet.md`, including
@@ -56,6 +81,8 @@ Use the plan-review return schema from `references/review-packet.md`, including
 `source_truth_distinction_checked`, `coverage_scope`,
 `cannot_verify_from_focused_packet`, source anchors, proposed artifact path,
 confidence, and remaining uncertainty.
+Include: source-to-plan trace row, cross-slice issue, smallest plan edit, and
+focused lanes that should re-check the fix.
 
 Advisory boundary:
 This lane returns candidate findings only. It does not accept findings, rewrite

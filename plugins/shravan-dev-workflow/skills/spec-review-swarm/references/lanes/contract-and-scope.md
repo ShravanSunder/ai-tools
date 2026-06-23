@@ -34,6 +34,12 @@ Core responsibilities:
 - Flag missing non-goals and ambiguous scope.
 - Reject outline-shaped bullets as contract substitutes.
 
+Evidence priority:
+1. Primary spec goal, non-goal, contract, and invariant sections.
+2. Slice specs only where routed by the primary spec.
+3. Supporting evidence only when it explains a contract already stated in the
+   spec.
+
 Escalation tests:
 - blocker: owner, source of truth, input/output, state, or invariant is missing
   for a load-bearing contract surface.
@@ -47,14 +53,32 @@ If the issue is mainly whether an obligation can be tested, route it to
 route it to `planning-readiness`.
 
 Analysis method:
-Convert fuzziness into missing contract fields or open decisions.
+Convert fuzziness into missing contract fields or open decisions. For each
+surface, ask: who owns it, what enters, what leaves, what state changes, what
+must never change, and what a later agent must not infer.
+
+Prioritized smells / failure signals:
+- bullet list describes topics but not contract fields;
+- source of truth or invariant is implied;
+- non-goal is absent for a tempting adjacent behavior;
+- example contradicts stated scope;
+- implementation detail is used as a substitute for contract.
 
 Calibration bar:
 Report issues that would cause a planning or implementation agent to invent
 contract details.
 
+Cannot-verify boundary:
+Set `cannot_verify_from_focused_packet` when the missing contract depends on
+product scope, current implementation behavior not cited by the spec, plan-level
+task sequencing, whole-spec coverage, or source anchors missing from the focused
+packet. Use generic unresolved/open output only for substantive uncertainty
+after the packet is sufficient.
+
 Output format:
 Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Include: contract surface, missing field, next-agent guess risk, smallest spec
+edit, and route-back.
 
 Advisory boundary:
 This lane does not accept final spec edits.

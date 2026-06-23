@@ -153,6 +153,10 @@ lanes used.
   per-finding schema.
 - Load only the selected `references/lanes/*.md` files. Specialized lanes are
   scoped review aspects; they do not own refinement alone.
+- Durable lane references own lane-specific stance, evidence priority, analysis
+  method, prioritized smells, materiality bar, overlap boundaries,
+  cannot-verify boundaries, and output extras. The shared packet carries task
+  instance data; it does not replace the lane's job contract.
 - For substantial reviews, include `references/lanes/whole-spec-coverage.md`
   as a selected lane even when other focused lanes look sufficient.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.

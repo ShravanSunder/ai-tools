@@ -33,15 +33,44 @@ Core responsibilities:
 - Ensure proof modalities are named without exact command sequencing.
 - Identify missing higher-layer proof when ready-to-use behavior is implied.
 
+Evidence priority:
+1. Requirements and proof expectations.
+2. Technical contract surfaces that imply state, data, UI, observability, or
+   runtime proof.
+3. Existing proof patterns only where the spec cites them.
+
 Analysis method:
 Ask whether `plan-creation-swarm` could build a proof matrix without redefining
 the spec.
 
+Prioritized smells / failure signals:
+- proof expectation is "run tests" with no modality;
+- observable state, log, trace, metric, screenshot, DB/data, or manual UX proof
+  needed but unnamed;
+- requirement cannot be mapped to a future proof row;
+- higher proof layer is used to excuse missing lower-layer proof;
+- proof belongs in plan commands, but spec omits what must be proven.
+
 Calibration bar:
 Report missing proof modality, stale proof assumptions, or proof layer mismatch.
 
+Overlap boundary:
+If the issue is mainly vague requirement language, route it to
+`requirements-testability`. If it is mainly plan commands, worker order, or
+checkpoint design, route it to `planning-readiness` or later
+`plan-creation-swarm`. If it requires whole-spec proof coverage, route it to
+`whole-spec-coverage`.
+
+Cannot-verify boundary:
+Set `cannot_verify_from_focused_packet` when exact commands, worker sequencing,
+runtime validation, whole-spec proof coverage, or source anchors missing from
+the focused packet are required. Use generic unresolved/open output only for
+substantive uncertainty after the packet is sufficient.
+
 Output format:
 Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Include: requirement, proof modality, missing signal, future matrix implication,
+and smallest spec edit.
 
 Advisory boundary:
 This lane does not choose exact commands or execution sequence.

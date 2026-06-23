@@ -44,6 +44,14 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `plan-handoff` | `plan-handoff-existing-plan-only.md` | Do not package spec/design context as an existing plan; route to `spec-handoff` or `plan-creation-swarm`. |
 | `plan-handoff` | `plan-handoff-proof-matrix-preservation.md` | Do not drop matrix owners, freshness guards, or parent verification while packaging a plan. |
 | `plan-review-swarm` | `plan-review-swarm-whole-artifact.md` | Do not skim or trust the summary; require whole-artifact coverage for file-backed plans. |
+| `plan-review-swarm` | `plan-review-swarm-focused-lane-durable-ref.md` | Do not use inline lane overlays or parent summaries as substitutes for durable lane refs, accepted source artifacts, and produced plan loading. |
+| `plan-review-swarm` | `plan-review-swarm-substantial-trigger.md` | Do not treat a planning-facing review as lightweight when substantiality requires lane packets and review artifacts. |
+| `plan-review-swarm` | `plan-review-swarm-whole-plan-cohesion-lane.md` | Do not let focused lanes replace whole-plan cohesion over source coverage, slice fit, dependencies, and proof gates. |
+| `plan-review-swarm` | `plan-review-swarm-architecture-assumptions-lane.md` | Do not reduce architecture review to style; require ownership, dependency direction, live anchors, and hidden-coupling checks. |
+| `plan-review-swarm` | `plan-review-swarm-testability-validation-lane.md` | Do not accept command lists as proof; require requirement-to-proof mapping, expected signals, proof layers, and freshness guards. |
+| `plan-review-swarm` | `plan-review-swarm-security-reliability-lane.md` | Do not defer sensitive-surface review; require trust boundaries, misuse/failure paths, rollback, cleanup, and observability. |
+| `plan-review-swarm` | `plan-review-swarm-execution-scope-lane.md` | Do not treat execution scope as timeline polish; require ordering, write scopes, worker packet clarity, integration gates, and route-back rules. |
+| `plan-review-swarm` | `plan-review-swarm-adversarial-design-lane.md` | Do not make adversarial review a nit list; require crux assumptions, contradictions, tradeoffs, falsifiers, simpler alternatives, and route-back. |
 | `plan-review-swarm` | `plan-review-swarm-routes-findings-to-plan-creation.md` | Do not execute or self-rewrite broadly when accepted plan findings should return to plan creation. |
 | `ops-linear-tracking` | `ops-linear-tracking-docs-are-truth.md` | Do not make Linear the design source of truth or clobber dependency relations. |
 | `ops-security-review` | `ops-security-review-official-scan.md` | Do not invent a security scanner; route explicit scans to official Codex Security workflows. |
@@ -61,8 +69,14 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `spec-review-swarm` | `spec-review-swarm-routes-findings-to-spec-creation.md` | Do not turn spec review into broad spec recreation or planning when accepted findings should return to spec creation. |
 | `spec-review-swarm` | `spec-review-swarm-refinement-inputs.md` | Do not isolate refinement in one lane or return verdict-only critique; every review lane returns refinement-shaped output. |
 | `spec-review-swarm` | `spec-review-swarm-boundary-fidelity.md` | Do not let agents guess vague boundaries; require owners, source anchors, allowed/disallowed edges, and refinement inputs. |
+| `spec-review-swarm` | `spec-review-swarm-focused-lane-durable-ref.md` | Do not use focused-lane inline summaries or parent summaries as substitutes for durable lane refs and primary draft artifact loading. |
+| `spec-review-swarm` | `spec-review-swarm-focused-overlap-cannot-verify.md` | Do not let a focused lane absorb whole-artifact questions; route overlap and set `cannot_verify_from_focused_packet` when packet scope blocks verification. |
+| `spec-review-swarm` | `spec-review-swarm-substantial-trigger.md` | Do not skip substantial review routing, artifact coverage, or mandatory whole-spec coverage for planning-facing specs. |
+| `spec-review-swarm` | `spec-review-swarm-whole-spec-coverage-lane.md` | Do not let focused lanes replace whole-spec coverage over product intent, requirements, contracts, boundaries, and proof expectations. |
 | `spec-review-swarm` | `spec-review-swarm-progressive-disclosure-lane.md` | Do not accept content scattered across appendices/evidence; verify primary spec, slice specs, evidence, routing, and line-cap layering. |
 | `spec-review-swarm` | `spec-review-swarm-spec-difference-lane.md` | Do not ignore or blindly trust prototypes; use implementation evidence to find hidden spec decisions. |
+| `spec-review-swarm` | `spec-review-swarm-harness-fit-lane.md` | Do not treat harness assumptions as implementation-only; review agents, tools, sandbox, approval, worktrees, MCP, and silent degradation. |
+| `spec-review-swarm` | `spec-review-swarm-guardrail-codification-lane.md` | Do not leave repeated failures as tribal knowledge; identify durable guardrails such as lint, schema, structural tests, pressure scenarios, and quality docs. |
 | `spec-review-swarm` | `spec-review-swarm-lane-prompts-not-generic.md` | Do not give review subagents generic broad prompts; require selected lane refs and refinement-shaped packet fields. |
 | `spec-review-swarm` | `spec-review-swarm-no-prejudged-lanes.md` | Do not pre-judge review lane findings or broaden unverifiable claims into repo crawls. |
 | `tui-presentation` | `tui-presentation-monospace-structure.md` | Do not use markdown headings/pipe tables for TUI structure; use Unicode shape discipline. |
@@ -71,3 +85,9 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `tui-presentation` | `tui-presentation-visual-family-selection.md` | Do not default to Mermaid or treat zoom as a diagram family; choose a visual family first. |
 | `tui-presentation` | `tui-presentation-semantic-markdown-boundary.md` | Do not redraw code, paths, URLs, or tokens as box text; preserve semantic markdown. |
 | `tui-presentation` | `tui-presentation-no-mermaid-catalog.md` | Do not create a broad Mermaid catalog; keep visual guidance understanding-first and small. |
+| `workflow-remediation` | `workflow-remediation-chat-only-source-limits.md` | Do not treat chat-only summaries as enough for substantial workflows without stable source anchors and source-truth limits. |
+| `workflow-remediation` | `workflow-remediation-durable-lane-ref-loading.md` | Do not advertise default or mandatory lanes unless each selected lane resolves to a durable `references/lanes/<lane>.md`. |
+| `workflow-remediation` | `workflow-remediation-release-metadata-changelog-consistency.md` | Do not claim release or cache proof when plugin metadata, changelog, and cache/reload status disagree. |
+| `workflow-remediation` | `workflow-remediation-stale-whole-picture-active-ids.md` | Do not leave stale whole-picture lane IDs active after canonical coverage/cohesion lanes are introduced. |
+| `workflow-remediation` | `workflow-remediation-substantial-trigger.md` | Do not downscope substantial workflow reviews into chat-only or no-artifact handling without explicit exception. |
+| `workflow-remediation` | `workflow-remediation-whole-plan-coverage-vs-cohesion.md` | Do not conflate creation-side whole-plan coverage with review-side whole-plan cohesion. |

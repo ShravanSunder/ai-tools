@@ -44,6 +44,10 @@ accepted source artifact + produced plan
   `references/lanes/<lane>.md` file before returning. Inline lane overlays in
   `references/review-packet.md` are compact summaries only; the lane reference
   file is the source of truth for lane-specific checklist and calibration.
+- Durable lane references also own lane-specific stance, evidence priority,
+  analysis method, prioritized smells, materiality bar, overlap boundaries,
+  cannot-verify boundaries, and output extras. The shared packet carries task
+  instance data; it does not replace the lane's job contract.
 - Plan-review lanes use medium or high reasoning effort according to plan size,
   risk, and latency cost. Security-sensitive, broad, or cross-module reviews
   should use high effort.

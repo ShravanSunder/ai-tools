@@ -43,18 +43,49 @@ Core responsibilities:
 - Report contradictions between primary spec, slice specs, research evidence,
   user decisions, and focused-lane findings.
 
+Evidence priority:
+1. Primary spec file and its full routing map.
+2. Slice specs named by the primary spec.
+3. Evidence ledgers, lane files, and current repo anchors only as supporting
+   evidence, not replacement contracts.
+4. Focused lane outputs only as candidate evidence to cross-check.
+
 Analysis method:
 Read from top-level intent down to requirements, contracts, proof expectations,
 and slices. Ask whether a later planning agent could implement the whole spec
 without inventing missing cross-slice meaning.
 
+Prioritized smells / failure signals:
+- product intent, requirement, contract, or proof expectation has no matching
+  artifact home;
+- slice spec changes meaning without a primary-spec route;
+- evidence file is required to understand the contract;
+- focused lanes are locally ready but contradict each other globally;
+- open question is hidden in a confident requirement or contract;
+- proof expectations cannot cover all material requirements.
+
 Calibration bar:
 Report findings that affect whole-spec readiness, cross-slice coherence,
 traceability, or later plan correctness.
 
+Overlap boundary:
+Focused lanes own local dimension depth. This lane owns cross-artifact
+traceability, sibling-lane contradictions, primary-to-slice routing, and
+whole-spec readiness. If a finding is purely local and already covered by one
+focused lane, cite that lane instead of duplicating it.
+
+Cannot-verify boundary:
+Set `cannot_verify_from_focused_packet` when whole-spec readiness depends on
+implementation feasibility, plan sequencing, human product judgment not present
+in the artifact, or source anchors missing from the review packet. Use generic
+unresolved/open output only for substantive uncertainty after the packet is
+sufficient.
+
 Output format:
 Use the canonical per-finding schema from `references/finding-schema.md`.
 Return lane-specific context only after the schema fields.
+Include: trace row, cross-artifact contradiction or gap, smallest spec/slice
+edit, affected focused lanes, and route-back.
 
 Advisory boundary:
 This lane does not decide accepted findings or rewrite the spec.

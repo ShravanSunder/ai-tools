@@ -34,6 +34,11 @@ Core responsibilities:
 - Flag implementation sequencing embedded in the spec.
 - Route human decisions to outer loop.
 
+Evidence priority:
+1. Primary spec requirements, contracts, non-goals, and proof expectations.
+2. Open questions and planning-input sections.
+3. Slice specs only where routed by the primary spec.
+
 Escalation tests:
 - blocker: the plan would have to invent product intent, requirement semantics,
   boundary ownership, proof expectations, or non-goals.
@@ -50,11 +55,27 @@ Analysis method:
 Ask what a plan would have to invent and whether that invention belongs in the
 spec.
 
+Prioritized smells / failure signals:
+- implementation sequence is present but source contract is missing;
+- proof expectation deferred without enough requirement detail;
+- plan would need to choose product scope;
+- open question is hidden in a task-like phrase;
+- worker assignment appears in the spec as if it were design truth.
+
 Calibration bar:
 Report gaps that would cause the plan to redesign, not minor wording issues.
 
+Cannot-verify boundary:
+Set `cannot_verify_from_focused_packet` when readiness depends on live
+implementation feasibility, test runtime, whole-spec coverage, user product
+priority outside the spec, or source anchors missing from the focused packet.
+Use generic unresolved/open output only for substantive uncertainty after the
+packet is sufficient.
+
 Output format:
 Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Include: invention required from planner, missing source decision, smallest spec
+edit, and route-back.
 
 Advisory boundary:
 This lane does not create the plan.

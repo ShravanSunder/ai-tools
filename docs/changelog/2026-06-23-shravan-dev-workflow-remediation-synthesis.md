@@ -28,6 +28,15 @@ Plan review and spec review now keep review read-only: accepted findings route
 back to the owning creation skill or to an owner-facing handoff rather than
 mutating the reviewed artifact inside the review phase.
 
+Follow-up in the same PR deepens the lane-teaching contract. Plan-review
+focused lanes and spec-review lanes now carry lane-specific stance, evidence
+priority, analysis method, prioritized smells, materiality/cannot-verify
+boundaries, and output extras so subagents know what to inspect and how to stay
+inside the lane dimension. New pressure scenarios exercise those dimensions for
+architecture assumptions, testability validation, security/reliability,
+execution scope, adversarial design, harness fit, guardrail codification, and
+focused spec-review overlap / cannot-verify routing.
+
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
@@ -52,8 +61,9 @@ mutating the reviewed artifact inside the review phase.
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh`
   focused over 15 touched/remediation scenarios: pass
 - `SKILL_PRESSURE_BACKEND=fake tests/skills/run-skill-pressure-tests.sh --fast`:
-  76 passed, 14 failed; failures are pre-existing/out-of-scope scenarios
-  outside this remediation surface
+  84 passed, 14 failed; the eight new lane-teaching scenarios passed, and the
+  remaining failures are pre-existing/out-of-scope scenarios outside this
+  remediation surface
 - `pnpm --dir tests/skills exec tsc --noEmit`: pass
 - `pnpm --dir tests/skills exec vitest run lib --config vitest.config.ts`: pass,
   6 files and 25 tests
@@ -65,6 +75,19 @@ mutating the reviewed artifact inside the review phase.
   or basic authentication`; fake backend results are harness-plumbing proof,
   not live behavior proof
 - `git diff --check`: pass
+
+Additional lane-teaching validation:
+
+- focused fake pressure scenarios for new lane dimensions: pass inside the
+  `--fast` run for architecture assumptions, testability validation,
+  security/reliability, execution scope, adversarial design, harness fit, and
+  guardrail codification, plus focused spec-review overlap /
+  `cannot_verify_from_focused_packet` routing
+- static lane-teaching field check across review lane refs: pass; every
+  plan-review and spec-review lane reference contains `Evidence priority:`,
+  `Prioritized smells / failure signals:`, `Overlap boundary:`, and
+  `Cannot-verify boundary:`; every spec-review lane reference also names
+  `cannot_verify_from_focused_packet`
 
 Real installed-cache pressure was not claimed in this changeset because the
 normal Codex plugin installation still points at the live installed marketplace
