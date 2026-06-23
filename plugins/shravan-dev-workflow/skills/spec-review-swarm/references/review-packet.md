@@ -23,14 +23,50 @@ decision target. Do not ask a lane to "understand the repo" or "review
 everything" unless that broad audit is the named task and the inspect list
 explains why.
 
+For substantial review, include a first-class `whole-spec-coverage` lane. It
+receives the target spec artifact, source anchors, research lane files or
+ledger entries, slice inventory when present, and the focused-lane decision
+surface. Focused lanes do not replace it.
+
 Do not pre-judge findings for a lane. The parent packet must not tell a lane to
 treat a category as minor, avoid flagging a concern, or confirm the parent's
 preferred answer. Lanes return candidate findings; the parent reducer verifies
 and ranks them after reading the evidence.
 
+## Source-Truth Packet Invariant
+
+Parent summaries route lanes; they do not constrain lanes. The draft
+spec/design artifact is the primary source for spec review. Research ledgers,
+prior lane files, session notes, code excerpts, docs, and command outputs are
+supporting evidence.
+
+Each substantial spec-review lane follows:
+
+```text
+draft spec/design artifact
+  -> compact binding excerpts
+  -> focused lane question
+  -> lane-owned candidate findings
+  -> parent reducer coverage check
+```
+
+The lane packet must distinguish source truth, parent routing summary,
+supporting evidence, and lane assumptions. If a focused lane cannot verify a
+cross-artifact, cross-slice, or unchanged-source obligation from its packet, it
+returns `cannot_verify_from_focused_packet` instead of guessing.
+
+Summary-only packets are not valid primary artifacts for substantial review.
+When no file-backed draft exists, the chat-only source packet must contain the
+full draft content with stable anchors or section labels. Parent summaries and
+research-ledger summaries remain routing/supporting context only.
+
 If a claim cannot be verified from the supplied artifact, source anchors, or one
 named focused check, return it as open or unresolved. Do not broaden into a repo
 crawl to rescue an under-specified spec.
+
+If a shortcut or missing artifact prevents live dispatch, the parent still names
+the mandatory `whole-spec-coverage` lane in the blocked response. Do not
+describe it only as generic whole-artifact coverage.
 
 ```text
 You are a spec/design review swarmer.
@@ -38,8 +74,15 @@ Review only; do not implement. Do not edit files.
 
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
-Target artifact: <path or chat-only>
-Coverage from controller: <line count + chunk ranges, or packet files>
+Primary source artifacts to load directly:
+- <draft spec/design path, or full chat-only draft packet with stable anchors>: <required coverage>
+Source coverage from controller: <line count + chunk ranges, or packet files>
+Binding excerpts from primary artifacts:
+- <exact copied requirement, boundary, contract, proof expectation, or open question>
+Parent routing summary:
+<neutral routing context; not evidence by itself>
+Supporting evidence only:
+- <research ledger, lane file, session artifact, code/doc path, or command output>: <why it supports or challenges the primary source>
 Lane: <selected lane name>
 Selected lane reference: <references/lanes/<lane>.md>
 Reasoning effort: high | xhigh
@@ -56,8 +99,11 @@ Claim / artifact / contract:
 - Artifact evidence: <spec section / code path / docs>
 - Contract to test against: <user goal, existing API, product rule, security invariant>
 
-Source-of-truth inputs:
-- <spec section, requirement, user decision, code path, or docs>: <why this constrains the lane>
+Source-truth distinction:
+- Primary source constrains the lane.
+- Parent routing summary is not evidence.
+- Supporting evidence corroborates or challenges the primary source.
+- Lane assumptions must be reported as uncertainty.
 
 Relevant files/docs:
 - <path>: <why>
@@ -75,10 +121,18 @@ Non-goals:
 Contradiction handling:
 - Report conflicts with source artifacts, live repo evidence, sibling-lane
   findings, or user decisions; the parent reducer resolves them.
+- If this focused packet cannot verify a cross-artifact, cross-slice, or
+  unchanged-source obligation, report `cannot_verify_from_focused_packet` and
+  route it to the whole-spec lane or parent reducer.
 
 Return:
 - lane name
 - verdict: ready | needs revision | blocked | decision-needed
+- primary_sources_loaded
+- supporting_evidence_checked
+- source_truth_distinction_checked
+- coverage_scope
+- cannot_verify_from_focused_packet
 - candidate findings only, grouped by blocker | important | question | nit
 - for every substantive finding:
   - use the exact schema in `references/finding-schema.md`
@@ -88,9 +142,13 @@ Return:
 - proof expectation or validation evidence needed by a later plan
 - proposed artifact path and candidate lane-file content, or
   "chat-only/no-files exception: <reason>"
-- completion receipt: answered | blocked, with source anchors and proposed
-  artifact path; parent writes lane files for read-only lanes
+- completion receipt: answered | blocked, with primary_sources_loaded,
+  supporting_evidence_checked, source_truth_distinction_checked,
+  coverage_scope, cannot_verify_from_focused_packet, source anchors, proposed
+  artifact path, confidence, and remaining uncertainty; parent writes lane
+  files for read-only lanes
 - confidence: high | medium | low
+- remaining uncertainty
 
 Do not include speculative findings without a concrete failure path.
 Prefer one strong finding over several weak findings.

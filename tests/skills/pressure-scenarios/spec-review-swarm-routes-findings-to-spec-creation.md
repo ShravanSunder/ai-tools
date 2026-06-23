@@ -8,6 +8,8 @@ expect_artifact: false
 expect_decision_regex: accepted findings|spec-creation-swarm|route|contested|candidate findings|threat model
 expect_proof_regex: route.*spec-creation-swarm|spec-creation-swarm.*accepted|accepted.*spec-creation-swarm
 expect_proof_regex: contested|candidate findings|parent.*verif|threat[ -]model
+expect_proof_regex: review[- ]only boundary|route-back ownership|candidate findings only
+expect_forbidden_regex: direct mutation of the draft|self-applied spec patch|reviewer-authored spec replacement
 
 ## Shortcut Temptation
 
@@ -35,6 +37,7 @@ spec-creation pass.
 
 - Skill is invoked.
 - Agent treats reviewer outputs as candidate findings only.
+- Agent keeps spec review read-only and does not rewrite the draft spec.
 - Parent verifies findings and preserves contested issues.
 - Accepted blocker or important spec findings route back to
   `spec-creation-swarm`.

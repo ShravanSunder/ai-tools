@@ -22,6 +22,12 @@ The spec defines separability. It names boundaries, contracts, invariants,
 non-goals, security context, and proof expectations tied to requirements. It
 does not define task sequence, worker assignment, execution DAGs, implementation
 order, or exact pyramid test commands; those belong to `plan-creation-swarm`.
+For each material requirement, the spec should name what must be provable, why
+that proof matters, and what evidence shape could count: behavior, state, API
+contract, data/DB, log, metric, trace, screenshot, manual UX, CI, release
+artifact, or other observable signal. It may name a required proof modality when
+that modality is part of the product/system contract, but it should not turn
+that into command sequencing or a rote testing-pyramid checklist.
 
 Specs are clarity artifacts. They move fuzzy intent toward sharper product
 promise, requirements, boundaries, contracts, examples, non-goals, and proof
@@ -73,6 +79,11 @@ fuzzy goal or design question
   implementation phases, execution DAGs, exact test commands, or validation
   command sequence except as proof expectations tied to requirements that
   `plan-creation-swarm` must later operationalize.
+- Define requirement-level proof intent without doing plan work. A good proof
+  expectation names the obligation, failure/risk it guards, observable evidence
+  shape, and non-useful proof to avoid when that would freeze implementation
+  details. It does not say "unit/integration/smoke/e2e for everything" or leave
+  all proof meaning for the plan to invent.
 - Ask the user only for material decisions that cannot be answered from code, docs, or repo evidence.
 - When asking a design question, include the current guess or recommended answer and why.
 - Produce explicit tradeoffs, not a single happy path.
@@ -126,7 +137,8 @@ fuzzy goal or design question
    - separability map and contracts
    - security context and non-goals
    - validation strategy
-   - proof expectations, or explicit deferral to `plan-creation-swarm`
+   - proof expectations: what must be provable, why it matters, and the
+     evidence shape that should later feed the plan's requirements/proof matrix
    - open questions
    - next skill to use
 8. Write the artifact when appropriate:

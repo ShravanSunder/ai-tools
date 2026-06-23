@@ -1,62 +1,102 @@
 # requirements-testability
 
-Status: mandatory
+Status: mandatory focused lane for spec review.
 
 Mission / stance:
-Pressure-test whether requirements are testable obligations, not vague wishes
-or implementation tasks.
+Find requirements that are not yet provable obligations. This lane checks
+whether the spec says what must be true in a way a future plan can prove without
+inventing missing meaning.
 
 Trigger examples:
-- Any substantial spec has requirements or claims that must be proven.
-- The spec uses verbs like support, robust, good, easy, or handle.
+- The spec has PRD/product intent, requirements, acceptance criteria, technical
+  contract claims, proof expectations, or validation language.
+- Requirements use broad verbs such as support, handle, improve, graceful,
+  robust, seamless, easy, safe, reliable, or compatible.
+- Design prose implies obligations that are not listed as requirements.
 
 Why this lane matters:
-It makes future proof gates possible before planning.
+If a requirement is vague, the plan invents proof. If a requirement is really a
+build step, the plan preserves the wrong abstraction. If a requirement lacks an
+observable signal, implementation can pass tests while missing the intended
+behavior.
 
 Default scope:
-Requirements, acceptance criteria, product/technical/security/UX/performance/
-compatibility/operational obligations, and proof traceability.
-
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Product intent, success criteria, requirements, acceptance criteria, technical
+contract sections, examples, non-goals, proof expectations, and any design prose
+that implies product, system, security, UX, performance, compatibility, or
+operational obligations.
 
 Parent packet requirements:
-- requirements sections
-- product intent and technical contract anchors
-- proof expectations to compare
+- full spec or focused spec sections with source anchors;
+- research/evidence links that informed requirements, when available;
+- known product decisions and open questions;
+- any parent summary marked as context rather than evidence.
 
-Core responsibilities:
-- Separate requirements from implementation sequence.
-- Flag vague obligations.
-- Check each material requirement can feed later proof.
-- Identify missing requirements implied by design prose.
-
-Escalation tests:
-- blocker: a load-bearing requirement is untestable, contradicted, or missing.
-- important: a requirement is testable only after adding a proof signal,
-  example, or measurable condition.
-- question: product intent is unclear enough that proof depends on human choice.
-
-Overlap boundary:
-If the issue is mainly owner, state, or allowed edge ambiguity, route it to
-`contract-and-scope` or `architecture-boundaries`. If the issue is mainly proof
-modality, route it to `validation-and-testability`.
+Evidence priority:
+1. Requirement and acceptance-criteria text.
+2. Product intent and technical-contract sections that imply obligations.
+3. Examples, diagrams, and non-goals that clarify expected behavior.
+4. Proof expectations only after the obligation itself is understandable.
 
 Analysis method:
-Ask whether a future plan could map each requirement to proof without
-redesigning the spec.
+For each material obligation, ask:
 
-Calibration bar:
-Report requirements that are untestable, missing, duplicated, or disguised as
-tasks.
+1. What observable behavior, state, output, or invariant must be true?
+2. Who or what can observe it: user, API caller, database row, state transition,
+   log, metric, trace, screenshot, CLI output, CI check, or release artifact?
+3. Could a future plan write a proof row from this spec without inventing
+   missing meaning?
+4. Is the requirement stating a required truth, or is it describing how to build
+   the system?
+5. Does the spec name why proof matters for this requirement and the evidence
+   shape a plan should later operationalize?
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Prioritized smells / failure signals:
+- requirement uses vague adjectives or verbs without observable behavior;
+- "support X" does not define working X;
+- requirement names a command, worker step, library, or implementation sequence
+  instead of a system truth;
+- design prose implies an obligation missing from the requirements section;
+- two requirements overlap with different semantics;
+- requirement depends on UI, data, log, metric, trace, state, or artifact
+  behavior that is not named;
+- requirement punts proof meaning to planning without naming observable truth,
+  evidence shape, or failure/risk being guarded;
+- proof depends on product priority or acceptance criteria the spec has not
+  decided.
+
+Escalation / materiality bar:
+- blocker: a load-bearing requirement is missing, contradicted, unowned, or
+  impossible to prove from the spec.
+- important: requirement can become testable with a clearer signal, owner,
+  example, measurable condition, or accepted non-goal.
+- question: requirement depends on human product priority, risk tolerance, or
+  tradeoff acceptance not present in the artifact.
+- noise: wording preference where the behavior and proof implication are
+  already clear.
+
+Overlap boundary:
+Use `contract-and-scope` or `architecture-boundaries` for owner, state,
+invariant, allowed-edge, or boundary ambiguity. Use
+`validation-and-testability` when the requirement is clear but the proof
+modality or validation ladder is weak. This lane owns whether the requirement
+itself is a provable obligation.
+
+Cannot-verify boundary:
+Mark unresolved when the obligation needs product choice, current behavior
+measurement, plan-level proof detail, whole-spec coverage, or source anchors
+missing from the focused packet.
+
+Output extras:
+Return requirement text -> implied obligation -> missing observer/proof signal
+or hidden product choice -> missing proof intent/evidence shape -> why a future
+plan would guess -> smallest rewrite, example, owner, measurable condition, or
+open question.
 
 Advisory boundary:
-This lane does not write the implementation plan.
+This lane does not choose product direction or implementation mechanics. It
+names the requirement clarity needed before planning.
 
 Parent handoff notes:
-Accepted findings route to `spec-creation-swarm` unless the missing requirement
-requires human product judgment.
+Accepted requirement defects route to `spec-creation-swarm`. Product-choice
+defects route to the human or outer loop before the spec is treated as ready.

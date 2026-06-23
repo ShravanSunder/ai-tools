@@ -18,10 +18,6 @@ Default scope:
 Product intent, users/operators, problem, why-now, success criteria, product
 non-goals, and trace to requirements.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - target artifact coverage
 - product claims to inspect
@@ -34,16 +30,42 @@ Core responsibilities:
 - Check trace from product intent to requirements and contract.
 - Identify product decisions that need the outer human loop.
 
+Evidence priority:
+1. Product intent / PRD section.
+2. Requirements and non-goals that claim product meaning.
+3. Technical contract only where it encodes user-visible behavior.
+
 Analysis method:
 Treat product claims as claims, not truth. Distinguish missing intent from
 acceptable technical-only scope.
+
+Prioritized smells / failure signals:
+- success criteria are absent or unobservable;
+- product non-goals missing for tempting scope expansion;
+- requirement has no user/product reason;
+- technical architecture silently decides product behavior;
+- target user or operator is ambiguous.
 
 Calibration bar:
 Report only product gaps that affect requirements, non-goals, boundaries, or
 human tradeoff decisions.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Overlap boundary:
+If the issue is mainly requirement wording, route it to
+`requirements-testability`. If it is mainly contract surface or non-goal
+ownership, route it to `contract-and-scope`. If it requires whole-artifact trace,
+route it to `whole-spec-coverage`.
+
+Cannot-verify boundary:
+Mark unresolved when the issue requires human product
+priority, market choice, acceptance of a tradeoff not present in the artifact,
+whole-spec coverage, or source anchors missing from the focused packet. Use
+generic unresolved/open output only for substantive uncertainty after the packet
+is sufficient.
+
+Output extras:
+Include: product promise, missing/contradictory requirement, user impact,
+smallest spec edit, and decision route.
 
 Advisory boundary:
 This lane does not choose product direction.

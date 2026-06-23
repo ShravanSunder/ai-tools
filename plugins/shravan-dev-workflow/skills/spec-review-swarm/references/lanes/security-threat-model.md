@@ -18,10 +18,6 @@ Default scope:
 Assets, privileges, entry points, untrusted inputs, trust boundaries, sensitive
 data, privileged actions, and security non-goals.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - security context
 - sensitive surfaces
@@ -34,15 +30,43 @@ Core responsibilities:
 - Check secrets/auth/session boundaries.
 - Check explicit security non-goals and proof expectations.
 
+Evidence priority:
+1. Security context, threat model, non-goals, and sensitive-surface claims.
+2. Contracts that touch auth, secrets, parsing, filesystem, network, subprocess,
+   plugins, MCP, CI, package scripts, agents, or external services.
+3. Existing security docs or code only where cited by the spec.
+
 Analysis method:
-Report missing threat model content as spec refinement, not implementation work.
+Trace untrusted input or authority from entry point to state or side effect.
+Then ask what misuse path, boundary, or proof the spec must make explicit.
+
+Prioritized smells / failure signals:
+- sensitive surface marked out of scope without reason;
+- asset, entry point, trust boundary, or privileged action omitted;
+- secret/token/auth behavior hidden in implementation detail;
+- filesystem/network/subprocess/package-script authority broadened;
+- threat proof deferred to plan without source-level security requirement.
 
 Calibration bar:
 Report only security gaps that affect requirements, invariants, non-goals, or
 proof expectations.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Overlap boundary:
+If the issue is mainly harness authority or tool availability, route it to
+`harness-fit`. If it is mainly proof modality, route it to
+`validation-and-testability`. If it is a cross-slice security coverage gap,
+route it to `whole-spec-coverage`.
+
+Cannot-verify boundary:
+Mark unresolved when validating an exploit, running a
+scan, proving runtime security behavior, whole-spec coverage, or source anchors
+missing from the focused packet are required. Route explicit scans to
+`ops-security-review`. Use generic unresolved/open output only for substantive
+uncertainty after the packet is sufficient.
+
+Output extras:
+Include: asset/boundary, misuse path, missing security requirement, smallest
+spec edit, and validation route.
 
 Advisory boundary:
 This lane does not run a full security scan.

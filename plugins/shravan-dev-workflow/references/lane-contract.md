@@ -14,8 +14,12 @@ Every substantial subagent lane packet includes:
 - edit boundary: exact allowed write scope, or an explicit read-only boundary
 - bounded question: the one question this lane answers
 - decision target: what parent decision or artifact this evidence informs
-- source-of-truth inputs: paths, spec sections, requirements, plan rows, logs,
-  docs, or command outputs that constrain the lane
+- primary source artifact paths the lane must load directly
+- compact binding excerpts or source-derived brief from those primary artifacts
+- parent routing summary, explicitly labeled as routing context rather than
+  source truth
+- supporting evidence links such as research ledgers, lane files, logs, docs,
+  or command outputs
 - inspect list: exact paths, docs, commands, searches, or repos to inspect and
   why each matters
 - non-goals: decisions, files, workflows, or behaviors this lane must not own
@@ -27,6 +31,39 @@ Every substantial subagent lane packet includes:
 - security context: applicable | not applicable
 - completion receipt: answered | blocked, with source anchors and artifact
   paths when artifacts are expected
+
+## Source-Truth Packet Invariant
+
+Parent summaries route lanes; they do not constrain lanes. Primary artifacts
+constrain lanes. Research ledgers, prior lane files, logs, docs, session notes,
+and command outputs support lanes.
+
+The invariant is:
+
+```text
+primary source artifact(s)
+  -> compact binding excerpt / source-derived brief
+  -> focused lane question
+  -> lane-owned evidence or findings
+  -> parent reducer coverage check
+```
+
+For substantial swarms, every lane packet distinguishes:
+
+- source truth: primary artifacts the lane loads directly
+- binding excerpts: exact values copied from primary artifacts for efficient
+  routing
+- parent routing summary: neutral context, never evidence by itself
+- supporting evidence: ledgers, lane files, logs, docs, command output, or repo
+  checks that corroborate or challenge source truth
+- lane assumptions: uncertainty the lane could not verify from its focused
+  packet
+
+When a focused packet cannot verify a cross-slice, cross-artifact, or
+unchanged-source obligation, the lane reports
+`cannot_verify_from_focused_packet` instead of guessing. The parent routes that
+gap to a whole-coverage lane, parent coverage pass, source revision, or human
+decision.
 
 ## Security Context
 
@@ -84,8 +121,14 @@ Lane receipts include:
 
 - lane name
 - status: answered | blocked
+- primary_sources_loaded: primary source artifacts loaded directly by the lane
+- supporting_evidence_checked
+- source_truth_distinction_checked
+- coverage_scope
+- cannot_verify_from_focused_packet
 - source anchors inspected
 - artifact paths written by parent or proposed by the lane
+- proposed artifact path when the lane expects a parent-written artifact
 - important contradictions
 - remaining uncertainty
 - confidence

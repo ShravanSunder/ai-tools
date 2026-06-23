@@ -20,11 +20,12 @@ Core pipeline:
 draft spec/design
   -> whole-artifact coverage
   -> claim / artifact / contract packet
+  -> mandatory whole-spec-coverage lane
   -> bounded review lanes
   -> optional external counsel when requested
   -> parent verification
   -> accepted / contested / open refinement inputs
-  -> smallest spec/design edits or owner-facing handoff
+  -> spec-creation route or owner-facing handoff
 ```
 
 ## Core Rules
@@ -33,6 +34,9 @@ draft spec/design
 - If a spec or design file exists, run `wc -l` and read every chunk before judging.
 - Treat the artifact as claims to verify, not truth.
 - Build one shared review packet before dispatching lanes.
+- For substantial spec reviews, always dispatch a first-class
+  `whole-spec-coverage` lane. Focused lanes do not replace it; lighter review
+  belongs to another workflow or an explicit chat-only/lightweight exception.
 - Spec-review lanes use high or xhigh reasoning effort according to artifact
   complexity, security sensitivity, and decision risk.
 - Do not pass author confidence or previous agent praise as evidence.
@@ -46,19 +50,31 @@ draft spec/design
 - When a shortcut or missing artifact prevents dispatching lanes in the current
   run, still name the substantial-lane packet shape: bounded question, decision
   target, source-of-truth inputs, inspect list, non-goals, contradiction
-  handling, security context, output contract, completion receipt, and parent
-  verification.
+  handling, security context, output contract, completion receipt, mandatory
+  `whole-spec-coverage` lane, and parent verification.
 - Parent owns verification, synthesis, and final recommendations.
 - Use external Claude, Gemini, or `agy` only when explicitly requested.
 - Keep lane ownership clean. Do not edit another agent's lane file or put words in another reviewer voice.
 - Accepted blocker or important findings normally route back to
-  `spec-creation-swarm` for revision with the full creation context. Only make
-  tiny same-session copy edits when they are explicitly scoped and do not
-  require renewed synthesis.
+  `spec-creation-swarm` for revision with the full creation context.
 - Preserve real disagreement as `contested`, not as a fake consensus.
 - Security-sensitive specs must include a threat model or an explicit reason why one is not needed.
 
 ## Workflow
+
+Classify review as substantial when any of these are true:
+
+- the draft is file-backed or handoff-backed and will feed
+  `plan-creation-swarm`, `spec-handoff`, or implementation planning
+- the draft carries product intent, requirements, contracts, boundaries, proof
+  expectations, multiple slices, subagents, or cross-phase obligations
+- the work is cross-module, security-sensitive, high-risk, high/xhigh effort,
+  or user-visible enough to need durable review evidence
+- findings, decisions, proof obligations, or route-back state need later
+  inspection
+
+When classification is unclear, treat file-backed or planning-facing review as
+substantial unless the user explicitly asks for a lightweight chat-only review.
 
 1. Resolve target:
    - spec file
@@ -68,7 +84,8 @@ draft spec/design
      surfaces instead of proceeding: product intent / PRD, testable
      obligations, technical contract, proof expectations, security threat
      model, and substantial-lane packet fields including bounded question,
-     decision target, inspect list, non-goals, and contradiction handling
+     decision target, inspect list, non-goals, contradiction handling, and the
+     mandatory `whole-spec-coverage` lane
 2. Establish coverage:
    - line count and chunks for files
    - packet files for handoffs
@@ -83,10 +100,12 @@ draft spec/design
    - security/trust-boundary claims
    - data flow and state ownership
    - validation strategy
-   - proof expectations, or explicit deferral to `plan-creation-swarm`
+   - proof expectations: what must be provable, why it matters, observable
+     evidence shape, and any non-useful proof to avoid
    - plan constraints or open planning inputs
 4. Verify major claims against code/docs/tests before dispatch where cheap.
-5. Dispatch review lanes for substantial artifacts.
+5. Dispatch `whole-spec-coverage` and focused review lanes for substantial
+   artifacts.
 6. Run a decision discussion for unresolved branches that block readiness.
 7. Verify and reduce findings:
    - accepted: technically valid and actionable
@@ -95,7 +114,6 @@ draft spec/design
    - rejected: unsupported, wrong, or out of scope
 8. Route accepted issues:
    - accepted blocker/important spec findings: `spec-creation-swarm`
-   - tiny explicitly scoped copy edits: edit the owned spec/design artifact
    - owner-facing handoff: produce exact edits when the artifact belongs to another agent
 9. Return review report and next-step recommendation.
 
@@ -105,6 +123,7 @@ Default lanes for substantial specs:
 
 | Lane | Status | Reference | Why |
 | --- | --- | --- | --- |
+| `whole-spec-coverage` | mandatory | `references/lanes/whole-spec-coverage.md` | Checks the full spec satisfies product intent, requirements, contract, boundaries, proof expectations, and slice coherence. |
 | `requirements-testability` | mandatory | `references/lanes/requirements-testability.md` | Ensures obligations are testable and not implementation tasks. |
 | `contract-and-scope` | mandatory | `references/lanes/contract-and-scope.md` | Checks goals, non-goals, ownership, invariants, and contract surfaces. |
 | `architecture-boundaries` | mandatory | `references/lanes/architecture-boundaries.md` | Challenges owners, sources of truth, dependency direction, and drift risks. |
@@ -135,6 +154,12 @@ lanes used.
   per-finding schema.
 - Load only the selected `references/lanes/*.md` files. Specialized lanes are
   scoped review aspects; they do not own refinement alone.
+- Durable lane references own lane-specific stance, evidence priority, analysis
+  method, prioritized smells, materiality bar, overlap boundaries,
+  cannot-verify boundaries, and output extras. The shared packet carries task
+  instance data; it does not replace the lane's job contract.
+- For substantial reviews, include `references/lanes/whole-spec-coverage.md`
+  as a selected lane even when other focused lanes look sufficient.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.
 - Use `../../references/source-inspirations.md` when updating this skill or explaining source practices.
 
@@ -144,6 +169,7 @@ Return:
 
 - Coverage evidence.
 - Review lanes run and lane status.
+- Whole-spec coverage status.
 - Verdict: ready, needs revision, blocked, or decision-needed.
 - Product-intent / requirements / technical-spec chain status.
 - What held.
@@ -151,13 +177,15 @@ Return:
 - Refinement inputs and inner-loop vs outer-loop routing.
 - Contested design choices.
 - Open questions.
-- Accepted finding route: `spec-creation-swarm`, tiny same-session edit, or
-  owner-facing handoff.
+- Accepted finding route: `spec-creation-swarm` or owner-facing handoff.
 - Full clickable artifact links (absolute path + line) for review reports,
   spec/design artifacts, or handoffs the human is expected to open.
 - Security threat-model status.
 - Proof expectations status: present in the spec, or explicitly deferred to
-  `plan-creation-swarm` with open proof gaps named.
+  `plan-creation-swarm` with open proof gaps named. A spec that leaves the plan
+  to invent what evidence would prove a material requirement is `needs
+  revision`; plan creation operationalizes proof, but the spec owns
+  requirement-level proof intent.
 - Next step: usually `plan-creation-swarm` when the spec is ready,
   `spec-creation-swarm` when accepted findings require revision,
   `spec-handoff` for portability, or `ops-security-review` for explicit
