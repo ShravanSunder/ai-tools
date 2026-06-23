@@ -22,10 +22,6 @@ Implementation plan, accepted source spec/design/goal/handoff, source anchors,
 requirements/proof matrix, vertical slices, task DAG, write scopes, checkpoints,
 proof gates, manual validation, and route-back conditions.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - plan artifact path and coverage
 - accepted source artifact path and coverage, or explicit source limitation
@@ -35,6 +31,8 @@ Parent packet requirements:
 - focused-lane list and contradiction handling
 
 Core responsibilities:
+- Open/read the plan artifact and accepted source artifact directly. Treat
+  controller summaries as hints only.
 - Check every material source requirement or boundary has a plan home.
 - Check vertical slices compose into the full requested behavior.
 - Check task order, parallelization, checkpoints, and integration gates are
@@ -45,8 +43,10 @@ Core responsibilities:
   units.
 
 Analysis method:
-Trace source artifact -> plan slice -> task/checkpoint -> proof gate. Then scan
-sideways across slices for contradictions, gaps, and dependency hazards.
+Trace source artifact -> plan slice -> task/checkpoint -> proof gate. Record a
+coverage ledger with source obligation, plan home/slice, proof row/checkpoint,
+and status. Then scan sideways across slices for contradictions, gaps, and
+dependency hazards.
 
 Calibration bar:
 Report findings that affect whole-plan readiness, execution coherence,
@@ -54,7 +54,7 @@ source-to-plan traceability, or proof correctness.
 
 Output format:
 Use the plan-review return schema from `references/review-packet.md`. Return
-lane-specific context after the standard finding fields.
+the coverage ledger before lane-specific context.
 
 Advisory boundary:
 This lane does not accept findings, rewrite the plan, or implement code.

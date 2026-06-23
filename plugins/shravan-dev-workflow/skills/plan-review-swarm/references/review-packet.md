@@ -1,11 +1,10 @@
 # Review Packet Template
 
-Use this for a subagent prompt or copy-paste prompt.
-
-Consume `../../references/lane-contract.md` as the shared lane packet contract.
-This file only adds plan-review lane overlays:
-adversarial plan critique, readiness verdicts, proof-gate review, route-back
-semantics, and execution-scope checks remain owned here.
+Use this skill-local packet contract for a plan-review subagent prompt or
+copy-paste prompt. This file owns plan-review packet anatomy, source-truth
+handling, artifact coverage fields, readiness verdicts, proof-gate review,
+route-back semantics, execution-scope checks, receipts, parent reducer rules,
+and review-specific lane overlays.
 
 For substantial plan-review swarms, the parent preserves an inspectable
 artifact trail in the existing review workflow home. If review artifacts live
@@ -21,6 +20,11 @@ artifact when one exists, required section/header anchors for both artifacts,
 and any research or ledger files that constrain the plan. Focused lanes do not
 replace it.
 
+Review lanes open and read the plan artifact and accepted source artifact
+themselves before judging. Controller summaries, coverage notes, and parent
+claims are routing hints only; they are not substitutes for the lane's own
+source-to-plan inspection.
+
 If a shortcut or missing artifact prevents live dispatch, the parent still names
 the mandatory `whole-plan-cohesion` lane in the blocked response. Do not
 describe it only as generic whole-artifact or whole-picture review.
@@ -35,6 +39,10 @@ Review target: <plan path or handoff packet>
 Coverage from controller: <line count + chunk ranges, or packet files>
 Accepted source artifact: <spec/design/goal/handoff path, or none with reason>
 Source artifact coverage: <line count + chunk ranges, packet files, or limitation>
+Independent read requirement:
+- Open/read the plan artifact yourself.
+- Open/read the accepted source artifact yourself when one exists.
+- Treat controller summaries as hints, not source truth.
 Primary artifact inputs:
 - plan artifact: <path, required sections, and coverage>
 - source artifact: <path, required sections/header anchors, and coverage; or none with reason>
@@ -82,6 +90,7 @@ Lane-specific checklist:
 - <checks this lane must perform before returning>
 
 Always check:
+- source obligation -> plan home/slice -> proof row/checkpoint coverage
 - stale assumptions
 - missing cutovers
 - API/contract mismatch
@@ -101,6 +110,12 @@ Return:
 - Verdict: ready | needs revision | blocked
 - candidate findings grouped as blocker | important | question | nit
 - For each finding: evidence, failure scenario, smallest plan edit, proof/test
+- Coverage ledger for `whole-plan-cohesion`, `spec-compliance`, and
+  `testability-validation` lanes:
+  - source obligation
+  - plan home/slice
+  - proof row/checkpoint
+  - status: covered | deferred with reason | missing | contradicted
 - For security findings: validation status as validated | unvalidated with proof gap | rejected
 - Proposed artifact path and candidate lane-file content, or
   "chat-only/no-files exception: <reason>"

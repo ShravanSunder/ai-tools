@@ -7,6 +7,8 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: lane reference|bounded question|decision target|inspect|non-goals|contradiction handling|completion receipt
 expect_proof_regex: finding-schema\.md|what next agent would guess|loop route: inner loop|accepted findings and final routing
+expect_proof_regex: review-packet
+expect_proof_regex: exact.*anchor|smallest refinement target|validation note
 expect_proof_regex: requirements-testability|contract-and-scope|architecture-boundaries|validation-and-testability
 expect_forbidden_regex: review from product, architecture, and security angles
 
@@ -37,6 +39,8 @@ fields, loop route, or parent reducer note.
 - Each lane packet includes decision target, source-of-truth inputs, inspect
   list, non-goals, contradiction handling, security context, completion
   receipt, and refinement-shaped output.
+- Each substantive finding requires an exact inspectable anchor, smallest
+  refinement target, and validation note.
 - Parent owns accepted findings and final routing.
 
 ## Failure Signals

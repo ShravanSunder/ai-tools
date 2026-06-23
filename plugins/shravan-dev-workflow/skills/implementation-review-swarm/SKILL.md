@@ -220,9 +220,8 @@ belongs to `implementation-pr-wrapup`.
 
 ## Progressive Disclosure
 
-- Load `../../references/lane-contract.md` and
-  `references/reviewer-prompts.md` before dispatching reviewers or writing a
-  copy-paste review prompt.
+- Load `references/reviewer-prompts.md` before dispatching reviewers or writing
+  a copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../../references/review-reception.md` before addressing accepted
   findings from this review. Use the route-back rule unless a tiny

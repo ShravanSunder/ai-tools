@@ -17,10 +17,6 @@ Default scope:
 Existing code, prototypes, traces, logs, session artifacts, generated outputs,
 or observed behavior assigned by the parent.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - implementation/prototype evidence
 - spec sections to compare

@@ -23,10 +23,6 @@ Primary spec artifact, slice specs, product intent / PRD, requirements,
 technical contract, diagrams, boundaries, non-goals, proof expectations, open
 decisions, research ledger, lane evidence, and source anchors.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - target spec/design artifact path and coverage
 - source anchors and research lane files or ledger entries that constrain the spec

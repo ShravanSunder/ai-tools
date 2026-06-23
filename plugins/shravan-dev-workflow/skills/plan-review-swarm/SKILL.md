@@ -201,8 +201,7 @@ execution after the plan is ready.
 
 ## Progressive Disclosure
 
-- Load `../../references/lane-contract.md` and
-  `references/review-packet.md` before dispatching subagents or writing a
+- Load `references/review-packet.md` before dispatching subagents or writing a
   copy-paste review prompt.
 - Load `references/lanes/whole-plan-cohesion.md` before dispatching the
   mandatory whole-picture lane for a substantial plan review.

@@ -3,62 +3,64 @@
 Status: mandatory
 
 Mission / stance:
-Pressure-test whether the spec states goals, non-goals, owners, invariants, and
-contract surfaces clearly enough for a later agent.
+Pressure-test whether the spec states goals, non-goals, owners, invariants,
+inputs, outputs, state, and examples clearly enough that a later agent can
+implement the contract without guessing.
 
-Trigger examples:
-- The spec defines APIs, prompts, state, protocol, workflow, UI, or docs
-  contracts.
-- The spec has unclear non-goals or ownership.
+When to run:
+- The spec defines APIs, prompts, workflows, state, files, protocols, UI, tools,
+  skills, or docs contracts.
+- The artifact is outline-shaped or mostly bullets.
+- The spec says what to build but not what must remain true.
 
-Why this lane matters:
-It prevents "the agent can guess this" defects at the contract layer.
+Where to look:
+- primary spec mental model, requirements, technical contract, and non-goals
+- slice specs or protocol specs referenced by the primary spec
+- diagrams, examples, schemas, CLI/API shapes, event shapes, state diagrams
+- current code/docs when the spec claims an existing contract
+- open decisions and planning inputs
 
-Default scope:
-Goals, non-goals, owners, sources of truth, inputs, outputs, state, invariants,
-allowed/disallowed edges, and examples.
+How to inspect:
+Pick each load-bearing contract surface and fill this checklist from the spec,
+not from your own assumptions:
+- owner: who owns this surface and who changes it?
+- consumer: who calls or relies on it?
+- input: what enters, including invalid or untrusted input?
+- output: what leaves, including errors and observable side effects?
+- state: what is read, written, cached, persisted, or explicitly untouched?
+- invariant: what must always hold?
+- negative space: what is out of scope or forbidden?
+- examples: at least one valid and one boundary/invalid example when shape
+  matters
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+If you cannot fill a field for a load-bearing surface, report the missing
+field. Do not replace it with "the implementation can decide" unless the spec
+explicitly delegates that freedom and names the acceptable range.
 
-Parent packet requirements:
-- contract claims
-- boundary map
-- open decisions
-- non-goals and contradiction handling
+Good signals:
+- contracts are written as stable truths, not implementation tasks
+- non-goals prevent plausible but unwanted expansion
+- examples clarify ambiguity instead of duplicating prose
+- open decisions are named at the right altitude
+- requirements trace into contract surfaces
 
-Core responsibilities:
-- Check whether each contract surface has owner, inputs/outputs, state, and
-  invariants where applicable.
-- Flag missing non-goals and ambiguous scope.
-- Reject outline-shaped bullets as contract substitutes.
+Bad signals:
+- "handle X" without inputs, outputs, errors, or state authority
+- "support Y" without success/failure examples
+- a contract that depends on reading session history
+- hidden sequencing or task planning embedded in the spec
+- broad "do not break existing behavior" without naming the behavior
 
-Escalation tests:
-- blocker: owner, source of truth, input/output, state, or invariant is missing
-  for a load-bearing contract surface.
-- important: a contract exists but allowed/disallowed edges or examples are
-  incomplete enough that a later agent would guess.
-- question: scope depends on a human product or ownership decision.
+Calibration:
+Report issues that would cause a planning or implementation agent to invent
+contract details. Do not ask for more detail without naming the missing owner,
+source anchor, input/output, invariant, example, non-goal, or open decision.
 
 Overlap boundary:
-If the issue is mainly whether an obligation can be tested, route it to
-`requirements-testability`. If the issue is mainly whether a plan can start,
-route it to `planning-readiness`.
+`requirements-testability` owns whether obligations are testable.
+`architecture-boundaries` owns layer and dependency placement. This lane owns
+whether the contract surface itself is legible.
 
-Analysis method:
-Convert fuzziness into missing contract fields or open decisions.
-
-Calibration bar:
-Report issues that would cause a planning or implementation agent to invent
-contract details.
-
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
-
-Advisory boundary:
-This lane does not accept final spec edits.
-
-Parent handoff notes:
-Parent should fold accepted contract findings into primary spec or slice spec
-routes.
+Output focus:
+Use `references/finding-schema.md`. The refinement input should be the exact
+contract field or scope boundary the spec must add.

@@ -5,11 +5,11 @@ normal backend, but the same lane contracts can be sent to another requested
 reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports
 candidate findings. The parent session is the reducer.
 
-Consume `../../references/lane-contract.md` as the shared lane packet contract.
-This file only adds implementation-review overlays:
-high/xhigh read-only review expectations, implementation proof review,
-security/trust-boundary review, and parent-verified findings. It does not
-authorize implementation.
+Use this skill-local packet contract for implementation-review lanes. This file
+owns implementation-review packet anatomy, source-truth handling, high/xhigh
+read-only review expectations, implementation proof review,
+security/trust-boundary review, receipts, and parent-verified findings. It does
+not authorize implementation.
 
 For substantial implementation-review swarms, the parent preserves an
 inspectable artifact trail in the existing review workflow home. If review

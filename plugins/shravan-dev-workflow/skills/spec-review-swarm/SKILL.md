@@ -135,9 +135,8 @@ lanes used.
 
 ## Progressive Disclosure
 
-- Load `../../references/lane-contract.md` and
-  `references/review-packet.md` before dispatching review lanes or writing a
-  copy-paste prompt.
+- Load `references/review-packet.md` before dispatching review lanes or writing
+  a copy-paste prompt.
 - Load `references/finding-schema.md`; every review lane uses this exact
   per-finding schema.
 - Load only the selected `references/lanes/*.md` files. Specialized lanes are

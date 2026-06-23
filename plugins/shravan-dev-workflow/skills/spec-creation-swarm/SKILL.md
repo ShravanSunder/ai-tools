@@ -157,6 +157,44 @@ Conditional lanes:
 For tiny design questions, run local versions of the relevant lanes and name the
 lane set used.
 
+## Lane Orchestration Order
+
+The parent owns lane sequencing. Run independent lanes in parallel where the
+tool surface supports it, but preserve these information dependencies:
+
+1. Current-truth lane:
+   - Run `codebase-explorer` first, or in the first parallel batch, whenever
+     local code/docs constrain the spec.
+   - Its output establishes owner/source-of-truth anchors, nearby patterns,
+     proof patterns, and files the parent must personally read.
+2. Source-expansion lanes:
+   - Run `prior-art-researcher`, `security-trust-boundary`, and
+     `ux-api-cli-surface` before architecture comparison when their evidence
+     could change requirements, boundaries, contracts, proof expectations, or
+     non-goals.
+   - These lanes can run in parallel with `codebase-explorer` when their inputs
+     are already named and do not depend on local owner discovery.
+3. Architecture option lanes:
+   - Run `architecture-minimal`, `architecture-clean-boundary`, and
+     `architecture-pragmatic` after enough current/source evidence exists to
+     make their tradeoffs real.
+   - These lanes compare options; they do not decide the final design.
+4. Crux/risk lane:
+   - Run `risk-and-tradeoff-design` after candidate directions are visible, or
+     in parallel with architecture lanes when the packet names the candidate
+     direction and assumptions to test.
+5. Parent collection pass:
+   - Read lane outputs and required source anchors.
+   - Verify high-impact claims against files/docs.
+   - Reduce by decision: accepted, contested, rejected, deferred, or open.
+   - Produce the primary spec and slice routes; do not preserve lane order as
+     spec structure.
+
+Each selected lane reference states its call timing, prerequisites, and
+collection contribution. If a lane cannot receive its prerequisites, record that
+as blocked or run an earlier research/current-state lane instead of sending a
+thin prompt.
+
 ## Required Spec Diagram
 
 Every substantial spec artifact includes a boundary / separability map:
@@ -180,8 +218,8 @@ ownership map and explain why.
 
 ## Progressive Disclosure
 
-- Load `../../references/lane-contract.md` and `references/swarm-packets.md`
-  before spawning design, research, or architecture subagents.
+- Load `references/swarm-packets.md` before spawning design, research, or
+  architecture subagents.
 - Load `references/creation-evidence-schema.md`; every substantive creation
   lane observation uses this schema before lane-specific context.
 - Load only the selected `references/lanes/*.md` files. Each selected lane

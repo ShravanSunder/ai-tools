@@ -1,12 +1,11 @@
 # Review Packet
 
-Use this for shared spec-review subagent prompts or copy-paste prompts.
-
-Consume `../../references/lane-contract.md` as the shared lane packet contract,
-then load only the selected `references/lanes/*.md` files for lane-specific
-behavior. This file owns the shared spec-review packet anatomy, artifact
-coverage fields, refinement-shaped output contract, and parent reducer
-boundaries. It intentionally does not define named lane overlays. Use
+Use this skill-local packet contract for spec-review subagent prompts or
+copy-paste prompts. Load only the selected `references/lanes/*.md` files for
+lane-specific behavior. This file owns spec-review packet anatomy, source-truth
+handling, artifact coverage fields, refinement-shaped output contract,
+receipts, parent reducer boundaries, and review-specific route-back rules. It
+intentionally does not define named lane overlays. Use
 `references/finding-schema.md` as the canonical per-finding schema for every
 review lane.
 
@@ -96,6 +95,10 @@ Return:
 - candidate findings only, grouped by blocker | important | question | nit
 - for every substantive finding:
   - use the exact schema in `references/finding-schema.md`
+  - include an exact inspectable anchor, preferably `path:line`; if line
+    numbers are unavailable, name the smallest durable heading/section and why
+  - name the smallest refinement target and validation note; do not say only
+    "add more detail" or "clarify"
 - contested tradeoffs
 - open questions
 - evidence paths or sections

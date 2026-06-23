@@ -88,8 +88,7 @@ question, lane packets, verification, synthesis, and final claim.
 Load `references/tool-routing.md` before choosing tools for mixed local, web,
 docs, memory, Reader, or session-log research.
 
-Load `../../references/lane-contract.md` and `references/lane-packets.md`
-before spawning subagents.
+Load `references/lane-packets.md` before spawning subagents.
 
 Load `references/evidence-ledger.md` before writing a research artifact or when
 the user needs a copy-pasteable packet.

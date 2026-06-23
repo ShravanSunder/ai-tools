@@ -18,10 +18,6 @@ Default scope:
 Assets, privileges, entry points, untrusted inputs, trust boundaries, sensitive
 data, privileged actions, and security non-goals.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - security context
 - sensitive surfaces

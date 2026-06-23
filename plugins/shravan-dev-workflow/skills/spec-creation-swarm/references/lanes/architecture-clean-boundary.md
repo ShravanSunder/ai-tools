@@ -18,9 +18,18 @@ Default scope:
 Owners, sources of truth, dependency direction, contract surfaces, slice specs,
 and enforceable invariants.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run after current-state evidence exists. It can run in parallel with the other
+architecture option lanes.
+
+Prerequisites:
+- current owner/source-of-truth anchors
+- candidate surfaces or domains to separate
+- known constraints and non-goals
+
+Collection contribution:
+Clean owner/contract option, allowed and disallowed edges, migration cost,
+future simplification, and possible enforceable invariants.
 
 Parent packet requirements:
 - candidate owner and source-of-truth choices
