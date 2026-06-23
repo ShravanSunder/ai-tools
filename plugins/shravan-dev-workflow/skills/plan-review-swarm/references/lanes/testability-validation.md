@@ -2,8 +2,8 @@
 
 Status: default focused lane for substantial plan review.
 
-This lane follows `../lane-judgment-cards.md`: use the shared plan-review
-packet for mechanics, and use this file for proof-strategy judgment.
+Use the shared plan-review packet for mechanics. This file owns the
+`testability-validation` judgment for plan review.
 
 ## Lens
 

@@ -2,8 +2,8 @@
 
 Status: default focused lane for substantial plan review.
 
-This lane follows `../lane-judgment-cards.md`: use the shared plan-review
-packet for mechanics, and use this file for the architecture judgment.
+Use the shared plan-review packet for mechanics. This file owns the
+`architecture-assumptions` judgment for plan review.
 
 ## Lens
 

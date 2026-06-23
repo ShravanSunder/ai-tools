@@ -149,9 +149,6 @@ lanes used.
 - Load `../../references/lane-contract.md` and
   `references/review-packet.md` before dispatching review lanes or writing a
   copy-paste prompt.
-- When writing or refactoring durable spec-review lane references, load
-  `references/lane-judgment-cards.md`. Do not load it for ordinary review
-  dispatch unless the lane text itself needs authoring/debugging.
 - Load `references/finding-schema.md`; every review lane uses this exact
   per-finding schema.
 - Load only the selected `references/lanes/*.md` files. Specialized lanes are

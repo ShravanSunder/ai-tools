@@ -37,22 +37,18 @@ architecture assumptions, testability validation, security/reliability,
 execution scope, adversarial design, harness fit, guardrail codification, and
 focused spec-review overlap / cannot-verify routing.
 
-A second follow-up establishes the lane judgment-card style. Shared packet
-references continue to own generic packet/receipt mechanics, while each review
-skill now owns its own lane judgment-card reference. Spec review teaches
-fuzzy-to-sharp refinement of intent, requirements, contracts, and proof
-expectations; plan review teaches source-to-plan traceability, vertical slices,
-execution packets, and proof gates. Lane files are written as progressive
-expert briefs that teach where to look, how to analyze, how to classify
-findings, and what evidence helps the next creator fix the artifact. The first
-model lanes are `architecture-assumptions`, `requirements-testability`, and
-`testability-validation`.
+A second follow-up clarifies the runtime/reference boundary. Shared packet and
+lane-contract references own generic protocol mechanics: source loading,
+packet/receipt fields, and parent reducer contracts. Focused lane files own
+actual review judgment. Spec-review lane files teach fuzzy-to-sharp refinement
+of intent, requirements, contracts, and proof expectations; plan-review lane
+files teach source-to-plan traceability, vertical slices, execution packets,
+repo anchors, sequencing, and proof gates. Authoring guidance for how to write
+lane files is not carried inside runtime workflow skills.
 
 ## Affected Surfaces
 
 - `plugins/shravan-dev-workflow/references/lane-contract.md`
-- `plugins/shravan-dev-workflow/skills/spec-review-swarm/references/lane-judgment-cards.md`
-- `plugins/shravan-dev-workflow/skills/plan-review-swarm/references/lane-judgment-cards.md`
 - `plugins/shravan-dev-workflow/skills/spec-review-swarm/`
 - `plugins/shravan-dev-workflow/skills/plan-creation-swarm/`
 - `plugins/shravan-dev-workflow/skills/plan-review-swarm/`
@@ -96,7 +92,7 @@ Additional lane-teaching validation:
   security/reliability, execution scope, adversarial design, harness fit, and
   guardrail codification, plus focused spec-review overlap /
   `cannot_verify_from_focused_packet` routing
-- direct Vitest evals over the focused judgment-card scenarios:
+- direct Vitest evals over the focused runtime lane scenarios:
   `plan-review-swarm-architecture-assumptions-lane`,
   `plan-review-swarm-testability-validation-lane`, and
   `spec-review-swarm-requirements-testability-lane`: pass, 3 passed / 96
