@@ -29,6 +29,15 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |
 | `implementation-review-swarm` | `implementation-review-swarm-verify-findings.md` | Do not accept reviewer output blindly or add external models by default. |
 | `implementation-review-swarm` | `implementation-review-swarm-routes-findings-to-implementation-execute.md` | Do not turn implementation review into broad fixing when accepted findings should return to implementation execution. |
+| `implementation-review-swarm` | `implementation-review-swarm-source-trigger-classifier.md` | Do not classify risky runtime/source-backed reviews by diff size; require source trace or explicit `diff_only_limited`. |
+| `implementation-review-swarm` | `implementation-review-swarm-source-ledger-row-shape.md` | Do not replace reducer-friendly source trace ledger rows with narrative summaries. |
+| `implementation-review-swarm` | `implementation-review-swarm-accepted-request-steering.md` | Do not use parent memory or raw transcript as source truth; require bounded accepted-request and steering anchors. |
+| `implementation-review-swarm` | `implementation-review-swarm-reanchor-missed-system.md` | Do not ignore user steering that says the implementation missed the requested system. |
+| `implementation-review-swarm` | `implementation-review-swarm-deviation-classification.md` | Do not let reviewer lanes own accepted deviation buckets or route targets. |
+| `implementation-review-swarm` | `implementation-review-swarm-runtime-reachability.md` | Do not approve schema/docs/config as proof for runtime or authority claims. |
+| `implementation-review-swarm` | `implementation-review-swarm-route-back-by-owner.md` | Do not route findings by severity alone; route by implementation, plan, spec, or human-decision ownership. |
+| `implementation-review-swarm` | `implementation-review-swarm-false-positive-substitute.md` | Do not approve weaker substitutes that pass while the desired system is still missing. |
+| `implementation-review-swarm` | `implementation-review-swarm-report-text-contract.md` | Do not defer schema expansion without a complete text-contract report proof. |
 | `orchestrator-goal` | `orchestrator-goal-clarity-gate.md` | Do not set a fuzzy long-horizon goal; route unclear goals to `discuss-with-me`. |
 | `orchestrator-goal` | `orchestrator-goal-closeout-audit.md` | Do not mark a goal complete without accounting for lifecycle gates, matrix rows, evidence, and remaining work. |
 | `orchestrator-goal` | `orchestrator-goal-plan-creation-matrix-handoff.md` | Do not route a clear goal to planning while dropping matrix rows that `plan-creation-swarm` must define. |
