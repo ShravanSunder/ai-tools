@@ -107,6 +107,6 @@ ai-tools/
 │   └── quorum-counsel/          # Optional manual multi-model counsel
 ├── agent_sidecar/               # Docker sidecar system
 ├── observability/               # Shared local OTel/Victoria stack
-├── agents.md                    # Maintainer and agent instructions
-└── CLAUDE.md                    # Claude Code alias for agents.md
+├── AGENTS.md                    # Maintainer and agent instructions
+└── CLAUDE.md                    # Claude Code alias for AGENTS.md
 ```

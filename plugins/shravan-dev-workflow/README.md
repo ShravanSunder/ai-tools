@@ -226,8 +226,8 @@ risk. It is for continuation, audit, or manual review of work already in motion.
   background-monitoring reference for redacted JSONL/state watchers that are
   cheap, cancellable, and visible through the agent harness when available.
 - `docs-maintain`: durable documentation maintenance after source-of-truth drift
-  is identified. It keeps README human-facing, `AGENTS.md` compact (`agents.md`
-  in this repo), and workflow history in changelog/runbook docs.
+  is identified. It keeps README human-facing, `AGENTS.md` compact, and
+  workflow history in changelog/runbook docs.
 - `ops-security-review`: routes explicit authorized security scans to the
   official Codex Security plugin workflows.
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and
@@ -283,4 +283,4 @@ Use docs-maintain to reconcile this README and AGENTS.md with current plugin sta
 - Source inspirations: [`references/source-inspirations.md`](references/source-inspirations.md)
 - Release smoke and behavioral checks: [`../../docs/changelog/references/shravan-dev-workflow-smoke.md`](../../docs/changelog/references/shravan-dev-workflow-smoke.md)
 - Release notes: [`../../docs/changelog/`](../../docs/changelog/)
-- Maintainer guidance: [`../../agents.md`](../../agents.md)
+- Maintainer guidance: [`../../AGENTS.md`](../../AGENTS.md)
