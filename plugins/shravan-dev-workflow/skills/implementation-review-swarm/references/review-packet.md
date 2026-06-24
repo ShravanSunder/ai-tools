@@ -43,8 +43,9 @@ steering_anchors[]
 ```
 
 Each source field is an inspectable artifact reference or an explicit absence
-reason. For source-backed or plan-backed review, missing `accepted_request`,
-`source_spec`, or `source_plan` makes the review `not_ready`.
+reason. For source-backed, plan-backed, or risk-triggered review, missing source
+artifacts that block source trace make the review `not_ready` and set
+`whole-source-trace: not_run_missing_source`.
 
 `steering_anchors[]` entries use this shape:
 
@@ -111,6 +112,27 @@ notes
 This ledger is local to `implementation-review-swarm`; it is not a repo-global
 lane contract.
 
+The parent reducer turns candidate ledger rows into accepted report rows with
+this concrete source/spec/plan/code/proof matrix shape:
+
+```text
+source_obligation_id
+source_anchor
+plan_anchor
+implementation_anchor
+proof_anchor
+reachability_status
+coverage_status
+false_substitute_risk
+accepted_deviation_bucket
+accepted_route_target
+```
+
+Do not replace the matrix with prose such as "source trace considered" or
+"aligned overall." If source artifacts are missing, still print the matrix field
+names with `missing`, `unknown`, `none`, or `not_applicable` values instead of
+claiming readiness.
+
 ## Runtime Reachability
 
 Runtime, authority, security, public-capability, plugin/MCP, agent/tool
@@ -158,8 +180,8 @@ The report must include:
 - whole-source trace status;
 - deviation bucket per accepted finding;
 - route target per accepted finding;
-- source/spec/plan/code/proof matrix for source-backed or risk-triggered
-  reviews;
+- source/spec/plan/code/proof matrix rows using the concrete matrix fields
+  above for source-backed or risk-triggered reviews;
 - false-positive/substitute risks;
 - proof gaps and weakened proof lanes;
 - swarm coverage and lane receipts.

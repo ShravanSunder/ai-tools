@@ -130,11 +130,19 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - The lane records local source-trace ledger rows with source, plan,
      implementation, proof, reachability, coverage, false-substitute,
      candidate_deviation_bucket, and candidate_route_target fields.
-   - Missing accepted source artifacts for source-backed review make the review
-     `not_ready`; diff-only limited review cannot claim source-backed readiness.
+   - Missing accepted source artifacts for source-backed, plan-backed, or
+     risk-triggered review make the review `not_ready` when they block source
+     trace; diff-only limited review cannot claim source-backed readiness.
      The report still states `review_class`, `whole-source-trace:
      not_run_missing_source`, and why `diff_only_limited` does or does not
      apply.
+   - When source trace is required but cannot run, still print the concrete
+     source matrix field names with missing or unknown values:
+     `source_obligation_id`, `source_anchor`, `plan_anchor`,
+     `implementation_anchor`, `proof_anchor`, `reachability_status`,
+     `coverage_status`, `false_substitute_risk`, `accepted_deviation_bucket`,
+     and `accepted_route_target`. Do not replace this with an overall prose
+     alignment statement.
 
 4. Implementation proof gate
    - Collect the claimed implementation proof into the shared packet and check
@@ -315,8 +323,18 @@ source_coverage_state: <covered | missing | ambiguous | diff_only_limited>
 source_backed_verdict_attempted: <true | false>
 whole-source-trace: <required | completed | not_required | not_run_missing_source>
 classifier_reason: <why this review class applies>
-<source/spec/plan/code/proof matrix, false-positive/substitute risks, runtime
-reachability status>
+source/spec/plan/code/proof matrix:
+  source_obligation_id: <id or missing>
+  source_anchor: <accepted_request | source_spec | source_plan | missing>
+  plan_anchor: <plan section/row or missing>
+  implementation_anchor: <file/symbol/diff anchor or missing>
+  proof_anchor: <test/command/artifact or missing>
+  reachability_status: <live | partial | schema_only | docs_only | unreachable | absent | not_applicable>
+  coverage_status: <covered | deferred_unreachable | missing | contradicted | ambiguous>
+  false_substitute_risk: <risk or none>
+  accepted_deviation_bucket: <bucket or none>
+  accepted_route_target: <workflow or none>
+<false-positive/substitute risks and runtime reachability status>
 
 Swarm coverage
 <reviewed scope, lanes run, lane status, backend used for each lane, external model lane status, verification notes>

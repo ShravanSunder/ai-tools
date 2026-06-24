@@ -12,6 +12,8 @@ Plugin: `shravan-dev-workflow` 1.6.31
 - Source trace uses reducer-friendly ledger rows with source, plan,
   implementation, proof, reachability, coverage, false-substitute, candidate
   bucket, and candidate route fields.
+- Source-backed and risk-triggered reports now require concrete
+  source/spec/plan/code/proof matrix rows instead of prose-only source trace.
 - Runtime/authority/public-capability claims require live reachability plus
   proof at the claim layer; schema/docs/config-only proof is `not_ready` unless
   the work is explicitly contract-only and unreachable.

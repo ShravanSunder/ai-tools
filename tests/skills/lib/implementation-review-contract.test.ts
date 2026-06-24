@@ -82,4 +82,28 @@ describe("implementation-review source-trace contract", () => {
     expect(reportSurface).toContain("diff_only_limited");
     expect(reportSurface).not.toContain("verdict: limited");
   });
+
+  test("requires concrete source matrix rows and risk-triggered missing-source handling", () => {
+    const packet = readSkillFile("references/review-packet.md");
+    const skill = readSkillFile("SKILL.md");
+    const reportSurface = [skill, packet].join("\n");
+
+    for (const matrixField of [
+      "source_obligation_id",
+      "source_anchor",
+      "plan_anchor",
+      "implementation_anchor",
+      "proof_anchor",
+      "reachability_status",
+      "coverage_status",
+      "false_substitute_risk",
+      "accepted_deviation_bucket",
+      "accepted_route_target",
+    ]) {
+      expect(reportSurface).toContain(matrixField);
+    }
+
+    expect(packet).toContain("For source-backed, plan-backed, or risk-triggered review");
+    expect(packet).toContain("not_run_missing_source");
+  });
 });
