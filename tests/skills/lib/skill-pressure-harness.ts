@@ -44,6 +44,7 @@ export function createSkillPressureHarness(
       const backend = metadata.backend ?? props.backend;
       const renderedPrompt = renderCodexPressurePrompt({
         scenario: input.scenario,
+        includeLocalSourceHint: backend !== "fake",
       });
 
       if (backend === "fake") {

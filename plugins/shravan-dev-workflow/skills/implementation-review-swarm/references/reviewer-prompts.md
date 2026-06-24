@@ -5,11 +5,10 @@ normal backend, but the same lane contracts can be sent to another requested
 reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports
 candidate findings. The parent session is the reducer.
 
-Use this skill-local packet contract for implementation-review lanes. This file
-owns implementation-review packet anatomy, source-truth handling, high/xhigh
-read-only review expectations, implementation proof review,
-security/trust-boundary review, receipts, and parent-verified findings. It does
-not authorize implementation.
+Use `references/review-packet.md` for implementation-review packet anatomy,
+source-truth handling, source trace, report text contract, route-back semantics,
+and parent reducer ownership. This file owns prompt suffixes and focused
+reviewer lane prompts. It does not authorize implementation.
 
 For substantial implementation-review swarms, the parent preserves an
 inspectable artifact trail in the existing review workflow home. If review
@@ -51,91 +50,6 @@ Return a completion receipt with source anchors, proposed artifact path,
 confidence, and remaining uncertainty.
 Do not write files. Do not mark findings accepted; parent verification owns
 accepted truth.
-```
-
-## Shared Review Packet Template
-
-Give every reviewer this same curated packet. Do not substitute the parent session transcript.
-
-```text
-Mode:
-<implementation | diff | pr | commit | files | adversarial>
-
-Role / mode:
-read-only implementation-review lane
-
-Edit boundary:
-read-only
-
-Review scope:
-<diff command, PR number, commit range, or file list>
-
-Bounded question:
-<the one review question this lane answers>
-
-Decision target:
-<verdict, finding class, proof gate, or readiness decision this lane informs>
-
-Git range:
-base_sha: <sha or "not applicable">
-head_sha: <sha or "working tree">
-diff_stat_command: <command or "not applicable">
-diff_command: <command or "not applicable">
-changed_files: <paths or "not applicable">
-
-Intent:
-<what the change is supposed to accomplish>
-
-Constraints:
-<repo instructions, product constraints, compatibility rules, user preferences>
-
-security context: <applicable | not applicable>
-- If not applicable: <short reason>
-- If applicable: <pointer to parent security context plus lane deltas, or
-  changed attack surface/assets/entry points/untrusted inputs/trust boundaries/
-  sensitive data/privileged actions/security non-goals/security validation
-  already run/proof gaps>
-- Forbidden broadening: no filesystem, network, subprocess, package-script, CI,
-  MCP, plugin, agent, external-model, auth, or secret-boundary broadening beyond
-  the reviewed scope.
-
-Implementation proof:
-<requirements or plan items claimed complete, commands and exit codes,
-red/green evidence, unsatisfied proof gates, evidence freshness, blockers, or "not provided">
-
-Source-of-truth inputs:
-- <request, spec section, plan row, PR description, code path, diff command, test output, artifact>: <why this constrains review>
-
-Focus:
-<requested focus areas, or "full review">
-
-Inspect:
-- <path, diff, test output, plan section, or command evidence>: <why>
-
-Non-goals:
-- Do not edit files, broaden the review scope, decide final verdict, or accept
-  findings as truth.
-
-Lane-specific checklist:
-- <checks this lane must perform before returning>
-
-Contradiction handling:
-- Report conflicts with source artifacts, live repo evidence, proof claims, or
-  sibling-reviewer output; the parent reducer resolves them.
-
-Confidence:
-high | medium | low, with remaining uncertainty
-
-Output contract:
-Return candidate findings only. Do not edit files. For each finding include
-severity, evidence, failure scenario, smallest fix, proof/test, and confidence.
-If there are no findings, still return lane-level confidence and remaining
-uncertainty.
-Return a proposed artifact path and candidate lane-file content, or
-"chat-only/no-files exception: <reason>".
-Return a completion receipt: answered | blocked, with source anchors and
-proposed artifact path, confidence, and remaining uncertainty. The parent writes
-lane files for read-only reviewers.
 ```
 
 ## Spec Compliance Reviewer

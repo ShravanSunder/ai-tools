@@ -29,12 +29,19 @@ failure phrase
 
 describe("renderCodexPressurePrompt", () => {
   test("renders the current pressure-test envelope and operator prompt", () => {
-    const prompt = renderCodexPressurePrompt({ scenario });
+    const prompt = renderCodexPressurePrompt({
+      scenario,
+      includeLocalSourceHint: true,
+    });
 
     expect(prompt).toContain("You are running a Codex skill pressure test.");
     expect(prompt).toContain("- Stay read-only unless the scenario explicitly permits edits.");
     expect(prompt).toContain("- scenario_id: render");
     expect(prompt).toContain("- skill_under_test: shravan-dev-workflow:test-skill");
+    expect(prompt).toContain(
+      "plugins/shravan-dev-workflow/skills/test-skill/SKILL.md",
+    );
+    expect(prompt).toContain("repo-local skill source is authoritative");
     expect(prompt).toContain("Operator prompt:");
     expect(prompt).toContain("Use the skill without seeing the rubric.");
   });
@@ -47,6 +54,7 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).not.toContain("hidden proof phrase");
     expect(prompt).not.toContain("failure phrase");
     expect(prompt).not.toContain("expect_proof_regex");
+    expect(prompt).not.toContain("repo-local skill source is authoritative");
   });
 });
 

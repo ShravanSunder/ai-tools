@@ -76,7 +76,17 @@ run_codex_pressure_case() {
     printf -- '- In fast read-only pressure runs, set artifact_created false unless you actually created an artifact.\n'
     printf -- '- If a skill would normally write an artifact, explain that in decision/coverage_evidence while keeping artifact_created false.\n'
     printf -- '- Put the full text of your live response to the operator (the response the user would see) in the decision field, followed by a short report of what you did.\n'
-    printf -- '- In the report part, name the specific skill rules that drove your response, using the skill'"'"'s own terms for its required artifacts, gates, and stop conditions.\n\n'
+    printf -- '- In the report part, name the specific skill rules that drove your response, using the skill'"'"'s own terms for its required artifacts, gates, and stop conditions.\n'
+    if [[ "$skill_meta" == *:* ]]; then
+      local plugin_name="${skill_meta%%:*}"
+      local skill_name="${skill_meta#*:}"
+      if [[ -n "$plugin_name" && -n "$skill_name" ]]; then
+        printf '\nLocal source under test:\n'
+        printf -- '- Before answering, load the repo-local skill source if it exists: plugins/%s/skills/%s/SKILL.md\n' "$plugin_name" "$skill_name"
+        printf -- '- For this pressure test, repo-local skill source is authoritative over any installed plugin cache.\n'
+      fi
+    fi
+    printf '\n'
     printf 'Operator prompt:\n\n'
     printf '%s\n' "$prompt_body"
   } > "$prompt_file"

@@ -50,8 +50,8 @@ ai-tools/
 │   ├── init_repo_sidecar.sh          # Initialize .agent_sidecar/ in repos
 │   ├── setup/                        # Firewall, init scripts, zsh config
 │   └── firewall-toggle-presets/      # Toggle preset domain lists
-├── agents.md                         # Agent instructions (this file)
-└── CLAUDE.md → agents.md             # Symlink for Claude Code
+├── AGENTS.md                         # Agent instructions (this file)
+└── CLAUDE.md → AGENTS.md             # Symlink for Claude Code
 ```
 
 ## Plugin Skills
@@ -62,7 +62,7 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 
 ## Skill Work SOP
 
-`agents.md` is the repo operating map for skill work. It should tell agents how
+`AGENTS.md` is the repo operating map for skill work. It should tell agents how
 to work here, which skill owns the next decision, and where deeper instructions
 live. It should not duplicate the full manuals from meta-skills.
 

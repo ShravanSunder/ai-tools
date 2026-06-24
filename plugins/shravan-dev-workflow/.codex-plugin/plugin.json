@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.30",
+  "version": "1.6.31",
   "description": "Shravan's development workflow plugin with goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, observability proof loops, implementation review orchestration, PR wrap-up, plan workflows, debugging, skill audits, progressive TUI presentation guidance, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"

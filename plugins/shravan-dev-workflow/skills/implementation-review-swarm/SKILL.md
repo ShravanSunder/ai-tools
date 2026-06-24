@@ -10,8 +10,11 @@ Use this skill to run a review swarm where the parent session remains the orches
 Core pipeline:
 
 ```text
-review packet
-  -> spec compliance reviewer
+scope builder
+  -> references/review-packet.md
+  -> source classifier
+  -> whole-source-trace when source-backed or risk-triggered
+  -> spec compliance and implementation proof gates
   -> bounded reviewer lanes
   -> optional external model lanes
   -> reducer verification
@@ -32,11 +35,15 @@ review packet
 - Treat all reviewer output as raw candidate findings. Verify findings against
   the repository before presenting them as accepted.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
-  run, still name the substantial-lane packet shape: role / mode, edit
-  boundary, bounded question, decision target, source-of-truth inputs, inspect
-  list, non-goals, lane-specific checklist, output schema, contradiction
-  handling, confidence, security context, completion receipt, and parent
-  verification.
+  run, still report the source classifier in canonical terms before the packet
+  shape: `review_class: source-backed | plan-backed | risk-triggered |
+  diff_only_limited`, `whole-source-trace: required | not_required |
+  not_run_missing_source`, `source_backed_verdict_attempted: true | false`,
+  and the classifier reason. Then name the substantial-lane packet shape: role /
+  mode, edit boundary, bounded question, decision target, source-of-truth
+  inputs, inspect list, non-goals, lane-specific checklist, output schema,
+  contradiction handling, confidence, security context, completion receipt, and
+  parent verification.
 - After review, receive findings rigorously: read, understand, verify against
   codebase reality, evaluate, then route accepted findings to the owning
   workflow.
@@ -81,7 +88,7 @@ If the scope is ambiguous and cannot be inferred safely from git state or the pr
 
 ## Shared Review Packet
 
-Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet. Use `references/reviewer-prompts.md` for the packet template and lane prompts.
+Give every reviewer the same curated packet. Do not pass the parent session transcript as a substitute for this packet. Use `references/review-packet.md` for packet anatomy and `references/reviewer-prompts.md` for prompt suffixes and lane prompts.
 Each substantial lane packet identifies role / mode, edit boundary, bounded
 question, decision target, source-of-truth inputs, inspect list, non-goals,
 lane-specific checklist, output schema, contradiction handling, confidence,
@@ -94,6 +101,17 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
 1. Scope builder
    - Determine mode, base/head, changed files, relevant instructions, and user intent.
    - Prefer explicit user scope. Otherwise infer from git state and current request.
+   - For plan-backed, source-backed, pre-merge, risk-triggered, runtime-authority,
+     security-boundary, cross-backend, public capability, plugin/MCP,
+     agent/tool execution, architecture-cutover, or false-green-risk reviews,
+     build the source packet from `references/review-packet.md`.
+   - Use `diff_only_limited` only for explicit tiny diff-only work with no
+     accepted source artifact and no risk trigger.
+   - Say the classifier labels explicitly in the report. For plugin/MCP,
+     runtime-authority, security-boundary, public-capability, agent/tool
+     execution, architecture-cutover, plan-backed, or source-backed review,
+     report that `whole-source-trace` is required even when missing artifacts
+     prevent dispatch.
    - If base/head cannot be inferred safely, ask one concise question before
      dispatch and name the substantial-lane packet shape required for the later
      review: role / mode, edit boundary, bounded question, decision target,
@@ -106,7 +124,27 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - The reviewer checks that the actual artifact matches the request: nothing missing, nothing extra, no misread requirement.
    - If this lane finds blocker/important intent failures, still run security/adversarial lanes when risk warrants it, but make the final verdict `not_ready` unless the reducer rejects the finding.
 
-3. Implementation proof gate
+3. Whole-source trace gate
+   - For source-backed or risk-triggered review, dispatch `whole-source-trace`
+     before focused lanes. Focused lanes do not replace it.
+   - The lane records local source-trace ledger rows with source, plan,
+     implementation, proof, reachability, coverage, false-substitute,
+     candidate_deviation_bucket, and candidate_route_target fields.
+   - Missing accepted source artifacts for source-backed, plan-backed, or
+     risk-triggered review make the review `not_ready` when they block source
+     trace; diff-only limited review cannot claim source-backed readiness.
+     The report still states `review_class`, `whole-source-trace:
+     not_run_missing_source`, and why `diff_only_limited` does or does not
+     apply.
+   - When source trace is required but cannot run, still print the concrete
+     source matrix field names with missing or unknown values:
+     `source_obligation_id`, `source_anchor`, `plan_anchor`,
+     `implementation_anchor`, `proof_anchor`, `reachability_status`,
+     `coverage_status`, `false_substitute_risk`, `accepted_deviation_bucket`,
+     and `accepted_route_target`. Do not replace this with an overall prose
+     alignment statement.
+
+4. Implementation proof gate
    - Collect the claimed implementation proof into the shared packet and check
      that it maps back to requirements, spec, or plan.
    - If an `implementation-handoff` packet exists, use its Implementation
@@ -120,32 +158,40 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
      exception recorded with explicit user approval is documented; an
      agent-authored waiver is not an exception.
 
-4. Reviewer swarm
+5. Reviewer swarm
    - Dispatch independent read-only reviewer lanes.
    - For small changes, run `spec_compliance` plus one general/adversarial lane.
    - For substantial changes, run all default lanes.
    - For any sensitive-surface change, run the security and trust-boundary lane even when the change is small.
 
-5. External model lanes
+6. External model lanes
    - Add Claude, Gemini, `agy`, or another outside model lane only when explicitly requested.
    - External model lanes are advisory and must be recorded in coverage.
 
-6. Reducer verification
+7. Reducer verification
    - Verify every candidate against code, diff, tests, or cited plan text.
+   - Treat lane deviation buckets and route targets as candidate metadata. Only
+     the parent reducer attaches accepted deviation bucket and route target
+     metadata to accepted findings and the final report.
    - Reject claims that cannot be proven from current artifacts.
    - Deduplicate by root cause.
 
-7. Review reception and routing
+8. Review reception and routing
    - Load `../../references/review-reception.md` to receive accepted findings,
      decide what this workflow owns, and handle feedback produced or validated
      by this review.
    - Route accepted blocker/important implementation findings to
      `implementation-execute-plan` unless a tiny same-session review-fix is
      explicitly scoped.
+   - Route plan translation errors to `plan-creation-swarm`, plan validation
+     issues to `plan-review-swarm`, spec ambiguity or missing contracts to
+     `spec-creation-swarm`, proposed spec validation to `spec-review-swarm`, and
+     unresolved product/design choices to `discuss-with-me` or direct user
+     clarification.
    - Pure follow-through on existing GitHub PR comments or review threads
      belongs to `implementation-pr-wrapup`.
 
-8. Verdict
+9. Verdict
    - `ready`: no accepted blocker/important findings and no decision-relevant open questions.
    - `ready_with_fixes`: accepted issues exist but are bounded and non-blocking.
    - `not_ready`: accepted blocker/important findings, failed spec compliance,
@@ -168,6 +214,7 @@ Backend rules:
 
 Default lanes:
 
+- Whole-source trace reviewer for source-backed or risk-triggered reviews
 - Spec compliance reviewer
 - Implementation proof reviewer
 - Code quality reviewer
@@ -220,6 +267,20 @@ belongs to `implementation-pr-wrapup`.
 
 ## Progressive Disclosure
 
+- Load `references/review-packet.md` before dispatching reviewers for
+  source-backed, plan-backed, risk-triggered, pre-merge, or substantial review.
+- Load `references/lanes/whole-source-trace.md` when the source classifier says
+  whole-source-trace is mandatory.
+- Load `references/lanes/spec-plan-compliance.md` for source-backed or
+  plan-backed compliance checks.
+- Load `references/lanes/implementation-proof.md` when proof claims are present.
+- Load `references/lanes/runtime-reachability.md` for runtime, authority,
+  security, public-capability, plugin/MCP, agent/tool execution, or
+  architecture-cutover claims.
+- Load `references/lanes/deviation-routing.md` before assigning candidate
+  deviation buckets or route targets.
+- Load `references/lanes/false-positive-substitutes.md` when a review can pass
+  while the desired system may still be missing.
 - Load `references/reviewer-prompts.md` before dispatching reviewers or writing
   a copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
@@ -255,6 +316,25 @@ Review proof
 <implementation proof checked and mapped to requirements/spec/plan, weakened
 or relabeled proof lanes found or "none", red/green evidence status, exceptions
 and their approval source>
+
+Source trace
+review_class: <source-backed | plan-backed | risk-triggered | diff_only_limited>
+source_coverage_state: <covered | missing | ambiguous | diff_only_limited>
+source_backed_verdict_attempted: <true | false>
+whole-source-trace: <required | completed | not_required | not_run_missing_source>
+classifier_reason: <why this review class applies>
+source/spec/plan/code/proof matrix:
+  source_obligation_id: <id or missing>
+  source_anchor: <accepted_request | source_spec | source_plan | missing>
+  plan_anchor: <plan section/row or missing>
+  implementation_anchor: <file/symbol/diff anchor or missing>
+  proof_anchor: <test/command/artifact or missing>
+  reachability_status: <live | partial | schema_only | docs_only | unreachable | absent | not_applicable>
+  coverage_status: <covered | deferred_unreachable | missing | contradicted | ambiguous>
+  false_substitute_risk: <risk or none>
+  accepted_deviation_bucket: <bucket or none>
+  accepted_route_target: <workflow or none>
+<false-positive/substitute risks and runtime reachability status>
 
 Swarm coverage
 <reviewed scope, lanes run, lane status, backend used for each lane, external model lane status, verification notes>
