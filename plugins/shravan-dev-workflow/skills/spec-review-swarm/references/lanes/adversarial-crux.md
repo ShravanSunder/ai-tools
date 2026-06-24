@@ -3,45 +3,65 @@
 Status: mandatory
 
 Mission / stance:
-Find the few assumptions or contradictions that could invalidate the design.
+Find the few assumptions, contradictions, or tradeoffs that could invalidate
+the spec if they are wrong. This lane is not a general critique lane; it looks
+for the load-bearing cruxes a later plan or implementation would otherwise
+inherit silently.
 
-Trigger examples:
-- The design has multiple valid boundaries.
-- The spec depends on a risky assumption or unresolved tradeoff.
+When to run:
+- The spec has multiple plausible boundaries or architecture paths.
+- Product intent, requirements, diagrams, and contracts do not obviously point
+  to one design.
+- The spec uses confident language around an assumption that has not been
+  anchored in code, docs, research, or user decision.
 
-Why this lane matters:
-It keeps review focused on high-leverage cruxes instead of broad nitpicking.
+Where to look:
+- product intent / PRD claims and success criteria
+- requirement statements and non-goals
+- boundary diagrams, ownership maps, sequence diagrams, and slice maps
+- open decisions, risks, alternatives, and rejected options
+- research ledgers or lane files that disagree with the chosen direction
+- current code/docs when the spec claims existing behavior or a current owner
 
-Default scope:
-Product intent, requirements, diagrams, contracts, proof expectations, open
-decisions, contradictions, and falsifying scenarios.
+How to think:
+Trace each major design claim to the condition that must be true for it to
+work. Then invert that condition. If the inverted condition would force a
+different owner, contract, data shape, protocol, proof signal, or human
+decision, that is a crux.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Useful questions:
+- What would make this design the wrong design?
+- Which assumption would force a route back to spec creation or human review?
+- Which contradiction would cause two implementation agents to build different
+  things while both believing they followed the spec?
+- Where is the spec relying on taste, memory, or "obvious" context instead of
+  an anchor?
 
-Parent packet requirements:
-- claimed design direction
-- known assumptions
-- evidence anchors
-- contradiction handling
+Good signals:
+- a named assumption with source evidence and a clear fallback
+- a tradeoff whose cost and owner are explicit
+- a contradiction preserved as an open decision instead of smoothed over
+- a spec route that says what changes if research disproves the assumption
 
-Core responsibilities:
-- Name assumptions that would invalidate the contract if false.
-- Identify contradictions across intent, requirements, diagrams, and contracts.
-- Ask crux questions that route to inner or outer loop.
+Bad signals:
+- "use the existing pattern" without exact pattern and location
+- a diagram that implies a different owner or edge than the prose
+- a requirement whose product meaning changes depending on audience
+- proof expectations that only prove the easy path, not the crux assumption
+- alternatives listed as decoration without explaining why the chosen path won
 
-Analysis method:
-Use concrete failure paths; do not report speculative discomfort.
+Calibration:
+Report blocker/important findings only when the crux could change the accepted
+contract, boundary, proof expectation, or human decision. Do not report vague
+discomfort. Convert it into the assumption, evidence gap, and failure path.
 
-Calibration bar:
-Report blocker/important cruxes only.
+Overlap boundary:
+If the issue is mainly an owner or dependency edge, coordinate with
+`architecture-boundaries`. If it is mainly missing product meaning, coordinate
+with `product-intent`. This lane owns the cross-cutting "what would invalidate
+the design" question.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
-
-Advisory boundary:
-This lane does not force consensus.
-
-Parent handoff notes:
-Contested cruxes stay contested until evidence or human judgment resolves them.
+Output focus:
+Use `references/finding-schema.md`. The refinement input should name the crux
+as a requirement, boundary decision, example, proof signal, or human decision
+that would make the spec sharper.

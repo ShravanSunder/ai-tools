@@ -3,47 +3,56 @@
 Status: conditional
 
 Mission / stance:
-Pressure-test which requirements or repeated failure modes should become
-enforceable guardrails.
+Identify which spec requirements, boundaries, or repeated failure modes should
+become durable guardrails later. This lane does not make the spec pedantic; it
+separates architecture judgment from checks that machines should eventually
+enforce.
 
-Trigger examples:
-- The spec names architectural constraints, taste invariants, schema rules,
-  structural boundaries, quality grades, or repeated agent failures.
+When to run:
+- The spec names architectural constraints, schema rules, prompt/skill rules,
+  state ownership, quality standards, or repeated agent failures.
+- The same failure would be easy for a future agent to repeat.
+- The spec relies on a rule that is important but boring to police manually.
 
-Why this lane matters:
-It turns fragile prose into future enforcement candidates without making the
-spec an implementation plan.
+Where to look:
+- requirements, invariants, non-goals, proof expectations, and boundary maps
+- existing tests, lint rules, schemas, typed interfaces, pressure scenarios,
+  docs quality trackers, or CI checks
+- prior findings in research/review ledgers and session notes named by the
+  parent packet
+- source inspiration docs only when they are supplied as accepted context
 
-Default scope:
-Requirements, invariants, boundaries, quality gaps, lints, schemas, structural
-tests, typed interfaces, golden principles, and tracker candidates.
+How to think:
+For each repeated or high-cost rule, ask:
+- Is this judgment an architectural/design question, or a mechanical check?
+- If future agents violate it, what artifact would catch them fastest?
+- Should the spec state the invariant, or should the plan create a lint,
+  schema, pressure scenario, structural test, type check, golden principle, or
+  tracker item?
+- What remediation instruction should the check point agents toward?
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Good signals:
+- guardrail candidates are tied to specific requirements or boundaries
+- enforcement is proportionate to risk
+- the spec states the invariant, while the plan owns mechanics
+- discovered boundary debt is captured durably instead of lost in chat
 
-Parent packet requirements:
-- requirements and invariants
-- known failure modes
-- existing enforcement patterns
+Bad signals:
+- using prose to enforce formatting or naming trivia that belongs in a linter
+- adding broad architecture taste unrelated to the accepted spec
+- saying "add tests" without naming the requirement, proof layer, and failure
+  the test should catch
+- creating guardrails for one-off mistakes with no recurrence risk
 
-Core responsibilities:
-- Identify guardrail candidates.
-- Convert vague style/taste preferences into taste invariants when relevant.
-- Capture durable boundary debt as spec open decision or follow-up artifact.
+Calibration:
+Report guardrails that materially reduce agent drift, regression risk, or
+manual review load. Do not turn the spec into an implementation checklist.
 
-Analysis method:
-Ask what could be enforced mechanically or tracked durably later.
+Overlap boundary:
+`validation-and-testability` owns proof that the requirement works now.
+This lane owns what should become reusable enforcement or durable memory.
 
-Calibration bar:
-Report guardrails that would materially reduce agent drift or regression risk.
-
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
-
-Advisory boundary:
-This lane names guardrail candidates; `plan-creation-swarm` decides mechanics.
-
-Parent handoff notes:
-Accepted guardrail findings become requirements, proof expectations, or planning
-inputs.
+Output focus:
+Use `references/finding-schema.md`. The refinement input should name the
+candidate invariant and the likely enforcement class. Leave exact commands or
+implementation sequencing to `plan-creation-swarm`.

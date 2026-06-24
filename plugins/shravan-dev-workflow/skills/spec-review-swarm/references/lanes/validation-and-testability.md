@@ -17,10 +17,6 @@ Default scope:
 Proof expectations, tests, manual UX/visual proof, data/DB/state checks, logs,
 traces, metrics, smoke/e2e/CI/PR/release proof, and not-applicable rationale.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
-
 Parent packet requirements:
 - requirements
 - proof expectations

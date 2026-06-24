@@ -16,9 +16,18 @@ Default scope:
 Acceptable compromises, operational simplicity, debt, proof, and revisit
 triggers.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run after current-state evidence exists. It can run in parallel with the other
+architecture option lanes.
+
+Prerequisites:
+- desired outcome and cost constraints
+- proof expectations
+- non-goals and accepted-risk vocabulary
+
+Collection contribution:
+Balanced option, accepted debt, revisit triggers, operational simplicity, and
+proof burden that keeps the compromise honest.
 
 Parent packet requirements:
 - desired outcome

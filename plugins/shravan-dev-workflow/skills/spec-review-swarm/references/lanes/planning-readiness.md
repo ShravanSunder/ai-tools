@@ -3,62 +3,61 @@
 Status: mandatory
 
 Mission / stance:
-Pressure-test whether enough decisions exist for `plan-creation-swarm` to plan
-without redefining the spec.
+Pressure-test whether enough decisions exist for `plan-creation-swarm` to turn
+the spec into implementation units without redefining product intent,
+requirements, boundaries, or proof expectations.
 
-Trigger examples:
+When to run:
 - A drafted spec is about to feed implementation planning.
-- Open decisions may force the plan to invent product, boundary, or proof
-  choices.
+- The spec includes open decisions, alternatives, unclear scope, or vague proof.
+- The spec contains task sequencing, worker assignments, or plan language that
+  belongs in the plan.
 
-Why this lane matters:
-It protects the spec/plan boundary.
+Where to look:
+- product intent, requirements, non-goals, and success criteria
+- technical contract, ownership boundaries, diagrams, and slice routes
+- proof expectations and required evidence types
+- open decisions and planning inputs
+- research ledgers or review findings that constrain planning
 
-Default scope:
-Product intent, requirements, boundary, contracts, proof expectations, open
-decisions, non-goals, slice routes, and planning inputs.
+How to inspect:
+Pretend you are creating the plan, but do not create it. For each material
+requirement or boundary, ask what the plan would need to know:
+- What is the implementation unit or vertical slice?
+- Which files or systems are likely touched?
+- What proof would show the requirement works?
+- What dependencies or gates are implied?
+- What decision would the planner have to invent?
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+If the planner would need to choose product meaning, boundary ownership,
+contract semantics, proof expectations, or non-goals, the spec is not ready.
+If the planner only needs to choose task order, write scopes, exact commands,
+or parallelization, that belongs in plan creation and is fine.
 
-Parent packet requirements:
-- full artifact coverage
-- open decisions
-- proof expectations
-- scope/non-goals
+Good signals:
+- requirements are stable enough to map to work units
+- proof expectations are declarative and source-anchored
+- open decisions are explicitly marked as blocking or non-blocking
+- slice routes indicate where deeper contracts live
+- the spec does not prescribe implementation sequencing
 
-Core responsibilities:
-- Check if plan creation has enough decisions.
-- Identify open decisions that block planning.
-- Flag implementation sequencing embedded in the spec.
-- Route human decisions to outer loop.
+Bad signals:
+- the plan would need to decide what success means
+- proof is deferred as "test appropriately" with no modality or requirement
+- task order appears in the spec as if it were design truth
+- non-goals are missing for obvious expansion paths
+- source artifacts are summarized but not anchored
 
-Escalation tests:
-- blocker: the plan would have to invent product intent, requirement semantics,
-  boundary ownership, proof expectations, or non-goals.
-- important: the plan can proceed only after adding a planning input, slice
-  route, or explicit open-decision owner.
-- question: a decision must go to the outer human loop before planning.
+Calibration:
+Report gaps that would cause the plan to redesign, invent, or silently narrow
+the spec. Do not report minor wording issues that do not affect planning.
 
 Overlap boundary:
-If the issue is only a vague requirement, route it to `requirements-testability`.
-If the issue is only a missing owner or edge, route it to `contract-and-scope`
-or `architecture-boundaries`.
+`contract-and-scope` owns missing contract fields.
+`requirements-testability` owns vague obligations.
+This lane owns the handoff boundary from spec to plan.
 
-Analysis method:
-Ask what a plan would have to invent and whether that invention belongs in the
-spec.
-
-Calibration bar:
-Report gaps that would cause the plan to redesign, not minor wording issues.
-
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
-
-Advisory boundary:
-This lane does not create the plan.
-
-Parent handoff notes:
-Ready findings route to `plan-creation-swarm`; blockers route back to
-`spec-creation-swarm` or `discuss-with-me`.
+Output focus:
+Use `references/finding-schema.md`. The refinement input should name the
+specific decision, planning input, source anchor, slice route, or proof
+expectation required before plan creation.

@@ -18,9 +18,19 @@ Default scope:
 Named sources first, then targeted docs/search only when the named sources are
 sparse, conflicting, or decisive.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run before architecture option lanes when external docs, admired repos, or
+platform behavior could change the requirements, contract, or proof
+expectations.
+
+Prerequisites:
+- named sources or exact research axis
+- fit/mismatch criteria
+- source-quality expectations
+
+Collection contribution:
+Source-backed borrow/adapt/do-not-borrow inputs and transfer assumptions for
+the parent reducer.
 
 Parent packet requirements:
 - named sources and why each matters

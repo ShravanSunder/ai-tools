@@ -1,17 +1,21 @@
 # Spec Creation Swarm Packets
 
-Use this file for the shared packet anatomy when dispatching read-only
-spec-creation subagents. Consume the universal lane contract in
-`../../references/lane-contract.md`, then load
-`references/creation-evidence-schema.md` and only the selected
+Use this skill-local packet contract when dispatching read-only spec-creation
+subagents. Load `references/creation-evidence-schema.md` and only the selected
 `references/lanes/*.md` files for lane-specific behavior.
 
 This file intentionally does not define named lane overlays. Stable lane
 behavior belongs in `references/lanes/<lane>.md`.
 
-The parent owns synthesis and decisions. Lane outputs are candidate evidence
-until the parent reducer verifies source anchors and folds accepted evidence
-into the primary spec artifact.
+The parent owns synthesis and decisions. Lane outputs are candidate evidence,
+not accepted design truth, until the parent reducer verifies source anchors and
+folds accepted evidence into the primary spec artifact.
+
+Parent summaries help route lanes, but they do not constrain lanes by
+themselves. Primary artifacts, accepted chat packets, current code/docs, named
+research ledgers, and explicit source anchors constrain the lane. Supporting
+evidence can corroborate or challenge those anchors; unverified assumptions
+remain uncertainty until the parent resolves them.
 
 Do not pass accumulated session history as lane context. Give each lane a
 fresh, bounded packet with source anchors, source/file inventory, and the exact

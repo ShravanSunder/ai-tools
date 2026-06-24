@@ -19,9 +19,18 @@ Default scope:
 Assigned files, adjacent implementations, existing docs/specs/plans, pressure
 tests, validation harnesses, and source-control state.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run first, or in the first parallel batch, whenever local repo reality
+constrains the spec.
+
+Prerequisites:
+- bounded question and decision target
+- source/file inventory or search terms from the parent
+- explicit non-goals and security context
+
+Collection contribution:
+Current owner/source-of-truth anchors, nearby patterns, proof patterns, and key
+files the parent must read before synthesis.
 
 Parent packet requirements:
 - bounded question

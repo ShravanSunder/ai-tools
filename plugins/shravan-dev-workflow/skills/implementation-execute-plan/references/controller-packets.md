@@ -1,12 +1,10 @@
 # Controller Packets
 
-Use these packet shapes when dispatching subagents. The controller reads the
-plan; subagents receive curated slices.
-
-Consume `../../references/lane-contract.md` as the shared lane packet contract.
-This file only adds execution-controller overlays:
-bounded implementation slices, proof obligations, controller verification, and
-completion receipts.
+Use this skill-local packet contract when dispatching implementation-execution
+subagents. The controller reads the plan; subagents receive curated slices.
+This file owns execution-controller packet anatomy, source-truth handling,
+bounded implementation slices, proof obligations, completion receipts, and
+controller verification.
 
 For substantial execution swarms, preserve an inspectable artifact trail in the
 existing execution/controller brief home. If execution artifacts live beside the

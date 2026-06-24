@@ -1,11 +1,10 @@
 # Review Packet Template
 
-Use this for a subagent prompt or copy-paste prompt.
-
-Consume `../../references/lane-contract.md` as the shared lane packet contract.
-This file only adds plan-review lane overlays:
-adversarial plan critique, readiness verdicts, proof-gate review, route-back
-semantics, and execution-scope checks remain owned here.
+Use this skill-local packet contract for a plan-review subagent prompt or
+copy-paste prompt. This file owns plan-review packet anatomy, source-truth
+handling, artifact coverage fields, readiness verdicts, proof-gate review,
+route-back semantics, execution-scope checks, receipts, parent reducer rules,
+and review-specific lane overlays.
 
 For substantial plan-review swarms, the parent preserves an inspectable
 artifact trail in the existing review workflow home. If review artifacts live
@@ -15,6 +14,21 @@ candidate findings; the parent ledger is the reducer synthesis; the
 implementation plan remains the accepted phase artifact only after parent
 verification.
 
+For substantial plan review, include a first-class `whole-plan-cohesion` lane.
+It receives the produced plan, the accepted source spec/design/goal/handoff
+artifact when one exists, required section/header anchors for both artifacts,
+and any research or ledger files that constrain the plan. Focused lanes do not
+replace it.
+
+Review lanes open and read the plan artifact and accepted source artifact
+themselves before judging. Controller summaries, coverage notes, and parent
+claims are routing hints only; they are not substitutes for the lane's own
+source-to-plan inspection.
+
+If a shortcut or missing artifact prevents live dispatch, the parent still names
+the mandatory `whole-plan-cohesion` lane in the blocked response. Do not
+describe it only as generic whole-artifact or whole-picture review.
+
 ```text
 You are an adversarial plan reviewer. Review only; do not implement.
 Do not edit files.
@@ -23,9 +37,20 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Review target: <plan path or handoff packet>
 Coverage from controller: <line count + chunk ranges, or packet files>
+Accepted source artifact: <spec/design/goal/handoff path, or none with reason>
+Source artifact coverage: <line count + chunk ranges, packet files, or limitation>
+Independent read requirement:
+- Open/read the plan artifact yourself.
+- Open/read the accepted source artifact yourself when one exists.
+- Treat controller summaries as hints, not source truth.
+Primary artifact inputs:
+- plan artifact: <path, required sections, and coverage>
+- source artifact: <path, required sections/header anchors, and coverage; or none with reason>
+Required source anchors:
+- <spec requirement / source decision / plan slice / proof row / command claim>: <why this constrains the lane, or not applicable with reason when no accepted source artifact exists>
 Role / mode: read-only plan-review lane
 Edit boundary: read-only
-Lane: <spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-model>
+Lane: <whole-plan-cohesion | spec-compliance | architecture-assumptions | testability-validation | security-reliability | execution-scope | adversarial-design | external-model>
 Backend: <Codex subagent | Claude Code CLI | agy/Gemini | other requested reviewer>
 Reasoning effort: medium | high
 Bounded question: <the one review question this lane answers>
@@ -65,6 +90,7 @@ Lane-specific checklist:
 - <checks this lane must perform before returning>
 
 Always check:
+- source obligation -> plan home/slice -> proof row/checkpoint coverage
 - stale assumptions
 - missing cutovers
 - API/contract mismatch
@@ -84,6 +110,12 @@ Return:
 - Verdict: ready | needs revision | blocked
 - candidate findings grouped as blocker | important | question | nit
 - For each finding: evidence, failure scenario, smallest plan edit, proof/test
+- Coverage ledger for `whole-plan-cohesion`, `spec-compliance`, and
+  `testability-validation` lanes:
+  - source obligation
+  - plan home/slice
+  - proof row/checkpoint
+  - status: covered | deferred with reason | missing | contradicted
 - For security findings: validation status as validated | unvalidated with proof gap | rejected
 - Proposed artifact path and candidate lane-file content, or
   "chat-only/no-files exception: <reason>"
@@ -96,6 +128,13 @@ Return:
 ```
 
 ## Lane Overlays
+
+### whole-plan-cohesion
+
+Check whether the whole plan implements the whole accepted spec/source artifact.
+Findings should name missing source requirements, contradictory slices,
+duplicated work, broken dependency order, proof gates that do not compose, or
+plan sections that cannot be executed together as written.
 
 ### spec-compliance
 

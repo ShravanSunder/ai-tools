@@ -1,13 +1,12 @@
 # Lane Packets
 
-Use these packet shapes for read-only subagents. Also consume the shared
-contract in `../../references/lane-contract.md`; this
-file owns research-specific lanes, source classes, route recommendations, and
-evidence expectations.
+Use this skill-local packet contract for read-only research subagents. This
+file owns research-specific packet anatomy, source classes, route
+recommendations, evidence expectations, receipts, and parent reducer rules.
 
 The parent owns the question, verification, reduction, and final claim. Lane
-outputs are candidate evidence until parent synthesis verifies them against
-source anchors.
+outputs are candidate evidence, not accepted research truth, until parent
+synthesis verifies them against source anchors.
 
 For substantial research, create inspectable stage artifacts unless the user
 asked for chat-only/no-files, the work is a single tiny local lane, or the tool

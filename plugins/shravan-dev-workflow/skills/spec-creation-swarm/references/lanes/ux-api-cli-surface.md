@@ -19,9 +19,18 @@ Default scope:
 Users/operators/callers, observable states, failure states, compatibility,
 manual proof, visual proof, and observability evidence.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run before architecture option lanes when user-visible behavior, API/CLI shape,
+manual proof, or observability evidence could change requirements or contracts.
+
+Prerequisites:
+- target user/operator/caller
+- observable behavior or surface to clarify
+- relevant UI/API/CLI sources when known
+
+Collection contribution:
+User-visible contracts, acceptance criteria, compatibility risks, proof
+expectations, and product non-goals.
 
 Parent packet requirements:
 - target user/operator/caller

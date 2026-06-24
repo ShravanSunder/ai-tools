@@ -19,9 +19,18 @@ Default scope:
 Assets, privileges, entry points, untrusted inputs, secrets, sessions, trust
 boundaries, external services, and explicit security non-goals.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run in the first batch when sensitive surfaces are in scope, before architecture
+options harden around unsafe assumptions.
+
+Prerequisites:
+- sensitive surfaces or reason security may be applicable
+- parent security context or explicit uncertainty
+- security non-goals known so far
+
+Collection contribution:
+Assets, trust boundaries, misuse cases, required invariants, security
+non-goals, and proof expectations for the spec.
 
 Parent packet requirements:
 - security context

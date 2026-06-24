@@ -18,9 +18,19 @@ Default scope:
 Assumptions, scenario probes, failure containment, reversibility, missing
 requirements, and proof burden.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run after candidate directions are visible. It may run in parallel with
+architecture option lanes only when the packet names the candidate direction
+and assumptions to test.
+
+Prerequisites:
+- candidate design direction or explicit competing options
+- assumptions to test
+- allowed/disallowed scope and proof modality
+
+Collection contribution:
+Falsifying scenarios, hidden assumptions, missing requirements, reversibility
+notes, and proof burden for parent synthesis.
 
 Parent packet requirements:
 - candidate design direction

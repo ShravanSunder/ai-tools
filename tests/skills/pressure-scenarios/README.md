@@ -39,17 +39,19 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `implementation-execute-plan` | `implementation-execute-plan-rejects-design-only.md` | Do not execute from a design/spec without a written implementation plan. |
 | `implementation-execute-plan` | `implementation-execute-plan-parallel-subagents-default.md` | Do not choose inline execution for clearly parallelizable disjoint slices without a concrete reason. |
 | `plan-creation-swarm` | `plan-creation-swarm-from-spec-not-code.md` | Do not blend plan creation with implementation; create an implementation plan only. |
-| `plan-creation-swarm` | `plan-creation-swarm-lane-packet-contract.md` | Do not give planning subagents thin generic prompts; require bounded lane packets, security context, candidate evidence, and receipts. |
+| `plan-creation-swarm` | `plan-creation-swarm-lane-packet-contract.md` | Do not give planning subagents thin generic prompts; require skill-local lane packets, security context, candidate evidence, and receipts. |
+| `plan-creation-swarm` | `plan-creation-swarm-vertical-slice-proof.md` | Do not organize plans as horizontal buckets with terminal validation; require source-owned vertical slices with local proof units. |
 | `plan-handoff` | `plan-handoff-full-packet.md` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only.md` | Do not package spec/design context as an existing plan; route to `spec-handoff` or `plan-creation-swarm`. |
 | `plan-handoff` | `plan-handoff-proof-matrix-preservation.md` | Do not drop matrix owners, freshness guards, or parent verification while packaging a plan. |
 | `plan-review-swarm` | `plan-review-swarm-whole-artifact.md` | Do not skim or trust the summary; require whole-artifact coverage for file-backed plans. |
+| `plan-review-swarm` | `plan-review-swarm-independent-source-coverage.md` | Do not let review lanes trust controller summaries; require independent source/plan reads and coverage ledgers. |
 | `plan-review-swarm` | `plan-review-swarm-routes-findings-to-plan-creation.md` | Do not execute or self-rewrite broadly when accepted plan findings should return to plan creation. |
 | `ops-linear-tracking` | `ops-linear-tracking-docs-are-truth.md` | Do not make Linear the design source of truth or clobber dependency relations. |
 | `ops-security-review` | `ops-security-review-official-scan.md` | Do not invent a security scanner; route explicit scans to official Codex Security workflows. |
 | `peekaboo` | `peekaboo-progressive-disclosure.md` | Do not reuse stale element IDs, skip live command discovery, or perform destructive desktop cleanup. |
 | `skill-audit` | `skill-audit-evidence-first.md` | Do not create broad skills from vibes; audit evidence, classify update/create/merge/skip, and include progressive skill shape plus pressure-proof recommendations. |
-| `skill-audit` | `shared-lane-contract-no-phase-verdicts.md` | Do not let a shared lane contract absorb review verdicts, execution statuses, route-backs, or proof manuals. |
+| `skill-audit` | `no-global-runtime-lane-contract.md` | Do not create a global runtime lane contract; keep packet contracts skill-local and authoring lessons in meta skills. |
 | `research-swarm` | `research-swarm-substantial-stage-artifacts.md` | Do not collapse substantial fan-out research into chat-only summaries; require lane artifacts and parent synthesis. |
 | `spec-creation-swarm` | `spec-creation-swarm-parent-synthesis.md` | Do not outsource the mental model or let spec creation become implementation sequencing. |
 | `spec-creation-swarm` | `spec-creation-swarm-primary-spec-not-outline.md` | Do not label a research outline, lane dump, or table of contents as a primary spec. |
@@ -64,6 +66,7 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `spec-review-swarm` | `spec-review-swarm-progressive-disclosure-lane.md` | Do not accept content scattered across appendices/evidence; verify primary spec, slice specs, evidence, routing, and line-cap layering. |
 | `spec-review-swarm` | `spec-review-swarm-spec-difference-lane.md` | Do not ignore or blindly trust prototypes; use implementation evidence to find hidden spec decisions. |
 | `spec-review-swarm` | `spec-review-swarm-lane-prompts-not-generic.md` | Do not give review subagents generic broad prompts; require selected lane refs and refinement-shaped packet fields. |
+| `spec-review-swarm` | `spec-review-swarm-semantic-lane-judgment.md` | Do not treat lane names and schemas as enough; require lane-local judgment guidance and exact refinement targets. |
 | `spec-review-swarm` | `spec-review-swarm-no-prejudged-lanes.md` | Do not pre-judge review lane findings or broaden unverifiable claims into repo crawls. |
 | `tui-presentation` | `tui-presentation-monospace-structure.md` | Do not use markdown headings/pipe tables for TUI structure; use Unicode shape discipline. |
 | `tui-presentation` | `tui-presentation-progressive-disclosure.md` | Do not dump one giant diagram; use disclosure sequence with one map, selected slice, small ledger, and detail. |

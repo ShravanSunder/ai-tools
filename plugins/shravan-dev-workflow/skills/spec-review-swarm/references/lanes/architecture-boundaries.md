@@ -3,49 +3,64 @@
 Status: mandatory
 
 Mission / stance:
-Pressure-test owners, sources of truth, dependency direction, and allowed or
-disallowed coupling.
+Pressure-test whether the spec names real owners, sources of truth, dependency
+directions, and allowed/disallowed edges clearly enough that implementation
+agents do not invent architecture from local vibes.
 
-Trigger examples:
-- The design crosses modules, domains, protocols, or state owners.
-- The spec says "use existing patterns" without exact anchors.
+When to run:
+- The design crosses modules, domains, protocols, persistence, UI, agents,
+  tools, auth, observability, or state owners.
+- The spec says "use existing patterns" or "follow current architecture".
+- A cross-cutting concern appears, such as logging, auth, metrics, files,
+  queueing, plugin state, or transport.
 
-Why this lane matters:
-It catches boundary drift before it becomes implementation structure.
+Where to look:
+- ownership maps, layer diagrams, sequence diagrams, and slice specs
+- current repo packages, module imports, public interfaces, and tests
+- existing architecture docs, runbooks, AGENTS.md, or source inspiration files
+- source claims in research ledgers and current implementation anchors
+- allowed edges, forbidden edges, non-goals, and cross-cutting entry points
 
-Default scope:
-Ownership map, slice routes, dependency edges, cross-cutting entry points,
-state ownership, source-of-truth docs/code, and diagrams.
+How to inspect:
+Start from the spec's nouns: each domain, service, protocol, state store,
+agent, tool, UI surface, and external system. For each noun, ask:
+- Who owns it?
+- What is its source of truth?
+- Who may read it?
+- Who may write it?
+- What interface must callers use?
+- What edge is explicitly disallowed?
+- What proof would reveal an illegal edge?
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Then compare the answer to current code. If the spec names an owner but code
+shows another owner, that is either a spec correction or an implementation
+constraint that must be made explicit.
 
-Parent packet requirements:
-- architecture claims
-- relevant code/docs
-- boundary diagrams
-- known allowed/disallowed edges
+Good signals:
+- fixed layers or domains with direction arrows
+- explicit allowed and forbidden dependency edges
+- one entry point for cross-cutting concerns
+- state ownership and mutation authority are named
+- diagrams and prose agree
+- enforcement/proof is identified for important boundaries
 
-Core responsibilities:
-- Verify owner and source-of-truth clarity.
-- Check dependency direction and permissible edges.
-- Flag hidden cross-cutting imports or guessed coupling.
-- Check diagrams match prose.
+Bad signals:
+- "shared helper" or "common utility" without an owner and allowed callers
+- hidden imports across layers the diagram says are separate
+- two places that can mutate the same state without an arbitration contract
+- a lower layer that must know UI/product workflow details
+- a protocol boundary where generic transport semantics and app semantics blur
+- no repo anchor for a claimed existing architecture pattern
 
-Analysis method:
-Ask what boundary could drift and what enforcement or proof would catch it.
+Calibration:
+Report findings that change implementation responsibility, contract shape,
+dependency direction, or proof. Do not report abstract architecture taste.
 
-Calibration bar:
-Report only boundary problems that change implementation responsibility,
-contract shape, or proof.
+Overlap boundary:
+`contract-and-scope` owns missing contract fields. This lane owns whether
+those contracts sit on the right side of the architecture boundary.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
-
-Advisory boundary:
-This lane does not choose architecture; it pressure-tests stated boundaries.
-
-Parent handoff notes:
-Accepted findings normally route to `spec-creation-swarm` for boundary diagram
-or contract revision.
+Output focus:
+Use `references/finding-schema.md`. The refinement input should name the owner,
+source anchor, allowed edge, disallowed edge, interface, or proof signal the
+spec must add.

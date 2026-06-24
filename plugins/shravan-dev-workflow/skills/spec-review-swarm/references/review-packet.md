@@ -1,12 +1,11 @@
 # Review Packet
 
-Use this for shared spec-review subagent prompts or copy-paste prompts.
-
-Consume `../../references/lane-contract.md` as the shared lane packet contract,
-then load only the selected `references/lanes/*.md` files for lane-specific
-behavior. This file owns the shared spec-review packet anatomy, artifact
-coverage fields, refinement-shaped output contract, and parent reducer
-boundaries. It intentionally does not define named lane overlays. Use
+Use this skill-local packet contract for spec-review subagent prompts or
+copy-paste prompts. Load only the selected `references/lanes/*.md` files for
+lane-specific behavior. This file owns spec-review packet anatomy, source-truth
+handling, artifact coverage fields, refinement-shaped output contract,
+receipts, parent reducer boundaries, and review-specific route-back rules. It
+intentionally does not define named lane overlays. Use
 `references/finding-schema.md` as the canonical per-finding schema for every
 review lane.
 
@@ -23,6 +22,11 @@ decision target. Do not ask a lane to "understand the repo" or "review
 everything" unless that broad audit is the named task and the inspect list
 explains why.
 
+For substantial review, include a first-class `whole-spec-coverage` lane. It
+receives the target spec artifact, source anchors, research lane files or
+ledger entries, slice inventory when present, and the focused-lane decision
+surface. Focused lanes do not replace it.
+
 Do not pre-judge findings for a lane. The parent packet must not tell a lane to
 treat a category as minor, avoid flagging a concern, or confirm the parent's
 preferred answer. Lanes return candidate findings; the parent reducer verifies
@@ -32,6 +36,10 @@ If a claim cannot be verified from the supplied artifact, source anchors, or one
 named focused check, return it as open or unresolved. Do not broaden into a repo
 crawl to rescue an under-specified spec.
 
+If a shortcut or missing artifact prevents live dispatch, the parent still names
+the mandatory `whole-spec-coverage` lane in the blocked response. Do not
+describe it only as generic whole-picture or whole-artifact coverage.
+
 ```text
 You are a spec/design review swarmer.
 Review only; do not implement. Do not edit files.
@@ -40,6 +48,11 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Target artifact: <path or chat-only>
 Coverage from controller: <line count + chunk ranges, or packet files>
+Primary artifact inputs:
+- target spec/design artifact: <path, required sections, and coverage>
+- source/research artifacts: <research ledger, lane files, source docs, or not applicable with reason>
+Required source anchors:
+- <product intent / requirement / contract / boundary / proof expectation / slice route>: <why this constrains the lane>
 Lane: <selected lane name>
 Selected lane reference: <references/lanes/<lane>.md>
 Reasoning effort: high | xhigh
@@ -82,6 +95,10 @@ Return:
 - candidate findings only, grouped by blocker | important | question | nit
 - for every substantive finding:
   - use the exact schema in `references/finding-schema.md`
+  - include an exact inspectable anchor, preferably `path:line`; if line
+    numbers are unavailable, name the smallest durable heading/section and why
+  - name the smallest refinement target and validation note; do not say only
+    "add more detail" or "clarify"
 - contested tradeoffs
 - open questions
 - evidence paths or sections

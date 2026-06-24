@@ -99,9 +99,8 @@ The main agent must:
 
 ## Progressive Disclosure
 
-- Load `../../references/lane-contract.md` and
-  `references/controller-packets.md` before dispatching implementer, reviewer,
-  or research subagents.
+- Load `references/controller-packets.md` before dispatching implementer,
+  reviewer, or research subagents.
 - Load `references/validation-checklist.md` before claiming the plan is executable or complete.
 
 ## Stop Conditions

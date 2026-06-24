@@ -16,9 +16,18 @@ Default scope:
 Current source boundaries, smallest viable contract change, proof implications,
 and deferred risks.
 
-Contract inheritance:
-The parent loads the shared lane contract named by `SKILL.md` before this lane file.
-This file adds lane-specific constraints only.
+Call timing:
+Run after current-state evidence exists. It can run in parallel with the other
+architecture option lanes.
+
+Prerequisites:
+- current owner/source-of-truth anchors
+- requirement or boundary to satisfy
+- proof expectations or known proof uncertainty
+
+Collection contribution:
+Smallest viable design option, accepted coupling/debt, revisit signals, and
+requirements that would break the minimal path.
 
 Parent packet requirements:
 - exact decision target

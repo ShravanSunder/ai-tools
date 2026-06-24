@@ -108,6 +108,9 @@ gates, and evidence requirements.
    - goal and non-goals
    - product intent, requirements, and spec source coverage
    - requirements/proof matrix, or compact proof line for tiny plans
+   - vertical slice cards for substantial plans, each mapping source
+     requirement -> behavior/capability -> likely touched files/interfaces ->
+     checkpoint/integration gate -> proof layers/evidence
    - evidence sources and freshness guards for each non-trivial row
    - testing-pyramid/TDD strategy tied back to source requirements
    - task sequence
@@ -128,23 +131,75 @@ gates, and evidence requirements.
 For substantial plans, dispatch bounded lanes where tool support exists:
 
 - `codebase-boundary`: checks write surfaces, ownership, adjacent modules, and
-  likely conflicts.
+  likely conflicts. Reference:
+  `references/lanes/codebase-boundary.md`.
+- `vertical-slice-decomposition`: maps source requirements into end-to-end
+  work units with owned proof, checkpoints, and integration gates. Reference:
+  `references/lanes/vertical-slice-decomposition.md`.
 - `validation-proof`: maps source requirements to proof layers, red/green
   needs, evidence sources, freshness guards, pyramid coverage, and split
-  triggers.
+  triggers. Reference: `references/lanes/validation-proof.md`.
 - `execution-order`: proposes dependency order, parallel lanes, integration
-  gates, and handoff points.
+  gates, and handoff points. Reference: `references/lanes/execution-order.md`.
 - `security-reliability`: checks trust boundaries, secrets, permissions,
-  rollback, cleanup, races, and partial failures.
+  rollback, cleanup, races, and partial failures. Reference:
+  `references/lanes/security-reliability.md`.
 - `scope-and-proof-fit`: checks whether task size, sequence, parallel lanes,
   assumptions, and proof gates fit the accepted spec and approved scope.
+  Reference: `references/lanes/scope-and-proof-fit.md`.
 
 Subagents return evidence and candidate plan structure. The parent verifies
 claims and owns the final plan.
 
-Load `../../references/lane-contract.md` and `references/lane-packets.md`
-before dispatching planning lanes or writing copy-paste prompts for
-plan-creation subagents.
+Substantial plans are organized around source-owned vertical slices, not
+horizontal buckets such as "backend", "frontend", and "tests" unless those
+labels are nested under an end-to-end slice. Every material slice carries its
+own local proof unit: the checkpoint and proof layers that show the source
+requirement works at that point. Terminal validation can compose slices, but it
+does not replace slice-level proof.
+
+Load `references/lane-packets.md` before dispatching planning lanes or writing
+copy-paste prompts for plan-creation subagents. Load the selected
+`references/lanes/*.md` files before dispatching those lanes; each lane
+reference states call timing, prerequisites, and collection contribution.
+
+## Lane Orchestration Order
+
+The parent owns planning sequence and collection. Run independent lanes in
+parallel where the tool surface supports it, but preserve these information
+dependencies:
+
+1. Source coverage and current repo re-anchor:
+   - Parent loads the accepted source artifact first.
+   - Run `codebase-boundary` early to identify owners, write surfaces,
+     integration points, and conflict risks.
+   - Run `security-reliability` in the first batch when sensitive surfaces are
+     in scope.
+2. Proof shaping:
+   - Run `validation-proof` after source requirements and proof expectations
+     are visible. It can run in parallel with `codebase-boundary` when the
+     source artifact already names the material requirements.
+3. Slice shaping:
+   - Run `vertical-slice-decomposition` after source coverage exists and at
+     least initial codebase/proof evidence is available.
+   - This lane creates candidate source-owned work units.
+4. Sequence shaping:
+   - Run `execution-order` after candidate slices exist. It orders slices,
+     identifies parallelizable lanes, and places checkpoints/integration gates.
+5. Fit check:
+   - Run `scope-and-proof-fit` after candidate slices, proof implications, and
+     execution order exist. It catches too-large tasks, missing local proof, and
+     scope drift before the parent writes the final plan.
+6. Parent collection pass:
+   - Verify lane evidence against the accepted source and live repo anchors.
+   - Reduce candidate slice cards, proof rows, DAG edges, write scopes, and
+     split/replan triggers into the implementation plan.
+   - Record accepted, contested, rejected, deferred, and open items in
+     `plan-ledger.md`.
+
+Each selected lane reference states when to call it, prerequisites, and what it
+contributes to collection. If prerequisites are missing, run the prerequisite
+lane or mark the planning lane blocked instead of asking a subagent to infer.
 
 ## Required Execution Diagram
 
@@ -179,6 +234,9 @@ Return:
 
 - source coverage
 - implementation plan path or chat-only plan
+- vertical slice cards for substantial plans, each with source anchors,
+  behavior/capability, likely touched files/interfaces, checkpoint/integration
+  gate, proof layers/evidence, dependencies, and split/replan trigger
 - requirements/proof matrix with source spec/requirement references, owning
   tasks, proof modalities, evidence sources, proof layers, and freshness guards,
   or compact proof line for tiny plans
