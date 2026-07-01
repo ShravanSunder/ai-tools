@@ -27,6 +27,11 @@ Specs are clarity artifacts. They move fuzzy intent toward sharper product
 promise, requirements, boundaries, contracts, examples, non-goals, and proof
 expectations. The parent may leave unclear higher-level decisions named for the
 next refinement pass, but it must not hide them as implementation detail.
+Primary specs are durable repo artifacts when the work is substantial and not
+chat-only. In `shravan-dev-workflow`, keep primary specs under `docs/specs/` so
+humans and future agents can maintain, revise, and explicitly delete them when
+they are no longer useful. Research lanes, review reports, and planning scratch
+may stay in repo-local `tmp/` unless the user asks to promote them.
 
 Core pipeline:
 
@@ -78,7 +83,8 @@ fuzzy goal or design question
 - Produce explicit tradeoffs, not a single happy path.
 - Record security context when the design touches auth, secrets, parsing, filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents, or external services.
 - If substantial design/spec work is clear and the user did not ask for
-  chat-only output, write a parent ledger and lane artifacts by default.
+  chat-only output, write the primary spec as a durable repo artifact and write
+  the parent ledger/lane artifacts by default.
 - If the desired design/spec output is unclear, do not create files yet; use `discuss-with-me` or ask one material question first.
 - Design artifacts contain decisions and technical rationale, not process history. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
@@ -130,7 +136,11 @@ fuzzy goal or design question
    - open questions
    - next skill to use
 8. Write the artifact when appropriate:
-   - For clear substantial design/spec work, create a repo-local temp or requested spec artifact unless the user said chat-only/no-files.
+   - For clear substantial design/spec work in `shravan-dev-workflow`, create
+     or update a durable repo spec artifact under `docs/specs/` unless the user
+     said chat-only/no-files.
+   - Keep supporting research lanes, review reports, and planning scratch in
+     repo-local `tmp/` by default unless they are promoted separately.
    - For chat-only or unclear design work, return the synthesis in chat and do not create files.
    - Do not decide long-term document lifecycle here; route cleanup or promotion to `docs-maintain`.
 
@@ -228,7 +238,7 @@ ownership map and explain why.
 - Use `research-swarm` when the design depends on external prior art, current
   web/docs, DeepWiki-style repository research, saved-reader sources, memory,
   session logs, or a portable evidence ledger.
-- Load `../../references/source-inspirations.md` when updating this skill, explaining source practices, or comparing against admired upstream skills.
+- Load `../../docs/source-inspiration-catalog.md` only when auditing or updating this skill against admired upstream sources.
 
 ## Output Shape
 

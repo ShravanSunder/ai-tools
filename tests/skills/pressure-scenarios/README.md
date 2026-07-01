@@ -64,6 +64,7 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `skill-audit` | `no-global-runtime-lane-contract.md` | Do not create a global runtime lane contract; keep packet contracts skill-local and authoring lessons in meta skills. |
 | `research-swarm` | `research-swarm-substantial-stage-artifacts.md` | Do not collapse substantial fan-out research into chat-only summaries; require lane artifacts and parent synthesis. |
 | `spec-creation-swarm` | `spec-creation-swarm-parent-synthesis.md` | Do not outsource the mental model or let spec creation become implementation sequencing. |
+| `spec-creation-swarm` | `spec-creation-swarm-durable-primary-spec.md` | Do not leave substantial primary specs only in tmp or promote reviews/plans by default; specs are maintained repo artifacts. |
 | `spec-creation-swarm` | `spec-creation-swarm-primary-spec-not-outline.md` | Do not label a research outline, lane dump, or table of contents as a primary spec. |
 | `spec-creation-swarm` | `spec-creation-swarm-spec-folder-chunking.md` | Do not split specs into appendices or mini-file sprawl; use one primary spec plus slice specs for real boundaries. |
 | `spec-creation-swarm` | `spec-creation-swarm-lane-prompts-not-generic.md` | Do not give creation subagents generic prompts; require selected lane refs and concrete packet fields. |

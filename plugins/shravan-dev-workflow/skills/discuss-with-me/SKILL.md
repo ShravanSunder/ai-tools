@@ -142,7 +142,7 @@ Do not use as the primary workflow for:
 - Load `references/question-patterns.md` before asking when the question is broad, high-stakes, or politically/technically loaded.
 - Load `references/workflow-handoff-map.md` when deciding which skill should own the next step.
 - Load `references/trigger-evals.md` when testing or updating this skill's trigger behavior.
-- Load `../../references/source-inspirations.md` only when updating this skill or explaining source practices.
+- Load `../../docs/source-inspiration-catalog.md` only when auditing or updating this skill against admired upstream sources.
 
 ## Output Shape
 

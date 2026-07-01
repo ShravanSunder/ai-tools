@@ -84,7 +84,7 @@ docs request
 - Load `references/workflows.md` for create, update, cleanup, and discrepancy workflows.
 - Load `references/staleness-and-purge.md` before deleting, archiving, or rewriting stale plans/specs.
 - Load `references/changelog-runbooks.md` when adding `docs/changelog` or reference excerpts.
-- Load `../../references/source-inspirations.md` when updating this skill or explaining source practices.
+- Load `../../docs/source-inspiration-catalog.md` only when auditing or updating workflow skills against admired upstream sources.
 
 ## Output Shape
 

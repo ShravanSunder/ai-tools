@@ -12,6 +12,8 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-06-28 Workflow Spec Cleanup And ACPX Strategy](2026-06-28-workflow-spec-cleanup-acpx.md)
+- [2026-06-25 Spec Creation Durable Specs](2026-06-25-spec-creation-durable-specs.md)
 - [2026-06-23 Shravan Dev Workflow Implementation Review Source Trace](2026-06-23-implementation-review-source-trace.md)
 - [2026-06-23 Shravan Dev Workflow Whole-Picture Review Lanes](2026-06-23-shravan-dev-workflow-whole-picture-review-lanes.md)
 - [2026-06-22 Spec Swarm Lane References](2026-06-22-spec-swarm-lane-references.md)

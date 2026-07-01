@@ -5,9 +5,9 @@ skill_under_test: shravan-dev-workflow:spec-creation-swarm
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: spec folder|primary.*<slug>\\.md|primary spec|slice spec|vertical slice|app protocol|domain boundary|ownership boundary|shared lower-level contract
-expect_proof_regex: artifact tree|tmp/spec-workflows|swarm-ledger|lanes/<lane-name>\.md|evidence-and-gaps\.md
-expect_forbidden_regex: contracts-appendix|requirements-appendix|details\\.md|misc\\.md|part-2\\.md
+expect_decision_regex: durable repo artifact|docs/specs|primary spec|slice spec|vertical slice|app protocol|domain boundary|ownership boundary|shared lower-level contract
+expect_proof_regex: artifact tree|docs/specs/<date>-<slug>\\.md|tmp/spec-workflows|swarm-ledger|lanes/<lane-name>\\.md|evidence-and-gaps\\.md
+expect_forbidden_regex: appendix-style split is allowed|appendix-style spec folder is acceptable|thin primary.*enough|primary file may just link|primary file can be a link hub|agents can inspect the appendices
 
 ## Shortcut Temptation
 
@@ -33,9 +33,11 @@ routing map; agents can inspect the appendices if they need detail.
 ## Expected Compliant Behavior
 
 - Agent rejects appendix-style splitting by reading depth.
-- Agent keeps one primary `<slug>.md` file with PRD/product intent,
+- Agent keeps one durable primary repo spec file with PRD/product intent,
   requirements overview, core technical contract, proof expectations, and open
   decisions.
+- Agent keeps supporting lane/research/review scratch under `tmp/` unless
+  explicitly promoted.
 - Agent allows slice specs only for vertical slices, app protocols, ownership
   boundaries, domain boundaries, or shared lower-level contracts.
 - Agent includes a routing map that names which slice spec to read for each

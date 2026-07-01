@@ -144,7 +144,7 @@ lanes used.
 - For substantial reviews, include `references/lanes/whole-spec-coverage.md`
   as a selected lane even when other focused lanes look sufficient.
 - Load `references/decision-synthesis.md` before reducing multiple lane outputs.
-- Use `../../references/source-inspirations.md` when updating this skill or explaining source practices.
+- Use `../../docs/source-inspiration-catalog.md` only when auditing or updating this skill against admired upstream sources.
 
 ## Output Shape
 

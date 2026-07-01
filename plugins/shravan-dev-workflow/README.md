@@ -280,7 +280,7 @@ Use docs-maintain to reconcile this README and AGENTS.md with current plugin sta
 
 - Skill source: [`skills/`](skills/)
 - Trigger and routing evals: [`references/trigger-evals.md`](references/trigger-evals.md)
-- Source inspirations: [`references/source-inspirations.md`](references/source-inspirations.md)
+- Source inspiration catalog: [`docs/source-inspiration-catalog.md`](docs/source-inspiration-catalog.md)
 - Release smoke and behavioral checks: [`../../docs/changelog/references/shravan-dev-workflow-smoke.md`](../../docs/changelog/references/shravan-dev-workflow-smoke.md)
 - Release notes: [`../../docs/changelog/`](../../docs/changelog/)
 - Maintainer guidance: [`../../AGENTS.md`](../../AGENTS.md)

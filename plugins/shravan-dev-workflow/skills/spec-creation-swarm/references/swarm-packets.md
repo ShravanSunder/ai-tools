@@ -23,22 +23,30 @@ decision target. Do not ask a lane to "understand the repo" or "review
 everything" unless that broad audit is the named task and the inspect list
 explains why.
 
-For substantial spec creation, create inspectable stage artifacts unless the
-user asked for chat-only/no-files, the work is a single tiny local lane, or the
-tool surface cannot write artifacts. Substantial means any of: more than one
-lane/subagent, output consumed by another workflow or phase, high/xhigh or
-security-sensitive lanes, or findings/decisions/proof obligations that need
-later inspection. Record any exception in the parent receipt.
+For substantial `shravan-dev-workflow` spec creation, create a durable primary
+spec artifact under `docs/specs/` unless the user asked for chat-only/no-files,
+the work is a single tiny local lane, or the tool surface cannot write
+artifacts. Substantial means any of: more than one lane/subagent, output
+consumed by another workflow or phase, high/xhigh or security-sensitive lanes,
+or findings/decisions/proof obligations that need later inspection. Record any
+exception in the parent receipt.
+
+Supporting artifacts are different. Research lane files, parent ledgers,
+review reports, and planning scratch can remain in repo-local `tmp/` unless the
+user explicitly asks to promote them. Specs are maintained artifacts; scratch
+evidence is inspectable support material.
 
 Default artifact shape:
 
 ```text
+docs/specs/<date>-<slug>.md
+                              # primary progressive-disclosure spec
+
 tmp/spec-workflows/<date>-<slug>/
-  <slug>.md                  # primary progressive-disclosure spec
   swarm-ledger.md            # parent synthesis and evidence trace
   lanes/
     <lane-name>.md           # candidate lane evidence
-  <slice-name>.md            # optional slice spec for real vertical slice
+  <slice-name>.md            # optional draft slice before promotion
   evidence-and-gaps.md       # optional evidence ledger, not required reading
 ```
 
@@ -46,8 +54,10 @@ The primary spec file carries product intent / PRD when load-bearing,
 requirements overview, technical contract, boundary map, slice routing map,
 proof expectations, non-goals, and open decisions. Slice specs are child specs
 for vertical slices, app protocols, ownership boundaries, domain boundaries, or
-shared lower-level contracts. Do not create appendix-style mini-doc sprawl.
-Every spec artifact file stays under 2000 lines.
+shared lower-level contracts. Promote slice specs to the repo spec/docs area
+when they become maintained contracts rather than draft scratch. Do not create
+appendix-style mini-doc sprawl. Every spec artifact file stays under 2000
+lines.
 
 ## Shared Spec-Creation Packet
 

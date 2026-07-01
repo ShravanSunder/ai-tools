@@ -66,7 +66,7 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 
 ## Source Inspiration Map
 
-When auditing `shravan-dev-workflow`, check `../../references/source-inspirations.md` for the concise plugin-level map of admired skills and borrowed mechanics.
+When auditing `shravan-dev-workflow`, check `../../docs/source-inspiration-catalog.md` for the concise plugin-level map of admired skills and borrowed mechanics.
 
 When auditing swarm lane packet duplication, keep runtime packet contracts
 skill-local. Do not create or preserve a global shared lane-contract reference
