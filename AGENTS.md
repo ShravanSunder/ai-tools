@@ -66,26 +66,32 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 to work here, which skill owns the next decision, and where deeper instructions
 live. It should not duplicate the full manuals from meta-skills.
 
-When creating, editing, auditing, or pressure-testing skills in this repo:
+When creating, editing, or evaluating one named skill or accepted draft in this
+repo, use `shravan-dev-workflow:creating-skills` as the owning workflow. It owns
+the authoring receipt, workflow-spine/reference split, pressure proof, platform
+mechanics branch, source-adaptation check, and sensitive-resource route.
+
+Use `shravan-dev-workflow:skill-audit` for broad evidence-backed questions about
+which skills to create, update, merge, or skip across the repo. `creating-skills`
+does not own broad repo-wide portfolio audit or duplicate-surface archaeology.
+
+When doing skill work in this repo:
 
 1. Start from a concrete need, repeated failure mode, or user-approved workflow
    change.
-2. Use `shravan-dev-workflow:skill-audit` to inspect the existing skill surface
-   before deciding what to carve. Prefer updating an existing skill over adding a
-   near-duplicate.
-3. Classify the outcome as `update`, `create`, `merge`, or `skip`.
-4. Use `superpowers:writing-skills` for pressure-first skill design and
-   rationalization traps.
-5. Use `skill-creator` for Codex skill structure, metadata, and
-   `references/`, `scripts/`, or `assets/` layout.
-6. Keep `SKILL.md` compact and progressive. Put depth in `references/` and
+2. If the target is not named, use `skill-audit` for broad portfolio
+   classification or ask for a named target.
+3. Use `creating-skills` for the named target's create/update/evaluate workflow.
+4. Use `creating-skills` references for pressure-first design, Codex/Claude
+   platform mechanics, source adaptation, pruning, and sensitive resources.
+5. Keep `SKILL.md` compact and progressive. Put depth in `references/` and
    deterministic mechanics in `scripts/`.
-7. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios
+6. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios
    under `tests/skills/pressure-scenarios/` and run
    `tests/skills/run-skill-pressure-tests.sh --fast`.
-8. For user-visible plugin behavior changes, update `docs/changelog/`, bump
+7. For user-visible plugin behavior changes, update `docs/changelog/`, bump
    plugin version metadata, and record refresh / reinstall status.
-9. Before calling skill-work changes complete, route the changed surface through
+8. Before calling skill-work changes complete, route the changed surface through
    `shravan-dev-workflow:implementation-review-swarm`, then
    `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks /
    review-thread / merge-readiness proof. Refresh installed Codex/Claude caches
@@ -94,11 +100,17 @@ When creating, editing, auditing, or pressure-testing skills in this repo:
 
 Detailed mechanics stay in the owning skills and references:
 
+- `creating-skills` owns create/update/evaluate for one named skill or accepted
+  draft, including workflow-spine authoring, great-skill evaluation,
+  pressure-proof design, platform mechanics, source adaptation, and
+  sensitive-resource routing.
 - `skill-audit` owns evidence-backed recommendations about what to update,
-  create, merge, or skip.
-- `superpowers:writing-skills` owns pressure-first skill design and testing
-  discipline.
-- `skill-creator` owns Codex skill anatomy and generated metadata.
+  create, merge, or skip across a broader skill surface.
+- `superpowers:writing-skills` is source inspiration for pressure-first skill
+  design and rationalization traps; normal repo skill authoring routes through
+  `creating-skills`.
+- `skill-creator` owns Codex skill anatomy and generated metadata as platform
+  support loaded through `creating-skills/references/platform-mechanics.md`.
 - `tests/skills/README.md` owns the local pressure-test runner contract.
 - `docs-maintain` owns cleanup, archival, promotion, and durable docs
   reconciliation after artifacts exist.
@@ -124,6 +136,7 @@ or generic Victoria query docs into app repos.
 | spec-review-swarm | `plugins/shravan-dev-workflow/skills/spec-review-swarm/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
 | plan-creation-swarm | `plugins/shravan-dev-workflow/skills/plan-creation-swarm/` | Create written implementation plans from spec/design context with proof gates and parallel work lanes, without editing code |
+| plan-improve-repo | `plugins/shravan-dev-workflow/skills/plan-improve-repo/` | Audit a repository for high-leverage improvements and write self-contained implementation plans for later execution |
 | ops-security-review | `plugins/shravan-dev-workflow/skills/ops-security-review/` | Routes authorized security scans to the official Codex Security workflows |
 | implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, and explicit opt-in Claude/Gemini/agy adversarial lanes |
 | implementation-pr-wrapup | `plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/` | Finish GitHub PR lifecycle work after implementation: push/open/update, monitor checks/comments, handle existing review threads, prove merge readiness, and merge only when authorized |
@@ -133,7 +146,8 @@ or generic Victoria query docs into app repos.
 | implementation-execute-plan | `plugins/shravan-dev-workflow/skills/implementation-execute-plan/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
 | ops-observability-stack | `plugins/shravan-dev-workflow/skills/ops-observability-stack/` | Shared local OTel and Victoria stack operations, producer boundaries, resource naming, and debug/beta query loops |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
-| skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed skill audits using current plugin inventory, session patterns, and upstream inspirations |
+| creating-skills | `plugins/shravan-dev-workflow/skills/creating-skills/` | Create, update, or evaluate one named skill or accepted draft with workflow-spine authoring, branch references, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
+| skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed portfolio audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
@@ -187,9 +201,13 @@ Use the changelog system as the durable release memory:
 
 Skills encode judgment, house style, and repeatable failure prevention. Prefer improving an existing skill over adding a near-duplicate.
 
-- Treat this section as repo-local guardrails. Use `Skill Work SOP` above to
-  route to the owning meta-skill before relying on these bullets.
-- When creating, editing, auditing, or pressure-testing skills, load and follow `superpowers:writing-skills`. For substantial behavior-changing skills, treat intent as the core artifact: what judgment should the future agent apply, what failure mode are we preventing, and what shortcut must it resist?
+- Treat this section as repo-local guardrails. Use `Skill Work SOP` above and
+  `creating-skills` for named create/update/evaluate work before relying on
+  these bullets.
+- When creating, editing, evaluating, or pressure-testing one named skill, load
+  `creating-skills`. Its references adapt the pressure-first lessons from
+  `superpowers:writing-skills` and the platform mechanics from `skill-creator`.
+  For broad portfolio questions, use `skill-audit` instead.
 - Name skills with active, searchable verbs in hyphen-case.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
