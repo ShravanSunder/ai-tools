@@ -48,7 +48,8 @@ ops-*                external operational systems  ops-security-review
                                                   ops-linear-tracking
 debug-*              root-cause investigation      debug-investigation
 docs-*               durable documentation         docs-maintain
-skill-*              skill system maintenance      skill-audit
+skill-*              skill authoring/maintenance   creating-skills
+                                                  skill-audit
 tui-*                structured chat presentation  tui-presentation
 ```
 
@@ -232,8 +233,11 @@ risk. It is for continuation, audit, or manual review of work already in motion.
   official Codex Security plugin workflows.
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and
   dependencies while keeping docs as the design source of truth.
-- `skill-audit`: audits current skills, session evidence, and upstream
-  inspirations before recommending updates or new skills.
+- `creating-skills`: creates, updates, or evaluates one named skill or accepted
+  draft with a compact workflow spine, branch references, pressure proof,
+  platform validation, source-adaptation checks, and sensitive-resource routing.
+- `skill-audit`: audits current skill portfolios, session evidence, and upstream
+  inspirations before recommending create/update/merge/skip decisions.
 - `tui-presentation`: gives agents a shared structure for readable chat/TUI
   explanations, diagrams, comparisons, and multi-section responses. It teaches
   disclosure sequence and visual-family selection while preserving semantic
@@ -271,7 +275,7 @@ Use plan-improve-repo to audit this repo and write executable improvement plans.
 Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.
 Use implementation-review-swarm to review this diff and include Claude counsel.
-Use implementation-pr-wrapup to handle existing PR comments and merge when ready.
+Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.
 ```

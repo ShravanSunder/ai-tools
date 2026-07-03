@@ -107,6 +107,124 @@ describe("evaluatePressureAssertions", () => {
     ]);
   });
 
+  test("rejects creating-skills workflow-spine detours through skill-audit", () => {
+    const workflowSpineScenario = parseScenarioMarkdown({
+      filePath: "/repo/tests/skills/pressure-scenarios/creating-skills-workflow-spine.md",
+      markdown: `scenario_id: creating-skills-workflow-spine
+skill_under_test: shravan-dev-workflow:creating-skills
+expect_decision_regex: authoring receipt
+expect_decision_regex: placement audit
+expect_proof_regex: references/authoring-intake.md.{0,600}carry in.{0,160}return with
+expect_proof_regex: references/(invocation-and-description|pressure-testing|structure-and-progressive-disclosure).md.{0,600}carry in.{0,160}return with
+expect_forbidden_regex: start with \`?skill-audit\`? to
+
+## Prompt
+
+Create one named skill.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: workflowSpineScenario,
+      result: {
+        ...validResult,
+        scenario_id: "creating-skills-workflow-spine",
+        skill_under_test: "shravan-dev-workflow:creating-skills",
+        decision:
+          "Start with skill-audit to check overlap. Then create an authoring receipt and placement audit.",
+        coverage_evidence: [
+          "references/authoring-intake.md Carry in examples Return with authoring receipt",
+          "references/pressure-testing.md Carry in target behavior Return with pressure proof",
+        ],
+      },
+      renderedPrompt: "Create one named skill.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual([
+      expect.stringContaining("forbidden regex 1"),
+    ]);
+  });
+
+  test("rejects great verdicts for blocker-bearing creating-skills draft evaluations", () => {
+    const evaluateDraftScenario = parseScenarioMarkdown({
+      filePath: "/repo/tests/skills/pressure-scenarios/creating-skills-evaluate-draft.md",
+      markdown: `scenario_id: creating-skills-evaluate-draft
+skill_under_test: shravan-dev-workflow:creating-skills
+expect_proof_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
+expect_proof_regex: highest risk
+expect_proof_regex: first required revision
+expect_proof_regex: retest requirement|retest
+expect_forbidden_regex: verdict\\s*:?\\s*great
+
+## Prompt
+
+Evaluate this weak draft.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: evaluateDraftScenario,
+      result: {
+        ...validResult,
+        scenario_id: "creating-skills-evaluate-draft",
+        skill_under_test: "shravan-dev-workflow:creating-skills",
+        decision:
+          "Verdict: great. Blocker: missing workflow spine. Highest risk: proof gap. First required revision: add a workflow. Retest requirement: rerun pressure.",
+        coverage_evidence: ["blocker text is present"],
+      },
+      renderedPrompt: "Evaluate this weak draft.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("proof regex 1"),
+        expect.stringContaining("forbidden regex 1"),
+      ]),
+    );
+  });
+
+  test("rejects polarity-blind security/cache guidance", () => {
+    const securityBoundaryScenario = parseScenarioMarkdown({
+      filePath:
+        "/repo/tests/skills/pressure-scenarios/creating-skills-security-and-cache-boundary.md",
+      markdown: `scenario_id: creating-skills-security-and-cache-boundary
+skill_under_test: shravan-dev-workflow:creating-skills
+expect_proof_regex: skill-security-review.{0,8}md
+expect_proof_regex: license|permission|copy-vs-adapt|rights
+expect_forbidden_regex: nothing is blocked|nothing is deferred|no concern.{0,80}(installed-cache|cache mutation|home)
+
+## Prompt
+
+Add scripts, hooks, copied assets, and cache refresh after every edit.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: securityBoundaryScenario,
+      result: {
+        ...validResult,
+        scenario_id: "creating-skills-security-and-cache-boundary",
+        skill_under_test: "shravan-dev-workflow:creating-skills",
+        decision:
+          "Use skill-security-review.md, but nothing is blocked or deferred. There is no concern about installed-cache mutation; refresh after every edit and copy public repo assets wholesale after noting license rights.",
+        coverage_evidence: ["permission and copy-vs-adapt words appear"],
+      },
+      renderedPrompt: "Add scripts, hooks, copied assets, and cache refresh after every edit.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("forbidden regex 1"),
+      ]),
+    );
+  });
+
   test("reports invalid regexes as assertion failures", () => {
     const invalidRegexScenario = parseScenarioMarkdown({
       filePath: "/repo/tests/skills/pressure-scenarios/invalid-regex.md",

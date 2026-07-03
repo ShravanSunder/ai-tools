@@ -65,6 +65,7 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **ops-observability-stack** skill -- guides shared local OpenTelemetry/Victoria stack use, producer boundaries, AgentStudio and Agent VM loops, resource naming, and Victoria proof queries
 - **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
+- **creating-skills** skill -- creates, updates, or evaluates one named skill or accepted draft with workflow-spine authoring, branch references, pressure proof, platform validation, and source-adaptation boundaries
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
 - **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with progressive Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens
 - **ops-linear-tracking** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
