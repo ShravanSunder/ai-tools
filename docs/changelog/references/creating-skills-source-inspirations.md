@@ -1,8 +1,10 @@
-# Source Inspirations
+# creating-skills Source Inspirations
 
-Temporary provenance ledger for this skill family. Do not load this file during
-normal authoring; the active `SKILL.md` route deliberately keeps source notes
-out of the editing path.
+Provenance ledger for the `shravan-dev-workflow:creating-skills` skill
+family. Moved out of the active skill (`plugins/shravan-dev-workflow/skills/
+creating-skills/references/`) during the 2026-07-03 rewrite so normal
+authoring never routes through a source-provenance file; this ledger is
+historical/reference-only.
 
 ## Adaptation Ledger
 
@@ -21,5 +23,5 @@ out of the editing path.
 - Keep local paths, sensitive values, environment-specific config, cache
   identifiers, and copied source text out of shipped skill files.
 - Prefer adapted judgment over quoted source prose.
-- Move this ledger outside active skill references when the repo grows a
-  separate source-inspiration home, README, or notes section.
+- This ledger itself lives outside the active skill; it is not loaded during
+  normal authoring.

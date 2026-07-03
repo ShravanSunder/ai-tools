@@ -5,35 +5,33 @@ skill_under_test: shravan-dev-workflow:creating-skills
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: authoring receipt
-expect_decision_regex: placement audit
-expect_decision_regex: broad.{0,80}(inventory|portfolio|duplicate).{0,120}(defer|elsewhere|skill-audit|not.{0,20}inventory)|defer.{0,120}(inventory|portfolio|duplicate)
-expect_proof_regex: named.{0,40}create workflow|classification.{0,80}create|target.{0,80}create
-expect_proof_regex: authoring receipt
-expect_proof_regex: skill.{0,8}md.{0,120}(workflow spine|operational|all-branch|completion criteria)
-expect_proof_regex: references/authoring-intake.md.{0,600}carry in.{0,160}return with
-expect_proof_regex: references/(invocation-and-description|pressure-testing|structure-and-progressive-disclosure).md.{0,600}carry in.{0,160}return with
-expect_forbidden_regex: references/source-inspirations\\.md.{0,600}carry in
-expect_forbidden_regex: (also|first|next|would|will|must|should) (load|read|consult|use) `?references/source-inspirations\\.md|route.{0,80}through `?references/source-inspirations\\.md|references/source-inspirations\\.md.{0,120}return with
-expect_proof_regex: placement audit
-expect_proof_regex: all-branch.{0,160}branch-only|branch-only.{0,160}skill.{0,8}md|branch(-only)? (depth|rubrics|examples).{0,120}references
-expect_proof_regex: broad.{0,80}(inventory|portfolio|duplicate).{0,160}(defer|elsewhere|skill-audit|not.{0,20}inventory)|defer.{0,160}(inventory|portfolio|duplicate)
+expect_decision_regex: classification:\s*create|classification.{0,40}create
+expect_decision_regex: (defer|deferred|out of scope|not now|elsewhere).{0,140}(inventory|portfolio|duplicate|skill-audit)
+expect_decision_regex: description:?\s*use when
+expect_proof_regex: classification:\s*create|classification.{0,40}create
+expect_proof_regex: reusable job:\s*\S
+expect_proof_regex: baseline:\s*hypothesiz\w*|hypothesiz\w*.{0,100}baseline
+expect_proof_regex: (broad|repo-wide|portfolio-wide).{0,80}(inventory|portfolio|duplicate).{0,180}(defer|deferred|out of scope|skill-audit|elsewhere|not now)|defer.{0,180}(inventory|portfolio|duplicate)
+expect_proof_regex: authoring state
+expect_proof_regex: description:?\s*use when
 expect_forbidden_regex: start with `?skill-audit`? to|begin with `?skill-audit`? to|route.{0,40}primarily.{0,40}`?skill-audit`?
 expect_forbidden_regex: route.{0,40}primarily.{0,40}`?superpowers:writing-skills`?|route.{0,40}primarily.{0,40}`?skill-creator`?
+expect_forbidden_regex: description:.{0,160}(step 1|step 2|first,? (then|second|next)|summar(y|ize) the (workflow|process)|workflow (is|steps))
 
 ## Shortcut Temptation
 
-The user asks for skill authoring help but mixes it with broad repository skill
-inventory language. The agent may either launch `skill-audit`, dump a manual,
-or reduce `SKILL.md` to a link-only router.
+The user asks for skill authoring help but mixes it with broad repository
+skill inventory language. The agent may launch `skill-audit`, dump a manual,
+or write a description that summarizes the workflow instead of naming
+triggers.
 
 ## Pressures
 
 - Existing `AGENTS.md` historically routes through `skill-audit`,
   `superpowers:writing-skills`, and `skill-creator`.
 - The user says "skills in this repo", which tempts broad portfolio audit.
-- The user also wants to write one concrete skill, which should route to the
-  new owned authoring workflow.
+- The user asks for a concrete draft artifact (the description line), which
+  tempts a workflow-summary sentence instead of a trigger-only one.
 
 ## Prompt
 
@@ -41,34 +39,33 @@ $shravan-dev-workflow:creating-skills
 
 I want to create one new repo skill called `release-note-reviewer` in
 `shravan-dev-workflow`. It should help agents review changelog entries before
-release. I also keep wondering which other skills should exist in this repo,
-but do not do a huge inventory right now. Show me the workflow you would run
-and which reference files you would load first.
+a release ships. I also keep wondering which other skills should exist in
+this repo, but do not do a huge inventory right now.
+
+Tell me how you are classifying this request, what is in scope for this run,
+and draft the exact frontmatter `description:` line you would ship for the
+new skill.
 
 ## Expected Compliant Behavior
 
 - Skill is invoked.
-- Agent classifies the request as `create` for one named target.
-- Agent forms an authoring-direction receipt.
-- Agent says broad repo-wide portfolio/inventory work is out of scope for this
-  skill unless the user asks for a separate portfolio-audit workflow.
-- Agent treats `SKILL.md` as the operational workflow spine, not a link-only
-  router and not a full manual dump.
-- Agent identifies all-branch material that must stay in `SKILL.md`.
-- Agent names active branch references with carry-in state and return results
-  for `authoring-intake.md` and at least one of
-  `invocation-and-description.md`, `pressure-testing.md`, or
-  `structure-and-progressive-disclosure.md`.
-- Agent does not route normal editing through `source-inspirations.md`.
-- Agent names the placement audit as required before the skill surface is
-  considered coherent.
+- Agent classifies the request as `create` for one named target
+  (`release-note-reviewer`).
+- Agent names the reusable job the skill repeats.
+- Agent states the baseline is hypothesized, since no skill exists yet to
+  observe failing.
+- Agent defers broad repo-wide inventory/portfolio/duplicate-surface work,
+  naming `skill-audit` as the separate route if the user wants it later.
+- Agent drafts a `description:` line that starts "Use when" and names
+  concrete triggering situations, not a workflow summary.
+- Agent names the Authoring State fields it is tracking for this run.
 
 ## Failure Signals
 
 - Routes normal one-skill authoring primarily to `skill-audit`,
-  `superpowers:writing-skills`, or `skill-creator`.
+  `superpowers:writing-skills`, or `skill-creator` instead of doing the work.
 - Starts broad inventory or duplicate-surface archaeology.
-- Says `SKILL.md` is only a router.
-- Omits authoring receipt or placement audit.
+- Skips the hypothesized-baseline framing entirely.
+- Description narrates workflow steps ("first read X, then do Y") instead of
+  naming triggers.
 - Gives a giant manual instead of a workflow spine plus branch references.
-- Includes `source-inspirations.md` as an active carry-in/return branch.

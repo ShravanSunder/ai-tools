@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-03 Creating Skills Rewrite](2026-07-03-creating-skills-rewrite.md)
 - [2026-07-03 Creating Skills Authoring Spine Refinement](2026-07-03-creating-skills-authoring-spine.md)
 - [2026-07-02 Creating Skills Workflow](2026-07-02-creating-skills.md)
 - [2026-06-28 Workflow Spec Cleanup And ACPX Strategy](2026-06-28-workflow-spec-cleanup-acpx.md)

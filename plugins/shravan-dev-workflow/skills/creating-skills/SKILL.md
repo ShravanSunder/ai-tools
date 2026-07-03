@@ -1,200 +1,149 @@
 ---
 name: creating-skills
-description: Use when creating, updating, or evaluating one named skill or accepted draft; turning a repeated agent failure into a skill; designing skill invocation, references, pressure proof, metadata, or repo skill-authoring routing.
+description: Use when creating, updating, or evaluating one named skill; turning a repeated agent failure into skill guidance; deciding skill invocation, description wording, reference structure, or pressure proof. Not for repo-wide skill portfolio audits - use skill-audit.
 ---
 
 # Creating Skills
 
-Create, update, or evaluate one named skill or accepted draft. Broad portfolio
-inventory belongs elsewhere; defer it to `skill-audit` or ask for one named
-target before authoring.
+## Stance
 
-## What Makes A Great Skill
-
-A great skill makes agent behavior more predictable without turning
-`SKILL.md` into a manual. Keep these levers visible before writing:
-
-- Reusable job: one durable job future agents should repeat.
-- Invocation fit: model-invoked when the agent must discover it; routed or
-  user-invoked when human choice should stay in control.
-- Trigger surface: the description names when to load the skill, not the whole
-  workflow.
-- Information hierarchy: `SKILL.md` carries the workflow spine and all-branch
-  rules; references carry branch-only depth.
-- Context pointers: each branch says when to load it, what to carry in, and
-  what must return.
-- Completion criteria: every step has a checkable stop condition.
-- Pressure proof: behavior-changing guidance needs RED/GREEN/REFACTOR evidence
-  or an explicit proof gap.
-- Pruning: delete no-op, duplicated, stale, or branch-only text that does not
-  earn top-level space.
-
-Load `references/glossary.md` when these terms need fuller meaning.
-
-## Authoring Contract
-
-- Work on one named skill or accepted draft.
-- Treat `SKILL.md` as the operational workflow spine, not a link-only router and
-  not a full manual.
-- Keep all-branch state, proof posture, placement rules, and completion
-  criteria in `SKILL.md`.
-- Put branch-specific examples, rubrics, rationalization tables, and mechanics
-  in `references/`.
-- Adapt user-approved source ideas; do not copy upstream or local prose
-  wholesale.
-- Separate static validation from behavior proof.
-- Defer installed-cache or home-level mutation unless release/refresh is
-  explicitly scoped.
+Work on exactly one named skill or accepted draft per run. Predictability
+(the agent takes the same route every time, even when its output text
+varies) is the target -- a great skill makes behavior steadier under
+pressure, it does not read like a manual. Broad repo-wide inventory,
+duplicate-surface archaeology, or "which skills should exist" belongs to
+`skill-audit`; defer it once, here, and do not re-open it mid-run. Terms
+below get a short gloss; `references/glossary.md` holds the fuller meaning.
 
 ## Authoring State
 
-Keep one small ledger and update it at branch returns. Use the compact form for
-small chat-only runs; expand only fields that prevent ambiguity, scope drift, or
-false proof.
+Show this compact block in the chat response at the start of every run --
+including a chat-only run with no file edits -- and show it again, in full,
+at run completion; at intermediate step boundaries, state only the fields
+that changed since it was last shown. It is the only cross-branch state
+artifact -- branch references may define their own labeled return blocks
+that feed its fields -- and it replaces every other ledger, receipt, or
+placement-audit table. Showing it is not optional narration; a run without
+it is incomplete.
 
 ```text
 classification: create | update | evaluate
-target skill/change:
-owner plugin:
+target skill / owner plugin:
 reusable job:
-baseline failure/proof gap:
+baseline: observed (update) | hypothesized (create) -- what fails
 branches loaded:
-changed resources:
-security route/result: allowed | disallowed | blocked | deferred | not-applicable
-proof status: RED | GREEN | REFACTOR | static validation | pressure scenario | proof gap
-shipping/review status: source-only | PR-ready | released | installed-cache refreshed | blocked | deferred
+security route: allowed | disallowed | blocked | deferred | n/a
+proof status: RED | GREEN | REFACTOR | static-only | proof gap
+shipping status: source-only | PR-ready | released
 ```
 
-## Main Workflow
+Use these exact field labels. One line per field is enough; expand a field
+only when it is disputed or it changes the edit boundary.
 
-When selecting branch references, use the exact `references/*.md` filename and
-spell out `Carry in` and `Return with`; a filename list or paraphrased branch
-name is not enough. Keep the filename adjacent to its carry/return contract:
+## Steps
 
-```text
-`references/example.md` - Carry in: ... Return with: ...
-```
+**1. Frame.** Classify the run; run an existing-surface check (does a skill
+already own this reusable job?); name the reusable job in one sentence; state
+the baseline -- observed (update: names the current failure) or
+hypothesized (create: names the likely failure). Completion:
+classification, owner plugin, reusable job, and baseline are all named.
+Evaluating an existing skill or draft routes straight to
+`references/great-skill-evaluation.md`.
 
-When showing the route, name what stays in `SKILL.md` for all branches and what
-moves to references as branch-only depth.
+**2. Prove first.** A behavior-changing update needs a pressure scenario or
+micro-test that already FAILS against the current skill before any edit is
+made or described -- that is RED, and it comes before step 4, not after. A
+create is due a scenario before it ships; a hypothesis is enough to draft
+against. A mechanical or metadata-only change (typo, filename, version bump)
+skips this and is noted as static-only instead. If an observed failure
+cannot be reproduced after a bounded number of attempts, record the
+baseline as hypothesized instead, cite the original observation, and
+proceed. Completion: a named failing scenario or micro-test exists for
+behavior-changing work, or the change is explicitly mechanical.
 
-Every branch returns through the parent Authoring State: branch loaded, decision
-or finding, changed placement/proof/security status, next branch, and retest or
-proof gap. Do not repeat a generic branch schema inside references unless that
-branch needs unique labels.
+**3. Design the surface.** Invocation is a tradeoff between context load
+(model-invoked, discovered every turn) and cognitive load (routed or
+user-invoked, a human carries it). Write the description as trigger text --
+when to load -- never a workflow summary. Placement rule (the one rule this
+skill also teaches by example, stated here once): all-branch material stays in
+`SKILL.md`; branch-only depth goes in exactly one reference (`<branch>.md`);
+a contract shared by two or more independent consumers -- lanes, subagents,
+other skills, copy-paste prompts -- becomes a `schema-<name>.md` of slots and
+templates only, never judgment or policy prose; a schema used by only one
+lane stays colocated inside that lane file instead of being promoted;
+`glossary.md` holds terms and meaning only, never rules or field lists.
+Before writing, hunt restatements of the same rule and collapse them into one
+leading word -- a short, memorable phrase that carries the rule on its own
+(for example "existing-surface check" or "RED-first") -- instead of repeating
+the paragraph that explains it. When behavior needs to change, match the
+observed failure to its guidance form instead of reaching for prose:
 
-1. Frame the authoring run.
-   Completion: authoring receipt exists and broad inventory is deferred or
-   narrowed to one target.
-   - `references/authoring-intake.md` - Load when the reusable job, target
-     behavior, baseline failure, or acceptance source is fuzzy. Carry in:
-     proposed change, examples, failure hypothesis. Return with: authoring
-     receipt and success criterion.
+| observed failure | guidance form |
+| --- | --- |
+| known rule skipped under pressure | bright-line rule + rationalization table |
+| wrong output shape | positive output contract or template |
+| omitted element | required slot next to the output |
+| conditional behavior mistake | observable predicate + action |
+| shallow legwork | stronger completion criterion |
+| wrong invocation | sharper description or user-invoked route |
+| reference retrieval gap | stronger context pointer or inline material |
 
-2. Choose invocation and trigger surface.
-   Completion: invocation mode and trigger-only description are decided.
-   - Load `references/invocation-and-description.md` when discoverability,
-     model/user invocation, router handoff, keywords, or description wording is
-     the crux. Carry in: invocation need and trigger examples. Return with:
-     invocation decision and trigger-only description.
+Completion: invocation choice and trigger-only description are decided, the
+placement rule has been applied so nothing sits in two homes, and any wording
+change cites a row above.
 
-3. Shape the skill surface.
-   Completion: workflow spine, reference routes, and placement audit are
-   mapped; the placement audit classifies `all-branch` vs `branch-only` material.
-   - Load `references/structure-and-progressive-disclosure.md` when `SKILL.md`
-     is becoming a manual, link table, too branchy, or too thin. Carry in:
-     draft outline, branches, reference candidates. Return with: workflow-spine
-     outline and context-pointer plan.
-   - Load `references/steering-and-wording.md` when wording must change agent
-     behavior. Carry in: baseline failure, target behavior, current wording.
-     Return with: leading words, completion criteria, failure-form choice.
-   - Load `references/great-skill-evaluation.md` when judging an existing skill
-     or draft. Carry in: skill files, intended trigger, source-adaptation
-     concerns, proof evidence. Return with: verdict, scorecard, gaps, required
-     revisions.
+**4. Write or edit.** Sensitive resources -- scripts, hooks, assets, package
+scripts, shell/network behavior, third-party skill/source adoption,
+installed-cache/home-level mutation, or anything in that reference's
+Sensitive Surfaces list -- route through
+`references/skill-security-review.md` BEFORE editing starts, not alongside
+it. Scaffolding, metadata, packaging, and platform-specific mechanics route
+through `references/platform-mechanics.md`. A drafted or edited skill body --
+including a chat-only draft -- obeys the placement rule on itself:
+branch-only is a property of who consumes the material, not its length -- a
+per-provider walkthrough, a per-case worked example, or a rubric for one path
+becomes a named reference pointer (`references/<name>.md` plus one line on
+when to load it) the first time it is drafted, short or not, never inline
+body text pending later growth; the draft body itself carries only
+all-branch material, and each step in that drafted body ends with a
+checkable stop condition -- a `Completion:` line or a named gate section
+such as `Stop Conditions` or `Removal Gate` -- the form is free, the slot is
+not. Completion: every sensitive surface touched by this run
+has an allowed, disallowed, blocked, or deferred decision, platform
+scaffolding is handled or explicitly not-applicable, and any drafted skill
+body inlines only all-branch material with branch depth behind named
+reference pointers from the first draft.
 
-4. Write or edit.
-   Completion: changed files match the receipt, placement audit, and any
-   sensitive-resource decision.
-   - Load `references/skill-security-review.md` before editing scripts, hooks,
-     assets, package scripts, shell/network behavior, third-party source
-     adoption, or installed-cache/home mutation. Carry in: resource, privileges,
-     entry points, untrusted inputs, intended mutation. Return with: security
-     route/result, allowed/disallowed actions, proof route, blocked/deferred
-     status.
-   - Load `references/platform-mechanics.md` only for scaffolding, metadata,
-     validation, packaging, or platform-specific mechanics. Carry in: target
-     platform, owning plugin, changed files. Return with: scaffold, metadata,
-     validation, package requirements.
+**5. Prove behavior.** Behavior-changing guidance needs GREEN from
+`references/pressure-testing.md` after the edit. Structural proof (files
+valid, validator passes) is never relabeled behavior proof (behavior changes
+under pressure) -- they are different claims, and both may be true at once.
+A proof gap may only coexist with shipping status `source-only`; anything
+`PR-ready` or `released` that
+changes behavior requires GREEN, not a gap. Completion: proof status matches
+shipping status under that rule.
 
-5. Prove behavior.
-   Completion: static validation is not relabeled as behavior proof, and
-   behavior-changing guidance has RED/GREEN/REFACTOR evidence or an explicit
-   proof gap.
-   - Load `references/pressure-testing.md` when the skill should prevent a
-     shortcut, change behavior, or prove create/update/evaluate flow. Carry in:
-     target behavior, scenario, changed skill files. Return with:
-     RED/GREEN/REFACTOR evidence or proof gap.
+**6. Prune and ship.** Run a deletion test per sentence: does removing it
+change agent behavior versus the model's default? If not, it is a no-op --
+delete it rather than smoothing it into nicer prose. Every rule keeps exactly
+one home; a rule with two homes is unfinished pruning, not redundancy for
+safety. When shipping, route the version bump, changelog entry, and
+review/PR proof through `references/platform-mechanics.md`. Completion: no
+duplicated all-branch material remains, and shipping routes are named or the
+run is explicitly source-only.
 
-6. Prune and package.
-   Completion: duplicated all-branch material is removed, branch-only depth is
-   behind references, source provenance is public-safe, and review/PR proof path
-   is named when shipping.
-   - Load `references/pruning-and-maintenance.md` when deleting, moving, or
-     reconciling skill text is material. Carry in: current skill, usage
-     evidence, test results. Return with: prune plan, retained source of truth,
-     retest need.
+## Completion Blockers
 
-Sensitive resources include scripts, hooks, assets, package scripts, shell or
-network behavior, third-party skill/source adoption, and installed-cache or
-home-level mutation.
+The run is not done while any of these hold:
 
-## Authoring Receipt
-
-Produce this before editing skill surfaces. Keep it useful, not ceremonial: one
-line per field is enough unless the field changes the edit boundary or proof.
-
-```text
-target skill/change:
-classification: create | update | evaluate
-owner plugin:
-reason / repeated failure:
-existing-surface check:
-user intent / acceptance source:
-proof shape:
-security-sensitive resource? yes | no
-security route/result:
-```
-
-## Placement Audit
-
-Before treating a skill surface as coherent, classify candidate instructions,
-state fields, invariants, completion criteria, and proof rules:
-
-```text
-item:
-classification: all-branch | branch-only
-target location:
-reason:
-```
-
-All-branch items belong in this `SKILL.md`. Branch-only items belong in exactly
-one reference unless another source of truth already owns them.
-
-For small edits, this can be a terse note naming only disputed or moved items.
-Do not generate a large audit table when the placement is obvious.
-
-## Completion Criteria
-
-The authoring run is complete only when:
-
-- receipt, branch choices, and placement audit exist;
-- required references were loaded and returned their branch results into the
-  Authoring State;
-- changed skill files pass required platform static validation for every
-  supported surface when applicable;
-- behavior-changing guidance has pressure proof or an explicit proof gap;
-- sensitive-resource routing is allowed, disallowed, blocked, deferred, or
-  not-applicable with evidence;
-- source adaptation is public-safe and not wholesale copying;
-- docs, metadata, changelog, review, and PR proof are handled when shipping.
+- the Authoring State block was not shown in chat, or is incomplete on a
+  field this run actually depends on;
+- a behavior-changing update skipped RED-first -- an edit was made or
+  described before a failing scenario or micro-test was named;
+- a proof gap exists and shipping status is anything other than
+  `source-only`;
+- a sensitive surface was touched without an allowed/disallowed/blocked/
+  deferred decision;
+- any rule still has two homes;
+- required platform static validation failed, or was skipped without a
+  stated reason.
