@@ -1,41 +1,35 @@
 # Invocation And Description
 
-Load trigger: the skill may be model-invoked, user-invoked, routed from another
-skill, or has a description that is broad, process-heavy, or hard to discover.
+Mission / stance:
+Make the skill discoverable at the right time without letting frontmatter become
+a shortcut around the body.
 
-Carry in: candidate skill type, intended users, model/user invocation need,
-trigger examples, branch list, and any router entry.
+When to use:
+- The skill may be model-invoked, user-invoked, or routed from another skill.
+- The description is broad, process-heavy, or hard to discover.
+- The trigger surface overlaps with another skill.
 
-## Procedure
+What to inspect:
+- intended users and invocation route
+- trigger and non-trigger examples
+- branch list
+- router handoff, if any
+- words the user or repo already uses for this work
 
-1. Decide invocation mode.
-   - Model-invoked: the agent or another skill must discover it.
-   - User-invoked: the human should consciously choose it and remember it.
-   - Router entry: a higher-level skill should point to it.
-2. Write the description as trigger text, not workflow summary.
-3. Include concrete situations, symptoms, and terms the user or repo already
-   uses.
-4. Keep one trigger per real branch. Collapse synonyms that describe the same
-   branch.
-5. Avoid description shortcuts that let the agent follow frontmatter instead of
-   loading the body.
-6. If another skill routes here, specify the handoff condition and expected
-   branch.
+How to inspect:
+Choose model-invoked when the agent or another skill must discover it. Choose a
+routed or user-invoked path when human/workflow control matters more than
+automatic discovery. Write the description as trigger text, not workflow
+summary. Keep one trigger per real branch and collapse synonyms.
 
-## Return Artifact
+Good signals:
+- concrete trigger situations
+- description names when to load, not what steps to follow
+- clear model/user/router tradeoff
+- router handoff has an observable condition
 
-```text
-invocation mode:
-trigger examples:
-description:
-router entry:
-context-load / cognitive-load tradeoff:
-```
-
-Completion criterion: a future agent can decide whether to load the skill from
-the description without mistaking the description for the workflow.
-
-Source material adapted: Matt's model/user invocation tradeoff and trigger-only
-description rule; Codex creator metadata constraints. Rejected: descriptions
-that summarize the full body. This branch does not duplicate all-branch
-workflow state from `SKILL.md`.
+Bad signals:
+- description summarizes the whole workflow
+- synonyms inflate the branch count
+- model-invoked skill exists only because the human forgot where to route it
+- trigger collides with another skill without a boundary

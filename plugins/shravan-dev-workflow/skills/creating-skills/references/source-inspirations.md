@@ -1,10 +1,8 @@
 # Source Inspirations
 
-Load trigger: source provenance matters, the skill borrows an upstream concept,
-or public-safe adaptation needs to be checked.
-
-Carry in: source names, concepts being borrowed, changed skill/reference text,
-and public docs or changelog surfaces.
+Temporary provenance ledger for this skill family. Do not load this file during
+normal authoring; the active `SKILL.md` route deliberately keeps source notes
+out of the editing path.
 
 ## Adaptation Ledger
 
@@ -18,28 +16,10 @@ and public docs or changelog surfaces.
 | Claude creator mechanics | Claude packaging/static validation awareness | claiming Claude behavior proof without a behavior harness |
 | local great-skills SOP | scorecard, authoring checklist, deployment/pruning gates | local paths, large copied passages, process history |
 
-## Procedure
+## Public-Safe Check
 
-1. Name the source idea being borrowed.
-2. State the local behavior it improves.
-3. Record what was adapted, rejected, or intentionally not loaded.
-4. Check shipped files for local paths, sensitive values, environment-specific
-   config, cache identifiers, and wholesale copied source text.
-5. Keep provenance terse and public-safe.
-
-## Return Artifact
-
-```text
-source idea:
-local adaptation:
-rejected material:
-not loaded:
-public-safe check:
-copying risk:
-```
-
-Completion criterion: reviewers can see why the local skill behaves this way
-without relying on temporary paths or copied source text.
-
-Source material adapted: this file is the source-adaptation boundary. It does
-not duplicate all-branch workflow state from `SKILL.md`.
+- Keep local paths, sensitive values, environment-specific config, cache
+  identifiers, and copied source text out of shipped skill files.
+- Prefer adapted judgment over quoted source prose.
+- Move this ledger outside active skill references when the repo grows a
+  separate source-inspiration home, README, or notes section.

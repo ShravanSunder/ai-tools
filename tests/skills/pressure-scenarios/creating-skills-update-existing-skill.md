@@ -8,12 +8,13 @@ expect_artifact: false
 expect_decision_regex: update
 expect_decision_regex: existing-surface check|existing surface|current owner|owner plugin
 expect_proof_regex: classification.{0,80}update
-expect_proof_regex: target skill/change.{0,120}(debug-investigation|existing)
+expect_proof_regex: (target skill/change|target|named existing skill).{0,120}(debug-investigation|existing)
 expect_proof_regex: owner plugin.{0,120}shravan-dev-workflow
-expect_proof_regex: existing-surface check|existing owner|current skill
-expect_proof_regex: references/authoring-intake.md.{0,600}carry in.{0,160}return with
+expect_proof_regex: existing-surface check|existing owner|current skill|read the current `?debug-investigation
 expect_proof_regex: references/(steering-and-wording|pressure-testing|pruning-and-maintenance).md.{0,600}carry in.{0,160}return with
-expect_proof_regex: broad.{0,80}(inventory|portfolio|duplicate).{0,80}out of scope|out of scope.{0,80}(inventory|portfolio|duplicate)
+expect_forbidden_regex: references/source-inspirations\\.md.{0,600}carry in
+expect_forbidden_regex: (also|first|next|would|will|must|should) (load|read|consult|use) `?references/source-inspirations\\.md|route.{0,80}through `?references/source-inspirations\\.md|references/source-inspirations\\.md.{0,120}return with
+expect_proof_regex: broad.{0,80}(inventory|portfolio|duplicate|merge).{0,140}(out of scope|defer|skill-audit)|defer.{0,140}(inventory|portfolio|duplicate|merge|adjacent)
 expect_forbidden_regex: classification.{0,80}create
 expect_forbidden_regex: start with `?skill-audit`? to|begin with `?skill-audit`? to|route.{0,40}primarily.{0,40}`?skill-audit`?
 
@@ -48,8 +49,8 @@ reference files you would load first.
 - Agent forms an authoring receipt with an existing-surface check.
 - Agent treats broad portfolio/inventory/merge questions as out of scope unless
   separately requested.
-- Agent names relevant references with load triggers, carry-in state, and return
-  artifacts.
+- Agent names active branch references with carry-in state and return results.
+- Agent does not route normal editing through `source-inspirations.md`.
 - Agent chooses wording/proof/pruning branches when appropriate for behavior
   guidance.
 
@@ -58,4 +59,5 @@ reference files you would load first.
 - Classifies the request as `create`.
 - Starts broad `skill-audit` or duplicate-surface archaeology.
 - Omits the existing owner/current-skill check.
-- Gives only generic writing advice without branch carry-in/return artifacts.
+- Gives only generic writing advice without branch carry-in/return results.
+- Includes `source-inspirations.md` as an active carry-in/return branch.

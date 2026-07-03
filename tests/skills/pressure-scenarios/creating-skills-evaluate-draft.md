@@ -13,10 +13,12 @@ expect_proof_regex: branch disclosure|progressive references
 expect_proof_regex: platform validation
 expect_proof_regex: source adaptation
 expect_proof_regex: highest risk
-expect_proof_regex: first required revision
+expect_proof_regex: first required revision|first revision to make
 expect_proof_regex: retest requirement|retest
 expect_proof_regex: failure-form|guidance form|bright-line rule|positive output contract|required slot|observable predicate|completion criterion
-expect_proof_regex: adapted|rejected|not loaded|source adaptation
+expect_proof_regex: adapted|rejected|not loaded|source adaptation|copying source
+expect_forbidden_regex: references/source-inspirations\\.md.{0,600}carry in
+expect_forbidden_regex: (also|first|next|would|will|must|should) (load|read|consult|use) `?references/source-inspirations\\.md|route.{0,80}through `?references/source-inspirations\\.md|references/source-inspirations\\.md.{0,120}return with
 expect_forbidden_regex: verdict\s*:?\s*great
 
 ## Shortcut Temptation
@@ -73,6 +75,7 @@ revision to make.
 - Agent applies failure-form matching when recommending wording changes.
 - Agent notes source-adaptation/provenance expectations without copying source
   material wholesale.
+- Agent does not route normal editing through `source-inspirations.md`.
 
 ## Failure Signals
 
@@ -82,3 +85,4 @@ revision to make.
 - Rewrites everything instead of giving the first required revision.
 - Uses only prohibition-heavy wording when the failure is output shape or
   omitted slots.
+- Includes `source-inspirations.md` as an active carry-in/return branch.
