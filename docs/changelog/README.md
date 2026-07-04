@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-04 Discuss Clarify Mental Models: Alignment Signal Card](2026-07-04-discuss-clarify-signal-card.md)
 - [2026-07-04 Discuss Clarify Mental Models](2026-07-04-discuss-clarify-mental-models.md)
 - [2026-07-03 Creating Skills Rewrite](2026-07-03-creating-skills-rewrite.md)
 - [2026-07-03 Creating Skills Authoring Spine Refinement](2026-07-03-creating-skills-authoring-spine.md)

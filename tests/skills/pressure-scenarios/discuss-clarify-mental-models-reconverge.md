@@ -14,7 +14,7 @@ expect_proof_regex: evidence_checked:
 expect_proof_regex: recommended_default:
 expect_proof_regex: open_or_confirmed:
 expect_proof_regex: next_workflow:
-expect_forbidden_regex: forcing question
+expect_forbidden_regex: forcing question:\s*[^\n]*\?|forcing question.{0,60}exactly one|exactly one.{0,60}forcing question
 
 ## Shortcut Temptation
 

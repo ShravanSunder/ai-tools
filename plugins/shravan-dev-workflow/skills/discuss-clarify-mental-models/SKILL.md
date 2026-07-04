@@ -1,6 +1,6 @@
 ---
 name: discuss-clarify-mental-models
-description: Use when the user asks to share understanding, reconverge, reflect back, or clarify a mental model before specs, plans, docs, or code because terms, boundaries, assumptions, source of truth, or tradeoffs are unstable.
+description: Use when either side notices drift or misalignment - repeated corrections, hollow or instant agreement, surprise at a plan or architecture, the same term meaning different things - or when the user asks to reconverge, share understanding, reflect back, clarify a mental model, or force an alignment check before specs, plans, docs, or code.
 ---
 
 # Discuss Clarify Mental Models
@@ -17,10 +17,28 @@ research ledgers. If the next useful move is broad evidence gathering, route to
 `research-swarm`; if the model is stable enough for a durable artifact, route
 to the owning phase skill.
 
+This is a drift signal card: either side calls it the moment something feels
+off -- a repeated correction, a too-quick agreement, a surprising plan.
+Invocation interrupts: stop in-flight edits and queued artifact work; this
+contract owns the turn. An unaligned model exported into specs, plans, or
+code multiplies the repair cost downstream.
+
+## Drift Signals
+
+Self-invoke on these, even when the user has not asked to discuss anything:
+
+- the user corrects the same point twice;
+- agreement arrives instantly on something complex;
+- evidence contradicts the stated model;
+- the user says "that's not what I meant" or "something feels off";
+- the agent is surprised by the user's reaction to a plan or architecture.
+
 ## Output Contract
 
-Every response must include these fields, using the smallest shape that makes
-the model clear:
+Show the full contract on the first response, again when the model
+materially changes, and once more at close. Interim turns may carry only the
+fields that changed since it was last shown in full. Use the smallest shape
+that makes the model clear:
 
 ```text
 model:
@@ -44,8 +62,9 @@ question when the useful discussion has multiple axes.
    source of truth, tradeoffs, or competing framings.
    Completion: `model` names the user's apparent frame and the unstable part.
 
-2. Check bounded evidence. Read the specific code, docs, or saved artifact that
-   can sharpen the model in this turn. If nothing was checked, say so.
+2. Check bounded evidence. Read the specific code, docs, or saved artifact
+   that can sharpen the model in this turn. If nothing was read, write `none
+   -- answering from session memory`; never imply evidence you did not check.
    Completion: `evidence_checked` distinguishes direct observation from
    inference or missing evidence.
 
@@ -60,7 +79,10 @@ question when the useful discussion has multiple axes.
    Completion: `countercase` says what would actually break the current model.
 
 5. Converge or route. Recommend the default, mark whether the model is
-   confirmed or still open, and name the next owning workflow.
+   confirmed or still open, and name the next owning workflow. When real
+   branches remain and the user must choose, end with the question that
+   selects between them -- and only then; never a ritual
+   exactly-one-question rule.
    Completion: `recommended_default`, `open_or_confirmed`, and `next_workflow`
    are all explicit.
 
@@ -71,13 +93,8 @@ question when the useful discussion has multiple axes.
 - `spec-creation-swarm`: durable product/design/architecture contract.
 - `plan-creation-swarm`: implementation sequencing after a spec or clear
   design exists.
-- `discuss-with-me`: manual pressure-test or owner decision using the currently
-  shipped discussion surface.
 - open in this skill: blocked work, broken model, conflicting artifacts,
   repeated loop, or missing authority when no shipped owner exists yet.
-
-The discussion spec names future blocker/divergence and owner-decision surfaces.
-Do not route to those names until their skills exist in the repo.
 
 ## Red Flags
 
@@ -94,7 +111,8 @@ Do not route to those names until their skills exist in the repo.
 
 Do not route onward while any of these hold:
 
-- the output contract fields are missing;
+- the output contract fields are missing at a full-contract point (first
+  response, material model change, or close);
 - evidence checked vs inferred is blurred;
 - competing framings are hidden inside one chosen solution;
 - the countercase is a hedge rather than a real falsifier;
