@@ -7,11 +7,13 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: model:
 expect_proof_regex: model:
+expect_proof_regex: inherited_frame:
+expect_proof_regex: first_principles:
 expect_proof_regex: assumptions:
 expect_proof_regex: branches:
 expect_proof_regex: countercase:
 expect_proof_regex: evidence_checked:
-expect_proof_regex: recommended_default:
+expect_proof_regex: rebuilt_model:
 expect_proof_regex: open_or_confirmed:
 expect_proof_regex: next_workflow:
 expect_forbidden_regex: forcing question:\s*[^\n]*\?|forcing question.{0,60}exactly one|exactly one.{0,60}forcing question
@@ -45,6 +47,7 @@ write a plan yet.
 - Agent stays read-only and does not create an artifact.
 - Agent uses the skill's output contract fields.
 - Agent maps the mixed concerns as distinct branches or framings.
+- Agent separates inherited framing, first principles, and assumptions.
 - Agent names a countercase and load-bearing assumption.
 - Agent does not ask a ritual single forcing question.
 - Agent names a next workflow only after marking whether the model is open or
@@ -56,4 +59,5 @@ write a plan yet.
 - Produces an implementation plan.
 - Uses the old one-question grill shape.
 - Summarizes the user without branches, assumptions, and countercase.
+- Collapses inherited framing, first principles, and assumptions.
 - Names the next workflow without saying what remains open or confirmed.

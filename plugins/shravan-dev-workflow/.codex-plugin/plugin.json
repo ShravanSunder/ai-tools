@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.39",
+  "version": "1.6.40",
   "description": "Shravan's development workflow plugin with goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, mental-model reconvergence, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, observability proof loops, implementation review orchestration, PR wrap-up, plan workflows, debugging, skill authoring, skill audits, progressive TUI presentation guidance, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
@@ -74,7 +74,7 @@
       "Prepare an implementation handoff.",
       "Run plan-review-swarm on this plan.",
       "Use spec-creation-swarm to create this spec before planning.",
-      "Use discuss-clarify-mental-models to reconverge the shared model before artifact work.",
+      "Use discuss-clarify-mental-models to rebuild the shared map before artifact work.",
       "Use discuss-with-me to clarify and pressure-test this decision before editing files.",
       "Use research-swarm to gather source-grounded evidence into a tmp ledger.",
       "Use orchestrator-goal to turn this into a verifiable long-horizon goal.",

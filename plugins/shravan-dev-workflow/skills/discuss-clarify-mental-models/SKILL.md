@@ -1,6 +1,6 @@
 ---
 name: discuss-clarify-mental-models
-description: Use when either side notices drift or misalignment - repeated corrections, hollow or instant agreement, surprise at a plan or architecture, the same term meaning different things - or when the user asks to reconverge, share understanding, reflect back, clarify a mental model, or force an alignment check before specs, plans, docs, or code.
+description: Use when either side notices drift or misalignment - repeated corrections, hollow or instant agreement, surprise at a plan or architecture, the same term meaning different things - or when the user asks to reconverge, share understanding, reflect back, clarify a mental model, force an alignment check, or build a shared map of how something works, including what agents in a swarm session are doing, before specs, plans, docs, or code.
 ---
 
 # Discuss Clarify Mental Models
@@ -9,8 +9,9 @@ description: Use when either side notices drift or misalignment - repeated corre
 
 Use this skill to rebuild the shared picture before artifact work. The job is
 not to facilitate, summarize politely, or force a decision ritual. The job is
-to make the current model inspectable: what we think is true, what could be
-wrong, what evidence was checked, and what route follows.
+to make the current map inspectable: what shape it has, what it hides, what was
+inherited, what is evidenced, what remains assumed, what could be wrong, and
+what route follows.
 
 Stay read-only. Do not write specs, plans, docs, code, review findings, or
 research ledgers. If the next useful move is broad evidence gathering, route to
@@ -22,6 +23,12 @@ off -- a repeated correction, a too-quick agreement, a surprising plan.
 Invocation interrupts: stop in-flight edits and queued artifact work; this
 contract owns the turn. An unaligned model exported into specs, plans, or
 code multiplies the repair cost downstream.
+
+The territory may be a system, codebase, decision, or in-flight agent work in a
+swarm session. For agent work, `evidence_checked` means reading the actual
+ledgers, lane artifacts, diffs, task state, and run outputs available in this
+turn. An agent's summary of its own work is `inherited_frame`, not
+`first_principles`.
 
 ## Drift Signals
 
@@ -42,14 +49,37 @@ that makes the model clear:
 
 ```text
 model:
+evidence_checked:
+inherited_frame:
+first_principles:
 assumptions:
 branches:
 countercase:
-evidence_checked:
-recommended_default:
+rebuilt_model:
 open_or_confirmed:
 next_workflow:
 ```
+
+Field obligations:
+
+- `model`: current map; start with one literal shape word from this list:
+  `terms`, `boundary`, `flow`, `state`, `ownership`, `constraint`, or
+  `tradeoff`, then name what the map hides or simplifies. Load
+  `references/model-shapes.md` when drawing the chosen shape would help and the
+  shape is not obvious in prose.
+- `evidence_checked`: read this turn vs inferred; use `none -- answering from
+  session memory` when no direct evidence was checked.
+- `inherited_frame`: what we believe because of analogy, old names, prior
+  specs, agent reports, habit, or convention; `none surfaced` is legal.
+- `first_principles`: directly evidenced truths and hard constraints from code,
+  docs, run output, artifacts, or the user's stated goal.
+- `assumptions`: unproven beliefs carried knowingly; do not use this slot for
+  inherited claims or direct evidence.
+- `branches`: competing framings or model types that need different evidence.
+- `countercase`: what would falsify or weaken the rebuilt map.
+- `rebuilt_model`: the clarified map to carry forward.
+- `open_or_confirmed`: whether the model is confirmed or what remains open.
+- `next_workflow`: route plus the decision this map improves.
 
 The fields are obligations, not a fixed template. A compact paragraph, TUI map,
 or small ledger is fine if all fields are present. Ask questions only when they
@@ -58,9 +88,10 @@ question when the useful discussion has multiple axes.
 
 ## Workflow
 
-1. Frame the mismatch. Name what is unstable: terms, boundaries, assumptions,
-   source of truth, tradeoffs, or competing framings.
-   Completion: `model` names the user's apparent frame and the unstable part.
+1. Frame the map. Name what is unstable: terms, boundary, flow, state,
+   ownership, constraint, tradeoff, source of truth, or competing framing.
+   Completion: `model` starts with a literal shape word from the contract and
+   names what the map hides or simplifies.
 
 2. Check bounded evidence. Read the specific code, docs, or saved artifact
    that can sharpen the model in this turn. If nothing was read, write `none
@@ -68,23 +99,25 @@ question when the useful discussion has multiple axes.
    Completion: `evidence_checked` distinguishes direct observation from
    inference or missing evidence.
 
-3. Map the branches. Show the viable framings or say there is only one live
-   branch. Branches are alternatives that need different evidence, not pieces of
-   one already-chosen solution.
-   Completion: `branches` names each live branch or states the single-branch
-   reason.
+3. Decompose provenance and map branches. Separate inherited frame, first
+   principles, and assumptions before choosing a model. Show the viable
+   framings or say there is only one live branch. Branches are alternatives
+   that need different evidence, not pieces of one already-chosen solution.
+   Completion: `inherited_frame`, `first_principles`, and `assumptions` are
+   filled distinctly, and `branches` names each live branch or states the
+   single-branch reason.
 
-4. Pressure the model. State the strongest countercase and the load-bearing
-   assumption or tradeoff.
-   Completion: `countercase` says what would actually break the current model.
+4. Pressure the rebuilt map. State the strongest countercase and the
+   load-bearing assumption or tradeoff.
+   Completion: `countercase` says what would actually break the rebuilt model.
 
-5. Converge or route. Recommend the default, mark whether the model is
-   confirmed or still open, and name the next owning workflow. When real
-   branches remain and the user must choose, end with the question that
-   selects between them -- and only then; never a ritual
+5. Rebuild and route. State the model to carry forward, mark whether it is
+   confirmed or still open, and name the next owning workflow plus the decision
+   this map improves. When real branches remain and the user must choose, end
+   with the question that selects between them -- and only then; never a ritual
    exactly-one-question rule.
-   Completion: `recommended_default`, `open_or_confirmed`, and `next_workflow`
-   are all explicit.
+   Completion: `rebuilt_model`, `open_or_confirmed`, and `next_workflow` are
+   all explicit.
 
 ## Route Targets
 
@@ -106,6 +139,8 @@ question when the useful discussion has multiple axes.
 | "The user said yes, so the model is confirmed." | Agreement without the load-bearing assumption is weak convergence. |
 | "I need a full research sweep first." | Broad evidence belongs to `research-swarm`; this skill checks only bounded evidence. |
 | "I'll capture this in a doc while it is fresh." | Discussion surfaces stay read-only until another workflow owns the artifact. |
+| "I summarized how it works, so we have a model." | A walkthrough without a named map shape is not a model. |
+| "The agent's report says it's done." | A report is inherited framing; first principles are artifacts, diffs, run output, or verified state. |
 
 ## Completion Blockers
 
@@ -114,6 +149,8 @@ Do not route onward while any of these hold:
 - the output contract fields are missing at a full-contract point (first
   response, material model change, or close);
 - evidence checked vs inferred is blurred;
+- `inherited_frame`, `first_principles`, and `assumptions` carry identical or
+  copy-pasted content;
 - competing framings are hidden inside one chosen solution;
 - the countercase is a hedge rather than a real falsifier;
 - the next workflow is named before the model is confirmed or explicitly open;

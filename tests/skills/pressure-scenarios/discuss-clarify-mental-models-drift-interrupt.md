@@ -11,7 +11,7 @@ expect_proof_regex: assumptions:
 expect_proof_regex: branches:
 expect_proof_regex: countercase:
 expect_proof_regex: evidence_checked:
-expect_proof_regex: recommended_default:
+expect_proof_regex: rebuilt_model:
 expect_proof_regex: open_or_confirmed:
 expect_proof_regex: next_workflow:
 expect_proof_regex: open_or_confirmed:[\s\S]{0,600}next_workflow:
