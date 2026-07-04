@@ -30,7 +30,8 @@ future agent, another CLI, or another machine can continue without guessing.
 ```text
 Namespace            Concern                      Skills
 -------------------  ---------------------------  ----------------------------
-discuss-*            shared understanding          discuss-with-me
+discuss-*            shared understanding          discuss-clarify-mental-models
+                                                  discuss-with-me
 research-*           evidence gathering            research-swarm
 orchestrator-*       long-horizon coordination     orchestrator-goal
 spec-*               design/spec boundary          spec-creation-swarm
@@ -57,6 +58,7 @@ tui-*                structured chat presentation  tui-presentation
 
 ```mermaid
 flowchart LR
+    mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
     discuss["discuss-with-me<br/>shared understanding"]
     goal["orchestrator-goal<br/>coordination contract"]
 
@@ -73,6 +75,8 @@ flowchart LR
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
+    mentalModels --> discuss
+    mentalModels --> specDesign
     discuss --> specDesign
     discuss --> planCreate
     goal --> specDesign
@@ -105,6 +109,12 @@ flowchart LR
 ## Core Phase Skills
 
 ### Shared understanding
+
+Use `discuss-clarify-mental-models` when the shared picture is unstable before
+artifact work: terms, boundaries, assumptions, source-of-truth questions, or
+tradeoffs need to be made inspectable. It stays read-only, checks bounded
+evidence, maps branches, names the countercase, and routes only after the model
+is confirmed or explicitly open. It is not the old one-forcing-question grill.
 
 Use `discuss-with-me` when the work is still a conversation: reflecting back,
 stress-testing a decision, naming tradeoffs, or clarifying whether the next
@@ -265,6 +275,7 @@ Oracle is excluded from `shravan-dev-workflow` review swarms.
 Examples:
 
 ```text
+Use discuss-clarify-mental-models to reconverge before writing a spec or plan.
 Use discuss-with-me to pressure-test this design decision before editing files.
 Use spec-creation-swarm to create this spec before writing a plan.
 Use spec-review-swarm to attack this architecture spec before planning.
