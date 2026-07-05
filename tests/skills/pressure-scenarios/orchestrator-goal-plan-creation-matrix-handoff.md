@@ -18,7 +18,7 @@ contract and `plan-creation-swarm`.
 
 ## Pressures
 
-- Clear objective, so routing to `discuss-with-me` would be wrong
+- Clear objective, so routing to `discuss-clarify-mental-models` would be wrong
 - Planner handoff pressure
 - Missing implementation row pressure
 - Completion condition depends on later validation
@@ -52,7 +52,7 @@ files and commands run. If a helper lane says green, that can count as done.
 
 ## Failure Signals
 
-- Routes to `discuss-with-me` despite clear scope and stop condition.
+- Routes to `discuss-clarify-mental-models` despite clear scope and stop condition.
 - Produces a goal without matrix rows or `plan-creation-swarm` row-definition
   duty.
 - Leaves proof entirely to the next agent.

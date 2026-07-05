@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.41",
-  "description": "Development workflow skills for goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, mental-model reconvergence, discuss-with-me thinking clarification, docs maintenance, adversarial spec review swarms, operations security review routing, observability proof loops, bounded subagent review lanes, PR wrap-up, plan handoff/review/execution, implementation handoff, debugging, skill authoring, skill audits, progressive TUI presentation, and operations Linear tracking.",
+  "version": "1.6.42",
+  "description": "Development workflow skills for goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, mental-model reconvergence, docs maintenance, adversarial spec review swarms, operations security review routing, observability proof loops, bounded subagent review lanes, PR wrap-up, plan handoff/review/execution, implementation handoff, debugging, skill authoring, skill audits, progressive TUI presentation, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -22,7 +22,6 @@
     "spec-handoff",
     "goal",
     "orchestrator-goal",
-    "discuss-with-me",
     "discuss-clarify-mental-models",
     "mental-model",
     "reconverge",

@@ -15,7 +15,7 @@ Finding:
 - refinement input: <requirement, boundary, contract, example, non-goal, proof signal, harness assumption, guardrail, or human decision that should become sharper>
 - smallest refinement target: <the smallest spec section, slice, diagram, contract field, example, non-goal, proof expectation, or open decision to edit>
 - validation note: <how the parent or next reviewer would check that the refinement fixed the issue>
-- loop route: inner loop to spec-creation-swarm | outer loop to discuss-with-me/human review
+- loop route: inner loop to spec-creation-swarm | outer loop to discuss-clarify-mental-models/human review
 - parent reducer note: <what the parent must verify before accepting this refinement input>
 ```
 

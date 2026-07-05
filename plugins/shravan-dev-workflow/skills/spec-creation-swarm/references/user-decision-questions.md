@@ -1,4 +1,4 @@
-# Discuss With Me Mechanics
+# User Decision Questions
 
 Use this reference when a spec/design needs user decisions before it can converge.
 

@@ -85,7 +85,9 @@ fuzzy goal or design question
 - If substantial design/spec work is clear and the user did not ask for
   chat-only output, write the primary spec as a durable repo artifact and write
   the parent ledger/lane artifacts by default.
-- If the desired design/spec output is unclear, do not create files yet; use `discuss-with-me` or ask one material question first.
+- If the desired design/spec output is unclear, do not create files yet; use
+  `discuss-clarify-mental-models` for shared-model drift or ask one material
+  question first.
 - Design artifacts contain decisions and technical rationale, not process history. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
 ## Workflow
@@ -234,7 +236,9 @@ ownership map and explain why.
   lane observation uses this schema before lane-specific context.
 - Load only the selected `references/lanes/*.md` files. Each selected lane
   reference is a job contract; the parent still curates the task instance.
-- Load `references/discuss-with-me.md` when intent is unclear or design branches need user decisions.
+- Use `discuss-clarify-mental-models` when intent is unclear because the shared
+  model is unstable; load `references/user-decision-questions.md` when a narrow
+  design branch needs a direct user decision.
 - Use `research-swarm` when the design depends on external prior art, current
   web/docs, DeepWiki-style repository research, saved-reader sources, memory,
   session logs, or a portable evidence ledger.

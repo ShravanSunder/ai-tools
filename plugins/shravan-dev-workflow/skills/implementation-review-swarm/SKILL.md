@@ -186,8 +186,8 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Route plan translation errors to `plan-creation-swarm`, plan validation
      issues to `plan-review-swarm`, spec ambiguity or missing contracts to
      `spec-creation-swarm`, proposed spec validation to `spec-review-swarm`, and
-     unresolved product/design choices to `discuss-with-me` or direct user
-     clarification.
+     unresolved product/design choices to direct user clarification, or to
+     `discuss-clarify-mental-models` when the issue is shared-model drift.
    - Pure follow-through on existing GitHub PR comments or review threads
      belongs to `implementation-pr-wrapup`.
 

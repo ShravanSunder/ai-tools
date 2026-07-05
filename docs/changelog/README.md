@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-05 Discuss-With-Me Retired From Plugin Discovery](2026-07-05-discuss-with-me-retired.md)
 - [2026-07-05 Discuss Clarify Mental Models: Provenance Reference](2026-07-05-discuss-clarify-provenance-reference.md)
 - [2026-07-04 Discuss Clarify Mental Models: Map-Building Upgrade](2026-07-04-discuss-clarify-map-building.md)
 - [2026-07-04 Creating Skills Evaluate Baseline Contract](2026-07-04-creating-skills-evaluate-baseline.md)

@@ -31,7 +31,6 @@ future agent, another CLI, or another machine can continue without guessing.
 Namespace            Concern                      Skills
 -------------------  ---------------------------  ----------------------------
 discuss-*            shared understanding          discuss-clarify-mental-models
-                                                  discuss-with-me
 research-*           evidence gathering            research-swarm
 orchestrator-*       long-horizon coordination     orchestrator-goal
 spec-*               design/spec boundary          spec-creation-swarm
@@ -59,7 +58,6 @@ tui-*                structured chat presentation  tui-presentation
 ```mermaid
 flowchart LR
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
-    discuss["discuss-with-me<br/>shared understanding"]
     goal["orchestrator-goal<br/>coordination contract"]
 
     specDesign["spec-creation-swarm<br/>spec creation"]
@@ -75,10 +73,7 @@ flowchart LR
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
-    mentalModels --> discuss
     mentalModels --> specDesign
-    discuss --> specDesign
-    discuss --> planCreate
     goal --> specDesign
     goal --> planCreate
     goal --> implExecute
@@ -116,14 +111,6 @@ tradeoffs need to be made inspectable. It stays read-only, checks bounded
 evidence, maps branches, names the countercase, and routes only after the model
 is confirmed or explicitly open. It is not the old one-forcing-question grill.
 
-Use `discuss-with-me` when the work is still a conversation: reflecting back,
-stress-testing a decision, naming tradeoffs, or clarifying whether the next
-artifact should be a spec, plan, implementation, or docs update. It makes the
-shared model prove itself before action: every live response states the user's
-model, maps the decision branches, names the strongest countercase, and asks
-one forcing question. It may inspect enough evidence to sharpen that question,
-but broad information gathering belongs to `research-swarm`.
-
 Use `research-swarm` when the next step is to gather evidence: local code/docs,
 sibling repos, DeepWiki-style repository research, current web/docs, Reader
 sources, memory, or session logs. It frames bounded research questions, routes
@@ -135,10 +122,10 @@ truth.
 
 Use `orchestrator-goal` when the objective is long-running and already clear
 enough to become a verifiable Codex or Claude `/goal` contract. If the goal is
-fuzzy, it routes back to `discuss-with-me`. For substantial goals, the contract
-carries a requirements/proof matrix and parent-owned completion gate; child
-agents, reviewers, UI drivers, and observability queries produce evidence, not
-completion by themselves.
+fuzzy, it routes back to `discuss-clarify-mental-models`. For substantial
+goals, the contract carries a requirements/proof matrix and parent-owned
+completion gate; child agents, reviewers, UI drivers, and observability queries
+produce evidence, not completion by themselves.
 At closeout, `orchestrator-goal` accounts for lifecycle gates with the simple
 statuses `done`, `not-applicable`, `open`, and `blocked`; `done` requires an
 evidence pointer and does not imply rerunning already-completed review cycles.
@@ -276,7 +263,6 @@ Examples:
 
 ```text
 Use discuss-clarify-mental-models to reconverge before writing a spec or plan.
-Use discuss-with-me to pressure-test this design decision before editing files.
 Use spec-creation-swarm to create this spec before writing a plan.
 Use spec-review-swarm to attack this architecture spec before planning.
 Use spec-handoff to package this design for another agent without creating a plan.

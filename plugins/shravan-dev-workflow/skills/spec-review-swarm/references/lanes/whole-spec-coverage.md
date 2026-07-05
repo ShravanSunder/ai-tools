@@ -57,5 +57,6 @@ This lane does not decide accepted findings or rewrite the spec.
 Parent handoff notes:
 Focused lanes do not replace this lane. Parent reducer verifies candidate
 whole-spec findings against the target artifact and source anchors before
-routing accepted findings to `spec-creation-swarm`, `discuss-with-me`, or a
+routing accepted findings to `spec-creation-swarm`,
+`discuss-clarify-mental-models`, or a
 tiny explicitly scoped edit.

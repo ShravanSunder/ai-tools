@@ -52,4 +52,4 @@ context.
 - Omits `shravan-dev-workflow:orchestrator-goal`.
 - Says only "the plan" or "related docs" while omitting known paths.
 - Drops the requirements/proof matrix or proof gates.
-- Routes to `discuss-with-me` despite clear files and scope.
+- Routes to `discuss-clarify-mental-models` despite clear files and scope.

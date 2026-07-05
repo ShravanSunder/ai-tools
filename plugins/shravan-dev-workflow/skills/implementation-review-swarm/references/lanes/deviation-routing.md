@@ -26,12 +26,12 @@ implementation_defect -> implementation-execute-plan
 implementation_scope_overreach -> implementation-execute-plan or human decision
 implementation_scope_underdelivery -> implementation-execute-plan
 proof_gap -> implementation-execute-plan unless proof scope is a plan defect
-unapproved_deviation -> discuss-with-me or owner workflow
+unapproved_deviation -> direct user clarification or owner workflow
 plan_translation_error -> plan-creation-swarm
-spec_plan_conflict -> spec-creation-swarm or discuss-with-me
+spec_plan_conflict -> spec-creation-swarm or discuss-clarify-mental-models
 spec_ambiguity -> spec-creation-swarm
-architecture_decision_gap -> spec-creation-swarm or discuss-with-me
-human_decision_needed -> discuss-with-me or direct user clarification
+architecture_decision_gap -> spec-creation-swarm or discuss-clarify-mental-models
+human_decision_needed -> direct user clarification
 ```
 
 When review is needed before revision:
