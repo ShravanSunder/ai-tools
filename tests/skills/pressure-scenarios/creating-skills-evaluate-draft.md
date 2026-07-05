@@ -8,6 +8,7 @@ expect_artifact: false
 expect_decision_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
 expect_decision_regex: (missing|no|lacks|without|absent).{0,80}(workflow spine|pressure proof|trigger)
 expect_proof_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
+expect_proof_regex: baseline:\s*(review target|evaluate|what is being judged)
 expect_proof_regex: blocker overrides?:\s*\S|blocker.{0,180}(workflow spine|trigger|pressure proof|link-only router)
 expect_proof_regex: highest risk
 expect_proof_regex: first required revision|first revision to make

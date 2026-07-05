@@ -30,7 +30,7 @@ it is incomplete.
 classification: create | update | evaluate
 target skill / owner plugin:
 reusable job:
-baseline: observed (update) | hypothesized (create) -- what fails
+baseline: observed (update) | hypothesized (create) | review target (evaluate) -- what fails or is being judged
 branches loaded:
 security route: allowed | disallowed | blocked | deferred | n/a
 proof status: RED | GREEN | REFACTOR | static-only | proof gap
@@ -45,9 +45,10 @@ only when it is disputed or it changes the edit boundary.
 **1. Frame.** Classify the run; run an existing-surface check (does a skill
 already own this reusable job?); name the reusable job in one sentence; state
 the baseline -- observed (update: names the current failure) or
-hypothesized (create: names the likely failure). Completion:
-classification, owner plugin, reusable job, and baseline are all named.
-Evaluating an existing skill or draft routes straight to
+hypothesized (create: names the likely failure) or review target (evaluate:
+names what is being judged). Completion: classification, owner plugin,
+reusable job, and baseline are all named. Evaluating an existing skill or
+draft routes straight to
 `references/great-skill-evaluation.md`.
 
 **2. Prove first.** A behavior-changing update needs a pressure scenario or

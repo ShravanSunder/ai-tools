@@ -8,8 +8,7 @@ versus `references/`. Definitions only -- rules and placement live in
 
 - Predictability: the agent takes the same route on repeat, even when its
   output text varies. The route is judged, not the prose.
-- Reusable job: the repeatable work the skill exists to improve. A one-off
-  job belongs in docs or chat, not a skill.
+- Reusable job: the repeatable work the skill exists to improve.
 - Invocation fit: whether the skill is model-invoked, routed, or
   user-invoked.
 - Context load: the cost a model-invoked skill pays -- the agent spends
@@ -61,10 +60,8 @@ versus `references/`. Definitions only -- rules and placement live in
 - Schema file (`schema-<name>.md`): slots, templates, or an output contract
   shared by two or more independent consumers -- lanes, subagents, other
   skills, copy-paste prompts. Owned by whichever skill defines the
-  contract; never carries judgment or policy prose.
+  contract.
 - Lane file (`lanes/<lane>.md`): swarm-skill-only, the focus delta for one
-  lane. A schema used by only one lane is colocated inside that lane file
-  rather than promoted to a schema file.
+  lane.
 - Authoring State: the one compact per-run tracking block defined in
-  `SKILL.md`. Owned by the parent skill run; every branch reads and updates
-  the same block instead of keeping its own.
+  `SKILL.md`. Owned by the parent skill run.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Discuss Clarify Mental Models"
+  short_description: "Rebuild a shared map"
+  default_prompt: "Use $discuss-clarify-mental-models to rebuild the shared map before artifact work."

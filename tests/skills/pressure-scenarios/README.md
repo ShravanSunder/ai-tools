@@ -21,6 +21,9 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 |-------|----------|-----------------|
 | `debug-investigation` | `debug-investigation-background-monitoring.md` | Do not burn model tokens on long-running monitors; use stateful, redacted, harness-visible watcher jobs. |
 | `debug-investigation` | `debug-investigation-no-blind-fix.md` | Do not patch before reproduction, evidence, hypothesis, and root-cause proof. |
+| `discuss-clarify-mental-models` | `discuss-clarify-mental-models-reconverge.md` | Do not collapse unstable shared understanding into the old one-question grill or premature artifact work. |
+| `discuss-clarify-mental-models` | `discuss-clarify-mental-models-drift-interrupt.md` | Do not apologize-and-continue or summarize past a drift signal; treat invocation as an interrupt and locate where the models diverged. |
+| `discuss-clarify-mental-models` | `discuss-clarify-mental-models-map-building.md` | Do not turn agent-work uncertainty into status prose; name the map shape, separate inherited report/direct evidence/assumptions, and say what the evidence does not prove when that split is the hard part. |
 | `discuss-with-me` | `discuss-with-me-fuzzy-intent.md` | Do not turn fuzzy discussion into implementation; map the branches and make the model prove itself first. |
 | `discuss-with-me` | `discuss-with-me-grill-under-pressure.md` | Do not confirm-and-proceed; challenge the user's model, map the branches, ask one forcing question. |
 | `discuss-with-me` | `discuss-with-me-mid-execution-stop.md` | Do not keep executing or write files mid-discussion; stop and reconverge before edits resume. |
