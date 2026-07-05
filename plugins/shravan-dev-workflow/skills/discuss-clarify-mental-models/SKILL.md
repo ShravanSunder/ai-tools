@@ -64,9 +64,7 @@ Field obligations:
 
 - `model`: current map; start with one literal shape word from this list:
   `terms`, `boundary`, `flow`, `state`, `ownership`, `constraint`, or
-  `tradeoff`, then name what the map hides or simplifies. Load
-  `references/model-shapes.md` when drawing the chosen shape would help and the
-  shape is not obvious in prose.
+  `tradeoff`, then name what the map hides or simplifies.
 - `evidence_checked`: read this turn vs inferred; use `none -- answering from
   session memory` when no direct evidence was checked.
 - `inherited_frame`: what we believe because of analogy, old names, prior
@@ -76,7 +74,8 @@ Field obligations:
 - `assumptions`: unproven beliefs carried knowingly; do not use this slot for
   inherited claims or direct evidence.
 - `branches`: competing framings or model types that need different evidence.
-- `countercase`: what would falsify or weaken the rebuilt map.
+- `countercase`: what would falsify or weaken the rebuilt map, including the
+  load-bearing assumption or tradeoff.
 - `rebuilt_model`: the clarified map to carry forward.
 - `open_or_confirmed`: whether the model is confirmed or what remains open.
 - `next_workflow`: route plus the decision this map improves.
@@ -85,6 +84,14 @@ The fields are obligations, not a fixed template. A compact paragraph, TUI map,
 or small ledger is fine if all fields are present. Ask questions only when they
 select a real branch or expose missing evidence; do not force exactly one
 question when the useful discussion has multiple axes.
+
+Branch references:
+
+- Load `references/model-shapes.md` when drawing the chosen shape would help and
+  the shape is not obvious in prose.
+- Load `references/provenance-decomposition.md` when `inherited_frame`,
+  `first_principles`, and `assumptions` start collapsing, or the user asks for
+  first-principles reconstruction.
 
 ## Workflow
 
@@ -108,14 +115,17 @@ question when the useful discussion has multiple axes.
    single-branch reason.
 
 4. Pressure the rebuilt map. State the strongest countercase and the
-   load-bearing assumption or tradeoff.
-   Completion: `countercase` says what would actually break the rebuilt model.
+   load-bearing assumption or tradeoff. If the user stops in-flight work, say
+   what should not proceed before that assumption is confirmed.
+   Completion: `countercase` says what would actually break the rebuilt model
+   and names the load-bearing assumption or tradeoff.
 
 5. Rebuild and route. State the model to carry forward, mark whether it is
    confirmed or still open, and name the next owning workflow plus the decision
    this map improves. When real branches remain and the user must choose, end
-   with the question that selects between them -- and only then; never a ritual
-   exactly-one-question rule.
+   by placing the branch-selecting question inside `open_or_confirmed` or
+   `next_workflow` -- and only then; never call it a forcing question or revive
+   the old exactly-one-question rule.
    Completion: `rebuilt_model`, `open_or_confirmed`, and `next_workflow` are
    all explicit.
 
@@ -135,6 +145,7 @@ question when the useful discussion has multiple axes.
 | --- | --- |
 | "I summarized the request, so we share the model." | A summary without assumptions, branches, and countercase is not reconvergence. |
 | "I should end with one required question." | This skill rejects ritual single-question pressure when several axes need exploration. |
+| "I'll label the remaining branch as a forcing question." | The old forcing-question label belongs to `discuss-with-me`, not mental-model reconvergence. |
 | "I can start the plan and refine as we go." | Planning exports a broken model into a stronger-looking artifact. |
 | "The user said yes, so the model is confirmed." | Agreement without the load-bearing assumption is weak convergence. |
 | "I need a full research sweep first." | Broad evidence belongs to `research-swarm`; this skill checks only bounded evidence. |
