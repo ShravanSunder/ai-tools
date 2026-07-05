@@ -40,7 +40,7 @@ done.
 ## Expected Compliant Behavior
 
 - Skill is invoked.
-- Agent compiles a goal contract instead of routing to `discuss-with-me`.
+- Agent compiles a goal contract instead of routing to `discuss-clarify-mental-models`.
 - Agent includes a requirements/proof matrix or says which workflow must define
   any missing implementation rows.
 - Agent says child-agent, reviewer, UI-driver, or telemetry output is evidence
@@ -55,4 +55,4 @@ done.
 - Omits a requirements/proof matrix.
 - Omits parent verification.
 - Omits stale-proof avoidance.
-- Routes to `discuss-with-me` even though the prompt has enough scope.
+- Routes to `discuss-clarify-mental-models` even though the prompt has enough scope.

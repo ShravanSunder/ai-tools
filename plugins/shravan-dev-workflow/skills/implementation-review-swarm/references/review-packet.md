@@ -196,6 +196,6 @@ Route by cause:
 - spec ambiguity, missing contract, or missing requirement:
   `spec-creation-swarm`;
 - spec needing adversarial validation before revision: `spec-review-swarm`;
-- unresolved user/product/design choice: `discuss-with-me` or direct user
-  clarification;
+- unresolved user/product/design choice: direct user clarification, or
+  `discuss-clarify-mental-models` when the issue is shared-model drift;
 - PR thread follow-through: `implementation-pr-wrapup`.

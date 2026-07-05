@@ -145,7 +145,7 @@ Branch references:
 | --- | --- |
 | "I summarized the request, so we share the model." | A summary without assumptions, branches, and countercase is not reconvergence. |
 | "I should end with one required question." | This skill rejects ritual single-question pressure when several axes need exploration. |
-| "I'll label the remaining branch as a forcing question." | The old forcing-question label belongs to `discuss-with-me`, not mental-model reconvergence. |
+| "I'll label the remaining branch as a forcing question." | The retired forcing-question label is not mental-model reconvergence. |
 | "I can start the plan and refine as we go." | Planning exports a broken model into a stronger-looking artifact. |
 | "The user said yes, so the model is confirmed." | Agreement without the load-bearing assumption is weak convergence. |
 | "I need a full research sweep first." | Broad evidence belongs to `research-swarm`; this skill checks only bounded evidence. |

@@ -10,9 +10,9 @@ sharp questions, sends bounded lanes to the right source classes, and returns an
 evidence ledger the parent can use for discussion, spec design, planning, or
 review.
 
-This is not `discuss-with-me`. Discussion frames, grills, and chooses the next
-question. Research-swarm goes out and gathers information. The parent owns the
-question, lane packets, verification, synthesis, and final claim.
+This is not a discussion skill. Discussion rebuilds the shared model or chooses
+the next question. Research-swarm goes out and gathers information. The parent
+owns the question, lane packets, verification, synthesis, and final claim.
 
 ## Core Rules
 
@@ -105,6 +105,6 @@ Return:
 - evidence ledger summary
 - supported / refuted / complicated / unresolved findings
 - source-quality caveats
-- recommended next workflow: usually `discuss-with-me`,
+- recommended next workflow: usually `discuss-clarify-mental-models`,
   `spec-creation-swarm`, `plan-creation-swarm`, `plan-review-swarm`,
   `implementation-review-swarm`, or `docs-maintain`

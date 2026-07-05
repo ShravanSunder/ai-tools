@@ -119,7 +119,7 @@ Make the workflow better.
 ```
 
 This does not name the expected state, allowed scope, validation, or stopping
-condition. Route it to `discuss-with-me`.
+condition. Route it to `discuss-clarify-mental-models`.
 
 ## Required Files
 

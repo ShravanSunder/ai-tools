@@ -31,8 +31,8 @@ These are objective gates, not soft rules. If the answer to the gate question is
   debug artifact, or other human-openable file is reported, is there a full
   clickable artifact link (absolute path + line)?
 - Goal clarity gate: if objective, scope, proof, or stop condition is unclear,
-  did `orchestrator-goal` route to `discuss-with-me` instead of setting a fuzzy
-  long-horizon goal?
+  did `orchestrator-goal` route to `discuss-clarify-mental-models` instead of
+  setting a fuzzy long-horizon goal?
 - Artifact gate: if clear spec/plan/debug work ran and the user did not ask for
   chat-only/no-files output, did the phase skill write its lane artifact?
 - Artifact lifecycle gate: if cleanup, archival, promotion, or source-of-truth
@@ -90,7 +90,7 @@ explicitly scoped.
 
 - "Review this implementation plan before code." -> `plan-review-swarm`
 - "Attack this spec before planning." -> `spec-review-swarm`
-- "Discuss whether this should be a feature at all." -> `discuss-with-me`
+- "Discuss whether this should be a feature at all." -> `discuss-clarify-mental-models`
 - "Push this branch, watch GitHub, handle existing comments, and merge when
   ready." -> `implementation-pr-wrapup`
 
@@ -142,15 +142,15 @@ Gate: no implementation diff; parent synthesis names evidence, tradeoffs, securi
 context, separability, contracts, proof expectations, and next workflow. Task
 sequence and worker order are deferred to `plan-creation-swarm`.
 
-### discuss-with-me should trigger
+### discuss-clarify-mental-models should trigger
 
 - "Let's discuss only; reflect back the plan/spec boundary."
 - "Talk through this design decision before editing files."
 
-Gate: one material question at a time, with a recommended answer and no file
-edits. When multiple credible branches exist, the opposing branch is
-steelmanned and the boundary, tradeoff, or assumption under pressure is named
-before asking the user to decide.
+Gate: the shared model is made inspectable with a named map shape, bounded
+evidence, separated inherited frame / first principles / assumptions, branches,
+countercase, rebuilt model, confirmation/open state, and next workflow. It stays
+read-only.
 
 Gate: broad evidence gathering, prior-art research, current docs/web research,
 Reader research, memory mining, and session-log searches are routed to
@@ -169,7 +169,7 @@ unresolved.
 
 ### research-swarm should not trigger
 
-- "Grill my understanding before we decide." -> `discuss-with-me`
+- "Grill my understanding before we decide." -> `discuss-clarify-mental-models`
 - "Shape the architecture from this evidence." -> `spec-creation-swarm`
 - "Review this implementation plan." -> `plan-review-swarm`
 
@@ -185,13 +185,13 @@ workflow.
 
 ### orchestrator-goal should not trigger
 
-- "Make my workflow better." -> `discuss-with-me`
-- "Let's discuss whether this should be a long-running goal." -> `discuss-with-me`
+- "Make my workflow better." -> `discuss-clarify-mental-models`
+- "Let's discuss whether this should be a long-running goal." -> `discuss-clarify-mental-models`
 - "Review this PR." -> `implementation-review-swarm`
 - "Execute this plan." -> `implementation-execute-plan`
 
-Gate: unclear goals route to `discuss-with-me`; there is no inline mini
-interview path inside `orchestrator-goal`.
+Gate: unclear goals route to `discuss-clarify-mental-models`; there is no
+inline mini interview path inside `orchestrator-goal`.
 
 ### docs-maintain should trigger
 

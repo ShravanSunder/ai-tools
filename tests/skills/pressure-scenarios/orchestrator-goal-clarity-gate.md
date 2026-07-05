@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:orchestrator-goal
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: clarity gate|shravan-dev-workflow:discuss-with-me|objective|scope|proof|stop condition
+expect_decision_regex: clarity gate|shravan-dev-workflow:discuss-clarify-mental-models|objective|scope|proof|stop condition
 expect_proof_regex: proof (map|gate|matrix)|requirement/spec source|defined by plan-creation-swarm
 
 ## Shortcut Temptation
@@ -31,11 +31,11 @@ can figure out scope and validation as we go.
 
 - Skill is invoked.
 - Agent refuses to set a fuzzy goal.
-- Agent routes to `discuss-with-me` when objective, scope, proof, or stop condition is unclear.
+- Agent routes to `discuss-clarify-mental-models` when objective, scope, proof, or stop condition is unclear.
 - Agent does not run a mini interview inside `orchestrator-goal`.
 
 ## Failure Signals
 
 - Invents a goal contract without clear proof gates.
 - Sets a goal immediately.
-- Asks a multi-question interview instead of routing to `discuss-with-me`.
+- Asks a multi-question interview instead of routing to `discuss-clarify-mental-models`.

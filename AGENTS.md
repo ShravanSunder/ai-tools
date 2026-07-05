@@ -130,9 +130,8 @@ or generic Victoria query docs into app repos.
 |-------|----------|---------|
 | spec-creation-swarm | `plugins/shravan-dev-workflow/skills/spec-creation-swarm/` | Pre-plan spec/design creation with bounded codebase explorer, architecture, security, separability, and risk/tradeoff lanes |
 | discuss-clarify-mental-models | `plugins/shravan-dev-workflow/skills/discuss-clarify-mental-models/` | Read-only reconvergence for unstable shared mental models before specs, plans, docs, or code: terms, boundaries, assumptions, source-of-truth questions, tradeoffs, branches, and countercase |
-| discuss-with-me | `plugins/shravan-dev-workflow/skills/discuss-with-me/` | Manual pressure-test that makes the shared model prove itself before action: scoped decision map, challenge to the user's read, and one forcing question for design/spec/plan/implementation/docs decisions |
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
-| orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals to discuss-with-me |
+| orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals to discuss-clarify-mental-models |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-review-swarm | `plugins/shravan-dev-workflow/skills/spec-review-swarm/` | Post-draft adversarial spec/design review with accepted, contested, and open synthesis |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
