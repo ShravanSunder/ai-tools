@@ -68,6 +68,9 @@ fuzzy goal or design question
   `spec-review-swarm` for drafted-spec critique in the response.
 - Treat lane outputs as candidate evidence until the parent reducer verifies
   source anchors and synthesizes accepted spec content.
+- This skill owns phase-specific lane packets, reduction, and proof. Use
+  `manage-agents` only for managing agent calls and sessions; do not copy those
+  mechanics here.
 - The parent must read key files returned by explorer lanes before recommending a design.
 - For substantial specs, create a spec folder with one primary
   `<descriptive-slug>.md` file. Use slice specs only for vertical slices, app

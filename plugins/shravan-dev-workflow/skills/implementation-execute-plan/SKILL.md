@@ -26,6 +26,9 @@ Validate first, then execute. This is controller-owned execution: subagents may 
   write scope, and completion receipt, then gives each subagent only what it
   needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
+- This skill owns implementation slicing, integration, and proof. Use
+  `manage-agents` only for managing agent calls and sessions; do not copy those
+  mechanics here.
 - Preserve implementation proof as you work: requirement/task coverage, changed
   files, proof commands with exit codes, red/green evidence for behavior
   changes, evidence sources, freshness guards, unsatisfied proof gates, and

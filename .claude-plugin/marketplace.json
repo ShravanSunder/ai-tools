@@ -28,8 +28,8 @@
     {
       "name": "shravan-dev-workflow",
       "source": "./plugins/shravan-dev-workflow",
-      "description": "Development workflow skills for goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, mental-model reconvergence, docs maintenance, spec review swarms, operations security routing, observability proof loops, bounded subagent review lanes, PR wrap-up, plan handoff/review/execution, implementation handoff, debugging, skill authoring, skill audits, progressive TUI presentation, and operations Linear tracking",
-      "version": "1.6.42"
+      "description": "Development workflow skills for goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, mental-model reconvergence, docs maintenance, spec review swarms, operations security routing, observability proof loops, subordinate agent management, bounded subagent review lanes, PR wrap-up, plan handoff/review/execution, implementation handoff, debugging, skill authoring, skill audits, progressive TUI presentation, and operations Linear tracking",
+      "version": "1.6.43"
     }
   ]
 }

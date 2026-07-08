@@ -42,6 +42,9 @@ gates, and evidence requirements.
   `security context: applicable | not applicable`, and completion receipt.
   Lane outputs are candidate evidence until the parent verifies source anchors
   and reduces them into the final plan.
+- This skill owns phase-specific lane packets, reduction, and proof. Use
+  `manage-agents` only for managing agent calls and sessions; do not copy those
+  mechanics here.
 - For substantial plan creation, create a parent plan ledger and per-lane
   artifacts unless the user asked for chat-only/no-files, the work is a single
   tiny local lane, or the tool surface cannot write artifacts. Record the

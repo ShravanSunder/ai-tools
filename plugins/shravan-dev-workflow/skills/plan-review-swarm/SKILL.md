@@ -47,6 +47,9 @@ plan artifact
 - Treat subagent and external model output as candidate findings only, with
   source anchors and completion receipts. The parent reviewer verifies and owns
   synthesis.
+- This skill owns phase-specific lane packets, reduction, and proof. Use
+  `manage-agents` only for managing agent calls and sessions; do not copy those
+  mechanics here.
 - When a shortcut or missing artifact prevents dispatching lanes in the current
   run, still name the substantial-lane packet shape: role / mode, edit
   boundary, bounded question, decision target, source-of-truth inputs, inspect

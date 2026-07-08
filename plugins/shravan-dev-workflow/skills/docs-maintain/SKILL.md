@@ -37,6 +37,8 @@ docs request
 - Before purging or rewriting docs, propose the change and say what will be preserved.
 - When code and docs disagree, identify the driver and ask the user if it is not obvious.
 - Use subagents for bounded inventory or stale-doc research in large repos, but the parent owns final edits.
+- Use `manage-agents` only for model-agent call/session mechanics; keep doc
+  roles, staleness, and source-of-truth classification here.
 - Use progressive disclosure: load only the workflow reference that matches the docs job.
 
 ## Workflow

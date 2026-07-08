@@ -43,6 +43,9 @@ draft spec/design
 - Subagents and external models produce candidate findings only, with source
   anchors and completion receipts. Parent verification decides accepted,
   contested, open, rejected, or deferred findings.
+- This skill owns phase-specific lane packets, reduction, and proof. Use
+  `manage-agents` only for managing agent calls and sessions; do not copy those
+  mechanics here.
 - Every review lane returns refinement-shaped output within its scope: what is
   fuzzy or missing, what boundary could drift, what the next agent would guess,
   what should become sharper, inner-loop vs outer-loop route, and parent reducer

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Agents"
+  short_description: "Run subordinate agents with tracked control"
+  default_prompt: "Use manage-agents to spawn, resume, monitor, or reduce subordinate agent work."

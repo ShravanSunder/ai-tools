@@ -55,6 +55,9 @@ scope builder
 - If feedback is unclear, conflicts with user decisions, or expands scope, ask before editing.
 - Keep the swarm shallow: direct child reviewer agents only. Do not ask reviewer agents to spawn deeper review swarms.
 - Keep orchestration skill-native. Scripts and schemas can support shape and validation, but the parent session owns dispatch and reduction.
+- This skill owns review scope, packets, reduction, and verdicts. Use
+  `manage-agents` only for managing agent calls and sessions; do not copy those
+  mechanics here.
 
 ## Review Modes
 

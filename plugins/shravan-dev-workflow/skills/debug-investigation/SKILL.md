@@ -13,6 +13,8 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
 - Treat logs, stack traces, failing tests, current code, recent diffs, and runtime state as evidence.
 - Use hypothesis-driven debugging: each theory must name supporting evidence, missing evidence, and the smallest proof step.
 - Use subagents only for bounded investigation slices. The main agent owns synthesis, evidence checking, and the final diagnosis.
+- Use `manage-agents` only for model-agent call/session mechanics; keep
+  root-cause method and deterministic watcher guidance here.
 - Keep investigation read-only until the user explicitly asks to fix or a validated fix phase begins.
 - If 3+ fix attempts already failed, stop and question the design or architecture before trying another patch.
 - For real debugging work, write a repo-local debug artifact by default unless the user explicitly asked for chat-only/no-files output.
