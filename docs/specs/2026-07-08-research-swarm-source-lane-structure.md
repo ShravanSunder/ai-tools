@@ -30,6 +30,27 @@ Local workflow skills are the source of truth for ownership boundaries:
 intent, requirements, technical contracts, boundaries, invariants, and proof
 expectations, and later phase skills own plans, reviews, and implementation.
 
+Local owner and boundary references:
+
+- `plugins/shravan-dev-workflow/skills/research-swarm/SKILL.md`: current
+  workflow contract and source of truth for research ownership.
+- `plugins/shravan-dev-workflow/skills/spec-creation-swarm/SKILL.md`: source of
+  truth for what belongs in a spec: product intent, requirements, technical
+  contract, boundaries, invariants, non-goals, and proof expectations.
+- `plugins/shravan-dev-workflow/skills/spec-creation-swarm/references/swarm-packets.md`:
+  local pattern for keeping packet anatomy in one skill-local packet reference
+  while stable lane behavior lives in `references/lanes/<lane>.md`.
+- `plugins/shravan-dev-workflow/skills/skills-creation/SKILL.md`: source of
+  truth for the later skill-update workflow, including single-skill scope,
+  placement rules, pressure proof, pruning, platform mechanics, and shipping.
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/great-skill-evaluation.md`:
+  evaluation lens for the eventual skill edit: `research-swarm` is a
+  targeted-revision candidate because the reusable job and invocation are
+  sound, while reference placement needs refinement.
+- `plugins/shravan-dev-workflow/skills/discuss-clarify-mental-models/SKILL.md`:
+  boundary reference for discussion versus research. Discussion rebuilds the
+  shared model; research gathers evidence; spec creation decides contracts.
+
 The Anthropic article "A field guide to Claude Fable 5: Finding your unknowns"
 is the source-of-truth inspiration for the unknowns lens. It frames the gap
 between map and territory as unknowns, names known-knowns, known-unknowns,
@@ -37,22 +58,29 @@ unknown-knowns, and unknown-unknowns, and stresses that unknowns can surface
 before, during, and after implementation:
 https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns
 
-`dzhng/skills` `explore-unknowns` is an implementation example of that lens,
-not the source of truth. Its useful adaptation is the quadrant walk and the
-rule that claims about territory cite real files read, but local workflow
-ownership must still come from this repo:
-https://github.com/dzhng/skills/blob/main/skills/engineering/explore-unknowns/SKILL.md
+Admired source references inform style and lane design, not local ownership:
 
-Admired local-source inspirations inform style, not authority:
-
-- Addy Osmani `doubt-driven-development`: preserve adversarial doubt for
-  non-trivial claims and separate the artifact from the claim being tested.
-- Pstack `why`: preserve coverage maps, null results, source categories, and
-  confidence calibration.
-- Pstack `how`: preserve architecture explanation before critique and bounded
-  exploration lanes for cross-file systems.
-- Obra `brainstorming`: preserve design-before-implementation and reactive
-  artifacts when tacit user criteria need surfacing.
+- `dzhng/skills` `explore-unknowns`:
+  `https://github.com/dzhng/skills/blob/main/skills/engineering/explore-unknowns/SKILL.md`.
+  This is an implementation example of the Anthropic unknowns lens, not the
+  source of truth. Preserve the quadrant walk and the rule that claims about
+  territory cite real files read; keep local workflow ownership in this repo.
+- Addy Osmani `doubt-driven-development`:
+  `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/addyosmani-agent-skills/skills/doubt-driven-development/SKILL.md`.
+  Preserve adversarial doubt for non-trivial claims, the artifact/contract split,
+  and the habit of testing confident claims before they stand.
+- Pstack `why`:
+  `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/cursor-plugins/pstack/skills/why/SKILL.md`.
+  Preserve evidence before narrative, source coverage maps, null results,
+  source-category routing, explicit confidence calibration, and gap reporting.
+- Pstack `how`:
+  `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/cursor-plugins/pstack/skills/how/SKILL.md`.
+  Preserve architecture explanation before critique, scoped explorer lanes, and
+  separate runtime mechanics from motivation.
+- Obra `brainstorming`:
+  `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/obra-superpowers/skills/brainstorming/SKILL.md`.
+  Preserve design-before-implementation, project-context exploration, explicit
+  alternatives/tradeoffs, and a written spec before implementation planning.
 
 ## Current-State Evidence
 
