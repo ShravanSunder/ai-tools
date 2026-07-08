@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Use when spawning, calling, resuming, steering, queueing, monitoring, or reducing work from subordinate AI agents, sidekicks, jobs, ACPX providers, JSON automation, flows, or custom ACP adapters.
+description: Use when choosing, spawning, calling, resuming, steering, queueing, monitoring, or reducing subordinate AI-agent patterns such as swarms, persistent sidekicks, advisors, ephemeral subagents, workflow handoffs, ACPX providers, JSON automation, flows, or custom ACP adapters.
 ---
 
 # Manage Agents
@@ -11,15 +11,19 @@ authority over scope, permissions, progress, verification, and the final claim.
 This skill is not a replacement for the phase workflow skills. Use
 `research-swarm`, `spec-creation-swarm`, `plan-creation-swarm`,
 `implementation-execute-plan`, or review swarms when those skills own the
-phase. Use this skill for the agent-call mechanics inside or around that work:
-which agent to call, whether it should be one-shot or persistent, how to resume
-it, how to monitor it, and how to reduce its output.
+phase. Use this skill for the harness-neutral orchestration choice and the
+agent-call mechanics inside or around that work: whether the job needs a swarm,
+persistent sidekick, advisor, ephemeral subagent, workflow handoff, one-shot
+call, or provider-specific runtime control.
 
 ## Core Rules
 
 - Parent owns truth. Subordinate agents return candidate evidence, patches,
   summaries, or recommendations; the parent verifies before presenting any
   result as accepted.
+- Choose the subordinate-agent pattern before choosing the provider or command.
+  Swarms, persistent sidekicks, advisors, ephemeral subagents, and workflow
+  handoffs solve different problems.
 - Name the job before choosing the agent. Record the decision target, write
   scope, permission mode, expected receipt, and stop condition.
 - Keep every persistent helper session ledgered by provider, cwd, session name,
@@ -42,6 +46,8 @@ the subordinate agent call as underway.
 ## Workflow
 
 1. Frame the subordinate job.
+   - Load `references/orchestration-patterns.md` when deciding between a swarm,
+     persistent sidekick, advisor, ephemeral subagent, or workflow handoff.
    - Decide whether the job is a one-shot answer, persistent sidekick,
      background queue item, live steering request, JSON automation step, flow,
      or custom adapter work.
@@ -134,6 +140,9 @@ next action:
 - `references/runtime-control.md`: live command/session controls,
   permissions, queueing, timeout, cancel, status, model control, prompt versus
   exec, and prompt versus steer boundaries.
+- `references/orchestration-patterns.md`: harness-neutral choice between
+  swarms, persistent sidekicks, advisors, ephemeral subagents, and workflow
+  handoffs before provider or command selection.
 - `references/session-ledger.md`: persistent sidekick naming, session ids,
   progress polling, history, receipts, and parent reduction.
 - `references/automation-and-flows.md`: machine-readable output, exit codes,
