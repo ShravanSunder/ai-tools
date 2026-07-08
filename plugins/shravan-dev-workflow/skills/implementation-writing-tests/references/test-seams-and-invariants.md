@@ -67,6 +67,74 @@ Weak seams:
 - snapshots without behavioral intent;
 - asserting a helper was called instead of asserting behavior changed.
 
+## Weak Seam Repairs
+
+Mock-only proof is weak when it proves only that the implementation called a
+collaborator, not that the consumer-visible contract changed.
+
+Bad:
+
+```ts
+it("submits invoice", async () => {
+  const billingApi = { post: vi.fn().mockResolvedValue({ ok: true }) };
+  await submitInvoice({ billingApi, invoiceId: "inv_123" });
+  expect(billingApi.post).toHaveBeenCalledWith("/invoice/inv_123");
+});
+```
+
+Repair route:
+
+```text
+public_seam: submitInvoice behavior through the app/service boundary
+observable_effect: invoice status, emitted event, persisted record, or external
+contract visible through a boundary the consumer relies on
+oracle: literal expected status/event/record chosen from the requirement
+```
+
+Owned-collaborator mocks are weak when the mock replaces code the project owns
+and the assertion checks wiring instead of behavior.
+
+Bad:
+
+```ts
+it("ranks paid invoices first", () => {
+  const scorer = { score: vi.fn().mockReturnValue(10) };
+  rankInvoices({ scorer, invoices });
+  expect(scorer.score).toHaveBeenCalledTimes(2);
+});
+```
+
+Repair:
+
+```ts
+it("ranks paid invoices above drafts when text score ties", () => {
+  const result = rankInvoices([
+    { id: "draft", status: "draft", textScore: 10 },
+    { id: "paid", status: "paid", textScore: 10 },
+  ]);
+  expect(result.map((invoice) => invoice.id)).toEqual(["paid", "draft"]);
+});
+```
+
+Assert-nothing tests are weak when they can pass without proving the intended
+claim.
+
+Bad:
+
+```ts
+it("renders cart", () => {
+  render(<CartView cart={cartFixture} />);
+});
+```
+
+Repair route:
+
+```text
+claim: the UI exposes the checkout total
+oracle: visible total text, accessible state, event, or navigation result
+proof_layer: component integration or UI test by project taxonomy
+```
+
 ## Choosing An Oracle
 
 An oracle should be independent from the implementation path under test.
@@ -86,6 +154,15 @@ Bad oracles:
 - recomputing the expected value by calling the same production helper;
 - asserting only that a mock was called;
 - snapshot approval with no claim named.
+
+Tautological-oracle repair:
+
+```ts
+expect(formatTotal({ cents: 1234, currency: "USD" })).toBe("$12.34");
+```
+
+The expected value is chosen from the requirement, not recomputed by the
+implementation under test.
 
 ## Invariant Prompts
 

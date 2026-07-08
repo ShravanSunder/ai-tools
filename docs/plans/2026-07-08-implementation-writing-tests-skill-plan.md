@@ -152,7 +152,6 @@ Files:
 - `references/test-seams-and-invariants.md`
 - `references/proof-layers.md`
 - `references/existing-test-audit.md`
-- `references/test-antipatterns.md`
 - `references/property-driven-development.md`
 - `references/schema-implementation-test-proof.md`
 
@@ -168,13 +167,14 @@ Concept ownership:
 - `SKILL.md`: all-branch workflow spine, category selection, required stop
   conditions, and reference routing.
 - `test-seams-and-invariants.md`: public seams, independent oracles,
-  invariants, property claims, and choosing the smallest useful observation
-  boundary.
+  invariants, property claims, weak seam/oracle examples, and choosing the
+  smallest useful observation boundary.
 - `proof-layers.md`: default unit/integration/smoke/e2e/PR-release taxonomy,
-  project override rule, RED/GREEN exception rule, and freshness guard concept.
+  project override rule, fake-smoke examples, RED/GREEN exception rule, and
+  freshness guard concept.
 - `existing-test-audit.md`: keep/repair/remove decision tree, deletion proof,
-  redundancy proof, dead-contract proof, and audit report shape.
-- `test-antipatterns.md`: concrete weak-test examples and repaired versions.
+  stale snapshot/fixture examples, broad deletion examples, redundancy proof,
+  dead-contract proof, and audit report shape.
 - `property-driven-development.md`: property families, table-driven examples,
   generator guidance, metamorphic relations, and state-transition thinking.
 - `schema-implementation-test-proof.md`: slots/templates only, split by
@@ -275,7 +275,7 @@ The reference should include one sample planning row and one sample
 execution/review row so planners do not fabricate execution-only details and
 executors/reviewers can distinguish pending fields from proof gaps.
 
-## Weak-Test Antipatterns
+## Weak-Test Failures By Concept
 
 The new skill should teach these as reviewable defects:
 
@@ -294,10 +294,16 @@ The new skill should teach these as reviewable defects:
   behavior
 - broad deletion: removes tests without replacement proof or redundancy proof
 
-`references/test-antipatterns.md` must include compact bad/good examples for
-mock-only proof, owned-collaborator mocks, tautological oracles, assert-nothing
-tests, stale snapshots, fake smoke, fixture fossils, and broad deletion. Each
-example must show:
+The concept references must include compact bad/good examples where the defect
+belongs:
+
+- mock-only proof, owned-collaborator mocks, tautological oracles, and
+  assert-nothing tests in `test-seams-and-invariants.md`;
+- fake smoke in `proof-layers.md`;
+- stale snapshots, fixture fossils, and broad deletion in
+  `existing-test-audit.md`.
+
+Each example must show:
 
 - the bad test shape;
 - why it cannot prove behavior;
@@ -515,7 +521,6 @@ Add branch references and shared schema:
 - `test-seams-and-invariants.md`
 - `proof-layers.md`
 - `existing-test-audit.md`
-- `test-antipatterns.md`
 - `property-driven-development.md`
 - `schema-implementation-test-proof.md`
 

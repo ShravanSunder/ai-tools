@@ -15,11 +15,10 @@ stop pretending to prove a change.
   observes, which domain boundary it crosses, what claim/property it protects,
   how illegal states are prevented, or what oracle is independent.
 - Load `references/proof-layers.md` when classifying unit/integration/smoke/e2e
-  proof, project-local definitions, RED/GREEN, or freshness guards.
+  proof, project-local definitions, fake smoke, RED/GREEN, or freshness guards.
 - Load `references/existing-test-audit.md` before deleting, repairing, or
-  keeping existing tests.
-- Load `references/test-antipatterns.md` when reviewing weak tests, false-green
-  proof, mocks, snapshots, fake smoke, or tautological assertions.
+  keeping existing tests, including stale snapshots, fixture fossils, or broad
+  deletion requests.
 - Load `references/property-driven-development.md` when critical invariants,
   illegal states, generated examples, state transitions, metamorphic relations,
   or table-driven property checks would make proof stronger.

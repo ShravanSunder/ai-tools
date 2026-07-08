@@ -49,6 +49,64 @@ remaining_risk:
 
 If none applies, repair the test or keep it as a known weak proof risk.
 
+## Stale Snapshot
+
+Bad:
+
+```ts
+expect(render(<Settings legacyMode />)).toMatchSnapshot();
+```
+
+Why weak: a snapshot locks structure without naming the live behavior it should
+protect.
+
+Repair route:
+
+```text
+live_contract: <named current behavior>
+public_seam: UI/component/API boundary the user or caller observes
+oracle: role/text/state/event that proves the behavior
+```
+
+## Fixture Fossil
+
+Bad:
+
+```ts
+const preferences = loadPreferences(oldPreferencesV1Fixture);
+expect(preferences.channels.email).toBe(true);
+```
+
+Why weak: an old fixture can preserve an obsolete contract instead of current
+behavior.
+
+Decision route:
+
+```text
+1. Identify whether v1 preferences are still accepted input.
+2. If yes, assert current migration behavior through the public loader.
+3. If no, remove only with dead-contract proof.
+```
+
+## Broad Deletion
+
+Bad:
+
+```text
+Delete the flaky snapshots; the new integration test probably covers them.
+```
+
+Why weak: "probably" is not redundancy proof.
+
+Required route:
+
+```text
+removed_test:
+replacement_or_redundant_test:
+covered_claim:
+remaining_gap:
+```
+
 ## Audit Report Shape
 
 ```text

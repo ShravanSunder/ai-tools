@@ -21,6 +21,30 @@ has not defined its own unit, integration, smoke, e2e, or release gates.
   signing, notarization, or release smoke when PR or release readiness is in
   scope.
 
+## Fake Smoke
+
+Do not label a unit, config, schema, or fake integration check as smoke.
+
+Bad:
+
+```ts
+it("smoke: validates config", () => {
+  expect(appConfig.routes.length).toBeGreaterThan(0);
+});
+```
+
+Why weak: config/schema/unit checks do not prove that the owned runnable surface
+boots and performs product behavior.
+
+Repair route:
+
+```text
+selected_layer: smoke
+proof: app or CLI starts with test config, performs one real product operation,
+and exits 0 or returns the expected observable result
+lower_layer_still_needed: unit/static config proof remains separate when useful
+```
+
 ## Project Override Rule
 
 When a repo defines proof-layer terms, record that definition and use it even
