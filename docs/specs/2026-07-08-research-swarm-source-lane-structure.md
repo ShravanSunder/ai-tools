@@ -34,12 +34,14 @@ The Anthropic article "A field guide to Claude Fable 5: Finding your unknowns"
 is the source-of-truth inspiration for the unknowns lens. It frames the gap
 between map and territory as unknowns, names known-knowns, known-unknowns,
 unknown-knowns, and unknown-unknowns, and stresses that unknowns can surface
-before, during, and after implementation.
+before, during, and after implementation:
+https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns
 
 `dzhng/skills` `explore-unknowns` is an implementation example of that lens,
 not the source of truth. Its useful adaptation is the quadrant walk and the
 rule that claims about territory cite real files read, but local workflow
-ownership must still come from this repo.
+ownership must still come from this repo:
+https://github.com/dzhng/skills/blob/main/skills/engineering/explore-unknowns/SKILL.md
 
 Admired local-source inspirations inform style, not authority:
 
