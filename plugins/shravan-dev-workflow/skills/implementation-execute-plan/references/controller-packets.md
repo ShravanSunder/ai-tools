@@ -72,6 +72,15 @@ Tests/verification:
 
 Proof obligations:
 - <requirement or matrix row>: <proof modality, proof layer, evidence source, freshness guard, red/green requirement>
+- When tests are in scope: include the full plan-required
+  `implementation-writing-tests` proof row first: requirement, source anchor,
+  public seam, domain boundary, claim/property, critical invariants,
+  illegal-state strategy, guard/precondition/assertion points, IO-boundary
+  cases, oracle, proof layer, project layer definition, freshness guard,
+  existing-test audit, RED/GREEN requirement, higher unrun layer, and blocker or
+  exception. Then append execution-filled fields: test files, tests added,
+  changed, or removed, RED/GREEN evidence or approved exception, false-proof
+  risks, and replacement/redundancy/dead-contract proof for removals.
 
 Artifact path:
 - <lane artifact path, or "chat-only/no-files exception: <reason>">
@@ -86,6 +95,8 @@ Return:
 - What was implemented
 - Proof commands run, exit codes, and relevant output summary
 - Red/green evidence status or approved exception source
+- Test-proof row status when tests were written, changed, repaired, removed, or
+  used as proof
 - Requirement/proof rows satisfied
 - Evidence freshness status
 - Artifact path
@@ -196,6 +207,7 @@ Return:
 - candidate findings with severity, evidence, scenario, smallest fix, proof, and confidence
 - Missing tests or proof
 - Requirement/proof row status
+- Test-proof schema status when tests are in scope
 - Proposed artifact path and candidate review-lane content, or
   "chat-only/no-files exception: <reason>"
 - completion receipt: answered | blocked, with plan anchors, source anchors,

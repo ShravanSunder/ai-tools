@@ -18,6 +18,9 @@ Use this before execution and before completion claims.
 - Required proof gates are sized so they can pass inside the approved scope; if
   not, split or replan before editing. Missing proof has either a concrete
   external blocker, a user-approved exception, or a split/replan route.
+- Test-writing, test-repair, and test-removal tasks have
+  `implementation-writing-tests` schema slots. Test deletion has replacement,
+  redundancy, or dead-contract proof before edits begin.
 - Stop conditions considered.
 
 ## Before Dispatching Subagents
@@ -36,6 +39,8 @@ Use this before execution and before completion claims.
 - Verify tests or evidence independently.
 - Cross-check the relevant matrix rows before treating subagent, reviewer,
   UI-driver, telemetry, or other delegated evidence as complete.
+- For test-proof rows, check tests added, changed, removed, RED/GREEN evidence,
+  and false-proof risks against `implementation-writing-tests`.
 - Resolve conflicts between subagent outputs.
 - Do not accept DONE_WITH_CONCERNS as done until concerns are evaluated.
 

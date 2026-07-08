@@ -10,12 +10,15 @@ When to run:
 - any implementation review with proof claims;
 - behavior changes, runtime claims, security boundaries, or plan-backed work;
 - implementer says tests passed or proof is implied by another artifact.
+- test proof claims, in which case also load `implementation-writing-tests`.
 
 Where to look:
 - proof_claims and known_deviations from `references/review-packet.md`;
 - commands, exit codes, artifacts, screenshots, logs, metrics, traces, schema
   validation, pressure runs, CI, PR checks, or release evidence;
 - changed tests and removed/disabled proof lanes.
+- `implementation-writing-tests` schema rows when tests were written, changed,
+  repaired, removed, or used as proof.
 
 How to inspect:
 Map every proof claim to:
@@ -36,11 +39,17 @@ Good signals:
 - red/green evidence exists for behavior changes or an approved exception is
   cited;
 - proof freshness and command output are current.
+- test-proof rows name public seam, domain boundary, claim/property or critical
+  invariants, illegal-state strategy, guard/precondition/assertion points,
+  IO-boundary cases, oracle, proof layer, project layer definition, freshness
+  guard, RED/GREEN evidence, and false-proof risks.
 
 Bad signals:
 - old proof for a new runtime path;
 - schema/docs/config proof for runtime behavior;
 - tests removed, weakened, disabled, or relabeled;
+- test rows with mock-only proof, bad oracles, missing seams, fake smoke/e2e
+  labels, or deletion without replacement/redundancy/dead-contract proof;
 - "CI will catch it" or implementer summary treated as proof.
 
 Output focus:

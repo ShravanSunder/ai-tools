@@ -26,10 +26,14 @@ Where to look:
 - task size and write scopes
 - dependencies and integration gates
 - split/replan triggers and open questions
+- test-proof rows that require `implementation-writing-tests` schema fields
 
 How to think:
 Ask whether a capable executor could complete each slice and prove it without
 redesigning the spec, inventing missing context, or weakening proof.
+Reject test-proof rows that say only "add tests", lack a seam/claim/oracle,
+relabel lower proof as smoke/e2e, skip project-local layer definitions, or
+delete tests without replacement, redundancy, or dead-contract proof.
 
 Collection contribution:
 - rejected or revised slice/task shapes

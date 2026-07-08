@@ -141,7 +141,12 @@ Default lanes:
   proof gate maps to a testing-pyramid layer, lower proof layers are not skipped
   just because a higher layer exists, behavior changes name whether red/green
   evidence is required, and manual proof is justified when durable automated
-  proof is not suitable.
+  proof is not suitable. When proof rows include tests, load
+  `implementation-writing-tests` and check that plan-required schema fields are
+  present: public seam, domain boundary, claim/property or critical invariants,
+  illegal-state strategy, guard/precondition/assertion points, IO-boundary
+  cases, oracle, proof layer, project layer definition or default statement,
+  freshness guard, existing-test audit status, and RED/GREEN need.
 - `security-reliability`: looks for trust-boundary, secret/token, race, cleanup, rollback, observability, and partial-failure gaps.
 - `execution-scope`: checks ordering, cutovers, migration completeness, ambiguous task packets, and overbroad or under-specified work.
 - `adversarial-design`: pokes holes in assumptions, contradictions, tradeoffs, and simpler alternatives.
@@ -191,6 +196,12 @@ line is sufficient for its size.
 
 Plans with required proof gates that cannot pass at the proposed task size are
 `needs revision` until split into smaller provable slices.
+
+Plans with test-proof rows that rely on generic "add tests", mock-heavy proof,
+tautological oracles, fake smoke/e2e labels, missing public seams, missing
+project proof-layer definitions, or test deletion without replacement,
+redundancy, or dead-contract proof are `needs revision` and route back to
+`plan-creation-swarm`.
 
 ## Addressing Accepted Findings
 
