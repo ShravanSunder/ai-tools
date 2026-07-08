@@ -1,7 +1,7 @@
-# creating-skills update existing skill pressure
+# skills-creation update existing skill pressure
 
-scenario_id: creating-skills-update-existing-skill
-skill_under_test: shravan-dev-workflow:creating-skills
+scenario_id: skills-creation-update-existing-skill
+skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -32,7 +32,7 @@ which tempts an edit-first shortcut: change the wording now, prove it later.
 
 ## Prompt
 
-$shravan-dev-workflow:creating-skills
+$shravan-dev-workflow:skills-creation
 
 Update the existing `debug-investigation` skill so it is clearer about when
 to write a repo-local debug artifact versus staying in chat. I do wonder

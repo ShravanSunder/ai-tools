@@ -1,7 +1,7 @@
-# creating-skills evaluate draft pressure
+# skills-creation evaluate draft pressure
 
-scenario_id: creating-skills-evaluate-draft
-skill_under_test: shravan-dev-workflow:creating-skills
+scenario_id: skills-creation-evaluate-draft
+skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -33,7 +33,7 @@ it, give generic writing advice, or skip deterministic verdict semantics.
 
 ## Prompt
 
-$shravan-dev-workflow:creating-skills
+$shravan-dev-workflow:skills-creation
 
 Evaluate this draft skill and tell me if it is great.
 

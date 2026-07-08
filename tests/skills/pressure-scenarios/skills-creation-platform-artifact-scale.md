@@ -1,7 +1,7 @@
-# creating-skills platform artifact scale pressure
+# skills-creation platform artifact scale pressure
 
-scenario_id: creating-skills-platform-artifact-scale
-skill_under_test: shravan-dev-workflow:creating-skills
+scenario_id: skills-creation-platform-artifact-scale
+skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -33,7 +33,7 @@ change.
 
 ## Prompt
 
-$shravan-dev-workflow:creating-skills
+$shravan-dev-workflow:skills-creation
 
 I want to update the existing `docs-maintain` skill wording and it is shared by
 Codex and Claude. Show me the workflow and proof path. Keep the artifact stuff

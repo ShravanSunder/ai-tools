@@ -107,11 +107,11 @@ describe("evaluatePressureAssertions", () => {
     ]);
   });
 
-  test("rejects creating-skills workflow-spine detours through skill-audit", () => {
+  test("rejects skills-creation workflow-spine detours through skill-audit", () => {
     const workflowSpineScenario = parseScenarioMarkdown({
-      filePath: "/repo/tests/skills/pressure-scenarios/creating-skills-workflow-spine.md",
-      markdown: `scenario_id: creating-skills-workflow-spine
-skill_under_test: shravan-dev-workflow:creating-skills
+      filePath: "/repo/tests/skills/pressure-scenarios/skills-creation-workflow-spine.md",
+      markdown: `scenario_id: skills-creation-workflow-spine
+skill_under_test: shravan-dev-workflow:skills-creation
 expect_decision_regex: authoring receipt
 expect_decision_regex: placement audit
 expect_proof_regex: references/authoring-intake.md.{0,600}carry in.{0,160}return with
@@ -128,8 +128,8 @@ Create one named skill.
       scenario: workflowSpineScenario,
       result: {
         ...validResult,
-        scenario_id: "creating-skills-workflow-spine",
-        skill_under_test: "shravan-dev-workflow:creating-skills",
+        scenario_id: "skills-creation-workflow-spine",
+        skill_under_test: "shravan-dev-workflow:skills-creation",
         decision:
           "Start with skill-audit to check overlap. Then create an authoring receipt and placement audit.",
         coverage_evidence: [
@@ -147,11 +147,11 @@ Create one named skill.
     ]);
   });
 
-  test("rejects great verdicts for blocker-bearing creating-skills draft evaluations", () => {
+  test("rejects great verdicts for blocker-bearing skills-creation draft evaluations", () => {
     const evaluateDraftScenario = parseScenarioMarkdown({
-      filePath: "/repo/tests/skills/pressure-scenarios/creating-skills-evaluate-draft.md",
-      markdown: `scenario_id: creating-skills-evaluate-draft
-skill_under_test: shravan-dev-workflow:creating-skills
+      filePath: "/repo/tests/skills/pressure-scenarios/skills-creation-evaluate-draft.md",
+      markdown: `scenario_id: skills-creation-evaluate-draft
+skill_under_test: shravan-dev-workflow:skills-creation
 expect_proof_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
 expect_proof_regex: highest risk
 expect_proof_regex: first required revision
@@ -168,8 +168,8 @@ Evaluate this weak draft.
       scenario: evaluateDraftScenario,
       result: {
         ...validResult,
-        scenario_id: "creating-skills-evaluate-draft",
-        skill_under_test: "shravan-dev-workflow:creating-skills",
+        scenario_id: "skills-creation-evaluate-draft",
+        skill_under_test: "shravan-dev-workflow:skills-creation",
         decision:
           "Verdict: great. Blocker: missing workflow spine. Highest risk: proof gap. First required revision: add a workflow. Retest requirement: rerun pressure.",
         coverage_evidence: ["blocker text is present"],
@@ -190,9 +190,9 @@ Evaluate this weak draft.
   test("rejects polarity-blind security/cache guidance", () => {
     const securityBoundaryScenario = parseScenarioMarkdown({
       filePath:
-        "/repo/tests/skills/pressure-scenarios/creating-skills-security-and-cache-boundary.md",
-      markdown: `scenario_id: creating-skills-security-and-cache-boundary
-skill_under_test: shravan-dev-workflow:creating-skills
+        "/repo/tests/skills/pressure-scenarios/skills-creation-security-and-cache-boundary.md",
+      markdown: `scenario_id: skills-creation-security-and-cache-boundary
+skill_under_test: shravan-dev-workflow:skills-creation
 expect_proof_regex: skill-security-review.{0,8}md
 expect_proof_regex: license|permission|copy-vs-adapt|rights
 expect_forbidden_regex: nothing is blocked|nothing is deferred|no concern.{0,80}(installed-cache|cache mutation|home)
@@ -207,8 +207,8 @@ Add scripts, hooks, copied assets, and cache refresh after every edit.
       scenario: securityBoundaryScenario,
       result: {
         ...validResult,
-        scenario_id: "creating-skills-security-and-cache-boundary",
-        skill_under_test: "shravan-dev-workflow:creating-skills",
+        scenario_id: "skills-creation-security-and-cache-boundary",
+        skill_under_test: "shravan-dev-workflow:skills-creation",
         decision:
           "Use skill-security-review.md, but nothing is blocked or deferred. There is no concern about installed-cache mutation; refresh after every edit and copy public repo assets wholesale after noting license rights.",
         coverage_evidence: ["permission and copy-vs-adapt words appear"],

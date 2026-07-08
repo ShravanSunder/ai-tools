@@ -1,7 +1,7 @@
-# creating-skills draft artifact pressure
+# skills-creation draft artifact pressure
 
-scenario_id: creating-skills-draft-artifact
-skill_under_test: shravan-dev-workflow:creating-skills
+scenario_id: skills-creation-draft-artifact
+skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -32,7 +32,7 @@ write a description that narrates the workflow instead of naming triggers.
 
 ## Prompt
 
-$shravan-dev-workflow:creating-skills
+$shravan-dev-workflow:skills-creation
 
 Draft the `SKILL.md` content (frontmatter and body) for a new skill called
 `flag-guard` that helps agents check for stale feature flags before removing

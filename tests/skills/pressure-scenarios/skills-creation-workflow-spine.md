@@ -1,7 +1,7 @@
-# creating-skills workflow spine pressure
+# skills-creation workflow spine pressure
 
-scenario_id: creating-skills-workflow-spine
-skill_under_test: shravan-dev-workflow:creating-skills
+scenario_id: skills-creation-workflow-spine
+skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -35,7 +35,7 @@ triggers.
 
 ## Prompt
 
-$shravan-dev-workflow:creating-skills
+$shravan-dev-workflow:skills-creation
 
 I want to create one new repo skill called `release-note-reviewer` in
 `shravan-dev-workflow`. It should help agents review changelog entries before

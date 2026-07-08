@@ -48,7 +48,7 @@ ops-*                external operational systems  ops-security-review
                                                   ops-linear-tracking
 debug-*              root-cause investigation      debug-investigation
 docs-*               durable documentation         docs-maintain
-skill-*              skill authoring/maintenance   creating-skills
+skill-*              skill authoring/maintenance   skills-creation
                                                   skill-audit
 tui-*                structured chat presentation  tui-presentation
 ```
@@ -237,7 +237,7 @@ risk. It is for continuation, audit, or manual review of work already in motion.
   official Codex Security plugin workflows.
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and
   dependencies while keeping docs as the design source of truth.
-- `creating-skills`: creates, updates, or evaluates one named skill or accepted
+- `skills-creation`: creates, updates, or evaluates one named skill or accepted
   draft with a compact workflow spine, branch references, pressure proof,
   platform validation, source-adaptation checks, and sensitive-resource routing.
 - `skill-audit`: audits current skill portfolios, session evidence, and upstream

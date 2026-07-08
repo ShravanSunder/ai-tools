@@ -1,9 +1,9 @@
 ---
-name: creating-skills
+name: skills-creation
 description: Use when creating, updating, or evaluating one named skill; turning a repeated agent failure into skill guidance; deciding skill invocation, description wording, reference structure, or pressure proof. Not for repo-wide skill portfolio audits - use skill-audit.
 ---
 
-# Creating Skills
+# Skills Creation
 
 ## Stance
 

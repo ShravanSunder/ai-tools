@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-08 Skills Creation Rename](2026-07-08-skills-creation-rename.md)
 - [2026-07-08 Manage Agents Structure Cleanup](2026-07-08-manage-agents-structure-cleanup.md)
 - [2026-07-08 Manage Agents Pattern Selector](2026-07-08-manage-agents-pattern-selector.md)
 - [2026-07-07 Manage Agents Skill](2026-07-07-manage-agents.md)

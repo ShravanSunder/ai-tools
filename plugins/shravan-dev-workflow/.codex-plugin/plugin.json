@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.6.45",
+  "version": "1.6.46",
   "description": "Shravan's development workflow plugin with goal orchestration, research swarms, spec creation swarms, spec handoff, plan creation swarms, repo improvement planning, mental-model reconvergence, docs maintenance, adversarial spec review swarms, operations security review routing, observability proof loops, subordinate agent management, implementation review orchestration, PR wrap-up, plan workflows, debugging, skill authoring, skill audits, progressive TUI presentation guidance, and operations Linear tracking.",
   "author": {
     "name": "Shravan Sunder"
@@ -49,7 +49,7 @@
     "implementation-pr-wrapup",
     "debugging",
     "bug-hunt",
-    "creating-skills",
+    "skills-creation",
     "skill-authoring",
     "skill-audit",
     "ops-linear-tracking",
@@ -63,7 +63,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Shravan's workflow with spec creation, review, security routing, observability, PR wrap-up, debugging, TUI, and PM",
-    "longDescription": "Use Shravan Dev Workflow to create specs with bounded spec-creation swarms, gather source-grounded evidence with research-swarm, package spec/design context with spec-handoff, create written implementation plans with plan-creation-swarm, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, reconverge unstable shared mental models with discuss-clarify-mental-models, maintain docs and workflow artifact lifecycle, review drafted specs with bounded review lanes, route explicit security audits to the official Codex Security workflows through ops-security-review, guide local OpenTelemetry and Victoria observability proof loops through ops-observability-stack, and manage subordinate AI agents, sidekicks, ACPX sessions, JSON automation, flows, and custom ACP adapter boundaries with manage-agents. It also runs evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested, validates and addresses accepted review findings, wraps up PRs with checks/comments/review-thread/merge gates through implementation-pr-wrapup, packages copy-pasteable plan and implementation handoffs, runs plan-review-swarm for implementation-plan review, executes written plans with implementation-execute-plan controller-owned verification, writes lane artifacts for clear spec/plan/debug/research work unless chat-only/no-files was requested, requires subagent packets to carry source anchors, security context, candidate-evidence labels, and completion receipts, investigates bugs before fixes, authors and evaluates named skills with creating-skills, audits skill portfolios from real session evidence, and includes progressive TUI presentation guidance that separates visual structure from semantic markdown, plus operations Linear tracking.",
+    "longDescription": "Use Shravan Dev Workflow to create specs with bounded spec-creation swarms, gather source-grounded evidence with research-swarm, package spec/design context with spec-handoff, create written implementation plans with plan-creation-swarm, turn clear long-horizon work into verifiable Codex or Claude /goal contracts, reconverge unstable shared mental models with discuss-clarify-mental-models, maintain docs and workflow artifact lifecycle, review drafted specs with bounded review lanes, route explicit security audits to the official Codex Security workflows through ops-security-review, guide local OpenTelemetry and Victoria observability proof loops through ops-observability-stack, and manage subordinate AI agents, sidekicks, ACPX sessions, JSON automation, flows, and custom ACP adapter boundaries with manage-agents. It also runs evidence-backed implementation reviews with bounded reviewer lanes, Codex subagents as the default and majority backend, plus optional Claude or Gemini/agy lanes when requested, validates and addresses accepted review findings, wraps up PRs with checks/comments/review-thread/merge gates through implementation-pr-wrapup, packages copy-pasteable plan and implementation handoffs, runs plan-review-swarm for implementation-plan review, executes written plans with implementation-execute-plan controller-owned verification, writes lane artifacts for clear spec/plan/debug/research work unless chat-only/no-files was requested, requires subagent packets to carry source anchors, security context, candidate-evidence labels, and completion receipts, investigates bugs before fixes, authors and evaluates named skills with skills-creation, audits skill portfolios from real session evidence, and includes progressive TUI presentation guidance that separates visual structure from semantic markdown, plus operations Linear tracking.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -90,7 +90,7 @@
       "Run implementation-execute-plan on this plan.",
       "Use implementation-pr-wrapup to finish this PR.",
       "Investigate this bug before fixing it.",
-      "Use creating-skills to create, update, or evaluate one named skill.",
+      "Use skills-creation to create, update, or evaluate one named skill.",
       "Audit these skills against session evidence."
     ]
   }
