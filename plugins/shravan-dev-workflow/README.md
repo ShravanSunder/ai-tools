@@ -5,9 +5,8 @@ spec, plan, implementation, review, handoff, debugging, docs, and operations
 work.
 
 The plugin is built around one idea: each workflow phase should have a clear
-owner, a clear artifact boundary, and a clear next handoff. Broad counsel still
-exists through `quorum-counsel`, but day-to-day work should use the narrower
-phase skills here.
+owner, a clear artifact boundary, and a clear next handoff. Day-to-day work
+should use the narrower phase skills here.
 
 ## Mental Model
 
@@ -257,10 +256,6 @@ normal review path
   implementation-review-swarm / plan-review-swarm / spec-review-swarm
       -> Codex reviewer lanes by default
       -> Claude or Gemini/agy only when explicitly requested
-
-manual counsel path
-  quorum-counsel
-      -> still available, but not the default workflow
 ```
 
 Oracle is excluded from `shravan-dev-workflow` review swarms.
