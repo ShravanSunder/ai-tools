@@ -1,150 +1,184 @@
 ---
 name: skills-creation
-description: Use when creating, updating, or evaluating one named skill; turning a repeated agent failure into skill guidance; deciding skill invocation, description wording, reference structure, or pressure proof. Not for repo-wide skill portfolio audits - use skill-audit.
+description: Use when creating, updating, or evaluating one named skill; turning repeated agent behavior into durable guidance; or deciding trigger wording, skill structure, references, steering language, or proof so future agents behave predictably. Not for repo-wide skill portfolio audits - use skill-audit.
 ---
 
 # Skills Creation
 
 ## Stance
 
-Work on exactly one named skill or accepted draft per run. Predictability
-(the agent takes the same route every time, even when its output text
-varies) is the target -- a great skill makes behavior steadier under
-pressure, it does not read like a manual. Broad repo-wide inventory,
-duplicate-surface archaeology, or "which skills should exist" belongs to
-`skill-audit`; defer it once, here, and do not re-open it mid-run. Terms
-below get a short gloss; `references/glossary.md` holds the fuller meaning.
+Work on exactly one named skill or accepted draft per run. A great skill is a
+compact behavior-shaping artifact: it makes the agent follow a predictable
+process, not a fixed script. The craft is choosing what belongs in the YAML
+trigger, what belongs in `SKILL.md`, what belongs in references, what language
+pulls the model into the right latent space, and what proof shows the wording
+actually changed behavior. Broad portfolio inventory, duplicate-surface
+archaeology, or "which skills should exist" belongs to `skill-audit`.
 
-## Authoring State
+## Great Skill Model
 
-Show this compact block in the chat response at the start of every run --
-including a chat-only run with no file edits -- and show it again, in full,
-at run completion; at intermediate step boundaries, state only the fields
-that changed since it was last shown. It is the only cross-branch state
-artifact -- branch references may define their own labeled return blocks
-that feed its fields -- and it replaces every other ledger, receipt, or
-placement-audit table. Showing it is not optional narration; a run without
-it is incomplete.
+Every skill has four surfaces:
+
+- YAML/frontmatter is the trigger surface. It answers "should I load this
+  now?" with concrete situations, symptoms, user words, adjacent-skill
+  boundaries, and a short payoff.
+- `SKILL.md` is the mental model and main path. It tells the agent how to think
+  and act when the skill is loaded.
+- `references/` carries branch depth: details, rubrics, examples, platform
+  mechanics, security gates, and longer proof protocols that only some runs
+  need.
+- Tests and pressure proof validate behavior. They are not the identity of the
+  skill, but behavior-changing skill text is not ready to ship without them.
+
+Use these quality axes while authoring:
+
+- trigger: the name and description are searchable, trigger-only, and concise.
+- mental model: the body introduces the concept or lens the agent should think
+  with.
+- path: ordered steps appear only where order matters, and each step has a
+  checkable completion criterion.
+- workflow: the all-run route is explicit, and branches have observable load
+  conditions and return shapes.
+- hierarchy: all-run material stays in `SKILL.md`; branch-only depth sits
+  behind a strong context pointer.
+- steering: leading words, positive shapes, required slots, and observable
+  predicates shape behavior more reliably than vague advice.
+- pruning: delete duplication, sediment, sprawl, no-op text, and branch detail
+  that bloats the main path.
+- proof: static validation proves structure; pressure proof proves changed
+  behavior.
+
+Load `references/glossary.md` when these terms need fuller meaning.
+
+## Scaled Run Note
+
+Use a compact run note when implementation, shipping, disputed scope, or proof
+needs tracking. Do not make chat-only discussion perform state ceremony.
 
 ```text
 classification: create | update | evaluate
 target skill / owner plugin:
-reusable job:
-baseline: observed (update) | hypothesized (create) | review target (evaluate) -- what fails or is being judged
+reusable behavior:
+baseline or review target:
 branches loaded:
 security route: allowed | disallowed | blocked | deferred | n/a
-proof status: RED | GREEN | REFACTOR | static-only | proof gap
+proof route: static-only | pressure scenario | micro-test | proof gap
 shipping status: source-only | PR-ready | released
 ```
 
-Use these exact field labels. One line per field is enough; expand a field
-only when it is disputed or it changes the edit boundary.
+## Workflow
 
-## Steps
+**1. Name the promise.** Classify the run; run an existing-surface check; name
+the reusable behavior in one sentence: "This skill helps agents reliably do X
+when Y happens." Completion: classification, owner, reusable behavior, and
+baseline or review target are named. Evaluating an existing skill or draft
+routes to `references/great-skill-evaluation.md`.
 
-**1. Frame.** Classify the run; run an existing-surface check (does a skill
-already own this reusable job?); name the reusable job in one sentence; state
-the baseline -- observed (update: names the current failure) or
-hypothesized (create: names the likely failure) or review target (evaluate:
-names what is being judged). Completion: classification, owner plugin,
-reusable job, and baseline are all named. Evaluating an existing skill or
-draft routes straight to
-`references/great-skill-evaluation.md`.
+For any classify, scope, or draft response, state the surface allocation in
+plain words before the details: YAML/frontmatter is the trigger surface,
+`SKILL.md` will carry the mental model and main path, `references/` will carry
+branch depth, and pressure or static proof will validate the change. This is
+part of alignment, not ceremony.
 
-**2. Prove first.** A behavior-changing update needs a pressure scenario or
-micro-test that already FAILS against the current skill before any edit is
-made or described -- that is RED, and it comes before step 4, not after. A
-create is due a scenario before it ships; a hypothesis is enough to draft
-against. A mechanical or metadata-only change (typo, filename, version bump)
-skips this and is noted as static-only instead. If an observed failure
-cannot be reproduced after a bounded number of attempts, record the
-baseline as hypothesized instead, cite the original observation, and
-proceed. Completion: a named failing scenario or micro-test exists for
-behavior-changing work, or the change is explicitly mechanical.
+**2. Design the trigger.** Write the YAML description as a context pointer, not
+a workflow summary. It should start with the real loading condition, use words
+the user/docs/code are likely to use, name distinct branches once, include a
+brief payoff when useful, and avoid internal step narration. Load
+`references/frontmatter-design.md` when trigger wording, adjacent-skill
+boundaries, or invocation tradeoffs are the hard part. Completion: description
+text answers "should I load this now?" without letting the agent skip the body.
 
-**3. Design the surface.** Invocation is a tradeoff between context load
-(model-invoked, discovered every turn) and cognitive load (routed or
-user-invoked, a human carries it). Write the description as trigger text --
-when to load -- never a workflow summary. Placement rule (the one rule this
-skill also teaches by example, stated here once): all-branch material stays in
-`SKILL.md`; branch-only depth goes in exactly one reference (`<branch>.md`);
-a contract shared by two or more independent consumers -- lanes, subagents,
-other skills, copy-paste prompts -- becomes a `schema-<name>.md` of slots and
-templates only, never judgment or policy prose; a schema used by only one
-lane stays colocated inside that lane file instead of being promoted;
-`glossary.md` holds terms and meaning only, never rules or field lists.
-Before writing, hunt restatements of the same rule and collapse them into one
-leading word -- a short, memorable phrase that carries the rule on its own
-(for example "existing-surface check" or "RED-first") -- instead of repeating
-the paragraph that explains it. When behavior needs to change, match the
-observed failure to its guidance form instead of reaching for prose:
+**3. Build the mental model.** Decide what concept, lens, or leading word the
+skill should pull into the model's latent space. Prefer existing domain or
+engineering language over invented jargon. State the behavior the skill
+stabilizes and the judgment it should improve. Completion: `SKILL.md` has a
+clear mental model before details or exceptions.
+
+**4. Shape the main path.** Decide whether the skill is all steps, all
+reference, or both. Put ordered steps in `SKILL.md` only when order changes
+behavior. End each step with a checkable completion criterion that demands the
+necessary legwork. Completion: the main path is visible in one scan and cannot
+be mistaken for a loose essay.
+
+**5. Build the workflow and branches.** Turn the main path into a route map.
+Name the all-run workflow first: what the agent does from load to completion.
+Then name branches only when an observable condition changes the work. Each
+branch needs a predicate, destination, and return shape: when to enter, where
+to read deeper guidance, and what result comes back to the main path. Do
+not create branches for topics that are merely interesting; create them when
+the agent would otherwise guess, skip a gate, or overload `SKILL.md`.
+Completion: the workflow has one all-run spine, each branch has a load
+condition, and every branch returns something the main path can use. Load
+`references/workflow-topology.md` for detailed workflow and branch design.
+
+**6. Place the depth.** Inline material every run needs. Move branch-specific
+walkthroughs, per-provider examples, detailed rubrics, platform mechanics,
+security review, and long proof protocols into `references/`. Context pointers
+must name the observable condition for loading the reference and what it
+returns. Use ordinary references for ordinary branch depth. For complex skills
+with independent lanes, multi-consumer outputs, or tool-validated shapes, put
+shared shapes in one `lane-schema`, `output-schema`, or `tool-schema` home and
+have each consumer point to it instead of copying fields. Completion: nothing
+sits in two homes, and branch depth is behind strong pointers rather than
+filename lists. Load
+`references/reference-design.md` when deciding what makes a reference file good
+or whether branch material belongs inline. Load `references/schema-design.md`
+when real lanes, skills, outputs, or tools share the same slots or shape.
+
+**7. Steer the failure.** Match the guidance form to the observed or
+hypothesized failure:
 
 | observed failure | guidance form |
 | --- | --- |
 | known rule skipped under pressure | bright-line rule + rationalization table |
-| wrong output shape | positive output contract or template |
+| wrong output shape | positive output shape or template |
 | omitted element | required slot next to the output |
 | conditional behavior mistake | observable predicate + action |
 | shallow legwork | stronger completion criterion |
 | wrong invocation | sharper description or user-invoked route |
 | reference retrieval gap | stronger context pointer or inline material |
 
-Completion: invocation choice and trigger-only description are decided, the
-placement rule has been applied so nothing sits in two homes, and any wording
-change cites a row above.
+Completion: wording changes cite the failure form they are meant to fix.
 
-**4. Write or edit.** Sensitive resources -- scripts, hooks, assets, package
-scripts, shell/network behavior, third-party skill/source adoption,
-installed-cache/home-level mutation, or anything in that reference's
-Sensitive Surfaces list -- route through
-`references/skill-security-review.md` BEFORE editing starts, not alongside
-it. Scaffolding, metadata, packaging, and platform-specific mechanics route
-through `references/platform-mechanics.md`. A drafted or edited skill body --
-including a chat-only draft -- obeys the placement rule on itself:
-branch-only is a property of who consumes the material, not its length -- a
-per-provider walkthrough, a per-case worked example, or a rubric for one path
-becomes a named reference pointer (`references/<name>.md` plus one line on
-when to load it) the first time it is drafted, short or not, never inline
-body text pending later growth; the draft body itself carries only
-all-branch material, and each step in that drafted body ends with a
-checkable stop condition -- a `Completion:` line or a named gate section
-such as `Stop Conditions` or `Removal Gate` -- the form is free, the slot is
-not. Completion: every sensitive surface touched by this run
-has an allowed, disallowed, blocked, or deferred decision, platform
-scaffolding is handled or explicitly not-applicable, and any drafted skill
-body inlines only all-branch material with branch depth behind named
-reference pointers from the first draft.
+**8. Prove under pressure.** Keep proof visible, but sized to the change.
+Behavior-changing updates caused by an observed failure need RED before the
+edit. New skill drafts may start from a failure hypothesis, but they need GREEN
+before `PR-ready` or `released`. Mechanical changes use static validation only.
+Choose proof by skill type:
 
-**5. Prove behavior.** Behavior-changing guidance needs GREEN from
-`references/pressure-testing.md` after the edit. Structural proof (files
-valid, validator passes) is never relabeled behavior proof (behavior changes
-under pressure) -- they are different claims, and both may be true at once.
-A proof gap may only coexist with shipping status `source-only`; anything
-`PR-ready` or `released` that
-changes behavior requires GREEN, not a gap. Completion: proof status matches
-shipping status under that rule.
+- discipline skill: pressure scenario plus rationalization capture.
+- technique skill: application to a fresh but similar task.
+- pattern skill: recognition, application, and counter-example.
+- reference skill: retrieval and correct use of the referenced material.
+- mechanical change: validator, packaging, or metadata proof only.
 
-**6. Prune and ship.** Run a deletion test per sentence: does removing it
-change agent behavior versus the model's default? If not, it is a no-op --
-delete it rather than smoothing it into nicer prose. Every rule keeps exactly
-one home; a rule with two homes is unfinished pruning, not redundancy for
-safety. When shipping, route the version bump, changelog entry, and
-review/PR proof through `references/platform-mechanics.md`. Completion: no
-duplicated all-branch material remains, and shipping routes are named or the
-run is explicitly source-only.
+Completion: proof route is explicit and static proof is not relabeled behavior
+proof. Load `references/pressure-testing.md` for the detailed protocol.
+
+**9. Prune and ship.** Run the deletion test sentence by sentence: would agent
+behavior change if this disappeared? If not, delete it. When shipping, route
+platform validation, versioning, changelog, and cache/readback decisions through
+`references/platform-mechanics.md`. Sensitive surfaces -- scripts, hooks,
+assets, package scripts, shell/network behavior, third-party source adoption,
+installed-cache refresh, or home-level mutation -- route through
+`references/skill-security-review.md` before outlining an authoring path or
+writing them. Chat-only sensitive-surface reviews still use that reference's
+return labels, including license/permission and copy-vs-adapt decisions for
+third-party source. Completion: the skill is compact, valid, public-safe, and
+proof status matches shipping status.
 
 ## Completion Blockers
 
 The run is not done while any of these hold:
 
-- the Authoring State block was not shown in chat, or is incomplete on a
-  field this run actually depends on;
-- a behavior-changing update skipped RED-first -- an edit was made or
-  described before a failing scenario or micro-test was named;
-- a proof gap exists and shipping status is anything other than
-  `source-only`;
+- the YAML description summarizes the workflow instead of triggering the skill;
+- `SKILL.md` lacks a mental model or main path;
+- the workflow has branches without observable predicates or return shapes;
+- branch-only depth is inlined without a strong reason;
+- a behavior-changing shipped update has no behavior proof or accepted proof
+  gap;
+- static validation is claimed as behavior proof;
 - a sensitive surface was touched without an allowed/disallowed/blocked/
   deferred decision;
-- any rule still has two homes;
-- required platform static validation failed, or was skipped without a
-  stated reason.
+- required platform static validation failed, or was skipped without a stated
+  reason.

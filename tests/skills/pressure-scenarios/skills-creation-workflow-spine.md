@@ -9,10 +9,11 @@ expect_decision_regex: classification:\s*create|classification.{0,40}create
 expect_decision_regex: (defer|deferred|out of scope|not now|elsewhere).{0,140}(inventory|portfolio|duplicate|skill-audit)
 expect_decision_regex: description:?\s*use when
 expect_proof_regex: classification:\s*create|classification.{0,40}create
-expect_proof_regex: reusable job:\s*\S
-expect_proof_regex: baseline:\s*hypothesiz\w*|hypothesiz\w*.{0,100}baseline
+expect_proof_regex: reusable (job|behavior):\s*\S
+expect_proof_regex: baseline( or review target)?:\s*hypothesiz\w*|hypothesiz\w*.{0,100}baseline
 expect_proof_regex: (broad|repo-wide|portfolio-wide).{0,80}(inventory|portfolio|duplicate).{0,180}(defer|deferred|out of scope|skill-audit|elsewhere|not now)|defer.{0,180}(inventory|portfolio|duplicate)
-expect_proof_regex: authoring state
+expect_proof_regex: (trigger surface|yaml|frontmatter|description).{0,200}(when|load|trigger)
+expect_proof_regex: (mental model|leading word|latent space|main path)
 expect_proof_regex: description:?\s*use when
 expect_forbidden_regex: start with `?skill-audit`? to|begin with `?skill-audit`? to|route.{0,40}primarily.{0,40}`?skill-audit`?
 expect_forbidden_regex: route.{0,40}primarily.{0,40}`?superpowers:writing-skills`?|route.{0,40}primarily.{0,40}`?skill-creator`?
@@ -51,14 +52,15 @@ new skill.
 - Skill is invoked.
 - Agent classifies the request as `create` for one named target
   (`release-note-reviewer`).
-- Agent names the reusable job the skill repeats.
+- Agent names the reusable behavior the skill repeats.
 - Agent states the baseline is hypothesized, since no skill exists yet to
   observe failing.
 - Agent defers broad repo-wide inventory/portfolio/duplicate-surface work,
   naming `skill-audit` as the separate route if the user wants it later.
 - Agent drafts a `description:` line that starts "Use when" and names
   concrete triggering situations, not a workflow summary.
-- Agent names the Authoring State fields it is tracking for this run.
+- Agent treats YAML/frontmatter as the trigger surface and names how the skill
+  body will carry the mental model or main path.
 
 ## Failure Signals
 
@@ -68,4 +70,5 @@ new skill.
 - Skips the hypothesized-baseline framing entirely.
 - Description narrates workflow steps ("first read X, then do Y") instead of
   naming triggers.
-- Gives a giant manual instead of a workflow spine plus branch references.
+- Gives a giant manual or proof-status ritual instead of a compact great-skill
+  model plus branch references.

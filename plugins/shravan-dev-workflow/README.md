@@ -238,8 +238,9 @@ risk. It is for continuation, audit, or manual review of work already in motion.
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and
   dependencies while keeping docs as the design source of truth.
 - `skills-creation`: creates, updates, or evaluates one named skill or accepted
-  draft with a compact workflow spine, branch references, pressure proof,
-  platform validation, source-adaptation checks, and sensitive-resource routing.
+  draft with YAML trigger design, a `SKILL.md` mental model and main path,
+  reference depth, steering language, pressure proof, platform validation,
+  source-adaptation checks, and sensitive-resource routing.
 - `skill-audit`: audits current skill portfolios, session evidence, and upstream
   inspirations before recommending create/update/merge/skip decisions.
 - `tui-presentation`: gives agents a shared structure for readable chat/TUI

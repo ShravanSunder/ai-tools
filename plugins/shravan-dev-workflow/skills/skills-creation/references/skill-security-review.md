@@ -45,7 +45,7 @@ privileged actions:
 third-party source:
 license / permission state:
 copy-vs-adapt decision:
-decision: allowed | disallowed | blocked | deferred -- sets the Authoring State `security route` field
+decision: allowed | disallowed | blocked | deferred -- sets the run note `security route` field when one is used
 required proof:
 public-safe constraints:
 review route:

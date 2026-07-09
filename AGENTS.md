@@ -67,8 +67,9 @@ live. It should not duplicate the full manuals from meta-skills.
 
 When creating, editing, or evaluating one named skill or accepted draft in this
 repo, use `shravan-dev-workflow:skills-creation` as the owning workflow. It owns
-the authoring receipt, workflow-spine/reference split, pressure proof, platform
-mechanics branch, source-adaptation check, and sensitive-resource route.
+the great-skill model: YAML trigger design, `SKILL.md` mental model and main
+path, reference depth, steering language, pruning, pressure proof, platform
+mechanics, source-adaptation checks, and sensitive-resource routing.
 
 Use `shravan-dev-workflow:skill-audit` for broad evidence-backed questions about
 which skills to create, update, merge, or skip across the repo. `skills-creation`
@@ -81,8 +82,9 @@ When doing skill work in this repo:
 2. If the target is not named, use `skill-audit` for broad portfolio
    classification or ask for a named target.
 3. Use `skills-creation` for the named target's create/update/evaluate workflow.
-4. Use `skills-creation` references for pressure-first design, Codex/Claude
-   platform mechanics, source adaptation, pruning, and sensitive resources.
+4. Use `skills-creation` references for trigger/invocation choices, mental-model
+   and reference hierarchy, pressure proof, Codex/Claude platform mechanics,
+   source adaptation, pruning, and sensitive resources.
 5. Keep `SKILL.md` compact and progressive. Put depth in `references/` and
    deterministic mechanics in `scripts/`.
 6. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios
@@ -100,14 +102,15 @@ When doing skill work in this repo:
 Detailed mechanics stay in the owning skills and references:
 
 - `skills-creation` owns create/update/evaluate for one named skill or accepted
-  draft, including workflow-spine authoring, great-skill evaluation,
-  pressure-proof design, platform mechanics, source adaptation, and
-  sensitive-resource routing.
+  draft, including YAML trigger design, the `SKILL.md` mental model and main
+  path, reference depth, great-skill evaluation, pressure-proof design, platform
+  mechanics, source adaptation, and sensitive-resource routing.
 - `skill-audit` owns evidence-backed recommendations about what to update,
   create, merge, or skip across a broader skill surface.
-- `superpowers:writing-skills` is source inspiration for pressure-first skill
-  design and rationalization traps; normal repo skill authoring routes through
-  `skills-creation`.
+- `superpowers:writing-skills` is source inspiration for pressure proof and
+  rationalization traps; Matt-style great-skill vocabulary is source inspiration
+  for invocation, hierarchy, steering, and pruning. Normal repo skill authoring
+  routes through `skills-creation`.
 - `skill-creator` owns Codex skill anatomy and generated metadata as platform
   support loaded through `skills-creation/references/platform-mechanics.md`.
 - `tests/skills/README.md` owns the local pressure-test runner contract.
@@ -172,7 +175,7 @@ or generic Victoria query docs into app repos.
 | implementation-execute-plan | `plugins/shravan-dev-workflow/skills/implementation-execute-plan/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
 | ops-observability-stack | `plugins/shravan-dev-workflow/skills/ops-observability-stack/` | Shared local OTel and Victoria stack operations, producer boundaries, resource naming, and debug/beta query loops |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
-| skills-creation | `plugins/shravan-dev-workflow/skills/skills-creation/` | Create, update, or evaluate one named skill or accepted draft with workflow-spine authoring, branch references, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
+| skills-creation | `plugins/shravan-dev-workflow/skills/skills-creation/` | Create, update, or evaluate one named skill or accepted draft with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed portfolio audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
@@ -231,9 +234,10 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
   `skills-creation` for named create/update/evaluate work before relying on
   these bullets.
 - When creating, editing, evaluating, or pressure-testing one named skill, load
-  `skills-creation`. Its references adapt the pressure-first lessons from
-  `superpowers:writing-skills` and the platform mechanics from `skill-creator`.
-  For broad portfolio questions, use `skill-audit` instead.
+  `skills-creation`. Its references adapt Matt-style great-skill vocabulary,
+  pressure-proof lessons from `superpowers:writing-skills`, and platform
+  mechanics from `skill-creator`. For broad portfolio questions, use
+  `skill-audit` instead.
 - Name skills with active, searchable verbs in hyphen-case.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
