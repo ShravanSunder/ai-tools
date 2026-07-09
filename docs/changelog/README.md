@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-08 Manage Agents Structure Cleanup](2026-07-08-manage-agents-structure-cleanup.md)
 - [2026-07-08 Manage Agents Pattern Selector](2026-07-08-manage-agents-pattern-selector.md)
 - [2026-07-07 Manage Agents Skill](2026-07-07-manage-agents.md)
 - [2026-07-05 Discuss-With-Me Retired From Plugin Discovery](2026-07-05-discuss-with-me-retired.md)
