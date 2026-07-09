@@ -66,9 +66,12 @@ for that mode. It should start with the real loading condition, use words the
 user/docs/code are likely to use, name distinct branches once, include a brief
 payoff when useful, and avoid internal step narration. Load
 `references/frontmatter-design.md` when trigger wording, adjacent-skill
-boundaries, or invocation tradeoffs are the hard part. Completion: invocation
-mode is named, and description matches that mode without summarizing the
-workflow.
+boundaries, or invocation tradeoffs are the hard part. When explicit-only,
+background-only, or client-specific invocation controls are requested, load
+`references/platform-mechanics.md` and return the platform encoding, such as
+Codex `agents/openai.yaml` policy versus Claude-oriented frontmatter fields.
+Completion: invocation mode is named, and description or platform policy
+matches that mode without summarizing the workflow.
 
 **4. Build the mental model.** Decide what concept, lens, or leading word the
 skill should pull into the model's latent space. Prefer existing domain or

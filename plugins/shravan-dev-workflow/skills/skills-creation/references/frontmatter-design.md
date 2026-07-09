@@ -17,6 +17,19 @@ description: required; max 1024 characters; action-oriented trigger phrase
 that tells the agent when to invoke the skill.
 ```
 
+## Invocation Controls
+
+First decide the invocation behavior: model-invoked, explicit-only,
+background-only, or routed. Then choose the platform encoding. Do not add
+platform-specific invocation-control frontmatter by default.
+
+Use `disable-model-invocation: true` or `user-invocable: false` only when the
+user explicitly asks for manual-only or background-only behavior, or when an
+existing target client contract already uses those fields. For Codex, route the
+exact encoding through `references/platform-mechanics.md` because Codex
+invocation policy lives in `agents/openai.yaml`, not portable `SKILL.md`
+frontmatter.
+
 ## Good Description
 
 A good `description`:

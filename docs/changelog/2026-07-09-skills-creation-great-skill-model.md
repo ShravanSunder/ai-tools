@@ -1,7 +1,7 @@
 # Skills Creation Great Skill Model
 
 - Marketplace plugin: `shravan-dev-workflow`
-- Version: `1.6.45` -> `1.6.48`
+- Version: `1.6.45` -> `1.6.49`
 
 ## User-Visible Behavior Changes
 
@@ -33,6 +33,10 @@
   symptoms instead of listing internal craft surfaces.
 - Added invocation mode to the main trigger-design step so new skills choose
   model-invoked, user-invoked, or routed behavior before description wording.
+- Added platform-specific invocation-control guidance: do not add
+  `disable-model-invocation` or `user-invocable` by default; use them only for
+  explicit manual-only/background-only client contracts, and route Codex
+  invocation policy through `agents/openai.yaml`.
 - Kept pressure testing visible in `SKILL.md`, but refocused it as the proof
   gate for behavior-changing skill text rather than the identity of the skill.
 - Reworked `glossary.md`, `great-skill-evaluation.md`, and
