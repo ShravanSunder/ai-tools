@@ -3,8 +3,9 @@
 Build the route before placing depth. A great skill has an all-run spine and
 only the branches needed to keep agents from guessing.
 
-Load this when a skill's workflow, branch structure, reference split, or return
-path is unclear.
+This reference owns workflow shape, branch structure, reference split, and
+return path design. Return the all-run spine plus any branch predicates,
+destinations, and return shapes the main path needs.
 
 ## Topology Model
 

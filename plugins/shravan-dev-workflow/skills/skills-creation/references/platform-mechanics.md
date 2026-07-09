@@ -3,11 +3,10 @@
 Handle Codex and Claude skill mechanics without turning platform scaffolding
 into authoring philosophy.
 
-Load this when creating or updating skill folders, updating
-`agents/openai.yaml`, plugin manifests, marketplace metadata, Claude
-packaging, validation commands, or release/readback status, or when
-deciding which static validation proves structure versus which proof proves
-behavior.
+This reference owns platform scaffolding, manifests, marketplace metadata,
+validation commands, version/changelog routing, and release/readback status.
+Return the platform surfaces touched, required static validation, and shipping
+route.
 
 ## Codex Mechanics
 

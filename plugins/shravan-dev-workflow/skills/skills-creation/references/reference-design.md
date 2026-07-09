@@ -3,19 +3,24 @@
 References hold depth that the main path can call when a branch needs it. A
 good reference changes behavior without making every run carry its weight.
 
-Load this when deciding where material belongs. Start with `SKILL.md` plus
+`SKILL.md` owns load conditions. Once a reference is open, the reference owns
+the branch work, local rules, and return shape. Start with `SKILL.md` plus
 ordinary references. Reach for lanes and schemas when the workflow has real
 independent lanes, shared outputs, or tool-validated shapes.
 
 ## Good Reference File
 
+A reference is branch depth the main path already chose to open. It is the home
+for local judgment, detailed procedure, examples, rubrics, templates, caveats,
+or schema links that would overload `SKILL.md`.
+
 A good `references/*.md` file:
 
-- starts by saying when to load it;
-- names the branch or decision it owns;
-- returns a concrete result to the main path;
+- opens by naming the branch, decision, or detail it owns;
+- states the concrete result it returns to the main path;
 - holds one coherent kind of depth;
 - keeps rules, examples, caveats, and templates co-located for that branch;
+- lets the parent `SKILL.md` pointer own routing;
 - avoids restating all-run rules from `SKILL.md`;
 - has checkable stop conditions when it asks the agent to do work.
 
@@ -39,20 +44,31 @@ Branch-only is about who consumes the material, not how long it is. A short
 provider-specific warning can still belong in a reference if only that provider
 branch needs it.
 
-Load `references/schema-design.md` before promoting a slot set, template,
-lane context shape, output shape, or tool shape into a schema. Keep small skills
+Before promoting a slot set, template, lane context shape, output shape, or
+tool shape into a schema, use `references/schema-design.md`. Keep small skills
 in the ordinary reference shape. When a schema is justified, each consumer links
 to the shared schema and adds only branch- or lane-specific judgment.
 
 ## Context Pointer Quality
 
-A pointer from `SKILL.md` to a reference should include:
+A pointer from `SKILL.md` to a reference should include the routing condition.
+The reference itself should state ownership and return shape, not repeat the
+routing condition.
+
+Pointer shape:
 
 ```text
-load condition:
+routing condition:
 reference path:
 what to do there:
 what to bring back:
+```
+
+Reference opening shape:
+
+```text
+this reference owns:
+return:
 ```
 
 Weak pointer:
@@ -71,7 +87,7 @@ shipping route plus validation commands.
 
 ## Reference Fit Signals
 
-- Branch reference: one observable condition loads it and one result returns.
+- Branch reference: one branch owns it and one result returns.
 - Lane reference: an independent workflow step can run from bounded context.
 - `lane-schema`: independent lanes share route, input, or return fields.
 - `output-schema`: multiple consumers share the same result shape.
@@ -84,11 +100,11 @@ shipping route plus validation commands.
 For each reference section, ask:
 
 ```text
-which branch loads this:
+what local judgment or detail does this own:
 what behavior changes:
 what result returns:
 what would break if deleted:
 ```
 
-If those answers are weak, inline the material, merge it with its real owner, or
-delete it.
+If those answers are weak, remove the fluff, inline the material into the main
+path, merge it with its real owner, or delete it.

@@ -4,9 +4,9 @@ Use this as the detailed proof protocol. Pressure testing validates the craft
 model; it is not a substitute for writing a clear trigger, mental model, main
 path, and reference hierarchy.
 
-Load this when a skill change is intended to alter agent behavior, when a
-shortcut or rationalization must be resisted, or when create/update/evaluate
-flow needs proof beyond static validation.
+This reference owns behavior proof beyond static validation. Return the RED or
+proof-gap baseline, GREEN rerun result, rationalization evidence, and smallest
+wording change still needed.
 
 RED captures baseline failure or a scenario-specific proof gap. GREEN reruns
 after the skill is present. REFACTOR tightens the smallest trigger, pointer,

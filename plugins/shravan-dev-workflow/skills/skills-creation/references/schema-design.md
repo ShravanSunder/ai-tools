@@ -4,8 +4,9 @@ Schemas are reusable shapes. Most skills use `SKILL.md` plus ordinary
 references. Add a schema only when downstream work needs a stable shape it can
 reuse or validate.
 
-Load this when a skill has real lanes, repeated output slots, tool-validated
-artifacts, or another consumer that must rely on the same fields.
+This reference owns reusable shape design for lanes, repeated output slots,
+tool-validated artifacts, and other consumers that rely on the same fields.
+Return the schema kind, owned fields, validation route, and consumer links.
 
 ## Schema Family
 

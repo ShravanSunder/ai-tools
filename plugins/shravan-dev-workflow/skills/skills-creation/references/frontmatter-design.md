@@ -3,8 +3,9 @@
 Design YAML/frontmatter as the trigger surface. Its job is to help the agent
 decide whether to load the skill, not to teach the workflow.
 
-Load this when description wording, adjacent-skill boundaries, invocation
-tradeoffs, or "why did this skill load?" are the hard part.
+This reference owns description wording, adjacent-skill boundaries, invocation
+tradeoffs, and "why did this skill load?" diagnosis. Return a concise trigger
+description and any adjacent-skill boundary that changes routing.
 
 ## Required Shape
 

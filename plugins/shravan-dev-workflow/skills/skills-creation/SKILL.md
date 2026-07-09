@@ -9,46 +9,15 @@ description: Use when creating, updating, or evaluating one named skill; turning
 
 Work on exactly one named skill or accepted draft per run. A great skill is a
 compact behavior-shaping artifact: it makes the agent follow a predictable
-process, not a fixed script. The craft is choosing what belongs in the YAML
-trigger, what belongs in `SKILL.md`, what belongs in references, what language
-pulls the model into the right latent space, and what proof shows the wording
-actually changed behavior. Broad portfolio inventory, duplicate-surface
+process, not a fixed script. Broad portfolio inventory, duplicate-surface
 archaeology, or "which skills should exist" belongs to `skill-audit`.
 
-## Great Skill Model
+## Great Skill Frame
 
-Every skill has four surfaces:
-
-- YAML/frontmatter is the trigger surface. It answers "should I load this
-  now?" with concrete situations, symptoms, user words, adjacent-skill
-  boundaries, and a short payoff.
-- `SKILL.md` is the mental model and main path. It tells the agent how to think
-  and act when the skill is loaded.
-- `references/` carries branch depth: details, rubrics, examples, platform
-  mechanics, security gates, and longer proof protocols that only some runs
-  need.
-- Tests and pressure proof validate behavior. They are not the identity of the
-  skill, but behavior-changing skill text is not ready to ship without them.
-
-Use these quality axes while authoring:
-
-- trigger: the name and description are searchable, trigger-only, and concise.
-- mental model: the body introduces the concept or lens the agent should think
-  with.
-- path: ordered steps appear only where order matters, and each step has a
-  checkable completion criterion.
-- workflow: the all-run route is explicit, and branches have observable load
-  conditions and return shapes.
-- hierarchy: all-run material stays in `SKILL.md`; branch-only depth sits
-  behind a strong context pointer.
-- steering: leading words, positive shapes, required slots, and observable
-  predicates shape behavior more reliably than vague advice.
-- pruning: delete duplication, sediment, sprawl, no-op text, and branch detail
-  that bloats the main path.
-- proof: static validation proves structure; pressure proof proves changed
-  behavior.
-
-Load `references/glossary.md` when these terms need fuller meaning.
+A skill has four surfaces: trigger (`YAML/frontmatter`), mental model and main
+path (`SKILL.md`), branch depth (`references/`), and proof (static or
+pressure). Author by walking those surfaces in order. Load
+`references/glossary.md` for terminology.
 
 ## Scaled Run Note
 

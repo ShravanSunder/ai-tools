@@ -4,9 +4,9 @@ Judge whether a skill or draft is great enough to trust. Use deterministic
 verdicts, but ground them in the great-skill model instead of vibes or point
 totals.
 
-Load this when an existing skill or draft needs a verdict, when the user asks
-whether a skill is "great," or when a review needs the first required revision
-instead of a rewrite dump.
+This reference owns evaluation of an existing skill or draft. Return a verdict,
+blocker overrides, evidence by axis, highest risk, first required revision, and
+retest requirement.
 
 ## Verdicts
 

@@ -1,12 +1,14 @@
 # Skills Creation Great Skill Model
 
 - Marketplace plugin: `shravan-dev-workflow`
-- Version: `1.6.45` -> `1.6.46`
+- Version: `1.6.45` -> `1.6.47`
 
 ## User-Visible Behavior Changes
 
 - Rebalanced `skills-creation` around the great-skill craft model instead of a
   proof-first authoring ritual.
+- Collapsed the top-level great-skill model into a compact four-surface frame
+  so the workflow remains the operational source of truth.
 - Made YAML/frontmatter trigger design explicit: when to load, trigger
   situations, brief payoff, adjacent-route boundaries, and no workflow summary.
 - Made `SKILL.md` the home for the mental model, leading words, main path, and
@@ -19,6 +21,8 @@
   while ordinary skills stay at `SKILL.md` plus references.
 - Added detailed rubrics for frontmatter design, workflow topology, and
   reference-file design.
+- Reworked reference-file openings so references state what they own and return
+  instead of repeating self-load conditions already owned by `SKILL.md`.
 - Kept pressure testing visible in `SKILL.md`, but refocused it as the proof
   gate for behavior-changing skill text rather than the identity of the skill.
 - Reworked `glossary.md`, `great-skill-evaluation.md`, and
@@ -51,7 +55,7 @@
 
 - `uv run --with PyYAML python /Users/shravansunder/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/shravan-dev-workflow/skills/skills-creation`
   - Exit 0: `Skill is valid!`
-- Focused pressure scenarios:
+- Earlier focused pressure scenarios before the final frame/reference cleanup:
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-workflow-spine --timeout 900`
     - Exit 0: 1 test passed.
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-draft-artifact --timeout 900`
@@ -74,6 +78,8 @@
   - Exit 0: validation passed.
 - `git diff --check`
   - Exit 0.
+- Final frame/reference cleanup pressure status:
+  - Deferred to the end of the change batch by user direction.
 
 ## Refresh Status
 
