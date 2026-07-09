@@ -19,7 +19,7 @@ work.
 
 Custom agents are sensitive-resource work. They usually involve subprocesses,
 network behavior, package scripts, auth material, filesystem access, or home
-configuration. Route through `creating-skills` security review before editing
+configuration. Route through `skills-creation` security review before editing
 scripts, packages, hooks, assets, auth paths, or home/cache state.
 
 When a user asks for an adapter sketch alongside an existing command, still name

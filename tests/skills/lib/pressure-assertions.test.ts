@@ -112,10 +112,10 @@ describe("evaluatePressureAssertions", () => {
       filePath: "/repo/tests/skills/pressure-scenarios/skills-creation-workflow-spine.md",
       markdown: `scenario_id: skills-creation-workflow-spine
 skill_under_test: shravan-dev-workflow:skills-creation
-expect_decision_regex: authoring receipt
-expect_decision_regex: placement audit
-expect_proof_regex: references/authoring-intake.md.{0,600}carry in.{0,160}return with
-expect_proof_regex: references/(invocation-and-description|pressure-testing|structure-and-progressive-disclosure).md.{0,600}carry in.{0,160}return with
+expect_decision_regex: classification:\\s*create|classification.{0,40}create
+expect_decision_regex: description:?\\s*use when
+expect_proof_regex: references/frontmatter-design.md.{0,600}carry in.{0,160}return with
+expect_proof_regex: references/(reference-design|pressure-testing|workflow-topology).md.{0,600}carry in.{0,160}return with
 expect_forbidden_regex: start with \`?skill-audit\`? to
 
 ## Prompt
@@ -131,9 +131,9 @@ Create one named skill.
         scenario_id: "skills-creation-workflow-spine",
         skill_under_test: "shravan-dev-workflow:skills-creation",
         decision:
-          "Start with skill-audit to check overlap. Then create an authoring receipt and placement audit.",
+          "Start with skill-audit to check overlap. Classification: create. Description: Use when reviewing release notes.",
         coverage_evidence: [
-          "references/authoring-intake.md Carry in examples Return with authoring receipt",
+          "references/frontmatter-design.md Carry in trigger wording Return with trigger-only description",
           "references/pressure-testing.md Carry in target behavior Return with pressure proof",
         ],
       },
@@ -214,6 +214,44 @@ Add scripts, hooks, copied assets, and cache refresh after every edit.
         coverage_evidence: ["permission and copy-vs-adapt words appear"],
       },
       renderedPrompt: "Add scripts, hooks, copied assets, and cache refresh after every edit.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("forbidden regex 1"),
+      ]),
+    );
+  });
+
+  test("rejects static validation presented as behavior proof", () => {
+    const platformArtifactScenario = parseScenarioMarkdown({
+      filePath:
+        "/repo/tests/skills/pressure-scenarios/skills-creation-platform-artifact-scale.md",
+      markdown: `scenario_id: skills-creation-platform-artifact-scale
+skill_under_test: shravan-dev-workflow:skills-creation
+expect_proof_regex: platform.{0,3}mechanics(\\.md)?
+expect_forbidden_regex: (static|structural).{0,40}(validation|proof).{0,40}(proves?|counts as|equals|is\\s+(behavior|pressure)).{0,80}(behavior|pressure).{0,40}(proof|evidence)|behavior.{0,40}(proof|evidence).{0,40}(proven by|covered by|satisfied by|is\\s+(static|structural)).{0,80}(static|structural).{0,40}(validation|proof)
+
+## Prompt
+
+Show the workflow and proof path for a shared Codex/Claude skill update.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: platformArtifactScenario,
+      result: {
+        ...validResult,
+        scenario_id: "skills-creation-platform-artifact-scale",
+        skill_under_test: "shravan-dev-workflow:skills-creation",
+        decision:
+          "Use platform-mechanics.md. Static validation proves behavior proof for this wording-only change.",
+        coverage_evidence: ["platform-mechanics.md"],
+      },
+      renderedPrompt:
+        "Show the workflow and proof path for a shared Codex/Claude skill update.",
       readOnlyRequested: true,
       artifactPaths: ["/tmp/final.json"],
     });

@@ -11,7 +11,7 @@ expect_decision_regex: description:?\s*use when
 expect_proof_regex: classification:\s*create|classification.{0,40}create
 expect_proof_regex: reusable (job|behavior):\s*\S
 expect_proof_regex: baseline( or review target)?:\s*hypothesiz\w*|hypothesiz\w*.{0,100}baseline
-expect_proof_regex: invocation:?\s*(model-invoked|user-invoked|routed)|invocation mode.{0,120}(model-invoked|user-invoked|routed)
+expect_proof_regex: invocation:?\s*(model-invocable|user-invocable)|invocation (mode|capabilit(y|ies)).{0,120}(model-invocable|user-invocable)
 expect_proof_regex: (broad|repo-wide|portfolio-wide).{0,80}(inventory|portfolio|duplicate).{0,180}(defer|deferred|out of scope|skill-audit|elsewhere|not now)|defer.{0,180}(inventory|portfolio|duplicate)
 expect_proof_regex: (trigger surface|yaml|frontmatter|description).{0,200}(when|load|trigger)
 expect_proof_regex: (mental model|leading word|latent space|main path)
@@ -56,7 +56,7 @@ new skill.
 - Agent names the reusable behavior the skill repeats.
 - Agent states the baseline is hypothesized, since no skill exists yet to
   observe failing.
-- Agent names the invocation mode and its load tradeoff.
+- Agent names the invocation capabilities and their load tradeoff.
 - Agent defers broad repo-wide inventory/portfolio/duplicate-surface work,
   naming `skill-audit` as the separate route if the user wants it later.
 - Agent drafts a `description:` line that starts "Use when" and names

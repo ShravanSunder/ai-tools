@@ -19,9 +19,11 @@ Use at least two read-only perspectives for non-trivial skill specs:
 - `fresh-perspective`: checks whether the intended skill promise, trigger,
   workflow, reference split, and proof route cohere without relying on the
   author's explanation.
+- `local-lane`: uses a second independent in-session/local perspective with a
+  different focus. This is the default second lane.
 - `outside-model`: uses Claude, Cursor-backed model, Grok, or another
-  configured non-parent provider when available. If unavailable, record the
-  outside-model gap and run a second independent lane with a different focus.
+  configured non-parent provider only when the user explicitly requests
+  external counsel. Otherwise record `outside-model not requested`.
 
 ## Verdicts
 
@@ -47,7 +49,8 @@ Cover each item with source-backed evidence:
 - promise: the reusable behavior is specific and worth making durable.
 - trigger: name and YAML/frontmatter description say when to load, why briefly,
   and do not summarize the workflow.
-- invocation: model-invoked, user-invoked, or routed choice pays the right load.
+- invocation: model-invocable and user-invocable capabilities pay the right
+  load.
 - mental model: `SKILL.md` will name the lens, leading words, or concepts that
   pull the model into the intended frame.
 - main path: ordered steps or reference shape are visible, operational, and

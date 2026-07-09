@@ -28,7 +28,8 @@ ship as soon as the focused pressure scenario passes.
 
 - The change is not a typo: it changes reference routing and workflow gates.
 - The agent may treat GREEN pressure proof as enough to ship.
-- The parent model is Codex, so an outside model review lane matters.
+- The parent model is Codex, but outside model review still requires explicit
+  user request.
 
 ## Prompt
 
