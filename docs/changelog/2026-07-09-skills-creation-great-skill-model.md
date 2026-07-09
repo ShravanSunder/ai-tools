@@ -21,6 +21,9 @@
   while ordinary skills stay at `SKILL.md` plus references.
 - Added detailed rubrics for frontmatter design, workflow topology, and
   reference-file design.
+- Collapsed duplicated placement ladders so `reference-design.md` owns
+  SKILL/reference/script/glossary placement, `workflow-topology.md` owns route
+  and branch returns, and `schema-design.md` owns only reusable schema families.
 - Reworked reference-file openings so references state what they own and return
   instead of repeating self-load conditions already owned by `SKILL.md`.
 - Moved RED-before-edit into an early hard gate for behavior-changing updates,

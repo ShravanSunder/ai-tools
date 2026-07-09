@@ -24,9 +24,9 @@ A good `references/*.md` file:
 - avoids restating all-run rules from `SKILL.md`;
 - has checkable stop conditions when it asks the agent to do work.
 
-## Placement Test
+## Canonical Placement Test
 
-Use this decision table:
+This reference owns the placement ladder. Use this decision table:
 
 ```text
 every run needs it                  -> SKILL.md

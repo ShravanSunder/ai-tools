@@ -3,9 +3,9 @@
 Build the route before placing depth. A great skill has an all-run spine and
 only the branches needed to keep agents from guessing.
 
-This reference owns workflow shape, branch structure, reference split, and
-return path design. Return the all-run spine plus any branch predicates,
-destinations, and return shapes the main path needs.
+This reference owns workflow shape, branch structure, and return path design.
+Return the all-run spine plus any branch predicates, destinations, and return
+shapes the main path needs. Use `reference-design.md` for the placement ladder.
 
 ## Topology Model
 
@@ -22,35 +22,6 @@ trigger
 
 The topology is not the file tree. It is the behavioral route the agent follows
 after the skill loads.
-
-## Structure Ladder
-
-Choose the smallest structure that makes the route predictable:
-
-```text
-simple skill        -> SKILL.md
-conditional depth   -> SKILL.md + references/<branch>.md
-independent worker  -> references/lanes/<lane-name>.md
-lane shape          -> references/<name>-lane-schema.md
-reused output shape -> references/<name>-output-schema.md
-tool-validated shape -> schemas/<name>.schema.json or references/<name>-tool-schema.md
-```
-
-Most skills stop at the first two rows. Lanes and schemas fit skills that have
-independent lanes, shared outputs, or tool-validated shapes.
-
-Use these homes deliberately when the complexity is real:
-
-- branch: a conditional route inside one skill;
-- lane: a branch designed as an independent workflow step;
-- schema: the reusable shape a lane, output, or tool must follow;
-- glossary: definitions only.
-
-Design the branch before placing files. Promote a branch into a lane when it is
-an independently runnable workflow step. When a consumer needs a stable reusable
-shape, choose the matching schema family: `lane-schema`, `output-schema`, or
-`tool-schema`. Load `references/schema-design.md` before promoting branch slots
-into a schema.
 
 ## All-Run Spine
 
@@ -119,14 +90,14 @@ or inline the material.
   back.
 - Parallel branches with the same predicate: two files own the same decision.
 - Ordered steps without order dependency: a checklist masquerades as workflow.
-- Simple branch owned simply: one reference owns the branch.
 - Shared shape copied many times: several real consumers repeat fields instead
   of linking to one schema.
 
 ## Repair Moves
 
 - If agents skip a branch, strengthen the predicate or inline the gate.
-- If `SKILL.md` bloats, split branch-only depth behind a return shape.
+- If `SKILL.md` carries branch-only depth, name the branch and use
+  `reference-design.md` to place it behind a return shape.
 - If references overlap, merge them or assign one source of truth.
 - If output varies wildly, add required slots at the branch return.
 - If multiple real consumers need the same slots, extract the matching schema

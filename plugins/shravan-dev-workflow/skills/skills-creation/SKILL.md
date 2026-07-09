@@ -93,19 +93,13 @@ Completion: the workflow has one all-run spine, each branch has a load
 condition, and every branch returns something the main path can use. Load
 `references/workflow-topology.md` for detailed workflow and branch design.
 
-**7. Place the depth.** Inline material every run needs. Move branch-specific
-walkthroughs, per-provider examples, detailed rubrics, platform mechanics,
-security review, and long proof protocols into `references/`. Context pointers
-must name the observable condition for loading the reference and what it
-returns. Use ordinary references for ordinary branch depth. For complex skills
-with independent lanes, multi-consumer outputs, or tool-validated shapes, put
-shared shapes in one `lane-schema`, `output-schema`, or `tool-schema` home and
-have each consumer point to it instead of copying fields. Completion: nothing
-sits in two homes, and branch depth is behind strong pointers rather than
-filename lists. Load
-`references/reference-design.md` when deciding what makes a reference file good
-or whether branch material belongs inline. Load `references/schema-design.md`
-when real lanes, skills, outputs, or tools share the same slots or shape.
+**7. Place the depth.** Inline material every run needs, then use one owning
+reference for the placement question instead of rebuilding the ladder here.
+Load `references/reference-design.md` when deciding whether material belongs in
+`SKILL.md`, a reference, a script, glossary, or nowhere. Load
+`references/schema-design.md` only when real lanes, repeated outputs, or tools
+share a shape that must stay stable. Completion: nothing sits in two homes, and
+branch depth is behind strong pointers rather than filename lists.
 
 **8. Steer the failure.** Match the guidance form to the observed or
 hypothesized failure:

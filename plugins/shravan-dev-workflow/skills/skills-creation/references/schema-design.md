@@ -10,15 +10,12 @@ Return the schema kind, owned fields, validation route, and consumer links.
 
 ## Schema Family
 
-Use one of these names instead of inventing new terminology:
+Use one of these schema names instead of inventing new terminology:
 
 ```text
-local branch result        -> return shape inside references/<branch>.md
 lane input/context shape   -> references/<name>-lane-schema.md
 shared model output shape  -> references/<name>-output-schema.md
 tool-validated shape       -> schemas/<name>.schema.json or references/<name>-tool-schema.md
-definitions only           -> references/glossary.md
-deterministic executable   -> scripts/
 ```
 
 A `lane-schema` is the input shape plus the context a lane needs, such as
@@ -53,8 +50,9 @@ lanes, shared outputs, or tool validation usually needs no schema file.
 - `lane-schema`: independent lanes share route, input, or return fields.
 - `output-schema`: multiple consumers need the same model-readable result shape.
 - `tool-schema`: a tool, test, CI check, or runtime validates the fields.
-- local return shape: one branch owns the slots.
-- glossary: the content is only a definition.
+- not a schema: one branch owns the slots, or the content is a term,
+  executable mechanic, example, or rule. Return to `reference-design.md` for
+  placement.
 
 ## Acceptance Check
 
