@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation Writing Tests"
+  short_description: "Write and judge implementation test proof"
+  default_prompt: "Use $implementation-writing-tests to write, repair, audit, remove, or review tests as implementation proof."

@@ -23,6 +23,12 @@ Load this for large, risky, stale, or implementation-facing plans.
 - Tasks have exact files, commands, expected output, and acceptance criteria.
 - Execution order is dependency-safe.
 - Validation gates prove behavior, not only formatting.
+- Test-proof rows include public seam, domain boundary, claim/property or
+  critical invariants, illegal-state strategy, guard/precondition/assertion
+  points, IO-boundary cases, oracle, proof layer, project layer definition or
+  default statement, freshness guard, existing-test audit status, and RED/GREEN
+  need when tests are in scope.
+- Test removal has replacement, redundancy, or dead-contract proof.
 - Scope is narrow enough for one execution pass or clearly split.
 
 ## Security Context

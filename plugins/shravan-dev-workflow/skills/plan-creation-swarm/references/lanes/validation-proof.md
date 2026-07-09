@@ -20,6 +20,8 @@ Prerequisites:
 - accepted source requirements and proof expectations
 - known product surfaces and non-goals
 - current test/proof patterns when available
+- `implementation-writing-tests` loaded when tests, test repair, test removal,
+  or test-proof claims are part of the proof route
 
 Where to look:
 - requirements and proof expectations in the source artifact
@@ -30,6 +32,12 @@ How to think:
 For each requirement, ask what evidence would make a skeptical reviewer believe
 the behavior works. Choose the smallest proof layers that prove the obligation,
 then note any higher layer needed by the user/runtime surface.
+When proof includes tests, add the plan-required
+`implementation-writing-tests` schema fields: public seam, domain boundary,
+claim/property or critical invariants, illegal-state strategy,
+guard/precondition/assertion points, IO-boundary cases, oracle, proof layer,
+project layer definition, freshness guard, existing-test audit status, and
+RED/GREEN need.
 
 Collection contribution:
 - requirements/proof matrix candidates
@@ -41,3 +49,5 @@ Collection contribution:
 Output focus:
 Return proof rows anchored to source requirements, with proof modality, pyramid
 layer, evidence source, freshness guard, and whether red/green is required.
+For test-proof rows, include the plan-required schema fields and leave
+execution-filled and review-filled fields pending.

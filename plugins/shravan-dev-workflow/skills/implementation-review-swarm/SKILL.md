@@ -153,6 +153,8 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - If an `implementation-handoff` packet exists, use its Implementation
      proof section as the claim inventory, then verify each claim against
      diffs, tests, command output, and artifacts.
+   - When proof claims include tests, load `implementation-writing-tests` and
+     include its test-proof schema status in the proof inventory.
    - The Implementation proof reviewer lane plus reducer acceptance produce
      the review proof: the verified judgment that implementation proof was
      checked, mapped, and not weakened. Record it in the report.
@@ -224,6 +226,7 @@ Default lanes:
 - Intent and regression reviewer
 - Security and trust-boundary reviewer
 - Reliability and performance reviewer
+- Implementation writing tests reviewer when proof claims include tests
 - Contracts and tests reviewer
 - Adversarial design reviewer
 
@@ -277,6 +280,9 @@ belongs to `implementation-pr-wrapup`.
 - Load `references/lanes/spec-plan-compliance.md` for source-backed or
   plan-backed compliance checks.
 - Load `references/lanes/implementation-proof.md` when proof claims are present.
+- Load `references/lanes/implementation-writing-tests.md` when proof claims
+  include writing, changing, repairing, removing, or reviewing tests or test
+  proof.
 - Load `references/lanes/runtime-reachability.md` for runtime, authority,
   security, public-capability, plugin/MCP, agent/tool execution, or
   architecture-cutover claims.

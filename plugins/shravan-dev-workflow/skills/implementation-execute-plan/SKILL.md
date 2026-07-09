@@ -33,6 +33,11 @@ Validate first, then execute. This is controller-owned execution: subagents may 
   files, proof commands with exit codes, red/green evidence for behavior
   changes, evidence sources, freshness guards, unsatisfied proof gates, and
   blockers.
+- When a task writes, changes, repairs, removes, or relies on tests as proof,
+  load `implementation-writing-tests`. Execution packets must include the
+  relevant schema slots, preserve RED/GREEN evidence or an approved exception,
+  and require replacement, redundancy, or dead-contract proof before deleting
+  tests.
 - If a required proof gate cannot pass inside the approved scope, stop and
   return to `plan-creation-swarm` or split the work into smaller provable slices.
 - Required proof gates have either fresh evidence, an explicit user-approved
@@ -81,6 +86,9 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Run targeted and full relevant checks.
    - Verify each matrix row's owning task, gate, evidence source, and freshness
      guard before treating it as satisfied.
+   - For rows involving tests, verify the `implementation-writing-tests`
+     execution fields: test files, tests added/changed/removed, RED evidence,
+     GREEN evidence, and remaining false-proof risks.
    - Report commands, exit codes, red/green evidence or exception, skipped
      proof gates, proof split status, and remaining blockers.
 

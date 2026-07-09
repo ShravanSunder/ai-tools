@@ -55,6 +55,7 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **plan-creation-swarm** skill -- turns spec/design context into a written implementation plan with proof gates and parallel work lanes without editing code
 - **ops-security-review** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
 - **ops-observability-stack** skill -- guides shared local OpenTelemetry/Victoria stack use, producer boundaries, AgentStudio and Agent VM loops, resource naming, and Victoria proof queries
+- **implementation-writing-tests** skill -- writes, repairs, audits, removes, and reviews tests as implementation proof with seams, domain boundaries, invariants, illegal-state strategy, IO-boundary proof, oracles, proof layers, RED/GREEN evidence, project test definitions, and weak-test antipattern checks
 - **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **creating-skills** skill -- creates, updates, or evaluates one named skill or accepted draft with workflow-spine authoring, branch references, pressure proof, platform validation, and source-adaptation boundaries

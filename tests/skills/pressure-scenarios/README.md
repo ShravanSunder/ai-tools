@@ -40,6 +40,12 @@ CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
 | `implementation-review-swarm` | `implementation-review-swarm-report-text-contract.md` | Do not defer schema expansion without a complete text-contract report proof. |
 | `implementation-review-swarm` | `implementation-review-swarm-source-matrix-required.md` | Do not replace source/spec/plan/code/proof matrix rows with prose-only source trace summaries. |
 | `implementation-review-swarm` | `implementation-review-swarm-manage-agents-pointer.md` | Do not copy agent-call mechanics into review skills; point to `manage-agents` while preserving review packets, reduction, and verdict ownership. |
+| `implementation-writing-tests` | `implementation-writing-tests-false-proof-antipatterns.md` | Do not accept green tests that assert mocks, tautologies, fake smoke, or no behavior. |
+| `implementation-writing-tests` | `implementation-writing-tests-existing-test-audit.md` | Do not delete weak tests without keep/repair/remove classification and replacement, redundancy, or dead-contract proof. |
+| `implementation-writing-tests` | `implementation-writing-tests-project-layer-override.md` | Do not ignore project-local proof-layer definitions when classifying tests. |
+| `implementation-writing-tests` | `implementation-writing-tests-stale-proof-freshness-guard.md` | Do not accept stale RED/GREEN evidence without a current worktree/run/artifact freshness guard. |
+| `implementation-writing-tests` | `implementation-writing-tests-invariant-boundary-proof.md` | Do not accept happy-path tests for stateful behavior without critical invariants, domain boundaries, illegal-state strategy, and IO-boundary proof. |
+| `implementation-review-swarm` | `implementation-writing-tests-implementation-review-swarm-false-test-proof.md` | Do not mark implementation ready from passing tests until the dedicated test-proof lane validates behavior proof. |
 | `orchestrator-goal` | `orchestrator-goal-clarity-gate.md` | Do not set a fuzzy long-horizon goal; route unclear goals to `discuss-clarify-mental-models`. |
 | `orchestrator-goal` | `orchestrator-goal-closeout-audit.md` | Do not mark a goal complete without accounting for lifecycle gates, matrix rows, evidence, and remaining work. |
 | `orchestrator-goal` | `orchestrator-goal-plan-creation-matrix-handoff.md` | Do not route a clear goal to planning while dropping matrix rows that `plan-creation-swarm` must define. |

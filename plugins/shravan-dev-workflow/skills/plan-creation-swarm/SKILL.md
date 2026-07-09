@@ -58,6 +58,13 @@ gates, and evidence requirements.
   evidence is required, and whether the task is sized so that proof can pass
   inside the approved scope. Tiny plans may use a compact proof line and say why
   it is sufficient.
+- When the matrix includes tests or test deletion/repair, load
+  `implementation-writing-tests` and use its schema slots for the test-proof
+  row. Planning owns candidate seams, domain boundaries, claims/properties or
+  critical invariants, illegal-state strategy, guard/precondition/assertion
+  points, IO-boundary cases, oracles, proof layers, project layer definitions,
+  freshness guards, and RED/GREEN needs; execution and review fields remain
+  pending.
 - Use the testing pyramid as the default proof shape: unit for fast deterministic
   logic, integration for real boundaries, smoke for the owned runnable surface,
   e2e for full user/runtime paths, and PR/release gates for merge or artifact
@@ -70,6 +77,9 @@ gates, and evidence requirements.
 - Use TDD for behavior changes when feasible: identify or add the smallest
   failing proof tied to a requirement, watch it fail for the expected reason,
   implement, then make it pass and climb the proof pyramid only as needed.
+- Do not copy reusable test doctrine into the plan skill. Route to
+  `implementation-writing-tests` for seams, oracles, weak-test antipatterns,
+  property concepts, proof-layer definitions, and test-removal proof.
 - If the source is a goal contract, preserve known matrix rows from that
   contract and define any missing implementation rows here instead of leaving
   evidence definition to the executor.
@@ -141,7 +151,9 @@ For substantial plans, dispatch bounded lanes where tool support exists:
   `references/lanes/vertical-slice-decomposition.md`.
 - `validation-proof`: maps source requirements to proof layers, red/green
   needs, evidence sources, freshness guards, pyramid coverage, and split
-  triggers. Reference: `references/lanes/validation-proof.md`.
+  triggers. When tests are part of proof, it references
+  `implementation-writing-tests` and its schema slots. Reference:
+  `references/lanes/validation-proof.md`.
 - `execution-order`: proposes dependency order, parallel lanes, integration
   gates, and handoff points. Reference: `references/lanes/execution-order.md`.
 - `security-reliability`: checks trust boundaries, secrets, permissions,
@@ -264,6 +276,10 @@ Return:
 - Omitting validation gates to move faster.
 - Listing validation commands without mapping them back to the requirements they
   prove.
+- Planning "add tests" without candidate seam, domain boundary,
+  claim/property or invariant, illegal-state strategy, IO-boundary cases,
+  oracle, project layer definition check, freshness guard, and RED/GREEN
+  requirement.
 - Inventing a testing strategy that does not trace back to the spec's
   requirements and proof expectations.
 - Treating one high-level smoke/e2e check as a substitute for lower pyramid

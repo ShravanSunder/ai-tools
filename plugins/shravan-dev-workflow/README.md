@@ -41,6 +41,7 @@ plan-*               implementation-plan boundary  plan-creation-swarm
                                                   plan-review-swarm
                                                   plan-handoff
 implementation-*     code/change boundary          implementation-execute-plan
+                                                  implementation-writing-tests
                                                   implementation-review-swarm
                                                   implementation-pr-wrapup
                                                   implementation-handoff
@@ -201,6 +202,15 @@ implementation proof, and completion claims. Worker packets cite exact plan
 tasks, requirement/proof rows, allowed write scopes, proof obligations, and
 completion receipts so subagent output can be reduced against the plan.
 
+Use `implementation-writing-tests` when implementation, planning, execution, or
+review work includes writing, changing, auditing, repairing, removing, or
+judging tests or test proof. It owns the reusable doctrine for public seams,
+domain boundaries, critical invariants, illegal-state strategy,
+guard/precondition/assertion points, IO-boundary cases, independent oracles,
+project proof-layer definitions, RED/GREEN evidence, property-style checks,
+weak-test antipatterns, and safe test removal. Phase skills route to it instead
+of duplicating testing manuals.
+
 Use `implementation-review-swarm` to review code, diffs, commits, PRs, or named
 files. Codex reviewer lanes are the default; Claude or Gemini/`agy` lanes are
 explicit opt-in external counsel. Reviewer outputs are candidates, not truth,
@@ -274,6 +284,7 @@ Use plan-creation-swarm to turn this spec into an implementation plan.
 Use plan-improve-repo to audit this repo and write executable improvement plans.
 Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.
+Use implementation-writing-tests to repair these tests without weakening proof.
 Use implementation-review-swarm to review this diff and include Claude counsel.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.
