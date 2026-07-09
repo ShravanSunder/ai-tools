@@ -39,12 +39,11 @@
   static-only.
 - Rewrote the skill trigger description around observable skill-authoring
   symptoms instead of listing internal craft surfaces.
-- Added invocation mode to the main trigger-design step so new skills choose
-  model-invoked, user-invoked, or routed behavior before description wording.
-- Added platform-specific invocation-control guidance: do not add
-  `disable-model-invocation` or `user-invocable` by default; use them only for
-  explicit manual-only/background-only client contracts, and route Codex
-  invocation policy through `agents/openai.yaml`.
+- Added invocation capability guidance to the main trigger-design step so new
+  skills choose model-invocable and user-invocable behavior before description
+  wording.
+- Added platform-specific invocation-control guidance: keep client-specific
+  controls in `platform-mechanics.md`, not default shared skill text.
 - Kept pressure testing visible in `SKILL.md`, but refocused it as the proof
   gate for behavior-changing skill text rather than the identity of the skill.
 - Reworked `glossary.md`, `skill-spec-review.md`, and
@@ -61,12 +60,14 @@
 - `plugins/shravan-dev-workflow/skills/skills-creation/SKILL.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/frontmatter-design.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/glossary.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/platform-mechanics.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-spec-review.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/pressure-testing.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/reference-design.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/schema-design.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-implementation-review.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-review-output-schema.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-security-review.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/workflow-topology.md`
 - `tests/skills/pressure-scenarios/skills-creation-*.md`
 - `tests/skills/pressure-scenarios/README.md`
@@ -102,7 +103,7 @@
 - `pnpm --dir tests/skills exec tsc --noEmit`
   - Exit 0.
 - `pnpm --dir tests/skills exec vitest run lib/pressure-assertions.test.ts --config vitest.config.ts`
-  - Exit 0: 10 tests passed.
+  - Exit 0: 11 tests passed.
 - `jq empty plugins/shravan-dev-workflow/.codex-plugin/plugin.json plugins/shravan-dev-workflow/.claude-plugin/plugin.json .claude-plugin/marketplace.json .agents/plugins/marketplace.json`
   - Exit 0.
 - `claude plugin validate .`

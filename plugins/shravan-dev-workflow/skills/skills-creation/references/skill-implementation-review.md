@@ -7,9 +7,11 @@ pressure coverage, accepted spec constraints, and remaining ship risk.
 Return changed-file coverage, accepted/rejected/unverified findings, smallest
 edits, targeted retest, and ship decision.
 
-Use `manage-agents` for reviewer-lane mechanics. Parent authority stays here:
-subordinate agents return candidate evidence, not the final verdict. Use
-`skill-review-output-schema.md` for shared packet, finding, coverage, and
+For final repo skill-work readiness, `implementation-review-swarm` owns review
+orchestration and this reference supplies the skill-specific rubric, changed
+file coverage, and targeted retest expectations. Parent authority stays in the
+main run: subordinate agents return candidate evidence, not the final verdict.
+Use `skill-review-output-schema.md` for shared packet, finding, coverage, and
 reduction shapes.
 
 ## Review Lanes
@@ -28,8 +30,9 @@ Use at least two read-only perspectives for non-trivial skill changes:
 If the user explicitly requests outside counsel and Codex authored the change,
 prefer a non-Codex outside-model lane. If another model authored it, prefer
 Codex plus one different model. Provider choice, packets, permissions, and
-reductions are governed by `manage-agents`; load its agent-packet guidance when
-constructing lanes.
+reductions are governed by the active review orchestrator; when using
+`implementation-review-swarm`, use this reference as the skill-specific review
+input rather than a competing orchestration path.
 
 ## Review Rubric
 

@@ -225,6 +225,44 @@ Add scripts, hooks, copied assets, and cache refresh after every edit.
     );
   });
 
+  test("rejects static validation presented as behavior proof", () => {
+    const platformArtifactScenario = parseScenarioMarkdown({
+      filePath:
+        "/repo/tests/skills/pressure-scenarios/skills-creation-platform-artifact-scale.md",
+      markdown: `scenario_id: skills-creation-platform-artifact-scale
+skill_under_test: shravan-dev-workflow:skills-creation
+expect_proof_regex: platform.{0,3}mechanics(\\.md)?
+expect_forbidden_regex: (static|structural).{0,40}(validation|proof).{0,40}(proves?|counts as|equals|is\\s+(behavior|pressure)).{0,80}(behavior|pressure).{0,40}(proof|evidence)|behavior.{0,40}(proof|evidence).{0,40}(proven by|covered by|satisfied by|is\\s+(static|structural)).{0,80}(static|structural).{0,40}(validation|proof)
+
+## Prompt
+
+Show the workflow and proof path for a shared Codex/Claude skill update.
+`,
+    });
+
+    const result = evaluatePressureAssertions({
+      scenario: platformArtifactScenario,
+      result: {
+        ...validResult,
+        scenario_id: "skills-creation-platform-artifact-scale",
+        skill_under_test: "shravan-dev-workflow:skills-creation",
+        decision:
+          "Use platform-mechanics.md. Static validation proves behavior proof for this wording-only change.",
+        coverage_evidence: ["platform-mechanics.md"],
+      },
+      renderedPrompt:
+        "Show the workflow and proof path for a shared Codex/Claude skill update.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json"],
+    });
+
+    expect(result.failures).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("forbidden regex 1"),
+      ]),
+    );
+  });
+
   test("reports invalid regexes as assertion failures", () => {
     const invalidRegexScenario = parseScenarioMarkdown({
       filePath: "/repo/tests/skills/pressure-scenarios/invalid-regex.md",

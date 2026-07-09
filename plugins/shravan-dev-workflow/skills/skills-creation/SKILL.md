@@ -29,7 +29,7 @@ classification: create | update | evaluate
 target skill / owner plugin:
 reusable behavior:
 baseline or review target:
-invocation: model-invoked | user-invoked | routed
+invocation: model-invocable | user-invocable
 branches loaded:
 security route: allowed | disallowed | blocked | deferred | n/a
 proof route: RED | GREEN | static-only | pressure scenario | micro-test | proof gap
@@ -60,20 +60,19 @@ Mechanical/metadata-only changes are static-only and must be labeled that way.
 "I already know the wording problem" is not a skip. Completion: RED is named,
 or the change is explicitly static-only.
 
-**3. Design the trigger.** First choose invocation: model-invoked (pays context
-load and lets the agent discover the skill), user-invoked (pays cognitive load
-because the human must name it), or routed when user-invoked skills are
-multiplying. Then write the YAML description as a trigger-only context pointer
-for that mode. It should start with the real loading condition, use words the
-user/docs/code are likely to use, name distinct branches once, include a brief
-payoff when useful, and avoid internal step narration. Load
+**3. Design the trigger.** First choose invocation capabilities:
+model-invocable (the agent can discover the skill from its description) and/or
+user-invocable (the human can name it directly). Then write the YAML description
+as a trigger-only context pointer for that choice. It should start with the real
+loading condition, use words the user/docs/code are likely to use, name distinct
+branches once, include a brief payoff when useful, and avoid internal step
+narration. Load
 `references/frontmatter-design.md` when trigger wording, adjacent-skill
-boundaries, or invocation tradeoffs are the hard part. When explicit-only,
-background-only, or client-specific invocation controls are requested, load
-`references/platform-mechanics.md` and return the platform encoding, such as
-Codex `agents/openai.yaml` policy versus Claude-oriented frontmatter fields.
-Completion: invocation mode is named, and description or platform policy
-matches that mode without summarizing the workflow.
+boundaries, or invocation tradeoffs are the hard part. When client-specific
+invocation controls are requested, load `references/platform-mechanics.md` and
+return the platform encoding. Completion: invocation capabilities are named,
+and description or platform policy matches them without summarizing the
+workflow.
 
 **4. Build the mental model.** Decide what concept, lens, or leading word the
 skill should pull into the model's latent space. Prefer existing domain or
@@ -116,7 +115,7 @@ hypothesized failure:
 | omitted element | required slot next to the output |
 | conditional behavior mistake | observable predicate + action |
 | shallow legwork | stronger completion criterion |
-| wrong invocation | sharper description or user-invoked route |
+| wrong invocation | sharper description or user-invocable route |
 | reference retrieval gap | stronger context pointer or inline material |
 
 Completion: wording changes cite the failure form they are meant to fix.
@@ -154,14 +153,17 @@ proof. Load `references/pressure-testing.md` for the detailed protocol.
 
 **11. Review the implementation.** After proof exists and before `PR-ready` or
 `released`, load `references/skill-implementation-review.md` for any
-non-trivial skill change unless the user explicitly says no review needed. Use
-two read-only perspectives: `fresh-perspective` plus a second independent local
-perspective by default. Use `outside-model` only when the user explicitly
-requests external counsel; otherwise record `outside-model not requested`. Name
-both perspectives in the implementation-review plan and reduction. The review
-checks the actual changed files, proof quality, pressure coverage, and accepted
-spec constraints. Accepted findings route back to implementation and proof;
-parent-reduce candidate findings; after fixes,
+non-trivial skill change unless the user explicitly says no review needed. For
+final repo skill-work readiness, route through `implementation-review-swarm`
+and use `references/skill-implementation-review.md` as the skill-specific
+rubric and packet input. Use two read-only perspectives: `fresh-perspective`
+plus a second independent local perspective by default. Use `outside-model`
+only when the user explicitly requests external counsel; otherwise record
+`outside-model not requested`. Name both perspectives in the
+implementation-review plan and reduction. The review checks the actual changed
+files, proof quality, pressure coverage, and accepted spec constraints.
+Accepted findings route back to implementation and proof; parent-reduce
+candidate findings; after fixes,
 rerun the targeted proof that could catch the issue and refresh the
 implementation-review reduction or changed-file coverage for files touched by
 the fix.
@@ -174,7 +176,8 @@ behavior change if this disappeared? If not, delete it. When shipping, route
 platform validation, versioning, changelog, and cache/readback decisions through
 `references/platform-mechanics.md`. Sensitive surfaces -- scripts, hooks,
 assets, package scripts, shell/network behavior, third-party source adoption,
-installed-cache refresh, or home-level mutation -- route through
+private auth material, privileged actions, installed-cache refresh, or
+home-level mutation -- route through
 `references/skill-security-review.md` before outlining an authoring path or
 writing them. Chat-only sensitive-surface reviews still use that reference's
 return labels, including license/permission and copy-vs-adapt decisions for

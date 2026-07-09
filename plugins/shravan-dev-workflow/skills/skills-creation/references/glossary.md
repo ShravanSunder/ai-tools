@@ -13,18 +13,19 @@ in `SKILL.md` or the branch reference that owns them.
 
 - Trigger surface: YAML/frontmatter description plus any router wording that
   decides whether the skill loads.
-- Description: the always-visible context pointer for a model-invoked skill. It
+- Description: the always-visible context pointer for a model-invocable skill. It
   names when to load and why, not how to run the workflow.
-- Model-invoked: discoverable by the agent through its description. Pays context
-  load.
-- User-invoked: loaded only when the human names it. Pays human cognitive load.
-- Router skill: a user-invoked index that helps the human choose among other
-  user-invoked skills.
+- Model-invocable: discoverable by the agent through its description. Pays
+  context load.
+- User-invocable: available for the human to name directly. Pays human
+  cognitive load.
+- Router skill: a user-invocable index that helps the human choose among other
+  user-invocable skills.
 - Context load: the token and attention cost of always-visible trigger text.
 - Cognitive load: the human memory and choice cost of skills the model cannot
   discover alone.
-- Granularity: how finely skills are split. More model-invoked skills spend
-  context load; more user-invoked skills spend cognitive load.
+- Granularity: how finely skills are split. More model-invocable skills spend
+  context load; more user-invocable skills spend cognitive load.
 
 ## Information Hierarchy
 

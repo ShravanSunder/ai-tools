@@ -19,16 +19,10 @@ that tells the agent when to invoke the skill.
 
 ## Invocation Controls
 
-First decide the invocation behavior: model-invoked, explicit-only,
-background-only, or routed. Then choose the platform encoding. Do not add
-platform-specific invocation-control frontmatter by default.
-
-Use `disable-model-invocation: true` or `user-invocable: false` only when the
-user explicitly asks for manual-only or background-only behavior, or when an
-existing target client contract already uses those fields. For Codex, route the
-exact encoding through `references/platform-mechanics.md` because Codex
-invocation policy lives in `agents/openai.yaml`, not portable `SKILL.md`
-frontmatter.
+First decide whether the skill is model-invocable, user-invocable, or both.
+Do not add platform-specific invocation-control frontmatter by default.
+When a client-specific control is needed, route the exact encoding through
+`references/platform-mechanics.md`.
 
 ## Good Description
 
@@ -70,7 +64,7 @@ summarizes the workflow.
 ## Repair Moves
 
 - Wrong invocation: sharpen the loading condition or make the skill
-  user-invoked.
+  user-invocable.
 - Over-broad trigger: add adjacent-skill boundaries or concrete symptoms.
 - Under-triggering: add user words and repo/code signals.
 - Workflow summary: move process detail into `SKILL.md`.

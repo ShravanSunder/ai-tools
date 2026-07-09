@@ -49,7 +49,8 @@ Cover each item with source-backed evidence:
 - promise: the reusable behavior is specific and worth making durable.
 - trigger: name and YAML/frontmatter description say when to load, why briefly,
   and do not summarize the workflow.
-- invocation: model-invoked, user-invoked, or routed choice pays the right load.
+- invocation: model-invocable and user-invocable capabilities pay the right
+  load.
 - mental model: `SKILL.md` will name the lens, leading words, or concepts that
   pull the model into the intended frame.
 - main path: ordered steps or reference shape are visible, operational, and

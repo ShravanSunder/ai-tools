@@ -14,8 +14,9 @@ route.
 - Required file: `SKILL.md` with `name` and `description`.
 - Recommended UI metadata: `agents/openai.yaml`.
 - Codex invocation policy belongs in `agents/openai.yaml`. Use
-  `policy.allow_implicit_invocation: false` when the skill should be explicit
-  `$skill` only. Do not add `disable-model-invocation` or `user-invocable` to
+  `policy.allow_implicit_invocation: false` only as the Codex encoding for a
+  skill that is user-invocable but not automatically model-invocable through
+  prompt matching. Do not add `disable-model-invocation` or `user-invocable` to
   shared `SKILL.md` frontmatter for Codex unless the active validator and target
   client explicitly support that field.
 - Optional resources: `references/`, `scripts/`, `assets/`.
@@ -34,10 +35,11 @@ route.
 - Claude skill delivery comes through the plugin source and `.claude-plugin`
   metadata when the owning plugin supports Claude.
 - Claude-oriented skill frontmatter may use `disable-model-invocation: true`
-  for manual-only skills or `user-invocable: false` for background-only skills
-  when the user requests that behavior or the target client contract requires
-  it. These are client-specific invocation controls, not default portable
-  frontmatter for every shared skill.
+  when a skill should not be model-invocable, or `user-invocable: false` when a
+  skill should not be user-invocable, if the user requests that behavior or the
+  target client contract requires it. These are client-specific encodings of
+  the standard invocation capabilities, not default portable frontmatter for
+  every shared skill.
 - Keep Claude plugin manifest and Claude marketplace versions in sync with
   the source plugin version when user-visible plugin behavior changes.
 - Run Claude plugin validation after Claude manifest, marketplace, or shared
