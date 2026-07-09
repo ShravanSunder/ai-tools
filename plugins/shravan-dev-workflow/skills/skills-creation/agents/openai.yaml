@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills Creation"
+  short_description: "Author and evaluate repo skills"
+  default_prompt: "Use $skills-creation to create, update, or evaluate one named skill."

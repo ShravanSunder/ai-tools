@@ -3,11 +3,11 @@
 Treat executable resources, third-party content, secrets, and home/cache
 writes as sensitive surfaces before ordinary authoring continues.
 
-Load this when scripts, hooks, assets, package scripts, shell/network
-behavior, third-party skill/source adoption, private auth material,
-privileged actions, or installed-cache/home mutation are in scope, or when
-the user asks to refresh installed plugins or mutate home-level state as
-proof.
+This reference owns sensitive-surface inspection for scripts, hooks, assets,
+package scripts, shell/network behavior, third-party source, private auth
+material, privileged actions, installed-cache refresh, and home-level mutation.
+Return the security decision and required proof before the sensitive surface is
+edited.
 
 ## Sensitive Surfaces
 
@@ -45,7 +45,7 @@ privileged actions:
 third-party source:
 license / permission state:
 copy-vs-adapt decision:
-decision: allowed | disallowed | blocked | deferred -- sets the Authoring State `security route` field
+decision: allowed | disallowed | blocked | deferred -- sets the run note `security route` field when one is used
 required proof:
 public-safe constraints:
 review route:

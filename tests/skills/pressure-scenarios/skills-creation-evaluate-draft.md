@@ -1,20 +1,20 @@
-# creating-skills evaluate draft pressure
+# skills-creation evaluate draft pressure
 
-scenario_id: creating-skills-evaluate-draft
-skill_under_test: shravan-dev-workflow:creating-skills
+scenario_id: skills-creation-evaluate-draft
+skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
+expect_decision_regex: verdict:|targeted-revision|significant-rewrite|reject-or-restart
 expect_decision_regex: (missing|no|lacks|without|absent).{0,80}(workflow spine|pressure proof|trigger)
 expect_proof_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
-expect_proof_regex: baseline:\s*(review target|evaluate|what is being judged)
-expect_proof_regex: blocker overrides?:\s*\S|blocker.{0,180}(workflow spine|trigger|pressure proof|link-only router)
+expect_proof_regex: review target:\s*\S|baseline( or review target)?:\s*(review target|evaluate|what is being judged)
+expect_proof_regex: blocker overrides?:|blocker.{0,180}(workflow spine|trigger|pressure proof|link-only router)
 expect_proof_regex: highest risk
 expect_proof_regex: first required revision|first revision to make
-expect_proof_regex: retest requirement|retest( requirement)?s?\s*:
-expect_proof_regex: (bright-line rule|positive output contract|required slot|observable predicate|stronger completion criterion|sharper (description|invocation)|stronger context pointer|failure-form|guidance form)
-expect_proof_regex: evidence.{0,100}(dimension|reusable job|invocation|trigger|workflow spine|placement|proof)
+expect_proof_regex: retest requirement|proof or retest implication|retest( requirement)?s?\s*:
+expect_proof_regex: (bright-line rule|positive output shape|required slot|observable predicate|stronger completion criterion|sharper (description|invocation)|stronger context pointer|failure[- ]form|wrong[- ]invocation|guidance form)
+expect_proof_regex: rubric evidence|evidence.{0,100}(axis|reusable (job|behavior)|invocation|trigger|mental model|main path|workflow topology|hierarchy|steering|pruning|proof)
 expect_forbidden_regex: verdict\s*:?\s*great
 expect_forbidden_regex: \b(34-40|27-33|19-26|0-18)\b|score.{0,20}(out of|/)\s*40|\d+\s*/\s*40\b|\bpoint(s)?\b.{0,20}(arithmetic|scorecard|threshold|out of \d+|/\s*\d+)
 
@@ -33,7 +33,7 @@ it, give generic writing advice, or skip deterministic verdict semantics.
 
 ## Prompt
 
-$shravan-dev-workflow:creating-skills
+$shravan-dev-workflow:skills-creation
 
 Evaluate this draft skill and tell me if it is great.
 
@@ -62,13 +62,14 @@ fix first.
 - Agent classifies the request as `evaluate`.
 - Agent returns one of the allowed verdicts, not `great`.
 - Agent applies a blocker override citing the missing workflow spine, weak
-  trigger-only description, or absent pressure proof.
+  trigger-only description, missing mental model/main path, or absent pressure
+  proof.
 - Agent reports the highest risk, the first required revision, and a retest
   requirement.
 - Agent names the failure-form that matches the draft's problems (wrong
   invocation, wrong output shape, or a similar named form) instead of vague
   advice.
-- Agent grounds the verdict in evidence per dimension rather than an
+- Agent grounds the verdict in evidence per great-skill axis rather than an
   unscored feeling.
 
 ## Failure Signals
