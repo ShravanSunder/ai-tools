@@ -1,6 +1,6 @@
 ---
 name: skills-creation
-description: Use when creating, updating, or evaluating one named skill; turning repeated agent behavior into durable guidance; or deciding trigger wording, skill structure, references, steering language, or proof so future agents behave predictably. Not for repo-wide skill portfolio audits - use skill-audit.
+description: Use when creating, updating, or evaluating one named skill or accepted draft; when skill wording fails under pressure; or when a draft's trigger, main path, or proof needs judgment before shipping.
 ---
 
 # Skills Creation
@@ -29,9 +29,10 @@ classification: create | update | evaluate
 target skill / owner plugin:
 reusable behavior:
 baseline or review target:
+invocation: model-invoked | user-invoked | routed
 branches loaded:
 security route: allowed | disallowed | blocked | deferred | n/a
-proof route: static-only | pressure scenario | micro-test | proof gap
+proof route: RED | GREEN | static-only | pressure scenario | micro-test | proof gap
 shipping status: source-only | PR-ready | released
 ```
 
@@ -49,27 +50,39 @@ plain words before the details: YAML/frontmatter is the trigger surface,
 branch depth, and pressure or static proof will validate the change. This is
 part of alignment, not ceremony.
 
-**2. Design the trigger.** Write the YAML description as a context pointer, not
-a workflow summary. It should start with the real loading condition, use words
-the user/docs/code are likely to use, name distinct branches once, include a
-brief payoff when useful, and avoid internal step narration. Load
-`references/frontmatter-design.md` when trigger wording, adjacent-skill
-boundaries, or invocation tradeoffs are the hard part. Completion: description
-text answers "should I load this now?" without letting the agent skip the body.
+**2. Prove first (behavior-changing work).** Before describing or writing any
+behavior-changing update, name a pressure scenario or micro-test that already
+fails against the current skill (RED). Creates may draft from a hypothesized
+baseline; they still need GREEN before `PR-ready` or `released`.
+Mechanical/metadata-only changes are static-only and must be labeled that way.
+"I already know the wording problem" is not a skip. Completion: RED is named,
+or the change is explicitly static-only.
 
-**3. Build the mental model.** Decide what concept, lens, or leading word the
+**3. Design the trigger.** First choose invocation: model-invoked (pays context
+load and lets the agent discover the skill), user-invoked (pays cognitive load
+because the human must name it), or routed when user-invoked skills are
+multiplying. Then write the YAML description as a trigger-only context pointer
+for that mode. It should start with the real loading condition, use words the
+user/docs/code are likely to use, name distinct branches once, include a brief
+payoff when useful, and avoid internal step narration. Load
+`references/frontmatter-design.md` when trigger wording, adjacent-skill
+boundaries, or invocation tradeoffs are the hard part. Completion: invocation
+mode is named, and description matches that mode without summarizing the
+workflow.
+
+**4. Build the mental model.** Decide what concept, lens, or leading word the
 skill should pull into the model's latent space. Prefer existing domain or
 engineering language over invented jargon. State the behavior the skill
 stabilizes and the judgment it should improve. Completion: `SKILL.md` has a
 clear mental model before details or exceptions.
 
-**4. Shape the main path.** Decide whether the skill is all steps, all
+**5. Shape the main path.** Decide whether the skill is all steps, all
 reference, or both. Put ordered steps in `SKILL.md` only when order changes
 behavior. End each step with a checkable completion criterion that demands the
 necessary legwork. Completion: the main path is visible in one scan and cannot
 be mistaken for a loose essay.
 
-**5. Build the workflow and branches.** Turn the main path into a route map.
+**6. Build the workflow and branches.** Turn the main path into a route map.
 Name the all-run workflow first: what the agent does from load to completion.
 Then name branches only when an observable condition changes the work. Each
 branch needs a predicate, destination, and return shape: when to enter, where
@@ -80,7 +93,7 @@ Completion: the workflow has one all-run spine, each branch has a load
 condition, and every branch returns something the main path can use. Load
 `references/workflow-topology.md` for detailed workflow and branch design.
 
-**6. Place the depth.** Inline material every run needs. Move branch-specific
+**7. Place the depth.** Inline material every run needs. Move branch-specific
 walkthroughs, per-provider examples, detailed rubrics, platform mechanics,
 security review, and long proof protocols into `references/`. Context pointers
 must name the observable condition for loading the reference and what it
@@ -94,7 +107,7 @@ filename lists. Load
 or whether branch material belongs inline. Load `references/schema-design.md`
 when real lanes, skills, outputs, or tools share the same slots or shape.
 
-**7. Steer the failure.** Match the guidance form to the observed or
+**8. Steer the failure.** Match the guidance form to the observed or
 hypothesized failure:
 
 | observed failure | guidance form |
@@ -109,11 +122,10 @@ hypothesized failure:
 
 Completion: wording changes cite the failure form they are meant to fix.
 
-**8. Prove under pressure.** Keep proof visible, but sized to the change.
-Behavior-changing updates caused by an observed failure need RED before the
-edit. New skill drafts may start from a failure hypothesis, but they need GREEN
-before `PR-ready` or `released`. Mechanical changes use static validation only.
-Choose proof by skill type:
+**9. Prove GREEN and size the proof.** After wording exists, rerun the chosen
+proof route. Behavior-changing work needs GREEN before `PR-ready` or
+`released`; mechanical changes use static validation only. Choose proof by
+skill type:
 
 - discipline skill: pressure scenario plus rationalization capture.
 - technique skill: application to a fresh but similar task.
@@ -124,7 +136,7 @@ Choose proof by skill type:
 Completion: proof route is explicit and static proof is not relabeled behavior
 proof. Load `references/pressure-testing.md` for the detailed protocol.
 
-**9. Prune and ship.** Run the deletion test sentence by sentence: would agent
+**10. Prune and ship.** Run the deletion test sentence by sentence: would agent
 behavior change if this disappeared? If not, delete it. When shipping, route
 platform validation, versioning, changelog, and cache/readback decisions through
 `references/platform-mechanics.md`. Sensitive surfaces -- scripts, hooks,
@@ -134,7 +146,7 @@ installed-cache refresh, or home-level mutation -- route through
 writing them. Chat-only sensitive-surface reviews still use that reference's
 return labels, including license/permission and copy-vs-adapt decisions for
 third-party source. Completion: the skill is compact, valid, public-safe, and
-proof status matches shipping status.
+proof route matches shipping status.
 
 ## Completion Blockers
 
@@ -142,6 +154,7 @@ The run is not done while any of these hold:
 
 - the YAML description summarizes the workflow instead of triggering the skill;
 - `SKILL.md` lacks a mental model or main path;
+- a behavior-changing update described or edited wording before naming RED;
 - the workflow has branches without observable predicates or return shapes;
 - branch-only depth is inlined without a strong reason;
 - a behavior-changing shipped update has no behavior proof or accepted proof

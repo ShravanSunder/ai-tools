@@ -12,7 +12,7 @@ expect_proof_regex: classification:\s*update|treat\w* this as.{0,60}update
 expect_proof_regex: existing-surface check|target skill.{0,60}owner plugin.{0,60}debug-investigation
 expect_proof_regex: owner plugin.{0,120}shravan-dev-workflow|shravan-dev-workflow.{0,80}owner plugin|shravan-dev-workflow.{0,120}debug-investigation|debug-investigation.{0,120}shravan-dev-workflow
 expect_proof_regex: (broad|repo-wide).{0,80}(inventory|portfolio|duplicate|merge).{0,160}(out of scope|defer|deferred|skill-audit|elsewhere|not now)|defer.{0,160}(inventory|portfolio|duplicate|merge|adjacent)
-expect_proof_regex: proof status:\s*red|failing (pressure )?(scenario|micro-test)|(pressure scenario|micro-test|micro test).{0,180}(fail(s|ing)?|red)\b
+expect_proof_regex: proof (status|route):\s*red|failing (pressure )?(scenario|micro-test)|(pressure scenario|micro-test|micro test).{0,180}(fail(s|ing)?|red)\b
 expect_proof_regex: (red).{0,180}(before|prior to|then).{0,100}(edit|writ(e|ing)|green)|(before|prior to).{0,100}(edit|writ(e|ing)).{0,180}(red|fail(s|ing)?|scenario|micro-test)|(edit\w*|chang\w*).{0,60}without.{0,60}(named )?(failing )?(scenario|micro-test|red)
 expect_forbidden_regex: classification.{0,80}create
 expect_forbidden_regex: start with `?skill-audit`? to|begin with `?skill-audit`? to|route.{0,40}primarily.{0,40}`?skill-audit`?

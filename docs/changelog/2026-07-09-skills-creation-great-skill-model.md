@@ -1,7 +1,7 @@
 # Skills Creation Great Skill Model
 
 - Marketplace plugin: `shravan-dev-workflow`
-- Version: `1.6.45` -> `1.6.47`
+- Version: `1.6.45` -> `1.6.48`
 
 ## User-Visible Behavior Changes
 
@@ -23,6 +23,13 @@
   reference-file design.
 - Reworked reference-file openings so references state what they own and return
   instead of repeating self-load conditions already owned by `SKILL.md`.
+- Moved RED-before-edit into an early hard gate for behavior-changing updates,
+  while keeping creates on hypothesized baselines and mechanical edits
+  static-only.
+- Rewrote the skill trigger description around observable skill-authoring
+  symptoms instead of listing internal craft surfaces.
+- Added invocation mode to the main trigger-design step so new skills choose
+  model-invoked, user-invoked, or routed behavior before description wording.
 - Kept pressure testing visible in `SKILL.md`, but refocused it as the proof
   gate for behavior-changing skill text rather than the identity of the skill.
 - Reworked `glossary.md`, `great-skill-evaluation.md`, and
@@ -42,6 +49,7 @@
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/great-skill-evaluation.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/pressure-testing.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/reference-design.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/schema-design.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/workflow-topology.md`
 - `tests/skills/pressure-scenarios/skills-creation-*.md`
 - `AGENTS.md`
@@ -55,7 +63,7 @@
 
 - `uv run --with PyYAML python /Users/shravansunder/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/shravan-dev-workflow/skills/skills-creation`
   - Exit 0: `Skill is valid!`
-- Earlier focused pressure scenarios before the final frame/reference cleanup:
+- Focused pressure scenarios after the final RED/invocation/description changes:
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-workflow-spine --timeout 900`
     - Exit 0: 1 test passed.
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-draft-artifact --timeout 900`
@@ -78,8 +86,12 @@
   - Exit 0: validation passed.
 - `git diff --check`
   - Exit 0.
-- Final frame/reference cleanup pressure status:
-  - Deferred to the end of the change batch by user direction.
+- Broad fast pressure suite:
+  - `tests/skills/run-skill-pressure-tests.sh --fast`
+  - Interrupted after unrelated non-owned failures in
+    `debug-investigation-background-monitoring` and
+    `discuss-clarify-mental-models-map-building`; focused
+    `skills-creation-*` scenarios above were run separately and passed.
 
 ## Refresh Status
 

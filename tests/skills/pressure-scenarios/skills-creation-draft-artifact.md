@@ -10,6 +10,7 @@ expect_decision_regex: description:\s*use when
 expect_proof_regex: classification:\s*create|classification.{0,40}create
 expect_proof_regex: reusable (job|behavior):\s*\S
 expect_proof_regex: baseline( or review target)?:\s*hypothesiz\w*|hypothesiz\w*.{0,100}baseline
+expect_proof_regex: invocation:?\s*(model-invoked|user-invoked|routed)|invocation mode.{0,120}(model-invoked|user-invoked|routed)
 expect_proof_regex: description:\s*use when
 expect_proof_regex: (mental model|leading word|latent space|lens)
 expect_proof_regex: (workflow topology|all-run spine|main path).{0,300}(branch|predicate|return shape)|(branch|predicate|return shape).{0,300}(workflow topology|all-run spine|main path)
@@ -50,6 +51,7 @@ working from.
 - Agent classifies the request as `create` and names the reusable behavior.
 - Agent states the baseline is hypothesized, since `flag-guard` does not
   exist yet.
+- Agent names the invocation mode and its load tradeoff.
 - Agent actually produces draft `SKILL.md` text, not just a description of
   what it would contain.
 - The drafted `description:` line starts "Use when" and names concrete
