@@ -1,13 +1,28 @@
 # Source Inspiration Catalog
 
-This is a maintainer catalog for workflow-skill design. It is not a runtime
-skill reference and should not be loaded during normal spec, plan, review, or
-implementation work.
+Lite maintainer map for `shravan-dev-workflow` design. **Not** a runtime skill
+reference — do not load during normal spec, plan, review, or implementation.
 
-Use it when auditing or updating `shravan-dev-workflow` skills and you need to
-remember which admired repositories are worth re-checking.
+## Full admired-source index (canonical)
 
-## Source Trees To Preserve
+Detailed per-skill provenance, upstream pins, and date-pinned From/To changelog
+compare live in the **`ai-dev-skills`** meta-repo:
+
+`/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/`
+
+| Index | Path in ai-dev-skills | Use for |
+|-------|----------------------|---------|
+| Local skill → upstream | `docs/my-ai-tools/` | Which admired sources a plugin skill borrows |
+| Upstream → local | `docs/repo-index/` | What we care about in each upstream tree |
+| Date-pinned history | `docs/repo-index-changelog/` | Cheap compare between two submodule SHAs |
+| Maintenance contract | `AGENTS.md` | How to bump submodules and keep indexes in sync |
+
+**Maintain both:** keep this file as a short in-plugin reminder; put durable
+path-level mappings, pin SHAs, and bump notes in `ai-dev-skills`. When they
+diverge, prefer updating `ai-dev-skills` first, then refresh the lite tables
+here if the high-level preserve/avoid story changed.
+
+## Source Trees To Preserve (lite)
 
 | Source tree | Preserve | Narrow / avoid |
 | --- | --- | --- |
@@ -26,7 +41,10 @@ pack for this repo's purposes, so keep Addy as the named source unless
 provenance matters. Broad curated skill catalogs are low value here except for
 review and security subsets.
 
-## Current Local Mapping
+Upstream checkouts for the trees above are submodules under `ai-dev-skills`
+(for example `cursor-plugins`, `mattpocock-skills`, `obra-superpowers`).
+
+## Current Local Mapping (lite)
 
 | Workflow area | Useful sources | Local adaptation |
 | --- | --- | --- |
@@ -37,10 +55,15 @@ review and security subsets.
 | Review transport | OpenClaw ACPX / ACP, local review swarms, Claude/Gemini structured feedback | ACPX is external review transport; parent reducer verifies all candidate findings |
 | Security review | Codex curated security skills | Route to `ops-security-review`; keep normal review lanes lightweight |
 
+For per-skill borrowed/do-not-copy detail, open the matching file under
+`ai-dev-skills/docs/my-ai-tools/shravan-dev-workflow/`.
+
 ## Maintenance Rules
 
-- Keep this catalog selective.
+- Keep this catalog selective and lite.
 - Do not copy upstream skill prose into local skills.
 - Do not cite source inspiration as proof that local behavior works.
 - When a workflow change is implemented, add pressure scenarios that prove the
   local adaptation prevents the observed failure.
+- Path-level provenance, submodule pins, and bump history: update `ai-dev-skills`
+  (`docs/my-ai-tools/`, `docs/repo-index/`, `docs/repo-index-changelog/`).

@@ -42,15 +42,6 @@ app automation via the Accessibility API. The Peekaboo skill uses live CLI
 discovery, snapshot-scoped interaction, and progressive references for
 troubleshooting and headless mode.
 
-### [quorum-counsel](quorum-counsel/)
-
-Multi-model review orchestration. Provides:
-
-- **counsel-reviewer** agent -- orchestrates Gemini + Codex in parallel for comprehensive plan/code review
-- **codex-solver** agent -- delegates hard problems to OpenAI Codex as a background task
-- `/review-plan` command -- trigger plan review
-- CLI permission hooks for bash commands
-
 ### [shravan-dev-workflow](shravan-dev-workflow/)
 
 Shravan's Codex-first development workflow plugin. Provides:

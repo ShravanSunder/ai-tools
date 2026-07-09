@@ -60,13 +60,6 @@ AgentStudio and Agent VM loops, resource naming, and Victoria query recipes.
 Start with [`plugins/shravan-dev-workflow/README.md`](plugins/shravan-dev-workflow/)
 for the full workflow map, phase diagrams, and skill boundaries.
 
-### Manual Counsel
-
-[`quorum-counsel`](plugins/quorum-counsel/) remains available for manual
-multi-model counsel, but it is not the default review path. Prefer
-`shravan-dev-workflow` review swarms for day-to-day implementation, plan, and
-spec review.
-
 ---
 
 ## Agent Sidecar
@@ -103,8 +96,7 @@ ai-tools/
 ├── plugins/                     # Codex and Claude Code plugins
 │   ├── shravan-dev-workflow/    # Spec, plan, implementation, review, handoff workflows
 │   ├── dev-workflow-tools/      # Common tool skills, including Peekaboo UI testing
-│   ├── ai-scaffold/             # Project scaffolding
-│   └── quorum-counsel/          # Optional manual multi-model counsel
+│   └── ai-scaffold/             # Project scaffolding
 ├── agent_sidecar/               # Docker sidecar system
 ├── observability/               # Shared local OTel/Victoria stack
 ├── AGENTS.md                    # Maintainer and agent instructions

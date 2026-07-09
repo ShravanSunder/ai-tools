@@ -40,7 +40,6 @@ ai-tools/
 ├── plugins/                          # Plugin sources
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
 │   ├── dev-workflow-tools/           # Common tool skills, including Peekaboo UI testing
-│   ├── quorum-counsel/               # Manual multi-model counsel stack
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent_sidecar/                    # Docker sidecar system
@@ -117,6 +116,32 @@ Detailed mechanics stay in the owning skills and references:
 - `implementation-review-swarm` and `implementation-pr-wrapup` own the final
   review and merge-ready PR proof for implemented skill-work changes.
 
+## Admired-source provenance (ai-dev-skills)
+
+Upstream skill collections are tracked in a separate meta-repo so this plugin
+can keep a **lite** inspiration map while durable provenance lives next to the
+actual upstream checkouts.
+
+- **Meta-repo:** `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/`
+- **Lite in-plugin map:**
+  `plugins/shravan-dev-workflow/docs/source-inspiration-catalog.md`
+  (preserve/avoid + workflow-area overview; not a runtime skill reference)
+- **Compatibility pointer:**
+  `plugins/shravan-dev-workflow/references/source-inspirations.md`
+
+| Need | Open |
+|------|------|
+| Quick preserve/avoid reminder | lite catalog above |
+| Per-skill borrowed / do-not-copy detail | `ai-dev-skills/docs/my-ai-tools/` |
+| What we care about in an upstream tree | `ai-dev-skills/docs/repo-index/` |
+| Cheap compare between two pinned SHAs | `ai-dev-skills/docs/repo-index-changelog/` |
+| How to bump submodules / keep indexes synced | `ai-dev-skills/AGENTS.md` |
+
+**Maintain both.** Update `ai-dev-skills` for path-level mappings, pin SHAs, and
+bump notes. Refresh the lite catalog here only when the high-level
+preserve/avoid or workflow-area story changes. Do not copy upstream skill prose
+into plugin skills; do not treat inspiration as proof that local behavior works.
+
 ## System Observability Ownership
 
 `observability/` owns the shared local OpenTelemetry and Victoria stack.
@@ -162,9 +187,9 @@ or generic Victoria query docs into app repos.
 
 Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
 
-### Relationship to quorum-counsel
+### Review defaults
 
-`quorum-counsel` remains available for manual use, but it is not the default review workflow. Prefer `shravan-dev-workflow:implementation-review-swarm` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend and includes Claude, Gemini/agy, or another outside adversarial lane only when the user explicitly asks.
+Prefer `shravan-dev-workflow:implementation-review-swarm` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend and includes Claude, Gemini/agy, or another outside adversarial lane only when the user explicitly asks.
 
 Oracle is manual-only. Do not invoke it from normal review workflows.
 
