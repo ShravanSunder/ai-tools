@@ -48,6 +48,9 @@ Persistent sidekicks need a session ledger before prompts that assume memory:
 provider, cwd, session name, status, current assignment, last receipt, and next
 follow-up intent.
 
+When explaining this pattern, name it as long-lived work in a separate context
+with a session ledger and progress check.
+
 Completion: the sidekick has a ledger row and a progress check that proves
 whether it is idle, running, blocked, or stale.
 
@@ -65,6 +68,9 @@ charge. Advisor modes include:
 Advisor output is not a second verdict. It is inline candidate guidance. The
 parent must decide whether the note is accepted, rejected, or escalated to a
 phase review.
+
+When explaining this pattern, name quiet notes, hard blockers, and course
+correction as advisor outputs when the harness supports inline notes.
 
 Completion: the advisor trigger, note channel, maximum authority, and stop
 condition are explicit.
