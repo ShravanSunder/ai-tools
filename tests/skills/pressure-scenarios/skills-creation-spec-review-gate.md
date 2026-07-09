@@ -9,7 +9,7 @@ expect_decision_regex: classification:\s*update|treat\w* this as.{0,60}update
 expect_decision_regex: spec review|skill-spec-review
 expect_decision_regex: references/skill-spec-review\.md|skill-spec-review\.md|skill-spec-review
 expect_decision_regex: before (implementation|editing|files are edited)|pre-implementation|before files are edited
-expect_decision_regex: fresh-perspective|outside-model|outside model|outside-model gap
+expect_decision_regex: fresh-perspective|local-lane|outside-model not requested|outside model not requested
 expect_proof_regex: RED before edit|red before edit|RED.{0,80}(before|first)|red.{0,80}(before|first)|failing (pressure )?(scenario|micro-test)
 expect_proof_regex: accepted-to-implement|accepted to implement|implementation decision|accept the design|spec accepted|required spec review|spec review before implementation
 expect_forbidden_regex: spec review.{0,120}(after|once).{0,80}(implementation|editing)
@@ -43,8 +43,8 @@ extra review ceremony unless the skill actually requires it.
   edited.
 - Agent routes the pre-implementation review to
   `references/skill-spec-review.md`.
-- Agent names fresh-perspective plus outside-model or outside-model gap as the
-  review perspectives.
+- Agent names fresh-perspective plus a second local lane by default, and does
+  not invoke outside-model unless the user explicitly requested it.
 - Agent says accepted findings return to the spec/design before implementation.
 
 ## Failure Signals

@@ -123,14 +123,16 @@ Completion: wording changes cite the failure form they are meant to fix.
 
 **9. Review the skill spec.** Before implementing a non-trivial skill change,
 load `references/skill-spec-review.md` unless the user explicitly says no
-review needed. Use two review perspectives: `fresh-perspective` plus
-`outside-model`, or record an `outside-model gap`; name both perspectives in
-the run plan before implementation, including read-only planning responses that
-stop before edits. The plan line should say `review perspectives:
-fresh-perspective + outside-model` or `review perspectives: fresh-perspective +
-outside-model gap`. Typos, version bumps, and metadata-only edits with no
-behavior claim may stay static-only. Accepted findings return to the relevant
-spec step above before files are edited. Use
+review needed. Use two read-only perspectives: `fresh-perspective` plus a
+second independent local perspective by default. Use `outside-model` only when
+the user explicitly requests external counsel; otherwise record
+`outside-model not requested`. Name both perspectives in the run plan before
+implementation, including read-only planning responses that stop before edits.
+The plan line should say `review perspectives: fresh-perspective + local-lane`
+or `review perspectives: fresh-perspective + outside-model requested`. Typos,
+version bumps, and metadata-only edits with no behavior claim may stay
+static-only. Accepted findings return to the relevant spec step above before
+files are edited. Use
 `references/skill-review-output-schema.md` for shared packet, finding,
 coverage, and reduction shapes. Completion: spec review is parent-reduced to
 accepted-to-implement, explicitly skipped by the user, or not applicable
@@ -153,11 +155,13 @@ proof. Load `references/pressure-testing.md` for the detailed protocol.
 **11. Review the implementation.** After proof exists and before `PR-ready` or
 `released`, load `references/skill-implementation-review.md` for any
 non-trivial skill change unless the user explicitly says no review needed. Use
-two review perspectives: `fresh-perspective` plus `outside-model`, or record an
-`outside-model gap`; name both perspectives in the implementation-review plan
-and reduction. The review checks the actual changed files, proof quality,
-pressure coverage, and accepted spec constraints. Accepted findings route back
-to implementation and proof; parent-reduce candidate findings; after fixes,
+two read-only perspectives: `fresh-perspective` plus a second independent local
+perspective by default. Use `outside-model` only when the user explicitly
+requests external counsel; otherwise record `outside-model not requested`. Name
+both perspectives in the implementation-review plan and reduction. The review
+checks the actual changed files, proof quality, pressure coverage, and accepted
+spec constraints. Accepted findings route back to implementation and proof;
+parent-reduce candidate findings; after fixes,
 rerun the targeted proof that could catch the issue and refresh the
 implementation-review reduction or changed-file coverage for files touched by
 the fix.

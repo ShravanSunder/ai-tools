@@ -24,9 +24,10 @@
 - Collapsed duplicated placement ladders so `reference-design.md` owns
   SKILL/reference/script/glossary placement, `workflow-topology.md` owns route
   and branch returns, and `schema-design.md` owns only reusable schema families.
-- Added a default implementation review gate for non-trivial skill changes with two
-  reviewer lanes, at least one outside-model lane when available, parent
-  reduction, and targeted pressure retest before `PR-ready` or `released`.
+- Added a default implementation review gate for non-trivial skill changes with
+  two reviewer perspectives, external counsel only when explicitly requested,
+  parent reduction, and targeted pressure retest before `PR-ready` or
+  `released`.
 - Split skill review into `skill-spec-review.md` before implementation and
   `skill-implementation-review.md` after pressure proof, before ship.
 - Added `skill-review-output-schema.md` as the single home for shared review
@@ -78,7 +79,8 @@
 
 ## Validation
 
-- `uv run --with PyYAML python /Users/shravansunder/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/shravan-dev-workflow/skills/skills-creation`
+- Codex skill quick validation from the active installation against
+  `plugins/shravan-dev-workflow/skills/skills-creation`
   - Exit 0: `Skill is valid!`
 - Focused pressure scenarios after the final RED/invocation/description changes:
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-workflow-spine --timeout 900`

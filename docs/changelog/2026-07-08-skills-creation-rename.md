@@ -2,7 +2,7 @@
 
 ## Plugin
 
-- `shravan-dev-workflow` `1.6.43`
+- `shravan-dev-workflow` `1.6.49`
 
 ## User-visible change
 
@@ -17,7 +17,8 @@
 
 ## Validation
 
-- `uv run --with PyYAML python /Users/shravansunder/.codex/skills/.system/skill-creator/scripts/quick_validate.py plugins/shravan-dev-workflow/skills/skills-creation`
+- Codex skill quick validation from the active installation against
+  `plugins/shravan-dev-workflow/skills/skills-creation`
   passed: `Skill is valid!`
 - `claude plugin validate .` passed.
 - `codex plugin list --marketplace ai-tools --available --json` completed and

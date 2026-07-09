@@ -19,9 +19,11 @@ Use at least two read-only perspectives for non-trivial skill specs:
 - `fresh-perspective`: checks whether the intended skill promise, trigger,
   workflow, reference split, and proof route cohere without relying on the
   author's explanation.
+- `local-lane`: uses a second independent in-session/local perspective with a
+  different focus. This is the default second lane.
 - `outside-model`: uses Claude, Cursor-backed model, Grok, or another
-  configured non-parent provider when available. If unavailable, record the
-  outside-model gap and run a second independent lane with a different focus.
+  configured non-parent provider only when the user explicitly requests
+  external counsel. Otherwise record `outside-model not requested`.
 
 ## Verdicts
 

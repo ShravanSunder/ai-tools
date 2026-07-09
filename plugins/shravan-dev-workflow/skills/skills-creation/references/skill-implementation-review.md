@@ -19,14 +19,17 @@ Use at least two read-only perspectives for non-trivial skill changes:
 - `fresh-perspective`: checks whether the implemented skill still satisfies its
   promise and avoids duplicated homes, weak pointers, missing gates, and no-op
   prose.
+- `local-lane`: uses a second independent in-session/local perspective with a
+  different focus. This is the default second lane.
 - `outside-model`: uses Claude, Cursor-backed model, Grok, or another
-  configured non-parent provider when available. If unavailable, record the
-  outside-model gap and run a second independent lane with a different focus.
+  configured non-parent provider only when the user explicitly requests
+  external counsel. Otherwise record `outside-model not requested`.
 
-If Codex authored the change, prefer a non-Codex outside-model lane. If another
-model authored it, prefer Codex plus one different model. Provider choice,
-packets, permissions, and reductions are governed by `manage-agents`; load its
-agent-packet guidance when constructing lanes.
+If the user explicitly requests outside counsel and Codex authored the change,
+prefer a non-Codex outside-model lane. If another model authored it, prefer
+Codex plus one different model. Provider choice, packets, permissions, and
+reductions are governed by `manage-agents`; load its agent-packet guidance when
+constructing lanes.
 
 ## Review Rubric
 

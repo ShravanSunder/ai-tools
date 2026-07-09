@@ -76,14 +76,15 @@ Checkpoint:
 Write surfaces:
 
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/glossary.md`
-- `plugins/shravan-dev-workflow/skills/skills-creation/references/great-skill-evaluation.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/reference-design.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-spec-review.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/pressure-testing.md`
 
 Changes:
 
 - Make `glossary.md` match the intended axes:
   invocation, information hierarchy, steering, pruning, proof.
-- Refocus `great-skill-evaluation.md` around the design rubric:
+- Refocus the review/design references around the rubric:
   trigger, structure, mental model, steering, pruning, proof.
 - Keep `pressure-testing.md` as the detailed proof strategy:
   discipline, technique, pattern, reference, and mechanical-change proof.
@@ -193,6 +194,5 @@ rewritten contract, not the old proof-heavy contract.
 
 ## Next Workflow
 
-Use `implementation-execute-plan` to implement this plan in the clean worktree:
-
-`/Users/shravansunder/dev/ai-tools.skills-creation-great-skill-model-current`
+Use `implementation-execute-plan` to implement this plan in a clean repo
+worktree for the skills-creation branch.
