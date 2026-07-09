@@ -5,16 +5,16 @@ skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: verdict:\s*(targeted-revision|significant-rewrite|reject-or-restart)|verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
+expect_decision_regex: verdict:|targeted-revision|significant-rewrite|reject-or-restart
 expect_decision_regex: (missing|no|lacks|without|absent).{0,80}(workflow spine|pressure proof|trigger)
 expect_proof_regex: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
 expect_proof_regex: review target:\s*\S|baseline( or review target)?:\s*(review target|evaluate|what is being judged)
-expect_proof_regex: blocker overrides?:\s*\S|blocker.{0,180}(workflow spine|trigger|pressure proof|link-only router)
+expect_proof_regex: blocker overrides?:|blocker.{0,180}(workflow spine|trigger|pressure proof|link-only router)
 expect_proof_regex: highest risk
 expect_proof_regex: first required revision|first revision to make
-expect_proof_regex: retest requirement|retest( requirement)?s?\s*:
-expect_proof_regex: (bright-line rule|positive output shape|required slot|observable predicate|stronger completion criterion|sharper (description|invocation)|stronger context pointer|failure-form|guidance form)
-expect_proof_regex: evidence.{0,100}(axis|reusable (job|behavior)|invocation|trigger|mental model|main path|workflow topology|hierarchy|steering|pruning|proof)
+expect_proof_regex: retest requirement|proof or retest implication|retest( requirement)?s?\s*:
+expect_proof_regex: (bright-line rule|positive output shape|required slot|observable predicate|stronger completion criterion|sharper (description|invocation)|stronger context pointer|failure[- ]form|wrong[- ]invocation|guidance form)
+expect_proof_regex: rubric evidence|evidence.{0,100}(axis|reusable (job|behavior)|invocation|trigger|mental model|main path|workflow topology|hierarchy|steering|pruning|proof)
 expect_forbidden_regex: verdict\s*:?\s*great
 expect_forbidden_regex: \b(34-40|27-33|19-26|0-18)\b|score.{0,20}(out of|/)\s*40|\d+\s*/\s*40\b|\bpoint(s)?\b.{0,20}(arithmetic|scorecard|threshold|out of \d+|/\s*\d+)
 

@@ -42,7 +42,8 @@ shipping status: source-only | PR-ready | released
 the reusable behavior in one sentence: "This skill helps agents reliably do X
 when Y happens." Completion: classification, owner, reusable behavior, and
 baseline or review target are named. Evaluating an existing skill or draft
-routes to `references/great-skill-evaluation.md`.
+routes to `references/skill-spec-review.md` and returns one of that reference's
+allowed verdict labels.
 
 For any classify, scope, or draft response, state the surface allocation in
 plain words before the details: YAML/frontmatter is the trigger surface,
@@ -52,8 +53,9 @@ part of alignment, not ceremony.
 
 **2. Prove first (behavior-changing work).** Before describing or writing any
 behavior-changing update, name a pressure scenario or micro-test that already
-fails against the current skill (RED). Creates may draft from a hypothesized
-baseline; they still need GREEN before `PR-ready` or `released`.
+fails against the current skill (RED). State the order visibly as RED before
+edit, wording, or change. Creates may draft from a hypothesized baseline; they
+still need GREEN before `PR-ready` or `released`.
 Mechanical/metadata-only changes are static-only and must be labeled that way.
 "I already know the wording problem" is not a skip. Completion: RED is named,
 or the change is explicitly static-only.
@@ -119,10 +121,25 @@ hypothesized failure:
 
 Completion: wording changes cite the failure form they are meant to fix.
 
-**9. Prove GREEN and size the proof.** After wording exists, rerun the chosen
-proof route. Behavior-changing work needs GREEN before `PR-ready` or
-`released`; mechanical changes use static validation only. Choose proof by
-skill type:
+**9. Review the skill spec.** Before implementing a non-trivial skill change,
+load `references/skill-spec-review.md` unless the user explicitly says no
+review needed. Use two review perspectives: `fresh-perspective` plus
+`outside-model`, or record an `outside-model gap`; name both perspectives in
+the run plan before implementation, including read-only planning responses that
+stop before edits. The plan line should say `review perspectives:
+fresh-perspective + outside-model` or `review perspectives: fresh-perspective +
+outside-model gap`. Typos, version bumps, and metadata-only edits with no
+behavior claim may stay static-only. Accepted findings return to the relevant
+spec step above before files are edited. Use
+`references/skill-review-output-schema.md` for shared packet, finding,
+coverage, and reduction shapes. Completion: spec review is parent-reduced to
+accepted-to-implement, explicitly skipped by the user, or not applicable
+because the change is trivial mechanical/static-only.
+
+**10. Implement and prove GREEN.** After the spec is accepted, edit the skill
+surface and rerun the chosen proof route. Behavior-changing work needs GREEN
+before `PR-ready` or `released`; mechanical changes use static validation only.
+Choose proof by skill type:
 
 - discipline skill: pressure scenario plus rationalization capture.
 - technique skill: application to a fresh but similar task.
@@ -133,7 +150,22 @@ skill type:
 Completion: proof route is explicit and static proof is not relabeled behavior
 proof. Load `references/pressure-testing.md` for the detailed protocol.
 
-**10. Prune and ship.** Run the deletion test sentence by sentence: would agent
+**11. Review the implementation.** After proof exists and before `PR-ready` or
+`released`, load `references/skill-implementation-review.md` for any
+non-trivial skill change unless the user explicitly says no review needed. Use
+two review perspectives: `fresh-perspective` plus `outside-model`, or record an
+`outside-model gap`; name both perspectives in the implementation-review plan
+and reduction. The review checks the actual changed files, proof quality,
+pressure coverage, and accepted spec constraints. Accepted findings route back
+to implementation and proof; parent-reduce candidate findings; after fixes,
+rerun the targeted proof that could catch the issue and refresh the
+implementation-review reduction or changed-file coverage for files touched by
+the fix.
+Completion: implementation review is parent-reduced, changed-file coverage is
+accounted for after any review-fix edits, and targeted retest is complete or
+the user explicitly skipped review.
+
+**12. Prune and ship.** Run the deletion test sentence by sentence: would agent
 behavior change if this disappeared? If not, delete it. When shipping, route
 platform validation, versioning, changelog, and cache/readback decisions through
 `references/platform-mechanics.md`. Sensitive surfaces -- scripts, hooks,
@@ -156,6 +188,11 @@ The run is not done while any of these hold:
 - branch-only depth is inlined without a strong reason;
 - a behavior-changing shipped update has no behavior proof or accepted proof
   gap;
+- a non-trivial skill change reached implementation without required spec review
+  or explicit user skip;
+- a non-trivial skill change reached `PR-ready` or `released` without
+  implementation-review reduction, changed-file coverage, and targeted retest,
+  unless the user explicitly skipped review;
 - static validation is claimed as behavior proof;
 - a sensitive surface was touched without an allowed/disallowed/blocked/
   deferred decision;

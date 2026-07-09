@@ -24,6 +24,13 @@
 - Collapsed duplicated placement ladders so `reference-design.md` owns
   SKILL/reference/script/glossary placement, `workflow-topology.md` owns route
   and branch returns, and `schema-design.md` owns only reusable schema families.
+- Added a default implementation review gate for non-trivial skill changes with two
+  reviewer lanes, at least one outside-model lane when available, parent
+  reduction, and targeted pressure retest before `PR-ready` or `released`.
+- Split skill review into `skill-spec-review.md` before implementation and
+  `skill-implementation-review.md` after pressure proof, before ship.
+- Added `skill-review-output-schema.md` as the single home for shared review
+  packets, lane findings, changed-file coverage, and parent reductions.
 - Reworked reference-file openings so references state what they own and return
   instead of repeating self-load conditions already owned by `SKILL.md`.
 - Moved RED-before-edit into an early hard gate for behavior-changing updates,
@@ -39,7 +46,7 @@
   invocation policy through `agents/openai.yaml`.
 - Kept pressure testing visible in `SKILL.md`, but refocused it as the proof
   gate for behavior-changing skill text rather than the identity of the skill.
-- Reworked `glossary.md`, `great-skill-evaluation.md`, and
+- Reworked `glossary.md`, `skill-spec-review.md`, and
   `pressure-testing.md` around invocation, information hierarchy, steering,
   pruning, and typed proof strategy.
 - Updated focused `skills-creation-*` pressure scenarios so they test trigger
@@ -53,12 +60,15 @@
 - `plugins/shravan-dev-workflow/skills/skills-creation/SKILL.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/frontmatter-design.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/glossary.md`
-- `plugins/shravan-dev-workflow/skills/skills-creation/references/great-skill-evaluation.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-spec-review.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/pressure-testing.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/reference-design.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/schema-design.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-implementation-review.md`
+- `plugins/shravan-dev-workflow/skills/skills-creation/references/skill-review-output-schema.md`
 - `plugins/shravan-dev-workflow/skills/skills-creation/references/workflow-topology.md`
 - `tests/skills/pressure-scenarios/skills-creation-*.md`
+- `tests/skills/pressure-scenarios/README.md`
 - `AGENTS.md`
 - `plugins/README.md`
 - `plugins/shravan-dev-workflow/README.md`
@@ -78,6 +88,10 @@
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-update-existing-skill --timeout 900`
     - Exit 0: 1 test passed.
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-evaluate-draft --timeout 900`
+    - Exit 0: 1 test passed.
+  - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-spec-review-gate --timeout 900`
+    - Exit 0: 1 test passed.
+  - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-implementation-review-gate --timeout 900`
     - Exit 0: 1 test passed.
   - `tests/skills/run-skill-pressure-tests.sh --scenario skills-creation-platform-artifact-scale --timeout 900`
     - Exit 0: 1 test passed.
