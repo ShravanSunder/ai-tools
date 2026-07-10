@@ -78,7 +78,7 @@
   provider, runtime, PR-wrapup, and public release surface. Parent verification
   fixed all candidate taxonomy and ownership findings; targeted rereviews
   confirmed them resolved.
-- The final skill folder was reduced from 1,353 to 510 lines by moving core
+- The final skill folder was reduced from 1,353 to 509 lines by moving core
   pattern/model decisions into `SKILL.md` and consolidating ACPX mechanics into
   one reference.
 - Codex skill quick validation passed: `Skill is valid!`, exit 0.

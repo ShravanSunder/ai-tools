@@ -76,9 +76,8 @@ under the same packet, authority, continuity, and parent-verification rules.
    - After choosing an ACPX provider, load `references/acpx-provider-claude.md`
      or `references/acpx-provider-cursor.md` when that provider has additional
      behavior.
-   - If no existing ACPX built-in, raw command, or config-defined agent supplies
-     the required capability, route adapter design or changes through
-     `references/building-acp-adapters.md`.
+   - When the user explicitly asks to build, modify, or wrap an ACP-compatible
+     adapter, route that work through `references/building-acp-adapters.md`.
    - Completion: exact model, reasoning effort, runtime, permissions, and
      fallback are explicit.
 
