@@ -122,11 +122,10 @@ truth.
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning,
 calling, resuming, steering, queueing, monitoring, or reducing advisors,
-sidekicks, subagents, and subagent swarms. It separates agent category,
-assignment, topology, model lineage, provider, and runtime; records persistent
-sessions before follow-ups; gives provider-specific ACPX/Fable guidance;
-distinguishes queueing from steering; and treats child output as candidate
-evidence until verified.
+sidekicks, delegates, operator routes, and swarms. It separates relationship,
+assignment route, model category, lineage, and native/ACPX runtime; records
+persistent sessions before follow-ups; gives provider-specific ACPX/Fable
+guidance; and treats child output as candidate evidence until verified.
 
 Use `orchestrator-goal` when the objective is long-running and already clear
 enough to become a verifiable Codex or Claude `/goal` contract. If the goal is

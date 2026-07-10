@@ -1,152 +1,64 @@
 # Provider: Claude
 
-Load this when the subordinate agent is Claude through ACPX and Claude-specific
-behavior affects the run.
+Load for Claude-specific ACPX behavior. Generic session and permission rules
+remain in `session-ledger.md` and `runtime-control.md`.
 
-## When To Use Claude
+## Fable
 
-Use Claude as a subordinate agent when the task benefits from an outside model
-lineage, a persistent advisor or sidekick, an outside judge, or Claude-specific
-coding-agent behavior the user requested.
-
-Completion: the parent records why Claude was selected instead of defaulting to
-it silently.
-
-## Ordinary Claude Command Shapes
+The locally verified custom model id is `claude-fable-5[1m]`, not bare
+`fable`. User settings must expose that custom catalog. Define one relationship
+wrapper so every lifecycle call keeps the same model environment, cwd, and
+permission boundary:
 
 ```bash
-acpx claude exec 'one-shot review prompt'
-acpx claude sessions ensure --name reviewer
-acpx claude -s reviewer 'continue reviewing the current branch'
+REPO=/absolute/repo
+
+fable_acpx() {
+  ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
+  ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
+  ANTHROPIC_MODEL='claude-fable-5[1m]' \
+  acpx --cwd "$REPO" --deny-all --no-terminal \
+    --non-interactive-permissions fail claude "$@"
+}
 ```
 
-Completion: persistent Claude work uses a named session and records category,
-cwd, model, effort, and permission boundary.
-
-## Fable Through ACPX
-
-The locally verified Fable route is not bare `--model fable`. The successful
-Claude adapter catalog advertised the exact custom id
-`claude-fable-5[1m]`. For this environment, every ACPX Claude call belonging to
-that relationship must carry:
+Create/reuse one persistent packet-only relationship, set an
+adapter-advertised effort, then prompt and inspect it:
 
 ```bash
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]'
+fable_acpx sessions ensure --name <name>
+fable_acpx set effort high -s <name>
+fable_acpx set-mode plan -s <name>
+fable_acpx -s <name> --file <packet>
+fable_acpx status -s <name>
+fable_acpx sessions history <name> --limit 20
+fable_acpx sessions read <name> --tail 20
 ```
 
-Keep the prefix on session creation, model/effort control, prompt, status,
-history, read, and cancel calls. A dead queue owner may reconnect during a call;
-omitting the environment can restart Claude with a different settings source or
-model catalog.
+The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`.
+Use the reasoning floor from `orchestration-patterns.md`. Do not invent
+`sessions ensure --effort` or `sessions new --effort`; effort is a control
+command.
 
-Create one persistent packet-only advisor:
+Use `new` only for an intentional continuity reset. Reconnect and provider
+limits follow `session-ledger.md`; they do not justify replacement names.
 
-```bash
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude sessions new \
-  --name <advisor-name>
+## Settings And Permissions
 
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude set effort xhigh \
-  -s <advisor-name>
+`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` also loads user plugins, commands, hooks,
+and external resources. That can create resource conflicts or unintended tool
+authority.
 
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude set-mode plan \
-  -s <advisor-name>
-```
+The wrapper above is packet-only. If source reads are required, replace
+`--deny-all` with `--approve-reads` in the wrapper for the whole relationship,
+keep `--no-terminal --non-interactive-permissions fail`, and explicitly forbid
+repository and home writes in the packet. Do not broaden to `--approve-all` for
+review or advice.
 
-`effort` is an adapter-advertised config option. Live evidence exposed
-`default`, `low`, `medium`, `high`, `xhigh`, and `max`. Advisors use `high` or
-above. Do not invent `sessions new --effort` or `sessions ensure --effort`;
-those flags do not exist in ACPX 0.12.
+Use the same absolute cwd on every call. Session names are not global.
 
-Send the bounded packet and inspect the result:
-
-```bash
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude -s <advisor-name> \
-  --file <advisor-packet>
-
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude status -s <advisor-name>
-
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude sessions history \
-  <advisor-name> --limit 20
-
-ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-ANTHROPIC_MODEL='claude-fable-5[1m]' \
-acpx --cwd <absolute-repo> --deny-all --no-terminal \
-  --non-interactive-permissions fail claude sessions read \
-  <advisor-name> --tail 20
-```
-
-Use `sessions ensure` instead of `new` when idempotent reuse is intentional.
-Use `new` when resetting continuity or correcting a session created with the
-wrong model/settings contract.
-
-Use the same absolute `--cwd` on every call. A session name alone is not global;
-changing cwd selects a different ACPX scope even when the model environment and
-name are unchanged.
-
-Completion: status or session capability evidence shows the exact Fable id,
-the `set effort` call succeeded at high or above, and the ledger records that
-user settings were included.
-
-## System Prompt And Settings
-
-Claude-compatible adapters may consume `--system-prompt` or
-`--append-system-prompt` at session creation. Treat system-prompt overrides as
-session-shaping choices and record them in the ledger when they matter.
-
-Built-in ACPX Claude sessions intentionally omit user settings by default.
-`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` exposes user plugins, commands, hooks, and
-their external resources to the spawned session. This can create singleton
-resource conflicts and a broader tool surface. It can also let an advisor
-attempt unintended repository or home writes.
-
-Use packet-only `--deny-all --no-terminal` when source inspection is not
-required. When source reads are required, grant the narrowest read policy and
-state `do not edit repository or home files` in the packet. Replace
-`--deny-all` with `--approve-reads` consistently on creation, control, and
-prompt calls for that relationship; keep
-`--non-interactive-permissions fail`. Do not broaden to `--approve-all` merely
-because the advisor needs source reads. Parent verification must inspect actual
-effects before accepting the receipt.
-
-Completion: model/system-prompt/settings choices are explicit when they affect
-behavior.
-
-## Model Control
-
-For ordinary provider-advertised Claude models, `--model <id>` at creation or
-`set model <id>` may work when the adapter advertises model control. For the
-local Fable custom model, use the three-variable environment contract above so
-the model is present in Claude's catalog before session creation.
-
-Do not normalize bracketed custom ids. Do not treat a syntactically accepted
-friendly alias as proof that the requested model launched.
-
-Completion: the selected model id is provider-advertised or the run records the
-fallback.
+For ordinary provider-advertised Claude models, creation-time `--model <id>` or
+`set model <id>` may work when advertised. For Fable, keep the exact three
+environment variables above. A friendly alias or exit code 0 does not prove the
+requested model launched; verify status/capability evidence and record the
+accepted id in the ledger.

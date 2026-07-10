@@ -1,54 +1,14 @@
 # Provider: Codex
 
-Load this when the subordinate agent is Codex through ACPX and Codex-specific
-behavior affects the run.
+Use native Codex subagents when they expose the selected model. Use ACPX Codex
+for a portable named session, queue control, or cross-provider flow.
 
-## When To Use Codex
-
-Use Codex as the default subordinate coding agent when the task fits the local
-Codex workflow, needs repo-aware code reasoning, or should stay inside the
-Codex-first review/implementation stack.
-
-Completion: Codex selection is deliberate when another provider was requested
-or available.
-
-## Command Shapes
-
-```bash
-acpx codex exec 'one-shot summary'
-acpx codex sessions ensure --name backend
-acpx codex -s backend 'continue the backend investigation'
-acpx --model <advertised-model-id> codex exec 'review changed files'
-```
-
-Completion: persistent Codex work records the session name and cwd; one-shot
-work records why no resume is needed.
-
-## Model And Config Caveats
-
-Codex model ids and reasoning variants must be accepted by the current adapter.
-Sol, Terra, and Luna in `model-selection.md` are capability guidance; use the
-exact current id exposed by native Codex or the ACP adapter.
-
-If the built-in command fails because local Codex config cannot be parsed or an
-adapter wrapper is broken, try a raw ACP adapter only when the user approves or
-the run already permits that fallback:
+Use the exact model/reasoning options advertised by the current adapter. If a
+raw adapter is required, report it as a fallback:
 
 ```bash
 acpx --agent 'npx -y @agentclientprotocol/codex-acp' exec 'sanity check'
 ```
 
-Completion: raw-adapter fallback is reported as a fallback, not hidden as the
-normal provider path.
-
-Native Codex subagents are often the lowest-friction runtime for same-lineage
-bounded work. Use ACPX Codex when a portable external session, named persistent
-sidekick, queue control, or cross-provider flow is the actual requirement.
-
-## Permissions
-
-For review-only Codex subordinate calls, prefer `--no-terminal` or
-`--deny-all`/policy-limited execution. For implementation tasks, keep the write
-scope explicit and parent-owned.
-
-Completion: Codex tool authority is no broader than the job requires.
+Keep review authority read-only/policy-limited and implementation write scope
+explicit.

@@ -1,129 +1,67 @@
 ---
 name: manage-agents
-description: Use when choosing, dispatching, resuming, monitoring, or reducing advisors, sidekicks, subagents, or subagent swarms; selecting model lineage, provider, or runtime; or using ACPX sessions, automation, flows, and custom ACP adapters.
+description: Use when choosing, dispatching, resuming, monitoring, or reducing advisors, sidekicks, delegates, operator routes, or swarms; choosing native subagents versus ACPX and model lineage; or using ACPX sessions, queueing, automation, flows, and custom adapters.
 ---
 
 # Manage Agents
 
-Run subordinate AI-agent work without flattening relationships, models, and
-runtimes into one choice. The parent chooses each axis deliberately:
+Keep relationship, work, model, and runtime as separate choices:
 
 ```text
-category -> assignment -> topology -> lineage -> model capability
-         -> provider/runtime -> permissions -> receipt -> reduction
+pattern -> assignment route -> model category -> exact model
+        -> native or ACPX runtime -> permissions -> packet -> receipt
 ```
 
-Categories describe the relationship to the parent. An advisor is usually one
-persistent consultative agent. A sidekick is usually one persistent delegated
-worker. A subagent is one ephemeral bounded worker. A swarm is a topology made
-from multiple independent subagents; it is not a fourth category. A handoff is
-a transfer protocol, not an agent category.
+## Rules
 
-## Core Rules
+- Parent owns decisions and accepted truth. Agent output is candidate evidence.
+- Choose the pattern and assignment route before the model or runtime.
+- Operator reports or escalates; it does not make judgment calls.
+- Every non-trivial call gets one bounded packet. Persistent relationships get
+  a ledger before the first prompt that assumes continuity.
+- Status proves liveness, not correctness. Only assignment-bound output enters
+  parent reduction.
+- Queue runs later. It is not immediate steer, and acknowledgement is not
+  completion.
 
-- Parent owns truth. Subordinate output is candidate evidence until the parent
-  verifies it.
-- Category before provider. Choose advisor, sidekick, or subagent before a
-  model, provider, runtime, or command.
-- Topology is separate. Choose one agent or a swarm only after the category and
-  assignment are clear. Do not describe advisor or sidekick collections as
-  swarms by default.
-- Task before model. Match risk, required judgment, lineage independence, and
-  reasoning level before optimizing cost or availability.
-- Mechanics down, judgment up. Delegate bounded file/log collection, status
-  checks, counting, and monitoring to an operational subagent when available.
-  Pass its structured receipt to a stronger synthesis lane or the parent when
-  correlation, architecture, adjudication, or high-risk judgment begins.
-- Provider is not lineage. Cursor is a multi-model provider; ACPX is a runtime.
-  Neither identifies the model family by itself.
-- Packet before prompt. Every non-trivial subordinate job gets source anchors,
-  authority limits, non-goals, expected receipt, and stop condition.
-- Continuity needs a ledger. Advisors, sidekicks, and queued follow-ups need
-  enough state to resume, monitor, and reduce safely.
-- Queue is not steer. Queue runs later; steer affects the active turn only when
-  the harness exposes that capability.
+## Workflow
 
-Completion: the parent can name the job, target agent, session mode, permission
-boundary, expected receipt, progress check, and verification step before
-treating the subordinate agent call as underway.
+1. Choose pattern, assignment route, and topology.
+   - Load `references/orchestration-patterns.md`.
+   - Completion: Advisor, Sidekick, or Delegate; reasoning or operator route;
+     and single or swarm are explicit.
 
-## When Loaded
+2. Choose model and runtime.
+   - Load `references/model-selection.md` for Frontier, Balanced, and Mini.
+   - Load `references/agent-registry.md` when resolving ACPX providers, names,
+     raw commands, or config-defined agents.
+   - Load `references/provider-claude.md`, `references/provider-codex.md`, or
+     `references/provider-cursor.md` only when that provider's behavior matters.
+   - Completion: exact model, reasoning effort, lineage, native/ACPX runtime,
+     and fallback are explicit.
 
-1. Choose the category and topology.
-   - Load `references/glossary.md` when terms like sidekick, advisor, swarm,
-     handoff, queue, or steer are ambiguous.
-   - Load `references/orchestration-patterns.md` when deciding between an
-     advisor, sidekick, subagent, one-agent topology, subagent swarm, or
-     workflow handoff.
-   - Completion: category, assignment, and topology are named before any model,
-     provider, or command.
+3. Choose controls and permissions.
+   - Load `references/runtime-control.md` for prompt/exec, queue/steer, cancel,
+     status, model controls, and permissions.
+   - Completion: runtime controls and authority match the packet.
 
-2. Choose lineage, model capability, and provider.
-   - Load `references/model-selection.md` for risk, lineage independence,
-     cognitive-load dispatch, current-generation model guidance, and fallback
-     rules.
-   - Load `references/agent-registry.md` for the provider map and ACPX agent
-     resolution, then load one provider reference when provider behavior
-     matters.
-   - Completion: the chosen model can perform the assignment at the required
-     risk level, and any availability fallback preserves the category's
-     lineage and capability constraints.
+4. Dispatch and reduce.
+   - Load `references/agent-job-packet.md` for the dispatch, operator decision,
+     and reduction shapes.
+   - Completion: source anchors, non-goals, receipt scope, stop condition, and
+     parent verification are present.
 
-3. Pick the runtime and permission boundary.
-   - Load `references/runtime-control.md` for session, prompt, queue, steer,
-     cancel, permission, timeout, or model controls.
-   - Load `references/automation-and-flows.md` for JSON, exit-code, quiet,
-     strict-output, or TypeScript flow automation.
-   - Load `references/building-custom-agents.md` only when building or wrapping
-     an ACP-compatible adapter.
-   - Completion: runtime and permission choices follow the category, assignment,
-     topology, and model choice.
+5. Manage persistence.
+   - Load `references/session-ledger.md` for Advisor/Sidekick creation, resume,
+     reconnect, progress, history, freshness, or reduction.
+   - Completion: the persistent identity is stable and the current receipt
+     matches the assignment and source/head version.
 
-4. Write the packet.
-   - Load `references/agent-job-packet.md` for dispatch prompts, advisor notes,
-     handoffs, and reduction receipts.
-   - Completion: the packet names category, assignment, topology, lineage,
-     model, provider/runtime, authority, source anchors, non-goals, permission
-     boundary, receipt, and stop condition.
+6. Enter specialized branches only when needed.
+   - Load `references/automation-and-flows.md` for JSON, exit codes, compare, or
+     TypeScript flows.
+   - Load `references/building-custom-agents.md` only to build or wrap an ACP
+     adapter.
 
-5. Track continuity, dispatch, and monitor.
-   - Load `references/session-ledger.md` for advisors, sidekicks, resumed
-     sessions, queued follow-ups, progress checks, or multi-agent reduction.
-   - Create the ledger row before the first persistent prompt. Send the packet,
-     then use runtime status and saved session output to distinguish queued,
-     running, answered, blocked, dead, or missing work.
-   - Completion: persistent work has a ledger row and current receipt; one-shot
-     work names why no ledger is needed.
-
-6. Reduce to the parent workflow.
-   - Accept only claims the parent verifies against source, commands, logs,
-     artifacts, or the owning phase skill's proof matrix.
-   - Completion: accepted, rejected, and unverified child output are separated.
-
-## Reference Routing
-
-- `references/glossary.md`: term meanings only for subordinate-agent patterns,
-  control words, ledgers, receipts, and parent authority.
-- `references/agent-job-packet.md`: skill-local packet anatomy for agent-call
-  plans, dispatch prompts, handoff packets, and result reductions.
-- `references/runtime-control.md`: live command/session controls,
-  permissions, queueing, timeout, cancel, status, model control, prompt versus
-  exec, and prompt versus steer boundaries.
-- `references/orchestration-patterns.md`: harness-neutral choice between
-  advisors, sidekicks, subagents, single-agent or swarm topology, and workflow
-  handoffs before provider or command selection.
-- `references/model-selection.md`: assignment risk, lineage independence,
-  reasoning level, cognitive-load dispatch, current-generation model guidance,
-  and fallback rules.
-- `references/session-ledger.md`: persistent agent naming, session ids,
-  progress polling, history, receipts, and parent reduction.
-- `references/automation-and-flows.md`: machine-readable output, exit codes,
-  `jq` parsing, quiet mode, strict JSON, and TypeScript flows.
-- `references/agent-registry.md`: provider map plus selection of built-in, raw,
-  overridden, or config-defined ACPX agents.
-- `references/building-custom-agents.md`: building or wrapping an
-  ACP-compatible custom agent. This is the custom-agent authoring reference;
-  do not shorten it to the overloaded name `custom-agents.md`.
-- `references/provider-claude.md`: Claude-specific ACPX behavior.
-- `references/provider-codex.md`: Codex-specific ACPX behavior.
-- `references/provider-cursor.md`: Cursor-specific ACPX behavior.
+Completion: the parent can name the pattern, assignment route, topology, model,
+runtime, permissions, packet, receipt, and verification step.

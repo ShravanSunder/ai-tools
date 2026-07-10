@@ -1,98 +1,41 @@
 # Runtime Control
 
-Load this when the task needs command/session control for a subordinate agent:
-prompt versus exec, persistent versus one-shot, queueing, follow-ups, steering,
-timeouts, cancel, status, model control, permissions, or terminal capability.
+Load for ACPX prompt/exec, queue/steer, session controls, or permissions.
 
-## Job Shape
+## Command Shape
 
-Choose the runtime shape before writing the prompt.
-
-```text
-one-shot job
-  use: exec
-  memory: none
-  parent proof: exit code, final text, JSON stream, or captured artifact
-
-persistent advisor or sidekick
-  use: sessions ensure/new, then prompt
-  memory: scoped by agent command, absolute cwd, optional session name
-  parent proof: status/history plus verified output
-
-queued follow-up
-  use: persistent prompt with --no-wait when a turn is already running
-  memory: same persistent session
-  parent proof: acknowledgement plus later status/history/result check
-
-steer
-  use: only a runtime or adapter surface that supports immediate injection
-  memory: current live turn
-  parent proof: runtime acknowledgement and changed in-flight behavior
-```
-
-Completion: the selected shape says whether the child should remember prior
-turns and whether the parent waits, queues, or steers.
-
-## Command Placement
-
-Examples use the launcher selected by `agent-registry.md`. Keep global options
-before the provider, provider options after the provider, and command options
-after the command.
+Global options precede the provider; provider options follow it; command
+options follow the command.
 
 ```bash
 acpx --cwd /absolute/repo --approve-reads claude -s advisor \
   --file tmp/advisor-packet.md
-
 acpx --format quiet --deny-all --no-terminal codex exec \
   --file tmp/review-packet.md
 ```
 
-Completion: the launcher and option placement match live `acpx --help` and
-`acpx <agent> <command> --help` output.
+## Prompt Or Exec
 
-## Prompt Versus Exec
+| Need | Command | Continuity |
+| --- | --- | --- |
+| One bounded Delegate | `acpx <agent> exec ...` | none |
+| Persistent Advisor/Sidekick | `sessions ensure/new`, then prompt or bare call with `-s` | ledgered session |
+| Follow-up after active turn | persistent prompt with `--no-wait` | queued in same session |
 
-Use `exec` for stateless answers, script steps, independent reviews, and machine
-pipelines that should not append to a persistent conversation.
+`exec` has no resume expectation. Persistent prompts require the same resolved
+command, absolute cwd, and session name.
 
-Use `prompt` or bare `acpx <agent> ...` for persistent work that needs memory,
-queue-aware follow-ups, cancel/status/control commands, or named sidekicks.
-
-Completion: `exec` jobs have no resume expectation; persistent jobs have a
-session ledger row before follow-up prompts are sent.
-
-```bash
-acpx codex exec 'answer one bounded question'
-acpx claude -s advisor 'review the next checkpoint'
-acpx cursor prompt -s sidekick --file tmp/next-assignment.md
-```
-
-Troubleshooting source: https://acpx.sh/prompting.html
-
-## Queue Versus Steer
-
-ACPX CLI queueing is not immediate steering.
+## Queue Or Steer
 
 - Default queue submission waits for the queued prompt to finish.
-- `--no-wait` enqueues and returns after acknowledgement.
-- Queued prompts run after the current turn drains.
-- Steering means immediate injection into an active task, and only exists when
-  the runtime surface exposes a `steer` mode or equivalent adapter behavior.
+- `--no-wait` returns after acknowledgement; the prompt runs after the active
+  turn drains.
+- Steer means immediate in-flight injection and requires an explicit runtime
+  capability. ACPX 0.12 has no generic `steer` command.
 
-Completion: every follow-up is labeled as `queue` or `steer`, with the expected
-start time stated.
+Do not report queue acknowledgement as steering or completion.
 
-```bash
-acpx codex -s sidekick --no-wait 'after the active turn, inspect failures'
-```
-
-ACPX 0.12 has no generic `steer` command. Do not rename queue acknowledgement
-as steering or completion.
-
-## Session Control
-
-Use these controls against the same `(agentCommand, cwd, optional session name)`
-scope:
+## Session Controls
 
 ```bash
 acpx <agent> status -s <name>
@@ -102,50 +45,22 @@ acpx <agent> set model <model-id> -s <name>
 acpx <agent> set effort <level> -s <name>
 ```
 
-Notes:
-
-- `cancel` is cooperative and succeeds when there is nothing to cancel.
-- `set-mode` values are adapter-defined.
-- `set <key> <value>` works only for adapter-advertised config options. Common
-  keys include `model` and `effort`; inspect the live provider capability and
-  do not invent creation flags such as `sessions ensure --effort`.
-- `status` is local process/session state, not proof that the agent's claims
-  are true.
-
-Completion: control commands include the session name when the sidekick is
-named, and status output is interpreted as liveness only.
-
-Troubleshooting source: https://acpx.sh/session-control.html
+`cancel` is cooperative. Modes and config keys are adapter-advertised. Do not
+invent creation flags such as `sessions ensure --effort`. Status proves local
+liveness only.
 
 ## Permissions
 
-Choose the narrowest permission boundary that can do the job:
-
 ```bash
-acpx --deny-all --no-terminal <agent> exec 'packet-only reasoning prompt'
-acpx --approve-reads --no-terminal <agent> exec 'review without shell'
+acpx --deny-all --no-terminal <agent> exec 'packet-only prompt'
+acpx --approve-reads --no-terminal <agent> exec 'source review'
 acpx --approve-reads <agent> 'inspect files and ask before writes'
-acpx --approve-all <agent> 'apply the scoped patch and run tests'
+acpx --approve-all <agent> 'apply the explicitly scoped patch'
 ```
 
-Use `--policy` or `--permission-policy` when automation needs tool-level
-approval, denial, or escalation behavior. Use `--no-terminal` for review-only
-or sandboxed tasks where the agent should know terminal calls are unavailable
-up front.
+Use the narrowest boundary that can perform the assignment. Keep
+`--non-interactive-permissions fail` for unattended runs, and never broaden an
+Advisor or reviewer merely because a read request failed.
 
-Completion: the permission mode matches the requested authority, and any write
-or shell-capable run has an explicit parent-approved scope.
-
-For packet-only advisors, prefer `--deny-all --no-terminal` and pass all needed
-context through `--file`. For repo-inspecting advisors, use the narrowest read
-policy that actually permits the required source reads and keep repository and
-home writes explicitly forbidden in the packet.
-
-Troubleshooting source: https://acpx.sh/permissions.html
-
-## CLI Fallback
-
-Use the full CLI reference only when a command fails because exact grammar,
-global-option placement, or subcommand syntax is unclear.
-
-Troubleshooting source: https://acpx.sh/CLI.html
+Troubleshooting: https://acpx.sh/prompting.html,
+https://acpx.sh/session-control.html, and https://acpx.sh/permissions.html

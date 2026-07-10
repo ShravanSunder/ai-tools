@@ -5,16 +5,20 @@
 
 ## User-Visible Changes
 
-- Defines advisor, sidekick, and subagent as the agent categories. Advisors and
-  sidekicks are normally one persistent relationship; a swarm is multiple
-  independent subagents, not a peer category.
-- Separates assignment, topology, model lineage, reasoning level, provider,
-  runtime, permissions, receipts, and parent reduction.
-- Adds current-generation model guidance for advisors, sidekicks, review
-  subagents, high-risk outside judges, and operational monitoring/reporting.
-- Separates Luna-level mechanical collection and monitoring from Terra/Sol or
-  outside-lineage synthesis and judgment. Parents consume reduced receipts and
-  verify only load-bearing anchors instead of repeating raw log scraping.
+- Defines Advisor, Sidekick, and Delegate as relationship patterns. Advisor and
+  Sidekick are persistent; Delegate is one bounded assignment; native subagent
+  is a runtime; swarm is multiple Delegates.
+- Adds an Operator assignment route for procedures, monitoring, simple
+  `git`/`gh` and PR checks, scripts, scraping, and structured reporting. Operator
+  always uses Mini and escalates judgment through a decision packet.
+- Defines model categories once: Frontier is GPT-5.6 Sol or Claude Fable;
+  Balanced is GPT-5.6 Terra, Claude Opus, or Grok 4.5; Mini is GPT-5.6 Luna or
+  Cursor Composer 2.5.
+- Requires Advisor to use Frontier at medium reasoning or above, Sidekick to
+  use Frontier/Balanced at medium or above, and Delegate to use Balanced/Mini
+  at any reasoning effort.
+- Parents consume reduced receipts and verify load-bearing anchors instead of
+  repeating raw log scraping.
 - Requires persistent advisor/sidekick continuity reasons, assignment-bound
   receipt levels, stale-output rejection, and explicit lifecycle handling for
   reconnect, authentication, model, permission, and provider-limit failures.
@@ -24,9 +28,9 @@
   packet.
 - Adds a provider map for Codex, Claude, and Cursor. Cursor is treated as a
   multi-model provider whose catalog is constrained by account usage limits;
-  Composer 2.5 is grouped with Luna and Sonnet for operational work.
+  Composer 2.5 is grouped with Luna as Mini.
 - Documents the locally verified Claude Fable ACPX environment, exact
-  `claude-fable-5[1m]` id, high-or-above effort control, user-settings hazards,
+  `claude-fable-5[1m]` id, effort control, user-settings hazards,
   and persistent advisor lifecycle.
 - Assigns generic ACPX controls to `runtime-control.md` and the complete session
   lifecycle, cwd lookup, history previews, and full readback to
@@ -64,6 +68,12 @@
   `xhigh` completion check. Parent verification accepted and fixed delegated
   PR-monitor authority leakage, multi-sidekick overclassification, child-owned
   verification wording, and identity/configuration transition ambiguity.
+- A fresh GPT-5.6 Terra high-reasoning Delegate reviewed every changed skill,
+  provider, runtime, PR-wrapup, and public release surface. Parent verification
+  fixed its two taxonomy findings; targeted rereview confirmed both resolved.
+- The final skill folder was reduced from 1,353 to 660 lines by deleting the
+  duplicate glossary and pruning duplicate packet, provider, runtime, and
+  session guidance.
 - Codex skill quick validation passed: `Skill is valid!`, exit 0.
 - JSON manifest parsing passed, exit 0.
 - `claude plugin validate .` passed, exit 0.

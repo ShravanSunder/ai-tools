@@ -64,8 +64,8 @@ Use ACPX exit codes for wrapper branching:
 
 Important meanings:
 
-- `4` usually means persistent prompt had no existing session; run
-  `sessions new` or `sessions ensure` and retry.
+- `4` usually means the persistent scope was not found; inspect exact command
+  and cwd, then ensure or intentionally resume.
 - `5` means permission requests happened and all were denied or cancelled.
 - `130` follows cooperative cancellation for interrupt/termination.
 
@@ -86,7 +86,7 @@ acpx --format json compare codex claude --file tmp/review-packet.md
 
 `compare` does not create saved sessions or a swarm with independent lane
 packets. It runs the same prompt serially and returns per-agent status. Use a
-real subagent swarm when lanes need different scopes, source anchors, or
+real Delegate swarm when lanes need different scopes, source anchors, or
 adversarial assignments.
 
 Completion: compare results remain candidate outputs and provider agreement is

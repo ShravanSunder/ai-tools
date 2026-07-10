@@ -1,4 +1,4 @@
 interface:
   display_name: "Manage Agents"
-  short_description: "Choose and run advisors, sidekicks, and subagents"
-  default_prompt: "Use manage-agents to choose the agent category, model lineage, provider, runtime, permissions, and parent-owned reduction."
+  short_description: "Choose advisors, sidekicks, delegates, and operators"
+  default_prompt: "Use manage-agents to choose the relationship pattern, assignment route, model category, lineage, native/ACPX runtime, permissions, and parent-owned reduction."
