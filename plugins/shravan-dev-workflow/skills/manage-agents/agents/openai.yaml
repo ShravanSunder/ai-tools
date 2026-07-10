@@ -1,4 +1,4 @@
 interface:
   display_name: "Manage Agents"
-  short_description: "Choose advisors, sidekicks, delegates, and operations"
-  default_prompt: "Use manage-agents to choose the pattern, model category, reasoning effort, lineage, native/ACPX runtime, permissions, and parent-owned reduction."
+  short_description: "Coordinate advisors, sidekicks, delegates, and operators"
+  default_prompt: "Use manage-agents to choose and coordinate an advisor, sidekick, delegate, operator, subagent, or swarm across native and ACPX runtimes."

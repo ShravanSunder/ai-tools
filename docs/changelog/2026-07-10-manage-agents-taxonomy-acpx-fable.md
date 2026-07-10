@@ -5,17 +5,17 @@
 
 ## User-Visible Changes
 
-- Defines Advisor, Sidekick, Delegate, and Operation as patterns. Advisor and
-  Sidekick are always one persistent relationship; Delegate and Operation may
+- Defines Advisor, Sidekick, Delegate, and Operator as patterns. Advisor and
+  Sidekick are always one persistent relationship; Delegate and Operator may
   be single or swarms; native subagent is a runtime.
-- Operation covers procedures, monitoring, simple `git`/`gh` and PR checks,
+- Operator covers procedures, monitoring, simple `git`/`gh` and PR checks,
   scripts, scraping, and structured reporting. It always uses Mini and
   escalates judgment through a decision packet.
 - Defines model categories once: Frontier is GPT-5.6 Sol or Claude Fable;
   Balanced is GPT-5.6 Terra, Claude Opus, or Grok 4.5; Mini is GPT-5.6 Luna or
   Cursor Composer 2.5.
 - Requires Advisor to use Frontier at high reasoning or above, and Sidekick,
-  Delegate, or Operation to use their allowed categories at medium or above.
+  Delegate, or Operator to use their allowed categories at medium or above.
 - Parents consume reduced receipts and verify load-bearing anchors instead of
   repeating raw log scraping.
 - Requires persistent advisor/sidekick continuity reasons, assignment-bound
@@ -31,9 +31,11 @@
 - Documents the locally verified Claude Fable ACPX environment, exact
   `claude-fable-5[1m]` id, effort control, user-settings hazards,
   and persistent advisor lifecycle.
-- Assigns generic ACPX controls to `runtime-control.md` and the complete session
-  lifecycle, cwd lookup, history previews, and full readback to
-  `session-ledger.md`.
+- Keeps pattern and model selection in `SKILL.md`; consolidates ACPX providers,
+  configuration, calls, controls, output, automation, and flows in `acpx.md`;
+  and keeps persistent identity and receipt freshness in `session-ledger.md`.
+- Separates ACPX configuration of an existing agent from implementation of a
+  new ACP-compatible adapter in `building-acp-adapters.md`.
 - Makes `SKILL.md` the only reference-routing surface; each reference starts
   with its owned subject matter rather than repeating its own entry condition.
 - Prefers the global `acpx` binary, then `pnpm dlx acpx`, then
@@ -42,6 +44,7 @@
 ## Cumulative Release Scope
 
 - `AGENTS.md`
+- `plugins/README.md`
 - `plugins/shravan-dev-workflow/README.md`
 - `plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md`
 - `plugins/shravan-dev-workflow/skills/manage-agents/agents/openai.yaml`
@@ -73,9 +76,9 @@
   provider, runtime, PR-wrapup, and public release surface. Parent verification
   fixed all candidate taxonomy and ownership findings; targeted rereviews
   confirmed them resolved.
-- The final skill folder was reduced from 1,353 to 638 lines by deleting the
-  duplicate glossary and pruning duplicate packet, provider, runtime, and
-  session guidance.
+- The final skill folder was reduced from 1,353 to 545 lines by moving core
+  pattern/model decisions into `SKILL.md` and consolidating ACPX mechanics into
+  one reference.
 - Codex skill quick validation passed: `Skill is valid!`, exit 0.
 - JSON manifest parsing passed, exit 0.
 - `claude plugin validate .` passed, exit 0.

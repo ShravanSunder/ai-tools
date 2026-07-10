@@ -14,7 +14,7 @@ babysit forever and do not claim readiness from the first green state.
 
 ## Delegated Monitoring
 
-A Mini Operation may perform the loop's observation steps: fetch and
+A Mini Operator may perform the loop's observation steps: fetch and
 classify state, wait for the bounded quiet interval, and re-fetch. It
 replaces the loop's action and readiness steps with decision packets to the
 main agent. Use `manage-agents` for its pattern, model, packet, receipt, and

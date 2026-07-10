@@ -4,7 +4,7 @@
 
 ```text
 agent job:
-pattern: advisor | sidekick | delegate | operation
+pattern: advisor | sidekick | delegate | operator
 assignment id:
 lane: single | <swarm name / lane>
 target:
@@ -12,7 +12,7 @@ model category / exact model / reasoning effort:
 lineage requirement:
 provider / runtime:
 decision target:
-continuity reason: required for Advisor/Sidekick | none for Delegate/Operation
+continuity reason: required for Advisor/Sidekick | none for Delegate/Operator
 source anchors:
 permission boundary:
 write scope:
@@ -23,9 +23,9 @@ stop condition:
 parent verification:
 ```
 
-## Operation Decision
+## Operator Decision
 
-An Operation that reaches work requiring judgment or authority sends this
+An Operator that reaches work requiring judgment or authority sends this
 packet:
 
 ```text

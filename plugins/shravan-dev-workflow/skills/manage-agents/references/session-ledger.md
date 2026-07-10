@@ -8,31 +8,26 @@ that assume continuity.
 ```text
 agent name / pattern / assignment / assignment id:
 continuity reason:
-resolved command / provider / model / reasoning effort:
-absolute cwd / session name:
-ACPX ids / provider-native id when exposed:
+resolved runtime / provider / model / reasoning effort:
+working scope / relationship name:
+runtime ids / provider-native id when exposed:
 permission boundary:
 status / queued work / last prompt / last checked:
 receipt expected / receipt level / receipt scope:
 parent verification / next follow-up / notes:
 ```
 
-ACPX ids are local runtime identities. Do not pass one to a native provider CLI
-unless a provider-native id is exposed and documented as accepted.
+Runtime ids are not interchangeable. Do not pass one runtime's local identity
+to another runtime unless a provider-native id is exposed and documented as
+accepted.
 
 ## Create Or Resume
 
-```bash
-acpx <agent> sessions ensure --name <name>
-acpx <agent> sessions new --name <name>
-acpx <agent> sessions ensure --name <name> \
-  --resume-session <provider-session-id>
-acpx <agent> -s <name> 'continue the scoped job'
-```
-
-Use `ensure` for intentional idempotent reuse and `new` only with an explicit
-continuity-reset reason. Reconnect, auth failure, model rejection, permission
-failure, or provider limits do not authorize replacement-session churn.
+Reuse an existing relationship only when runtime identity, working scope,
+assignment, model, and permissions still match. Create a new relationship only
+with an explicit continuity-reset reason. Reconnect, auth failure, model
+rejection, permission failure, or provider limits do not authorize replacement
+churn.
 
 ## Readiness Lifecycle
 
@@ -41,14 +36,14 @@ local record -> provider attached -> selected model active
              -> assignment-bound output -> parent-verified claim
 ```
 
-Identity is the resolved command, absolute cwd, session name, and exposed ids.
+Identity is the resolved runtime, working scope, relationship name, and exposed ids.
 Configuration is model, reasoning effort, and permissions. Keep both stable or
 record a deliberate transition before the next call.
 
 | Signal | Action |
 | --- | --- |
 | reconnect requested | Resume/retry the same scope. |
-| local session missing | Inspect local records for exact command and cwd, then ensure or intentionally resume. |
+| local relationship missing | Inspect runtime records for matching runtime and working scope, then resume or intentionally recreate. |
 | auth failure | Repair auth or report blocked; local creation is not provider readiness. |
 | model rejected/substituted | Use an advertised equivalent or report degraded/blocked. |
 | permission failure | Correct the narrow policy or report blocked; do not broaden silently. |
@@ -56,19 +51,9 @@ record a deliberate transition before the next call.
 
 ## Progress And Scope
 
-```bash
-acpx <agent> sessions show <name>
-acpx <agent> sessions history <name> --limit 20
-acpx <agent> sessions read <name> --tail 20
-acpx <agent> sessions list --local
-```
-
-`status`/`show` proves liveness. `history` is a recent preview; `read` is saved
-history. Before declaring a session missing, match the local record's resolved
-command and absolute cwd. Session names are not global.
-
-Provider-side `sessions list --filter-cwd` and `--cursor` are separate from
-local record inspection.
+A runtime status proves liveness only. Recent previews and saved history must be
+matched to the ledger's runtime identity, working scope, assignment, and source
+version before they can enter reduction.
 
 ## Receipt Freshness
 
