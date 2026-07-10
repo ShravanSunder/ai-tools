@@ -14,9 +14,8 @@
 - Defines model categories once: Frontier is GPT-5.6 Sol or Claude Fable;
   Balanced is GPT-5.6 Terra, Claude Opus, or Grok 4.5; Mini is GPT-5.6 Luna or
   Cursor Composer 2.5.
-- Requires Advisor to use Frontier at medium reasoning or above, Sidekick to
-  use Frontier/Balanced at medium or above, and Delegate to use Balanced/Mini
-  at any reasoning effort.
+- Requires Advisor to use Frontier at high reasoning or above, and Sidekick or
+  Delegate to use their allowed categories at medium or above.
 - Parents consume reduced receipts and verify load-bearing anchors instead of
   repeating raw log scraping.
 - Requires persistent advisor/sidekick continuity reasons, assignment-bound

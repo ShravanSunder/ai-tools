@@ -2,9 +2,9 @@
 
 | Pattern | Role | Continuity | Model category | Reasoning effort |
 | --- | --- | --- | --- | --- |
-| Advisor | Gives strategic advice, reflection, course correction, or completion checks while the parent remains executor. Candidate guidance only. | One persistent named relationship with trigger, authority, and stop condition. | Frontier | medium or above |
+| Advisor | Gives strategic advice, reflection, course correction, or completion checks while the parent remains executor. Candidate guidance only. | One persistent named relationship with trigger, authority, and stop condition. | Frontier | high or above |
 | Sidekick | Owns delegated execution across assignments and follow-ups without final authority. | One persistent named relationship with ledger and progress checks. | Frontier or Balanced | medium or above |
-| Delegate | Completes one bounded research, review, implementation, monitoring, or reporting assignment. | One packet and receipt; normally one-shot. | Balanced or Mini | any |
+| Delegate | Completes one bounded research, review, implementation, monitoring, or reporting assignment. | One packet and receipt; normally one-shot. | Balanced or Mini | medium or above |
 
 ## Assignment Routes
 
