@@ -4,54 +4,31 @@ Load this after choosing the agent category and assignment. This file owns the
 mapping from task risk and lineage needs to model capability. Provider command
 grammar belongs in provider and runtime references.
 
-## Selection Order
+## Decision Rule
 
 Choose in this order:
 
-1. Assignment: advice, implementation, review, research, monitoring, merge or
-   PR babysitting, scripting, or reporting.
-2. Risk: low, normal, high, or release/security/architecture critical.
-3. Lineage: same lineage is acceptable, or independent lineage is required to
-   reduce correlated blind spots.
-4. Capability: model family plus minimum reasoning level.
-5. Provider availability: advertised model id, account usage limits, session
-   limits, and expected duration.
-6. Fallback: a predeclared replacement that preserves required lineage and
-   capability, or an explicit blocked/degraded result.
+```text
+assignment and cognitive load -> risk -> lineage -> capability
+                              -> availability -> fallback
+```
 
-Do not select a model because its name sounds senior. Do not let a provider
-silently substitute a cheaper model when independent lineage or a minimum
-reasoning level is load-bearing.
+- Use Luna-level agents for bounded collection and monitoring: file/log
+  inventory, simple git/status/check reads, counting, scripts, PR babysitting,
+  and structured receipts.
+- Use Terra, Sol, or an independent outside lineage for correlated synthesis,
+  architecture, adjudication, cross-module review, or high-risk judgment.
+- Collectors return facts and anchors; they do not decide. The parent consumes
+  reduced receipts and verifies load-bearing anchors instead of repeating raw
+  scraping, except when a receipt is contested, incomplete, or failed.
 
 Completion: the ledger records assignment, risk, lineage requirement, selected
-model, reasoning level, provider, and fallback or blocked condition.
-
-## Cognitive-Load Dispatch
-
-Use low-cost operational agents for bounded mechanical work, then hand their
-structured receipts upward when the work becomes interpretive.
-
-- Luna-level agents collect or monitor facts: file and log inventory, simple
-  git/status/check reads, command census, structured counts or classification,
-  PR babysitting, script execution, and concise reporting.
-- Terra, Sol, or an explicitly independent outside lineage handles correlated
-  synthesis, architecture, adjudication, cross-module review, or high-risk
-  judgment. Increase capability with risk and ambiguity, not merely input size.
-- The collector returns source anchors, commands, exit status, observed facts,
-  confidence, and unresolved items. It does not turn correlation into accepted
-  truth or make the blocked decision.
-- The parent consumes reduced receipts and verifies load-bearing anchors. Do
-  not make the parent repeat raw file or log scraping when an eligible
-  collection lane is available, except to resolve a contested, incomplete, or
-  failed receipt.
-
-Completion: the assignment names whether the agent is collecting, synthesizing,
-or deciding, and its capability matches that cognitive load.
+model and reasoning level, provider, and fallback or blocked condition.
 
 ## Current-Generation Guidance
 
-This is a dated operating snapshot, not a permanent ranking. Runtime-advertised
-ids, current access, and observed behavior are authoritative.
+This is a dated snapshot. Runtime-advertised ids and current access are
+authoritative.
 
 | Category / assignment | Current guidance | Minimum level |
 | --- | --- | --- |
@@ -61,24 +38,11 @@ ids, current access, and observed behavior are authoritative.
 | Review subagent | Opus, Sol, Terra, or Luna according to scope and risk. Increase capability for cross-module, security, architecture, or release claims. | task-dependent |
 | Operational subagent | Luna, Sonnet, or Cursor Composer 2.5 for monitoring, scripts, PR babysitting, merge observation, and reporting. | normal task level |
 
-An outside judge is an assignment, not a fourth agent category. Use an advisor
-when continuity and consultation checkpoints matter; use a review subagent when
-one bounded independent verdict is enough.
+An outside judge is an assignment, not an agent category.
 
-## Availability And Fallback
+## Fallback
 
-- Codex and Claude model availability can vary by account and active session
-  limits.
-- Cursor is a multi-model provider. Its catalog and usage limits may make
-  Composer, Grok, or another model unavailable during a run.
-- Verify the exact advertised id before dispatch. Friendly names are not proof
-  that the provider accepted the intended model.
-- If an advisor requires different lineage, a same-lineage fallback is not an
-  equivalent success. Report the outside perspective as unavailable or choose
-  another independent provider.
-- If a high-risk judge is unavailable, do not silently green the work. Record
-  the missing judgment and follow the owning workflow's blocked or escalation
-  rule.
-
-Completion: fallback behavior is explicit before a quota or session limit is
-hit.
+Verify the exact advertised model id before dispatch. If lineage independence
+or a minimum capability is required, a weaker or same-lineage substitute is not
+equivalent success. Use a declared equivalent fallback or report the lane
+degraded/blocked; never silently green missing high-risk judgment.
