@@ -26,6 +26,28 @@ reasoning level is load-bearing.
 Completion: the ledger records assignment, risk, lineage requirement, selected
 model, reasoning level, provider, and fallback or blocked condition.
 
+## Cognitive-Load Dispatch
+
+Use low-cost operational agents for bounded mechanical work, then hand their
+structured receipts upward when the work becomes interpretive.
+
+- Luna-level agents collect or monitor facts: file and log inventory, simple
+  git/status/check reads, command census, structured counts or classification,
+  PR babysitting, script execution, and concise reporting.
+- Terra, Sol, or an explicitly independent outside lineage handles correlated
+  synthesis, architecture, adjudication, cross-module review, or high-risk
+  judgment. Increase capability with risk and ambiguity, not merely input size.
+- The collector returns source anchors, commands, exit status, observed facts,
+  confidence, and unresolved items. It does not turn correlation into accepted
+  truth or make the blocked decision.
+- The parent consumes reduced receipts and verifies load-bearing anchors. Do
+  not make the parent repeat raw file or log scraping when an eligible
+  collection lane is available, except to resolve a contested, incomplete, or
+  failed receipt.
+
+Completion: the assignment names whether the agent is collecting, synthesizing,
+or deciding, and its capability matches that cognitive load.
+
 ## Current-Generation Guidance
 
 This is a dated operating snapshot, not a permanent ranking. Runtime-advertised

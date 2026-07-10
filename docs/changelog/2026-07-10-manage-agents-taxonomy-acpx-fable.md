@@ -1,7 +1,7 @@
 # Manage Agents Taxonomy And ACPX Fable
 
 - Marketplace plugin: `shravan-dev-workflow`
-- New version: `1.6.50`
+- New version: `1.6.51`
 
 ## User-Visible Changes
 
@@ -12,6 +12,16 @@
   runtime, permissions, receipts, and parent reduction.
 - Adds current-generation model guidance for advisors, sidekicks, review
   subagents, high-risk outside judges, and operational monitoring/reporting.
+- Separates Luna-level mechanical collection and monitoring from Terra/Sol or
+  outside-lineage synthesis and judgment. Parents consume reduced receipts and
+  verify only load-bearing anchors instead of repeating raw log scraping.
+- Requires persistent advisor/sidekick continuity reasons, assignment-bound
+  receipt levels, stale-output rejection, and explicit lifecycle handling for
+  reconnect, authentication, model, permission, and provider-limit failures.
+- Links delegated PR monitoring to `manage-agents`: an operational monitor may
+  report state deltas, but judgment, code changes, disputed review handling,
+  readiness, and merge authority return to the main agent through a decision
+  packet.
 - Adds a provider map for Codex, Claude, and Cursor. Cursor is treated as a
   multi-model provider whose catalog is constrained by account usage limits;
   Composer 2.5 is grouped with Luna and Sonnet for operational work.
@@ -24,13 +34,15 @@
 - Prefers the global `acpx` binary, then `pnpm dlx acpx`, then
   `npx --yes acpx`; routine examples are not pinned to the research version.
 
-## Affected Files
+## Cumulative Release Scope
 
 - `AGENTS.md`
 - `plugins/shravan-dev-workflow/README.md`
 - `plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md`
 - `plugins/shravan-dev-workflow/skills/manage-agents/agents/openai.yaml`
 - `plugins/shravan-dev-workflow/skills/manage-agents/references/`
+- `plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/SKILL.md`
+- `plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/references/monitor-loop.md`
 - `plugins/shravan-dev-workflow/.codex-plugin/plugin.json`
 - `plugins/shravan-dev-workflow/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
@@ -48,6 +60,10 @@
   read-only changed-surface review, and returned candidate findings. Parent
   verification accepted and fixed cwd pinning, packet-only permission wording,
   and reference-ownership findings.
+- The same Fable advisor relationship resumed after a reconnect request for an
+  `xhigh` completion check. Parent verification accepted and fixed delegated
+  PR-monitor authority leakage, multi-sidekick overclassification, child-owned
+  verification wording, and identity/configuration transition ambiguity.
 - Codex skill quick validation passed: `Skill is valid!`, exit 0.
 - JSON manifest parsing passed, exit 0.
 - `claude plugin validate .` passed, exit 0.

@@ -30,6 +30,10 @@ a transfer protocol, not an agent category.
   swarms by default.
 - Task before model. Match risk, required judgment, lineage independence, and
   reasoning level before optimizing cost or availability.
+- Mechanics down, judgment up. Delegate bounded file/log collection, status
+  checks, counting, and monitoring to an operational subagent when available.
+  Pass its structured receipt to a stronger synthesis lane or the parent when
+  correlation, architecture, adjudication, or high-risk judgment begins.
 - Provider is not lineage. Cursor is a multi-model provider; ACPX is a runtime.
   Neither identifies the model family by itself.
 - Packet before prompt. Every non-trivial subordinate job gets source anchors,
@@ -56,7 +60,8 @@ treating the subordinate agent call as underway.
 
 2. Choose lineage, model capability, and provider.
    - Load `references/model-selection.md` for risk, lineage independence,
-     reasoning level, current-generation model guidance, and fallback rules.
+     cognitive-load dispatch, current-generation model guidance, and fallback
+     rules.
    - Load `references/agent-registry.md` for the provider map and ACPX agent
      resolution, then load one provider reference when provider behavior
      matters.
@@ -108,7 +113,8 @@ treating the subordinate agent call as underway.
   advisors, sidekicks, subagents, single-agent or swarm topology, and workflow
   handoffs before provider or command selection.
 - `references/model-selection.md`: assignment risk, lineage independence,
-  reasoning level, current-generation model guidance, and fallback rules.
+  reasoning level, cognitive-load dispatch, current-generation model guidance,
+  and fallback rules.
 - `references/session-ledger.md`: persistent agent naming, session ids,
   progress polling, history, receipts, and parent reduction.
 - `references/automation-and-flows.md`: machine-readable output, exit codes,

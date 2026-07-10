@@ -18,6 +18,8 @@ follow-up or reduction claim is made.
 agent name:
 category: advisor | sidekick
 assignment:
+assignment id:
+continuity reason:
 provider / command:
 model / reasoning level:
 cwd:
@@ -30,6 +32,8 @@ queued work:
 last prompt:
 last checked:
 receipt expected:
+receipt level:
+receipt scope:
 parent verification:
 notes:
 ```
@@ -60,6 +64,11 @@ Use `sessions new` when intentionally starting over. Both accept
 `--resume-session <provider-session-id>` when intentionally attaching an
 existing provider session.
 
+`sessions new` requires an explicit continuity-reset reason. Reconnect, auth,
+model rejection, permission failure, or provider session limits do not by
+themselves authorize replacement-session creation. Inspect the same scope,
+reuse or resume when valid, use a declared fallback, or report blocked.
+
 ```bash
 acpx <agent> sessions ensure --name <name>
 acpx <agent> sessions new --name <name>
@@ -70,6 +79,39 @@ acpx <agent> -s <name> 'continue the scoped job'
 
 Completion: the parent can explain whether the session was created, resumed,
 idle, running, dead, or missing.
+
+## Provider-Ready Lifecycle
+
+Treat persistent startup as staged evidence:
+
+```text
+local record -> provider attached -> selected model active
+             -> assignment-bound output -> parent-verified claim
+```
+
+Before the first prompt, record the identity tuple: resolved agent command,
+absolute cwd, session name, local ACPX ids, and provider-native id when exposed.
+Also record the configuration tuple: selected model, reasoning level, and
+permission boundary. Hold both constant across lifecycle calls unless a
+deliberate control or assignment transition is recorded in the ledger before
+the next call; identity changes create or resume a different relationship.
+
+Local record creation proves only local state. Provider capability, status, or
+turn evidence must establish provider attachment and the selected model before
+the run is described as model-correct. Assignment output must bind to the
+current assignment id and decision target before reduction.
+
+| Signal | Required action |
+| --- | --- |
+| reconnect requested | Retry or resume the same scoped relationship; do not create a replacement name. |
+| local session missing | Inspect `sessions list --local` for the exact command and cwd, then ensure or intentionally resume. |
+| authentication failure | Repair authentication or report blocked; local creation is not success. |
+| model rejected or substituted | Inspect the advertised catalog, use the declared fallback, or report degraded/blocked. |
+| permission failure | Correct the narrow policy deliberately or report blocked; do not broaden silently. |
+| provider session limit | Stop creating sessions; reuse/resume, choose the declared fallback, defer, or report blocked. |
+
+Completion: the ledger distinguishes local existence, provider readiness,
+model correctness, assignment output, and parent verification.
 
 ## Progress Checks
 
@@ -148,13 +190,29 @@ scope is explicit.
 
 ## Reduction Receipt
 
+Use these receipt levels:
+
+- `local`: local record or liveness only;
+- `provider-active`: provider attached and selected model evidenced;
+- `assignment-output`: captured output bound to the current session scope,
+  assignment id, decision target, and source/head version;
+- `parent-verified`: the parent checked the accepted claim against primary
+  evidence.
+
+Only current `assignment-output` enters reduction. If queued work completes
+after the assignment, decision target, session scope, or source/head version
+changes, mark the receipt `stale`; do not reduce it as current evidence.
+
 When reducing a persistent agent result, record:
 
 ```text
 source agent:
 category: advisor | sidekick
 prompt/job:
+assignment id:
 status:
+receipt level:
+receipt scope:
 candidate result:
 evidence cited by child:
 parent checks run:

@@ -27,6 +27,9 @@ Use one advisor or sidekick by default because those categories are persistent
 relationships. Do not call several advisors an `advisor swarm` or several
 sidekicks a `sidekick swarm`; if independent breadth is required, dispatch
 bounded review/advice or work slices as subagents and use swarm topology.
+Plural independent helpers pursuing the same assignment or decision target are
+swarm lanes even when each runtime happens to preserve a session. Several
+sidekicks with distinct long-lived assignments remain separate relationships.
 
 Use one subagent for a single bounded lane. Use a swarm when multiple
 independent subagents can inspect, research, review, or compare in parallel.
@@ -57,6 +60,12 @@ Persistent sidekicks need a session ledger before prompts that assume memory:
 provider, cwd, session name, status, current assignment, last receipt, and next
 follow-up intent.
 
+Call the relationship a sidekick only when it has a named session plus a stated
+follow-up or warm-context need. Bounded file ownership without expected
+follow-ups is a subagent assignment. When a sidekick changes assignment class,
+write a new packet and ledger transition before the next prompt; persistence
+does not preserve stale authority.
+
 When explaining this pattern, name it as long-lived work in a separate context
 with a session ledger and progress check.
 
@@ -74,6 +83,11 @@ charge. Advisor modes include:
   notes, concerns, or hard blockers when the harness supports that feed;
 - completion-check: the advisor reviews before the parent claims done.
 
+A sole bounded completion review is a review subagent. Completion-check is
+advisor work only inside an existing consultative relationship with a named
+trigger or next checkpoint. Several independent advice requests are subagent
+swarm lanes, not one advisor relationship.
+
 Advisor output is not a second verdict. It is inline candidate guidance. The
 parent must decide whether the note is accepted, rejected, or escalated to a
 phase review.
@@ -82,7 +96,7 @@ When explaining this pattern, name quiet notes, hard blockers, and course
 correction as advisor outputs when the harness supports inline notes.
 
 Completion: the advisor trigger, note channel, maximum authority, and stop
-condition are explicit.
+condition are explicit, and persistence has a stated continuity reason.
 
 ## Subagent
 

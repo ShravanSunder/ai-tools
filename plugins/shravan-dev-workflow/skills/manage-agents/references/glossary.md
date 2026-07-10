@@ -61,8 +61,19 @@ defining property of `subagent` in this skill.
 
 - Packet: the bounded instructions, source anchors, non-goals, permission
   boundary, expected receipt, and stop condition sent to a subordinate agent.
+- Assignment id: the stable identifier binding a prompt and receipt to one
+  delegated job.
+- Continuity reason: why a persistent advisor or sidekick needs warm context or
+  future follow-ups instead of a bounded subagent call.
 - Receipt: the subordinate agent's returned status, candidate result, evidence,
   blockers, and next-action signal.
+- Receipt level: whether evidence proves local state, provider/model activity,
+  assignment-bound output, or a parent-verified claim.
+- Receipt scope: the session identity, assignment id, decision target, and
+  source/head version to which a receipt applies.
+- Stale receipt: output whose receipt scope no longer matches the current work.
+- Decision packet: a subordinate agent's bounded escalation of an observed
+  delta and blocked authority-bearing action to the parent.
 - Ledger: the parent-maintained record of persistent subordinate sessions and
   their current state.
 - Candidate claim: a subordinate-agent claim that has not been verified by the
