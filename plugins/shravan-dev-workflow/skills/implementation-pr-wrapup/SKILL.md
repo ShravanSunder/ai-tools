@@ -32,7 +32,7 @@ bugs" to `implementation-review-swarm`.
 3. Inspect or create/update the PR.
 4. Monitor checks, comments, review threads, mergeability, and PR head SHA.
    When delegating bounded monitoring, load `manage-agents` to choose the
-   Operator route, Mini model, packet, receipt, and escalation boundary.
+   Operation pattern, Mini model, packet, receipt, and escalation boundary.
    Paginate review-thread connections and collect unresolved thread node IDs
    before readiness decisions.
    Keep monitoring API-budget aware: use REST where it is sufficient, reserve
@@ -61,9 +61,8 @@ bugs" to `implementation-review-swarm`.
   comments, review threads, or mergeability.
 - Load `references/monitor-loop.md` before polling asynchronous PR state.
 - Load `manage-agents` before dispatching or resuming a subordinate PR monitor.
-  This skill still owns PR gates; `manage-agents` owns the Delegate pattern,
-  Operator assignment route, Mini model/runtime, packet, receipt, and decision
-  escalation.
+  This skill still owns PR gates; `manage-agents` owns the Operation pattern,
+  Mini model/runtime, packet, receipt, and decision escalation.
 - Load `references/merge-gates.md` before saying ready, merge-clear, green,
   fixed, complete, or running a merge command.
 - Load `../../references/review-reception.md` before acting on existing PR

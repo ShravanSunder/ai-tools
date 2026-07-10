@@ -14,11 +14,11 @@ babysit forever and do not claim readiness from the first green state.
 
 ## Delegated Monitoring
 
-A Mini Operator Delegate may perform the loop's observation steps: fetch and
+A Mini Operation may perform the loop's observation steps: fetch and
 classify state, wait for the bounded quiet interval, and re-fetch. It
 replaces the loop's action and readiness steps with decision packets to the
-main agent. Use `manage-agents` for its pattern, assignment route, model,
-packet, receipt, and decision boundary.
+main agent. Use `manage-agents` for its pattern, model, packet, receipt, and
+decision boundary.
 
 The monitor may fetch and classify checks, comments, thread state,
 mergeability, rate limits, and head SHA. It must not reply to comments, change

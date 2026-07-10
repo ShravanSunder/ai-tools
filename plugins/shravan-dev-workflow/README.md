@@ -122,8 +122,8 @@ truth.
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning,
 calling, resuming, steering, queueing, monitoring, or reducing advisors,
-sidekicks, delegates, operator routes, and swarms. It separates relationship,
-assignment route, model category, lineage, and native/ACPX runtime; records
+sidekicks, delegates, operations, and swarms. It separates pattern, model
+category, lineage, and native/ACPX runtime; records
 persistent sessions before follow-ups; gives provider-specific ACPX/Fable
 guidance; and treats child output as candidate evidence until verified.
 

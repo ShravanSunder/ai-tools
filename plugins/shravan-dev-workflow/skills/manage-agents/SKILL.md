@@ -1,22 +1,23 @@
 ---
 name: manage-agents
-description: Use when choosing, dispatching, resuming, monitoring, or reducing advisors, sidekicks, delegates, operator routes, or swarms; choosing native subagents versus ACPX and model lineage; or using ACPX sessions, queueing, automation, flows, and custom adapters.
+description: Use when choosing, dispatching, resuming, monitoring, or reducing advisors, sidekicks, delegates, operations, or swarms; choosing native subagents versus ACPX and model lineage; or using ACPX sessions, queueing, automation, flows, and custom adapters.
 ---
 
 # Manage Agents
 
-Keep relationship, work, model, and runtime as separate choices:
+The pattern owns work, continuity, authority, and allowed cardinality. Model and
+runtime follow it:
 
 ```text
-pattern -> assignment route -> model category -> exact model
+pattern -> model category -> exact model -> reasoning effort -> lineage
         -> native or ACPX runtime -> permissions -> packet -> receipt
 ```
 
 ## Rules
 
 - Parent owns decisions and accepted truth. Agent output is candidate evidence.
-- Choose the pattern and assignment route before the model or runtime.
-- Operator reports or escalates; it does not make judgment calls.
+- Choose the pattern before the model or runtime.
+- Operation executes, observes, and reports; it escalates judgment.
 - Every non-trivial call gets one bounded packet. Persistent relationships get
   a ledger before the first prompt that assumes continuity.
 - Status proves liveness, not correctness. Only assignment-bound output enters
@@ -26,10 +27,10 @@ pattern -> assignment route -> model category -> exact model
 
 ## Workflow
 
-1. Choose pattern, assignment route, and topology.
+1. Choose the pattern.
    - Load `references/orchestration-patterns.md`.
-   - Completion: Advisor, Sidekick, or Delegate; reasoning or operator route;
-     and single or swarm are explicit.
+   - Completion: Advisor, Sidekick, Delegate, or Operation is explicit; the
+     table determines continuity, authority, and allowed single/swarm form.
 
 2. Choose model and runtime.
    - Load `references/model-selection.md` for Frontier, Balanced, and Mini.
@@ -46,7 +47,7 @@ pattern -> assignment route -> model category -> exact model
    - Completion: runtime controls and authority match the packet.
 
 4. Dispatch and reduce.
-   - Load `references/agent-job-packet.md` for the dispatch, operator decision,
+   - Load `references/agent-job-packet.md` for dispatch, Operation decisions,
      and reduction shapes.
    - Completion: source anchors, non-goals, receipt scope, stop condition, and
      parent verification are present.
@@ -63,5 +64,5 @@ pattern -> assignment route -> model category -> exact model
    - Load `references/building-custom-agents.md` only to build or wrap an ACP
      adapter.
 
-Completion: the parent can name the pattern, assignment route, topology, model,
-runtime, permissions, packet, receipt, and verification step.
+Completion: the parent can name the pattern, model, runtime, permissions,
+packet, receipt, and verification step.

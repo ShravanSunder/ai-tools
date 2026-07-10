@@ -18,12 +18,12 @@ acpx --format quiet --deny-all --no-terminal codex exec \
 
 | Need | Command | Continuity |
 | --- | --- | --- |
-| One bounded Delegate | `acpx <agent> exec ...` | none |
+| One bounded Delegate/Operation | `acpx <agent> exec ...` | none |
 | Persistent Advisor/Sidekick | `sessions ensure/new`, then prompt or bare call with `-s` | ledgered session |
 | Follow-up after active turn | persistent prompt with `--no-wait` | queued in same session |
 
-`exec` has no resume expectation. Persistent prompts require the same resolved
-command, absolute cwd, and session name.
+`exec` has no resume expectation. Persistent prompt identity and scope are owned
+by `session-ledger.md`.
 
 ## Queue Or Steer
 

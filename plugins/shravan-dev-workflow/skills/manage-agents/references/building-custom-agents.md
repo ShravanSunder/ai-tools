@@ -3,10 +3,6 @@
 Load this only when building, modifying, or wrapping an ACP-compatible adapter.
 Calling an existing custom command belongs in `agent-registry.md`.
 
-This file owns custom-agent authoring. Keep the explicit filename
-`building-custom-agents.md`; do not collapse it into an overloaded
-`custom-agents.md` reference.
-
 ## Build Gate
 
 Before building a custom agent, confirm why a built-in, raw `--agent`, or

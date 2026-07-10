@@ -5,17 +5,17 @@
 
 ## User-Visible Changes
 
-- Defines Advisor, Sidekick, and Delegate as relationship patterns. Advisor and
-  Sidekick are persistent; Delegate is one bounded assignment; native subagent
-  is a runtime; swarm is multiple Delegates.
-- Adds an Operator assignment route for procedures, monitoring, simple
-  `git`/`gh` and PR checks, scripts, scraping, and structured reporting. Operator
-  always uses Mini and escalates judgment through a decision packet.
+- Defines Advisor, Sidekick, Delegate, and Operation as patterns. Advisor and
+  Sidekick are always one persistent relationship; Delegate and Operation may
+  be single or swarms; native subagent is a runtime.
+- Operation covers procedures, monitoring, simple `git`/`gh` and PR checks,
+  scripts, scraping, and structured reporting. It always uses Mini and
+  escalates judgment through a decision packet.
 - Defines model categories once: Frontier is GPT-5.6 Sol or Claude Fable;
   Balanced is GPT-5.6 Terra, Claude Opus, or Grok 4.5; Mini is GPT-5.6 Luna or
   Cursor Composer 2.5.
-- Requires Advisor to use Frontier at high reasoning or above, and Sidekick or
-  Delegate to use their allowed categories at medium or above.
+- Requires Advisor to use Frontier at high reasoning or above, and Sidekick,
+  Delegate, or Operation to use their allowed categories at medium or above.
 - Parents consume reduced receipts and verify load-bearing anchors instead of
   repeating raw log scraping.
 - Requires persistent advisor/sidekick continuity reasons, assignment-bound
@@ -67,10 +67,11 @@
   `xhigh` completion check. Parent verification accepted and fixed delegated
   PR-monitor authority leakage, multi-sidekick overclassification, child-owned
   verification wording, and identity/configuration transition ambiguity.
-- A fresh GPT-5.6 Terra high-reasoning Delegate reviewed every changed skill,
+- Fresh GPT-5.6 Terra high-reasoning Delegates reviewed every changed skill,
   provider, runtime, PR-wrapup, and public release surface. Parent verification
-  fixed its two taxonomy findings; targeted rereview confirmed both resolved.
-- The final skill folder was reduced from 1,353 to 660 lines by deleting the
+  fixed all candidate taxonomy and ownership findings; targeted rereviews
+  confirmed them resolved.
+- The final skill folder was reduced from 1,353 to 638 lines by deleting the
   duplicate glossary and pruning duplicate packet, provider, runtime, and
   session guidance.
 - Codex skill quick validation passed: `Skill is valid!`, exit 0.

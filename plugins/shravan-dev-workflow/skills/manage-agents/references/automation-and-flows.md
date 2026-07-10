@@ -86,7 +86,7 @@ acpx --format json compare codex claude --file tmp/review-packet.md
 
 `compare` does not create saved sessions or a swarm with independent lane
 packets. It runs the same prompt serially and returns per-agent status. Use a
-real Delegate swarm when lanes need different scopes, source anchors, or
+real Delegate or Operation swarm when lanes need different scopes, source anchors, or
 adversarial assignments.
 
 Completion: compare results remain candidate outputs and provider agreement is

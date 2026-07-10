@@ -36,8 +36,7 @@ resolved command stable because it participates in session identity.
 Use either a positional/built-in name or `--agent`, never both. Config-defined
 names may override built-ins; make that override explicit.
 
-The resolved command, absolute cwd, and optional session name form persistent
-scope. Switching command strings selects a different session even when the
-friendly intent is unchanged.
+For persistent work, pass the resolved command to `session-ledger.md`; that
+reference owns identity and scope.
 
 Troubleshooting: https://acpx.sh/agents.html and https://acpx.sh/config.html

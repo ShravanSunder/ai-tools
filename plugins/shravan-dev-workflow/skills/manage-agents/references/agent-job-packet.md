@@ -4,16 +4,15 @@
 
 ```text
 agent job:
-pattern: advisor | sidekick | delegate
-assignment route: reasoning | operator
+pattern: advisor | sidekick | delegate | operation
 assignment id:
-topology: single | swarm lane
+lane: single | <swarm name / lane>
 target:
 model category / exact model / reasoning effort:
 lineage requirement:
 provider / runtime:
 decision target:
-continuity reason: required for Advisor/Sidekick | none for Delegate
+continuity reason: required for Advisor/Sidekick | none for Delegate/Operation
 source anchors:
 permission boundary:
 write scope:
@@ -24,9 +23,9 @@ stop condition:
 parent verification:
 ```
 
-## Operator Decision
+## Operation Decision
 
-Use when an Operator reaches work requiring judgment or authority.
+Use when an Operation reaches work requiring judgment or authority.
 
 ```text
 decision packet:
@@ -45,8 +44,8 @@ Silence is not approval.
 
 ```text
 agent result:
-source / pattern / assignment route / assignment id:
-topology / status:
+source / pattern / assignment id:
+lane / status:
 receipt level / receipt scope:
 candidate claims:
 accepted claims:
