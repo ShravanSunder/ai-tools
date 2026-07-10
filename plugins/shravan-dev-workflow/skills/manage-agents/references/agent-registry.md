@@ -1,8 +1,5 @@
 # Agent Registry
 
-Load when resolving an ACPX provider name, raw adapter command, or reusable
-config-defined agent.
-
 ## Providers
 
 | Provider | Native runtime | ACPX runtime | Caveat |
@@ -13,6 +10,11 @@ config-defined agent.
 
 Provider is not lineage, and ACPX is a runtime. Record the actual model when
 lineage independence matters.
+
+Use native only when it exposes the selected model. Otherwise use ACPX for
+another provider or lineage, or for a persistent cross-provider session. Verify
+the provider-advertised model id; if the required category or lineage is
+unavailable, use a declared equivalent fallback or report degraded/blocked.
 
 ## Launcher
 

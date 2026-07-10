@@ -1,9 +1,5 @@
 # Automation And Flows
 
-Load this when ACPX output is consumed by a script, when exit codes decide
-control flow, when JSON must be parsed, or when a multi-step TypeScript flow is
-the right shape.
-
 ## Output Modes
 
 Pick the format by consumer:

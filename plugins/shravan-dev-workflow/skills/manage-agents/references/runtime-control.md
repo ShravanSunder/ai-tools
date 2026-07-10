@@ -1,7 +1,5 @@
 # Runtime Control
 
-Load for ACPX prompt/exec, queue/steer, session controls, or permissions.
-
 ## Command Shape
 
 Global options precede the provider; provider options follow it; command

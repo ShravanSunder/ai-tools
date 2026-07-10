@@ -25,7 +25,8 @@ parent verification:
 
 ## Operation Decision
 
-Use when an Operation reaches work requiring judgment or authority.
+An Operation that reaches work requiring judgment or authority sends this
+packet:
 
 ```text
 decision packet:

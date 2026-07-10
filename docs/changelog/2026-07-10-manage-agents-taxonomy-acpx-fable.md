@@ -34,6 +34,8 @@
 - Assigns generic ACPX controls to `runtime-control.md` and the complete session
   lifecycle, cwd lookup, history previews, and full readback to
   `session-ledger.md`.
+- Makes `SKILL.md` the only reference-routing surface; each reference starts
+  with its owned subject matter rather than repeating its own entry condition.
 - Prefers the global `acpx` binary, then `pnpm dlx acpx`, then
   `npx --yes acpx`; routine examples are not pinned to the research version.
 

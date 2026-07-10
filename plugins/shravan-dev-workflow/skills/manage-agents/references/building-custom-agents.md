@@ -1,8 +1,5 @@
 # Building Custom Agents
 
-Load this only when building, modifying, or wrapping an ACP-compatible adapter.
-Calling an existing custom command belongs in `agent-registry.md`.
-
 ## Build Gate
 
 Before building a custom agent, confirm why a built-in, raw `--agent`, or

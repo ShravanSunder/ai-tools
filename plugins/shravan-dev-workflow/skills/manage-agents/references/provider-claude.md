@@ -1,8 +1,5 @@
 # Provider: Claude
 
-Load for Claude-specific ACPX behavior. Generic session and permission rules
-remain in `session-ledger.md` and `runtime-control.md`.
-
 ## Fable
 
 The locally verified custom model id is `claude-fable-5[1m]`, not bare
