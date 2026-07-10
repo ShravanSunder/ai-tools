@@ -52,7 +52,7 @@ under the same packet, authority, continuity, and parent-verification rules.
 
 ## Rules
 
-- Parent owns decisions and accepted truth. Agent output is candidate evidence.
+- Parent owns decisions and validates agent output as candidate evidence.
 - Choose the pattern before the model or runtime.
 - Operator executes, observes, and reports; it escalates judgment.
 - Every non-trivial call gets one bounded packet. Persistent relationships get
