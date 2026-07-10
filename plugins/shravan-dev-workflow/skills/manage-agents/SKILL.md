@@ -39,6 +39,17 @@ Verify the exact provider-advertised model id. Use a declared equivalent
 fallback or report degraded/blocked when the required category or lineage is
 unavailable.
 
+## Runtimes
+
+| Runtime | What it is | Choose it when |
+| --- | --- | --- |
+| Native subagent | The current host's built-in agent runtime. The host may be Codex, Claude, Cursor, or another client. | The host exposes the selected model and can honor the pattern's continuity and authority. |
+| ACPX | A client for calling ACP-compatible provider adapters and persistent sessions outside the host's native runtime. | The selected provider or lineage is not native, persistent cross-provider control is required, or the user asks for ACPX. |
+
+Native describes how the subagent is launched, not its pattern or model. A
+native subagent still operates as an Advisor, Sidekick, Delegate, or Operator
+under the same packet, authority, continuity, and parent-verification rules.
+
 ## Rules
 
 - Parent owns decisions and accepted truth. Agent output is candidate evidence.
@@ -62,6 +73,12 @@ unavailable.
      and the pattern's continuity can be honored.
    - Load `references/acpx.md` for another provider or lineage, persistent
      cross-provider work, explicit ACPX use, or ACPX configuration and control.
+   - After choosing an ACPX provider, load `references/acpx-provider-claude.md`
+     or `references/acpx-provider-cursor.md` when that provider has additional
+     behavior.
+   - If no existing ACPX built-in, raw command, or config-defined agent supplies
+     the required capability, route adapter design or changes through
+     `references/building-acp-adapters.md`.
    - Completion: exact model, reasoning effort, runtime, permissions, and
      fallback are explicit.
 
@@ -76,13 +93,6 @@ unavailable.
      reconnect, progress, history, freshness, or reduction.
    - Completion: the persistent identity is stable and the current receipt
      matches the assignment and source/head version.
-
-5. Build an adapter only when an existing ACPX built-in, raw command, or
-   config-defined agent cannot supply the required capability.
-   - Load `references/building-acp-adapters.md` before designing or changing an
-     ACP-compatible adapter.
-   - Completion: the missing capability, security route, ACP contract, and
-     smoke proof are explicit.
 
 Completion: the parent can name the pattern, model, runtime, permissions,
 packet, receipt, and verification step.

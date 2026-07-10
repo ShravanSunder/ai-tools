@@ -31,9 +31,11 @@
 - Documents the locally verified Claude Fable ACPX environment, exact
   `claude-fable-5[1m]` id, effort control, user-settings hazards,
   and persistent advisor lifecycle.
-- Keeps pattern and model selection in `SKILL.md`; consolidates ACPX providers,
-  configuration, calls, controls, output, automation, and flows in `acpx.md`;
-  and keeps persistent identity and receipt freshness in `session-ledger.md`.
+- Keeps pattern, model, and host-neutral native-versus-ACPX selection in
+  `SKILL.md`; consolidates generic ACPX configuration, calls, controls, output,
+  automation, and flows in `acpx.md`; keeps real provider exceptions in
+  `acpx-provider-*`; and keeps persistent identity and receipt freshness in
+  `session-ledger.md`.
 - Separates ACPX configuration of an existing agent from implementation of a
   new ACP-compatible adapter in `building-acp-adapters.md`.
 - Makes `SKILL.md` the only reference-routing surface; each reference starts
@@ -76,7 +78,7 @@
   provider, runtime, PR-wrapup, and public release surface. Parent verification
   fixed all candidate taxonomy and ownership findings; targeted rereviews
   confirmed them resolved.
-- The final skill folder was reduced from 1,353 to 545 lines by moving core
+- The final skill folder was reduced from 1,353 to 510 lines by moving core
   pattern/model decisions into `SKILL.md` and consolidating ACPX mechanics into
   one reference.
 - Codex skill quick validation passed: `Skill is valid!`, exit 0.

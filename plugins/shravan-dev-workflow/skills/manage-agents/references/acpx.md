@@ -2,26 +2,9 @@
 
 ## Contents
 
-- Runtime and provider
 - Launcher and agent resolution
 - Command shape, queue, persistent sessions, and permissions
-- Claude Fable, Codex, and Cursor notes
 - Output, automation, compare, and flows
-
-## Runtime And Provider
-
-Use native only when the current client exposes the selected model and can honor
-the pattern's continuity. Use ACPX for another provider or lineage, persistent
-cross-provider work, or explicit ACPX control.
-
-| Provider | Native runtime | ACPX runtime | Caveat |
-| --- | --- | --- | --- |
-| Codex | Native Codex subagent or CLI session | `acpx codex` | Exact models depend on the current adapter and account. |
-| Claude | Claude Code agent or CLI session | `acpx claude` | User settings, custom model environment, auth, and session limits affect availability. |
-| Cursor | Cursor agent or Composer | `acpx cursor` | Cursor is multi-model; catalog and usage limits can change. |
-
-Provider is not lineage, and ACPX is a runtime. Record the actual model when
-lineage independence matters.
 
 ## Launcher And Agent Resolution
 
@@ -130,75 +113,6 @@ Advisor or reviewer merely because a read request failed.
 
 Troubleshooting: https://acpx.sh/prompting.html,
 https://acpx.sh/session-control.html, and https://acpx.sh/permissions.html
-
-## Provider Notes
-
-### Claude Fable
-
-The locally verified custom model id is `claude-fable-5[1m]`, not bare
-`fable`. User settings must expose that custom catalog. Define one relationship
-wrapper so every lifecycle call keeps the same model environment, cwd, and
-permission boundary:
-
-```bash
-REPO=/absolute/repo
-
-fable_acpx() {
-  ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-  ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-  ANTHROPIC_MODEL='claude-fable-5[1m]' \
-  acpx --cwd "$REPO" --deny-all --no-terminal \
-    --non-interactive-permissions fail claude "$@"
-}
-```
-
-```bash
-fable_acpx sessions ensure --name <name>
-fable_acpx set effort high -s <name>
-fable_acpx set-mode plan -s <name>
-fable_acpx -s <name> --file <packet>
-fable_acpx status -s <name>
-fable_acpx sessions history <name> --limit 20
-fable_acpx sessions read <name> --tail 20
-```
-
-The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`.
-Use the pattern's reasoning floor. Effort is a control command, not a
-`sessions ensure` or `sessions new` option. Use `new` only for an intentional
-continuity reset.
-
-`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` also loads user plugins, commands, hooks,
-and external resources. For source reads, replace `--deny-all` with
-`--approve-reads` for the whole relationship, keep
-`--no-terminal --non-interactive-permissions fail`, and forbid repository and
-home writes in the packet. Do not broaden to `--approve-all` for review or
-advice.
-
-Use the same absolute cwd on every call. Session names are not global. A
-friendly alias or exit code 0 does not prove Fable launched; verify capability
-evidence and record the accepted id in the ledger.
-
-### Codex
-
-Use native Codex subagents when they expose the selected model. Use ACPX Codex
-for a portable named session, queue control, or cross-provider flow. Use exact
-adapter-advertised model and reasoning options.
-
-Raw fallback:
-
-```bash
-acpx --agent 'npx -y @agentclientprotocol/codex-acp' exec 'sanity check'
-```
-
-### Cursor
-
-Cursor is a multi-model provider. Use it for Grok 4.5, Composer 2.5, or
-Cursor-specific branch behavior. Record config-defined overrides because the
-resolved command participates in session identity.
-
-Cursor may silently resolve a bare model name. Record the exact advertised id
-and actual lineage. If usage limits remove a model, use an equivalent declared
-fallback or report degraded/blocked.
 
 ## Output And Automation
 
