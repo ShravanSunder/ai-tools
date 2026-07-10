@@ -1,97 +1,68 @@
 # Session Ledger
 
-Load this when subordinate work must be resumed, monitored, queued, cancelled,
-or reduced across more than one turn or more than one agent.
+Persistent Advisors and Sidekicks need one current ledger row before prompts
+that assume continuity.
 
-## Ledger Rule
-
-Persistent sidekicks need a ledger before follow-ups. The parent needs enough
-identity to resume the right conversation and enough state to decide whether a
-result is fresh.
-
-Completion: every persistent sidekick has one current ledger row before a
-follow-up or reduction claim is made.
-
-## Minimal Row
+## Row
 
 ```text
-agent name:
-provider / command:
-cwd:
-session name:
-session mode: persistent | oneshot
+agent name / pattern / assignment / assignment id:
+continuity reason:
+resolved runtime / provider / model / reasoning effort:
+working scope / relationship name:
+runtime ids / provider-native id when exposed:
 permission boundary:
-created / ensured by:
-status:
-queued work:
-last prompt:
-last checked:
-receipt expected:
-parent verification:
-notes:
+status / queued work / last prompt / last checked:
+receipt expected / receipt level / receipt scope:
+parent verification / next follow-up / notes:
 ```
 
-Use `session mode: oneshot` only to document why no persistent resume is
-expected.
+Runtime ids are not interchangeable. Do not pass one runtime's local identity
+to another runtime unless a provider-native id is exposed and documented as
+accepted.
 
-## Identity Fields
+## Create Or Resume
 
-ACPX session-control JSON can include both local and provider-native ids.
+Reuse an existing relationship only when runtime identity, working scope,
+assignment, model, and permissions still match. Create a new relationship only
+with an explicit continuity-reset reason. Reconnect, auth failure, model
+rejection, permission failure, or provider limits do not authorize replacement
+churn.
 
-- `acpxRecordId`: local record id.
-- `acpxSessionId`: ACPX-side session id.
-- `agentSessionId`: provider-native id when exposed by the adapter.
-
-Do not pass an ACPX id to a native provider CLI unless the provider-native id is
-present and the provider docs say it is accepted.
-
-Completion: the ledger names which id is local and which id, if any, belongs to
-the provider.
-
-Troubleshooting source: https://acpx.sh/sessions.html
-
-## Creation And Resume
-
-Use `sessions ensure` for idempotent setup in scripts or repeatable workflows.
-Use `sessions new` when intentionally starting over. Use `sessions show`,
-`history`, and `status` to inspect before reducing a long-running job.
-
-```bash
-acpx <agent> sessions ensure --name <name>
-acpx <agent> -s <name> 'continue the scoped job'
-acpx <agent> status -s <name>
-acpx <agent> sessions history <name> --limit 20
-```
-
-Completion: the parent can explain whether the session was created, resumed,
-idle, running, dead, or missing.
-
-## Progress Checks
-
-Polling `status` checks local process state only. It is useful for deciding
-whether a queue owner is running, idle, dead, or missing, but it does not prove
-the agent's task succeeded.
-
-Use `history` or captured JSON/quiet output to find completed turn content.
-Use parent verification to accept or reject claims from that content.
-
-Completion: progress checks separate liveness from correctness.
-
-## Reduction Receipt
-
-When reducing a sidekick result, record:
+## Readiness Lifecycle
 
 ```text
-source sidekick:
-prompt/job:
-status:
-candidate result:
-evidence cited by child:
-parent checks run:
-accepted:
-rejected / unverified:
-follow-up:
+local record -> provider attached -> selected model active
+             -> assignment-bound output -> parent-verified claim
 ```
 
-Completion: every accepted result has a parent check or a clearly labeled proof
-gap.
+Identity is the resolved runtime, working scope, relationship name, and exposed ids.
+Configuration is model, reasoning effort, and permissions. Keep both stable or
+record a deliberate transition before the next call.
+
+| Signal | Action |
+| --- | --- |
+| reconnect requested | Resume/retry the same scope. |
+| local relationship missing | Inspect runtime records for matching runtime and working scope, then resume or intentionally recreate. |
+| auth failure | Repair auth or report blocked; local creation is not provider readiness. |
+| model rejected/substituted | Use an advertised equivalent or report degraded/blocked. |
+| permission failure | Correct the narrow policy or report blocked; do not broaden silently. |
+| provider session limit | Stop creating; reuse/resume, use declared fallback, defer, or report blocked. |
+
+## Progress And Scope
+
+A runtime status proves liveness only. Recent previews and saved history must be
+matched to the ledger's runtime identity, working scope, assignment, and source
+version before they can enter reduction.
+
+## Receipt Freshness
+
+| Level | Proves |
+| --- | --- |
+| `local` | record or liveness only |
+| `provider-active` | provider attached and selected model evidenced |
+| `assignment-output` | captured output matches session, assignment id, decision target, and source/head version |
+| `parent-verified` | parent checked the accepted claim against primary evidence |
+
+Only current `assignment-output` enters reduction. Mark queued output `stale`
+when assignment, decision target, session scope, or source/head version changed.

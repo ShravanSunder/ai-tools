@@ -121,10 +121,11 @@ receipts; parent ledgers reduce lane evidence before anything becomes accepted
 truth.
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning,
-calling, resuming, steering, queueing, monitoring, or reducing sidekicks, ACPX
-providers, JSON automation, flows, or custom ACP adapter boundaries. It keeps
-the parent session authoritative, records persistent helper sessions before
-follow-ups, distinguishes queueing from steering, and treats child output as
+calling, resuming, steering, queueing, monitoring, or reducing advisors,
+sidekicks, delegates, operators, subagents, and swarms. Its core skill owns
+pattern, model, and host-neutral runtime selection; `acpx.md` owns generic ACPX
+mechanics and `acpx-provider-*` references own real provider exceptions;
+persistent sessions are ledgered before follow-ups; and child output remains
 candidate evidence until verified.
 
 Use `orchestrator-goal` when the objective is long-running and already clear

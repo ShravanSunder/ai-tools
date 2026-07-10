@@ -12,6 +12,24 @@ babysit forever and do not claim readiness from the first green state.
 5. Re-fetch all gate state.
 6. Only then report readiness or proceed to merge authorization checks.
 
+## Delegated Monitoring
+
+A Mini Operator may perform the loop's observation steps: fetch and
+classify state, wait for the bounded quiet interval, and re-fetch. It
+replaces the loop's action and readiness steps with decision packets to the
+main agent. Use `manage-agents` for its pattern, model, packet, receipt, and
+decision boundary.
+
+The monitor may fetch and classify checks, comments, thread state,
+mergeability, rate limits, and head SHA. It must not reply to comments, change
+code, resolve disputes, declare readiness, or merge. When the next action needs
+judgment, a code change, disputed-review handling, scope change, or merge
+authorization, it sends the main agent a decision packet and then waits,
+continues read-only monitoring, or stops exactly as its packet permits.
+
+Completion: delegated monitoring returns assignment-bound state evidence, and
+every authority-bearing action remains with the main agent.
+
 Default cadence for general checks/comments/review-state monitoring is about 2
 minutes. Use 30-60 seconds only for short active windows, such as a fresh push,
 checks starting, or quiet-poll confirmation. Use a bounded timeout. If the
