@@ -14,7 +14,7 @@ one-shot job
   memory: none
   parent proof: exit code, final text, JSON stream, or captured artifact
 
-persistent sidekick
+persistent advisor or sidekick
   use: sessions ensure/new, then prompt
   memory: scoped by agent command, absolute cwd, optional session name
   parent proof: status/history plus verified output
@@ -33,6 +33,23 @@ steer
 Completion: the selected shape says whether the child should remember prior
 turns and whether the parent waits, queues, or steers.
 
+## Command Placement
+
+Examples use the launcher selected by `agent-registry.md`. Keep global options
+before the provider, provider options after the provider, and command options
+after the command.
+
+```bash
+acpx --cwd /absolute/repo --approve-reads claude -s advisor \
+  --file tmp/advisor-packet.md
+
+acpx --format quiet --deny-all --no-terminal codex exec \
+  --file tmp/review-packet.md
+```
+
+Completion: the launcher and option placement match live `acpx --help` and
+`acpx <agent> <command> --help` output.
+
 ## Prompt Versus Exec
 
 Use `exec` for stateless answers, script steps, independent reviews, and machine
@@ -43,6 +60,12 @@ queue-aware follow-ups, cancel/status/control commands, or named sidekicks.
 
 Completion: `exec` jobs have no resume expectation; persistent jobs have a
 session ledger row before follow-up prompts are sent.
+
+```bash
+acpx codex exec 'answer one bounded question'
+acpx claude -s advisor 'review the next checkpoint'
+acpx cursor prompt -s sidekick --file tmp/next-assignment.md
+```
 
 Troubleshooting source: https://acpx.sh/prompting.html
 
@@ -59,6 +82,13 @@ ACPX CLI queueing is not immediate steering.
 Completion: every follow-up is labeled as `queue` or `steer`, with the expected
 start time stated.
 
+```bash
+acpx codex -s sidekick --no-wait 'after the active turn, inspect failures'
+```
+
+ACPX 0.12 has no generic `steer` command. Do not rename queue acknowledgement
+as steering or completion.
+
 ## Session Control
 
 Use these controls against the same `(agentCommand, cwd, optional session name)`
@@ -69,13 +99,16 @@ acpx <agent> status -s <name>
 acpx <agent> cancel -s <name>
 acpx <agent> set-mode <mode> -s <name>
 acpx <agent> set model <model-id> -s <name>
+acpx <agent> set effort <level> -s <name>
 ```
 
 Notes:
 
 - `cancel` is cooperative and succeeds when there is nothing to cancel.
 - `set-mode` values are adapter-defined.
-- `set model` works only when the adapter advertises model control.
+- `set <key> <value>` works only for adapter-advertised config options. Common
+  keys include `model` and `effort`; inspect the live provider capability and
+  do not invent creation flags such as `sessions ensure --effort`.
 - `status` is local process/session state, not proof that the agent's claims
   are true.
 
@@ -89,7 +122,7 @@ Troubleshooting source: https://acpx.sh/session-control.html
 Choose the narrowest permission boundary that can do the job:
 
 ```bash
-acpx --deny-all --no-terminal <agent> exec 'read-only reasoning prompt'
+acpx --deny-all --no-terminal <agent> exec 'packet-only reasoning prompt'
 acpx --approve-reads --no-terminal <agent> exec 'review without shell'
 acpx --approve-reads <agent> 'inspect files and ask before writes'
 acpx --approve-all <agent> 'apply the scoped patch and run tests'
@@ -102,6 +135,11 @@ up front.
 
 Completion: the permission mode matches the requested authority, and any write
 or shell-capable run has an explicit parent-approved scope.
+
+For packet-only advisors, prefer `--deny-all --no-terminal` and pass all needed
+context through `--file`. For repo-inspecting advisors, use the narrowest read
+policy that actually permits the required source reads and keep repository and
+home writes explicitly forbidden in the packet.
 
 Troubleshooting source: https://acpx.sh/permissions.html
 

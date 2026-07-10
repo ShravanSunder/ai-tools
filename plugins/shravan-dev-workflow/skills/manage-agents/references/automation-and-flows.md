@@ -74,6 +74,24 @@ and interrupted outcomes explicitly when those outcomes change the next step.
 
 Troubleshooting source: https://acpx.sh/exit-codes.html
 
+## Compare
+
+Use `compare` for the same one-shot prompt across providers when serial
+comparison is enough and persistent continuity is not required:
+
+```bash
+acpx compare codex claude cursor --file tmp/comparison-packet.md
+acpx --format json compare codex claude --file tmp/review-packet.md
+```
+
+`compare` does not create saved sessions or a swarm with independent lane
+packets. It runs the same prompt serially and returns per-agent status. Use a
+real subagent swarm when lanes need different scopes, source anchors, or
+adversarial assignments.
+
+Completion: compare results remain candidate outputs and provider agreement is
+not treated as parent-verified truth.
+
 ## Flows
 
 Use flows when the work is a repeatable graph of agent and deterministic steps,

@@ -1,32 +1,37 @@
 # Orchestration Patterns
 
-Load this before choosing a provider, command, or runtime when the question is
-what kind of subordinate agent relationship the harness should use.
+Load this before choosing a model, provider, command, or runtime when the
+question is what kind of subordinate relationship and topology the harness
+should use.
 
 ## Pattern First
 
-Pick the agent relationship before picking ACPX, Claude, Codex, Cursor, Devin,
-or any other harness. A provider command is an implementation detail; the
-pattern decides context lifetime, authority, interruption behavior, and proof.
+Pick the agent category and assignment before picking ACPX, Claude, Codex,
+Cursor, or any other harness. Then choose one-agent or swarm topology. Provider
+and runtime choices implement that relationship; they do not define it.
 
-Completion: the parent can name the selected pattern and why the rejected
-patterns would be worse for this job.
+Completion: the parent can name category, assignment, topology, and why the
+rejected choices would be worse for this job.
 
-## Pattern Selector
+## Category Selector
 
-| Pattern | Use when | Avoid when | Parent owns |
+| Category | Use when | Avoid when | Parent owns |
 | --- | --- | --- | --- |
-| Swarm | Independent lanes can inspect, research, review, or compare options in parallel. | The work needs continuous shared context, tight serial integration, or one agent's evolving memory. | Packet, lane selection, reduction, accepted findings. |
-| Persistent sidekick | A helper should stay warm across turns with its own context, receipts, and follow-ups. | The task is one-shot, the helper cannot be monitored, or context continuity would create stale authority. | Plan, ambiguity, delegation, final review, session ledger. |
-| Advisor | A stronger or different model should watch or be consulted for strategic course correction while another agent executes. | The harness cannot expose the main transcript or inline notes, every turn needs the advisor model, or advice cannot be separated from authority. | When advice is requested, which notes are blockers, and whether to continue. |
-| Ephemeral subagent | A bounded question or patch can be answered without later continuity. | The result needs ongoing memory, queueing, or long-running progress checks. | Prompt packet, receipt, verification. |
-| Workflow handoff | The next unit of work belongs to another phase skill, future session, machine, or long-running goal. | The current parent still owns active integration or the handoff would hide unresolved decisions. | Handoff contract, exact files, proof state, resumption point. |
+| Advisor | One persistent consultative relationship should provide advice, reflection, concerns, or completion checks from a different model lineage. | The agent should own delegated execution, or the parent cannot separate advice from authority. | Consultation trigger, context packet, maximum authority, acceptance or rejection of advice. |
+| Sidekick | One persistent worker should stay warm across delegated assignments, receipts, and follow-ups. | The task is one-shot, the helper cannot be monitored, or continuity would create stale authority. | Plan, ambiguity, delegation, final review, and session ledger. |
+| Subagent | One bounded question, implementation slice, research lane, or review can complete without continuity. | The result needs ongoing memory, queueing, or repeated follow-ups. | Packet, permission scope, receipt, and verification. |
 
-## Swarm
+## Topology Selector
 
-Use a swarm for breadth: multiple bounded lanes, independent evidence, or
-adversarial review. The parent writes one shared packet, dispatches lanes,
-deduplicates candidate findings, verifies source anchors, and owns the verdict.
+Use one advisor or sidekick by default because those categories are persistent
+relationships. Do not call several advisors an `advisor swarm` or several
+sidekicks a `sidekick swarm`; if independent breadth is required, dispatch
+bounded review/advice or work slices as subagents and use swarm topology.
+
+Use one subagent for a single bounded lane. Use a swarm when multiple
+independent subagents can inspect, research, review, or compare in parallel.
+The parent writes the shared packet, bounds each lane, deduplicates candidate
+findings, verifies source anchors, and owns the verdict.
 
 Do not use a swarm as a way to avoid judgment. If the hard part is the product
 or architecture decision itself, the parent keeps that decision and may ask
@@ -35,14 +40,18 @@ lanes for evidence only.
 Completion: every lane has a bounded packet, non-goals, receipt, and reducer
 rule.
 
-## Persistent Sidekick
+## Sidekick
 
-Use a persistent sidekick for continuity: repeated follow-ups, slow
+Use a sidekick for continuity: repeated follow-ups, slow
 verification, mechanical work over many files, or an ongoing helper that should
 maintain its own cached context. This matches the useful part of hybrid harness
 patterns where the main agent keeps planning, ambiguity handling, delegation,
 and final review while a sidekick carries cheaper or more mechanical work in a
 separate context.
+
+A sidekick may delegate further bounded work to native subagents only when its
+packet permits that topology. It still cannot expand scope, grant itself final
+authority, or replace parent verification.
 
 Persistent sidekicks need a session ledger before prompts that assume memory:
 provider, cwd, session name, status, current assignment, last receipt, and next
@@ -75,9 +84,9 @@ correction as advisor outputs when the harness supports inline notes.
 Completion: the advisor trigger, note channel, maximum authority, and stop
 condition are explicit.
 
-## Ephemeral Subagent
+## Subagent
 
-Use an ephemeral subagent for small bounded work: inspect one file, answer one
+Use a subagent for small bounded work: inspect one file, answer one
 research question, draft one patch candidate, or run one stateless review. It
 does not need a persistent ledger unless the parent will refer back to its
 state later.
@@ -98,12 +107,14 @@ history.
 
 ## Escalation And Routing
 
-- Start with the cheapest pattern that preserves required judgment and proof.
-- Upgrade from ephemeral to persistent when follow-up state matters.
-- Upgrade from persistent sidekick to swarm when independent perspectives
-  matter more than continuity.
-- Upgrade from sidekick to advisor when the doer needs strategic correction,
-  not extra hands.
+- Start with the least expensive category, topology, and model capability that
+  preserve required judgment, lineage independence, and proof.
+- Move from subagent to sidekick when follow-up state matters.
+- Move from one subagent to a swarm when independent perspectives matter more
+  than continuity.
+- Do not "upgrade" a sidekick into an advisor because a model is smarter. The
+  relationship changes only when the assignment changes from delegated work to
+  consultation; write a new packet and authority boundary when that happens.
 - Route back to the main parent when the delegated work becomes ambiguous,
   high-risk, security-sensitive, or judgment-heavy.
 
@@ -112,9 +123,8 @@ Completion: escalation rules are named before the subordinate work starts.
 ## Source Inspirations
 
 - Cognition's Devin Fusion article describes a hybrid harness where a frontier
-  main agent and a smaller sidekick run in parallel with separate persistent
+  main agent and one smaller sidekick run in parallel with separate persistent
   contexts; the main agent delegates and monitors while keeping significant
   decisions and final review.
-- Anthropic's advisor-tool docs describe a faster executor consulting a stronger
-  advisor model mid-generation for plans or course corrections while the
-  executor continues the task.
+- Anthropic's advisor-tool docs describe an executor consulting one stronger
+  advisor model for plans or course corrections while the executor continues.

@@ -7,9 +7,13 @@ workflow handoffs, and result reductions.
 
 ```text
 agent job:
-pattern: swarm | persistent sidekick | advisor | ephemeral subagent | workflow handoff | one-shot | flow | custom adapter
+category: advisor | sidekick | subagent
+assignment:
+topology: single advisor | single sidekick | single subagent | subagent swarm
 target:
-agent / provider:
+lineage requirement:
+model / reasoning level:
+provider / runtime:
 decision target:
 source anchors:
 - <path, doc, command output, issue, spec, plan, or accepted request>: <why it constrains the job>
@@ -26,7 +30,9 @@ parent verification:
 ```text
 You are a subordinate agent for <parent/session/job>.
 
-Pattern: <swarm lane | persistent sidekick | advisor | ephemeral subagent | workflow handoff | one-shot | flow>
+Category: <advisor | sidekick | subagent>
+Assignment: <advice | delegated work | review | research | monitoring | other>
+Topology: <single advisor | single sidekick | single subagent | subagent swarm lane>
 Authority: return candidate evidence only.
 Task: <bounded task>
 Decision target: <what the parent will decide with this output>
@@ -62,7 +68,9 @@ recommended parent action:
 ```text
 agent result:
 source:
-pattern:
+category:
+assignment:
+topology:
 status:
 candidate claims:
 accepted claims:

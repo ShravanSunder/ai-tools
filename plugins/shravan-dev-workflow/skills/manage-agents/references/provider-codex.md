@@ -18,7 +18,7 @@ or available.
 acpx codex exec 'one-shot summary'
 acpx codex sessions ensure --name backend
 acpx codex -s backend 'continue the backend investigation'
-acpx --model gpt-5.4 codex exec 'review changed files'
+acpx --model <advertised-model-id> codex exec 'review changed files'
 ```
 
 Completion: persistent Codex work records the session name and cwd; one-shot
@@ -26,10 +26,13 @@ work records why no resume is needed.
 
 ## Model And Config Caveats
 
-Codex model ids must be accepted by the adapter. If the built-in command fails
-because local Codex config cannot be parsed or an adapter wrapper is broken,
-try a raw ACP adapter only when the user approves or the run already permits
-that fallback:
+Codex model ids and reasoning variants must be accepted by the current adapter.
+Sol, Terra, and Luna in `model-selection.md` are capability guidance; use the
+exact current id exposed by native Codex or the ACP adapter.
+
+If the built-in command fails because local Codex config cannot be parsed or an
+adapter wrapper is broken, try a raw ACP adapter only when the user approves or
+the run already permits that fallback:
 
 ```bash
 acpx --agent 'npx -y @agentclientprotocol/codex-acp' exec 'sanity check'
@@ -37,6 +40,10 @@ acpx --agent 'npx -y @agentclientprotocol/codex-acp' exec 'sanity check'
 
 Completion: raw-adapter fallback is reported as a fallback, not hidden as the
 normal provider path.
+
+Native Codex subagents are often the lowest-friction runtime for same-lineage
+bounded work. Use ACPX Codex when a portable external session, named persistent
+sidekick, queue control, or cross-provider flow is the actual requirement.
 
 ## Permissions
 
