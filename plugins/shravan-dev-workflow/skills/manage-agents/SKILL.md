@@ -5,8 +5,9 @@ description: Use when using an advisor, sidekick, delegate, operator, subagent, 
 
 # Manage Agents
 
-The pattern owns work, continuity, authority, cardinality, model category, and
-reasoning floor. Runtime follows it:
+The pattern owns work, continuity, authority, cardinality, and the minimum
+capability category. A model category is a model-plus-thinking combination;
+runtime follows it:
 
 ```text
 pattern -> model category -> exact model -> reasoning effort -> lineage
@@ -27,17 +28,26 @@ implementation and an Operator for mechanical execution or observation.
 Changing patterns requires a new packet and authority boundary; entering
 Advisor or Sidekick also requires a ledger transition.
 
+Pattern effort floors apply when the selected model exposes a thinking control.
+A model without that control satisfies pattern eligibility through its declared
+capability category; do not invent a setting to simulate the floor.
+
 ## Models
 
-| Model category | Models |
-| --- | --- |
-| Frontier | GPT-5.6 Sol, Claude Fable |
-| Balanced | GPT-5.6 Terra, Claude Opus, Grok 4.5 through Cursor |
-| Mini | GPT-5.6 Luna, Cursor Composer 2.5 |
+| Model category | Model | Thinking |
+| --- | --- | --- |
+| Frontier | GPT-5.6 Sol | high, xhigh, or max |
+| Frontier | Claude Fable | medium, high, or xhigh |
+| Balanced | GPT-5.6 Sol | low or medium |
+| Balanced | Claude Opus | high or above |
+| Balanced | Grok 4.5 through Cursor | medium or above |
+| Mini | GPT-5.6 Luna | high or above |
+| Mini | Cursor Composer 2.5 | no thinking setting |
 
-Verify the exact provider-advertised model id. Use a declared equivalent
-fallback or report degraded/blocked when the required category or lineage is
-unavailable.
+Verify the exact provider-advertised model id and thinking option when the
+provider exposes one. Do not invent a thinking setting for a model without that
+control. Use a declared equivalent fallback or report degraded/blocked when the
+required category or lineage is unavailable.
 
 ## Runtimes
 
@@ -66,7 +76,8 @@ under the same packet, authority, continuity, and parent-verification rules.
 
 1. Choose the pattern and model from the tables above.
    - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an
-     allowed model category, reasoning effort, and lineage requirement.
+     allowed model category, available reasoning effort, and lineage
+     requirement.
 
 2. Choose native or ACPX runtime.
    - Prefer a native subagent when the current client exposes the selected model
@@ -78,8 +89,8 @@ under the same packet, authority, continuity, and parent-verification rules.
      behavior.
    - When the user explicitly asks to build, modify, or wrap an ACP-compatible
      adapter, route that work through `references/building-acp-adapters.md`.
-   - Completion: exact model, reasoning effort, runtime, permissions, and
-     fallback are explicit.
+   - Completion: exact model, available reasoning effort, runtime, permissions,
+     and fallback are explicit.
 
 3. Dispatch and reduce.
    - Load `references/agent-job-packet.md` for dispatch, Operator decisions,
