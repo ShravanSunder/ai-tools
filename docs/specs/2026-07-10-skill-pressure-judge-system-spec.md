@@ -171,10 +171,13 @@ R9. The controlled environment must prevent ambient repo instructions or other
 skills from supplying the behavior attributed to the target skill. The target
 skill and its required references must be the only behavior-bearing skill
 surface added by the treatment. Each skill manifest declares a behavior-source
-closure rooted at `SKILL.md`; the harness resolves referenced skill files,
-rejects paths outside the target skill, records every source digest, and exposes
-only that closure plus neutral harness files. Source-isolated evaluation is the
-causal behavior gate. Installed-plugin execution is a separate release smoke
+graph rooted at its `SKILL.md`. The graph may cross a skill boundary only
+through an explicit manifest dependency edge to a named file; every transitive
+edge, path, owner, blob, and digest is validated and receipted. Undeclared
+cross-skill files, ambient instructions, installed caches, and unrelated skills
+remain unavailable. The harness exposes only the resolved graph plus neutral
+harness files. Source-isolated evaluation is the causal behavior gate.
+Installed-plugin execution is a separate release smoke
 and cannot share its behavior receipt. Release smoke must record the installed
 plugin name, version, source digest, discoverability, and load evidence. A
 missing, stale, or mismatched installed artifact fails the release smoke without
@@ -449,13 +452,21 @@ plugin
 skill
 source_path
 source_closure_roots[]
+declared_source_dependencies[]:
+  owner_plugin
+  owner_skill
+  path
 base_risk: standard | high
 risk_reasons[]
 scenario_roots[]
 ```
 
 The plugin and skill fields must agree with the owning path. The source path is
-validated against the plugin tree. Skill manifests use versioned YAML.
+validated against the plugin tree. Declared dependency edges must point to
+regular files under an existing skill owner and are recursively resolved from
+the same selected Git tree or treatment source. Undeclared cross-owner edges,
+symlinks, submodules, cycles, and paths outside skill owners are invalid. Skill
+manifests use versioned YAML.
 
 ### Scenario Contract
 
