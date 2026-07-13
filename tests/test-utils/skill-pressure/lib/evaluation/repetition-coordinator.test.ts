@@ -191,4 +191,28 @@ describe("scenario repetition coordinator", () => {
       "one or more repetitions contain an infrastructure error",
     ]));
   });
+
+  it("retries only infrastructure failures and preserves every attempt receipt", async () => {
+    let sequence = 0;
+    let failedOnce = false;
+    const result = await runScenarioRepetitions({
+      ...props(async (input) => {
+        sequence += 1;
+        if (!failedOnce && input.variant === "baseline") {
+          failedOnce = true;
+          return receipt({ sequence, variant: input.variant, status: "infrastructure_error" });
+        }
+        return receipt({ sequence, variant: input.variant });
+      }),
+      infrastructureRetries: 1,
+    });
+
+    expect(result.status).toBe("executed");
+    expect(result.attempts[0]?.receipts).toHaveLength(2);
+    expect(result.attempts[0]?.receipts.map((item) => item.status)).toEqual([
+      "infrastructure_error",
+      "executed",
+    ]);
+    expect(result.baseline[0]?.repetitionId).toBe(result.attempts[0]?.selectedRepetitionId);
+  });
 });

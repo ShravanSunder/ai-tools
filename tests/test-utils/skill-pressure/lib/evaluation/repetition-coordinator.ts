@@ -17,6 +17,7 @@ type RepetitionCommonProps = Omit<
 
 export interface RunScenarioRepetitionsProps {
   readonly repetitions: number;
+  readonly infrastructureRetries?: number;
   readonly baselineSource: Exclude<SelectedSkillSource, { readonly mode: "current" }>;
   readonly treatmentSource: Extract<SelectedSkillSource, { readonly mode: "current" }>;
   readonly repetitionProps: RepetitionCommonProps;
@@ -30,11 +31,20 @@ export interface ScenarioRepetitionSetReceipt {
   readonly runId: string;
   readonly scenarioId: string;
   readonly requestedRepetitions: number;
+  readonly infrastructureRetries: number;
   readonly baseline: readonly SubjectRepetitionReceipt[];
   readonly treatment: readonly SubjectRepetitionReceipt[];
+  readonly attempts: readonly RepetitionAttemptReceipt[];
   readonly pairSetFingerprint: string;
   readonly status: "executed" | "infrastructure_error";
   readonly infrastructureReasons: readonly string[];
+}
+
+export interface RepetitionAttemptReceipt {
+  readonly variant: "baseline" | "treatment";
+  readonly repetitionNumber: number;
+  readonly receipts: readonly SubjectRepetitionReceipt[];
+  readonly selectedRepetitionId: string;
 }
 
 export async function runScenarioRepetitions(
@@ -43,21 +53,36 @@ export async function runScenarioRepetitions(
   if (!Number.isInteger(props.repetitions) || props.repetitions < 5) {
     throw new Error("pressure scenarios require at least five repetitions per variant");
   }
+  const infrastructureRetries = props.infrastructureRetries ?? 0;
+  if (!Number.isInteger(infrastructureRetries) || infrastructureRetries < 0) {
+    throw new Error("infrastructureRetries must be a non-negative integer");
+  }
 
   const runRepetition = props.runRepetition ?? runSubjectRepetition;
   const baseline: SubjectRepetitionReceipt[] = [];
   const treatment: SubjectRepetitionReceipt[] = [];
+  const attempts: RepetitionAttemptReceipt[] = [];
   for (let repetitionIndex = 0; repetitionIndex < props.repetitions; repetitionIndex += 1) {
-    baseline.push(await runRepetition({
-      ...props.repetitionProps,
+    const baselineAttempt = await runWithInfrastructureRetries({
+      runRepetition,
+      repetitionProps: props.repetitionProps,
       variant: "baseline",
       selectedSkillSource: props.baselineSource,
-    }));
-    treatment.push(await runRepetition({
-      ...props.repetitionProps,
+      repetitionNumber: repetitionIndex + 1,
+      infrastructureRetries,
+    });
+    baseline.push(baselineAttempt.selected);
+    attempts.push(baselineAttempt.receipt);
+    const treatmentAttempt = await runWithInfrastructureRetries({
+      runRepetition,
+      repetitionProps: props.repetitionProps,
       variant: "treatment",
       selectedSkillSource: props.treatmentSource,
-    }));
+      repetitionNumber: repetitionIndex + 1,
+      infrastructureRetries,
+    });
+    treatment.push(treatmentAttempt.selected);
+    attempts.push(treatmentAttempt.receipt);
   }
 
   const infrastructureReasons = collectSetInfrastructureReasons(baseline, treatment);
@@ -66,12 +91,15 @@ export async function runScenarioRepetitions(
     runId: randomUUID(),
     scenarioId: props.repetitionProps.scenarioId,
     requestedRepetitions: props.repetitions,
+    infrastructureRetries,
     baseline,
     treatment,
+    attempts,
     pairSetFingerprint: digest(JSON.stringify({
       coordinatorVersion: COORDINATOR_VERSION,
       scenarioId: props.repetitionProps.scenarioId,
       repetitions: props.repetitions,
+      infrastructureRetries,
       commonInputDigest: uniqueValues([...baseline, ...treatment].map((item) => item.commonInputDigest)),
       promptDigest: uniqueValues([...baseline, ...treatment].map((item) => item.promptDigest)),
       fixtureDigest: uniqueValues([...baseline, ...treatment].map((item) => item.fixtureDigest)),
@@ -86,6 +114,39 @@ export async function runScenarioRepetitions(
     })),
     status: infrastructureReasons.length === 0 ? "executed" : "infrastructure_error",
     infrastructureReasons,
+  };
+}
+
+async function runWithInfrastructureRetries(props: {
+  readonly runRepetition: (
+    props: RunSubjectRepetitionProps,
+  ) => Promise<SubjectRepetitionReceipt>;
+  readonly repetitionProps: RepetitionCommonProps;
+  readonly variant: "baseline" | "treatment";
+  readonly selectedSkillSource: SelectedSkillSource;
+  readonly repetitionNumber: number;
+  readonly infrastructureRetries: number;
+}): Promise<{ readonly selected: SubjectRepetitionReceipt; readonly receipt: RepetitionAttemptReceipt }> {
+  const receipts: SubjectRepetitionReceipt[] = [];
+  for (let attempt = 0; attempt <= props.infrastructureRetries; attempt += 1) {
+    const receipt = await props.runRepetition({
+      ...props.repetitionProps,
+      variant: props.variant,
+      selectedSkillSource: props.selectedSkillSource,
+    });
+    receipts.push(receipt);
+    if (receipt.status === "executed") break;
+  }
+  const selected = receipts.at(-1);
+  if (selected === undefined) throw new Error("repetition attempt produced no receipt");
+  return {
+    selected,
+    receipt: {
+      variant: props.variant,
+      repetitionNumber: props.repetitionNumber,
+      receipts,
+      selectedRepetitionId: selected.repetitionId,
+    },
   };
 }
 

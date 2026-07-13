@@ -19,6 +19,7 @@ const { values } = parseArgs({
     "skill-dir": { type: "string" },
     output: { type: "string" },
     timeout: { type: "string", default: "180" },
+    "infrastructure-retries": { type: "string", default: "1" },
     "disable-skill-path": { type: "string", multiple: true, default: [] },
   },
   strict: true,
@@ -28,8 +29,12 @@ const scenarioPath = path.resolve(requireValue(values.scenario, "--scenario"));
 const skillDirectory = path.resolve(requireValue(values["skill-dir"], "--skill-dir"));
 const outputDirectory = path.resolve(requireValue(values.output, "--output"));
 const timeoutSeconds = Number(values.timeout);
+const infrastructureRetries = Number(values["infrastructure-retries"]);
 if (!Number.isInteger(timeoutSeconds) || timeoutSeconds <= 0) {
   throw new Error("--timeout must be a positive integer");
+}
+if (!Number.isInteger(infrastructureRetries) || infrastructureRetries < 0) {
+  throw new Error("--infrastructure-retries must be a non-negative integer");
 }
 
 const scenario = await loadScenarioContract({ scenarioPath });
@@ -50,6 +55,7 @@ const disabledAmbientSkillPaths = [...new Set([
 
 const result = await runScenarioRepetitions({
   repetitions: scenario.repetitions,
+  infrastructureRetries,
   baselineSource: { mode: "none" },
   treatmentSource: { mode: "current", directory: skillDirectory },
   repetitionProps: {
