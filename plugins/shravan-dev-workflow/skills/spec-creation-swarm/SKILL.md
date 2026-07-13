@@ -15,7 +15,7 @@ A spec may contain product intent, requirements, and technical design in one art
 
 The spec defines separability. It names boundaries, contracts, invariants, non-goals, security context, and proof expectations tied to requirements. It does not define task sequence, worker assignment, execution DAGs, implementation order, or exact pyramid test commands; those belong to `plan-creation-swarm`.
 
-Specs are clarity artifacts. They move fuzzy intent toward sharper product promise, requirements, boundaries, contracts, examples, non-goals, and proof expectations. The parent may leave unclear higher-level decisions named for the next refinement pass, but it must not hide them as implementation detail. Primary specs are durable repo artifacts when the work is substantial and not chat-only. In `shravan-dev-workflow`, keep primary specs under `docs/specs/` so humans and future agents can maintain, revise, and explicitly delete them when they are no longer useful. Research lanes, review reports, and planning scratch may stay in repo-local `tmp/` unless the user asks to promote them.
+Specs are clarity artifacts. They move fuzzy intent toward sharper product promise, requirements, boundaries, contracts, examples, non-goals, and proof expectations. The parent may leave unclear higher-level decisions named for the next refinement pass, but it must not hide them as implementation detail. Primary specs are durable repo artifacts when the work is substantial and not chat-only. Keep primary specs under `docs/specs/` so for persistence, revision and review. Research lanes, review reports, and planning scratch may stay in repo-local `tmp/` unless the user asks to promote them.
 
 Core pipeline:
 
