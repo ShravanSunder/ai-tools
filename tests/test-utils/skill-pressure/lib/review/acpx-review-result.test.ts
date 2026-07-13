@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { AcpxTranscriptFacts } from "../collector/acpx-transcript-collector.js";
-import { parseAcpxStructuredReview } from "./acpx-review-result.js";
+import { parseAcpxStructuredReview, parseReviewCandidateResult } from "./acpx-review-result.js";
 
 function transcript(visibleResponse: string): AcpxTranscriptFacts {
   return {
@@ -33,6 +33,32 @@ describe("ACPX structured review result", () => {
     expect(parseAcpxStructuredReview(transcript("pass"))).toMatchObject({
       structuredOutput: null,
       parseError: "review response is not valid JSON",
+    });
+  });
+
+  it("parses the candidate outcome and rationalization fields without assigning final truth", () => {
+    expect(parseReviewCandidateResult({
+      outcome: "behavior_fail",
+      rationalization: "The task looked obvious.",
+      behaviorRisk: "The required check may be skipped.",
+      smallestWordingChange: "Require evidence before acting.",
+      retestTarget: "workflow/pressure-proof",
+    })).toEqual({
+      result: {
+        outcome: "behavior_fail",
+        rationalization: "The task looked obvious.",
+        behaviorRisk: "The required check may be skipped.",
+        smallestWordingChange: "Require evidence before acting.",
+        retestTarget: "workflow/pressure-proof",
+      },
+      parseError: null,
+    });
+  });
+
+  it("rejects candidate output missing a required rationale field", () => {
+    expect(parseReviewCandidateResult({ outcome: "pass" })).toMatchObject({
+      result: null,
+      parseError: "review rationale fields must be strings or null",
     });
   });
 });
