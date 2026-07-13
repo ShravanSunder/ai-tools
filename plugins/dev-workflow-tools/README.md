@@ -1,7 +1,6 @@
 # Dev Workflow Tools
 
-Common development tool skills that are useful across Codex and Claude Code.
-Currently includes the Peekaboo skill for native macOS UI automation via the
+Common development tool skills that are useful across Codex and Claude Code. Currently includes the Peekaboo skill for native macOS UI automation via the
 [Peekaboo CLI](https://github.com/openclaw/Peekaboo).
 
 ## Installation
@@ -13,8 +12,7 @@ Currently includes the Peekaboo skill for native macOS UI automation via the
 
 ## What It Does
 
-The `peekaboo` skill teaches agents how to use Peekaboo for macOS app
-automation:
+The `peekaboo` skill teaches agents how to use Peekaboo for macOS app automation:
 
 - Capture UI state and screenshots
 - Click elements, type text, send keyboard shortcuts
@@ -32,8 +30,7 @@ automation:
 
 ## Key Concepts
 
-Peekaboo automation should start from current target and UI state, then use the
-fresh snapshot for element actions:
+Peekaboo automation should start from current target and UI state, then use the fresh snapshot for element actions:
 
 ```bash
 # 1. Bring the intended app/window into view
@@ -51,11 +48,9 @@ SNAPSHOT=$(jq -r '.data.snapshot_id' "$UI_JSON")
 peekaboo click --snapshot "$SNAPSHOT" --on elem_5 --json
 ```
 
-The top-level skill stays compact and routes deeper material to references for
-visual testing patterns, troubleshooting, and headless automation.
+The top-level skill stays compact and routes deeper material to references for visual testing patterns, troubleshooting, and headless automation.
 
-See [`skills/peekaboo/SKILL.md`](skills/peekaboo/SKILL.md) for the full skill
-documentation.
+See [`skills/peekaboo/SKILL.md`](skills/peekaboo/SKILL.md) for the full skill documentation.
 
 ## Directory Structure
 
