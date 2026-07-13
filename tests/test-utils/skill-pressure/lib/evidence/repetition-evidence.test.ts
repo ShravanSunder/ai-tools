@@ -5,7 +5,9 @@ import { createRepositoryEvidence, type RepositorySnapshot } from "./repository-
 import {
   evaluateRepositoryPathChecks,
   evaluateResponsePatternChecks,
+  evaluateDeterministicChecks,
   normalizeRepetitionEvidence,
+  reduceDeterministicCheckResults,
 } from "./repetition-evidence.js";
 
 function receipt(): SubjectRepetitionReceipt {
@@ -194,5 +196,56 @@ describe("repetition evidence", () => {
       { checkId: "missing-required", outcome: "behavior_fail", reason: "required repository path is absent" },
       { checkId: "matched-forbidden", outcome: "behavior_fail", reason: "forbidden repository path exists" },
     ]);
+  });
+
+  it("evaluates contract-owned response, path, and artifact checks", () => {
+    const evidence = normalizeRepetitionEvidence({
+      receipt: {
+        ...receipt(),
+        repositoryEvidence: createRepositoryEvidence({
+          beforeRunSnapshot: { repositoryDirectory: "/tmp/fixture", entries: [], omissions: [] },
+          postRunSnapshot: {
+            repositoryDirectory: "/tmp/fixture",
+            entries: [{
+              path: "reports/result.md",
+              kind: "file",
+              contentDigest: "sha256:result",
+              contentExcerpt: "verified report",
+            }],
+            omissions: [],
+          },
+          expectedArtifacts: [{
+            artifactId: "result",
+            path: "reports/result.md",
+            fileType: "file",
+            contentContract: "verified report",
+          }],
+        }),
+      },
+    });
+
+    expect(evaluateDeterministicChecks(evidence, [
+      { checkId: "response", fact: "visible_response", operator: "matches", expected: "(?is)INSPECTED.{0,80}result" },
+      { checkId: "path", fact: "path:reports/result.md", operator: "exists" },
+      { checkId: "artifact", fact: "artifact:result", operator: "contains", expected: "verified" },
+      { checkId: "forbidden", fact: "path:tmp/shortcut.txt", operator: "absent" },
+    ])).toEqual([
+      { checkId: "response", outcome: "pass", reason: "matches comparison passed" },
+      { checkId: "path", outcome: "pass", reason: "repository path exists" },
+      { checkId: "artifact", outcome: "pass", reason: "contains comparison passed" },
+      { checkId: "forbidden", outcome: "pass", reason: "repository path is absent" },
+    ]);
+  });
+
+  it("reduces deterministic check results with missing evidence before behavior failures", () => {
+    expect(reduceDeterministicCheckResults([])).toBe("not_evaluated");
+    expect(reduceDeterministicCheckResults([
+      { checkId: "pass", outcome: "pass", reason: "ok" },
+      { checkId: "fail", outcome: "behavior_fail", reason: "missing" },
+    ])).toBe("behavior_fail");
+    expect(reduceDeterministicCheckResults([
+      { checkId: "fail", outcome: "behavior_fail", reason: "missing" },
+      { checkId: "unknown", outcome: "not_evaluated", reason: "omitted" },
+    ])).toBe("not_evaluated");
   });
 });

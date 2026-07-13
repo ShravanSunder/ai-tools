@@ -16,7 +16,11 @@ export interface ExpectedArtifact {
 
 export interface DeterministicCheck {
   readonly checkId: string;
-  readonly fact: string;
+  readonly fact:
+    | "visible_response"
+    | "tool_observations"
+    | `path:${string}`
+    | `artifact:${string}`;
   readonly operator: "equals" | "contains" | "matches" | "exists" | "absent";
   readonly expected?: unknown;
 }

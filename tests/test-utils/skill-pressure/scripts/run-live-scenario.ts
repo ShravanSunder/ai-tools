@@ -6,6 +6,12 @@ import { parseArgs } from "node:util";
 import { loadScenarioContract } from "../lib/contracts/skill-contracts.js";
 import { runScenarioRepetitions } from "../lib/evaluation/repetition-coordinator.js";
 import {
+  evaluateDeterministicChecks,
+  normalizeRepetitionEvidence,
+  reduceDeterministicCheckResults,
+} from "../lib/evidence/repetition-evidence.js";
+import { reduceScenarioOutcome } from "../lib/reduction/outcome-reducer.js";
+import {
   collectSensitiveEnvironmentValues,
   resolveAcpxLauncher,
   resolveExecutablePath,
@@ -76,6 +82,35 @@ const result = await runScenarioRepetitions({
     redactionSecrets: collectSensitiveEnvironmentValues(),
   },
 });
+const deterministicBaseline = result.baseline.map((receipt) => {
+  const evidence = normalizeRepetitionEvidence({ receipt });
+  const checkResults = evaluateDeterministicChecks(evidence, scenario.deterministicChecks);
+  return {
+    repetitionId: receipt.repetitionId,
+    checkResults,
+    outcome: reduceDeterministicCheckResults(checkResults),
+    ...(receipt.status === "infrastructure_error"
+      ? { infrastructureError: receipt.infrastructureReasons.join("; ") }
+      : {}),
+  };
+});
+const deterministicTreatment = result.treatment.map((receipt) => {
+  const evidence = normalizeRepetitionEvidence({ receipt });
+  const checkResults = evaluateDeterministicChecks(evidence, scenario.deterministicChecks);
+  return {
+    repetitionId: receipt.repetitionId,
+    checkResults,
+    outcome: reduceDeterministicCheckResults(checkResults),
+    ...(receipt.status === "infrastructure_error"
+      ? { infrastructureError: receipt.infrastructureReasons.join("; ") }
+      : {}),
+  };
+});
+const deterministicReduction = reduceScenarioOutcome({
+  expectedRepetitions: scenario.repetitions,
+  baseline: deterministicBaseline,
+  treatment: deterministicTreatment,
+});
 
 const resultPath = path.join(outputDirectory, "repetition-set-receipt.json");
 await writeFile(resultPath, `${JSON.stringify({
@@ -87,6 +122,11 @@ await writeFile(resultPath, `${JSON.stringify({
     risk: scenario.risk,
   },
   result,
+  deterministicEvaluation: {
+    baseline: deterministicBaseline,
+    treatment: deterministicTreatment,
+    reduction: deterministicReduction,
+  },
 }, null, 2)}\n`, { flag: "wx" });
 process.stdout.write(`${JSON.stringify({
   resultPath,

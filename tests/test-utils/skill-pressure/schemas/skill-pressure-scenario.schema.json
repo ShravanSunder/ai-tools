@@ -99,9 +99,24 @@
             "pattern": "^[a-z0-9][a-z0-9-]*$"
           },
           "fact": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "\\S"
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "visible_response"
+              },
+              {
+                "type": "string",
+                "const": "tool_observations"
+              },
+              {
+                "type": "string",
+                "pattern": "^path:[\\s\\S]{1,}$"
+              },
+              {
+                "type": "string",
+                "pattern": "^artifact:[a-z0-9][a-z0-9-]*$"
+              }
+            ]
           },
           "operator": {
             "type": "string",

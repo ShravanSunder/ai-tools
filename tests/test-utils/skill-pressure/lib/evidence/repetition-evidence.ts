@@ -1,4 +1,5 @@
 import type { AcpxToolObservation } from "../collector/acpx-transcript-collector.js";
+import type { DeterministicCheck } from "../contracts/contract-types.js";
 import type { SubjectRepetitionReceipt } from "../evaluation/subject-repetition.js";
 import type { RepositoryEvidence, RepositorySnapshotEntry } from "./repository-snapshot.js";
 
@@ -45,6 +46,15 @@ export interface DeterministicCheckResult {
   readonly checkId: string;
   readonly outcome: DeterministicCheckOutcome;
   readonly reason: string;
+}
+
+export function reduceDeterministicCheckResults(
+  results: readonly DeterministicCheckResult[],
+): DeterministicCheckOutcome {
+  if (results.length === 0 || results.some((result) => result.outcome === "not_evaluated")) {
+    return "not_evaluated";
+  }
+  return results.some((result) => result.outcome === "behavior_fail") ? "behavior_fail" : "pass";
 }
 
 const DEFAULT_RESPONSE_LIMIT = 8_000;
@@ -123,6 +133,95 @@ export function evaluateRepositoryPathChecks(
       ? { checkId: check.checkId, outcome: "behavior_fail", reason: "forbidden repository path exists" }
       : { checkId: check.checkId, outcome: "pass", reason: "forbidden repository path is absent" };
   });
+}
+
+export function evaluateDeterministicChecks(
+  evidence: NormalizedRepetitionEvidence,
+  checks: readonly DeterministicCheck[],
+): readonly DeterministicCheckResult[] {
+  return checks.map((check) => evaluateDeterministicCheck(evidence, check));
+}
+
+function evaluateDeterministicCheck(
+  evidence: NormalizedRepetitionEvidence,
+  check: DeterministicCheck,
+): DeterministicCheckResult {
+  if (check.fact === "visible_response") {
+    return evaluateTextCheck(check, evidence.visibleResponse);
+  }
+  if (check.fact === "tool_observations") {
+    return evaluateTextCheck(check, evidence.toolObservations.map((observation) => observation.payload).join("\n"));
+  }
+  if (check.fact.startsWith("path:")) {
+    const relativePath = check.fact.slice("path:".length);
+    const omission = evidence.repositoryFacts.omissions.find((item) => item.path === relativePath);
+    if (omission !== undefined) return notEvaluated(check, omission.reason);
+    const entry = evidence.repositoryFacts.files.find((item) => item.path === relativePath);
+    return evaluateOptionalFact(check, entry?.contentExcerpt ?? null, entry !== undefined, "repository path");
+  }
+  const artifactId = check.fact.slice("artifact:".length);
+  const artifact = evidence.repositoryFacts.artifacts.find((item) => item.artifactId === artifactId);
+  if (artifact === undefined) return notEvaluated(check, `artifact ${artifactId} was not declared`);
+  if (artifact.status === "not_evaluated") return notEvaluated(check, artifact.reason ?? "artifact was not evaluated");
+  return evaluateOptionalFact(
+    check,
+    artifact.contentExcerpt,
+    artifact.status === "observed",
+    `artifact ${artifactId}`,
+  );
+}
+
+function evaluateOptionalFact(
+  check: DeterministicCheck,
+  content: string | null,
+  exists: boolean,
+  label: string,
+): DeterministicCheckResult {
+  if (check.operator === "exists") {
+    return exists ? passed(check, `${label} exists`) : failed(check, `${label} is absent`);
+  }
+  if (check.operator === "absent") {
+    return exists ? failed(check, `${label} exists`) : passed(check, `${label} is absent`);
+  }
+  if (!exists) return failed(check, `${label} is absent`);
+  if (content === null) return notEvaluated(check, `${label} has no text content`);
+  return evaluateTextCheck(check, content);
+}
+
+function evaluateTextCheck(check: DeterministicCheck, actual: string): DeterministicCheckResult {
+  if (check.operator === "exists") {
+    return actual.trim() === "" ? failed(check, "text fact is empty") : passed(check, "text fact exists");
+  }
+  if (check.operator === "absent") {
+    return actual.trim() === "" ? passed(check, "text fact is absent") : failed(check, "text fact exists");
+  }
+  if (typeof check.expected !== "string") return notEvaluated(check, "text comparison requires a string expected value");
+  const matched = check.operator === "equals"
+    ? actual === check.expected
+    : check.operator === "contains"
+      ? actual.includes(check.expected)
+      : compilePattern(check.expected).test(actual);
+  return matched
+    ? passed(check, `${check.operator} comparison passed`)
+    : failed(check, `${check.operator} comparison failed`);
+}
+
+function compilePattern(pattern: string): RegExp {
+  const inlineFlags = /^\(\?([is]+)\)/u.exec(pattern);
+  const flags = new Set(["u", ...(inlineFlags?.[1] ?? "")]);
+  return new RegExp(inlineFlags === null ? pattern : pattern.slice(inlineFlags[0].length), [...flags].join(""));
+}
+
+function passed(check: DeterministicCheck, reason: string): DeterministicCheckResult {
+  return { checkId: check.checkId, outcome: "pass", reason };
+}
+
+function failed(check: DeterministicCheck, reason: string): DeterministicCheckResult {
+  return { checkId: check.checkId, outcome: "behavior_fail", reason };
+}
+
+function notEvaluated(check: DeterministicCheck, reason: string): DeterministicCheckResult {
+  return { checkId: check.checkId, outcome: "not_evaluated", reason };
 }
 
 function normalizeRepositoryEvidence(evidence: RepositoryEvidence): RepositoryEvidence {

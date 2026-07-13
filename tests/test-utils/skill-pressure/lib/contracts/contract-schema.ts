@@ -14,6 +14,12 @@ const relativePathSchema = z
     /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.{1,2}(?:\/|$))(?!.*\/\/)(?!.*\/$).+$/u,
     "must be a non-traversing POSIX relative path",
   );
+const deterministicFactSchema = z.union([
+  z.literal("visible_response"),
+  z.literal("tool_observations"),
+  z.templateLiteral(["path:", z.string().min(1)]),
+  z.templateLiteral(["artifact:", identifierSchema]),
+]);
 
 function hasUniqueCheckIds(input: unknown): boolean {
   if (typeof input !== "object" || input === null || !("deterministic_checks" in input)) {
@@ -49,10 +55,18 @@ export const scenarioInputSchema = z
     deterministic_checks: z.array(
       z.object({
         check_id: identifierSchema,
-        fact: nonEmptyStringSchema,
+        fact: deterministicFactSchema,
         operator: z.enum(["equals", "contains", "matches", "exists", "absent"]),
         expected: z.unknown().optional(),
-      }).strict(),
+      }).strict().superRefine((check, context) => {
+        const requiresExpected = check.operator === "equals" || check.operator === "contains" || check.operator === "matches";
+        if (requiresExpected && check.expected === undefined) {
+          context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} requires expected` });
+        }
+        if (!requiresExpected && check.expected !== undefined) {
+          context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} does not accept expected` });
+        }
+      }),
     ),
     expected_artifacts: z.array(
       z.object({
