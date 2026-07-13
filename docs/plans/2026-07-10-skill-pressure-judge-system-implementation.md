@@ -1,6 +1,6 @@
 # Skill Pressure Testing System Implementation Plan
 
-Status: executable; S0 complete and S1 contracts/discovery in progress
+Status: blocked at CP2; S0, CP1, and local S2 implementation complete
 
 Source: `docs/specs/2026-07-10-skill-pressure-judge-system-spec.md`
 
@@ -52,6 +52,9 @@ Current implementation proof (2026-07-13):
   construction, then failed on Codex transport/DNS. The first attempt exposed
   an exit-0 false-positive and the bounded retry correctly reduced to
   `infrastructure_error`; CP2 remains open.
+- Fresh host checks on 2026-07-13 still fail DNS resolution for both
+  `chatgpt.com` and `api.anthropic.com` (`curl` exit 6). No independent S2 work
+  remains, and S3 must not begin before CP2 succeeds.
 - Behavioral RED/GREEN ACPX scenarios executed: 0. Migration remains 0/107.
 
 ## Keep And Simplify
