@@ -69,6 +69,7 @@ Who are you and what are you running on?
 2. Choose native or ACPX runtime.
 Native:
    - Prefer a native subagent if your harness allows those models as native subagents.
+   - For Codex: see `references/native-providers-codex.md` for spawn schema and properties like model id and reasoning effort.
 
 ACPX:
    - Load `references/acpx.md` for another provider or lineage, persistent cross-provider work, explicit ACPX use, or ACPX configuration and control.

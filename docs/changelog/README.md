@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-13 Manage Agents Native Providers Codex](2026-07-13-manage-agents-native-providers-codex.md)
 - [2026-07-13 Manage Agents Native And ACPX Routing](2026-07-13-manage-agents-native-acpx-routing.md)
 - [2026-07-10 Manage Agents Model And Thinking Matrix](2026-07-10-manage-agents-model-thinking-matrix.md)
 - [2026-07-10 Manage Agents Taxonomy And ACPX Fable](2026-07-10-manage-agents-taxonomy-acpx-fable.md)
