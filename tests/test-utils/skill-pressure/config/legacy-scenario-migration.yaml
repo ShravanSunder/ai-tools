@@ -1,0 +1,861 @@
+schema_version: 1
+source_root: tests/skills/pressure-scenarios
+source_digest: sha256:e2e5ee484f5e7707c7ee519b3ec89c7d75dff032376d0b4a30c027594a754c3a
+expected_count: 107
+scenarios:
+  - scenario_id: debug-investigation-background-monitoring
+    legacy_path: tests/skills/pressure-scenarios/debug-investigation-background-monitoring.md
+    skill_under_test: shravan-dev-workflow:debug-investigation
+    target_plugin: shravan-dev-workflow
+    target_skill: debug-investigation
+    target_path: tests/shravan-dev-workflow/debug-investigation/scenarios/debug-investigation-background-monitoring.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: debug-investigation-no-blind-fix
+    legacy_path: tests/skills/pressure-scenarios/debug-investigation-no-blind-fix.md
+    skill_under_test: shravan-dev-workflow:debug-investigation
+    target_plugin: shravan-dev-workflow
+    target_skill: debug-investigation
+    target_path: tests/shravan-dev-workflow/debug-investigation/scenarios/debug-investigation-no-blind-fix.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: discuss-clarify-mental-models-drift-interrupt
+    legacy_path: tests/skills/pressure-scenarios/discuss-clarify-mental-models-drift-interrupt.md
+    skill_under_test: shravan-dev-workflow:discuss-clarify-mental-models
+    target_plugin: shravan-dev-workflow
+    target_skill: discuss-clarify-mental-models
+    target_path: tests/shravan-dev-workflow/discuss-clarify-mental-models/scenarios/discuss-clarify-mental-models-drift-interrupt.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: discuss-clarify-mental-models-map-building
+    legacy_path: tests/skills/pressure-scenarios/discuss-clarify-mental-models-map-building.md
+    skill_under_test: shravan-dev-workflow:discuss-clarify-mental-models
+    target_plugin: shravan-dev-workflow
+    target_skill: discuss-clarify-mental-models
+    target_path: tests/shravan-dev-workflow/discuss-clarify-mental-models/scenarios/discuss-clarify-mental-models-map-building.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: discuss-clarify-mental-models-reconverge
+    legacy_path: tests/skills/pressure-scenarios/discuss-clarify-mental-models-reconverge.md
+    skill_under_test: shravan-dev-workflow:discuss-clarify-mental-models
+    target_plugin: shravan-dev-workflow
+    target_skill: discuss-clarify-mental-models
+    target_path: tests/shravan-dev-workflow/discuss-clarify-mental-models/scenarios/discuss-clarify-mental-models-reconverge.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: docs-maintain-no-stale-purge
+    legacy_path: tests/skills/pressure-scenarios/docs-maintain-no-stale-purge.md
+    skill_under_test: shravan-dev-workflow:docs-maintain
+    target_plugin: shravan-dev-workflow
+    target_skill: docs-maintain
+    target_path: tests/shravan-dev-workflow/docs-maintain/scenarios/docs-maintain-no-stale-purge.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-execute-plan-matrix-verification
+    legacy_path: tests/skills/pressure-scenarios/implementation-execute-plan-matrix-verification.md
+    skill_under_test: shravan-dev-workflow:implementation-execute-plan
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-execute-plan
+    target_path: tests/shravan-dev-workflow/implementation-execute-plan/scenarios/implementation-execute-plan-matrix-verification.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-execute-plan-parallel-subagents-default
+    legacy_path: tests/skills/pressure-scenarios/implementation-execute-plan-parallel-subagents-default.md
+    skill_under_test: shravan-dev-workflow:implementation-execute-plan
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-execute-plan
+    target_path: tests/shravan-dev-workflow/implementation-execute-plan/scenarios/implementation-execute-plan-parallel-subagents-default.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-execute-plan-rejects-design-only
+    legacy_path: tests/skills/pressure-scenarios/implementation-execute-plan-rejects-design-only.md
+    skill_under_test: shravan-dev-workflow:implementation-execute-plan
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-execute-plan
+    target_path: tests/shravan-dev-workflow/implementation-execute-plan/scenarios/implementation-execute-plan-rejects-design-only.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-execute-plan-validate-before-edits
+    legacy_path: tests/skills/pressure-scenarios/implementation-execute-plan-validate-before-edits.md
+    skill_under_test: shravan-dev-workflow:implementation-execute-plan
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-execute-plan
+    target_path: tests/shravan-dev-workflow/implementation-execute-plan/scenarios/implementation-execute-plan-validate-before-edits.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-handoff-evidence-packet
+    legacy_path: tests/skills/pressure-scenarios/implementation-handoff-evidence-packet.md
+    skill_under_test: shravan-dev-workflow:implementation-handoff
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-handoff
+    target_path: tests/shravan-dev-workflow/implementation-handoff/scenarios/implementation-handoff-evidence-packet.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-handoff-requires-state
+    legacy_path: tests/skills/pressure-scenarios/implementation-handoff-requires-state.md
+    skill_under_test: shravan-dev-workflow:implementation-handoff
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-handoff
+    target_path: tests/shravan-dev-workflow/implementation-handoff/scenarios/implementation-handoff-requires-state.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-baseline-comparison
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-baseline-comparison.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-baseline-comparison.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-bot-comment-quiet-period
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-bot-comment-quiet-period.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-bot-comment-quiet-period.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-github-api-budget
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-github-api-budget.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-github-api-budget.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-local-dirty-or-unpushed-state
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-local-dirty-or-unpushed-state.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-local-dirty-or-unpushed-state.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-low-thinking-default
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-low-thinking-default.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-low-thinking-default.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-monitor-timeout
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-monitor-timeout.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-monitor-timeout.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-paginated-review-threads
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-paginated-review-threads.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-paginated-review-threads.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-review-routing-boundary
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-review-routing-boundary.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-review-routing-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-secret-safe-pr-body
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-secret-safe-pr-body.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-secret-safe-pr-body.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-stale-success-claim
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-stale-success-claim.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-stale-success-claim.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-unclear-review-batch
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-unclear-review-batch.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-unclear-review-batch.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-unresolved-thread-before-merge
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-unresolved-thread-before-merge.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-unresolved-thread-before-merge.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-untrusted-comment-safety
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-untrusted-comment-safety.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-untrusted-comment-safety.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-untrusted-comment
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-untrusted-comment.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-untrusted-comment.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-user-agreement-gate
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-user-agreement-gate.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-user-agreement-gate.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-pr-wrapup-wrong-base-branch
+    legacy_path: tests/skills/pressure-scenarios/implementation-pr-wrapup-wrong-base-branch.md
+    skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-pr-wrapup
+    target_path: tests/shravan-dev-workflow/implementation-pr-wrapup/scenarios/implementation-pr-wrapup-wrong-base-branch.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-accepted-request-steering
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-accepted-request-steering.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-accepted-request-steering.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-deviation-classification
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-deviation-classification.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-deviation-classification.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-false-positive-substitute
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-false-positive-substitute.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-false-positive-substitute.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-manage-agents-pointer
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-manage-agents-pointer.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-manage-agents-pointer.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-reanchor-missed-system
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-reanchor-missed-system.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-reanchor-missed-system.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-report-text-contract
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-report-text-contract.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-report-text-contract.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-route-back-by-owner
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-route-back-by-owner.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-route-back-by-owner.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-routes-findings-to-implementation-execute
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-routes-findings-to-implementation-execute.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-routes-findings-to-implementation-execute.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-runtime-reachability
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-runtime-reachability.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-runtime-reachability.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-source-ledger-row-shape
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-source-ledger-row-shape.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-source-ledger-row-shape.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-source-matrix-required
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-source-matrix-required.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-source-matrix-required.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-source-trigger-classifier
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-source-trigger-classifier.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-source-trigger-classifier.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: implementation-review-swarm-verify-findings
+    legacy_path: tests/skills/pressure-scenarios/implementation-review-swarm-verify-findings.md
+    skill_under_test: shravan-dev-workflow:implementation-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: implementation-review-swarm
+    target_path: tests/shravan-dev-workflow/implementation-review-swarm/scenarios/implementation-review-swarm-verify-findings.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: local-monitoring-no-detached-process
+    legacy_path: tests/skills/pressure-scenarios/local-monitoring-no-detached-process.md
+    skill_under_test: shravan-dev-workflow:debug-investigation
+    target_plugin: shravan-dev-workflow
+    target_skill: debug-investigation
+    target_path: tests/shravan-dev-workflow/debug-investigation/scenarios/local-monitoring-no-detached-process.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: local-monitoring-no-model-polling
+    legacy_path: tests/skills/pressure-scenarios/local-monitoring-no-model-polling.md
+    skill_under_test: shravan-dev-workflow:debug-investigation
+    target_plugin: shravan-dev-workflow
+    target_skill: debug-investigation
+    target_path: tests/shravan-dev-workflow/debug-investigation/scenarios/local-monitoring-no-model-polling.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: manage-agents-custom-agent-boundary
+    legacy_path: tests/skills/pressure-scenarios/manage-agents-custom-agent-boundary.md
+    skill_under_test: shravan-dev-workflow:manage-agents
+    target_plugin: shravan-dev-workflow
+    target_skill: manage-agents
+    target_path: tests/shravan-dev-workflow/manage-agents/scenarios/manage-agents-custom-agent-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: manage-agents-json-flows-exit-codes
+    legacy_path: tests/skills/pressure-scenarios/manage-agents-json-flows-exit-codes.md
+    skill_under_test: shravan-dev-workflow:manage-agents
+    target_plugin: shravan-dev-workflow
+    target_skill: manage-agents
+    target_path: tests/shravan-dev-workflow/manage-agents/scenarios/manage-agents-json-flows-exit-codes.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: manage-agents-pattern-selection
+    legacy_path: tests/skills/pressure-scenarios/manage-agents-pattern-selection.md
+    skill_under_test: shravan-dev-workflow:manage-agents
+    target_plugin: shravan-dev-workflow
+    target_skill: manage-agents
+    target_path: tests/shravan-dev-workflow/manage-agents/scenarios/manage-agents-pattern-selection.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: manage-agents-queue-vs-steer
+    legacy_path: tests/skills/pressure-scenarios/manage-agents-queue-vs-steer.md
+    skill_under_test: shravan-dev-workflow:manage-agents
+    target_plugin: shravan-dev-workflow
+    target_skill: manage-agents
+    target_path: tests/shravan-dev-workflow/manage-agents/scenarios/manage-agents-queue-vs-steer.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: manage-agents-session-ledger-reduction
+    legacy_path: tests/skills/pressure-scenarios/manage-agents-session-ledger-reduction.md
+    skill_under_test: shravan-dev-workflow:manage-agents
+    target_plugin: shravan-dev-workflow
+    target_skill: manage-agents
+    target_path: tests/shravan-dev-workflow/manage-agents/scenarios/manage-agents-session-ledger-reduction.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: no-global-runtime-lane-contract
+    legacy_path: tests/skills/pressure-scenarios/no-global-runtime-lane-contract.md
+    skill_under_test: shravan-dev-workflow:skill-audit
+    target_plugin: shravan-dev-workflow
+    target_skill: skill-audit
+    target_path: tests/shravan-dev-workflow/skill-audit/scenarios/no-global-runtime-lane-contract.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: ops-linear-tracking-docs-are-truth
+    legacy_path: tests/skills/pressure-scenarios/ops-linear-tracking-docs-are-truth.md
+    skill_under_test: shravan-dev-workflow:ops-linear-tracking
+    target_plugin: shravan-dev-workflow
+    target_skill: ops-linear-tracking
+    target_path: tests/shravan-dev-workflow/ops-linear-tracking/scenarios/ops-linear-tracking-docs-are-truth.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: ops-observability-agent-vm-boundary
+    legacy_path: tests/skills/pressure-scenarios/ops-observability-agent-vm-boundary.md
+    skill_under_test: shravan-dev-workflow:ops-observability-stack
+    target_plugin: shravan-dev-workflow
+    target_skill: ops-observability-stack
+    target_path: tests/shravan-dev-workflow/ops-observability-stack/scenarios/ops-observability-agent-vm-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: ops-observability-stack-boundary
+    legacy_path: tests/skills/pressure-scenarios/ops-observability-stack-boundary.md
+    skill_under_test: shravan-dev-workflow:ops-observability-stack
+    target_plugin: shravan-dev-workflow
+    target_skill: ops-observability-stack
+    target_path: tests/shravan-dev-workflow/ops-observability-stack/scenarios/ops-observability-stack-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: ops-security-review-official-scan
+    legacy_path: tests/skills/pressure-scenarios/ops-security-review-official-scan.md
+    skill_under_test: shravan-dev-workflow:ops-security-review
+    target_plugin: shravan-dev-workflow
+    target_skill: ops-security-review
+    target_path: tests/shravan-dev-workflow/ops-security-review/scenarios/ops-security-review-official-scan.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-clarity-gate
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-clarity-gate.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-clarity-gate.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-closeout-audit
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-closeout-audit.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-closeout-audit.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-default-pr-ready-terminal
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-default-pr-ready-terminal.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-default-pr-ready-terminal.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-plan-creation-matrix-handoff
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-plan-creation-matrix-handoff.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-plan-creation-matrix-handoff.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-plan-review-transition
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-plan-review-transition.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-plan-review-transition.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-proof-matrix-ownership
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-proof-matrix-ownership.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-proof-matrix-ownership.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-required-files-skill-name
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-required-files-skill-name.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-required-files-skill-name.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-stale-terminal-override
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-stale-terminal-override.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-stale-terminal-override.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: orchestrator-goal-transition-single-writer
+    legacy_path: tests/skills/pressure-scenarios/orchestrator-goal-transition-single-writer.md
+    skill_under_test: shravan-dev-workflow:orchestrator-goal
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-transition-single-writer.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: peekaboo-progressive-disclosure
+    legacy_path: tests/skills/pressure-scenarios/peekaboo-progressive-disclosure.md
+    skill_under_test: peekaboo
+    target_plugin: dev-workflow-tools
+    target_skill: peekaboo
+    target_path: tests/dev-workflow-tools/peekaboo/scenarios/peekaboo-progressive-disclosure.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-creation-swarm-from-spec-not-code
+    legacy_path: tests/skills/pressure-scenarios/plan-creation-swarm-from-spec-not-code.md
+    skill_under_test: shravan-dev-workflow:plan-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-creation-swarm
+    target_path: tests/shravan-dev-workflow/plan-creation-swarm/scenarios/plan-creation-swarm-from-spec-not-code.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-creation-swarm-lane-packet-contract
+    legacy_path: tests/skills/pressure-scenarios/plan-creation-swarm-lane-packet-contract.md
+    skill_under_test: shravan-dev-workflow:plan-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-creation-swarm
+    target_path: tests/shravan-dev-workflow/plan-creation-swarm/scenarios/plan-creation-swarm-lane-packet-contract.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-creation-swarm-vertical-slice-proof
+    legacy_path: tests/skills/pressure-scenarios/plan-creation-swarm-vertical-slice-proof.md
+    skill_under_test: shravan-dev-workflow:plan-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-creation-swarm
+    target_path: tests/shravan-dev-workflow/plan-creation-swarm/scenarios/plan-creation-swarm-vertical-slice-proof.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-handoff-existing-plan-only
+    legacy_path: tests/skills/pressure-scenarios/plan-handoff-existing-plan-only.md
+    skill_under_test: shravan-dev-workflow:plan-handoff
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-handoff
+    target_path: tests/shravan-dev-workflow/plan-handoff/scenarios/plan-handoff-existing-plan-only.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-handoff-full-packet
+    legacy_path: tests/skills/pressure-scenarios/plan-handoff-full-packet.md
+    skill_under_test: shravan-dev-workflow:plan-handoff
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-handoff
+    target_path: tests/shravan-dev-workflow/plan-handoff/scenarios/plan-handoff-full-packet.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-handoff-proof-matrix-preservation
+    legacy_path: tests/skills/pressure-scenarios/plan-handoff-proof-matrix-preservation.md
+    skill_under_test: shravan-dev-workflow:plan-handoff
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-handoff
+    target_path: tests/shravan-dev-workflow/plan-handoff/scenarios/plan-handoff-proof-matrix-preservation.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-review-swarm-independent-source-coverage
+    legacy_path: tests/skills/pressure-scenarios/plan-review-swarm-independent-source-coverage.md
+    skill_under_test: shravan-dev-workflow:plan-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-review-swarm
+    target_path: tests/shravan-dev-workflow/plan-review-swarm/scenarios/plan-review-swarm-independent-source-coverage.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-review-swarm-routes-findings-to-plan-creation
+    legacy_path: tests/skills/pressure-scenarios/plan-review-swarm-routes-findings-to-plan-creation.md
+    skill_under_test: shravan-dev-workflow:plan-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-review-swarm
+    target_path: tests/shravan-dev-workflow/plan-review-swarm/scenarios/plan-review-swarm-routes-findings-to-plan-creation.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-review-swarm-whole-artifact
+    legacy_path: tests/skills/pressure-scenarios/plan-review-swarm-whole-artifact.md
+    skill_under_test: shravan-dev-workflow:plan-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-review-swarm
+    target_path: tests/shravan-dev-workflow/plan-review-swarm/scenarios/plan-review-swarm-whole-artifact.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: plan-review-swarm-whole-plan-cohesion-lane
+    legacy_path: tests/skills/pressure-scenarios/plan-review-swarm-whole-plan-cohesion-lane.md
+    skill_under_test: shravan-dev-workflow:plan-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: plan-review-swarm
+    target_path: tests/shravan-dev-workflow/plan-review-swarm/scenarios/plan-review-swarm-whole-plan-cohesion-lane.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: research-swarm-question-first
+    legacy_path: tests/skills/pressure-scenarios/research-swarm-question-first.md
+    skill_under_test: shravan-dev-workflow:research-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: research-swarm
+    target_path: tests/shravan-dev-workflow/research-swarm/scenarios/research-swarm-question-first.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: research-swarm-substantial-stage-artifacts
+    legacy_path: tests/skills/pressure-scenarios/research-swarm-substantial-stage-artifacts.md
+    skill_under_test: shravan-dev-workflow:research-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: research-swarm
+    target_path: tests/shravan-dev-workflow/research-swarm/scenarios/research-swarm-substantial-stage-artifacts.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skill-audit-evidence-first
+    legacy_path: tests/skills/pressure-scenarios/skill-audit-evidence-first.md
+    skill_under_test: shravan-dev-workflow:skill-audit
+    target_plugin: shravan-dev-workflow
+    target_skill: skill-audit
+    target_path: tests/shravan-dev-workflow/skill-audit/scenarios/skill-audit-evidence-first.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-draft-artifact
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-draft-artifact.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-draft-artifact.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-evaluate-draft
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-evaluate-draft.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-evaluate-draft.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-implementation-review-gate
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-implementation-review-gate.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-implementation-review-gate.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-platform-artifact-scale
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-platform-artifact-scale.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-platform-artifact-scale.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-security-and-cache-boundary
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-security-and-cache-boundary.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-security-and-cache-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-spec-review-gate
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-spec-review-gate.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-spec-review-gate.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-update-existing-skill
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-update-existing-skill.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-update-existing-skill.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-workflow-spine
+    legacy_path: tests/skills/pressure-scenarios/skills-creation-workflow-spine.md
+    skill_under_test: shravan-dev-workflow:skills-creation
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-workflow-spine.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-creation-swarm-durable-primary-spec
+    legacy_path: tests/skills/pressure-scenarios/spec-creation-swarm-durable-primary-spec.md
+    skill_under_test: shravan-dev-workflow:spec-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-creation-swarm
+    target_path: tests/shravan-dev-workflow/spec-creation-swarm/scenarios/spec-creation-swarm-durable-primary-spec.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-creation-swarm-lane-prompts-not-generic
+    legacy_path: tests/skills/pressure-scenarios/spec-creation-swarm-lane-prompts-not-generic.md
+    skill_under_test: shravan-dev-workflow:spec-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-creation-swarm
+    target_path: tests/shravan-dev-workflow/spec-creation-swarm/scenarios/spec-creation-swarm-lane-prompts-not-generic.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-creation-swarm-no-session-dump-lanes
+    legacy_path: tests/skills/pressure-scenarios/spec-creation-swarm-no-session-dump-lanes.md
+    skill_under_test: shravan-dev-workflow:spec-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-creation-swarm
+    target_path: tests/shravan-dev-workflow/spec-creation-swarm/scenarios/spec-creation-swarm-no-session-dump-lanes.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-creation-swarm-parent-synthesis
+    legacy_path: tests/skills/pressure-scenarios/spec-creation-swarm-parent-synthesis.md
+    skill_under_test: shravan-dev-workflow:spec-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-creation-swarm
+    target_path: tests/shravan-dev-workflow/spec-creation-swarm/scenarios/spec-creation-swarm-parent-synthesis.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-creation-swarm-primary-spec-not-outline
+    legacy_path: tests/skills/pressure-scenarios/spec-creation-swarm-primary-spec-not-outline.md
+    skill_under_test: shravan-dev-workflow:spec-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-creation-swarm
+    target_path: tests/shravan-dev-workflow/spec-creation-swarm/scenarios/spec-creation-swarm-primary-spec-not-outline.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-creation-swarm-spec-folder-chunking
+    legacy_path: tests/skills/pressure-scenarios/spec-creation-swarm-spec-folder-chunking.md
+    skill_under_test: shravan-dev-workflow:spec-creation-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-creation-swarm
+    target_path: tests/shravan-dev-workflow/spec-creation-swarm/scenarios/spec-creation-swarm-spec-folder-chunking.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-handoff-portable-design-context
+    legacy_path: tests/skills/pressure-scenarios/spec-handoff-portable-design-context.md
+    skill_under_test: shravan-dev-workflow:spec-handoff
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-handoff
+    target_path: tests/shravan-dev-workflow/spec-handoff/scenarios/spec-handoff-portable-design-context.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-boundary-fidelity
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-boundary-fidelity.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-boundary-fidelity.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-claims-not-truth
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-claims-not-truth.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-claims-not-truth.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-lane-prompts-not-generic
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-lane-prompts-not-generic.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-lane-prompts-not-generic.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-no-prejudged-lanes
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-no-prejudged-lanes.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-no-prejudged-lanes.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-progressive-disclosure-lane
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-progressive-disclosure-lane.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-progressive-disclosure-lane.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-refinement-inputs
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-refinement-inputs.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-refinement-inputs.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-routes-findings-to-spec-creation
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-routes-findings-to-spec-creation.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-routes-findings-to-spec-creation.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-semantic-lane-judgment
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-semantic-lane-judgment.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-semantic-lane-judgment.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-spec-difference-lane
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-spec-difference-lane.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-spec-difference-lane.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: spec-review-swarm-whole-spec-coverage-lane
+    legacy_path: tests/skills/pressure-scenarios/spec-review-swarm-whole-spec-coverage-lane.md
+    skill_under_test: shravan-dev-workflow:spec-review-swarm
+    target_plugin: shravan-dev-workflow
+    target_skill: spec-review-swarm
+    target_path: tests/shravan-dev-workflow/spec-review-swarm/scenarios/spec-review-swarm-whole-spec-coverage-lane.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: tui-presentation-monospace-structure
+    legacy_path: tests/skills/pressure-scenarios/tui-presentation-monospace-structure.md
+    skill_under_test: shravan-dev-workflow:tui-presentation
+    target_plugin: shravan-dev-workflow
+    target_skill: tui-presentation
+    target_path: tests/shravan-dev-workflow/tui-presentation/scenarios/tui-presentation-monospace-structure.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: tui-presentation-no-mermaid-catalog
+    legacy_path: tests/skills/pressure-scenarios/tui-presentation-no-mermaid-catalog.md
+    skill_under_test: shravan-dev-workflow:tui-presentation
+    target_plugin: shravan-dev-workflow
+    target_skill: tui-presentation
+    target_path: tests/shravan-dev-workflow/tui-presentation/scenarios/tui-presentation-no-mermaid-catalog.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: tui-presentation-progressive-disclosure
+    legacy_path: tests/skills/pressure-scenarios/tui-presentation-progressive-disclosure.md
+    skill_under_test: shravan-dev-workflow:tui-presentation
+    target_plugin: shravan-dev-workflow
+    target_skill: tui-presentation
+    target_path: tests/shravan-dev-workflow/tui-presentation/scenarios/tui-presentation-progressive-disclosure.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: tui-presentation-research-lane-board
+    legacy_path: tests/skills/pressure-scenarios/tui-presentation-research-lane-board.md
+    skill_under_test: shravan-dev-workflow:tui-presentation
+    target_plugin: shravan-dev-workflow
+    target_skill: tui-presentation
+    target_path: tests/shravan-dev-workflow/tui-presentation/scenarios/tui-presentation-research-lane-board.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: tui-presentation-semantic-markdown-boundary
+    legacy_path: tests/skills/pressure-scenarios/tui-presentation-semantic-markdown-boundary.md
+    skill_under_test: shravan-dev-workflow:tui-presentation
+    target_plugin: shravan-dev-workflow
+    target_skill: tui-presentation
+    target_path: tests/shravan-dev-workflow/tui-presentation/scenarios/tui-presentation-semantic-markdown-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: tui-presentation-visual-family-selection
+    legacy_path: tests/skills/pressure-scenarios/tui-presentation-visual-family-selection.md
+    skill_under_test: shravan-dev-workflow:tui-presentation
+    target_plugin: shravan-dev-workflow
+    target_skill: tui-presentation
+    target_path: tests/shravan-dev-workflow/tui-presentation/scenarios/tui-presentation-visual-family-selection.md
+    disposition: migrate
+    retirement_reason: null

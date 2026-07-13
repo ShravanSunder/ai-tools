@@ -1,0 +1,25 @@
+{
+  "name": "ai-tools-skill-pressure",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.8.0",
+  "scripts": {
+    "schemas:check": "vitest run lib/contracts/schema-generation.test.ts --config vitest.config.ts",
+    "schemas:generate": "SKILL_PRESSURE_UPDATE_SCHEMAS=1 vitest run lib/contracts/schema-generation.test.ts --config vitest.config.ts",
+    "test:unit": "vitest run lib --exclude '**/*.integration.test.ts' --config vitest.config.ts",
+    "test:integration": "vitest run lib/evaluation/subject-repetition.integration.test.ts --config vitest.config.ts",
+    "test:live-pair": "tsx scripts/run-live-pair.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "yaml": "^2.8.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "ajv": "^8.17.1",
+    "tsx": "^4.23.0",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.9"
+  }
+}

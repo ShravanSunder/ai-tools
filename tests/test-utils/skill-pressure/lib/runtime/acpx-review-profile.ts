@@ -1,0 +1,81 @@
+import path from "node:path";
+
+import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
+
+export interface AcpxClaudeReviewProfile {
+  readonly launcher: AcpxLauncher;
+  readonly cwd: string;
+  readonly mcpConfigPath: string;
+  readonly packetPath: string;
+  readonly packetDigest: string;
+  readonly model: "opus";
+  readonly reasoningEffort: "high";
+  readonly timeoutSeconds: number;
+}
+
+export function buildAcpxClaudeReviewCommand(
+  profile: AcpxClaudeReviewProfile,
+): ExecutableAcpxCommand {
+  validateProfile(profile);
+  return {
+    executable: profile.launcher.executable,
+    cwd: profile.cwd,
+    args: [
+      ...profile.launcher.prefixArgs,
+      "--cwd",
+      profile.cwd,
+      "--mcp-config",
+      profile.mcpConfigPath,
+      "--deny-all",
+      "--non-interactive-permissions",
+      "fail",
+      "--no-terminal",
+      "--allowed-tools",
+      "",
+      "--max-turns",
+      "1",
+      "--model",
+      `${profile.model}[${profile.reasoningEffort}]`,
+      "--format",
+      "json",
+      "--json-strict",
+      "--timeout",
+      String(profile.timeoutSeconds),
+      "claude",
+      "exec",
+      "--file",
+      profile.packetPath,
+    ],
+    environment: {
+      ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1",
+    },
+  };
+}
+
+function validateProfile(profile: AcpxClaudeReviewProfile): void {
+  for (const [field, value] of [
+    ["launcher.executable", profile.launcher.executable],
+    ["cwd", profile.cwd],
+    ["mcpConfigPath", profile.mcpConfigPath],
+    ["packetPath", profile.packetPath],
+  ] as const) {
+    if (!path.isAbsolute(value)) {
+      throw new Error(`${field} must be an absolute path`);
+    }
+  }
+  const relativePacketPath = path.relative(profile.cwd, profile.packetPath);
+  if (
+    relativePacketPath === "" ||
+    relativePacketPath === ".." ||
+    relativePacketPath.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relativePacketPath)
+  ) {
+    throw new Error("packetPath must be a file inside cwd");
+  }
+  if (profile.packetDigest.trim() === "") {
+    throw new Error("packetDigest must be non-empty");
+  }
+  if (!Number.isInteger(profile.timeoutSeconds) || profile.timeoutSeconds <= 0) {
+    throw new Error("timeoutSeconds must be a positive integer");
+  }
+}

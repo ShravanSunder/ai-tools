@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "number",
+      "const": 1
+    },
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "owner_plugin": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "owner_skill": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "skill_type": {
+      "type": "string",
+      "enum": [
+        "discipline",
+        "technique",
+        "pattern",
+        "reference"
+      ]
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "hidden_rubric": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "baseline": {
+      "type": "string",
+      "enum": [
+        "no_skill",
+        "previous_revision"
+      ]
+    },
+    "repetitions": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 9007199254740991
+    },
+    "risk": {
+      "type": "string",
+      "enum": [
+        "standard",
+        "high"
+      ]
+    },
+    "fixture_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "allowed_tools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "allowed_write_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^(?!\\/)(?!.*\\\\)(?!.*(?:^|\\/)\\.{1,2}(?:\\/|$))(?!.*\\/\\/)(?!.*\\/$).+$"
+      }
+    },
+    "deterministic_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "check_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "fact": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "equals",
+              "contains",
+              "matches",
+              "exists",
+              "absent"
+            ]
+          },
+          "expected": {}
+        },
+        "required": [
+          "check_id",
+          "fact",
+          "operator"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "expected_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^(?!\\/)(?!.*\\\\)(?!.*(?:^|\\/)\\.{1,2}(?:\\/|$))(?!.*\\/\\/)(?!.*\\/$).+$"
+          },
+          "file_type": {
+            "type": "string",
+            "enum": [
+              "file",
+              "directory"
+            ]
+          },
+          "content_contract": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "path",
+          "file_type",
+          "content_contract"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "owner_plugin",
+    "owner_skill",
+    "skill_type",
+    "prompt",
+    "hidden_rubric",
+    "baseline",
+    "repetitions",
+    "risk",
+    "fixture_requirements",
+    "allowed_tools",
+    "allowed_write_paths",
+    "deterministic_checks",
+    "expected_artifacts"
+  ],
+  "additionalProperties": false,
+  "$id": "https://ai-tools.local/schemas/skill-pressure/scenario/v1.json",
+  "title": "Skill Pressure Scenario v1",
+  "xSkillPressureUniqueCheckIds": true
+}

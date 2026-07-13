@@ -1,361 +1,423 @@
-# Skill Pressure Judge System Implementation Plan
+# Skill Pressure Testing System Implementation Plan
 
-Status: accepted
+Status: executable; S0 complete and S1 contracts/discovery in progress
 
 Source: `docs/specs/2026-07-10-skill-pressure-judge-system-spec.md`
 
-Goal: replace the flat self-grading pressure runner with one Vitest Evals system
-that owns recursive skill scenarios, authentic model behavior, deterministic
-evidence, independent semantic judgment, fail-closed reduction, and inspectable
-proof.
+Goal: hard-cut over the current flat self-grading runner to one ACPX-backed
+Vitest Evals system that measures whether skills improve mini-model behavior
+across repeated RED/GREEN pressure trials.
 
 ## Scope
 
-- Replace `tests/skills/` with the standalone
-  `tests/test-utils/skill-pressure/` package.
-- Move 107 active scenarios into 23 `tests/<plugin>/<skill>/` owners.
-- Preserve Vitest Evals as the only behavior runner.
-- Prove standard and high-risk semantics, paired baseline/treatment causality,
-  and separate installed-plugin release smoke.
+- `tests/test-utils/skill-pressure/` for the standalone runner package.
+- `tests/<plugin>/<skill>/` for all migrated scenario owners.
+- `tests/skills/` only for migration input and final hard cutover.
+- Exact plugin metadata, changelog, manifests, and docs required by the cutover.
 
-Non-goals: compatibility discovery/reducers, live destructive external actions,
-direct judge repository access, a replacement eval framework, unrelated skill
-rewrites, or PR merge.
+Non-goals:
 
-## Security Context
+- generalized agent-host isolation;
+- plugin-command, exec-policy-rule, or MCP poison testing;
+- hostile-code or credential containment;
+- a replacement evaluation framework;
+- dual runners or compatibility reducers;
+- unrelated skill rewrites;
+- installed home-cache mutation without explicit authorization;
+- PR merge.
 
-Applicable. The system handles untrusted model text, filesystem paths,
-subprocesses, local raw artifacts, repository source, environment values, and
-external Claude transport. All model output is untrusted. Shared TypeScript
-owners decide source closure, risk, evidence, calibration, and reduction.
+## Current-State Correction
 
-## Capability Gate 0
+The untracked runner tree contains useful exploratory infrastructure mixed with
+an overbuilt capability-gate design. Infrastructure unit tests are green, but no
+real skill pressure scenario has yet produced RED/GREEN behavioral proof and no
+legacy scenario has yet been migrated into the new owner layout.
 
-Before runtime implementation claims:
+The implementation must first separate useful runner mechanics from machinery
+that does not measure skill performance.
 
-1. Prove a disposable Codex subject can expose only a materialized target-skill
-   closure plus neutral harness files, while still emitting observable load/read
-   evidence. Record the exact CLI/config shape and a sentinel ambient-instruction
-   rejection receipt.
-2. Define one typed ACPX launch profile and prove it can launch a currently advertised Claude Opus model at high
-   reasoning with deny-all, no terminal, non-interactive failure, empty cwd,
-   explicit environment allowlist, empty MCP configuration, no allowed tools,
-   disabled or isolated user settings/resources, packet-only input, bounded
-   timeout, structured output, and resolved capability evidence. Poison ambient
-   Claude instructions/settings and attempt a forbidden tool/resource read; the
-   poison must not affect output and the read must be denied. Malformed output
-   maps to `infrastructure_error`.
-3. If either capability cannot be proven, stop the affected runtime slice and
-   return to spec/plan review. Do not create a weaker fallback that can green.
-4. Installed-plugin smoke that mutates home caches remains deferred until an
-   explicit post-push/release authorization.
+Current implementation proof (2026-07-13):
 
-## Vertical Slices
+- S0 pruning is complete: Gate 0, poison/capability receipts, owner-risk policy,
+  direct-Codex execution, and the obsolete capability-probe directory are gone.
+- ACPX execution, subject/review profiles, transcript facts, process cleanup,
+  and structured review parsing now have retained owners.
+- Scenario contracts and discovery now use the behavioral R3 fields and
+  `tests/<plugin>/<skill>/scenarios/` owner paths without a separate manifest or
+  behavior-source graph.
+- Parent verification after S2 hardening: typecheck exit 0; 15 unit files and
+  39 tests passed; one integration file and 9 tests passed; schema check exit 0;
+  `git diff --check` exit 0.
+- Live CP2 attempts reached ACPX, proved project installation and pair input
+  construction, then failed on Codex transport/DNS. The first attempt exposed
+  an exit-0 false-positive and the bounded retry correctly reduced to
+  `infrastructure_error`; CP2 remains open.
+- Behavioral RED/GREEN ACPX scenarios executed: 0. Migration remains 0/107.
 
-### S1. Contracts, Package, And Discovery
+## Keep And Simplify
 
-Source: R1-R5; repository layout; proof expectation 1.
+Retain one clear owner for each required job:
 
-Behavior: create the standalone package, versioned YAML/JSON schemas, recursive
-owner-aware discovery, global-ID selection, and complete discovery receipt.
+| Job | Retained surface |
+| --- | --- |
+| Project skill installation | `lib/installation/` |
+| ACPX process execution | `lib/runtime/` |
+| Process-group timeout and cleanup | `lib/runtime/process-group-supervisor.ts` |
+| ACPX event and visible-response collection | `lib/collector/` |
+| Scenario contracts | `lib/contracts/` |
+| Recursive owner discovery | `lib/discovery/` |
+| Legacy ID accounting | `lib/migration/` |
+| RED/GREEN repetitions and comparison | new `lib/evaluation/` |
+| Deterministic file/tool/artifact checks | new `lib/evidence/` |
+| Parent or blind review packets | new `lib/review/` |
+| Final outcomes and reports | new `lib/reduction/` and `lib/reporting/` |
+| Vitest Evals entrypoint | new `evals/skill-pressure.eval.ts` |
 
-Likely writes:
+Simplification rules:
 
-- `tests/test-utils/skill-pressure/package.json`
-- `tests/test-utils/skill-pressure/pnpm-lock.yaml`
-- `tests/test-utils/skill-pressure/tsconfig.json`
-- `tests/test-utils/skill-pressure/vitest.config.ts`
-- `tests/test-utils/skill-pressure/lib/contracts/`
-- `tests/test-utils/skill-pressure/lib/discovery/`
-- `tests/test-utils/skill-pressure/schemas/`
+- one ACPX command executor, not provider-specific process wrappers;
+- provider profiles contain only exact model, reasoning, permissions, cwd,
+  prompt, skill install, and scenario-required MCP/tool configuration;
+- receipts contain facts needed to compare RED and GREEN;
+- no source or configuration digest unless it protects pair equality or proves
+  the installed baseline/treatment source;
+- no reviewer receives authoring discussion or expected conclusions;
+- no subject receives grader criteria or self-grade fields.
 
-Tasks:
+## Delete Completely
 
-1. Add RED schema tests for path/manifest mismatch, duplicate IDs, external
-   owner handling, malformed criteria/artifacts/baselines, and invalid source
-   closure roots.
-   Include declared cross-skill dependency, undeclared edge, cycle, symlink,
-   submodule, missing owner, and historical-revision fixtures.
-2. Add RED discovery tests for recursive ordering, selected/skipped/invalid
-   receipts, and an unmapped migration ID.
-3. Implement typed contracts with direct YAML dependency and deterministic
-   digests.
-4. Implement recursive discovery rooted at `tests/`, excluding `test-utils`
-   and non-scenario trees by structural contract rather than filename guesses.
-5. Build and review an initial 23-owner base-risk inventory with R30 rule IDs;
-   scenarios may raise but never lower each owner's baseline risk.
+Delete or remove from runner reachability:
 
-Checkpoint CP1: fixture-tree and live-tree discovery are deterministic; package
-typecheck/unit tests pass; no runtime model code is required.
+- `lib/capability-probes/gate0-cli.ts`
+- `lib/capability-probes/gate0-runner.ts`
+- `lib/capability-probes/gate0-runner.test.ts`
+- `lib/capability-probes/acpx-codex-attribution-probe.ts`
+- `lib/capability-probes/acpx-codex-attribution-probe.test.ts`
+- `lib/capability-probes/codex-prompt-input-inventory.ts`
+- `lib/capability-probes/codex-prompt-input-inventory.test.ts`
+- `lib/capability-probes/functional-capability-receipt.ts`
+- `lib/capability-probes/functional-capability-receipt.test.ts`
+- the five-class poison receipt and every plugin-command, `.rules`, MCP-poison,
+  approved-command-inventory, and global Gate 0 concept;
+- `config/owner-risk-inventory.yaml`
+- `schemas/owner-risk-inventory.schema.json`
+- owner-risk inventory tests and loading code;
+- direct-Codex exploratory primary runner code that is not used by ACPX;
+- duplicate provider-specific collectors or process runners after their useful
+  parsing logic is folded into the shared ACPX collector;
+- any schema or contract field used only by the removed capability system;
+- plan/spec prose requiring all five behavior-source classes, broad source-graph
+  security, or a capability gate before scenario execution.
 
-### S2. Controlled Primary And Fact Collection
-
-Source: R6-R19; proof expectations 3-5.
-
-S2a source-isolated primary:
-
-- materialize target closure and neutral instructions in a private disposable
-  root;
-- resolve current and historical source graphs from the classifier-selected Git
-  tree-ish using regular-file blobs only; recursively follow manifest-declared
-  same-skill and cross-skill dependency edges, reject undeclared edges,
-  symlinks, submodules, cycles, and paths outside skill owners, and receipt
-  owner/path/blob/digest mappings without consulting current-worktree files for
-  a historical baseline;
-- render only the operator prompt plus neutral safety context;
-- return normal visible text, never a self-grade schema;
-- supervise the process group with bounded TERM/KILL cleanup and drained streams.
-
-S2b response/process/trace collector:
-
-- normalize Codex JSONL into process, sandbox, skill-load, tool, provenance, and
-  bounded evidence facts;
-- stream-redact before any persistence or transport;
-- use private unique run roots, retain only redacted artifacts and safe digests,
-  delete transient unredacted buffers at process completion, and record a
-  retention/cleanup receipt.
-
-S2c workspace/artifact collector:
-
-- enforce canonical fixture containment;
-- reject traversal, symlink, and hard-link escape before launch;
-- detect link/traversal escape created during execution and verify a
-  harness-owned sibling sentinel's digest, type, and mode remain unchanged;
-- capture pre/post snapshots and write attempts;
-- validate actual artifact type, location, digest, content, and schema.
-
-Checkpoint CP2: one response fixture and one workspace fixture produce complete
-fact packets; ambient source, unexpected writes, malformed artifacts, timeout,
-or missing required facts cannot pass.
-
-CP2 regression fixtures include a descendant that holds stdout/stderr across
-timeout/cancellation; proof requires process-group termination, stream EOF, no
-live descendants, and a cleanup receipt before owned-root removal. A seeded
-secret must be absent from every retained run file, fact packet, report, and
-judge packet.
-
-S2d controlled external-effect traces:
-
-- require manifests for skills whose production behavior mutates external
-  systems to select a controlled adapter or trace fixture;
-- reject direct egress/action attempts;
-- collect the intended external effect as a deterministic trace fact without
-  performing the live action.
-
-### S3. Risk, Judges, Reduction, And Reporting
-
-Source: R20-R32 and R37-R45; proof expectations 2 and 7-11.
-
-S3a risk classifier:
-
-- consume comparison revision plus tracked/untracked change inventory;
-- classify reachable skill/harness surfaces with provenance and policy digest;
-- own new/changed/unchanged baseline mode; fail high on stale or incomplete
-  input.
-
-S3a also owns one versioned `judge-policy` contract that maps effective risk and
-semantic criteria to required judge roles. Codex/ACPX adapters and the reducer
-consume it; no adapter may independently choose or weaken required lanes.
-
-S3b deterministic reducer:
-
-- RED-test all five outcomes and precedence cells;
-- deterministic failures override judges;
-- missing facts/calibration/required judges are non-green;
-- high-risk disagreement is inconclusive;
-- fake backend is always `not_evaluated`.
-
-S3c Codex judge and calibration:
-
-- build provider-neutral packets from bounded facts and hidden criteria;
-- run one-shot in a separate context;
-- validate structured criterion receipts;
-- calibrate pass, fail, insufficient, injection, and deterministic-conflict
-  gold packets.
-- validate calibration receipts against judge family, resolved model, effort,
-  prompt, parser, rubric, envelope schema, corpus, and adapter versions; mutate
-  every key in tests and require `infrastructure_error` on mismatch.
-
-S3d ACPX Claude judge and calibration:
-
-- use only the Gate 0 verified Opus/high packet-only adapter;
-- consume the identical packet digest as Codex;
-- map timeout, permission, malformed, unavailable, and capability mismatch to
-  infrastructure error.
-
-S3e reporter/redaction:
-
-- preserve trusted facts, untrusted excerpts, judge/calibration receipts,
-  reduction, usage, provenance, and local raw-artifact pointers separately;
-- never serialize secrets or raw reasoning into outside packets.
-
-Checkpoint CP3: pure reducer matrix passes; both judge families pass calibration;
-one standard and one high-risk live semantic case produce inspectable receipts.
-
-### S4. Paired Baseline/Treatment Causality
-
-Source: R33-R36; proof expectation 6.
-
-Tasks:
-
-1. RED-test classifier-selected no-target versus immutable pre-change closure
-   construction and receipt invalidation.
-2. Implement separate disposable baseline/treatment environments.
-3. Build and validate a `PairInputFingerprint` covering primary model,
-   reasoning, neutral instructions, fixture, operator prompt, judge policy, and
-   all source-independent controls; reject any baseline/treatment mismatch and
-   record the fingerprint in the receipt.
-4. Implement two paired trials where every named target criterion baseline-fails
-   for its declared reason and treatment-passes; mixed results are inconclusive.
-5. Use the representative migrated `manage-agents` high-risk scenario after S5a.
-
-Checkpoint CP4: a real changed-skill receipt proves two current paired RED/GREEN
-trials with all relevant digests; fake or stale receipts cannot satisfy it.
-
-### S5. Scenario Ownership Migration
-
-Source: R3-R5; hard-cutover layout and migration contract.
-
-S5a inventory and representative cases:
-
-- freeze the 107 active legacy IDs and 23 owners;
-- add an old-ID to new-path/retirement migration receipt;
-- record the reviewed 23-owner base-risk inventory and R30 reasons in the
-  migration receipt;
-- migrate representative response, workspace, standard semantic, and
-  `manage-agents` high-risk semantic scenarios first.
-
-S5b plugin batches:
-
-- migrate each skill into `tests/<plugin>/<skill>/skill-eval.yaml` and
-  `scenarios/`;
-- translate regex/self-grade expectations into typed deterministic/semantic
-  criteria;
-- add fixtures only where execution mode requires them;
-- keep each batch's write scope confined to its owning skill directory.
-
-Checkpoint CP5: every legacy ID maps exactly once or has an explicit approved
-retirement; full-tree discovery reports no orphan, duplicate, or invalid owner.
-Structural migration alone is not behavior green.
-
-### S6. Hard Cutover And Release Smoke
-
-Source: R1-R2, R9, R42-R45; proof expectation 12.
-
-S6a command/docs cutover:
-
-- create the single runner under `tests/test-utils/skill-pressure/`;
-- update `AGENTS.md`, `skills-creation/references/pressure-testing.md`, current
-  plugin docs/changelog, and non-historical live references;
-- delete `tests/skills/`, including the legacy shell reducer, regex oracle,
-  self-grade schema, flat scenarios, and alternate command;
-- prove no dual discovery or reducer remains.
-
-S6b installed-plugin smoke:
-
-- after explicit cache-mutation authorization, verify installed plugin name,
-  version, expected/installed source digest, discovery, and load evidence;
-- report the smoke beside causal behavior receipts, never inside reduction.
-
-Checkpoint CP6: fresh CP4 causal and CP5 migration receipts are mandatory;
-authoritative command passes required unit/integration/live eval gates;
-installed smoke is separately proven or explicitly deferred as a release
-blocker; old layout is absent.
-
-## Requirements/Proof Matrix
-
-| Requirement / claim | Source | Owner | Proof source and layer | Evidence source | Freshness guard | RED/GREEN |
-| --- | --- | --- | --- | --- | --- | --- |
-| One Vitest runner and recursive ownership | R1-R5, E1 | S1/S5/S6 | Unit schemas + integration live discovery + cutover receipt | Parent-run Vitest and inventory artifact | tree/schema/manifest digests | Required |
-| Authentic isolated primary and invocation | R6-R10, E3-E4 | S1/S2a/S2b | Unit source-graph edges + integration disposable process + live Codex smoke | process/trace/source-graph receipt | model/config/graph/event digests | Required |
-| Workspace safety, artifacts, and controlled external effects | R11-R14, E5 | S2c/S2d | Unit path attacks + integration fixture writes/controlled traces + workspace smoke | snapshots/write attempts/artifact and effect-trace facts | fixture and pre/post digests | Required |
-| Deterministic fact truth and bounded evidence | R15-R19, E4/E10 | S2b/S3e | Unit schema/redaction + real-event integration | fact packet and bounded excerpts | collector/schema/event digests | Required |
-| Independent semantic judgment | R20-R27, E7-E9 | S3a/S3c/S3d | Unit judge-policy/envelopes + calibration + standard/high-risk live smoke | policy/judge/calibration/capability receipts | packet/model/effort/prompt/parser/rubric/envelope/corpus/adapter digests | Required |
-| Fail-closed changed-surface risk | R28-R32, E9 | S3a | Unit policy table + Git/worktree integration + high-risk smoke | classifier receipt | revision/worktree/policy/reachability digest | Required |
-| Causal paired comparison | R33-R36, E6 | S2a/S4 | Unit invalidation/fingerprint + historical Git-blob closure integration + two live pairs | closure and baseline/treatment receipts | pair fingerprint plus all scenario/model/source/judge digests | Required |
-| Deterministic outcomes and fake boundary | R37-R41, R45, E2/E11 | S3b | Table-driven unit matrix + integration reduction | reduction receipt | reducer and consumed receipt digests | Required |
-| Provenance, calibration, reporting | R42-R44, E7/E10 | S3c-S3e | Unit invalidation + reporter integration | run/report artifacts | configuration and artifact digests | Required |
-| Installed distribution wiring | R9, E12 | S6b | Install/discovery/load smoke | installed-plugin smoke receipt | installed version/source digest | Required for release; explicit authorization gate |
-
-E1-E12 refer to the numbered Proof Expectations in the accepted spec.
+Do not delete the ACPX subject/judge transcript parsers until their useful model,
+effort, response, tool, usage, and structured-review parsing has been moved into
+the retained collector/review modules.
 
 ## Execution DAG
 
 ```text
-gate 0: Codex source isolation + ACPX Opus/high capability receipts
+gate A: revised spec and plan accepted
   |
-S1 contracts/package/discovery
+Sidekick deletion pass 1
+  scope: fully dead files and mechanical owner-risk decoupling
+  proof: named paths absent; typecheck and focused tests pass
   |
-  +-- S2a isolated primary ---- S2b response collector --+
-  +-- S2c workspace/artifacts ---------------------------+--> CP2
-  +-- S3a risk classifier -- S3b reducer ----------------+
-  +-- S5a inventory + representative scenarios ----------+
+parent extraction and simplification
+  scope: move useful ACPX behavior into retained owners
+  proof: no retained import points into capability-probes
   |
-fact-packet contract frozen
-  +-- S3c Codex judge/calibration
-  +-- S3d ACPX judge/calibration
-  +-- S3e reporter/redaction
+Sidekick deletion pass 2
+  scope: remaining obsolete capability-probe shell
+  proof: capability-probes absent; typecheck and focused tests pass
   |
-CP3 -> S4 paired causality -> CP4
+slice 1: RED/GREEN coordinator and five-repetition comparison
   |
-  +-- S5b per-plugin migration batches
+slice 2: evidence checks, rationalizations, review, and reduction
   |
-CP4 + CP5 -> S6a hard cutover -> full validation -> implementation-review-swarm
+slice 3: Vitest Evals entrypoint and focused live behavior smoke
   |
-S6b authorized installed smoke -> implementation-pr-wrapup
+slice 4: migrate 107 scenarios across 23 owners
+  |
+hard-cutover gate: exact 107-of-107 accounting
+  |
+delete old authoritative runner and legacy reducer
+  |
+full validation and implementation-review-swarm
+  |
+implementation-pr-wrapup; PR-ready and unmerged
 ```
 
-Parallel work is allowed only for disjoint files after the shared contracts are
-frozen. Package metadata, schemas, migration receipt, final runner, and legacy
-deletion are parent single-writer surfaces.
+## S0. Prune The Wrong Architecture
 
-## Validation Gates
+Source: spec Explicitly Removed Architecture.
 
-The standalone package must expose stable scripts and receipt directories under
-`tmp/skill-pressure-evals/<run-id>/`:
+### Sidekick deletion lane
 
-1. Unit: `pnpm --dir tests/test-utils/skill-pressure test:unit`.
-2. Typecheck: `pnpm --dir tests/test-utils/skill-pressure typecheck`.
-3. Capability: `pnpm --dir tests/test-utils/skill-pressure gate0`; nonzero on
-   missing isolation/Opus capability, writes capability receipts.
-4. Integration: `pnpm --dir tests/test-utils/skill-pressure test:integration`;
-   covers filesystem, Git blobs, process groups, event normalization, controlled
-   external traces, adapters, and reporting.
-5. Calibration: `pnpm --dir tests/test-utils/skill-pressure calibrate`; nonzero
-   on any stale/missing family receipt.
-6. Live standard: `pnpm --dir tests/test-utils/skill-pressure eval:standard`.
-7. Live high risk: `pnpm --dir tests/test-utils/skill-pressure eval:high-risk`
-   using `manage-agents` and fail-closed negative cases.
-8. Paired behavior: `pnpm --dir tests/test-utils/skill-pressure eval:paired`;
-   requires two discriminating pairs and matching input fingerprints.
-9. Full migration/evaluation: `pnpm --dir tests/test-utils/skill-pressure eval:full`;
-   requires fresh CP4 receipt and complete 107-ID/23-owner receipt.
-10. Static/plugin docs validation when metadata changes: JSON parsing, Codex skill
-   validator where applicable, and `claude plugin validate .`.
-11. Implementation review, then fresh PR checks/comments/threads/mergeability.
+The same persistent Sidekick receives two exact deletion packets and may not
+redesign retained modules. The parent reviews every returned diff.
 
-Exact script flags and test filenames may be refined during implementation, but
-no proof layer may be removed or relabeled.
+Pass 1 deletes these fully dead files:
 
-## Recovery And Split Triggers
+```text
+lib/capability-probes/gate0-cli.ts
+lib/capability-probes/gate0-runner.ts
+lib/capability-probes/gate0-runner.test.ts
+lib/capability-probes/acpx-codex-attribution-probe.ts
+lib/capability-probes/acpx-codex-attribution-probe.test.ts
+lib/runtime/codex-primary-runner.ts
+lib/runtime/codex-primary-runner.test.ts
+config/owner-risk-inventory.yaml
+schemas/owner-risk-inventory.schema.json
+lib/contracts/owner-risk-inventory.test.ts
+```
 
-- Keep work under the new package until S6a; do not make old and new runners
-  simultaneously authoritative.
-- If response and workspace isolation cannot share one runner safely, split
-  their adapters while preserving one fact contract.
-- If Opus/high capability cannot be confirmed, high-risk evaluation remains
-  infrastructure error and the goal is not PR-ready.
-- If a migrated scenario cannot be translated without changing product meaning,
-  record it as an explicit planning blocker; do not silently retire it.
-- On timeout/cancellation, kill the process group, drain streams, preserve a
-  bounded cleanup receipt, and remove only harness-owned disposable roots.
-- Persist only stream-redacted artifacts under private harness-owned roots;
-  transient unredacted buffers are deleted at process completion. Any retained
-  sentinel secret blocks CP2 and all later gates.
+Pass 1 removes only direct references made invalid by those deletions:
 
-## Plan Completion Receipt
+- remove the `gate0` package script;
+- remove owner-risk schema generation and schema-parity cases;
+- remove `OwnerRiskInventory`, owner-risk loading, and owner-risk reconciliation;
+- keep migration accounting based on the migration inventory and live legacy
+  files, with the owner set derived from migration rows;
+- remove imports, exports, fixtures, or tests whose only purpose was one of the
+  deleted files.
 
-phase_result: complete
-evidence: docs/plans/2026-07-10-skill-pressure-judge-system-implementation.md
-recommended_next_workflow: shravan-dev-workflow:plan-review-swarm
-recommended_transition_reason: The accepted spec is mapped to vertical slices, a requirements/proof matrix, security constraints, and an execution DAG.
+The parent then moves the useful behavior into these exact retained owners:
+
+```text
+lib/runtime/acpx-command-executor.ts
+lib/runtime/acpx-subject-profile.ts
+lib/collector/acpx-transcript-collector.ts
+lib/review/acpx-review-result.ts
+```
+
+The moved behavior is limited to ACPX execution, exact model/effort and skill
+configuration, visible response/tool/usage collection, and structured review
+parsing. Poison/source-class capability reduction is not moved.
+
+Pass 2 deletes the entire remaining `lib/capability-probes/` directory only
+after `rg` proves no retained import points into it. Until that gate, do not
+delete or redesign these migration-source files:
+
+```text
+lib/capability-probes/acpx-command-executor.ts
+lib/capability-probes/acpx-command-executor.test.ts
+lib/capability-probes/acpx-codex-primary-profile.ts
+lib/capability-probes/acpx-codex-primary-profile.test.ts
+lib/capability-probes/acpx-codex-primary-probe.ts
+lib/capability-probes/acpx-codex-primary-probe.test.ts
+lib/capability-probes/acpx-codex-judge-profile.ts
+lib/capability-probes/acpx-codex-judge-profile.test.ts
+lib/capability-probes/acpx-codex-judge-probe.ts
+lib/capability-probes/acpx-codex-judge-probe.test.ts
+lib/capability-probes/acpx-claude-judge-profile.ts
+lib/capability-probes/acpx-claude-judge-profile.test.ts
+lib/capability-probes/acpx-claude-judge-probe.ts
+lib/capability-probes/acpx-claude-judge-probe.test.ts
+lib/capability-probes/probe-redaction.ts
+```
+
+Those files contain the useful behavior named above plus obsolete probe shells.
+The parent moves only the useful behavior; the Sidekick removes the old files in
+pass 2.
+
+The Sidekick returns:
+
+```text
+deleted paths
+direct import repairs
+files intentionally left for parent migration
+tests run and exit codes
+concerns requiring parent decision
+```
+
+### Parent simplification lane
+
+The parent:
+
+1. Moves reusable ACPX command construction and transcript parsing out of
+   `capability-probes/` into the four exact retained owners named above.
+2. Consolidates process execution under `runtime/` and preserves process-group
+   timeout/cleanup proof.
+3. Reduces scenario contracts to behavioral fields from R3.
+4. Removes owner-risk policy in favor of scenario `standard | high`.
+5. Keeps discovery and migration only when they serve owner layout and exact
+   accounting: 108 Markdown files in the legacy directory means 107 active
+   scenarios plus the non-scenario `README.md`.
+
+Checkpoint CP0: removed architecture is absent, retained modules have one job,
+typecheck passes, and unit tests describe the behavioral runner rather than Gate
+0 capabilities.
+
+## S1. Scenario Contract And Discovery
+
+Source: R1-R4 and R27.
+
+1. Add RED contract tests for missing prompt/rubric, rubric leakage into subject
+   input, repetitions below five, invalid baseline, invalid risk, duplicate
+   global ID, and owner path mismatch.
+2. Implement the smallest versioned scenario schema carrying the R3 fields.
+3. Implement recursive deterministic discovery under `tests/`, excluding
+   `test-utils` and the legacy input tree.
+4. Preserve selected, skipped, invalid, and migration-accounting receipts.
+5. Verify the legacy directory contains exactly 107 scenario fixtures across 23
+   owners plus one excluded `README.md` before any scenario move.
+
+Checkpoint CP1: fixture discovery and live legacy inventory are deterministic.
+
+## S2. ACPX Subject Runtime And Minimal Isolation
+
+Source: R5-R14 and R17.
+
+1. Add RED integration tests for baseline/treatment install state, grader leakage,
+   stale repository reuse, session reuse, model/reasoning mismatch, timeout, and
+   descendant process cleanup.
+2. Retain the repo-owned regular-file project installer and its digest receipt.
+3. Build one shared ACPX executor using global `acpx`, with `pnpm dlx` then
+   `npx --yes` only as fallback.
+4. Implement Codex Luna/xhigh as the default subject profile and Claude Sonnet
+   low/medium as optional Claude-specific coverage.
+5. Create a fresh disposable Git repository and fresh ACPX `exec` call for every
+   repetition.
+6. Install only no skill, the accepted previous version, or the current target
+   version according to the pair side.
+7. Use neutral instructions, hidden grader criteria, and empty MCP unless the
+   scenario explicitly declares MCP.
+8. Preserve runner-owned timeout, TERM/KILL cleanup, drained streams, and cleanup
+   receipt.
+
+Checkpoint CP2: one no-skill and one treatment repetition return authentic ACPX
+responses from equal inputs with only the skill source differing.
+
+## S3. RED/GREEN Repetitions And Evidence
+
+Source: R5-R9 and R15-R17.
+
+1. Add RED tests for fewer than five executions, reused session IDs, unequal pair
+   inputs, lucky one-off GREEN, missing RED failure/proof gap, and mixed outcomes.
+2. Implement a pair fingerprint over scenario, prompt, fixture, model, reasoning,
+   permissions, repetitions, runner version, baseline/treatment source mode, and
+   immutable selected-source revision/content digests. Every repetition must
+   match the selected source digest for its side.
+3. Run at least five fresh RED and five fresh GREEN contexts.
+4. Normalize visible response, tools, usage, process outcome, file changes,
+   artifacts, and rationalization excerpts.
+5. Implement deterministic checks for required/forbidden actions and artifacts.
+6. Store only redacted bounded evidence and safe digests.
+
+Checkpoint CP3: a fixture pair distinguishes consistent improvement from
+variance, mixed results, and infrastructure failure.
+
+## S4. Review And Reduction
+
+Source: R18-R22.
+
+1. Add RED tests proving rubric packets exclude authoring discussion, expected
+   conclusions, and another reviewer's reasoning.
+2. Implement the parent-review receipt shape for manually reviewed transcripts.
+   It enumerates every RED and GREEN repetition ID and transcript digest; a
+   partial acknowledgement is invalid.
+3. Implement a fresh-context blind-review packet containing only scenario ID,
+   hidden rubric, deterministic facts, and bounded RED/GREEN results.
+4. Use ACPX for model reviewers. Standard automated runs may use a mini or
+   balanced fresh reviewer. High-risk runs require Claude Opus/high.
+5. Implement deterministic precedence and outcomes: pass, behavior_fail,
+   inconclusive, infrastructure_error, not_evaluated.
+6. Record rationalization, behavior risk, smallest wording change, and retest.
+
+Checkpoint CP4: known pass, failure, variance, missing-evidence, and high-risk
+review fixtures reduce correctly.
+
+## S5. Vitest Evals Integration
+
+Source: R23-R26.
+
+1. Add the pinned `vitest-evals` dependency and one evaluator entrypoint.
+2. Map each discovered scenario to one RED/GREEN evaluation case.
+3. Keep grader criteria out of subject input and expose them only to review.
+4. Implement `--fast`, `--scenario`, `--jobs`, and `--serial` selection.
+5. Use bounded parallelism for independent scenarios/repetitions.
+6. Persist per-scenario evidence and aggregate exact counts.
+7. Keep the fake backend only for plumbing tests and label it non-behavioral.
+
+Checkpoint CP5: one focused scenario executes end to end through Vitest Evals.
+
+## S6. Scenario Migration And Hard Cutover
+
+Source: R27-R29.
+
+1. Generate and parent-review a 107-row immutable migration map.
+2. Move scenarios into `tests/<plugin>/<skill>/` without changing their behavioral
+   intent during the mechanical move.
+3. Convert each scenario to the new behavioral schema, adding skill type,
+   baseline, repetitions, hidden rubric, deterministic checks, and risk.
+4. Verify global uniqueness, owner/path agreement, and exact 107-of-107 discovery.
+5. Run representative discipline, technique, pattern, and reference scenarios.
+6. Remove the old flat scenario directory, self-grade prompt, regex reducer,
+   legacy shell authority, and duplicate package only after accounting passes.
+7. Update `tests/skills/README.md` or replace it with the new runner contract and
+   update every repo reference.
+
+Checkpoint CP6: one authoritative runner discovers all 107 scenarios across 23
+owners; old authority is absent.
+
+## S7. Shipping Proof
+
+1. Run package typecheck and all unit tests.
+2. Run integration tests for Git fixtures, installation, processes, collection,
+   evidence, review packets, and migration.
+3. Run one live Luna/xhigh scenario with five RED and five GREEN repetitions.
+4. Run one standard blind-review scenario.
+5. Run one high-risk Claude Opus/high review scenario.
+6. Run the full standard suite with exact accounting; record provider failures as
+   infrastructure errors, never behavioral passes.
+7. Update plugin version metadata, manifests, README, and changelog.
+8. Route the complete diff through `implementation-review-swarm`; address or
+   explicitly reject findings and rerun affected proof.
+9. Use `implementation-pr-wrapup` to push/open/update the PR, monitor checks and
+   comments, verify review threads and mergeability, and report readiness.
+10. Do not merge.
+
+## Requirements/Proof Matrix
+
+| Requirement | Owner | Proof | Evidence source | Freshness guard |
+| --- | --- | --- | --- | --- |
+| R1-R4 scenario ownership and hidden rubric | S1 | unit schemas + live discovery | parent-run Vitest | tree and schema digest |
+| R5-R9 authentic repeated RED/GREEN | S2-S3 | integration + live ACPX smoke | repetition and pair receipts | model/prompt/fixture/source fingerprint |
+| R10-R14 minimal isolation | S2 | disposable repo integration | install and input receipt | repository and installed-file digest |
+| R15-R17 evidence and cleanup | S2-S3 | collector unit + process integration | tool/file/artifact/process facts | event and fixture digest |
+| R18-R22 parent/blind review and reduction | S4 | packet tests + calibrated result fixtures | review and reduction receipts | rubric/reviewer/result digest |
+| R23-R26 Vitest Evals runner | S5 | focused end-to-end eval | Vitest result artifacts | evaluator/config digest |
+| R27-R29 exact migration and cutover | S6 | 107-row accounting + absence checks | discovery/migration receipt | legacy/new tree digest |
+| PR-ready unmerged delivery | S7 | checks, review, threads, mergeability | GitHub PR state | current head SHA |
+
+## Validation Commands
+
+The final package should expose these stable commands:
+
+```bash
+pnpm --dir tests/test-utils/skill-pressure typecheck
+pnpm --dir tests/test-utils/skill-pressure test:unit
+pnpm --dir tests/test-utils/skill-pressure test:integration
+pnpm --dir tests/test-utils/skill-pressure test:behavior --scenario <id>
+pnpm --dir tests/test-utils/skill-pressure test:standard
+pnpm --dir tests/test-utils/skill-pressure test:high-risk
+pnpm --dir tests/test-utils/skill-pressure test:migration
+```
+
+Every command reports exit code and exact executed/passed/failed/inconclusive/
+infrastructure-error counts. Missing higher-layer proof prevents a completion
+claim.
+
+## Recovery And Stop Rules
+
+- Use the two-pass pruning order above. The parent reviews every deletion and
+  direct reference repair; pass 2 cannot start until retained imports no longer
+  point into `capability-probes/`.
+- Do not weaken or delete behavioral proof to make validation pass.
+- Provider unavailability is `infrastructure_error`; continue independent local
+  work and use bounded retries.
+- Stop for user input only if the revised behavioral contract changes again,
+  required provider access remains unavailable after bounded retries and no
+  independent work remains, or a home-cache/history/destructive action requires
+  authorization.
+- Final terminal remains PR-ready and unmerged.
