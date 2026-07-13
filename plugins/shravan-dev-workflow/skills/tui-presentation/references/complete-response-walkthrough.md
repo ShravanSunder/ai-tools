@@ -1,10 +1,7 @@
 Complete Response Walkthrough — TUI Presentation Reference
 ══════════════════════════════════════════════════════════════════════
 
-Load this file when it helps to see how the skill should actually be
-used in a real answer.  This is the "show me the form" reference: how
-title, framing, sections, shapes, cordoning, and closing synthesis fit
-together in one complete answer.
+Load this file when it helps to see how the skill should actually be used in a real answer.  This is the "show me the form" reference: how title, framing, sections, shapes, cordoning, and closing synthesis fit together in one complete answer.
 
 Use this file for:
 
@@ -17,18 +14,13 @@ Use this file for:
 For rules and specific mechanics, load:
 
   ▸ Per-shape geometry questions ──► shape-catalog.md
-  ▸ Indentation, overflow, alignment, or verification ──►
-    build-discipline.md
-  ▸ Specialized table / layout / architecture / sequence patterns ──►
-    peer reference files
+  ▸ Indentation, overflow, alignment, or verification ──► build-discipline.md
+  ▸ Specialized table / layout / architecture / sequence patterns ──► peer reference files
 
 
 ─── Golden example — a complete response ─────────────────────────────
 
-One holistic example of what a full TUI response looks like.  Shows
-title, framing, multiple sections, multiple shapes, cordoning, and
-closing synthesis — all composed.  Use as a template: swap the
-content, keep the structure.
+One holistic example of what a full TUI response looks like.  Shows title, framing, multiple sections, multiple shapes, cordoning, and closing synthesis — all composed.  Use as a template: swap the content, keep the structure.
 
 ```
 How we're handling the cache-invalidation race
@@ -98,10 +90,6 @@ What the example teaches:
 
   ▸ Closing "My read" synthesis — prose paragraph, not a frame
 
-Important — the title is YOUR response's topic, not the skill's name.
-Never emit "TUI Presentation" as a title — that's the skill file's
-own H1, not a template for the response's opening line.
+Important — the title is YOUR response's topic, not the skill's name. Never emit "TUI Presentation" as a title — that's the skill file's own H1, not a template for the response's opening line.
 
-  Wrong:  response begins with "TUI Presentation\n═══════..."
-  Right:  response begins with the actual topic, e.g.
-          "How we're handling the cache-invalidation race\n═══════..."
+  Wrong:  response begins with "TUI Presentation\n═══════..." Right:  response begins with the actual topic, e.g. "How we're handling the cache-invalidation race\n═══════..."

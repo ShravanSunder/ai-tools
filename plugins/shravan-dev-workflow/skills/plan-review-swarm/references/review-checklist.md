@@ -27,14 +27,10 @@ Load this for large, risky, stale, or implementation-facing plans.
 
 ## Security Context
 
-- Threat model exists when the plan touches auth, parsing, filesystem, network,
-  secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies,
-  agents, or external services.
-- Entry points, untrusted inputs, trust boundaries, sensitive data, privileged
-  actions, invariants, and non-goals are explicit.
+- Threat model exists when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
+- Entry points, untrusted inputs, trust boundaries, sensitive data, privileged actions, invariants, and non-goals are explicit.
 - Security validation proves behavior, not only "reviewed for security".
-- If the user requested a scan or audit, route to `ops-security-review`
-  instead of treating the normal review lane as exhaustive.
+- If the user requested a scan or audit, route to `ops-security-review` instead of treating the normal review lane as exhaustive.
 
 ## Adversarial Questions
 

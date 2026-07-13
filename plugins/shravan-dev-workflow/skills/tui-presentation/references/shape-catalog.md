@@ -1,16 +1,12 @@
 Shape Catalog — TUI Presentation Reference
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for the seven TUI shapes plus six compositional
-applications.  Load when you need worked examples, shape selection
-guidance, or anti-pattern recognition.
+Deep-dive reference for the seven TUI shapes plus six compositional applications.  Load when you need worked examples, shape selection guidance, or anti-pattern recognition.
 
 See also:
 
-  ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-    picker (quick reference)
-  ▸ build-discipline.md — mechanics (build procedure, alignment
-    recipes, indentation recipes, overflow, verification checklist)
+  ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary picker (quick reference)
+  ▸ build-discipline.md — mechanics (build procedure, alignment recipes, indentation recipes, overflow, verification checklist)
 
 Peer reference map (per shape — for deeper variants of the pattern):
 
@@ -27,8 +23,7 @@ All examples below use canvas width 70 unless noted.
 
 ─── Shape catalog — full worked examples ────────────────────────────
 
-Each shape with a realistic worked example, commentary on geometry
-choices, and notes on when NOT to use it.
+Each shape with a realistic worked example, commentary on geometry choices, and notes on when NOT to use it.
 
 
 ─── Shape 1 — Framed card (titled) ──────────────────────────────────
@@ -56,20 +51,15 @@ choices, and notes on when NOT to use it.
 
 Geometry choices:
 
-  ▸ Title lives inside the top border: `┌─ Title ─...─┐`.  Two fixed
-    `─` chars before the title, one space, title, one space, fill `─`
-    to column 69, then `┐` at column 70.
+  ▸ Title lives inside the top border: `┌─ Title ─...─┐`.  Two fixed `─` chars before the title, one space, title, one space, fill `─` to column 69, then `┐` at column 70.
 
-  ▸ Content rows: `│ ` at col 0 + space + 2 indent + content, padded
-    to col 69, `│` at col 70.
+  ▸ Content rows: `│ ` at col 0 + space + 2 indent + content, padded to col 69, `│` at col 70.
 
   ▸ Blank row after `┌─┐` and before `└─┘` for breathing.
 
-  ▸ Items use `✓` / `✗` markers as bullets — they carry meaning
-    (in-scope / out-of-scope).
+  ▸ Items use `✓` / `✗` markers as bullets — they carry meaning (in-scope / out-of-scope).
 
-  ▸ Each item: marker + title line, continuation prose hang-indented
-    under the title text (4 spaces).
+  ▸ Each item: marker + title line, continuation prose hang-indented under the title text (4 spaces).
 
   ▸ Blank line between items inside the frame.
 
@@ -84,8 +74,7 @@ Don't use when:
   ▸ Content is a diagram (use a specific shape instead)
   ▸ Body is only 1-2 short lines (prose is lighter and works)
 
-  ▸ Several parallel concepts deserve equal billing (use sub-framed
-    grid)
+  ▸ Several parallel concepts deserve equal billing (use sub-framed grid)
 
 ─── Shape 2 — Sub-framed grid ───────────────────────────────────────
 
@@ -117,15 +106,11 @@ Geometry choices:
   ▸ Parent frame canvas width: 70.
   ▸ Inner content width: 68 (70 minus two │ borders).
 
-  ▸ Two sub-frames across in the first row: each 20 wide + 8 gap
-    between + 2 left padding + 2 right padding = 52.  Remaining 16
-    cols are outer gutter padding inside the parent.
+  ▸ Two sub-frames across in the first row: each 20 wide + 8 gap between + 2 left padding + 2 right padding = 52.  Remaining 16 cols are outer gutter padding inside the parent.
 
-  ▸ Third sub-frame spans wider (54) for longer content — allowed
-    because it's a standalone row.
+  ▸ Third sub-frame spans wider (54) for longer content — allowed because it's a standalone row.
 
-  ▸ Sub-frame borders are ┌─┐ matching the parent style (single
-    borders consistent).
+  ▸ Sub-frame borders are ┌─┐ matching the parent style (single borders consistent).
 
   ▸ Blank rows inside parent frame around each sub-row.
 
@@ -174,11 +159,9 @@ Geometry choices:
 
   ▸ No frame borders — the cards are separated by ──── rules only.
 
-  ▸ Each card has the same field structure: #:, Concern:, Where:,
-    Why it matters:.
+  ▸ Each card has the same field structure: #:, Concern:, Where:, Why it matters:.
 
-  ▸ Field labels align on the left; values follow the `:` on the
-    same line.
+  ▸ Field labels align on the left; values follow the `:` on the same line.
 
   ▸ Multi-line values hang-indent 2 spaces from the label column.
   ▸ Separator rule width matches the canvas (here 68).
@@ -225,8 +208,7 @@ Geometry choices:
   ▸ Row groups (model: / registry: / view:) separated by blank lines.
   ▸ Embedded callout ◄── too eager rides on the data line, inline.
 
-  ▸ The third column can extend downward with longer prose —
-    unbounded because no │ constrains it.
+  ▸ The third column can extend downward with longer prose — unbounded because no │ constrains it.
 
 Use when:
 
@@ -277,8 +259,7 @@ Geometry choices:
   ▸ Step 3 and Step 5 have sub-items inside the same step —
     indented 5 spaces from the │, with ──► arrows aligning substeps.
 
-  ▸ No blank row after ┌─┐ or before └─┘ here because the dividers
-    already provide visual separation.
+  ▸ No blank row after ┌─┐ or before └─┘ here because the dividers already provide visual separation.
 
 Use when:
 
@@ -320,14 +301,12 @@ Geometry choices:
 
   ▸ State boxes all 14 wide for visual rhythm.
 
-  ▸ Main flow down the right column (no slot ──► LIVE ──► ORPHANED ──►
-    RETIRED).
+  ▸ Main flow down the right column (no slot ──► LIVE ──► ORPHANED ──► RETIRED).
 
   ▸ Re-entry arm on the left — back to `no slot` via `finalize`.
   ▸ Arrow labels ride on the arrow line.
 
-  ▸ The re-entry arm uses │ ▲ at the left margin and connects at
-    the bottom.
+  ▸ The re-entry arm uses │ ▲ at the left margin and connects at the bottom.
 
   ▸ Long labels hang-indent under the main label.
 
@@ -357,14 +336,12 @@ aac6cdd  docs(arch): feature-slice self-containment
 
 Geometry choices:
 
-  ▸ Fixed-width first column (7-char SHA), then two spaces, then
-    variable-width subject.
+  ▸ Fixed-width first column (7-char SHA), then two spaces, then variable-width subject.
 
   ▸ No borders, no rules.
   ▸ Left-aligned throughout.
 
-  ▸ Two-space column gap (not one, not three) — the tight-but-
-    readable standard.
+  ▸ Two-space column gap (not one, not three) — the tight-but- readable standard.
 
 Use when:
 
@@ -381,9 +358,7 @@ Don't use when:
 
 ─── Shape anti-patterns ─────────────────────────────────────────────
 
-The #1 TUI failure mode: cramming multiple concerns into one giant
-frame.  One shape per block.  One shape per content type.  Split
-across sections.
+The #1 TUI failure mode: cramming multiple concerns into one giant frame.  One shape per block.  One shape per content type.  Split across sections.
 
 WRONG — everything crammed into one ╔═╗ box:
 
@@ -406,9 +381,7 @@ WRONG — everything crammed into one ╔═╗ box:
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-Problems: double borders misused for non-focal content; markdown
-pipe-table inside the frame; comparison + flow + synthesis
-crammed together; reader can't parse what's what.
+Problems: double borders misused for non-focal content; markdown pipe-table inside the frame; comparison + flow + synthesis crammed together; reader can't parse what's what.
 
 RIGHT — split into sections, each with an appropriate shape:
 
@@ -437,22 +410,17 @@ Option B — flexibility matters more than implementation cost here.
 ```
 
 Three concerns ──► three sections ──► three shapes.  Comparison uses
-column-ruled (parallel data).  Flow uses pipeline box (sequential
-steps).  Synthesis uses prose (single-paragraph conclusion).  One
-shape per block.  One heading per section.
+column-ruled (parallel data).  Flow uses pipeline box (sequential steps).  Synthesis uses prose (single-paragraph conclusion).  One shape per block.  One heading per section.
 
 
 ─── Shape variants and applications ─────────────────────────────────
 
-Three worked examples of shapes applied to specific real-world
-layouts.  These aren't new shapes — they're compositional patterns
-built from the vocabulary above.
+Three worked examples of shapes applied to specific real-world layouts.  These aren't new shapes — they're compositional patterns built from the vocabulary above.
 
 
 ─── Shape 2 variant — phase-sequence layout ─────────────────────────
 
-A sub-framed grid tuned for phased/sequential work: horizontal sub-
-frames labeled above each, connector prose below showing dependencies.
+A sub-framed grid tuned for phased/sequential work: horizontal sub- frames labeled above each, connector prose below showing dependencies.
 
 ```
          PHASE 1                    PHASE 2                    PHASE 3
@@ -488,21 +456,16 @@ frames labeled above each, connector prose below showing dependencies.
 
 Geometry choices:
 
-  ▸ Phase labels sit above each sub-frame as prose ("PHASE 1"), not
-    inside.  Keeps the frame reserved for the goal/content.
+  ▸ Phase labels sit above each sub-frame as prose ("PHASE 1"), not inside.  Keeps the frame reserved for the goal/content.
 
   ▸ Sub-frames are all the same width (24 inner, 26 outer) for rhythm.
   ▸ 2-char gap between sub-frames ("  " between `┐` and `┌`).
 
-  ▸ Each sub-frame has Goal / Visible / Files as labeled sections
-    separated by blank rows.
+  ▸ Each sub-frame has Goal / Visible / Files as labeled sections separated by blank rows.
 
-  ▸ Connector line below: `│` emerges from each frame's bottom
-    center (via `└───┬────┘`), then joins into prose explaining
-    dependencies.
+  ▸ Connector line below: `│` emerges from each frame's bottom center (via `└───┬────┘`), then joins into prose explaining dependencies.
 
-  ▸ Dependencies stated as prose — not drawn with arrow geometry —
-    because they're complex and narrative-worthy.
+  ▸ Dependencies stated as prose — not drawn with arrow geometry — because they're complex and narrative-worthy.
 
 Use when:
 
@@ -512,18 +475,14 @@ Use when:
 
 Don't use when:
 
-  ▸ Phases aren't truly parallel in structure (use separate framed
-    cards, one per phase)
+  ▸ Phases aren't truly parallel in structure (use separate framed cards, one per phase)
 
-  ▸ More than 3-4 phases (canvas 70 can't fit wider grids; stack
-    vertically instead)
+  ▸ More than 3-4 phases (canvas 70 can't fit wider grids; stack vertically instead)
 
 
 ─── Shape 1 application — Q&A rationale frames ──────────────────────
 
-A series of framed cards where each card answers one "why this / why
-not that" question.  Scales to multiple alternatives without nesting
-and without forcing a comparison table.
+A series of framed cards where each card answers one "why this / why not that" question.  Scales to multiple alternatives without nesting and without forcing a comparison table.
 
 ```
 ┌─ Why not 2 phases (combine A+B) ────────────────────────────────────┐
@@ -565,17 +524,13 @@ and without forcing a comparison table.
 
 Geometry choices:
 
-  ▸ Each question gets its own standalone framed card — not stacked
-    inside a parent frame.
+  ▸ Each question gets its own standalone framed card — not stacked inside a parent frame.
 
-  ▸ Title phrased as the question itself ("Why not X", "Why include
-    Y") — the frame's top IS the question.
+  ▸ Title phrased as the question itself ("Why not X", "Why include Y") — the frame's top IS the question.
 
-  ▸ Body is prose reasoning, typically 2-4 paragraphs separated by
-    blank lines inside the frame.
+  ▸ Body is prose reasoning, typically 2-4 paragraphs separated by blank lines inside the frame.
 
-  ▸ Blank line BETWEEN cards (outside them) — each card is a
-    distinct answer.
+  ▸ Blank line BETWEEN cards (outside them) — each card is a distinct answer.
 
   ▸ No numbering needed; cards stand on their own.
 
@@ -594,10 +549,7 @@ Don't use when:
 
 ─── Shape 1 application — review findings with severity ─────────────
 
-Review findings (HIGH / MEDIUM / LOW severity) are a specific
-application of framed cards.  Each finding is a framed card with
-the severity tag in the frame title.  Reader scans severity badges
-down the left margin to triage at a glance.
+Review findings (HIGH / MEDIUM / LOW severity) are a specific application of framed cards.  Each finding is a framed card with the severity tag in the frame title.  Reader scans severity badges down the left margin to triage at a glance.
 
 ```
 ┌─ [HIGH] Surface handoff race during mode switch ────────────────────┐
@@ -661,21 +613,13 @@ observed without being mutated.
 
 Geometry choices:
 
-  ▸ Severity bracketed tag is the FIRST element of the frame title:
-    `┌─ [HIGH] Title ─...─┐`.  Reader sees badge immediately when
-    scanning from the left margin.
+  ▸ Severity bracketed tag is the FIRST element of the frame title: `┌─ [HIGH] Title ─...─┐`.  Reader sees badge immediately when scanning from the left margin.
 
-  ▸ Each finding's body starts with a "Location:" field pointing at
-    the affected file/function.  Then prose explanation.  Then an
-    embedded flow diagram if useful (indented under a label line,
-    per the cordoning rule).
+  ▸ Each finding's body starts with a "Location:" field pointing at the affected file/function.  Then prose explanation.  Then an embedded flow diagram if useful (indented under a label line, per the cordoning rule).
 
-  ▸ Proposed fixes live OUTSIDE the finding frame — below it,
-    shown as fenced code blocks with a prose lead-in.  Fixes are
-    NOT part of the finding itself.
+  ▸ Proposed fixes live OUTSIDE the finding frame — below it, shown as fenced code blocks with a prose lead-in.  Fixes are NOT part of the finding itself.
 
-  ▸ Blank line between findings.  Findings are independent — one
-    can be accepted without the other.
+  ▸ Blank line between findings.  Findings are independent — one can be accepted without the other.
 
 Use when:
 
@@ -689,17 +633,12 @@ Don't use when:
   ▸ All findings are equal severity — use ruled cards instead
   ▸ Only 1 finding — use a plain framed card
 
-  ▸ Findings cross-reference each other heavily — consider a
-    combined state/relationship diagram
+  ▸ Findings cross-reference each other heavily — consider a combined state/relationship diagram
 
 
 ─── Shape 1 application — dual-tag title band ───────────────────────
 
-A framed card whose title band carries TWO tags: identifier on the
-LEFT and status on the RIGHT, with description in the middle.  `─`
-characters fill the space between.  Used for triage dashboards,
-resolution summaries, task trackers — anywhere items need both
-stable identity and current state, both visible at a glance.
+A framed card whose title band carries TWO tags: identifier on the LEFT and status on the RIGHT, with description in the middle.  `─` characters fill the space between.  Used for triage dashboards, resolution summaries, task trackers — anywhere items need both stable identity and current state, both visible at a glance.
 
 ```
 ┌─ F1: sidebarCollapsed dual-write ──────────────────────── RESOLVED ─┐
@@ -745,56 +684,40 @@ stable identity and current state, both visible at a glance.
 
 Layout and spacing notes:
 
-  ▸ Every card is the SAME canvas width.  RESOLVED / DEFERRED land
-    at the same column across all cards, so the reader's eye can
-    scan the right margin vertically to see status distribution.
+  ▸ Every card is the SAME canvas width.  RESOLVED / DEFERRED land at the same column across all cards, so the reader's eye can scan the right margin vertically to see status distribution.
 
-  ▸ Every card uses the SAME indent (2 spaces from left │) and
-    SAME body width.  Vertical consistency makes the stack scannable.
+  ▸ Every card uses the SAME indent (2 spaces from left │) and SAME body width.  Vertical consistency makes the stack scannable.
 
-  ▸ Title format: `┌─ ID: Title ─...──── STATUS ─┐` — the `─` chars
-    fill the middle to reach canvas width.  Single space before and
-    after STATUS to keep it visually distinct from the fill dashes.
+  ▸ Title format: `┌─ ID: Title ─...──── STATUS ─┐` — the `─` chars fill the middle to reach canvas width.  Single space before and after STATUS to keep it visually distinct from the fill dashes.
 
   ▸ One blank row at top AND bottom inside each frame for breathing.
   ▸ Blank line BETWEEN cards — each is a distinct answer.
 
-  ▸ When body has sub-lists (see F3's task list), blank rows
-    separate semantic groups within the body.
+  ▸ When body has sub-lists (see F3's task list), blank rows separate semantic groups within the body.
 
 Use when:
 
-  ▸ Triage reports: findings with stable ID + closed-vocab status
-    (RESOLVED / DEFERRED / PENDING / BLOCKED / WONTFIX)
+  ▸ Triage reports: findings with stable ID + closed-vocab status (RESOLVED / DEFERRED / PENDING / BLOCKED / WONTFIX)
 
   ▸ Task dashboards (TODO / IN-PROGRESS / DONE / BLOCKED)
   ▸ Iteration summaries: "here's where we landed on each concern"
 
-  ▸ Any review response where items previously raised have now been
-    categorized
+  ▸ Any review response where items previously raised have now been categorized
 
 Don't use when:
 
-  ▸ All items share one status (drop the right tag — plain framed
-    card is enough)
+  ▸ All items share one status (drop the right tag — plain framed card is enough)
 
-  ▸ Status vocabulary is large or open-ended (more than ~6 values)
-    — use a table with a status column instead
+  ▸ Status vocabulary is large or open-ended (more than ~6 values) — use a table with a status column instead
 
-  ▸ Items need cross-referencing or relational structure — use a
-    table or state diagram
+  ▸ Items need cross-referencing or relational structure — use a table or state diagram
 
 
 ─── Shape 1 application — scope inventory with subsections ─────────
 
-A framed card whose body contains multiple NAMED subsections,
-each labeled in UPPERCASE with a `─` underline matching label
-width.  Used for phase plans, ticket scopes, component specs,
-API contracts — any concept with multiple distinct facets that
-all belong together under one named scope.
+A framed card whose body contains multiple NAMED subsections, each labeled in UPPERCASE with a `─` underline matching label width.  Used for phase plans, ticket scopes, component specs, API contracts — any concept with multiple distinct facets that all belong together under one named scope.
 
-File-tree inventory (documented below) is the most common content
-type for the IN SCOPE / NOT IN SCOPE subsections.
+File-tree inventory (documented below) is the most common content type for the IN SCOPE / NOT IN SCOPE subsections.
 
 ```
 ┌─ PHASE 1 — Sidebar Composition Foundation ─────────────────────────┐
@@ -859,29 +782,19 @@ type for the IN SCOPE / NOT IN SCOPE subsections.
 
 Layout and spacing notes:
 
-  ▸ Outer frame title names the scope: "PHASE 1 — Title" for phased
-    plans, "Ticket LUNA-361" for ticket bodies, "Component: Name"
-    for specs.
+  ▸ Outer frame title names the scope: "PHASE 1 — Title" for phased plans, "Ticket LUNA-361" for ticket bodies, "Component: Name" for specs.
 
-  ▸ Subsection label: UPPERCASE, 2-space indent from left │.  Under-
-    line: `─` characters at same indent, matching label width exactly.
+  ▸ Subsection label: UPPERCASE, 2-space indent from left │.  Under- line: `─` characters at same indent, matching label width exactly.
 
-  ▸ Blank row BEFORE every subsection label (inside the frame) —
-    separates this subsection visually from the previous one.
+  ▸ Blank row BEFORE every subsection label (inside the frame) — separates this subsection visually from the previous one.
 
-  ▸ Blank row AFTER every underline before content begins — gives
-    the label its own visual space before the reader drops into
-    content.
+  ▸ Blank row AFTER every underline before content begins — gives the label its own visual space before the reader drops into content.
 
-  ▸ Content width: 2-space indent from left │ for top-level content,
-    +2 per nesting level (so 4 for files under paths, 6 for members
-    under files).
+  ▸ Content width: 2-space indent from left │ for top-level content, +2 per nesting level (so 4 for files under paths, 6 for members under files).
 
-  ▸ End of each subsection: blank row before the next label.  Every
-    subsection has top AND bottom breathing.
+  ▸ End of each subsection: blank row before the next label.  Every subsection has top AND bottom breathing.
 
-Common subsection labels (vocabulary guide — keep to a small set
-per response so the reader builds muscle memory):
+Common subsection labels (vocabulary guide — keep to a small set per response so the reader builds muscle memory):
 
   ▸ IN SCOPE / EXPLICITLY NOT IN SCOPE  — plan and ticket structure
   ▸ DEPENDS ON / EXPOSES                — phased work contracts
@@ -892,29 +805,23 @@ per response so the reader builds muscle memory):
 
 Use when:
 
-  ▸ Multi-faceted concept where each facet deserves its own named
-    structural region
+  ▸ Multi-faceted concept where each facet deserves its own named structural region
 
   ▸ Plans, scopes, specifications, ticket bodies, API contracts
 
-  ▸ Reader needs to jump straight to a specific facet (pass the
-    skim test: can each subsection label be spotted at a glance?)
+  ▸ Reader needs to jump straight to a specific facet (pass the skim test: can each subsection label be spotted at a glance?)
 
 Don't use when:
 
   ▸ Only one facet matters — use a plain framed card
   ▸ Facets are sequential steps — use a pipeline box
 
-  ▸ Facets are similar items to compare — use ruled cards or a
-    comparison table
+  ▸ Facets are similar items to compare — use ruled cards or a comparison table
 
 
 ─── Content pattern — file-tree inventory ───────────────────────────
 
-A structured way to list file and member changes — not a shape,
-a content pattern that lives inside a framed card (typically a
-scope-inventory's IN SCOPE subsection) or standalone in a PR
-summary.
+A structured way to list file and member changes — not a shape, a content pattern that lives inside a framed card (typically a scope-inventory's IN SCOPE subsection) or standalone in a PR summary.
 
 ```
 Core/Models/
@@ -953,27 +860,17 @@ Features/Sidebar/  →  Features/RepoExplorer/
 
 Layout and spacing notes:
 
-  ▸ Paths end with `/`.  Zero indent.  Blank line BETWEEN path groups
-    so the reader sees the tree's trunks at a glance.
+  ▸ Paths end with `/`.  Zero indent.  Blank line BETWEEN path groups so the reader sees the tree's trunks at a glance.
 
-  ▸ File names indented 2 spaces under the path.  File name, two
-    spaces, then mutation tag in brackets: `[NEW]` / `[MOD]` / `[DEL]`.
+  ▸ File names indented 2 spaces under the path.  File name, two spaces, then mutation tag in brackets: `[NEW]` / `[MOD]` / `[DEL]`.
 
-  ▸ Member changes indented 4 spaces under the file:
-      `+ addedMember`       (addition)
-      `- removedMember`     (deletion)
-      `mutatedMember`       (no prefix — just mentioning it changed)
+  ▸ Member changes indented 4 spaces under the file: `+ addedMember`       (addition) `- removedMember`     (deletion) `mutatedMember`       (no prefix — just mentioning it changed)
 
-  ▸ Short free-form descriptions live on a following indented line
-    under the file or member.  Wrap at the frame's content width.
+  ▸ Short free-form descriptions live on a following indented line under the file or member.  Wrap at the frame's content width.
 
-  ▸ Rename on the path line: `OldPath/ → NewPath/` with spaces
-    around `→`.  Member renames inside use the same `Old → New`
-    convention.
+  ▸ Rename on the path line: `OldPath/ → NewPath/` with spaces around `→`.  Member renames inside use the same `Old → New` convention.
 
-  ▸ Don't nest paths visually — each path starts at column 0 of
-    the content area regardless of file-system hierarchy depth.
-    Path names carry the hierarchy.
+  ▸ Don't nest paths visually — each path starts at column 0 of the content area regardless of file-system hierarchy depth. Path names carry the hierarchy.
 
 Mutation tag vocabulary (keep closed):
 
@@ -991,8 +888,7 @@ Use when:
 
 Don't use when:
 
-  ▸ Changes are content-level within a single file — use a diff
-    snippet instead
+  ▸ Changes are content-level within a single file — use a diff snippet instead
 
   ▸ You need line-level precision — use actual diff output
   ▸ The list is trivial (1-2 files) — just name them in prose

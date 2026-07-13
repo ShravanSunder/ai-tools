@@ -70,8 +70,7 @@ peekaboo see --app "MyApp" --json
 
 ### Snapshot-backed action resolves in the wrong app
 
-**Symptom**: `click --snapshot "$SNAPSHOT" --on elem_5` appears to target the
-wrong app or window.
+**Symptom**: `click --snapshot "$SNAPSHOT" --on elem_5` appears to target the wrong app or window.
 
 **Checks**:
 ```bash
@@ -87,8 +86,7 @@ jq '.data | {snapshot_id, app_name, window_title, windowContext}' "$UI_JSON"
 **Solutions**:
 - Recapture after focusing the intended app/window.
 - Inspect whether the saved snapshot preserved the expected app/window context.
-- Avoid adding `--app` to a click that already uses `--snapshot`; instead,
-  create a fresh snapshot for the correct target.
+- Avoid adding `--app` to a click that already uses `--snapshot`; instead, create a fresh snapshot for the correct target.
 
 ## Element Not Found
 
@@ -152,8 +150,7 @@ peekaboo see --app "PID:$PID" --json
 peekaboo press down down return
 ```
 
-When the target is a debug build without a stable bundle ID, PID targeting or
-keyboard navigation is often safer than fuzzy click targeting.
+When the target is a debug build without a stable bundle ID, PID targeting or keyboard navigation is often safer than fuzzy click targeting.
 
 ### Window in different Space
 
@@ -206,8 +203,7 @@ peekaboo bridge status
 # Restart Peekaboo.app if needed
 ```
 
-If this happens after the UI changed, recapture first. Retrying with stale
-element IDs often repeats the wrong action.
+If this happens after the UI changed, recapture first. Retrying with stale element IDs often repeats the wrong action.
 
 ### Bridge socket not found
 

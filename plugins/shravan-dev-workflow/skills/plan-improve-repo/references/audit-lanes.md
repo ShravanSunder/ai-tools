@@ -31,16 +31,12 @@ Return:
 ## Default Lanes
 
 - `correctness-behavior`: bugs, broken invariants, edge cases, contract drift.
-- `security-boundary`: auth, secrets, parsing, filesystem, network, subprocess,
-  plugin, MCP, CI, package-script, or agent trust-boundary issues.
+- `security-boundary`: auth, secrets, parsing, filesystem, network, subprocess, plugin, MCP, CI, package-script, or agent trust-boundary issues.
 - `tests-proof`: missing regression coverage, weak proof gates, brittle tests.
-- `architecture-maintainability`: ownership confusion, duplicated logic,
-  overgrown files, unstable abstractions.
-- `performance-reliability`: slow paths, retries, cleanup, partial failure,
-  concurrency, observability.
+- `architecture-maintainability`: ownership confusion, duplicated logic, overgrown files, unstable abstractions.
+- `performance-reliability`: slow paths, retries, cleanup, partial failure, concurrency, observability.
 - `dx-tooling`: confusing scripts, validation friction, generated output drift.
-- `docs-onboarding`: README/AGENTS/runbook drift that blocks future agents or
-  maintainers.
+- `docs-onboarding`: README/AGENTS/runbook drift that blocks future agents or maintainers.
 
 For small repos, run these locally instead of spawning every lane.
 
@@ -48,7 +44,5 @@ For small repos, run these locally instead of spawning every lane.
 
 - `quick`: run correctness, tests-proof, and one obvious project-specific lane.
 - `deep`: run all lanes that match the repo.
-- `focus`: run only the requested lane plus correctness or tests-proof if they
-  are needed to prove the result.
-- `branch`: audit changed files first, then inspect adjacent tests and ownership
-  boundaries.
+- `focus`: run only the requested lane plus correctness or tests-proof if they are needed to prove the result.
+- `branch`: audit changed files first, then inspect adjacent tests and ownership boundaries.

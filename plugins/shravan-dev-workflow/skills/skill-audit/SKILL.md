@@ -13,16 +13,7 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 - Recommend new skills only for repeated workflows with stable inputs, a repeatable procedure, and a clear output.
 - Keep recommendations narrow. Do not turn themes into vague mega-skills.
 - Separate create, update, merge, and skip.
-- For update/create recommendations, include the trigger and ownership fit, the
-  compact `SKILL.md` boundary, whether depth belongs in `references/`, whether
-  deterministic mechanics belong in `scripts/`, and the pressure-coverage
-  status: exists, update needed, new scenario needed, or explicitly not needed.
-  This applies to tentative recommendations too. If evidence is insufficient,
-  say no update/create recommendation is being made yet instead of naming a
-  likely update path without its shape and proof. Avoid phrases like `likely
-  update`, `probably create`, or `candidate update` unless the recommendation
-  includes the required `SKILL.md`, `references/`, `scripts/`, and pressure
-  coverage labels.
+- For update/create recommendations, include the trigger and ownership fit, the compact `SKILL.md` boundary, whether depth belongs in `references/`, whether deterministic mechanics belong in `scripts/`, and the pressure-coverage status: exists, update needed, new scenario needed, or explicitly not needed. This applies to tentative recommendations too. If evidence is insufficient, say no update/create recommendation is being made yet instead of naming a likely update path without its shape and proof. Avoid phrases like `likely update`, `probably create`, or `candidate update` unless the recommendation includes the required `SKILL.md`, `references/`, `scripts/`, and pressure coverage labels.
 - Use source inspirations as best-practice inputs, not text to copy wholesale.
 
 ## Workflow
@@ -49,12 +40,9 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 5. Shape every update/create recommendation:
    - trigger and ownership fit
    - `SKILL.md`: what stays in the compact core instructions
-   - `references/`: what deeper detail, examples, rubrics, or templates move out
-     of the core instructions
-   - `scripts/`: what deterministic mechanics belong in scripts, or `not
-     needed`
-   - pressure coverage: exists, reuse, update, new scenario needed, or not
-     needed with reason
+   - `references/`: what deeper detail, examples, rubrics, or templates move out of the core instructions
+   - `scripts/`: what deterministic mechanics belong in scripts, or `not needed`
+   - pressure coverage: exists, reuse, update, new scenario needed, or not needed with reason
 6. Produce the audit:
    - candidate name
    - evidence and dates when available
@@ -68,32 +56,20 @@ Audit real workflows before creating skills. Skills encode judgment and house st
 
 When auditing `shravan-dev-workflow`, check `../../docs/source-inspiration-catalog.md` for the concise plugin-level map of admired skills and borrowed mechanics.
 
-When auditing swarm lane packet duplication, keep runtime packet contracts
-skill-local. Do not create or preserve a global shared lane-contract reference
-for workflow skills. Each workflow skill owns its packet anatomy, source-truth
-rules, security context, receipts, parent reducer rules, lane names,
-route-backs, proof details, statuses, and examples.
+When auditing swarm lane packet duplication, keep runtime packet contracts skill-local. Do not create or preserve a global shared lane-contract reference for workflow skills. Each workflow skill owns its packet anatomy, source-truth rules, security context, receipts, parent reducer rules, lane names, route-backs, proof details, statuses, and examples.
 
-Shared authoring lessons belong in meta skills or authoring references, not in
-runtime workflow skills. Runtime skills should load only the packet and lane
-references needed for their phase.
+Shared authoring lessons belong in meta skills or authoring references, not in runtime workflow skills. Runtime skills should load only the packet and lane references needed for their phase.
 
 Do not add per-skill provenance docs unless a skill needs a task-specific reference file for progressive disclosure.
 
 ## Failure Shields
 
-- New skill recommendations require recurrence that is clearly likely and
-  costly.
-- Existing skills are the preferred home when tighter wording can prevent the
-  observed failure mode.
-- Upstream inspiration belongs in the audit only with the local behavior it
-  improves.
-- Marketplace or agent-instruction edits belong in scope when the audit finds
-  concrete drift there.
-- Update/create recommendations include the compact `SKILL.md` boundary,
-  reference depth, script need, and pressure-proof status.
-- Audit output remains read-only until the user explicitly asks to implement a
-  narrow recommendation.
+- New skill recommendations require recurrence that is clearly likely and costly.
+- Existing skills are the preferred home when tighter wording can prevent the observed failure mode.
+- Upstream inspiration belongs in the audit only with the local behavior it improves.
+- Marketplace or agent-instruction edits belong in scope when the audit finds concrete drift there.
+- Update/create recommendations include the compact `SKILL.md` boundary, reference depth, script need, and pressure-proof status.
+- Audit output remains read-only until the user explicitly asks to implement a narrow recommendation.
 
 ## Output Shape
 
@@ -103,9 +79,7 @@ Return:
 - suggested updates
 - suggested new skills
 - deliberate skips
-- progressive shape and pressure-coverage recommendation for each update/create,
-  using `SKILL.md`, `references/`, `scripts/`, and pressure coverage labels
+- progressive shape and pressure-coverage recommendation for each update/create, using `SKILL.md`, `references/`, `scripts/`, and pressure coverage labels
 - source inspirations used
 - priority order
-- full clickable artifact links (absolute path + line) for any audit artifacts
-  or referenced files the human is expected to open
+- full clickable artifact links (absolute path + line) for any audit artifacts or referenced files the human is expected to open

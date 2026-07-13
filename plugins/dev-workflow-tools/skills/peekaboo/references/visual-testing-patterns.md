@@ -20,19 +20,13 @@ jq '.data.ui_elements[] | {id, label, role: .role_description}' "$UI_JSON"
 peekaboo click --snapshot "$SNAPSHOT" --on elem_5 --json
 ```
 
-Element IDs are snapshot-specific. If the UI changes, capture again before
-using the next `elem_*` ID. For a snapshot-backed click, pass `--snapshot` and
-the element ID; do not add `--app` to that click. The snapshot already carries
-the app/window context needed for stable targeting.
+Element IDs are snapshot-specific. If the UI changes, capture again before using the next `elem_*` ID. For a snapshot-backed click, pass `--snapshot` and the element ID; do not add `--app` to that click. The snapshot already carries the app/window context needed for stable targeting.
 
-For multi-window apps, select a specific `--window-id` or `--window-title`, or
-focus that window explicitly before capture. Use private per-run temp files for
-UI JSON because captures can include window titles and text.
+For multi-window apps, select a specific `--window-id` or `--window-title`, or focus that window explicitly before capture. Use private per-run temp files for UI JSON because captures can include window titles and text.
 
 ## Input Path Probes
 
-Use input-path probes when a click appears to resolve the right element but the
-app does not respond as expected.
+Use input-path probes when a click appears to resolve the right element but the app does not respond as expected.
 
 ```bash
 umask 077
@@ -56,11 +50,9 @@ peekaboo click --on elem_20 --snapshot "$SNAPSHOT" --input-strategy synthOnly --
 Interpretation:
 
 - `actionOnly` success proves live AX re-resolution and action invocation.
-- `synthOnly` success proves coordinate resolution and event delivery; verify
-  app state independently.
+- `synthOnly` success proves coordinate resolution and event delivery; verify app state independently.
 - `perform-action AXPress` is the cleanest UIAX smoke test.
-- Coordinates cannot prove `actionOnly`; use coordinates only as a fallback when
-  Accessibility metadata is unavailable.
+- Coordinates cannot prove `actionOnly`; use coordinates only as a fallback when Accessibility metadata is unavailable.
 
 ## Before/After State Capture
 

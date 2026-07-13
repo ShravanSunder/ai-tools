@@ -9,18 +9,13 @@ Package actual implementation state so another agent can review, continue, or au
 
 ## Core Rules
 
-- Use only when implementation state exists: branch/diff/changed files,
-  commits, failed commands, validation evidence, blocker evidence, or
-  implementation risk.
+- Use only when implementation state exists: branch/diff/changed files, commits, failed commands, validation evidence, blocker evidence, or implementation risk.
 - If no implementation state exists, use `plan-handoff` instead.
-- Works at any implementation stage: `in-progress`, `pre-review`,
-  `post-review`, or `blocked`.
+- Works at any implementation stage: `in-progress`, `pre-review`, `post-review`, or `blocked`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/review-handoffs/<yyyy-mm-dd>-<repo>-<branch>-<slug>/`.
 - Always write a file artifact and also print the copy-paste prompt in the response.
 - Ground the handoff in current repo state: branch, diff, commits, changed files, validation commands, and known risks.
-- Include implementation proof: requirements/tasks claimed complete, commands
-  and exit codes, red/green evidence or exception, skipped layers, blockers,
-  and split/replan status.
+- Include implementation proof: requirements/tasks claimed complete, commands and exit codes, red/green evidence or exception, skipped layers, blockers, and split/replan status.
 - Preserve security state when the implementation touches sensitive surfaces: changed trust boundaries, fixed findings, unvalidated risks, security proofs, report paths, and accepted risks.
 - Separate proven facts from claims, guesses, and unfinished work.
 - Do not run reviewers automatically. This skill prepares the packet; `implementation-review-swarm` or a manual Claude/Gemini/Codex paste can consume it.
@@ -73,5 +68,4 @@ Package actual implementation state so another agent can review, continue, or au
 - Forgetting to print the copy-paste prompt in chat.
 - Asking the next agent to infer current state from branch name alone.
 - Omitting changed trust boundaries or unvalidated security risks from a handoff.
-- Omitting implementation proof and forcing the reviewer to reconstruct proof
-  from chat or branch state.
+- Omitting implementation proof and forcing the reviewer to reconstruct proof from chat or branch state.

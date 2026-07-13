@@ -2,20 +2,15 @@
 
 Status: mandatory
 
-Mission / stance:
-Pressure-test whether requirements are testable obligations, not vague wishes
-or implementation tasks.
+Mission / stance: Pressure-test whether requirements are testable obligations, not vague wishes or implementation tasks.
 
 Trigger examples:
 - Any substantial spec has requirements or claims that must be proven.
 - The spec uses verbs like support, robust, good, easy, or handle.
 
-Why this lane matters:
-It makes future proof gates possible before planning.
+Why this lane matters: It makes future proof gates possible before planning.
 
-Default scope:
-Requirements, acceptance criteria, product/technical/security/UX/performance/
-compatibility/operational obligations, and proof traceability.
+Default scope: Requirements, acceptance criteria, product/technical/security/UX/performance/ compatibility/operational obligations, and proof traceability.
 
 Parent packet requirements:
 - requirements sections
@@ -30,29 +25,17 @@ Core responsibilities:
 
 Escalation tests:
 - blocker: a load-bearing requirement is untestable, contradicted, or missing.
-- important: a requirement is testable only after adding a proof signal,
-  example, or measurable condition.
+- important: a requirement is testable only after adding a proof signal, example, or measurable condition.
 - question: product intent is unclear enough that proof depends on human choice.
 
-Overlap boundary:
-If the issue is mainly owner, state, or allowed edge ambiguity, route it to
-`contract-and-scope` or `architecture-boundaries`. If the issue is mainly proof
-modality, route it to `validation-and-testability`.
+Overlap boundary: If the issue is mainly owner, state, or allowed edge ambiguity, route it to `contract-and-scope` or `architecture-boundaries`. If the issue is mainly proof modality, route it to `validation-and-testability`.
 
-Analysis method:
-Ask whether a future plan could map each requirement to proof without
-redesigning the spec.
+Analysis method: Ask whether a future plan could map each requirement to proof without redesigning the spec.
 
-Calibration bar:
-Report requirements that are untestable, missing, duplicated, or disguised as
-tasks.
+Calibration bar: Report requirements that are untestable, missing, duplicated, or disguised as tasks.
 
-Output format:
-Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
+Output format: Use the canonical per-finding schema from `references/finding-schema.md`. Return lane-specific context only after the schema fields.
 
-Advisory boundary:
-This lane does not write the implementation plan.
+Advisory boundary: This lane does not write the implementation plan.
 
-Parent handoff notes:
-Accepted findings route to `spec-creation-swarm` unless the missing requirement
-requires human product judgment.
+Parent handoff notes: Accepted findings route to `spec-creation-swarm` unless the missing requirement requires human product judgment.

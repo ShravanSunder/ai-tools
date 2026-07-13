@@ -4,9 +4,7 @@ External model lanes give the reducer a different model family or tool runtime. 
 
 ## Agy / Gemini
 
-Use `agy` only when the user explicitly asks to include Gemini/agy or outside
-adversarial counsel. Prefer the latest Gemini Pro/High model exposed by
-`agy models`; record the actual model selected in swarm coverage.
+Use `agy` only when the user explicitly asks to include Gemini/agy or outside adversarial counsel. Prefer the latest Gemini Pro/High model exposed by `agy models`; record the actual model selected in swarm coverage.
 
 Before invoking:
 
@@ -27,9 +25,7 @@ Return findings only, with severity, evidence, scenario, smallest fix, proof,
 and confidence. If no findings, say "No findings."
 ```
 
-When the CLI supports stdin, pipe the prompt file into the process so the full
-review packet does not appear in process argv. Prefer an output file so stdout
-truncation or formatting bugs do not lose the review:
+When the CLI supports stdin, pipe the prompt file into the process so the full review packet does not appear in process argv. Prefer an output file so stdout truncation or formatting bugs do not lose the review:
 
 ```shell
 prompt_file="$(mktemp /tmp/shravan-dev-workflow-agy-prompt.XXXXXX)"
@@ -41,12 +37,7 @@ agy --print < "$prompt_file"
 cat "$output_file"
 ```
 
-If a specific model is selected from `agy models`, pass it without embedding the
-review packet in argv, for example `agy --model "$selected_model" --print <
-"$prompt_file"`. If no Gemini Pro/High model is available, run `agy` without a
-model override and record the actual model source in swarm coverage. If `agy` is
-missing, unauthenticated, noninteractive, or times out, record that as a skipped
-or failed external model lane and continue with available reviewer lanes.
+If a specific model is selected from `agy models`, pass it without embedding the review packet in argv, for example `agy --model "$selected_model" --print < "$prompt_file"`. If no Gemini Pro/High model is available, run `agy` without a model override and record the actual model source in swarm coverage. If `agy` is missing, unauthenticated, noninteractive, or times out, record that as a skipped or failed external model lane and continue with available reviewer lanes.
 
 ## Claude
 
@@ -76,9 +67,7 @@ printf '%s\n' "Return exactly: CLAUDE_HAIKU_HARNESS_OK" | claude --print \
   --output-format json
 ```
 
-Inspect `modelUsage` in the JSON result. Claude Code aliases can resolve to a
-different available model than the requested shorthand; record the actual model
-in swarm coverage when Claude is used.
+Inspect `modelUsage` in the JSON result. Claude Code aliases can resolve to a different available model than the requested shorthand; record the actual model in swarm coverage when Claude is used.
 
 Use the same shared packet and the same findings-only contract. Prefer piping the diff or review packet through stdin so Claude does not need filesystem tools. Do not use Claude as an implementation agent from this skill.
 

@@ -25,8 +25,7 @@ parent verification:
 
 ## Operator Decision
 
-An Operator that reaches work requiring judgment or authority sends this
-packet:
+An Operator that reaches work requiring judgment or authority sends this packet:
 
 ```text
 decision packet:

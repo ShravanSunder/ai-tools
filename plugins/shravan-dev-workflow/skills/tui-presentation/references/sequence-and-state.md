@@ -1,21 +1,15 @@
 Sequence and State Diagrams
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for time-ordered flows and state machines.  Use
-sequence diagrams when the STORY is "who talks to whom in what
-order."  Use state diagrams when the STORY is "what states exist
-and how do we transition between them."
+Deep-dive reference for time-ordered flows and state machines.  Use sequence diagrams when the STORY is "who talks to whom in what order."  Use state diagrams when the STORY is "what states exist and how do we transition between them."
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
   ▸ visual-family-selection.md — choose sequence vs. state before drawing
-  ▸ shape-catalog.md ──► Shape 6 (State diagram) — full state-machine
-    worked example with re-entry arm
-  ▸ build-discipline.md ──► Alignment recipes — positioning lifelines,
-    arrow landings, junction selection
-  ▸ architecture.md — pipeline with branches, pub/sub fan-out,
-    request roundtrip
+  ▸ shape-catalog.md ──► Shape 6 (State diagram) — full state-machine worked example with re-entry arm
+  ▸ build-discipline.md ──► Alignment recipes — positioning lifelines, arrow landings, junction selection
+  ▸ architecture.md — pipeline with branches, pub/sub fan-out, request roundtrip
 
 
 ─── Sequence (actors + lifelines + messages) ────────────────────────
@@ -31,8 +25,7 @@ Client          API           Auth          DB
   │◀── 201 ───── │             │             │
 ```
 
-Actors in a header row, vertical lifelines with │, horizontal
-messages with labeled arrows.  Time flows top to bottom.
+Actors in a header row, vertical lifelines with │, horizontal messages with labeled arrows.  Time flows top to bottom.
 
 Use sequence when participants matter.  Each message should answer:
 
@@ -41,8 +34,7 @@ Use sequence when participants matter.  Each message should answer:
   ▸ what is the message?
   ▸ what returns, retries, or fails?
 
-If a retry changes ownership, draw the retry as a real message, not a
-footnote.
+If a retry changes ownership, draw the retry as a real message, not a footnote.
 
 
 ─── State machine ───────────────────────────────────────────────────
@@ -58,8 +50,7 @@ footnote.
                        └────────┘
 ```
 
-Boxes are states.  Labeled arrows are transitions.  Return arrows
-(▲ │ └──) for cycles.
+Boxes are states.  Labeled arrows are transitions.  Return arrows (▲ │ └──) for cycles.
 
 Each state diagram should identify:
 
@@ -105,8 +96,7 @@ Diamond-like split via labeled branches.  Use ┬ ┴ for fork/merge.
   start          parsed         validated         stored
 ```
 
-Horizontal line of events (●) with timestamps above and labels
-below.
+Horizontal line of events (●) with timestamps above and labels below.
 
 
 ─── State variants table ────────────────────────────────────────────

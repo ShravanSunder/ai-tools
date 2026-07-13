@@ -67,11 +67,7 @@ Read-only context:
 ```text
 Use implementation-execute-plan on this plan.
 
-Repo: <absolute path>
-Plan: <absolute path>
-Start by validating the plan against current git state before editing files.
-Use bounded subagents only for independent slices. Parent owns integration and
-final proof.
+Repo: <absolute path> Plan: <absolute path> Start by validating the plan against current git state before editing files. Use bounded subagents only for independent slices. Parent owns integration and final proof.
 ```
 ```
 

@@ -4,8 +4,7 @@ Use this reference when preparing a Claude `/goal` prompt or copy-paste handoff.
 
 ## Semantics
 
-Claude goal evaluation is transcript-oriented. Phrase the goal so completion
-evidence is visible in the conversation:
+Claude goal evaluation is transcript-oriented. Phrase the goal so completion evidence is visible in the conversation:
 
 - commands run
 - exit codes
@@ -14,8 +13,7 @@ evidence is visible in the conversation:
 - artifacts written
 - blockers and proof
 
-Do not rely on hidden filesystem state or "I inspected it" claims without
-visible evidence.
+Do not rely on hidden filesystem state or "I inspected it" claims without visible evidence.
 
 ## Suggested Claude Goal Prompt
 
@@ -28,9 +26,7 @@ blocker with evidence instead of broadening scope.
 
 ## Harness Rule
 
-When Claude is invoked from this workflow, use the Claude Code CLI harness
-(`claude --print` or `claude -p`) or produce a manual copy-paste prompt. Do not
-route through Anthropic API calls for this plugin workflow.
+When Claude is invoked from this workflow, use the Claude Code CLI harness (`claude --print` or `claude -p`) or produce a manual copy-paste prompt. Do not route through Anthropic API calls for this plugin workflow.
 
 ## Goal Wording
 

@@ -1,22 +1,10 @@
 # Plan Creation Lane Packets
 
-Use this skill-local packet contract for subagent planning lanes. The parent
-owns the final implementation plan; subagents produce bounded evidence and
-candidate plan structure. This file owns plan-specific packet anatomy,
-source-truth handling, lane names, source classes, execution-DAG shaping,
-validation gates, proof matrix expectations, receipts, parent reducer rules,
-and split/replan triggers.
+Use this skill-local packet contract for subagent planning lanes. The parent owns the final implementation plan; subagents produce bounded evidence and candidate plan structure. This file owns plan-specific packet anatomy, source-truth handling, lane names, source classes, execution-DAG shaping, validation gates, proof matrix expectations, receipts, parent reducer rules, and split/replan triggers.
 
-Lane outputs are candidate evidence, not accepted plan truth, until parent
-synthesis verifies source anchors and accepts them into
-`implementation-plan.md`.
+Lane outputs are candidate evidence, not accepted plan truth, until parent synthesis verifies source anchors and accepts them into `implementation-plan.md`.
 
-For substantial plan creation, create inspectable stage artifacts unless the
-user asked for chat-only/no-files, the work is a single tiny local lane, or the
-tool surface cannot write artifacts. Substantial means any of: more than one
-lane/subagent, output consumed by another workflow or phase, high/xhigh or
-security-sensitive lanes, or findings/decisions/proof obligations that need
-later inspection. Record any exception in the parent receipt.
+For substantial plan creation, create inspectable stage artifacts unless the user asked for chat-only/no-files, the work is a single tiny local lane, or the tool surface cannot write artifacts. Substantial means any of: more than one lane/subagent, output consumed by another workflow or phase, high/xhigh or security-sensitive lanes, or findings/decisions/proof obligations that need later inspection. Record any exception in the parent receipt.
 
 Default artifact shape:
 
@@ -84,16 +72,11 @@ For substantial work, the parent `plan-ledger.md` records:
 - lane packets issued and lane artifact paths under `lanes/`
 - candidate evidence accepted, contested, rejected, deferred, or left open
 - accepted vertical slice cards and rejected horizontal/task-only decompositions
-- task sequence, write scopes, execution DAG, integration gates, validation
-  gates, requirements/proof matrix, and split/replan triggers accepted into
-  `implementation-plan.md`
-- route to `plan-review-swarm` for plan critique, then
-  `implementation-execute-plan` after accepted review feedback is folded in
-- completion receipt with source anchors, artifact paths, named exceptions, and
-  remaining uncertainty
+- task sequence, write scopes, execution DAG, integration gates, validation gates, requirements/proof matrix, and split/replan triggers accepted into `implementation-plan.md`
+- route to `plan-review-swarm` for plan critique, then `implementation-execute-plan` after accepted review feedback is folded in
+- completion receipt with source anchors, artifact paths, named exceptions, and remaining uncertainty
 
-Plan creation operationalizes an accepted spec. It does not redefine product
-intent or requirements, and it does not execute the plan.
+Plan creation operationalizes an accepted spec. It does not redefine product intent or requirements, and it does not execute the plan.
 
 ## Lane Overlays
 
@@ -101,48 +84,32 @@ intent or requirements, and it does not execute the plan.
 
 Load `references/lanes/codebase-boundary.md`.
 
-Focus on write surfaces, ownership boundaries, adjacent modules, likely conflict
-points, and disjoint lane feasibility. Return candidate task scopes with allowed
-write sets and integration touchpoints.
+Focus on write surfaces, ownership boundaries, adjacent modules, likely conflict points, and disjoint lane feasibility. Return candidate task scopes with allowed write sets and integration touchpoints.
 
 ### vertical-slice-decomposition
 
-Load `references/lanes/vertical-slice-decomposition.md`. Map source
-requirements into end-to-end work units that each have a clear behavior,
-allowed write surface, integration point, checkpoint, and proof gate. Return
-candidate slice cards, source anchors, dependencies, and split/replan triggers.
+Load `references/lanes/vertical-slice-decomposition.md`. Map source requirements into end-to-end work units that each have a clear behavior, allowed write surface, integration point, checkpoint, and proof gate. Return candidate slice cards, source anchors, dependencies, and split/replan triggers.
 
 ### validation-proof
 
 Load `references/lanes/validation-proof.md`.
 
-Map each material requirement to proof modality, proof layer, evidence source,
-freshness guard, and red/green need. Consider tests, manual UX validation,
-visual proof, data/DB/state checks, logs, traces, metrics, OTel queries, smoke,
-e2e, CI, PR, and release artifact proof. Return split/replan triggers for proof
-that is too large for a task.
+Map each material requirement to proof modality, proof layer, evidence source, freshness guard, and red/green need. Consider tests, manual UX validation, visual proof, data/DB/state checks, logs, traces, metrics, OTel queries, smoke, e2e, CI, PR, and release artifact proof. Return split/replan triggers for proof that is too large for a task.
 
 ### execution-order
 
 Load `references/lanes/execution-order.md`.
 
-Propose task order, dependencies, integration gates, parallel lanes, and parent
-validation points. The output should be an execution DAG candidate, not code
-steps. Reject ordering that separates a slice from the checkpoint and proof
-unit that proves it.
+Propose task order, dependencies, integration gates, parallel lanes, and parent validation points. The output should be an execution DAG candidate, not code steps. Reject ordering that separates a slice from the checkpoint and proof unit that proves it.
 
 ### security-reliability
 
 Load `references/lanes/security-reliability.md`.
 
-Check trust boundaries, secrets, permissions, filesystem/network/subprocess
-surfaces, plugin/MCP/agent boundaries, rollback, cleanup, races, partial
-failures, and observability needed to prove safe behavior.
+Check trust boundaries, secrets, permissions, filesystem/network/subprocess surfaces, plugin/MCP/agent boundaries, rollback, cleanup, races, partial failures, and observability needed to prove safe behavior.
 
 ### scope-and-proof-fit
 
 Load `references/lanes/scope-and-proof-fit.md`.
 
-Check whether task sizes, sequence, assumptions, and proof gates fit the
-accepted spec and approved scope. Reject slices that lack local end-to-end
-proof. Name simpler decompositions when they make proof clearer.
+Check whether task sizes, sequence, assumptions, and proof gates fit the accepted spec and approved scope. Reject slices that lack local end-to-end proof. Name simpler decompositions when they make proof clearer.

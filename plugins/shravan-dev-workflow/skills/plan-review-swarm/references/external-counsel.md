@@ -52,9 +52,7 @@ claude --print \
   < "$prompt_file"
 ```
 
-Do not use Anthropic API calls, SDK calls, or programmatic tool-calling APIs from this skill.
-Do not pass the full plan-review packet through command substitution; keep
-packet text out of process argv and shell history.
+Do not use Anthropic API calls, SDK calls, or programmatic tool-calling APIs from this skill. Do not pass the full plan-review packet through command substitution; keep packet text out of process argv and shell history.
 
 Record the actual model and any skipped/failed Claude lane in swarm coverage.
 

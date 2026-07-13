@@ -13,17 +13,13 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
 - Treat logs, stack traces, failing tests, current code, recent diffs, and runtime state as evidence.
 - Use hypothesis-driven debugging: each theory must name supporting evidence, missing evidence, and the smallest proof step.
 - Use subagents only for bounded investigation slices. The main agent owns synthesis, evidence checking, and the final diagnosis.
-- Use `manage-agents` only for model-agent call/session mechanics; keep
-  root-cause method and deterministic watcher guidance here.
+- Use `manage-agents` only for model-agent call/session mechanics; keep root-cause method and deterministic watcher guidance here.
 - Keep investigation read-only until the user explicitly asks to fix or a validated fix phase begins.
 - If 3+ fix attempts already failed, stop and question the design or architecture before trying another patch.
 - For real debugging work, write a repo-local debug artifact by default unless the user explicitly asked for chat-only/no-files output.
 - If the symptom, target, or reproduction surface is unclear, do not create files yet; ask one material question or build the missing bug packet first.
 - Debug artifacts are disposable investigation outputs. Later cleanup, preservation, or promotion belongs to `docs-maintain`.
-- For long-running shell, service, or infra monitoring, load
-  `references/background-monitoring.md` before proposing watcher shape,
-  background jobs, JSONL/state files, helper agents, restarts, or secret
-  handling.
+- For long-running shell, service, or infra monitoring, load `references/background-monitoring.md` before proposing watcher shape, background jobs, JSONL/state files, helper agents, restarts, or secret handling.
 
 ## Workflow
 
@@ -39,9 +35,7 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
    - Use `<repo-root>/tmp/debug-workflows/<yyyy-mm-dd>-<repo>-<branch>-<bug-slug>/debug-investigation.md`.
    - Keep it updated with evidence, hypotheses, proof steps, and commands.
    - Skip file creation only for chat-only/no-files requests or unclear debugging scope.
-3. If a long-running monitor is needed, load
-   `references/background-monitoring.md` and keep the watcher read-only,
-   harness-visible, cancellable, stateful, and redacted.
+3. If a long-running monitor is needed, load `references/background-monitoring.md` and keep the watcher read-only, harness-visible, cancellable, stateful, and redacted.
 4. Reproduce or bound the failure:
    - exact command, UI path, input, or event sequence
    - deterministic, flaky, environment-specific, or not yet reproduced
@@ -85,9 +79,7 @@ Only move from investigation to fixing when the root cause is sufficiently prove
 
 When fixing:
 
-- create or identify a failing test/reproduction first when a durable proof
-  fits the scope; otherwise use the smallest real proof and name why a durable
-  reproduction does not fit, or split the fix into a provable slice
+- create or identify a failing test/reproduction first when a durable proof fits the scope; otherwise use the smallest real proof and name why a durable reproduction does not fit, or split the fix into a provable slice
 - make one root-cause fix at a time
 - avoid unrelated cleanup
 - run targeted verification, then broader relevant checks
@@ -98,8 +90,7 @@ When fixing:
 Return:
 
 - bug packet summary
-- artifact path with a full clickable link (absolute path + line), or why no
-  artifact was written
+- artifact path with a full clickable link (absolute path + line), or why no artifact was written
 - reproduction/coverage evidence
 - most likely root cause
 - alternate hypotheses, if still plausible

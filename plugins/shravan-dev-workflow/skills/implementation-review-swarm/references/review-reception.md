@@ -6,5 +6,4 @@ The canonical review-reception guidance now lives at:
 ../../references/review-reception.md
 ```
 
-Load that shared reference before editing, replying to review comments, or
-closing PR threads.
+Load that shared reference before editing, replying to review comments, or closing PR threads.

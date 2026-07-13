@@ -76,8 +76,7 @@ the live plugin list reports 1.6.5 with the new skill visible.
 
 ## Default Implementation Terminal
 
-For implementation goals, the default implementation terminal is not a spec,
-plan, review report, or implementation-only checkpoint. It is:
+For implementation goals, the default implementation terminal is not a spec, plan, review report, or implementation-only checkpoint. It is:
 
 ```text
 PR created or updated and proven ready, implementation review findings
@@ -86,29 +85,20 @@ checks/review-thread/mergeability state reported, and merge not performed unless
 the user explicitly authorized it.
 ```
 
-Only the starting point is mutable. Existing artifacts decide the first
-unproven lifecycle gate:
+Only the starting point is mutable. Existing artifacts decide the first unproven lifecycle gate:
 
 - no accepted spec/design: start at `spec-creation-swarm` or `spec-review-swarm`
 - accepted spec/design but no plan: start at `plan-creation-swarm`
 - unreviewed plan: start at `plan-review-swarm`
 - reviewed plan but no implementation proof: start at `implementation-execute-plan`
-- implementation proof but unresolved implementation review: start at
-  `implementation-review-swarm`
+- implementation proof but unresolved implementation review: start at `implementation-review-swarm`
 - review addressed but no PR readiness proof: start at `implementation-pr-wrapup`
 
-This is the pr-ready non-merge boundary: `implementation-pr-wrapup` proves PR
-readiness and does not imply merge permission.
+This is the pr-ready non-merge boundary: `implementation-pr-wrapup` proves PR readiness and does not imply merge permission.
 
-The full proof loop should name the highest required proof layers from the goal:
-tests, type/lint/build, app/runtime behavior, screenshots or visual proof,
-manual verification, benchmarks, metrics, PR checks, review threads, or release
-artifacts. Do not let a lower proof layer silently stand in for a requested
-higher layer.
+The full proof loop should name the highest required proof layers from the goal: tests, type/lint/build, app/runtime behavior, screenshots or visual proof, manual verification, benchmarks, metrics, PR checks, review threads, or release artifacts. Do not let a lower proof layer silently stand in for a requested higher layer.
 
-Checkpoint commit guidance belongs in the goal when implementation is in scope:
-commit at verified lifecycle checkpoints when scoped files changed and repo
-policy permits; never stage unrelated files or use a commit as proof.
+Checkpoint commit guidance belongs in the goal when implementation is in scope: commit at verified lifecycle checkpoints when scoped files changed and repo policy permits; never stage unrelated files or use a commit as proof.
 
 ## Bad Goal Shape
 
@@ -118,8 +108,7 @@ Avoid goals that hide scope or proof:
 Make the workflow better.
 ```
 
-This does not name the expected state, allowed scope, validation, or stopping
-condition. Route it to `discuss-clarify-mental-models`.
+This does not name the expected state, allowed scope, validation, or stopping condition. Route it to `discuss-clarify-mental-models`.
 
 ## Required Files
 
@@ -130,13 +119,9 @@ Goal text must name the actual source files when they are known:
 - handoff packet
 - related source files or docs the next workflow must read
 
-Do not collapse known artifacts into vague wording like "the plan", "the docs",
-or "related files". Use repo-relative paths or absolute paths when portability
-requires them.
+Do not collapse known artifacts into vague wording like "the plan", "the docs", or "related files". Use repo-relative paths or absolute paths when portability requires them.
 
-Do not create `files.md` as a separate source of truth for key files. The
-critical spec, plan, review/report, and handoff paths stay in the goal text.
-Put secondary files and expanded context in `details.md`.
+Do not create `files.md` as a separate source of truth for key files. The critical spec, plan, review/report, and handoff paths stay in the goal text. Put secondary files and expanded context in `details.md`.
 
 ## Workflow State Files
 
@@ -147,11 +132,9 @@ tmp/workflow-state/<goal_id>/details.md
 tmp/workflow-state/<goal_id>/events.jsonl
 ```
 
-`details.md` owns expanded context: proof matrix, blockers, secondary files,
-accepted findings, phase recommendations, and stale-proof notes.
+`details.md` owns expanded context: proof matrix, blockers, secondary files, accepted findings, phase recommendations, and stale-proof notes.
 
-`events.jsonl` owns append-only transition history. Each official transition
-event is written by `orchestrator-goal`, not by a phase skill.
+`events.jsonl` owns append-only transition history. Each official transition event is written by `orchestrator-goal`, not by a phase skill.
 
 Minimum transition event fields:
 
@@ -169,19 +152,15 @@ Minimum transition event fields:
 
 Precedence rule:
 
-1. `/goal` owns scope, non-goals, required workflow skill, `goal_id`, and exact
-   key artifact paths.
-2. The latest valid orchestrator-written event in `events.jsonl` owns current
-   workflow, next workflow, and transition decision.
+1. `/goal` owns scope, non-goals, required workflow skill, `goal_id`, and exact key artifact paths.
+2. The latest valid orchestrator-written event in `events.jsonl` owns current workflow, next workflow, and transition decision.
 3. `details.md` owns expanded context and phase recommendations.
 
-If the pointers are missing, renamed, or contradictory, stop and report the
-broken state instead of continuing from chat memory.
+If the pointers are missing, renamed, or contradictory, stop and report the broken state instead of continuing from chat memory.
 
 ## Phase Recommendation Footer
 
-Phase skills can recommend, not decide, the next transition. In goal-backed
-flows, ask for or preserve this footer:
+Phase skills can recommend, not decide, the next transition. In goal-backed flows, ask for or preserve this footer:
 
 ```text
 phase_result: complete | blocked | needs_revision | not_applicable
@@ -196,10 +175,8 @@ Treat the goal as a contract made of rules and gates:
 
 - Rules constrain behavior while the work is happening.
 - Gates decide whether the work may proceed or be called complete.
-- A gate must be inspectable through files, commands, artifacts, or transcript
-  evidence.
-- If the required proof cannot pass at the current scope, split or replan
-  instead of weakening the gate.
+- A gate must be inspectable through files, commands, artifacts, or transcript evidence.
+- If the required proof cannot pass at the current scope, split or replan instead of weakening the gate.
 
 ## Matrix Rows
 
@@ -219,11 +196,9 @@ Stale-proof guard:
 <marker, process/worktree identity, bounded time window, current diff, or "not applicable">
 ```
 
-Use the exact labels `Proof owner:` and `Stale-proof guard:` when writing rows.
-Do not encode them only in prose.
+Use the exact labels `Proof owner:` and `Stale-proof guard:` when writing rows. Do not encode them only in prose.
 
-Use `must be defined by plan-creation-swarm` only when the goal is clear but the
-implementation proof shape does not exist yet.
+Use `must be defined by plan-creation-swarm` only when the goal is clear but the implementation proof shape does not exist yet.
 
 ## Parent Ownership
 
@@ -260,13 +235,9 @@ Next:
 <none, next workflow, or blocker>
 ```
 
-`done` requires an evidence pointer. If the only evidence is that the user says
-a review or work cycle already happened, write `user assertion in this chat`.
-Do not rerun already-completed lifecycle skills merely because the closeout
-checklist is mandatory; account for them and route only open or blocked rows.
+`done` requires an evidence pointer. If the only evidence is that the user says a review or work cycle already happened, write `user assertion in this chat`. Do not rerun already-completed lifecycle skills merely because the closeout checklist is mandatory; account for them and route only open or blocked rows.
 
-For goal-backed multi-phase closeout, always include the literal workflow-state
-block:
+For goal-backed multi-phase closeout, always include the literal workflow-state block:
 
 ```text
 Workflow state:
@@ -279,6 +250,4 @@ Transition log: tmp/workflow-state/<goal_id>/events.jsonl
 Latest transition source: <event id/path or none/missing>
 ```
 
-If the pointers are missing, keep the exact labels and fill missing fields with
-`missing`; do not collapse them into prose. Missing workflow-state pointers make
-parent verification `open` or `blocked`, never `done`.
+If the pointers are missing, keep the exact labels and fill missing fields with `missing`; do not collapse them into prose. Missing workflow-state pointers make parent verification `open` or `blocked`, never `done`.

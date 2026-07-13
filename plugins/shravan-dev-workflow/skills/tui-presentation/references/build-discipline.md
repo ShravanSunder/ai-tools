@@ -1,33 +1,24 @@
 Build Discipline — TUI Presentation Reference
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for the MECHANICS of building clean TUI output:
-step-by-step build procedure, alignment arithmetic, indentation
-recipes, overflow handling, and verification.
+Deep-dive reference for the MECHANICS of building clean TUI output: step-by-step build procedure, alignment arithmetic, indentation recipes, overflow handling, and verification.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ shape-catalog.md — full worked examples for the seven shapes,
-    six compositional applications (phase-sequence, Q&A rationale,
-    review findings, dual-tag title, scope inventory, file-tree),
-    and shape anti-patterns
-  ▸ Peer references — per-shape pattern catalogs (tables,
-    ui-layouts, architecture, sequence-and-state, annotations)
+  ▸ shape-catalog.md — full worked examples for the seven shapes, six compositional applications (phase-sequence, Q&A rationale, review findings, dual-tag title, scope inventory, file-tree), and shape anti-patterns
+  ▸ Peer references — per-shape pattern catalogs (tables, ui-layouts, architecture, sequence-and-state, annotations)
 
 All examples below use canvas width 70 unless noted.
 
 
 ─── Build procedure — step by step with snapshots ───────────────────
 
-Follow this procedure when drawing a framed card.  Other shapes use
-the same discipline with shape-specific adjustments.
+Follow this procedure when drawing a framed card.  Other shapes use the same discipline with shape-specific adjustments.
 
 Canvas = 70 by default.
 
-Step 1 — Commit canvas width.  State the width (or keep it in a
-mental note).  Default 70.  Widen deliberately when the block clearly
-benefits.  Do not change mid-block.
+Step 1 — Commit canvas width.  State the width (or keep it in a mental note).  Default 70.  Widen deliberately when the block clearly benefits.  Do not change mid-block.
 
 Output so far: (nothing)
 
@@ -55,8 +46,7 @@ Step 3 — Emit breathing row.
 
 `│` at col 0, 68 spaces, `│` at col 69.
 
-Step 4 — Emit content row.  Content indented 2 spaces from left │.
-Right-pad to col 69 with spaces, then `│`.
+Step 4 — Emit content row.  Content indented 2 spaces from left │. Right-pad to col 69 with spaces, then `│`.
 
 ```
 ┌─ Example section title ─────────────────────────────────────────────┐
@@ -94,8 +84,7 @@ Step 7 — Verify.
 ▸ Single borders only (no ╔═╗ mixed in)
 ▸ Identifier content not truncated mid-token
 
-If any row's right edge doesn't land at col 69: pad with spaces, or
-apply overflow policy (shorten/wrap/widen).
+If any row's right edge doesn't land at col 69: pad with spaces, or apply overflow policy (shorten/wrap/widen).
 
 
 ─── Alignment recipes ───────────────────────────────────────────────
@@ -122,26 +111,19 @@ Junction character selection.  Pick by which sides connect:
   └ ┘       corners
 ```
 
-Never drop to `+` — the result is noisy and amateurish.  Stay in
-Unicode.
+Never drop to `+` — the result is noisy and amateurish.  Stay in Unicode.
 
 Padding rules:
 
-  ▸ Left-aligned content: append spaces to reach the right alignment
-    column
+  ▸ Left-aligned content: append spaces to reach the right alignment column
 
-  ▸ Centered content: prepend (width − content) / 2 spaces, append
-    the remainder
+  ▸ Centered content: prepend (width − content) / 2 spaces, append the remainder
 
-  ▸ Right-aligned content: prepend spaces until content ends at the
-    right alignment column
+  ▸ Right-aligned content: prepend spaces until content ends at the right alignment column
 
-Consistency rule.  Every row of a given block must emit structural
-chars at the same columns.  If row 1 has │ at col 12, every row in
-that block has │ at col 12 — or the block is broken.
+Consistency rule.  Every row of a given block must emit structural chars at the same columns.  If row 1 has │ at col 12, every row in that block has │ at col 12 — or the block is broken.
 
-Before/After drift example.  When content changes and row widths
-accidentally mismatch, catch and fix:
+Before/After drift example.  When content changes and row widths accidentally mismatch, catch and fix:
 
 BROKEN (top/bottom border ends col 70, rows end col 68):
 
@@ -154,8 +136,7 @@ BROKEN (top/bottom border ends col 70, rows end col 68):
 └─────────────────┴──────────────────────────────────────────────┘
 ```
 
-Scan the right edge — row 1 and row 4 end at col 68, but the
-borders end at col 70.  Drift.
+Scan the right edge — row 1 and row 4 end at col 68, but the borders end at col 70.  Drift.
 
 FIXED (every row ends col 70):
 
@@ -168,8 +149,7 @@ FIXED (every row ends col 70):
 └─────────────────┴──────────────────────────────────────────────┘
 ```
 
-Fix: pad each row's content with spaces until the closing │ lands
-exactly at canvas width.  Count chars if unsure.
+Fix: pad each row's content with spaces until the closing │ lands exactly at canvas width.  Count chars if unsure.
 
 
 ─── Indentation recipes ─────────────────────────────────────────────
@@ -186,8 +166,7 @@ Continuation of wrapped line    under first content char
 Inside framed card              2 spaces from left │
 ```
 
-Worked examples.  For each common pattern, the WRONG and RIGHT
-side-by-side.
+Worked examples.  For each common pattern, the WRONG and RIGHT side-by-side.
 
 Label ──► content:
 
@@ -233,15 +212,7 @@ and it publishes both keys.      and it publishes both keys.
 
 Actual code-like block:
 
-Use inline snippet treatment for short code-like tokens or tiny
-expressions inside prose.  Prefer inline code spans when the surface
-preserves them cleanly: variable names, property names, field names,
-type names, enum cases, file names, commands, config keys, and short
-expressions or literal values.  Switch to a fenced code block as soon as
-the reader would reasonably treat the content as code-like structure to
-copy, scan, or run: source code, typed data models, schemas, or
-structured definitions.  Do not redraw that content as a Unicode
-layout.
+Use inline snippet treatment for short code-like tokens or tiny expressions inside prose.  Prefer inline code spans when the surface preserves them cleanly: variable names, property names, field names, type names, enum cases, file names, commands, config keys, and short expressions or literal values.  Switch to a fenced code block as soon as the reader would reasonably treat the content as code-like structure to copy, scan, or run: source code, typed data models, schemas, or structured definitions.  Do not redraw that content as a Unicode layout.
 
 ```
 WRONG                            RIGHT
@@ -299,10 +270,7 @@ Continuation hang-indent:
 WRONG                            RIGHT
 ─────                            ─────
 
-Problem: the pane                Problem: the pane publishes
-publishes frames into              frames into both maps,
-both maps, which                   which explains the leak.
-explains the leak.
+Problem: the pane                Problem: the pane publishes publishes frames into              frames into both maps, both maps, which                   which explains the leak. explains the leak.
 ```
 
 Indent is always worth the characters.  Flat output is unreadable;
@@ -320,8 +288,7 @@ WRONG (long first step, detached connector):
 
 prompt asks for design / explanation / comparison / architecture
 │
-▼
-skill metadata triggers
+▼ skill metadata triggers
 
 RIGHT (compact arrow-chain owns the long labels):
 
@@ -341,8 +308,7 @@ sequence.
 Shorten with `…`.  Preferred.  No reflow.
 
 ```
-before:  │ tabLayoutAtom.removePaneFromLayout        │
-after:   │ tabLayoutAtom.removePane…                  │
+before:  │ tabLayoutAtom.removePaneFromLayout        │ after:   │ tabLayoutAtom.removePane…                  │
 ```
 
 Prefer truncating at a word or dot boundary if visible.  If the
@@ -353,8 +319,7 @@ Wrap to next line.  When the content can't be shortened (identifier,
 quoted string).
 
 ```
-before:  │ Some very long prose that doesn't fit in the available width │
-                                                                       ↑ drift
+before:  │ Some very long prose that doesn't fit in the available width │ ↑ drift
 
 after:   │ Some very long prose that doesn't fit in the available     │
          │   width (hanging-indented continuation)                     │
@@ -366,8 +331,7 @@ Widen the column.  Only when shorten loses meaning AND wrap is ugly.
 Reflows the whole block.
 
 ```
-before:  │ col1 │ col2 │ col3 │     cells are 8 chars each
-after:   │ col1     │ col2 │ col3 │   col1 widened to 12 chars
+before:  │ col1 │ col2 │ col3 │     cells are 8 chars each after:   │ col1     │ col2 │ col3 │   col1 widened to 12 chars
 ```
 
 Widen the column that has the longest content.  Recompute all
@@ -413,22 +377,17 @@ Run this before shipping a response.  Every item must pass.
   [ ] Every content row right-padded to the right alignment column?
   [ ] Right edges line up when you scan vertically?
   [ ] No markdown-as-layout inside (#, **bold**, | col |, - bullet)?
-  [ ] Semantic markdown preserved for code, technical atoms, files,
-      URLs, and runnable/copyable snippets?
-  [ ] Inline markdown avoided in fixed-width rows when hidden markup
-      could shift visible padding?
+  [ ] Semantic markdown preserved for code, technical atoms, files, URLs, and runnable/copyable snippets?
+  [ ] Inline markdown avoided in fixed-width rows when hidden markup could shift visible padding?
   [ ] No identifier truncated mid-token?
-  [ ] Breathing room present (blank row after ┌─┐, before └─┘,
-      between semantic groups)?
+  [ ] Breathing room present (blank row after ┌─┐, before └─┘, between semantic groups)?
   [ ] One shape per block (no nested nesting beyond sub-framed grid)?
   [ ] Shape choice matches content type from the vocabulary picker?
   [ ] Actual code-like content shown as fenced block when appropriate?
   [ ] Sections have heading → block → heading rhythm?
-  [ ] Closing synthesis ("My read" or summary) present for long
-      responses?
+  [ ] Closing synthesis ("My read" or summary) present for long responses?
   [ ] Arrows consistent (──► ◄── ▼ only; no → ⇒ -> mixing)?
-  [ ] Vertical flow used only when connector columns visually belong
-      to each step?
+  [ ] Vertical flow used only when connector columns visually belong to each step?
   [ ] Single borders (╔═╗ used only for rare focal emphasis)?
 ```
 
