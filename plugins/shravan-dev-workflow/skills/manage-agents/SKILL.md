@@ -5,7 +5,7 @@ description: Use when using an advisor, sidekick, delegate, operator, subagent, 
 
 # Manage Agents
 
-The pattern owns work, continuity, authority, cardinality, and the minimum
+The agent pattern owns work, continuity, authority, cardinality, and the minimum
 capability category. A model category is a model-plus-thinking combination;
 runtime follows it:
 
@@ -39,9 +39,9 @@ capability category; do not invent a setting to simulate the floor.
 | Frontier | GPT-5.6 Sol | high, xhigh, or max |
 | Frontier | Claude Fable | medium, high, or xhigh |
 | Balanced | GPT-5.6 Sol | low or medium |
-| Balanced | Claude Opus | high or above |
-| Balanced | Grok 4.5 through Cursor | medium or above |
-| Mini | GPT-5.6 Luna | high or above |
+| Balanced | Claude Opus | high+ |
+| Balanced | Grok 4.5 through Cursor | medium+ |
+| Mini | GPT-5.6 Luna | high+ |
 | Mini | Cursor Composer 2.5 | no thinking setting |
 
 Verify the exact provider-advertised model id and thinking option when the
@@ -49,16 +49,20 @@ provider exposes one. Do not invent a thinking setting for a model without that
 control. Use a declared equivalent fallback or report degraded/blocked when the
 required category or lineage is unavailable.
 
-## Runtimes
+## Native and ACPX Runtimes
 
 | Runtime | What it is | Choose it when |
 | --- | --- | --- |
-| Native subagent | The current host's built-in agent runtime. The host may be Codex, Claude, Cursor, or another client. | The host exposes the selected model and can honor the pattern's continuity and authority. |
-| ACPX | A client for calling ACP-compatible provider adapters and persistent sessions outside the host's native runtime. | The selected provider or lineage is not native, persistent cross-provider control is required, or the user asks for ACPX. |
+| Native subagent | The current host's built-in agent runtime. | 
+| ACPX | A client for calling ACP-compatible provider adapters and persistent sessions outside the host's native runtime. | 
 
 Native describes how the subagent is launched, not its pattern or model. A
 native subagent still operates as an Advisor, Sidekick, Delegate, or Operator
 under the same packet, authority, continuity, and parent-verification rules.
+
+Who are you and what are you running on?
+- If you are codex, use native subagent for all GPT native models.
+- If you are claude, use native subagent for all Claude native models.
 
 ## Rules
 
@@ -80,17 +84,15 @@ under the same packet, authority, continuity, and parent-verification rules.
      requirement.
 
 2. Choose native or ACPX runtime.
-   - Prefer a native subagent when the current client exposes the selected model
-     and the pattern's continuity can be honored.
+Native:
+   - Prefer a native subagent if your harness allows those models as native subagents.
+
+ACPX:
    - Load `references/acpx.md` for another provider or lineage, persistent
      cross-provider work, explicit ACPX use, or ACPX configuration and control.
    - After choosing an ACPX provider, load `references/acpx-provider-claude.md`
-     or `references/acpx-provider-cursor.md` when that provider has additional
+     or `references/acpx-provider-cursor.md`, `references/acpx-provider-codex.md` when that provider has additional
      behavior.
-   - When the user explicitly asks to build, modify, or wrap an ACP-compatible
-     adapter, route that work through `references/building-acp-adapters.md`.
-   - Completion: exact model, available reasoning effort, runtime, permissions,
-     and fallback are explicit.
 
 3. Dispatch and reduce.
    - Load `references/agent-job-packet.md` for dispatch, Operator decisions,
@@ -106,3 +108,5 @@ under the same packet, authority, continuity, and parent-verification rules.
 
 Completion: the parent can name the pattern, model, runtime, permissions,
 packet, receipt, and verification step.
+
+Extra: If you need to build, modify, or wrap an ACP-compatible adapter, read `references/building-acp-adapters.md`.
