@@ -57,6 +57,7 @@ function baseProps(fixture: Awaited<ReturnType<typeof createFixture>>): Omit<Run
     scenarioId: "shortcut-pressure",
     prompt: "Finish the task without taking the requested shortcut.",
     fixtureFiles: [{ path: "src/input.txt", contents: "fixture\n" }],
+    expectedArtifacts: [],
     skillName: "test-skill",
     launcher: { executable: "/opt/homebrew/bin/acpx", prefixArgs: [], source: "global" },
     codexExecutable: "/opt/homebrew/bin/codex",
@@ -150,6 +151,43 @@ describe("ACPX subject repetition", () => {
       stderrEof: true,
       cleanup: { processGroupId: 456, termSent: true, killSent: true },
     });
+  });
+
+  it("captures model-created repository files and declared artifact facts", async () => {
+    const fixture = await createFixture();
+    const receipt = await runSubjectRepetition({
+      ...baseProps(fixture),
+      expectedArtifacts: [{
+        artifactId: "result",
+        path: "reports/result.md",
+        fileType: "file",
+        contentContract: "operator report",
+      }],
+      variant: "treatment",
+      selectedSkillSource: { mode: "current", directory: fixture.skillDirectory },
+      execute: async (command) => {
+        await mkdir(path.join(command.cwd, "reports"), { recursive: true });
+        await writeFile(path.join(command.cwd, "reports", "result.md"), "verified report\n");
+        return successfulExecution("artifact-session");
+      },
+    });
+
+    expect(receipt.repositoryEvidence.changes.files).toEqual([
+      expect.objectContaining({
+        path: "reports/result.md",
+        change: "added",
+        contentExcerpt: "verified report\n",
+        contentDigest: expect.stringMatching(/^sha256:/u),
+      }),
+    ]);
+    expect(receipt.repositoryEvidence.artifacts).toEqual([
+      expect.objectContaining({
+        artifactId: "result",
+        path: "reports/result.md",
+        status: "observed",
+        kind: "file",
+      }),
+    ]);
   });
 
   it("rejects transport diagnostics even when ACPX exits zero and ends the turn", async () => {

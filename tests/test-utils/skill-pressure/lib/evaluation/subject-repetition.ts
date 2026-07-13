@@ -9,6 +9,12 @@ import {
   installCodexRepoSkill,
   type CodexRepoSkillInstallReceipt,
 } from "../installation/codex-repo-skill-installer.js";
+import type { ExpectedArtifact } from "../contracts/contract-types.js";
+import {
+  collectRepositorySnapshot,
+  createRepositoryEvidence,
+  type RepositoryEvidence,
+} from "../evidence/repository-snapshot.js";
 import {
   executeAcpxCommand,
   type AcpxLauncher,
@@ -50,6 +56,7 @@ export interface RunSubjectRepetitionProps {
   readonly variant: "baseline" | "treatment";
   readonly prompt: string;
   readonly fixtureFiles: readonly SubjectFixtureFile[];
+  readonly expectedArtifacts: readonly ExpectedArtifact[];
   readonly skillName: string;
   readonly selectedSkillSource: SelectedSkillSource;
   readonly launcher: AcpxLauncher;
@@ -83,6 +90,7 @@ export interface SubjectRepetitionReceipt {
   readonly permissionMode: AcpxPermissionMode;
   readonly runtimeIdentity: RuntimeExecutableIdentity;
   readonly disabledAmbientSkills: readonly { readonly path: string; readonly digest: string }[];
+  readonly repositoryEvidence: RepositoryEvidence;
   readonly transcript: AcpxTranscriptFacts;
   readonly transcriptDigest: string;
   readonly process: {
@@ -161,9 +169,16 @@ export async function runSubjectRepetition(
     disabledSkillPaths: props.disabledAmbientSkillPaths,
     timeoutSeconds: props.timeoutSeconds,
   });
+  const beforeRunSnapshot = await collectRepositorySnapshot({ repositoryDirectory });
   const startedAt = performance.now();
   const execution = await (props.execute ?? executeAcpxCommand)(command);
   const durationMs = Math.round(performance.now() - startedAt);
+  const postRunSnapshot = await collectRepositorySnapshot({ repositoryDirectory });
+  const repositoryEvidence = createRepositoryEvidence({
+    beforeRunSnapshot,
+    postRunSnapshot,
+    expectedArtifacts: props.expectedArtifacts,
+  });
   const transcript = collectAcpxTranscript(execution.stdout, {
     secrets: props.redactionSecrets,
     excerptLimit: 8_000,
@@ -190,6 +205,7 @@ export async function runSubjectRepetition(
     permissionMode: props.permissionMode,
     runtimeIdentity: props.runtimeIdentity,
     disabledAmbientSkills,
+    repositoryEvidence,
     transcript,
     transcriptDigest: digest(execution.stdout),
     process: {

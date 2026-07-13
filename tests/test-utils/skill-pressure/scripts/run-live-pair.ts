@@ -49,6 +49,7 @@ const common = {
   scenarioId,
   prompt,
   fixtureFiles: [],
+  expectedArtifacts: [],
   skillName,
   launcher,
   codexExecutable,
