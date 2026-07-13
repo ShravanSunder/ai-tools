@@ -1,12 +1,8 @@
 # Shravan Dev Workflow
 
-Shravan's development workflow skills for moving from shared understanding to
-spec, plan, implementation, review, handoff, debugging, docs, and operations
-work.
+Shravan's development workflow skills for moving from shared understanding to spec, plan, implementation, review, handoff, debugging, docs, and operations work.
 
-The plugin is built around one idea: each workflow phase should have a clear
-owner, a clear artifact boundary, and a clear next handoff. Day-to-day work
-should use the narrower phase skills here.
+The plugin is built around one idea: each workflow phase should have a clear owner, a clear artifact boundary, and a clear next handoff. Day-to-day work should use the narrower phase skills here.
 
 ## Mental Model
 
@@ -20,9 +16,7 @@ design/review/handoff       create/review/handoff     execute/review/handoff
         '----------- implementation review ---> done claim ---'
 ```
 
-`handoff` means portability. It does not mean the phase is approved, complete,
-or ready for the next phase. A handoff packet makes context transferable so a
-future agent, another CLI, or another machine can continue without guessing.
+`handoff` means portability. It does not mean the phase is approved, complete, or ready for the next phase. A handoff packet makes context transferable so a future agent, another CLI, or another machine can continue without guessing.
 
 ## Namespace Map
 
@@ -105,149 +99,51 @@ flowchart LR
 
 ### Shared understanding
 
-Use `discuss-clarify-mental-models` when the shared picture is unstable before
-artifact work: terms, boundaries, assumptions, source-of-truth questions, or
-tradeoffs need to be made inspectable. It stays read-only, checks bounded
-evidence, maps branches, names the countercase, and routes only after the model
-is confirmed or explicitly open. It is not the old one-forcing-question grill.
+Use `discuss-clarify-mental-models` when the shared picture is unstable before artifact work: terms, boundaries, assumptions, source-of-truth questions, or tradeoffs need to be made inspectable. It stays read-only, checks bounded evidence, maps branches, names the countercase, and routes only after the model is confirmed or explicitly open. It is not the old one-forcing-question grill.
 
-Use `research-swarm` when the next step is to gather evidence: local code/docs,
-sibling repos, DeepWiki-style repository research, current web/docs, Reader
-sources, memory, or session logs. It frames bounded research questions, routes
-source-specific lanes, labels claim quality, and writes tmp research ledgers for
-substantial runs. Substantial swarm lanes use explicit packet contracts with
-source anchors, security context, candidate-evidence labels, and completion
-receipts; parent ledgers reduce lane evidence before anything becomes accepted
-truth.
+Use `research-swarm` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, routes source-specific lanes, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial swarm lanes use explicit packet contracts with source anchors, security context, candidate-evidence labels, and completion receipts; parent ledgers reduce lane evidence before anything becomes accepted truth.
 
-Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning,
-calling, resuming, steering, queueing, monitoring, or reducing advisors,
-sidekicks, delegates, operators, subagents, and swarms. Its core skill owns
-pattern, model, and host-neutral runtime selection; `acpx.md` owns generic ACPX
-mechanics and `acpx-provider-*` references own real provider exceptions;
-persistent sessions are ledgered before follow-ups; and child output remains
-candidate evidence until verified.
+Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and host-neutral runtime selection; `acpx.md` owns generic ACPX mechanics and `acpx-provider-*` references own real provider exceptions; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
-Use `orchestrator-goal` when the objective is long-running and already clear
-enough to become a verifiable Codex or Claude `/goal` contract. If the goal is
-fuzzy, it routes back to `discuss-clarify-mental-models`. For substantial
-goals, the contract carries a requirements/proof matrix and parent-owned
-completion gate; child agents, reviewers, UI drivers, and observability queries
-produce evidence, not completion by themselves.
-At closeout, `orchestrator-goal` accounts for lifecycle gates with the simple
-statuses `done`, `not-applicable`, `open`, and `blocked`; `done` requires an
-evidence pointer and does not imply rerunning already-completed review cycles.
+Use `orchestrator-goal` when the objective is long-running and already clear enough to become a verifiable Codex or Claude `/goal` contract. If the goal is fuzzy, it routes back to `discuss-clarify-mental-models`. For substantial goals, the contract carries a requirements/proof matrix and parent-owned completion gate; child agents, reviewers, UI drivers, and observability queries produce evidence, not completion by themselves. At closeout, `orchestrator-goal` accounts for lifecycle gates with the simple statuses `done`, `not-applicable`, `open`, and `blocked`; `done` requires an evidence pointer and does not imply rerunning already-completed review cycles.
 
 ### Spec boundary
 
-Use `spec-creation-swarm` to create a design, architecture, or product spec
-before an implementation plan exists. It can use bounded explorer, security,
-architecture, and risk/tradeoff lanes, but the parent agent owns the synthesis.
-Specs may contain product intent / PRD, requirements, and technical design in
-one artifact, but those layers stay distinct: product intent names who and why,
-requirements name testable obligations, and the technical spec names the system
-contract. Specs define separability, boundaries, contracts, invariants,
-non-goals, and proof expectations; task sequence belongs to planning.
-When design depends on mixed outside evidence, use `research-swarm` first and
-consume its ledger.
+Use `spec-creation-swarm` to create a design, architecture, or product spec before an implementation plan exists. It can use bounded explorer, security, architecture, and risk/tradeoff lanes, but the parent agent owns the synthesis. Specs may contain product intent / PRD, requirements, and technical design in one artifact, but those layers stay distinct: product intent names who and why, requirements name testable obligations, and the technical spec names the system contract. Specs define separability, boundaries, contracts, invariants, non-goals, and proof expectations; task sequence belongs to planning. When design depends on mixed outside evidence, use `research-swarm` first and consume its ledger.
 
-Use `spec-review-swarm` to attack a drafted spec/design before planning. It
-keeps accepted, contested, and open findings separate instead of forcing fake
-consensus. Accepted blocker/important findings route back to
-`spec-creation-swarm`; ready specs route to `plan-creation-swarm`.
+Use `spec-review-swarm` to attack a drafted spec/design before planning. It keeps accepted, contested, and open findings separate instead of forcing fake consensus. Accepted blocker/important findings route back to `spec-creation-swarm`; ready specs route to `plan-creation-swarm`.
 
-Use `spec-handoff` to package spec/design context for a future session. It
-preserves decisions, non-goals, contracts, tradeoffs, evidence, security
-context, and open questions without creating an implementation plan.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, and open questions without creating an implementation plan.
 
 ### Plan boundary
 
-Use `plan-creation-swarm` to turn spec/design context into a written
-implementation plan. It stays read-only against product code and captures task
-sequence, dependency graph, parallel work lanes, write surfaces, validation
-gates, rollback or recovery notes, risks, and open questions. It preserves
-accepted product intent, requirements, and spec contracts as source context
-instead of redefining them. Non-trivial
-plans include a requirements/proof matrix with source requirements, owning
-tasks, proof modalities, evidence sources, freshness guards, and proof layers;
-if proof
-cannot pass at the planned scope, the plan should split or replan before
-execution. Proof gates trace back to the spec's requirements and proof
-expectations, then use the testing pyramid and TDD shape: smallest useful
-red/green proof first, unit/integration/smoke/e2e/PR-release layers as required
-by risk, with lower layers kept explicit when higher layers exist.
-Goal-seeded matrix rows must keep evidence sources and freshness guards through
-planning, handoff, and execution.
+Use `plan-creation-swarm` to turn spec/design context into a written implementation plan. It stays read-only against product code and captures task sequence, dependency graph, parallel work lanes, write surfaces, validation gates, rollback or recovery notes, risks, and open questions. It preserves accepted product intent, requirements, and spec contracts as source context instead of redefining them. Non-trivial plans include a requirements/proof matrix with source requirements, owning tasks, proof modalities, evidence sources, freshness guards, and proof layers; if proof cannot pass at the planned scope, the plan should split or replan before execution. Proof gates trace back to the spec's requirements and proof expectations, then use the testing pyramid and TDD shape: smallest useful red/green proof first, unit/integration/smoke/e2e/PR-release layers as required by risk, with lower layers kept explicit when higher layers exist. Goal-seeded matrix rows must keep evidence sources and freshness guards through planning, handoff, and execution.
 
-Use `plan-improve-repo` to audit a repo for high-leverage improvements and
-write executable plans without editing source. It supports quick, deep, focus,
-branch, next, validate-plan, and reconcile flows, and validates plan readiness
-before routing to review, handoff, or execution.
+Use `plan-improve-repo` to audit a repo for high-leverage improvements and write executable plans without editing source. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows, and validates plan readiness before routing to review, handoff, or execution.
 
-Use `plan-review-swarm` to review a written implementation plan before code
-changes. It checks the whole artifact and verifies claims against the repo.
-Accepted blocker/important findings route back to `plan-creation-swarm`, or to
-`spec-creation-swarm` when the issue exposes a missing spec boundary.
+Use `plan-review-swarm` to review a written implementation plan before code changes. It checks the whole artifact and verifies claims against the repo. Accepted blocker/important findings route back to `plan-creation-swarm`, or to `spec-creation-swarm` when the issue exposes a missing spec boundary.
 
-Use `plan-handoff` to package an existing implementation plan for another agent,
-CLI, machine, or future session. If no plan exists yet, use `spec-handoff` or
-`plan-creation-swarm` instead.
+Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. If no plan exists yet, use `spec-handoff` or `plan-creation-swarm` instead.
 
 ### Implementation boundary
 
-Use `implementation-execute-plan` to validate and execute a written plan. It may
-coordinate bounded subagent slices and uses them whenever work is parallelizable
-into disjoint lanes, but the parent owns integration, verification,
-implementation proof, and completion claims. Worker packets cite exact plan
-tasks, requirement/proof rows, allowed write scopes, proof obligations, and
-completion receipts so subagent output can be reduced against the plan.
+Use `implementation-execute-plan` to validate and execute a written plan. It may coordinate bounded subagent slices and uses them whenever work is parallelizable into disjoint lanes, but the parent owns integration, verification, implementation proof, and completion claims. Worker packets cite exact plan tasks, requirement/proof rows, allowed write scopes, proof obligations, and completion receipts so subagent output can be reduced against the plan.
 
-Use `implementation-review-swarm` to review code, diffs, commits, PRs, or named
-files. Codex reviewer lanes are the default; Claude or Gemini/`agy` lanes are
-explicit opt-in external counsel. Reviewer outputs are candidates, not truth,
-and accepted findings are verified before edits. Implementation review verifies
-that proof maps back to requirements/spec/plan before a ready verdict. Reviewer
-packets include source-of-truth inputs, proof inventory, lane focus, and
-completion receipts so lanes produce different evidence instead of generic
-summaries. Accepted
-blocker/important findings normally route back to
-`implementation-execute-plan`.
+Use `implementation-review-swarm` to review code, diffs, commits, PRs, or named files. Codex reviewer lanes are the default; Claude or Gemini/`agy` lanes are explicit opt-in external counsel. Reviewer outputs are candidates, not truth, and accepted findings are verified before edits. Implementation review verifies that proof maps back to requirements/spec/plan before a ready verdict. Reviewer packets include source-of-truth inputs, proof inventory, lane focus, and completion receipts so lanes produce different evidence instead of generic summaries. Accepted blocker/important findings normally route back to `implementation-execute-plan`.
 
-Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after
-implementation work exists: push/open/update the PR, monitor checks and
-comments, process existing review threads, prove merge readiness with fresh
-state, and merge only when user authorization exists. This is a low-thinking
-workflow by default because state reads and gates carry the rigor. Fresh code-review
-discovery still belongs to `implementation-review-swarm`.
+Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation work exists: push/open/update the PR, monitor checks and comments, process existing review threads, prove merge readiness with fresh state, and merge only when user authorization exists. This is a low-thinking workflow by default because state reads and gates carry the rigor. Fresh code-review discovery still belongs to `implementation-review-swarm`.
 
-Use `implementation-handoff` when real implementation state exists: branch,
-diff, changed files, commits, validation output, failed commands, blockers, or
-risk. It is for continuation, audit, or manual review of work already in motion.
+Use `implementation-handoff` when real implementation state exists: branch, diff, changed files, commits, validation output, failed commands, blockers, or risk. It is for continuation, audit, or manual review of work already in motion.
 
 ## Supporting Skills
 
-- `debug-investigation`: diagnosis-first debugging before fixes. Use it for
-  failing tests, flaky behavior, crashes, regressions, build failures, or
-  unexpected behavior. For long-running infra or batch monitoring, it loads a
-  background-monitoring reference for redacted JSONL/state watchers that are
-  cheap, cancellable, and visible through the agent harness when available.
-- `docs-maintain`: durable documentation maintenance after source-of-truth drift
-  is identified. It keeps README human-facing, `AGENTS.md` compact, and
-  workflow history in changelog/runbook docs.
-- `ops-security-review`: routes explicit authorized security scans to the
-  official Codex Security plugin workflows.
-- `ops-linear-tracking`: manages Linear projects, milestones, issues, and
-  dependencies while keeping docs as the design source of truth.
-- `skills-creation`: creates, updates, or evaluates one named skill or accepted
-  draft with YAML trigger design, a `SKILL.md` mental model and main path,
-  reference depth, steering language, pressure proof, platform validation,
-  source-adaptation checks, and sensitive-resource routing.
-- `skill-audit`: audits current skill portfolios, session evidence, and upstream
-  inspirations before recommending create/update/merge/skip decisions.
-- `tui-presentation`: gives agents a shared structure for readable chat/TUI
-  explanations, diagrams, comparisons, and multi-section responses. It teaches
-  disclosure sequence and visual-family selection while preserving semantic
-  markdown for code, paths, URLs, and technical tokens.
+- `debug-investigation`: diagnosis-first debugging before fixes. Use it for failing tests, flaky behavior, crashes, regressions, build failures, or unexpected behavior. For long-running infra or batch monitoring, it loads a background-monitoring reference for redacted JSONL/state watchers that are cheap, cancellable, and visible through the agent harness when available.
+- `docs-maintain`: durable documentation maintenance after source-of-truth drift is identified. It keeps README human-facing, `AGENTS.md` compact, and workflow history in changelog/runbook docs.
+- `ops-security-review`: routes explicit authorized security scans to the official Codex Security plugin workflows.
+- `ops-linear-tracking`: manages Linear projects, milestones, issues, and dependencies while keeping docs as the design source of truth.
+- `skills-creation`: creates, updates, or evaluates one named skill or accepted draft with YAML trigger design, a `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source-adaptation checks, and sensitive-resource routing.
+- `skill-audit`: audits current skill portfolios, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions.
+- `tui-presentation`: gives agents a shared structure for readable chat/TUI explanations, diagrams, comparisons, and multi-section responses. It teaches disclosure sequence and visual-family selection while preserving semantic markdown for code, paths, URLs, and technical tokens.
 
 ## External Counsel
 

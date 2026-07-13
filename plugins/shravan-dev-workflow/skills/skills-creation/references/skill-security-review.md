@@ -1,13 +1,8 @@
 # Skill Security Review
 
-Treat executable resources, third-party content, secrets, and home/cache
-writes as sensitive surfaces before ordinary authoring continues.
+Treat executable resources, third-party content, secrets, and home/cache writes as sensitive surfaces before ordinary authoring continues.
 
-This reference owns sensitive-surface inspection for scripts, hooks, assets,
-package scripts, shell/network behavior, third-party source, private auth
-material, privileged actions, installed-cache refresh, and home-level mutation.
-Return the security decision and required proof before the sensitive surface is
-edited.
+This reference owns sensitive-surface inspection for scripts, hooks, assets, package scripts, shell/network behavior, third-party source, private auth material, privileged actions, installed-cache refresh, and home-level mutation. Return the security decision and required proof before the sensitive surface is edited.
 
 ## Sensitive Surfaces
 
@@ -24,14 +19,7 @@ edited.
 
 ## How To Inspect
 
-Inventory sensitive surfaces and entry points. Identify untrusted inputs and
-privileged actions. For third-party source or assets, record source, license
-or permission state, and a copy-vs-adapt decision before anything is copied.
-Decide `allowed`, `disallowed`, `blocked`, or `deferred`, and gate that
-decision before any write or edit of the sensitive surface -- not alongside
-it. Executable resources need behavior proof (deterministic tests).
-Escalate to `ops-security-review` only for an explicit security scan or
-vulnerability review, not routine authoring judgment.
+Inventory sensitive surfaces and entry points. Identify untrusted inputs and privileged actions. For third-party source or assets, record source, license or permission state, and a copy-vs-adapt decision before anything is copied. Decide `allowed`, `disallowed`, `blocked`, or `deferred`, and gate that decision before any write or edit of the sensitive surface -- not alongside it. Executable resources need behavior proof (deterministic tests). Escalate to `ops-security-review` only for an explicit security scan or vulnerability review, not routine authoring judgment.
 
 ## Return Labels
 

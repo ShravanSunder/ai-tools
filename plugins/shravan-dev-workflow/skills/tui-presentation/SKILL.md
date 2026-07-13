@@ -7,9 +7,7 @@ description: >-
 TUI Presentation
 ══════════════════════════════════════════════════════════════════════
 
-Use this skill when the answer needs visual structure in a monospace
-chat surface. Unicode box drawing and whitespace own layout. Markdown
-still owns fenced code blocks, inline code, file links, and URLs.
+Use this skill when the answer needs visual structure in a monospace chat surface. Unicode box drawing and whitespace own layout. Markdown still owns fenced code blocks, inline code, file links, and URLs.
 
 
 ─── Trigger boundary ────────────────────────────────────────────────
@@ -34,27 +32,16 @@ User-specified format always wins.
 ─── Core rules ──────────────────────────────────────────────────────
 
   1. Pick one shape by content type before writing.
-  2. For hard explanations, pick a disclosure sequence before detail:
-     one map, one selected slice, one small ledger, then technical detail.
+  2. For hard explanations, pick a disclosure sequence before detail: one map, one selected slice, one small ledger, then technical detail.
   3. Treat zoom as a disclosure move, not a visual family.
-  4. Render research as handed-over lanes plus parent synthesis; TUI
-     does not run agents or decide acceptance.
-  5. Keep Mermaid requests understanding-first: recommend a small
-     visual-family guide, not a Mermaid translation catalog and not a
-     seven-shape inventory. Do not recommend translation notes unless the
-     user explicitly asks for translation.
-     If the user asks whether Mermaid examples would improve this skill,
-     recommend a "small visual-family guide" in terms of flow, sequence,
-     state, topology, and quadrant/2D families. Do not use catalog wording
-     for the recommendation, and do not propose a Mermaid-to-TUI mapping
-     table.
+  4. Render research as handed-over lanes plus parent synthesis; TUI does not run agents or decide acceptance.
+  5. Keep Mermaid requests understanding-first: recommend a small visual-family guide, not a Mermaid translation catalog and not a seven-shape inventory. Do not recommend translation notes unless the user explicitly asks for translation. If the user asks whether Mermaid examples would improve this skill, recommend a "small visual-family guide" in terms of flow, sequence, state, topology, and quadrant/2D families. Do not use catalog wording for the recommendation, and do not propose a Mermaid-to-TUI mapping table.
   6. Use 70 columns by default; widen only when the content earns it.
   7. Keep layout structural: borders, rules, arrows, indentation.
   8. Use semantic markdown only for code, file links, URLs, and tokens.
   9. Keep rows readable; wrap prose instead of shrinking or cramming.
  10. Keep sections visually distinct, but do not nest frames deeply.
- 11. Verify the rendered shape before sending: alignment, overflow,
-     row rhythm, and right edges.
+ 11. Verify the rendered shape before sending: alignment, overflow, row rhythm, and right edges.
 
 
 ─── Shape picker ────────────────────────────────────────────────────
@@ -86,42 +73,27 @@ Fast picks:
 
 Load only the reference needed for the response being built:
 
-  ▸ `references/progressive-disclosure.md`
-    Disclosure sequence for hard explanations, research synthesis,
-    debug narratives, and "draw this out" asks.
+  ▸ `references/progressive-disclosure.md` Disclosure sequence for hard explanations, research synthesis, debug narratives, and "draw this out" asks.
 
-  ▸ `references/visual-family-selection.md`
-    Visual family choice: flow, sequence, state, quadrant/2D, topology.
-    Use before domain examples when the best family is unclear.
+  ▸ `references/visual-family-selection.md` Visual family choice: flow, sequence, state, quadrant/2D, topology. Use before domain examples when the best family is unclear.
 
-  ▸ `references/shape-catalog.md`
-    Worked examples and anti-patterns for all seven shapes.
+  ▸ `references/shape-catalog.md` Worked examples and anti-patterns for all seven shapes.
 
-  ▸ `references/build-discipline.md`
-    Alignment arithmetic, indentation recipes, overflow handling,
-    verification checklist.
+  ▸ `references/build-discipline.md` Alignment arithmetic, indentation recipes, overflow handling, verification checklist.
 
-  ▸ `references/tables.md`
-    Column-ruled comparisons, status matrices, timelines.
+  ▸ `references/tables.md` Column-ruled comparisons, status matrices, timelines.
 
-  ▸ `references/architecture.md`
-    System maps, component boundaries, data/control flow.
+  ▸ `references/architecture.md` System maps, component boundaries, data/control flow.
 
-  ▸ `references/sequence-and-state.md`
-    State machines, lifecycles, transitions, sequence flows.
+  ▸ `references/sequence-and-state.md` State machines, lifecycles, transitions, sequence flows.
 
-  ▸ `references/ui-layouts.md`
-    Terminal UI layouts, panels, tool surfaces, compact dashboards.
+  ▸ `references/ui-layouts.md` Terminal UI layouts, panels, tool surfaces, compact dashboards.
 
-  ▸ `references/annotations-and-specs.md`
-    Callouts, constraints, specs, edge-case explanations.
+  ▸ `references/annotations-and-specs.md` Callouts, constraints, specs, edge-case explanations.
 
-  ▸ `references/complete-response-walkthrough.md`
-    Full response construction example.
+  ▸ `references/complete-response-walkthrough.md` Full response construction example.
 
-Load one of `progressive-disclosure.md` or `visual-family-selection.md`
-first when needed, then at most one domain example reference unless the
-user explicitly asks for broad catalog exploration.
+Load one of `progressive-disclosure.md` or `visual-family-selection.md` first when needed, then at most one domain example reference unless the user explicitly asks for broad catalog exploration.
 
 
 ─── Output discipline ───────────────────────────────────────────────
@@ -133,5 +105,4 @@ Before sending:
   ▸ Check code and structured data remain fenced code blocks.
   ▸ Check the visual shape helps the decision; if not, simplify.
 
-If the response is short or the user asked for a normal markdown answer,
-skip the TUI treatment.
+If the response is short or the user asked for a normal markdown answer, skip the TUI treatment.

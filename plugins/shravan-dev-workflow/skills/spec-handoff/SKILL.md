@@ -5,25 +5,18 @@ description: Use when packaging spec, design, architecture, or product-decision 
 
 # Spec Handoff
 
-Package spec/design context so another agent can continue without reconstructing
-the conversation. This is a portability boundary, not a completion boundary:
-handoff means the context is transferable, not that the spec is approved or the
-next phase is complete.
+Package spec/design context so another agent can continue without reconstructing the conversation. This is a portability boundary, not a completion boundary: handoff means the context is transferable, not that the spec is approved or the next phase is complete.
 
 ## Core Rules
 
 - Use this only before an implementation plan exists.
-- Package decisions, non-goals, open questions, source evidence, contracts,
-  tradeoffs, security context, and proof expectations.
-- Always name proof expectations in the handoff response: validation strategy,
-  proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps.
+- Package decisions, non-goals, open questions, source evidence, contracts, tradeoffs, security context, and proof expectations.
+- Always name proof expectations in the handoff response: validation strategy, proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps.
 - Preserve uncertainty. Do not hide open questions to make the packet feel done.
 - Do not create an implementation plan here. Use `plan-creation-swarm` for that.
 - Do not review the spec here. Use `spec-review-swarm` for adversarial review.
-- Do not package code, branch, diff, commits, or test state. Use
-  `implementation-handoff` when implementation state exists.
-- Always write a file artifact and also print the copy-paste prompt in the
-  response unless the user explicitly asks for chat-only output.
+- Do not package code, branch, diff, commits, or test state. Use `implementation-handoff` when implementation state exists.
+- Always write a file artifact and also print the copy-paste prompt in the response unless the user explicitly asks for chat-only output.
 
 ## Workflow
 
@@ -31,8 +24,7 @@ next phase is complete.
    - spec/design/architecture artifact
    - chat decision
    - current repo evidence
-2. If a source file exists, count lines and read the whole file in chunks before
-   summarizing.
+2. If a source file exists, count lines and read the whole file in chunks before summarizing.
 3. Inspect only the code/docs needed to make claims grounded.
 4. Create a repo-local artifact under:
    - `<repo-root>/tmp/spec-workflows/<yyyy-mm-dd>-<repo>-<branch>-<spec-slug>/`
@@ -45,10 +37,8 @@ next phase is complete.
    - decisions and non-goals
    - open questions
    - proof expectations or proof gaps
-   - recommended next skill: usually `plan-creation-swarm`, `spec-review-swarm`, or
-     `docs-maintain`
-   - full clickable artifact links (absolute path + line) for handoff artifacts
-     the human is expected to open
+   - recommended next skill: usually `plan-creation-swarm`, `spec-review-swarm`, or `docs-maintain`
+   - full clickable artifact links (absolute path + line) for handoff artifacts the human is expected to open
 
 ## Packet Contents
 
@@ -58,8 +48,7 @@ next phase is complete.
 - Contracts, interfaces, data flow, and ownership boundaries
 - Tradeoffs and who pays their cost
 - Security context or reason it is not security-sensitive
-- Proof expectations: validation strategy, proof assumptions, explicit
-  deferrals to `plan-creation-swarm`, or open proof gaps
+- Proof expectations: validation strategy, proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent

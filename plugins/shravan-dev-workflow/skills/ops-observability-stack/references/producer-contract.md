@@ -1,8 +1,6 @@
 # Producer Contract
 
-App and service repos are OTLP producers. They do not own the shared collector,
-Victoria services, Docker Compose lifecycle, retention flags, or generic query
-recipes.
+App and service repos are OTLP producers. They do not own the shared collector, Victoria services, Docker Compose lifecycle, retention flags, or generic query recipes.
 
 ## Startup Modes
 
@@ -33,9 +31,7 @@ Producers must not emit:
 - tokens, passwords, API keys, cookies, or auth headers
 - raw UUIDs or high-cardinality product ids as stream fields
 
-The collector deletes known sensitive attributes and redacts secret-like
-variants, but that is defense-in-depth. Do not rely on the collector as the
-first privacy boundary.
+The collector deletes known sensitive attributes and redacts secret-like variants, but that is defense-in-depth. Do not rely on the collector as the first privacy boundary.
 
 ## Cardinality Rules
 
@@ -50,9 +46,7 @@ dev.runtime.flavor
 dev.release.channel
 ```
 
-Keep branch names, markers, PIDs, run ids, and workspace ids out of stream
-fields. They can be searchable log/span attributes when they are scrubbed and
-bounded.
+Keep branch names, markers, PIDs, run ids, and workspace ids out of stream fields. They can be searchable log/span attributes when they are scrubbed and bounded.
 
 ## Repo Helper Expectations
 

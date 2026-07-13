@@ -1,17 +1,8 @@
 # Controller Packets
 
-Use this skill-local packet contract when dispatching implementation-execution
-subagents. The controller reads the plan; subagents receive curated slices.
-This file owns execution-controller packet anatomy, source-truth handling,
-bounded implementation slices, proof obligations, completion receipts, and
-controller verification.
+Use this skill-local packet contract when dispatching implementation-execution subagents. The controller reads the plan; subagents receive curated slices. This file owns execution-controller packet anatomy, source-truth handling, bounded implementation slices, proof obligations, completion receipts, and controller verification.
 
-For substantial execution swarms, preserve an inspectable artifact trail in the
-existing execution/controller brief home. If execution artifacts live beside the
-source plan workflow instead, the controller brief or parent ledger must point
-to that source workflow and to each parent-written lane artifact path. Subagent
-outputs are candidate evidence until controller-side parent verification
-inspects changed files, diffs, and test output.
+For substantial execution swarms, preserve an inspectable artifact trail in the existing execution/controller brief home. If execution artifacts live beside the source plan workflow instead, the controller brief or parent ledger must point to that source workflow and to each parent-written lane artifact path. Subagent outputs are candidate evidence until controller-side parent verification inspects changed files, diffs, and test output.
 
 ## Implementer Packet
 

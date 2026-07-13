@@ -1,7 +1,6 @@
 # Evidence Ledger
 
-Use this structure for substantial research artifacts under
-`tmp/research-workflows/<date>-<slug>/research-ledger.md`.
+Use this structure for substantial research artifacts under `tmp/research-workflows/<date>-<slug>/research-ledger.md`.
 
 ```text
 Research Ledger
@@ -39,5 +38,4 @@ Recommended Next Workflow:
 <discuss-clarify-mental-models | spec-creation-swarm | plan-creation-swarm | spec-review-swarm | plan-review-swarm | implementation-review-swarm | docs-maintain>
 ```
 
-Always keep raw lane notes or copy-paste prompts in the same tmp folder when
-they are useful for another agent.
+Always keep raw lane notes or copy-paste prompts in the same tmp folder when they are useful for another agent.

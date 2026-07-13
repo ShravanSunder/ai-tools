@@ -1,12 +1,8 @@
 # Provenance Decomposition
 
-Use when `inherited_frame`, `first_principles`, and `assumptions` start
-collapsing into one vague caveat.
+Use when `inherited_frame`, `first_principles`, and `assumptions` start collapsing into one vague caveat.
 
-The job is to separate where a belief came from before rebuilding the model.
-Do not decide whether a claim is useful until its provenance is clear.
-The slot definitions live in `SKILL.md`; this reference only shows how to use
-them when the split is hard.
+The job is to separate where a belief came from before rebuilding the model. Do not decide whether a claim is useful until its provenance is clear. The slot definitions live in `SKILL.md`; this reference only shows how to use them when the split is hard.
 
 ## Decomposition Move
 
@@ -47,8 +43,7 @@ What artifact, constraint, or user-stated goal proves it?
 What can this evidence not prove?
 ```
 
-Use the third question to prevent overclaiming: direct evidence can prove one
-piece of the map without proving the inherited story around it.
+Use the third question to prevent overclaiming: direct evidence can prove one piece of the map without proving the inherited story around it.
 
 Good:
 
@@ -87,6 +82,4 @@ Why weak: that is a desired outcome, not direct evidence or a hard constraint.
 
 ## Stop Condition
 
-Return to the main skill when the three slots are distinct enough that
-`rebuilt_model` can name what is known, what was inherited, and what still
-needs proof.
+Return to the main skill when the three slots are distinct enough that `rebuilt_model` can name what is known, what was inherited, and what still needs proof.

@@ -1,27 +1,21 @@
 Architecture Diagrams
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for architecture-style diagrams.  Use these
-patterns for system overviews, data flows, and pipeline diagrams.
+Deep-dive reference for architecture-style diagrams.  Use these patterns for system overviews, data flows, and pipeline diagrams.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
   ▸ progressive-disclosure.md — map first, then selected slice
   ▸ visual-family-selection.md — choose topology vs. flow vs. 2D map
-  ▸ shape-catalog.md ──► Shape 5 (Pipeline box) — bordered pipeline
-    with numbered steps; Shape 6 (State diagram) — full state-machine
-    worked example
-  ▸ build-discipline.md ──► Alignment recipes — positioning lifelines,
-    arrow landings, junction characters
-  ▸ sequence-and-state.md — state machines, sequence diagrams,
-    decision trees, event timelines
+  ▸ shape-catalog.md ──► Shape 5 (Pipeline box) — bordered pipeline with numbered steps; Shape 6 (State diagram) — full state-machine worked example
+  ▸ build-discipline.md ──► Alignment recipes — positioning lifelines, arrow landings, junction characters
+  ▸ sequence-and-state.md — state machines, sequence diagrams, decision trees, event timelines
 
 
 ─── Canonical path first ────────────────────────────────────────────
 
-Show the normal path before exceptions.  This gives the reader a stable
-spine for later detail.
+Show the normal path before exceptions.  This gives the reader a stable spine for later detail.
 
 ```
 user asks
@@ -46,8 +40,7 @@ Use topology when the question is "who owns what?"
        └──────────────────────────────────────────┘
 ```
 
-Keep ownership labels on arrows.  Do not imply a data flow where the
-real point is responsibility.
+Keep ownership labels on arrows.  Do not imply a data flow where the real point is responsibility.
 
 
 ─── Two-axis map ────────────────────────────────────────────────────
@@ -64,8 +57,7 @@ Use a 2D map when two independent concerns explain the choice.
                      less visual structure
 ```
 
-Axes must name real tradeoffs.  If the axes are vague, use a table or
-boundary map instead.
+Axes must name real tradeoffs.  If the axes are vague, use a table or boundary map instead.
 
 
 ─── Client ──► API ──► DB with labels ─────────────────────────────
@@ -120,8 +112,7 @@ One producer, multiple consumers.  Fan-out via ├──┬──┐ junction.
  └──────────────────────────────────────┘
 ```
 
-Stacked rectangles sharing borders.  Each layer labeled and briefly
-described.
+Stacked rectangles sharing borders.  Each layer labeled and briefly described.
 
 
 ─── Pipeline with branches ──────────────────────────────────────────
@@ -154,5 +145,4 @@ Main path horizontal, branch drops down on condition.
    │               │── cache ──    │            │
 ```
 
-Time flows down.  Lifelines vertical.  Dashed tail for async post-
-response work.
+Time flows down.  Lifelines vertical.  Dashed tail for async post- response work.

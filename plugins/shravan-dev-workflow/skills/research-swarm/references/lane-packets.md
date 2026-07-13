@@ -1,19 +1,10 @@
 # Lane Packets
 
-Use this skill-local packet contract for read-only research subagents. This
-file owns research-specific packet anatomy, source classes, route
-recommendations, evidence expectations, receipts, and parent reducer rules.
+Use this skill-local packet contract for read-only research subagents. This file owns research-specific packet anatomy, source classes, route recommendations, evidence expectations, receipts, and parent reducer rules.
 
-The parent owns the question, verification, reduction, and final claim. Lane
-outputs are candidate evidence, not accepted research truth, until parent
-synthesis verifies them against source anchors.
+The parent owns the question, verification, reduction, and final claim. Lane outputs are candidate evidence, not accepted research truth, until parent synthesis verifies them against source anchors.
 
-For substantial research, create inspectable stage artifacts unless the user
-asked for chat-only/no-files, the work is a single tiny local lane, or the tool
-surface cannot write artifacts. Substantial means any of: more than one
-lane/subagent, output consumed by another workflow or phase, high/xhigh or
-security-sensitive lanes, or findings/decisions/proof obligations that need
-later inspection. Record any exception in the parent receipt.
+For substantial research, create inspectable stage artifacts unless the user asked for chat-only/no-files, the work is a single tiny local lane, or the tool surface cannot write artifacts. Substantial means any of: more than one lane/subagent, output consumed by another workflow or phase, high/xhigh or security-sensitive lanes, or findings/decisions/proof obligations that need later inspection. Record any exception in the parent receipt.
 
 Default artifact shape:
 
@@ -72,18 +63,14 @@ For substantial work, the parent `research-ledger.md` records:
 - lane artifact paths under `lanes/`
 - which observations the parent accepted, contested, rejected, or left open
 - contradictions and stale assumptions that affect the next phase
-- route recommendation to `spec-creation-swarm` or `plan-creation-swarm`, when
-  the evidence is ready for a creation or planning workflow
-- completion receipt with source anchors, artifact paths, named exceptions, and
-  remaining uncertainty
+- route recommendation to `spec-creation-swarm` or `plan-creation-swarm`, when the evidence is ready for a creation or planning workflow
+- completion receipt with source anchors, artifact paths, named exceptions, and remaining uncertainty
 
-Research ledgers do not create specs or implementation plans. They preserve
-evidence for the next parent reducer.
+Research ledgers do not create specs or implementation plans. They preserve evidence for the next parent reducer.
 
 ## Local Re-Anchor Lane
 
-Use when a local repo, spec, plan, runbook, or current implementation constrains
-the research.
+Use when a local repo, spec, plan, runbook, or current implementation constrains the research.
 
 ```text
 Find the current local truth before external comparison.
@@ -110,8 +97,7 @@ system.
 
 ## Memory / Session Lane
 
-Use only when the task asks about the user's prior workflows, repeated behavior,
-session history, or durable preferences.
+Use only when the task asks about the user's prior workflows, repeated behavior, session history, or durable preferences.
 
 ```text
 Search memory and targeted rollout/session logs for repeated patterns.

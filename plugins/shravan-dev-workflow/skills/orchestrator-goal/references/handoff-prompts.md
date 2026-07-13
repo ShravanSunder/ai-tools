@@ -1,7 +1,6 @@
 # Goal Handoff Prompts
 
-Use this reference when the user needs a copy-paste prompt for another session,
-agent, or CLI.
+Use this reference when the user needs a copy-paste prompt for another session, agent, or CLI.
 
 ## Codex Prompt
 

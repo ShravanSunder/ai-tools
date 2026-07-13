@@ -1,7 +1,6 @@
 # Session Ledger
 
-Persistent Advisors and Sidekicks need one current ledger row before prompts
-that assume continuity.
+Persistent Advisors and Sidekicks need one current ledger row before prompts that assume continuity.
 
 ## Row
 
@@ -17,17 +16,11 @@ receipt expected / receipt level / receipt scope:
 parent verification / next follow-up / notes:
 ```
 
-Runtime ids are not interchangeable. Do not pass one runtime's local identity
-to another runtime unless a provider-native id is exposed and documented as
-accepted.
+Runtime ids are not interchangeable. Do not pass one runtime's local identity to another runtime unless a provider-native id is exposed and documented as accepted.
 
 ## Create Or Resume
 
-Reuse an existing relationship only when runtime identity, working scope,
-assignment, model, and permissions still match. Create a new relationship only
-with an explicit continuity-reset reason. Reconnect, auth failure, model
-rejection, permission failure, or provider limits do not authorize replacement
-churn.
+Reuse an existing relationship only when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship only with an explicit continuity-reset reason. Reconnect, auth failure, model rejection, permission failure, or provider limits do not authorize replacement churn.
 
 ## Readiness Lifecycle
 
@@ -36,9 +29,7 @@ local record -> provider attached -> selected model active
              -> assignment-bound output -> parent-verified claim
 ```
 
-Identity is the resolved runtime, working scope, relationship name, and exposed ids.
-Configuration is model, reasoning effort, and permissions. Keep both stable or
-record a deliberate transition before the next call.
+Identity is the resolved runtime, working scope, relationship name, and exposed ids. Configuration is model, reasoning effort, and permissions. Keep both stable or record a deliberate transition before the next call.
 
 | Signal | Action |
 | --- | --- |
@@ -51,9 +42,7 @@ record a deliberate transition before the next call.
 
 ## Progress And Scope
 
-A runtime status proves liveness only. Recent previews and saved history must be
-matched to the ledger's runtime identity, working scope, assignment, and source
-version before they can enter reduction.
+A runtime status proves liveness only. Recent previews and saved history must be matched to the ledger's runtime identity, working scope, assignment, and source version before they can enter reduction.
 
 ## Receipt Freshness
 
@@ -64,5 +53,4 @@ version before they can enter reduction.
 | `assignment-output` | captured output matches session, assignment id, decision target, and source/head version |
 | `parent-verified` | parent checked the accepted claim against primary evidence |
 
-Only current `assignment-output` enters reduction. Mark queued output `stale`
-when assignment, decision target, session scope, or source/head version changed.
+Only current `assignment-output` enters reduction. Mark queued output `stale` when assignment, decision target, session scope, or source/head version changed.

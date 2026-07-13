@@ -1,48 +1,32 @@
 # Background Monitoring Reference
 
-Use this reference when a debug investigation needs a long-running watcher,
-progress poller, shell monitor, or background job while the main model continues
-other work.
+Use this reference when a debug investigation needs a long-running watcher, progress poller, shell monitor, or background job while the main model continues other work.
 
 ## Decision Boundary
 
-Machine watches; model adjudicates. Deterministic shell, Python, or service
-probes should collect small facts on a schedule. The model should inspect only
-state changes, anomalies, completion, and bounded summaries. Do not make the
-main model or a helper model the steady-state model polling loop.
+Machine watches; model adjudicates. Deterministic shell, Python, or service probes should collect small facts on a schedule. The model should inspect only state changes, anomalies, completion, and bounded summaries. Do not make the main model or a helper model the steady-state model polling loop.
 
-This belongs to `debug-investigation` when the purpose is diagnosis,
-observability, failure detection, or root-cause proof. Do not route it to a new
-skill, `model-callers`, or an unfinished external caller helper just because the
-watcher launches another process. Helper agents are optional bounded lanes for
-interpreting snapshots or reviewing a monitor plan; they are not the monitor.
+This belongs to `debug-investigation` when the purpose is diagnosis, observability, failure detection, or root-cause proof. Do not route it to a new skill, `model-callers`, or an unfinished external caller helper just because the watcher launches another process. Helper agents are optional bounded lanes for interpreting snapshots or reviewing a monitor plan; they are not the monitor.
 
 ## Launch Contract
 
-When the agent harness has a background job system, launch the watcher through
-that surface so the user can see runtime, status, recent output, and cancel it.
-Do not use `nohup`, `disown`, hidden `&`, unmanaged cron, a hidden daemon, or a
-detached process group as a fallback.
+When the agent harness has a background job system, launch the watcher through that surface so the user can see runtime, status, recent output, and cancel it. Do not use `nohup`, `disown`, hidden `&`, unmanaged cron, a hidden daemon, or a detached process group as a fallback.
 
 If no harness-visible job-control surface exists, use one of these shapes:
 
 - a bounded foreground command in a visible terminal or CLI session;
-- a session-managed surface the user can inspect and cancel, such as an
-  explicitly named terminal session;
+- a session-managed surface the user can inspect and cancel, such as an explicitly named terminal session;
 - a single-shot probe the user or harness can rerun on the stated cadence;
 - a blocker report that explains no visible cancellable monitor can be launched.
 
-PID files and stop sentinels make a visible watcher safer, but they do not make
-an unmanaged detached process acceptable.
+PID files and stop sentinels make a visible watcher safer, but they do not make an unmanaged detached process acceptable.
 
 Before launch:
 
 - create the monitor directory under the debug artifact path
-- probe the safe path for required read-only tools with `command -v` or an
-  equivalent tool probe
+- probe the safe path for required read-only tools with `command -v` or an equivalent tool probe
 - probe access using read-only checks before the long loop
-- set `max_runtime_seconds`, interval, stall threshold, and a sentinel such as
-  `stop.requested`
+- set `max_runtime_seconds`, interval, stall threshold, and a sentinel such as `stop.requested`
 - use `trap` cleanup for temp files and child processes
 - start a process group when the shell supports it so stop can clean children
 - write `watcher.pid` and `pid_started_at`
@@ -58,12 +42,7 @@ Use compact, recoverable state:
 - `watcher.pid`: watcher PID or process group identifier
 - `stop.requested`: sentinel file that asks the loop to exit cleanly
 
-Default interval is 60 seconds unless the signal or user request requires a
-slower cadence. Do not write raw logs. If raw logs already exist in the harness
-or service,
-replay only a bounded tail through a redactor. Use the last 20 lines or 16 KiB
-as the default preview limit, whichever is smaller. Persist redacted previews
-and `output_refs`, not full streams.
+Default interval is 60 seconds unless the signal or user request requires a slower cadence. Do not write raw logs. If raw logs already exist in the harness or service, replay only a bounded tail through a redactor. Use the last 20 lines or 16 KiB as the default preview limit, whichever is smaller. Persist redacted previews and `output_refs`, not full streams.
 
 `monitor.json` should include:
 
@@ -92,44 +71,31 @@ and `output_refs`, not full streams.
 - `stopped`
 - `monitor_error`
 
-Make writes idempotent. Re-running the launcher with the same `monitor_id`
-should detect an active watcher, show the current state, and avoid duplicate
-loops unless the old `watcher.pid` is stale.
+Make writes idempotent. Re-running the launcher with the same `monitor_id` should detect an active watcher, show the current state, and avoid duplicate loops unless the old `watcher.pid` is stale.
 
 ## Secrets
 
 Use 1Password without leaking secrets:
 
-- prefer `op://` references passed through environment variables, `op run`, or
-  `op inject` into an ephemeral env file
-- do not ask the user for 1Password access again once a usable reference path is
-  known; verify the reference and report the exact blocker only if it fails
-- never persist secret values, passwords, tokens, `Authorization` headers,
-  `AWS_ACCESS_KEY_ID`, or connection string values in `monitor.json`,
-  `events.jsonl`, `stdout.log`, `stderr.log`, debug artifacts, shell history, or
-  chat output
-- if a temporary credential file is unavoidable, create it under the monitor tmp
-  directory with `umask 077` or `chmod 600`, use it only for the child process,
-  and delete it in `trap` cleanup
-- record secret provenance as a field name or 1Password reference label only,
-  not the value
+- prefer `op://` references passed through environment variables, `op run`, or `op inject` into an ephemeral env file
+- do not ask the user for 1Password access again once a usable reference path is known; verify the reference and report the exact blocker only if it fails
+- never persist secret values, passwords, tokens, `Authorization` headers, `AWS_ACCESS_KEY_ID`, or connection string values in `monitor.json`, `events.jsonl`, `stdout.log`, `stderr.log`, debug artifacts, shell history, or chat output
+- if a temporary credential file is unavoidable, create it under the monitor tmp directory with `umask 077` or `chmod 600`, use it only for the child process, and delete it in `trap` cleanup
+- record secret provenance as a field name or 1Password reference label only, not the value
 
-Set `redaction_applied: true` whenever any process output was scanned or
-persisted. Redact before writing, not after.
+Set `redaction_applied: true` whenever any process output was scanned or persisted. Redact before writing, not after.
 
 ## Status Policy
 
 A watcher should not narrate every interval. Report only:
 
-- `monitor_started` with path, PID, interval, stop command/sentinel, and runtime
-  bound
+- `monitor_started` with path, PID, interval, stop command/sentinel, and runtime bound
 - `progress` when the useful progress cursor changes
 - `anomaly` when thresholds or error signatures are crossed
 - `stalled` when no progress appears after the stated stall window
 - `completed`, `failed`, `stopped`, or `monitor_error`
 
-The debug artifact should link to the monitor directory and record the latest
-state, but the JSONL files carry the detailed timeline.
+The debug artifact should link to the monitor directory and record the latest state, but the JSONL files carry the detailed timeline.
 
 When presenting the monitor plan, explicitly name:
 
@@ -138,17 +104,13 @@ When presenting the monitor plan, explicitly name:
 - bounded subagent interpretation only; no steady-state model polling
 - safe path/tool probe before launch
 - raw log replay policy: bounded tails only, redacted before persistence
-- PID/log/state files, especially `watcher.pid`, `stdout.log`, `stderr.log`,
-  `monitor.json`, and `events.jsonl`
+- PID/log/state files, especially `watcher.pid`, `stdout.log`, `stderr.log`, `monitor.json`, and `events.jsonl`
 - harness-managed cancellable watcher when job control exists
-- `op://` or ephemeral env secret handling, `chmod 600` if temp files are
-  unavoidable, and `redaction_applied`
+- `op://` or ephemeral env secret handling, `chmod 600` if temp files are unavoidable, and `redaction_applied`
 
 ## Recovery and Stop
 
-Monitoring is read-only in investigation mode. Do not restart jobs, mutate
-infrastructure, clear queues, scale pods, or change config just because the
-watcher sees a stall. Those are fix or ops actions and need explicit approval.
+Monitoring is read-only in investigation mode. Do not restart jobs, mutate infrastructure, clear queues, scale pods, or change config just because the watcher sees a stall. Those are fix or ops actions and need explicit approval.
 
 Stop behavior:
 

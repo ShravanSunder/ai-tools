@@ -8,9 +8,7 @@ Use this reference when a spec/design needs user decisions before it can converg
 - Include the agent's current guess or recommended answer.
 - Explain what changes if the user chooses differently.
 - Inspect code/docs before asking if the answer is discoverable.
-- Keep inspection bounded to the decision. If the next useful output is an
-  evidence ledger, prior-art comparison, current docs/web research, or
-  memory/session-log mining, hand off to `research-swarm`.
+- Keep inspection bounded to the decision. If the next useful output is an evidence ledger, prior-art comparison, current docs/web research, or memory/session-log mining, hand off to `research-swarm`.
 - Do not accept vague approval as convergence when a material branch remains.
 - Keep the discussion scoped to design/spec/plan/implementation/docs decisions; route review, debug, security, and execution work to their own skills.
 

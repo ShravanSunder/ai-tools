@@ -1,8 +1,6 @@
 # Spec Review Finding Schema
 
-Every `spec-review-swarm` lane returns findings in this canonical shape. Lane
-references may add lane-specific context, but they do not replace or weaken
-this schema.
+Every `spec-review-swarm` lane returns findings in this canonical shape. Lane references may add lane-specific context, but they do not replace or weaken this schema.
 
 ```text
 Finding:
@@ -22,14 +20,9 @@ Finding:
 Rules:
 
 - Do not report speculative findings without a concrete failure path.
-- Every substantive finding needs an exact inspectable anchor. Prefer
-  `path:line` or a durable heading anchor. If line numbers are unavailable,
-  explain the limitation and provide the smallest inspectable section.
-- Every substantive finding names the smallest refinement target and a
-  validation note. Do not say only "add more detail" or "clarify".
+- Every substantive finding needs an exact inspectable anchor. Prefer `path:line` or a durable heading anchor. If line numbers are unavailable, explain the limitation and provide the smallest inspectable section.
+- Every substantive finding names the smallest refinement target and a validation note. Do not say only "add more detail" or "clarify".
 - Prefer one strong finding over several weak findings.
-- Do not mark findings accepted. Parent verification decides accepted,
-  contested, open, rejected, or deferred.
+- Do not mark findings accepted. Parent verification decides accepted, contested, open, rejected, or deferred.
 - `question` findings still need evidence and a loop route.
-- If the lane has no substantive findings, return `verdict: ready` plus the
-  evidence checked and completion receipt.
+- If the lane has no substantive findings, return `verdict: ready` plus the evidence checked and completion receipt.

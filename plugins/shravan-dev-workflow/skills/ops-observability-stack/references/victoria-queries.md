@@ -56,8 +56,7 @@ curl --get --silent --show-error --max-time 5 \
   --data-urlencode 'match[]=your_metric_name'
 ```
 
-The label-set response must not contain tokens, secrets, raw paths, prompts, or
-payload canaries.
+The label-set response must not contain tokens, secrets, raw paths, prompts, or payload canaries.
 
 ## VictoriaTraces
 
@@ -85,6 +84,4 @@ Both responses must omit the canary.
 
 ## Interpretation
 
-Positive proof needs a current marker and the expected service/resource labels.
-Negative proof needs the exact canary absent from logs, traces, and metric label
-sets. If a query times out, report it as inconclusive rather than green.
+Positive proof needs a current marker and the expected service/resource labels. Negative proof needs the exact canary absent from logs, traces, and metric label sets. If a query times out, report it as inconclusive rather than green.

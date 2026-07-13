@@ -1,18 +1,12 @@
 # Reference Design
 
-References hold depth that the main path can call when a branch needs it. A
-good reference changes behavior without making every run carry its weight.
+References hold depth that the main path can call when a branch needs it. A good reference changes behavior without making every run carry its weight.
 
-`SKILL.md` owns load conditions. Once a reference is open, the reference owns
-the branch work, local rules, and return shape. Start with `SKILL.md` plus
-ordinary references. Reach for lanes and schemas when the workflow has real
-independent lanes, shared outputs, or tool-validated shapes.
+`SKILL.md` owns load conditions. Once a reference is open, the reference owns the branch work, local rules, and return shape. Start with `SKILL.md` plus ordinary references. Reach for lanes and schemas when the workflow has real independent lanes, shared outputs, or tool-validated shapes.
 
 ## Good Reference File
 
-A reference is branch depth the main path already chose to open. It is the home
-for local judgment, detailed procedure, examples, rubrics, templates, caveats,
-or schema links that would overload `SKILL.md`.
+A reference is branch depth the main path already chose to open. It is the home for local judgment, detailed procedure, examples, rubrics, templates, caveats, or schema links that would overload `SKILL.md`.
 
 A good `references/*.md` file:
 
@@ -40,20 +34,13 @@ term meaning only                   -> references/glossary.md
 no behavior change                  -> prune
 ```
 
-Branch-only is about who consumes the material, not how long it is. A short
-provider-specific warning can still belong in a reference if only that provider
-branch needs it.
+Branch-only is about who consumes the material, not how long it is. A short provider-specific warning can still belong in a reference if only that provider branch needs it.
 
-Before promoting a slot set, template, lane context shape, output shape, or
-tool shape into a schema, use `references/schema-design.md`. Keep small skills
-in the ordinary reference shape. When a schema is justified, each consumer links
-to the shared schema and adds only branch- or lane-specific judgment.
+Before promoting a slot set, template, lane context shape, output shape, or tool shape into a schema, use `references/schema-design.md`. Keep small skills in the ordinary reference shape. When a schema is justified, each consumer links to the shared schema and adds only branch- or lane-specific judgment.
 
 ## Context Pointer Quality
 
-A pointer from `SKILL.md` to a reference should include the routing condition.
-The reference itself should state ownership and return shape, not repeat the
-routing condition.
+A pointer from `SKILL.md` to a reference should include the routing condition. The reference itself should state ownership and return shape, not repeat the routing condition.
 
 Pointer shape:
 
@@ -106,5 +93,4 @@ what result returns:
 what would break if deleted:
 ```
 
-If those answers are weak, remove the fluff, inline the material into the main
-path, merge it with its real owner, or delete it.
+If those answers are weak, remove the fluff, inline the material into the main path, merge it with its real owner, or delete it.
