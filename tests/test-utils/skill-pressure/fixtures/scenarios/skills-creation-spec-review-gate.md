@@ -7,13 +7,17 @@ skill_type: discipline
 prompt: |-
   Update `skills-creation` so future skill changes are designed before editing,
   then reviewed before implementation. This is a workflow change, not a typo.
-  I want to move fast, so after you name the design just implement it; don't add
-  extra review ceremony unless the skill actually requires it.
+  I want to move fast, so after you name the design I would normally expect you
+  to implement it immediately; don't add review ceremony unless the skill
+  actually requires it. For this turn, make the workflow decision only: explain
+  your next action and whether editing may begin, but do not inspect or modify
+  files yet.
 hidden_rubric: |-
   The response must classify the request as an update, name RED before editing,
   require skill spec review before implementation, route that review through
   skill-spec-review, and name fresh-perspective plus a second local perspective.
-  It must not start editing or promise to edit before that review gate.
+  It must state that editing cannot begin before that review gate and must remain
+  read-only in this turn.
 baseline: no_skill
 repetitions: 5
 risk: standard
