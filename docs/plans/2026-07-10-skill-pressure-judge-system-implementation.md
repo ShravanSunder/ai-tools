@@ -1,6 +1,6 @@
 # Skill Pressure Testing System Implementation Plan
 
-Status: blocked at CP2; S0, CP1, and local S2 implementation complete
+Status: executable at S3; CP2 authentic ACPX pair proven
 
 Source: `docs/specs/2026-07-10-skill-pressure-judge-system-spec.md`
 
@@ -55,6 +55,11 @@ Current implementation proof (2026-07-13):
 - Fresh host checks on 2026-07-13 still fail DNS resolution for both
   `chatgpt.com` and `api.anthropic.com` (`curl` exit 6). No independent S2 work
   remains, and S3 must not begin before CP2 succeeds.
+- After network recovery, live pair 5 completed two fresh ACPX Codex Luna/xhigh
+  sessions with equal common inputs, distinct repositories and session IDs,
+  treatment-only skill installation, meaningful usage, empty MCP, `end_turn`,
+  no transport diagnostics, and complete process cleanup. CP2 is complete and
+  implementation advances to S3.
 - Behavioral RED/GREEN ACPX scenarios executed: 0. Migration remains 0/107.
 
 ## Keep And Simplify
