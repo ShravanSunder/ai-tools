@@ -1,6 +1,6 @@
 # Glossary
 
-Vocabulary for judging great skills. Definitions only -- operational rules live in `SKILL.md` or the branch reference that owns them.
+Vocabulary for judging great skills. Definitions only -- operational rules live in `SKILL.md` or the reference that owns them.
 
 ## Root Virtue
 
@@ -23,18 +23,27 @@ Vocabulary for judging great skills. Definitions only -- operational rules live 
 - Steps: ordered actions the agent performs. They belong in `SKILL.md` when order changes behavior.
 - Workflow topology: the route from trigger through all-run spine, branches, return shapes, and completion/proof.
 - All-run spine: the part of the workflow every invocation needs. It belongs in `SKILL.md`.
-- Reference: definitions, facts, examples, rubrics, commands, or conditional details consulted while using the skill.
+- Reference: coherent mandatory or conditional detail consulted after the calling `SKILL.md` selects the work.
+- Load mode: the caller-owned choice between all-run `MUST load` and conditional `IF <observable predicate>, load` consumption in the current workflow.
+- Execution shape: the work's classification as an ordinary reference or a parallel-safe, handoff-ready lane.
+- Mandatory reference: coherent all-run detail consumed through `MUST load` while its parent obligation and completion remain visible in `SKILL.md`.
 - Context pointer: wording that names when to load a reference and what to do with it. Weak pointer wording is a variance bug.
-- Progressive disclosure: moving branch-specific or heavy reference out of `SKILL.md` behind a context pointer.
+- Progressive disclosure: moving coherent detailed procedure or branch-specific depth out of `SKILL.md` behind a complete caller.
 - Co-location: keeping a concept's definition, rules, caveats, and examples near each other once their hierarchy level is chosen.
-- Branch: a distinct way the skill runs that needs different reference or proof.
-- Branch predicate: the observable condition that sends the agent into a branch.
-- Return shape: the concrete result a branch brings back to the main path, such as a verdict, filled slots, proof result, route decision, or edit boundary.
-- Lane: a branch designed as an independent workflow step.
+- Branch: a conditional route that changes the work performed by the skill.
+- Branch predicate: the observable condition that selects a branch.
+- Return shape: the concrete result a reference pass or branch brings back to the main path, such as a verdict, filled slots, proof result, route decision, or edit boundary.
+- Lane: a parallel-safe work boundary that a subagent can execute from bounded context once declared prerequisites are satisfied, with an owned mission, context and source anchors, decisions and non-goals, dependency state, authority, shaped receipt, and parent-owned verification and reduction. Independence is semantic: a lane remains a lane when run locally or scheduled sequentially.
+- Lane qualification: the complete parallel-safety, bounded-handoff, mission, context, decision, dependency, authority, receipt, and parent-reduction contract. Parallel execution or delegation alone does not qualify work as a lane.
+- Readiness wave: a set of lanes whose prerequisites and required prior results are complete, making them semantically eligible to overlap.
+- Lane receipt: a `complete`, `partial`, or `blocked` lane result carrying evidence and unresolved questions for parent verification.
+- Parent reduction: the parent's verification, conflict handling, and integration of lane receipts into the overall workflow and final claim.
+- Maximum authority: the stable upper bound on actions a lane reference permits.
+- Instance authority: the actions permitted for one caller-supplied lane invocation within its reference's maximum authority.
 - Schema: a reusable shape a downstream consumer can rely on.
-- Lane-schema: the shared route, input, or return shape used by independent lanes.
-- Output-schema: the shared result shape multiple consumers need from model output.
-- Tool-schema: the shape validated by a tool, test, CI check, or runtime.
+- Lane-schema: stable input, context, route, or return fields shared by multiple lanes, including provisional receipt and parent-reduction semantics.
+- Output-schema: stable readable result fields shared by multiple model-facing consumers without implying a lane.
+- Tool-schema: stable structure machine-validated by a tool, test, CI check, or runtime without implying a lane.
 
 ## Steering
 
