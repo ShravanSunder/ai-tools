@@ -8,6 +8,7 @@
     "schemas:generate": "SKILL_PRESSURE_UPDATE_SCHEMAS=1 vitest run lib/contracts/schema-generation.test.ts --config vitest.config.ts",
     "test:unit": "vitest run lib --exclude '**/*.integration.test.ts' --config vitest.config.ts",
     "test:integration": "vitest run lib/evaluation/subject-repetition.integration.test.ts --config vitest.config.ts",
+    "test:evals": "vitest run evals --config vitest.evals.config.ts",
     "test:live-pair": "tsx scripts/run-live-pair.ts",
     "test:live-scenario": "tsx scripts/run-live-scenario.ts",
     "typecheck": "tsc --noEmit"
@@ -19,8 +20,10 @@
   "devDependencies": {
     "@types/node": "^25.5.0",
     "ajv": "^8.17.1",
+    "tinyrainbow": "3.1.0",
     "tsx": "^4.23.0",
     "typescript": "^5.8.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "vitest-evals": "0.14.0"
   }
 }

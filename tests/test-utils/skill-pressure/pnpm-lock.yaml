@@ -21,6 +21,9 @@ importers:
       ajv:
         specifier: ^8.17.1
         version: 8.20.0
+      tinyrainbow:
+        specifier: 3.1.0
+        version: 3.1.0
       tsx:
         specifier: ^4.23.0
         version: 4.23.0
@@ -30,6 +33,9 @@ importers:
       vitest:
         specifier: ^4.1.9
         version: 4.1.10(@types/node@25.9.5)(vite@8.1.4(@types/node@25.9.5)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0))
+      vitest-evals:
+        specifier: 0.14.0
+        version: 0.14.0(tinyrainbow@3.1.0)(vitest@4.1.10(@types/node@25.9.5)(vite@8.1.4(@types/node@25.9.5)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0)))(zod@4.4.3)
 
 packages:
 
@@ -326,6 +332,12 @@ packages:
   '@types/node@25.9.5':
     resolution: {integrity: sha512-OScDchr2fwuUmWdf4kZ9h7PcJiYDVInhJizG/biAq3cAvqwYktuy/TYGGdZNMtNTFUP7rnb0NU4TUdm82kt4Rg==}
 
+  '@vitest-evals/core@0.14.0':
+    resolution: {integrity: sha512-N7Weau1IdLADKKsyiieNptYBsOLuzv96C/Ki3qxT0u3+TbAnnVxAR1Aruz+pAwsK1Nks5pJ+4GbrAmrgaDWS3g==}
+
+  '@vitest-evals/report-ui@0.14.0':
+    resolution: {integrity: sha512-TfkL4/i4bE9Q1+8KMFmxP9v8oOBvcR70wOMYhfB3Ziv4f+pUlKbUkcgrggRjukzdm8g6P7qHvTGrx2mGCvaj0A==}
+
   '@vitest/expect@4.1.10':
     resolution: {integrity: sha512-YsCn+qAk1GWjQOWFEsEcL2gNQ0zmVmQu3T03qP6UyjhtmdtwtbuI+DASn/7iQB3HGTXkdBwGddzxPlmiql5vlA==}
 
@@ -607,6 +619,20 @@ packages:
       yaml:
         optional: true
 
+  vitest-evals@0.14.0:
+    resolution: {integrity: sha512-CugWWm6LMgCknSMBOFy2Y1RkbScbAqJ6c61+kU9EEerq1ELMH0AurvDGU36lkaXrmz6CPRABNx5CzBvwEUh3+w==}
+    hasBin: true
+    peerDependencies:
+      ai: '>=4 <7'
+      tinyrainbow: '>=2 <4'
+      vitest: '>=4 <5'
+      zod: '>=3 <5'
+    peerDependenciesMeta:
+      ai:
+        optional: true
+      zod:
+        optional: true
+
   vitest@4.1.10:
     resolution: {integrity: sha512-R9jUTe5S4Qb0HCd4TNqpC7oGcrMssMRGXLW80ubjWsW9VH5GF8y1Y0SFLY9AbqSk6nt0PnOx4H4WNJYZ13GUPw==}
     engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -838,6 +864,14 @@ snapshots:
   '@types/node@25.9.5':
     dependencies:
       undici-types: 7.24.6
+
+  '@vitest-evals/core@0.14.0':
+    dependencies:
+      zod: 4.4.3
+
+  '@vitest-evals/report-ui@0.14.0':
+    dependencies:
+      '@vitest-evals/core': 0.14.0
 
   '@vitest/expect@4.1.10':
     dependencies:
@@ -1082,6 +1116,15 @@ snapshots:
       fsevents: 2.3.3
       tsx: 4.23.0
       yaml: 2.9.0
+
+  vitest-evals@0.14.0(tinyrainbow@3.1.0)(vitest@4.1.10(@types/node@25.9.5)(vite@8.1.4(@types/node@25.9.5)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0)))(zod@4.4.3):
+    dependencies:
+      '@vitest-evals/core': 0.14.0
+      '@vitest-evals/report-ui': 0.14.0
+      tinyrainbow: 3.1.0
+      vitest: 4.1.10(@types/node@25.9.5)(vite@8.1.4(@types/node@25.9.5)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0))
+    optionalDependencies:
+      zod: 4.4.3
 
   vitest@4.1.10(@types/node@25.9.5)(vite@8.1.4(@types/node@25.9.5)(esbuild@0.28.1)(tsx@4.23.0)(yaml@2.9.0)):
     dependencies:
