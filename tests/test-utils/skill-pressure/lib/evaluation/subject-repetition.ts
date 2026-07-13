@@ -89,7 +89,11 @@ export interface SubjectRepetitionReceipt {
   readonly requestedReasoningEffort: string;
   readonly permissionMode: AcpxPermissionMode;
   readonly runtimeIdentity: RuntimeExecutableIdentity;
-  readonly disabledAmbientSkills: readonly { readonly path: string; readonly digest: string }[];
+  readonly disabledAmbientSkills: readonly {
+    readonly path: string;
+    readonly status: "present" | "missing";
+    readonly digest: string | null;
+  }[];
   readonly repositoryEvidence: RepositoryEvidence;
   readonly transcript: AcpxTranscriptFacts;
   readonly transcriptDigest: string;
@@ -138,10 +142,9 @@ export async function runSubjectRepetition(
     }
   }
   const sourceDigest = installReceipt?.closureDigest ?? null;
-  const disabledAmbientSkills = await Promise.all([...props.disabledAmbientSkillPaths].sort().map(async (skillPath) => ({
-    path: path.resolve(skillPath),
-    digest: digest((await readFile(path.resolve(skillPath))).toString("utf8")),
-  })));
+  const disabledAmbientSkills = await Promise.all(
+    [...props.disabledAmbientSkillPaths].sort().map(readDisabledAmbientSkill),
+  );
   const fixtureDigest = digestFixture(props.fixtureFiles);
   const promptDigest = digest(props.prompt);
   const commonInputDigest = digest(JSON.stringify({
@@ -220,6 +223,30 @@ export async function runSubjectRepetition(
     status: infrastructureReasons.length === 0 ? "executed" : "infrastructure_error",
     infrastructureReasons,
   };
+}
+
+async function readDisabledAmbientSkill(skillPath: string): Promise<{
+  readonly path: string;
+  readonly status: "present" | "missing";
+  readonly digest: string | null;
+}> {
+  const resolvedPath = path.resolve(skillPath);
+  try {
+    return {
+      path: resolvedPath,
+      status: "present",
+      digest: digest((await readFile(resolvedPath)).toString("utf8")),
+    };
+  } catch (error) {
+    if (isMissingPathError(error)) {
+      return { path: resolvedPath, status: "missing", digest: null };
+    }
+    throw error;
+  }
+}
+
+function isMissingPathError(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
 }
 
 export function assertComparablePair(

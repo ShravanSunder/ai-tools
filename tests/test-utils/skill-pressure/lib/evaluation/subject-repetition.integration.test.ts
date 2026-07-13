@@ -190,6 +190,23 @@ describe("ACPX subject repetition", () => {
     ]);
   });
 
+  it("records an ambient skill that disappears after discovery without crashing", async () => {
+    const fixture = await createFixture();
+    const missingSkillPath = path.join(fixture.runRoot, "removed-skill", "SKILL.md");
+    const receipt = await runSubjectRepetition({
+      ...baseProps(fixture),
+      disabledAmbientSkillPaths: [missingSkillPath],
+      variant: "baseline",
+      selectedSkillSource: { mode: "none" },
+      execute: async () => successfulExecution("missing-ambient-session"),
+    });
+
+    expect(receipt.status).toBe("executed");
+    expect(receipt.disabledAmbientSkills).toEqual([
+      { path: missingSkillPath, status: "missing", digest: null },
+    ]);
+  });
+
   it("rejects transport diagnostics even when ACPX exits zero and ends the turn", async () => {
     const fixture = await createFixture();
     const execution = successfulExecution("diagnostic-session");
