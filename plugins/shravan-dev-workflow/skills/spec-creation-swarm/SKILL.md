@@ -53,10 +53,7 @@ fuzzy goal or design question
 - Read current code, docs, prior specs, and logs before designing.
 - Use subagents by default for substantial spec creation when research,
   codebase exploration, architecture comparison, security/trust-boundary
-  mapping, or risk/tradeoff mapping can run as independent lanes. Spec creation
-  lanes use high effort by default and xhigh effort for architecture, security,
-  or crux-decision lanes. For tiny local decisions, name the smaller lane set
-  used.
+  mapping, or risk/tradeoff mapping can run as independent lanes. Spec creation lanes use `sidekicks`. `Advisors` will be used for checking architecture decisions.
 - Give every subagent a bounded packet with a concrete question, exact source
   inputs, source-of-truth inputs, selected lane reference, lane-specific focus,
   security context, expected evidence, and completion receipt. Broad repo
