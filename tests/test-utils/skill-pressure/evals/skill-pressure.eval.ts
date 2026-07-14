@@ -18,13 +18,10 @@ import {
 import { createSkillPressureEvalHarness } from "../lib/evaluation/skill-pressure-eval-harness.js";
 import { loadFastScenarioManifest } from "../lib/evaluation/fast-scenario-manifest.js";
 import type { ExecutedV3BehavioralScenario } from "../lib/evaluation/v3-behavioral-scenario-execution.js";
+import { executeV3SuiteCommand } from "../lib/evaluation/v3-suite-command.js";
 import { selectV3SuiteScenarios } from "../lib/evaluation/v3-suite-selection.js";
 import { calculateRunnerSemantics } from "../lib/runtime/runner-semantics.js";
-import {
-  createV3AggregateReceipt,
-  validateV3ScenarioExecutionForAggregate,
-  type ValidatedV3ScenarioExecutionSummary,
-} from "../lib/reporting/aggregate-receipt.js";
+import type { V3SkillPressureAggregateReceipt } from "../lib/reporting/aggregate-receipt.js";
 import { writeJsonReceipt } from "../lib/reporting/attempt-receipt.js";
 
 const repositoryRoot = path.resolve(import.meta.dirname, "../../../..");
@@ -123,7 +120,7 @@ const suiteExecutionGraphPersistence =
         secrets: [],
       });
 const concurrencyGate = createBoundedConcurrencyGate(configuration.jobs);
-const completedResults: ValidatedV3ScenarioExecutionSummary[] = [];
+const completedExecutions = new Map<string, ExecutedV3BehavioralScenario>();
 
 afterAll(async () => {
   if (suiteExecutionGraphPersistence !== null) {
@@ -143,13 +140,14 @@ afterAll(async () => {
     ).not.toBeNull();
     return;
   }
-  const aggregateReceipt = createV3AggregateReceipt({
+  const aggregateDirectory = path.join(repositoryRoot, "tmp/skill-pressure-evals", runId);
+  const commandResult = await executeV3SuiteCommand({
     runId,
-    suiteKind: selection.aggregateSuiteKind,
+    repositoryRoot,
     discoveredScenarioCount: discoveryReceipt.discovered.length,
-    selectedScenarioIds: selection.selectedScenarioIds,
-    claimedRequirements,
-    registrySnapshotDigest: selection.registrySnapshotDigest,
+    invalid: discoveryReceipt.invalid,
+    selection,
+    registrySnapshot,
     executionGraphPreflightReceipt:
       suiteExecutionGraphPersistence === null
         ? null
@@ -157,20 +155,18 @@ afterAll(async () => {
             receiptPath: suiteExecutionGraphPersistence.receiptPath,
             receiptDigest: suiteExecutionGraphPersistence.receiptDigest,
           },
-    selection: {
-      mode: selection.mode,
-      selectionDigest: selection.selectionDigest,
-      selectedScenarios: selection.selectedScenarios,
-      excludedStaleGateScenarioIds: selection.excludedStaleGateScenarioIds,
+    executeScenario: async (scenarioId) => completedExecutions.get(scenarioId) ?? null,
+    persistAggregate: async (receipt: V3SkillPressureAggregateReceipt) => {
+      const aggregatePath = path.join(aggregateDirectory, "aggregate-receipt.json");
+      await mkdir(aggregateDirectory, { recursive: true });
+      await writeFile(aggregatePath, `${JSON.stringify(receipt, null, 2)}\n`, { flag: "wx" });
+      return aggregatePath;
     },
-    invalid: discoveryReceipt.invalid,
-    results: completedResults,
   });
-  const aggregateDirectory = path.join(repositoryRoot, "tmp/skill-pressure-evals", runId);
-  const aggregatePath = path.join(aggregateDirectory, "aggregate-receipt.json");
-  await mkdir(aggregateDirectory, { recursive: true });
-  await writeFile(aggregatePath, `${JSON.stringify(aggregateReceipt, null, 2)}\n`, { flag: "wx" });
-  expect(aggregateReceipt.suite.success, `aggregate receipt: ${aggregatePath}`).toBe(true);
+  expect(
+    commandResult.exitCode,
+    `aggregate receipt: ${commandResult.aggregateReceiptPath}`,
+  ).toBe(0);
 });
 
 if (!configuration.dryRun) {
@@ -188,22 +184,11 @@ if (!configuration.dryRun) {
           );
           if (registryRow === undefined)
             throw new Error(`missing registry row: ${result.output.scenarioId}`);
-          completedResults.push(
-            await validateV3ScenarioExecutionForAggregate({
-              scenarioId: result.output.scenarioId,
-              repositoryRoot,
-              registryRow,
-              expectedRepetitions:
-                selection.selectedScenarios.find(
-                  (scenario) => scenario.scenarioId === result.output.scenarioId,
-                )?.repetitions ?? 0,
-              executed: {
-                receiptPath: result.output.receiptPath,
-                receiptDigest: `sha256:${createHash("sha256").update(receiptSource).digest("hex")}`,
-                receipt,
-              },
-            }),
-          );
+          completedExecutions.set(result.output.scenarioId, {
+            receiptPath: result.output.receiptPath,
+            receiptDigest: `sha256:${createHash("sha256").update(receiptSource).digest("hex")}`,
+            receipt,
+          });
 
           expect(result.output.executionStatus).toBe("executed");
           expect(result.output.baselineCount).toBe(5);

@@ -74,16 +74,11 @@ export async function createRuntimeAuthorityContext(props: {
   return {
     freshnessInputs,
     calibration,
-    resolveParentAcceptance: async (request) => persistParentAcceptance({
-      repositoryRoot: props.repositoryRoot,
-      contract: props.contract,
-      promotion,
-      request,
-    }),
+    resolveParentAcceptance: async () => null,
   };
 }
 
-async function persistParentAcceptance(props: {
+export async function persistExplicitParentAcceptance(props: {
   readonly repositoryRoot: string;
   readonly contract: V3BehaviorContract;
   readonly promotion: ValidatedPromotionReceipt;

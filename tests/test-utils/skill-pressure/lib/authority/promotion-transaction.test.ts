@@ -16,7 +16,11 @@ import {
 import type { AuthorityDigest, CalibrationFreshnessInputs } from "./authority-receipts.js";
 import { loadEvaluationRegistry } from "./evaluation-registry.js";
 import { promoteScenarioFromReceipt } from "./promotion-transaction.js";
-import { createRuntimeAuthorityContext } from "./runtime-authority-context.js";
+import { acceptScenarioRunFromReceipt } from "./run-acceptance-transaction.js";
+import {
+  createRuntimeAuthorityContext,
+  persistExplicitParentAcceptance,
+} from "./runtime-authority-context.js";
 
 const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
 const REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
@@ -124,7 +128,7 @@ describe("promotion transaction", () => {
     await expectDiagnosticRegistry(unaccepted.repositoryRoot);
   });
 
-  it("loads fresh promoted authority and writes acceptance for the exact gate run", async () => {
+  it("loads fresh promoted authority but requires a separate exact-run acceptance step", async () => {
     const fixture = await createPromotionFixture();
     await promoteScenarioFromReceipt({
       repositoryRoot: fixture.repositoryRoot,
@@ -152,7 +156,7 @@ describe("promotion transaction", () => {
     expect(authority.calibration?.promotion.freshness).toEqual({ status: "fresh", reasonCode: null });
 
     const runDigest = DIGEST("8");
-    const acceptance = await authority.resolveParentAcceptance({
+    const request = {
       candidate: {
         scenarioId: fixture.contract.scenarioId,
         behaviorContractDigest: fixture.contract.behaviorContractDigest as AuthorityDigest,
@@ -164,6 +168,14 @@ describe("promotion transaction", () => {
       },
       runDigest,
       claimedRequirementManifestDigest: DIGEST("2"),
+    } as const;
+    await expect(authority.resolveParentAcceptance(request)).resolves.toBeNull();
+    if (authority.calibration === null) throw new Error("fixture calibration is missing");
+    const acceptance = await persistExplicitParentAcceptance({
+      repositoryRoot: fixture.repositoryRoot,
+      contract: fixture.contract,
+      promotion: authority.calibration.promotion,
+      request,
     });
     expect(acceptance?.receipt).toMatchObject({ acceptedRunDigest: runDigest });
     await expect(readFile(path.join(fixture.repositoryRoot, acceptance?.sourceReceipt.receiptPath ?? ""), "utf8"))
@@ -202,6 +214,79 @@ describe("promotion transaction", () => {
       status: "stale",
       reasonCode: "stale_calibration",
     });
+  });
+
+  it("accepts one exact persisted gate run without mutating the candidate receipt", async () => {
+    const fixture = await createPromotionFixture();
+    await promoteScenarioFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: true,
+      verifyMutationCoverage: async () => undefined,
+      dependencies: fixture.dependencies,
+    });
+    const registry = await loadEvaluationRegistry({
+      repositoryRoot: fixture.repositoryRoot,
+      registryPath: path.join(fixture.repositoryRoot, REGISTRY_PATH),
+      knownScenarios: [{
+        scenarioId: fixture.contract.scenarioId,
+        behaviorContractDigest: fixture.contract.behaviorContractDigest,
+      }],
+    });
+    const registryRow = registry.scenarios[0];
+    if (registryRow === undefined) throw new Error("fixture registry row is missing");
+    const authority = await createRuntimeAuthorityContext({
+      repositoryRoot: fixture.repositoryRoot,
+      contract: fixture.contract,
+      registryRow,
+      calculateFreshnessInputs: fixture.dependencies.calculateFreshnessInputs,
+    });
+    if (authority.calibration === null) throw new Error("fixture calibration is missing");
+    const candidate = JSON.parse(await readFile(fixture.scenarioReceiptPath, "utf8")) as {
+      authoritySnapshot: Record<string, unknown>;
+    } & Record<string, unknown>;
+    candidate.authoritySnapshot = {
+      ...candidate.authoritySnapshot,
+      evaluationRole: "gate",
+      freshness: "fresh",
+      calibrationStatus: "calibrated",
+      evidenceDigest: DIGEST("9"),
+      releaseAuthority: false,
+      reasonCode: "missing_parent_acceptance",
+      parentAcceptanceReceiptDigest: null,
+      parentAcceptanceSourceReceipt: null,
+      calibrationAuthorityReceiptDigest: authority.calibration.promotion.authorityReceiptDigest,
+      calibrationFingerprintDigest: authority.calibration.promotion.calibrationFingerprint.digest,
+    };
+    const candidateSource = `${JSON.stringify(candidate, null, 2)}\n`;
+    await writeFile(fixture.scenarioReceiptPath, candidateSource);
+
+    const accepted = await acceptScenarioRunFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: true,
+      dependencies: {
+        validateScenarioExecution: async () => ({}) as never,
+        createAuthorityContext: async () => authority,
+      },
+    });
+
+    await expect(readFile(fixture.scenarioReceiptPath, "utf8")).resolves.toBe(candidateSource);
+    await expect(readFile(accepted.acceptedScenarioReceiptPath, "utf8")).resolves.toContain(
+      '"releaseAuthority": true',
+    );
+    await expect(
+      readFile(path.join(fixture.repositoryRoot, accepted.parentAcceptanceReceiptPath), "utf8"),
+    ).resolves.toContain(accepted.runDigest);
+  });
+
+  it("rejects implicit run acceptance and rolls back acceptance if derived receipt commit fails", async () => {
+    const fixture = await createPromotionFixture();
+    await expect(acceptScenarioRunFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: false,
+    })).rejects.toThrow(/explicit parent decision/u);
   });
 
   it("rejects a diagnostic run produced under stale calibration inputs", async () => {
