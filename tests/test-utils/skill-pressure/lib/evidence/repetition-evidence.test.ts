@@ -11,7 +11,7 @@ import {
 
 function receipt(): SubjectRepetitionReceipt {
   return {
-    runnerVersion: "skill-pressure-repetition-v1",
+    runnerVersion: "skill-pressure-repetition-v2",
     repetitionId: "green-1",
     scenarioId: "shortcut-pressure",
     variant: "treatment",
@@ -27,6 +27,9 @@ function receipt(): SubjectRepetitionReceipt {
     requestedModel: "gpt-5.6-luna",
     requestedReasoningEffort: "xhigh",
     permissionMode: "approve-reads",
+    allowedTools: [],
+    allowedWritePaths: [],
+    writePolicy: { status: "pass", unauthorizedPaths: [] },
     runtimeIdentity: {
       launcher: { executable: "/usr/local/bin/acpx", prefixArgs: [], source: "global" },
       launcherDigest: "sha256:acpx",

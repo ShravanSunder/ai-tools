@@ -19,6 +19,7 @@ import {
   resolveExecutablePath,
   resolveRuntimeExecutableIdentity,
 } from "../runtime/acpx-command-executor.js";
+import type { AcpxPermissionMode } from "../runtime/acpx-subject-profile.js";
 import { discoverAmbientSkillPaths } from "../runtime/ambient-skill-discovery.js";
 import {
   runScenarioRepetitions,
@@ -87,6 +88,10 @@ export async function executeBehavioralScenario(
     ...discoveredAmbientSkillPaths,
     ...(props.additionalDisabledSkillPaths ?? []).map((skillPath) => path.resolve(skillPath)),
   ])].sort();
+  const subjectExecutionPolicy = resolveSubjectExecutionPolicy({
+    allowedTools: scenario.allowedTools,
+    allowedWritePaths: scenario.allowedWritePaths,
+  });
   const result = await runScenarioRepetitions({
     repetitions: scenario.repetitions,
     infrastructureRetries: props.infrastructureRetries,
@@ -103,13 +108,15 @@ export async function executeBehavioralScenario(
       prompt: scenario.prompt,
       fixtureFiles: [],
       expectedArtifacts: scenario.expectedArtifacts,
+      allowedTools: subjectExecutionPolicy.allowedTools,
+      allowedWritePaths: subjectExecutionPolicy.allowedWritePaths,
       skillName: scenario.skill,
       launcher,
       codexExecutable,
       runtimeIdentity,
       model: "gpt-5.6-luna",
       reasoningEffort: "xhigh",
-      permissionMode: "approve-reads",
+      permissionMode: subjectExecutionPolicy.permissionMode,
       disabledAmbientSkillPaths,
       timeoutSeconds: props.timeoutSeconds,
       redactionSecrets: collectSensitiveEnvironmentValues(),
@@ -176,6 +183,23 @@ function createDeterministicFacts(
     outcome: evaluation.outcome,
     results: evaluation.checkResults,
   }));
+}
+
+export function resolveSubjectExecutionPolicy(props: {
+  readonly allowedTools: readonly string[];
+  readonly allowedWritePaths: readonly string[];
+}): {
+  readonly permissionMode: AcpxPermissionMode;
+  readonly allowedTools: readonly string[];
+  readonly allowedWritePaths: readonly string[];
+} {
+  const allowedTools = [...new Set(props.allowedTools)].sort();
+  const allowedWritePaths = [...new Set(props.allowedWritePaths)].sort();
+  return {
+    permissionMode: allowedWritePaths.length === 0 ? "approve-reads" : "approve-all",
+    allowedTools,
+    allowedWritePaths,
+  };
 }
 
 function createSourceFingerprint(result: ScenarioRepetitionSetReceipt) {
@@ -281,7 +305,16 @@ function evaluateReceipt(
   receipt: ScenarioRepetitionSetReceipt["baseline"][number],
   checks: Parameters<typeof evaluateDeterministicChecks>[1],
 ): DeterministicRepetitionEvaluation {
-  const checkResults = evaluateDeterministicChecks(normalizeRepetitionEvidence({ receipt }), checks);
+  const checkResults = [
+    {
+      checkId: "runner-write-policy",
+      outcome: receipt.writePolicy.status,
+      reason: receipt.writePolicy.status === "pass"
+        ? "repository writes stayed within declared paths"
+        : `repository writes escaped declared paths: ${receipt.writePolicy.unauthorizedPaths.join(", ")}`,
+    } satisfies DeterministicCheckResult,
+    ...evaluateDeterministicChecks(normalizeRepetitionEvidence({ receipt }), checks),
+  ];
   return {
     repetitionId: receipt.repetitionId,
     checkResults,

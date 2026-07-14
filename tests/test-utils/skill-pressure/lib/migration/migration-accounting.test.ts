@@ -25,7 +25,11 @@ describe("post-cutover migration accounting", () => {
     expect(receipt.scenarioCount).toBe(EXPECTED_MIGRATED_SCENARIO_COUNT);
     expect(receipt.activeScenarioCount).toBe(EXPECTED_MIGRATED_SCENARIO_COUNT);
     expect(receipt.retiredScenarioCount).toBe(0);
-    expect(receipt.postBaselineScenarioCount).toBe(1);
+    expect(receipt.postBaselineScenarioCount).toBe(2);
+    expect(receipt.postBaselineScenarioIds).toEqual([
+      "orchestrator-goal-artifact-content-boundary",
+      "skills-creation-reference-lane-non-regression",
+    ]);
     expect(receipt.retiredScenarios).toEqual([]);
     expect(receipt.ownerCount).toBe(EXPECTED_MIGRATED_OWNER_COUNT);
     expect(receipt.legacyAuthorityAbsent).toBe(true);

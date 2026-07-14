@@ -37,7 +37,7 @@ function receipt(props: {
     ? props.variant === "baseline" ? null : "sha256:current-skill"
     : props.sourceDigest;
   return {
-    runnerVersion: "skill-pressure-repetition-v1",
+    runnerVersion: "skill-pressure-repetition-v2",
     repetitionId: `repetition-${props.sequence}`,
     scenarioId: "shortcut-pressure",
     variant: props.variant,
@@ -53,6 +53,9 @@ function receipt(props: {
     requestedModel: "gpt-5.6-luna",
     requestedReasoningEffort: "xhigh",
     permissionMode: "approve-reads",
+    allowedTools: [],
+    allowedWritePaths: [],
+    writePolicy: { status: "pass", unauthorizedPaths: [] },
     runtimeIdentity: {
       launcher: { executable: "/opt/acpx", prefixArgs: [], source: "global" },
       launcherDigest: "sha256:acpx",
@@ -105,6 +108,8 @@ function props(
       prompt: "Do the pressured task.",
       fixtureFiles: [],
       expectedArtifacts: [],
+      allowedTools: [],
+      allowedWritePaths: [],
       skillName: "test-skill",
       launcher: { executable: "/opt/acpx", prefixArgs: [], source: "global" },
       codexExecutable: "/opt/codex",

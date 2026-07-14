@@ -100,7 +100,7 @@ async function props(risk: "standard" | "high"): Promise<ExecuteBlindReviewProps
       treatment: { mode: "current", sourceDigest: "sha256:skill", sourceRevision: null },
     },
     runtimeFingerprint: {
-      runnerVersion: "skill-pressure-repetition-v1",
+      runnerVersion: "skill-pressure-repetition-v2",
       subjectModel: "gpt-5.6-luna",
       subjectReasoningEffort: "xhigh",
       runtimeDigest: "sha256:runtime",

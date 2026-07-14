@@ -48,6 +48,7 @@ export interface MigrationAccountingReceipt {
   readonly activeScenarioCount: number;
   readonly retiredScenarioCount: number;
   readonly postBaselineScenarioCount: number;
+  readonly postBaselineScenarioIds: readonly string[];
   readonly ownerCount: typeof EXPECTED_MIGRATED_OWNER_COUNT;
   readonly retiredScenarios: readonly {
     readonly scenarioId: string;
@@ -123,6 +124,7 @@ export async function verifyMigrationCutover(
   }
 
   const inventoryDigest = digest(inventorySource);
+  const inventoryScenarioIds = new Set(parsed.data.scenarios.map((row) => row.scenario_id));
   const activeScenarioCount = parsed.data.scenarios.filter((row) => row.disposition === "migrate").length;
   const retiredScenarios = parsed.data.scenarios.flatMap((row) => row.disposition === "retire"
     ? [{
@@ -136,6 +138,10 @@ export async function verifyMigrationCutover(
     activeScenarioCount,
     retiredScenarioCount: retiredScenarios.length,
     postBaselineScenarioCount: discovery.discovered.length - activeScenarioCount,
+    postBaselineScenarioIds: discovery.discovered
+      .map((scenario) => scenario.scenarioId)
+      .filter((scenarioId) => !inventoryScenarioIds.has(scenarioId))
+      .sort(),
     ownerCount: EXPECTED_MIGRATED_OWNER_COUNT,
     retiredScenarios,
     inventoryDigest,

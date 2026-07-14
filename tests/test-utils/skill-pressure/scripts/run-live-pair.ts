@@ -50,6 +50,8 @@ const common = {
   prompt,
   fixtureFiles: [],
   expectedArtifacts: [],
+  allowedTools: [],
+  allowedWritePaths: [],
   skillName,
   launcher,
   codexExecutable,

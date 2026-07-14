@@ -15,6 +15,7 @@ const profile = {
   model: "gpt-5.6-luna",
   reasoningEffort: "xhigh",
   permissionMode: "approve-reads",
+  allowedTools: [],
   disabledSkillPaths: ["/tmp/ambient/SKILL.md"],
   timeoutSeconds: 120,
 } satisfies AcpxCodexSubjectProfile;
@@ -25,10 +26,21 @@ describe("ACPX Codex subject profile", () => {
 
     expect(command.cwd).toBe(profile.cwd);
     expect(command.args).toContain("gpt-5.6-luna[xhigh]");
+    expect(command.args).not.toContain("--allowed-tools");
     expect(command.args.slice(-3)).toEqual(["exec", "--file", profile.promptPath]);
     expect(command.environment.CODEX_CONFIG).toBe(
       serializeDisabledSkillConfig(profile.disabledSkillPaths),
     );
+  });
+
+  it("passes a bounded tool allowlist to ACPX", () => {
+    const command = buildAcpxCodexSubjectCommand({
+      ...profile,
+      permissionMode: "approve-all",
+      allowedTools: ["apply_patch", "exec_command"],
+    });
+
+    expect(command.args[command.args.indexOf("--allowed-tools") + 1]).toBe("apply_patch,exec_command");
   });
 
   it("rejects a prompt outside the disposable repository", () => {

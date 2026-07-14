@@ -59,7 +59,7 @@ function packetInput(): BlindReviewPacketInput {
       treatment: { mode: "current", sourceDigest: "sha256:current", sourceRevision: null },
     },
     runtimeFingerprint: {
-      runnerVersion: "skill-pressure-repetition-v1",
+      runnerVersion: "skill-pressure-repetition-v2",
       subjectModel: "gpt-5.6-luna",
       subjectReasoningEffort: "xhigh",
       runtimeDigest: "sha256:runtime",

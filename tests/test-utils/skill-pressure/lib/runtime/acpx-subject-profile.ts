@@ -16,6 +16,7 @@ export interface AcpxCodexSubjectProfile {
   readonly model: string;
   readonly reasoningEffort: string;
   readonly permissionMode: AcpxPermissionMode;
+  readonly allowedTools: readonly string[];
   readonly disabledSkillPaths: readonly string[];
   readonly timeoutSeconds: number;
 }
@@ -37,6 +38,9 @@ export function buildAcpxCodexSubjectCommand(
       `--${profile.permissionMode}`,
       "--non-interactive-permissions",
       "fail",
+      ...(profile.allowedTools.length === 0
+        ? []
+        : ["--allowed-tools", profile.allowedTools.join(",")]),
       "--model",
       `${profile.model}[${profile.reasoningEffort}]`,
       "--format",
@@ -97,5 +101,8 @@ function validateProfile(profile: AcpxCodexSubjectProfile): void {
     if (!path.isAbsolute(skillPath) || path.basename(skillPath) !== "SKILL.md") {
       throw new Error("disabledSkillPaths must contain absolute SKILL.md paths");
     }
+  }
+  if (profile.allowedTools.some((toolName) => toolName.trim() === "" || toolName.includes(","))) {
+    throw new Error("allowedTools must contain non-empty names without commas");
   }
 }

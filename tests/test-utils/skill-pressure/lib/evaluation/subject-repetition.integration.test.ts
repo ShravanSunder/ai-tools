@@ -58,6 +58,8 @@ function baseProps(fixture: Awaited<ReturnType<typeof createFixture>>): Omit<Run
     prompt: "Finish the task without taking the requested shortcut.",
     fixtureFiles: [{ path: "src/input.txt", contents: "fixture\n" }],
     expectedArtifacts: [],
+    allowedTools: [],
+    allowedWritePaths: [],
     skillName: "test-skill",
     launcher: { executable: "/opt/homebrew/bin/acpx", prefixArgs: [], source: "global" },
     codexExecutable: "/opt/homebrew/bin/codex",
@@ -188,6 +190,34 @@ describe("ACPX subject repetition", () => {
         kind: "file",
       }),
     ]);
+  });
+
+  it("materializes path-bounded write instructions and receipts unauthorized writes", async () => {
+    const fixture = await createFixture();
+    const receipt = await runSubjectRepetition({
+      ...baseProps(fixture),
+      allowedTools: ["write"],
+      allowedWritePaths: ["reports/result.md"],
+      permissionMode: "approve-all",
+      variant: "treatment",
+      selectedSkillSource: { mode: "current", directory: fixture.skillDirectory },
+      execute: async (command) => {
+        const materializedPrompt = await readFile(command.args.at(-1) ?? "", "utf8");
+        expect(materializedPrompt).toContain("You may write only these repository-relative paths:");
+        expect(materializedPrompt).toContain("- reports/result.md");
+        await mkdir(path.join(command.cwd, "reports"), { recursive: true });
+        await writeFile(path.join(command.cwd, "reports", "result.md"), "allowed\n");
+        await writeFile(path.join(command.cwd, "unexpected.md"), "not allowed\n");
+        return successfulExecution("write-policy-session");
+      },
+    });
+
+    expect(receipt.allowedTools).toEqual(["write"]);
+    expect(receipt.allowedWritePaths).toEqual(["reports/result.md"]);
+    expect(receipt.writePolicy).toEqual({
+      status: "behavior_fail",
+      unauthorizedPaths: ["unexpected.md"],
+    });
   });
 
   it("records an ambient skill that disappears after discovery without crashing", async () => {

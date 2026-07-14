@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import type { ReviewRepetitionCandidate } from "../review/review-packet.js";
-import { reduceWithBlindReview, type DeterministicRepetitionEvaluation } from "./behavioral-scenario-runner.js";
+import {
+  resolveSubjectExecutionPolicy,
+  reduceWithBlindReview,
+  type DeterministicRepetitionEvaluation,
+} from "./behavioral-scenario-runner.js";
 
 function deterministic(
   variant: "baseline" | "treatment",
@@ -92,6 +96,22 @@ function reviewed(
 }
 
 describe("behavioral scenario final reduction", () => {
+  it("enables disposable-repository writes only for path-bounded scenarios", () => {
+    expect(resolveSubjectExecutionPolicy({ allowedTools: [], allowedWritePaths: [] })).toEqual({
+      permissionMode: "approve-reads",
+      allowedTools: [],
+      allowedWritePaths: [],
+    });
+    expect(resolveSubjectExecutionPolicy({
+      allowedTools: ["write"],
+      allowedWritePaths: ["reports/result.md"],
+    })).toEqual({
+      permissionMode: "approve-all",
+      allowedTools: ["write"],
+      allowedWritePaths: ["reports/result.md"],
+    });
+  });
+
   it("passes an improvement only when reviewed baseline failures become treatment passes", () => {
     expect(reduceWithBlindReview({
       comparisonIntent: "improvement",
