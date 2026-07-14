@@ -279,7 +279,7 @@ describe("ACPX subject repetition", () => {
     })).rejects.toThrow(/escapes repository/);
   });
 
-  it("installs an immutable previous Git revision for a changed-skill baseline", async () => {
+  it("installs an immutable previous Git revision when skill content is unchanged", async () => {
     const fixture = await createFixture();
     const sourceRepository = path.join(fixture.runRoot, "source-repository");
     const skillRelativePath = "plugins/workflow/skills/changed-skill";
@@ -293,7 +293,7 @@ describe("ACPX subject repetition", () => {
     execFileSync("git", ["add", "."], { cwd: sourceRepository });
     execFileSync("git", ["commit", "--quiet", "-m", "previous"], { cwd: sourceRepository });
     const previousRevision = execFileSync("git", ["rev-parse", "HEAD"], { cwd: sourceRepository, encoding: "utf8" }).trim();
-    await writeFile(path.join(skillDirectory, "SKILL.md"), "# Current guidance\n");
+    await writeFile(path.join(skillDirectory, "SKILL.md"), "# Previous guidance\n");
 
     let sessionNumber = 0;
     const execute = async (): Promise<AcpxProcessExecution> => successfulExecution(`revision-session-${++sessionNumber}`);
@@ -318,7 +318,7 @@ describe("ACPX subject repetition", () => {
     expect(() => assertComparablePair(baseline, treatment)).not.toThrow();
     expect(baseline.sourceMode).toBe("previous_revision");
     expect(baseline.sourceRevision).toBe(previousRevision);
-    expect(baseline.sourceDigest).not.toBe(treatment.sourceDigest);
+    expect(baseline.sourceDigest).toBe(treatment.sourceDigest);
   });
 
   it("does not leak a temporary source when historical extraction fails", async () => {

@@ -285,8 +285,19 @@ export function assertComparablePair(
   if (baseline.transcript.sessionId === treatment.transcript.sessionId) {
     throw new Error("baseline and treatment reused an ACPX session");
   }
-  if (baseline.sourceDigest === treatment.sourceDigest) {
-    throw new Error("baseline and treatment must differ by selected skill source");
+  if (treatment.sourceMode !== "current" || treatment.sourceDigest === null) {
+    throw new Error("treatment must use an installed current skill source");
+  }
+  if (baseline.sourceMode === "none") {
+    if (baseline.sourceDigest !== null || baseline.sourceRevision !== null) {
+      throw new Error("no-skill baseline contains selected skill source evidence");
+    }
+  } else if (baseline.sourceMode === "previous_revision") {
+    if (baseline.sourceDigest === null || baseline.sourceRevision === null) {
+      throw new Error("previous-revision baseline lacks immutable source evidence");
+    }
+  } else {
+    throw new Error("baseline must use no skill or an immutable previous revision");
   }
 }
 

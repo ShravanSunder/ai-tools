@@ -15,6 +15,8 @@ export interface SkillPressureEvalOutput {
   readonly scenarioId: string;
   readonly executionStatus: "executed" | "infrastructure_error";
   readonly outcome: "pass" | "behavior_fail" | "inconclusive" | "infrastructure_error" | "not_evaluated";
+  readonly reasonCode: string | null;
+  readonly comparisonIntent: "improvement" | "non_regression";
   readonly baselineCount: number;
   readonly treatmentCount: number;
   readonly pairSetFingerprint: string;
@@ -39,6 +41,8 @@ export function createSkillPressureEvalHarness(
         scenarioId: executed.receipt.scenario.scenarioId,
         executionStatus: executed.receipt.result.status,
         outcome: executed.receipt.reduction.outcome,
+        reasonCode: executed.receipt.reduction.reasonCode ?? null,
+        comparisonIntent: executed.receipt.scenario.comparisonIntent,
         baselineCount: executed.receipt.result.baseline.length,
         treatmentCount: executed.receipt.result.treatment.length,
         pairSetFingerprint: executed.receipt.result.pairSetFingerprint,
