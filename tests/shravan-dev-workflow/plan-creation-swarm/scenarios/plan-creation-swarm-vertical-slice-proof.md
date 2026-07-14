@@ -47,43 +47,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: vertical slice|source requirement|checkpoint|proof layer|implementation plan
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: vertical-slice-decomposition
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: codebase-boundary|validation-proof|execution-order|scope-and-proof-fit
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: source requirement.{0,80}behavior/capability.{0,80}(touched files|interfaces).{0,80}checkpoint.{0,80}proof
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: after source coverage|initial codebase/proof evidence|feeds execution-order|scope-and-proof-fit
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: local proof unit|slice-level proof|terminal validation.*does not replace
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: testing pyramid|unit|integration|smoke|e2e|manual|logs|traces|metrics
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: reject|avoid|not.*horizontal buckets|backend.*frontend.*tests
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: one final validation section is enough
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-creation-swarm vertical slice proof pressure

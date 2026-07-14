@@ -49,15 +49,29 @@ describe("skill pressure scenario contract", () => {
     const source = scenarioContract({ scenarioId: "duplicate", plugin: "workflow", skill: "skill" })
       .replace("deterministic_checks: []", `deterministic_checks:
   - check_id: same
-    fact: visible_response
+    fact: tool_observations
     operator: contains
     expected: first
   - check_id: same
-    fact: visible_response
+    fact: tool_observations
     operator: contains
     expected: second`);
     await writeFile(scenarioPath, source);
 
     await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/duplicate check_id/);
+  });
+
+  it("rejects semantic response matching as a deterministic fact", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    const source = scenarioContract({ scenarioId: "semantic-check", plugin: "workflow", skill: "skill" })
+      .replace("deterministic_checks: []", `deterministic_checks:
+  - check_id: response-wording
+    fact: visible_response
+    operator: matches
+    expected: followed the workflow`);
+    await writeFile(scenarioPath, source);
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/deterministic_checks/);
   });
 });

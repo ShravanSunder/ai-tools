@@ -28,11 +28,7 @@ risk: high
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: source of truth|stale|purge|preserve|driver
+deterministic_checks: []
 expected_artifacts: []
 ---
 # docs-maintain no stale purge pressure

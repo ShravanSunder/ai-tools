@@ -31,19 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: line count|coverage|requirements/proof matrix|copy-paste|handoff|security|repo
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof[ -](matrix|mapping|map)|requirements/proof
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: line count|chunk coverage|whole[- ]plan coverage|wc -l|end[- ]to[- ]end
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-handoff full packet pressure

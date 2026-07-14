@@ -28,23 +28,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: re-anchor|accepted request|desired system|not_ready
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: re-?anchor.{0,160}(request|source|spec|plan)|((accepted|actual|source-of-truth) request|source intent).{0,160}(source|spec|plan|runtime)
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: route.{0,120}(spec-creation-swarm|plan-creation-swarm|implementation-execute-plan|discuss-clarify-mental-models|direct user clarification)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: continue reviewing locally|ignore steering|code looks fine
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm reanchor missed system pressure

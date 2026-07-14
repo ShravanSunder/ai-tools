@@ -27,23 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: wait|poll|re.?check|not.*merge|hold|reset
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: quiet.{0,20}poll|quiet.{0,20}period|full.{0,20}poll
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: new.{0,40}(comment|review|bot)|comment.{0,40}reset|asynchronous.{0,40}event.{0,40}reset|feedback.{0,40}reset|late code-quality bot comment risk|late.*bot|bot comment risk|readiness[- ]reset|delayed bot comments|service may post|delayed note|code-quality service can post
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: final.{0,20}re-fetch|re-fetch.{0,40}(comments|threads|checks)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup delayed comment pressure

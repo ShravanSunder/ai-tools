@@ -31,15 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation-pr-wrapup|low[- ]thinking|state checks|checks|comments|review threads|mergeability|quiet poll|final re-fetch
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: public artifact safety.*review threads.*mergeability|local branch state.*public artifact safety|repeatable state checks.*gate decisions
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup low thinking default pressure

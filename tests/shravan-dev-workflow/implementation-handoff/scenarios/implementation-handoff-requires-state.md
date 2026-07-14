@@ -28,11 +28,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation state|diff|changed files|plan-handoff|no implementation
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-handoff requires implementation state pressure

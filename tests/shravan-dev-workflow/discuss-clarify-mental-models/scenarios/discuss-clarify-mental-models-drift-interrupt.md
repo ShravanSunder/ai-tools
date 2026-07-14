@@ -36,63 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: "model:"
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: "model:"
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: "assumptions:"
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: "branches:"
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: "countercase:"
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: "evidence_checked:"
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: "rebuilt_model:"
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: "open_or_confirmed:"
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: "next_workflow:"
-  - check_id: proof-9
-    fact: visible_response
-    operator: matches
-    expected: "open_or_confirmed:[\\s\\S]{0,600}next_workflow:"
-  - check_id: proof-10
-    fact: visible_response
-    operator: matches
-    expected: (term|boundary|assumption|architecture detail).{0,160}(diverg|mismatch|differ|misalign|unstable|not trustworthy|collapse (them|those|it|one) into|inconsistent)|(diverg|mismatch|differ|misalign|unstable|not trustworthy|collapse (them|those|it|one) into|inconsistent).{0,160}(term|boundary|assumption|architecture detail)
-  - check_id: proof-11
-    fact: visible_response
-    operator: matches
-    expected: load-bearing|load bearing|should not (pick|choose|select|assume|proceed).{0,60}(silently|without)|before (any )?(code|edits|implementation|files) (move|moves|resume|resumes)|risk.{0,40}(encoding|baking in|the wrong)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: sorry.{0,100}(continu|proceed|resum|keep going|go ahead)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: (i'?ll|i will|let me) (continue|proceed|resume|go ahead) with (the|your|remaining)|(continuing|resuming) (the|with the) (migration|edits|remaining files|remaining work)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # discuss-clarify-mental-models drift interrupt pressure

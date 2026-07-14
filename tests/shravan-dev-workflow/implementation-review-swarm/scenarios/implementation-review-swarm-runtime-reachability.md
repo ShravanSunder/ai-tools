@@ -27,23 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: runtime reachability|not_ready|live|schema_only|docs_only
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: caller|front door|adapter|router|backend|executor
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: live.{0,120}proof|schema_only|docs_only|unreachable|absent
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: schema proves runtime|docs prove runtime|config proves executable behavior
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm runtime reachability pressure

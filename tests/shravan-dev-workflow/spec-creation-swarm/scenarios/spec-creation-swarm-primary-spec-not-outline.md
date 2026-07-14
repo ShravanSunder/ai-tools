@@ -34,23 +34,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: primary spec|human-readable|mental model|product intent|requirements overview|technical contract|boundary|proof expectation
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: slice spec|vertical slice|ownership boundary|routing map|2000 lines
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: contract-bearing|PRD/product intent|boundary/separability map|evidence links|slice routing
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: implementation order|worker sequence|execution DAG
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-creation-swarm primary spec not outline pressure

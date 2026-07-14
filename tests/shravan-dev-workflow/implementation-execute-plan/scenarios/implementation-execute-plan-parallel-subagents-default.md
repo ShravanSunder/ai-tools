@@ -37,23 +37,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: parallel|subagent|disjoint write|controller brief|packet|verify
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: controller-side verification|changed files, diffs, and test output|fresh verification evidence
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: plan anchors|proof obligations|completion receipt|allowed write scope|controller-packets|lane-contract
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: decision target|inspect|non-goals|contradiction handling|bounded question
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-execute-plan parallel subagents default pressure

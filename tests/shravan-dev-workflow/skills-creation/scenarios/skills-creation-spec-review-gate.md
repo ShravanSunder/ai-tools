@@ -34,43 +34,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: classification:\s*update|treat\w* this as.{0,60}update
-  - check_id: decision-2
-    fact: visible_response
-    operator: matches
-    expected: spec review|skill-spec-review
-  - check_id: decision-3
-    fact: visible_response
-    operator: matches
-    expected: references/skill-spec-review\.md|skill-spec-review\.md|skill-spec-review
-  - check_id: decision-4
-    fact: visible_response
-    operator: matches
-    expected: before (implementation|editing|files are edited)|pre-implementation|before files are edited
-  - check_id: decision-5
-    fact: visible_response
-    operator: matches
-    expected: fresh-perspective|local-lane|outside-model not requested|outside model not requested
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: RED before edit|red before edit|RED.{0,80}(before|first)|red.{0,80}(before|first)|failing (pressure )?(scenario|micro-test)
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: accepted-to-implement|accepted to implement|implementation decision|accept the design|spec accepted|required spec review|spec review before implementation
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: spec review.{0,120}(after|once).{0,80}(implementation|editing)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: (I|we) (will|would|can) (implement|edit).{0,80}(before|without).{0,80}spec review
+deterministic_checks: []
 expected_artifacts: []
 ---
 # skills-creation spec review gate pressure

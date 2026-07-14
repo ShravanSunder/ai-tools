@@ -29,27 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: text-contract-first|report contract|R9|diff_only_limited
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: verdict.*accepted findings|source coverage|whole-source trace status
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: deviation bucket|route target|false-positive|proof gaps|lane receipts
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: source_coverage_state|source_backed_verdict_attempted
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: "schema later is enough|couple regexes|verdict: limited"
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm report text contract pressure

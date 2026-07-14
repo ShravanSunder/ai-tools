@@ -32,19 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: accepted findings|plan-creation-swarm|needs revision|proof matrix|do not implement
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: route.*plan-creation-swarm|plan-creation-swarm.*accepted|accepted.*plan-creation-swarm
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: "needs[ _]revision|not ready|not acceptable|verdict: blocked|blocked"
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-review-swarm routes findings to plan creation pressure

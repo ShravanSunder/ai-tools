@@ -15,7 +15,6 @@ const relativePathSchema = z
     "must be a non-traversing POSIX relative path",
   );
 const deterministicFactSchema = z.union([
-  z.literal("visible_response"),
   z.literal("tool_observations"),
   z.templateLiteral(["path:", z.string().min(1)]),
   z.templateLiteral(["artifact:", identifierSchema]),

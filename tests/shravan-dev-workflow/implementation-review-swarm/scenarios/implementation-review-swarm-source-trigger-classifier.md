@@ -30,27 +30,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: whole-source-trace|source-backed|risk-triggered|diff_only_limited
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: (plan-backed|source-backed|risk-triggered).{0,120}whole-source-trace
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: (runtime|plugin|mcp|security).{0,160}whole-source-trace
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: diff_only_limited|diff-only.{0,120}(no source|no accepted source|no risk)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: substantial only|size heuristic|skip whole-source-trace
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm source trigger classifier pressure

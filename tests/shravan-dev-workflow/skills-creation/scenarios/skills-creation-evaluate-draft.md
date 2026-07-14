@@ -57,55 +57,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: verdict:|targeted-revision|significant-rewrite|reject-or-restart
-  - check_id: decision-2
-    fact: visible_response
-    operator: matches
-    expected: (missing|no|lacks|without|absent).{0,80}(workflow spine|pressure proof|trigger)
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: verdict.{0,80}(targeted-revision|significant-rewrite|reject-or-restart)
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: review target:\s*\S|baseline( or review target)?:\s*(review target|evaluate|what is being judged)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: blocker overrides?:|blocker.{0,180}(workflow spine|trigger|pressure proof|link-only router)
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: highest risk
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: first required revision|first revision to make
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: "retest requirement|proof or retest implication|retest( requirement)?s?\\s*:"
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: (bright-line rule|positive output shape|required slot|observable predicate|stronger completion criterion|sharper (description|invocation)|stronger context pointer|failure[- ]form|wrong[- ]invocation|guidance form)
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: rubric evidence|evidence.{0,100}(axis|reusable (job|behavior)|invocation|trigger|mental model|main path|workflow topology|hierarchy|steering|pruning|proof)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: verdict\s*:?\s*great
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: \b(34-40|27-33|19-26|0-18)\b|score.{0,20}(out of|/)\s*40|\d+\s*/\s*40\b|\bpoint(s)?\b.{0,20}(arithmetic|scorecard|threshold|out of \d+|/\s*\d+)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # skills-creation evaluate draft pressure

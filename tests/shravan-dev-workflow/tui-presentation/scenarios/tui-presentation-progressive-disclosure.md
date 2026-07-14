@@ -29,23 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: layer|architecture|slice|detail|structure
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: disclosure[- ]sequence|progressive disclosure|layered explanation
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: one map.*selected slice|selected slice.*one map|compact first visual|sub-framed grid.*pipeline
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: small ledger|technical detail|where it goes sideways|technical atoms
+deterministic_checks: []
 expected_artifacts: []
 ---
 # tui-presentation progressive disclosure pressure

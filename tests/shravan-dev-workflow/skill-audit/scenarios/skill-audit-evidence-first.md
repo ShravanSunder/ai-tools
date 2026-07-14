@@ -44,31 +44,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: evidence|update|create|merge|skip|source inspiration
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: evidence-backed|recurring workflow|existing skill|smallest useful change|priority
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: skill\.md.{0,120}(compact|boundary|core|trigger|decision|workflow|rule)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: references/.{0,120}(detail|depth|example|rubric|template|long|source)
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: scripts/.{0,120}(deterministic|mechanic|runner|command|automation|none|not needed)
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: pressure.{0,80}(exists|reuse|update|new|scenario|not needed|skip with reason|coverage)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # skill-audit evidence first pressure

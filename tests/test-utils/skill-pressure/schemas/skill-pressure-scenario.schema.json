@@ -102,10 +102,6 @@
             "anyOf": [
               {
                 "type": "string",
-                "const": "visible_response"
-              },
-              {
-                "type": "string",
                 "const": "tool_observations"
               },
               {

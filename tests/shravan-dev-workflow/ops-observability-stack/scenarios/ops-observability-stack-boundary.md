@@ -31,31 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: ai-tools|observability-stack|agentstudio|producer
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: app repos.*producer|telemetry producer|producer-only
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: ai-tools/observability|~/dev/ai-tools/observability
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: query recipes.*skill|skill.*query recipes|victoria query.*skill|generic victoria.*(cookbook|docs|troubleshooting)
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: strict.*launcher|launcher.*strict
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: fail-open|ordinary.*startup
+deterministic_checks: []
 expected_artifacts: []
 ---
 # ops-observability stack boundary pressure

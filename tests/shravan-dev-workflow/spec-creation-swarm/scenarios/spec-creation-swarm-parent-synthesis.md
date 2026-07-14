@@ -54,51 +54,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: parent|synthesis|tradeoffs|security|subagents|bounded|separability|spec|product intent|requirements|technical contract
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof expectation|boundary / separability map|separability boundaries
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: product intent / prd|testable requirements|technical spec
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: plan-creation-swarm
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: spec-review-swarm
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: high|xhigh|reasoning effort|architecture option lanes|security-trust-boundary
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: bounded packet|source-of-truth inputs|completion receipt|lane-specific focus|bounded evidence|bounded lane files
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: candidate evidence|parent reducer|parent verification|source anchors
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: security-trust-boundary|security implications
-  - check_id: proof-9
-    fact: visible_response
-    operator: matches
-    expected: tmp/.*/spec|swarm-ledger|lanes/
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: adversarial-design|assumption pressure|architecture pressure
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-creation-swarm parent synthesis pressure

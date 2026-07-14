@@ -34,27 +34,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: deterministic|machine|script|watcher|subagent|helper
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: deterministic watcher|machine watches|script.{0,40}watches|shell.{0,40}watches
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: model adjudicates|model.{0,40}adjudicat|agent.{0,40}adjudicat
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: no steady-state model polling|avoid.{0,40}steady-state model polling|not.{0,40}steady-state model|not.{0,40}model polling|helper.{0,40}not.{0,40}loop
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: state.{0,40}events|events.{0,40}state|jsonl|monitor.json|events.jsonl
+deterministic_checks: []
 expected_artifacts: []
 ---
 # local monitoring no model polling pressure

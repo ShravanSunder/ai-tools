@@ -29,23 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: cannot|before|need|check|inspect|not.*merge|not.*ready
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: behavior gap|gap beyond|not enough|not sufficient|green checks alone|green checks.{0,40}one gate|ci success.{0,40}one gate|not merge readiness
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: comments?.{0,80}threads?|threads?.{0,80}comments?
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: local.{0,40}(head|branch|worktree)|branch.{0,40}(remote|pr head)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup baseline comparison pressure

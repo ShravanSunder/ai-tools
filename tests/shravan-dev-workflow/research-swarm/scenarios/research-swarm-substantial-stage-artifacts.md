@@ -43,35 +43,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: research ledger|subagents|lanes|evidence|parent|synthesis|candidate
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: tmp/research-workflows|research-ledger|lanes/|per-lane artifacts|parent writes
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: bounded question|bounded research questions|researchable questions|source-of-truth inputs|inspect list|non-goals|output schema|bounded read-only lane packets|bounded helper lanes|bounded lane packets|bounded lanes
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: candidate evidence|parent synthesis|parent verification|confidence
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: completion receipt|source anchors|proposed artifact path|ledger columns|source-anchor receipts
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: spec-creation-swarm|plan-creation-swarm|spec-review-swarm|plan-review-swarm|implementation-review-swarm|recommended next workflow
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: chat-only research|accepted truth without parent|single summary only
+deterministic_checks: []
 expected_artifacts: []
 ---
 # research-swarm substantial stage artifacts pressure

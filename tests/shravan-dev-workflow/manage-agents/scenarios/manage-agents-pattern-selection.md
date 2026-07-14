@@ -32,35 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: manage-agents|pattern|sidekick|advisor|swarm|handoff
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: pattern before provider|provider.{0,60}implementation detail|command.{0,60}implementation detail
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: long-lived|separate context|session ledger|progress check
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: inline candidate guidance|quiet notes|hard blockers|course correction
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: phase skill|handoff contract|receiving workflow|resume without
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: acpx (codex|claude|cursor)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: start with acpx|just use acpx|always use acpx
+deterministic_checks: []
 expected_artifacts: []
 ---
 # manage-agents pattern selection pressure

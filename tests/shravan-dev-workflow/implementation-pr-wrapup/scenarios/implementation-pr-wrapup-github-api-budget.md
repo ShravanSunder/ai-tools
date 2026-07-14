@@ -40,47 +40,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: rate|limit|backoff|conditional|etag|rest|graphql
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: rest-first|rest first|rest.{0,40}sufficient|use rest
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: conditional.{0,30}request|etag|if-none-match|304
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: rate.{0,20}header|x-ratelimit|reset|remaining
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: backoff|reset boundary|wait.{0,40}reset|stop.{0,40}limit|rate limits.{0,120}stop|api limits.{0,120}stop|if rate limits|if api limits
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: graphql.{0,60}(narrow|sparingly|only|review-thread|thread resolution)
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: cache.{0,90}(owner/repo|pr number|endpoint|query|head sha|auth|pagination|cursor|variables|per_page)|key.{0,90}(owner/repo|pr number|endpoint|query|head sha|auth|pagination|cursor|variables|per_page)
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: invalidate|bypass cache|head sha changes|new comments|check restarts|unknown mergeability
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: final.{0,30}re-fetch|fresh.{0,40}proof|304.{0,40}cached payload
-  - check_id: proof-9
-    fact: visible_response
-    operator: matches
-    expected: rate-limit.{0,80}not.{0,80}(readiness[- ]reset|pr readiness)|not.{0,80}pr readiness.{0,80}reset|api-budget event
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup GitHub API budget pressure

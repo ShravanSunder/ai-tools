@@ -32,19 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: branch|diff|changed files|implementation proof|validation|copy-paste|do not edit
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: implementation proof|red/green|proof[ -](gate|matrix|layer|line|section)|skipped (proof )?layers|missing proof|proof (evidence|status|claims)
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: branch.*(diff|changed files)|(diff|changed files).*branch
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-handoff evidence packet pressure

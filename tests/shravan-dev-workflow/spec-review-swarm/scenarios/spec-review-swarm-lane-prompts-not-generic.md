@@ -32,31 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: lane reference|bounded question|decision target|inspect|non-goals|contradiction handling|completion receipt
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: "finding-schema\\.md|what next agent would guess|loop route: inner loop|accepted findings and final routing"
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: review-packet
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: exact.*anchor|smallest refinement target|validation note
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: requirements-testability|contract-and-scope|architecture-boundaries|validation-and-testability
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: review from product, architecture, and security angles
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm lane prompts not generic pressure

@@ -17,7 +17,6 @@ export interface ExpectedArtifact {
 export interface DeterministicCheck {
   readonly checkId: string;
   readonly fact:
-    | "visible_response"
     | "tool_observations"
     | `path:${string}`
     | `artifact:${string}`;

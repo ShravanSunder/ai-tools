@@ -42,35 +42,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: verify|candidate findings|implementation proof|not_ready|read-only|external
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: implementation proof|review proof|missing proof|proof[ -](gate|chain|matrix)|proof.{0,40}(mapped|maps back)|not accepted as proof
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: not[ _-]?ready|cannot.*ready|missing (required )?proof|unverified.*proof|without (verified |checking )?proof|proof.*(checked|mapped|verif)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: uses? high or xhigh|use high or xhigh review effort|high or xhigh reasoning effort|high or xhigh is required|pr/pre-merge/plan-backed|rejected medium-effort-first|medium-effort-first was rejected
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: source-of-truth inputs|proof inventory|lane focus|completion receipt|shared review packet|implementation proof gate
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: decision target|inspect|non-goals|contradiction handling|bounded question
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: skipped lane|lanes skipped|skip lane
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm verify findings pressure

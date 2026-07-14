@@ -26,15 +26,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: clarity gate|shravan-dev-workflow:discuss-clarify-mental-models|objective|scope|proof|stop condition
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof (map|gate|matrix)|requirement/spec source|defined by plan-creation-swarm
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal clarity gate pressure

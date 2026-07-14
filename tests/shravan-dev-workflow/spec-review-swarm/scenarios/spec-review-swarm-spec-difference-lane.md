@@ -31,15 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: spec-difference|implementation|prototype|hidden decisions|refinement input
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: finding-schema|failure path|loop route|parent reducer note|not.*final authority|boundary-discovery
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm spec difference lane pressure

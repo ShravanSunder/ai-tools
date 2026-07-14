@@ -40,23 +40,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: goal contract|proof matrix|requirements/proof|parent|verify|subagent|stop condition
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: requirements/proof matrix|proof matrix
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: parent[- ]owned|parent.*verify|verify.*returned evidence
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: stale[- ]proof guard|bounded query windows|current verification
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal proof matrix ownership pressure

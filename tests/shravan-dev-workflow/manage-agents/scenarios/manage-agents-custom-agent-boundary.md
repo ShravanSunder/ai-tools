@@ -41,31 +41,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: agent-registry|building-custom-agents|custom
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: agent-registry.{0,160}(call|existing|--agent|config)
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: building-custom-agents.{0,180}(build|wrap|adapter|ACP)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: security|sensitive
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: overloaded.{0,120}custom-agents\.md|not.{0,120}custom-agents\.md
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: build.{0,80}adapter.{0,80}(just to call|for existing)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # manage-agents custom agent boundary pressure

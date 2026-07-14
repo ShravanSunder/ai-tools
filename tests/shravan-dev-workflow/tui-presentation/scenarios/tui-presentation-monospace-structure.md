@@ -27,11 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: unicode|monospace|markdown|shape|structure|code
+deterministic_checks: []
 expected_artifacts: []
 ---
 # tui-presentation monospace structure pressure

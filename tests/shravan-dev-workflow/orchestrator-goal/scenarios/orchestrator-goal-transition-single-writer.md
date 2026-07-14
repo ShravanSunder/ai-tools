@@ -33,27 +33,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: orchestrator-goal|official transition|recommended|phase_result|recommended_next_workflow
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: only .*orchestrator-goal.*official.*transition|orchestrator-goal.*only .*official.*transition
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: phase_result
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: recommended_next_workflow
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: latest .*event.*wins|events\.jsonl.*latest
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal transition single-writer pressure

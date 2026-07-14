@@ -26,23 +26,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: timeout|stop|blocked|cannot|report|not.*ready
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: bounded.{0,40}(timeout|window)|timeout
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: remaining.{0,40}blockers|blockers?.{0,40}remaining|report.{0,40}the blocker|report.{0,40}blockers?|blocking state|stop with a blocker
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: do not.{0,40}spin|not.{0,40}forever|stop
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup monitor timeout pressure

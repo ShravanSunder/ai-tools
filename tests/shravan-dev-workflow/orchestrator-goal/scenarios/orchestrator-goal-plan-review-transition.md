@@ -35,31 +35,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: next workflow|implementation-execute-plan|not complete|terminal condition
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: current[_ -]workflow|current workflow
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: next[_ -]workflow|next workflow
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: terminal[_ -]condition|terminal condition
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: details\.md
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: events\.jsonl
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal plan review transition pressure

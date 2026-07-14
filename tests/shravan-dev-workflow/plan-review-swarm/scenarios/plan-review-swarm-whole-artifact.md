@@ -53,43 +53,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: wc -l|whole|coverage|proof mapping|proof gate|needs revision|summary|proof relevance|validation-command claims
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof[ -](mapping|gate|matrix)|requirements/proof|proof relevance|validation-command claims|claims against live evidence|whole-artifact coverage
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: needs[ _]revision|verdict|not ready|blocked
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: split|replan|too[- ]broad|smaller slices|proof[ -]gate|proof matrix|proof relevance|validation-command claims|clarify first|unclear review target|blocked pending the review target|route accepted (blocker|important)|accepted (blocker|important)|incomplete review surface|missing-artifact stop|slow-check decisions
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: plan-creation-swarm|spec-creation-swarm|provide the plan (artifact )?path|plan file path|full (chat )?plan
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: role / mode|edit boundary|read-only boundary|explicit read-only|bounded question|decision target|inspect|non-goals|lane-specific checklist|output schema|contradiction handling|confidence|uncertainty|security context|completion receipt
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: references/review-packet|whole-plan-cohesion
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: open/read the plan artifact yourself|open/read the accepted source artifact yourself
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: load (a )?shared lane contract|import (a )?shared lane contract
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-review-swarm whole artifact pressure

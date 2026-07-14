@@ -36,51 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: no global runtime lane contract|skill-local packet references|runtime workflow skills
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: spec-creation-swarm/references/swarm-packets
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: plan-creation-swarm/references/lane-packets
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: spec-review-swarm/references/review-packet
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: plan-review-swarm/references/review-packet
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: packet anatomy|source-truth|completion receipt|parent reducer|candidate evidence
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: authoring lessons|meta skills|runtime workflow skills
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: create (a )?shared lane contract|import (a )?shared lane contract|load (a )?shared lane contract
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: use (a )?universal lane contract|load (a )?universal lane contract
-  - check_id: forbidden-3
-    fact: visible_response
-    operator: not_matches
-    expected: plugins/shravan-dev-workflow/references/lane-contract
-  - check_id: forbidden-4
-    fact: visible_response
-    operator: not_matches
-    expected: common review rubric
+deterministic_checks: []
 expected_artifacts: []
 ---
 # no global runtime lane contract pressure

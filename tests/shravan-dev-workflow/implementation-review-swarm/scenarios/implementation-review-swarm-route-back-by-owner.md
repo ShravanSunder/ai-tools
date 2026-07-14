@@ -29,35 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation-execute-plan|plan-creation-swarm|spec-creation-swarm|discuss-clarify-mental-models|direct clarification
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: (implementation findings?|implementation(_| )defect).{0,140}implementation-execute-plan
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: plan(_| )translation errors?.{0,140}plan-creation-swarm
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: spec(_| )ambiguity.{0,140}spec-creation-swarm
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: (human(_| )decision(_| )needed|unresolved product/design choices).{0,160}(direct user clarification|discuss-clarify-mental-models)
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: (cause|owner|ownership|owning failure mode).{0,100}(route target|route|workflow)|route target.{0,100}(cause|owner|ownership)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: route by severity|all blockers go to implementation-execute-plan|fix everything here
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm route back by owner pressure

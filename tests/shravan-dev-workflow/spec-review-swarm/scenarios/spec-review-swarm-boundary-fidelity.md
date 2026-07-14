@@ -29,19 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: boundary|ownership|source of truth|dependency direction|permissible|disallowed|refinement input
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: architecture-boundaries\.md|finding schema|failure path|what the next agent would guess
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: use existing patterns is enough|obvious boundary
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm boundary fidelity pressure

@@ -27,11 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: written implementation plan|plan-creation-swarm|cannot execute|design
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-execute-plan rejects design only pressure

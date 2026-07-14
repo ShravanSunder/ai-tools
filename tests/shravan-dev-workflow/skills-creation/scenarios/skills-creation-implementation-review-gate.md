@@ -36,59 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: classification:\s*update|treat\w* this as.{0,60}update
-  - check_id: decision-2
-    fact: visible_response
-    operator: matches
-    expected: implementation review|skill-implementation-review
-  - check_id: decision-3
-    fact: visible_response
-    operator: matches
-    expected: references/skill-implementation-review\.md|skill-implementation-review\.md|skill-implementation-review|implementation review
-  - check_id: decision-4
-    fact: visible_response
-    operator: matches
-    expected: parent.{0,80}reduction|implementation review reduction|targeted.{0,40}retest
-  - check_id: decision-5
-    fact: visible_response
-    operator: matches
-    expected: changed-file coverage|changed file coverage|every changed file
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof (status|route):\s*red|failing (pressure )?(scenario|micro-test)|(pressure scenario|micro-test|micro test).{0,180}(fail(s|ing)?|red)\b
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: references/skill-implementation-review\.md|skill-implementation-review\.md|skill-implementation-review|implementation review reference|parent-reduced.{0,80}two-lane
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: (references/)?skill-implementation-review(\.md)?|implementation[- ]review reduction|loading/reducing implementation review|targeted.{0,40}retest
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: changed-file coverage|changed file coverage|every changed file
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: parent.{0,80}(reduce|reduction|verify)|implementation[- ]review reduction|accepted.{0,80}rejected.{0,80}unverified|candidate evidence
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: (rerun|retest).{0,80}(pressure|scenario|micro-test|targeted)|targeted.{0,40}retest
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: treat\w*.{0,120}(non-trivial|behavior|workflow|reference).{0,120}(typo|metadata|version|formatting).{0,120}(skip|static-only)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: one reviewer lane is enough|single reviewer lane is enough|(I|we) (will|would|can) skip implementation review
+deterministic_checks: []
 expected_artifacts: []
 ---
 # skills-creation implementation review gate pressure

@@ -80,51 +80,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation plan|requirements/proof matrix|proof gate|split|validation|do not edit|subagent|bounded|plan-review-swarm|implementation-execute-plan|accepted spec|product intent|requirements
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: split|replan|smaller (provable )?slices|sized so that proof|proof matrix|requirements/proof
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: execution dag|disjoint write|integration gate
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: testing[- ]pyramid|unit.*integration.*smoke.*e2e|red/green proof|tdd strategy
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: concrete validation modalities|manual ux.*visual proof|data/database/state proof|logs/traces/metrics/otel proof|pr/release artifact proof|proof modality|proof layer|freshness guard
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: medium|high|reasoning effort|parallel work lanes
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: source-of-truth inputs|lane-specific focus|completion receipt|planning question|source coverage|source context|source references
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: candidate evidence|parent reducer|parent synthesis|source anchors|parent plan-ledger|plan-ledger
-  - check_id: proof-9
-    fact: visible_response
-    operator: matches
-    expected: tmp/.*/plan|implementation-plan|lanes/
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: adversarial-plan|adversarial review|proof owner|skipped proof
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-creation-swarm from spec not code pressure

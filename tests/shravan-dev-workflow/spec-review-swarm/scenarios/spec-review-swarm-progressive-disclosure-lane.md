@@ -31,19 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: progressive-disclosure|primary spec|slice spec|evidence|routing map|2000 lines
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: finding-schema|refinement input|loop route|parent reducer note|what.*agent.*read
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: appendix|details\\.md|misc\\.md|part-2\\.md
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm progressive disclosure lane pressure

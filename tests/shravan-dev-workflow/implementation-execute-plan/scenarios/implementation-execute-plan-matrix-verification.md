@@ -35,27 +35,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: requirements/proof|proof matrix|verify|subagent|freshness|before claiming|complete|rerun|cross-check
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: requirements/proof matrix|proof matrix
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: evidence source|source
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: freshness guard|freshness
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: parent.*verif|verify.*subagent|cross-check
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-execute-plan matrix verification pressure

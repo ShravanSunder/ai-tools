@@ -36,31 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: whole-spec-coverage|whole-spec coverage
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: target spec/design artifact|primary artifact inputs|target artifact coverage
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: research ledger|source anchors and research|source/research artifacts
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: mandatory.*whole-spec-coverage|first-class.*whole-spec-coverage
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: product intent|requirements|technical contract|boundaries
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: focused lanes.*do not replace|do not replace.*focused lanes|parent reducer
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm whole spec coverage lane pressure

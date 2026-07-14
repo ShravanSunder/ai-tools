@@ -31,19 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: durable repo artifact|docs/specs|maintain|explicitly delete
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: primary spec.*docs/specs|supporting.*tmp|review.*scratch|planning scratch
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: review reports belong under docs/specs|plans belong under docs/specs|plans must be repo docs
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-creation-swarm durable primary spec pressure

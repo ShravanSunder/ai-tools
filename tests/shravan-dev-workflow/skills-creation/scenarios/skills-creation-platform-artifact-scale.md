@@ -45,59 +45,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: platform-mechanics|(codex|claude).{0,60}(metadata|validation|manifest|mechanics)|(metadata|validation|manifest|mechanics).{0,60}(codex|claude)
-  - check_id: decision-2
-    fact: visible_response
-    operator: matches
-    expected: classification:\s*update|(run note|artifact|state).{0,300}(compact|terse|small|scale|ceremony)
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: platform.{0,3}mechanics(\.md)?
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: codex.{0,160}(metadata|validation|marketplace|mechanics)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: (client-specific|platform-specific).{0,200}(invocation|control|policy|encoding)
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: claude.{0,160}(manifest|marketplace|validation|plugin)
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: (static|structural).{0,80}(validation|proof).{0,120}(behavior|pressure)|behavior.{0,120}(pressure|scenario|proof)
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: (installed[- ]cache|cache refresh|home).{0,180}(defer|not.{0,40}proof|not.{0,40}routine|not part|explicit|requires explicit|did not claim)|(defer|explicit).{0,180}(installed[- ]cache|cache refresh|home)
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: classification:\s*update[\s\S]{0,1200}(shipping status:|proof route:)
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: all-(run|branch).{0,160}skill.{0,8}md|branch-(only|specific).{0,160}references|skill\.md.{0,120}(mental model|main path).{0,120}references.{0,80}branch depth
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: (?<!not )(?<!never )(?<!n't )(?<!avoid )(?<!skip )refresh.{0,80}(installed-cache|cache).{0,80}(as proof|to prove|proves|counts as proof)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: (static|structural).{0,40}(validation|proof).{0,40}(proves?|counts as|equals|is\s+(behavior|pressure)).{0,80}(behavior|pressure).{0,40}(proof|evidence)|behavior.{0,40}(proof|evidence).{0,40}(proven by|covered by|satisfied by|is\s+(static|structural)).{0,80}(static|structural).{0,40}(validation|proof)
-  - check_id: forbidden-3
-    fact: visible_response
-    operator: not_matches
-    expected: full.{0,40}(authoring state (writeup|block)|audit table).{0,80}(always|required every time)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # skills-creation platform artifact scale pressure

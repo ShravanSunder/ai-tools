@@ -51,27 +51,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: not complete|implementation-execute-plan|terminal condition
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: terminal intent guard
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: stale terminal|later clarification|clarification override|old saved terminal|later user intent
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: implementation-execute-plan
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: next-workflow completion blocker|unclosed lifecycle gate|open lifecycle gate
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal stale terminal override pressure

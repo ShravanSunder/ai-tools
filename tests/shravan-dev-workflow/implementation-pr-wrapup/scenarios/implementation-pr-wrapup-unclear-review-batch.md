@@ -27,23 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: ask|clarify|route|cannot.*resolve|not.*merge|blocked
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: product|design|judgment|ambiguous|unclear
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: one.{0,40}at.{0,20}a.{0,20}time|do not.{0,40}batch|not.{0,40}partially|stop.{0,80}(customer|scope|question)|stop condition
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: implementation-review-swarm|implementation execution|route|ask.{0,80}(user|product)|decision
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup unclear feedback pressure

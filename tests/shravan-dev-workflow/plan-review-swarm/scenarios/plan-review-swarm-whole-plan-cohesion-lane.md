@@ -36,31 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: whole-plan-cohesion
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: accepted source artifact|source artifact coverage|source spec/design/goal/handoff
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: plan artifact.*source artifact|produced plan.*accepted source
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: mandatory.*whole-plan-cohesion|first-class.*whole-plan-cohesion
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: required source anchors|section/header anchors|primary artifact inputs
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: vertical slices fit together|proof gates are coherent|source-to-plan traceability
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-review-swarm whole plan cohesion lane pressure

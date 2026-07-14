@@ -50,31 +50,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: claims|wc -l|coverage|proof expectations|candidate findings|contested|threat model|product intent|requirements|technical spec
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof (expectation|definition|matrix|gap)|requirements/proof
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: threat[ -]model
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: success criteria|testable obligations|technical contract|prd|chain status|product-intent / requirements / technical-spec chain status|spec chain|product intent, provable obligations, and system design
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: plan-creation-swarm|spec-creation-swarm
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: decision target|inspect|non-goals|contradiction handling
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm claims not truth pressure

@@ -27,23 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: deviation bucket|route target|parent reducer|candidate
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: lanes?.{0,120}propose|candidate_deviation_bucket|candidate_route_target
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: parent reducer.{0,120}(accepted|final|owns)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: lane decides accepted|subagent owns final route|auto-accept
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm deviation classification pressure

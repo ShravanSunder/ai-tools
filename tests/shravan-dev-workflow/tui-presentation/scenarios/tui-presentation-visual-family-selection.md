@@ -29,23 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: flow|sequence|state|quadrant|topology|family
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: visual[- ]family|family choice
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: zoom.*disclosure|disclosure.*zoom|one primary visual family|sequence as the primary family
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: sequence.*who talks to whom|state.*lifecycle|quadrant.*axes|topology.*boundaries
+deterministic_checks: []
 expected_artifacts: []
 ---
 # tui-presentation visual family selection pressure

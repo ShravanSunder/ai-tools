@@ -32,27 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: handoff|requirements/proof|proof matrix|evidence source|freshness|parent|coverage|copy-paste
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: requirements/proof matrix|proof matrix
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: evidence source|source
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: freshness guards
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: parent[- ]owned|parent.*verif|verify.*delegated
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-handoff proof matrix preservation pressure

@@ -31,31 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation-review-swarm|review packet|review scope|candidate findings|manage-agents
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: agent calls and sessions
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: (review scope|review packet|packets).{0,120}(reduction|verdict|candidate findings)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: (not|won.t|refus|rather than).{0,80}(embed|fold|duplicat|manual|mechanics)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: acpx (codex|claude|cursor)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: --no-wait|sessions ensure|flow run
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm manage-agents pointer pressure

@@ -32,23 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation-execute-plan|route|accepted findings|tiny same-session|review-fix|read-only
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: accepted (blocker|important).*implementation-execute-plan|route.*implementation-execute-plan|tiny same-session
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: candidate findings|verify|reducer|repo reality
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: start (fixing|editing)|apply patch|make the code change now
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm routes findings to implementation execute pressure

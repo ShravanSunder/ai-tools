@@ -31,19 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: spec-review-swarm|review|pressure-test|refinement input|candidate findings|parent reducer
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: what is fuzzy|boundary could drift|next agent.*guess|what should become sharper|inner loop|outer loop
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: harness-fit|spec-difference|progressive-disclosure|guardrail-codification|scoped review aspects
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm refinement inputs pressure

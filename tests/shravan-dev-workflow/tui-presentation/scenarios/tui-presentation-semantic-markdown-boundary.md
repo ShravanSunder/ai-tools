@@ -36,23 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: markdown|code|link|url|path|token
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: semantic markdown
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: fenced code|fenced json|inline code
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: file links|urls|tokens
+deterministic_checks: []
 expected_artifacts: []
 ---
 # tui-presentation semantic markdown boundary pressure

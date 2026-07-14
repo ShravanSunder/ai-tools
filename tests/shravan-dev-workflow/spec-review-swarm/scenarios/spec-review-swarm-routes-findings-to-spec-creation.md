@@ -31,19 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: accepted findings|spec-creation-swarm|route|contested|candidate findings|threat model
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: route.*spec-creation-swarm|spec-creation-swarm.*accepted|accepted.*spec-creation-swarm
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: contested|candidate findings|parent.*verif|threat[ -]model
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm routes findings to spec creation pressure

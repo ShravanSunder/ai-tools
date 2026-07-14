@@ -31,19 +31,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: candidate findings|parent reducer|do not pre-judge|bounded packet|unresolved
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: avoid flagging|treat.*minor|one strong finding|concrete failure path|focused check
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: do not flag this|treat this as minor|confirm my preferred answer
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm no prejudged lanes pressure

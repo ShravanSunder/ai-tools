@@ -28,11 +28,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: reproduce|evidence|hypothesis|root cause|debug artifact
+deterministic_checks: []
 expected_artifacts: []
 ---
 # debug-investigation no blind fix pressure

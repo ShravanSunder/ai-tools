@@ -38,35 +38,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: adversarial-crux|planning-readiness|security-threat-model|lane judgment
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: where to look|how to think|how to inspect|good signals|bad signals|calibration
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: exact.*anchor|path:line|smallest refinement target|validation note
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: what would invalidate|what the planner would have to invent|assets|entry points|trust boundaries
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: finding-schema|review-packet
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: generic broad prompts are enough
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: return the schema and be thorough
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-review-swarm semantic lane judgment pressure

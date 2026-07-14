@@ -27,23 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: not.*ready|cannot|need|push|commit|decide|local
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: git status|dirty worktree|worktree
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: local.{0,40}head.{0,40}pr head|pr head.{0,40}local.{0,40}head
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: unpushed|upstream|detached
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup local state pressure

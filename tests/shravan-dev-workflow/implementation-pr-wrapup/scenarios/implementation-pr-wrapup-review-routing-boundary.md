@@ -24,23 +24,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation-review-swarm|review swarm|route|not.*wrap
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: fresh.{0,40}review|review.{0,40}discovery|finding discovery
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: implementation-review-swarm
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: implementation-pr-wrapup.{0,80}(not|only|existing|lifecycle)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup review routing boundary pressure

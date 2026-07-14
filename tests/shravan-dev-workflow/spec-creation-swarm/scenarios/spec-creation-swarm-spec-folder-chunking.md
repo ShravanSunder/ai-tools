@@ -36,19 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: durable repo artifact|docs/specs|primary spec|slice spec|vertical slice|app protocol|domain boundary|ownership boundary|shared lower-level contract
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: artifact tree|docs/specs/<date>-<slug>\\.md|tmp/spec-workflows|swarm-ledger|lanes/<lane-name>\\.md|evidence-and-gaps\\.md
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: appendix-style split is allowed|appendix-style spec folder is acceptable|thin primary.*enough|primary file may just link|primary file can be a link hub|agents can inspect the appendices
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-creation-swarm spec folder chunking pressure

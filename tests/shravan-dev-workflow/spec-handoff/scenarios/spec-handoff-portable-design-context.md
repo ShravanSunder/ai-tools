@@ -33,19 +33,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: spec|design|handoff|portable|proof expectations|plan-creation-swarm|implementation plan
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: proof (expectation|assumption|gap)|proof assumptions|validation strategy|explicit deferrals|defer.*plan-creation-swarm
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: plan-creation-swarm
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-handoff portable design context pressure

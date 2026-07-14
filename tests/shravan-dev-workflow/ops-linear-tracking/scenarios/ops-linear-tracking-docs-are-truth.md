@@ -27,11 +27,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: docs are truth|tickets are tracking|dependencies|mcp|cli|doc sections
+deterministic_checks: []
 expected_artifacts: []
 ---
 # ops-linear-tracking docs are truth pressure

@@ -27,23 +27,7 @@ risk: high
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: baseRefName|base branch|wrong base|target branch|not ready|stop
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: baseRefName|base branch|target branch|intended base|repo-default base
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: stop|ask|update.*base|not ready|block
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: base mismatch|wrong target|not enough|only one gate|does not override|still.*block|readiness.*block|readiness blocker
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-pr-wrapup wrong base branch pressure

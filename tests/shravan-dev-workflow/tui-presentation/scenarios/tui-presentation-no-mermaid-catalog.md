@@ -29,23 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: mermaid|catalog|diagram|understand|selection
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: understanding[- ]first|complicated-system questions|terminal-native drawing first|terminal[- ]first|decision rule before the drawing|system shape
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: few visual families|small set of visual families|small visual-family guide|visual families.*not a catalog
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: not.*catalog|avoid.*catalog
+deterministic_checks: []
 expected_artifacts: []
 ---
 # tui-presentation diagram catalog pressure

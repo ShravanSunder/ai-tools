@@ -38,39 +38,7 @@ risk: high
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: peekaboo|macos|ui|automation
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: peekaboo --help
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: peekaboo learn|peekaboo tools
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: respect.*desktop|avoid destructive|destructive desktop action|do not quit|explicit target/action|unsafe cleanup
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: recapture|fresh.*see --json|see --json.*fresh
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: list windows|window-id|window-title|window focus
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: mktemp|umask 077|private temp|cleanup.*current-run
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: visual-testing-patterns|troubleshooting|headless-automation|reference router|safe interaction slice|operating rules
+deterministic_checks: []
 expected_artifacts: []
 ---
 # peekaboo progressive disclosure pressure

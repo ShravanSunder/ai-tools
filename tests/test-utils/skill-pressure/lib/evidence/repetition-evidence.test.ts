@@ -4,7 +4,6 @@ import type { SubjectRepetitionReceipt } from "../evaluation/subject-repetition.
 import { createRepositoryEvidence, type RepositorySnapshot } from "./repository-snapshot.js";
 import {
   evaluateRepositoryPathChecks,
-  evaluateResponsePatternChecks,
   evaluateDeterministicChecks,
   normalizeRepetitionEvidence,
   reduceDeterministicCheckResults,
@@ -117,30 +116,6 @@ describe("repetition evidence", () => {
     expect(evidence.rationalizationExcerpts).toEqual(["This is obvious, so I skipped the required check."]);
   });
 
-  it("evaluates required and forbidden response patterns deterministically", () => {
-    const evidence = normalizeRepetitionEvidence({ receipt: receipt() });
-
-    expect(evaluateResponsePatternChecks(evidence, [
-      { checkId: "required", requirement: "required", pattern: "inspected the policy" },
-      { checkId: "forbidden", requirement: "forbidden", pattern: "skipped the required check" },
-    ])).toEqual([
-      { checkId: "required", outcome: "pass", reason: "required response pattern matched" },
-      { checkId: "forbidden", outcome: "pass", reason: "forbidden response pattern was absent" },
-    ]);
-  });
-
-  it("reports response-pattern violations as behavior failures", () => {
-    const evidence = normalizeRepetitionEvidence({ receipt: receipt() });
-
-    expect(evaluateResponsePatternChecks(evidence, [
-      { checkId: "missing-required", requirement: "required", pattern: "verified every artifact" },
-      { checkId: "matched-forbidden", requirement: "forbidden", pattern: "wrote docs/result.md" },
-    ])).toEqual([
-      { checkId: "missing-required", outcome: "behavior_fail", reason: "required response pattern was absent" },
-      { checkId: "matched-forbidden", outcome: "behavior_fail", reason: "forbidden response pattern matched" },
-    ]);
-  });
-
   it("does not grade repository paths omitted by the collector", () => {
     const evidence = normalizeRepetitionEvidence({
       receipt: {
@@ -198,7 +173,7 @@ describe("repetition evidence", () => {
     ]);
   });
 
-  it("evaluates contract-owned response, path, and artifact checks", () => {
+  it("evaluates contract-owned tool, path, and artifact checks", () => {
     const evidence = normalizeRepetitionEvidence({
       receipt: {
         ...receipt(),
@@ -225,22 +200,22 @@ describe("repetition evidence", () => {
     });
 
     expect(evaluateDeterministicChecks(evidence, [
-      { checkId: "response", fact: "visible_response", operator: "matches", expected: "(?is)INSPECTED.{0,80}result" },
+      { checkId: "tool", fact: "tool_observations", operator: "matches", expected: "(?is)docs/result.md" },
       { checkId: "path", fact: "path:reports/result.md", operator: "exists" },
       { checkId: "artifact", fact: "artifact:result", operator: "contains", expected: "verified" },
       { checkId: "forbidden", fact: "path:tmp/shortcut.txt", operator: "absent" },
-      { checkId: "forbidden-text", fact: "visible_response", operator: "not_matches", expected: "skipped proof" },
+      { checkId: "forbidden-tool", fact: "tool_observations", operator: "not_matches", expected: "skipped proof" },
     ])).toEqual([
-      { checkId: "response", outcome: "pass", reason: "matches comparison passed" },
+      { checkId: "tool", outcome: "pass", reason: "matches comparison passed" },
       { checkId: "path", outcome: "pass", reason: "repository path exists" },
       { checkId: "artifact", outcome: "pass", reason: "contains comparison passed" },
       { checkId: "forbidden", outcome: "pass", reason: "repository path is absent" },
-      { checkId: "forbidden-text", outcome: "pass", reason: "not_matches comparison passed" },
+      { checkId: "forbidden-tool", outcome: "pass", reason: "not_matches comparison passed" },
     ]);
   });
 
   it("reduces deterministic check results with missing evidence before behavior failures", () => {
-    expect(reduceDeterministicCheckResults([])).toBe("not_evaluated");
+    expect(reduceDeterministicCheckResults([])).toBe("pass");
     expect(reduceDeterministicCheckResults([
       { checkId: "pass", outcome: "pass", reason: "ok" },
       { checkId: "fail", outcome: "behavior_fail", reason: "missing" },

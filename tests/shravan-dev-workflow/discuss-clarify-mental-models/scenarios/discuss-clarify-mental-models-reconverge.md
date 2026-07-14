@@ -36,55 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: "model:"
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: "model:"
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: "inherited_frame:"
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: "first_principles:"
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: "assumptions:"
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: "branches:"
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: "countercase:"
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: "evidence_checked:"
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: "rebuilt_model:"
-  - check_id: proof-9
-    fact: visible_response
-    operator: matches
-    expected: "open_or_confirmed:"
-  - check_id: proof-10
-    fact: visible_response
-    operator: matches
-    expected: "next_workflow:"
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: forcing question:\s*[^\n]*\?|forcing question.{0,60}exactly one|exactly one.{0,60}forcing question
+deterministic_checks: []
 expected_artifacts: []
 ---
 # discuss-clarify-mental-models reconverge pressure

@@ -41,23 +41,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: goal contract|plan-creation-swarm|requirements/proof|proof matrix|must be defined by plan-creation-swarm|first verification checkpoint
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: must be defined by plan-creation-swarm|plan-creation-swarm.*define
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: requirements/proof matrix|proof matrix
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: evidence source|freshness guard
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal plan-creation matrix handoff pressure

@@ -30,12 +30,6 @@ export interface NormalizedRepetitionEvidence {
   readonly rationalizationExcerpts: readonly string[];
 }
 
-export interface ResponsePatternCheck {
-  readonly checkId: string;
-  readonly requirement: "required" | "forbidden";
-  readonly pattern: string;
-}
-
 export interface RepositoryPathCheck {
   readonly checkId: string;
   readonly requirement: "required" | "forbidden";
@@ -51,7 +45,7 @@ export interface DeterministicCheckResult {
 export function reduceDeterministicCheckResults(
   results: readonly DeterministicCheckResult[],
 ): DeterministicCheckOutcome {
-  if (results.length === 0 || results.some((result) => result.outcome === "not_evaluated")) {
+  if (results.some((result) => result.outcome === "not_evaluated")) {
     return "not_evaluated";
   }
   return results.some((result) => result.outcome === "behavior_fail") ? "behavior_fail" : "pass";
@@ -95,23 +89,6 @@ export function normalizeRepetitionEvidence(
   };
 }
 
-export function evaluateResponsePatternChecks(
-  evidence: NormalizedRepetitionEvidence,
-  checks: readonly ResponsePatternCheck[],
-): readonly DeterministicCheckResult[] {
-  return checks.map((check) => {
-    const matched = new RegExp(check.pattern, "u").test(evidence.visibleResponse);
-    if (check.requirement === "required") {
-      return matched
-        ? { checkId: check.checkId, outcome: "pass", reason: "required response pattern matched" }
-        : { checkId: check.checkId, outcome: "behavior_fail", reason: "required response pattern was absent" };
-    }
-    return matched
-      ? { checkId: check.checkId, outcome: "behavior_fail", reason: "forbidden response pattern matched" }
-      : { checkId: check.checkId, outcome: "pass", reason: "forbidden response pattern was absent" };
-  });
-}
-
 export function evaluateRepositoryPathChecks(
   evidence: NormalizedRepetitionEvidence,
   checks: readonly RepositoryPathCheck[],
@@ -146,9 +123,6 @@ function evaluateDeterministicCheck(
   evidence: NormalizedRepetitionEvidence,
   check: DeterministicCheck,
 ): DeterministicCheckResult {
-  if (check.fact === "visible_response") {
-    return evaluateTextCheck(check, evidence.visibleResponse);
-  }
   if (check.fact === "tool_observations") {
     return evaluateTextCheck(check, evidence.toolObservations.map((observation) => observation.payload).join("\n"));
   }

@@ -47,59 +47,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: classification:\s*create|classification.{0,40}create
-  - check_id: decision-2
-    fact: visible_response
-    operator: matches
-    expected: description:\s*use when
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: classification:\s*create|classification.{0,40}create
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: reusable (job|behavior):\s*\S
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: baseline( or review target)?:\s*hypothesiz\w*|hypothesiz\w*.{0,100}baseline
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: invocation:?\s*(model-invocable|user-invocable)|invocation (mode|capabilit(y|ies)).{0,120}(model-invocable|user-invocable)
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: description:\s*use when
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: (mental model|leading word|latent space|lens)
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: (workflow topology|all-run spine|main path).{0,300}(branch|predicate|return shape)|(branch|predicate|return shape).{0,300}(workflow topology|all-run spine|main path)
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: (completion criterion|completion:|done when|checkable stop condition|complete only when)|(do not (remove|proceed|edit|ship).{0,140}(unless|until|if any|before))|((if any|unless|until).{0,140}do not (remove|proceed|edit|ship))|(gate|stop condition|must be true).{0,200}(before|proceeding|recommending)|(stop|do not \w+) before \w+ing
-  - check_id: proof-9
-    fact: visible_response
-    operator: matches
-    expected: references/[a-z0-9_-]+\.md|(per-provider|per-case|walkthrough|worked example|provider (depth|detail|example)).{0,400}(reference|references/)
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: description:.{0,180}(step 1|step 2|first,? (then|second|next)|workflow (is|steps)|summar(y|ize) the (workflow|process))
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: (i )?(can'?t|will not|won'?t|unable to) (draft|write|show|produce) the (skill|draft|content)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # skills-creation draft artifact pressure

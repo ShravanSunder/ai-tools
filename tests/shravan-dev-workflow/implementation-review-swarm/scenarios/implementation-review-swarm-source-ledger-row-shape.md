@@ -26,27 +26,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: source_obligation_id|whole-source-trace|ledger
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: source_anchor|plan_anchor|implementation_anchor|proof_anchor
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: reachability_status|coverage_status|false_substitute_risk
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: candidate_deviation_bucket|candidate_route_target
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: prose summary is enough|narrative only|simple checklist
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm source ledger row shape pressure

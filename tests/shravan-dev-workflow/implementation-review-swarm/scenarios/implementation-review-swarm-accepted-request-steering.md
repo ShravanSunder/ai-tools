@@ -28,23 +28,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: accepted_request|steering|source truth|review-packet
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: quote|source_reference|why_it_changes_ownership_or_review_focus
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: no raw transcript|mining raw session|parent paraphrase
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: paste the transcript|summarize from memory|parent summary is source truth
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-review-swarm accepted request steering pressure

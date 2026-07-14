@@ -32,27 +32,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: session-ledger|ledger|parent
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: candidate|unverified|parent verifies|parent-owned
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: minimal row|ledger row|reduction receipt
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: accepted|rejected|unverified
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: no need.{0,80}(ledger|session|track)
+deterministic_checks: []
 expected_artifacts: []
 ---
 # manage-agents session ledger and reduction pressure

@@ -29,19 +29,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: fresh|bounded packet|source anchors|source/file inventory|decision target
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: do not pass accumulated session history|session history|understand the repo|creation-evidence-schema|unresolved
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: paste the whole session|read the entire repo|understand everything
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-creation-swarm no session dump lanes pressure

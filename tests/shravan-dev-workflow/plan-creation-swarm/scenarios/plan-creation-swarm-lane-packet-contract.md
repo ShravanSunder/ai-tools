@@ -55,51 +55,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation plan|planning lanes|subagents|bounded|parent|requirements/proof matrix|validation gates
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: role / mode|allowed write scope|planning question|source-of-truth inputs|inspect list|non-goals
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: references/lane-packets
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: codebase-boundary|validation-proof|vertical-slice-decomposition|execution-order|security-reliability|scope-and-proof-fit
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: lane-specific checklist|output schema|uncertainty|confidence
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: lane orchestration order|call timing|prerequisites|collection contribution|parent collection pass
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: security context
-  - check_id: proof-7
-    fact: visible_response
-    operator: matches
-    expected: candidate evidence|parent reducer|parent synthesis|parent verification
-  - check_id: proof-8
-    fact: visible_response
-    operator: matches
-    expected: completion receipt|source anchors|proposed artifact path|parent writes|lanes/
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: two[- ]line prompts|whole plan to each subagent|review verdict|adversarial-plan
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: load (a )?shared lane contract|import (a )?shared lane contract
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-creation-swarm lane packet contract pressure

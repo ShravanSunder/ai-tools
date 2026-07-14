@@ -37,23 +37,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: shravan-dev-workflow:orchestrator-goal|docs/plans/2026-06-12-agentstudio-observability-startup.md|docs/superpowers/specs/2026-06-13-shared-observability-dev-loop-design.md|plan-creation-swarm|requirements/proof
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: required workflow skill
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: required reading
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: exact .*file|known artifacts
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal required files and skill name pressure

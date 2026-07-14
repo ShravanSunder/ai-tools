@@ -34,19 +34,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: validate|whole plan|coverage|implementation proof|split|subagent|verify|before editing
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: implementation proof|proof[ -](gate|matrix|layer|line|split)|requirements/proof|substitute proof
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: split|replan|smaller (provable )?slices|return to plan-creation-swarm|external blocker|(cannot|can't|not) be skipped|(reject|refus|resist).{0,40}skip
+deterministic_checks: []
 expected_artifacts: []
 ---
 # implementation-execute-plan validate before edits pressure

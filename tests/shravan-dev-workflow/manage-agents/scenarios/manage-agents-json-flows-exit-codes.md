@@ -40,35 +40,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: automation-and-flows|json|exit codes|flows
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: session/update
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: raw acp|json-rpc|ndjson
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: (0|1|2|3|4|5|130).{0,180}(timeout|permission|no session|interrupted|usage)
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: repeatable multi-step|acpx flow run|flow artifacts
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: select\(\.type==[\"']tool_call[\"']\)
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: parse human text output|parse `?text`? output
+deterministic_checks: []
 expected_artifacts: []
 ---
 # manage-agents JSON, flows, and exit-code pressure

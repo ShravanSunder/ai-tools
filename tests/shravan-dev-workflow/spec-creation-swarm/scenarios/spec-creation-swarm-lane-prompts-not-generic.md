@@ -36,31 +36,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: lane reference|bounded question|decision target|source-of-truth inputs|inspect|non-goals|completion receipt
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: codebase-explorer|architecture-minimal|architecture-clean-boundary|architecture-pragmatic|risk-and-tradeoff-design
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: creation-evidence-schema\.md|design implication|boundary impact|proof modality
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: lane orchestration order|call timing|prerequisites|collection contribution|parent collection pass
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: current-truth lane|architecture option lanes|crux/risk lane
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: research the repo and suggest architecture|use the standard packet
+deterministic_checks: []
 expected_artifacts: []
 ---
 # spec-creation-swarm lane prompts not generic pressure

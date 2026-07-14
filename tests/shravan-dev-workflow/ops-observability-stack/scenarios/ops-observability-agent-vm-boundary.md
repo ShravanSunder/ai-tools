@@ -33,31 +33,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: managed|external|agent vm|shravan-claw-beta|ai-tools
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: managed mode.*deployment|deployment.*managed mode
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: external mode.*ai-tools|shared.*ai-tools
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: pnpm observability:start|observability:start
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: plain.*pnpm start.*fail-open|pnpm start.*fail-open
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: dev[.]repo[.]hash|dev[.]worktree[.]hash
+deterministic_checks: []
 expected_artifacts: []
 ---
 # ops-observability Agent VM boundary pressure

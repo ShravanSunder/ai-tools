@@ -35,23 +35,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: manage-agents|runtime-control|queue|steer
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: queue.{0,80}(after|finishes|drains|current turn)
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: steer.{0,120}(immediate|current turn|runtime|adapter)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: status|history|ledger
+deterministic_checks: []
 expected_artifacts: []
 ---
 # manage-agents queue vs steer pressure

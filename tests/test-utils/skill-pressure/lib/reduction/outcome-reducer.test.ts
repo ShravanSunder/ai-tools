@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { reduceScenarioOutcome } from "./outcome-reducer.js";
+import { reduceObjectiveEvidenceOutcome, reduceScenarioOutcome } from "./outcome-reducer.js";
 
 function repetitions(outcome: "pass" | "behavior_fail" | "not_evaluated", count = 5) {
   return Array.from({ length: count }, (_, index) => ({ repetitionId: `run-${index + 1}`, outcome }));
@@ -45,5 +45,23 @@ describe("scenario outcome reduction", () => {
       baseline: repetitions("pass"),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "not_evaluated", reasons: ["baseline did not demonstrate a behavior failure"] });
+  });
+});
+
+describe("objective evidence reduction", () => {
+  it("passes when every repetition has no objective violation", () => {
+    expect(reduceObjectiveEvidenceOutcome({
+      expectedRepetitions: 5,
+      baseline: repetitions("pass"),
+      treatment: repetitions("pass"),
+    })).toMatchObject({ outcome: "pass" });
+  });
+
+  it("fails closed on an objective violation without requiring a deterministic RED", () => {
+    expect(reduceObjectiveEvidenceOutcome({
+      expectedRepetitions: 5,
+      baseline: repetitions("pass"),
+      treatment: [...repetitions("pass", 4), ...repetitions("behavior_fail", 1)],
+    })).toMatchObject({ outcome: "behavior_fail" });
   });
 });

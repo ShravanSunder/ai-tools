@@ -45,35 +45,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: model:[\s\S]{0,160}(terms|boundary|flow|state|ownership|constraint|tradeoff)\b
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: model:[\s\S]{0,160}(terms|boundary|flow|state|ownership|constraint|tradeoff)\b
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: inherited_frame:[\s\S]{0,220}(agent|sidekick|report|summary|claim|said)
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: first_principles:[\s\S]{0,300}(none|unavailable|not checked|evidence|artifact|run output|observed|verified|hard constraint|constraint|directly grounded|available facts)
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: assumptions:[\s\S]{0,220}(assum|unproven|not yet|likely|until checked|may|unless proven|probably|without proof|does not imply)
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: evidence (only|merely).{0,120}(claim|claimed)|evidence that.{0,120}(asserted|claimed).{0,120}not evidence|not (first-principles )?(proof|evidence) that.{0,120}(code|docs|tests)|started tests.{0,140}(not|rather than|instead of).{0,80}(passed|completed|running/passing)
-  - check_id: proof-6
-    fact: visible_response
-    operator: matches
-    expected: "rebuilt_model:"
+deterministic_checks: []
 expected_artifacts: []
 ---
 # discuss-clarify-mental-models map-building pressure

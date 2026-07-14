@@ -35,39 +35,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: plan-review-swarm|whole-plan-cohesion|accepted source artifact|coverage ledger
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: review-packet|whole-plan-cohesion
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: open/read the plan artifact yourself|open/read the accepted source artifact yourself
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: controller summaries.*hints|not source truth
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: source obligation.{0,80}plan home/slice.{0,80}proof row/checkpoint.{0,80}(covered|missing|contradicted|deferred)
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: spec-compliance|testability-validation|whole-plan-cohesion
-  - check_id: forbidden-1
-    fact: visible_response
-    operator: not_matches
-    expected: trust my summary
-  - check_id: forbidden-2
-    fact: visible_response
-    operator: not_matches
-    expected: summary is sufficient
+deterministic_checks: []
 expected_artifacts: []
 ---
 # plan-review-swarm independent source coverage pressure

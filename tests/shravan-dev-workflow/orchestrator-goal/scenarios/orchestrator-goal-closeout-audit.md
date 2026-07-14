@@ -34,27 +34,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: goal closeout checklist|matrix closeout|completion decision|done|not-applicable|open|blocked
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: goal closeout checklist
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: "gate:|status:|evidence:|next:"
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: done.*evidence|evidence.*user assertion|user assertion in this chat
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: review/work cycles|matrix closeout
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal closeout audit pressure

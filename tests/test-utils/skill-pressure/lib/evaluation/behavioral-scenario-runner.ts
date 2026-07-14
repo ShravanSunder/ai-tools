@@ -9,7 +9,7 @@ import {
   reduceDeterministicCheckResults,
 } from "../evidence/repetition-evidence.js";
 import type { ScenarioOutcomeReduction } from "../reduction/outcome-reducer.js";
-import { reduceScenarioOutcome } from "../reduction/outcome-reducer.js";
+import { reduceObjectiveEvidenceOutcome } from "../reduction/outcome-reducer.js";
 import { executeAutomatedBlindReview, type AutomatedBlindReviewReceipt } from "../review/acpx-blind-review-runner.js";
 import { applyDeterministicReviewPrecedence, type ReviewDeterministicState } from "../review/review-packet.js";
 import {
@@ -109,7 +109,7 @@ export async function executeBehavioralScenario(
   });
   const deterministicBaseline = result.baseline.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
   const deterministicTreatment = result.treatment.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
-  const deterministicReduction = reduceScenarioOutcome({
+  const deterministicReduction = reduceObjectiveEvidenceOutcome({
     expectedRepetitions: scenario.repetitions,
     baseline: deterministicBaseline,
     treatment: deterministicTreatment,

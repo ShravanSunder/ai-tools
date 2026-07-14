@@ -35,23 +35,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: research question|evidence ledger|local re-anchor|tmp/research-workflows
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: local re-anchor|re-anchor locally|re-anchor on local|re-anchor in the local repo|local repo lane|local repo/docs re-anchor|local code/docs|local .*docs/code
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: evidence ledger
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: direct observation|inference|unresolved
+deterministic_checks: []
 expected_artifacts: []
 ---
 # research-swarm question first

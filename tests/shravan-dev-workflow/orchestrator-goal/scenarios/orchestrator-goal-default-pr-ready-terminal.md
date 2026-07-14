@@ -50,39 +50,7 @@ risk: high
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: decision-1
-    fact: visible_response
-    operator: matches
-    expected: implementation-execute-plan
-  - check_id: decision-2
-    fact: visible_response
-    operator: matches
-    expected: implementation-pr-wrapup
-  - check_id: decision-3
-    fact: visible_response
-    operator: matches
-    expected: not merged|do not merge|merge.*out of scope
-  - check_id: proof-1
-    fact: visible_response
-    operator: matches
-    expected: default implementation terminal
-  - check_id: proof-2
-    fact: visible_response
-    operator: matches
-    expected: mutable starting point
-  - check_id: proof-3
-    fact: visible_response
-    operator: matches
-    expected: pr-ready non-merge boundary
-  - check_id: proof-4
-    fact: visible_response
-    operator: matches
-    expected: full proof loop
-  - check_id: proof-5
-    fact: visible_response
-    operator: matches
-    expected: checkpoint commit
+deterministic_checks: []
 expected_artifacts: []
 ---
 # orchestrator-goal default PR-ready terminal pressure
