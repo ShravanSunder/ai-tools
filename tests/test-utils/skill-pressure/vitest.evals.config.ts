@@ -9,6 +9,5 @@ export default defineConfig({
     include: ["evals/**/*.eval.ts"],
     reporters: ["vitest-evals/reporter"],
     maxConcurrency: configuration.jobs,
-    testTimeout: 2_400_000,
   },
 });

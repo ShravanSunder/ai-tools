@@ -1,0 +1,387 @@
+import { createHash } from "node:crypto";
+
+export type AuthorityDigest = `sha256:${string}`;
+
+export interface CalibrationFreshnessInputs {
+  readonly behaviorContractDigest: AuthorityDigest;
+  readonly baselinePolicyDigest: AuthorityDigest;
+  readonly runnerSemanticsDigest: AuthorityDigest;
+  readonly subjectProfileDigest: AuthorityDigest;
+  readonly reviewProfileDigest: AuthorityDigest;
+}
+
+export interface CalibrationFreshnessFingerprint extends CalibrationFreshnessInputs {
+  readonly digest: AuthorityDigest;
+}
+
+export interface ParentAcceptanceReceipt {
+  readonly schemaVersion: 1;
+  readonly receiptKind: "parent_acceptance";
+  readonly scenarioId: string;
+  readonly behaviorContractDigest: AuthorityDigest;
+  readonly acceptedAuthorityReceiptDigest: AuthorityDigest;
+  readonly acceptedRunDigest: AuthorityDigest;
+  readonly calibrationFingerprintDigest: AuthorityDigest;
+  readonly claimedRequirementManifestDigest: AuthorityDigest;
+}
+
+export interface PromotionReceipt {
+  readonly schemaVersion: 1;
+  readonly receiptKind: "promotion";
+  readonly scenarioId: string;
+  readonly behaviorContractDigest: AuthorityDigest;
+  readonly calibrationFingerprint: CalibrationFreshnessInputs;
+  readonly calibrationRunDigest: AuthorityDigest;
+  readonly promotionTreatmentDigest: AuthorityDigest;
+  readonly calibration: {
+    readonly contractConsistent: true;
+    readonly contractConsistencyEvidenceDigest: AuthorityDigest;
+    readonly baselinePolicyValid: true;
+    readonly baselinePolicyEvidenceDigest: AuthorityDigest;
+    readonly baselineRepetitionDigests: readonly AuthorityDigest[];
+    readonly treatmentRepetitionDigests: readonly AuthorityDigest[];
+    readonly comparisonIntentPassed: true;
+    readonly objectiveEvidenceDigest: AuthorityDigest;
+    readonly semanticEvidenceDigest: AuthorityDigest;
+    readonly attemptReceiptDigests: readonly AuthorityDigest[];
+    readonly cleanupReceiptDigests: readonly AuthorityDigest[];
+    readonly deterministicMutationCoverage: true;
+    readonly subjectProfileVerified: true;
+    readonly reviewProfileVerified: true;
+  };
+  readonly parentAcceptance: ParentAcceptanceReceipt;
+}
+
+export interface DemotionReceipt {
+  readonly schemaVersion: 1;
+  readonly receiptKind: "demotion";
+  readonly scenarioId: string;
+  readonly behaviorContractDigest: AuthorityDigest;
+  readonly observedRunDigest: AuthorityDigest;
+  readonly evidence: {
+    readonly contractDigest: AuthorityDigest;
+    readonly repetitionSetDigest: AuthorityDigest;
+    readonly reviewDigest: AuthorityDigest;
+    readonly aggregateDigest: AuthorityDigest;
+    readonly reason: "contract_contradiction" | "unstable_baseline" | "reviewer_ambiguity" | "execution_budget_insufficient";
+  };
+  readonly parentAcceptance: ParentAcceptanceReceipt;
+}
+
+export interface ValidatedPromotionReceipt {
+  readonly receipt: PromotionReceipt;
+  readonly authorityReceiptDigest: AuthorityDigest;
+  readonly calibrationFingerprint: CalibrationFreshnessFingerprint;
+  readonly freshness: CalibrationFreshnessResult;
+}
+
+export type CalibrationFreshnessResult =
+  | { readonly status: "fresh"; readonly reasonCode: null }
+  | { readonly status: "stale"; readonly reasonCode: "stale_calibration" };
+
+export function calculateCalibrationFreshnessFingerprint(
+  inputs: CalibrationFreshnessInputs,
+): CalibrationFreshnessFingerprint {
+  assertFreshnessInputs(inputs, "calibration freshness inputs");
+  return { ...inputs, digest: digestCanonical(inputs) };
+}
+
+export function evaluateCalibrationFreshness(props: {
+  readonly recordedFingerprintDigest: AuthorityDigest;
+  readonly currentFreshnessInputs: CalibrationFreshnessInputs;
+}): CalibrationFreshnessResult {
+  assertDigest(props.recordedFingerprintDigest, "recorded calibration fingerprint digest");
+  return calculateCalibrationFreshnessFingerprint(props.currentFreshnessInputs).digest === props.recordedFingerprintDigest
+    ? { status: "fresh", reasonCode: null }
+    : { status: "stale", reasonCode: "stale_calibration" };
+}
+
+export function calculateAuthorityReceiptDigest(receipt: unknown): AuthorityDigest {
+  const record = assertRecord(receipt, "authority receipt");
+  const { parentAcceptance: _parentAcceptance, ...unsignedReceipt } = record;
+  return digestCanonical(unsignedReceipt);
+}
+
+export function validateParentAcceptanceReceipt(props: {
+  readonly receipt: unknown;
+  readonly expected: {
+    readonly scenarioId: string;
+    readonly behaviorContractDigest: AuthorityDigest;
+    readonly authorityReceiptDigest: AuthorityDigest;
+    readonly runDigest: AuthorityDigest;
+    readonly calibrationFingerprintDigest: AuthorityDigest;
+    readonly claimedRequirementManifestDigest: AuthorityDigest;
+  };
+}): ParentAcceptanceReceipt {
+  const receipt = parseParentAcceptanceReceipt(props.receipt);
+  if (receipt.scenarioId !== props.expected.scenarioId) throw new Error("parent acceptance scenario id does not match");
+  if (receipt.behaviorContractDigest !== props.expected.behaviorContractDigest) throw new Error("parent acceptance behavior contract digest does not match");
+  if (receipt.acceptedAuthorityReceiptDigest !== props.expected.authorityReceiptDigest) throw new Error("parent acceptance authority receipt digest does not match");
+  if (receipt.acceptedRunDigest !== props.expected.runDigest) throw new Error("parent acceptance run digest does not match");
+  if (receipt.calibrationFingerprintDigest !== props.expected.calibrationFingerprintDigest) throw new Error("parent acceptance calibration fingerprint digest does not match");
+  if (receipt.claimedRequirementManifestDigest !== props.expected.claimedRequirementManifestDigest) throw new Error("parent acceptance claimed requirement manifest digest does not match");
+  return receipt;
+}
+
+export function validatePromotionReceipt(props: {
+  readonly receipt: unknown;
+  readonly currentFreshnessInputs: CalibrationFreshnessInputs;
+}): ValidatedPromotionReceipt {
+  const receipt = parsePromotionReceipt(props.receipt);
+  const authorityReceiptDigest = calculateAuthorityReceiptDigest(receipt);
+  const calibrationFingerprint = calculateCalibrationFreshnessFingerprint(receipt.calibrationFingerprint);
+  if (receipt.behaviorContractDigest !== receipt.calibrationFingerprint.behaviorContractDigest) {
+    throw new Error("promotion behavior contract digest does not match calibration fingerprint");
+  }
+  validatePromotionEvidence(receipt.calibration);
+  validateParentAcceptanceReceipt({
+    receipt: receipt.parentAcceptance,
+    expected: {
+      scenarioId: receipt.scenarioId,
+      behaviorContractDigest: receipt.behaviorContractDigest,
+      authorityReceiptDigest,
+      runDigest: receipt.calibrationRunDigest,
+      calibrationFingerprintDigest: calibrationFingerprint.digest,
+      claimedRequirementManifestDigest: receipt.parentAcceptance.claimedRequirementManifestDigest,
+    },
+  });
+  return {
+    receipt,
+    authorityReceiptDigest,
+    calibrationFingerprint,
+    freshness: evaluateCalibrationFreshness({
+      recordedFingerprintDigest: calibrationFingerprint.digest,
+      currentFreshnessInputs: props.currentFreshnessInputs,
+    }),
+  };
+}
+
+export function validateDemotionReceipt(props: {
+  readonly receipt: unknown;
+  readonly currentRunDigest?: AuthorityDigest;
+}): { readonly receipt: DemotionReceipt; readonly authorityReceiptDigest: AuthorityDigest } {
+  const receipt = parseDemotionReceipt(props.receipt);
+  if (props.currentRunDigest !== undefined && receipt.observedRunDigest === props.currentRunDigest) {
+    throw new Error("a demotion cannot change authority for the same run");
+  }
+  const authorityReceiptDigest = calculateAuthorityReceiptDigest(receipt);
+  validateParentAcceptanceReceipt({
+    receipt: receipt.parentAcceptance,
+    expected: {
+      scenarioId: receipt.scenarioId,
+      behaviorContractDigest: receipt.behaviorContractDigest,
+      authorityReceiptDigest,
+      runDigest: receipt.observedRunDigest,
+      calibrationFingerprintDigest: receipt.parentAcceptance.calibrationFingerprintDigest,
+      claimedRequirementManifestDigest: receipt.parentAcceptance.claimedRequirementManifestDigest,
+    },
+  });
+  return { receipt, authorityReceiptDigest };
+}
+
+export function evaluateReleaseAuthority(props: {
+  readonly evaluationRole: "gate" | "diagnostic" | "retired";
+  readonly calibration: ValidatedPromotionReceipt | null;
+  readonly outcome: "pass" | "behavior_fail" | "inconclusive" | "infrastructure_error" | "not_evaluated";
+  readonly runDigest: AuthorityDigest;
+  readonly parentAcceptance: unknown | null;
+  readonly claimedRequirementStatus: "traced" | "untraced" | "unknown";
+  readonly claimedRequirementManifestDigest: AuthorityDigest;
+}): { readonly releaseAuthority: boolean; readonly reasonCode: string | null } {
+  if (props.evaluationRole !== "gate") return { releaseAuthority: false, reasonCode: "diagnostic_result" };
+  if (props.calibration === null) return { releaseAuthority: false, reasonCode: "missing_calibration" };
+  if (props.calibration.freshness.status === "stale") return { releaseAuthority: false, reasonCode: "stale_calibration" };
+  if (props.claimedRequirementStatus !== "traced") return { releaseAuthority: false, reasonCode: "untraced_behavior_requirement" };
+  if (props.outcome !== "pass") return { releaseAuthority: false, reasonCode: "non_passing_gate_outcome" };
+  if (props.parentAcceptance === null) return { releaseAuthority: false, reasonCode: "missing_parent_acceptance" };
+  try {
+    validateParentAcceptanceReceipt({
+      receipt: props.parentAcceptance,
+      expected: {
+        scenarioId: props.calibration.receipt.scenarioId,
+        behaviorContractDigest: props.calibration.receipt.behaviorContractDigest,
+        authorityReceiptDigest: props.calibration.authorityReceiptDigest,
+        runDigest: props.runDigest,
+        calibrationFingerprintDigest: props.calibration.calibrationFingerprint.digest,
+        claimedRequirementManifestDigest: props.claimedRequirementManifestDigest,
+      },
+    });
+  } catch {
+    return { releaseAuthority: false, reasonCode: "parent_acceptance_mismatch" };
+  }
+  return { releaseAuthority: true, reasonCode: null };
+}
+
+function parsePromotionReceipt(input: unknown): PromotionReceipt {
+  const receipt = assertRecord(input, "promotion receipt");
+  assertLiteral(receipt.schemaVersion, 1, "promotion receipt schemaVersion");
+  assertLiteral(receipt.receiptKind, "promotion", "promotion receipt kind");
+  assertIdentifier(receipt.scenarioId, "promotion receipt scenario id");
+  assertDigest(receipt.behaviorContractDigest, "promotion behavior contract digest");
+  assertDigest(receipt.calibrationRunDigest, "promotion calibration run digest");
+  assertDigest(receipt.promotionTreatmentDigest, "promotion treatment digest");
+  const calibrationFingerprint = parseFreshnessInputs(receipt.calibrationFingerprint, "promotion calibration fingerprint");
+  const calibration = parsePromotionEvidence(receipt.calibration);
+  return {
+    schemaVersion: 1,
+    receiptKind: "promotion",
+    scenarioId: receipt.scenarioId,
+    behaviorContractDigest: receipt.behaviorContractDigest,
+    calibrationFingerprint,
+    calibrationRunDigest: receipt.calibrationRunDigest,
+    promotionTreatmentDigest: receipt.promotionTreatmentDigest,
+    calibration,
+    parentAcceptance: parseParentAcceptanceReceipt(receipt.parentAcceptance),
+  };
+}
+
+function parseDemotionReceipt(input: unknown): DemotionReceipt {
+  const receipt = assertRecord(input, "demotion receipt");
+  assertLiteral(receipt.schemaVersion, 1, "demotion receipt schemaVersion");
+  assertLiteral(receipt.receiptKind, "demotion", "demotion receipt kind");
+  assertIdentifier(receipt.scenarioId, "demotion receipt scenario id");
+  assertDigest(receipt.behaviorContractDigest, "demotion behavior contract digest");
+  assertDigest(receipt.observedRunDigest, "demotion observed run digest");
+  const evidence = assertRecord(receipt.evidence, "demotion evidence");
+  assertDigest(evidence.contractDigest, "demotion contract digest");
+  assertDigest(evidence.repetitionSetDigest, "demotion repetition set digest");
+  assertDigest(evidence.reviewDigest, "demotion review digest");
+  assertDigest(evidence.aggregateDigest, "demotion aggregate digest");
+  const allowedReasons = ["contract_contradiction", "unstable_baseline", "reviewer_ambiguity", "execution_budget_insufficient"] as const;
+  if (!allowedReasons.includes(evidence.reason as typeof allowedReasons[number])) {
+    throw new Error("treatment failure or mix does not justify demotion");
+  }
+  return {
+    schemaVersion: 1,
+    receiptKind: "demotion",
+    scenarioId: receipt.scenarioId,
+    behaviorContractDigest: receipt.behaviorContractDigest,
+    observedRunDigest: receipt.observedRunDigest,
+    evidence: {
+      contractDigest: evidence.contractDigest,
+      repetitionSetDigest: evidence.repetitionSetDigest,
+      reviewDigest: evidence.reviewDigest,
+      aggregateDigest: evidence.aggregateDigest,
+      reason: evidence.reason as DemotionReceipt["evidence"]["reason"],
+    },
+    parentAcceptance: parseParentAcceptanceReceipt(receipt.parentAcceptance),
+  };
+}
+
+function parsePromotionEvidence(input: unknown): PromotionReceipt["calibration"] {
+  const evidence = assertRecord(input, "promotion calibration evidence");
+  assertLiteral(evidence.contractConsistent, true, "promotion contract consistency");
+  assertDigest(evidence.contractConsistencyEvidenceDigest, "promotion contract consistency evidence digest");
+  assertLiteral(evidence.baselinePolicyValid, true, "promotion baseline policy validity");
+  assertDigest(evidence.baselinePolicyEvidenceDigest, "promotion baseline policy evidence digest");
+  assertLiteral(evidence.comparisonIntentPassed, true, "promotion comparison intent result");
+  assertLiteral(evidence.deterministicMutationCoverage, true, "promotion deterministic mutation coverage");
+  assertLiteral(evidence.subjectProfileVerified, true, "promotion subject profile verification");
+  assertLiteral(evidence.reviewProfileVerified, true, "promotion review profile verification");
+  const baselineRepetitionDigests = parseDigestArray(evidence.baselineRepetitionDigests, "promotion baseline repetitions");
+  const treatmentRepetitionDigests = parseDigestArray(evidence.treatmentRepetitionDigests, "promotion treatment repetitions");
+  if (baselineRepetitionDigests.length !== 5 || treatmentRepetitionDigests.length !== 5) {
+    throw new Error("promotion requires five baseline and five treatment repetitions");
+  }
+  const attemptReceiptDigests = parseDigestArray(evidence.attemptReceiptDigests, "promotion attempt receipts");
+  const cleanupReceiptDigests = parseDigestArray(evidence.cleanupReceiptDigests, "promotion cleanup receipts");
+  if (attemptReceiptDigests.length < 10 || cleanupReceiptDigests.length < 10) {
+    throw new Error("promotion requires durable attempt and cleanup receipts for every repetition");
+  }
+  assertDigest(evidence.objectiveEvidenceDigest, "promotion objective evidence digest");
+  assertDigest(evidence.semanticEvidenceDigest, "promotion semantic evidence digest");
+  return {
+    contractConsistent: true,
+    contractConsistencyEvidenceDigest: evidence.contractConsistencyEvidenceDigest,
+    baselinePolicyValid: true,
+    baselinePolicyEvidenceDigest: evidence.baselinePolicyEvidenceDigest,
+    baselineRepetitionDigests,
+    treatmentRepetitionDigests,
+    comparisonIntentPassed: true,
+    objectiveEvidenceDigest: evidence.objectiveEvidenceDigest,
+    semanticEvidenceDigest: evidence.semanticEvidenceDigest,
+    attemptReceiptDigests,
+    cleanupReceiptDigests,
+    deterministicMutationCoverage: true,
+    subjectProfileVerified: true,
+    reviewProfileVerified: true,
+  };
+}
+
+function validatePromotionEvidence(evidence: PromotionReceipt["calibration"]): void {
+  if (new Set(evidence.baselineRepetitionDigests).size !== 5 || new Set(evidence.treatmentRepetitionDigests).size !== 5) {
+    throw new Error("promotion repetitions must be independently receipted");
+  }
+}
+
+function parseParentAcceptanceReceipt(input: unknown): ParentAcceptanceReceipt {
+  const receipt = assertRecord(input, "parent acceptance receipt");
+  assertLiteral(receipt.schemaVersion, 1, "parent acceptance schemaVersion");
+  assertLiteral(receipt.receiptKind, "parent_acceptance", "parent acceptance receipt kind");
+  assertIdentifier(receipt.scenarioId, "parent acceptance scenario id");
+  assertDigest(receipt.behaviorContractDigest, "parent acceptance behavior contract digest");
+  assertDigest(receipt.acceptedAuthorityReceiptDigest, "parent acceptance authority receipt digest");
+  assertDigest(receipt.acceptedRunDigest, "parent acceptance run digest");
+  assertDigest(receipt.calibrationFingerprintDigest, "parent acceptance calibration fingerprint digest");
+  assertDigest(receipt.claimedRequirementManifestDigest, "parent acceptance claimed requirement manifest digest");
+  return {
+    schemaVersion: 1,
+    receiptKind: "parent_acceptance",
+    scenarioId: receipt.scenarioId,
+    behaviorContractDigest: receipt.behaviorContractDigest,
+    acceptedAuthorityReceiptDigest: receipt.acceptedAuthorityReceiptDigest,
+    acceptedRunDigest: receipt.acceptedRunDigest,
+    calibrationFingerprintDigest: receipt.calibrationFingerprintDigest,
+    claimedRequirementManifestDigest: receipt.claimedRequirementManifestDigest,
+  };
+}
+
+function parseFreshnessInputs(input: unknown, label: string): CalibrationFreshnessInputs {
+  const values = assertRecord(input, label);
+  assertFreshnessInputs(values, label);
+  return values;
+}
+
+function assertFreshnessInputs(input: unknown, label: string): asserts input is CalibrationFreshnessInputs {
+  const values = assertRecord(input, label);
+  assertDigest(values.behaviorContractDigest, `${label} behavior contract digest`);
+  assertDigest(values.baselinePolicyDigest, `${label} baseline policy digest`);
+  assertDigest(values.runnerSemanticsDigest, `${label} runner semantics digest`);
+  assertDigest(values.subjectProfileDigest, `${label} subject profile digest`);
+  assertDigest(values.reviewProfileDigest, `${label} review profile digest`);
+}
+
+function parseDigestArray(input: unknown, label: string): readonly AuthorityDigest[] {
+  if (!Array.isArray(input)) throw new Error(`${label} must be an array`);
+  input.forEach((digest, index) => assertDigest(digest, `${label}[${index}]`));
+  return input;
+}
+
+function assertRecord(value: unknown, label: string): Record<string, unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) {
+    throw new Error(`${label} must be an object`);
+  }
+  return value as Record<string, unknown>;
+}
+
+function assertDigest(value: unknown, label: string): asserts value is AuthorityDigest {
+  if (typeof value !== "string" || !/^sha256:[a-f0-9]{64}$/u.test(value)) throw new Error(`${label} must be a sha256 digest`);
+}
+
+function assertIdentifier(value: unknown, label: string): asserts value is string {
+  if (typeof value !== "string" || !/^[a-z0-9][a-z0-9-]*$/u.test(value)) throw new Error(`${label} must be an identifier`);
+}
+
+function assertLiteral<TValue>(value: unknown, expected: TValue, label: string): asserts value is TValue {
+  if (value !== expected) throw new Error(`${label} must equal ${String(expected)}`);
+}
+
+function digestCanonical(value: unknown): AuthorityDigest {
+  return `sha256:${createHash("sha256").update(JSON.stringify(canonicalize(value))).digest("hex")}`;
+}
+
+function canonicalize(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (typeof value !== "object" || value === null) return value;
+  return Object.fromEntries(Object.entries(value).sort(([left], [right]) => left.localeCompare(right)).map(([key, entry]) => [key, canonicalize(entry)]));
+}

@@ -72,6 +72,8 @@ describe("skill pressure eval registration", () => {
     expect(new Set(cases.map((evaluationCase) => evaluationCase.outputDirectory)).size).toBe(2);
     expect(cases.every((evaluationCase) => evaluationCase.concurrent)).toBe(true);
     expect(cases.every((evaluationCase) => evaluationCase.timeoutSeconds === 180)).toBe(true);
+    expect(cases.every((evaluationCase) => evaluationCase.scenarioDeadlineMs > 2_400_000)).toBe(true);
+    expect(cases.every((evaluationCase) => evaluationCase.vitestTimeoutMs > evaluationCase.scenarioDeadlineMs)).toBe(true);
   });
 
   it("selects only the checked fast manifest and rejects conflicting modes", () => {
@@ -105,6 +107,7 @@ describe("skill pressure eval registration", () => {
 
     expect(standardCases.map((evaluationCase) => evaluationCase.scenarioId)).toEqual(["alpha"]);
     expect(highRiskCases.map((evaluationCase) => evaluationCase.scenarioId)).toEqual(["omega"]);
+    expect(highRiskCases[0]?.scenarioDeadlineMs).toBeGreaterThan(standardCases[0]?.scenarioDeadlineMs ?? 0);
   });
 
   it("rejects malformed controls and discovery failures before registering eval cases", () => {

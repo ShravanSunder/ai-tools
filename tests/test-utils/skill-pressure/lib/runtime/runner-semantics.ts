@@ -28,6 +28,8 @@ export const RUNNER_SEMANTICS_MANIFEST = [
   { semanticClass: "contract_parser", path: "lib/contracts/v3-behavior-contract.ts" },
   { semanticClass: "contract_parser", path: "schemas/skill-pressure-scenario.schema.json" },
   { semanticClass: "discovery_registry", path: "lib/authority/evaluation-registry.ts" },
+  { semanticClass: "discovery_registry", path: "lib/authority/authority-receipts.ts" },
+  { semanticClass: "discovery_registry", path: "lib/authority/claimed-requirements.ts" },
   { semanticClass: "discovery_registry", path: "lib/discovery/skill-discovery.ts" },
   { semanticClass: "execution_budget", path: "lib/evaluation/behavioral-scenario-runner.ts" },
   { semanticClass: "execution_budget", path: "lib/evaluation/v3-behavioral-scenario-execution.ts" },

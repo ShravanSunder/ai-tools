@@ -2,6 +2,7 @@ import path from "node:path";
 
 import type { DiscoveryReceipt } from "../discovery/skill-discovery.js";
 import type { ExecuteBehavioralScenarioProps } from "./behavioral-scenario-runner.js";
+import { deriveScenarioExecutionBudget } from "./scenario-execution-budget.js";
 
 const DEFAULT_JOB_COUNT = 4;
 const DEFAULT_TIMEOUT_SECONDS = 180;
@@ -17,6 +18,8 @@ export interface SkillPressureEvaluationConfiguration {
 export interface SkillPressureEvaluationCase extends ExecuteBehavioralScenarioProps {
   readonly scenarioId: string;
   readonly concurrent: boolean;
+  readonly scenarioDeadlineMs: number;
+  readonly vitestTimeoutMs: number;
 }
 
 export function resolveSkillPressureEvaluationConfiguration(
@@ -81,6 +84,29 @@ export function buildSkillPressureEvaluationCases(props: {
       throw new Error(`scenario output directory is not unique: ${outputDirectory}`);
     }
     outputDirectories.add(outputDirectory);
+    const budget = deriveScenarioExecutionBudget({
+      repetitions: scenario.repetitions,
+      infrastructureRetries: 1,
+      commandSlots: scenario.risk === "high"
+        ? [
+            { commandType: "subject", acpxTimeoutMs: props.configuration.timeoutSeconds * 1_000, executorOverheadMs: 10_000, terminationGraceMs: 5_000 },
+            { commandType: "reviewer_session_create", acpxTimeoutMs: 30_000, executorOverheadMs: 5_000, terminationGraceMs: 5_000 },
+            { commandType: "reviewer_effort_config", acpxTimeoutMs: 30_000, executorOverheadMs: 5_000, terminationGraceMs: 5_000 },
+            { commandType: "reviewer_prompt", acpxTimeoutMs: props.configuration.timeoutSeconds * 1_000, executorOverheadMs: 10_000, terminationGraceMs: 5_000 },
+            { commandType: "reviewer_close", acpxTimeoutMs: 30_000, executorOverheadMs: 5_000, terminationGraceMs: 5_000 },
+          ]
+        : [
+            { commandType: "subject", acpxTimeoutMs: props.configuration.timeoutSeconds * 1_000, executorOverheadMs: 10_000, terminationGraceMs: 5_000 },
+            { commandType: "reviewer_prompt", acpxTimeoutMs: props.configuration.timeoutSeconds * 1_000, executorOverheadMs: 10_000, terminationGraceMs: 5_000 },
+          ],
+      fixtureSetupReserveMs: 10_000,
+      scenarioCleanupReserveMs: 20_000,
+      receiptFlushReserveMs: 10_000,
+      schedulingMarginMs: 5_000,
+      registeredScenarioCount: selectedScenarios.length,
+      jobs: props.configuration.jobs,
+      vitestEmergencyReserveMs: 30_000,
+    });
     return {
       scenarioId: scenario.scenarioId,
       scenarioPath: scenario.scenarioPath,
@@ -89,6 +115,8 @@ export function buildSkillPressureEvaluationCases(props: {
       timeoutSeconds: props.configuration.timeoutSeconds,
       infrastructureRetries: 1,
       concurrent: props.configuration.scenarioId === undefined,
+      scenarioDeadlineMs: budget.scenarioDeadlineMs,
+      vitestTimeoutMs: budget.vitestEmergencyTimeoutMs,
     } satisfies SkillPressureEvaluationCase;
   });
 

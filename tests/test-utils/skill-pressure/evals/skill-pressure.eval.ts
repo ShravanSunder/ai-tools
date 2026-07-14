@@ -70,6 +70,6 @@ describeEval("behavioral skill pressure", { harness, judgeThreshold: null }, (it
       expect(result.output.baselineCount).toBe(5);
       expect(result.output.treatmentCount).toBe(5);
       expect(result.output.pairSetFingerprint).toMatch(/^sha256:/u);
-    }, 2_400_000);
+    }, evaluationCase.vitestTimeoutMs);
   }
 });
