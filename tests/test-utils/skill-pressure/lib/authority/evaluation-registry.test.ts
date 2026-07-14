@@ -337,7 +337,68 @@ describe("evaluation registry", () => {
     }));
 
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/regular file/u);
+      .rejects.toThrow(/regular file|symlinked parent/u);
+  });
+
+  it("rejects authority receipts reached through a symlinked parent directory", async () => {
+    const fixture = await createRegistryFixture();
+    const outsideDirectory = path.join(fixture.repositoryRoot, "outside-authority");
+    await mkdir(outsideDirectory);
+    const outsideSource = "{\"kind\":\"outside-parent\"}\n";
+    await writeFile(path.join(outsideDirectory, "validity.json"), outsideSource);
+    const linkedDirectory = path.join(
+      fixture.repositoryRoot,
+      "tests/test-utils/skill-pressure/config/authority-receipts/alias",
+    );
+    await symlink(outsideDirectory, linkedDirectory);
+    const linkedDigest = `sha256:${createHash("sha256").update(outsideSource).digest("hex")}`;
+    await writeFile(fixture.registryPath, registrySource({
+      validityPath: "tests/test-utils/skill-pressure/config/authority-receipts/alias/validity.json",
+      validityDigest: linkedDigest,
+    }));
+
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+      .rejects.toThrow(/symlinked parent|canonical tracked authority root/u);
+  });
+
+  it("rejects a symlinked tracked authority root", async () => {
+    const repositoryRoot = await mkdtemp(path.join(tmpdir(), "skill-pressure-registry-root-link-"));
+    const outsideDirectory = await mkdtemp(path.join(tmpdir(), "skill-pressure-authority-outside-"));
+    const outsideSource = "{\"kind\":\"outside-root\"}\n";
+    await writeFile(path.join(outsideDirectory, "artifact-proof-validity.json"), outsideSource);
+    const authorityParent = path.join(repositoryRoot, "tests/test-utils/skill-pressure/config");
+    await mkdir(authorityParent, { recursive: true });
+    await symlink(outsideDirectory, path.join(authorityParent, "authority-receipts"));
+    const validityDigest = `sha256:${createHash("sha256").update(outsideSource).digest("hex")}`;
+    const registryPath = path.join(repositoryRoot, "registry.yaml");
+    await writeFile(registryPath, registrySource({ validityDigest }));
+
+    await expect(loadEvaluationRegistry({ repositoryRoot, registryPath, knownScenarios: knownScenarios() }))
+      .rejects.toThrow(/tracked authority root.*real directory/u);
+  });
+
+  it("rejects reuse of an old promotion receipt after demotion", async () => {
+    const fixture = await createRegistryFixture();
+    const receipt = `
+        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
+        receipt_digest: ${fixture.validityDigest}`;
+    await writeFile(fixture.registryPath, registrySource({
+      validityDigest: fixture.validityDigest,
+      role: "gate",
+      calibration: `
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
+      receipt_digest: ${fixture.validityDigest}`,
+      history: `
+      - sequence: 1
+        event: promotion${receipt}
+      - sequence: 2
+        event: demotion${receipt}
+      - sequence: 3
+        event: promotion${receipt}`,
+    }));
+
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+      .rejects.toThrow(/promotion receipt.*reused/u);
   });
 
   it("rejects unordered or non-contiguous authority history", async () => {

@@ -1,7 +1,18 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 
-import type { EvaluationRegistry, EvaluationRegistryRow } from "../authority/evaluation-registry.js";
+import type {
+  AuthorityReceiptReference,
+  EvaluationRegistry,
+  EvaluationRegistryRow,
+} from "../authority/evaluation-registry.js";
+import { calculateEvaluationRegistrySnapshotDigest } from "../authority/evaluation-registry.js";
+import type {
+  AuthorityDigest,
+  CalibrationFreshnessInputs,
+  ValidatedPromotionReceipt,
+} from "../authority/authority-receipts.js";
+import type { ClaimedRequirementValidation } from "../authority/claimed-requirements.js";
 import type { ObjectiveArtifactDeclaration } from "../contracts/objective-check-types.js";
 import type { V3BehaviorContract } from "../contracts/v3-behavior-contract.js";
 import { evaluateObjectiveCheckPlan, type ObjectiveCheckResult } from "../evidence/objective-artifact-checks.js";
@@ -38,6 +49,11 @@ import {
   validateV3ComparisonSet,
   type V3ComparisonIdentity,
 } from "./v3-scenario-preflight.js";
+import {
+  resolveV3ScenarioAuthority,
+  type V3ParentAcceptanceContext,
+  type V3ParentAcceptanceRequest,
+} from "./v3-scenario-authority.js";
 
 export interface V3ExecutedRepetition {
   readonly evidence: NormalizedRepetitionEvidence;
@@ -45,6 +61,10 @@ export interface V3ExecutedRepetition {
   readonly durableFacts: AttemptDurableFacts;
   readonly comparisonIdentity: V3ComparisonIdentity;
 }
+
+type ActiveEvaluationRegistryRow = EvaluationRegistryRow & {
+  readonly evaluationRole: "gate" | "diagnostic";
+};
 
 export interface PersistV3AttemptProps {
   readonly variant: "baseline" | "treatment";
@@ -89,6 +109,15 @@ export interface V3SemanticReviewExecutionResult {
 export interface ExecuteV3BehavioralScenarioProps {
   readonly contract: V3BehaviorContract;
   readonly registrySnapshot: EvaluationRegistry;
+  readonly authorityContext: {
+    readonly calibration: {
+      readonly promotion: ValidatedPromotionReceipt;
+      readonly sourceReceipt: AuthorityReceiptReference;
+      readonly source: string;
+    } | null;
+    readonly claimedRequirements: ClaimedRequirementValidation;
+    readonly resolveParentAcceptance: (request: V3ParentAcceptanceRequest) => Promise<V3ParentAcceptanceContext | null>;
+  };
   readonly executionBudget: DerivedScenarioExecutionBudget;
   readonly configuredScenarioDeadlineMs: number;
   readonly configuredVitestTimeoutMs: number;
@@ -114,11 +143,33 @@ export interface V3BehavioralScenarioReceipt {
   readonly behaviorIdentity: {
     readonly behaviorContractDigest: string;
     readonly behaviorRequirementIds: readonly string[];
+    readonly comparisonIntent: "improvement" | "non_regression";
+    readonly expectedRepetitions: number;
   };
   readonly authoritySnapshot: {
-    readonly evaluationRole: EvaluationRegistryRow["evaluationRole"];
+    readonly evaluationRole: "gate" | "diagnostic";
     readonly freshness: EvaluationRegistryRow["freshness"];
+    readonly registrySnapshotDigest: string;
+    readonly calibrationStatus: "calibrated" | "stale" | "uncalibrated";
+    readonly runDigest: string;
+    readonly evidenceDigest: string;
     readonly releaseAuthority: boolean;
+    readonly reasonCode: string | null;
+    readonly parentAcceptanceReceiptDigest: string | null;
+    readonly parentAcceptanceSourceReceipt: AuthorityReceiptReference | null;
+    readonly calibrationSourceReceipt: AuthorityReceiptReference | null;
+    readonly calibrationAuthorityReceiptDigest: string | null;
+    readonly calibrationFingerprintDigest: string | null;
+    readonly calibrationFreshnessInputs: CalibrationFreshnessInputs | null;
+    readonly demotedThisRun: false;
+  };
+  readonly claimedRequirements: {
+    readonly source: ClaimedRequirementValidation["manifest"]["source"];
+    readonly claimedRequirementIds: readonly string[];
+    readonly manifestDigest: string;
+    readonly status: ClaimedRequirementValidation["status"];
+    readonly unknownRequirementIds: readonly string[];
+    readonly untracedRequirementIds: readonly string[];
   };
   readonly comparisonValidation: {
     readonly valid: boolean;
@@ -128,15 +179,17 @@ export interface V3BehavioralScenarioReceipt {
   readonly semanticReview: {
     readonly validation: SemanticCandidateValidationResult;
     readonly runtimeProfile: RuntimeProfileReceipt | null;
+    readonly candidate: unknown | null;
   };
   readonly runtimeProfiles: {
     readonly subjects: readonly RuntimeProfileReceipt[];
     readonly reviewer: RuntimeProfileReceipt;
   };
+  readonly subjects: readonly V3ExecutedRepetition[];
   readonly executionBudget: DerivedScenarioExecutionBudget;
-  readonly attemptReceiptPaths: readonly string[];
-  readonly repetitionReceiptPaths: readonly string[];
-  readonly progressReceiptPaths: readonly string[];
+  readonly attemptReceipts: readonly { readonly receiptPath: string; readonly receiptDigest: string }[];
+  readonly repetitionReceipts: readonly { readonly receiptPath: string; readonly receiptDigest: string }[];
+  readonly progressReceipts: readonly { readonly receiptPath: string; readonly receiptDigest: string }[];
   readonly reduction: ScenarioOutcomeReduction | {
     readonly outcome: "infrastructure_error" | "not_evaluated";
     readonly reasonCode: "scenario_deadline" | "runtime_profile_unverified" | "incomplete_cleanup" | "comparison_mismatch" | "review_parse_failure" | "stale_calibration";
@@ -147,6 +200,7 @@ export interface V3BehavioralScenarioReceipt {
 
 export interface ExecutedV3BehavioralScenario {
   readonly receiptPath: string;
+  readonly receiptDigest: string;
   readonly receipt: V3BehavioralScenarioReceipt;
 }
 
@@ -157,9 +211,12 @@ export async function executeV3BehavioralScenario(
   const objectiveCheckPlan = createObjectiveCheckPlanFromContract(props.contract);
   const receiptDirectory = path.resolve(props.outputDirectory, "receipts");
   const attemptReceiptPaths: string[] = [];
+  const attemptReceipts: Array<{ readonly receiptPath: string; readonly receiptDigest: string }> = [];
   const attemptBindings = new Map<string, { readonly repetitionDigest: string; readonly receiptDigest: string }>();
   const repetitionReceiptPaths: string[] = [];
+  const repetitionReceipts: Array<{ readonly receiptPath: string; readonly receiptDigest: string }> = [];
   const progressReceiptPaths: string[] = [];
+  const progressReceipts: Array<{ readonly receiptPath: string; readonly receiptDigest: string }> = [];
   let progressSequence = 0;
   const abortController = new AbortController();
   const deadlineTimer = setTimeout(() => abortController.abort("scenario_deadline"), props.configuredScenarioDeadlineMs);
@@ -183,6 +240,7 @@ export async function executeV3BehavioralScenario(
       secrets: props.redactionSecrets,
     });
     progressReceiptPaths.push(persisted.receiptPath);
+    progressReceipts.push({ receiptPath: persisted.receiptPath, receiptDigest: persisted.receiptDigest });
   };
 
   await persistProgress("running", "scenario_started");
@@ -204,10 +262,11 @@ export async function executeV3BehavioralScenario(
           receiptDirectory,
           fileName: `${attempt.variant}-${attempt.repetitionNumber}-attempt-${attempt.attemptNumber}.json`,
           durableFacts: attempt.repetition.durableFacts,
-          receipt: attempt,
+          receipt: { scenarioId: props.contract.scenarioId, ...attempt },
           secrets: props.redactionSecrets,
         });
         attemptReceiptPaths.push(persisted.receiptPath);
+        attemptReceipts.push({ receiptPath: persisted.receiptPath, receiptDigest: persisted.receiptDigest });
         attemptBindings.set(persisted.receiptPath, {
           repetitionDigest: digestRepetition(attempt.repetition),
           receiptDigest: persisted.receiptDigest,
@@ -239,6 +298,7 @@ export async function executeV3BehavioralScenario(
           secrets: props.redactionSecrets,
         });
         repetitionReceiptPaths.push(persisted.receiptPath);
+        repetitionReceipts.push({ receiptPath: persisted.receiptPath, receiptDigest: persisted.receiptDigest });
         await persistProgress("running", "repetition_receipt_published");
         return persisted.receiptPath;
       },
@@ -257,9 +317,9 @@ export async function executeV3BehavioralScenario(
         props,
         registryRow,
         receiptDirectory,
-        attemptReceiptPaths,
-        repetitionReceiptPaths,
-        progressReceiptPaths,
+        attemptReceipts,
+        repetitionReceipts,
+        progressReceipts,
         persistProgress,
         subjects: repetitions,
         comparisonValidation,
@@ -275,9 +335,9 @@ export async function executeV3BehavioralScenario(
         props,
         registryRow,
         receiptDirectory,
-        attemptReceiptPaths,
-        repetitionReceiptPaths,
-        progressReceiptPaths,
+        attemptReceipts,
+        repetitionReceipts,
+        progressReceipts,
         persistProgress,
         subjects: repetitions,
         comparisonValidation,
@@ -317,9 +377,9 @@ export async function executeV3BehavioralScenario(
         props,
         registryRow,
         receiptDirectory,
-        attemptReceiptPaths,
-        repetitionReceiptPaths,
-        progressReceiptPaths,
+        attemptReceipts,
+        repetitionReceipts,
+        progressReceipts,
         persistProgress,
         subjects: repetitions,
         comparisonValidation,
@@ -335,9 +395,9 @@ export async function executeV3BehavioralScenario(
         props,
         registryRow,
         receiptDirectory,
-        attemptReceiptPaths,
-        repetitionReceiptPaths,
-        progressReceiptPaths,
+        attemptReceipts,
+        repetitionReceipts,
+        progressReceipts,
         persistProgress,
         subjects: repetitions,
         comparisonValidation,
@@ -359,19 +419,24 @@ export async function executeV3BehavioralScenario(
           reasonCode: "review_parse_failure" as const,
           reasons: [semanticValidation.reason ?? "semantic review candidate failed validation"],
         };
-    const authorityReduction = applyAuthorityFreshness(registryRow, reduction);
+    const authorityReduction = applyAuthorityFreshness(
+      registryRow,
+      props.authorityContext.calibration?.promotion ?? null,
+      reduction,
+    );
     return publishScenarioReceipt({
       props,
       registryRow,
       receiptDirectory,
-      attemptReceiptPaths,
-      repetitionReceiptPaths,
-      progressReceiptPaths,
+      attemptReceipts,
+      repetitionReceipts,
+      progressReceipts,
       persistProgress,
       subjects: repetitions,
       comparisonValidation,
       objectiveResults,
       semanticValidation,
+      semanticCandidate: parsed.candidate,
       reviewerRuntimeProfile: review.runtimeProfile,
       reduction: authorityReduction,
     });
@@ -384,9 +449,9 @@ export async function executeV3BehavioralScenario(
       props,
       registryRow,
       receiptDirectory,
-      attemptReceiptPaths,
-      repetitionReceiptPaths,
-      progressReceiptPaths,
+      attemptReceipts,
+      repetitionReceipts,
+      progressReceipts,
       persistProgress,
       subjects: [],
       comparisonValidation: { valid: false, reasons: ["scenario deadline elapsed before comparison validation"] },
@@ -412,7 +477,7 @@ const VERIFIED_ABSENT_REVIEW_PROFILE: RuntimeProfileReceipt = {
   },
 };
 
-function assertIntegrationInputs(props: ExecuteV3BehavioralScenarioProps): EvaluationRegistryRow {
+function assertIntegrationInputs(props: ExecuteV3BehavioralScenarioProps): ActiveEvaluationRegistryRow {
   assertScenarioExecutionBudget({
     budget: props.executionBudget,
     configuredScenarioDeadlineMs: props.configuredScenarioDeadlineMs,
@@ -429,7 +494,36 @@ function assertIntegrationInputs(props: ExecuteV3BehavioralScenarioProps): Evalu
   if (registryRow.evaluationRole === "retired") {
     throw new Error("retired scenarios cannot execute");
   }
-  return registryRow;
+  if (registryRow.evaluationRole === "gate") {
+    const calibrationContext = props.authorityContext.calibration;
+    if (registryRow.calibrationReceipt === null || calibrationContext === null) {
+      throw new Error("gate execution requires the registry calibration receipt context");
+    }
+    if (
+      registryRow.calibrationReceipt.receiptPath !== calibrationContext.sourceReceipt.receiptPath ||
+      registryRow.calibrationReceipt.receiptDigest !== calibrationContext.sourceReceipt.receiptDigest
+    ) {
+      throw new Error("calibration context does not match the registry calibration receipt reference");
+    }
+    const actualCalibrationSourceDigest = `sha256:${createHash("sha256")
+      .update(calibrationContext.source)
+      .digest("hex")}`;
+    if (actualCalibrationSourceDigest !== calibrationContext.sourceReceipt.receiptDigest) {
+      throw new Error("calibration source receipt digest does not match its content");
+    }
+    let parsedCalibrationSource: unknown;
+    try {
+      parsedCalibrationSource = JSON.parse(calibrationContext.source);
+    } catch {
+      throw new Error("calibration source receipt is not valid JSON");
+    }
+    if (JSON.stringify(parsedCalibrationSource) !== JSON.stringify(calibrationContext.promotion.receipt)) {
+      throw new Error("calibration source receipt does not match the validated promotion");
+    }
+  } else if (props.authorityContext.calibration !== null) {
+    throw new Error("diagnostic execution cannot receive gate calibration authority");
+  }
+  return registryRow as ActiveEvaluationRegistryRow;
 }
 
 function reduceInfrastructure(
@@ -499,9 +593,14 @@ function reduceEvidence(props: {
 
 function applyAuthorityFreshness(
   registry: EvaluationRegistryRow,
+  calibration: ValidatedPromotionReceipt | null,
   reduction: V3BehavioralScenarioReceipt["reduction"],
 ): V3BehavioralScenarioReceipt["reduction"] {
-  if (registry.evaluationRole === "gate" && registry.freshness !== "fresh" && reduction.outcome === "pass") {
+  if (
+    registry.evaluationRole === "gate" &&
+    (registry.freshness !== "fresh" || calibration === null || calibration.freshness.status !== "fresh") &&
+    reduction.outcome === "pass"
+  ) {
     return {
       outcome: "not_evaluated",
       reasonCode: "stale_calibration",
@@ -520,11 +619,11 @@ function infrastructureReductionResult(
 
 async function publishScenarioReceipt(props: {
   readonly props: ExecuteV3BehavioralScenarioProps;
-  readonly registryRow: EvaluationRegistryRow;
+  readonly registryRow: ActiveEvaluationRegistryRow;
   readonly receiptDirectory: string;
-  readonly attemptReceiptPaths: readonly string[];
-  readonly repetitionReceiptPaths: readonly string[];
-  readonly progressReceiptPaths: readonly string[];
+  readonly attemptReceipts: readonly { readonly receiptPath: string; readonly receiptDigest: string }[];
+  readonly repetitionReceipts: readonly { readonly receiptPath: string; readonly receiptDigest: string }[];
+  readonly progressReceipts: readonly { readonly receiptPath: string; readonly receiptDigest: string }[];
   readonly persistProgress: (
     status: "running" | "timed_out" | "completed" | "infrastructure_error",
     lastDurableStage: string,
@@ -534,39 +633,99 @@ async function publishScenarioReceipt(props: {
   readonly comparisonValidation: V3BehavioralScenarioReceipt["comparisonValidation"];
   readonly objectiveResults: readonly V3ObjectiveRepetitionResult[];
   readonly semanticValidation: SemanticCandidateValidationResult;
+  readonly semanticCandidate?: unknown | null;
   readonly reviewerRuntimeProfile: RuntimeProfileReceipt;
   readonly reduction: V3BehavioralScenarioReceipt["reduction"];
   readonly progressStatus?: "timed_out" | "completed" | "infrastructure_error";
 }): Promise<ExecutedV3BehavioralScenario> {
   const progressStatus = props.progressStatus ?? (props.reduction.outcome === "infrastructure_error" ? "infrastructure_error" : "completed");
   await props.persistProgress(progressStatus, "reduction_completed", props.reduction.reasonCode ?? null);
+  const registrySnapshotDigest = calculateEvaluationRegistrySnapshotDigest(props.props.registrySnapshot);
+  const evidenceDigest = calculateV3ScenarioEvidenceDigest({
+    registrySnapshotDigest,
+    comparisonValidation: props.comparisonValidation,
+    objectiveResults: props.objectiveResults,
+    semanticValidation: props.semanticValidation,
+    semanticCandidate: props.semanticCandidate ?? null,
+    subjects: props.subjects,
+    reviewerRuntimeProfile: props.reviewerRuntimeProfile,
+    attemptReceipts: props.attemptReceipts,
+    repetitionReceipts: props.repetitionReceipts,
+    progressReceipts: props.progressReceipts,
+    reduction: props.reduction,
+  });
+  const authority = await resolveV3ScenarioAuthority({
+    candidate: {
+      scenarioId: props.props.contract.scenarioId,
+      behaviorContractDigest: props.props.contract.behaviorContractDigest as AuthorityDigest,
+      behaviorRequirementIds: props.props.contract.behaviorRequirementIds,
+      evaluationRole: props.registryRow.evaluationRole,
+      outcome: props.reduction.outcome,
+      comparisonIntent: props.props.contract.comparisonIntent,
+      evidenceDigest,
+    },
+    calibration: props.props.authorityContext.calibration?.promotion ?? null,
+    claimedRequirements: props.props.authorityContext.claimedRequirements,
+    resolveParentAcceptance: props.props.authorityContext.resolveParentAcceptance,
+  });
+  const claimedRequirements = props.props.authorityContext.claimedRequirements;
   const receiptWithoutStage = {
     schemaVersion: 3 as const,
     scenarioId: props.props.contract.scenarioId,
     behaviorIdentity: {
       behaviorContractDigest: props.props.contract.behaviorContractDigest,
       behaviorRequirementIds: props.props.contract.behaviorRequirementIds,
+      comparisonIntent: props.props.contract.comparisonIntent,
+      expectedRepetitions: props.props.contract.repetitions,
     },
     authoritySnapshot: {
       evaluationRole: props.registryRow.evaluationRole,
       freshness: props.registryRow.freshness,
-      releaseAuthority: props.registryRow.evaluationRole === "gate" &&
-        props.registryRow.freshness === "fresh" && props.reduction.outcome === "pass",
+      registrySnapshotDigest,
+      calibrationStatus: props.props.authorityContext.calibration === null
+        ? "uncalibrated" as const
+        : props.props.authorityContext.calibration.promotion.freshness.status === "fresh" && props.registryRow.freshness === "fresh"
+          ? "calibrated" as const
+          : "stale" as const,
+      runDigest: authority.runDigest,
+      evidenceDigest,
+      releaseAuthority: authority.releaseAuthority,
+      reasonCode: authority.reasonCode,
+      parentAcceptanceReceiptDigest: authority.parentAcceptanceReceiptDigest,
+      parentAcceptanceSourceReceipt: authority.parentAcceptanceSourceReceipt,
+      calibrationSourceReceipt: props.props.authorityContext.calibration?.sourceReceipt ?? null,
+      calibrationAuthorityReceiptDigest:
+        props.props.authorityContext.calibration?.promotion.authorityReceiptDigest ?? null,
+      calibrationFingerprintDigest:
+        props.props.authorityContext.calibration?.promotion.calibrationFingerprint.digest ?? null,
+      calibrationFreshnessInputs:
+        props.props.authorityContext.calibration?.promotion.receipt.calibrationFingerprint ?? null,
+      demotedThisRun: false as const,
+    },
+    claimedRequirements: {
+      source: claimedRequirements.manifest.source,
+      claimedRequirementIds: claimedRequirements.manifest.claimedRequirementIds,
+      manifestDigest: claimedRequirements.manifestDigest,
+      status: claimedRequirements.status,
+      unknownRequirementIds: claimedRequirements.unknownRequirementIds,
+      untracedRequirementIds: claimedRequirements.untracedRequirementIds,
     },
     comparisonValidation: props.comparisonValidation,
     objectiveResults: props.objectiveResults,
     semanticReview: {
       validation: props.semanticValidation,
       runtimeProfile: props.reviewerRuntimeProfile,
+      candidate: props.semanticCandidate ?? null,
     },
     runtimeProfiles: {
       subjects: props.subjects.map((subject) => subject.runtimeProfile),
       reviewer: props.reviewerRuntimeProfile,
     },
+    subjects: props.subjects,
     executionBudget: props.props.executionBudget,
-    attemptReceiptPaths: props.attemptReceiptPaths,
-    repetitionReceiptPaths: props.repetitionReceiptPaths,
-    progressReceiptPaths: props.progressReceiptPaths,
+    attemptReceipts: props.attemptReceipts,
+    repetitionReceipts: props.repetitionReceipts,
+    progressReceipts: props.progressReceipts,
     reduction: props.reduction,
   };
   const persisted = await writeJsonReceipt({
@@ -575,5 +734,37 @@ async function publishScenarioReceipt(props: {
     receipt: { ...receiptWithoutStage, lastDurableStage: "scenario_receipt_published" as const },
     secrets: props.props.redactionSecrets,
   });
-  return { receiptPath: persisted.receiptPath, receipt: persisted.receipt };
+  return {
+    receiptPath: persisted.receiptPath,
+    receiptDigest: persisted.receiptDigest,
+    receipt: persisted.receipt,
+  };
+}
+
+export function calculateV3ScenarioEvidenceDigest(props: {
+  readonly registrySnapshotDigest: string;
+  readonly comparisonValidation: V3BehavioralScenarioReceipt["comparisonValidation"];
+  readonly objectiveResults: V3BehavioralScenarioReceipt["objectiveResults"];
+  readonly semanticValidation: V3BehavioralScenarioReceipt["semanticReview"]["validation"];
+  readonly semanticCandidate: unknown;
+  readonly subjects: readonly V3ExecutedRepetition[];
+  readonly reviewerRuntimeProfile: RuntimeProfileReceipt;
+  readonly attemptReceipts: V3BehavioralScenarioReceipt["attemptReceipts"];
+  readonly repetitionReceipts: V3BehavioralScenarioReceipt["repetitionReceipts"];
+  readonly progressReceipts: V3BehavioralScenarioReceipt["progressReceipts"];
+  readonly reduction: V3BehavioralScenarioReceipt["reduction"];
+}): AuthorityDigest {
+  return `sha256:${createHash("sha256").update(JSON.stringify({
+    registrySnapshotDigest: props.registrySnapshotDigest,
+    comparisonValidation: props.comparisonValidation,
+    objectiveResults: props.objectiveResults,
+    semanticValidation: props.semanticValidation,
+    semanticCandidate: props.semanticCandidate,
+    subjects: props.subjects,
+    reviewerRuntimeProfile: props.reviewerRuntimeProfile,
+    attemptReceipts: props.attemptReceipts,
+    repetitionReceipts: props.repetitionReceipts,
+    progressReceipts: props.progressReceipts,
+    reduction: props.reduction,
+  })).digest("hex")}`;
 }

@@ -1,6 +1,15 @@
 import { createHash } from "node:crypto";
+import type { AuthorityReceiptReference } from "./evaluation-registry.js";
+import { readTrackedAuthorityReceiptFile } from "./tracked-authority-receipt-file.js";
 
 export type AuthorityDigest = `sha256:${string}`;
+
+export interface PromotionEvidenceReceiptReference extends AuthorityReceiptReference {
+  readonly scenarioId: string;
+  readonly variant: "baseline" | "treatment";
+  readonly repetitionNumber: number;
+  readonly attemptNumber: number;
+}
 
 export interface CalibrationFreshnessInputs {
   readonly behaviorContractDigest: AuthorityDigest;
@@ -43,8 +52,8 @@ export interface PromotionReceipt {
     readonly comparisonIntentPassed: true;
     readonly objectiveEvidenceDigest: AuthorityDigest;
     readonly semanticEvidenceDigest: AuthorityDigest;
-    readonly attemptReceiptDigests: readonly AuthorityDigest[];
-    readonly cleanupReceiptDigests: readonly AuthorityDigest[];
+    readonly attemptReceipts: readonly PromotionEvidenceReceiptReference[];
+    readonly cleanupReceipts: readonly PromotionEvidenceReceiptReference[];
     readonly deterministicMutationCoverage: true;
     readonly subjectProfileVerified: true;
     readonly reviewProfileVerified: true;
@@ -102,6 +111,10 @@ export function calculateAuthorityReceiptDigest(receipt: unknown): AuthorityDige
   return digestCanonical(unsignedReceipt);
 }
 
+export function calculateParentAcceptanceReceiptDigest(receipt: unknown): AuthorityDigest {
+  return digestCanonical(parseParentAcceptanceReceipt(receipt));
+}
+
 export function validateParentAcceptanceReceipt(props: {
   readonly receipt: unknown;
   readonly expected: {
@@ -123,10 +136,11 @@ export function validateParentAcceptanceReceipt(props: {
   return receipt;
 }
 
-export function validatePromotionReceipt(props: {
+export async function validatePromotionReceipt(props: {
   readonly receipt: unknown;
   readonly currentFreshnessInputs: CalibrationFreshnessInputs;
-}): ValidatedPromotionReceipt {
+  readonly repositoryRoot: string;
+}): Promise<ValidatedPromotionReceipt> {
   const receipt = parsePromotionReceipt(props.receipt);
   const authorityReceiptDigest = calculateAuthorityReceiptDigest(receipt);
   const calibrationFingerprint = calculateCalibrationFreshnessFingerprint(receipt.calibrationFingerprint);
@@ -134,6 +148,12 @@ export function validatePromotionReceipt(props: {
     throw new Error("promotion behavior contract digest does not match calibration fingerprint");
   }
   validatePromotionEvidence(receipt.calibration);
+  await validatePromotionEvidenceFiles({
+    repositoryRoot: props.repositoryRoot,
+    scenarioId: receipt.scenarioId,
+    attemptReceipts: receipt.calibration.attemptReceipts,
+    cleanupReceipts: receipt.calibration.cleanupReceipts,
+  });
   validateParentAcceptanceReceipt({
     receipt: receipt.parentAcceptance,
     expected: {
@@ -283,9 +303,9 @@ function parsePromotionEvidence(input: unknown): PromotionReceipt["calibration"]
   if (baselineRepetitionDigests.length !== 5 || treatmentRepetitionDigests.length !== 5) {
     throw new Error("promotion requires five baseline and five treatment repetitions");
   }
-  const attemptReceiptDigests = parseDigestArray(evidence.attemptReceiptDigests, "promotion attempt receipts");
-  const cleanupReceiptDigests = parseDigestArray(evidence.cleanupReceiptDigests, "promotion cleanup receipts");
-  if (attemptReceiptDigests.length < 10 || cleanupReceiptDigests.length < 10) {
+  const attemptReceipts = parsePromotionEvidenceReferences(evidence.attemptReceipts, "promotion attempt receipts");
+  const cleanupReceipts = parsePromotionEvidenceReferences(evidence.cleanupReceipts, "promotion cleanup receipts");
+  if (attemptReceipts.length < 10 || cleanupReceipts.length < 10) {
     throw new Error("promotion requires durable attempt and cleanup receipts for every repetition");
   }
   assertDigest(evidence.objectiveEvidenceDigest, "promotion objective evidence digest");
@@ -300,8 +320,8 @@ function parsePromotionEvidence(input: unknown): PromotionReceipt["calibration"]
     comparisonIntentPassed: true,
     objectiveEvidenceDigest: evidence.objectiveEvidenceDigest,
     semanticEvidenceDigest: evidence.semanticEvidenceDigest,
-    attemptReceiptDigests,
-    cleanupReceiptDigests,
+    attemptReceipts,
+    cleanupReceipts,
     deterministicMutationCoverage: true,
     subjectProfileVerified: true,
     reviewProfileVerified: true,
@@ -312,6 +332,99 @@ function validatePromotionEvidence(evidence: PromotionReceipt["calibration"]): v
   if (new Set(evidence.baselineRepetitionDigests).size !== 5 || new Set(evidence.treatmentRepetitionDigests).size !== 5) {
     throw new Error("promotion repetitions must be independently receipted");
   }
+  if (
+    new Set(evidence.attemptReceipts.map(promotionEvidenceIdentity)).size !== evidence.attemptReceipts.length ||
+    new Set(evidence.cleanupReceipts.map(promotionEvidenceIdentity)).size !== evidence.cleanupReceipts.length
+  ) {
+    throw new Error("promotion attempts and cleanups must be independently receipted");
+  }
+  const expectedRepetitions = ["baseline", "treatment"].flatMap((variant) =>
+    Array.from({ length: 5 }, (_, index) => `${variant}:${String(index + 1)}`));
+  for (const references of [evidence.attemptReceipts, evidence.cleanupReceipts]) {
+    const coveredRepetitions = new Set(references.map((reference) => {
+      if (reference.repetitionNumber > 5) throw new Error("promotion evidence repetition is outside the calibrated range");
+      return `${reference.variant}:${String(reference.repetitionNumber)}`;
+    }));
+    if (!expectedRepetitions.every((identity) => coveredRepetitions.has(identity))) {
+      throw new Error("promotion evidence requires all five baseline and treatment repetitions");
+    }
+  }
+}
+
+async function validatePromotionEvidenceFiles(props: {
+  readonly repositoryRoot: string;
+  readonly scenarioId: string;
+  readonly attemptReceipts: readonly PromotionEvidenceReceiptReference[];
+  readonly cleanupReceipts: readonly PromotionEvidenceReceiptReference[];
+}): Promise<void> {
+  const attemptIdentities = new Set(props.attemptReceipts.map(promotionEvidenceIdentity));
+  const cleanupIdentities = new Set(props.cleanupReceipts.map(promotionEvidenceIdentity));
+  if (attemptIdentities.size !== cleanupIdentities.size || [...attemptIdentities].some((identity) => !cleanupIdentities.has(identity))) {
+    throw new Error("promotion attempt and cleanup receipt identities must match");
+  }
+  await Promise.all([
+    ...props.attemptReceipts.map((reference) => validatePromotionEvidenceFile({
+      repositoryRoot: props.repositoryRoot,
+      scenarioId: props.scenarioId,
+      receiptKind: "attempt",
+      reference,
+    })),
+    ...props.cleanupReceipts.map((reference) => validatePromotionEvidenceFile({
+      repositoryRoot: props.repositoryRoot,
+      scenarioId: props.scenarioId,
+      receiptKind: "cleanup",
+      reference,
+    })),
+  ]);
+}
+
+async function validatePromotionEvidenceFile(props: {
+  readonly repositoryRoot: string;
+  readonly scenarioId: string;
+  readonly receiptKind: "attempt" | "cleanup";
+  readonly reference: PromotionEvidenceReceiptReference;
+}): Promise<void> {
+  if (props.reference.scenarioId !== props.scenarioId) throw new Error("promotion evidence scenario id does not match");
+  const source = await readTrackedAuthorityReceiptFile({
+    repositoryRoot: props.repositoryRoot,
+    receiptPath: props.reference.receiptPath,
+    label: "promotion evidence receipt",
+  });
+  const digest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
+  if (digest !== props.reference.receiptDigest) throw new Error("promotion evidence receipt digest does not match");
+  const receipt: unknown = JSON.parse(source.toString("utf8"));
+  const record = assertRecord(receipt, "promotion evidence receipt");
+  assertLiteral(record.schemaVersion, 1, "promotion evidence receipt schemaVersion");
+  assertLiteral(record.receiptKind, props.receiptKind, "promotion evidence receipt kind");
+  assertLiteral(record.scenarioId, props.reference.scenarioId, "promotion evidence receipt scenario id");
+  assertLiteral(record.variant, props.reference.variant, "promotion evidence receipt variant");
+  assertLiteral(record.repetitionNumber, props.reference.repetitionNumber, "promotion evidence receipt repetition number");
+  assertLiteral(record.attemptNumber, props.reference.attemptNumber, "promotion evidence receipt attempt number");
+}
+
+function parsePromotionEvidenceReferences(input: unknown, label: string): readonly PromotionEvidenceReceiptReference[] {
+  if (!Array.isArray(input)) throw new Error(`${label} must be an array`);
+  return input.map((item) => {
+    const reference = assertRecord(item, label);
+    assertIdentifier(reference.scenarioId, `${label} scenario id`);
+    if (reference.variant !== "baseline" && reference.variant !== "treatment") throw new Error(`${label} variant is invalid`);
+    if (!Number.isSafeInteger(reference.repetitionNumber) || Number(reference.repetitionNumber) < 1) throw new Error(`${label} repetition number is invalid`);
+    if (!Number.isSafeInteger(reference.attemptNumber) || Number(reference.attemptNumber) < 1) throw new Error(`${label} attempt number is invalid`);
+    if (typeof reference.receiptPath !== "string" || reference.receiptPath.trim() === "") throw new Error(`${label} receipt path is invalid`);
+    assertDigest(reference.receiptDigest, `${label} receipt digest`);
+    return {
+      scenarioId: reference.scenarioId,
+      variant: reference.variant,
+      repetitionNumber: Number(reference.repetitionNumber),
+      attemptNumber: Number(reference.attemptNumber),
+      receiptPath: reference.receiptPath,
+      receiptDigest: reference.receiptDigest,
+    };
+  });
+}
+
+function promotionEvidenceIdentity(reference: PromotionEvidenceReceiptReference): string {
+  return `${reference.scenarioId}:${reference.variant}:${String(reference.repetitionNumber)}:${String(reference.attemptNumber)}`;
 }
 
 function parseParentAcceptanceReceipt(input: unknown): ParentAcceptanceReceipt {

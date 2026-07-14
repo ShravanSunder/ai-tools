@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  assertClaimedRequirementValidationIntegrity,
   calculateClaimedRequirementManifestDigest,
   validateClaimedRequirementManifest,
 } from "./claimed-requirements.js";
@@ -45,5 +46,33 @@ describe("claimed behavior requirements", () => {
       unknownRequirementIds: [],
       untracedRequirementIds: [],
     });
+  });
+
+  it("brands and freezes validation so spread-forged authority is rejected", () => {
+    const validation = validateClaimedRequirementManifest({
+      manifest,
+      knownRequirementIds: ["behavior-a", "behavior-b"],
+      calibratedGateRequirementIds: ["behavior-a", "behavior-b"],
+    });
+    expect(Object.isFrozen(validation)).toBe(true);
+    expect(Object.isFrozen(validation.manifest.claimedRequirementIds)).toBe(true);
+    expect(Reflect.set(validation, "status", "not_evaluated")).toBe(false);
+    expect(() => assertClaimedRequirementValidationIntegrity(
+      Object.create(validation) as typeof validation,
+    )).toThrow(/not produced by the manifest validator/u);
+    expect(() => assertClaimedRequirementValidationIntegrity({
+      ...validation,
+      manifestDigest: `sha256:${"f".repeat(64)}`,
+    } as unknown as typeof validation)).toThrow(/not produced by the manifest validator/u);
+    expect(() => assertClaimedRequirementValidationIntegrity({
+      ...validation,
+      status: "not_evaluated",
+    } as unknown as typeof validation)).toThrow(/not produced by the manifest validator/u);
+    expect(() => assertClaimedRequirementValidationIntegrity({
+      ...validation,
+      unknownRequirementIds: ["not-claimed"],
+      untracedRequirementIds: ["not-claimed"],
+      status: "not_evaluated",
+    } as unknown as typeof validation)).toThrow(/not produced by the manifest validator/u);
   });
 });

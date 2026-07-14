@@ -1,11 +1,12 @@
 import { createHash } from "node:crypto";
-import { lstat, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { parseDocument } from "yaml";
 import { z } from "zod";
 
-const TRACKED_AUTHORITY_RECEIPT_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
+import { readTrackedAuthorityReceiptFile } from "./tracked-authority-receipt-file.js";
+
 const identifierSchema = z.string().min(1).max(200).regex(/^[a-z0-9][a-z0-9-]*$/u);
 const digestSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/u);
 const receiptReferenceSchema = z.object({
@@ -84,6 +85,21 @@ export interface EvaluationRegistry {
   readonly scenarios: readonly EvaluationRegistryRow[];
 }
 
+export function calculateEvaluationRegistrySnapshotDigest(
+  registry: EvaluationRegistry,
+): `sha256:${string}` {
+  const canonicalRegistry = {
+    schemaVersion: registry.schemaVersion,
+    scenarios: [...registry.scenarios]
+      .sort((left, right) => left.scenarioId.localeCompare(right.scenarioId))
+      .map((row) => ({
+        ...row,
+        authorityHistory: [...row.authorityHistory].sort((left, right) => left.sequence - right.sequence),
+      })),
+  };
+  return `sha256:${createHash("sha256").update(JSON.stringify(canonicalRegistry)).digest("hex")}`;
+}
+
 export async function loadEvaluationRegistry(
   props: LoadEvaluationRegistryProps,
 ): Promise<EvaluationRegistry> {
@@ -150,11 +166,17 @@ function validateAuthorityHistory(
   scenarioId: string,
 ): void {
   let authorityState: "diagnostic" | "gate" | "retired" = "diagnostic";
+  const usedPromotionReceipts = new Set<string>();
   history.forEach((event, index) => {
     if (event.sequence !== index + 1) {
       throw new Error(`evaluation registry authority history is not contiguous for scenario ${scenarioId}`);
     }
     if (event.event === "promotion" && authorityState === "diagnostic") {
+      const receiptIdentity = `${event.receipt_path}\0${event.receipt_digest}`;
+      if (usedPromotionReceipts.has(receiptIdentity)) {
+        throw new Error(`evaluation registry promotion receipt is reused for scenario ${scenarioId}`);
+      }
+      usedPromotionReceipts.add(receiptIdentity);
       authorityState = "gate";
       return;
     }
@@ -201,30 +223,22 @@ async function validateReceiptReference(
   repositoryRoot: string,
   reference: z.infer<typeof receiptReferenceSchema>,
 ): Promise<AuthorityReceiptReference> {
-  const normalizedPath = path.posix.normalize(reference.receipt_path);
-  if (
-    normalizedPath !== reference.receipt_path ||
-    path.posix.isAbsolute(normalizedPath) ||
-    !(normalizedPath === TRACKED_AUTHORITY_RECEIPT_ROOT || normalizedPath.startsWith(`${TRACKED_AUTHORITY_RECEIPT_ROOT}/`))
-  ) {
-    throw new Error(`authority receipt must use the tracked authority receipt root: ${reference.receipt_path}`);
-  }
-  let source: string;
+  let source: Buffer;
   try {
-    const receiptStatus = await lstat(path.resolve(repositoryRoot, normalizedPath));
-    if (!receiptStatus.isFile() || receiptStatus.nlink !== 1) {
-      throw new Error(`authority receipt must be one regular file without links: ${normalizedPath}`);
-    }
-    source = await readFile(path.resolve(repositoryRoot, normalizedPath), "utf8");
+    source = await readTrackedAuthorityReceiptFile({
+      repositoryRoot,
+      receiptPath: reference.receipt_path,
+      label: "authority receipt",
+    });
   } catch (error) {
     if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") {
-      throw new Error(`authority receipt does not exist: ${normalizedPath}`);
+      throw new Error(`authority receipt does not exist: ${reference.receipt_path}`);
     }
     throw error;
   }
   const actualDigest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
   if (actualDigest !== reference.receipt_digest) {
-    throw new Error(`authority receipt digest does not match: ${normalizedPath}`);
+    throw new Error(`authority receipt digest does not match: ${reference.receipt_path}`);
   }
-  return { receiptPath: normalizedPath, receiptDigest: actualDigest };
+  return { receiptPath: reference.receipt_path, receiptDigest: actualDigest };
 }

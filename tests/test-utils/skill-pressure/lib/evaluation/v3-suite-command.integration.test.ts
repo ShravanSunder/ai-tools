@@ -1,0 +1,501 @@
+import { createHash } from "node:crypto";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
+import { describe, expect, it } from "vitest";
+
+import {
+  calculateEvaluationRegistrySnapshotDigest,
+  type EvaluationRegistry,
+} from "../authority/evaluation-registry.js";
+import { calculateParentAcceptanceReceiptDigest } from "../authority/authority-receipts.js";
+import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
+import {
+  createClaimedRequirementValidationFixture,
+  createRunAcceptanceFixture,
+  createValidatedPromotionFixture,
+  fixtureAuthorityDigest,
+} from "../test-fixtures.js";
+import { executeV3SuiteCommand } from "./v3-suite-command.js";
+import {
+  type ExecutedV3BehavioralScenario,
+  type V3BehavioralScenarioReceipt,
+} from "./v3-behavioral-scenario-execution.js";
+import { deriveScenarioExecutionBudget } from "./scenario-execution-budget.js";
+import { calculateV3ScenarioEvidenceDigest } from "./v3-behavioral-scenario-execution.js";
+import { calculateV3ScenarioAuthorityRunDigest } from "./v3-scenario-authority.js";
+import { calculateV3SuiteSelectionDigest, selectV3SuiteScenarios } from "./v3-suite-selection.js";
+
+const CLAIMED = createClaimedRequirementValidationFixture({ claimedRequirementIds: ["behavior-one"] });
+const COMMAND_REPOSITORY_ROOT = await mkdtemp(path.join(tmpdir(), "v3-command-repository-"));
+const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
+const CALIBRATION_PATH = `${AUTHORITY_ROOT}/gate-calibration.json`;
+await mkdir(path.join(COMMAND_REPOSITORY_ROOT, AUTHORITY_ROOT), { recursive: true });
+const PROMOTION_EVIDENCE = await Promise.all((["attempt", "cleanup"] as const).map(async (receiptKind) =>
+  Promise.all((["baseline", "treatment"] as const).flatMap((variant) =>
+    Array.from({ length: 5 }, async (_, index) => {
+      const repetitionNumber = index + 1;
+      const receiptPath = `${AUTHORITY_ROOT}/gate-${variant}-${repetitionNumber}-${receiptKind}.json`;
+      const receipt = { schemaVersion: 1, receiptKind, scenarioId: "gate", variant, repetitionNumber, attemptNumber: 1 };
+      const source = `${JSON.stringify(receipt, null, 2)}\n`;
+      await writeFile(path.join(COMMAND_REPOSITORY_ROOT, receiptPath), source, { flag: "wx" });
+      return {
+        scenarioId: "gate",
+        variant,
+        repetitionNumber,
+        attemptNumber: 1,
+        receiptPath,
+        receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as const,
+      };
+    })))));
+const ATTEMPT_EVIDENCE = PROMOTION_EVIDENCE[0];
+const CLEANUP_EVIDENCE = PROMOTION_EVIDENCE[1];
+if (ATTEMPT_EVIDENCE === undefined || CLEANUP_EVIDENCE === undefined) throw new Error("promotion fixture evidence is incomplete");
+const CALIBRATION = createValidatedPromotionFixture({
+  scenarioId: "gate",
+  behaviorContractDigest: fixtureAuthorityDigest("b"),
+  claimedRequirementManifestDigest: CLAIMED.manifestDigest,
+  attemptReceipts: ATTEMPT_EVIDENCE,
+  cleanupReceipts: CLEANUP_EVIDENCE,
+});
+const CALIBRATION_SOURCE = `${JSON.stringify(CALIBRATION.receipt, null, 2)}\n`;
+const CALIBRATION_SOURCE_DIGEST = `sha256:${createHash("sha256").update(CALIBRATION_SOURCE).digest("hex")}`;
+await writeFile(path.join(COMMAND_REPOSITORY_ROOT, CALIBRATION_PATH), CALIBRATION_SOURCE, { flag: "wx" });
+
+const REGISTRY: EvaluationRegistry = {
+  schemaVersion: 1,
+  scenarios: [
+    {
+      scenarioId: "gate",
+      behaviorContractDigest: fixtureAuthorityDigest("b"),
+      evaluationRole: "gate",
+      freshness: "fresh",
+      validityReview: { receiptPath: "gate-validity.json", receiptDigest: fixtureAuthorityDigest("c") },
+      calibrationReceipt: { receiptPath: CALIBRATION_PATH, receiptDigest: CALIBRATION_SOURCE_DIGEST },
+      authorityHistory: [],
+    },
+    {
+      scenarioId: "diagnostic",
+      behaviorContractDigest: fixtureAuthorityDigest("e"),
+      evaluationRole: "diagnostic",
+      freshness: "uncalibrated",
+      validityReview: { receiptPath: "diagnostic-validity.json", receiptDigest: fixtureAuthorityDigest("f") },
+      calibrationReceipt: null,
+      authorityHistory: [],
+    },
+  ],
+};
+
+const CANDIDATES = [
+  { scenarioId: "gate", risk: "standard" as const, repetitions: 5 },
+  { scenarioId: "diagnostic", risk: "standard" as const, repetitions: 5 },
+];
+
+const VERIFIED_PROFILE: RuntimeProfileReceipt = {
+  requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+  acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+  providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+  verification: { status: "verified", reasonCode: null, reasons: [] },
+};
+
+async function executedScenario(props: {
+  readonly scenarioId: "gate" | "diagnostic";
+  readonly outcome: "pass" | "behavior_fail";
+  readonly releaseAuthority?: boolean;
+}): Promise<ExecutedV3BehavioralScenario> {
+  const gate = props.scenarioId === "gate";
+  const receiptDirectory = await mkdtemp(path.join(tmpdir(), "v3-scenario-command-"));
+  const writeFixture = async (fileName: string, receipt: unknown) => {
+    const receiptPath = path.join(receiptDirectory, fileName);
+    const source = `${JSON.stringify(receipt, null, 2)}\n`;
+    await writeFile(receiptPath, source, { flag: "wx" });
+    return { receiptPath, receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` };
+  };
+  const attemptReceipts = await Promise.all(Array.from({ length: 10 }, (_, index) => {
+    const variant = index < 5 ? "baseline" : "treatment";
+    const repetitionNumber = (index % 5) + 1;
+    return writeFixture(`attempt-${index + 1}.json`, {
+      schemaVersion: 1,
+      scenarioId: props.scenarioId,
+      variant,
+      repetitionNumber,
+      attemptNumber: 1,
+      durableFacts: {},
+      lastDurableStage: "attempt_receipt_published",
+    });
+  }));
+  const repetitionReceipts = await Promise.all(attemptReceipts.map((attempt, index) => {
+    const variant = index < 5 ? "baseline" : "treatment";
+    const repetitionNumber = (index % 5) + 1;
+    return writeFixture(`repetition-${index + 1}.json`, {
+      schemaVersion: 1,
+      scenarioId: props.scenarioId,
+      variant,
+      repetitionNumber,
+      repetitionId: `${variant}-${repetitionNumber}`,
+      acceptedAttemptReceiptPath: attempt.receiptPath,
+      acceptedAttemptReceiptDigest: attempt.receiptDigest,
+      lastDurableStage: "repetition_receipt_published",
+    });
+  }));
+  const progressReceipt = await writeFixture("progress-1.json", {
+    schemaVersion: 1,
+    scenarioId: props.scenarioId,
+    status: "completed",
+    lastDurableStage: "scenario_completed",
+    completedAttemptReceiptPaths: attemptReceipts.map((receipt) => receipt.receiptPath),
+    reasonCode: null,
+  });
+  const comparisonValidation = { valid: true, reasons: [] } as const;
+  const objectiveResults: V3BehavioralScenarioReceipt["objectiveResults"] = [];
+  const semanticValidation = { valid: true, reason: null } as const;
+  const semanticCandidate = {};
+  const subjects: V3BehavioralScenarioReceipt["subjects"] = [];
+  const reduction: V3BehavioralScenarioReceipt["reduction"] = props.outcome === "pass"
+    ? { outcome: "pass" as const, reasonCode: null, reasons: [] }
+    : { outcome: "behavior_fail" as const, reasonCode: "treatment_behavior_failed", reasons: ["fixture failure"] };
+  const registrySnapshotDigest = calculateEvaluationRegistrySnapshotDigest(REGISTRY);
+  const evidenceDigest = calculateV3ScenarioEvidenceDigest({
+    registrySnapshotDigest,
+    comparisonValidation,
+    objectiveResults,
+    semanticValidation,
+    semanticCandidate,
+    subjects,
+    reviewerRuntimeProfile: VERIFIED_PROFILE,
+    attemptReceipts,
+    repetitionReceipts,
+    progressReceipts: [progressReceipt],
+    reduction,
+  });
+  const behaviorContractDigest = gate ? fixtureAuthorityDigest("b") : fixtureAuthorityDigest("e");
+  const runDigest = calculateV3ScenarioAuthorityRunDigest({
+    scenarioId: props.scenarioId,
+    behaviorContractDigest,
+    behaviorRequirementIds: ["behavior-one"],
+    evaluationRole: gate ? "gate" : "diagnostic",
+    outcome: reduction.outcome,
+    comparisonIntent: "non_regression",
+    evidenceDigest,
+  }, CLAIMED.manifestDigest);
+  const acceptance = props.releaseAuthority === true
+    ? createRunAcceptanceFixture({ calibration: CALIBRATION, runDigest, claimedRequirementManifestDigest: CLAIMED.manifestDigest })
+    : null;
+  const acceptancePath = `${AUTHORITY_ROOT}/${path.basename(receiptDirectory)}-acceptance.json`;
+  const acceptanceSource = acceptance === null ? null : `${JSON.stringify(acceptance, null, 2)}\n`;
+  const acceptanceSourceDigest = acceptanceSource === null
+    ? null
+    : `sha256:${createHash("sha256").update(acceptanceSource).digest("hex")}`;
+  if (acceptanceSource !== null) {
+    await writeFile(path.join(COMMAND_REPOSITORY_ROOT, acceptancePath), acceptanceSource, { flag: "wx" });
+  }
+  const receipt = {
+    schemaVersion: 3,
+    scenarioId: props.scenarioId,
+    behaviorIdentity: {
+      behaviorContractDigest,
+      behaviorRequirementIds: ["behavior-one"],
+      comparisonIntent: "non_regression",
+      expectedRepetitions: 5,
+    },
+    authoritySnapshot: {
+      evaluationRole: gate ? "gate" : "diagnostic",
+      freshness: gate ? "fresh" : "uncalibrated",
+      registrySnapshotDigest,
+      calibrationStatus: gate ? "calibrated" : "uncalibrated",
+      runDigest,
+      evidenceDigest,
+      releaseAuthority: props.releaseAuthority ?? false,
+      reasonCode: props.releaseAuthority === true ? null : gate ? "non_passing_gate_outcome" : "diagnostic_result",
+      parentAcceptanceReceiptDigest: acceptance === null ? null : calculateParentAcceptanceReceiptDigest(acceptance),
+      parentAcceptanceSourceReceipt: props.releaseAuthority === true
+        ? { receiptPath: acceptancePath, receiptDigest: acceptanceSourceDigest! }
+        : null,
+      calibrationSourceReceipt: gate
+        ? { receiptPath: CALIBRATION_PATH, receiptDigest: CALIBRATION_SOURCE_DIGEST }
+        : null,
+      calibrationAuthorityReceiptDigest: gate ? CALIBRATION.authorityReceiptDigest : null,
+      calibrationFingerprintDigest: gate ? CALIBRATION.calibrationFingerprint.digest : null,
+      calibrationFreshnessInputs: gate ? CALIBRATION.receipt.calibrationFingerprint : null,
+      demotedThisRun: false,
+    },
+    claimedRequirements: {
+      source: CLAIMED.manifest.source,
+      claimedRequirementIds: CLAIMED.manifest.claimedRequirementIds,
+      manifestDigest: CLAIMED.manifestDigest,
+      status: CLAIMED.status,
+      unknownRequirementIds: CLAIMED.unknownRequirementIds,
+      untracedRequirementIds: CLAIMED.untracedRequirementIds,
+    },
+    comparisonValidation,
+    objectiveResults,
+    semanticReview: { validation: semanticValidation, runtimeProfile: VERIFIED_PROFILE, candidate: semanticCandidate },
+    runtimeProfiles: { subjects: Array.from({ length: 10 }, () => VERIFIED_PROFILE), reviewer: VERIFIED_PROFILE },
+    subjects,
+    executionBudget: deriveScenarioExecutionBudget({
+      repetitions: 5,
+      infrastructureRetries: 0,
+      commandSlots: [{ commandType: "subject", acpxTimeoutMs: 1, executorOverheadMs: 0, terminationGraceMs: 1 }],
+      fixtureSetupReserveMs: 0,
+      scenarioCleanupReserveMs: 0,
+      receiptFlushReserveMs: 1,
+      schedulingMarginMs: 0,
+      registeredScenarioCount: 1,
+      jobs: 1,
+      vitestEmergencyReserveMs: 1,
+    }),
+    attemptReceipts,
+    repetitionReceipts,
+    progressReceipts: [progressReceipt],
+    reduction,
+    lastDurableStage: "scenario_receipt_published",
+  } as const satisfies V3BehavioralScenarioReceipt;
+  const receiptPath = path.join(receiptDirectory, "scenario-receipt.json");
+  const source = `${JSON.stringify(receipt, null, 2)}\n`;
+  await writeFile(receiptPath, source, { flag: "wx" });
+  return {
+    receiptPath,
+    receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}`,
+    receipt,
+  };
+}
+
+async function persistAggregate(receipt: unknown): Promise<string> {
+  const directory = await mkdtemp(path.join(tmpdir(), "v3-command-smoke-"));
+  const receiptPath = path.join(directory, "aggregate-receipt.json");
+  await writeFile(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, { flag: "wx" });
+  return receiptPath;
+}
+
+describe("v3 fake-backed command smoke", () => {
+  it("returns nonzero for a behavioral gate failure and still creates an aggregate", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const result = await executeV3SuiteCommand({
+      runId: "gate-failure",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => executedScenario({ scenarioId: "gate", outcome: "behavior_fail" }),
+      persistAggregate,
+    });
+
+    expect(result.exitCode).toBe(1);
+    expect(result.aggregate.suite).toEqual({ kind: "gate", terminalState: "failed", success: false });
+    expect(JSON.parse(await readFile(result.aggregateReceiptPath, "utf8"))).toMatchObject({ runId: "gate-failure" });
+  });
+
+  it("returns zero with completed_with_findings for a complete diagnostic behavioral failure", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "diagnostic",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const result = await executeV3SuiteCommand({
+      runId: "diagnostic-finding",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => executedScenario({ scenarioId: "diagnostic", outcome: "behavior_fail" }),
+      persistAggregate,
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.aggregate.suite).toEqual({
+      kind: "diagnostic",
+      terminalState: "completed_with_findings",
+      success: true,
+    });
+  });
+
+  it("returns nonzero and records missing accounting when selected execution is absent", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "diagnostic",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const result = await executeV3SuiteCommand({
+      runId: "missing-diagnostic",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => null,
+      persistAggregate,
+    });
+
+    expect(result.exitCode).toBe(1);
+    expect(result.aggregate.counts.missing).toBe(1);
+    expect(result.aggregate.suite.terminalState).toBe("failed");
+  });
+
+  it("fails when an authoritative command selects no executable scenarios", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      risk: "high",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const result = await executeV3SuiteCommand({
+      runId: "empty-gate",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => {
+        throw new Error("no scenario should execute");
+      },
+      persistAggregate,
+    });
+
+    expect(result.aggregate.counts.selected).toBe(0);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("rejects registry drift between selection and command execution", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const driftedRegistry: EvaluationRegistry = {
+      ...REGISTRY,
+      scenarios: REGISTRY.scenarios.map((row) => row.scenarioId === "gate"
+        ? { ...row, freshness: "stale" as const }
+        : row),
+    };
+
+    await expect(executeV3SuiteCommand({
+      runId: "registry-drift",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: driftedRegistry,
+      executeScenario: async () => executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true }),
+      persistAggregate,
+    })).rejects.toThrow(/registry snapshot digest does not match/u);
+  });
+
+  it("rejects a mutated selection receipt before invoking a scenario", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    await expect(executeV3SuiteCommand({
+      runId: "mutated-selection",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection: { ...selection, aggregateSuiteKind: "diagnostic" },
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => {
+        throw new Error("scenario executor must not run");
+      },
+      persistAggregate,
+    })).rejects.toThrow(/selection digest does not match|selector-produced/u);
+  });
+
+  it("rejects a recomputed selection that omits an eligible gate", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const forgedBase = {
+      ...selection,
+      selectedScenarioIds: [] as readonly string[],
+      selectedScenarios: [] as readonly { readonly scenarioId: string; readonly repetitions: number }[],
+    };
+    const { selectionDigest: _oldDigest, ...forgedWithoutDigest } = forgedBase;
+
+    await expect(executeV3SuiteCommand({
+      runId: "recomputed-partial-selection",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection: {
+        ...forgedWithoutDigest,
+        selectionDigest: calculateV3SuiteSelectionDigest(forgedWithoutDigest),
+      },
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => {
+        throw new Error("scenario executor must not run");
+      },
+      persistAggregate,
+    })).rejects.toThrow(/selector-produced/u);
+  });
+
+  it("does not trust an authoritative summary when the persisted scenario receipt changed", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const result = await executeV3SuiteCommand({
+      runId: "tampered-scenario-receipt",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => {
+        const executed = await executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true });
+        await writeFile(executed.receiptPath, "{}\n");
+        return executed;
+      },
+      persistAggregate,
+    });
+
+    expect(result.exitCode).toBe(1);
+    expect(result.aggregate.counts.missing).toBe(1);
+    expect(result.aggregate.counts.releaseAuthorityGranted).toBe(0);
+  });
+
+  it("preserves claimed-ID and parent-acceptance traceability for an authoritative gate pass", async () => {
+    const selection = selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: CANDIDATES,
+      registry: REGISTRY,
+      claimedRequirements: CLAIMED,
+    });
+    const result = await executeV3SuiteCommand({
+      runId: "gate-pass",
+      repositoryRoot: COMMAND_REPOSITORY_ROOT,
+      discoveredScenarioCount: CANDIDATES.length,
+      invalid: [],
+      selection,
+      registrySnapshot: REGISTRY,
+      executeScenario: async () => executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true }),
+      persistAggregate,
+    });
+
+    expect(result.exitCode).toBe(0);
+    expect(result.aggregate.claimedRequirementInputDigest).toBe(CLAIMED.manifestDigest);
+    expect(result.aggregate.untracedBehaviorRequirementIds).toEqual([]);
+    expect(result.aggregate.results[0]).toMatchObject({
+      claimedRequirementManifestDigest: CLAIMED.manifestDigest,
+      parentAcceptanceReceiptDigest: expect.stringMatching(/^sha256:/u),
+      releaseAuthority: true,
+    });
+  });
+});

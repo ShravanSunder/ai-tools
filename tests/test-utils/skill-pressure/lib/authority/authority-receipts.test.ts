@@ -1,3 +1,8 @@
+import { createHash } from "node:crypto";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -11,10 +16,36 @@ import {
   type CalibrationFreshnessInputs,
   type AuthorityDigest,
   type ParentAcceptanceReceipt,
+  type PromotionEvidenceReceiptReference,
   type PromotionReceipt,
 } from "./authority-receipts.js";
 
 const DIGEST = (character: string): AuthorityDigest => `sha256:${character.repeat(64)}`;
+const REPOSITORY_ROOT = await mkdtemp(path.join(tmpdir(), "authority-receipts-"));
+const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
+await mkdir(path.join(REPOSITORY_ROOT, AUTHORITY_ROOT), { recursive: true });
+const PROMOTION_EVIDENCE = await Promise.all((["attempt", "cleanup"] as const).map(async (receiptKind) =>
+  Promise.all((["baseline", "treatment"] as const).flatMap((variant) =>
+    Array.from({ length: 5 }, async (_, index) => {
+      const repetitionNumber = index + 1;
+      const receiptPath = `${AUTHORITY_ROOT}/authority-fixture-${variant}-${repetitionNumber}-${receiptKind}.json`;
+      const receipt = { schemaVersion: 1, receiptKind, scenarioId: "authority-fixture", variant, repetitionNumber, attemptNumber: 1 };
+      const source = `${JSON.stringify(receipt, null, 2)}\n`;
+      await writeFile(path.join(REPOSITORY_ROOT, receiptPath), source, { flag: "wx" });
+      return {
+        scenarioId: "authority-fixture",
+        variant,
+        repetitionNumber,
+        attemptNumber: 1,
+        receiptPath,
+        receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as const,
+      };
+    })))));
+const ATTEMPT_EVIDENCE = PROMOTION_EVIDENCE[0];
+const CLEANUP_EVIDENCE = PROMOTION_EVIDENCE[1];
+if (ATTEMPT_EVIDENCE === undefined || CLEANUP_EVIDENCE === undefined) throw new Error("promotion fixture evidence is incomplete");
+const VERIFIED_ATTEMPT_EVIDENCE: readonly PromotionEvidenceReceiptReference[] = ATTEMPT_EVIDENCE;
+const VERIFIED_CLEANUP_EVIDENCE: readonly PromotionEvidenceReceiptReference[] = CLEANUP_EVIDENCE;
 
 const FRESHNESS_INPUTS: CalibrationFreshnessInputs = {
   behaviorContractDigest: DIGEST("a"),
@@ -66,8 +97,8 @@ function promotionReceipt(props: {
       comparisonIntentPassed: true as const,
       objectiveEvidenceDigest: DIGEST("a"),
       semanticEvidenceDigest: DIGEST("b"),
-      attemptReceiptDigests: Array.from({ length: 10 }, (_, index) => DIGEST(String(index))),
-      cleanupReceiptDigests: Array.from({ length: 10 }, (_, index) => DIGEST(String(index))),
+      attemptReceipts: VERIFIED_ATTEMPT_EVIDENCE,
+      cleanupReceipts: VERIFIED_CLEANUP_EVIDENCE,
       deterministicMutationCoverage: true as const,
       subjectProfileVerified: true as const,
       reviewProfileVerified: true as const,
@@ -85,22 +116,118 @@ function promotionReceipt(props: {
 }
 
 describe("authority receipts", () => {
-  it("accepts a complete parent-accepted promotion receipt", () => {
+  it("accepts a complete parent-accepted promotion receipt", async () => {
     const receipt = promotionReceipt();
 
-    expect(validatePromotionReceipt({
+    await expect(validatePromotionReceipt({
       receipt,
       currentFreshnessInputs: FRESHNESS_INPUTS,
-    })).toMatchObject({
+      repositoryRoot: REPOSITORY_ROOT,
+    })).resolves.toMatchObject({
       authorityReceiptDigest: calculateAuthorityReceiptDigest(receipt),
       freshness: { status: "fresh" },
     });
   });
 
-  it("keeps a calibration fresh when only the later treatment source changes", () => {
-    const calibration = validatePromotionReceipt({
+  it("rejects duplicate attempt or cleanup receipts in promotion evidence", async () => {
+    const receipt = promotionReceipt();
+    for (const field of ["attemptReceipts", "cleanupReceipts"] as const) {
+      await expect(validatePromotionReceipt({
+        receipt: {
+          ...receipt,
+          calibration: {
+            ...receipt.calibration,
+            [field]: Array.from({ length: 10 }, () => receipt.calibration[field][0]!),
+          },
+        },
+        currentFreshnessInputs: FRESHNESS_INPUTS,
+        repositoryRoot: REPOSITORY_ROOT,
+      })).rejects.toThrow(/independently receipted/u);
+    }
+  });
+
+  it("requires promotion evidence for every baseline and treatment repetition", async () => {
+    const repositoryRoot = await mkdtemp(path.join(tmpdir(), "authority-receipts-coverage-"));
+    await mkdir(path.join(repositoryRoot, AUTHORITY_ROOT), { recursive: true });
+    const evidence = await Promise.all((["attempt", "cleanup"] as const).map(async (receiptKind) =>
+      Promise.all(Array.from({ length: 10 }, async (_, index) => {
+        const repetitionNumber = (index % 5) + 1;
+        const attemptNumber = Math.floor(index / 5) + 1;
+        const receiptPath = `${AUTHORITY_ROOT}/baseline-${repetitionNumber}-${attemptNumber}-${receiptKind}.json`;
+        const receipt = {
+          schemaVersion: 1,
+          receiptKind,
+          scenarioId: "authority-fixture",
+          variant: "baseline",
+          repetitionNumber,
+          attemptNumber,
+        } as const;
+        const source = `${JSON.stringify(receipt, null, 2)}\n`;
+        await writeFile(path.join(repositoryRoot, receiptPath), source, { flag: "wx" });
+        return {
+          scenarioId: receipt.scenarioId,
+          variant: receipt.variant,
+          repetitionNumber,
+          attemptNumber,
+          receiptPath,
+          receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as const,
+        };
+      }))));
+    const receipt = promotionReceipt();
+    const calibration = {
+      ...receipt.calibration,
+      attemptReceipts: evidence[0]!,
+      cleanupReceipts: evidence[1]!,
+    };
+    const changedReceipt = { ...receipt, calibration };
+
+    await expect(validatePromotionReceipt({
+      receipt: {
+        ...changedReceipt,
+        parentAcceptance: parentAcceptance({
+          authorityReceiptDigest: calculateAuthorityReceiptDigest(changedReceipt),
+          runDigest: changedReceipt.calibrationRunDigest,
+        }),
+      },
+      currentFreshnessInputs: FRESHNESS_INPUTS,
+      repositoryRoot,
+    })).rejects.toThrow(/baseline and treatment repetitions/u);
+  });
+
+  it("rejects promotion evidence with a mismatched source digest or cleanup identity", async () => {
+    const receipt = promotionReceipt();
+    await expect(validatePromotionReceipt({
+      receipt: {
+        ...receipt,
+        calibration: {
+          ...receipt.calibration,
+          attemptReceipts: receipt.calibration.attemptReceipts.map((reference, index) =>
+            index === 0 ? { ...reference, receiptDigest: DIGEST("f") } : reference),
+        },
+      },
+      currentFreshnessInputs: FRESHNESS_INPUTS,
+      repositoryRoot: REPOSITORY_ROOT,
+    })).rejects.toThrow(/receipt digest does not match/u);
+
+    await expect(validatePromotionReceipt({
+      receipt: {
+        ...receipt,
+        calibration: {
+          ...receipt.calibration,
+          cleanupReceipts: receipt.calibration.cleanupReceipts.map((reference, index) =>
+            index === 0 ? { ...reference, attemptNumber: 2 } : reference),
+        },
+      },
+      currentFreshnessInputs: FRESHNESS_INPUTS,
+      repositoryRoot: REPOSITORY_ROOT,
+    })).rejects.toThrow(/identities must match/u);
+  });
+
+  it("keeps a calibration fresh when only the later treatment source changes", async () => {
+    const calibration = await validatePromotionReceipt({
       receipt: promotionReceipt({ treatmentSourceDigest: DIGEST("9") }),
       currentFreshnessInputs: FRESHNESS_INPUTS,
+      repositoryRoot: REPOSITORY_ROOT,
     });
 
     expect(evaluateCalibrationFreshness({
@@ -130,24 +257,27 @@ describe("authority receipts", () => {
     }
   });
 
-  it("rejects partial or digest-mismatched parent acceptance", () => {
+  it("rejects partial or digest-mismatched parent acceptance", async () => {
     const receipt = promotionReceipt();
-    expect(() => validatePromotionReceipt({
+    await expect(validatePromotionReceipt({
       receipt: { ...receipt, parentAcceptance: { ...receipt.parentAcceptance, acceptedAuthorityReceiptDigest: DIGEST("f") } },
       currentFreshnessInputs: FRESHNESS_INPUTS,
-    })).toThrow(/parent acceptance.*authority receipt digest/u);
+      repositoryRoot: REPOSITORY_ROOT,
+    })).rejects.toThrow(/parent acceptance.*authority receipt digest/u);
 
     const { claimedRequirementManifestDigest: _removed, ...partialAcceptance } = receipt.parentAcceptance;
-    expect(() => validatePromotionReceipt({
+    await expect(validatePromotionReceipt({
       receipt: { ...receipt, parentAcceptance: partialAcceptance },
       currentFreshnessInputs: FRESHNESS_INPUTS,
-    })).toThrow(/parent acceptance.*claimed requirement/u);
+      repositoryRoot: REPOSITORY_ROOT,
+    })).rejects.toThrow(/parent acceptance.*claimed requirement/u);
   });
 
-  it("requires a separate parent acceptance bound to the exact gate outcome before release authority", () => {
-    const promotion = validatePromotionReceipt({
+  it("requires a separate parent acceptance bound to the exact gate outcome before release authority", async () => {
+    const promotion = await validatePromotionReceipt({
       receipt: promotionReceipt(),
       currentFreshnessInputs: FRESHNESS_INPUTS,
+      repositoryRoot: REPOSITORY_ROOT,
     });
     const runDigest = DIGEST("f");
     const acceptance = parentAcceptance({ authorityReceiptDigest: promotion.authorityReceiptDigest, runDigest });
@@ -181,10 +311,11 @@ describe("authority receipts", () => {
     })).toMatchObject({ releaseAuthority: false, reasonCode: "parent_acceptance_mismatch" });
   });
 
-  it("does not let diagnostic, stale, or untraced results carry release authority", () => {
-    const promotion = validatePromotionReceipt({
+  it("does not let diagnostic, stale, or untraced results carry release authority", async () => {
+    const promotion = await validatePromotionReceipt({
       receipt: promotionReceipt(),
       currentFreshnessInputs: FRESHNESS_INPUTS,
+      repositoryRoot: REPOSITORY_ROOT,
     });
     const acceptance = parentAcceptance({ authorityReceiptDigest: promotion.authorityReceiptDigest });
 

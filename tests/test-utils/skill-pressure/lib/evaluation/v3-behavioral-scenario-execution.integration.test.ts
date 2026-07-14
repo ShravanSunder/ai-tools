@@ -1,15 +1,23 @@
+import { createHash } from "node:crypto";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import type { AuthorityDigest } from "../authority/authority-receipts.js";
 import type { EvaluationRegistryRow } from "../authority/evaluation-registry.js";
 import { parseV3BehaviorContract } from "../contracts/v3-behavior-contract.js";
 import type { NormalizedRepetitionEvidence } from "../evidence/repetition-evidence.js";
 import type { AttemptDurableFacts } from "../reporting/attempt-receipt.js";
 import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
 import type { StructuredSemanticReviewPacket } from "../review/semantic-review-contract.js";
+import {
+  createRunAcceptanceFixture,
+  createClaimedRequirementValidationFixture,
+  createValidatedPromotionFixture,
+  fixtureAuthorityDigest,
+} from "../test-fixtures.js";
 import { deriveScenarioExecutionBudget } from "./scenario-execution-budget.js";
 import {
   executeV3BehavioralScenario,
@@ -135,6 +143,7 @@ function evidence(props: {
 function semanticResult(
   packet: StructuredSemanticReviewPacket,
   classification: "pass" | "behavior_fail" | "inconclusive" = "pass",
+  evidenceAnchorEndOffset = 9,
 ): string {
   return JSON.stringify({
     assertions: packet.untrustedEvidence.repetitions.flatMap((repetition) =>
@@ -143,7 +152,7 @@ function semanticResult(
         variant: repetition.variant,
         assertionId: assertion.assertionId,
         classification,
-        evidenceAnchor: { kind: "response", evidenceId: "response", startOffset: 0, endOffset: 9 },
+        evidenceAnchor: { kind: "response", evidenceId: "response", startOffset: 0, endOffset: evidenceAnchorEndOffset },
       })),
     ),
     rationalizations: [],
@@ -181,9 +190,31 @@ async function runIntegratedFixture(props: {
   readonly reviewerProfile?: RuntimeProfileReceipt;
   readonly executeSubjects?: (request: V3SubjectExecutionRequest) => Promise<never>;
   readonly scenarioDeadlineMs?: number;
+  readonly grantParentAcceptance?: boolean;
+  readonly claimedRequirementStatus?: "traced" | "not_evaluated";
+  readonly calibrationSourceDigestOverride?: AuthorityDigest;
+  readonly semanticAnchorEndOffset?: number;
 }) {
   const contract = v3Contract(props.comparisonIntent, props.risk);
   const outputDirectory = await mkdtemp(path.join(tmpdir(), "v3-runner-integration-"));
+  const claimedRequirements = createClaimedRequirementValidationFixture({
+    claimedRequirementIds: ["fixture-behavior"],
+    calibratedGateRequirementIds: props.claimedRequirementStatus === "not_evaluated" ? [] : ["fixture-behavior"],
+  });
+  const calibration = props.registryFreshness === undefined
+    ? null
+    : createValidatedPromotionFixture({
+        scenarioId: contract.scenarioId,
+        behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
+        freshness: props.registryFreshness,
+        claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
+      });
+  const calibrationSource = calibration === null ? "" : JSON.stringify(calibration.receipt);
+  const calibrationSourceDigest = `sha256:${createHash("sha256").update(calibrationSource).digest("hex")}` as AuthorityDigest;
+  const calibrationSourceReceipt = {
+    receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/calibration.json",
+    receiptDigest: props.calibrationSourceDigestOverride ?? calibrationSourceDigest,
+  };
   let subjectRequest: V3SubjectExecutionRequest | null = null;
   const execution = executeV3BehavioralScenario({
     contract,
@@ -194,8 +225,33 @@ async function runIntegratedFixture(props: {
         ...(props.registryFreshness === undefined ? {} : {
           evaluationRole: "gate" as const,
           freshness: props.registryFreshness,
+          calibrationReceipt: {
+            receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/calibration.json",
+            receiptDigest: calibrationSourceDigest,
+          },
         }),
       }],
+    },
+    authorityContext: {
+      calibration: calibration === null
+        ? null
+        : { promotion: calibration, sourceReceipt: calibrationSourceReceipt, source: calibrationSource },
+      claimedRequirements,
+      resolveParentAcceptance: async ({ runDigest, claimedRequirementManifestDigest }) =>
+        props.grantParentAcceptance === true && calibration !== null
+          ? (() => {
+              const receipt = createRunAcceptanceFixture({ calibration, runDigest, claimedRequirementManifestDigest });
+              const source = JSON.stringify(receipt);
+              return {
+              receipt,
+              sourceReceipt: {
+                receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/parent-acceptance.json",
+                receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as AuthorityDigest,
+              },
+              source,
+            };
+            })()
+          : null,
     },
     executionBudget: budget(),
     configuredScenarioDeadlineMs: props.scenarioDeadlineMs ?? 5_000,
@@ -251,7 +307,7 @@ async function runIntegratedFixture(props: {
       return { baseline: await createVariant("baseline"), treatment: await createVariant("treatment") };
     }),
     executeSemanticReview: async ({ packet }) => ({
-      visibleResponse: semanticResult(packet, props.semanticClassification),
+      visibleResponse: semanticResult(packet, props.semanticClassification, props.semanticAnchorEndOffset),
       runtimeProfile: props.reviewerProfile ?? VERIFIED_LUNA_PROFILE,
     }),
   });
@@ -267,10 +323,17 @@ describe("reachable v3 behavioral scenario execution", () => {
       expect(result.receipt.reduction).toMatchObject({ outcome: "pass", reasonCode: null });
       expect(result.receipt.behaviorIdentity.behaviorContractDigest).toMatch(/^sha256:/u);
       expect(result.receipt.authoritySnapshot.evaluationRole).toBe("diagnostic");
+      expect(result.receipt.authoritySnapshot.releaseAuthority).toBe(false);
+      expect(result.receipt.authoritySnapshot.reasonCode).toBe("diagnostic_result");
+      expect(result.receipt.authoritySnapshot.runDigest).toMatch(/^sha256:/u);
+      expect(result.receipt.claimedRequirements.manifestDigest).toBe(
+        createClaimedRequirementValidationFixture({ claimedRequirementIds: ["fixture-behavior"] }).manifestDigest,
+      );
       expect(result.receipt.objectiveResults).toHaveLength(10);
       expect(result.receipt.semanticReview.validation).toEqual({ valid: true, reason: null });
-      expect(result.receipt.attemptReceiptPaths).toHaveLength(10);
-      expect(result.receipt.repetitionReceiptPaths).toHaveLength(10);
+      expect(result.receipt.attemptReceipts).toHaveLength(10);
+      expect(result.receipt.repetitionReceipts).toHaveLength(10);
+      expect(result.receipt.attemptReceipts.every((receipt) => receipt.receiptDigest.startsWith("sha256:"))).toBe(true);
       expect(result.receipt.runtimeProfiles.subjects).toHaveLength(10);
       expect(result.receipt.runtimeProfiles.reviewer.verification.status).toBe("verified");
       expect(result.receiptPath).toMatch(/scenario-receipt\.json$/u);
@@ -319,6 +382,85 @@ describe("reachable v3 behavioral scenario execution", () => {
       reasonCode: "treatment_behavior_failed",
     });
     expect(result.receipt.authoritySnapshot.releaseAuthority).toBe(false);
+  });
+
+  it("requires exact parent acceptance before a fresh traced gate pass gains release authority", async () => {
+    const withoutAcceptance = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      registryFreshness: "fresh",
+    });
+    expect(withoutAcceptance.result.receipt.reduction).toMatchObject({ outcome: "pass" });
+    expect(withoutAcceptance.result.receipt.authoritySnapshot).toMatchObject({
+      releaseAuthority: false,
+      reasonCode: "missing_parent_acceptance",
+      parentAcceptanceReceiptDigest: null,
+    });
+
+    const accepted = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      registryFreshness: "fresh",
+      grantParentAcceptance: true,
+    });
+    expect(accepted.result.receipt.authoritySnapshot).toMatchObject({
+      releaseAuthority: true,
+      reasonCode: null,
+    });
+    expect(accepted.result.receipt.authoritySnapshot.parentAcceptanceReceiptDigest).toMatch(/^sha256:/u);
+    expect(accepted.result.receipt.authoritySnapshot.parentAcceptanceSourceReceipt).toMatchObject({
+      receiptPath: expect.stringContaining("authority-receipts"),
+    });
+    expect(accepted.result.receipt.authoritySnapshot.calibrationSourceReceipt).toMatchObject({
+      receiptPath: expect.stringContaining("authority-receipts"),
+    });
+    expect(accepted.result.receipt.authoritySnapshot.calibrationAuthorityReceiptDigest).toMatch(/^sha256:/u);
+  });
+
+  it("changes the accepted run digest when semantic evidence changes under the same passing outcome", async () => {
+    const first = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      registryFreshness: "fresh",
+      grantParentAcceptance: true,
+      semanticAnchorEndOffset: 9,
+    });
+    const second = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      registryFreshness: "fresh",
+      grantParentAcceptance: true,
+      semanticAnchorEndOffset: 8,
+    });
+
+    expect(first.result.receipt.reduction.outcome).toBe("pass");
+    expect(second.result.receipt.reduction.outcome).toBe("pass");
+    expect(first.result.receipt.authoritySnapshot.runDigest).not.toBe(
+      second.result.receipt.authoritySnapshot.runDigest,
+    );
+    expect(first.result.receipt.semanticReview.candidate).not.toEqual(
+      second.result.receipt.semanticReview.candidate,
+    );
+  });
+
+  it("rejects calibration authority that is not the registry's exact referenced receipt", async () => {
+    await expect(runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      registryFreshness: "fresh",
+      calibrationSourceDigestOverride: fixtureAuthorityDigest("9"),
+    })).rejects.toThrow(/does not match the registry calibration receipt/u);
+  });
+
+  it("withholds release authority when the claimed requirement manifest is untraced", async () => {
+    const { result } = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      registryFreshness: "fresh",
+      grantParentAcceptance: true,
+      claimedRequirementStatus: "not_evaluated",
+    });
+
+    expect(result.receipt.reduction).toMatchObject({ outcome: "pass" });
+    expect(result.receipt.authoritySnapshot).toMatchObject({
+      releaseAuthority: false,
+      reasonCode: "untraced_behavior_requirement",
+    });
+    expect(result.receipt.claimedRequirements.untracedRequirementIds).toEqual(["fixture-behavior"]);
   });
 
   it("rejects a non-comparable repetition set before semantic review", async () => {
@@ -441,6 +583,7 @@ describe("reachable v3 behavioral scenario execution", () => {
           attemptNumber: 1,
           repetition,
         });
+        if (request.signal.aborted) throw new Error("scenario aborted");
         await new Promise<void>((_resolve, reject) => {
           request.signal.addEventListener("abort", () => reject(new Error("scenario aborted")), { once: true });
         });
@@ -450,8 +593,8 @@ describe("reachable v3 behavioral scenario execution", () => {
     });
 
     expect(result.receipt.reduction).toMatchObject({ outcome: "infrastructure_error", reasonCode: "scenario_deadline" });
-    expect(result.receipt.attemptReceiptPaths).toContain(completedAttemptPath);
-    expect(result.receipt.progressReceiptPaths.length).toBeGreaterThan(1);
+    expect(result.receipt.attemptReceipts.map((receipt) => receipt.receiptPath)).toContain(completedAttemptPath);
+    expect(result.receipt.progressReceipts.length).toBeGreaterThan(1);
     expect(result.receipt.lastDurableStage).toBe("scenario_receipt_published");
   });
 });
