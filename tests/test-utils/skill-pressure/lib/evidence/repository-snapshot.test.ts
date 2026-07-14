@@ -101,4 +101,27 @@ describe("repository snapshot evidence", () => {
       expect.objectContaining({ artifactId: "result", path: "docs/result.md", status: "observed", contentExcerpt: "result" }),
     ]);
   });
+
+  it("records the byte size and digest when artifact content exceeds the evaluation ceiling", async () => {
+    const root = await repository();
+    await mkdir(path.join(root, "docs"), { recursive: true });
+    await writeFile(path.join(root, "docs", "result.md"), "x".repeat(1_000_001));
+    const snapshot = await collectRepositorySnapshot({ repositoryDirectory: root });
+
+    expect(deriveExpectedArtifactFacts({
+      postRunSnapshot: snapshot,
+      expectedArtifacts: [
+        { artifactId: "result", path: "docs/result.md", fileType: "file", contentContract: "result" },
+      ],
+    })).toEqual([
+      expect.objectContaining({
+        artifactId: "result",
+        status: "observed",
+        contentByteLength: 1_000_001,
+        contentDigest: expect.stringMatching(/^sha256:/u),
+        contentExcerpt: "x".repeat(2_000),
+        contentUnavailableReason: "artifact content exceeds the 1000000-byte evaluation ceiling",
+      }),
+    ]);
+  });
 });

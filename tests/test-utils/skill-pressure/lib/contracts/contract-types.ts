@@ -21,7 +21,7 @@ export interface DeterministicCheck {
     | "tool_observations"
     | `path:${string}`
     | `artifact:${string}`;
-  readonly operator: "equals" | "contains" | "matches" | "not_matches" | "exists" | "absent";
+  readonly operator: "equals" | "contains" | "excludes" | "matches" | "not_matches" | "exists" | "absent";
   readonly expected?: unknown;
 }
 

@@ -9,6 +9,10 @@ export interface RepositorySnapshotEntry {
   readonly kind: "file" | "directory";
   readonly contentDigest: string | null;
   readonly contentExcerpt: string | null;
+  readonly contentByteLength?: number;
+  readonly contentUnavailableReason?: string;
+  /** Evaluation-only content is installed as a non-enumerable field by the collector. */
+  readonly contentForEvaluation?: string | null;
 }
 
 export interface RepositorySnapshotOmission {
@@ -60,10 +64,15 @@ export interface ExpectedArtifactFact {
   readonly kind: RepositorySnapshotEntry["kind"] | null;
   readonly contentDigest: string | null;
   readonly contentExcerpt: string | null;
+  readonly contentByteLength: number | null;
+  readonly contentUnavailableReason: string | null;
+  /** Evaluation-only content is deliberately absent from serialized receipts. */
+  readonly contentForEvaluation?: string | null;
   readonly reason: string | null;
 }
 
 const DEFAULT_EXCERPT_LIMIT = 2_000;
+export const MAX_ARTIFACT_EVALUATION_CONTENT_BYTES = 1_000_000;
 const EXCLUDED_TOP_LEVEL_DIRECTORIES = new Set([".git", ".codex"]);
 const EXCLUDED_TOP_LEVEL_FILES = new Set([
   ".skill-pressure-prompt.md",
@@ -81,6 +90,7 @@ export async function collectRepositorySnapshot(
     repositoryDirectory,
     relativeDirectory: "",
     excerptLimit: props.excerptLimit ?? DEFAULT_EXCERPT_LIMIT,
+    evaluationContentCeiling: MAX_ARTIFACT_EVALUATION_CONTENT_BYTES,
     entries,
     omissions,
   });
@@ -170,6 +180,7 @@ async function collectDirectory(props: {
   readonly repositoryDirectory: string;
   readonly relativeDirectory: string;
   readonly excerptLimit: number;
+  readonly evaluationContentCeiling: number;
   readonly entries: RepositorySnapshotEntry[];
   readonly omissions: RepositorySnapshotOmission[];
 }): Promise<void> {
@@ -200,12 +211,20 @@ async function collectDirectory(props: {
       continue;
     }
     const content = await readFile(absolutePath);
-    props.entries.push({
+    const contentByteLength = content.byteLength;
+    const contentUnavailableReason = contentByteLength > props.evaluationContentCeiling
+      ? `artifact content exceeds the ${props.evaluationContentCeiling}-byte evaluation ceiling`
+      : undefined;
+    const entry: RepositorySnapshotEntry = {
       path: relativePath,
       kind: "file",
       contentDigest: `sha256:${createHash("sha256").update(content).digest("hex")}`,
       contentExcerpt: content.toString("utf8").slice(0, props.excerptLimit),
-    });
+      contentByteLength,
+      ...(contentUnavailableReason === undefined ? {} : { contentUnavailableReason }),
+    };
+    setEvaluationContent(entry, contentUnavailableReason === undefined ? content.toString("utf8") : null);
+    props.entries.push(entry);
   }
 }
 
@@ -217,7 +236,12 @@ function isRunnerOwned(relativePath: string): boolean {
 }
 
 function observedArtifact(artifact: ExpectedArtifact, entry: RepositorySnapshotEntry): ExpectedArtifactFact {
-  return {
+  const contentUnavailableReason = entry.kind === "file"
+    ? entry.contentUnavailableReason ?? (entry.contentForEvaluation === undefined
+      ? "artifact content was unavailable for evaluation"
+      : null)
+    : "artifact is not a regular file";
+  const fact: ExpectedArtifactFact = {
     artifactId: artifact.artifactId,
     path: artifact.path,
     expectedKind: artifact.fileType,
@@ -225,8 +249,12 @@ function observedArtifact(artifact: ExpectedArtifact, entry: RepositorySnapshotE
     kind: entry.kind,
     contentDigest: entry.contentDigest,
     contentExcerpt: entry.contentExcerpt,
+    contentByteLength: entry.contentByteLength ?? null,
+    contentUnavailableReason,
     reason: null,
   };
+  setEvaluationContent(fact, entry.contentForEvaluation ?? null);
+  return fact;
 }
 
 function missingArtifact(artifact: ExpectedArtifact): ExpectedArtifactFact {
@@ -238,6 +266,8 @@ function missingArtifact(artifact: ExpectedArtifact): ExpectedArtifactFact {
     kind: null,
     contentDigest: null,
     contentExcerpt: null,
+    contentByteLength: null,
+    contentUnavailableReason: null,
     reason: "artifact path was absent from the post-run snapshot",
   };
 }
@@ -251,8 +281,23 @@ function unavailableArtifact(artifact: ExpectedArtifact, reason: string): Expect
     kind: null,
     contentDigest: null,
     contentExcerpt: null,
+    contentByteLength: null,
+    contentUnavailableReason: reason,
     reason,
   };
+}
+
+function setEvaluationContent<TEntry extends { readonly contentForEvaluation?: string | null }>(
+  entry: TEntry,
+  contentForEvaluation: string | null,
+): TEntry {
+  Object.defineProperty(entry, "contentForEvaluation", {
+    configurable: false,
+    enumerable: false,
+    value: contentForEvaluation,
+    writable: false,
+  });
+  return entry;
 }
 
 function comparePath(left: { readonly path: string }, right: { readonly path: string }): number {

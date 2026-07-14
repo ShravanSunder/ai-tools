@@ -131,18 +131,18 @@ function evaluateDeterministicCheck(
     const omission = evidence.repositoryFacts.omissions.find((item) => item.path === relativePath);
     if (omission !== undefined) return notEvaluated(check, omission.reason);
     const entry = evidence.repositoryFacts.files.find((item) => item.path === relativePath);
-    return evaluateOptionalFact(check, entry?.contentExcerpt ?? null, entry !== undefined, "repository path");
+    return evaluateOptionalFact(
+      check,
+      entry?.contentForEvaluation ?? null,
+      entry !== undefined,
+      "repository path",
+      entry?.contentUnavailableReason ?? null,
+    );
   }
   const artifactId = check.fact.slice("artifact:".length);
   const artifact = evidence.repositoryFacts.artifacts.find((item) => item.artifactId === artifactId);
   if (artifact === undefined) return notEvaluated(check, `artifact ${artifactId} was not declared`);
-  if (artifact.status === "not_evaluated") return notEvaluated(check, artifact.reason ?? "artifact was not evaluated");
-  return evaluateOptionalFact(
-    check,
-    artifact.contentExcerpt,
-    artifact.status === "observed",
-    `artifact ${artifactId}`,
-  );
+  return evaluateArtifactCheck(check, artifact);
 }
 
 function evaluateOptionalFact(
@@ -150,6 +150,7 @@ function evaluateOptionalFact(
   content: string | null,
   exists: boolean,
   label: string,
+  contentUnavailableReason: string | null = null,
 ): DeterministicCheckResult {
   if (check.operator === "exists") {
     return exists ? passed(check, `${label} exists`) : failed(check, `${label} is absent`);
@@ -158,8 +159,40 @@ function evaluateOptionalFact(
     return exists ? failed(check, `${label} exists`) : passed(check, `${label} is absent`);
   }
   if (!exists) return failed(check, `${label} is absent`);
+  if (contentUnavailableReason !== null) return notEvaluated(check, contentUnavailableReason);
   if (content === null) return notEvaluated(check, `${label} has no text content`);
   return evaluateTextCheck(check, content);
+}
+
+function evaluateArtifactCheck(
+  check: DeterministicCheck,
+  artifact: NormalizedRepetitionEvidence["repositoryFacts"]["artifacts"][number],
+): DeterministicCheckResult {
+  const label = `artifact ${artifact.artifactId}`;
+  const exists = artifact.status === "observed";
+  if (check.operator === "exists" || check.operator === "absent") {
+    return evaluateOptionalFact(check, null, exists, label);
+  }
+  if (!exists) {
+    return artifact.status === "not_evaluated"
+      ? notEvaluated(check, artifact.reason ?? "artifact was not evaluated")
+      : failed(check, `${label} is absent`);
+  }
+  if (check.operator === "equals") {
+    if (check.expected !== "file" && check.expected !== "directory") {
+      return notEvaluated(check, "artifact kind comparison requires file or directory expected value");
+    }
+    return artifact.kind === check.expected
+      ? passed(check, "artifact kind comparison passed")
+      : failed(check, "artifact kind comparison failed");
+  }
+  return evaluateOptionalFact(
+    check,
+    artifact.contentForEvaluation ?? null,
+    true,
+    label,
+    artifact.contentUnavailableReason,
+  );
 }
 
 function evaluateTextCheck(check: DeterministicCheck, actual: string): DeterministicCheckResult {
@@ -174,12 +207,22 @@ function evaluateTextCheck(check: DeterministicCheck, actual: string): Determini
     ? actual === check.expected
     : check.operator === "contains"
       ? actual.includes(check.expected)
+      : check.operator === "excludes"
+        ? !actual.includes(check.expected)
       : check.operator === "not_matches"
-        ? !compilePattern(check.expected).test(actual)
-        : compilePattern(check.expected).test(actual);
+        ? !matchesPattern(check.expected, actual)
+        : matchesPattern(check.expected, actual);
   return matched
     ? passed(check, `${check.operator} comparison passed`)
     : failed(check, `${check.operator} comparison failed`);
+}
+
+function matchesPattern(pattern: string, actual: string): boolean {
+  try {
+    return compilePattern(pattern).test(actual);
+  } catch {
+    return false;
+  }
 }
 
 function compilePattern(pattern: string): RegExp {
@@ -211,10 +254,7 @@ function normalizeRepositoryEvidence(evidence: RepositoryEvidence): RepositoryEv
     },
     artifacts: [...evidence.artifacts]
       .sort((left, right) => left.artifactId.localeCompare(right.artifactId) || left.path.localeCompare(right.path))
-      .map((artifact) => ({
-        ...artifact,
-        contentExcerpt: artifact.contentExcerpt === null ? null : bound(artifact.contentExcerpt, DEFAULT_EXCERPT_LIMIT),
-      })),
+      .map(normalizeArtifactFact),
     omissions: normalizeOmissions(evidence.omissions),
   };
 }
@@ -226,7 +266,31 @@ function normalizeSnapshotEntries(facts: readonly RepositorySnapshotEntry[]): re
 }
 
 function normalizeSnapshotEntry<TEntry extends RepositorySnapshotEntry>(fact: TEntry): TEntry {
-  return { ...fact, contentExcerpt: fact.contentExcerpt === null ? null : bound(fact.contentExcerpt, DEFAULT_EXCERPT_LIMIT) };
+  const normalized = { ...fact, contentExcerpt: fact.contentExcerpt === null ? null : bound(fact.contentExcerpt, DEFAULT_EXCERPT_LIMIT) };
+  return setEvaluationContent(normalized, fact.contentForEvaluation ?? null) as TEntry;
+}
+
+function normalizeArtifactFact(
+  artifact: NormalizedRepetitionEvidence["repositoryFacts"]["artifacts"][number],
+): NormalizedRepetitionEvidence["repositoryFacts"]["artifacts"][number] {
+  const normalized = {
+    ...artifact,
+    contentExcerpt: artifact.contentExcerpt === null ? null : bound(artifact.contentExcerpt, DEFAULT_EXCERPT_LIMIT),
+  };
+  return setEvaluationContent(normalized, artifact.contentForEvaluation ?? null);
+}
+
+function setEvaluationContent<TEntry extends { readonly contentForEvaluation?: string | null }>(
+  entry: TEntry,
+  contentForEvaluation: string | null,
+): TEntry {
+  Object.defineProperty(entry, "contentForEvaluation", {
+    configurable: false,
+    enumerable: false,
+    value: contentForEvaluation,
+    writable: false,
+  });
+  return entry;
 }
 
 function normalizeOmissions(omissions: RepositoryEvidence["omissions"]): RepositoryEvidence["omissions"] {

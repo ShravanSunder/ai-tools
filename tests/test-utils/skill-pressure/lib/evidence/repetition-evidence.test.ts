@@ -186,6 +186,7 @@ describe("repetition evidence", () => {
               kind: "file",
               contentDigest: "sha256:result",
               contentExcerpt: "verified report",
+              contentForEvaluation: "verified report",
             }],
             omissions: [],
           },
@@ -211,6 +212,103 @@ describe("repetition evidence", () => {
       { checkId: "artifact", outcome: "pass", reason: "contains comparison passed" },
       { checkId: "forbidden", outcome: "pass", reason: "repository path is absent" },
       { checkId: "forbidden-tool", outcome: "pass", reason: "not_matches comparison passed" },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "ignores required text in the visible response and a different artifact",
+      check: { checkId: "target-only", fact: "artifact:target", operator: "contains", expected: "required text" },
+      targetContent: "safe content",
+      otherContent: "required text",
+      expectedOutcome: "behavior_fail",
+    },
+    {
+      name: "fails forbidden literal text in the target artifact",
+      check: { checkId: "forbidden", fact: "artifact:target", operator: "excludes", expected: "forbidden text" },
+      targetContent: "contains forbidden text",
+      otherContent: "safe content",
+      expectedOutcome: "behavior_fail",
+    },
+    {
+      name: "evaluates required text beyond the persisted excerpt boundary",
+      check: { checkId: "complete-content", fact: "artifact:target", operator: "contains", expected: "required tail" },
+      targetContent: `${"x".repeat(2_000)}required tail`,
+      otherContent: "safe content",
+      expectedOutcome: "pass",
+    },
+  ] as const)("$name", ({ check, targetContent, otherContent, expectedOutcome }) => {
+    const evidence = normalizeRepetitionEvidence({
+      receipt: {
+        ...receipt(),
+        transcript: { ...receipt().transcript, visibleResponse: "required text" },
+        repositoryEvidence: createRepositoryEvidence({
+          beforeRunSnapshot: { repositoryDirectory: "/tmp/fixture", entries: [], omissions: [] },
+          postRunSnapshot: {
+            repositoryDirectory: "/tmp/fixture",
+            entries: [
+              {
+                path: "reports/other.md",
+                kind: "file",
+                contentDigest: "sha256:other",
+                contentExcerpt: otherContent.slice(0, 2_000),
+                contentForEvaluation: otherContent,
+              },
+              {
+                path: "reports/target.md",
+                kind: "file",
+                contentDigest: "sha256:target",
+                contentExcerpt: targetContent.slice(0, 2_000),
+                contentForEvaluation: targetContent,
+              },
+            ],
+            omissions: [],
+          },
+          expectedArtifacts: [
+            { artifactId: "other", path: "reports/other.md", fileType: "file", contentContract: "other" },
+            { artifactId: "target", path: "reports/target.md", fileType: "file", contentContract: "target" },
+          ],
+        }),
+      },
+    });
+
+    expect(evaluateDeterministicChecks(evidence, [check])).toEqual([
+      expect.objectContaining({ checkId: check.checkId, outcome: expectedOutcome }),
+    ]);
+    expect(evidence.repositoryFacts.artifacts.find((artifact) => artifact.artifactId === "target")?.contentExcerpt)
+      .not.toContain("required tail");
+  });
+
+  it("fails closed when target content is unavailable above the evaluation ceiling", () => {
+    const evidence = normalizeRepetitionEvidence({
+      receipt: {
+        ...receipt(),
+        repositoryEvidence: createRepositoryEvidence({
+          beforeRunSnapshot: { repositoryDirectory: "/tmp/fixture", entries: [], omissions: [] },
+          postRunSnapshot: {
+            repositoryDirectory: "/tmp/fixture",
+            entries: [{
+              path: "reports/target.md",
+              kind: "file",
+              contentDigest: "sha256:target",
+              contentExcerpt: "x".repeat(2_000),
+              contentForEvaluation: null,
+              contentByteLength: 1_000_001,
+              contentUnavailableReason: "artifact content exceeds the 1000000-byte evaluation ceiling",
+            }],
+            omissions: [],
+          },
+          expectedArtifacts: [
+            { artifactId: "target", path: "reports/target.md", fileType: "file", contentContract: "target" },
+          ],
+        }),
+      },
+    });
+
+    expect(evaluateDeterministicChecks(evidence, [
+      { checkId: "complete-content", fact: "artifact:target", operator: "contains", expected: "required tail" },
+    ])).toEqual([
+      expect.objectContaining({ outcome: "not_evaluated", reason: "artifact content exceeds the 1000000-byte evaluation ceiling" }),
     ]);
   });
 
