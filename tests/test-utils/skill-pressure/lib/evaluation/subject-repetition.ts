@@ -75,6 +75,7 @@ export interface RunSubjectRepetitionProps {
   readonly disabledAmbientSkillPaths: readonly string[];
   readonly timeoutSeconds: number;
   readonly redactionSecrets: readonly string[];
+  readonly signal?: AbortSignal;
   readonly execute?: (command: ExecutableAcpxCommand) => Promise<AcpxProcessExecution>;
 }
 
@@ -197,7 +198,10 @@ export async function runSubjectRepetition(
   });
   const beforeRunSnapshot = await collectRepositorySnapshot({ repositoryDirectory });
   const startedAt = performance.now();
-  const execution = await (props.execute ?? executeAcpxCommand)(command);
+  const execution = await (props.execute ?? executeAcpxCommand)({
+    ...command,
+    ...(props.signal === undefined ? {} : { signal: props.signal }),
+  });
   const durationMs = Math.round(performance.now() - startedAt);
   const postRunSnapshot = await collectRepositorySnapshot({ repositoryDirectory });
   const repositoryEvidence = createRepositoryEvidence({

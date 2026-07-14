@@ -25,6 +25,12 @@ export interface RunScenarioRepetitionsProps {
   readonly runRepetition?: (
     props: RunSubjectRepetitionProps,
   ) => Promise<SubjectRepetitionReceipt>;
+  readonly persistAttemptReceipt?: (props: {
+    readonly receipt: SubjectRepetitionReceipt;
+    readonly variant: "baseline" | "treatment";
+    readonly repetitionNumber: number;
+    readonly attemptNumber: number;
+  }) => Promise<string>;
 }
 
 export interface ScenarioRepetitionSetReceipt {
@@ -45,6 +51,7 @@ export interface RepetitionAttemptReceipt {
   readonly variant: "baseline" | "treatment";
   readonly repetitionNumber: number;
   readonly receipts: readonly SubjectRepetitionReceipt[];
+  readonly durableAttemptReceiptPaths: readonly string[];
   readonly selectedRepetitionId: string;
 }
 
@@ -94,6 +101,7 @@ export async function runScenarioRepetitions(
       selectedSkillSource: props.baselineSource,
       repetitionNumber: repetitionIndex + 1,
       infrastructureRetries,
+      persistAttemptReceipt: props.persistAttemptReceipt,
     });
     baseline.push(baselineAttempt.selected);
     attempts.push(baselineAttempt.receipt);
@@ -104,6 +112,7 @@ export async function runScenarioRepetitions(
       selectedSkillSource: props.treatmentSource,
       repetitionNumber: repetitionIndex + 1,
       infrastructureRetries,
+      persistAttemptReceipt: props.persistAttemptReceipt,
     });
     treatment.push(treatmentAttempt.selected);
     attempts.push(treatmentAttempt.receipt);
@@ -152,15 +161,33 @@ async function runWithInfrastructureRetries(props: {
   readonly selectedSkillSource: SelectedSkillSource;
   readonly repetitionNumber: number;
   readonly infrastructureRetries: number;
+  readonly persistAttemptReceipt: RunScenarioRepetitionsProps["persistAttemptReceipt"];
 }): Promise<{ readonly selected: SubjectRepetitionReceipt; readonly receipt: RepetitionAttemptReceipt }> {
   const receipts: SubjectRepetitionReceipt[] = [];
+  const durableAttemptReceiptPaths: string[] = [];
   for (let attempt = 0; attempt <= props.infrastructureRetries; attempt += 1) {
+    if (props.repetitionProps.signal?.aborted) {
+      throw new Error("runner abort signal is already aborted; refusing to launch another repetition attempt");
+    }
     const receipt = await props.runRepetition({
       ...props.repetitionProps,
       variant: props.variant,
       selectedSkillSource: props.selectedSkillSource,
     });
     receipts.push(receipt);
+    const durableAttemptReceiptPath = await props.persistAttemptReceipt?.({
+      receipt,
+      variant: props.variant,
+      repetitionNumber: props.repetitionNumber,
+      attemptNumber: attempt + 1,
+    });
+    if (durableAttemptReceiptPath !== undefined) durableAttemptReceiptPaths.push(durableAttemptReceiptPath);
+    if (props.repetitionProps.signal?.aborted) {
+      if (receipt.status === "executed") {
+        throw new Error("runner abort signal fired after a durable attempt receipt; refusing to accept the successful attempt");
+      }
+      throw new Error("runner abort signal fired after a failed attempt; refusing retry");
+    }
     if (receipt.status === "executed") break;
   }
   const selected = receipts.at(-1);
@@ -171,6 +198,7 @@ async function runWithInfrastructureRetries(props: {
       variant: props.variant,
       repetitionNumber: props.repetitionNumber,
       receipts,
+      durableAttemptReceiptPaths,
       selectedRepetitionId: selected.repetitionId,
     },
   };

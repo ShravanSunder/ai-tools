@@ -65,6 +65,25 @@ describe("ACPX command contract", () => {
     });
   });
 
+  it("passes one runner-owned abort signal through to supervised execution", async () => {
+    const abortController = new AbortController();
+    const resultPromise = executeAcpxCommand({
+      executable: process.execPath,
+      args: ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000);"],
+      cwd: process.cwd(),
+      environment: {},
+      timeoutMs: 5_000,
+      terminationGraceMs: 20,
+      signal: abortController.signal,
+    });
+    setTimeout(() => abortController.abort(), 20);
+
+    await expect(resultPromise).resolves.toMatchObject({
+      timedOut: false,
+      supervisorReceipt: { outcome: "cancelled", cleanup: { termSent: true } },
+    });
+  });
+
   it("prefers global acpx, then pnpm dlx, then npx", async () => {
     const executableRoot = await mkdtemp(path.join(tmpdir(), "acpx-launcher-"));
     const pnpmPath = path.join(executableRoot, "pnpm");

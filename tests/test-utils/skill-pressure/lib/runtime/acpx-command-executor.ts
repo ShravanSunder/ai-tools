@@ -30,6 +30,7 @@ export interface ExecutableAcpxCommand {
   readonly environment: Readonly<Record<string, string>>;
   readonly timeoutMs?: number;
   readonly terminationGraceMs?: number;
+  readonly signal?: AbortSignal;
 }
 
 export interface AcpxProcessExecution {
@@ -105,6 +106,7 @@ export async function executeAcpxCommand(
     timeoutMs: command.timeoutMs ?? inferWrapperTimeoutMs(command.args),
     terminationGraceMs:
       command.terminationGraceMs ?? DEFAULT_TERMINATION_GRACE_MS,
+    ...(command.signal === undefined ? {} : { signal: command.signal }),
   });
   const timedOut = result.receipt.outcome === "timed_out" ||
     result.receipt.exitCode === 3;

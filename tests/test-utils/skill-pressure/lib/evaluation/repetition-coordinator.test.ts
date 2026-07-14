@@ -1,7 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import type { AcpxTranscriptFacts } from "../collector/acpx-transcript-collector.js";
-import type { SubjectRepetitionReceipt } from "./subject-repetition.js";
+import type { RunSubjectRepetitionProps, SubjectRepetitionReceipt } from "./subject-repetition.js";
 import {
   runScenarioRepetitions,
   selectBaselineSkillSource,
@@ -240,5 +240,63 @@ describe("scenario repetition coordinator", () => {
       "executed",
     ]);
     expect(result.baseline[0]?.repetitionId).toBe(result.attempts[0]?.selectedRepetitionId);
+  });
+
+  it("persists failed attempts before retrying and records their immutable receipt paths", async () => {
+    let sequence = 0;
+    let failedOnce = false;
+    const persistedStatuses: string[] = [];
+    const result = await runScenarioRepetitions({
+      ...props(async (input) => {
+        sequence += 1;
+        if (!failedOnce && input.variant === "baseline") {
+          failedOnce = true;
+          return receipt({ sequence, variant: input.variant, status: "infrastructure_error" });
+        }
+        return receipt({ sequence, variant: input.variant });
+      }),
+      infrastructureRetries: 1,
+      persistAttemptReceipt: async ({ receipt: attemptReceipt, attemptNumber }) => {
+        persistedStatuses.push(attemptReceipt.status);
+        return `/tmp/attempt-${attemptNumber}-${attemptReceipt.repetitionId}.json`;
+      },
+    });
+
+    expect(persistedStatuses.slice(0, 2)).toEqual(["infrastructure_error", "executed"]);
+    expect(result.attempts[0]?.durableAttemptReceiptPaths).toHaveLength(2);
+  });
+
+  it("refuses a retry after the runner-owned abort signal fires", async () => {
+    const abortController = new AbortController();
+    const runRepetition = vi.fn(async (input: RunSubjectRepetitionProps) => {
+      abortController.abort();
+      return receipt({ sequence: 1, variant: input.variant, status: "infrastructure_error" });
+    });
+
+    await expect(runScenarioRepetitions({
+      ...props(runRepetition),
+      infrastructureRetries: 1,
+      repetitionProps: { ...props(runRepetition).repetitionProps, signal: abortController.signal },
+    })).rejects.toThrow(/refusing retry/u);
+    expect(runRepetition).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not accept a final successful attempt after cancellation fires during durable persistence", async () => {
+    const abortController = new AbortController();
+    let sequence = 0;
+    const runRepetition = vi.fn(async (input: RunSubjectRepetitionProps) => receipt({
+      sequence: ++sequence,
+      variant: input.variant,
+    }));
+
+    await expect(runScenarioRepetitions({
+      ...props(runRepetition),
+      repetitionProps: { ...props(runRepetition).repetitionProps, signal: abortController.signal },
+      persistAttemptReceipt: async ({ variant, repetitionNumber, attemptNumber }) => {
+        if (variant === "treatment" && repetitionNumber === 5 && attemptNumber === 1) abortController.abort();
+        return `/tmp/${variant}-${repetitionNumber}-${attemptNumber}.json`;
+      },
+    })).rejects.toThrow(/abort.*durable/u);
+    expect(runRepetition).toHaveBeenCalledTimes(10);
   });
 });
