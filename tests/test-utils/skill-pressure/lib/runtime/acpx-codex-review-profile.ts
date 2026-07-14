@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
+import { ACPX_LUNA_XHIGH_SUBJECT_PROFILE } from "./runtime-profile.js";
 
 export interface AcpxCodexReviewProfile {
   readonly launcher: AcpxLauncher;
@@ -9,8 +10,8 @@ export interface AcpxCodexReviewProfile {
   readonly mcpConfigPath: string;
   readonly packetPath: string;
   readonly packetDigest: string;
-  readonly model: "gpt-5.6-luna";
-  readonly reasoningEffort: "medium";
+  readonly model: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel;
+  readonly reasoningEffort: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort;
   readonly timeoutSeconds: number;
 }
 

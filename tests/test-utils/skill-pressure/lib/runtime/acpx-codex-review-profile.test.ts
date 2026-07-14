@@ -10,15 +10,15 @@ const profile = {
   packetPath: "/tmp/skill-pressure/review-1/packet.json",
   packetDigest: "sha256:packet",
   model: "gpt-5.6-luna",
-  reasoningEffort: "medium",
+  reasoningEffort: "xhigh",
   timeoutSeconds: 120,
 } satisfies AcpxCodexReviewProfile;
 
 describe("ACPX Codex review profile", () => {
-  it("builds the one-shot Luna/medium blind-review command", () => {
+  it("builds the one-shot Luna/xhigh blind-review command", () => {
     const command = buildAcpxCodexReviewCommand(profile);
 
-    expect(command.args).toContain("gpt-5.6-luna[medium]");
+    expect(command.args).toContain("gpt-5.6-luna[xhigh]");
     expect(command.args).toContain("--deny-all");
     expect(command.args).toContain("--no-terminal");
     expect(command.args.slice(-3)).toEqual(["exec", "--file", profile.packetPath]);

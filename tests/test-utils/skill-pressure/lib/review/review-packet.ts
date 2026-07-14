@@ -164,13 +164,13 @@ export function validateReviewRoute(props: {
     props.route.kind === "blind" &&
     props.route.freshContext &&
     props.route.reviewer.provider === "claude" &&
-    props.route.reviewer.model === "opus" &&
-    props.route.reviewer.reasoningEffort === "high" &&
+    props.route.reviewer.model === "claude-opus-4-1" &&
+    props.route.reviewer.reasoningEffort === "xhigh" &&
     props.route.reviewer.runtime === "acpx"
   ) {
     return { allowed: true, reason: null };
   }
-  return { allowed: false, reason: "high-risk review requires fresh ACPX Claude Opus/high" };
+  return { allowed: false, reason: "high-risk review requires fresh ACPX Claude Opus/xhigh" };
 }
 
 export function createReviewReceipt(props: CreateReviewReceiptProps): ReviewReceipt {

@@ -91,7 +91,7 @@ async function props(risk: "standard" | "high"): Promise<ExecuteBlindReviewProps
 }
 
 describe("automated ACPX blind review", () => {
-  it("uses a sealed isolated Luna/medium review packet and leaves a cleanup receipt", async () => {
+  it("uses a sealed isolated Luna/xhigh review packet and leaves a cleanup receipt", async () => {
     const input = await props("standard");
     let observedArgs: readonly string[] = [];
     let observedCwd = "";
@@ -107,13 +107,18 @@ describe("automated ACPX blind review", () => {
         expect(prompt).not.toContain("expected conclusion");
         expect(prompt).not.toContain("other reviewer reasoning");
         expect(await readFile(path.join(command.cwd, "mcp.json"), "utf8")).toBe('{"mcpServers":[]}\n');
-        return reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "medium" });
+        return reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "xhigh" });
       },
     });
 
-    expect(observedArgs).toContain("gpt-5.6-luna[medium]");
+    expect(observedArgs).toContain("gpt-5.6-luna[xhigh]");
     expect(receipt.outcome).toBe("pass");
-    expect(receipt.reviewReceipt?.reviewer).toMatchObject({ provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "medium" });
+    expect(receipt.reviewReceipt?.reviewer).toMatchObject({ provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" });
+    expect(receipt.runtime.profile).toMatchObject({
+      requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+      providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+      verification: { status: "verified", reasonCode: null },
+    });
     expect(receipt.cleanup).toEqual({ reviewCwdRemoved: true, cleanupError: null });
     expect(receipt.runtime.sessionId).toBe("review-session");
     expect(receipt.runtime.usageDigest).toMatch(/^sha256:/u);
@@ -121,31 +126,35 @@ describe("automated ACPX blind review", () => {
     await expect(stat(observedCwd)).rejects.toMatchObject({ code: "ENOENT" });
   });
 
-  it("routes high-risk review to one fresh Claude Opus/high ACPX command", async () => {
+  it("routes high-risk review to one fresh exact Claude Opus/xhigh ACPX command", async () => {
     const input = await props("high");
     const receipt = await executeAutomatedBlindReview({
       ...input,
       execute: async (command) => {
-        expect(command.args).toContain("opus[high]");
+        expect(command.args).toContain("claude-opus-4-1[xhigh]");
         expect(command.args).toContain("claude");
-        expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" });
-        return reviewExecution({ model: "opus", reasoningEffort: "high", sessionId: "fresh-opus-session" });
+        expect(command.environment).toEqual({
+          ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1",
+          ANTHROPIC_CUSTOM_MODEL_OPTION: "claude-opus-4-1[xhigh]",
+          ANTHROPIC_MODEL: "claude-opus-4-1[xhigh]",
+        });
+        return reviewExecution({ model: "claude-opus-4-1", reasoningEffort: "xhigh", sessionId: "fresh-opus-session" });
       },
     });
 
     expect(receipt.outcome).toBe("pass");
-    expect(receipt.command).toMatchObject({ provider: "claude", model: "opus", reasoningEffort: "high", oneFreshExecution: true });
+    expect(receipt.command).toMatchObject({ provider: "claude", model: "claude-opus-4-1", reasoningEffort: "xhigh", oneFreshExecution: true });
     expect(receipt.reviewReceipt?.route).toMatchObject({ kind: "blind", freshContext: true });
   });
 
   it("never passes malformed reviewer output or missing usage evidence", async () => {
     const malformed = await executeAutomatedBlindReview({
       ...(await props("standard")),
-      execute: async () => reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "medium", response: "pass" }),
+      execute: async () => reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "xhigh", response: "pass" }),
     });
     const missingUsage = await executeAutomatedBlindReview({
       ...(await props("standard")),
-      execute: async () => reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "medium", usage: false }),
+      execute: async () => reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "xhigh", usage: false }),
     });
 
     expect(malformed).toMatchObject({ outcome: "not_evaluated", reviewReceipt: null, parseError: "review response is not valid JSON" });

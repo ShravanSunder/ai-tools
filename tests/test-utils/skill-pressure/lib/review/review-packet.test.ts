@@ -150,7 +150,7 @@ describe("review routing and receipts", () => {
     }).allowed).toBe(true);
   });
 
-  it("rejects a high-risk reviewer profile that is not fresh Claude Opus/high", () => {
+  it("rejects a high-risk reviewer profile that is not fresh Claude Opus/xhigh", () => {
     expect(validateReviewRoute({
       risk: "high",
       route: {
@@ -158,7 +158,7 @@ describe("review routing and receipts", () => {
         freshContext: true,
         reviewer: { reviewerId: "balanced-1", provider: "codex", model: "gpt-5.6-terra", modelCategory: "balanced", reasoningEffort: "high", runtime: "acpx" },
       },
-    })).toMatchObject({ allowed: false, reason: "high-risk review requires fresh ACPX Claude Opus/high" });
+    })).toMatchObject({ allowed: false, reason: "high-risk review requires fresh ACPX Claude Opus/xhigh" });
   });
 
   it("records the review candidate and all required digests", () => {
@@ -167,7 +167,7 @@ describe("review routing and receipts", () => {
       route: {
         kind: "blind",
         freshContext: true,
-        reviewer: { reviewerId: "opus-1", provider: "claude", model: "opus", modelCategory: "balanced", reasoningEffort: "high", runtime: "acpx" },
+        reviewer: { reviewerId: "opus-1", provider: "claude", model: "claude-opus-4-1", modelCategory: "balanced", reasoningEffort: "xhigh", runtime: "acpx" },
       },
       rubric: "Confirm every required proof gate before acting.",
       result: candidateResult(),
@@ -175,7 +175,7 @@ describe("review routing and receipts", () => {
 
     expect(receipt).toMatchObject({
       result: candidateResult(),
-      reviewer: { reviewerId: "opus-1", model: "opus", reasoningEffort: "high" },
+      reviewer: { reviewerId: "opus-1", model: "claude-opus-4-1", reasoningEffort: "xhigh" },
     });
     expect(receipt.rubricDigest).toMatch(/^sha256:/u);
     expect(receipt.resultDigest).toMatch(/^sha256:/u);

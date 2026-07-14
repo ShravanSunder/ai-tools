@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
+import { ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE } from "./runtime-profile.js";
 
 export interface AcpxClaudeReviewProfile {
   readonly launcher: AcpxLauncher;
@@ -8,8 +9,8 @@ export interface AcpxClaudeReviewProfile {
   readonly mcpConfigPath: string;
   readonly packetPath: string;
   readonly packetDigest: string;
-  readonly model: "opus";
-  readonly reasoningEffort: "high";
+  readonly model: typeof ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedModel;
+  readonly reasoningEffort: typeof ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedReasoningEffort;
   readonly timeoutSeconds: number;
 }
 
@@ -48,6 +49,8 @@ export function buildAcpxClaudeReviewCommand(
     ],
     environment: {
       ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1",
+      ANTHROPIC_CUSTOM_MODEL_OPTION: `${profile.model}[${profile.reasoningEffort}]`,
+      ANTHROPIC_MODEL: `${profile.model}[${profile.reasoningEffort}]`,
     },
   };
 }

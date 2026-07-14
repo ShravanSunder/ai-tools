@@ -10,6 +10,13 @@ import type { AcpxLauncher, AcpxProcessExecution, ExecutableAcpxCommand } from "
 import { executeAcpxCommand } from "../runtime/acpx-command-executor.js";
 import { buildAcpxClaudeReviewCommand } from "../runtime/acpx-review-profile.js";
 import { buildAcpxCodexReviewCommand } from "../runtime/acpx-codex-review-profile.js";
+import {
+  ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
+  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  verifyRuntimeProfile,
+  type RuntimeProfile,
+  type RuntimeProfileReceipt,
+} from "../runtime/runtime-profile.js";
 import { parseAcpxStructuredReview, parseReviewCandidateResult } from "./acpx-review-result.js";
 import {
   buildBlindReviewPacket,
@@ -63,6 +70,7 @@ export interface AutomatedBlindReviewReceipt {
   readonly runtime: {
     readonly launcherDigest: string;
     readonly sessionId: string | null;
+    readonly profile: RuntimeProfileReceipt;
     readonly transcriptDigest: string;
     readonly usageDigest: string | null;
   };
@@ -157,10 +165,18 @@ function buildReceipt(props: {
   readonly execution: AcpxProcessExecution;
 }): AutomatedBlindReviewReceipt {
   const transcript = collectAcpxTranscript(props.execution.stdout, { secrets: props.props.redactionSecrets });
+  const runtimeProfile = verifyRuntimeProfile({
+    profile: reviewRuntimeProfile(props.props.scenario.risk),
+    providerReported: {
+      model: transcript.resolvedModel,
+      reasoningEffort: transcript.reasoningEffort,
+    },
+  });
   const reasons = collectInfrastructureReasons({
     props: props.props,
     execution: props.execution,
     transcript,
+    runtimeProfile,
   });
   const structured = parseAcpxStructuredReview(transcript);
   const candidate = parseReviewCandidateResult(structured.structuredOutput);
@@ -231,6 +247,13 @@ function receiptBase(props: {
   readonly cleanup: { readonly reviewCwdRemoved: boolean; readonly cleanupError: string | null };
 }): Omit<AutomatedBlindReviewReceipt, "outcome" | "reviewReceipt" | "infrastructureReasons" | "parseError"> {
   const reviewer = reviewCommandIdentity(props.risk);
+  const runtimeProfile = verifyRuntimeProfile({
+    profile: reviewRuntimeProfile(props.risk),
+    providerReported: {
+      model: props.transcript?.resolvedModel ?? null,
+      reasoningEffort: props.transcript?.reasoningEffort ?? null,
+    },
+  });
   return {
     runnerVersion: RUNNER_VERSION,
     route: "blind",
@@ -258,6 +281,7 @@ function receiptBase(props: {
     runtime: {
       launcherDigest: digest(JSON.stringify({ executable: props.command.executable })),
       sessionId: props.transcript?.sessionId ?? null,
+      profile: runtimeProfile,
       transcriptDigest: digest(props.execution?.stdout ?? ""),
       usageDigest: props.transcript === null || !hasMeaningfulUsage(props.transcript.usageObservations)
         ? null
@@ -290,8 +314,8 @@ function buildReviewCommand(props: {
       mcpConfigPath: props.mcpConfigPath,
       packetPath: props.packetPath,
       packetDigest: props.packetDigest,
-      model: "opus",
-      reasoningEffort: "high",
+      model: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedModel,
+      reasoningEffort: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedReasoningEffort,
       timeoutSeconds: props.timeoutSeconds,
     });
   }
@@ -302,8 +326,8 @@ function buildReviewCommand(props: {
     mcpConfigPath: props.mcpConfigPath,
     packetPath: props.packetPath,
     packetDigest: props.packetDigest,
-    model: "gpt-5.6-luna",
-    reasoningEffort: "medium",
+    model: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel,
+    reasoningEffort: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort,
     timeoutSeconds: props.timeoutSeconds,
   });
 }
@@ -319,6 +343,7 @@ function collectInfrastructureReasons(props: {
   readonly props: ExecuteBlindReviewProps;
   readonly execution: AcpxProcessExecution;
   readonly transcript: AcpxTranscriptFacts;
+  readonly runtimeProfile: RuntimeProfileReceipt;
 }): readonly string[] {
   const expected = reviewCommandIdentity(props.props.scenario.risk);
   const reasons: string[] = [];
@@ -330,8 +355,9 @@ function collectInfrastructureReasons(props: {
   if (props.transcript.promptCount !== 1) reasons.push("ACPX execution was not one prompt");
   if (props.transcript.mcpServerCount !== 0) reasons.push("ACPX MCP configuration is not empty");
   if (props.transcript.stopReason !== "end_turn") reasons.push("ACPX turn did not end successfully");
-  if (props.transcript.resolvedModel !== expected.model) reasons.push("resolved reviewer model differs from request");
-  if (props.transcript.reasoningEffort !== expected.reasoningEffort) reasons.push("resolved reviewer reasoning effort differs from request");
+  if (props.runtimeProfile.verification.status !== "verified") {
+    reasons.push(`reviewer runtime profile is unverified: ${props.runtimeProfile.verification.reasons.join(", ")}`);
+  }
   if (props.transcript.sessionId === null) reasons.push("ACPX review session id is missing");
   if (props.transcript.sessionId !== null && props.props.subjectSessionIds.includes(props.transcript.sessionId)) {
     reasons.push("ACPX review session id was reused from a subject repetition");
@@ -358,8 +384,22 @@ function reviewCommandIdentity(risk: ScenarioRisk): {
   readonly reasoningEffort: string;
 } {
   return risk === "high"
-    ? { provider: "claude", model: "opus", reasoningEffort: "high" }
-    : { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "medium" };
+    ? {
+        provider: "claude",
+        model: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedModel,
+        reasoningEffort: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedReasoningEffort,
+      }
+    : {
+        provider: "codex",
+        model: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel,
+        reasoningEffort: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort,
+      };
+}
+
+function reviewRuntimeProfile(risk: ScenarioRisk): RuntimeProfile {
+  return risk === "high"
+    ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
+    : ACPX_LUNA_XHIGH_SUBJECT_PROFILE;
 }
 
 function hasMeaningfulUsage(observations: readonly string[]): boolean {

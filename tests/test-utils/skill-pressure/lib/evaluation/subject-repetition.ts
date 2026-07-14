@@ -26,6 +26,11 @@ import {
   buildAcpxCodexSubjectCommand,
   type AcpxPermissionMode,
 } from "../runtime/acpx-subject-profile.js";
+import {
+  createAcpxCodexRuntimeProfile,
+  verifyRuntimeProfile,
+  type RuntimeProfileReceipt,
+} from "../runtime/runtime-profile.js";
 
 const execFileAsync = promisify(execFile);
 const RUNNER_VERSION = "skill-pressure-repetition-v1";
@@ -96,6 +101,7 @@ export interface SubjectRepetitionReceipt {
   }[];
   readonly repositoryEvidence: RepositoryEvidence;
   readonly transcript: AcpxTranscriptFacts;
+  readonly runtimeProfile?: RuntimeProfileReceipt;
   readonly transcriptDigest: string;
   readonly process: {
     readonly exitCode: number;
@@ -187,7 +193,14 @@ export async function runSubjectRepetition(
     excerptLimit: 8_000,
     observationLimit: 200,
   });
-  const infrastructureReasons = collectInfrastructureReasons({ props, execution, transcript });
+  const runtimeProfile = verifyRuntimeProfile({
+    profile: createAcpxCodexRuntimeProfile({ model: props.model, reasoningEffort: props.reasoningEffort }),
+    providerReported: {
+      model: transcript.resolvedModel,
+      reasoningEffort: transcript.reasoningEffort,
+    },
+  });
+  const infrastructureReasons = collectInfrastructureReasons({ props, execution, transcript, runtimeProfile });
 
   return {
     runnerVersion: RUNNER_VERSION,
@@ -210,6 +223,7 @@ export async function runSubjectRepetition(
     disabledAmbientSkills,
     repositoryEvidence,
     transcript,
+    runtimeProfile,
     transcriptDigest: digest(execution.stdout),
     process: {
       exitCode: execution.exitCode,
@@ -280,6 +294,7 @@ function collectInfrastructureReasons(props: {
   readonly props: RunSubjectRepetitionProps;
   readonly execution: AcpxProcessExecution;
   readonly transcript: AcpxTranscriptFacts;
+  readonly runtimeProfile: RuntimeProfileReceipt;
 }): readonly string[] {
   const reasons: string[] = [];
   if (props.execution.exitCode !== 0) reasons.push(`ACPX exited ${props.execution.exitCode}`);
@@ -289,8 +304,9 @@ function collectInfrastructureReasons(props: {
   if (props.transcript.transportErrors.length > 0) reasons.push("ACPX transport reported errors");
   if (props.transcript.promptCount !== 1) reasons.push("ACPX execution was not one prompt");
   if (props.transcript.sessionId === null) reasons.push("ACPX session id is missing");
-  if (props.transcript.resolvedModel !== props.props.model) reasons.push("resolved model differs from request");
-  if (props.transcript.reasoningEffort !== props.props.reasoningEffort) reasons.push("resolved reasoning effort differs from request");
+  if (props.runtimeProfile.verification.status !== "verified") {
+    reasons.push(`runtime profile is unverified: ${props.runtimeProfile.verification.reasons.join(", ")}`);
+  }
   if (props.transcript.mcpServerCount !== 0) reasons.push("ACPX MCP configuration is not empty");
   if (props.transcript.stopReason !== "end_turn") reasons.push("ACPX turn did not end successfully");
   if (props.transcript.visibleResponse.trim() === "") reasons.push("operator response is empty");

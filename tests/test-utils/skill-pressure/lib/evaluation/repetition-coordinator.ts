@@ -7,6 +7,7 @@ import {
   type SelectedSkillSource,
   type SubjectRepetitionReceipt,
 } from "./subject-repetition.js";
+import type { ScenarioBaseline } from "../contracts/contract-types.js";
 
 const COORDINATOR_VERSION = "skill-pressure-coordinator-v1";
 
@@ -45,6 +46,29 @@ export interface RepetitionAttemptReceipt {
   readonly repetitionNumber: number;
   readonly receipts: readonly SubjectRepetitionReceipt[];
   readonly selectedRepetitionId: string;
+}
+
+export function selectBaselineSkillSource(props: {
+  readonly baseline: ScenarioBaseline;
+  readonly baselineRevision: string | null;
+  readonly repositoryRoot: string;
+  readonly skillRelativePath: string;
+}): Exclude<SelectedSkillSource, { readonly mode: "current" }> {
+  if (props.baseline === "no_skill") {
+    if (props.baselineRevision !== null) {
+      throw new Error("no-skill baseline may not declare a previous revision");
+    }
+    return { mode: "none" };
+  }
+  if (props.baselineRevision === null || !/^[a-f0-9]{40}$/u.test(props.baselineRevision)) {
+    throw new Error("previous-revision baseline requires an immutable 40-character Git revision");
+  }
+  return {
+    mode: "previous_revision",
+    repositoryRoot: props.repositoryRoot,
+    revision: props.baselineRevision,
+    skillRelativePath: props.skillRelativePath,
+  };
 }
 
 export async function runScenarioRepetitions(
@@ -109,8 +133,10 @@ export async function runScenarioRepetitions(
       runtimeIdentity: props.repetitionProps.runtimeIdentity,
       baselineSourceMode: props.baselineSource.mode,
       baselineSourceDigest: uniqueValues(baseline.map((item) => item.sourceDigest)),
+      baselineSourceRevision: uniqueValues(baseline.map((item) => item.sourceRevision)),
       treatmentSourceMode: props.treatmentSource.mode,
       treatmentSourceDigest: uniqueValues(treatment.map((item) => item.sourceDigest)),
+      treatmentSourceRevision: uniqueValues(treatment.map((item) => item.sourceRevision)),
     })),
     status: infrastructureReasons.length === 0 ? "executed" : "infrastructure_error",
     infrastructureReasons,
@@ -185,6 +211,9 @@ function collectSetInfrastructureReasons(
   }
   if (uniqueValues(baseline.map((item) => item.sourceDigest)).length !== 1) {
     reasons.push("baseline source digest differs across repetitions");
+  }
+  if (uniqueValues(baseline.map((item) => item.sourceRevision)).length !== 1) {
+    reasons.push("baseline source revision differs across repetitions");
   }
   if (uniqueValues(treatment.map((item) => item.sourceDigest)).length !== 1) {
     reasons.push("treatment source digest differs across repetitions");
