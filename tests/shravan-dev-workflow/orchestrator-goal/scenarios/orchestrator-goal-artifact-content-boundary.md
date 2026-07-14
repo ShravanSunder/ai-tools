@@ -19,13 +19,13 @@ semantic_assertions:
   - assertion_id: orchestrator-goal-artifact-content-boundary-behavior
     criterion: |-
       Assess the semantic goal quality independently of exact labels. A passing
-      response creates goal-contract.md and gives the next agent enough context to
+      goal-contract.md gives the next agent enough context to
       pursue one durable implementation outcome through proof and PR readiness
       without merging. It must state scope, non-goals, risks, proof expectations,
       and a clear terminal condition. Do not use the exact workflow-skill token or
       its byte position as a semantic criterion; those are objective artifact facts
       evaluated separately by the runner.
-    evidence_surface: response
+    evidence_surface: artifact:goal-contract
 behavior_requirement_ids:
   - orchestrator-goal-artifact-content-boundary
 baseline: no_skill

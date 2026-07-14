@@ -46,6 +46,12 @@ describe("post-cutover migration accounting", () => {
       "orchestrator-goal-artifact-content-boundary",
       "skills-creation-reference-lane-non-regression",
     ]);
+    const artifactBoundaryScenario = discovery.discovered.find(
+      (scenario) => scenario.scenarioId === "orchestrator-goal-artifact-content-boundary",
+    );
+    expect(artifactBoundaryScenario?.semanticAssertions).toEqual([
+      expect.objectContaining({ evidenceSurface: "artifact:goal-contract" }),
+    ]);
     expect(receipt.retiredScenarios).toEqual([]);
     expect(receipt.ownerCount).toBe(EXPECTED_MIGRATED_OWNER_COUNT);
     expect(receipt.legacyAuthorityAbsent).toBe(true);
