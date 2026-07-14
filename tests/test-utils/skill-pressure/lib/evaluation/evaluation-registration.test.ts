@@ -5,9 +5,10 @@ import {
   buildSkillPressureEvaluationCases,
   createBoundedConcurrencyGate,
   resolveSkillPressureEvaluationConfiguration,
+  selectedScenarioIdsForEvaluation,
 } from "./evaluation-registration.js";
 
-function scenario(scenarioId: string): DiscoveredScenario {
+function scenario(scenarioId: string, risk: "standard" | "high" = "standard"): DiscoveredScenario {
   return {
     schemaVersion: 2,
     scenarioId,
@@ -21,7 +22,7 @@ function scenario(scenarioId: string): DiscoveredScenario {
     baselineRevision: null,
     comparisonIntent: "improvement",
     repetitions: 5,
-    risk: "standard",
+    risk,
     fixtureRequirements: [],
     allowedTools: [],
     allowedWritePaths: [],
@@ -73,24 +74,37 @@ describe("skill pressure eval registration", () => {
     expect(cases.every((evaluationCase) => evaluationCase.timeoutSeconds === 180)).toBe(true);
   });
 
-  it("keeps fast mode on the complete migrated scenario selection", () => {
-    const discoveryReceipt = receipt();
+  it("selects only the checked fast manifest and rejects conflicting modes", () => {
+    const fast = resolveSkillPressureEvaluationConfiguration({ SKILL_PRESSURE_FAST: "true" });
+
+    expect(selectedScenarioIdsForEvaluation(fast, ["alpha", "beta"])).toEqual(["alpha", "beta"]);
+    expect(() => resolveSkillPressureEvaluationConfiguration({
+      SKILL_PRESSURE_FAST: "true",
+      SKILL_PRESSURE_SCENARIO: "alpha",
+    })).toThrow(/cannot be combined/);
+    expect(() => resolveSkillPressureEvaluationConfiguration({
+      SKILL_PRESSURE_FAST: "true",
+      SKILL_PRESSURE_RISK: "standard",
+    })).toThrow(/cannot be combined/);
+  });
+
+  it("filters standard and high-risk suites into disjoint selections", () => {
+    const discoveryReceipt = receipt({ selected: [scenario("alpha"), scenario("omega", "high")] });
     const standardCases = buildSkillPressureEvaluationCases({
       repositoryRoot: "/repository",
       discoveryReceipt,
-      configuration: resolveSkillPressureEvaluationConfiguration({}),
+      configuration: resolveSkillPressureEvaluationConfiguration({ SKILL_PRESSURE_RISK: "standard" }),
       runId: "standard",
     });
-    const fastCases = buildSkillPressureEvaluationCases({
+    const highRiskCases = buildSkillPressureEvaluationCases({
       repositoryRoot: "/repository",
       discoveryReceipt,
-      configuration: resolveSkillPressureEvaluationConfiguration({ SKILL_PRESSURE_FAST: "true" }),
-      runId: "fast",
+      configuration: resolveSkillPressureEvaluationConfiguration({ SKILL_PRESSURE_RISK: "high" }),
+      runId: "high",
     });
 
-    expect(fastCases.map((evaluationCase) => evaluationCase.scenarioId)).toEqual(
-      standardCases.map((evaluationCase) => evaluationCase.scenarioId),
-    );
+    expect(standardCases.map((evaluationCase) => evaluationCase.scenarioId)).toEqual(["alpha"]);
+    expect(highRiskCases.map((evaluationCase) => evaluationCase.scenarioId)).toEqual(["omega"]);
   });
 
   it("rejects malformed controls and discovery failures before registering eval cases", () => {

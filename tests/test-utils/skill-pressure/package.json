@@ -10,6 +10,10 @@
     "test:integration": "vitest run lib/evaluation/subject-repetition.integration.test.ts --config vitest.config.ts",
     "test:migration": "vitest run lib/migration/migration-accounting.test.ts --config vitest.config.ts",
     "test:evals": "vitest run evals --config vitest.evals.config.ts",
+    "test:fast": "./run-skill-pressure-tests.sh --fast",
+    "test:behavior": "./run-skill-pressure-tests.sh",
+    "test:standard": "./run-skill-pressure-tests.sh --standard",
+    "test:high-risk": "./run-skill-pressure-tests.sh --high-risk",
     "test:live-pair": "tsx scripts/run-live-pair.ts",
     "test:live-scenario": "tsx scripts/run-live-scenario.ts",
     "typecheck": "tsc --noEmit"

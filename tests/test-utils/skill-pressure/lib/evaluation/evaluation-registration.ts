@@ -9,6 +9,7 @@ const DEFAULT_TIMEOUT_SECONDS = 180;
 export interface SkillPressureEvaluationConfiguration {
   readonly fast: boolean;
   readonly scenarioId?: string;
+  readonly risk?: "standard" | "high";
   readonly jobs: number;
   readonly timeoutSeconds: number;
 }
@@ -24,6 +25,7 @@ export function resolveSkillPressureEvaluationConfiguration(
   const fast = parseBooleanEnvironmentValue(environment.SKILL_PRESSURE_FAST, "SKILL_PRESSURE_FAST");
   const serial = parseBooleanEnvironmentValue(environment.SKILL_PRESSURE_SERIAL, "SKILL_PRESSURE_SERIAL");
   const scenarioId = parseScenarioId(environment.SKILL_PRESSURE_SCENARIO);
+  const risk = parseRisk(environment.SKILL_PRESSURE_RISK);
   const requestedJobs = parseJobCount(environment.SKILL_PRESSURE_JOBS);
   const timeoutSeconds = parsePositiveInteger(
     environment.SKILL_PRESSURE_TIMEOUT_SECONDS,
@@ -31,9 +33,14 @@ export function resolveSkillPressureEvaluationConfiguration(
     DEFAULT_TIMEOUT_SECONDS,
   );
 
+  if (fast && (scenarioId !== undefined || risk !== undefined)) {
+    throw new Error("SKILL_PRESSURE_FAST cannot be combined with SKILL_PRESSURE_SCENARIO or SKILL_PRESSURE_RISK");
+  }
+
   return {
     fast,
     ...(scenarioId === undefined ? {} : { scenarioId }),
+    ...(risk === undefined ? {} : { risk }),
     jobs: serial || scenarioId !== undefined ? 1 : requestedJobs,
     timeoutSeconds,
   };
@@ -41,7 +48,9 @@ export function resolveSkillPressureEvaluationConfiguration(
 
 export function selectedScenarioIdsForEvaluation(
   configuration: SkillPressureEvaluationConfiguration,
+  fastScenarioIds: readonly string[],
 ): readonly string[] | undefined {
+  if (configuration.fast) return fastScenarioIds;
   return configuration.scenarioId === undefined ? undefined : [configuration.scenarioId];
 }
 
@@ -59,7 +68,10 @@ export function buildSkillPressureEvaluationCases(props: {
   }
 
   const outputDirectories = new Set<string>();
-  const evaluationCases = props.discoveryReceipt.selected.map((scenario) => {
+  const selectedScenarios = props.configuration.risk === undefined
+    ? props.discoveryReceipt.selected
+    : props.discoveryReceipt.selected.filter((scenario) => scenario.risk === props.configuration.risk);
+  const evaluationCases = selectedScenarios.map((scenario) => {
     const outputDirectory = path.resolve(
       props.repositoryRoot,
       "tmp/skill-pressure-evals",
@@ -81,6 +93,12 @@ export function buildSkillPressureEvaluationCases(props: {
   });
 
   return evaluationCases;
+}
+
+function parseRisk(value: string | undefined): "standard" | "high" | undefined {
+  if (value === undefined || value === "") return undefined;
+  if (value === "standard" || value === "high") return value;
+  throw new Error("SKILL_PRESSURE_RISK must be standard or high");
 }
 
 export function createBoundedConcurrencyGate(maximumConcurrency: number): {

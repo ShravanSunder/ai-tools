@@ -11,12 +11,16 @@ import {
   selectedScenarioIdsForEvaluation,
 } from "../lib/evaluation/evaluation-registration.js";
 import { createSkillPressureEvalHarness } from "../lib/evaluation/skill-pressure-eval-harness.js";
+import { loadFastScenarioManifest } from "../lib/evaluation/fast-scenario-manifest.js";
 
 const repositoryRoot = path.resolve(import.meta.dirname, "../../../..");
 const runId = `${Date.now()}-${process.pid}`;
 const harness = createSkillPressureEvalHarness();
 const configuration = resolveSkillPressureEvaluationConfiguration(process.env);
-const selectedScenarioIds = selectedScenarioIdsForEvaluation(configuration);
+const fastScenarioIds = await loadFastScenarioManifest(
+  new URL("../config/fast-scenario-manifest.yaml", import.meta.url),
+);
+const selectedScenarioIds = selectedScenarioIdsForEvaluation(configuration, fastScenarioIds);
 const discoveryReceipt = await discoverSkillScenarios({
   repositoryRoot,
   ...(selectedScenarioIds === undefined ? {} : { selectedScenarioIds }),
