@@ -11,16 +11,28 @@ export const EXPECTED_MIGRATED_SCENARIO_COUNT = 107;
 export const EXPECTED_MIGRATED_OWNER_COUNT = 23;
 export const LEGACY_SCENARIO_ROOT = "tests/skills/pressure-scenarios";
 
-const migrationRowSchema = z.object({
+const migrationRowShape = {
   scenario_id: z.string().min(1),
   legacy_path: z.string().min(1),
   skill_under_test: z.string().min(1),
   target_plugin: z.string().min(1),
   target_skill: z.string().min(1),
   target_path: z.string().min(1),
-  disposition: z.literal("migrate"),
-  retirement_reason: z.null(),
-}).strict();
+} as const;
+
+const migrationRowSchema = z.discriminatedUnion("disposition", [
+  z.object({
+    ...migrationRowShape,
+    disposition: z.literal("migrate"),
+    retirement_reason: z.null(),
+  }).strict(),
+  z.object({
+    ...migrationRowShape,
+    disposition: z.literal("retire"),
+    retirement_reason: z.string().min(1).regex(/\S/u),
+    user_authorization: z.string().min(1).regex(/\S/u),
+  }).strict(),
+]);
 
 const migrationInventorySchema = z.object({
   schema_version: z.literal(1),
@@ -33,7 +45,15 @@ const migrationInventorySchema = z.object({
 export interface MigrationAccountingReceipt {
   readonly schemaVersion: 1;
   readonly scenarioCount: typeof EXPECTED_MIGRATED_SCENARIO_COUNT;
+  readonly activeScenarioCount: number;
+  readonly retiredScenarioCount: number;
+  readonly postBaselineScenarioCount: number;
   readonly ownerCount: typeof EXPECTED_MIGRATED_OWNER_COUNT;
+  readonly retiredScenarios: readonly {
+    readonly scenarioId: string;
+    readonly reason: string;
+    readonly userAuthorization: string;
+  }[];
   readonly inventoryDigest: string;
   readonly discoveryDigest: string;
   readonly accountingDigest: string;
@@ -76,15 +96,15 @@ export async function verifyMigrationCutover(
   if (discovery.invalid.length > 0) {
     throw new Error(`migrated discovery is invalid: ${discovery.invalid.map((item) => item.detail).join("; ")}`);
   }
-  if (discovery.discovered.length !== EXPECTED_MIGRATED_SCENARIO_COUNT) {
-    throw new Error(
-      `expected ${EXPECTED_MIGRATED_SCENARIO_COUNT} migrated scenarios, found ${discovery.discovered.length}`,
-    );
-  }
-
   const discoveredById = new Map(discovery.discovered.map((scenario) => [scenario.scenarioId, scenario]));
   for (const row of parsed.data.scenarios) {
     const discovered = discoveredById.get(row.scenario_id);
+    if (row.disposition === "retire") {
+      if (discovered !== undefined) {
+        throw new Error(`retired migration target is still active: ${row.scenario_id}`);
+      }
+      continue;
+    }
     if (discovered === undefined) {
       throw new Error(`migration target was not discovered: ${row.scenario_id}`);
     }
@@ -103,9 +123,21 @@ export async function verifyMigrationCutover(
   }
 
   const inventoryDigest = digest(inventorySource);
+  const activeScenarioCount = parsed.data.scenarios.filter((row) => row.disposition === "migrate").length;
+  const retiredScenarios = parsed.data.scenarios.flatMap((row) => row.disposition === "retire"
+    ? [{
+        scenarioId: row.scenario_id,
+        reason: row.retirement_reason,
+        userAuthorization: row.user_authorization,
+      }]
+    : []);
   const accountingBase = {
     scenarioCount: EXPECTED_MIGRATED_SCENARIO_COUNT,
+    activeScenarioCount,
+    retiredScenarioCount: retiredScenarios.length,
+    postBaselineScenarioCount: discovery.discovered.length - activeScenarioCount,
     ownerCount: EXPECTED_MIGRATED_OWNER_COUNT,
+    retiredScenarios,
     inventoryDigest,
     discoveryDigest: discovery.receiptDigest,
     legacyAuthorityAbsent: true as const,
