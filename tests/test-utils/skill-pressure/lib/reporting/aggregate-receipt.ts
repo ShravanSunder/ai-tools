@@ -24,6 +24,7 @@ import {
   type ExecutedV3BehavioralScenario,
 } from "../evaluation/v3-behavioral-scenario-execution.js";
 import { calculateV3ScenarioAuthorityRunDigest } from "../evaluation/v3-scenario-authority.js";
+import { readObservedTokenCount } from "../evaluation/scenario-execution-budget.js";
 import { readTrackedAuthorityReceiptFile } from "../authority/tracked-authority-receipt-file.js";
 
 export type AggregateSuiteKind = "gate" | "diagnostic";
@@ -658,6 +659,7 @@ async function validateDurableExecutionReceipts(props: {
       attempt.lastDurableStage !== "attempt_receipt_published"
     )
       return false;
+    if (!attemptHasObservedUsage(attempt)) return false;
     const variant = attempt.variant;
     const repetitionNumber = attempt.repetitionNumber;
     const attemptNumber = attempt.attemptNumber;
@@ -795,11 +797,25 @@ async function validateReviewerLifecycleReceipts(props: {
   if (lifecycle.state === "completed") {
     return (
       lifecycle.lifecycleComplete &&
+      lifecycle.usageObserved &&
       lifecycle.failureCommandType === null &&
       commands.every((command) => command.successful)
     );
   }
   return false;
+}
+
+function attemptHasObservedUsage(attempt: Record<string, unknown>): boolean {
+  if (!isRecord(attempt.repetition) || !isRecord(attempt.repetition.evidence)) return false;
+  const observations = attempt.repetition.evidence.usageObservations;
+  if (!Array.isArray(observations) || !observations.every((value) => typeof value === "string"))
+    return false;
+  try {
+    readObservedTokenCount(observations);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function isReviewerLifecycleReceipt(
@@ -814,6 +830,7 @@ function isReviewerLifecycleReceipt(
       "failureCommandType",
       "namedSessionIdentity",
       "providerSessionIdentity",
+      "usageObserved",
       "commandReceipts",
     ]) ||
     (lifecycle.risk !== "standard" && lifecycle.risk !== "high") ||
@@ -822,6 +839,7 @@ function isReviewerLifecycleReceipt(
     !isNullableReviewerCommandType(lifecycle.failureCommandType) ||
     !isNullableNonEmptyString(lifecycle.namedSessionIdentity) ||
     !isNullableNonEmptyString(lifecycle.providerSessionIdentity) ||
+    typeof lifecycle.usageObserved !== "boolean" ||
     !Array.isArray(lifecycle.commandReceipts)
   )
     return false;

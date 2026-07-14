@@ -141,6 +141,7 @@ function completedReviewerLifecycle(risk: "standard" | "high"): ReviewerLifecycl
     failureCommandType: null,
     namedSessionIdentity: risk === "high" ? "pressure-review-fixture" : null,
     providerSessionIdentity: risk === "high" ? "claude-session-fixture" : "codex-session-fixture",
+    usageObserved: true,
     commandReceipts: commandTypes.map(successfulReviewerCommand),
   };
 }
@@ -155,6 +156,7 @@ function failedReviewerLifecycle(
     state: "failed",
     lifecycleComplete: false,
     failureCommandType,
+    usageObserved: false,
     commandReceipts: completed.commandReceipts.map((command) =>
       command.commandType === failureCommandType ? { ...command, exitCode: 1 } : command,
     ),

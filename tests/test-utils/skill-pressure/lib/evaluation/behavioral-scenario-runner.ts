@@ -187,8 +187,9 @@ export async function executeBehavioralScenario(
               repetition,
             });
             attemptPathsByRepetitionId.set(receipt.repetitionId, receiptPath);
-            executionCapTracker.recordObservedTokens(
-              readObservedTokenCount(receipt.transcript.usageObservations),
+            recordObservedUsageIfPresent(
+              executionCapTracker,
+              receipt.transcript.usageObservations,
             );
             return receiptPath;
           },
@@ -240,9 +241,7 @@ export async function executeBehavioralScenario(
             });
           },
         }).then((review) => {
-          executionCapTracker.recordObservedTokens(
-            readObservedTokenCount(review.usageObservations),
-          );
+          recordObservedUsageIfPresent(executionCapTracker, review.usageObservations);
           return review;
         }),
     });
@@ -260,6 +259,14 @@ export async function executeBehavioralScenario(
       secrets: redactionSecrets,
     });
   }
+}
+
+function recordObservedUsageIfPresent(
+  tracker: ReturnType<typeof createScenarioExecutionCapTracker>,
+  observations: readonly string[],
+): void {
+  if (observations.length === 0) return;
+  tracker.recordObservedTokens(readObservedTokenCount(observations));
 }
 
 export function resolveSubjectExecutionPolicy(props: {

@@ -124,6 +124,7 @@ export interface V3ReviewerLifecycleReceipt {
   readonly failureCommandType: ReviewerCommandType | null;
   readonly namedSessionIdentity: string | null;
   readonly providerSessionIdentity: string | null;
+  readonly usageObserved: boolean;
   readonly commandReceipts: readonly {
     readonly commandType: ReviewerCommandType;
     readonly receiptPath: string;
@@ -670,6 +671,7 @@ function createNotStartedReviewerLifecycleEvidence(
     failureCommandType: null,
     namedSessionIdentity: null,
     providerSessionIdentity: null,
+    usageObserved: false,
     commandReceipts: [],
   };
 }
@@ -684,6 +686,7 @@ function createNotStartedReviewerLifecycleReceipt(
     failureCommandType: null,
     namedSessionIdentity: null,
     providerSessionIdentity: null,
+    usageObserved: false,
     commandReceipts: [],
   };
 }
@@ -722,6 +725,7 @@ async function persistReviewerLifecycle(props: {
     failureCommandType: props.lifecycle.failureCommandType,
     namedSessionIdentity: props.lifecycle.namedSessionIdentity,
     providerSessionIdentity: props.lifecycle.providerSessionIdentity,
+    usageObserved: props.lifecycle.usageObserved,
     commandReceipts,
   };
 }
@@ -831,7 +835,8 @@ function reduceInfrastructure(
 function reduceReviewerLifecycle(
   lifecycle: ReviewerLifecycleEvidence,
 ): V3BehavioralScenarioReceipt["reduction"] | null {
-  if (lifecycle.state === "completed" && lifecycle.lifecycleComplete) return null;
+  if (lifecycle.state === "completed" && lifecycle.lifecycleComplete && lifecycle.usageObserved)
+    return null;
   return infrastructureReductionResult("incomplete_cleanup", [
     "semantic reviewer lifecycle evidence is incomplete",
   ]);

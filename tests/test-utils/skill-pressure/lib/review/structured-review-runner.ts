@@ -64,6 +64,7 @@ export interface ReviewerLifecycleEvidence {
   readonly failureCommandType: ReviewerCommandType | null;
   readonly namedSessionIdentity: string | null;
   readonly providerSessionIdentity: string | null;
+  readonly usageObserved: boolean;
   readonly commandReceipts: readonly ReviewerCommandReceipt[];
 }
 
@@ -113,6 +114,15 @@ export async function executeStructuredReview(
       props.risk === "high"
         ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
         : ACPX_LUNA_XHIGH_SUBJECT_PROFILE;
+    const usageObserved = transcript.usageObservations.length > 0;
+    const lifecycle = {
+      ...review.lifecycle,
+      ...(review.lifecycle.state === "completed" && !usageObserved
+        ? { state: "failed" as const, lifecycleComplete: false, failureCommandType: null }
+        : {}),
+      providerSessionIdentity: transcript.sessionId,
+      usageObserved,
+    };
     return {
       visibleResponse: transcript.visibleResponse,
       runtimeProfile: verifyRuntimeProfile({
@@ -123,10 +133,7 @@ export async function executeStructuredReview(
         },
       }),
       usageObservations: transcript.usageObservations,
-      lifecycle: {
-        ...review.lifecycle,
-        providerSessionIdentity: transcript.sessionId,
-      },
+      lifecycle,
     };
   } finally {
     await rm(reviewDirectory, { recursive: true, force: true });
@@ -356,6 +363,7 @@ function createLifecycleEvidence(props: {
     failureCommandType: failure?.commandType ?? null,
     namedSessionIdentity: props.namedSessionIdentity ?? null,
     providerSessionIdentity: null,
+    usageObserved: false,
     commandReceipts: props.commandReceipts.map((receipt) => ({ ...receipt })),
   };
 }

@@ -61,14 +61,19 @@ function execution(
   };
 }
 
-function transcript(model: string): string {
+function transcript(model: string, includeUsage = true): string {
   return [
     { result: { models: { currentModelId: model } } },
     {
       method: "session/update",
       params: { update: { sessionUpdate: "agent_message_chunk", content: { text: "reviewed" } } },
     },
-    { result: { stopReason: "end_turn" } },
+    {
+      result: {
+        ...(includeUsage ? { usage: { inputTokens: 10, outputTokens: 5 } } : {}),
+        stopReason: "end_turn",
+      },
+    },
   ]
     .map((message) => JSON.stringify(message))
     .join("\n");
@@ -306,6 +311,27 @@ describe("structured ACPX semantic-review runner", () => {
       state: "failed",
       lifecycleComplete: false,
       failureCommandType: "reviewer_prompt",
+    });
+  });
+
+  it("fails closed when a successful reviewer command omits usage evidence", async () => {
+    const result = await executeStructuredReview({
+      disabledAmbientSkillPaths: [],
+      beforeCommand: () => undefined,
+      packet,
+      risk: "standard",
+      launcher,
+      codexExecutable: "/usr/local/bin/codex",
+      timeoutSeconds: 120,
+      signal: new AbortController().signal,
+      execute: async () => execution(transcript("gpt-5.6-luna[xhigh]", false)),
+    });
+
+    expect(result.lifecycle).toMatchObject({
+      state: "failed",
+      lifecycleComplete: false,
+      failureCommandType: null,
+      usageObserved: false,
     });
   });
 });

@@ -168,6 +168,7 @@ async function validateSummaries(
     readonly crossVariantAttemptBinding?: boolean;
     readonly reviewerReceiptState?: "missing" | "tampered" | "incomplete";
     readonly progressReceiptState?: "running" | "non_terminal_stage";
+    readonly missingAttemptUsage?: boolean;
     readonly receiptObservedAccounting?: {
       readonly modelPrompts: number;
       readonly acpxCommands: number;
@@ -295,6 +296,14 @@ async function validateSummaries(
               repetitionNumber,
               attemptNumber,
               durableFacts: {},
+              repetition: {
+                evidence: {
+                  usageObservations:
+                    options.missingAttemptUsage === true && receiptIndex === 0
+                      ? []
+                      : ['{"inputTokens":10,"outputTokens":5}'],
+                },
+              },
               lastDurableStage: "attempt_receipt_published",
             },
           );
@@ -371,6 +380,7 @@ async function validateSummaries(
         failureCommandType: reviewerCommandSuccessful ? null : "reviewer_prompt",
         namedSessionIdentity: null,
         providerSessionIdentity: "codex-session-fixture",
+        usageObserved: reviewerCommandSuccessful,
         commandReceipts: [{ commandType: "reviewer_prompt", ...reviewerPromptReceipt }],
       } as const;
       const executionBudget = deriveScenarioExecutionBudget({
@@ -1079,6 +1089,12 @@ describe("skill pressure aggregate receipt", () => {
       });
       expect(validated?.accountingComplete).toBe(false);
     }
+
+    const missingUsageRepository = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+    const [missingUsage] = await validateSummaries(missingUsageRepository, claims, [scenario], {
+      missingAttemptUsage: true,
+    });
+    expect(missingUsage?.accountingComplete).toBe(false);
   });
 
   it("rejects a scenario receipt tree reached through a symlinked directory or ancestor", async () => {

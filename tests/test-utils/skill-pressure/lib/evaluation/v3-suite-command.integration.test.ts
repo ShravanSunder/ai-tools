@@ -174,6 +174,9 @@ async function executedScenario(props: {
         repetitionNumber,
         attemptNumber: 1,
         durableFacts: {},
+        repetition: {
+          evidence: { usageObservations: ['{"inputTokens":10,"outputTokens":5}'] },
+        },
         lastDurableStage: "attempt_receipt_published",
       });
     }),
@@ -226,6 +229,7 @@ async function executedScenario(props: {
     failureCommandType: null,
     namedSessionIdentity: null,
     providerSessionIdentity: "codex-session-fixture",
+    usageObserved: true,
     commandReceipts: [{ commandType: "reviewer_prompt", ...reviewerPromptReceipt }],
   } as const;
   const comparisonValidation = { valid: true, reasons: [] } as const;
