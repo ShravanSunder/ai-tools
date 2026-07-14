@@ -179,19 +179,19 @@ describe("structured ACPX semantic-review runner", () => {
     const commands: ExecutableAcpxCommand[] = [];
 
     const result = await executeStructuredReview({
-        disabledAmbientSkillPaths: [],
-        beforeCommand: () => undefined,
-        packet,
-        risk: "high",
-        launcher,
-        codexExecutable: "/usr/local/bin/codex",
-        timeoutSeconds: 120,
-        signal: new AbortController().signal,
-        execute: async (command) => {
-          commands.push(command);
-          return execution("", command.args.includes("--file") ? { exitCode: 1 } : {});
-        },
-      });
+      disabledAmbientSkillPaths: [],
+      beforeCommand: () => undefined,
+      packet,
+      risk: "high",
+      launcher,
+      codexExecutable: "/usr/local/bin/codex",
+      timeoutSeconds: 120,
+      signal: new AbortController().signal,
+      execute: async (command) => {
+        commands.push(command);
+        return execution("", command.args.includes("--file") ? { exitCode: 1 } : {});
+      },
+    });
 
     expect(commands.at(-1)?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
     expect(result.lifecycle).toMatchObject({
@@ -211,19 +211,19 @@ describe("structured ACPX semantic-review runner", () => {
     const commands: ExecutableAcpxCommand[] = [];
 
     const result = await executeStructuredReview({
-        disabledAmbientSkillPaths: [],
-        beforeCommand: () => undefined,
-        packet,
-        risk: "high",
-        launcher,
-        codexExecutable: "/usr/local/bin/codex",
-        timeoutSeconds: 120,
-        signal: new AbortController().signal,
-        execute: async (command) => {
-          commands.push(command);
-          return execution("", command.args.includes("effort") ? { exitCode: 1 } : {});
-        },
-      });
+      disabledAmbientSkillPaths: [],
+      beforeCommand: () => undefined,
+      packet,
+      risk: "high",
+      launcher,
+      codexExecutable: "/usr/local/bin/codex",
+      timeoutSeconds: 120,
+      signal: new AbortController().signal,
+      execute: async (command) => {
+        commands.push(command);
+        return execution("", command.args.includes("effort") ? { exitCode: 1 } : {});
+      },
+    });
 
     expect(commands).toHaveLength(3);
     expect(commands.at(-1)?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
@@ -234,18 +234,72 @@ describe("structured ACPX semantic-review runner", () => {
     });
   });
 
+  it("attempts named-session cleanup when session creation fails", async () => {
+    const commands: ExecutableAcpxCommand[] = [];
+
+    const result = await executeStructuredReview({
+      disabledAmbientSkillPaths: [],
+      beforeCommand: () => undefined,
+      packet,
+      risk: "high",
+      launcher,
+      codexExecutable: "/usr/local/bin/codex",
+      timeoutSeconds: 120,
+      signal: new AbortController().signal,
+      execute: async (command) => {
+        commands.push(command);
+        return execution("", command.args.includes("new") ? { timedOut: true } : {});
+      },
+    });
+
+    expect(commands).toHaveLength(2);
+    expect(commands.at(-1)?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
+    expect(result.lifecycle).toMatchObject({
+      state: "failed",
+      lifecycleComplete: false,
+      failureCommandType: "reviewer_session_create",
+    });
+  });
+
+  it("executes mandatory close even when the accounting hook rejects it", async () => {
+    const commands: ExecutableAcpxCommand[] = [];
+
+    const result = await executeStructuredReview({
+      disabledAmbientSkillPaths: [],
+      beforeCommand: ({ commandType }) => {
+        if (commandType === "reviewer_close") throw new Error("accounting unavailable");
+      },
+      packet,
+      risk: "high",
+      launcher,
+      codexExecutable: "/usr/local/bin/codex",
+      timeoutSeconds: 120,
+      signal: new AbortController().signal,
+      execute: async (command) => {
+        commands.push(command);
+        return execution(
+          command.args.includes("--file") ? transcript("claude-opus-4-7[xhigh]") : "",
+        );
+      },
+    });
+
+    expect(commands).toHaveLength(4);
+    expect(commands.at(-1)?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
+    expect(result.lifecycle).toMatchObject({ state: "completed", lifecycleComplete: true });
+  });
+
   it("fails closed for unsuccessful standard review execution", async () => {
     const result = await executeStructuredReview({
-        disabledAmbientSkillPaths: [],
-        beforeCommand: () => undefined,
-        packet,
-        risk: "standard",
-        launcher,
-        codexExecutable: "/usr/local/bin/codex",
-        timeoutSeconds: 120,
-        signal: new AbortController().signal,
-        execute: async () => execution("", { timedOut: true }),
-      });
+      disabledAmbientSkillPaths: [],
+      beforeCommand: () => undefined,
+      packet,
+      risk: "standard",
+      launcher,
+      codexExecutable: "/usr/local/bin/codex",
+      timeoutSeconds: 120,
+      signal: new AbortController().signal,
+      execute: async () => execution("", { timedOut: true }),
+    });
 
     expect(result.lifecycle).toMatchObject({
       risk: "standard",

@@ -164,8 +164,10 @@ async function validateSummaries(
     readonly attemptScenarioId?: string;
     readonly deleteProgressReceipt?: boolean;
     readonly useSymlinkedReceiptDirectory?: boolean;
+    readonly useSymlinkedReceiptAncestor?: boolean;
     readonly crossVariantAttemptBinding?: boolean;
     readonly reviewerReceiptState?: "missing" | "tampered" | "incomplete";
+    readonly progressReceiptState?: "running" | "non_terminal_stage";
     readonly receiptObservedAccounting?: {
       readonly modelPrompts: number;
       readonly acpxCommands: number;
@@ -271,6 +273,11 @@ async function validateSummaries(
         const linkedParent = await mkdtemp(path.join(tmpdir(), "aggregate-scenario-link-"));
         receiptDirectory = path.join(linkedParent, "receipts");
         await symlink(physicalReceiptDirectory, receiptDirectory);
+      } else if (options.useSymlinkedReceiptAncestor === true) {
+        const linkedParent = await mkdtemp(path.join(tmpdir(), "aggregate-scenario-link-"));
+        const ancestorPath = path.join(linkedParent, "ancestor");
+        await symlink(path.dirname(physicalReceiptDirectory), ancestorPath);
+        receiptDirectory = path.join(ancestorPath, path.basename(physicalReceiptDirectory));
       }
       const receiptCount = options.attemptReceiptCount ?? (candidate.accountingComplete ? 10 : 9);
       const attemptReceipts = await Promise.all(
@@ -325,8 +332,11 @@ async function validateSummaries(
         {
           schemaVersion: 1,
           scenarioId: candidate.scenarioId,
-          status: "completed",
-          lastDurableStage: "scenario_completed",
+          status: options.progressReceiptState === "running" ? "running" : "completed",
+          lastDurableStage:
+            options.progressReceiptState === "non_terminal_stage"
+              ? "scenario_started"
+              : "reduction_completed",
           completedAttemptReceiptPaths: persistedAttemptReceipts.map(
             (receipt) => receipt.receiptPath,
           ),
@@ -1035,17 +1045,55 @@ describe("skill pressure aggregate receipt", () => {
     });
     expect(incomplete?.accountingComplete).toBe(false);
     expect(incomplete?.releaseAuthority).toBe(false);
+
+    const authoritativeRepository = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+    await expect(
+      validateSummaries(
+        authoritativeRepository,
+        claims,
+        [
+          summary(
+            {
+              scenarioId: "gate",
+              evaluationRole: "gate",
+              calibrationStatus: "calibrated",
+              behaviorRequirementIds: ["fixture-behavior"],
+              releaseAuthority: true,
+            },
+            claims,
+          ),
+        ],
+        { reviewerReceiptState: "incomplete" },
+      ),
+    ).rejects.toThrow(/incomplete durable accounting cannot grant release authority/u);
   });
 
-  it("rejects a scenario receipt tree reached through a symlinked directory", async () => {
-    const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+  it("withholds completeness for non-terminal progress evidence", async () => {
     const claims = claimedRequirements(["fixture-behavior"]);
+    const scenario = summary({ scenarioId: "scenario" }, claims);
 
-    await expect(
-      validateSummaries(repositoryRoot, claims, [summary({ scenarioId: "scenario" }, claims)], {
-        useSymlinkedReceiptDirectory: true,
-      }),
-    ).rejects.toThrow(/scenario receipt directory.*canonical/u);
+    for (const progressReceiptState of ["running", "non_terminal_stage"] as const) {
+      const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+      const [validated] = await validateSummaries(repositoryRoot, claims, [scenario], {
+        progressReceiptState,
+      });
+      expect(validated?.accountingComplete).toBe(false);
+    }
+  });
+
+  it("rejects a scenario receipt tree reached through a symlinked directory or ancestor", async () => {
+    const claims = claimedRequirements(["fixture-behavior"]);
+    const scenario = summary({ scenarioId: "scenario" }, claims);
+
+    for (const option of [
+      { useSymlinkedReceiptDirectory: true },
+      { useSymlinkedReceiptAncestor: true },
+    ] as const) {
+      const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+      await expect(validateSummaries(repositoryRoot, claims, [scenario], option)).rejects.toThrow(
+        /scenario receipt directory.*canonical/u,
+      );
+    }
   });
 
   it("rejects self-declared repetition counts and stale gate release authority", async () => {

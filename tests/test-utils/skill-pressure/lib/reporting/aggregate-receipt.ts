@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { lstat, readFile } from "node:fs/promises";
+import { lstat, readFile, realpath } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 import {
@@ -363,11 +364,6 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     receipt,
   });
   assertCalibrationAndReleaseStatus({ receipt, registryRow: props.registryRow, calibration });
-  if (!reviewerLifecycleComplete && receipt.authoritySnapshot.releaseAuthority) {
-    throw new Error(
-      `scenario ${props.scenarioId} incomplete reviewer lifecycle cannot grant release authority`,
-    );
-  }
   const expectedReceiptCount = props.expectedRepetitions * 2;
   const durableAccountingComplete = await validateDurableExecutionReceipts({
     scenarioId: props.scenarioId,
@@ -377,6 +373,14 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     repetitionReceipts: receipt.repetitionReceipts,
     progressReceipts: receipt.progressReceipts,
   });
+  if (
+    (!reviewerLifecycleComplete || !durableAccountingComplete) &&
+    receipt.authoritySnapshot.releaseAuthority
+  ) {
+    throw new Error(
+      `scenario ${props.scenarioId} incomplete durable accounting cannot grant release authority`,
+    );
+  }
   const summary: V3ScenarioExecutionSummary = {
     scenarioId: receipt.scenarioId,
     scenarioReceiptDigest: props.executed.receiptDigest,
@@ -463,7 +467,14 @@ async function validateExecutionAccounting(props: {
 async function assertCanonicalScenarioReceiptDirectory(receiptPath: string): Promise<void> {
   const receiptDirectory = path.dirname(path.resolve(receiptPath));
   const directoryStatus = await lstat(receiptDirectory);
-  if (!directoryStatus.isDirectory()) {
+  const temporaryRoot = path.resolve(tmpdir());
+  const expectedCanonicalDirectory = path.relative(temporaryRoot, receiptDirectory).startsWith("..")
+    ? receiptDirectory
+    : path.join(await realpath(temporaryRoot), path.relative(temporaryRoot, receiptDirectory));
+  if (
+    !directoryStatus.isDirectory() ||
+    (await realpath(receiptDirectory)) !== expectedCanonicalDirectory
+  ) {
     throw new Error("scenario receipt directory must be a canonical real directory, not a symlink");
   }
 }
@@ -698,6 +709,8 @@ async function validateDurableExecutionReceipts(props: {
   );
   if (!expectedIdentities.every((identity) => acceptedIdentities.has(identity))) return false;
 
+  let finalProgressStatus: string | null = null;
+  let finalProgressStage: string | null = null;
   for (const reference of props.progressReceipts) {
     const progress = await readDurableExecutionReceipt(reference, receiptDirectory);
     if (
@@ -717,8 +730,14 @@ async function validateDurableExecutionReceipts(props: {
       )
     )
       return false;
+    finalProgressStatus = String(progress.status);
+    finalProgressStage = String(progress.lastDurableStage);
   }
-  return true;
+  return (
+    finalProgressStatus !== null &&
+    finalProgressStatus !== "running" &&
+    finalProgressStage === "reduction_completed"
+  );
 }
 
 async function validateReviewerLifecycleReceipts(props: {
@@ -901,7 +920,7 @@ function matchesReviewerCommandTopology(props: {
     return JSON.stringify(commandTypes) === JSON.stringify(expected);
   }
   return [
-    ["reviewer_session_create"],
+    ["reviewer_session_create", "reviewer_close"],
     ["reviewer_session_create", "reviewer_effort_config", "reviewer_close"],
     expected,
   ].some((topology) => JSON.stringify(commandTypes) === JSON.stringify(topology));
@@ -1028,6 +1047,11 @@ function normalizeScenarioExecutionSummary(
   if (summary.demotedThisRun && summary.releaseAuthority) {
     throw new Error(
       `scenario ${summary.scenarioId} demoted this run cannot carry release authority`,
+    );
+  }
+  if (!summary.accountingComplete && summary.releaseAuthority) {
+    throw new Error(
+      `scenario ${summary.scenarioId} incomplete durable accounting cannot carry release authority`,
     );
   }
   if (

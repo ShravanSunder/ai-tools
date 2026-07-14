@@ -198,7 +198,7 @@ async function executedScenario(props: {
     schemaVersion: 1,
     scenarioId: props.scenarioId,
     status: "completed",
-    lastDurableStage: "scenario_completed",
+    lastDurableStage: "reduction_completed",
     completedAttemptReceiptPaths: attemptReceipts.map((receipt) => receipt.receiptPath),
     reasonCode: null,
   });

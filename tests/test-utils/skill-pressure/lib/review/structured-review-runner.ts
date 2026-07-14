@@ -231,37 +231,28 @@ async function executeHighRiskReview(
     command: withSignal(commands.create, props.signal),
   });
   commandReceipts.push(create.receipt);
-  if (!isSuccessfulReviewerReceipt(create.receipt)) {
-    return {
-      promptExecution: null,
-      lifecycle: createLifecycleEvidence({
-        risk: "high",
-        namedSessionIdentity: sessionName,
-        commandReceipts,
-      }),
-    };
-  }
-
   let promptExecution: AcpxProcessExecution | null = null;
   try {
-    const effort = await executeReviewerCommand({
-      props,
-      commandType: "reviewer_effort_config",
-      modelPrompt: false,
-      mandatoryCleanup: false,
-      command: withSignal(commands.setEffort, props.signal),
-    });
-    commandReceipts.push(effort.receipt);
-    if (isSuccessfulReviewerReceipt(effort.receipt)) {
-      const prompt = await executeReviewerCommand({
+    if (isSuccessfulReviewerReceipt(create.receipt)) {
+      const effort = await executeReviewerCommand({
         props,
-        commandType: "reviewer_prompt",
-        modelPrompt: true,
+        commandType: "reviewer_effort_config",
+        modelPrompt: false,
         mandatoryCleanup: false,
-        command: withSignal(commands.prompt, props.signal),
+        command: withSignal(commands.setEffort, props.signal),
       });
-      commandReceipts.push(prompt.receipt);
-      promptExecution = prompt.execution;
+      commandReceipts.push(effort.receipt);
+      if (isSuccessfulReviewerReceipt(effort.receipt)) {
+        const prompt = await executeReviewerCommand({
+          props,
+          commandType: "reviewer_prompt",
+          modelPrompt: true,
+          mandatoryCleanup: false,
+          command: withSignal(commands.prompt, props.signal),
+        });
+        commandReceipts.push(prompt.receipt);
+        promptExecution = prompt.execution;
+      }
     }
   } finally {
     // Session cleanup stays outside the scenario signal once creation succeeded.
@@ -304,23 +295,34 @@ async function executeReviewerCommand(props: {
       modelPrompt: props.modelPrompt,
       mandatoryCleanup: props.mandatoryCleanup,
     });
+  } catch {
+    if (!props.mandatoryCleanup) return failedReviewerCommand(props.commandType);
+  }
+  try {
     const execution = await props.props.execute(props.command);
     return { execution, receipt: createReviewerCommandReceipt(props.commandType, execution) };
   } catch {
-    return {
-      execution: null,
-      receipt: {
-        commandType: props.commandType,
-        exitCode: null,
-        timedOut: false,
-        processClosed: false,
-        streamsDrained: false,
-        cleanupComplete: false,
-        termSent: false,
-        killSent: false,
-      },
-    };
+    return failedReviewerCommand(props.commandType);
   }
+}
+
+function failedReviewerCommand(commandType: ReviewerCommandType): {
+  readonly execution: null;
+  readonly receipt: ReviewerCommandReceipt;
+} {
+  return {
+    execution: null,
+    receipt: {
+      commandType,
+      exitCode: null,
+      timedOut: false,
+      processClosed: false,
+      streamsDrained: false,
+      cleanupComplete: false,
+      termSent: false,
+      killSent: false,
+    },
+  };
 }
 
 function createReviewerCommandReceipt(
