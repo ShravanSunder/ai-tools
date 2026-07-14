@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "attempt",
+  "scenarioId": "orchestrator-goal-artifact-content-boundary",
+  "variant": "baseline",
+  "repetitionNumber": 2,
+  "attemptNumber": 1,
+  "sourceAttemptReceiptDigest": "sha256:dd192804ac353dfe7974d7435ae465996261e31afde88fd1bce67995516a2d7b",
+  "acceptedForRepetition": true,
+  "acceptedRepetitionReceiptDigest": "sha256:30315ceadea5eaa17ea439671418bf6d59541b9d7d0ac351c0ba7188e53c61c7",
+  "processClosed": true,
+  "streamsDrained": true,
+  "outputRedacted": true,
+  "snapshotsCollected": true
+}
