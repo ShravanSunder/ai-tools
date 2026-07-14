@@ -1,11 +1,12 @@
 export type ScenarioOutcome = "pass" | "behavior_fail" | "inconclusive" | "infrastructure_error" | "not_evaluated";
-export type RepetitionOutcome = Exclude<ScenarioOutcome, "inconclusive" | "infrastructure_error">;
+export type RepetitionOutcome = Exclude<ScenarioOutcome, "infrastructure_error">;
 export type ScenarioOutcomeReasonCode =
   | "improvement_baseline_already_passed"
   | "invalid_non_regression_control"
   | "missing_evidence"
   | "mixed_baseline"
   | "mixed_treatment"
+  | "semantic_inconclusive"
   | "repetition_count_mismatch"
   | "runtime_profile_unverified"
   | "treatment_behavior_failed"
@@ -48,6 +49,9 @@ export function reduceScenarioOutcome(
   }
   if ([...props.baseline, ...props.treatment].some((repetition) => repetition.outcome === "not_evaluated")) {
     return reduction("not_evaluated", "missing_evidence", ["at least one repetition lacks required evidence"]);
+  }
+  if ([...props.baseline, ...props.treatment].some((repetition) => repetition.outcome === "inconclusive")) {
+    return reduction("inconclusive", "semantic_inconclusive", ["at least one semantic assertion was inconclusive"]);
   }
 
   const treatmentOutcomes = new Set(props.treatment.map((repetition) => repetition.outcome));

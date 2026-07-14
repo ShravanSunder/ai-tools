@@ -37,6 +37,21 @@ function evidence(props: {
 }
 
 describe("objective artifact checks", () => {
+  it("compares exact content only within its declared artifact", () => {
+    const plan = createObjectiveCheckPlan({
+      declaredArtifacts: [{ artifactId: "target", path: "reports/target.md", fileType: "file" }],
+      checks: [{ checkId: "exact", owner: { kind: "artifact_id", artifactId: "target" }, operator: "content_equals", expected: "exact content" }],
+    });
+
+    expect(evaluateObjectiveCheckPlan({
+      plan,
+      repositoryEvidence: evidence({
+        artifacts: [artifact({ artifactId: "target", path: "reports/target.md", contentForEvaluation: "exact content" })],
+      }),
+      toolObservations: [],
+    })).toEqual([expect.objectContaining({ outcome: "pass" })]);
+  });
+
   it("resolves content only through the declared artifact id, never a response-adjacent artifact", () => {
     const plan = createObjectiveCheckPlan({
       declaredArtifacts: [{ artifactId: "target", path: "reports/target.md", fileType: "file" }],

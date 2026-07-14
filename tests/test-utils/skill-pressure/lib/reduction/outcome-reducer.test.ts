@@ -96,6 +96,18 @@ describe("scenario outcome reduction", () => {
     })).toMatchObject({ outcome: "not_evaluated", reasonCode: "missing_evidence" });
   });
 
+  it("preserves a semantic inconclusive repetition without applying comparison intent", () => {
+    expect(reduceScenarioOutcome({
+      comparisonIntent: "non_regression",
+      expectedRepetitions: 5,
+      baseline: repetitions("pass"),
+      treatment: [
+        ...repetitions("pass", 4),
+        { repetitionId: "run-5", outcome: "inconclusive" },
+      ],
+    })).toMatchObject({ outcome: "inconclusive", reasonCode: "semantic_inconclusive" });
+  });
+
   it("marks an invalid repetition count before comparison semantics", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",

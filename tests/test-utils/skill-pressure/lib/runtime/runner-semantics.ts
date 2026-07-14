@@ -30,6 +30,8 @@ export const RUNNER_SEMANTICS_MANIFEST = [
   { semanticClass: "discovery_registry", path: "lib/authority/evaluation-registry.ts" },
   { semanticClass: "discovery_registry", path: "lib/discovery/skill-discovery.ts" },
   { semanticClass: "execution_budget", path: "lib/evaluation/behavioral-scenario-runner.ts" },
+  { semanticClass: "execution_budget", path: "lib/evaluation/v3-behavioral-scenario-execution.ts" },
+  { semanticClass: "execution_budget", path: "lib/evaluation/v3-scenario-preflight.ts" },
   { semanticClass: "execution_budget", path: "lib/evaluation/repetition-coordinator.ts" },
   { semanticClass: "execution_budget", path: "lib/evaluation/scenario-execution-budget.ts" },
   { semanticClass: "execution_budget", path: "lib/evaluation/subject-repetition.ts" },

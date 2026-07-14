@@ -29,6 +29,12 @@ export interface PersistedAttemptReceipt<TReceipt extends object> {
   };
 }
 
+export interface PersistedJsonReceipt<TReceipt extends object> {
+  readonly receiptPath: string;
+  readonly receiptDigest: string;
+  readonly receipt: TReceipt;
+}
+
 export interface ScenarioProgressReceipt {
   readonly schemaVersion: 1;
   readonly scenarioId: string;
@@ -52,6 +58,27 @@ export async function writeAttemptReceipt<TReceipt extends object>(
     receiptDirectory: props.receiptDirectory,
     fileName: props.fileName,
     receipt,
+    secrets: props.secrets,
+    ...(props.beforeAtomicPublish === undefined ? {} : { beforeAtomicPublish: props.beforeAtomicPublish }),
+  });
+  return {
+    receiptPath: published.receiptPath,
+    receiptDigest: digest(await readFile(published.receiptPath)),
+    receipt: published.receipt,
+  };
+}
+
+export async function writeJsonReceipt<TReceipt extends object>(props: {
+  readonly receiptDirectory: string;
+  readonly fileName: string;
+  readonly receipt: TReceipt;
+  readonly secrets: readonly string[];
+  readonly beforeAtomicPublish?: () => void;
+}): Promise<PersistedJsonReceipt<TReceipt>> {
+  const published = await publishAtomicRedactedReceipt({
+    receiptDirectory: props.receiptDirectory,
+    fileName: props.fileName,
+    receipt: props.receipt,
     secrets: props.secrets,
     ...(props.beforeAtomicPublish === undefined ? {} : { beforeAtomicPublish: props.beforeAtomicPublish }),
   });

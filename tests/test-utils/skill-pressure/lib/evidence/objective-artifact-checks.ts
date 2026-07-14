@@ -88,7 +88,7 @@ function validateObjectiveCheck(
     if (declaration === undefined) {
       throw new Error(`objective artifact check references undeclared artifact id: ${check.owner.artifactId}`);
     }
-    if (!["exists", "kind_equals", "content_contains", "content_matches", "content_excludes", "content_excludes_pattern"].includes(check.operator)) {
+    if (!["exists", "kind_equals", "content_equals", "content_contains", "content_matches", "content_excludes", "content_excludes_pattern"].includes(check.operator)) {
       throw new Error("artifact_id checks require an artifact operator");
     }
     if (check.operator === "kind_equals" && check.expected !== "file" && check.expected !== "directory") {
@@ -120,7 +120,7 @@ function validateObjectiveCheck(
     if (check.expected !== undefined) throw new Error("direct path checks do not accept expected values");
     return;
   }
-  if (!["contains", "excludes", "matches", "not_matches"].includes(check.operator) || typeof check.expected !== "string") {
+  if (!["equals", "contains", "excludes", "matches", "not_matches"].includes(check.operator) || typeof check.expected !== "string") {
     throw new Error("tool observation checks require a text operator and string expected value");
   }
   if ((check.operator === "matches" || check.operator === "not_matches") && !isBoundedSafePattern(check.expected)) {
@@ -175,7 +175,9 @@ function evaluateText(check: ObjectiveCheckDefinition, actual: string): Objectiv
   const expected = typeof check.expected === "string" ? check.expected : null;
   if (expected === null) return notEvaluated(check, "text check expected value was invalid");
   let matched: boolean;
-  if (check.operator === "content_contains" || check.operator === "contains") {
+  if (check.operator === "content_equals" || check.operator === "equals") {
+    matched = actual === expected;
+  } else if (check.operator === "content_contains" || check.operator === "contains") {
     matched = actual.includes(expected);
   } else if (check.operator === "content_excludes" || check.operator === "excludes") {
     matched = !actual.includes(expected);
