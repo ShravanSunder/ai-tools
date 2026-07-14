@@ -117,6 +117,36 @@ describe("structured semantic review contract", () => {
     expect(sealedPacket.untrustedEvidence.boundary).toBe("untrusted_quoted_evidence");
   });
 
+  it("sends complete named-artifact evaluation content while reports remain excerpted", () => {
+    const fullContent = `${"prefix\n".repeat(1_500)}required terminal condition`;
+    const base = evidence("treatment-1", "treatment");
+    const artifact = base.repositoryFacts.artifacts[0]!;
+    const completePacket = buildStructuredSemanticReviewPacket({
+      assertions: [
+        {
+          assertionId: "artifact",
+          criterion: "The artifact contains the terminal condition.",
+          evidenceSurface: "artifact:result",
+        },
+      ],
+      evidence: [
+        {
+          ...base,
+          repositoryFacts: {
+            ...base.repositoryFacts,
+            artifacts: [{ ...artifact, contentForEvaluation: fullContent }],
+          },
+        },
+      ],
+      redactionSecrets: [],
+    });
+
+    const quote = completePacket.untrustedEvidence.repetitions[0]?.artifacts[0]?.text ?? "";
+    expect(artifact.contentExcerpt).not.toContain("required terminal condition");
+    expect(quote).toBe(fullContent);
+    expect(quote.indexOf("required terminal condition")).toBeGreaterThan(9_000);
+  });
+
   it("does not let semantic approval override objective failure", () => {
     expect(applyObjectiveSemanticPrecedence({ objectiveOutcome: "behavior_fail", classifications: ["pass"] })).toBe("behavior_fail");
     expect(applyObjectiveSemanticPrecedence({ objectiveOutcome: "not_evaluated", classifications: ["pass"] })).toBe("not_evaluated");

@@ -179,10 +179,15 @@ function createUntrustedEvidence(props: {
   readonly redactionSecrets: readonly string[];
   readonly maxEvidenceTextLength: number;
 }): UntrustedRepetitionEvidence {
-  const quote = (kind: QuotedEvidence["kind"], evidenceId: string, text: string): QuotedEvidence => ({
+  const quote = (
+    kind: QuotedEvidence["kind"],
+    evidenceId: string,
+    text: string,
+    maxLength = props.maxEvidenceTextLength,
+  ): QuotedEvidence => ({
     kind,
     evidenceId,
-    text: boundAndRedact(text, props.redactionSecrets, props.maxEvidenceTextLength),
+    text: boundAndRedact(text, props.redactionSecrets, maxLength),
   });
   return {
     repetitionId: props.evidence.repetitionId,
@@ -192,7 +197,12 @@ function createUntrustedEvidence(props: {
     artifacts: props.evidence.repositoryFacts.artifacts.map((artifact) => quote(
       "artifact",
       artifact.artifactId,
-      artifact.contentExcerpt ?? artifact.contentUnavailableReason ?? artifact.reason ?? "",
+      artifact.contentForEvaluation ??
+        artifact.contentExcerpt ??
+        artifact.contentUnavailableReason ??
+        artifact.reason ??
+        "",
+      MAX_REVIEW_PACKET_BYTES,
     )),
     rationalizations: props.evidence.rationalizationExcerpts.map((excerpt, index) => quote("rationalization", `rationalization-${index + 1}`, excerpt)),
   };
