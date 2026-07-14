@@ -19,6 +19,9 @@ set_mode() {
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --)
+      shift
+      ;;
     --fast)
       set_mode "fast"
       shift
