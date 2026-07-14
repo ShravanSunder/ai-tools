@@ -14,7 +14,7 @@ export interface SkillPressureEvalOutput {
   readonly [key: string]: JsonValue;
   readonly scenarioId: string;
   readonly executionStatus: "executed" | "infrastructure_error";
-  readonly deterministicOutcome: "pass" | "behavior_fail" | "inconclusive" | "infrastructure_error" | "not_evaluated";
+  readonly outcome: "pass" | "behavior_fail" | "inconclusive" | "infrastructure_error" | "not_evaluated";
   readonly baselineCount: number;
   readonly treatmentCount: number;
   readonly pairSetFingerprint: string;
@@ -38,7 +38,7 @@ export function createSkillPressureEvalHarness(
       const output: SkillPressureEvalOutput = {
         scenarioId: executed.receipt.scenario.scenarioId,
         executionStatus: executed.receipt.result.status,
-        deterministicOutcome: executed.receipt.deterministicEvaluation.reduction.outcome,
+        outcome: executed.receipt.reduction.outcome,
         baselineCount: executed.receipt.result.baseline.length,
         treatmentCount: executed.receipt.result.treatment.length,
         pairSetFingerprint: executed.receipt.result.pairSetFingerprint,
@@ -53,7 +53,7 @@ export function createSkillPressureEvalHarness(
         artifacts: {
           receiptPath: executed.receiptPath,
           pairSetFingerprint: output.pairSetFingerprint,
-          deterministicOutcome: output.deterministicOutcome,
+          outcome: output.outcome,
         },
         errors: output.executionStatus === "executed"
           ? []

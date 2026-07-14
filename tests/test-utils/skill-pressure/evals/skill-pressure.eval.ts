@@ -36,6 +36,7 @@ describeEval("behavioral skill pressure", { harness, judgeThreshold: null }, (it
       const result = await concurrencyGate.run(() => run(evaluationCase));
 
       expect(result.output.executionStatus).toBe("executed");
+      expect(result.output.outcome).toBe("pass");
       expect(result.output.baselineCount).toBe(5);
       expect(result.output.treatmentCount).toBe(5);
       expect(result.output.pairSetFingerprint).toMatch(/^sha256:/u);

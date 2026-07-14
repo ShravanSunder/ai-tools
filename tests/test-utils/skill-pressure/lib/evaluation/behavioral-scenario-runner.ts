@@ -3,14 +3,15 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { loadScenarioContract } from "../contracts/skill-contracts.js";
-import type { DeterministicCheckResult } from "../evidence/repetition-evidence.js";
+import { type DeterministicCheckResult, normalizeRepetitionEvidence } from "../evidence/repetition-evidence.js";
 import {
   evaluateDeterministicChecks,
-  normalizeRepetitionEvidence,
   reduceDeterministicCheckResults,
 } from "../evidence/repetition-evidence.js";
 import type { ScenarioOutcomeReduction } from "../reduction/outcome-reducer.js";
 import { reduceScenarioOutcome } from "../reduction/outcome-reducer.js";
+import { executeAutomatedBlindReview, type AutomatedBlindReviewReceipt } from "../review/acpx-blind-review-runner.js";
+import { applyDeterministicReviewPrecedence, type ReviewDeterministicState } from "../review/review-packet.js";
 import {
   collectSensitiveEnvironmentValues,
   resolveAcpxLauncher,
@@ -53,6 +54,8 @@ export interface BehavioralScenarioReceipt {
     readonly treatment: readonly DeterministicRepetitionEvaluation[];
     readonly reduction: ScenarioOutcomeReduction;
   };
+  readonly automatedReview: AutomatedBlindReviewReceipt;
+  readonly reduction: ScenarioOutcomeReduction;
 }
 
 export interface ExecutedBehavioralScenario {
@@ -106,6 +109,31 @@ export async function executeBehavioralScenario(
   });
   const deterministicBaseline = result.baseline.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
   const deterministicTreatment = result.treatment.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
+  const deterministicReduction = reduceScenarioOutcome({
+    expectedRepetitions: scenario.repetitions,
+    baseline: deterministicBaseline,
+    treatment: deterministicTreatment,
+  });
+  const automatedReview = await executeAutomatedBlindReview({
+    reviewRoot: path.join(outputDirectory, "blind-review-workspaces"),
+    scenario: { scenarioId: scenario.scenarioId, hiddenRubric: scenario.hiddenRubric, risk: scenario.risk },
+    deterministicFacts: [
+      ...createDeterministicFacts("baseline", deterministicBaseline),
+      ...createDeterministicFacts("treatment", deterministicTreatment),
+    ],
+    baselineEvidence: result.baseline.map((receipt) => normalizeRepetitionEvidence({ receipt })),
+    treatmentEvidence: result.treatment.map((receipt) => normalizeRepetitionEvidence({ receipt })),
+    sourceFingerprint: createSourceFingerprint(result),
+    runtimeFingerprint: createRuntimeFingerprint(result),
+    launcher,
+    codexExecutable,
+    timeoutSeconds: props.timeoutSeconds,
+    subjectSessionIds: [...result.baseline, ...result.treatment]
+      .map((receipt) => receipt.transcript.sessionId)
+      .filter((sessionId): sessionId is string => sessionId !== null),
+    redactionSecrets: collectSensitiveEnvironmentValues(),
+  });
+  const reduction = reduceWithBlindReview(deterministicReduction, automatedReview);
   const receipt: BehavioralScenarioReceipt = {
     schemaVersion: 1,
     scenario: {
@@ -118,16 +146,98 @@ export async function executeBehavioralScenario(
     deterministicEvaluation: {
       baseline: deterministicBaseline,
       treatment: deterministicTreatment,
-      reduction: reduceScenarioOutcome({
-        expectedRepetitions: scenario.repetitions,
-        baseline: deterministicBaseline,
-        treatment: deterministicTreatment,
-      }),
+      reduction: deterministicReduction,
     },
+    automatedReview,
+    reduction,
   };
   const receiptPath = path.join(outputDirectory, "repetition-set-receipt.json");
   await writeFile(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, { flag: "wx" });
   return { scenarioPrompt: scenario.prompt, receiptPath, receipt };
+}
+
+function createDeterministicFacts(
+  variant: "baseline" | "treatment",
+  evaluations: readonly DeterministicRepetitionEvaluation[],
+) {
+  return evaluations.map((evaluation) => ({
+    repetitionId: evaluation.repetitionId,
+    variant,
+    outcome: evaluation.outcome,
+    results: evaluation.checkResults,
+  }));
+}
+
+function createSourceFingerprint(result: ScenarioRepetitionSetReceipt) {
+  const baseline = result.baseline[0];
+  const treatment = result.treatment[0];
+  if (baseline === undefined || treatment === undefined) throw new Error("review requires selected baseline and treatment evidence");
+  return {
+    pairSetFingerprint: result.pairSetFingerprint,
+    baseline: {
+      mode: baseline.sourceMode,
+      sourceDigest: baseline.sourceDigest,
+      sourceRevision: baseline.sourceRevision,
+    },
+    treatment: {
+      mode: treatment.sourceMode,
+      sourceDigest: treatment.sourceDigest,
+      sourceRevision: treatment.sourceRevision,
+    },
+  } as const;
+}
+
+function createRuntimeFingerprint(result: ScenarioRepetitionSetReceipt) {
+  const subject = result.baseline[0];
+  if (subject === undefined) throw new Error("review requires selected baseline evidence");
+  return {
+    runnerVersion: subject.runnerVersion,
+    subjectModel: subject.requestedModel,
+    subjectReasoningEffort: subject.requestedReasoningEffort,
+    runtimeDigest: digest(JSON.stringify(subject.runtimeIdentity)),
+  };
+}
+
+export function reduceWithBlindReview(
+  deterministicReduction: ScenarioOutcomeReduction,
+  automatedReview: Pick<AutomatedBlindReviewReceipt, "outcome" | "infrastructureReasons" | "parseError">,
+): ScenarioOutcomeReduction {
+  if (deterministicReduction.outcome === "inconclusive") {
+    return {
+      outcome: "inconclusive",
+      reasons: [...deterministicReduction.reasons, "blind review cannot resolve mixed deterministic repetitions"],
+    };
+  }
+  const outcome = applyDeterministicReviewPrecedence({
+    semanticOutcome: automatedReview.outcome,
+    deterministicState: deterministicStateForOutcome(deterministicReduction.outcome),
+  });
+  return {
+    outcome,
+    reasons: [
+      ...deterministicReduction.reasons,
+      automatedReview.outcome === "infrastructure_error"
+        ? `blind review infrastructure error: ${automatedReview.infrastructureReasons.join("; ")}`
+        : automatedReview.outcome === "not_evaluated"
+          ? `blind review was not evaluated: ${automatedReview.parseError ?? "review receipt is incomplete"}`
+          : `blind review candidate outcome: ${automatedReview.outcome}`,
+    ],
+  };
+}
+
+function deterministicStateForOutcome(outcome: ScenarioOutcomeReduction["outcome"]): ReviewDeterministicState {
+  switch (outcome) {
+    case "infrastructure_error":
+      return "infrastructure_error";
+    case "not_evaluated":
+      return "missing_evidence";
+    case "behavior_fail":
+      return "objective_behavior_failure";
+    case "pass":
+      return "pass";
+    case "inconclusive":
+      throw new Error("inconclusive deterministic reduction must be handled before review precedence");
+  }
 }
 
 function evaluateReceipt(
