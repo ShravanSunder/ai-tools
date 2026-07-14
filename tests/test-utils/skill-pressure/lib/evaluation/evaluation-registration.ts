@@ -179,13 +179,13 @@ export function buildSkillPressureEvaluationCases(props: {
               {
                 commandType: "reviewer_session_create",
                 acpxTimeoutMs: 30_000,
-                executorOverheadMs: 5_000,
+                executorOverheadMs: 10_000,
                 terminationGraceMs: 5_000,
               },
               {
                 commandType: "reviewer_effort_config",
                 acpxTimeoutMs: 30_000,
-                executorOverheadMs: 5_000,
+                executorOverheadMs: 10_000,
                 terminationGraceMs: 5_000,
               },
               {
@@ -197,7 +197,7 @@ export function buildSkillPressureEvaluationCases(props: {
               {
                 commandType: "reviewer_close",
                 acpxTimeoutMs: 30_000,
-                executorOverheadMs: 5_000,
+                executorOverheadMs: 10_000,
                 terminationGraceMs: 5_000,
               },
             ]

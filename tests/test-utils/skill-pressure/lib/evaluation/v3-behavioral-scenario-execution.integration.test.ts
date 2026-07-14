@@ -258,6 +258,11 @@ async function runIntegratedFixture(props: {
           freshness: props.registryFreshness,
           claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
         });
+  const freshnessInputs = (calibration ?? createValidatedPromotionFixture({
+    scenarioId: contract.scenarioId,
+    behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
+    claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
+  })).receipt.calibrationFingerprint;
   const calibrationSource = calibration === null ? "" : JSON.stringify(calibration.receipt);
   const calibrationSourceDigest =
     `sha256:${createHash("sha256").update(calibrationSource).digest("hex")}` as AuthorityDigest;
@@ -288,6 +293,7 @@ async function runIntegratedFixture(props: {
       ],
     },
     authorityContext: {
+      freshnessInputs,
       calibration:
         calibration === null
           ? null

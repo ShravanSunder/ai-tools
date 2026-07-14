@@ -12,6 +12,7 @@ import { calculateCurrentCalibrationFreshnessInputs } from "./calibration-freshn
 import {
   validatePromotionReceipt,
   type AuthorityDigest,
+  type CalibrationFreshnessInputs,
   type ParentAcceptanceReceipt,
   type ValidatedPromotionReceipt,
 } from "./authority-receipts.js";
@@ -24,6 +25,7 @@ import { readTrackedAuthorityReceiptFile } from "./tracked-authority-receipt-fil
 const AUTHORITY_RECEIPT_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
 
 export interface RuntimeAuthorityContext {
+  readonly freshnessInputs: CalibrationFreshnessInputs;
   readonly calibration: {
     readonly promotion: ValidatedPromotionReceipt;
     readonly sourceReceipt: AuthorityReceiptReference;
@@ -40,8 +42,12 @@ export async function createRuntimeAuthorityContext(props: {
   readonly registryRow: EvaluationRegistryRow;
   readonly calculateFreshnessInputs?: typeof calculateCurrentCalibrationFreshnessInputs;
 }): Promise<RuntimeAuthorityContext> {
+  const freshnessInputs = await (props.calculateFreshnessInputs ?? calculateCurrentCalibrationFreshnessInputs)({
+    repositoryRoot: props.repositoryRoot,
+    contract: props.contract,
+  });
   if (props.registryRow.evaluationRole !== "gate") {
-    return { calibration: null, resolveParentAcceptance: async () => null };
+    return { freshnessInputs, calibration: null, resolveParentAcceptance: async () => null };
   }
   if (props.registryRow.calibrationReceipt === null) {
     throw new Error("gate registry row is missing its calibration receipt");
@@ -55,10 +61,6 @@ export async function createRuntimeAuthorityContext(props: {
   if (digestSource(source) !== props.registryRow.calibrationReceipt.receiptDigest) {
     throw new Error("runtime calibration receipt digest does not match the registry");
   }
-  const freshnessInputs = await (props.calculateFreshnessInputs ?? calculateCurrentCalibrationFreshnessInputs)({
-    repositoryRoot: props.repositoryRoot,
-    contract: props.contract,
-  });
   const promotion = await validatePromotionReceipt({
     receipt: JSON.parse(source) as unknown,
     currentFreshnessInputs: freshnessInputs,
@@ -70,6 +72,7 @@ export async function createRuntimeAuthorityContext(props: {
     source,
   };
   return {
+    freshnessInputs,
     calibration,
     resolveParentAcceptance: async (request) => persistParentAcceptance({
       repositoryRoot: props.repositoryRoot,

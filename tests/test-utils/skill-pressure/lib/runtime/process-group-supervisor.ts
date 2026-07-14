@@ -119,6 +119,20 @@ export async function runSupervisedProcess(props: ProcessLaunchProps): Promise<S
   if (props.timeoutMs <= 0 || props.terminationGraceMs <= 0) {
     throw new Error("timeoutMs and terminationGraceMs must be positive");
   }
+  if (props.signal?.aborted) {
+    return {
+      stdout: "",
+      stderr: "",
+      receipt: {
+        outcome: "cancelled",
+        exitCode: null,
+        signal: null,
+        stdoutEof: true,
+        stderrEof: true,
+        cleanup: { processGroupId: null, termSent: false, killSent: false },
+      },
+    };
+  }
   const processHandle = (props.processRunner ?? nodeProcessRunner).spawn(props);
   const captureOutput = props.captureOutput ?? true;
   const stdout = observeStream(processHandle.stdout, captureOutput, props.onStdoutChunk);
@@ -159,9 +173,6 @@ export async function runSupervisedProcess(props: ProcessLaunchProps): Promise<S
   const timeoutTimer = setTimeout(() => terminate("timed_out"), props.timeoutMs);
   const abortHandler = (): void => terminate("cancelled");
   props.signal?.addEventListener("abort", abortHandler, { once: true });
-  if (props.signal?.aborted) {
-    abortHandler();
-  }
 
   try {
     const closeResult = await waitForClose(processHandle);

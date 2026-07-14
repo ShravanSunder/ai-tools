@@ -183,6 +183,7 @@ async function executeHighRiskReview(
       model: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedModel,
       reasoningEffort: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedReasoningEffort,
       timeoutSeconds: props.timeoutSeconds,
+      controlPlaneTimeoutSeconds: 30,
     },
     sessionName,
   );
@@ -221,7 +222,7 @@ async function executeHighRiskReview(
       mandatoryCleanup: true,
     });
     await requireSuccessfulExecution(
-      props.execute(withSignal(commands.close, props.signal)),
+      props.execute(commands.close),
       "close Claude review session",
     );
   }

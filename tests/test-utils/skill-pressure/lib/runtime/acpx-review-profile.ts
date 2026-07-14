@@ -12,6 +12,7 @@ export interface AcpxClaudeReviewProfile {
   readonly model: typeof ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedModel;
   readonly reasoningEffort: typeof ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.requestedReasoningEffort;
   readonly timeoutSeconds: number;
+  readonly controlPlaneTimeoutSeconds: number;
 }
 
 export interface AcpxClaudeReviewSessionCommands {
@@ -26,7 +27,7 @@ export function buildAcpxClaudeReviewSessionCommands(
   sessionName: string,
 ): AcpxClaudeReviewSessionCommands {
   validateProfile(profile, sessionName);
-  const boundaryArgs = [
+  const boundaryArgs = (timeoutSeconds: number): readonly string[] => [
     ...profile.launcher.prefixArgs,
     "--cwd",
     profile.cwd,
@@ -41,7 +42,7 @@ export function buildAcpxClaudeReviewSessionCommands(
     "--max-turns",
     "1",
     "--timeout",
-    String(profile.timeoutSeconds),
+    String(timeoutSeconds),
   ];
   const environment = { ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" } as const;
   const command = (args: readonly string[]): ExecutableAcpxCommand => ({
@@ -52,7 +53,7 @@ export function buildAcpxClaudeReviewSessionCommands(
   });
   return {
     create: command([
-      ...boundaryArgs,
+      ...boundaryArgs(profile.controlPlaneTimeoutSeconds),
       "--model",
       profile.model,
       "claude",
@@ -62,7 +63,7 @@ export function buildAcpxClaudeReviewSessionCommands(
       sessionName,
     ]),
     setEffort: command([
-      ...boundaryArgs,
+      ...boundaryArgs(profile.controlPlaneTimeoutSeconds),
       "claude",
       "set",
       "effort",
@@ -71,7 +72,7 @@ export function buildAcpxClaudeReviewSessionCommands(
       sessionName,
     ]),
     prompt: command([
-      ...boundaryArgs,
+      ...boundaryArgs(profile.timeoutSeconds),
       "--format",
       "json",
       "--json-strict",
@@ -82,7 +83,7 @@ export function buildAcpxClaudeReviewSessionCommands(
       profile.packetPath,
     ]),
     close: command([
-      ...boundaryArgs,
+      ...boundaryArgs(profile.controlPlaneTimeoutSeconds),
       "claude",
       "sessions",
       "close",
@@ -109,7 +110,10 @@ function validateProfile(profile: AcpxClaudeReviewProfile, sessionName: string):
   ) throw new Error("packetPath must be a file inside cwd");
   if (profile.packetDigest.trim() === "") throw new Error("packetDigest must be non-empty");
   if (!/^[a-z0-9][a-z0-9-]{0,79}$/u.test(sessionName)) throw new Error("sessionName is invalid");
-  if (!Number.isInteger(profile.timeoutSeconds) || profile.timeoutSeconds <= 0) {
-    throw new Error("timeoutSeconds must be a positive integer");
+  if (
+    !Number.isInteger(profile.timeoutSeconds) || profile.timeoutSeconds <= 0 ||
+    !Number.isInteger(profile.controlPlaneTimeoutSeconds) || profile.controlPlaneTimeoutSeconds <= 0
+  ) {
+    throw new Error("review timeout values must be positive integers");
   }
 }

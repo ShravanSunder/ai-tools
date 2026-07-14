@@ -25,6 +25,7 @@ import {
   calculateCalibrationFreshnessFingerprint,
   validatePromotionReceipt,
   type AuthorityDigest,
+  type CalibrationFreshnessInputs,
   type ParentAcceptanceReceipt,
   type PromotionAttemptEvidenceReceipt,
   type PromotionCleanupEvidenceReceipt,
@@ -127,6 +128,7 @@ export async function promoteScenarioFromReceipt(props: {
     contract,
   });
   const calibrationFingerprint = calculateCalibrationFreshnessFingerprint(freshnessInputs);
+  assertDiagnosticRunFreshness({ receipt, currentFreshnessInputs: freshnessInputs });
   const behaviorContractDigest = asAuthorityDigest(
     contract.behaviorContractDigest,
     "behavior contract digest",
@@ -232,6 +234,21 @@ export async function promoteScenarioFromReceipt(props: {
   } catch (error) {
     await Promise.all(createdReceiptPaths.map((receiptPath) => rm(receiptPath, { force: true })));
     throw error;
+  }
+}
+
+function assertDiagnosticRunFreshness(props: {
+  readonly receipt: ExecutedV3BehavioralScenario["receipt"];
+  readonly currentFreshnessInputs: CalibrationFreshnessInputs;
+}): void {
+  const recordedInputs = props.receipt.authoritySnapshot.calibrationFreshnessInputs;
+  if (recordedInputs === null) {
+    throw new Error("diagnostic run is missing its calibration freshness inputs");
+  }
+  const recorded = calculateCalibrationFreshnessFingerprint(recordedInputs);
+  const current = calculateCalibrationFreshnessFingerprint(props.currentFreshnessInputs);
+  if (recorded.digest !== current.digest) {
+    throw new Error("diagnostic run used stale calibration inputs and must be rerun before promotion");
   }
 }
 

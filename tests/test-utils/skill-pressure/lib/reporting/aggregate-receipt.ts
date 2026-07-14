@@ -858,7 +858,10 @@ function createSuiteResult(props: {
     props.counts.infrastructureError > 0 ||
     props.counts.timedOut > 0 ||
     props.counts.missing > 0 ||
-    props.counts.accountingIncomplete > 0;
+    props.counts.accountingIncomplete > 0 ||
+    props.results.some((result) =>
+      result.outcome === "not_evaluated" &&
+      (result.reasonCode === "missing_evidence" || result.reasonCode === "review_parse_failure"));
   if (props.kind === "diagnostic") {
     return {
       kind: "diagnostic",

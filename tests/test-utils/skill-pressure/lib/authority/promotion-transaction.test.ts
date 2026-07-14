@@ -204,6 +204,27 @@ describe("promotion transaction", () => {
     });
   });
 
+  it("rejects a diagnostic run produced under stale calibration inputs", async () => {
+    const fixture = await createPromotionFixture();
+    const source = JSON.parse(await readFile(fixture.scenarioReceiptPath, "utf8")) as {
+      authoritySnapshot: { calibrationFreshnessInputs: CalibrationFreshnessInputs };
+    };
+    source.authoritySnapshot.calibrationFreshnessInputs = {
+      ...source.authoritySnapshot.calibrationFreshnessInputs,
+      runnerSemanticsDigest: DIGEST("7"),
+    };
+    await writeFile(fixture.scenarioReceiptPath, `${JSON.stringify(source, null, 2)}\n`);
+
+    await expect(promoteScenarioFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: true,
+      verifyMutationCoverage: async () => undefined,
+      dependencies: fixture.dependencies,
+    })).rejects.toThrow(/diagnostic run.*freshness|stale calibration inputs/u);
+    await expectDiagnosticRegistry(fixture.repositoryRoot);
+  });
+
   it("rolls back candidate authority files when the registry commit fails", async () => {
     const fixture = await createPromotionFixture();
     await expect(promoteScenarioFromReceipt({
@@ -220,6 +241,31 @@ describe("promotion transaction", () => {
     })).rejects.toThrow(/registry commit rejected/u);
 
     await expectDiagnosticRegistry(fixture.repositoryRoot);
+    expect(await readdir(path.join(fixture.repositoryRoot, AUTHORITY_ROOT))).toEqual([
+      "promotion-fixture-validity.json",
+    ]);
+  });
+
+  it("fails closed when the registry changes before the atomic commit", async () => {
+    const fixture = await createPromotionFixture();
+    const registryPath = path.join(fixture.repositoryRoot, REGISTRY_PATH);
+    const original = await readFile(registryPath, "utf8");
+    const concurrentSource = `${original}\n# concurrent authority update\n`;
+
+    await expect(promoteScenarioFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: true,
+      verifyMutationCoverage: async () => undefined,
+      dependencies: {
+        ...fixture.dependencies,
+        beforeRegistryCommit: async () => {
+          await writeFile(registryPath, concurrentSource);
+        },
+      },
+    })).rejects.toThrow(/registry changed|concurrent/u);
+
+    await expect(readFile(registryPath, "utf8")).resolves.toBe(concurrentSource);
     expect(await readdir(path.join(fixture.repositoryRoot, AUTHORITY_ROOT))).toEqual([
       "promotion-fixture-validity.json",
     ]);
@@ -324,6 +370,13 @@ async function createPromotionFixture(overrides: {
     profile: ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
     providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
   });
+  const freshnessInputs: CalibrationFreshnessInputs = {
+    behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
+    baselinePolicyDigest: DIGEST("3"),
+    runnerSemanticsDigest: DIGEST("4"),
+    subjectProfileDigest: DIGEST("5"),
+    reviewProfileDigest: DIGEST("6"),
+  };
   const scenarioReceipt = {
     schemaVersion: 3,
     scenarioId: contract.scenarioId,
@@ -335,6 +388,7 @@ async function createPromotionFixture(overrides: {
     },
     authoritySnapshot: {
       runDigest: DIGEST("1"),
+      calibrationFreshnessInputs: freshnessInputs,
     },
     claimedRequirements: { manifestDigest: DIGEST("2") },
     comparisonValidation: { valid: true, reasons: [] },
@@ -348,13 +402,6 @@ async function createPromotionFixture(overrides: {
   } as unknown as ExecutedV3BehavioralScenario["receipt"];
   const scenarioReceiptPath = path.join(receiptDirectory, "scenario-receipt.json");
   await writeFile(scenarioReceiptPath, `${JSON.stringify(scenarioReceipt, null, 2)}\n`);
-  const freshnessInputs: CalibrationFreshnessInputs = {
-    behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
-    baselinePolicyDigest: DIGEST("3"),
-    runnerSemanticsDigest: DIGEST("4"),
-    subjectProfileDigest: DIGEST("5"),
-    reviewProfileDigest: DIGEST("6"),
-  };
   return {
     repositoryRoot,
     scenarioReceiptPath,

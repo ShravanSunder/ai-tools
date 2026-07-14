@@ -116,6 +116,7 @@ export interface ExecuteV3BehavioralScenarioProps {
   readonly contract: V3BehaviorContract;
   readonly registrySnapshot: EvaluationRegistry;
   readonly authorityContext: {
+    readonly freshnessInputs: CalibrationFreshnessInputs;
     readonly calibration: {
       readonly promotion: ValidatedPromotionReceipt;
       readonly sourceReceipt: AuthorityReceiptReference;
@@ -876,8 +877,7 @@ async function publishScenarioReceipt(props: {
         props.props.authorityContext.calibration?.promotion.authorityReceiptDigest ?? null,
       calibrationFingerprintDigest:
         props.props.authorityContext.calibration?.promotion.calibrationFingerprint.digest ?? null,
-      calibrationFreshnessInputs:
-        props.props.authorityContext.calibration?.promotion.receipt.calibrationFingerprint ?? null,
+      calibrationFreshnessInputs: props.props.authorityContext.freshnessInputs,
       demotedThisRun: false as const,
     },
     claimedRequirements: {

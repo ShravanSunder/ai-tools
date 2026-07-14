@@ -629,7 +629,7 @@ describe("skill pressure aggregate receipt", () => {
     expect(Reflect.set(receipt, "runId", "mutated")).toBe(false);
   });
 
-  it("completes a diagnostic run with behavioral findings without granting release authority", async () => {
+  it("fails a diagnostic run when not-evaluated means required evidence is missing", async () => {
     const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
     const claims = claimedRequirements(["release-authority"]);
     const receipt = createV3AggregateReceipt({
@@ -657,8 +657,8 @@ describe("skill pressure aggregate receipt", () => {
 
     expect(receipt.suite).toEqual({
       kind: "diagnostic",
-      terminalState: "completed_with_findings",
-      success: true,
+      terminalState: "failed",
+      success: false,
     });
     expect(receipt.counts.releaseAuthorityGranted).toBe(0);
     expect(receipt.counts.untracedBehaviorRequirement).toBe(1);

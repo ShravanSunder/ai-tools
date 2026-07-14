@@ -144,15 +144,27 @@ export async function loadEvaluationRegistry(
     });
     const calibrationReceipt = row.calibration_receipt === null
       ? null
-      : await validateReceiptReference(props.repositoryRoot, row.calibration_receipt);
+      : await validateAuthorityReceiptReference({
+          repositoryRoot: props.repositoryRoot,
+          reference: row.calibration_receipt,
+          expectedKind: "promotion",
+          scenarioId: row.scenario_id,
+          behaviorContractDigest: row.behavior_contract_digest,
+        });
     const authorityHistory = [];
     for (const event of row.authority_history) {
       authorityHistory.push({
         sequence: event.sequence,
         event: event.event,
-        receipt: await validateReceiptReference(props.repositoryRoot, {
-          receipt_path: event.receipt_path,
-          receipt_digest: event.receipt_digest,
+        receipt: await validateAuthorityReceiptReference({
+          repositoryRoot: props.repositoryRoot,
+          reference: {
+            receipt_path: event.receipt_path,
+            receipt_digest: event.receipt_digest,
+          },
+          expectedKind: event.event,
+          scenarioId: row.scenario_id,
+          behaviorContractDigest: row.behavior_contract_digest,
         }),
       });
     }
@@ -186,7 +198,7 @@ function validateAuthorityHistory(
       throw new Error(`evaluation registry authority history is not contiguous for scenario ${scenarioId}`);
     }
     if (event.event === "promotion" && authorityState === "diagnostic") {
-      const receiptIdentity = `${event.receipt_path}\0${event.receipt_digest}`;
+      const receiptIdentity = event.receipt_digest;
       if (usedPromotionReceipts.has(receiptIdentity)) {
         throw new Error(`evaluation registry promotion receipt is reused for scenario ${scenarioId}`);
       }
@@ -233,15 +245,38 @@ function validateRoleHistoryConsistency(row: z.infer<typeof registryRowSchema>):
   }
 }
 
-async function validateReceiptReference(
-  repositoryRoot: string,
-  reference: z.infer<typeof receiptReferenceSchema>,
-): Promise<AuthorityReceiptReference> {
-  return (await readValidatedReceiptSource({
-    repositoryRoot,
-    reference,
-    label: "authority receipt",
-  })).reference;
+async function validateAuthorityReceiptReference(props: {
+  readonly repositoryRoot: string;
+  readonly reference: z.infer<typeof receiptReferenceSchema>;
+  readonly expectedKind: "promotion" | "demotion" | "retirement";
+  readonly scenarioId: string;
+  readonly behaviorContractDigest: string;
+}): Promise<AuthorityReceiptReference> {
+  const validated = await readValidatedReceiptSource({
+    repositoryRoot: props.repositoryRoot,
+    reference: props.reference,
+    label: `${props.expectedKind} authority receipt`,
+  });
+  let receipt: unknown;
+  try {
+    receipt = JSON.parse(validated.source.toString("utf8"));
+  } catch {
+    throw new Error(`${props.expectedKind} authority receipt is not valid JSON`);
+  }
+  if (typeof receipt !== "object" || receipt === null || Array.isArray(receipt)) {
+    throw new Error(`${props.expectedKind} authority receipt must be an object`);
+  }
+  const record = receipt as Record<string, unknown>;
+  if (record.receiptKind !== props.expectedKind) {
+    throw new Error(`${props.expectedKind} authority receipt kind does not match its registry event`);
+  }
+  if (record.scenarioId !== props.scenarioId) {
+    throw new Error(`${props.expectedKind} authority receipt scenario id does not match its registry row`);
+  }
+  if (record.behaviorContractDigest !== props.behaviorContractDigest) {
+    throw new Error(`${props.expectedKind} authority receipt behavior contract digest does not match its registry row`);
+  }
+  return validated.reference;
 }
 
 async function readValidatedReceiptSource(props: {

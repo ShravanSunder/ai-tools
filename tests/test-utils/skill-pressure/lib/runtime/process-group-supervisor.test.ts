@@ -26,6 +26,37 @@ async function processEventuallyStops(processId: number): Promise<boolean> {
 }
 
 describe("process group supervisor", () => {
+  it("does not spawn when cancellation already fired", async () => {
+    const abortController = new AbortController();
+    abortController.abort();
+    let spawnCalls = 0;
+
+    const result = await runSupervisedProcess({
+      command: "must-not-launch",
+      args: [],
+      cwd: process.cwd(),
+      environment: process.env,
+      timeoutMs: 5_000,
+      terminationGraceMs: 20,
+      signal: abortController.signal,
+      processRunner: {
+        spawn: () => {
+          spawnCalls += 1;
+          throw new Error("spawn must not be called after cancellation");
+        },
+      },
+    });
+
+    expect(spawnCalls).toBe(0);
+    expect(result.receipt).toMatchObject({
+      outcome: "cancelled",
+      exitCode: null,
+      stdoutEof: true,
+      stderrEof: true,
+      cleanup: { processGroupId: null, termSent: false, killSent: false },
+    });
+  });
+
   it("terminates an ignoring process group, drains inherited pipes, and leaves no descendant", async () => {
     const source = [
       "const { spawn } = require('node:child_process');",

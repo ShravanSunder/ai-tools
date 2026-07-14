@@ -11,6 +11,7 @@ const profile = {
   model: "claude-opus-4-7",
   reasoningEffort: "xhigh",
   timeoutSeconds: 120,
+  controlPlaneTimeoutSeconds: 30,
 } satisfies AcpxClaudeReviewProfile;
 
 describe("ACPX Claude review profile", () => {
@@ -22,6 +23,10 @@ describe("ACPX Claude review profile", () => {
     expect(commands.setEffort.args).toEqual(expect.arrayContaining(["set", "effort", "xhigh", "-s", "review-session"]));
     expect(commands.prompt.args).toEqual(expect.arrayContaining(["claude", "-s", "review-session", "--file", profile.packetPath]));
     expect(commands.close.args).toEqual(expect.arrayContaining(["sessions", "close", "review-session"]));
+    expect(commands.prompt.args).toEqual(expect.arrayContaining(["--timeout", "120"]));
+    for (const command of [commands.create, commands.setEffort, commands.close]) {
+      expect(command.args).toEqual(expect.arrayContaining(["--timeout", "30"]));
+    }
     for (const command of Object.values(commands)) {
       expect(command.args).toContain("--deny-all");
       expect(command.args).toContain("--no-terminal");

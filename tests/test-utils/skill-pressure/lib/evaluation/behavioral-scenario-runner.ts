@@ -18,6 +18,7 @@ import { discoverAmbientSkillPaths } from "../runtime/ambient-skill-discovery.js
 import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
 import { runScenarioRepetitions, selectBaselineSkillSource } from "./repetition-coordinator.js";
 import {
+  assertCommandCanStart,
   createScenarioExecutionCapTracker,
   readObservedTokenCount,
   type DerivedScenarioExecutionBudget,
@@ -81,6 +82,24 @@ export async function executeBehavioralScenario(
     executionGraph: props.executionBudget.executionGraph,
     acceptedCaps: props.executionBudget.acceptedCaps,
   });
+  const supervisedExecutionStartedAt = Date.now();
+  const assertSupervisedCommandCanStart = (
+    commandType: DerivedScenarioExecutionBudget["commandBudgets"][number]["commandType"],
+  ): void => {
+    const commandBudget = props.executionBudget.commandBudgets.find(
+      (candidate) => candidate.commandType === commandType,
+    );
+    if (commandBudget === undefined) {
+      throw new Error(`execution budget is missing command type: ${commandType}`);
+    }
+    assertCommandCanStart({
+      remainingScenarioBudgetMs: Math.max(
+        0,
+        props.scenarioDeadlineMs - (Date.now() - supervisedExecutionStartedAt),
+      ),
+      commandBudgetMs: commandBudget.perCommandMs,
+    });
+  };
   const executionReceiptDirectory = path.join(path.resolve(props.outputDirectory), "receipts");
   const executionGraphPreflight = await writeJsonReceipt({
     receiptDirectory: executionReceiptDirectory,
@@ -100,6 +119,7 @@ export async function executeBehavioralScenario(
       contract,
       registrySnapshot: props.registrySnapshot,
       authorityContext: {
+        freshnessInputs: runtimeAuthorityContext.freshnessInputs,
         calibration: runtimeAuthorityContext.calibration,
         claimedRequirements: props.claimedRequirements,
         resolveParentAcceptance: runtimeAuthorityContext.resolveParentAcceptance,
@@ -149,11 +169,13 @@ export async function executeBehavioralScenario(
             redactionSecrets,
             signal: request.signal,
           },
-          beforeAttempt: ({ retry }) =>
+          beforeAttempt: ({ retry }) => {
+            assertSupervisedCommandCanStart("subject");
             executionCapTracker.startCommand({
               modelPrompt: true,
               retry,
-            }),
+            });
+          },
           runRepetition: runSubjectRepetition,
           persistAttemptReceipt: async ({ receipt, variant, repetitionNumber, attemptNumber }) => {
             const repetition = toV3Repetition(receipt);
@@ -209,12 +231,14 @@ export async function executeBehavioralScenario(
           timeoutSeconds: props.timeoutSeconds,
           signal,
           disabledAmbientSkillPaths,
-          beforeCommand: ({ modelPrompt, mandatoryCleanup }) =>
+          beforeCommand: ({ commandType, modelPrompt, mandatoryCleanup }) => {
+            if (!mandatoryCleanup) assertSupervisedCommandCanStart(commandType);
             executionCapTracker.startCommand({
               modelPrompt,
               retry: false,
               mandatoryCleanup,
-            }),
+            });
+          },
         }).then((review) => {
           executionCapTracker.recordObservedTokens(
             readObservedTokenCount(review.usageObservations),
