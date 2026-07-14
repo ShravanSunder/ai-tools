@@ -229,11 +229,13 @@ describe("repetition evidence", () => {
       { checkId: "path", fact: "path:reports/result.md", operator: "exists" },
       { checkId: "artifact", fact: "artifact:result", operator: "contains", expected: "verified" },
       { checkId: "forbidden", fact: "path:tmp/shortcut.txt", operator: "absent" },
+      { checkId: "forbidden-text", fact: "visible_response", operator: "not_matches", expected: "skipped proof" },
     ])).toEqual([
       { checkId: "response", outcome: "pass", reason: "matches comparison passed" },
       { checkId: "path", outcome: "pass", reason: "repository path exists" },
       { checkId: "artifact", outcome: "pass", reason: "contains comparison passed" },
       { checkId: "forbidden", outcome: "pass", reason: "repository path is absent" },
+      { checkId: "forbidden-text", outcome: "pass", reason: "not_matches comparison passed" },
     ]);
   });
 

@@ -200,7 +200,9 @@ function evaluateTextCheck(check: DeterministicCheck, actual: string): Determini
     ? actual === check.expected
     : check.operator === "contains"
       ? actual.includes(check.expected)
-      : compilePattern(check.expected).test(actual);
+      : check.operator === "not_matches"
+        ? !compilePattern(check.expected).test(actual)
+        : compilePattern(check.expected).test(actual);
   return matched
     ? passed(check, `${check.operator} comparison passed`)
     : failed(check, `${check.operator} comparison failed`);

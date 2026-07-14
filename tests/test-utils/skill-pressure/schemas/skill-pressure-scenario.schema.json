@@ -124,6 +124,7 @@
               "equals",
               "contains",
               "matches",
+              "not_matches",
               "exists",
               "absent"
             ]

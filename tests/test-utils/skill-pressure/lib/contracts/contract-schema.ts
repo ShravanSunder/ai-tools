@@ -56,10 +56,13 @@ export const scenarioInputSchema = z
       z.object({
         check_id: identifierSchema,
         fact: deterministicFactSchema,
-        operator: z.enum(["equals", "contains", "matches", "exists", "absent"]),
+        operator: z.enum(["equals", "contains", "matches", "not_matches", "exists", "absent"]),
         expected: z.unknown().optional(),
       }).strict().superRefine((check, context) => {
-        const requiresExpected = check.operator === "equals" || check.operator === "contains" || check.operator === "matches";
+        const requiresExpected = check.operator === "equals" ||
+          check.operator === "contains" ||
+          check.operator === "matches" ||
+          check.operator === "not_matches";
         if (requiresExpected && check.expected === undefined) {
           context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} requires expected` });
         }
