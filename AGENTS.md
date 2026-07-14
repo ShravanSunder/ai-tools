@@ -88,8 +88,8 @@ When doing skill work in this repo:
 5. Keep `SKILL.md` compact and progressive. Put depth in `references/` and
    deterministic mechanics in `scripts/`.
 6. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios
-   under `tests/skills/pressure-scenarios/` and run
-   `tests/skills/run-skill-pressure-tests.sh --fast`.
+   under `tests/<plugin>/<skill>/scenarios/` and run
+   `tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --fast`.
 7. For user-visible plugin behavior changes, update `docs/changelog/`, bump
    plugin version metadata, and record refresh / reinstall status.
 8. Before calling skill-work changes complete, route the changed surface through
@@ -113,7 +113,7 @@ Detailed mechanics stay in the owning skills and references:
   routes through `skills-creation`.
 - `skill-creator` owns Codex skill anatomy and generated metadata as platform
   support loaded through `skills-creation/references/platform-mechanics.md`.
-- `tests/skills/README.md` owns the local pressure-test runner contract.
+- `tests/test-utils/skill-pressure/README.md` owns the local pressure-test runner contract.
 - `docs-maintain` owns cleanup, archival, promotion, and durable docs
   reconciliation after artifacts exist.
 - `implementation-review-swarm` and `implementation-pr-wrapup` own the final
@@ -245,7 +245,7 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Cross-reference other skills by skill name, not fragile installed-cache paths.
 - Treat skill writing like TDD for process documentation: first identify or create a pressure scenario where the agent fails without the skill, then write the smallest wording that prevents that failure, then retest and close loopholes.
 - Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.
-- For `shravan-dev-workflow` skill changes, add or update pressure scenarios under `tests/skills/pressure-scenarios/` and run `tests/skills/run-skill-pressure-tests.sh --fast` before rollout.
+- For `shravan-dev-workflow` skill changes, add or update pressure scenarios under `tests/<plugin>/<skill>/scenarios/` and run `tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --fast` before rollout.
 - Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.
 - Keep artifact ownership explicit: spec, plan, research, and debug skills create their lane artifacts for clear substantial work unless the user asks for chat-only/no-files; `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation after artifacts exist.
 - Keep parent/subagent ownership explicit: subagents produce bounded evidence or candidate findings; the parent agent verifies, reduces, and owns the final claim.

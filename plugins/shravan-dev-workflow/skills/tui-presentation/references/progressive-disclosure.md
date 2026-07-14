@@ -91,7 +91,7 @@ commands, code, data names, and URLs.  Keep those atoms in semantic
 markdown:
 
   ▸ `SKILL.md`
-  ▸ `tests/skills/run-skill-pressure-tests.sh --fast`
+  ▸ `tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --fast`
   ▸ `kind: "agent-channel-provider-health"`
 
 Do not put copyable code or data inside a decorative table cell.  Use

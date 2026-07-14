@@ -8,6 +8,7 @@
     "schemas:generate": "SKILL_PRESSURE_UPDATE_SCHEMAS=1 vitest run lib/contracts/schema-generation.test.ts --config vitest.config.ts",
     "test:unit": "vitest run lib --exclude '**/*.integration.test.ts' --config vitest.config.ts",
     "test:integration": "vitest run lib/evaluation/subject-repetition.integration.test.ts --config vitest.config.ts",
+    "test:migration": "vitest run lib/migration/migration-accounting.test.ts --config vitest.config.ts",
     "test:evals": "vitest run evals --config vitest.evals.config.ts",
     "test:live-pair": "tsx scripts/run-live-pair.ts",
     "test:live-scenario": "tsx scripts/run-live-scenario.ts",

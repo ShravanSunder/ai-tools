@@ -56,7 +56,7 @@ retest:
 
 ## Running The Suite
 
-`tests/skills/run-skill-pressure-tests.sh --fast` runs the fast suite;
-`tests/skills/run-skill-pressure-tests.sh --scenario <id>` runs one scenario.
+`tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --fast` runs the fast suite;
+`tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --scenario <id>` runs one scenario.
 Scenario file format and the runner's grader-only checks are owned by
-`tests/skills/README.md` -- cite it, do not restate its checklist here.
+`tests/test-utils/skill-pressure/README.md` -- cite it, do not restate its checklist here.
