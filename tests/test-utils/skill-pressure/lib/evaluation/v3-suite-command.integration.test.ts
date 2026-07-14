@@ -27,31 +27,51 @@ import { calculateV3ScenarioEvidenceDigest } from "./v3-behavioral-scenario-exec
 import { calculateV3ScenarioAuthorityRunDigest } from "./v3-scenario-authority.js";
 import { calculateV3SuiteSelectionDigest, selectV3SuiteScenarios } from "./v3-suite-selection.js";
 
-const CLAIMED = createClaimedRequirementValidationFixture({ claimedRequirementIds: ["behavior-one"] });
+const CLAIMED = createClaimedRequirementValidationFixture({
+  claimedRequirementIds: ["behavior-one"],
+});
+const SUITE_PREFLIGHT = {
+  receiptPath: "/tmp/skill-pressure-suite-preflight.json",
+  receiptDigest: `sha256:${"f".repeat(64)}`,
+} as const;
 const COMMAND_REPOSITORY_ROOT = await mkdtemp(path.join(tmpdir(), "v3-command-repository-"));
 const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
 const CALIBRATION_PATH = `${AUTHORITY_ROOT}/gate-calibration.json`;
 await mkdir(path.join(COMMAND_REPOSITORY_ROOT, AUTHORITY_ROOT), { recursive: true });
-const PROMOTION_EVIDENCE = await Promise.all((["attempt", "cleanup"] as const).map(async (receiptKind) =>
-  Promise.all((["baseline", "treatment"] as const).flatMap((variant) =>
-    Array.from({ length: 5 }, async (_, index) => {
-      const repetitionNumber = index + 1;
-      const receiptPath = `${AUTHORITY_ROOT}/gate-${variant}-${repetitionNumber}-${receiptKind}.json`;
-      const receipt = { schemaVersion: 1, receiptKind, scenarioId: "gate", variant, repetitionNumber, attemptNumber: 1 };
-      const source = `${JSON.stringify(receipt, null, 2)}\n`;
-      await writeFile(path.join(COMMAND_REPOSITORY_ROOT, receiptPath), source, { flag: "wx" });
-      return {
-        scenarioId: "gate",
-        variant,
-        repetitionNumber,
-        attemptNumber: 1,
-        receiptPath,
-        receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as const,
-      };
-    })))));
+const PROMOTION_EVIDENCE = await Promise.all(
+  (["attempt", "cleanup"] as const).map(async (receiptKind) =>
+    Promise.all(
+      (["baseline", "treatment"] as const).flatMap((variant) =>
+        Array.from({ length: 5 }, async (_, index) => {
+          const repetitionNumber = index + 1;
+          const receiptPath = `${AUTHORITY_ROOT}/gate-${variant}-${repetitionNumber}-${receiptKind}.json`;
+          const receipt = {
+            schemaVersion: 1,
+            receiptKind,
+            scenarioId: "gate",
+            variant,
+            repetitionNumber,
+            attemptNumber: 1,
+          };
+          const source = `${JSON.stringify(receipt, null, 2)}\n`;
+          await writeFile(path.join(COMMAND_REPOSITORY_ROOT, receiptPath), source, { flag: "wx" });
+          return {
+            scenarioId: "gate",
+            variant,
+            repetitionNumber,
+            attemptNumber: 1,
+            receiptPath,
+            receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as const,
+          };
+        }),
+      ),
+    ),
+  ),
+);
 const ATTEMPT_EVIDENCE = PROMOTION_EVIDENCE[0];
 const CLEANUP_EVIDENCE = PROMOTION_EVIDENCE[1];
-if (ATTEMPT_EVIDENCE === undefined || CLEANUP_EVIDENCE === undefined) throw new Error("promotion fixture evidence is incomplete");
+if (ATTEMPT_EVIDENCE === undefined || CLEANUP_EVIDENCE === undefined)
+  throw new Error("promotion fixture evidence is incomplete");
 const CALIBRATION = createValidatedPromotionFixture({
   scenarioId: "gate",
   behaviorContractDigest: fixtureAuthorityDigest("b"),
@@ -61,7 +81,9 @@ const CALIBRATION = createValidatedPromotionFixture({
 });
 const CALIBRATION_SOURCE = `${JSON.stringify(CALIBRATION.receipt, null, 2)}\n`;
 const CALIBRATION_SOURCE_DIGEST = `sha256:${createHash("sha256").update(CALIBRATION_SOURCE).digest("hex")}`;
-await writeFile(path.join(COMMAND_REPOSITORY_ROOT, CALIBRATION_PATH), CALIBRATION_SOURCE, { flag: "wx" });
+await writeFile(path.join(COMMAND_REPOSITORY_ROOT, CALIBRATION_PATH), CALIBRATION_SOURCE, {
+  flag: "wx",
+});
 
 const REGISTRY: EvaluationRegistry = {
   schemaVersion: 1,
@@ -71,8 +93,14 @@ const REGISTRY: EvaluationRegistry = {
       behaviorContractDigest: fixtureAuthorityDigest("b"),
       evaluationRole: "gate",
       freshness: "fresh",
-      validityReview: { receiptPath: "gate-validity.json", receiptDigest: fixtureAuthorityDigest("c") },
-      calibrationReceipt: { receiptPath: CALIBRATION_PATH, receiptDigest: CALIBRATION_SOURCE_DIGEST },
+      validityReview: {
+        receiptPath: "gate-validity.json",
+        receiptDigest: fixtureAuthorityDigest("c"),
+      },
+      calibrationReceipt: {
+        receiptPath: CALIBRATION_PATH,
+        receiptDigest: CALIBRATION_SOURCE_DIGEST,
+      },
       authorityHistory: [],
     },
     {
@@ -80,7 +108,10 @@ const REGISTRY: EvaluationRegistry = {
       behaviorContractDigest: fixtureAuthorityDigest("e"),
       evaluationRole: "diagnostic",
       freshness: "uncalibrated",
-      validityReview: { receiptPath: "diagnostic-validity.json", receiptDigest: fixtureAuthorityDigest("f") },
+      validityReview: {
+        receiptPath: "diagnostic-validity.json",
+        receiptDigest: fixtureAuthorityDigest("f"),
+      },
       calibrationReceipt: null,
       authorityHistory: [],
     },
@@ -110,35 +141,42 @@ async function executedScenario(props: {
     const receiptPath = path.join(receiptDirectory, fileName);
     const source = `${JSON.stringify(receipt, null, 2)}\n`;
     await writeFile(receiptPath, source, { flag: "wx" });
-    return { receiptPath, receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` };
+    return {
+      receiptPath,
+      receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}`,
+    };
   };
-  const attemptReceipts = await Promise.all(Array.from({ length: 10 }, (_, index) => {
-    const variant = index < 5 ? "baseline" : "treatment";
-    const repetitionNumber = (index % 5) + 1;
-    return writeFixture(`attempt-${index + 1}.json`, {
-      schemaVersion: 1,
-      scenarioId: props.scenarioId,
-      variant,
-      repetitionNumber,
-      attemptNumber: 1,
-      durableFacts: {},
-      lastDurableStage: "attempt_receipt_published",
-    });
-  }));
-  const repetitionReceipts = await Promise.all(attemptReceipts.map((attempt, index) => {
-    const variant = index < 5 ? "baseline" : "treatment";
-    const repetitionNumber = (index % 5) + 1;
-    return writeFixture(`repetition-${index + 1}.json`, {
-      schemaVersion: 1,
-      scenarioId: props.scenarioId,
-      variant,
-      repetitionNumber,
-      repetitionId: `${variant}-${repetitionNumber}`,
-      acceptedAttemptReceiptPath: attempt.receiptPath,
-      acceptedAttemptReceiptDigest: attempt.receiptDigest,
-      lastDurableStage: "repetition_receipt_published",
-    });
-  }));
+  const attemptReceipts = await Promise.all(
+    Array.from({ length: 10 }, (_, index) => {
+      const variant = index < 5 ? "baseline" : "treatment";
+      const repetitionNumber = (index % 5) + 1;
+      return writeFixture(`attempt-${index + 1}.json`, {
+        schemaVersion: 1,
+        scenarioId: props.scenarioId,
+        variant,
+        repetitionNumber,
+        attemptNumber: 1,
+        durableFacts: {},
+        lastDurableStage: "attempt_receipt_published",
+      });
+    }),
+  );
+  const repetitionReceipts = await Promise.all(
+    attemptReceipts.map((attempt, index) => {
+      const variant = index < 5 ? "baseline" : "treatment";
+      const repetitionNumber = (index % 5) + 1;
+      return writeFixture(`repetition-${index + 1}.json`, {
+        schemaVersion: 1,
+        scenarioId: props.scenarioId,
+        variant,
+        repetitionNumber,
+        repetitionId: `${variant}-${repetitionNumber}`,
+        acceptedAttemptReceiptPath: attempt.receiptPath,
+        acceptedAttemptReceiptDigest: attempt.receiptDigest,
+        lastDurableStage: "repetition_receipt_published",
+      });
+    }),
+  );
   const progressReceipt = await writeFixture("progress-1.json", {
     schemaVersion: 1,
     scenarioId: props.scenarioId,
@@ -152,9 +190,45 @@ async function executedScenario(props: {
   const semanticValidation = { valid: true, reason: null } as const;
   const semanticCandidate = {};
   const subjects: V3BehavioralScenarioReceipt["subjects"] = [];
-  const reduction: V3BehavioralScenarioReceipt["reduction"] = props.outcome === "pass"
-    ? { outcome: "pass" as const, reasonCode: null, reasons: [] }
-    : { outcome: "behavior_fail" as const, reasonCode: "treatment_behavior_failed", reasons: ["fixture failure"] };
+  const reduction: V3BehavioralScenarioReceipt["reduction"] =
+    props.outcome === "pass"
+      ? { outcome: "pass" as const, reasonCode: null, reasons: [] }
+      : {
+          outcome: "behavior_fail" as const,
+          reasonCode: "treatment_behavior_failed",
+          reasons: ["fixture failure"],
+        };
+  const executionBudget = deriveScenarioExecutionBudget({
+    repetitions: 5,
+    infrastructureRetries: 0,
+    acceptedCaps: {
+      maxModelPrompts: 10,
+      maxAcpxCommands: 10,
+      maxRetries: 0,
+      maxObservedTokens: 1_000_000,
+    },
+    commandSlots: [
+      { commandType: "subject", acpxTimeoutMs: 1, executorOverheadMs: 0, terminationGraceMs: 1 },
+    ],
+    fixtureSetupReserveMs: 0,
+    scenarioCleanupReserveMs: 0,
+    receiptFlushReserveMs: 1,
+    schedulingMarginMs: 0,
+    registeredScenarioCount: 1,
+    jobs: 1,
+    vitestEmergencyReserveMs: 1,
+  });
+  const executionPreflight = await writeFixture("execution-graph-preflight.json", {
+    schemaVersion: 1,
+    scenarioId: props.scenarioId,
+    executionGraph: executionBudget.executionGraph,
+    acceptedCaps: executionBudget.acceptedCaps,
+    status: "accepted_before_launch",
+  });
+  const executionAccounting = {
+    preflightReceipt: executionPreflight,
+    observed: { modelPrompts: 10, acpxCommands: 10, retries: 0, observedTokens: 100 },
+  } as const;
   const registrySnapshotDigest = calculateEvaluationRegistrySnapshotDigest(REGISTRY);
   const evidenceDigest = calculateV3ScenarioEvidenceDigest({
     registrySnapshotDigest,
@@ -167,28 +241,41 @@ async function executedScenario(props: {
     attemptReceipts,
     repetitionReceipts,
     progressReceipts: [progressReceipt],
+    executionBudget,
+    executionAccounting,
     reduction,
   });
   const behaviorContractDigest = gate ? fixtureAuthorityDigest("b") : fixtureAuthorityDigest("e");
-  const runDigest = calculateV3ScenarioAuthorityRunDigest({
-    scenarioId: props.scenarioId,
-    behaviorContractDigest,
-    behaviorRequirementIds: ["behavior-one"],
-    evaluationRole: gate ? "gate" : "diagnostic",
-    outcome: reduction.outcome,
-    comparisonIntent: "non_regression",
-    evidenceDigest,
-  }, CLAIMED.manifestDigest);
-  const acceptance = props.releaseAuthority === true
-    ? createRunAcceptanceFixture({ calibration: CALIBRATION, runDigest, claimedRequirementManifestDigest: CLAIMED.manifestDigest })
-    : null;
+  const runDigest = calculateV3ScenarioAuthorityRunDigest(
+    {
+      scenarioId: props.scenarioId,
+      behaviorContractDigest,
+      behaviorRequirementIds: ["behavior-one"],
+      evaluationRole: gate ? "gate" : "diagnostic",
+      outcome: reduction.outcome,
+      comparisonIntent: "non_regression",
+      evidenceDigest,
+    },
+    CLAIMED.manifestDigest,
+  );
+  const acceptance =
+    props.releaseAuthority === true
+      ? createRunAcceptanceFixture({
+          calibration: CALIBRATION,
+          runDigest,
+          claimedRequirementManifestDigest: CLAIMED.manifestDigest,
+        })
+      : null;
   const acceptancePath = `${AUTHORITY_ROOT}/${path.basename(receiptDirectory)}-acceptance.json`;
   const acceptanceSource = acceptance === null ? null : `${JSON.stringify(acceptance, null, 2)}\n`;
-  const acceptanceSourceDigest = acceptanceSource === null
-    ? null
-    : `sha256:${createHash("sha256").update(acceptanceSource).digest("hex")}`;
+  const acceptanceSourceDigest =
+    acceptanceSource === null
+      ? null
+      : `sha256:${createHash("sha256").update(acceptanceSource).digest("hex")}`;
   if (acceptanceSource !== null) {
-    await writeFile(path.join(COMMAND_REPOSITORY_ROOT, acceptancePath), acceptanceSource, { flag: "wx" });
+    await writeFile(path.join(COMMAND_REPOSITORY_ROOT, acceptancePath), acceptanceSource, {
+      flag: "wx",
+    });
   }
   const receipt = {
     schemaVersion: 3,
@@ -207,11 +294,18 @@ async function executedScenario(props: {
       runDigest,
       evidenceDigest,
       releaseAuthority: props.releaseAuthority ?? false,
-      reasonCode: props.releaseAuthority === true ? null : gate ? "non_passing_gate_outcome" : "diagnostic_result",
-      parentAcceptanceReceiptDigest: acceptance === null ? null : calculateParentAcceptanceReceiptDigest(acceptance),
-      parentAcceptanceSourceReceipt: props.releaseAuthority === true
-        ? { receiptPath: acceptancePath, receiptDigest: acceptanceSourceDigest! }
-        : null,
+      reasonCode:
+        props.releaseAuthority === true
+          ? null
+          : gate
+            ? "non_passing_gate_outcome"
+            : "diagnostic_result",
+      parentAcceptanceReceiptDigest:
+        acceptance === null ? null : calculateParentAcceptanceReceiptDigest(acceptance),
+      parentAcceptanceSourceReceipt:
+        props.releaseAuthority === true
+          ? { receiptPath: acceptancePath, receiptDigest: acceptanceSourceDigest! }
+          : null,
       calibrationSourceReceipt: gate
         ? { receiptPath: CALIBRATION_PATH, receiptDigest: CALIBRATION_SOURCE_DIGEST }
         : null,
@@ -230,21 +324,18 @@ async function executedScenario(props: {
     },
     comparisonValidation,
     objectiveResults,
-    semanticReview: { validation: semanticValidation, runtimeProfile: VERIFIED_PROFILE, candidate: semanticCandidate },
-    runtimeProfiles: { subjects: Array.from({ length: 10 }, () => VERIFIED_PROFILE), reviewer: VERIFIED_PROFILE },
+    semanticReview: {
+      validation: semanticValidation,
+      runtimeProfile: VERIFIED_PROFILE,
+      candidate: semanticCandidate,
+    },
+    runtimeProfiles: {
+      subjects: Array.from({ length: 10 }, () => VERIFIED_PROFILE),
+      reviewer: VERIFIED_PROFILE,
+    },
     subjects,
-    executionBudget: deriveScenarioExecutionBudget({
-      repetitions: 5,
-      infrastructureRetries: 0,
-      commandSlots: [{ commandType: "subject", acpxTimeoutMs: 1, executorOverheadMs: 0, terminationGraceMs: 1 }],
-      fixtureSetupReserveMs: 0,
-      scenarioCleanupReserveMs: 0,
-      receiptFlushReserveMs: 1,
-      schedulingMarginMs: 0,
-      registeredScenarioCount: 1,
-      jobs: 1,
-      vitestEmergencyReserveMs: 1,
-    }),
+    executionBudget,
+    executionAccounting,
     attemptReceipts,
     repetitionReceipts,
     progressReceipts: [progressReceipt],
@@ -283,13 +374,21 @@ describe("v3 fake-backed command smoke", () => {
       invalid: [],
       selection,
       registrySnapshot: REGISTRY,
-      executeScenario: async () => executedScenario({ scenarioId: "gate", outcome: "behavior_fail" }),
+      executionGraphPreflightReceipt: SUITE_PREFLIGHT,
+      executeScenario: async () =>
+        executedScenario({ scenarioId: "gate", outcome: "behavior_fail" }),
       persistAggregate,
     });
 
     expect(result.exitCode).toBe(1);
-    expect(result.aggregate.suite).toEqual({ kind: "gate", terminalState: "failed", success: false });
-    expect(JSON.parse(await readFile(result.aggregateReceiptPath, "utf8"))).toMatchObject({ runId: "gate-failure" });
+    expect(result.aggregate.suite).toEqual({
+      kind: "gate",
+      terminalState: "failed",
+      success: false,
+    });
+    expect(JSON.parse(await readFile(result.aggregateReceiptPath, "utf8"))).toMatchObject({
+      runId: "gate-failure",
+    });
   });
 
   it("returns zero with completed_with_findings for a complete diagnostic behavioral failure", async () => {
@@ -306,7 +405,9 @@ describe("v3 fake-backed command smoke", () => {
       invalid: [],
       selection,
       registrySnapshot: REGISTRY,
-      executeScenario: async () => executedScenario({ scenarioId: "diagnostic", outcome: "behavior_fail" }),
+      executionGraphPreflightReceipt: SUITE_PREFLIGHT,
+      executeScenario: async () =>
+        executedScenario({ scenarioId: "diagnostic", outcome: "behavior_fail" }),
       persistAggregate,
     });
 
@@ -332,6 +433,7 @@ describe("v3 fake-backed command smoke", () => {
       invalid: [],
       selection,
       registrySnapshot: REGISTRY,
+      executionGraphPreflightReceipt: SUITE_PREFLIGHT,
       executeScenario: async () => null,
       persistAggregate,
     });
@@ -356,6 +458,7 @@ describe("v3 fake-backed command smoke", () => {
       invalid: [],
       selection,
       registrySnapshot: REGISTRY,
+      executionGraphPreflightReceipt: SUITE_PREFLIGHT,
       executeScenario: async () => {
         throw new Error("no scenario should execute");
       },
@@ -375,21 +478,25 @@ describe("v3 fake-backed command smoke", () => {
     });
     const driftedRegistry: EvaluationRegistry = {
       ...REGISTRY,
-      scenarios: REGISTRY.scenarios.map((row) => row.scenarioId === "gate"
-        ? { ...row, freshness: "stale" as const }
-        : row),
+      scenarios: REGISTRY.scenarios.map((row) =>
+        row.scenarioId === "gate" ? { ...row, freshness: "stale" as const } : row,
+      ),
     };
 
-    await expect(executeV3SuiteCommand({
-      runId: "registry-drift",
-      repositoryRoot: COMMAND_REPOSITORY_ROOT,
-      discoveredScenarioCount: CANDIDATES.length,
-      invalid: [],
-      selection,
-      registrySnapshot: driftedRegistry,
-      executeScenario: async () => executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true }),
-      persistAggregate,
-    })).rejects.toThrow(/registry snapshot digest does not match/u);
+    await expect(
+      executeV3SuiteCommand({
+        runId: "registry-drift",
+        repositoryRoot: COMMAND_REPOSITORY_ROOT,
+        discoveredScenarioCount: CANDIDATES.length,
+        invalid: [],
+        selection,
+        registrySnapshot: driftedRegistry,
+        executionGraphPreflightReceipt: SUITE_PREFLIGHT,
+        executeScenario: async () =>
+          executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true }),
+        persistAggregate,
+      }),
+    ).rejects.toThrow(/registry snapshot digest does not match/u);
   });
 
   it("rejects a mutated selection receipt before invoking a scenario", async () => {
@@ -399,18 +506,21 @@ describe("v3 fake-backed command smoke", () => {
       registry: REGISTRY,
       claimedRequirements: CLAIMED,
     });
-    await expect(executeV3SuiteCommand({
-      runId: "mutated-selection",
-      repositoryRoot: COMMAND_REPOSITORY_ROOT,
-      discoveredScenarioCount: CANDIDATES.length,
-      invalid: [],
-      selection: { ...selection, aggregateSuiteKind: "diagnostic" },
-      registrySnapshot: REGISTRY,
-      executeScenario: async () => {
-        throw new Error("scenario executor must not run");
-      },
-      persistAggregate,
-    })).rejects.toThrow(/selection digest does not match|selector-produced/u);
+    await expect(
+      executeV3SuiteCommand({
+        runId: "mutated-selection",
+        repositoryRoot: COMMAND_REPOSITORY_ROOT,
+        discoveredScenarioCount: CANDIDATES.length,
+        invalid: [],
+        selection: { ...selection, aggregateSuiteKind: "diagnostic" },
+        registrySnapshot: REGISTRY,
+        executionGraphPreflightReceipt: SUITE_PREFLIGHT,
+        executeScenario: async () => {
+          throw new Error("scenario executor must not run");
+        },
+        persistAggregate,
+      }),
+    ).rejects.toThrow(/selection digest does not match|selector-produced/u);
   });
 
   it("rejects a recomputed selection that omits an eligible gate", async () => {
@@ -423,25 +533,31 @@ describe("v3 fake-backed command smoke", () => {
     const forgedBase = {
       ...selection,
       selectedScenarioIds: [] as readonly string[],
-      selectedScenarios: [] as readonly { readonly scenarioId: string; readonly repetitions: number }[],
+      selectedScenarios: [] as readonly {
+        readonly scenarioId: string;
+        readonly repetitions: number;
+      }[],
     };
     const { selectionDigest: _oldDigest, ...forgedWithoutDigest } = forgedBase;
 
-    await expect(executeV3SuiteCommand({
-      runId: "recomputed-partial-selection",
-      repositoryRoot: COMMAND_REPOSITORY_ROOT,
-      discoveredScenarioCount: CANDIDATES.length,
-      invalid: [],
-      selection: {
-        ...forgedWithoutDigest,
-        selectionDigest: calculateV3SuiteSelectionDigest(forgedWithoutDigest),
-      },
-      registrySnapshot: REGISTRY,
-      executeScenario: async () => {
-        throw new Error("scenario executor must not run");
-      },
-      persistAggregate,
-    })).rejects.toThrow(/selector-produced/u);
+    await expect(
+      executeV3SuiteCommand({
+        runId: "recomputed-partial-selection",
+        repositoryRoot: COMMAND_REPOSITORY_ROOT,
+        discoveredScenarioCount: CANDIDATES.length,
+        invalid: [],
+        selection: {
+          ...forgedWithoutDigest,
+          selectionDigest: calculateV3SuiteSelectionDigest(forgedWithoutDigest),
+        },
+        registrySnapshot: REGISTRY,
+        executionGraphPreflightReceipt: SUITE_PREFLIGHT,
+        executeScenario: async () => {
+          throw new Error("scenario executor must not run");
+        },
+        persistAggregate,
+      }),
+    ).rejects.toThrow(/selector-produced/u);
   });
 
   it("does not trust an authoritative summary when the persisted scenario receipt changed", async () => {
@@ -458,8 +574,13 @@ describe("v3 fake-backed command smoke", () => {
       invalid: [],
       selection,
       registrySnapshot: REGISTRY,
+      executionGraphPreflightReceipt: SUITE_PREFLIGHT,
       executeScenario: async () => {
-        const executed = await executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true });
+        const executed = await executedScenario({
+          scenarioId: "gate",
+          outcome: "pass",
+          releaseAuthority: true,
+        });
         await writeFile(executed.receiptPath, "{}\n");
         return executed;
       },
@@ -485,7 +606,9 @@ describe("v3 fake-backed command smoke", () => {
       invalid: [],
       selection,
       registrySnapshot: REGISTRY,
-      executeScenario: async () => executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true }),
+      executionGraphPreflightReceipt: SUITE_PREFLIGHT,
+      executeScenario: async () =>
+        executedScenario({ scenarioId: "gate", outcome: "pass", releaseAuthority: true }),
       persistAggregate,
     });
 

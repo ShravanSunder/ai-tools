@@ -12,7 +12,10 @@ import {
   validatePromotionReceipt,
 } from "../authority/authority-receipts.js";
 import type { DiscoveryInvalidReceipt } from "../discovery/skill-discovery.js";
-import type { AuthorityReceiptReference, EvaluationRegistryRow } from "../authority/evaluation-registry.js";
+import type {
+  AuthorityReceiptReference,
+  EvaluationRegistryRow,
+} from "../authority/evaluation-registry.js";
 import type { CalibrationFreshnessInputs } from "../authority/authority-receipts.js";
 import type { ScenarioOutcome } from "../reduction/outcome-reducer.js";
 import {
@@ -93,10 +96,14 @@ export interface V3SkillPressureAggregateReceipt {
   readonly claimedRequirementIds: readonly string[];
   readonly claimedRequirementInputDigest: string;
   readonly registrySnapshotDigest: string;
+  readonly executionGraphPreflightReceipt: AuthorityReceiptReference | null;
   readonly selectionMode: "gate" | "diagnostic" | "focused";
   readonly selectionDigest: string;
   readonly selectedScenarioIds: readonly string[];
-  readonly selectedScenarios: readonly { readonly scenarioId: string; readonly repetitions: number }[];
+  readonly selectedScenarios: readonly {
+    readonly scenarioId: string;
+    readonly repetitions: number;
+  }[];
   readonly excludedStaleGateScenarioIds: readonly string[];
   readonly missingScenarioIds: readonly string[];
   readonly untracedBehaviorRequirementIds: readonly string[];
@@ -113,10 +120,14 @@ export function createV3AggregateReceipt(props: {
   readonly selectedScenarioIds: readonly string[];
   readonly claimedRequirements: ClaimedRequirementValidation;
   readonly registrySnapshotDigest: string;
+  readonly executionGraphPreflightReceipt: AuthorityReceiptReference | null;
   readonly selection: {
     readonly mode: "gate" | "diagnostic" | "focused";
     readonly selectionDigest: string;
-    readonly selectedScenarios: readonly { readonly scenarioId: string; readonly repetitions: number }[];
+    readonly selectedScenarios: readonly {
+      readonly scenarioId: string;
+      readonly repetitions: number;
+    }[];
     readonly excludedStaleGateScenarioIds: readonly string[];
   };
   readonly invalid: readonly DiscoveryInvalidReceipt[];
@@ -128,25 +139,44 @@ export function createV3AggregateReceipt(props: {
   }
   assertDigest(props.claimedRequirements.manifestDigest, "claimed requirement input");
   assertDigest(props.registrySnapshotDigest, "registry snapshot");
+  if (props.selectedScenarioIds.length > 0 && props.executionGraphPreflightReceipt === null) {
+    throw new Error("selected aggregate requires an execution-graph preflight receipt");
+  }
+  if (props.executionGraphPreflightReceipt !== null) {
+    assertAuthorityReceiptReference(
+      props.executionGraphPreflightReceipt,
+      "execution-graph preflight",
+    );
+  }
   assertDigest(props.selection.selectionDigest, "suite selection");
 
-  const selectedScenarioIds = normalizeUniqueValues(props.selectedScenarioIds, "aggregate selection scenario ids");
+  const selectedScenarioIds = normalizeUniqueValues(
+    props.selectedScenarioIds,
+    "aggregate selection scenario ids",
+  );
   const excludedStaleGateScenarioIds = normalizeUniqueValues(
     props.selection.excludedStaleGateScenarioIds,
     "aggregate excluded stale gate scenario ids",
   );
   const selectedScenarios = props.selection.selectedScenarios.map((scenario) => ({ ...scenario }));
   if (
-    selectedScenarios.some((scenario) => !Number.isSafeInteger(scenario.repetitions) || scenario.repetitions < 5) ||
-    JSON.stringify(selectedScenarios.map((scenario) => scenario.scenarioId).sort()) !== JSON.stringify([...selectedScenarioIds].sort())
+    selectedScenarios.some(
+      (scenario) => !Number.isSafeInteger(scenario.repetitions) || scenario.repetitions < 5,
+    ) ||
+    JSON.stringify(selectedScenarios.map((scenario) => scenario.scenarioId).sort()) !==
+      JSON.stringify([...selectedScenarioIds].sort())
   ) {
-    throw new Error("aggregate selected scenario repetition metadata does not match selected scenario ids");
+    throw new Error(
+      "aggregate selected scenario repetition metadata does not match selected scenario ids",
+    );
   }
   if (excludedStaleGateScenarioIds.some((scenarioId) => selectedScenarioIds.includes(scenarioId))) {
     throw new Error("aggregate scenario cannot be both selected and excluded as stale");
   }
   if (props.discoveredScenarioCount < selectedScenarioIds.length) {
-    throw new Error("aggregate discovered scenario count cannot be smaller than selected scenario count");
+    throw new Error(
+      "aggregate discovered scenario count cannot be smaller than selected scenario count",
+    );
   }
   const claimedRequirementIds = normalizeUniqueValues(
     props.claimedRequirements.manifest.claimedRequirementIds,
@@ -158,8 +188,13 @@ export function createV3AggregateReceipt(props: {
   );
   const results = props.results
     .map((summary) => {
-      if (!Object.hasOwn(summary, validatedScenarioSummary) || summary[validatedScenarioSummary] !== true) {
-        throw new Error(`scenario ${summary.scenarioId} was not validated from persisted authority receipts`);
+      if (
+        !Object.hasOwn(summary, validatedScenarioSummary) ||
+        summary[validatedScenarioSummary] !== true
+      ) {
+        throw new Error(
+          `scenario ${summary.scenarioId} was not validated from persisted authority receipts`,
+        );
       }
       return normalizeScenarioExecutionSummary(summary);
     })
@@ -176,16 +211,21 @@ export function createV3AggregateReceipt(props: {
     throw new Error("diagnostic aggregate cannot contain release authority");
   }
   const mismatchedClaim = results.find(
-    (result) => result.claimedRequirementManifestDigest !== props.claimedRequirements.manifestDigest,
+    (result) =>
+      result.claimedRequirementManifestDigest !== props.claimedRequirements.manifestDigest,
   );
   if (mismatchedClaim !== undefined) {
-    throw new Error(`scenario ${mismatchedClaim.scenarioId} claimed requirement manifest digest does not match the aggregate`);
+    throw new Error(
+      `scenario ${mismatchedClaim.scenarioId} claimed requirement manifest digest does not match the aggregate`,
+    );
   }
   const mismatchedRegistrySnapshot = results.find(
     (result) => result.registrySnapshotDigest !== props.registrySnapshotDigest,
   );
   if (mismatchedRegistrySnapshot !== undefined) {
-    throw new Error(`scenario ${mismatchedRegistrySnapshot.scenarioId} registry snapshot digest does not match the aggregate`);
+    throw new Error(
+      `scenario ${mismatchedRegistrySnapshot.scenarioId} registry snapshot digest does not match the aggregate`,
+    );
   }
 
   const completed = new Set(results.map((result) => result.scenarioId));
@@ -217,6 +257,7 @@ export function createV3AggregateReceipt(props: {
     claimedRequirementIds,
     claimedRequirementInputDigest: props.claimedRequirements.manifestDigest,
     registrySnapshotDigest: props.registrySnapshotDigest,
+    executionGraphPreflightReceipt: props.executionGraphPreflightReceipt,
     selectionMode: props.selection.mode,
     selectionDigest: props.selection.selectionDigest,
     selectedScenarioIds,
@@ -249,20 +290,31 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
   const source = await readFile(props.executed.receiptPath);
   const actualReceiptDigest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
   if (actualReceiptDigest !== props.executed.receiptDigest) {
-    throw new Error(`scenario ${props.scenarioId} persisted receipt digest does not match execution`);
+    throw new Error(
+      `scenario ${props.scenarioId} persisted receipt digest does not match execution`,
+    );
   }
   const persistedReceipt: unknown = JSON.parse(source.toString("utf8"));
   if (JSON.stringify(persistedReceipt) !== JSON.stringify(props.executed.receipt)) {
-    throw new Error(`scenario ${props.scenarioId} in-memory receipt does not match persisted receipt`);
+    throw new Error(
+      `scenario ${props.scenarioId} in-memory receipt does not match persisted receipt`,
+    );
   }
   const receipt = props.executed.receipt;
   if (receipt.scenarioId !== props.scenarioId) {
     throw new Error(`scenario ${props.scenarioId} execution returned a different scenario receipt`);
   }
   if (receipt.behaviorIdentity.expectedRepetitions !== props.expectedRepetitions) {
-    throw new Error(`scenario ${props.scenarioId} repetition count does not match the selected contract`);
+    throw new Error(
+      `scenario ${props.scenarioId} repetition count does not match the selected contract`,
+    );
   }
   assertScenarioMatchesRegistryRow({ receipt, registryRow: props.registryRow });
+  await validateExecutionAccounting({
+    scenarioId: props.scenarioId,
+    scenarioReceiptPath: props.executed.receiptPath,
+    receipt,
+  });
   const expectedEvidenceDigest = calculateV3ScenarioEvidenceDigest({
     registrySnapshotDigest: receipt.authoritySnapshot.registrySnapshotDigest,
     comparisonValidation: receipt.comparisonValidation,
@@ -274,24 +326,36 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     attemptReceipts: receipt.attemptReceipts,
     repetitionReceipts: receipt.repetitionReceipts,
     progressReceipts: receipt.progressReceipts,
+    executionBudget: receipt.executionBudget,
+    executionAccounting: receipt.executionAccounting,
     reduction: receipt.reduction,
   });
   if (expectedEvidenceDigest !== receipt.authoritySnapshot.evidenceDigest) {
-    throw new Error(`scenario ${props.scenarioId} evidence digest does not match persisted evidence`);
+    throw new Error(
+      `scenario ${props.scenarioId} evidence digest does not match persisted evidence`,
+    );
   }
-  const expectedRunDigest = calculateV3ScenarioAuthorityRunDigest({
-    scenarioId: receipt.scenarioId,
-    behaviorContractDigest: receipt.behaviorIdentity.behaviorContractDigest as `sha256:${string}`,
-    behaviorRequirementIds: receipt.behaviorIdentity.behaviorRequirementIds,
-    evaluationRole: receipt.authoritySnapshot.evaluationRole,
-    outcome: receipt.reduction.outcome,
-    comparisonIntent: receipt.behaviorIdentity.comparisonIntent,
-    evidenceDigest: expectedEvidenceDigest,
-  }, receipt.claimedRequirements.manifestDigest as `sha256:${string}`);
+  const expectedRunDigest = calculateV3ScenarioAuthorityRunDigest(
+    {
+      scenarioId: receipt.scenarioId,
+      behaviorContractDigest: receipt.behaviorIdentity.behaviorContractDigest as `sha256:${string}`,
+      behaviorRequirementIds: receipt.behaviorIdentity.behaviorRequirementIds,
+      evaluationRole: receipt.authoritySnapshot.evaluationRole,
+      outcome: receipt.reduction.outcome,
+      comparisonIntent: receipt.behaviorIdentity.comparisonIntent,
+      evidenceDigest: expectedEvidenceDigest,
+    },
+    receipt.claimedRequirements.manifestDigest as `sha256:${string}`,
+  );
   if (expectedRunDigest !== receipt.authoritySnapshot.runDigest) {
-    throw new Error(`scenario ${props.scenarioId} run digest does not match persisted authority inputs`);
+    throw new Error(
+      `scenario ${props.scenarioId} run digest does not match persisted authority inputs`,
+    );
   }
-  const calibration = await validateScenarioAuthoritySources({ repositoryRoot: props.repositoryRoot, receipt });
+  const calibration = await validateScenarioAuthoritySources({
+    repositoryRoot: props.repositoryRoot,
+    receipt,
+  });
   assertCalibrationAndReleaseStatus({ receipt, registryRow: props.registryRow, calibration });
   const expectedReceiptCount = props.expectedRepetitions * 2;
   const durableAccountingComplete = await validateDurableExecutionReceipts({
@@ -314,7 +378,8 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     calibrationFingerprintDigest: receipt.authoritySnapshot.calibrationFingerprintDigest,
     calibrationFreshnessInputs: receipt.authoritySnapshot.calibrationFreshnessInputs,
     registrySnapshotDigest: receipt.authoritySnapshot.registrySnapshotDigest,
-    executionStatus: receipt.reduction.outcome === "infrastructure_error" ? "infrastructure_error" : "executed",
+    executionStatus:
+      receipt.reduction.outcome === "infrastructure_error" ? "infrastructure_error" : "executed",
     outcome: receipt.reduction.outcome,
     comparisonIntent: receipt.behaviorIdentity.comparisonIntent,
     reasonCode: receipt.reduction.reasonCode ?? null,
@@ -323,7 +388,8 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     calibrationStatus: receipt.authoritySnapshot.calibrationStatus,
     demotedThisRun: receipt.authoritySnapshot.demotedThisRun,
     timedOut: receipt.reduction.reasonCode === "scenario_deadline",
-    accountingComplete: receipt.attemptReceipts.length >= expectedReceiptCount &&
+    accountingComplete:
+      receipt.attemptReceipts.length >= expectedReceiptCount &&
       receipt.repetitionReceipts.length === expectedReceiptCount &&
       durableAccountingComplete &&
       receipt.lastDurableStage === "scenario_receipt_published",
@@ -332,10 +398,54 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     authorityReasonCode: receipt.authoritySnapshot.reasonCode,
   };
   if (summary.demotedThisRun && summary.releaseAuthority) {
-    throw new Error(`scenario ${summary.scenarioId} demoted this run cannot carry release authority`);
+    throw new Error(
+      `scenario ${summary.scenarioId} demoted this run cannot carry release authority`,
+    );
   }
   Object.defineProperty(summary, validatedScenarioSummary, { value: true });
   return deepFreeze(summary) as ValidatedV3ScenarioExecutionSummary;
+}
+
+async function validateExecutionAccounting(props: {
+  readonly scenarioId: string;
+  readonly scenarioReceiptPath: string;
+  readonly receipt: ExecutedV3BehavioralScenario["receipt"];
+}): Promise<void> {
+  const preflight = await readDurableExecutionReceipt(
+    props.receipt.executionAccounting.preflightReceipt,
+    path.dirname(props.scenarioReceiptPath),
+  );
+  if (
+    !isRecord(preflight) ||
+    preflight.schemaVersion !== 1 ||
+    preflight.scenarioId !== props.scenarioId ||
+    preflight.status !== "accepted_before_launch" ||
+    JSON.stringify(preflight.executionGraph) !==
+      JSON.stringify(props.receipt.executionBudget.executionGraph) ||
+    JSON.stringify(preflight.acceptedCaps) !==
+      JSON.stringify(props.receipt.executionBudget.acceptedCaps)
+  ) {
+    throw new Error(
+      `scenario ${props.scenarioId} execution preflight does not match its authoritative budget`,
+    );
+  }
+  const observed = props.receipt.executionAccounting.observed;
+  const graph = props.receipt.executionBudget.executionGraph;
+  const caps = props.receipt.executionBudget.acceptedCaps;
+  if (
+    observed.modelPrompts > graph.maximumModelPrompts ||
+    observed.acpxCommands > graph.maximumAcpxCommands ||
+    observed.retries > graph.maximumRetries ||
+    observed.observedTokens > graph.maximumObservedTokens ||
+    observed.modelPrompts > caps.maxModelPrompts ||
+    observed.acpxCommands > caps.maxAcpxCommands ||
+    observed.retries > caps.maxRetries ||
+    observed.observedTokens > caps.maxObservedTokens
+  ) {
+    throw new Error(
+      `scenario ${props.scenarioId} execution accounting exceeds its graph or accepted caps`,
+    );
+  }
 }
 
 async function assertCanonicalScenarioReceiptDirectory(receiptPath: string): Promise<void> {
@@ -353,24 +463,33 @@ function assertScenarioMatchesRegistryRow(props: {
   const authority = props.receipt.authoritySnapshot;
   if (
     props.registryRow.scenarioId !== props.receipt.scenarioId ||
-    props.registryRow.behaviorContractDigest !== props.receipt.behaviorIdentity.behaviorContractDigest ||
+    props.registryRow.behaviorContractDigest !==
+      props.receipt.behaviorIdentity.behaviorContractDigest ||
     props.registryRow.evaluationRole === "retired" ||
     props.registryRow.evaluationRole !== authority.evaluationRole ||
     props.registryRow.freshness !== authority.freshness
   ) {
-    throw new Error(`scenario ${props.receipt.scenarioId} receipt does not match its selected registry row`);
+    throw new Error(
+      `scenario ${props.receipt.scenarioId} receipt does not match its selected registry row`,
+    );
   }
   if (props.registryRow.evaluationRole === "gate") {
     if (
       props.registryRow.calibrationReceipt === null ||
       authority.calibrationSourceReceipt === null ||
-      props.registryRow.calibrationReceipt.receiptPath !== authority.calibrationSourceReceipt.receiptPath ||
-      props.registryRow.calibrationReceipt.receiptDigest !== authority.calibrationSourceReceipt.receiptDigest
+      props.registryRow.calibrationReceipt.receiptPath !==
+        authority.calibrationSourceReceipt.receiptPath ||
+      props.registryRow.calibrationReceipt.receiptDigest !==
+        authority.calibrationSourceReceipt.receiptDigest
     ) {
-      throw new Error(`scenario ${props.receipt.scenarioId} calibration source does not match its registry row`);
+      throw new Error(
+        `scenario ${props.receipt.scenarioId} calibration source does not match its registry row`,
+      );
     }
   } else if (authority.calibrationSourceReceipt !== null) {
-    throw new Error(`diagnostic scenario ${props.receipt.scenarioId} cannot carry gate calibration authority`);
+    throw new Error(
+      `diagnostic scenario ${props.receipt.scenarioId} cannot carry gate calibration authority`,
+    );
   }
 }
 
@@ -380,18 +499,23 @@ function assertCalibrationAndReleaseStatus(props: {
   readonly calibration: Awaited<ReturnType<typeof validatePromotionReceipt>> | null;
 }): void {
   const authority = props.receipt.authoritySnapshot;
-  const expectedCalibrationStatus = props.registryRow.evaluationRole === "gate" &&
+  const expectedCalibrationStatus =
+    props.registryRow.evaluationRole === "gate" &&
     props.registryRow.freshness === "fresh" &&
     props.calibration?.freshness.status === "fresh"
-    ? "calibrated"
-    : props.registryRow.evaluationRole === "gate"
-      ? "stale"
-      : "uncalibrated";
+      ? "calibrated"
+      : props.registryRow.evaluationRole === "gate"
+        ? "stale"
+        : "uncalibrated";
   if (authority.calibrationStatus !== expectedCalibrationStatus) {
-    throw new Error(`scenario ${props.receipt.scenarioId} calibration status does not match registry authority`);
+    throw new Error(
+      `scenario ${props.receipt.scenarioId} calibration status does not match registry authority`,
+    );
   }
   if (authority.releaseAuthority && expectedCalibrationStatus !== "calibrated") {
-    throw new Error(`scenario ${props.receipt.scenarioId} stale or diagnostic authority cannot grant release authority`);
+    throw new Error(
+      `scenario ${props.receipt.scenarioId} stale or diagnostic authority cannot grant release authority`,
+    );
   }
 }
 
@@ -423,7 +547,8 @@ async function validateScenarioAuthoritySources(props: {
       validatedPromotion.authorityReceiptDigest !== authority.calibrationAuthorityReceiptDigest ||
       validatedPromotion.calibrationFingerprint.digest !== authority.calibrationFingerprintDigest ||
       validatedPromotion.receipt.scenarioId !== props.receipt.scenarioId ||
-      validatedPromotion.receipt.behaviorContractDigest !== props.receipt.behaviorIdentity.behaviorContractDigest
+      validatedPromotion.receipt.behaviorContractDigest !==
+        props.receipt.behaviorIdentity.behaviorContractDigest
     ) {
       throw new Error("calibration authority receipt does not match the scenario receipt");
     }
@@ -443,18 +568,23 @@ async function validateScenarioAuthoritySources(props: {
       reference: authority.parentAcceptanceSourceReceipt,
       label: "parent acceptance",
     });
-    if (calculateParentAcceptanceReceiptDigest(parentAcceptance) !== authority.parentAcceptanceReceiptDigest) {
+    if (
+      calculateParentAcceptanceReceiptDigest(parentAcceptance) !==
+      authority.parentAcceptanceReceiptDigest
+    ) {
       throw new Error("parent acceptance semantic digest does not match the scenario receipt");
     }
     validateParentAcceptanceReceipt({
       receipt: parentAcceptance,
       expected: {
         scenarioId: props.receipt.scenarioId,
-        behaviorContractDigest: props.receipt.behaviorIdentity.behaviorContractDigest as `sha256:${string}`,
+        behaviorContractDigest: props.receipt.behaviorIdentity
+          .behaviorContractDigest as `sha256:${string}`,
         authorityReceiptDigest: authority.calibrationAuthorityReceiptDigest as `sha256:${string}`,
         runDigest: authority.runDigest as `sha256:${string}`,
         calibrationFingerprintDigest: authority.calibrationFingerprintDigest as `sha256:${string}`,
-        claimedRequirementManifestDigest: props.receipt.claimedRequirements.manifestDigest as `sha256:${string}`,
+        claimedRequirementManifestDigest: props.receipt.claimedRequirements
+          .manifestDigest as `sha256:${string}`,
       },
     });
   }
@@ -491,7 +621,8 @@ async function validateDurableExecutionReceipts(props: {
     !hasUniqueReceiptBindings(props.repetitionReceipts) ||
     !hasUniqueReceiptBindings(props.progressReceipts) ||
     props.progressReceipts.length === 0
-  ) return false;
+  )
+    return false;
   const receiptDirectory = path.dirname(props.scenarioReceiptPath);
   const attemptBindings = new Map<string, string>();
   const attemptIdentities = new Set<string>();
@@ -502,15 +633,20 @@ async function validateDurableExecutionReceipts(props: {
       attempt.schemaVersion !== 1 ||
       attempt.scenarioId !== props.scenarioId ||
       attempt.lastDurableStage !== "attempt_receipt_published"
-    ) return false;
+    )
+      return false;
     const variant = attempt.variant;
     const repetitionNumber = attempt.repetitionNumber;
     const attemptNumber = attempt.attemptNumber;
     if (
       (variant !== "baseline" && variant !== "treatment") ||
-      !Number.isSafeInteger(repetitionNumber) || Number(repetitionNumber) < 1 || Number(repetitionNumber) > props.expectedRepetitions ||
-      !Number.isSafeInteger(attemptNumber) || Number(attemptNumber) < 1
-    ) return false;
+      !Number.isSafeInteger(repetitionNumber) ||
+      Number(repetitionNumber) < 1 ||
+      Number(repetitionNumber) > props.expectedRepetitions ||
+      !Number.isSafeInteger(attemptNumber) ||
+      Number(attemptNumber) < 1
+    )
+      return false;
     const identity = `${variant}:${String(repetitionNumber)}:${String(attemptNumber)}`;
     if (attemptIdentities.has(identity)) return false;
     attemptIdentities.add(identity);
@@ -531,7 +667,8 @@ async function validateDurableExecutionReceipts(props: {
       Number(repetition.repetitionNumber) > props.expectedRepetitions ||
       typeof repetition.acceptedAttemptReceiptPath !== "string" ||
       typeof repetition.acceptedAttemptReceiptDigest !== "string"
-    ) return false;
+    )
+      return false;
     const acceptedBinding = receiptBindingKey({
       receiptPath: repetition.acceptedAttemptReceiptPath,
       receiptDigest: repetition.acceptedAttemptReceiptDigest,
@@ -542,7 +679,11 @@ async function validateDurableExecutionReceipts(props: {
     acceptedIdentities.add(identity);
   }
   const expectedIdentities = ["baseline", "treatment"].flatMap((variant) =>
-    Array.from({ length: props.expectedRepetitions }, (_, index) => `${variant}:${String(index + 1)}`));
+    Array.from(
+      { length: props.expectedRepetitions },
+      (_, index) => `${variant}:${String(index + 1)}`,
+    ),
+  );
   if (!expectedIdentities.every((identity) => acceptedIdentities.has(identity))) return false;
 
   for (const reference of props.progressReceipts) {
@@ -551,13 +692,19 @@ async function validateDurableExecutionReceipts(props: {
       !isRecord(progress) ||
       progress.schemaVersion !== 1 ||
       progress.scenarioId !== props.scenarioId ||
-      !["running", "timed_out", "cancelled", "completed", "infrastructure_error"].includes(String(progress.status)) ||
+      !["running", "timed_out", "cancelled", "completed", "infrastructure_error"].includes(
+        String(progress.status),
+      ) ||
       typeof progress.lastDurableStage !== "string" ||
       progress.lastDurableStage.trim() === "" ||
       !Array.isArray(progress.completedAttemptReceiptPaths) ||
-      !progress.completedAttemptReceiptPaths.every((receiptPath) =>
-        typeof receiptPath === "string" && props.attemptReceipts.some((attempt) => attempt.receiptPath === receiptPath))
-    ) return false;
+      !progress.completedAttemptReceiptPaths.every(
+        (receiptPath) =>
+          typeof receiptPath === "string" &&
+          props.attemptReceipts.some((attempt) => attempt.receiptPath === receiptPath),
+      )
+    )
+      return false;
   }
   return true;
 }
@@ -576,7 +723,8 @@ async function readDurableExecutionReceipt(
   }
   const source = await readFile(resolvedPath);
   const digest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
-  if (digest !== reference.receiptDigest) throw new Error("durable execution receipt digest does not match");
+  if (digest !== reference.receiptDigest)
+    throw new Error("durable execution receipt digest does not match");
   return JSON.parse(source.toString("utf8"));
 }
 
@@ -598,34 +746,52 @@ function deepFreeze<TValue>(value: TValue): TValue {
   return Object.freeze(value);
 }
 
-function normalizeScenarioExecutionSummary(summary: V3ScenarioExecutionSummary): V3ScenarioExecutionSummary {
+function normalizeScenarioExecutionSummary(
+  summary: V3ScenarioExecutionSummary,
+): V3ScenarioExecutionSummary {
   assertDigest(summary.scenarioReceiptDigest, `scenario ${summary.scenarioId} receipt`);
   assertDigest(summary.runDigest, `scenario ${summary.scenarioId} run`);
-  assertDigest(summary.claimedRequirementManifestDigest, `scenario ${summary.scenarioId} claimed requirement manifest`);
+  assertDigest(
+    summary.claimedRequirementManifestDigest,
+    `scenario ${summary.scenarioId} claimed requirement manifest`,
+  );
   assertDigest(summary.registrySnapshotDigest, `scenario ${summary.scenarioId} registry snapshot`);
   if (summary.parentAcceptanceReceiptDigest !== null) {
-    assertDigest(summary.parentAcceptanceReceiptDigest, `scenario ${summary.scenarioId} parent acceptance receipt`);
+    assertDigest(
+      summary.parentAcceptanceReceiptDigest,
+      `scenario ${summary.scenarioId} parent acceptance receipt`,
+    );
   }
   if (summary.calibrationAuthorityReceiptDigest !== null) {
-    assertDigest(summary.calibrationAuthorityReceiptDigest, `scenario ${summary.scenarioId} calibration authority receipt`);
+    assertDigest(
+      summary.calibrationAuthorityReceiptDigest,
+      `scenario ${summary.scenarioId} calibration authority receipt`,
+    );
   }
   if (summary.parentAcceptanceSourceReceipt !== null) {
-    assertAuthorityReceiptReference(summary.parentAcceptanceSourceReceipt, `scenario ${summary.scenarioId} parent acceptance source`);
+    assertAuthorityReceiptReference(
+      summary.parentAcceptanceSourceReceipt,
+      `scenario ${summary.scenarioId} parent acceptance source`,
+    );
   }
   if (summary.calibrationSourceReceipt !== null) {
-    assertAuthorityReceiptReference(summary.calibrationSourceReceipt, `scenario ${summary.scenarioId} calibration source`);
+    assertAuthorityReceiptReference(
+      summary.calibrationSourceReceipt,
+      `scenario ${summary.scenarioId} calibration source`,
+    );
   }
   const behaviorRequirementIds = normalizeUniqueValues(
     summary.behaviorRequirementIds,
     `scenario ${summary.scenarioId} behavior requirement ids`,
   );
   if (summary.demotedThisRun && summary.releaseAuthority) {
-    throw new Error(`scenario ${summary.scenarioId} demoted this run cannot carry release authority`);
+    throw new Error(
+      `scenario ${summary.scenarioId} demoted this run cannot carry release authority`,
+    );
   }
   if (
     summary.releaseAuthority &&
-    (
-      summary.evaluationRole !== "gate" ||
+    (summary.evaluationRole !== "gate" ||
       summary.calibrationStatus !== "calibrated" ||
       summary.outcome !== "pass" ||
       summary.parentAcceptanceReceiptDigest === null ||
@@ -634,10 +800,11 @@ function normalizeScenarioExecutionSummary(summary: V3ScenarioExecutionSummary):
       summary.calibrationAuthorityReceiptDigest === null ||
       summary.calibrationFingerprintDigest === null ||
       summary.calibrationFreshnessInputs === null ||
-      summary.authorityReasonCode !== null
-    )
+      summary.authorityReasonCode !== null)
   ) {
-    throw new Error(`scenario ${summary.scenarioId} release authority requires a parent-accepted calibrated gate pass`);
+    throw new Error(
+      `scenario ${summary.scenarioId} release authority requires a parent-accepted calibrated gate pass`,
+    );
   }
   return { ...summary, behaviorRequirementIds };
 }
@@ -661,7 +828,8 @@ function createAggregateCounts(props: {
     passed: props.results.filter((result) => result.outcome === "pass").length,
     behaviorFailed: props.results.filter((result) => result.outcome === "behavior_fail").length,
     inconclusive: props.results.filter((result) => result.outcome === "inconclusive").length,
-    infrastructureError: props.results.filter((result) => result.outcome === "infrastructure_error").length,
+    infrastructureError: props.results.filter((result) => result.outcome === "infrastructure_error")
+      .length,
     notEvaluated: props.results.filter((result) => result.outcome === "not_evaluated").length,
     timedOut: props.results.filter((result) => result.timedOut).length,
     gate: props.results.filter((result) => result.evaluationRole === "gate").length,
@@ -683,7 +851,8 @@ function createSuiteResult(props: {
   readonly counts: AggregateCounts;
   readonly results: readonly V3ScenarioExecutionSummary[];
 }): V3SkillPressureAggregateReceipt["suite"] {
-  const executionIncomplete = props.counts.selected === 0 ||
+  const executionIncomplete =
+    props.counts.selected === 0 ||
     props.counts.invalid > 0 ||
     props.counts.executed !== props.counts.selected ||
     props.counts.infrastructureError > 0 ||
@@ -698,16 +867,18 @@ function createSuiteResult(props: {
     };
   }
 
-  const gatePassed = !executionIncomplete &&
+  const gatePassed =
+    !executionIncomplete &&
     props.counts.untracedBehaviorRequirement === 0 &&
     props.counts.unknownBehaviorRequirement === 0 &&
     props.results.length === props.counts.selected &&
-    props.results.every((result) =>
-      result.evaluationRole === "gate" &&
-      result.calibrationStatus === "calibrated" &&
-      result.outcome === "pass" &&
-      !result.demotedThisRun &&
-      result.releaseAuthority,
+    props.results.every(
+      (result) =>
+        result.evaluationRole === "gate" &&
+        result.calibrationStatus === "calibrated" &&
+        result.outcome === "pass" &&
+        !result.demotedThisRun &&
+        result.releaseAuthority,
     );
   return {
     kind: "gate",
@@ -733,8 +904,12 @@ function assertDigest(value: string, label: string): void {
   }
 }
 
-function assertAuthorityReceiptReference(reference: AuthorityReceiptReference, label: string): void {
-  if (reference.receiptPath.trim() === "") throw new Error(`${label} receipt path must be non-empty`);
+function assertAuthorityReceiptReference(
+  reference: AuthorityReceiptReference,
+  label: string,
+): void {
+  if (reference.receiptPath.trim() === "")
+    throw new Error(`${label} receipt path must be non-empty`);
   assertDigest(reference.receiptDigest, `${label} receipt`);
 }
 
@@ -775,14 +950,20 @@ export function createAggregateReceipt(props: {
   readonly invalid: readonly DiscoveryInvalidReceipt[];
   readonly results: readonly ScenarioExecutionSummary[];
 }): SkillPressureAggregateReceipt {
-  const selectedScenarioIds = normalizeUniqueValues(props.selectedScenarioIds, "aggregate selection scenario ids");
-  const results = [...props.results].sort((left, right) => left.scenarioId.localeCompare(right.scenarioId));
+  const selectedScenarioIds = normalizeUniqueValues(
+    props.selectedScenarioIds,
+    "aggregate selection scenario ids",
+  );
+  const results = [...props.results].sort((left, right) =>
+    left.scenarioId.localeCompare(right.scenarioId),
+  );
   if (new Set(results.map((result) => result.scenarioId)).size !== results.length) {
     throw new Error("aggregate results contain duplicate scenario ids");
   }
   const selected = new Set(selectedScenarioIds);
   const unexpectedResult = results.find((result) => !selected.has(result.scenarioId));
-  if (unexpectedResult !== undefined) throw new Error(`aggregate result was not selected: ${unexpectedResult.scenarioId}`);
+  if (unexpectedResult !== undefined)
+    throw new Error(`aggregate result was not selected: ${unexpectedResult.scenarioId}`);
   const completed = new Set(results.map((result) => result.scenarioId));
   const missingScenarioIds = selectedScenarioIds.filter((scenarioId) => !completed.has(scenarioId));
   const counts = {
@@ -793,7 +974,8 @@ export function createAggregateReceipt(props: {
     passed: results.filter((result) => result.outcome === "pass").length,
     behaviorFailed: results.filter((result) => result.outcome === "behavior_fail").length,
     inconclusive: results.filter((result) => result.outcome === "inconclusive").length,
-    infrastructureError: results.filter((result) => result.outcome === "infrastructure_error").length,
+    infrastructureError: results.filter((result) => result.outcome === "infrastructure_error")
+      .length,
     notEvaluated: results.filter((result) => result.outcome === "not_evaluated").length,
   };
   const base = {
@@ -803,8 +985,14 @@ export function createAggregateReceipt(props: {
     missingScenarioIds,
     results,
     counts,
-    success: props.invalid.length === 0 && missingScenarioIds.length === 0 &&
-      counts.executed === selectedScenarioIds.length && counts.passed === selectedScenarioIds.length,
+    success:
+      props.invalid.length === 0 &&
+      missingScenarioIds.length === 0 &&
+      counts.executed === selectedScenarioIds.length &&
+      counts.passed === selectedScenarioIds.length,
   };
-  return { ...base, receiptDigest: `sha256:${createHash("sha256").update(JSON.stringify(base)).digest("hex")}` };
+  return {
+    ...base,
+    receiptDigest: `sha256:${createHash("sha256").update(JSON.stringify(base)).digest("hex")}`,
+  };
 }

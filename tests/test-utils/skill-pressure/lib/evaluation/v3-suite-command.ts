@@ -1,4 +1,5 @@
 import type { DiscoveryInvalidReceipt } from "../discovery/skill-discovery.js";
+import type { AuthorityReceiptReference } from "../authority/evaluation-registry.js";
 import {
   calculateEvaluationRegistrySnapshotDigest,
   type EvaluationRegistry,
@@ -28,6 +29,7 @@ export async function executeV3SuiteCommand(props: {
   readonly invalid: readonly DiscoveryInvalidReceipt[];
   readonly selection: V3SuiteSelectionReceipt;
   readonly registrySnapshot: EvaluationRegistry;
+  readonly executionGraphPreflightReceipt: AuthorityReceiptReference | null;
   readonly executeScenario: (scenarioId: string) => Promise<ExecutedV3BehavioralScenario | null>;
   readonly persistAggregate: (receipt: V3SkillPressureAggregateReceipt) => Promise<string>;
 }): Promise<V3SuiteCommandResult> {
@@ -39,19 +41,27 @@ export async function executeV3SuiteCommand(props: {
   const results: ValidatedV3ScenarioExecutionSummary[] = [];
   for (const scenarioId of props.selection.selectedScenarioIds) {
     try {
-      const registryRow = props.registrySnapshot.scenarios.find((row) => row.scenarioId === scenarioId);
-      const selectedScenario = props.selection.selectedScenarios.find((scenario) => scenario.scenarioId === scenarioId);
-      if (registryRow === undefined) throw new Error(`selected scenario is missing from registry snapshot: ${scenarioId}`);
-      if (selectedScenario === undefined) throw new Error(`selected scenario is missing repetition metadata: ${scenarioId}`);
+      const registryRow = props.registrySnapshot.scenarios.find(
+        (row) => row.scenarioId === scenarioId,
+      );
+      const selectedScenario = props.selection.selectedScenarios.find(
+        (scenario) => scenario.scenarioId === scenarioId,
+      );
+      if (registryRow === undefined)
+        throw new Error(`selected scenario is missing from registry snapshot: ${scenarioId}`);
+      if (selectedScenario === undefined)
+        throw new Error(`selected scenario is missing repetition metadata: ${scenarioId}`);
       const result = await props.executeScenario(scenarioId);
       if (result !== null) {
-        results.push(await validateV3ScenarioExecutionForAggregate({
-          scenarioId,
-          repositoryRoot: props.repositoryRoot,
-          registryRow,
-          expectedRepetitions: selectedScenario.repetitions,
-          executed: result,
-        }));
+        results.push(
+          await validateV3ScenarioExecutionForAggregate({
+            scenarioId,
+            repositoryRoot: props.repositoryRoot,
+            registryRow,
+            expectedRepetitions: selectedScenario.repetitions,
+            executed: result,
+          }),
+        );
       }
     } catch {
       // The absent result remains visible as missing execution in the aggregate.
@@ -65,6 +75,7 @@ export async function executeV3SuiteCommand(props: {
     selectedScenarioIds: props.selection.selectedScenarioIds,
     claimedRequirements: props.selection.claimedRequirements,
     registrySnapshotDigest,
+    executionGraphPreflightReceipt: props.executionGraphPreflightReceipt,
     selection: {
       mode: props.selection.mode,
       selectionDigest: props.selection.selectionDigest,

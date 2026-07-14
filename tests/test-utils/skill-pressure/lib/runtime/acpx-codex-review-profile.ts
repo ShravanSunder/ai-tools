@@ -1,6 +1,7 @@
 import path from "node:path";
 
 import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
+import { serializeDisabledSkillConfig } from "./acpx-subject-profile.js";
 import { ACPX_LUNA_XHIGH_SUBJECT_PROFILE } from "./runtime-profile.js";
 
 export interface AcpxCodexReviewProfile {
@@ -10,6 +11,7 @@ export interface AcpxCodexReviewProfile {
   readonly mcpConfigPath: string;
   readonly packetPath: string;
   readonly packetDigest: string;
+  readonly disabledSkillPaths: readonly string[];
   readonly model: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel;
   readonly reasoningEffort: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort;
   readonly timeoutSeconds: number;
@@ -48,7 +50,10 @@ export function buildAcpxCodexReviewCommand(
       "--file",
       profile.packetPath,
     ],
-    environment: { CODEX_PATH: profile.codexExecutable },
+    environment: {
+      CODEX_CONFIG: serializeDisabledSkillConfig(profile.disabledSkillPaths),
+      CODEX_PATH: profile.codexExecutable,
+    },
   };
 }
 
@@ -72,6 +77,11 @@ function validateProfile(profile: AcpxCodexReviewProfile): void {
     throw new Error("packetPath must be a file inside cwd");
   }
   if (profile.packetDigest.trim() === "") throw new Error("packetDigest must be non-empty");
+  for (const skillPath of profile.disabledSkillPaths) {
+    if (!path.isAbsolute(skillPath) || path.basename(skillPath) !== "SKILL.md") {
+      throw new Error("disabledSkillPaths must contain absolute SKILL.md paths");
+    }
+  }
   if (!Number.isInteger(profile.timeoutSeconds) || profile.timeoutSeconds <= 0) {
     throw new Error("timeoutSeconds must be a positive integer");
   }

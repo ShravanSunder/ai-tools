@@ -50,11 +50,13 @@ function v3Contract(
     skill_type: "discipline",
     effect_surfaces: ["response", "artifacts", "tools"],
     prompt: "Create reports/result.md and briefly report completion.",
-    semantic_assertions: [{
-      assertion_id: "completion-is-clear",
-      criterion: "The response clearly reports completion.",
-      evidence_surface: "response",
-    }],
+    semantic_assertions: [
+      {
+        assertion_id: "completion-is-clear",
+        criterion: "The response clearly reports completion.",
+        evidence_surface: "response",
+      },
+    ],
     behavior_requirement_ids: ["fixture-behavior"],
     baseline: comparisonIntent === "improvement" ? "no_skill" : "previous_revision",
     ...(comparisonIntent === "non_regression" ? { baseline_revision: "a".repeat(40) } : {}),
@@ -66,18 +68,22 @@ function v3Contract(
     allowed_write_paths: ["reports/result.md"],
     required_tool_observations: ["write"],
     forbidden_tool_observations: [],
-    deterministic_checks: [{
-      check_id: "result-exists",
-      fact: "artifact:result",
-      operator: "contains",
-      expected: "ACCEPTED",
-    }],
-    expected_artifacts: [{
-      artifact_id: "result",
-      path: "reports/result.md",
-      file_type: "file",
-      content_contract: "EXPECTED_CONTENT_SENTINEL",
-    }],
+    deterministic_checks: [
+      {
+        check_id: "result-exists",
+        fact: "artifact:result",
+        operator: "contains",
+        expected: "ACCEPTED",
+      },
+    ],
+    expected_artifacts: [
+      {
+        artifact_id: "result",
+        path: "reports/result.md",
+        file_type: "file",
+        content_contract: "EXPECTED_CONTENT_SENTINEL",
+      },
+    ],
   });
 }
 
@@ -110,30 +116,55 @@ function evidence(props: {
     repetitionId: props.repetitionId,
     variant: props.variant,
     visibleResponse: "Completed the requested report.",
-    toolObservations: [{ eventId: "write-1", payload: '{"tool":"write","path":"reports/result.md"}' }],
+    toolObservations: [
+      { eventId: "write-1", payload: '{"tool":"write","path":"reports/result.md"}' },
+    ],
     usageObservations: [],
-    process: { outcome: "executed", exitCode: 0, timedOut: false, cleanupComplete: true, infrastructureReasons: [] },
+    process: {
+      outcome: "executed",
+      exitCode: 0,
+      timedOut: false,
+      cleanupComplete: true,
+      infrastructureReasons: [],
+    },
     repositoryFacts: {
-      files: [{ path: "reports/result.md", kind: "file", contentDigest: "sha256:content", contentExcerpt: props.content }],
+      files: [
+        {
+          path: "reports/result.md",
+          kind: "file",
+          contentDigest: "sha256:content",
+          contentExcerpt: props.content,
+        },
+      ],
       changes: {
-        files: [{ path: "reports/result.md", kind: "file", change: "added", contentDigest: "sha256:content", contentExcerpt: props.content }],
+        files: [
+          {
+            path: "reports/result.md",
+            kind: "file",
+            change: "added",
+            contentDigest: "sha256:content",
+            contentExcerpt: props.content,
+          },
+        ],
         pathChanges: [{ path: "reports/result.md", kind: "file", change: "added" }],
         deletedPaths: [],
         omissions: [],
       },
-      artifacts: [{
-        artifactId: "result",
-        path: "reports/result.md",
-        expectedKind: "file",
-        status: "observed",
-        kind: "file",
-        contentDigest: "sha256:content",
-        contentExcerpt: props.content,
-        contentByteLength: Buffer.byteLength(props.content),
-        contentUnavailableReason: null,
-        contentForEvaluation: props.content,
-        reason: null,
-      }],
+      artifacts: [
+        {
+          artifactId: "result",
+          path: "reports/result.md",
+          expectedKind: "file",
+          status: "observed",
+          kind: "file",
+          contentDigest: "sha256:content",
+          contentExcerpt: props.content,
+          contentByteLength: Buffer.byteLength(props.content),
+          contentUnavailableReason: null,
+          contentForEvaluation: props.content,
+          reason: null,
+        },
+      ],
       omissions: [],
     },
     rationalizationExcerpts: [],
@@ -152,7 +183,12 @@ function semanticResult(
         variant: repetition.variant,
         assertionId: assertion.assertionId,
         classification,
-        evidenceAnchor: { kind: "response", evidenceId: "response", startOffset: 0, endOffset: evidenceAnchorEndOffset },
+        evidenceAnchor: {
+          kind: "response",
+          evidenceId: "response",
+          startOffset: 0,
+          endOffset: evidenceAnchorEndOffset,
+        },
       })),
     ),
     rationalizations: [],
@@ -164,9 +200,20 @@ function budget() {
   return deriveScenarioExecutionBudget({
     repetitions: 5,
     infrastructureRetries: 0,
+    acceptedCaps: {
+      maxModelPrompts: 11,
+      maxAcpxCommands: 11,
+      maxRetries: 0,
+      maxObservedTokens: 1_000_000,
+    },
     commandSlots: [
       { commandType: "subject", acpxTimeoutMs: 1, executorOverheadMs: 0, terminationGraceMs: 1 },
-      { commandType: "reviewer_prompt", acpxTimeoutMs: 1, executorOverheadMs: 0, terminationGraceMs: 1 },
+      {
+        commandType: "reviewer_prompt",
+        acpxTimeoutMs: 1,
+        executorOverheadMs: 0,
+        terminationGraceMs: 1,
+      },
     ],
     fixtureSetupReserveMs: 0,
     scenarioCleanupReserveMs: 0,
@@ -199,18 +246,21 @@ async function runIntegratedFixture(props: {
   const outputDirectory = await mkdtemp(path.join(tmpdir(), "v3-runner-integration-"));
   const claimedRequirements = createClaimedRequirementValidationFixture({
     claimedRequirementIds: ["fixture-behavior"],
-    calibratedGateRequirementIds: props.claimedRequirementStatus === "not_evaluated" ? [] : ["fixture-behavior"],
+    calibratedGateRequirementIds:
+      props.claimedRequirementStatus === "not_evaluated" ? [] : ["fixture-behavior"],
   });
-  const calibration = props.registryFreshness === undefined
-    ? null
-    : createValidatedPromotionFixture({
-        scenarioId: contract.scenarioId,
-        behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
-        freshness: props.registryFreshness,
-        claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
-      });
+  const calibration =
+    props.registryFreshness === undefined
+      ? null
+      : createValidatedPromotionFixture({
+          scenarioId: contract.scenarioId,
+          behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
+          freshness: props.registryFreshness,
+          claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
+        });
   const calibrationSource = calibration === null ? "" : JSON.stringify(calibration.receipt);
-  const calibrationSourceDigest = `sha256:${createHash("sha256").update(calibrationSource).digest("hex")}` as AuthorityDigest;
+  const calibrationSourceDigest =
+    `sha256:${createHash("sha256").update(calibrationSource).digest("hex")}` as AuthorityDigest;
   const calibrationSourceReceipt = {
     receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/calibration.json",
     receiptDigest: props.calibrationSourceDigestOverride ?? calibrationSourceDigest,
@@ -220,94 +270,139 @@ async function runIntegratedFixture(props: {
     contract,
     registrySnapshot: {
       schemaVersion: 1,
-      scenarios: [{
-        ...registryRow(contract),
-        ...(props.registryFreshness === undefined ? {} : {
-          evaluationRole: "gate" as const,
-          freshness: props.registryFreshness,
-          calibrationReceipt: {
-            receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/calibration.json",
-            receiptDigest: calibrationSourceDigest,
-          },
-        }),
-      }],
+      scenarios: [
+        {
+          ...registryRow(contract),
+          ...(props.registryFreshness === undefined
+            ? {}
+            : {
+                evaluationRole: "gate" as const,
+                freshness: props.registryFreshness,
+                calibrationReceipt: {
+                  receiptPath:
+                    "tests/test-utils/skill-pressure/config/authority-receipts/calibration.json",
+                  receiptDigest: calibrationSourceDigest,
+                },
+              }),
+        },
+      ],
     },
     authorityContext: {
-      calibration: calibration === null
-        ? null
-        : { promotion: calibration, sourceReceipt: calibrationSourceReceipt, source: calibrationSource },
+      calibration:
+        calibration === null
+          ? null
+          : {
+              promotion: calibration,
+              sourceReceipt: calibrationSourceReceipt,
+              source: calibrationSource,
+            },
       claimedRequirements,
       resolveParentAcceptance: async ({ runDigest, claimedRequirementManifestDigest }) =>
         props.grantParentAcceptance === true && calibration !== null
           ? (() => {
-              const receipt = createRunAcceptanceFixture({ calibration, runDigest, claimedRequirementManifestDigest });
+              const receipt = createRunAcceptanceFixture({
+                calibration,
+                runDigest,
+                claimedRequirementManifestDigest,
+              });
               const source = JSON.stringify(receipt);
               return {
-              receipt,
-              sourceReceipt: {
-                receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/parent-acceptance.json",
-                receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as AuthorityDigest,
-              },
-              source,
-            };
+                receipt,
+                sourceReceipt: {
+                  receiptPath:
+                    "tests/test-utils/skill-pressure/config/authority-receipts/parent-acceptance.json",
+                  receiptDigest:
+                    `sha256:${createHash("sha256").update(source).digest("hex")}` as AuthorityDigest,
+                },
+                source,
+              };
             })()
           : null,
     },
     executionBudget: budget(),
+    executionAccounting: {
+      preflightReceipt: {
+        receiptPath: "execution-graph-preflight.json",
+        receiptDigest: `sha256:${"e".repeat(64)}`,
+      },
+      snapshot: () => ({ modelPrompts: 11, acpxCommands: 11, retries: 0, observedTokens: 100 }),
+    },
     configuredScenarioDeadlineMs: props.scenarioDeadlineMs ?? 5_000,
     configuredVitestTimeoutMs: (props.scenarioDeadlineMs ?? 5_000) + 1,
     outputDirectory,
     redactionSecrets: [],
-    executeSubjects: props.executeSubjects ?? (async (request) => {
-      subjectRequest = request;
-      const createVariant = async (variant: "baseline" | "treatment") => {
-        const values = [];
-        for (let index = 0; index < 5; index += 1) {
-          const content = variant === "baseline" && props.comparisonIntent === "improvement"
-            ? "REJECTED"
-            : variant === "treatment" && props.forceTreatmentObjectiveFailure === true
-              ? "REJECTED"
-              : "ACCEPTED";
-          const item = {
-            evidence: evidence({ repetitionId: `${variant}-${index + 1}`, variant, content }),
-            runtimeProfile: VERIFIED_LUNA_PROFILE,
-            durableFacts: COMPLETE_DURABLE_FACTS,
-            comparisonIdentity: {
-              sessionId: props.duplicateSessionIds === true ? "duplicate-session" : `${variant}-session-${index + 1}`,
-              repositoryIdentity: `${variant}-repository-${index + 1}`,
-              commonInputDigest: "sha256:common-input",
-              promptDigest: "sha256:prompt",
-              fixtureDigest: "sha256:fixture",
-              sourceDigest: variant === "baseline" && props.comparisonIntent === "improvement"
-                ? null
-                : `sha256:${variant}-source`,
-              sourceRevision: variant === "baseline" && props.comparisonIntent === "non_regression"
-                ? props.baselineRevisionOverride ?? "a".repeat(40)
-                : null,
-            },
-          };
-          const attemptReceiptPath = await request.persistAttempt({
-            variant,
-            repetitionNumber: index + 1,
-            attemptNumber: 1,
-            repetition: props.acceptDifferentRepetition === true
-              ? { ...item, evidence: { ...item.evidence, visibleResponse: "different accepted evidence" } }
-              : item,
-          });
-          await request.persistAcceptedRepetition({
-            variant,
-            repetitionNumber: index + 1,
-            repetition: item,
-            attemptReceiptPath,
-          });
-          values.push(item);
-        }
-        return values;
-      };
-      return { baseline: await createVariant("baseline"), treatment: await createVariant("treatment") };
-    }),
+    executeSubjects:
+      props.executeSubjects ??
+      (async (request) => {
+        subjectRequest = request;
+        const createVariant = async (variant: "baseline" | "treatment") => {
+          const values = [];
+          for (let index = 0; index < 5; index += 1) {
+            const content =
+              variant === "baseline" && props.comparisonIntent === "improvement"
+                ? "REJECTED"
+                : variant === "treatment" && props.forceTreatmentObjectiveFailure === true
+                  ? "REJECTED"
+                  : "ACCEPTED";
+            const item = {
+              evidence: evidence({ repetitionId: `${variant}-${index + 1}`, variant, content }),
+              runtimeProfile: VERIFIED_LUNA_PROFILE,
+              durableFacts: COMPLETE_DURABLE_FACTS,
+              comparisonIdentity: {
+                sessionId:
+                  props.duplicateSessionIds === true
+                    ? "duplicate-session"
+                    : `${variant}-session-${index + 1}`,
+                repositoryIdentity: `${variant}-repository-${index + 1}`,
+                commonInputDigest: "sha256:common-input",
+                promptDigest: "sha256:prompt",
+                fixtureDigest: "sha256:fixture",
+                sourceDigest:
+                  variant === "baseline" && props.comparisonIntent === "improvement"
+                    ? null
+                    : `sha256:${variant}-source`,
+                sourceRevision:
+                  variant === "baseline" && props.comparisonIntent === "non_regression"
+                    ? (props.baselineRevisionOverride ?? "a".repeat(40))
+                    : null,
+              },
+            };
+            const attemptReceiptPath = await request.persistAttempt({
+              variant,
+              repetitionNumber: index + 1,
+              attemptNumber: 1,
+              repetition:
+                props.acceptDifferentRepetition === true
+                  ? {
+                      ...item,
+                      evidence: {
+                        ...item.evidence,
+                        visibleResponse: "different accepted evidence",
+                      },
+                    }
+                  : item,
+            });
+            await request.persistAcceptedRepetition({
+              variant,
+              repetitionNumber: index + 1,
+              repetition: item,
+              attemptReceiptPath,
+            });
+            values.push(item);
+          }
+          return values;
+        };
+        return {
+          baseline: await createVariant("baseline"),
+          treatment: await createVariant("treatment"),
+        };
+      }),
     executeSemanticReview: async ({ packet }) => ({
-      visibleResponse: semanticResult(packet, props.semanticClassification, props.semanticAnchorEndOffset),
+      visibleResponse: semanticResult(
+        packet,
+        props.semanticClassification,
+        props.semanticAnchorEndOffset,
+      ),
       runtimeProfile: props.reviewerProfile ?? VERIFIED_LUNA_PROFILE,
     }),
   });
@@ -327,13 +422,18 @@ describe("reachable v3 behavioral scenario execution", () => {
       expect(result.receipt.authoritySnapshot.reasonCode).toBe("diagnostic_result");
       expect(result.receipt.authoritySnapshot.runDigest).toMatch(/^sha256:/u);
       expect(result.receipt.claimedRequirements.manifestDigest).toBe(
-        createClaimedRequirementValidationFixture({ claimedRequirementIds: ["fixture-behavior"] }).manifestDigest,
+        createClaimedRequirementValidationFixture({ claimedRequirementIds: ["fixture-behavior"] })
+          .manifestDigest,
       );
       expect(result.receipt.objectiveResults).toHaveLength(10);
       expect(result.receipt.semanticReview.validation).toEqual({ valid: true, reason: null });
       expect(result.receipt.attemptReceipts).toHaveLength(10);
       expect(result.receipt.repetitionReceipts).toHaveLength(10);
-      expect(result.receipt.attemptReceipts.every((receipt) => receipt.receiptDigest.startsWith("sha256:"))).toBe(true);
+      expect(
+        result.receipt.attemptReceipts.every((receipt) =>
+          receipt.receiptDigest.startsWith("sha256:"),
+        ),
+      ).toBe(true);
       expect(result.receipt.runtimeProfiles.subjects).toHaveLength(10);
       expect(result.receipt.runtimeProfiles.reviewer.verification.status).toBe("verified");
       expect(result.receiptPath).toMatch(/scenario-receipt\.json$/u);
@@ -405,14 +505,18 @@ describe("reachable v3 behavioral scenario execution", () => {
       releaseAuthority: true,
       reasonCode: null,
     });
-    expect(accepted.result.receipt.authoritySnapshot.parentAcceptanceReceiptDigest).toMatch(/^sha256:/u);
+    expect(accepted.result.receipt.authoritySnapshot.parentAcceptanceReceiptDigest).toMatch(
+      /^sha256:/u,
+    );
     expect(accepted.result.receipt.authoritySnapshot.parentAcceptanceSourceReceipt).toMatchObject({
       receiptPath: expect.stringContaining("authority-receipts"),
     });
     expect(accepted.result.receipt.authoritySnapshot.calibrationSourceReceipt).toMatchObject({
       receiptPath: expect.stringContaining("authority-receipts"),
     });
-    expect(accepted.result.receipt.authoritySnapshot.calibrationAuthorityReceiptDigest).toMatch(/^sha256:/u);
+    expect(accepted.result.receipt.authoritySnapshot.calibrationAuthorityReceiptDigest).toMatch(
+      /^sha256:/u,
+    );
   });
 
   it("changes the accepted run digest when semantic evidence changes under the same passing outcome", async () => {
@@ -440,11 +544,13 @@ describe("reachable v3 behavioral scenario execution", () => {
   });
 
   it("rejects calibration authority that is not the registry's exact referenced receipt", async () => {
-    await expect(runIntegratedFixture({
-      comparisonIntent: "non_regression",
-      registryFreshness: "fresh",
-      calibrationSourceDigestOverride: fixtureAuthorityDigest("9"),
-    })).rejects.toThrow(/does not match the registry calibration receipt/u);
+    await expect(
+      runIntegratedFixture({
+        comparisonIntent: "non_regression",
+        registryFreshness: "fresh",
+        calibrationSourceDigestOverride: fixtureAuthorityDigest("9"),
+      }),
+    ).rejects.toThrow(/does not match the registry calibration receipt/u);
   });
 
   it("withholds release authority when the claimed requirement manifest is untraced", async () => {
@@ -494,10 +600,12 @@ describe("reachable v3 behavioral scenario execution", () => {
   });
 
   it("binds an accepted repetition to the exact durable attempt evidence", async () => {
-    await expect(runIntegratedFixture({
-      comparisonIntent: "improvement",
-      acceptDifferentRepetition: true,
-    })).rejects.toThrow(/does not match its durable attempt receipt/u);
+    await expect(
+      runIntegratedFixture({
+        comparisonIntent: "improvement",
+        acceptDifferentRepetition: true,
+      }),
+    ).rejects.toThrow(/does not match its durable attempt receipt/u);
   });
 
   it("rejects a verified reviewer receipt from the wrong exact profile", async () => {
@@ -526,36 +634,45 @@ describe("reachable v3 behavioral scenario execution", () => {
       risk: "high",
       reviewerProfile: VERIFIED_OPUS_PROFILE,
     });
-    expect(exactProfile.result.receipt.reduction).toMatchObject({ outcome: "pass", reasonCode: null });
+    expect(exactProfile.result.receipt.reduction).toMatchObject({
+      outcome: "pass",
+      reasonCode: null,
+    });
   });
 
   it("refuses to persist an attempt whose durability facts were not observed", async () => {
-    await expect(runIntegratedFixture({
-      comparisonIntent: "improvement",
-      executeSubjects: async (request) => {
-        const repetition = {
-          evidence: evidence({ repetitionId: "baseline-1", variant: "baseline", content: "REJECTED" }),
-          runtimeProfile: VERIFIED_LUNA_PROFILE,
-          durableFacts: { ...COMPLETE_DURABLE_FACTS, streamsDrained: false },
-          comparisonIdentity: {
-            sessionId: "baseline-session-1",
-            repositoryIdentity: "baseline-repository-1",
-            commonInputDigest: "sha256:common-input",
-            promptDigest: "sha256:prompt",
-            fixtureDigest: "sha256:fixture",
-            sourceDigest: "sha256:baseline-source",
-            sourceRevision: null,
-          },
-        };
-        await request.persistAttempt({
-          variant: "baseline",
-          repetitionNumber: 1,
-          attemptNumber: 1,
-          repetition,
-        });
-        throw new Error("unreachable");
-      },
-    })).rejects.toThrow(/streamsDrained/u);
+    await expect(
+      runIntegratedFixture({
+        comparisonIntent: "improvement",
+        executeSubjects: async (request) => {
+          const repetition = {
+            evidence: evidence({
+              repetitionId: "baseline-1",
+              variant: "baseline",
+              content: "REJECTED",
+            }),
+            runtimeProfile: VERIFIED_LUNA_PROFILE,
+            durableFacts: { ...COMPLETE_DURABLE_FACTS, streamsDrained: false },
+            comparisonIdentity: {
+              sessionId: "baseline-session-1",
+              repositoryIdentity: "baseline-repository-1",
+              commonInputDigest: "sha256:common-input",
+              promptDigest: "sha256:prompt",
+              fixtureDigest: "sha256:fixture",
+              sourceDigest: "sha256:baseline-source",
+              sourceRevision: null,
+            },
+          };
+          await request.persistAttempt({
+            variant: "baseline",
+            repetitionNumber: 1,
+            attemptNumber: 1,
+            repetition,
+          });
+          throw new Error("unreachable");
+        },
+      }),
+    ).rejects.toThrow(/streamsDrained/u);
   });
 
   it("preserves partial attempt and progress receipts when the scenario deadline fires", async () => {
@@ -564,7 +681,11 @@ describe("reachable v3 behavioral scenario execution", () => {
       comparisonIntent: "improvement",
       executeSubjects: async (request) => {
         const repetition = {
-          evidence: evidence({ repetitionId: "baseline-1", variant: "baseline", content: "REJECTED" }),
+          evidence: evidence({
+            repetitionId: "baseline-1",
+            variant: "baseline",
+            content: "REJECTED",
+          }),
           runtimeProfile: VERIFIED_LUNA_PROFILE,
           durableFacts: COMPLETE_DURABLE_FACTS,
           comparisonIdentity: {
@@ -585,15 +706,22 @@ describe("reachable v3 behavioral scenario execution", () => {
         });
         if (request.signal.aborted) throw new Error("scenario aborted");
         await new Promise<void>((_resolve, reject) => {
-          request.signal.addEventListener("abort", () => reject(new Error("scenario aborted")), { once: true });
+          request.signal.addEventListener("abort", () => reject(new Error("scenario aborted")), {
+            once: true,
+          });
         });
         throw new Error("unreachable");
       },
       scenarioDeadlineMs: 25,
     });
 
-    expect(result.receipt.reduction).toMatchObject({ outcome: "infrastructure_error", reasonCode: "scenario_deadline" });
-    expect(result.receipt.attemptReceipts.map((receipt) => receipt.receiptPath)).toContain(completedAttemptPath);
+    expect(result.receipt.reduction).toMatchObject({
+      outcome: "infrastructure_error",
+      reasonCode: "scenario_deadline",
+    });
+    expect(result.receipt.attemptReceipts.map((receipt) => receipt.receiptPath)).toContain(
+      completedAttemptPath,
+    );
     expect(result.receipt.progressReceipts.length).toBeGreaterThan(1);
     expect(result.receipt.lastDurableStage).toBe("scenario_receipt_published");
   });

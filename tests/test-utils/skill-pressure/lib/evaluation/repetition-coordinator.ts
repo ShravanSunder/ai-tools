@@ -22,15 +22,19 @@ export interface RunScenarioRepetitionsProps {
   readonly baselineSource: Exclude<SelectedSkillSource, { readonly mode: "current" }>;
   readonly treatmentSource: Extract<SelectedSkillSource, { readonly mode: "current" }>;
   readonly repetitionProps: RepetitionCommonProps;
-  readonly runRepetition?: (
-    props: RunSubjectRepetitionProps,
-  ) => Promise<SubjectRepetitionReceipt>;
+  readonly runRepetition?: (props: RunSubjectRepetitionProps) => Promise<SubjectRepetitionReceipt>;
   readonly persistAttemptReceipt?: (props: {
     readonly receipt: SubjectRepetitionReceipt;
     readonly variant: "baseline" | "treatment";
     readonly repetitionNumber: number;
     readonly attemptNumber: number;
   }) => Promise<string>;
+  readonly beforeAttempt?: (props: {
+    readonly variant: "baseline" | "treatment";
+    readonly repetitionNumber: number;
+    readonly attemptNumber: number;
+    readonly retry: boolean;
+  }) => void;
 }
 
 export interface ScenarioRepetitionSetReceipt {
@@ -102,6 +106,7 @@ export async function runScenarioRepetitions(
       repetitionNumber: repetitionIndex + 1,
       infrastructureRetries,
       persistAttemptReceipt: props.persistAttemptReceipt,
+      beforeAttempt: props.beforeAttempt,
     });
     baseline.push(baselineAttempt.selected);
     attempts.push(baselineAttempt.receipt);
@@ -113,6 +118,7 @@ export async function runScenarioRepetitions(
       repetitionNumber: repetitionIndex + 1,
       infrastructureRetries,
       persistAttemptReceipt: props.persistAttemptReceipt,
+      beforeAttempt: props.beforeAttempt,
     });
     treatment.push(treatmentAttempt.selected);
     attempts.push(treatmentAttempt.receipt);
@@ -128,47 +134,61 @@ export async function runScenarioRepetitions(
     baseline,
     treatment,
     attempts,
-    pairSetFingerprint: digest(JSON.stringify({
-      coordinatorVersion: COORDINATOR_VERSION,
-      scenarioId: props.repetitionProps.scenarioId,
-      repetitions: props.repetitions,
-      infrastructureRetries,
-      commonInputDigest: uniqueValues([...baseline, ...treatment].map((item) => item.commonInputDigest)),
-      promptDigest: uniqueValues([...baseline, ...treatment].map((item) => item.promptDigest)),
-      fixtureDigest: uniqueValues([...baseline, ...treatment].map((item) => item.fixtureDigest)),
-      model: props.repetitionProps.model,
-      reasoningEffort: props.repetitionProps.reasoningEffort,
-      permissionMode: props.repetitionProps.permissionMode,
-      runtimeIdentity: props.repetitionProps.runtimeIdentity,
-      baselineSourceMode: props.baselineSource.mode,
-      baselineSourceDigest: uniqueValues(baseline.map((item) => item.sourceDigest)),
-      baselineSourceRevision: uniqueValues(baseline.map((item) => item.sourceRevision)),
-      treatmentSourceMode: props.treatmentSource.mode,
-      treatmentSourceDigest: uniqueValues(treatment.map((item) => item.sourceDigest)),
-      treatmentSourceRevision: uniqueValues(treatment.map((item) => item.sourceRevision)),
-    })),
+    pairSetFingerprint: digest(
+      JSON.stringify({
+        coordinatorVersion: COORDINATOR_VERSION,
+        scenarioId: props.repetitionProps.scenarioId,
+        repetitions: props.repetitions,
+        infrastructureRetries,
+        commonInputDigest: uniqueValues(
+          [...baseline, ...treatment].map((item) => item.commonInputDigest),
+        ),
+        promptDigest: uniqueValues([...baseline, ...treatment].map((item) => item.promptDigest)),
+        fixtureDigest: uniqueValues([...baseline, ...treatment].map((item) => item.fixtureDigest)),
+        model: props.repetitionProps.model,
+        reasoningEffort: props.repetitionProps.reasoningEffort,
+        permissionMode: props.repetitionProps.permissionMode,
+        runtimeIdentity: props.repetitionProps.runtimeIdentity,
+        baselineSourceMode: props.baselineSource.mode,
+        baselineSourceDigest: uniqueValues(baseline.map((item) => item.sourceDigest)),
+        baselineSourceRevision: uniqueValues(baseline.map((item) => item.sourceRevision)),
+        treatmentSourceMode: props.treatmentSource.mode,
+        treatmentSourceDigest: uniqueValues(treatment.map((item) => item.sourceDigest)),
+        treatmentSourceRevision: uniqueValues(treatment.map((item) => item.sourceRevision)),
+      }),
+    ),
     status: infrastructureReasons.length === 0 ? "executed" : "infrastructure_error",
     infrastructureReasons,
   };
 }
 
 async function runWithInfrastructureRetries(props: {
-  readonly runRepetition: (
-    props: RunSubjectRepetitionProps,
-  ) => Promise<SubjectRepetitionReceipt>;
+  readonly runRepetition: (props: RunSubjectRepetitionProps) => Promise<SubjectRepetitionReceipt>;
   readonly repetitionProps: RepetitionCommonProps;
   readonly variant: "baseline" | "treatment";
   readonly selectedSkillSource: SelectedSkillSource;
   readonly repetitionNumber: number;
   readonly infrastructureRetries: number;
   readonly persistAttemptReceipt: RunScenarioRepetitionsProps["persistAttemptReceipt"];
-}): Promise<{ readonly selected: SubjectRepetitionReceipt; readonly receipt: RepetitionAttemptReceipt }> {
+  readonly beforeAttempt: RunScenarioRepetitionsProps["beforeAttempt"];
+}): Promise<{
+  readonly selected: SubjectRepetitionReceipt;
+  readonly receipt: RepetitionAttemptReceipt;
+}> {
   const receipts: SubjectRepetitionReceipt[] = [];
   const durableAttemptReceiptPaths: string[] = [];
   for (let attempt = 0; attempt <= props.infrastructureRetries; attempt += 1) {
     if (props.repetitionProps.signal?.aborted) {
-      throw new Error("runner abort signal is already aborted; refusing to launch another repetition attempt");
+      throw new Error(
+        "runner abort signal is already aborted; refusing to launch another repetition attempt",
+      );
     }
+    props.beforeAttempt?.({
+      variant: props.variant,
+      repetitionNumber: props.repetitionNumber,
+      attemptNumber: attempt + 1,
+      retry: attempt > 0,
+    });
     const receipt = await props.runRepetition({
       ...props.repetitionProps,
       variant: props.variant,
@@ -181,10 +201,13 @@ async function runWithInfrastructureRetries(props: {
       repetitionNumber: props.repetitionNumber,
       attemptNumber: attempt + 1,
     });
-    if (durableAttemptReceiptPath !== undefined) durableAttemptReceiptPaths.push(durableAttemptReceiptPath);
+    if (durableAttemptReceiptPath !== undefined)
+      durableAttemptReceiptPaths.push(durableAttemptReceiptPath);
     if (props.repetitionProps.signal?.aborted) {
       if (receipt.status === "executed") {
-        throw new Error("runner abort signal fired after a durable attempt receipt; refusing to accept the successful attempt");
+        throw new Error(
+          "runner abort signal fired after a durable attempt receipt; refusing to accept the successful attempt",
+        );
       }
       throw new Error("runner abort signal fired after a failed attempt; refusing retry");
     }

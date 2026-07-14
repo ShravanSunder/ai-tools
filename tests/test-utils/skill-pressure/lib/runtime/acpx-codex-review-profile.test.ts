@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { buildAcpxCodexReviewCommand, type AcpxCodexReviewProfile } from "./acpx-codex-review-profile.js";
+import {
+  buildAcpxCodexReviewCommand,
+  type AcpxCodexReviewProfile,
+} from "./acpx-codex-review-profile.js";
 
 const profile = {
   launcher: { executable: "/opt/homebrew/bin/acpx", prefixArgs: [], source: "global" },
@@ -9,6 +12,7 @@ const profile = {
   mcpConfigPath: "/tmp/skill-pressure/review-1/mcp.json",
   packetPath: "/tmp/skill-pressure/review-1/packet.json",
   packetDigest: "sha256:packet",
+  disabledSkillPaths: ["/tmp/codex-home/skills/ambient/SKILL.md"],
   model: "gpt-5.6-luna",
   reasoningEffort: "xhigh",
   timeoutSeconds: 120,
@@ -22,6 +26,7 @@ describe("ACPX Codex review profile", () => {
     expect(command.args).toContain("--deny-all");
     expect(command.args).toContain("--no-terminal");
     expect(command.args.slice(-3)).toEqual(["exec", "--file", profile.packetPath]);
-    expect(command.environment).toEqual({ CODEX_PATH: profile.codexExecutable });
+    expect(command.environment?.CODEX_PATH).toBe(profile.codexExecutable);
+    expect(command.environment?.CODEX_CONFIG).toContain(profile.disabledSkillPaths[0]);
   });
 });
