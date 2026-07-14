@@ -1,6 +1,7 @@
 # Skill Pressure Testing System Spec
 
-Status: accepted after adversarial review and parent remediation
+Status: superseded by
+`docs/specs/2026-07-13-skill-pressure-behavior-evaluation-system/2026-07-13-skill-pressure-behavior-evaluation-system.md`
 
 ## Decision Summary
 
