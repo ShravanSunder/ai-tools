@@ -52,6 +52,16 @@ describe("post-cutover migration accounting", () => {
     expect(artifactBoundaryScenario?.semanticAssertions).toEqual([
       expect.objectContaining({ evidenceSurface: "artifact:goal-contract" }),
     ]);
+    const requiredWorkflowCheck = artifactBoundaryScenario?.deterministicChecks.find(
+      (check) => check.checkId === "required-workflow-anchor",
+    );
+    const requiredWorkflowPattern = new RegExp(String(requiredWorkflowCheck?.expected), "u");
+    expect(requiredWorkflowPattern.test(
+      "Required workflow skill: shravan-dev-workflow:orchestrator-goal",
+    )).toBe(true);
+    expect(requiredWorkflowPattern.test(
+      "Required workflow skill:\nshravan-dev-workflow:orchestrator-goal",
+    )).toBe(true);
     expect(receipt.retiredScenarios).toEqual([]);
     expect(receipt.ownerCount).toBe(EXPECTED_MIGRATED_OWNER_COUNT);
     expect(receipt.legacyAuthorityAbsent).toBe(true);

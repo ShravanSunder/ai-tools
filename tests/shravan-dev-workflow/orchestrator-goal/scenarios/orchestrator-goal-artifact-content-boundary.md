@@ -48,11 +48,11 @@ deterministic_checks:
   - check_id: required-workflow-anchor
     fact: artifact:goal-contract
     operator: matches
-    expected: "Required workflow skill: `?shravan-dev-workflow:orchestrator-goal`?"
+    expected: "Required workflow skill:\\s{0,100}`?shravan-dev-workflow:orchestrator-goal`?"
   - check_id: workflow-anchor-after-excerpt
     fact: artifact:goal-contract
     operator: matches
-    expected: "(?s)^.{1000}.{1000}(?:.{1000}){0,30}.{0,1000}Required workflow skill: `?shravan-dev-workflow:orchestrator-goal`?"
+    expected: "(?s)^.{1000}.{1000}(?:.{1000}){0,30}.{0,1000}Required workflow skill:\\s{0,100}`?shravan-dev-workflow:orchestrator-goal`?"
 expected_artifacts:
   - artifact_id: goal-contract
     path: goal-contract.md

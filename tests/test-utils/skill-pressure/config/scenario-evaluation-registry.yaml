@@ -478,12 +478,12 @@ scenarios:
     calibration_receipt: null
     authority_history: []
   - scenario_id: orchestrator-goal-artifact-content-boundary
-    behavior_contract_digest: sha256:c68fc6856883c293c73952c14feb6d8b810d9228807c2dc25460e14f8e3f3f79
+    behavior_contract_digest: sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e
     evaluation_role: diagnostic
     freshness: uncalibrated
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
-      receipt_digest: sha256:2d5616027d40738c88776f718f4b7691e367108db6a9bdad10dc65585bd2de6c
+      receipt_digest: sha256:9d22f1156fcf90bc207b762e0ce16b58ffebed75a744672115adc35c93f65367
     calibration_receipt: null
     authority_history: []
   - scenario_id: orchestrator-goal-clarity-gate

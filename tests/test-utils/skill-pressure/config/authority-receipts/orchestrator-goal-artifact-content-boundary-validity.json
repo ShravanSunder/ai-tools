@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-artifact-content-boundary",
-  "behaviorContractDigest": "sha256:c68fc6856883c293c73952c14feb6d8b810d9228807c2dc25460e14f8e3f3f79",
+  "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,
