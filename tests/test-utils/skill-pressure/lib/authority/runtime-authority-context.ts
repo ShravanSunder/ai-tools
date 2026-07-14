@@ -83,7 +83,7 @@ export async function persistExplicitParentAcceptance(props: {
   readonly contract: V3BehaviorContract;
   readonly promotion: ValidatedPromotionReceipt;
   readonly request: V3ParentAcceptanceRequest;
-}): Promise<V3ParentAcceptanceContext> {
+}): Promise<V3ParentAcceptanceContext & { readonly newlyCreated: boolean }> {
   if (
     props.request.candidate.scenarioId !== props.contract.scenarioId ||
     props.request.candidate.behaviorContractDigest !== props.contract.behaviorContractDigest ||
@@ -103,6 +103,7 @@ export async function persistExplicitParentAcceptance(props: {
   const receiptDirectory = path.join(props.repositoryRoot, AUTHORITY_RECEIPT_ROOT);
   const receiptPath = path.join(receiptDirectory, fileName);
   let source: string;
+  let newlyCreated = false;
   try {
     source = await readFile(receiptPath, "utf8");
     if (JSON.stringify(JSON.parse(source)) !== JSON.stringify(receipt)) {
@@ -116,6 +117,7 @@ export async function persistExplicitParentAcceptance(props: {
       receipt,
       secrets: [],
     });
+    newlyCreated = true;
     source = await readFile(persisted.receiptPath, "utf8");
   }
   return {
@@ -125,6 +127,7 @@ export async function persistExplicitParentAcceptance(props: {
       receiptPath: `${AUTHORITY_RECEIPT_ROOT}/${fileName}`,
       receiptDigest: digestSource(source),
     },
+    newlyCreated,
   };
 }
 

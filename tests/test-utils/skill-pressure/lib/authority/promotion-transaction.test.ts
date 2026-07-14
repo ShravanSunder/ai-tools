@@ -278,6 +278,15 @@ describe("promotion transaction", () => {
     await expect(
       readFile(path.join(fixture.repositoryRoot, accepted.parentAcceptanceReceiptPath), "utf8"),
     ).resolves.toContain(accepted.runDigest);
+    await expect(acceptScenarioRunFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: true,
+      dependencies: {
+        validateScenarioExecution: async () => ({}) as never,
+        createAuthorityContext: async () => authority,
+      },
+    })).resolves.toEqual(accepted);
   });
 
   it("rejects implicit run acceptance and rolls back acceptance if derived receipt commit fails", async () => {

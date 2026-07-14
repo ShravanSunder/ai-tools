@@ -131,33 +131,68 @@ export async function acceptScenarioRunFromReceipt(props: {
   let acceptedReceiptCreated = false;
   try {
     await props.dependencies?.beforeAcceptedReceiptCommit?.();
-    const persisted = await writeJsonReceipt({
+    const persisted = await persistAcceptedScenarioReceipt({
       receiptDirectory: path.dirname(scenarioReceiptPath),
       fileName: acceptedFileName,
       receipt: acceptedReceipt,
-      secrets: [],
     });
-    acceptedReceiptCreated = true;
+    acceptedReceiptCreated = persisted.newlyCreated;
     await (props.dependencies?.validateScenarioExecution ?? validateV3ScenarioExecutionForAggregate)({
       scenarioId: receipt.scenarioId,
       repositoryRoot,
       registryRow,
       expectedRepetitions: contract.repetitions,
-      executed: persisted,
+      executed: persisted.executed,
     });
     return {
       scenarioId: receipt.scenarioId,
       runDigest: receipt.authoritySnapshot.runDigest as AuthorityDigest,
       parentAcceptanceReceiptPath: acceptance.sourceReceipt.receiptPath,
       parentAcceptanceReceiptDigest,
-      acceptedScenarioReceiptPath: persisted.receiptPath,
-      acceptedScenarioReceiptDigest: persisted.receiptDigest as AuthorityDigest,
+      acceptedScenarioReceiptPath: persisted.executed.receiptPath,
+      acceptedScenarioReceiptDigest: persisted.executed.receiptDigest as AuthorityDigest,
     };
   } catch (error) {
     if (acceptedReceiptCreated) await rm(acceptedReceiptPath, { force: true });
-    await rm(path.join(repositoryRoot, acceptance.sourceReceipt.receiptPath), { force: true });
+    if (acceptance.newlyCreated) {
+      await rm(path.join(repositoryRoot, acceptance.sourceReceipt.receiptPath), { force: true });
+    }
     throw error;
   }
+}
+
+async function persistAcceptedScenarioReceipt(props: {
+  readonly receiptDirectory: string;
+  readonly fileName: string;
+  readonly receipt: V3BehavioralScenarioReceipt;
+}): Promise<{
+  readonly executed: ExecutedV3BehavioralScenario;
+  readonly newlyCreated: boolean;
+}> {
+  const receiptPath = path.join(props.receiptDirectory, props.fileName);
+  try {
+    const source = await readFile(receiptPath, "utf8");
+    if (JSON.stringify(JSON.parse(source)) !== JSON.stringify(props.receipt)) {
+      throw new Error("existing parent-accepted scenario receipt does not match this run");
+    }
+    return {
+      executed: {
+        receiptPath,
+        receiptDigest: digestSource(source),
+        receipt: props.receipt,
+      },
+      newlyCreated: false,
+    };
+  } catch (error) {
+    if (!isMissingFile(error)) throw error;
+  }
+  const persisted = await writeJsonReceipt({
+    receiptDirectory: props.receiptDirectory,
+    fileName: props.fileName,
+    receipt: props.receipt,
+    secrets: [],
+  });
+  return { executed: persisted, newlyCreated: true };
 }
 
 function assertAcceptableCandidate(receipt: V3BehavioralScenarioReceipt): void {
@@ -180,4 +215,8 @@ function assertAcceptableCandidate(receipt: V3BehavioralScenarioReceipt): void {
 
 function digestSource(source: string): AuthorityDigest {
   return `sha256:${createHash("sha256").update(source).digest("hex")}`;
+}
+
+function isMissingFile(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
 }
