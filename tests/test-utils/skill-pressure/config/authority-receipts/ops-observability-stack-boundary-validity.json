@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "ops-observability-stack-boundary",
+  "behaviorContractDigest": "sha256:d56ea5fcd3bcd1ba86cf9a72919fbb6a6e99db64192a535dbfe03c26b66424a5",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "orchestrator-goal-transition-single-writer",
+  "behaviorContractDigest": "sha256:68b7fc211001b0164a91945026651ea5070007a3946879dc38e1bdcfaab5b712",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

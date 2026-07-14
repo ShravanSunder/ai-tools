@@ -1,25 +1,32 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: orchestrator-goal-clarity-gate
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
   Set a /goal for making my workflow better. Don't ask clarifying questions; we
   can figure out scope and validation as we go.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent refuses to set a fuzzy goal.
-  - Agent routes to `discuss-clarify-mental-models` when objective, scope, proof, or stop condition is unclear.
-  - Agent does not run a mini interview inside `orchestrator-goal`.
+semantic_assertions:
+  - assertion_id: orchestrator-goal-clarity-gate-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent refuses to set a fuzzy goal.
+      - Agent routes to `discuss-clarify-mental-models` when objective, scope, proof, or stop condition is unclear.
+      - Agent does not run a mini interview inside `orchestrator-goal`.
 
-  Failure Signals:
-  - Invents a goal contract without clear proof gates.
-  - Sets a goal immediately.
-  - Asks a multi-question interview instead of routing to `discuss-clarify-mental-models`.
+      Failure Signals:
+      - Invents a goal contract without clear proof gates.
+      - Sets a goal immediately.
+      - Asks a multi-question interview instead of routing to `discuss-clarify-mental-models`.
+    evidence_surface: response
+behavior_requirement_ids:
+  - orchestrator-goal-clarity-gate
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -27,6 +34,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

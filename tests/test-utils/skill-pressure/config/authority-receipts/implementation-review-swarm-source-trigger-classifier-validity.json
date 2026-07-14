@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "implementation-review-swarm-source-trigger-classifier",
+  "behaviorContractDigest": "sha256:9a79b8d6fdd4039080863d5fedb2d4004f8040e8b0a1ced10c83c5c0bd4f05cb",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

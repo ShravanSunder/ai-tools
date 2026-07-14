@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "ops-security-review-official-scan",
+  "behaviorContractDigest": "sha256:a6edb2b3661debcf15077e34efbb14efc6c683033799b0dc41fc91af46f2fddd",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

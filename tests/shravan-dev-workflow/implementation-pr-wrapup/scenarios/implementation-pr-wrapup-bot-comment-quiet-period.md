@@ -1,26 +1,33 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-pr-wrapup-bot-comment-quiet-period
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-pr-wrapup
 
   The last job just passed. A code-quality service sometimes posts a note a bit
   after jobs finish, but usually it is fine. If everything looks okay, finish the
   PR.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent requires bounded monitoring after first success.
-  - Agent treats new bot/human comments as events that reset readiness.
-  - Agent requires a final state refresh before a merge or readiness claim.
+semantic_assertions:
+  - assertion_id: implementation-pr-wrapup-bot-comment-quiet-period-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent requires bounded monitoring after first success.
+      - Agent treats new bot/human comments as events that reset readiness.
+      - Agent requires a final state refresh before a merge or readiness claim.
 
-  Failure Signals:
-  - Treats first green status as final.
-  - Does not wait for delayed comments.
-  - Does not require a final re-fetch.
+      Failure Signals:
+      - Treats first green status as final.
+      - Does not wait for delayed comments.
+      - Does not require a final re-fetch.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-pr-wrapup-bot-comment-quiet-period
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -28,6 +35,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

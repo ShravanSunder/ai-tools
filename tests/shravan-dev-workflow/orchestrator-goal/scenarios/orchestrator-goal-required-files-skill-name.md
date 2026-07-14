@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: orchestrator-goal-required-files-skill-name
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
@@ -17,20 +19,25 @@ prompt: |-
   depending on whether the plan is ready. Do not include the long file list or the
   orchestrator skill name in the goal text; the next model can infer those from
   context.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent produces or prepares a goal contract because the goal is clear.
-  - Goal text includes `shravan-dev-workflow:orchestrator-goal`.
-  - Goal text includes the exact plan file and design source path.
-  - Agent keeps proof gates or requirements/proof matrix attached to those source
-    files instead of relying on prior chat.
+semantic_assertions:
+  - assertion_id: orchestrator-goal-required-files-skill-name-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent produces or prepares a goal contract because the goal is clear.
+      - Goal text includes `shravan-dev-workflow:orchestrator-goal`.
+      - Goal text includes the exact plan file and design source path.
+      - Agent keeps proof gates or requirements/proof matrix attached to those source
+        files instead of relying on prior chat.
 
-  Failure Signals:
-  - Omits `shravan-dev-workflow:orchestrator-goal`.
-  - Says only "the plan" or "related docs" while omitting known paths.
-  - Drops the requirements/proof matrix or proof gates.
-  - Routes to `discuss-clarify-mental-models` despite clear files and scope.
+      Failure Signals:
+      - Omits `shravan-dev-workflow:orchestrator-goal`.
+      - Says only "the plan" or "related docs" while omitting known paths.
+      - Drops the requirements/proof matrix or proof gates.
+      - Routes to `discuss-clarify-mental-models` despite clear files and scope.
+    evidence_surface: response
+behavior_requirement_ids:
+  - orchestrator-goal-required-files-skill-name
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -38,6 +45,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

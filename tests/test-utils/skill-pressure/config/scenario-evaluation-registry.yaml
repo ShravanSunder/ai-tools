@@ -1,0 +1,983 @@
+schema_version: 1
+scenarios:
+  - scenario_id: debug-investigation-background-monitoring
+    behavior_contract_digest: sha256:3f84566e20677b3d8224fac3a638259f5cb2d8b8a24aaf40a166da8257eb1c20
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/debug-investigation-background-monitoring-validity.json
+      receipt_digest: sha256:c1a908626eaf50acbcfd594ec4532e58bce32bb182eb4f0055a50c6f74b6f083
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: debug-investigation-no-blind-fix
+    behavior_contract_digest: sha256:21ddbdb3a9ba7ad4af21312a69c016d94a668f5720805b8dc3c9fd835cc88d0b
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/debug-investigation-no-blind-fix-validity.json
+      receipt_digest: sha256:5b6bebd949a170d558c3daea0ca05a00b82c677edd07fa3b6019b0b25c1ead0a
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: discuss-clarify-mental-models-drift-interrupt
+    behavior_contract_digest: sha256:e37b798f9b1accd13bf4692ac4a22326b0a34fe8a39aac93040b069da2357b72
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/discuss-clarify-mental-models-drift-interrupt-validity.json
+      receipt_digest: sha256:e7a15909651420cbbf45e9a437c23479895a3573c9cf06ece002621251ff612c
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: discuss-clarify-mental-models-map-building
+    behavior_contract_digest: sha256:f33e06f493fcbb5d8d0b7573f91f4c0babb29183fc45bfccdb20f1becc3c5d35
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/discuss-clarify-mental-models-map-building-validity.json
+      receipt_digest: sha256:c8920157a1fcc4220912e79cb4a6d501b335839789e4b1cc3f413898facafb25
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: discuss-clarify-mental-models-reconverge
+    behavior_contract_digest: sha256:6caeba9607cc54f238cd344530d0436f14950c2139e6a1acda6b83fd34bca6eb
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/discuss-clarify-mental-models-reconverge-validity.json
+      receipt_digest: sha256:88a6eb71abffa417bc39cee28c41b5dbb74ef437aba134ae399cec6a32e045fb
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: docs-maintain-no-stale-purge
+    behavior_contract_digest: sha256:16d096f0827569a0819e8262d6be3042146415a437642f2e174d9d9a06527b70
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/docs-maintain-no-stale-purge-validity.json
+      receipt_digest: sha256:d147ef026559daaae44dd4e0d103df3304cdfc714705145047f2d10fb81108b9
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-execute-plan-matrix-verification
+    behavior_contract_digest: sha256:689da05d536800377b41382480fc69ac64f0a8cb9368c3318b19926ba75a1650
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-execute-plan-matrix-verification-validity.json
+      receipt_digest: sha256:00edab4e61edfc05d7b3494a3a250449309f89b13d97403bb280acfe75aef4f9
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-execute-plan-parallel-subagents-default
+    behavior_contract_digest: sha256:90ba93864b021781a03c29472ab82e0b39fb5bebfe784b2a253a74d63923ef66
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-execute-plan-parallel-subagents-default-validity.json
+      receipt_digest: sha256:3fa20de7ae98581398b097c6f7758db1ae1adacb0e07375a9a3c8274271b79c8
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-execute-plan-rejects-design-only
+    behavior_contract_digest: sha256:f8efdf76a5934e203497670e5fd599b9e721adde11d09d51b3b3f5d493ae8f49
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-execute-plan-rejects-design-only-validity.json
+      receipt_digest: sha256:b4489c05eac9c931cf85ea30d90f38f4d9e534f8b03de22bf0fe0ec8443a1182
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-execute-plan-validate-before-edits
+    behavior_contract_digest: sha256:5876b72d1aca2e76759a9b68a11821aefd76e5764f5aa1d1fd7869bd7cc1b123
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-execute-plan-validate-before-edits-validity.json
+      receipt_digest: sha256:92c631027e90405902ad37f95d12d109777160142d2c81bd9246a42f036e4c50
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-handoff-evidence-packet
+    behavior_contract_digest: sha256:3d2be2327cae9e612fad6c96a6ca5ccdd3fc80f9affc6494bc2435885523e83a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-handoff-evidence-packet-validity.json
+      receipt_digest: sha256:dd814d1bcc49b82b5a95cc70e7d907f333caaafc9f8e3b6600b1f02877943101
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-handoff-requires-state
+    behavior_contract_digest: sha256:ab425afcc55c4f73abdbf64cc0eaec4bc1e334f931a78f79e4f68bb65e5ea441
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-handoff-requires-state-validity.json
+      receipt_digest: sha256:37fd5b4eea520c44a9db93ef40ffdd91372c10ff6063e023f24446b89db7ae04
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-baseline-comparison
+    behavior_contract_digest: sha256:ecc307405b97b3ac7191e89344a452aa593be58f649592c59708ddee62f8a310
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-baseline-comparison-validity.json
+      receipt_digest: sha256:904a8cede87b90578e863bbdea8b32cdfd6e0eca07756a39e5f1109844f3f548
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-bot-comment-quiet-period
+    behavior_contract_digest: sha256:00d528e0021fd1f3ed8b659a6ccac8f88efdfa7e1f5257501025cf3c09618419
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-bot-comment-quiet-period-validity.json
+      receipt_digest: sha256:eec4e12b31f2773df28513216a753a87f5282af3e72a64a8644cc1a3516c52ef
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-github-api-budget
+    behavior_contract_digest: sha256:525884d134ce41de4d38a5bfb5adb85b13660158873400130eb2d41e9c6579f8
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-github-api-budget-validity.json
+      receipt_digest: sha256:b37a873ac1968ad41d8b0663f5c7d8206f1b513d1d77b9ecff5069b6e52f05cf
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-local-dirty-or-unpushed-state
+    behavior_contract_digest: sha256:a48898f612b4041bd0be5760aaa81e88f7d7bf5b877db72a2562de3f8a2c03c9
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-local-dirty-or-unpushed-state-validity.json
+      receipt_digest: sha256:7fad61d7add09bd1b89ef4fcddeedd43766d0c54aa0fe5885a24301607be552e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-low-thinking-default
+    behavior_contract_digest: sha256:1773d91a3e6a27d8b1726bdd9cd461ad0fb021cd17d7e09a2c16e658fc7a56a3
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-low-thinking-default-validity.json
+      receipt_digest: sha256:13840d8c0dd8b4bc72a3dac7bd292b7dfbb33a57380bbbf995fed60b8db6c0a8
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-monitor-timeout
+    behavior_contract_digest: sha256:b42482667272ad3c9ab704fbb5ff34e4e35ad5e6b874a703a3f28629c3b76c04
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-monitor-timeout-validity.json
+      receipt_digest: sha256:daa8356a00bbd40f0959e9d2af1d75e90d53a9510cc1ea9da63263177cedea09
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-paginated-review-threads
+    behavior_contract_digest: sha256:3f2da16c700446880d8cee87ed06c9548d6aa2b8af2657e3734131ffc43f8e87
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-paginated-review-threads-validity.json
+      receipt_digest: sha256:2b60028686bce1d1c4fcef56904ad792d40a7354df2907291fa7ed55a4868fed
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-review-routing-boundary
+    behavior_contract_digest: sha256:cadaf2734e8d29fa01608297836648873921229f2f40aa5c83bf4cbdc3098652
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-review-routing-boundary-validity.json
+      receipt_digest: sha256:5388809cd33b54c282f3b846c5d2fc03b293dd4122e8cde2c30b148962c30119
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-secret-safe-pr-body
+    behavior_contract_digest: sha256:dedf549cc7e82719e0d6c4b0e9e8da9160e6baeee8892a71c480eed76817cd62
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-secret-safe-pr-body-validity.json
+      receipt_digest: sha256:eccb7377ac6f9bc35d3b06ca0ac6ad36bdf6a34b416293ba9f5512dedb22d36d
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-stale-success-claim
+    behavior_contract_digest: sha256:c7e57b58de8c2a9ea9c13632d3cbad4e1cd6d24caa5b78b4ca240bb967566b3d
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-stale-success-claim-validity.json
+      receipt_digest: sha256:b581e9ea032b1964c2892f8374c955af0585a08385630c10a6285ae281c8908a
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-unclear-review-batch
+    behavior_contract_digest: sha256:f91e6b72b446cf893c1271a0b1d1bcd6974efdb8962eca285e909a9f0e6591d0
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-unclear-review-batch-validity.json
+      receipt_digest: sha256:35b40af7dee8f8bfd2ea3449fd9b5bceb340de4fca1fbac73442ca87a3005cef
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-unresolved-thread-before-merge
+    behavior_contract_digest: sha256:7a0b2c9038d2600a2288f852e86a066157932984b37f8d7d91cad4b6d1172b60
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-unresolved-thread-before-merge-validity.json
+      receipt_digest: sha256:e576256d17857a3f40f84a8050efc53ae3d1b623d8c9c4f425ec76bcdf4de058
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-untrusted-comment
+    behavior_contract_digest: sha256:b66757bb15971361743b2b3d988e17ba086a75f26a181636d0d2e05f5e35d2fd
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-untrusted-comment-validity.json
+      receipt_digest: sha256:74c1560216a14a2824c8587d1a1ab9f67d66ffe4403432d73ff5c3bbfc7c5cf3
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-untrusted-comment-safety
+    behavior_contract_digest: sha256:0dadb0c395e1a9bbfb09524139112f04f03f309a90ce66ed8cd45f0e18bda4c7
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-untrusted-comment-safety-validity.json
+      receipt_digest: sha256:d6abb3a6e5c9729447cf4914397f573b0f6ef399be823917f0a164e420c4f865
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-user-agreement-gate
+    behavior_contract_digest: sha256:a4143b55b0d724f98a61da74c06b21b2bc76f9efe50ce35fff3019d981e7aade
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-user-agreement-gate-validity.json
+      receipt_digest: sha256:cd3e902f2b995e97c8d247d7c797ed94a38c05437622bf104b82e142462a0730
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-pr-wrapup-wrong-base-branch
+    behavior_contract_digest: sha256:deaac13e14cdd0d522ed98490554065eccd24fe49f88b000ff87fe3d2fd12038
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-pr-wrapup-wrong-base-branch-validity.json
+      receipt_digest: sha256:9fd43ea74675bb9de5d927cd4d3121d92361777876d72d6584d8631388ac701c
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-accepted-request-steering
+    behavior_contract_digest: sha256:00d2b68e2d55cf7517b7662291ce0f92ec6ff500a27554361769aac5f0e3ff5c
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-accepted-request-steering-validity.json
+      receipt_digest: sha256:e5f3fe6032267f19f4c4e0dbb9a166facb2c8f8921310a07e6332a8bef00be71
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-deviation-classification
+    behavior_contract_digest: sha256:fa14c38d94950883182e6ffafd9a0f1cb2fa8fa9bd94e8c03c6775624222b23d
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-deviation-classification-validity.json
+      receipt_digest: sha256:b12e3c8dc248aef04d5cf46252c5228e7f4ed8b2dbc488746395bad7989c8f46
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-false-positive-substitute
+    behavior_contract_digest: sha256:a4d56f485647c47c48d33dea11940ad1ef1b26f7f10b6bd78471d4bc89a016c6
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-false-positive-substitute-validity.json
+      receipt_digest: sha256:9a949ffa50f9dacb97621974ed79235dfb156e209f6d6e62ca3326373d5e72a8
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-manage-agents-pointer
+    behavior_contract_digest: sha256:35e3304b95cc591e5e1e1f0b353491a362318d85470e62508e8e365bd68a0e13
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-manage-agents-pointer-validity.json
+      receipt_digest: sha256:b095c3ef928d3b9465eec629f3187650e0ebf1e0048ee5e94f3d7f55a1b3b425
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-reanchor-missed-system
+    behavior_contract_digest: sha256:3482d7af3c226f94c938bdd505d08661c2b79c85ae601bbe9baaf1eb343729db
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-reanchor-missed-system-validity.json
+      receipt_digest: sha256:2e3bc49df9fe7e9d50c78f4e3fd7c1e382c1a07d572895eb55b5ec7f772fc818
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-report-text-contract
+    behavior_contract_digest: sha256:93fda897c43dcff796fa7043fffc320a48254e1a4cd7c9c1804cd3e5b7dcdc9a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-report-text-contract-validity.json
+      receipt_digest: sha256:f52bba51a19bcad9f5bacaab4f170d9903ac3efc3027b6509616bc6de2fed743
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-route-back-by-owner
+    behavior_contract_digest: sha256:6236a6a3c8cbdc6bba8af1eb939e5ed082131596ece6a1d23304d68b822cd828
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-route-back-by-owner-validity.json
+      receipt_digest: sha256:52c39f4d5b19b2301341d06dac4f611098dbd48df43cfe5af608a3050f1494b7
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-routes-findings-to-implementation-execute
+    behavior_contract_digest: sha256:ea00531b878a31efdd482a0ba1830323e992a06a37374e49fca068db708e67b8
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-routes-findings-to-implementation-execute-validity.json
+      receipt_digest: sha256:dd2ae1686cf60314337f15a8f1b8f964add5c442e56c21337aeccc1267365311
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-runtime-reachability
+    behavior_contract_digest: sha256:6eb6cdb046e83003351a31158b46ac211114f6bb8c5a61dfd03691eedbf92842
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-runtime-reachability-validity.json
+      receipt_digest: sha256:5e040cfeb918ddc811b3e4c0abb4bc528915abb83b9a8f174dd3955ad28fd96b
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-source-ledger-row-shape
+    behavior_contract_digest: sha256:269a37d00dd0079732b9048aff6a60cb3a10d54f91e4718be37313577e061b7c
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-source-ledger-row-shape-validity.json
+      receipt_digest: sha256:13f7d8a755e0a87b12e752658cf842ab6ff1ff1f96c2e0a93babdb6f4e99da04
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-source-matrix-required
+    behavior_contract_digest: sha256:06f676c8c04398ec4c0ec30325d779d92a5101cb1ee3d27481addb060505cbea
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-source-matrix-required-validity.json
+      receipt_digest: sha256:7ef9be24bdd7773fd502cb17fcae446c4b42c991bdab45e25d0ffc920db3963c
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-source-trigger-classifier
+    behavior_contract_digest: sha256:9a79b8d6fdd4039080863d5fedb2d4004f8040e8b0a1ced10c83c5c0bd4f05cb
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-source-trigger-classifier-validity.json
+      receipt_digest: sha256:c8021b7f7848cc32b1845b3a94d3c010f54dcab06c337234f5d2f7db1c6e045f
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: implementation-review-swarm-verify-findings
+    behavior_contract_digest: sha256:74cc34ee5002fa5808a8ed1e44f40b432d16a61b0bab6f8b05e926279dd44385
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/implementation-review-swarm-verify-findings-validity.json
+      receipt_digest: sha256:25ffa531fbb43945369bbeb08d29688c0e45f9cbab3d13e1e52ca73e93e84f7a
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: local-monitoring-no-detached-process
+    behavior_contract_digest: sha256:5d58df4199b04e7d3de1445bb993e1ac6aed82ab5fb5481237532001d4018492
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/local-monitoring-no-detached-process-validity.json
+      receipt_digest: sha256:502402aabf1efd31ec4ad2c5cafd8efc516ae6a4299223a1f87aeda7327f9159
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: local-monitoring-no-model-polling
+    behavior_contract_digest: sha256:d951cb094739d66c23ed88cff1a9cc9cf20b3d9c6c5c5b930790ff5fd76402fa
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/local-monitoring-no-model-polling-validity.json
+      receipt_digest: sha256:198c404795e623b0d28df734cfea6498d79b0b4d79bfb39bb57f09ff998d3af0
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: manage-agents-custom-agent-boundary
+    behavior_contract_digest: sha256:45c1ef84dbd5a7259ef285f4f2a1e729d2f9e6d2f2f0b28154e86f03ed71cb20
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/manage-agents-custom-agent-boundary-validity.json
+      receipt_digest: sha256:ceb256024897f23bed050783748ed57dabe082ad86614a749ec707feab1a53bf
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: manage-agents-json-flows-exit-codes
+    behavior_contract_digest: sha256:332ae724332787f18dc34a8b6ee0105e69243a00334c9c603064b2756f7adc7c
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/manage-agents-json-flows-exit-codes-validity.json
+      receipt_digest: sha256:c5dc97b39109d1460e44b25146e7ac4bd354087af7ef66aed300470162a2cc55
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: manage-agents-pattern-selection
+    behavior_contract_digest: sha256:35701d7c38bd2f79452a522e02688de243d06236fce303f6391c936c587f1f8e
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/manage-agents-pattern-selection-validity.json
+      receipt_digest: sha256:687c5d80baef9d67907ca5080aa5a18841f2a5142caa15f588c3fc4bd8792365
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: manage-agents-queue-vs-steer
+    behavior_contract_digest: sha256:f647766eb7369011e76aada1c42a5d9d3078fa4e4883fc885ac399db73c983d4
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/manage-agents-queue-vs-steer-validity.json
+      receipt_digest: sha256:fe75a9b978b80148ed5656cd1c4ae27756123b69b4c85dec0fea0adcae258bba
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: manage-agents-session-ledger-reduction
+    behavior_contract_digest: sha256:450e12fc853c3fc2969567f74ef0f383024066c5854a5096adff37a4ae49340d
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/manage-agents-session-ledger-reduction-validity.json
+      receipt_digest: sha256:53585a0079eaaea0c830d84b3450f9acc981c02aa3703f2e32e33d660f8c7473
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: no-global-runtime-lane-contract
+    behavior_contract_digest: sha256:9a7fb1ae70edc77f09665f3cbe6e7ec5824ba4e1f5ec1fcda3e49f5c4a8f8203
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/no-global-runtime-lane-contract-validity.json
+      receipt_digest: sha256:1632f10cc08b87f579df9f53aed0a224450536877c43a90a84b90c8a21001606
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: ops-linear-tracking-docs-are-truth
+    behavior_contract_digest: sha256:88f0b90fc3dfc3b795ecabfac1175e8ca28052fdf6be37bd5094f89891b4c4e1
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/ops-linear-tracking-docs-are-truth-validity.json
+      receipt_digest: sha256:69eaee6f1c409c481b2ef616bd06b60958fd9e5bcc63c6d6fe9a0bd14e02ece4
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: ops-observability-agent-vm-boundary
+    behavior_contract_digest: sha256:57061a0ddae845ea9d1baba94f93f091d4e245013a9b346b464d3d39f4242808
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/ops-observability-agent-vm-boundary-validity.json
+      receipt_digest: sha256:eee99d5145afc30827b25e457ee0db11d7e52c1c0785e07a2ac9c5a2d68cbb18
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: ops-observability-stack-boundary
+    behavior_contract_digest: sha256:d56ea5fcd3bcd1ba86cf9a72919fbb6a6e99db64192a535dbfe03c26b66424a5
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/ops-observability-stack-boundary-validity.json
+      receipt_digest: sha256:1e33017db9165f61b4ef861ac054ae07abc98dabd9c487ba1793e88dea75735d
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: ops-security-review-official-scan
+    behavior_contract_digest: sha256:a6edb2b3661debcf15077e34efbb14efc6c683033799b0dc41fc91af46f2fddd
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/ops-security-review-official-scan-validity.json
+      receipt_digest: sha256:20650eb42578d61d8b26758ea2834e7aea4fbc9adf2f277aedde2147be3dc242
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-artifact-content-boundary
+    behavior_contract_digest: sha256:14311945c5a5478dfb7c4f9c6f02ff71d92c94517bb898bcc27b02f26d8e4ac8
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
+      receipt_digest: sha256:1e8c832ef16310fe25ed3c0f02c4f5ddb2fe7d13bf470b84e7095c2aec813717
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-clarity-gate
+    behavior_contract_digest: sha256:f1cc84e81ddac61bec56d23591cba218c52e477f32addafcabdd892f32c180b2
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-clarity-gate-validity.json
+      receipt_digest: sha256:0572634b6d6089365d4c636c94981092ba0e1ba2a0bbc1e698bc6dfb62ef0738
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-closeout-audit
+    behavior_contract_digest: sha256:2676fee725b8e739d1376ce8a83660454cda4c147fd2c2780e301088d0ba3cd4
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-closeout-audit-validity.json
+      receipt_digest: sha256:8bc557da02809b687077dff454391830b2481eb14555188b9ea9941cec53ccb9
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-default-pr-ready-terminal
+    behavior_contract_digest: sha256:ec958bade10422d5945783188d30425c98fc619e7d5e15395e35d05d45194709
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-default-pr-ready-terminal-validity.json
+      receipt_digest: sha256:c55578b0085ca737bc7dd4a52887464b32e32d2bb9f2e458aac37db8960a451e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-plan-creation-matrix-handoff
+    behavior_contract_digest: sha256:efb29399127054ee21adf93d823c2d2c19c6d654139e281209baf0f8c8cf7941
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-plan-creation-matrix-handoff-validity.json
+      receipt_digest: sha256:f9491b8308b3274269b749f94d6cf9487795fc9cba90cd5b31da3df671885024
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-plan-review-transition
+    behavior_contract_digest: sha256:ed78622c0dd22298985d46c59f8e337daf7e4021ab682808cf1a4f26e5f057e0
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-plan-review-transition-validity.json
+      receipt_digest: sha256:d67e17ab15ef216df62b62b3bed03ad933fb8062b934875da5eb8fcefc0da2c6
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-proof-matrix-ownership
+    behavior_contract_digest: sha256:117d922464a3e69a1b6f93962a8c7b035b3e7f129e9329717512c51253ddcd44
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-proof-matrix-ownership-validity.json
+      receipt_digest: sha256:a344e7e61ece0340ac6a2c9c4eb4811ab3359c5628db4cfa5892905bbeec3f1a
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-required-files-skill-name
+    behavior_contract_digest: sha256:c9fc8bde53ffa10687940b776ac00c0b5e0a2c1b70ba76bcb752cae81a97738d
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-required-files-skill-name-validity.json
+      receipt_digest: sha256:f3023e6c2a70dc924f3562b0adfd351dce18e0d6946a439b03a706652f0262c4
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-stale-terminal-override
+    behavior_contract_digest: sha256:6bf210c79819b00d33fafcaae4afebf7f2d1465780eae01d8a28c0eb21d9605a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-stale-terminal-override-validity.json
+      receipt_digest: sha256:3aca1fb67348f685d6e85788f1eaf4f141eb2dc42cd25b9c43829a38ee1401da
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: orchestrator-goal-transition-single-writer
+    behavior_contract_digest: sha256:68b7fc211001b0164a91945026651ea5070007a3946879dc38e1bdcfaab5b712
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-transition-single-writer-validity.json
+      receipt_digest: sha256:69d5d913aa50a6cae6504114e6347da037b83e8108799681abbfd267d8fc98a1
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: peekaboo-progressive-disclosure
+    behavior_contract_digest: sha256:62c49f3debb955fd9f1df32a33849d157eeb924d13f92d72e06390cab792c187
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/peekaboo-progressive-disclosure-validity.json
+      receipt_digest: sha256:5a322411303d6445a0a2c01db15830a01addb0f40f1d6d55c53f9bb0a33cb889
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-creation-swarm-from-spec-not-code
+    behavior_contract_digest: sha256:8b6a4a50ee1fd24a846883bb88a3fa52ebc0b0cc01ad0dad24c0499cfefeefc4
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-creation-swarm-from-spec-not-code-validity.json
+      receipt_digest: sha256:3c04d160da5554d2d55e1ec13910ce83d2d70ba826787d1edc037efe675ab557
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-creation-swarm-lane-packet-contract
+    behavior_contract_digest: sha256:2107d57e29ae3ab6ed6081149847b0ecb5df871b91b299b49df33d0e66ded794
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-creation-swarm-lane-packet-contract-validity.json
+      receipt_digest: sha256:5b5bc387127bdc3d8d099a40872e87299bdb5a0e653e189ca785e7237dd07e65
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-creation-swarm-vertical-slice-proof
+    behavior_contract_digest: sha256:b5d4ab362961216f18f0f221773ed8f1cffce65c719bbffc087ce0535278f46b
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-creation-swarm-vertical-slice-proof-validity.json
+      receipt_digest: sha256:bb0922940cfa389bbc2e0774f6d78cf281c421ee43b1e95f86fff034b5389965
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-handoff-existing-plan-only
+    behavior_contract_digest: sha256:30946b6803eb77228e2bbf42c0bcefd003d317f67cd7547f8c80175f80b0efdb
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-handoff-existing-plan-only-validity.json
+      receipt_digest: sha256:f1babef9c76f9357cc150bd152d20a50ae87bab23269cadc5ddbf427bac300c5
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-handoff-full-packet
+    behavior_contract_digest: sha256:f0d90c4c87918028bf1befedc3b8bdbf4687e464b1b00392cec4cbc30514b087
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-handoff-full-packet-validity.json
+      receipt_digest: sha256:850fcccda73fb5c5c45cfad6c897f57cadef0096d1438eaeddc88d907347eac8
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-handoff-proof-matrix-preservation
+    behavior_contract_digest: sha256:de5bf297235628e190ae00041de35c01e8f83c6b2b5d06dce756bffd21c987c0
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-handoff-proof-matrix-preservation-validity.json
+      receipt_digest: sha256:03279e0051a0e0ac30ca1006fe70cc4aab0b370e74a9b9ad52f75b109dfe4a35
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-review-swarm-independent-source-coverage
+    behavior_contract_digest: sha256:135efa70badef537b533407e7bf2cc59a6cf2f0f86a73d7f3fc04e79ee53004a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-review-swarm-independent-source-coverage-validity.json
+      receipt_digest: sha256:7113b70407b39769ef5a3b6f67ebd7f653a3ec8147d4af54272cc2abcf882dd2
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-review-swarm-routes-findings-to-plan-creation
+    behavior_contract_digest: sha256:f9ae0fc847d2207cf257d116e0fea54f1dcd8a840fcee4d2295dd21c9a1629f0
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-review-swarm-routes-findings-to-plan-creation-validity.json
+      receipt_digest: sha256:7e5c5c33e62803125c0331f6ad00d80b985a93a453c60f23fec56eb786dfb0e9
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-review-swarm-whole-artifact
+    behavior_contract_digest: sha256:728e79a1a29e6b3c3c903188f0f462616347c0e7ea61d37207717074d40a4c20
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-review-swarm-whole-artifact-validity.json
+      receipt_digest: sha256:bdb76abbfaf45087d839008a95ab7a06f07801e7928e60ec4978e0f4ad20032e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: plan-review-swarm-whole-plan-cohesion-lane
+    behavior_contract_digest: sha256:18cfd6ba03c0a8a71b2bab842be122cf5ec5ef98edca1f827ff6aba56799f43a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/plan-review-swarm-whole-plan-cohesion-lane-validity.json
+      receipt_digest: sha256:5460b8c789c4a8608d3c92b3a7243def0ed71328ca64f1211fd3302099f9f36b
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: research-swarm-question-first
+    behavior_contract_digest: sha256:39adb494e07d2dcb47bee7297e7cc123fbc940b6c97a8eddafeee8e981dba3c7
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/research-swarm-question-first-validity.json
+      receipt_digest: sha256:104f1473056ed16ea9f965c927c4a9e2ff0b4ecba4754d148adb5c2ac78956bd
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: research-swarm-substantial-stage-artifacts
+    behavior_contract_digest: sha256:b0192d2cf59dd739068bbbd1421801fe98a53ae97e7f85adfdeb84b33615fa94
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/research-swarm-substantial-stage-artifacts-validity.json
+      receipt_digest: sha256:ac31037ff225745ee9c4e0d0fb643191183b3e1f19d1b1955acf32350439dbce
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skill-audit-evidence-first
+    behavior_contract_digest: sha256:717aa52459fa6a1eb06488d953818db888b94c8b0b5d5a94531dc6b0fa3a7de7
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skill-audit-evidence-first-validity.json
+      receipt_digest: sha256:52b27dfb6a27e0ff3664840c2e17d27bf48c7e30fb57b797fff67789378c37ce
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-draft-artifact
+    behavior_contract_digest: sha256:8f33dffbea4d0a51661ae026f9a4b636df49a62e850b46780886615aa70fca41
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-draft-artifact-validity.json
+      receipt_digest: sha256:3efa19c64ca84238e966d45462aa887d8287ee538da1aa557343c4feffc8855c
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-evaluate-draft
+    behavior_contract_digest: sha256:cb520d8e8cfb0a5302d682f39e039f6738073f2bfa59ac0e5931782091252717
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-evaluate-draft-validity.json
+      receipt_digest: sha256:91579f2bcc947b137693ac349585ac8d124fad5363e77ee6279a38e082523b85
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-implementation-review-gate
+    behavior_contract_digest: sha256:729bbe890b31e5d72340b5d7ee85ea8ab582d5b14f93c5c997f6d5ee7888e19b
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-implementation-review-gate-validity.json
+      receipt_digest: sha256:7d1713cbcb1d658e57f8ea6147c07e8197ea8de9a86d17f7108bc50835ff4922
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-platform-artifact-scale
+    behavior_contract_digest: sha256:5f53e94216610061015dc6fc96f216a71984d4f7ea471db6a7aa9a99cc38f0c7
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-platform-artifact-scale-validity.json
+      receipt_digest: sha256:6a02d1a92257bb78da13330b084993260e16985b4755e72054a41b55272c5d1e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-reference-lane-non-regression
+    behavior_contract_digest: sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-validity.json
+      receipt_digest: sha256:a0fe2af9746d01e4a613d4d51fa422807acbc4de1617dbe7fca552789d284dee
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-security-and-cache-boundary
+    behavior_contract_digest: sha256:a678fbc3318c4406b2c211e1006379833875537c0a3a3c23eefc1c0ebfc3afb0
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-security-and-cache-boundary-validity.json
+      receipt_digest: sha256:3d920e836913d74d141a61e4d3838f0ad1a2869594491f88f19df2cd5b2bad04
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-spec-review-gate
+    behavior_contract_digest: sha256:3671ab8a7e767a8e9bb3333047687306230426ec52b9929e826ca21db6606483
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-spec-review-gate-validity.json
+      receipt_digest: sha256:154f6b818ebebdcee46bf23575ea0375c619fb221ed135ad3969f609167c6f9f
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-update-existing-skill
+    behavior_contract_digest: sha256:79b3db2c6ae117868bf17cd255d507378d6f1473b64a54c992f26b6f61206340
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-update-existing-skill-validity.json
+      receipt_digest: sha256:f1ba69fe2869270f1f91fce383d92a9f26e409b5e236c0f9880d589080b64225
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: skills-creation-workflow-spine
+    behavior_contract_digest: sha256:08ffb01823425b90a2f2086511d7a66f5924aa952a7df3e6905ac1f9a4b84737
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-workflow-spine-validity.json
+      receipt_digest: sha256:4e346666583a102341e9dd9bff5c9b371c489f10f2be44c182de2c749cf6bd99
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-creation-swarm-durable-primary-spec
+    behavior_contract_digest: sha256:c1215e0994f87adc7eff5c0be3305414de187de68f6cf01a3439e771f0a39db6
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-creation-swarm-durable-primary-spec-validity.json
+      receipt_digest: sha256:105d09f5d8ebaae4dd65771530ab62bf76d781669c23a87b56528b4a20f8a7f0
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-creation-swarm-lane-prompts-not-generic
+    behavior_contract_digest: sha256:4b2c1cb855eabb50764e65afd73fb1f60a2ec070341f8d2297043344aa1d1d20
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-creation-swarm-lane-prompts-not-generic-validity.json
+      receipt_digest: sha256:e93de8da44c4c3d7d72fe2d65d71f878e12bd73f2a2e5524499fd8a1a02a0d9e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-creation-swarm-no-session-dump-lanes
+    behavior_contract_digest: sha256:2c33aef0ac05492efb0c44c4e08d42e0a4567ac6f9ebcee3a83fe947668d03db
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-creation-swarm-no-session-dump-lanes-validity.json
+      receipt_digest: sha256:10a3282cb7a1c7cedc3329b3db2cad109472164cb884deaa252fadd0082ac47e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-creation-swarm-parent-synthesis
+    behavior_contract_digest: sha256:f4556b1dd22ed4acc4e8f6207e19b4e4f0597e51e7eba9af57cad56aac7af9d4
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-creation-swarm-parent-synthesis-validity.json
+      receipt_digest: sha256:3b25ef062450bbc9524fc84b57a1e79806ed64c6aba21435c79943da9fe090d6
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-creation-swarm-primary-spec-not-outline
+    behavior_contract_digest: sha256:d9125653c10d14ded49ef356a37b7396ad997d6e48a4fe3a2300692865c4b5b2
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-creation-swarm-primary-spec-not-outline-validity.json
+      receipt_digest: sha256:91682b3a80ab8ad185bf76df92cd856c31f8e7980d8d52d20dbcdf37a4f20bb1
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-creation-swarm-spec-folder-chunking
+    behavior_contract_digest: sha256:3b09f8f05782c4723cbcea39aea974d206d8493b6ca77f3982149c61e092cd00
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-creation-swarm-spec-folder-chunking-validity.json
+      receipt_digest: sha256:063cab56feda92e2911c6d6b613bc1678928b43a240b2621e2aa13b5f0cb2cf7
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-handoff-portable-design-context
+    behavior_contract_digest: sha256:c6d868338f2a5d9347cd046bcb7bef5a002e3df5af810fe764ea17da40468035
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-handoff-portable-design-context-validity.json
+      receipt_digest: sha256:abae25a1286368081ee27109425d752cd743d8d626b00868bbd8e09b7c6c9856
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-boundary-fidelity
+    behavior_contract_digest: sha256:2f8af962db2a373b7af6a3ae3b651498c3f28bc86ae97ae96f4b0b0edb91ecff
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-boundary-fidelity-validity.json
+      receipt_digest: sha256:37f54879cbdc508d0f28bdc604ddba386ff56a56bdf39eb615e9463094d0bd5e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-claims-not-truth
+    behavior_contract_digest: sha256:608f2b31cc8675f6171cb3975850f77f05ad84de79f958a08749c6eff17009df
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-claims-not-truth-validity.json
+      receipt_digest: sha256:4aab42433d76ce34a663bb971cb60ae53988c6914044a20be3d93cfa0461172b
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-lane-prompts-not-generic
+    behavior_contract_digest: sha256:5e256566d4bb5490f80fe0743d47b7dfaa0bf59cc62adbff656e4f5c5f84d284
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-lane-prompts-not-generic-validity.json
+      receipt_digest: sha256:417e23009a2ff3ad54f28ac685229cf6ccf9c90be7f0448280589a34d669e4bd
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-no-prejudged-lanes
+    behavior_contract_digest: sha256:dfcd408b2ba2b114a947655d0dd476c3be4e300a13c62fd1b421230396147526
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-no-prejudged-lanes-validity.json
+      receipt_digest: sha256:10a9c89849ff9a6b73189989119d0323d4c155ae00dacaa13eaaa8d7a30ba3c8
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-progressive-disclosure-lane
+    behavior_contract_digest: sha256:7ca9fdf7857652d0df165d177830668dd43f4b8513eb7fa89cfb8044b9068a2c
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-progressive-disclosure-lane-validity.json
+      receipt_digest: sha256:b607d4581aaed04d0548978d02cbbf38487177648784d720cea27edda85e8062
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-refinement-inputs
+    behavior_contract_digest: sha256:c0aae2f5d153efe1fa092ac0acaaf0d227a4d7099de4b419dcd29d910f914b49
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-refinement-inputs-validity.json
+      receipt_digest: sha256:c31272b54d268dc27e3207f4121702cde8da021dfb97b98023c90980b3f5d06b
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-routes-findings-to-spec-creation
+    behavior_contract_digest: sha256:9413d98e2c6779ee0480e384e6e34eb99e1079bc6cfd9abf1fcdc3008155958a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-routes-findings-to-spec-creation-validity.json
+      receipt_digest: sha256:fb3fee7ebb9310c1ac0b8b296bb3f87e2618e22f14f028d1a25103f20d343198
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-semantic-lane-judgment
+    behavior_contract_digest: sha256:0016e3fe0650ca273aa8948314c514595fb9ac3e073f79e5aa4ee7af5bd23d27
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-semantic-lane-judgment-validity.json
+      receipt_digest: sha256:94855225145760f7f046c2e52926aea2cfbc31a76c6ca745af16eb961f75f751
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-spec-difference-lane
+    behavior_contract_digest: sha256:22e18709aac64701c41854ca9c43fdd5e708a9853558e461dd75623d9fca9549
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-spec-difference-lane-validity.json
+      receipt_digest: sha256:a937e8324d870c82ca51eff99eb4a6b3381c9384510752eefdb15b4281b3aee6
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: spec-review-swarm-whole-spec-coverage-lane
+    behavior_contract_digest: sha256:b4687f2e8a6c47300ddd2fced5183dcf4cac2b429a0709ad3a00e8864a11b5d8
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/spec-review-swarm-whole-spec-coverage-lane-validity.json
+      receipt_digest: sha256:ebd85f4a17f73d43539ae3f7bf5b76b34d5d8365587a5071b6a5d150418a8e09
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: tui-presentation-monospace-structure
+    behavior_contract_digest: sha256:710e5d237872290db826a495b77980f7af14b79681549462b58e1a7696d85875
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/tui-presentation-monospace-structure-validity.json
+      receipt_digest: sha256:a4534ea6e7d080b0e791214d588e6230931646da69e64c1913150dfd76300580
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: tui-presentation-no-mermaid-catalog
+    behavior_contract_digest: sha256:98df43fa037b6a7ca26f59515c49362db5d702db1b32f90094d781c77c4e34a3
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/tui-presentation-no-mermaid-catalog-validity.json
+      receipt_digest: sha256:867d3091eab8c3fe791fac95a0625855220dfdc06f10a98f4b7d1e03b699ac6e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: tui-presentation-progressive-disclosure
+    behavior_contract_digest: sha256:96394a667f83e3201832549571ad06968140b60be5c2a4a1851083f8492676f0
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/tui-presentation-progressive-disclosure-validity.json
+      receipt_digest: sha256:9d65bc2416d9f6bc707e0a7c023733eef73a56dbe8821374418ed9034d67bacb
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: tui-presentation-research-lane-board
+    behavior_contract_digest: sha256:c532499318a4c940bf2af6a660fd3c128e422540e2765554453cfa310e2794f7
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/tui-presentation-research-lane-board-validity.json
+      receipt_digest: sha256:399dac18a7507700fc88a91c84843365a201b6ec9962a7b4b063fc77cb3f70b5
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: tui-presentation-semantic-markdown-boundary
+    behavior_contract_digest: sha256:3e06dde7010d6aa09aa6fdf2abac39f78d8655029aa87fb7fb94433796ca543a
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/tui-presentation-semantic-markdown-boundary-validity.json
+      receipt_digest: sha256:082562fd56e793660f71e842712cd23ef4f9e1f91a6b4f8603dc815bc275ea4e
+    calibration_receipt: null
+    authority_history: []
+  - scenario_id: tui-presentation-visual-family-selection
+    behavior_contract_digest: sha256:1b4e224c9b578de19b268fa378062bc2f8511bb7ce497a7bd9bf06cdc7428394
+    evaluation_role: diagnostic
+    freshness: uncalibrated
+    validity_review:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/tui-presentation-visual-family-selection-validity.json
+      receipt_digest: sha256:4331761ffd901b6d303a0146f7c59075ab5e1393acc3640b6295add702bd3e13
+    calibration_receipt: null
+    authority_history: []

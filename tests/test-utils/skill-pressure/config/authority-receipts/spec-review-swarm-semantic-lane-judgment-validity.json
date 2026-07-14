@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "spec-review-swarm-semantic-lane-judgment",
+  "behaviorContractDigest": "sha256:0016e3fe0650ca273aa8948314c514595fb9ac3e073f79e5aa4ee7af5bd23d27",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

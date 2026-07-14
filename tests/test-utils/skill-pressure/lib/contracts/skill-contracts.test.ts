@@ -7,7 +7,7 @@ import { createRepositoryFixture, scenarioContract } from "../test-fixtures.js";
 import { loadScenarioContract } from "./skill-contracts.js";
 
 describe("skill pressure scenario contract", () => {
-  it("loads the behavioral fields and keeps the rubric separate from the prompt", async () => {
+  it("loads the v3 behavioral fields and keeps semantic assertions separate from the prompt", async () => {
     const repositoryRoot = await createRepositoryFixture();
     const scenarioPath = join(repositoryRoot, "scenario.md");
     await writeFile(scenarioPath, scenarioContract({ scenarioId: "behavior", plugin: "workflow", skill: "skill" }));
@@ -18,23 +18,28 @@ describe("skill pressure scenario contract", () => {
       skill: "skill",
       skillType: "discipline",
       prompt: "Follow the requested workflow under time pressure.",
-      hiddenRubric: "The response must reject the shortcut and follow the workflow.",
+      semanticAssertions: [{
+        assertionId: "behavior-behavior",
+        criterion: "The response must reject the shortcut and follow the workflow.",
+        evidenceSurface: "response",
+      }],
+      behaviorRequirementIds: ["behavior"],
       baseline: "no_skill",
       baselineRevision: null,
       comparisonIntent: "improvement",
       repetitions: 5,
       risk: "standard",
-      schemaVersion: 2,
+      schemaVersion: 3,
     });
   });
 
-  it("rejects v1 scenarios instead of applying a compatibility default", async () => {
+  it("rejects v2 scenarios instead of applying a compatibility default", async () => {
     const repositoryRoot = await createRepositoryFixture();
     const scenarioPath = join(repositoryRoot, "scenario.md");
     await writeFile(
       scenarioPath,
       scenarioContract({ scenarioId: "legacy", plugin: "workflow", skill: "skill" })
-        .replace("schema_version: 2", "schema_version: 1"),
+        .replace("schema_version: 3", "schema_version: 2"),
     );
 
     await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/schema_version/);
@@ -119,7 +124,7 @@ describe("skill pressure scenario contract", () => {
     const first = await loadScenarioContract({ scenarioPath: firstPath });
     const second = await loadScenarioContract({ scenarioPath: secondPath });
 
-    expect(first.contractDigest).toBe(second.contractDigest);
+    expect(first.behaviorContractDigest).toBe(second.behaviorContractDigest);
   });
 
   it("includes comparison intent in the canonical contract digest", async () => {
@@ -146,7 +151,7 @@ describe("skill pressure scenario contract", () => {
     const improvement = await loadScenarioContract({ scenarioPath: improvementPath });
     const control = await loadScenarioContract({ scenarioPath: controlPath });
 
-    expect(improvement.contractDigest).not.toBe(control.contractDigest);
+    expect(improvement.behaviorContractDigest).not.toBe(control.behaviorContractDigest);
   });
 
   it("rejects fewer than five repetitions", async () => {
@@ -203,6 +208,8 @@ describe("skill pressure scenario contract", () => {
     const repositoryRoot = await createRepositoryFixture();
     const scenarioPath = join(repositoryRoot, "scenario.md");
     const source = scenarioContract({ scenarioId: "duplicate-owner", plugin: "workflow", skill: "skill" })
+      .replace("effect_surfaces:\n  - response", "effect_surfaces:\n  - response\n  - artifacts")
+      .replace("allowed_write_paths: []", "allowed_write_paths:\n  - reports/result.md")
       .replace("deterministic_checks: []", `deterministic_checks:
   - check_id: wrong-owner
     fact: path:reports/result.md

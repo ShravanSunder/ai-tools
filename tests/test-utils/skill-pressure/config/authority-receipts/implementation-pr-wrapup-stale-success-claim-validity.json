@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "implementation-pr-wrapup-stale-success-claim",
+  "behaviorContractDigest": "sha256:c7e57b58de8c2a9ea9c13632d3cbad4e1cd6d24caa5b78b4ca240bb967566b3d",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

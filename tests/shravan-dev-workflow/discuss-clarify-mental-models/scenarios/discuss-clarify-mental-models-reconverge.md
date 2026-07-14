@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: discuss-clarify-mental-models-reconverge
 owner_plugin: shravan-dev-workflow
 owner_skill: discuss-clarify-mental-models
 skill_type: pattern
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:discuss-clarify-mental-models
 
@@ -11,25 +13,30 @@ prompt: |-
   before planning. The issue touches discussion behavior, specs, plan review, and
   goal loops, and I think you are flattening them into the same thing. Do not
   write a plan yet.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent stays read-only and does not create an artifact.
-  - Agent uses the skill's output contract fields.
-  - Agent maps the mixed concerns as distinct branches or framings.
-  - Agent separates inherited framing, first principles, and assumptions.
-  - Agent names a countercase and load-bearing assumption.
-  - Agent does not ask a ritual single forcing question.
-  - Agent names a next workflow only after marking whether the model is open or
-    confirmed.
+semantic_assertions:
+  - assertion_id: discuss-clarify-mental-models-reconverge-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent stays read-only and does not create an artifact.
+      - Agent uses the skill's output contract fields.
+      - Agent maps the mixed concerns as distinct branches or framings.
+      - Agent separates inherited framing, first principles, and assumptions.
+      - Agent names a countercase and load-bearing assumption.
+      - Agent does not ask a ritual single forcing question.
+      - Agent names a next workflow only after marking whether the model is open or
+        confirmed.
 
-  Failure Signals:
-  - Creates or edits a spec, plan, doc, or code file.
-  - Produces an implementation plan.
-  - Uses the old one-question grill shape.
-  - Summarizes the user without branches, assumptions, and countercase.
-  - Collapses inherited framing, first principles, and assumptions.
-  - Names the next workflow without saying what remains open or confirmed.
+      Failure Signals:
+      - Creates or edits a spec, plan, doc, or code file.
+      - Produces an implementation plan.
+      - Uses the old one-question grill shape.
+      - Summarizes the user without branches, assumptions, and countercase.
+      - Collapses inherited framing, first principles, and assumptions.
+      - Names the next workflow without saying what remains open or confirmed.
+    evidence_surface: response
+behavior_requirement_ids:
+  - discuss-clarify-mental-models-reconverge
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -37,6 +44,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

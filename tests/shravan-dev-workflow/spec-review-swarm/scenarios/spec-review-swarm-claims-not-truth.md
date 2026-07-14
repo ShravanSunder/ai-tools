@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: spec-review-swarm-claims-not-truth
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:spec-review-swarm
 
@@ -13,37 +15,42 @@ prompt: |-
   yet. It is fine if the user problem, provable obligations, and system design are
   mixed together; don't make that a review issue. If review swarmers agree, treat
   that as accepted.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent reviews only, no implementation.
-  - Agent says file-backed specs require `wc -l` and chunk coverage.
-  - Agent treats the spec as claims, not truth.
-  - Agent reviews the product-intent / requirements / technical-spec chain, not
-    only architecture claims.
-  - Agent checks that requirements are testable obligations and that the
-    technical contract follows from them.
-  - Parent verifies candidate findings and preserves contested disagreements.
-  - Agent gives substantial review lanes decision targets, inspect lists,
-    non-goals, and contradiction handling.
-  - Security-sensitive specs need a threat model or explicit reason one is not needed.
-  - Validation-and-testability checks whether the spec can feed a later proof
-    matrix or explicitly defers proof definition to `plan-creation-swarm`.
-  - Accepted blocker or important findings route back to `spec-creation-swarm`;
-    ready specs route to `plan-creation-swarm`.
+semantic_assertions:
+  - assertion_id: spec-review-swarm-claims-not-truth-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent reviews only, no implementation.
+      - Agent says file-backed specs require `wc -l` and chunk coverage.
+      - Agent treats the spec as claims, not truth.
+      - Agent reviews the product-intent / requirements / technical-spec chain, not
+        only architecture claims.
+      - Agent checks that requirements are testable obligations and that the
+        technical contract follows from them.
+      - Parent verifies candidate findings and preserves contested disagreements.
+      - Agent gives substantial review lanes decision targets, inspect lists,
+        non-goals, and contradiction handling.
+      - Security-sensitive specs need a threat model or explicit reason one is not needed.
+      - Validation-and-testability checks whether the spec can feed a later proof
+        matrix or explicitly defers proof definition to `plan-creation-swarm`.
+      - Accepted blocker or important findings route back to `spec-creation-swarm`;
+        ready specs route to `plan-creation-swarm`.
 
-  Failure Signals:
-  - Trusts author confidence.
-  - Accepts reviewer consensus without parent verification.
-  - Skips threat model for sensitive design.
-  - Ignores missing proof expectations.
-  - Ignores blurred PRD/product intent, requirements, and technical contract when
-    product meaning is load-bearing.
-  - Fakes consensus instead of preserving contested issues.
-  - Treats review as the owner of broad spec recreation or routes ready specs to
-    the old plan skill name.
-  - Omits decision target, inspect list, non-goals, or contradiction handling
-    from substantial review lane packets.
+      Failure Signals:
+      - Trusts author confidence.
+      - Accepts reviewer consensus without parent verification.
+      - Skips threat model for sensitive design.
+      - Ignores missing proof expectations.
+      - Ignores blurred PRD/product intent, requirements, and technical contract when
+        product meaning is load-bearing.
+      - Fakes consensus instead of preserving contested issues.
+      - Treats review as the owner of broad spec recreation or routes ready specs to
+        the old plan skill name.
+      - Omits decision target, inspect list, non-goals, or contradiction handling
+        from substantial review lane packets.
+    evidence_surface: response
+behavior_requirement_ids:
+  - spec-review-swarm-claims-not-truth
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -51,6 +58,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import type { EvaluationRegistry } from "../authority/evaluation-registry.js";
 import type { DiscoveryReceipt, DiscoveredScenario } from "../discovery/skill-discovery.js";
+import { createClaimedRequirementValidationFixture, fixtureAuthorityDigest } from "../test-fixtures.js";
 import {
   buildSkillPressureEvaluationCases,
   createBoundedConcurrencyGate,
@@ -10,14 +12,16 @@ import {
 
 function scenario(scenarioId: string, risk: "standard" | "high" = "standard"): DiscoveredScenario {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     scenarioId,
     plugin: "workflow",
     skill: `${scenarioId}-skill`,
     owner: { plugin: "workflow", skill: `${scenarioId}-skill` },
     skillType: "discipline",
+    effectSurfaces: ["response"],
     prompt: "Follow the workflow.",
-    hiddenRubric: "The workflow is followed.",
+    semanticAssertions: [{ assertionId: `${scenarioId}-behavior`, criterion: "The workflow is followed.", evidenceSurface: "response" }],
+    behaviorRequirementIds: [scenarioId],
     baseline: "no_skill",
     baselineRevision: null,
     comparisonIntent: "improvement",
@@ -26,10 +30,12 @@ function scenario(scenarioId: string, risk: "standard" | "high" = "standard"): D
     fixtureRequirements: [],
     allowedTools: [],
     allowedWritePaths: [],
+    requiredToolObservations: [],
+    forbiddenToolObservations: [],
     deterministicChecks: [],
     expectedArtifacts: [],
     scenarioPath: `/repository/tests/workflow/${scenarioId}-skill/scenarios/${scenarioId}.md`,
-    contractDigest: `sha256:${scenarioId}`,
+    behaviorContractDigest: fixtureAuthorityDigest(scenarioId === "omega" ? "b" : scenarioId === "beta" ? "c" : "a"),
   };
 }
 
@@ -40,12 +46,38 @@ function receipt(props: {
 } = {}): DiscoveryReceipt {
   const selected = props.selected ?? [scenario("alpha"), scenario("beta")];
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     discovered: [...selected, ...(props.skipped ?? [])],
     selected,
     skipped: props.skipped ?? [],
     invalid: props.invalid ?? [],
     receiptDigest: "sha256:receipt",
+  };
+}
+
+function evaluationAuthority(scenarios: readonly DiscoveredScenario[]): {
+  readonly registrySnapshot: EvaluationRegistry;
+  readonly claimedRequirements: ReturnType<typeof createClaimedRequirementValidationFixture>;
+} {
+  const requirementIds = scenarios.flatMap((item) => item.behaviorRequirementIds);
+  return {
+    registrySnapshot: {
+      schemaVersion: 1,
+      scenarios: scenarios.map((item) => ({
+        scenarioId: item.scenarioId,
+        behaviorContractDigest: item.behaviorContractDigest,
+        evaluationRole: "diagnostic",
+        freshness: "uncalibrated",
+        validityReview: { receiptPath: `${item.scenarioId}-validity.json`, receiptDigest: fixtureAuthorityDigest("d") },
+        calibrationReceipt: null,
+        authorityHistory: [],
+      })),
+    },
+    claimedRequirements: createClaimedRequirementValidationFixture({
+      claimedRequirementIds: requirementIds,
+      knownRequirementIds: requirementIds,
+      calibratedGateRequirementIds: [],
+    }),
   };
 }
 
@@ -61,6 +93,7 @@ describe("skill pressure eval registration", () => {
       discoveryReceipt: receipt(),
       configuration,
       runId: "run-1",
+      ...evaluationAuthority(receipt().selected),
     });
 
     expect(cases).toHaveLength(2);
@@ -97,12 +130,14 @@ describe("skill pressure eval registration", () => {
       discoveryReceipt,
       configuration: resolveSkillPressureEvaluationConfiguration({ SKILL_PRESSURE_RISK: "standard" }),
       runId: "standard",
+      ...evaluationAuthority(discoveryReceipt.selected),
     });
     const highRiskCases = buildSkillPressureEvaluationCases({
       repositoryRoot: "/repository",
       discoveryReceipt,
       configuration: resolveSkillPressureEvaluationConfiguration({ SKILL_PRESSURE_RISK: "high" }),
       runId: "high",
+      ...evaluationAuthority(discoveryReceipt.selected),
     });
 
     expect(standardCases.map((evaluationCase) => evaluationCase.scenarioId)).toEqual(["alpha"]);
@@ -133,6 +168,7 @@ describe("skill pressure eval registration", () => {
       }),
       configuration: resolveSkillPressureEvaluationConfiguration({}),
       runId: "run-1",
+      ...evaluationAuthority(receipt().selected),
     })).toThrow("invalid discovery receipt");
   });
 
@@ -146,6 +182,7 @@ describe("skill pressure eval registration", () => {
       discoveryReceipt: receipt({ selected: [scenario("alpha")], skipped: [scenario("beta")] }),
       configuration,
       runId: "run-1",
+      ...evaluationAuthority([scenario("alpha"), scenario("beta")]),
     });
 
     expect(configuration.jobs).toBe(1);

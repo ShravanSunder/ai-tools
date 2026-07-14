@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: skills-creation-evaluate-draft
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:skills-creation
 
@@ -27,30 +29,35 @@ prompt: |-
 
   Do not rewrite the whole skill yet. Tell me the verdict and what you would
   fix first.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent classifies the request as `evaluate`.
-  - Agent returns one of the allowed verdicts, not `great`.
-  - Agent applies a blocker override citing the missing workflow spine, weak
-    trigger-only description, missing mental model/main path, or absent pressure
-    proof.
-  - Agent reports the highest risk, the first required revision, and a retest
-    requirement.
-  - Agent names the failure-form that matches the draft's problems (wrong
-    invocation, wrong output shape, or a similar named form) instead of vague
-    advice.
-  - Agent grounds the verdict in evidence per great-skill axis rather than an
-    unscored feeling.
+semantic_assertions:
+  - assertion_id: skills-creation-evaluate-draft-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent classifies the request as `evaluate`.
+      - Agent returns one of the allowed verdicts, not `great`.
+      - Agent applies a blocker override citing the missing workflow spine, weak
+        trigger-only description, missing mental model/main path, or absent pressure
+        proof.
+      - Agent reports the highest risk, the first required revision, and a retest
+        requirement.
+      - Agent names the failure-form that matches the draft's problems (wrong
+        invocation, wrong output shape, or a similar named form) instead of vague
+        advice.
+      - Agent grounds the verdict in evidence per great-skill axis rather than an
+        unscored feeling.
 
-  Failure Signals:
-  - Says the skill is "great" despite missing workflow spine and pressure
-    proof.
-  - Uses vague advice instead of an allowed verdict and required revision.
-  - Treats a valid frontmatter shape as behavior proof.
-  - Rewrites everything instead of giving the first required revision.
-  - Cites a numeric score or point total instead of the verdict/blocker/evidence
-    shape.
+      Failure Signals:
+      - Says the skill is "great" despite missing workflow spine and pressure
+        proof.
+      - Uses vague advice instead of an allowed verdict and required revision.
+      - Treats a valid frontmatter shape as behavior proof.
+      - Rewrites everything instead of giving the first required revision.
+      - Cites a numeric score or point total instead of the verdict/blocker/evidence
+        shape.
+    evidence_surface: response
+behavior_requirement_ids:
+  - skills-creation-evaluate-draft
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -58,6 +65,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

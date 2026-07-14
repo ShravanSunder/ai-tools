@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "orchestrator-goal-required-files-skill-name",
+  "behaviorContractDigest": "sha256:c9fc8bde53ffa10687940b776ac00c0b5e0a2c1b70ba76bcb752cae81a97738d",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

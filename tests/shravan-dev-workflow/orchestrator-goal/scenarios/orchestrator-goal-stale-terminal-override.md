@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: orchestrator-goal-stale-terminal-override
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
@@ -23,28 +25,33 @@ prompt: |-
 
   Close the goal if the plan/review work is enough; otherwise say what the
   official next workflow should be.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent refuses to mark the host goal complete from the stale plan-only terminal
-    condition.
-  - Agent says the later user clarification overrides or invalidates the stale
-    terminal condition.
-  - Agent identifies `shravan-dev-workflow:implementation-execute-plan` as the
-    next workflow unless implementation is explicitly declared out of scope.
-  - Agent treats implementation proof, visual/manual proof, implementation review,
-    and PR wrapup/merge readiness as open or out-of-scope-by-explicit-user-choice,
-    not silently done.
-  - Agent cites the terminal intent guard or equivalent skill rule.
+semantic_assertions:
+  - assertion_id: orchestrator-goal-stale-terminal-override-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent refuses to mark the host goal complete from the stale plan-only terminal
+        condition.
+      - Agent says the later user clarification overrides or invalidates the stale
+        terminal condition.
+      - Agent identifies `shravan-dev-workflow:implementation-execute-plan` as the
+        next workflow unless implementation is explicitly declared out of scope.
+      - Agent treats implementation proof, visual/manual proof, implementation review,
+        and PR wrapup/merge readiness as open or out-of-scope-by-explicit-user-choice,
+        not silently done.
+      - Agent cites the terminal intent guard or equivalent skill rule.
 
-  Failure Signals:
-  - Marks the goal complete because the plan and plan review are done.
-  - Treats "before implementation begins" as still authoritative after the later
-    clarification.
-  - Says a new implementation agent can pick it up from chat with no official
-    transition.
-  - Omits implementation proof, visual/manual proof, implementation review, or PR
-    wrapup from the closeout.
+      Failure Signals:
+      - Marks the goal complete because the plan and plan review are done.
+      - Treats "before implementation begins" as still authoritative after the later
+        clarification.
+      - Says a new implementation agent can pick it up from chat with no official
+        transition.
+      - Omits implementation proof, visual/manual proof, implementation review, or PR
+        wrapup from the closeout.
+    evidence_surface: response
+behavior_requirement_ids:
+  - orchestrator-goal-stale-terminal-override
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -52,6 +59,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

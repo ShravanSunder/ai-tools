@@ -6,7 +6,7 @@
       "properties": {
         "schema_version": {
           "type": "number",
-          "const": 2
+          "const": 3
         },
         "scenario_id": {
           "type": "string",
@@ -35,15 +35,74 @@
             "reference"
           ]
         },
+        "effect_surfaces": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "response",
+              "artifacts",
+              "tools"
+            ]
+          }
+        },
         "prompt": {
           "type": "string",
           "minLength": 1,
           "pattern": "\\S"
         },
-        "hidden_rubric": {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "\\S"
+        "semantic_assertions": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assertion_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "criterion": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "evidence_surface": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "const": "response"
+                  },
+                  {
+                    "type": "string",
+                    "const": "tools"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^artifact:[a-z0-9][a-z0-9-]*$"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "assertion_id",
+              "criterion",
+              "evidence_surface"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "behavior_requirement_ids": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          }
         },
         "comparison_intent": {
           "type": "string",
@@ -89,6 +148,22 @@
             "pattern": "^(?!\\/)(?!.*\\\\)(?!.*(?:^|\\/)\\.{1,2}(?:\\/|$))(?!.*\\/\\/)(?!.*\\/$).+$"
           }
         },
+        "required_tool_observations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "forbidden_tool_observations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
         "deterministic_checks": {
           "type": "array",
           "items": {
@@ -108,7 +183,7 @@
                   },
                   {
                     "type": "string",
-                    "pattern": "^path:[\\s\\S]{1,}$"
+                    "pattern": "^path:(?!\\/)(?!.*\\\\)(?!.*(?:^|\\/)\\.{1,2}(?:\\/|$))(?!.*\\/\\/)(?!.*\\/$).+$"
                   },
                   {
                     "type": "string",
@@ -188,14 +263,18 @@
         "owner_plugin",
         "owner_skill",
         "skill_type",
+        "effect_surfaces",
         "prompt",
-        "hidden_rubric",
+        "semantic_assertions",
+        "behavior_requirement_ids",
         "comparison_intent",
         "repetitions",
         "risk",
         "fixture_requirements",
         "allowed_tools",
         "allowed_write_paths",
+        "required_tool_observations",
+        "forbidden_tool_observations",
         "deterministic_checks",
         "expected_artifacts",
         "baseline"
@@ -207,7 +286,7 @@
       "properties": {
         "schema_version": {
           "type": "number",
-          "const": 2
+          "const": 3
         },
         "scenario_id": {
           "type": "string",
@@ -236,15 +315,74 @@
             "reference"
           ]
         },
+        "effect_surfaces": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "response",
+              "artifacts",
+              "tools"
+            ]
+          }
+        },
         "prompt": {
           "type": "string",
           "minLength": 1,
           "pattern": "\\S"
         },
-        "hidden_rubric": {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "\\S"
+        "semantic_assertions": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assertion_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "criterion": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "evidence_surface": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "const": "response"
+                  },
+                  {
+                    "type": "string",
+                    "const": "tools"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^artifact:[a-z0-9][a-z0-9-]*$"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "assertion_id",
+              "criterion",
+              "evidence_surface"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "behavior_requirement_ids": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          }
         },
         "comparison_intent": {
           "type": "string",
@@ -290,6 +428,22 @@
             "pattern": "^(?!\\/)(?!.*\\\\)(?!.*(?:^|\\/)\\.{1,2}(?:\\/|$))(?!.*\\/\\/)(?!.*\\/$).+$"
           }
         },
+        "required_tool_observations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "forbidden_tool_observations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
         "deterministic_checks": {
           "type": "array",
           "items": {
@@ -309,7 +463,7 @@
                   },
                   {
                     "type": "string",
-                    "pattern": "^path:[\\s\\S]{1,}$"
+                    "pattern": "^path:(?!\\/)(?!.*\\\\)(?!.*(?:^|\\/)\\.{1,2}(?:\\/|$))(?!.*\\/\\/)(?!.*\\/$).+$"
                   },
                   {
                     "type": "string",
@@ -393,14 +547,18 @@
         "owner_plugin",
         "owner_skill",
         "skill_type",
+        "effect_surfaces",
         "prompt",
-        "hidden_rubric",
+        "semantic_assertions",
+        "behavior_requirement_ids",
         "comparison_intent",
         "repetitions",
         "risk",
         "fixture_requirements",
         "allowed_tools",
         "allowed_write_paths",
+        "required_tool_observations",
+        "forbidden_tool_observations",
         "deterministic_checks",
         "expected_artifacts",
         "baseline",
@@ -409,7 +567,7 @@
       "additionalProperties": false
     }
   ],
-  "$id": "https://ai-tools.local/schemas/skill-pressure/scenario/v1.json",
-  "title": "Skill Pressure Scenario v1",
+  "$id": "https://ai-tools.local/schemas/skill-pressure/scenario/v3.json",
+  "title": "Skill Pressure Scenario v3",
   "xSkillPressureUniqueCheckIds": true
 }

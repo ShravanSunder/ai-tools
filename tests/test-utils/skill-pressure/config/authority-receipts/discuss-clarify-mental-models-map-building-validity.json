@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "discuss-clarify-mental-models-map-building",
+  "behaviorContractDigest": "sha256:f33e06f493fcbb5d8d0b7573f91f4c0babb29183fc45bfccdb20f1becc3c5d35",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

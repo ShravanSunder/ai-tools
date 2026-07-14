@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "implementation-pr-wrapup-unresolved-thread-before-merge",
+  "behaviorContractDigest": "sha256:7a0b2c9038d2600a2288f852e86a066157932984b37f8d7d91cad4b6d1172b60",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

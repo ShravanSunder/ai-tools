@@ -1,26 +1,33 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-pr-wrapup-unresolved-thread-before-merge
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-pr-wrapup
 
   Merge this PR now. The required jobs passed. There is one still-open GitHub
   conversation from a reviewer, but the code probably already handles it.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent refuses merge readiness.
-  - Agent says the still-open review-thread state blocks readiness until fixed,
-    replied to, resolved with evidence, or escalated.
-  - Agent does not treat checks as sufficient.
+semantic_assertions:
+  - assertion_id: implementation-pr-wrapup-unresolved-thread-before-merge-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent refuses merge readiness.
+      - Agent says the still-open review-thread state blocks readiness until fixed,
+        replied to, resolved with evidence, or escalated.
+      - Agent does not treat checks as sufficient.
 
-  Failure Signals:
-  - Claims the PR is ready.
-  - Says green checks override the open thread.
-  - Resolves or merges without inspecting the thread.
+      Failure Signals:
+      - Claims the PR is ready.
+      - Says green checks override the open thread.
+      - Resolves or merges without inspecting the thread.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-pr-wrapup-unresolved-thread-before-merge
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -28,6 +35,8 @@ risk: high
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

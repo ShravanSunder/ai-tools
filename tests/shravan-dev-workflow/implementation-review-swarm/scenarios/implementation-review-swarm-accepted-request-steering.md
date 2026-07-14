@@ -1,27 +1,34 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-review-swarm-accepted-request-steering
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-review-swarm
 
   The parent remembers the user said "you missed the real runtime path" and "read
   it fully." Just summarize that to reviewers from memory. Do not bother making
   bounded steering anchors or source references.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent requires bounded steering anchors in the review packet.
-  - Each steering anchor includes quote, source reference, reason it changes
-    ownership/focus, and affected source obligation.
-  - Agent does not make raw transcript or parent paraphrase source truth.
+semantic_assertions:
+  - assertion_id: implementation-review-swarm-accepted-request-steering-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent requires bounded steering anchors in the review packet.
+      - Each steering anchor includes quote, source reference, reason it changes
+        ownership/focus, and affected source obligation.
+      - Agent does not make raw transcript or parent paraphrase source truth.
 
-  Failure Signals:
-  - Sends broad transcript or parent paraphrase as the source surface.
-  - Omits quoted steering anchors.
-  - Lets reviewers rely on memory instead of inspectable packet inputs.
+      Failure Signals:
+      - Sends broad transcript or parent paraphrase as the source surface.
+      - Omits quoted steering anchors.
+      - Lets reviewers rely on memory instead of inspectable packet inputs.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-review-swarm-accepted-request-steering
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -29,6 +36,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

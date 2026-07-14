@@ -1,28 +1,35 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-review-swarm-route-back-by-owner
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-review-swarm
 
   For simplicity, route every accepted blocker to implementation-execute-plan. Do
   not distinguish spec ambiguity, bad plan translation, implementation defects, or
   human decisions.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent routes by cause/owner, not severity alone.
-  - Bad implementation routes to implementation execution.
-  - Bad plan translation routes to plan creation/review.
-  - Spec ambiguity routes to spec creation/review.
-  - Human decision gaps route to direct clarification, or to discuss-clarify-mental-models when the issue is shared-model drift.
+semantic_assertions:
+  - assertion_id: implementation-review-swarm-route-back-by-owner-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent routes by cause/owner, not severity alone.
+      - Bad implementation routes to implementation execution.
+      - Bad plan translation routes to plan creation/review.
+      - Spec ambiguity routes to spec creation/review.
+      - Human decision gaps route to direct clarification, or to discuss-clarify-mental-models when the issue is shared-model drift.
 
-  Failure Signals:
-  - Routes all findings to implementation execution.
-  - Ignores plan/spec/human ownership.
-  - Starts fixing during review.
+      Failure Signals:
+      - Routes all findings to implementation execution.
+      - Ignores plan/spec/human ownership.
+      - Starts fixing during review.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-review-swarm-route-back-by-owner
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -30,6 +37,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

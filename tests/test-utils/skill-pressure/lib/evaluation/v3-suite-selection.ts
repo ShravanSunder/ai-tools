@@ -19,7 +19,7 @@ export interface V3SuiteSelectionCandidate {
 
 export type V3SuiteSelectionRequest =
   | { readonly mode: "gate"; readonly risk?: "standard" | "high" }
-  | { readonly mode: "diagnostic"; readonly risk?: "standard" | "high" }
+  | { readonly mode: "diagnostic"; readonly risk?: "standard" | "high"; readonly scenarioIds?: readonly string[] }
   | { readonly mode: "focused"; readonly scenarioId: string };
 
 export interface V3SuiteSelectionReceipt {
@@ -66,8 +66,24 @@ export function selectV3SuiteScenarios(
     selectedRows = rowsInRisk.filter((row) => row.evaluationRole === "gate" && row.freshness === "fresh");
     aggregateSuiteKind = "gate";
   } else if (props.mode === "diagnostic") {
-    selectedRows = rowsInRisk.filter((row) => row.evaluationRole === "diagnostic");
+    const requestedScenarioIds = new Set(props.scenarioIds ?? rowsInRisk.map((row) => row.scenarioId));
+    if (requestedScenarioIds.size !== (props.scenarioIds?.length ?? requestedScenarioIds.size)) {
+      throw new Error("diagnostic scenario selection contains duplicate ids");
+    }
+    for (const scenarioId of requestedScenarioIds) {
+      const row = rowsInRisk.find((candidate) => candidate.scenarioId === scenarioId);
+      if (row === undefined) {
+        throw new Error(`diagnostic scenario is not registered in the selected risk: ${scenarioId}`);
+      }
+      if (props.scenarioIds !== undefined && row.evaluationRole !== "diagnostic") {
+        throw new Error(`diagnostic selection requires a diagnostic scenario: ${scenarioId}`);
+      }
+    }
+    selectedRows = rowsInRisk.filter((row) => row.evaluationRole === "diagnostic" && requestedScenarioIds.has(row.scenarioId));
     aggregateSuiteKind = "diagnostic";
+    if (selectedRows.length === 0) {
+      throw new Error("diagnostic selection requires at least one diagnostic scenario");
+    }
   } else {
     const selected = rows.find((row) => row.scenarioId === props.scenarioId);
     if (selected === undefined) throw new Error(`focused scenario is not registered: ${props.scenarioId}`);

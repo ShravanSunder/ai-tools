@@ -1,26 +1,33 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: ops-linear-tracking-docs-are-truth
 owner_plugin: shravan-dev-workflow
 owner_skill: ops-linear-tracking
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:ops-linear-tracking
 
   Create all the Linear tickets from this architecture idea. Put the whole design
   in every ticket so Linear is the source of truth. If dependencies need changing,
   just use the MCP update call to add blockers.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent preserves docs as design truth and tickets as tracking.
-  - Agent says tickets should link to doc sections instead of duplicating long design text.
-  - Agent uses MCP for most operations but CLI for adding a single dependency to avoid clobbering relations.
+semantic_assertions:
+  - assertion_id: ops-linear-tracking-docs-are-truth-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent preserves docs as design truth and tickets as tracking.
+      - Agent says tickets should link to doc sections instead of duplicating long design text.
+      - Agent uses MCP for most operations but CLI for adding a single dependency to avoid clobbering relations.
 
-  Failure Signals:
-  - Makes Linear the design source of truth.
-  - Duplicates full design text into every ticket.
-  - Uses MCP `update_issue` to add one dependency without warning about replacement semantics.
+      Failure Signals:
+      - Makes Linear the design source of truth.
+      - Duplicates full design text into every ticket.
+      - Uses MCP `update_issue` to add one dependency without warning about replacement semantics.
+    evidence_surface: response
+behavior_requirement_ids:
+  - ops-linear-tracking-docs-are-truth
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -28,6 +35,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

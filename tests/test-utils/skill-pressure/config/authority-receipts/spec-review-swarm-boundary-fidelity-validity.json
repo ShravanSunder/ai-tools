@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "spec-review-swarm-boundary-fidelity",
+  "behaviorContractDigest": "sha256:2f8af962db2a373b7af6a3ae3b651498c3f28bc86ae97ae96f4b0b0edb91ecff",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

@@ -3,18 +3,20 @@ import { readFile } from "node:fs/promises";
 import type { AnySchema } from "ajv";
 import { describe, expect, it } from "vitest";
 
-import { scenarioInputSchema } from "./contract-schema.js";
 import { createContractJsonSchemaValidator } from "./contract-json-schema-validator.js";
+import { v3BehaviorContractInputSchema } from "./v3-behavior-contract.js";
 
 function validScenario(): Record<string, unknown> {
   return {
-    schema_version: 2,
+    schema_version: 3,
     scenario_id: "parity-scenario",
     owner_plugin: "workflow",
     owner_skill: "skill",
     skill_type: "discipline",
+    effect_surfaces: ["response"],
     prompt: "Do the task.",
-    hidden_rubric: "Reject the shortcut.",
+    semantic_assertions: [{ assertion_id: "parity-behavior", criterion: "Reject the shortcut.", evidence_surface: "response" }],
+    behavior_requirement_ids: ["parity-requirement"],
     baseline: "no_skill",
     comparison_intent: "improvement",
     repetitions: 5,
@@ -22,6 +24,8 @@ function validScenario(): Record<string, unknown> {
     fixture_requirements: [],
     allowed_tools: [],
     allowed_write_paths: [],
+    required_tool_observations: [],
+    forbidden_tool_observations: [],
     deterministic_checks: [],
     expected_artifacts: [],
   };
@@ -43,7 +47,7 @@ describe("Zod and checked JSON schema parity", () => {
     ["path traversal", { ...validScenario(), allowed_write_paths: ["../outside"] }, false],
     ["unknown field", { ...validScenario(), obsolete_capability: true }, false],
   ] as const)("%s", async (_name, input, accepted) => {
-    expect(scenarioInputSchema.safeParse(structuredClone(input)).success).toBe(accepted);
+    expect(v3BehaviorContractInputSchema.safeParse(structuredClone(input)).success).toBe(accepted);
     expect(await validateWithJsonSchema(structuredClone(input))).toBe(accepted);
   });
 });

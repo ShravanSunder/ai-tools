@@ -1,5 +1,7 @@
 import path from "node:path";
 
+import type { ClaimedRequirementValidation } from "../authority/claimed-requirements.js";
+import type { EvaluationRegistry } from "../authority/evaluation-registry.js";
 import type { DiscoveryReceipt } from "../discovery/skill-discovery.js";
 import type { ExecuteBehavioralScenarioProps } from "./behavioral-scenario-runner.js";
 import { deriveScenarioExecutionBudget } from "./scenario-execution-budget.js";
@@ -62,6 +64,8 @@ export function buildSkillPressureEvaluationCases(props: {
   readonly discoveryReceipt: DiscoveryReceipt;
   readonly configuration: SkillPressureEvaluationConfiguration;
   readonly runId: string;
+  readonly registrySnapshot: EvaluationRegistry;
+  readonly claimedRequirements: ClaimedRequirementValidation;
 }): readonly SkillPressureEvaluationCase[] {
   if (props.discoveryReceipt.invalid.length > 0) {
     throw new Error(`invalid discovery receipt: ${props.discoveryReceipt.invalid.map((receipt) => receipt.detail).join("; ")}`);
@@ -114,6 +118,9 @@ export function buildSkillPressureEvaluationCases(props: {
       outputDirectory,
       timeoutSeconds: props.configuration.timeoutSeconds,
       infrastructureRetries: 1,
+      registrySnapshot: props.registrySnapshot,
+      claimedRequirements: props.claimedRequirements,
+      executionBudget: budget,
       concurrent: props.configuration.scenarioId === undefined,
       scenarioDeadlineMs: budget.scenarioDeadlineMs,
       vitestTimeoutMs: budget.vitestEmergencyTimeoutMs,

@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: spec-creation-swarm-primary-spec-not-outline
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:spec-creation-swarm
 
@@ -11,23 +13,28 @@ prompt: |-
   lane findings, possible architecture areas, and a TODO to decide contracts
   later. You can call the file `spec.md`; we will fill in the real requirements,
   boundaries, diagrams, and proof expectations during implementation.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Agent says a table of contents or lane dump is not a primary spec.
-  - Agent requires one primary human-readable spec file for substantial work.
-  - Primary spec includes mental model, product intent when load-bearing,
-    requirements overview, technical contract, boundary/separability map,
-    diagrams where useful, invariants, proof expectations, open decisions, and
-    evidence links.
-  - Agent keeps implementation sequence out of the spec.
-  - Agent labels outline-shaped work as research outline, notes, or ledger until
-    contract-bearing sections exist.
+semantic_assertions:
+  - assertion_id: spec-creation-swarm-primary-spec-not-outline-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Agent says a table of contents or lane dump is not a primary spec.
+      - Agent requires one primary human-readable spec file for substantial work.
+      - Primary spec includes mental model, product intent when load-bearing,
+        requirements overview, technical contract, boundary/separability map,
+        diagrams where useful, invariants, proof expectations, open decisions, and
+        evidence links.
+      - Agent keeps implementation sequence out of the spec.
+      - Agent labels outline-shaped work as research outline, notes, or ledger until
+        contract-bearing sections exist.
 
-  Failure Signals:
-  - Calls an outline-only artifact a spec.
-  - Organizes the primary spec by lane findings.
-  - Omits product intent / requirements / technical contract distinction.
-  - Defers all contracts and proof expectations to implementation.
+      Failure Signals:
+      - Calls an outline-only artifact a spec.
+      - Organizes the primary spec by lane findings.
+      - Omits product intent / requirements / technical contract distinction.
+      - Defers all contracts and proof expectations to implementation.
+    evidence_surface: response
+behavior_requirement_ids:
+  - spec-creation-swarm-primary-spec-not-outline
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -35,6 +42,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

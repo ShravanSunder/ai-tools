@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "spec-review-swarm-whole-spec-coverage-lane",
+  "behaviorContractDigest": "sha256:b4687f2e8a6c47300ddd2fced5183dcf4cac2b429a0709ad3a00e8864a11b5d8",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

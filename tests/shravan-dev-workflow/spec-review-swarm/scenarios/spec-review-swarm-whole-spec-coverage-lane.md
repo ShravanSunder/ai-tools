@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: spec-review-swarm-whole-spec-coverage-lane
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:spec-review-swarm
 
@@ -11,25 +13,30 @@ prompt: |-
   contract, architecture, and testability lanes together cover the important
   parts. Give each lane only its local section and a quick parent summary of the
   research; no need to give them the whole spec or research lane files.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent stays read-only.
-  - Agent requires spec reviewers to receive the target spec artifact, source
-    anchors, and relevant research lane files or ledgers.
-  - Agent includes a mandatory whole-spec-coverage lane for substantial spec
-    review.
-  - The whole-picture lane checks whether the full spec satisfies product intent,
-    requirements, technical contract, boundaries, non-goals, proof expectations,
-    and slice coherence.
-  - Focused lanes do not replace the whole-picture lane; the parent reducer still
-    verifies candidate findings.
+semantic_assertions:
+  - assertion_id: spec-review-swarm-whole-spec-coverage-lane-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent stays read-only.
+      - Agent requires spec reviewers to receive the target spec artifact, source
+        anchors, and relevant research lane files or ledgers.
+      - Agent includes a mandatory whole-spec-coverage lane for substantial spec
+        review.
+      - The whole-picture lane checks whether the full spec satisfies product intent,
+        requirements, technical contract, boundaries, non-goals, proof expectations,
+        and slice coherence.
+      - Focused lanes do not replace the whole-picture lane; the parent reducer still
+        verifies candidate findings.
 
-  Failure Signals:
-  - Lets focused lanes replace whole-spec coverage.
-  - Omits target artifact or research/source anchors from packets.
-  - Reviews only local sections.
-  - Treats reviewer consensus as accepted truth.
+      Failure Signals:
+      - Lets focused lanes replace whole-spec coverage.
+      - Omits target artifact or research/source anchors from packets.
+      - Reviews only local sections.
+      - Treats reviewer consensus as accepted truth.
+    evidence_surface: response
+behavior_requirement_ids:
+  - spec-review-swarm-whole-spec-coverage-lane
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -37,6 +44,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: manage-agents-pattern-selection
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
 skill_type: reference
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:manage-agents
 
@@ -12,20 +14,25 @@ prompt: |-
   advisor that watches the main doer and interrupts with notes, a throwaway
   helper for one bounded question, or a workflow handoff to the next phase. Do
   not give provider command recipes yet.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent chooses the orchestration pattern before any provider or command.
-  - Agent distinguishes swarm breadth from persistent sidekick continuity.
-  - Agent describes advisor notes as candidate guidance, not final authority.
-  - Agent distinguishes ephemeral one-shot subagents from workflow handoffs.
-  - Agent does not give ACPX command recipes.
+semantic_assertions:
+  - assertion_id: manage-agents-pattern-selection-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent chooses the orchestration pattern before any provider or command.
+      - Agent distinguishes swarm breadth from persistent sidekick continuity.
+      - Agent describes advisor notes as candidate guidance, not final authority.
+      - Agent distinguishes ephemeral one-shot subagents from workflow handoffs.
+      - Agent does not give ACPX command recipes.
 
-  Failure Signals:
-  - Starts with `acpx` commands or provider setup.
-  - Treats advisor, sidekick, swarm, and ephemeral helper as synonyms.
-  - Gives the advisor final authority instead of parent-owned reduction.
-  - Omits workflow handoff as a separate pattern.
+      Failure Signals:
+      - Starts with `acpx` commands or provider setup.
+      - Treats advisor, sidekick, swarm, and ephemeral helper as synonyms.
+      - Gives the advisor final authority instead of parent-owned reduction.
+      - Omits workflow handoff as a separate pattern.
+    evidence_surface: response
+behavior_requirement_ids:
+  - manage-agents-pattern-selection
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -33,6 +40,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

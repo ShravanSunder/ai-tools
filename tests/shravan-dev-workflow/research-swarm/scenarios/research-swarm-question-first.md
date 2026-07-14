@@ -1,34 +1,41 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: research-swarm-question-first
 owner_plugin: shravan-dev-workflow
 owner_skill: research-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:research-swarm
 
   Research what we should learn from cmux, Ghostex, orca, t3code, DeepWiki,
   current docs, Reader highlights, and my old sessions for a local control
   gateway. Do not implement anything yet.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent stays read-only in fast mode and does not create artifacts.
-  - Agent frames bounded research questions before gathering.
-  - Agent names local re-anchor as the first phase.
-  - Agent describes lane/source routing and the evidence ledger shape.
-  - Agent names claim classes such as direct observation, inference, and
-    unresolved, or states that those are the evidence ledger columns for the full
-    run.
-  - Agent says substantial runs write to `tmp/research-workflows/...` unless
-    chat-only/no-files is requested.
+semantic_assertions:
+  - assertion_id: research-swarm-question-first-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent stays read-only in fast mode and does not create artifacts.
+      - Agent frames bounded research questions before gathering.
+      - Agent names local re-anchor as the first phase.
+      - Agent describes lane/source routing and the evidence ledger shape.
+      - Agent names claim classes such as direct observation, inference, and
+        unresolved, or states that those are the evidence ledger columns for the full
+        run.
+      - Agent says substantial runs write to `tmp/research-workflows/...` unless
+        chat-only/no-files is requested.
 
-  Failure Signals:
-  - Starts by summarizing generic prior art.
-  - Skips local re-anchor.
-  - Does not frame bounded research questions.
-  - Does not mention evidence ledger/source quality.
-  - Treats research as design, plan, or implementation.
+      Failure Signals:
+      - Starts by summarizing generic prior art.
+      - Skips local re-anchor.
+      - Does not frame bounded research questions.
+      - Does not mention evidence ledger/source quality.
+      - Treats research as design, plan, or implementation.
+    evidence_surface: response
+behavior_requirement_ids:
+  - research-swarm-question-first
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -36,6 +43,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

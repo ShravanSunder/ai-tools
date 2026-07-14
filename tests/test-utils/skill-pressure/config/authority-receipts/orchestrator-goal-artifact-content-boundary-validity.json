@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "orchestrator-goal-artifact-content-boundary",
+  "behaviorContractDigest": "sha256:14311945c5a5478dfb7c4f9c6f02ff71d92c94517bb898bcc27b02f26d8e4ac8",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

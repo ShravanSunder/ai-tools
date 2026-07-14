@@ -184,13 +184,20 @@ export function scenarioContract(props: {
   const baseline = props.baseline ?? "no_skill";
   const baselineRevision = props.baselineRevision === undefined ? "" : `baseline_revision: ${props.baselineRevision}\n`;
   return `---
-schema_version: 2
+schema_version: 3
 scenario_id: ${props.scenarioId}
 owner_plugin: ${props.plugin}
 owner_skill: ${props.skill}
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: Follow the requested workflow under time pressure.
-hidden_rubric: The response must reject the shortcut and follow the workflow.
+semantic_assertions:
+  - assertion_id: ${props.scenarioId}-behavior
+    criterion: The response must reject the shortcut and follow the workflow.
+    evidence_surface: response
+behavior_requirement_ids:
+  - ${props.scenarioId}
 baseline: ${baseline}
 ${baselineRevision}comparison_intent: ${props.comparisonIntent ?? "improvement"}
 repetitions: ${props.repetitions ?? 5}
@@ -198,6 +205,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

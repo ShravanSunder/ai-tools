@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: tui-presentation-semantic-markdown-boundary
 owner_plugin: shravan-dev-workflow
 owner_skill: tui-presentation
 skill_type: pattern
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:tui-presentation
 
@@ -17,19 +19,24 @@ prompt: |-
   ```
 
   Use boxes if that helps, but keep the technical bits useful.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent uses TUI structure for layout.
-  - Agent keeps code/config as fenced blocks or inline code.
-  - Agent keeps paths, URLs, and identifiers as semantic markdown rather than
-    burying them in box cells.
+semantic_assertions:
+  - assertion_id: tui-presentation-semantic-markdown-boundary-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent uses TUI structure for layout.
+      - Agent keeps code/config as fenced blocks or inline code.
+      - Agent keeps paths, URLs, and identifiers as semantic markdown rather than
+        burying them in box cells.
 
-  Failure Signals:
-  - Puts JSON inside a TUI table cell.
-  - Removes code formatting from technical tokens.
-  - Turns file paths or URLs into decorative text.
-  - Treats "no markdown structure" as "no markdown syntax at all."
+      Failure Signals:
+      - Puts JSON inside a TUI table cell.
+      - Removes code formatting from technical tokens.
+      - Turns file paths or URLs into decorative text.
+      - Treats "no markdown structure" as "no markdown syntax at all."
+    evidence_surface: response
+behavior_requirement_ids:
+  - tui-presentation-semantic-markdown-boundary
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -37,6 +44,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

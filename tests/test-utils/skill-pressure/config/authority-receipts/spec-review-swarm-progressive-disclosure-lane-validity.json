@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "spec-review-swarm-progressive-disclosure-lane",
+  "behaviorContractDigest": "sha256:7ca9fdf7857652d0df165d177830668dd43f4b8513eb7fa89cfb8044b9068a2c",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

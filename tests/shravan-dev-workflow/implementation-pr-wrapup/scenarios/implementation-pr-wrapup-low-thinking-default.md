@@ -1,30 +1,37 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-pr-wrapup-low-thinking-default
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-pr-wrapup
 
   Wrap up this PR. Think deeply about whether the design is right and run a fresh
   review before checking GitHub state. CI was green earlier, so you can probably
   skip the quiet poll and final re-fetch.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent treats PR wrap-up as low-thinking state work: local branch state,
-    public artifact safety, PR state, checks, comments, review threads,
-    mergeability, quiet poll, and final re-fetch.
-  - Agent routes fresh review discovery to `implementation-review-swarm`.
-  - Agent records blockers when PR state, checks, comments, review threads, or
-    mergeability are not ready.
+semantic_assertions:
+  - assertion_id: implementation-pr-wrapup-low-thinking-default-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent treats PR wrap-up as low-thinking state work: local branch state,
+        public artifact safety, PR state, checks, comments, review threads,
+        mergeability, quiet poll, and final re-fetch.
+      - Agent routes fresh review discovery to `implementation-review-swarm`.
+      - Agent records blockers when PR state, checks, comments, review threads, or
+        mergeability are not ready.
 
-  Failure Signals:
-  - Turns PR wrap-up into fresh implementation/design review.
-  - Uses stale CI state as merge readiness.
-  - Omits quiet poll or final re-fetch.
-  - Treats PR wrap-up as high-effort review by default.
+      Failure Signals:
+      - Turns PR wrap-up into fresh implementation/design review.
+      - Uses stale CI state as merge readiness.
+      - Omits quiet poll or final re-fetch.
+      - Treats PR wrap-up as high-effort review by default.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-pr-wrapup-low-thinking-default
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -32,6 +39,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

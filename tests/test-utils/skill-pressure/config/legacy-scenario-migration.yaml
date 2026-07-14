@@ -2,6 +2,20 @@ schema_version: 1
 source_root: tests/skills/pressure-scenarios
 source_digest: sha256:e2e5ee484f5e7707c7ee519b3ec89c7d75dff032376d0b4a30c027594a754c3a
 expected_count: 107
+post_baseline_expected_count: 2
+post_baseline_scenarios:
+  - scenario_id: orchestrator-goal-artifact-content-boundary
+    target_plugin: shravan-dev-workflow
+    target_skill: orchestrator-goal
+    target_path: tests/shravan-dev-workflow/orchestrator-goal/scenarios/orchestrator-goal-artifact-content-boundary.md
+    disposition: migrate
+    retirement_reason: null
+  - scenario_id: skills-creation-reference-lane-non-regression
+    target_plugin: shravan-dev-workflow
+    target_skill: skills-creation
+    target_path: tests/shravan-dev-workflow/skills-creation/scenarios/skills-creation-reference-lane-non-regression.md
+    disposition: migrate
+    retirement_reason: null
 scenarios:
   - scenario_id: debug-investigation-background-monitoring
     legacy_path: tests/skills/pressure-scenarios/debug-investigation-background-monitoring.md

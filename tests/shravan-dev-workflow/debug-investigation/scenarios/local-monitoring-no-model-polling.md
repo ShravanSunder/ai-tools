@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: local-monitoring-no-model-polling
 owner_plugin: shravan-dev-workflow
 owner_skill: debug-investigation
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:debug-investigation
 
@@ -14,20 +16,25 @@ prompt: |-
   The queue has a monotonic processed count, a failure counter, and a cursor. The
   monitor should only bother me when the cursor advances, error rate changes, or
   the run finishes. Keep it read-only.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent uses deterministic machine watching for the repeated observation loop.
-  - Agent limits models or subagents to bounded interpretation of snapshots,
-    anomalies, or monitor plans.
-  - Agent says the model adjudicates changes rather than acting as the
-    steady-state polling loop.
-  - Agent records compact state/events/cursor information.
+semantic_assertions:
+  - assertion_id: local-monitoring-no-model-polling-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent uses deterministic machine watching for the repeated observation loop.
+      - Agent limits models or subagents to bounded interpretation of snapshots,
+        anomalies, or monitor plans.
+      - Agent says the model adjudicates changes rather than acting as the
+        steady-state polling loop.
+      - Agent records compact state/events/cursor information.
 
-  Failure Signals:
-  - Creates a helper model loop for every interval.
-  - Treats repeated subagent wakeups as the monitor implementation.
-  - Omits durable state/cursor/event tracking.
+      Failure Signals:
+      - Creates a helper model loop for every interval.
+      - Treats repeated subagent wakeups as the monitor implementation.
+      - Omits durable state/cursor/event tracking.
+    evidence_surface: response
+behavior_requirement_ids:
+  - local-monitoring-no-model-polling
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -35,6 +42,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: skills-creation-platform-artifact-scale
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:skills-creation
 
@@ -11,34 +13,39 @@ prompt: |-
   Codex and Claude. For Codex, I want the client-specific setting that prevents
   automatic model invocation. Show me the workflow and proof path. Keep the
   artifact stuff useful, not ceremony, and do not edit files in this run.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent treats this as `update` for one existing skill.
-  - Agent names `references/platform-mechanics.md` because Codex/Claude mechanics
-    matter.
-  - Agent separates Codex metadata/validation from Claude manifest/marketplace
-    metadata/validation.
-  - Agent routes the Codex-specific invocation control to `platform-mechanics.md`
-    instead of treating client-specific fields as default portable YAML.
-  - Agent says static validation is structural proof and behavior proof needs a
-    pressure scenario or explicit proof gap.
-  - Agent defers installed-cache/home refresh unless release/readback is
-    explicitly scoped.
-  - Agent scales run-state or artifact tracking down to compact, useful notes for
-    a small wording edit -- no giant ritual block when fields are undisputed.
-  - Agent keeps all-branch obligations in `SKILL.md` and branch-only depth in
-    references.
+semantic_assertions:
+  - assertion_id: skills-creation-platform-artifact-scale-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent treats this as `update` for one existing skill.
+      - Agent names `references/platform-mechanics.md` because Codex/Claude mechanics
+        matter.
+      - Agent separates Codex metadata/validation from Claude manifest/marketplace
+        metadata/validation.
+      - Agent routes the Codex-specific invocation control to `platform-mechanics.md`
+        instead of treating client-specific fields as default portable YAML.
+      - Agent says static validation is structural proof and behavior proof needs a
+        pressure scenario or explicit proof gap.
+      - Agent defers installed-cache/home refresh unless release/readback is
+        explicitly scoped.
+      - Agent scales run-state or artifact tracking down to compact, useful notes for
+        a small wording edit -- no giant ritual block when fields are undisputed.
+      - Agent keeps all-branch obligations in `SKILL.md` and branch-only depth in
+        references.
 
-  Failure Signals:
-  - Treats Codex validation as proof for Claude behavior, or Claude packaging as
-    proof for Codex behavior.
-  - Uses installed-cache refresh as routine proof.
-  - Requires a giant state writeup or placement table even when
-    nothing about placement is disputed.
-  - Omits the all-branch versus branch-only placement rule.
-  - Adds client-specific invocation controls as default shared `SKILL.md`
-    frontmatter instead of routing platform policy through `platform-mechanics.md`.
+      Failure Signals:
+      - Treats Codex validation as proof for Claude behavior, or Claude packaging as
+        proof for Codex behavior.
+      - Uses installed-cache refresh as routine proof.
+      - Requires a giant state writeup or placement table even when
+        nothing about placement is disputed.
+      - Omits the all-branch versus branch-only placement rule.
+      - Adds client-specific invocation controls as default shared `SKILL.md`
+        frontmatter instead of routing platform policy through `platform-mechanics.md`.
+    evidence_surface: response
+behavior_requirement_ids:
+  - skills-creation-platform-artifact-scale
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -46,6 +53,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

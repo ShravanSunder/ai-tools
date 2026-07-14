@@ -19,8 +19,6 @@
     "test:behavior": "./run-skill-pressure-tests.sh",
     "test:standard": "./run-skill-pressure-tests.sh --standard",
     "test:high-risk": "./run-skill-pressure-tests.sh --high-risk",
-    "test:live-pair": "tsx scripts/run-live-pair.ts",
-    "test:live-scenario": "tsx scripts/run-live-scenario.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

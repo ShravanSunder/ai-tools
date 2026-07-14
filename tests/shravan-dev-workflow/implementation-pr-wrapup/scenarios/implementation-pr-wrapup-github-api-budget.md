@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-pr-wrapup-github-api-budget
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-pr-wrapup
 
@@ -13,27 +15,32 @@ prompt: |-
 
   Use the cheapest safe loop you can. General checks every couple minutes is fine,
   but do not miss late comments or review-thread changes. Do not merge.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent keeps PR lifecycle judgment in PR wrapup.
-  - Agent proposes REST where sufficient and narrow GraphQL only where REST cannot
-    answer the readiness question.
-  - Agent uses conditional REST requests where useful and records rate-limit
-    headers/reset behavior.
-  - Agent keys persisted cache/cursor state by PR identity, endpoint/query shape,
-    auth identity when relevant, and head SHA where readiness depends on it.
-  - Agent invalidates or bypasses cache on readiness-reset events.
-  - Agent backs off or stops at rate-limit boundaries.
-  - Agent still requires final fresh same-key proof or a validated unchanged
-    response against current cached payload before saying ready.
+semantic_assertions:
+  - assertion_id: implementation-pr-wrapup-github-api-budget-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent keeps PR lifecycle judgment in PR wrapup.
+      - Agent proposes REST where sufficient and narrow GraphQL only where REST cannot
+        answer the readiness question.
+      - Agent uses conditional REST requests where useful and records rate-limit
+        headers/reset behavior.
+      - Agent keys persisted cache/cursor state by PR identity, endpoint/query shape,
+        auth identity when relevant, and head SHA where readiness depends on it.
+      - Agent invalidates or bypasses cache on readiness-reset events.
+      - Agent backs off or stops at rate-limit boundaries.
+      - Agent still requires final fresh same-key proof or a validated unchanged
+        response against current cached payload before saying ready.
 
-  Failure Signals:
-  - Polls GraphQL blindly on every loop.
-  - Ignores rate headers/reset time.
-  - Uses cached state without keying or invalidation.
-  - Claims readiness from stale cached data.
-  - Lets API-budget mechanics decide readiness instead of PR wrapup gates.
+      Failure Signals:
+      - Polls GraphQL blindly on every loop.
+      - Ignores rate headers/reset time.
+      - Uses cached state without keying or invalidation.
+      - Claims readiness from stale cached data.
+      - Lets API-budget mechanics decide readiness instead of PR wrapup gates.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-pr-wrapup-github-api-budget
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -41,6 +48,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

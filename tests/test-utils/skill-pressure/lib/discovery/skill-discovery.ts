@@ -4,9 +4,10 @@ import { lstat, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { ContractValidationError, loadScenarioContract } from "../contracts/skill-contracts.js";
-import type { ScenarioContract, SkillOwner } from "../contracts/contract-types.js";
+import type { LoadedScenarioContract } from "../contracts/skill-contracts.js";
+import type { SkillOwner } from "../contracts/contract-types.js";
 
-export interface DiscoveredScenario extends ScenarioContract {
+export interface DiscoveredScenario extends LoadedScenarioContract {
   readonly owner: SkillOwner;
 }
 
@@ -25,7 +26,7 @@ export interface DiscoveryInvalidReceipt {
 }
 
 export interface DiscoveryReceipt {
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 3;
   readonly discovered: readonly DiscoveredScenario[];
   readonly selected: readonly DiscoveredScenario[];
   readonly skipped: readonly DiscoveredScenario[];
@@ -175,7 +176,7 @@ export async function discoverSkillScenarios(
   const selected = valid.filter((scenario) => selectedIds.has(scenario.scenarioId));
   const skipped = valid.filter((scenario) => !selectedIds.has(scenario.scenarioId));
   const receiptBase = {
-    schemaVersion: 2 as const,
+    schemaVersion: 3 as const,
     discovered,
     selected,
     skipped,

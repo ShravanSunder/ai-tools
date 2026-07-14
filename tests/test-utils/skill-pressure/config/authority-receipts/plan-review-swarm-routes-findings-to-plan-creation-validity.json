@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "plan-review-swarm-routes-findings-to-plan-creation",
+  "behaviorContractDigest": "sha256:f9ae0fc847d2207cf257d116e0fea54f1dcd8a840fcee4d2295dd21c9a1629f0",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

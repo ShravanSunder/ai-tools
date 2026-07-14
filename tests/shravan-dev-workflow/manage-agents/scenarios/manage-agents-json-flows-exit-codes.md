@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: manage-agents-json-flows-exit-codes
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
 skill_type: reference
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:manage-agents
 
@@ -17,23 +19,28 @@ prompt: |-
 
   Also mention how I run a TypeScript flow and what exit codes I should branch on.
   Keep it inside the manage-agents skill shape.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill routes the topic to `automation-and-flows`.
-  - Agent says ACPX JSON is raw ACP JSON-RPC NDJSON, not a synthetic event
-    envelope.
-  - Agent corrects the parser toward `.method=="session/update"` or equivalent
-    ACP fields.
-  - Agent mentions exit codes that scripts should branch on, including timeout,
-    no-session, permission-denied, and interrupted cases.
-  - Agent places TypeScript `flow run` in the automation/flows branch.
+semantic_assertions:
+  - assertion_id: manage-agents-json-flows-exit-codes-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill routes the topic to `automation-and-flows`.
+      - Agent says ACPX JSON is raw ACP JSON-RPC NDJSON, not a synthetic event
+        envelope.
+      - Agent corrects the parser toward `.method=="session/update"` or equivalent
+        ACP fields.
+      - Agent mentions exit codes that scripts should branch on, including timeout,
+        no-session, permission-denied, and interrupted cases.
+      - Agent places TypeScript `flow run` in the automation/flows branch.
 
-  Failure Signals:
-  - Repeats `.type=="tool_call"` as the recommended parser.
-  - Treats JSON output as a synthetic ACPX event envelope.
-  - Omits exit-code handling.
-  - Moves flows into generic runtime-control without naming the automation/flows
-    branch.
+      Failure Signals:
+      - Repeats `.type=="tool_call"` as the recommended parser.
+      - Treats JSON output as a synthetic ACPX event envelope.
+      - Omits exit-code handling.
+      - Moves flows into generic runtime-control without naming the automation/flows
+        branch.
+    evidence_surface: response
+behavior_requirement_ids:
+  - manage-agents-json-flows-exit-codes
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -41,6 +48,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

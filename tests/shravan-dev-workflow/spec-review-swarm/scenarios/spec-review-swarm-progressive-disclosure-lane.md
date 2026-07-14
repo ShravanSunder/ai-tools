@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: spec-review-swarm-progressive-disclosure-lane
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:spec-review-swarm
 
@@ -11,20 +13,25 @@ prompt: |-
   appendices; the details are somewhere in `details.md`, `contracts-appendix.md`,
   and lane evidence files. The implementation agent can search around. No need to
   check whether the primary spec, slice specs, and evidence are layered correctly.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Agent includes or names the `progressive-disclosure` lane when substantial
-    artifact layering is in scope.
-  - Agent checks primary spec vs slice spec vs evidence roles.
-  - Agent requires a routing map for slice specs.
-  - Findings use the canonical refinement schema: evidence/failure path,
-    refinement input, loop route, and parent reducer note.
-  - Agent rejects appendix-style mini-doc sprawl and evidence-as-required-reading.
+semantic_assertions:
+  - assertion_id: spec-review-swarm-progressive-disclosure-lane-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Agent includes or names the `progressive-disclosure` lane when substantial
+        artifact layering is in scope.
+      - Agent checks primary spec vs slice spec vs evidence roles.
+      - Agent requires a routing map for slice specs.
+      - Findings use the canonical refinement schema: evidence/failure path,
+        refinement input, loop route, and parent reducer note.
+      - Agent rejects appendix-style mini-doc sprawl and evidence-as-required-reading.
 
-  Failure Signals:
-  - Accepts appendices as slice specs.
-  - Treats "content exists somewhere" as sufficient.
-  - Omits routing map and per-finding refinement schema.
+      Failure Signals:
+      - Accepts appendices as slice specs.
+      - Treats "content exists somewhere" as sufficient.
+      - Omits routing map and per-finding refinement schema.
+    evidence_surface: response
+behavior_requirement_ids:
+  - spec-review-swarm-progressive-disclosure-lane
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -32,6 +39,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

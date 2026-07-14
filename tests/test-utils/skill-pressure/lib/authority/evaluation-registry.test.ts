@@ -5,13 +5,31 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { discoverSkillScenarios } from "../discovery/skill-discovery.js";
 import {
   loadEvaluationRegistry,
   type EvaluationRegistryScenarioIdentity,
 } from "./evaluation-registry.js";
+import type { ScenarioValidityDigest, ScenarioValidityReceipt } from "./validity-receipts.js";
 
 const SCENARIO_ID = "artifact-proof";
-const BEHAVIOR_DIGEST = `sha256:${"a".repeat(64)}`;
+const BEHAVIOR_DIGEST: ScenarioValidityDigest = `sha256:${"a".repeat(64)}`;
+
+const VALIDITY_RECEIPT: ScenarioValidityReceipt = {
+  schemaVersion: 1,
+  receiptKind: "scenario_validity",
+  scenarioId: SCENARIO_ID,
+  behaviorContractDigest: BEHAVIOR_DIGEST,
+  verdict: "pass",
+  consistency: {
+    promptConsistent: true,
+    effectSurfacesConsistent: true,
+    semanticAssertionsConsistent: true,
+    permissionsConsistent: true,
+    fixturesConsistent: true,
+    expectedArtifactsConsistent: true,
+  },
+};
 
 function knownScenarios(): readonly EvaluationRegistryScenarioIdentity[] {
   return [{ scenarioId: SCENARIO_ID, behaviorContractDigest: BEHAVIOR_DIGEST }];
@@ -54,7 +72,7 @@ async function createRegistryFixture(): Promise<{
     "tests/test-utils/skill-pressure/config/authority-receipts",
   );
   await mkdir(receiptRoot, { recursive: true });
-  const validitySource = "{\"kind\":\"validity\"}\n";
+  const validitySource = `${JSON.stringify(VALIDITY_RECEIPT, null, 2)}\n`;
   const validityPath = path.join(receiptRoot, "artifact-proof-validity.json");
   await writeFile(validityPath, validitySource);
   const validityDigest = `sha256:${createHash("sha256").update(validitySource).digest("hex")}`;
@@ -64,6 +82,28 @@ async function createRegistryFixture(): Promise<{
 }
 
 describe("evaluation registry", () => {
+  it("loads the complete 109-row repository registry and every tracked validity receipt", async () => {
+    const repositoryRoot = path.resolve(import.meta.dirname, "../../../../..");
+    const discovery = await discoverSkillScenarios({ repositoryRoot });
+
+    expect(discovery.invalid).toEqual([]);
+    expect(discovery.discovered).toHaveLength(109);
+    const registry = await loadEvaluationRegistry({
+      repositoryRoot,
+      registryPath: path.join(
+        repositoryRoot,
+        "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml",
+      ),
+      knownScenarios: discovery.discovered,
+    });
+
+    expect(registry.scenarios).toHaveLength(109);
+    expect(new Set(registry.scenarios.map((row) => row.validityReview.receiptPath)).size).toBe(109);
+    expect(registry.scenarios.every((row) => row.evaluationRole === "diagnostic")).toBe(true);
+    expect(registry.scenarios.every((row) => row.freshness === "uncalibrated")).toBe(true);
+    expect(registry.scenarios.every((row) => row.calibrationReceipt === null)).toBe(true);
+  });
+
   it("loads a diagnostic row without changing behavior identity", async () => {
     const fixture = await createRegistryFixture();
 
@@ -96,6 +136,54 @@ describe("evaluation registry", () => {
     }));
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
       .rejects.toThrow(/behavior contract digest/u);
+  });
+
+  it("requires exact one-to-one closure with known scenarios", async () => {
+    const fixture = await createRegistryFixture();
+
+    await expect(loadEvaluationRegistry({
+      ...fixture,
+      knownScenarios: [
+        ...knownScenarios(),
+        { scenarioId: "another-scenario", behaviorContractDigest: `sha256:${"c".repeat(64)}` },
+      ],
+    })).rejects.toThrow(/one-to-one.*missing.*another-scenario/u);
+  });
+
+  it("rejects a validity receipt whose content is forged behind a matching registry digest", async () => {
+    const fixture = await createRegistryFixture();
+    const forgedSource = `${JSON.stringify({ ...VALIDITY_RECEIPT, verdict: "fail" }, null, 2)}\n`;
+    const validityPath = path.join(
+      fixture.repositoryRoot,
+      "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json",
+    );
+    await writeFile(validityPath, forgedSource);
+    const forgedDigest = `sha256:${createHash("sha256").update(forgedSource).digest("hex")}`;
+    await writeFile(fixture.registryPath, registrySource({ validityDigest: forgedDigest }));
+
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+      .rejects.toThrow(/scenario validity receipt.*verdict.*pass/u);
+  });
+
+  it("rejects a validity receipt bound to a different scenario or behavior digest", async () => {
+    const fixture = await createRegistryFixture();
+    const validityPath = path.join(
+      fixture.repositoryRoot,
+      "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json",
+    );
+
+    for (const [field, value, expectedError] of [
+      ["scenarioId", "other-scenario", /scenario id does not match/u],
+      ["behaviorContractDigest", `sha256:${"c".repeat(64)}`, /behavior contract digest does not match/u],
+    ] as const) {
+      const forgedSource = `${JSON.stringify({ ...VALIDITY_RECEIPT, [field]: value }, null, 2)}\n`;
+      await writeFile(validityPath, forgedSource);
+      const forgedDigest = `sha256:${createHash("sha256").update(forgedSource).digest("hex")}`;
+      await writeFile(fixture.registryPath, registrySource({ validityDigest: forgedDigest }));
+
+      await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+        .rejects.toThrow(expectedError);
+    }
   });
 
   it("rejects missing, ignored, and digest-mismatched authority receipts", async () => {

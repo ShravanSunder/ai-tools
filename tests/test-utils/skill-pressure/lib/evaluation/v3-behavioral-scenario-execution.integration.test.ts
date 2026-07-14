@@ -110,7 +110,7 @@ function evidence(props: {
     repetitionId: props.repetitionId,
     variant: props.variant,
     visibleResponse: "Completed the requested report.",
-    toolObservations: [],
+    toolObservations: [{ eventId: "write-1", payload: '{"tool":"write","path":"reports/result.md"}' }],
     usageObservations: [],
     process: { outcome: "executed", exitCode: 0, timedOut: false, cleanupComplete: true, infrastructureReasons: [] },
     repositoryFacts: {

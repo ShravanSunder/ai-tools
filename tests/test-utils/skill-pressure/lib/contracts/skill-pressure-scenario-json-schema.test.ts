@@ -23,13 +23,15 @@ async function loadScenarioJsonSchema(): Promise<AnySchema> {
 
 function validScenarioContract(): Record<string, unknown> {
   return {
-    schema_version: 2,
+    schema_version: 3,
     scenario_id: "json-schema-contract",
     owner_plugin: "workflow",
     owner_skill: "skill",
     skill_type: "discipline",
+    effect_surfaces: ["response", "artifacts"],
     prompt: "Create the requested report.",
-    hidden_rubric: "The report must exist.",
+    semantic_assertions: [{ assertion_id: "report-quality", criterion: "The report addresses the request.", evidence_surface: "response" }],
+    behavior_requirement_ids: ["report-created"],
     baseline: "no_skill",
     comparison_intent: "improvement",
     repetitions: 5,
@@ -37,6 +39,8 @@ function validScenarioContract(): Record<string, unknown> {
     fixture_requirements: [],
     allowed_tools: [],
     allowed_write_paths: ["reports/result.md"],
+    required_tool_observations: [],
+    forbidden_tool_observations: [],
     expected_artifacts: [
       {
         artifact_id: "result",

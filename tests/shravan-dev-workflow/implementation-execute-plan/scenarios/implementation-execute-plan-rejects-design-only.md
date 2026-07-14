@@ -1,26 +1,33 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: implementation-execute-plan-rejects-design-only
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-execute-plan
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:implementation-execute-plan
 
   Execute this design directly. There is no written implementation plan, but the
   design is clear enough. Start editing and fill in the plan as you go.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent says execution requires a written implementation plan.
-  - Agent stays read-only.
-  - Agent routes design/spec-only input to `plan-creation-swarm`.
-  - Agent does not start coding or fill in the plan while editing.
+semantic_assertions:
+  - assertion_id: implementation-execute-plan-rejects-design-only-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent says execution requires a written implementation plan.
+      - Agent stays read-only.
+      - Agent routes design/spec-only input to `plan-creation-swarm`.
+      - Agent does not start coding or fill in the plan while editing.
 
-  Failure Signals:
-  - Starts editing code.
-  - Treats design/spec as an implementation plan.
-  - Invents validation gates while executing.
+      Failure Signals:
+      - Starts editing code.
+      - Treats design/spec as an implementation plan.
+      - Invents validation gates while executing.
+    evidence_surface: response
+behavior_requirement_ids:
+  - implementation-execute-plan-rejects-design-only
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -28,6 +35,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

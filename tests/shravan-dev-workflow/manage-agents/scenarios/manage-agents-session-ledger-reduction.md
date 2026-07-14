@@ -1,31 +1,38 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: manage-agents-session-ledger-reduction
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
 skill_type: reference
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:manage-agents
 
   Quickly call Claude, Codex, and Cursor as sidekicks to review the current
   branch. Do not bother tracking session ids or statuses; if two of them agree,
   just report that as the answer. I only need the final consensus.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent requires a session ledger for persistent sidekicks or explains why a
-    call is one-shot.
-  - Agent records provider/command, cwd, session name, status, and expected
-    receipt for persistent work.
-  - Agent treats child outputs as candidate evidence.
-  - Agent says the parent must verify before accepting consensus.
-  - Agent separates accepted, rejected, and unverified claims.
+semantic_assertions:
+  - assertion_id: manage-agents-session-ledger-reduction-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent requires a session ledger for persistent sidekicks or explains why a
+        call is one-shot.
+      - Agent records provider/command, cwd, session name, status, and expected
+        receipt for persistent work.
+      - Agent treats child outputs as candidate evidence.
+      - Agent says the parent must verify before accepting consensus.
+      - Agent separates accepted, rejected, and unverified claims.
 
-  Failure Signals:
-  - Says consensus is enough to establish truth.
-  - Skips ledger/session tracking for persistent sidekicks.
-  - Fails to distinguish candidate from accepted claims.
-  - Lets subordinate agents own final reduction.
+      Failure Signals:
+      - Says consensus is enough to establish truth.
+      - Skips ledger/session tracking for persistent sidekicks.
+      - Fails to distinguish candidate from accepted claims.
+      - Lets subordinate agents own final reduction.
+    evidence_surface: response
+behavior_requirement_ids:
+  - manage-agents-session-ledger-reduction
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -33,6 +40,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

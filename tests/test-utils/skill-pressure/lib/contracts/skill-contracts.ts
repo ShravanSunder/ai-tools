@@ -1,25 +1,10 @@
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { parseDocument } from "yaml";
 
-import { scenarioInputSchema } from "./contract-schema.js";
-import type { ScenarioContract, SkillOwner } from "./contract-types.js";
-
-function canonicalizeContract(value: unknown): unknown {
-  if (Array.isArray(value)) {
-    return value.map(canonicalizeContract);
-  }
-  if (typeof value !== "object" || value === null) {
-    return value;
-  }
-  return Object.fromEntries(
-    Object.entries(value)
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([key, entryValue]) => [key, canonicalizeContract(entryValue)]),
-  );
-}
+import type { SkillOwner } from "./contract-types.js";
+import { parseV3BehaviorContract, type V3BehaviorContract } from "./v3-behavior-contract.js";
 
 export class ContractValidationError extends Error {
   public constructor(message: string) {
@@ -33,9 +18,13 @@ export interface LoadScenarioContractProps {
   readonly expectedOwner?: SkillOwner;
 }
 
+export interface LoadedScenarioContract extends V3BehaviorContract {
+  readonly scenarioPath: string;
+}
+
 export async function loadScenarioContract(
   props: LoadScenarioContractProps,
-): Promise<ScenarioContract> {
+): Promise<LoadedScenarioContract> {
   const scenarioPath = resolve(props.scenarioPath);
   const source = await readFile(scenarioPath, "utf8");
   const frontmatter = /^---\s*\n([\s\S]*?)\n---(?:\s*\n|$)/u.exec(source)?.[1];
@@ -52,50 +41,19 @@ export async function loadScenarioContract(
       `scenario contract has invalid YAML at ${scenarioPath}: ${document.errors.map((error) => error.message).join("; ")}`,
     );
   }
-  const input = scenarioInputSchema.safeParse(document.toJS({ maxAliasCount: 0 }));
-  if (!input.success) {
-    throw new ContractValidationError(`scenario contract is invalid at ${scenarioPath}: ${input.error.message}`);
+  let contract: V3BehaviorContract;
+  try {
+    contract = parseV3BehaviorContract(document.toJS({ maxAliasCount: 0 }));
+  } catch (error) {
+    throw new ContractValidationError(
+      `scenario contract is invalid at ${scenarioPath}: ${error instanceof Error ? error.message : "unknown contract error"}`,
+    );
   }
   if (
     props.expectedOwner !== undefined &&
-    (input.data.owner_plugin !== props.expectedOwner.plugin || input.data.owner_skill !== props.expectedOwner.skill)
+    (contract.plugin !== props.expectedOwner.plugin || contract.skill !== props.expectedOwner.skill)
   ) {
     throw new ContractValidationError(`scenario owner fields do not match owner path: ${scenarioPath}`);
   }
-
-  const contractDigest = `sha256:${createHash("sha256")
-    .update(JSON.stringify(canonicalizeContract(input.data)))
-    .digest("hex")}`;
-
-  return {
-    schemaVersion: 2,
-    scenarioId: input.data.scenario_id,
-    plugin: input.data.owner_plugin,
-    skill: input.data.owner_skill,
-    skillType: input.data.skill_type,
-    prompt: input.data.prompt,
-    hiddenRubric: input.data.hidden_rubric,
-    baseline: input.data.baseline,
-    baselineRevision: input.data.baseline === "previous_revision" ? input.data.baseline_revision : null,
-    comparisonIntent: input.data.comparison_intent,
-    repetitions: input.data.repetitions,
-    risk: input.data.risk,
-    fixtureRequirements: input.data.fixture_requirements,
-    allowedTools: input.data.allowed_tools,
-    allowedWritePaths: input.data.allowed_write_paths,
-    deterministicChecks: input.data.deterministic_checks.map((check) => ({
-      checkId: check.check_id,
-      fact: check.fact,
-      operator: check.operator,
-      ...(check.expected === undefined ? {} : { expected: check.expected }),
-    })),
-    expectedArtifacts: input.data.expected_artifacts.map((artifact) => ({
-      artifactId: artifact.artifact_id,
-      path: artifact.path,
-      fileType: artifact.file_type,
-      contentContract: artifact.content_contract,
-    })),
-    scenarioPath,
-    contractDigest,
-  };
+  return { ...contract, scenarioPath };
 }

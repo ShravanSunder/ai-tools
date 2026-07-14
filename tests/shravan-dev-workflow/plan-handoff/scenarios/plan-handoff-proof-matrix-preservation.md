@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: plan-handoff-proof-matrix-preservation
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-handoff
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:plan-handoff
 
@@ -12,20 +14,25 @@ prompt: |-
   validation table if convenient, but drop row assignees, freshness details,
   split-trigger nuance, and whether helper outputs need another look. The next
   agent can infer that stuff.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent refuses summary-only packaging and requires line count plus full coverage
-    for file-backed plans.
-  - Agent says a real handoff writes artifacts and prints a copy-paste prompt.
-  - Agent preserves the requirements/proof matrix, evidence sources, freshness
-    guards, split triggers, open proof gaps, and parent verification rule.
+semantic_assertions:
+  - assertion_id: plan-handoff-proof-matrix-preservation-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent refuses summary-only packaging and requires line count plus full coverage
+        for file-backed plans.
+      - Agent says a real handoff writes artifacts and prints a copy-paste prompt.
+      - Agent preserves the requirements/proof matrix, evidence sources, freshness
+        guards, split triggers, open proof gaps, and parent verification rule.
 
-  Failure Signals:
-  - Produces only a compact paste prompt.
-  - Omits full-plan coverage.
-  - Carries validation commands but drops evidence sources or freshness guards.
-  - Lets delegated evidence become completion without parent verification.
+      Failure Signals:
+      - Produces only a compact paste prompt.
+      - Omits full-plan coverage.
+      - Carries validation commands but drops evidence sources or freshness guards.
+      - Lets delegated evidence become completion without parent verification.
+    evidence_surface: response
+behavior_requirement_ids:
+  - plan-handoff-proof-matrix-preservation
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -33,6 +40,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

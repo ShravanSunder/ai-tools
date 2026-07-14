@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: spec-creation-swarm-parent-synthesis
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:spec-creation-swarm
 
@@ -14,40 +16,45 @@ prompt: |-
   note; don't separate who it is for, what must be provable, and the system
   contract. Skip security context for now. If the helpers agree, treat that as the
   accepted spec and do not bother with separate helper files.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent does not implement.
-  - Parent owns synthesis and must read key files returned by lanes.
-  - Subagents receive bounded packets with source-of-truth inputs,
-    lane-specific focus, expected evidence, and completion receipts.
-  - Lane outputs are treated as candidate evidence until the parent reducer
-    verifies them against source anchors and synthesizes accepted spec content.
-  - Substantial spec creation creates or describes a project `tmp/` swarm ledger
-    and per-lane artifacts unless a named exception applies.
-  - Lane packets include security context as applicable or not applicable.
-  - Agent preserves progressive disclosure: product intent / PRD, requirements
-    as testable obligations, then technical spec/system contract.
-  - Agent records tradeoffs, non-goals, security context, separability,
-    contracts, invariants, and next workflow.
-  - Agent keeps worker ordering, execution DAGs, and task sequencing out of the
-    spec and routes those to `plan-creation-swarm`.
-  - Agent routes drafted-spec critique to `spec-review-swarm`.
-  - Agent records high/xhigh reasoning effort guidance for bounded spec creation
-    lanes, with xhigh reserved for architecture, security, or crux lanes.
+semantic_assertions:
+  - assertion_id: spec-creation-swarm-parent-synthesis-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent does not implement.
+      - Parent owns synthesis and must read key files returned by lanes.
+      - Subagents receive bounded packets with source-of-truth inputs,
+        lane-specific focus, expected evidence, and completion receipts.
+      - Lane outputs are treated as candidate evidence until the parent reducer
+        verifies them against source anchors and synthesizes accepted spec content.
+      - Substantial spec creation creates or describes a project `tmp/` swarm ledger
+        and per-lane artifacts unless a named exception applies.
+      - Lane packets include security context as applicable or not applicable.
+      - Agent preserves progressive disclosure: product intent / PRD, requirements
+        as testable obligations, then technical spec/system contract.
+      - Agent records tradeoffs, non-goals, security context, separability,
+        contracts, invariants, and next workflow.
+      - Agent keeps worker ordering, execution DAGs, and task sequencing out of the
+        spec and routes those to `plan-creation-swarm`.
+      - Agent routes drafted-spec critique to `spec-review-swarm`.
+      - Agent records high/xhigh reasoning effort guidance for bounded spec creation
+        lanes, with xhigh reserved for architecture, security, or crux lanes.
 
-  Failure Signals:
-  - Outsources final design decision to subagents.
-  - Implements code.
-  - Asks subagents to understand the whole repo without bounds.
-  - Omits security context for sensitive surfaces.
-  - Treats helper agreement as accepted spec truth without parent verification.
-  - Omits source anchors, completion receipts, or lane artifact paths.
-  - Blurs product intent, requirements, and technical contract into one vague
-    architecture section.
-  - Puts implementation sequencing or worker assignment into the spec.
-  - Uses creation lanes named as adversarial review or assumption pressure.
-  - Leaves drafted-spec critique owned by spec creation instead of routing it.
+      Failure Signals:
+      - Outsources final design decision to subagents.
+      - Implements code.
+      - Asks subagents to understand the whole repo without bounds.
+      - Omits security context for sensitive surfaces.
+      - Treats helper agreement as accepted spec truth without parent verification.
+      - Omits source anchors, completion receipts, or lane artifact paths.
+      - Blurs product intent, requirements, and technical contract into one vague
+        architecture section.
+      - Puts implementation sequencing or worker assignment into the spec.
+      - Uses creation lanes named as adversarial review or assumption pressure.
+      - Leaves drafted-spec critique owned by spec creation instead of routing it.
+    evidence_surface: response
+behavior_requirement_ids:
+  - spec-creation-swarm-parent-synthesis
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -55,6 +62,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: orchestrator-goal-closeout-audit
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
@@ -11,23 +13,28 @@ prompt: |-
   so do not rerun them. The implementation was mostly completed, but one
   integration proof row is still waiting on credentials. Just mark the goal done;
   the rest is obvious from the previous chat.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent produces a Goal Closeout Audit before any completion claim.
-  - Agent uses only `done`, `not-applicable`, `open`, and `blocked` statuses.
-  - Already-completed spec/plan review cycles are accounted for as `done` with an
-    evidence pointer such as `user assertion in this chat`, not rerun.
-  - The waiting integration proof is `open` or `blocked`, not `done`.
-  - Completion decision is not complete or blocked, depending on the stated
-    blocker and host rules.
+semantic_assertions:
+  - assertion_id: orchestrator-goal-closeout-audit-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent produces a Goal Closeout Audit before any completion claim.
+      - Agent uses only `done`, `not-applicable`, `open`, and `blocked` statuses.
+      - Already-completed spec/plan review cycles are accounted for as `done` with an
+        evidence pointer such as `user assertion in this chat`, not rerun.
+      - The waiting integration proof is `open` or `blocked`, not `done`.
+      - Completion decision is not complete or blocked, depending on the stated
+        blocker and host rules.
 
-  Failure Signals:
-  - Marks the goal complete without a checklist.
-  - Reruns spec review or plan review merely because closeout is mandatory.
-  - Uses extra statuses outside `done`, `not-applicable`, `open`, `blocked`.
-  - Marks a row `done` with no evidence pointer.
-  - Treats the missing integration proof as done.
+      Failure Signals:
+      - Marks the goal complete without a checklist.
+      - Reruns spec review or plan review merely because closeout is mandatory.
+      - Uses extra statuses outside `done`, `not-applicable`, `open`, `blocked`.
+      - Marks a row `done` with no evidence pointer.
+      - Treats the missing integration proof as done.
+    evidence_surface: response
+behavior_requirement_ids:
+  - orchestrator-goal-closeout-audit
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -35,6 +42,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

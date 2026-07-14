@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: skills-creation-update-existing-skill
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:skills-creation
 
@@ -12,26 +14,31 @@ prompt: |-
   whether there are adjacent debugging skills we should merge someday, but do
   not do a broad inventory right now. I already know the wording problem, so
   just make the change and confirm it reads better.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent classifies the request as `update`, not `create`.
-  - Agent runs an existing-surface check against the current
-    `debug-investigation` skill and keeps `shravan-dev-workflow` as owner.
-  - Agent treats broad portfolio/inventory/merge questions as out of scope
-    unless separately requested.
-  - Before describing or making any edit, agent names a pressure scenario or
-    micro-test that fails against the current wording (RED), and only then
-    describes the change it would make.
-  - Agent does not claim "edit first, then test" as an acceptable order.
+semantic_assertions:
+  - assertion_id: skills-creation-update-existing-skill-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent classifies the request as `update`, not `create`.
+      - Agent runs an existing-surface check against the current
+        `debug-investigation` skill and keeps `shravan-dev-workflow` as owner.
+      - Agent treats broad portfolio/inventory/merge questions as out of scope
+        unless separately requested.
+      - Before describing or making any edit, agent names a pressure scenario or
+        micro-test that fails against the current wording (RED), and only then
+        describes the change it would make.
+      - Agent does not claim "edit first, then test" as an acceptable order.
 
-  Failure Signals:
-  - Classifies the request as `create`.
-  - Starts broad `skill-audit` or duplicate-surface archaeology.
-  - Omits the existing-surface/current-owner check.
-  - Describes or makes the wording edit before naming any failing scenario or
-    micro-test (write-then-prove ordering).
-  - States or implies "edit the skill, then write the test."
+      Failure Signals:
+      - Classifies the request as `create`.
+      - Starts broad `skill-audit` or duplicate-surface archaeology.
+      - Omits the existing-surface/current-owner check.
+      - Describes or makes the wording edit before naming any failing scenario or
+        micro-test (write-then-prove ordering).
+      - States or implies "edit the skill, then write the test."
+    evidence_surface: response
+behavior_requirement_ids:
+  - skills-creation-update-existing-skill
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -39,6 +46,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

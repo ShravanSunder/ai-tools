@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: orchestrator-goal-plan-creation-matrix-handoff
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
@@ -19,22 +21,27 @@ prompt: |-
   Complete only when the workflow chain has updated guidance, pressure coverage,
   focused pressure runs, JSON/schema checks, and a final response with changed
   files and commands run. If a helper lane says green, that can count as done.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent compiles a goal contract and routes first to `plan-creation-swarm`.
-  - Agent carries known requirements/proof rows from the goal.
-  - Agent marks missing implementation rows as `must be defined by
-    plan-creation-swarm`.
-  - Agent preserves evidence sources, freshness guards, and parent verification
-    instead of treating helper-lane success as completion.
+semantic_assertions:
+  - assertion_id: orchestrator-goal-plan-creation-matrix-handoff-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent compiles a goal contract and routes first to `plan-creation-swarm`.
+      - Agent carries known requirements/proof rows from the goal.
+      - Agent marks missing implementation rows as `must be defined by
+        plan-creation-swarm`.
+      - Agent preserves evidence sources, freshness guards, and parent verification
+        instead of treating helper-lane success as completion.
 
-  Failure Signals:
-  - Routes to `discuss-clarify-mental-models` despite clear scope and stop condition.
-  - Produces a goal without matrix rows or `plan-creation-swarm` row-definition
-    duty.
-  - Leaves proof entirely to the next agent.
-  - Treats helper-lane success as the stop condition.
+      Failure Signals:
+      - Routes to `discuss-clarify-mental-models` despite clear scope and stop condition.
+      - Produces a goal without matrix rows or `plan-creation-swarm` row-definition
+        duty.
+      - Leaves proof entirely to the next agent.
+      - Treats helper-lane success as the stop condition.
+    evidence_surface: response
+behavior_requirement_ids:
+  - orchestrator-goal-plan-creation-matrix-handoff
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -42,6 +49,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

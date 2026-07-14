@@ -82,6 +82,44 @@ describe("v3 suite selection", () => {
     expect(selection.claimedRequirements.manifestDigest).toBe(claimedRequirements.manifestDigest);
   });
 
+  it("honors explicit diagnostic scenario ids and rejects non-diagnostic rows", () => {
+    expect(selectV3SuiteScenarios({
+      mode: "diagnostic",
+      scenarioIds: ["diagnostic"],
+      candidates,
+      registry,
+      claimedRequirements,
+    }).selectedScenarioIds).toEqual(["diagnostic"]);
+
+    expect(() => selectV3SuiteScenarios({
+      mode: "diagnostic",
+      scenarioIds: ["standard-fresh"],
+      candidates,
+      registry,
+      claimedRequirements,
+    })).toThrow(/requires a diagnostic scenario/u);
+  });
+
+  it("represents an empty gate selection for command-level fail-closed accounting", () => {
+    expect(selectV3SuiteScenarios({
+      mode: "gate",
+      risk: "standard",
+      candidates: candidates.filter((candidate) => candidate.scenarioId !== "standard-fresh"),
+      registry: { ...registry, scenarios: registry.scenarios.filter((row) => row.scenarioId !== "standard-fresh") },
+      claimedRequirements,
+    }).selectedScenarioIds).toEqual([]);
+  });
+
+  it("rejects an explicitly empty diagnostic request", () => {
+    expect(() => selectV3SuiteScenarios({
+      mode: "diagnostic",
+      scenarioIds: [],
+      candidates,
+      registry,
+      claimedRequirements,
+    })).toThrow(/at least one diagnostic scenario/u);
+  });
+
   it("allows focused execution of either active role while refusing retired scenarios", () => {
     expect(selectV3SuiteScenarios({
       mode: "focused",

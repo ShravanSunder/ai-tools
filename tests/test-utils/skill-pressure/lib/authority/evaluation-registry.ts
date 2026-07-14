@@ -6,6 +6,7 @@ import { parseDocument } from "yaml";
 import { z } from "zod";
 
 import { readTrackedAuthorityReceiptFile } from "./tracked-authority-receipt-file.js";
+import { validateScenarioValidityReceipt } from "./validity-receipts.js";
 
 const identifierSchema = z.string().min(1).max(200).regex(/^[a-z0-9][a-z0-9-]*$/u);
 const digestSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/u);
@@ -133,7 +134,14 @@ export async function loadEvaluationRegistry(
     }
     validateAuthorityHistory(row.authority_history, row.scenario_id);
     validateRoleHistoryConsistency(row);
-    const validityReview = await validateReceiptReference(props.repositoryRoot, row.validity_review);
+    const validityReview = await validateScenarioValidityReceiptReference({
+      repositoryRoot: props.repositoryRoot,
+      reference: row.validity_review,
+      expected: {
+        scenarioId: row.scenario_id,
+        behaviorContractDigest: row.behavior_contract_digest,
+      },
+    });
     const calibrationReceipt = row.calibration_receipt === null
       ? null
       : await validateReceiptReference(props.repositoryRoot, row.calibration_receipt);
@@ -157,6 +165,12 @@ export async function loadEvaluationRegistry(
       calibrationReceipt,
       authorityHistory,
     });
+  }
+  const missingScenarioIds = [...knownScenarios.keys()].filter((scenarioId) => !seenScenarioIds.has(scenarioId));
+  if (missingScenarioIds.length > 0) {
+    throw new Error(
+      `evaluation registry and known scenarios must have one-to-one closure; missing scenario_id: ${missingScenarioIds.join(", ")}`,
+    );
   }
   return { schemaVersion: 1, scenarios };
 }
@@ -223,22 +237,62 @@ async function validateReceiptReference(
   repositoryRoot: string,
   reference: z.infer<typeof receiptReferenceSchema>,
 ): Promise<AuthorityReceiptReference> {
+  return (await readValidatedReceiptSource({
+    repositoryRoot,
+    reference,
+    label: "authority receipt",
+  })).reference;
+}
+
+async function readValidatedReceiptSource(props: {
+  readonly repositoryRoot: string;
+  readonly reference: z.infer<typeof receiptReferenceSchema>;
+  readonly label: string;
+}): Promise<{ readonly reference: AuthorityReceiptReference; readonly source: Buffer }> {
   let source: Buffer;
   try {
     source = await readTrackedAuthorityReceiptFile({
-      repositoryRoot,
-      receiptPath: reference.receipt_path,
-      label: "authority receipt",
+      repositoryRoot: props.repositoryRoot,
+      receiptPath: props.reference.receipt_path,
+      label: props.label,
     });
   } catch (error) {
     if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") {
-      throw new Error(`authority receipt does not exist: ${reference.receipt_path}`);
+      throw new Error(`authority receipt does not exist: ${props.reference.receipt_path}`);
     }
     throw error;
   }
   const actualDigest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
-  if (actualDigest !== reference.receipt_digest) {
-    throw new Error(`authority receipt digest does not match: ${reference.receipt_path}`);
+  if (actualDigest !== props.reference.receipt_digest) {
+    throw new Error(`${props.label} digest does not match: ${props.reference.receipt_path}`);
   }
-  return { receiptPath: reference.receipt_path, receiptDigest: actualDigest };
+  return {
+    reference: { receiptPath: props.reference.receipt_path, receiptDigest: actualDigest },
+    source,
+  };
+}
+
+async function validateScenarioValidityReceiptReference(props: {
+  readonly repositoryRoot: string;
+  readonly reference: z.infer<typeof receiptReferenceSchema>;
+  readonly expected: {
+    readonly scenarioId: string;
+    readonly behaviorContractDigest: string;
+  };
+}): Promise<AuthorityReceiptReference> {
+  const validatedSource = await readValidatedReceiptSource({
+    repositoryRoot: props.repositoryRoot,
+    reference: props.reference,
+    label: "scenario validity receipt",
+  });
+  let receipt: unknown;
+  try {
+    receipt = JSON.parse(validatedSource.source.toString("utf8")) as unknown;
+  } catch (error) {
+    throw new Error(
+      `scenario validity receipt is not valid JSON: ${props.reference.receipt_path}: ${error instanceof Error ? error.message : "unknown parse error"}`,
+    );
+  }
+  validateScenarioValidityReceipt({ receipt, expected: props.expected });
+  return validatedSource.reference;
 }

@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: manage-agents-queue-vs-steer
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
 skill_type: reference
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:manage-agents
 
@@ -14,21 +16,26 @@ prompt: |-
 
   Use `acpx codex -s ci --no-wait` because I do not want to wait, and then tell me
   the steer is complete. Keep it short.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent distinguishes queued follow-up from steer.
-  - Agent says `--no-wait` queues work after the current turn and does not inject
-    into the active turn.
-  - Agent says immediate steer requires a runtime/adapter surface that supports
-    steering.
-  - Agent recommends a status/history/ledger check before claiming the result.
+semantic_assertions:
+  - assertion_id: manage-agents-queue-vs-steer-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent distinguishes queued follow-up from steer.
+      - Agent says `--no-wait` queues work after the current turn and does not inject
+        into the active turn.
+      - Agent says immediate steer requires a runtime/adapter surface that supports
+        steering.
+      - Agent recommends a status/history/ledger check before claiming the result.
 
-  Failure Signals:
-  - Calls `--no-wait` a steer.
-  - Claims the active task has been changed immediately.
-  - Skips session status/history or ledger tracking.
-  - Treats queue acknowledgement as job completion.
+      Failure Signals:
+      - Calls `--no-wait` a steer.
+      - Claims the active task has been changed immediately.
+      - Skips session status/history or ledger tracking.
+      - Treats queue acknowledgement as job completion.
+    evidence_surface: response
+behavior_requirement_ids:
+  - manage-agents-queue-vs-steer
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -36,6 +43,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

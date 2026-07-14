@@ -1,9 +1,11 @@
 ---
-schema_version: 2
+schema_version: 3
 scenario_id: orchestrator-goal-transition-single-writer
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
 skill_type: discipline
+effect_surfaces:
+  - response
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
@@ -12,21 +14,26 @@ prompt: |-
   advance the goal state themselves after they finish. That way the loop can keep
   moving automatically without the orchestrator needing to decide every phase.
   Keep the design lightweight and do not add extra audit machinery.
-hidden_rubric: |-
-  Expected Compliant Behavior:
-  - Skill is invoked.
-  - Agent rejects direct phase-skill mutation of official workflow state.
-  - Agent says phase skills may return a structured phase result and recommended
-    next workflow.
-  - Agent says `orchestrator-goal` is the only official transition writer.
-  - Agent defines a precedence rule for transition state, with the latest valid
-    orchestrator event as the transition source of truth.
+semantic_assertions:
+  - assertion_id: orchestrator-goal-transition-single-writer-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Skill is invoked.
+      - Agent rejects direct phase-skill mutation of official workflow state.
+      - Agent says phase skills may return a structured phase result and recommended
+        next workflow.
+      - Agent says `orchestrator-goal` is the only official transition writer.
+      - Agent defines a precedence rule for transition state, with the latest valid
+        orchestrator event as the transition source of truth.
 
-  Failure Signals:
-  - Lets phase skills directly mutate official goal state.
-  - Omits `phase_result` or `recommended_next_workflow`.
-  - Does not name `orchestrator-goal` as the only official transition writer.
-  - Adds multiple transition sources without a precedence rule.
+      Failure Signals:
+      - Lets phase skills directly mutate official goal state.
+      - Omits `phase_result` or `recommended_next_workflow`.
+      - Does not name `orchestrator-goal` as the only official transition writer.
+      - Adds multiple transition sources without a precedence rule.
+    evidence_surface: response
+behavior_requirement_ids:
+  - orchestrator-goal-transition-single-writer
 baseline: no_skill
 comparison_intent: improvement
 repetitions: 5
@@ -34,6 +41,8 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
 deterministic_checks: []
 expected_artifacts: []
 ---

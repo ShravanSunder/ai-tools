@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "plan-creation-swarm-from-spec-not-code",
+  "behaviorContractDigest": "sha256:8b6a4a50ee1fd24a846883bb88a3fa52ebc0b0cc01ad0dad24c0499cfefeefc4",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

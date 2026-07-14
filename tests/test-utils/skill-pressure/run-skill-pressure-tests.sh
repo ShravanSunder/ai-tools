@@ -34,6 +34,10 @@ while [[ $# -gt 0 ]]; do
       set_mode "high"
       shift
       ;;
+    --diagnostic)
+      set_mode "diagnostic"
+      shift
+      ;;
     --scenario)
       [[ $# -ge 2 ]] || { echo "--scenario requires an id" >&2; exit 2; }
       set_mode "scenario"
@@ -56,7 +60,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     --help|-h)
       cat <<'USAGE'
-Usage: tests/test-utils/skill-pressure/run-skill-pressure-tests.sh [--fast|--standard|--high-risk|--scenario ID] [--timeout SECONDS] [--jobs N|--serial]
+Usage: tests/test-utils/skill-pressure/run-skill-pressure-tests.sh [--fast|--diagnostic|--standard|--high-risk|--scenario ID] [--timeout SECONDS] [--jobs N|--serial]
 
 Runs behavioral skill pressure tests through Vitest Evals. Every authoritative
 subject call uses ACPX with Codex Luna/xhigh.

@@ -189,6 +189,18 @@ export function parseV3BehaviorContract(input: unknown): V3BehaviorContract {
   };
 }
 
+export function hasUniqueDeterministicCheckIds(input: unknown): boolean {
+  if (typeof input !== "object" || input === null || !("deterministic_checks" in input)) return true;
+  const checks = (input as { readonly deterministic_checks?: unknown }).deterministic_checks;
+  if (!Array.isArray(checks)) return true;
+  const checkIds = checks.flatMap((check) =>
+    typeof check === "object" && check !== null && "check_id" in check && typeof check.check_id === "string"
+      ? [check.check_id]
+      : [],
+  );
+  return new Set(checkIds).size === checkIds.length;
+}
+
 function validateV3ContractConsistency(
   contract: z.infer<z.ZodDiscriminatedUnion<typeof v3BehaviorContractInputSchema.def.options>>,
   context: z.RefinementCtx,
@@ -298,7 +310,7 @@ function validateToolEffects(
     if (contract.allowed_tools.length === 0) {
       addIssue(context, ["allowed_tools"], "tools effect surface requires allowed_tools");
     }
-    if (toolObservations.length === 0) {
+    if (toolObservations.length === 0 && !hasToolFacts) {
       addIssue(context, ["required_tool_observations"], "tools effect surface requires required or forbidden tool observations");
     }
     for (const requiredTool of contract.required_tool_observations) {
@@ -312,7 +324,7 @@ function validateToolEffects(
     }
     return;
   }
-  if (contract.allowed_tools.length > 0 || toolObservations.length > 0 || hasToolFacts) {
+  if (toolObservations.length > 0 || hasToolFacts) {
     addIssue(context, ["effect_surfaces"], "tools effect surface is absent but tool permissions or observations are declared");
   }
 }

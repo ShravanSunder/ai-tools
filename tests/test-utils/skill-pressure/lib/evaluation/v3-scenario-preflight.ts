@@ -35,13 +35,13 @@ export function createObjectiveCheckPlanFromContract(contract: V3BehaviorContrac
     path: artifact.path,
     fileType: artifact.fileType,
   } satisfies ObjectiveArtifactDeclaration));
-  const checks = contract.deterministicChecks.map((check) => {
+  const declaredChecks = contract.deterministicChecks.map((check) => {
     const owner: ObjectiveCheckOwner = check.fact === "tool_observations"
       ? { kind: "tool_observations" }
       : check.fact.startsWith("artifact:")
         ? { kind: "artifact_id", artifactId: check.fact.slice("artifact:".length) }
         : { kind: "direct_path", path: check.fact.slice("path:".length) };
-    const operator = mapObjectiveOperator(owner, check.operator);
+    const operator = mapObjectiveOperator(owner, check.operator, check.expected);
     if (check.expected !== undefined && typeof check.expected !== "string") {
       throw new Error(`objective check ${check.checkId} requires a string expected value`);
     }
@@ -52,6 +52,19 @@ export function createObjectiveCheckPlanFromContract(contract: V3BehaviorContrac
       ...(check.expected === undefined ? {} : { expected: check.expected }),
     } satisfies ObjectiveCheckDefinition;
   });
+  const requiredToolChecks = contract.requiredToolObservations.map((tool, index) => ({
+    checkId: `contract-required-tool-observation-${index + 1}`,
+    owner: { kind: "tool_observations" } as const,
+    operator: "contains" as const,
+    expected: tool,
+  }));
+  const forbiddenToolChecks = contract.forbiddenToolObservations.map((tool, index) => ({
+    checkId: `contract-forbidden-tool-observation-${index + 1}`,
+    owner: { kind: "tool_observations" } as const,
+    operator: "excludes" as const,
+    expected: tool,
+  }));
+  const checks = [...declaredChecks, ...requiredToolChecks, ...forbiddenToolChecks];
   return createObjectiveCheckPlan({ declaredArtifacts, checks });
 }
 
@@ -109,8 +122,12 @@ export function validateV3ComparisonSet(props: {
 function mapObjectiveOperator(
   owner: ObjectiveCheckOwner,
   operator: V3BehaviorContract["deterministicChecks"][number]["operator"],
+  expected: unknown,
 ): ObjectiveCheckOperator {
   if (owner.kind === "artifact_id") {
+    if (operator === "equals" && (expected === "file" || expected === "directory")) {
+      return "kind_equals";
+    }
     const artifactOperators = {
       equals: "content_equals",
       contains: "content_contains",

@@ -134,6 +134,17 @@ describe("v3 behavior contract", () => {
     })).toThrow(/tools.*absent/u);
   });
 
+  it("treats allowed tools as permissions rather than proof that tool behavior is under evaluation", () => {
+    const contract = validContract();
+
+    expect(() => parseV3BehaviorContract({
+      ...contract,
+      effect_surfaces: ["response", "artifacts"],
+      required_tool_observations: [],
+      forbidden_tool_observations: [],
+    })).not.toThrow();
+  });
+
   it("requires non-regression to use an immutable previous revision", () => {
     expect(() => parseV3BehaviorContract({
       ...validContract(),

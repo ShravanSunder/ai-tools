@@ -1,18 +1,10 @@
-import { createHash } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import type { ClaimedRequirementValidation } from "../authority/claimed-requirements.js";
+import type { EvaluationRegistry } from "../authority/evaluation-registry.js";
 import { loadScenarioContract } from "../contracts/skill-contracts.js";
-import { type DeterministicCheckResult, normalizeRepetitionEvidence } from "../evidence/repetition-evidence.js";
-import {
-  evaluateDeterministicChecks,
-  reduceDeterministicCheckResults,
-} from "../evidence/repetition-evidence.js";
-import type { ComparisonIntent } from "../contracts/contract-types.js";
-import type { ReductionRepetition, ScenarioOutcomeReduction } from "../reduction/outcome-reducer.js";
-import { reduceScenarioOutcome } from "../reduction/outcome-reducer.js";
-import { executeAutomatedBlindReview, type AutomatedBlindReviewReceipt } from "../review/acpx-blind-review-runner.js";
-import { applyDeterministicReviewPrecedence, type ReviewRepetitionCandidate } from "../review/review-packet.js";
+import { normalizeRepetitionEvidence } from "../evidence/repetition-evidence.js";
+import { executeStructuredReview } from "../review/structured-review-runner.js";
 import {
   collectSensitiveEnvironmentValues,
   resolveAcpxLauncher,
@@ -21,11 +13,18 @@ import {
 } from "../runtime/acpx-command-executor.js";
 import type { AcpxPermissionMode } from "../runtime/acpx-subject-profile.js";
 import { discoverAmbientSkillPaths } from "../runtime/ambient-skill-discovery.js";
+import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
 import {
   runScenarioRepetitions,
   selectBaselineSkillSource,
-  type ScenarioRepetitionSetReceipt,
 } from "./repetition-coordinator.js";
+import type { DerivedScenarioExecutionBudget } from "./scenario-execution-budget.js";
+import type { SubjectRepetitionReceipt } from "./subject-repetition.js";
+import {
+  executeV3BehavioralScenario,
+  type ExecutedV3BehavioralScenario,
+  type V3ExecutedRepetition,
+} from "./v3-behavioral-scenario-execution.js";
 
 export interface ExecuteBehavioralScenarioProps {
   readonly scenarioPath: string;
@@ -33,51 +32,21 @@ export interface ExecuteBehavioralScenarioProps {
   readonly outputDirectory: string;
   readonly timeoutSeconds: number;
   readonly infrastructureRetries: number;
+  readonly registrySnapshot: EvaluationRegistry;
+  readonly claimedRequirements: ClaimedRequirementValidation;
+  readonly executionBudget: DerivedScenarioExecutionBudget;
+  readonly scenarioDeadlineMs: number;
+  readonly vitestTimeoutMs: number;
   readonly additionalDisabledSkillPaths?: readonly string[];
-}
-
-export interface DeterministicRepetitionEvaluation {
-  readonly repetitionId: string;
-  readonly checkResults: readonly DeterministicCheckResult[];
-  readonly outcome: "pass" | "behavior_fail" | "not_evaluated";
-  readonly infrastructureError?: string;
-  readonly infrastructureReasonCode?: "runtime_profile_unverified";
-}
-
-export interface BehavioralScenarioReceipt {
-  readonly schemaVersion: 2;
-  readonly scenario: {
-    readonly scenarioId: string;
-    readonly contractDigest: string;
-    readonly hiddenRubricDigest: string;
-    readonly comparisonIntent: "improvement" | "non_regression";
-    readonly baselineRevision: string | null;
-    readonly risk: "standard" | "high";
-  };
-  readonly result: ScenarioRepetitionSetReceipt;
-  readonly deterministicEvaluation: {
-    readonly baseline: readonly DeterministicRepetitionEvaluation[];
-    readonly treatment: readonly DeterministicRepetitionEvaluation[];
-  };
-  readonly automatedReview: AutomatedBlindReviewReceipt;
-  readonly reduction: ScenarioOutcomeReduction;
-}
-
-export interface ExecutedBehavioralScenario {
-  readonly scenarioPrompt: string;
-  readonly receiptPath: string;
-  readonly receipt: BehavioralScenarioReceipt;
 }
 
 export async function executeBehavioralScenario(
   props: ExecuteBehavioralScenarioProps,
-): Promise<ExecutedBehavioralScenario> {
+): Promise<ExecutedV3BehavioralScenario> {
   validateProps(props);
-  const scenario = await loadScenarioContract({ scenarioPath: path.resolve(props.scenarioPath) });
+  const contract = await loadScenarioContract({ scenarioPath: path.resolve(props.scenarioPath) });
   const repositoryRoot = path.resolve(props.skillDirectory, "../../../..");
   const skillRelativePath = path.relative(repositoryRoot, path.resolve(props.skillDirectory)).split(path.sep).join("/");
-  const outputDirectory = path.resolve(props.outputDirectory);
-  await mkdir(outputDirectory, { recursive: true });
   const launcher = await resolveAcpxLauncher();
   const codexExecutable = await resolveExecutablePath("codex");
   const runtimeIdentity = await resolveRuntimeExecutableIdentity(launcher, codexExecutable);
@@ -89,100 +58,100 @@ export async function executeBehavioralScenario(
     ...(props.additionalDisabledSkillPaths ?? []).map((skillPath) => path.resolve(skillPath)),
   ])].sort();
   const subjectExecutionPolicy = resolveSubjectExecutionPolicy({
-    allowedTools: scenario.allowedTools,
-    allowedWritePaths: scenario.allowedWritePaths,
+    allowedTools: contract.allowedTools,
+    allowedWritePaths: contract.allowedWritePaths,
   });
-  const result = await runScenarioRepetitions({
-    repetitions: scenario.repetitions,
-    infrastructureRetries: props.infrastructureRetries,
-    baselineSource: selectBaselineSkillSource({
-      baseline: scenario.baseline,
-      baselineRevision: scenario.baselineRevision,
-      repositoryRoot,
-      skillRelativePath,
-    }),
-    treatmentSource: { mode: "current", directory: path.resolve(props.skillDirectory) },
-    repetitionProps: {
-      runRoot: path.join(outputDirectory, "repositories"),
-      scenarioId: scenario.scenarioId,
-      prompt: scenario.prompt,
-      fixtureFiles: [],
-      expectedArtifacts: scenario.expectedArtifacts,
-      allowedTools: subjectExecutionPolicy.allowedTools,
-      allowedWritePaths: subjectExecutionPolicy.allowedWritePaths,
-      skillName: scenario.skill,
+  const redactionSecrets = collectSensitiveEnvironmentValues();
+
+  return executeV3BehavioralScenario({
+    contract,
+    registrySnapshot: props.registrySnapshot,
+    authorityContext: {
+      calibration: null,
+      claimedRequirements: props.claimedRequirements,
+      resolveParentAcceptance: async () => null,
+    },
+    executionBudget: props.executionBudget,
+    configuredScenarioDeadlineMs: props.scenarioDeadlineMs,
+    configuredVitestTimeoutMs: props.vitestTimeoutMs,
+    outputDirectory: path.resolve(props.outputDirectory),
+    redactionSecrets,
+    executeSubjects: async (request) => {
+      const repetitionsById = new Map<string, V3ExecutedRepetition>();
+      const attemptPathsByRepetitionId = new Map<string, string>();
+      const result = await runScenarioRepetitions({
+        repetitions: request.repetitions,
+        infrastructureRetries: props.infrastructureRetries,
+        baselineSource: selectBaselineSkillSource({
+          baseline: request.baseline,
+          baselineRevision: request.baselineRevision,
+          repositoryRoot,
+          skillRelativePath,
+        }),
+        treatmentSource: { mode: "current", directory: path.resolve(props.skillDirectory) },
+        repetitionProps: {
+          runRoot: path.join(path.resolve(props.outputDirectory), "repositories"),
+          scenarioId: request.scenarioId,
+          prompt: request.prompt,
+          fixtureFiles: [],
+          expectedArtifacts: contract.expectedArtifacts,
+          allowedTools: subjectExecutionPolicy.allowedTools,
+          allowedWritePaths: subjectExecutionPolicy.allowedWritePaths,
+          skillName: request.skillName,
+          launcher,
+          codexExecutable,
+          runtimeIdentity,
+          model: "gpt-5.6-luna",
+          reasoningEffort: "xhigh",
+          permissionMode: subjectExecutionPolicy.permissionMode,
+          disabledAmbientSkillPaths,
+          timeoutSeconds: props.timeoutSeconds,
+          redactionSecrets,
+          signal: request.signal,
+        },
+        persistAttemptReceipt: async ({ receipt, variant, repetitionNumber, attemptNumber }) => {
+          const repetition = toV3Repetition(receipt);
+          repetitionsById.set(receipt.repetitionId, repetition);
+          const receiptPath = await request.persistAttempt({
+            variant,
+            repetitionNumber,
+            attemptNumber,
+            repetition,
+          });
+          attemptPathsByRepetitionId.set(receipt.repetitionId, receiptPath);
+          return receiptPath;
+        },
+      });
+      for (const [variant, receipts] of [["baseline", result.baseline], ["treatment", result.treatment]] as const) {
+        for (const [index, receipt] of receipts.entries()) {
+          const repetition = repetitionsById.get(receipt.repetitionId);
+          const attemptReceiptPath = attemptPathsByRepetitionId.get(receipt.repetitionId);
+          if (repetition === undefined || attemptReceiptPath === undefined) {
+            throw new Error(`selected repetition lacks its durable attempt binding: ${receipt.repetitionId}`);
+          }
+          await request.persistAcceptedRepetition({
+            variant,
+            repetitionNumber: index + 1,
+            repetition,
+            attemptReceiptPath,
+          });
+        }
+      }
+      return {
+        baseline: result.baseline.map((receipt) => requiredRepetition(repetitionsById, receipt.repetitionId)),
+        treatment: result.treatment.map((receipt) => requiredRepetition(repetitionsById, receipt.repetitionId)),
+      };
+    },
+    executeSemanticReview: async ({ packet, signal }) => executeStructuredReview({
+      reviewRoot: path.join(path.resolve(props.outputDirectory), "semantic-review-workspaces"),
+      packet,
+      risk: contract.risk,
       launcher,
       codexExecutable,
-      runtimeIdentity,
-      model: "gpt-5.6-luna",
-      reasoningEffort: "xhigh",
-      permissionMode: subjectExecutionPolicy.permissionMode,
-      disabledAmbientSkillPaths,
       timeoutSeconds: props.timeoutSeconds,
-      redactionSecrets: collectSensitiveEnvironmentValues(),
-    },
+      signal,
+    }),
   });
-  const deterministicBaseline = result.baseline.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
-  const deterministicTreatment = result.treatment.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
-  const automatedReview = await executeAutomatedBlindReview({
-    reviewRoot: path.join(outputDirectory, "blind-review-workspaces"),
-    scenario: { scenarioId: scenario.scenarioId, hiddenRubric: scenario.hiddenRubric, risk: scenario.risk },
-    deterministicFacts: [
-      ...createDeterministicFacts("baseline", deterministicBaseline),
-      ...createDeterministicFacts("treatment", deterministicTreatment),
-    ],
-    baselineEvidence: result.baseline.map((receipt) => normalizeRepetitionEvidence({ receipt })),
-    treatmentEvidence: result.treatment.map((receipt) => normalizeRepetitionEvidence({ receipt })),
-    sourceFingerprint: createSourceFingerprint(result),
-    runtimeFingerprint: createRuntimeFingerprint(result),
-    launcher,
-    codexExecutable,
-    timeoutSeconds: props.timeoutSeconds,
-    subjectSessionIds: [...result.baseline, ...result.treatment]
-      .map((receipt) => receipt.transcript.sessionId)
-      .filter((sessionId): sessionId is string => sessionId !== null),
-    redactionSecrets: collectSensitiveEnvironmentValues(),
-  });
-  const reduction = reduceWithBlindReview({
-    comparisonIntent: scenario.comparisonIntent,
-    expectedRepetitions: scenario.repetitions,
-    baseline: deterministicBaseline,
-    treatment: deterministicTreatment,
-    automatedReview,
-  });
-  const receipt: BehavioralScenarioReceipt = {
-    schemaVersion: 2,
-    scenario: {
-      scenarioId: scenario.scenarioId,
-      contractDigest: scenario.contractDigest,
-      hiddenRubricDigest: digest(scenario.hiddenRubric),
-      comparisonIntent: scenario.comparisonIntent,
-      baselineRevision: scenario.baselineRevision,
-      risk: scenario.risk,
-    },
-    result,
-    deterministicEvaluation: {
-      baseline: deterministicBaseline,
-      treatment: deterministicTreatment,
-    },
-    automatedReview,
-    reduction,
-  };
-  const receiptPath = path.join(outputDirectory, "repetition-set-receipt.json");
-  await writeFile(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, { flag: "wx" });
-  return { scenarioPrompt: scenario.prompt, receiptPath, receipt };
-}
-
-function createDeterministicFacts(
-  variant: "baseline" | "treatment",
-  evaluations: readonly DeterministicRepetitionEvaluation[],
-) {
-  return evaluations.map((evaluation) => ({
-    repetitionId: evaluation.repetitionId,
-    variant,
-    outcome: evaluation.outcome,
-    results: evaluation.checkResults,
-  }));
 }
 
 export function resolveSubjectExecutionPolicy(props: {
@@ -202,131 +171,48 @@ export function resolveSubjectExecutionPolicy(props: {
   };
 }
 
-function createSourceFingerprint(result: ScenarioRepetitionSetReceipt) {
-  const baseline = result.baseline[0];
-  const treatment = result.treatment[0];
-  if (baseline === undefined || treatment === undefined) throw new Error("review requires selected baseline and treatment evidence");
+function toV3Repetition(receipt: SubjectRepetitionReceipt): V3ExecutedRepetition {
   return {
-    pairSetFingerprint: result.pairSetFingerprint,
-    baseline: {
-      mode: baseline.sourceMode,
-      sourceDigest: baseline.sourceDigest,
-      sourceRevision: baseline.sourceRevision,
+    evidence: normalizeRepetitionEvidence({ receipt }),
+    runtimeProfile: receipt.runtimeProfile ?? unverifiedRuntimeProfile(),
+    durableFacts: {
+      processClosed: receipt.process.supervisorReceipt.exitCode !== null || receipt.process.supervisorReceipt.signal !== null,
+      streamsDrained: receipt.process.supervisorReceipt.stdoutEof && receipt.process.supervisorReceipt.stderrEof,
+      outputRedacted: true,
+      snapshotsCollected: true,
+      cleanupFactsCollected: true,
     },
-    treatment: {
-      mode: treatment.sourceMode,
-      sourceDigest: treatment.sourceDigest,
-      sourceRevision: treatment.sourceRevision,
+    comparisonIdentity: {
+      sessionId: receipt.transcript.sessionId,
+      repositoryIdentity: receipt.repositoryIdentity,
+      commonInputDigest: receipt.commonInputDigest,
+      promptDigest: receipt.promptDigest,
+      fixtureDigest: receipt.fixtureDigest,
+      sourceDigest: receipt.sourceDigest,
+      sourceRevision: receipt.sourceRevision,
     },
-  } as const;
-}
-
-function createRuntimeFingerprint(result: ScenarioRepetitionSetReceipt) {
-  const subject = result.baseline[0];
-  if (subject === undefined) throw new Error("review requires selected baseline evidence");
-  return {
-    runnerVersion: subject.runnerVersion,
-    subjectModel: subject.requestedModel,
-    subjectReasoningEffort: subject.requestedReasoningEffort,
-    runtimeDigest: digest(JSON.stringify(subject.runtimeIdentity)),
   };
 }
 
-export function reduceWithBlindReview(props: {
-  readonly comparisonIntent: ComparisonIntent;
-  readonly expectedRepetitions: number;
-  readonly baseline: readonly DeterministicRepetitionEvaluation[];
-  readonly treatment: readonly DeterministicRepetitionEvaluation[];
-  readonly automatedReview: Pick<
-    AutomatedBlindReviewReceipt,
-    "outcome" | "reviewReceipt" | "infrastructureReasons" | "parseError" | "runtime"
-  >;
-}): ScenarioOutcomeReduction {
-  if (props.automatedReview.outcome === "infrastructure_error") {
-    const runtimeProfileUnverified = props.automatedReview.runtime.profile.verification.status !== "verified";
-    return {
-      outcome: "infrastructure_error",
-      reasonCode: runtimeProfileUnverified ? "runtime_profile_unverified" : "infrastructure_error",
-      reasons: props.automatedReview.infrastructureReasons,
-    };
-  }
-  if (props.automatedReview.outcome === "not_evaluated" || props.automatedReview.reviewReceipt === null) {
-    return {
-      outcome: "not_evaluated",
-      reasonCode: "missing_evidence",
-      reasons: [props.automatedReview.parseError ?? "blind review receipt is incomplete"],
-    };
-  }
-  const semanticByRepetition = new Map(
-    props.automatedReview.reviewReceipt.result.repetitions.map((repetition) => [repetition.repetitionId, repetition]),
-  );
-  return reduceScenarioOutcome({
-    comparisonIntent: props.comparisonIntent,
-    expectedRepetitions: props.expectedRepetitions,
-    baseline: combineReviewEvidence(props.baseline, semanticByRepetition),
-    treatment: combineReviewEvidence(props.treatment, semanticByRepetition),
-  });
+function requiredRepetition(
+  repetitionsById: ReadonlyMap<string, V3ExecutedRepetition>,
+  repetitionId: string,
+): V3ExecutedRepetition {
+  const repetition = repetitionsById.get(repetitionId);
+  if (repetition === undefined) throw new Error(`missing converted repetition: ${repetitionId}`);
+  return repetition;
 }
 
-function combineReviewEvidence(
-  deterministic: readonly DeterministicRepetitionEvaluation[],
-  semanticByRepetition: ReadonlyMap<string, ReviewRepetitionCandidate>,
-): readonly ReductionRepetition[] {
-  return deterministic.map((evaluation) => {
-    const semantic = semanticByRepetition.get(evaluation.repetitionId);
-    if (semantic === undefined) {
-      return { repetitionId: evaluation.repetitionId, outcome: "not_evaluated" };
-    }
-    const outcome = applyDeterministicReviewPrecedence({
-      semanticOutcome: semantic.outcome,
-      deterministicState: evaluation.infrastructureError !== undefined
-        ? "infrastructure_error"
-        : evaluation.outcome === "not_evaluated"
-          ? "missing_evidence"
-          : evaluation.outcome === "behavior_fail"
-            ? "objective_behavior_failure"
-            : "pass",
-    });
-    if (outcome === "inconclusive" || outcome === "infrastructure_error") {
-      throw new Error(`unexpected repetition review outcome: ${outcome}`);
-    }
-    return {
-      repetitionId: evaluation.repetitionId,
-      outcome,
-      ...(evaluation.infrastructureError === undefined ? {} : { infrastructureError: evaluation.infrastructureError }),
-      ...(evaluation.infrastructureReasonCode === undefined
-        ? {}
-        : { infrastructureReasonCode: evaluation.infrastructureReasonCode }),
-    };
-  });
-}
-
-function evaluateReceipt(
-  receipt: ScenarioRepetitionSetReceipt["baseline"][number],
-  checks: Parameters<typeof evaluateDeterministicChecks>[1],
-): DeterministicRepetitionEvaluation {
-  const checkResults = [
-    {
-      checkId: "runner-write-policy",
-      outcome: receipt.writePolicy.status,
-      reason: receipt.writePolicy.status === "pass"
-        ? "repository writes stayed within declared paths"
-        : `repository writes escaped declared paths: ${receipt.writePolicy.unauthorizedPaths.join(", ")}`,
-    } satisfies DeterministicCheckResult,
-    ...evaluateDeterministicChecks(normalizeRepetitionEvidence({ receipt }), checks),
-  ];
+function unverifiedRuntimeProfile(): RuntimeProfileReceipt {
   return {
-    repetitionId: receipt.repetitionId,
-    checkResults,
-    outcome: reduceDeterministicCheckResults(checkResults),
-    ...(receipt.status === "infrastructure_error"
-      ? {
-          infrastructureError: receipt.infrastructureReasons.join("; "),
-          ...(receipt.runtimeProfile?.verification.reasonCode === "runtime_profile_unverified"
-            ? { infrastructureReasonCode: "runtime_profile_unverified" as const }
-            : {}),
-        }
-      : {}),
+    requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+    acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+    providerReported: { model: null, reasoningEffort: null },
+    verification: {
+      status: "unverified",
+      reasonCode: "runtime_profile_unverified",
+      reasons: ["subject repetition did not produce a runtime profile receipt"],
+    },
   };
 }
 
@@ -337,8 +223,4 @@ function validateProps(props: ExecuteBehavioralScenarioProps): void {
   if (!Number.isInteger(props.infrastructureRetries) || props.infrastructureRetries < 0) {
     throw new Error("infrastructureRetries must be a non-negative integer");
   }
-}
-
-function digest(value: string): string {
-  return `sha256:${createHash("sha256").update(value).digest("hex")}`;
 }
