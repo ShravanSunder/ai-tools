@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 
 import {
   assertComparablePair,
+  createSubjectInfrastructureFailureReceipt,
   runSubjectRepetition,
   type RunSubjectRepetitionProps,
   type SelectedSkillSource,
@@ -189,11 +190,20 @@ async function runWithInfrastructureRetries(props: {
       attemptNumber: attempt + 1,
       retry: attempt > 0,
     });
-    const receipt = await props.runRepetition({
+    const repetitionAttemptProps = {
       ...props.repetitionProps,
       variant: props.variant,
       selectedSkillSource: props.selectedSkillSource,
-    });
+    } satisfies RunSubjectRepetitionProps;
+    let receipt: SubjectRepetitionReceipt;
+    try {
+      receipt = await props.runRepetition(repetitionAttemptProps);
+    } catch (error) {
+      receipt = createSubjectInfrastructureFailureReceipt({
+        props: repetitionAttemptProps,
+        error,
+      });
+    }
     receipts.push(receipt);
     const durableAttemptReceiptPath = await props.persistAttemptReceipt?.({
       receipt,

@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdir, mkdtemp, readFile, readdir, writeFile } from "node:fs/promises";
+import { chmod, mkdir, mkdtemp, readFile, readdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -81,6 +81,25 @@ function baseProps(fixture: Awaited<ReturnType<typeof createFixture>>): Omit<Run
 }
 
 describe("ACPX subject repetition", () => {
+  it("does not launch setup or ACPX work after scenario cancellation", async () => {
+    const fixture = await createFixture();
+    const abortController = new AbortController();
+    abortController.abort("scenario_deadline");
+    let acpxLaunches = 0;
+
+    await expect(runSubjectRepetition({
+      ...baseProps(fixture),
+      variant: "baseline",
+      selectedSkillSource: { mode: "none" },
+      signal: abortController.signal,
+      execute: async () => {
+        acpxLaunches += 1;
+        return successfulExecution("must-not-launch");
+      },
+    })).rejects.toThrow(/cancelled before repository initialization/u);
+    expect(acpxLaunches).toBe(0);
+  });
+
   it("creates comparable fresh baseline and treatment repositories", async () => {
     const fixture = await createFixture();
     let sessionNumber = 0;
@@ -115,6 +134,55 @@ describe("ACPX subject repetition", () => {
       "references/detail.md",
     ]);
     expect(await readMaterializedPrompt(treatment)).not.toContain("Reject the shortcut");
+  });
+
+  it("crosses the default supervised ACPX process boundary without an injected executor", async () => {
+    const fixture = await createFixture();
+    const fakeAcpxPath = path.join(path.dirname(fixture.runRoot), "fake-acpx.mjs");
+    await writeFile(
+      fakeAcpxPath,
+      `#!/usr/bin/env node
+const messages = [
+  { method: "session/new", params: { mcpServers: [] } },
+  { result: { sessionId: "supervised-boundary-session", models: { currentModelId: "gpt-5.6-luna[xhigh]" } } },
+  { method: "session/prompt" },
+  { method: "session/update", params: { update: { sessionUpdate: "agent_message_chunk", content: { text: "Supervised operator answer" } } } },
+  { method: "session/update", params: { update: { sessionUpdate: "usage_update", _meta: { usage: { input_tokens: 10, output_tokens: 5 } } } } },
+  { result: { stopReason: "end_turn" } },
+];
+process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\n") + "\\n");
+`,
+      { flag: "wx" },
+    );
+    await chmod(fakeAcpxPath, 0o755);
+    const launcher = { executable: fakeAcpxPath, prefixArgs: [], source: "global" as const };
+
+    const repetition = await runSubjectRepetition({
+      ...baseProps(fixture),
+      launcher,
+      codexExecutable: process.execPath,
+      runtimeIdentity: {
+        launcher,
+        launcherDigest: "sha256:fake-acpx",
+        launcherVersion: "0.0.0-test",
+        codexExecutable: process.execPath,
+        codexDigest: "sha256:node",
+        codexVersion: process.version,
+      },
+      variant: "baseline",
+      selectedSkillSource: { mode: "none" },
+    });
+
+    expect(repetition.status).toBe("executed");
+    expect(repetition.transcript.sessionId).toBe("supervised-boundary-session");
+    expect(repetition.process.supervisorReceipt).toMatchObject({
+      outcome: "completed",
+      exitCode: 0,
+      stdoutEof: true,
+      stderrEof: true,
+      cleanup: { termSent: false, killSent: false },
+    });
+    expect(repetition.process.supervisorReceipt.cleanup.processGroupId).toBeTypeOf("number");
   });
 
   it("classifies model drift, timeout, and incomplete cleanup as infrastructure errors", async () => {

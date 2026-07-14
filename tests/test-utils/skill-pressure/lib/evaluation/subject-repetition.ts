@@ -133,9 +133,14 @@ export async function runSubjectRepetition(
   const repositoryDirectory = await mkdtemp(
     path.join(path.resolve(props.runRoot), `${props.scenarioId}-${props.variant}-`),
   );
-  await execFileAsync("git", ["init", "--quiet"], { cwd: repositoryDirectory });
+  throwIfAborted(props.signal, "repository initialization");
+  await execFileAsync("git", ["init", "--quiet"], {
+    cwd: repositoryDirectory,
+    timeout: setupTimeoutMs(props.timeoutSeconds),
+    ...(props.signal === undefined ? {} : { signal: props.signal }),
+  });
   await writeFile(path.join(repositoryDirectory, "AGENTS.md"), NEUTRAL_INSTRUCTIONS, { flag: "wx" });
-  await materializeFixture(repositoryDirectory, props.fixtureFiles);
+  await materializeFixture(repositoryDirectory, props.fixtureFiles, props.signal);
   const promptPath = path.join(repositoryDirectory, ".skill-pressure-prompt.md");
   const mcpConfigPath = path.join(repositoryDirectory, ".skill-pressure-mcp.json");
   const allowedTools = [...props.allowedTools].sort();
@@ -147,7 +152,12 @@ export async function runSubjectRepetition(
   }), { flag: "wx" });
   await writeFile(mcpConfigPath, '{"mcpServers":[]}\n', { flag: "wx" });
 
-  const selectedSource = await resolveSelectedSource(props.selectedSkillSource, props.runRoot);
+  const selectedSource = await resolveSelectedSource(
+    props.selectedSkillSource,
+    props.runRoot,
+    props.signal,
+    setupTimeoutMs(props.timeoutSeconds),
+  );
   let installReceipt: CodexRepoSkillInstallReceipt | null = null;
   try {
     installReceipt = selectedSource.directory === null
@@ -366,8 +376,10 @@ function hasMeaningfulUsage(observations: readonly string[]): boolean {
 async function materializeFixture(
   repositoryDirectory: string,
   fixtureFiles: readonly SubjectFixtureFile[],
+  signal: AbortSignal | undefined,
 ): Promise<void> {
   for (const fixtureFile of [...fixtureFiles].sort((left, right) => left.path.localeCompare(right.path))) {
+    throwIfAborted(signal, `fixture materialization for ${fixtureFile.path}`);
     const destination = containedFixturePath(repositoryDirectory, fixtureFile.path);
     await mkdir(path.dirname(destination), { recursive: true });
     await writeFile(destination, fixtureFile.contents, { flag: "wx" });
@@ -464,6 +476,8 @@ function validateProps(props: RunSubjectRepetitionProps): void {
 async function resolveSelectedSource(
   source: SelectedSkillSource,
   runRoot: string,
+  signal: AbortSignal | undefined,
+  timeoutMs: number,
 ): Promise<{ readonly directory: string | null; readonly revision: string | null; readonly temporary: boolean }> {
   if (source.mode === "none") {
     return { directory: null, revision: null, temporary: false };
@@ -476,13 +490,18 @@ async function resolveSelectedSource(
   const { stdout: resolvedRevisionOutput } = await execFileAsync(
     "git",
     ["rev-parse", "--verify", `${source.revision}^{commit}`],
-    { cwd: repositoryRoot },
+    { cwd: repositoryRoot, timeout: timeoutMs, ...(signal === undefined ? {} : { signal }) },
   );
   const revision = resolvedRevisionOutput.trim();
   const { stdout: treeOutput } = await execFileAsync(
     "git",
     ["ls-tree", "-r", "-z", revision, "--", skillRelativePath],
-    { cwd: repositoryRoot, maxBuffer: 10 * 1024 * 1024 },
+    {
+      cwd: repositoryRoot,
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: timeoutMs,
+      ...(signal === undefined ? {} : { signal }),
+    },
   );
   const entries = treeOutput.split("\0").filter(Boolean);
   if (entries.length === 0) {
@@ -491,6 +510,7 @@ async function resolveSelectedSource(
   const sourceDirectory = await mkdtemp(path.join(path.resolve(runRoot), ".previous-source-"));
   try {
     for (const entry of entries) {
+      throwIfAborted(signal, "previous-revision skill materialization");
       const match = /^(?<mode>\d+) (?<type>\w+) (?<hash>[a-f0-9]+)\t(?<filePath>.+)$/u.exec(entry);
       const mode = match?.groups?.mode;
       const type = match?.groups?.type;
@@ -501,7 +521,13 @@ async function resolveSelectedSource(
       }
       const relativeFilePath = path.posix.relative(skillRelativePath, filePath);
       const destination = containedFixturePath(sourceDirectory, relativeFilePath);
-      const contents = await execFileBuffer("git", ["cat-file", "blob", hash], repositoryRoot);
+      const contents = await execFileBuffer(
+        "git",
+        ["cat-file", "blob", hash],
+        repositoryRoot,
+        signal,
+        timeoutMs,
+      );
       await mkdir(path.dirname(destination), { recursive: true });
       await writeFile(destination, contents, { flag: "wx" });
     }
@@ -523,9 +549,21 @@ function normalizeGitRelativePath(value: string): string {
   return normalized;
 }
 
-function execFileBuffer(command: string, args: readonly string[], cwd: string): Promise<Buffer> {
+function execFileBuffer(
+  command: string,
+  args: readonly string[],
+  cwd: string,
+  signal: AbortSignal | undefined,
+  timeoutMs: number,
+): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    execFile(command, args, { cwd, encoding: "buffer", maxBuffer: 20 * 1024 * 1024 }, (error, stdout) => {
+    execFile(command, args, {
+      cwd,
+      encoding: "buffer",
+      maxBuffer: 20 * 1024 * 1024,
+      timeout: timeoutMs,
+      ...(signal === undefined ? {} : { signal }),
+    }, (error, stdout) => {
       if (error !== null) {
         reject(error);
         return;
@@ -537,4 +575,111 @@ function execFileBuffer(command: string, args: readonly string[], cwd: string): 
 
 export async function readMaterializedPrompt(receipt: SubjectRepetitionReceipt): Promise<string> {
   return readFile(path.join(receipt.repositoryDirectory, ".skill-pressure-prompt.md"), "utf8");
+}
+
+export function createSubjectInfrastructureFailureReceipt(props: {
+  readonly props: RunSubjectRepetitionProps;
+  readonly error: unknown;
+}): SubjectRepetitionReceipt {
+  const repetitionId = randomUUID();
+  const repositoryDirectory = path.join(
+    path.resolve(props.props.runRoot),
+    `${props.props.scenarioId}-${props.props.variant}-failed-${repetitionId}`,
+  );
+  const failureMessage = props.error instanceof Error ? props.error.message : "unknown setup or launch failure";
+  const transcript: AcpxTranscriptFacts = {
+    sessionId: null,
+    resolvedModel: null,
+    reasoningEffort: null,
+    stopReason: null,
+    promptCount: 0,
+    mcpServerCount: null,
+    visibleResponse: "",
+    toolObservations: [],
+    usageObservations: [],
+    diagnosticErrors: [],
+    parseErrors: [],
+    transportErrors: [],
+  };
+  const repositoryEvidence: RepositoryEvidence = {
+    files: [],
+    changes: { files: [], pathChanges: [], deletedPaths: [], omissions: [] },
+    artifacts: [],
+    omissions: [{
+      path: ".",
+      reason: "repository evidence unavailable because setup or process launch failed",
+    }],
+  };
+  const supervisorReceipt: AcpxProcessExecution["supervisorReceipt"] = {
+    outcome: props.props.signal?.aborted ? "cancelled" : "completed",
+    exitCode: null,
+    signal: null,
+    stdoutEof: true,
+    stderrEof: true,
+    cleanup: { processGroupId: null, termSent: false, killSent: false },
+  };
+  return {
+    runnerVersion: RUNNER_VERSION,
+    repetitionId,
+    scenarioId: props.props.scenarioId,
+    variant: props.props.variant,
+    repositoryDirectory,
+    repositoryIdentity: digest(repositoryDirectory),
+    commonInputDigest: digest(JSON.stringify({
+      scenarioId: props.props.scenarioId,
+      prompt: props.props.prompt,
+      fixtureFiles: props.props.fixtureFiles,
+      model: props.props.model,
+      reasoningEffort: props.props.reasoningEffort,
+      permissionMode: props.props.permissionMode,
+      allowedTools: [...props.props.allowedTools].sort(),
+      allowedWritePaths: [...props.props.allowedWritePaths].sort(),
+    })),
+    promptDigest: digest(props.props.prompt),
+    fixtureDigest: digestFixture(props.props.fixtureFiles),
+    sourceDigest: null,
+    sourceMode: props.props.selectedSkillSource.mode,
+    sourceRevision:
+      props.props.selectedSkillSource.mode === "previous_revision"
+        ? props.props.selectedSkillSource.revision
+        : null,
+    installReceipt: null,
+    requestedModel: props.props.model,
+    requestedReasoningEffort: props.props.reasoningEffort,
+    permissionMode: props.props.permissionMode,
+    allowedTools: [...props.props.allowedTools].sort(),
+    allowedWritePaths: [...props.props.allowedWritePaths].sort(),
+    writePolicy: { status: "pass", unauthorizedPaths: [] },
+    runtimeIdentity: props.props.runtimeIdentity,
+    disabledAmbientSkills: [],
+    repositoryEvidence,
+    transcript,
+    runtimeProfile: verifyRuntimeProfile({
+      profile: createAcpxCodexRuntimeProfile({
+        model: props.props.model,
+        reasoningEffort: props.props.reasoningEffort,
+      }),
+      providerReported: { model: null, reasoningEffort: null },
+    }),
+    transcriptDigest: digest(JSON.stringify(transcript)),
+    process: {
+      exitCode: 1,
+      timedOut: false,
+      cleanupComplete: false,
+      stderrDigest: digest(failureMessage),
+      stderrExcerpt: redactDiagnosticText(failureMessage, props.props.redactionSecrets),
+      supervisorReceipt,
+    },
+    durationMs: 0,
+    status: "infrastructure_error",
+    infrastructureReasons: [`repetition setup or process launch failed: ${failureMessage}`],
+  };
+}
+
+function setupTimeoutMs(promptTimeoutSeconds: number): number {
+  return Math.min(promptTimeoutSeconds * 1_000, 30_000);
+}
+
+function throwIfAborted(signal: AbortSignal | undefined, operation: string): void {
+  if (signal?.aborted) throw new Error(`scenario cancelled before ${operation}`);
 }

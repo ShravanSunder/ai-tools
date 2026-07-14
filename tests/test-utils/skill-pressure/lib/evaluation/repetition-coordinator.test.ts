@@ -301,6 +301,39 @@ describe("scenario repetition coordinator", () => {
     expect(result.attempts[0]?.durableAttemptReceiptPaths).toHaveLength(2);
   });
 
+  it("converts setup or process-launch exceptions into durable retryable attempts", async () => {
+    let sequence = 0;
+    let threwOnce = false;
+    const persistedStatuses: string[] = [];
+    const runRepetition = async (input: RunSubjectRepetitionProps): Promise<SubjectRepetitionReceipt> => {
+      if (!threwOnce && input.variant === "baseline") {
+        threwOnce = true;
+        throw new Error("spawn failed before ACPX produced a receipt");
+      }
+      sequence += 1;
+      return receipt({ sequence, variant: input.variant });
+    };
+
+    const result = await runScenarioRepetitions({
+      ...props(runRepetition),
+      infrastructureRetries: 1,
+      persistAttemptReceipt: async ({ receipt: attemptReceipt, attemptNumber }) => {
+        persistedStatuses.push(attemptReceipt.status);
+        return `/tmp/exception-attempt-${attemptNumber}-${attemptReceipt.repetitionId}.json`;
+      },
+    });
+
+    expect(result.status).toBe("executed");
+    expect(persistedStatuses.slice(0, 2)).toEqual(["infrastructure_error", "executed"]);
+    expect(result.attempts[0]?.receipts[0]).toMatchObject({
+      status: "infrastructure_error",
+      process: { cleanupComplete: false },
+    });
+    expect(result.attempts[0]?.receipts[0]?.infrastructureReasons).toContain(
+      "repetition setup or process launch failed: spawn failed before ACPX produced a receipt",
+    );
+  });
+
   it("refuses a retry after the runner-owned abort signal fires", async () => {
     const abortController = new AbortController();
     const runRepetition = vi.fn(async (input: RunSubjectRepetitionProps) => {
