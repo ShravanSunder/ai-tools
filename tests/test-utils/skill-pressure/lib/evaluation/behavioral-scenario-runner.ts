@@ -2,6 +2,7 @@ import path from "node:path";
 
 import type { ClaimedRequirementValidation } from "../authority/claimed-requirements.js";
 import type { EvaluationRegistry } from "../authority/evaluation-registry.js";
+import { createRuntimeAuthorityContext } from "../authority/runtime-authority-context.js";
 import { loadScenarioContract } from "../contracts/skill-contracts.js";
 import { normalizeRepetitionEvidence } from "../evidence/repetition-evidence.js";
 import { executeStructuredReview } from "../review/structured-review-runner.js";
@@ -48,6 +49,13 @@ export async function executeBehavioralScenario(
   validateProps(props);
   const contract = await loadScenarioContract({ scenarioPath: path.resolve(props.scenarioPath) });
   const repositoryRoot = path.resolve(props.skillDirectory, "../../../..");
+  const registryRow = props.registrySnapshot.scenarios.find((row) => row.scenarioId === contract.scenarioId);
+  if (registryRow === undefined) throw new Error(`evaluation registry row is missing: ${contract.scenarioId}`);
+  const runtimeAuthorityContext = await createRuntimeAuthorityContext({
+    repositoryRoot,
+    contract,
+    registryRow,
+  });
   const skillRelativePath = path
     .relative(repositoryRoot, path.resolve(props.skillDirectory))
     .split(path.sep)
@@ -92,9 +100,9 @@ export async function executeBehavioralScenario(
       contract,
       registrySnapshot: props.registrySnapshot,
       authorityContext: {
-        calibration: null,
+        calibration: runtimeAuthorityContext.calibration,
         claimedRequirements: props.claimedRequirements,
-        resolveParentAcceptance: async () => null,
+        resolveParentAcceptance: runtimeAuthorityContext.resolveParentAcceptance,
       },
       executionBudget: props.executionBudget,
       executionAccounting: {

@@ -108,6 +108,20 @@ export function installCodexRepoSkill(
   };
 }
 
+export function calculateSkillSourceClosureDigest(sourceSkillDirectory: string): string {
+  const sourceDirectory = path.resolve(sourceSkillDirectory);
+  validateSourceDirectory(sourceDirectory);
+  const sourceFiles = collectSourceFiles(sourceDirectory);
+  if (!sourceFiles.some((file) => file.relativePath === "SKILL.md")) {
+    throw new Error("source skill directory must contain a regular SKILL.md");
+  }
+  return digestClosure(sourceFiles.map((sourceFile) => ({
+    relativePath: sourceFile.relativePath,
+    sourceDigest: sourceFile.digest,
+    installedDigest: sourceFile.digest,
+  })));
+}
+
 function validateSkillName(skillName: string): void {
   if (!/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u.test(skillName)) {
     throw new Error("skillName must be lowercase hyphen-case without traversal");

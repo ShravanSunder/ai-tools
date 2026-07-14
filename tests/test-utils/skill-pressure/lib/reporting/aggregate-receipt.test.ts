@@ -188,13 +188,31 @@ async function validateSummaries(
                 const receiptPath = `${authorityRoot}/${candidate.scenarioId}-${fixtureSequence}-${index}-${variant}-${repetitionNumber}-${receiptKind}.json`;
                 const reference = await writeReceiptFixture(
                   path.join(repositoryRoot, receiptPath),
-                  {
+                  receiptKind === "attempt" ? {
                     schemaVersion: 1,
                     receiptKind,
                     scenarioId: candidate.scenarioId,
                     variant,
                     repetitionNumber,
                     attemptNumber: 1,
+                    sourceAttemptReceiptDigest: fixtureAuthorityDigest("a"),
+                    acceptedForRepetition: true,
+                    acceptedRepetitionReceiptDigest: fixtureAuthorityDigest("b"),
+                    processClosed: true,
+                    streamsDrained: true,
+                    outputRedacted: true,
+                    snapshotsCollected: true,
+                  } : {
+                    schemaVersion: 1,
+                    receiptKind,
+                    scenarioId: candidate.scenarioId,
+                    variant,
+                    repetitionNumber,
+                    attemptNumber: 1,
+                    sourceAttemptReceiptDigest: fixtureAuthorityDigest("a"),
+                    processClosed: true,
+                    streamsDrained: true,
+                    cleanupFactsCollected: true,
                   },
                 );
                 return {

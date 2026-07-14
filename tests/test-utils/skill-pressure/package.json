@@ -19,6 +19,7 @@
     "test:behavior": "./run-skill-pressure-tests.sh",
     "test:standard": "./run-skill-pressure-tests.sh --standard",
     "test:high-risk": "./run-skill-pressure-tests.sh --high-risk",
+    "promote": "tsx scripts/promote-scenario.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -29,7 +29,31 @@ const PROMOTION_EVIDENCE = await Promise.all((["attempt", "cleanup"] as const).m
     Array.from({ length: 5 }, async (_, index) => {
       const repetitionNumber = index + 1;
       const receiptPath = `${AUTHORITY_ROOT}/authority-fixture-${variant}-${repetitionNumber}-${receiptKind}.json`;
-      const receipt = { schemaVersion: 1, receiptKind, scenarioId: "authority-fixture", variant, repetitionNumber, attemptNumber: 1 };
+      const identity = {
+        schemaVersion: 1 as const,
+        receiptKind,
+        scenarioId: "authority-fixture",
+        variant,
+        repetitionNumber,
+        attemptNumber: 1,
+        sourceAttemptReceiptDigest: DIGEST("a"),
+      };
+      const receipt = receiptKind === "attempt"
+        ? {
+            ...identity,
+            acceptedForRepetition: true,
+            acceptedRepetitionReceiptDigest: DIGEST("b"),
+            processClosed: true,
+            streamsDrained: true,
+            outputRedacted: true,
+            snapshotsCollected: true,
+          }
+        : {
+            ...identity,
+            processClosed: true,
+            streamsDrained: true,
+            cleanupFactsCollected: true,
+          };
       const source = `${JSON.stringify(receipt, null, 2)}\n`;
       await writeFile(path.join(REPOSITORY_ROOT, receiptPath), source, { flag: "wx" });
       return {

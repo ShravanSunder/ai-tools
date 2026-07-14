@@ -12,6 +12,8 @@ max_model_prompts="${SKILL_PRESSURE_MAX_MODEL_PROMPTS:-}"
 max_acpx_commands="${SKILL_PRESSURE_MAX_ACPX_COMMANDS:-}"
 max_retries="${SKILL_PRESSURE_MAX_RETRIES:-}"
 max_observed_tokens="${SKILL_PRESSURE_MAX_OBSERVED_TOKENS:-}"
+promotion_receipt=""
+parent_acceptance="false"
 
 set_mode() {
   local requested="$1"
@@ -41,6 +43,16 @@ while [[ $# -gt 0 ]]; do
       ;;
     --diagnostic)
       set_mode "diagnostic"
+      shift
+      ;;
+    --promote)
+      [[ $# -ge 2 ]] || { echo "--promote requires a scenario receipt path" >&2; exit 2; }
+      set_mode "promote"
+      promotion_receipt="$2"
+      shift 2
+      ;;
+    --accept)
+      parent_acceptance="true"
       shift
       ;;
     --scenario)
@@ -90,6 +102,7 @@ while [[ $# -gt 0 ]]; do
     --help|-h)
       cat <<'USAGE'
 Usage: tests/test-utils/skill-pressure/run-skill-pressure-tests.sh [--fast|--diagnostic|--standard|--high-risk|--scenario ID] [--timeout SECONDS] [--jobs N|--serial] [--dry-run] --max-model-prompts N --max-acpx-commands N --max-retries N --max-observed-tokens N
+       tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --promote PATH --accept
 
 Runs behavioral skill pressure tests through Vitest Evals. Every authoritative
 subject call uses ACPX with Codex Luna/xhigh.
@@ -104,6 +117,11 @@ USAGE
 done
 
 mode="${mode:-fast}"
+
+if [[ "$mode" == "promote" ]]; then
+  [[ "$parent_acceptance" == "true" ]] || { echo "--promote requires explicit --accept" >&2; exit 2; }
+  exec pnpm --dir "$SCRIPT_DIR" run promote -- --scenario-receipt "$promotion_receipt" --accept
+fi
 
 [[ "$jobs" =~ ^[1-9][0-9]*$ ]] || { echo "Invalid --jobs value: $jobs" >&2; exit 2; }
 [[ "$timeout_seconds" =~ ^[1-9][0-9]*$ ]] || { echo "Invalid --timeout value: $timeout_seconds" >&2; exit 2; }

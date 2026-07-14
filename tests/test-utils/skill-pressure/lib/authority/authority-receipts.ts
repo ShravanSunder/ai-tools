@@ -11,6 +11,35 @@ export interface PromotionEvidenceReceiptReference extends AuthorityReceiptRefer
   readonly attemptNumber: number;
 }
 
+export interface PromotionAttemptEvidenceReceipt {
+  readonly schemaVersion: 1;
+  readonly receiptKind: "attempt";
+  readonly scenarioId: string;
+  readonly variant: "baseline" | "treatment";
+  readonly repetitionNumber: number;
+  readonly attemptNumber: number;
+  readonly sourceAttemptReceiptDigest: AuthorityDigest;
+  readonly acceptedForRepetition: boolean;
+  readonly acceptedRepetitionReceiptDigest: AuthorityDigest | null;
+  readonly processClosed: true;
+  readonly streamsDrained: true;
+  readonly outputRedacted: true;
+  readonly snapshotsCollected: true;
+}
+
+export interface PromotionCleanupEvidenceReceipt {
+  readonly schemaVersion: 1;
+  readonly receiptKind: "cleanup";
+  readonly scenarioId: string;
+  readonly variant: "baseline" | "treatment";
+  readonly repetitionNumber: number;
+  readonly attemptNumber: number;
+  readonly sourceAttemptReceiptDigest: AuthorityDigest;
+  readonly processClosed: true;
+  readonly streamsDrained: true;
+  readonly cleanupFactsCollected: true;
+}
+
 export interface CalibrationFreshnessInputs {
   readonly behaviorContractDigest: AuthorityDigest;
   readonly baselinePolicyDigest: AuthorityDigest;
@@ -400,6 +429,25 @@ async function validatePromotionEvidenceFile(props: {
   assertLiteral(record.variant, props.reference.variant, "promotion evidence receipt variant");
   assertLiteral(record.repetitionNumber, props.reference.repetitionNumber, "promotion evidence receipt repetition number");
   assertLiteral(record.attemptNumber, props.reference.attemptNumber, "promotion evidence receipt attempt number");
+  assertDigest(record.sourceAttemptReceiptDigest, "promotion evidence source attempt receipt digest");
+  if (props.receiptKind === "attempt") {
+    if (typeof record.acceptedForRepetition !== "boolean") {
+      throw new Error("promotion attempt acceptance flag must be boolean");
+    }
+    if (record.acceptedForRepetition) {
+      assertDigest(record.acceptedRepetitionReceiptDigest, "promotion accepted repetition receipt digest");
+    } else if (record.acceptedRepetitionReceiptDigest !== null) {
+      throw new Error("unaccepted promotion attempt cannot cite an accepted repetition receipt");
+    }
+    assertLiteral(record.processClosed, true, "promotion attempt process closure");
+    assertLiteral(record.streamsDrained, true, "promotion attempt stream drainage");
+    assertLiteral(record.outputRedacted, true, "promotion attempt output redaction");
+    assertLiteral(record.snapshotsCollected, true, "promotion attempt snapshot collection");
+  } else {
+    assertLiteral(record.processClosed, true, "promotion cleanup process closure");
+    assertLiteral(record.streamsDrained, true, "promotion cleanup stream drainage");
+    assertLiteral(record.cleanupFactsCollected, true, "promotion cleanup facts");
+  }
 }
 
 function parsePromotionEvidenceReferences(input: unknown, label: string): readonly PromotionEvidenceReceiptReference[] {
