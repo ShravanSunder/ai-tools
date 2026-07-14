@@ -479,13 +479,19 @@ scenarios:
     authority_history: []
   - scenario_id: orchestrator-goal-artifact-content-boundary
     behavior_contract_digest: sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e
-    evaluation_role: diagnostic
-    freshness: uncalibrated
+    evaluation_role: gate
+    freshness: fresh
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
       receipt_digest: sha256:9d22f1156fcf90bc207b762e0ce16b58ffebed75a744672115adc35c93f65367
-    calibration_receipt: null
-    authority_history: []
+    calibration_receipt:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-promotion-f4ac733c21d0.json
+      receipt_digest: sha256:171030a9bd8fd4d7e440c91e22de4b3c65fd757257c67cf7daa341ec8244fd3d
+    authority_history:
+      - sequence: 1
+        event: promotion
+        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-promotion-f4ac733c21d0.json
+        receipt_digest: sha256:171030a9bd8fd4d7e440c91e22de4b3c65fd757257c67cf7daa341ec8244fd3d
   - scenario_id: orchestrator-goal-clarity-gate
     behavior_contract_digest: sha256:f1cc84e81ddac61bec56d23591cba218c52e477f32addafcabdd892f32c180b2
     evaluation_role: diagnostic

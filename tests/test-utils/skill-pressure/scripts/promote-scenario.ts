@@ -10,7 +10,7 @@ if (!argumentsByName.has("accept")) throw new Error("--accept is required for pa
 const repositoryRoot = path.resolve(import.meta.dirname, "../../../..");
 const result = await promoteScenarioFromReceipt({
   repositoryRoot,
-  scenarioReceiptPath: path.resolve(scenarioReceiptPath),
+  scenarioReceiptPath: path.resolve(repositoryRoot, scenarioReceiptPath),
   parentAccepted: true,
 });
 process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
@@ -19,6 +19,7 @@ function parseArguments(argumentsList: readonly string[]): ReadonlyMap<string, s
   const parsed = new Map<string, string>();
   for (let index = 0; index < argumentsList.length; index += 1) {
     const argument = argumentsList[index];
+    if (argument === "--") continue;
     if (argument === "--accept") {
       parsed.set("accept", "true");
       continue;
