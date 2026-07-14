@@ -456,7 +456,7 @@ function successfulLifecycleExecution(execution: AcpxProcessExecution): boolean 
 
 function createReviewPrompt(packet: BlindReviewPacket): Readonly<Record<string, unknown>> {
   return {
-    task: "Assess every baseline and treatment repetition against the hidden rubric using only this packet. Return one JSON object with repetitions, rationalization, behaviorRisk, smallestWordingChange, and retestTarget. repetitions must contain exactly one row per packet repetition with repetitionId, variant, outcome (pass, behavior_fail, or not_evaluated), and evidenceClass (demonstrated_failure, classified_proof_gap, passing_control, or null). Each rationale field must be a string or null.",
+    task: "Assess every baseline and treatment repetition against the hidden rubric using only this packet. Return exactly one JSON object with repetitions, rationalization, behaviorRisk, smallestWordingChange, and retestTarget. Do not wrap the object in a Markdown code fence and do not add prose before or after it. repetitions must contain exactly one row per packet repetition with repetitionId, variant, outcome (pass, behavior_fail, or not_evaluated), and evidenceClass (demonstrated_failure, classified_proof_gap, passing_control, or null). Each rationale field must be a string or null.",
     packet,
   };
 }

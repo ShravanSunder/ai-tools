@@ -8,7 +8,7 @@ const profile = {
   mcpConfigPath: "/tmp/skill-pressure/review-1/mcp.json",
   packetPath: "/tmp/skill-pressure/review-1/packet.md",
   packetDigest: "sha256:packet",
-  model: "opus",
+  model: "claude-opus-4-7",
   reasoningEffort: "xhigh",
   timeoutSeconds: 120,
 } satisfies AcpxClaudeReviewProfile;
@@ -17,7 +17,7 @@ describe("ACPX Claude review profile", () => {
   it("builds the isolated exact Opus/xhigh blind-review command", () => {
     const commands = buildAcpxClaudeReviewSessionCommands(profile, "review-session");
 
-    expect(commands.create.args).toContain("opus");
+    expect(commands.create.args).toContain("claude-opus-4-7");
     expect(commands.create.args).toContain("review-session");
     expect(commands.setEffort.args).toEqual(expect.arrayContaining(["set", "effort", "xhigh", "-s", "review-session"]));
     expect(commands.prompt.args).toEqual(expect.arrayContaining(["claude", "-s", "review-session", "--file", profile.packetPath]));

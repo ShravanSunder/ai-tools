@@ -39,7 +39,7 @@ export const ACPX_LUNA_XHIGH_SUBJECT_PROFILE = {
 
 export const ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE = {
   provider: "claude",
-  requestedModel: "opus",
+  requestedModel: "claude-opus-4-7",
   requestedReasoningEffort: "xhigh",
   acceptedProviderReportedModel: "claude-opus-4-7",
   acceptedProviderReportedReasoningEffort: "xhigh",

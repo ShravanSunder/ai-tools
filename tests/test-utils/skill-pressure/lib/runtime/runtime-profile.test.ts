@@ -7,6 +7,14 @@ import {
 } from "./runtime-profile.js";
 
 describe("runtime-profile verification", () => {
+  it("requests the exact provider-advertised Claude Opus model", () => {
+    expect(ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE).toMatchObject({
+      requestedModel: "claude-opus-4-7",
+      acceptedProviderReportedModel: "claude-opus-4-7",
+      requestedReasoningEffort: "xhigh",
+    });
+  });
+
   it("accepts exact provider-reported Luna/xhigh evidence", () => {
     expect(verifyRuntimeProfile({
       profile: ACPX_LUNA_XHIGH_SUBJECT_PROFILE,

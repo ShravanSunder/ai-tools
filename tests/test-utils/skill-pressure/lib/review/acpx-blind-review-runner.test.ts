@@ -157,17 +157,24 @@ describe("automated ACPX blind review", () => {
       execute: async (command) => {
         observedCommands.push({ args: command.args, environment: command.environment });
         expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" });
+        if (command.args.includes("--file")) {
+          const prompt = JSON.parse(await readFile(command.args.at(-1) ?? "", "utf8")) as {
+            readonly task: string;
+          };
+          expect(prompt.task).toContain("Return exactly one JSON object");
+          expect(prompt.task).toContain("Do not wrap the object in a Markdown code fence");
+        }
         return reviewExecution({ model: "claude-opus-4-7", reasoningEffort: "xhigh", sessionId: "fresh-opus-session" });
       },
     });
 
     expect(observedCommands).toHaveLength(4);
-    expect(observedCommands[0]?.args).toEqual(expect.arrayContaining(["--model", "opus", "sessions", "new"]));
+    expect(observedCommands[0]?.args).toEqual(expect.arrayContaining(["--model", "claude-opus-4-7", "sessions", "new"]));
     expect(observedCommands[1]?.args).toEqual(expect.arrayContaining(["set", "effort", "xhigh"]));
     expect(observedCommands[2]?.args).toEqual(expect.arrayContaining(["claude", "-s", expect.stringMatching(/^pressure-review-/u), "--file"]));
     expect(observedCommands[3]?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
     expect(receipt.outcome).toBe("pass");
-    expect(receipt.command).toMatchObject({ provider: "claude", model: "opus", reasoningEffort: "xhigh", oneFreshExecution: true });
+    expect(receipt.command).toMatchObject({ provider: "claude", model: "claude-opus-4-7", reasoningEffort: "xhigh", oneFreshExecution: true });
     expect(receipt.reviewReceipt?.reviewer).toMatchObject({ model: "claude-opus-4-7", reasoningEffort: "xhigh" });
     expect(receipt.reviewReceipt?.route).toMatchObject({ kind: "blind", freshContext: true });
     expect(receipt.runtime.sessionLifecycle).toMatchObject({

@@ -7,7 +7,8 @@ skill_type: discipline
 prompt: |-
   $shravan-dev-workflow:orchestrator-goal
 
-  Create the Codex goal contract for LUNA-338. The spec already exists at
+  Create the Codex goal contract with goal_id
+  `2026-07-13-luna-338-codeview` for LUNA-338. The spec already exists at
   docs/specs/luna-338-codeview.md and the reviewed implementation plan already
   exists at docs/plans/luna-338-codeview-plan.md. Start wherever that means we
   should start now.
@@ -49,8 +50,12 @@ comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []
-allowed_tools: []
-allowed_write_paths: []
+allowed_tools:
+  - apply_patch
+  - exec_command
+allowed_write_paths:
+  - tmp/workflow-state/2026-07-13-luna-338-codeview/details.md
+  - tmp/workflow-state/2026-07-13-luna-338-codeview/events.jsonl
 deterministic_checks: []
 expected_artifacts: []
 ---
@@ -76,7 +81,8 @@ lifecycle and enter it at the first unproven gate.
 
 $shravan-dev-workflow:orchestrator-goal
 
-Create the Codex goal contract for LUNA-338. The spec already exists at
+Create the Codex goal contract with goal_id `2026-07-13-luna-338-codeview` for
+LUNA-338. The spec already exists at
 docs/specs/luna-338-codeview.md and the reviewed implementation plan already
 exists at docs/plans/luna-338-codeview-plan.md. Start wherever that means we
 should start now.
