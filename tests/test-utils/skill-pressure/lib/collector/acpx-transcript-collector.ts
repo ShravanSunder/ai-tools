@@ -160,16 +160,22 @@ function readVisibleResponse(messages: readonly JsonRecord[]): string {
 }
 
 function readToolObservations(messages: readonly JsonRecord[]): readonly AcpxToolObservation[] {
-  return messages.flatMap((message, index) => {
+  const lifecycleEventsByToolCall = new Map<string, JsonRecord[]>();
+  for (const [index, message] of messages.entries()) {
     const update = asRecord(asRecord(message.params)?.update);
     if (update?.sessionUpdate !== "tool_call" && update?.sessionUpdate !== "tool_call_update") {
-      return [];
+      continue;
     }
-    return [{
-      eventId: typeof update.toolCallId === "string" ? update.toolCallId : `tool-${index}`,
-      payload: JSON.stringify(update),
-    }];
-  });
+    const eventId = typeof update.toolCallId === "string" ? update.toolCallId : `tool-${index}`;
+    const lifecycleEvents = lifecycleEventsByToolCall.get(eventId) ?? [];
+    lifecycleEvents.push(update);
+    lifecycleEventsByToolCall.set(eventId, lifecycleEvents);
+  }
+
+  return [...lifecycleEventsByToolCall.entries()].map(([eventId, lifecycleEvents]) => ({
+    eventId,
+    payload: JSON.stringify(lifecycleEvents.length === 1 ? lifecycleEvents[0] : lifecycleEvents),
+  }));
 }
 
 function parseModelId(modelId: string): { readonly model: string; readonly effort: string } | null {

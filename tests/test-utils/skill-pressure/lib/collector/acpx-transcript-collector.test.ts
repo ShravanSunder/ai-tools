@@ -32,6 +32,38 @@ describe("ACPX transcript collector", () => {
     expect(facts.usageObservations).toEqual(['{"inputTokens":10,"outputTokens":5}']);
   });
 
+  it("collapses one tool call lifecycle into one uniquely addressable observation", () => {
+    const facts = collectAcpxTranscript([
+      JSON.stringify({
+        method: "session/update",
+        params: {
+          update: {
+            sessionUpdate: "tool_call",
+            toolCallId: "exec-1",
+            status: "in_progress",
+            rawInput: { command: "git status --short" },
+          },
+        },
+      }),
+      JSON.stringify({
+        method: "session/update",
+        params: {
+          update: {
+            sessionUpdate: "tool_call_update",
+            toolCallId: "exec-1",
+            status: "completed",
+            rawOutput: { exit_code: 0 },
+          },
+        },
+      }),
+    ].join("\n"));
+
+    expect(facts.toolObservations).toHaveLength(1);
+    expect(facts.toolObservations[0]).toMatchObject({ eventId: "exec-1" });
+    expect(facts.toolObservations[0]?.payload).toContain("git status --short");
+    expect(facts.toolObservations[0]?.payload).toContain('"status":"completed"');
+  });
+
   it("retains malformed and provider error facts as infrastructure evidence", () => {
     const facts = collectAcpxTranscript([
       "not-json",
