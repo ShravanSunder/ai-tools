@@ -165,6 +165,7 @@ async function validateSummaries(
     readonly deleteProgressReceipt?: boolean;
     readonly useSymlinkedReceiptDirectory?: boolean;
     readonly crossVariantAttemptBinding?: boolean;
+    readonly reviewerReceiptState?: "missing" | "tampered" | "incomplete";
     readonly receiptObservedAccounting?: {
       readonly modelPrompts: number;
       readonly acpxCommands: number;
@@ -332,6 +333,36 @@ async function validateSummaries(
           reasonCode: null,
         },
       );
+      const reviewerCommandSuccessful = options.reviewerReceiptState !== "incomplete";
+      const reviewerPromptReceipt = await writeReceiptFixture(
+        path.join(receiptDirectory, "reviewer-prompt.json"),
+        {
+          schemaVersion: 1,
+          scenarioId: candidate.scenarioId,
+          risk: "standard",
+          namedSessionIdentity: null,
+          providerSessionIdentity: "codex-session-fixture",
+          command: {
+            commandType: "reviewer_prompt",
+            exitCode: reviewerCommandSuccessful ? 0 : 1,
+            timedOut: false,
+            processClosed: true,
+            streamsDrained: true,
+            cleanupComplete: true,
+            termSent: false,
+            killSent: false,
+          },
+        },
+      );
+      const reviewerLifecycle = {
+        risk: "standard",
+        state: reviewerCommandSuccessful ? "completed" : "failed",
+        lifecycleComplete: reviewerCommandSuccessful,
+        failureCommandType: reviewerCommandSuccessful ? null : "reviewer_prompt",
+        namedSessionIdentity: null,
+        providerSessionIdentity: "codex-session-fixture",
+        commandReceipts: [{ commandType: "reviewer_prompt", ...reviewerPromptReceipt }],
+      } as const;
       const executionBudget = deriveScenarioExecutionBudget({
         repetitions: 5,
         infrastructureRetries: 0,
@@ -385,6 +416,7 @@ async function validateSummaries(
         semanticCandidate,
         subjects,
         reviewerRuntimeProfile: VERIFIED_PROFILE,
+        reviewerLifecycle,
         attemptReceipts: persistedAttemptReceipts,
         repetitionReceipts,
         progressReceipts: [progressReceipt],
@@ -480,6 +512,7 @@ async function validateSummaries(
           runtimeProfile: VERIFIED_PROFILE,
           candidate: semanticCandidate,
         },
+        reviewerLifecycle,
         runtimeProfiles: { subjects: [], reviewer: VERIFIED_PROFILE },
         subjects,
         executionBudget,
@@ -502,6 +535,11 @@ async function validateSummaries(
       const receiptSource = `${JSON.stringify(receipt, null, 2)}\n`;
       await writeFile(receiptPath, receiptSource, { flag: "wx" });
       if (options.deleteProgressReceipt === true) await unlink(progressReceipt.receiptPath);
+      if (options.reviewerReceiptState === "missing") {
+        await unlink(reviewerPromptReceipt.receiptPath);
+      } else if (options.reviewerReceiptState === "tampered") {
+        await writeFile(reviewerPromptReceipt.receiptPath, '{"tampered":true}\n');
+      }
       return validateV3ScenarioExecutionForAggregate({
         scenarioId: candidate.scenarioId,
         repositoryRoot,
@@ -978,6 +1016,25 @@ describe("skill pressure aggregate receipt", () => {
         { deleteProgressReceipt: true },
       ),
     ).rejects.toThrow(/progress.*does not exist|ENOENT/u);
+  });
+
+  it("rejects missing or tampered reviewer receipts and withholds completeness for failed cleanup", async () => {
+    const claims = claimedRequirements(["fixture-behavior"]);
+    const scenario = summary({ scenarioId: "scenario" }, claims);
+
+    for (const reviewerReceiptState of ["missing", "tampered"] as const) {
+      const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+      await expect(
+        validateSummaries(repositoryRoot, claims, [scenario], { reviewerReceiptState }),
+      ).rejects.toThrow(/reviewer|receipt.*does not exist|digest/u);
+    }
+
+    const incompleteRepository = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+    const [incomplete] = await validateSummaries(incompleteRepository, claims, [scenario], {
+      reviewerReceiptState: "incomplete",
+    });
+    expect(incomplete?.accountingComplete).toBe(false);
+    expect(incomplete?.releaseAuthority).toBe(false);
   });
 
   it("rejects a scenario receipt tree reached through a symlinked directory", async () => {

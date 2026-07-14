@@ -40,6 +40,10 @@ import {
   type SemanticCandidateValidationResult,
   type StructuredSemanticReviewPacket,
 } from "../review/semantic-review-contract.js";
+import type {
+  ReviewerCommandType,
+  ReviewerLifecycleEvidence,
+} from "../review/structured-review-runner.js";
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
   ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
@@ -110,6 +114,21 @@ export interface V3SubjectExecutionResult {
 export interface V3SemanticReviewExecutionResult {
   readonly visibleResponse: string;
   readonly runtimeProfile: RuntimeProfileReceipt;
+  readonly lifecycle: ReviewerLifecycleEvidence;
+}
+
+export interface V3ReviewerLifecycleReceipt {
+  readonly risk: "standard" | "high";
+  readonly state: "not_started" | "completed" | "failed";
+  readonly lifecycleComplete: boolean;
+  readonly failureCommandType: ReviewerCommandType | null;
+  readonly namedSessionIdentity: string | null;
+  readonly providerSessionIdentity: string | null;
+  readonly commandReceipts: readonly {
+    readonly commandType: ReviewerCommandType;
+    readonly receiptPath: string;
+    readonly receiptDigest: string;
+  }[];
 }
 
 export interface ExecuteV3BehavioralScenarioProps {
@@ -201,6 +220,7 @@ export interface V3BehavioralScenarioReceipt {
     readonly runtimeProfile: RuntimeProfileReceipt | null;
     readonly candidate: unknown | null;
   };
+  readonly reviewerLifecycle: V3ReviewerLifecycleReceipt;
   readonly runtimeProfiles: {
     readonly subjects: readonly RuntimeProfileReceipt[];
     readonly reviewer: RuntimeProfileReceipt;
@@ -396,6 +416,7 @@ export async function executeV3BehavioralScenario(
           reason: "semantic review skipped after comparison validation failure",
         },
         reviewerRuntimeProfile: VERIFIED_ABSENT_REVIEW_PROFILE,
+        reviewerLifecycle: createNotStartedReviewerLifecycleReceipt(props.contract.risk),
         reduction: infrastructureReductionResult(
           "comparison_mismatch",
           comparisonValidation.reasons,
@@ -420,6 +441,7 @@ export async function executeV3BehavioralScenario(
           reason: "semantic review skipped after infrastructure failure",
         },
         reviewerRuntimeProfile: VERIFIED_ABSENT_REVIEW_PROFILE,
+        reviewerLifecycle: createNotStartedReviewerLifecycleReceipt(props.contract.risk),
         reduction: infrastructureReduction,
       });
     }
@@ -442,9 +464,68 @@ export async function executeV3BehavioralScenario(
       evidence: repetitions.map((repetition) => repetition.evidence),
       redactionSecrets: props.redactionSecrets,
     });
-    const review = await props.executeSemanticReview({ packet, signal: abortController.signal });
-    if (abortController.signal.aborted)
-      throw new Error("scenario deadline elapsed after semantic review");
+    let review: V3SemanticReviewExecutionResult;
+    try {
+      review = await props.executeSemanticReview({ packet, signal: abortController.signal });
+    } catch {
+      review = {
+        visibleResponse: "",
+        runtimeProfile: VERIFIED_ABSENT_REVIEW_PROFILE,
+        lifecycle: createNotStartedReviewerLifecycleEvidence(props.contract.risk),
+      };
+    }
+    const reviewerLifecycle = await persistReviewerLifecycle({
+      receiptDirectory,
+      scenarioId: props.contract.scenarioId,
+      lifecycle: review.lifecycle,
+      secrets: props.redactionSecrets,
+    });
+    if (abortController.signal.aborted) {
+      return publishScenarioReceipt({
+        props,
+        registryRow,
+        receiptDirectory,
+        attemptReceipts,
+        repetitionReceipts,
+        progressReceipts,
+        persistProgress,
+        subjects: repetitions,
+        comparisonValidation,
+        objectiveResults,
+        semanticValidation: {
+          valid: false,
+          reason: "scenario deadline elapsed before semantic review completed",
+        },
+        reviewerRuntimeProfile: review.runtimeProfile,
+        reviewerLifecycle,
+        reduction: infrastructureReductionResult("scenario_deadline", [
+          "scenario deadline elapsed after semantic review",
+        ]),
+        progressStatus: "timed_out",
+      });
+    }
+    const reviewerLifecycleReduction = reduceReviewerLifecycle(review.lifecycle);
+    if (reviewerLifecycleReduction !== null) {
+      return publishScenarioReceipt({
+        props,
+        registryRow,
+        receiptDirectory,
+        attemptReceipts,
+        repetitionReceipts,
+        progressReceipts,
+        persistProgress,
+        subjects: repetitions,
+        comparisonValidation,
+        objectiveResults,
+        semanticValidation: {
+          valid: false,
+          reason: "reviewer lifecycle evidence is incomplete",
+        },
+        reviewerRuntimeProfile: review.runtimeProfile,
+        reviewerLifecycle,
+        reduction: reviewerLifecycleReduction,
+      });
+    }
     const expectedReviewerProfile =
       props.contract.risk === "high"
         ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
@@ -467,6 +548,7 @@ export async function executeV3BehavioralScenario(
         objectiveResults,
         semanticValidation: { valid: false, reason: "review runtime profile was not verified" },
         reviewerRuntimeProfile: review.runtimeProfile,
+        reviewerLifecycle,
         reduction: infrastructureReductionResult(
           "runtime_profile_unverified",
           reviewProfileReasons,
@@ -488,6 +570,7 @@ export async function executeV3BehavioralScenario(
         objectiveResults,
         semanticValidation: { valid: false, reason: parsed.parseError },
         reviewerRuntimeProfile: review.runtimeProfile,
+        reviewerLifecycle,
         reduction: {
           outcome: "not_evaluated",
           reasonCode: "review_parse_failure",
@@ -530,6 +613,7 @@ export async function executeV3BehavioralScenario(
       semanticValidation,
       semanticCandidate: parsed.candidate,
       reviewerRuntimeProfile: review.runtimeProfile,
+      reviewerLifecycle,
       reduction: authorityReduction,
     });
   } catch (error) {
@@ -556,6 +640,7 @@ export async function executeV3BehavioralScenario(
         reason: "scenario deadline elapsed before semantic review",
       },
       reviewerRuntimeProfile: VERIFIED_ABSENT_REVIEW_PROFILE,
+      reviewerLifecycle: createNotStartedReviewerLifecycleReceipt(props.contract.risk),
       reduction,
       progressStatus: "timed_out",
     });
@@ -574,6 +659,82 @@ const VERIFIED_ABSENT_REVIEW_PROFILE: RuntimeProfileReceipt = {
     reasons: ["semantic reviewer was not started"],
   },
 };
+
+function createNotStartedReviewerLifecycleEvidence(
+  risk: ReviewerLifecycleEvidence["risk"],
+): ReviewerLifecycleEvidence {
+  return {
+    risk,
+    state: "not_started",
+    lifecycleComplete: false,
+    failureCommandType: null,
+    namedSessionIdentity: null,
+    providerSessionIdentity: null,
+    commandReceipts: [],
+  };
+}
+
+function createNotStartedReviewerLifecycleReceipt(
+  risk: V3ReviewerLifecycleReceipt["risk"],
+): V3ReviewerLifecycleReceipt {
+  return {
+    risk,
+    state: "not_started",
+    lifecycleComplete: false,
+    failureCommandType: null,
+    namedSessionIdentity: null,
+    providerSessionIdentity: null,
+    commandReceipts: [],
+  };
+}
+
+async function persistReviewerLifecycle(props: {
+  readonly receiptDirectory: string;
+  readonly scenarioId: string;
+  readonly lifecycle: ReviewerLifecycleEvidence;
+  readonly secrets: readonly string[];
+}): Promise<V3ReviewerLifecycleReceipt> {
+  const commandReceipts: V3ReviewerLifecycleReceipt["commandReceipts"][number][] = [];
+  for (const command of props.lifecycle.commandReceipts) {
+    const persisted = await writeJsonReceipt({
+      receiptDirectory: props.receiptDirectory,
+      fileName: reviewerCommandReceiptFileName(command.commandType),
+      receipt: {
+        schemaVersion: 1,
+        scenarioId: props.scenarioId,
+        risk: props.lifecycle.risk,
+        namedSessionIdentity: props.lifecycle.namedSessionIdentity,
+        providerSessionIdentity: props.lifecycle.providerSessionIdentity,
+        command,
+      },
+      secrets: props.secrets,
+    });
+    commandReceipts.push({
+      commandType: command.commandType,
+      receiptPath: persisted.receiptPath,
+      receiptDigest: persisted.receiptDigest,
+    });
+  }
+  return {
+    risk: props.lifecycle.risk,
+    state: props.lifecycle.state,
+    lifecycleComplete: props.lifecycle.lifecycleComplete,
+    failureCommandType: props.lifecycle.failureCommandType,
+    namedSessionIdentity: props.lifecycle.namedSessionIdentity,
+    providerSessionIdentity: props.lifecycle.providerSessionIdentity,
+    commandReceipts,
+  };
+}
+
+function reviewerCommandReceiptFileName(commandType: ReviewerCommandType): string {
+  const fileNames = {
+    reviewer_session_create: "reviewer-session-create.json",
+    reviewer_effort_config: "reviewer-effort-config.json",
+    reviewer_prompt: "reviewer-prompt.json",
+    reviewer_close: "reviewer-close.json",
+  } as const satisfies Record<ReviewerCommandType, string>;
+  return fileNames[commandType];
+}
 
 function assertIntegrationInputs(
   props: ExecuteV3BehavioralScenarioProps,
@@ -665,6 +826,15 @@ function reduceInfrastructure(
         reasonCode: "incomplete_cleanup",
         reasons: processFailures,
       };
+}
+
+function reduceReviewerLifecycle(
+  lifecycle: ReviewerLifecycleEvidence,
+): V3BehavioralScenarioReceipt["reduction"] | null {
+  if (lifecycle.state === "completed" && lifecycle.lifecycleComplete) return null;
+  return infrastructureReductionResult("incomplete_cleanup", [
+    "semantic reviewer lifecycle evidence is incomplete",
+  ]);
 }
 
 function validateExactRuntimeProfile(
@@ -798,6 +968,7 @@ async function publishScenarioReceipt(props: {
   readonly semanticValidation: SemanticCandidateValidationResult;
   readonly semanticCandidate?: unknown | null;
   readonly reviewerRuntimeProfile: RuntimeProfileReceipt;
+  readonly reviewerLifecycle: V3ReviewerLifecycleReceipt;
   readonly reduction: V3BehavioralScenarioReceipt["reduction"];
   readonly progressStatus?: "timed_out" | "completed" | "infrastructure_error";
 }): Promise<ExecutedV3BehavioralScenario> {
@@ -824,6 +995,7 @@ async function publishScenarioReceipt(props: {
     semanticCandidate: props.semanticCandidate ?? null,
     subjects: props.subjects,
     reviewerRuntimeProfile: props.reviewerRuntimeProfile,
+    reviewerLifecycle: props.reviewerLifecycle,
     attemptReceipts: props.attemptReceipts,
     repetitionReceipts: props.repetitionReceipts,
     progressReceipts: props.progressReceipts,
@@ -895,6 +1067,7 @@ async function publishScenarioReceipt(props: {
       runtimeProfile: props.reviewerRuntimeProfile,
       candidate: props.semanticCandidate ?? null,
     },
+    reviewerLifecycle: props.reviewerLifecycle,
     runtimeProfiles: {
       subjects: props.subjects.map((subject) => subject.runtimeProfile),
       reviewer: props.reviewerRuntimeProfile,
@@ -928,6 +1101,7 @@ export function calculateV3ScenarioEvidenceDigest(props: {
   readonly semanticCandidate: unknown;
   readonly subjects: readonly V3ExecutedRepetition[];
   readonly reviewerRuntimeProfile: RuntimeProfileReceipt;
+  readonly reviewerLifecycle: V3ReviewerLifecycleReceipt;
   readonly attemptReceipts: V3BehavioralScenarioReceipt["attemptReceipts"];
   readonly repetitionReceipts: V3BehavioralScenarioReceipt["repetitionReceipts"];
   readonly progressReceipts: V3BehavioralScenarioReceipt["progressReceipts"];
@@ -945,6 +1119,7 @@ export function calculateV3ScenarioEvidenceDigest(props: {
         semanticCandidate: props.semanticCandidate,
         subjects: props.subjects,
         reviewerRuntimeProfile: props.reviewerRuntimeProfile,
+        reviewerLifecycle: props.reviewerLifecycle ?? null,
         attemptReceipts: props.attemptReceipts,
         repetitionReceipts: props.repetitionReceipts,
         progressReceipts: props.progressReceipts,

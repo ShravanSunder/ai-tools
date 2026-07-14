@@ -202,6 +202,32 @@ async function executedScenario(props: {
     completedAttemptReceiptPaths: attemptReceipts.map((receipt) => receipt.receiptPath),
     reasonCode: null,
   });
+  const reviewerPromptReceipt = await writeFixture("reviewer-prompt.json", {
+    schemaVersion: 1,
+    scenarioId: props.scenarioId,
+    risk: "standard",
+    namedSessionIdentity: null,
+    providerSessionIdentity: "codex-session-fixture",
+    command: {
+      commandType: "reviewer_prompt",
+      exitCode: 0,
+      timedOut: false,
+      processClosed: true,
+      streamsDrained: true,
+      cleanupComplete: true,
+      termSent: false,
+      killSent: false,
+    },
+  });
+  const reviewerLifecycle = {
+    risk: "standard",
+    state: "completed",
+    lifecycleComplete: true,
+    failureCommandType: null,
+    namedSessionIdentity: null,
+    providerSessionIdentity: "codex-session-fixture",
+    commandReceipts: [{ commandType: "reviewer_prompt", ...reviewerPromptReceipt }],
+  } as const;
   const comparisonValidation = { valid: true, reasons: [] } as const;
   const objectiveResults: V3BehavioralScenarioReceipt["objectiveResults"] = [];
   const semanticValidation = { valid: true, reason: null } as const;
@@ -255,6 +281,7 @@ async function executedScenario(props: {
     semanticCandidate,
     subjects,
     reviewerRuntimeProfile: VERIFIED_PROFILE,
+    reviewerLifecycle,
     attemptReceipts,
     repetitionReceipts,
     progressReceipts: [progressReceipt],
@@ -346,6 +373,7 @@ async function executedScenario(props: {
       runtimeProfile: VERIFIED_PROFILE,
       candidate: semanticCandidate,
     },
+    reviewerLifecycle,
     runtimeProfiles: {
       subjects: Array.from({ length: 10 }, () => VERIFIED_PROFILE),
       reviewer: VERIFIED_PROFILE,

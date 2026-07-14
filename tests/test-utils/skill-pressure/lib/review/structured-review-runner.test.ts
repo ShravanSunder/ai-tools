@@ -120,6 +120,15 @@ describe("structured ACPX semantic-review runner", () => {
     expect(mcpConfiguration).toBe('{"mcpServers":[]}\n');
     expect(reviewCommands).toEqual(["reviewer_prompt"]);
     expect(result.runtimeProfile.verification.status).toBe("verified");
+    expect(result.lifecycle).toMatchObject({
+      risk: "standard",
+      state: "completed",
+      lifecycleComplete: true,
+      failureCommandType: null,
+    });
+    expect(result.lifecycle.commandReceipts.map(({ commandType }) => commandType)).toEqual([
+      "reviewer_prompt",
+    ]);
     await expect(access(commands[0]?.cwd ?? "")).rejects.toThrow();
   });
 
@@ -157,13 +166,19 @@ describe("structured ACPX semantic-review runner", () => {
       "reviewer_prompt",
       "reviewer_close",
     ]);
+    expect(result.lifecycle).toMatchObject({
+      risk: "high",
+      state: "completed",
+      lifecycleComplete: true,
+      failureCommandType: null,
+      namedSessionIdentity: expect.stringMatching(/^pressure-review-/u),
+    });
   });
 
   it("closes the Claude session when its prompt fails", async () => {
     const commands: ExecutableAcpxCommand[] = [];
 
-    await expect(
-      executeStructuredReview({
+    const result = await executeStructuredReview({
         disabledAmbientSkillPaths: [],
         beforeCommand: () => undefined,
         packet,
@@ -176,17 +191,26 @@ describe("structured ACPX semantic-review runner", () => {
           commands.push(command);
           return execution("", command.args.includes("--file") ? { exitCode: 1 } : {});
         },
-      }),
-    ).rejects.toThrow(/run Claude semantic review/u);
+      });
 
     expect(commands.at(-1)?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
+    expect(result.lifecycle).toMatchObject({
+      state: "failed",
+      lifecycleComplete: false,
+      failureCommandType: "reviewer_prompt",
+    });
+    expect(result.lifecycle.commandReceipts.map(({ commandType }) => commandType)).toEqual([
+      "reviewer_session_create",
+      "reviewer_effort_config",
+      "reviewer_prompt",
+      "reviewer_close",
+    ]);
   });
 
   it("closes the Claude session when effort configuration fails", async () => {
     const commands: ExecutableAcpxCommand[] = [];
 
-    await expect(
-      executeStructuredReview({
+    const result = await executeStructuredReview({
         disabledAmbientSkillPaths: [],
         beforeCommand: () => undefined,
         packet,
@@ -199,16 +223,19 @@ describe("structured ACPX semantic-review runner", () => {
           commands.push(command);
           return execution("", command.args.includes("effort") ? { exitCode: 1 } : {});
         },
-      }),
-    ).rejects.toThrow(/set Claude review effort/u);
+      });
 
     expect(commands).toHaveLength(3);
     expect(commands.at(-1)?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
+    expect(result.lifecycle).toMatchObject({
+      state: "failed",
+      lifecycleComplete: false,
+      failureCommandType: "reviewer_effort_config",
+    });
   });
 
   it("fails closed for unsuccessful standard review execution", async () => {
-    await expect(
-      executeStructuredReview({
+    const result = await executeStructuredReview({
         disabledAmbientSkillPaths: [],
         beforeCommand: () => undefined,
         packet,
@@ -218,7 +245,13 @@ describe("structured ACPX semantic-review runner", () => {
         timeoutSeconds: 120,
         signal: new AbortController().signal,
         execute: async () => execution("", { timedOut: true }),
-      }),
-    ).rejects.toThrow(/run Luna semantic review/u);
+      });
+
+    expect(result.lifecycle).toMatchObject({
+      risk: "standard",
+      state: "failed",
+      lifecycleComplete: false,
+      failureCommandType: "reviewer_prompt",
+    });
   });
 });

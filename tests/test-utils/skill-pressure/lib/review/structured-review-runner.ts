@@ -40,10 +40,38 @@ export interface ExecuteStructuredReviewProps {
   readonly execute?: (command: ExecutableAcpxCommand) => Promise<AcpxProcessExecution>;
 }
 
+export type ReviewerCommandType =
+  | "reviewer_session_create"
+  | "reviewer_effort_config"
+  | "reviewer_prompt"
+  | "reviewer_close";
+
+export interface ReviewerCommandReceipt {
+  readonly commandType: ReviewerCommandType;
+  readonly exitCode: number | null;
+  readonly timedOut: boolean;
+  readonly processClosed: boolean;
+  readonly streamsDrained: boolean;
+  readonly cleanupComplete: boolean;
+  readonly termSent: boolean;
+  readonly killSent: boolean;
+}
+
+export interface ReviewerLifecycleEvidence {
+  readonly risk: "standard" | "high";
+  readonly state: "not_started" | "completed" | "failed";
+  readonly lifecycleComplete: boolean;
+  readonly failureCommandType: ReviewerCommandType | null;
+  readonly namedSessionIdentity: string | null;
+  readonly providerSessionIdentity: string | null;
+  readonly commandReceipts: readonly ReviewerCommandReceipt[];
+}
+
 export interface StructuredReviewExecution {
   readonly visibleResponse: string;
   readonly runtimeProfile: RuntimeProfileReceipt;
   readonly usageObservations: readonly string[];
+  readonly lifecycle: ReviewerLifecycleEvidence;
 }
 
 export async function executeStructuredReview(
@@ -62,7 +90,7 @@ export async function executeStructuredReview(
     );
     await writeFile(packetPath, packetSource, { flag: "wx" });
     await writeFile(mcpConfigPath, '{"mcpServers":[]}\n', { flag: "wx" });
-    const execution =
+    const review =
       props.risk === "high"
         ? await executeHighRiskReview({
             ...props,
@@ -80,7 +108,7 @@ export async function executeStructuredReview(
             mcpConfigPath,
             packetSource,
           });
-    const transcript = collectAcpxTranscript(execution.stdout);
+    const transcript = collectAcpxTranscript(review.promptExecution?.stdout ?? "");
     const expectedProfile =
       props.risk === "high"
         ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
@@ -95,6 +123,10 @@ export async function executeStructuredReview(
         },
       }),
       usageObservations: transcript.usageObservations,
+      lifecycle: {
+        ...review.lifecycle,
+        providerSessionIdentity: transcript.sessionId,
+      },
     };
   } finally {
     await rm(reviewDirectory, { recursive: true, force: true });
@@ -135,32 +167,35 @@ async function executeStandardReview(
     readonly mcpConfigPath: string;
     readonly packetSource: string;
   },
-): Promise<AcpxProcessExecution> {
-  props.beforeCommand({
+): Promise<ReviewLifecycleExecution> {
+  const prompt = await executeReviewerCommand({
+    props,
     commandType: "reviewer_prompt",
     modelPrompt: true,
     mandatoryCleanup: false,
-  });
-  return requireSuccessfulExecution(
-    props.execute(
-      withSignal(
-        buildAcpxCodexReviewCommand({
-          launcher: props.launcher,
-          codexExecutable: props.codexExecutable,
-          cwd: props.reviewDirectory,
-          mcpConfigPath: props.mcpConfigPath,
-          packetPath: props.packetPath,
-          packetDigest: digest(props.packetSource),
-          disabledSkillPaths: props.disabledAmbientSkillPaths,
-          model: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel,
-          reasoningEffort: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort,
-          timeoutSeconds: props.timeoutSeconds,
-        }),
-        props.signal,
-      ),
+    command: withSignal(
+      buildAcpxCodexReviewCommand({
+        launcher: props.launcher,
+        codexExecutable: props.codexExecutable,
+        cwd: props.reviewDirectory,
+        mcpConfigPath: props.mcpConfigPath,
+        packetPath: props.packetPath,
+        packetDigest: digest(props.packetSource),
+        disabledSkillPaths: props.disabledAmbientSkillPaths,
+        model: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel,
+        reasoningEffort: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort,
+        timeoutSeconds: props.timeoutSeconds,
+      }),
+      props.signal,
     ),
-    "run Luna semantic review",
-  );
+  });
+  return {
+    promptExecution: prompt.execution,
+    lifecycle: createLifecycleEvidence({
+      risk: "standard",
+      commandReceipts: [prompt.receipt],
+    }),
+  };
 }
 
 async function executeHighRiskReview(
@@ -171,7 +206,7 @@ async function executeHighRiskReview(
     readonly mcpConfigPath: string;
     readonly packetSource: string;
   },
-): Promise<AcpxProcessExecution> {
+): Promise<ReviewLifecycleExecution> {
   const sessionName = `pressure-review-${randomUUID()}`;
   const commands = buildAcpxClaudeReviewSessionCommands(
     {
@@ -187,56 +222,150 @@ async function executeHighRiskReview(
     },
     sessionName,
   );
-  props.beforeCommand({
+  const commandReceipts: ReviewerCommandReceipt[] = [];
+  const create = await executeReviewerCommand({
+    props,
     commandType: "reviewer_session_create",
     modelPrompt: false,
     mandatoryCleanup: false,
+    command: withSignal(commands.create, props.signal),
   });
-  await requireSuccessfulExecution(
-    props.execute(withSignal(commands.create, props.signal)),
-    "create Claude review session",
-  );
+  commandReceipts.push(create.receipt);
+  if (!isSuccessfulReviewerReceipt(create.receipt)) {
+    return {
+      promptExecution: null,
+      lifecycle: createLifecycleEvidence({
+        risk: "high",
+        namedSessionIdentity: sessionName,
+        commandReceipts,
+      }),
+    };
+  }
+
+  let promptExecution: AcpxProcessExecution | null = null;
   try {
-    props.beforeCommand({
+    const effort = await executeReviewerCommand({
+      props,
       commandType: "reviewer_effort_config",
       modelPrompt: false,
       mandatoryCleanup: false,
+      command: withSignal(commands.setEffort, props.signal),
     });
-    await requireSuccessfulExecution(
-      props.execute(withSignal(commands.setEffort, props.signal)),
-      "set Claude review effort",
-    );
-    props.beforeCommand({
-      commandType: "reviewer_prompt",
-      modelPrompt: true,
-      mandatoryCleanup: false,
-    });
-    return await requireSuccessfulExecution(
-      props.execute(withSignal(commands.prompt, props.signal)),
-      "run Claude semantic review",
-    );
+    commandReceipts.push(effort.receipt);
+    if (isSuccessfulReviewerReceipt(effort.receipt)) {
+      const prompt = await executeReviewerCommand({
+        props,
+        commandType: "reviewer_prompt",
+        modelPrompt: true,
+        mandatoryCleanup: false,
+        command: withSignal(commands.prompt, props.signal),
+      });
+      commandReceipts.push(prompt.receipt);
+      promptExecution = prompt.execution;
+    }
   } finally {
-    props.beforeCommand({
+    // Session cleanup stays outside the scenario signal once creation succeeded.
+    const close = await executeReviewerCommand({
+      props,
       commandType: "reviewer_close",
       modelPrompt: false,
       mandatoryCleanup: true,
+      command: commands.close,
     });
-    await requireSuccessfulExecution(
-      props.execute(commands.close),
-      "close Claude review session",
-    );
+    commandReceipts.push(close.receipt);
+  }
+  return {
+    promptExecution,
+    lifecycle: createLifecycleEvidence({
+      risk: "high",
+      namedSessionIdentity: sessionName,
+      commandReceipts,
+    }),
+  };
+}
+
+interface ReviewLifecycleExecution {
+  readonly promptExecution: AcpxProcessExecution | null;
+  readonly lifecycle: ReviewerLifecycleEvidence;
+}
+
+async function executeReviewerCommand(props: {
+  readonly props: ExecuteStructuredReviewProps & {
+    readonly execute: (command: ExecutableAcpxCommand) => Promise<AcpxProcessExecution>;
+  };
+  readonly commandType: ReviewerCommandType;
+  readonly modelPrompt: boolean;
+  readonly mandatoryCleanup: boolean;
+  readonly command: ExecutableAcpxCommand;
+}): Promise<{ readonly execution: AcpxProcessExecution | null; readonly receipt: ReviewerCommandReceipt }> {
+  try {
+    props.props.beforeCommand({
+      commandType: props.commandType,
+      modelPrompt: props.modelPrompt,
+      mandatoryCleanup: props.mandatoryCleanup,
+    });
+    const execution = await props.props.execute(props.command);
+    return { execution, receipt: createReviewerCommandReceipt(props.commandType, execution) };
+  } catch {
+    return {
+      execution: null,
+      receipt: {
+        commandType: props.commandType,
+        exitCode: null,
+        timedOut: false,
+        processClosed: false,
+        streamsDrained: false,
+        cleanupComplete: false,
+        termSent: false,
+        killSent: false,
+      },
+    };
   }
 }
 
-async function requireSuccessfulExecution(
-  execution: Promise<AcpxProcessExecution>,
-  operation: string,
-): Promise<AcpxProcessExecution> {
-  const result = await execution;
-  if (result.exitCode !== 0 || result.timedOut || !result.cleanupComplete) {
-    throw new Error(`failed to ${operation}`);
-  }
-  return result;
+function createReviewerCommandReceipt(
+  commandType: ReviewerCommandType,
+  execution: AcpxProcessExecution,
+): ReviewerCommandReceipt {
+  return {
+    commandType,
+    exitCode: execution.exitCode,
+    timedOut: execution.timedOut,
+    processClosed:
+      execution.supervisorReceipt.exitCode !== null || execution.supervisorReceipt.signal !== null,
+    streamsDrained:
+      execution.supervisorReceipt.stdoutEof && execution.supervisorReceipt.stderrEof,
+    cleanupComplete: execution.cleanupComplete,
+    termSent: execution.supervisorReceipt.cleanup.termSent,
+    killSent: execution.supervisorReceipt.cleanup.killSent,
+  };
+}
+
+function createLifecycleEvidence(props: {
+  readonly risk: ReviewerLifecycleEvidence["risk"];
+  readonly commandReceipts: readonly ReviewerCommandReceipt[];
+  readonly namedSessionIdentity?: string;
+}): ReviewerLifecycleEvidence {
+  const failure = props.commandReceipts.find((receipt) => !isSuccessfulReviewerReceipt(receipt));
+  return {
+    risk: props.risk,
+    state: failure === undefined ? "completed" : "failed",
+    lifecycleComplete: failure === undefined,
+    failureCommandType: failure?.commandType ?? null,
+    namedSessionIdentity: props.namedSessionIdentity ?? null,
+    providerSessionIdentity: null,
+    commandReceipts: props.commandReceipts.map((receipt) => ({ ...receipt })),
+  };
+}
+
+function isSuccessfulReviewerReceipt(receipt: ReviewerCommandReceipt): boolean {
+  return (
+    receipt.exitCode === 0 &&
+    !receipt.timedOut &&
+    receipt.processClosed &&
+    receipt.streamsDrained &&
+    receipt.cleanupComplete
+  );
 }
 
 function withSignal(command: ExecutableAcpxCommand, signal: AbortSignal): ExecutableAcpxCommand {

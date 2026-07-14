@@ -315,6 +315,11 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     scenarioReceiptPath: props.executed.receiptPath,
     receipt,
   });
+  const reviewerLifecycleComplete = await validateReviewerLifecycleReceipts({
+    scenarioId: props.scenarioId,
+    scenarioReceiptPath: props.executed.receiptPath,
+    receipt,
+  });
   const expectedEvidenceDigest = calculateV3ScenarioEvidenceDigest({
     registrySnapshotDigest: receipt.authoritySnapshot.registrySnapshotDigest,
     comparisonValidation: receipt.comparisonValidation,
@@ -323,6 +328,7 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     semanticCandidate: receipt.semanticReview.candidate,
     subjects: receipt.subjects,
     reviewerRuntimeProfile: receipt.runtimeProfiles.reviewer,
+    reviewerLifecycle: receipt.reviewerLifecycle,
     attemptReceipts: receipt.attemptReceipts,
     repetitionReceipts: receipt.repetitionReceipts,
     progressReceipts: receipt.progressReceipts,
@@ -357,6 +363,11 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
     receipt,
   });
   assertCalibrationAndReleaseStatus({ receipt, registryRow: props.registryRow, calibration });
+  if (!reviewerLifecycleComplete && receipt.authoritySnapshot.releaseAuthority) {
+    throw new Error(
+      `scenario ${props.scenarioId} incomplete reviewer lifecycle cannot grant release authority`,
+    );
+  }
   const expectedReceiptCount = props.expectedRepetitions * 2;
   const durableAccountingComplete = await validateDurableExecutionReceipts({
     scenarioId: props.scenarioId,
@@ -392,6 +403,7 @@ export async function validateV3ScenarioExecutionForAggregate(props: {
       receipt.attemptReceipts.length >= expectedReceiptCount &&
       receipt.repetitionReceipts.length === expectedReceiptCount &&
       durableAccountingComplete &&
+      reviewerLifecycleComplete &&
       receipt.lastDurableStage === "scenario_receipt_published",
     behaviorRequirementIds: receipt.behaviorIdentity.behaviorRequirementIds,
     releaseAuthority: receipt.authoritySnapshot.releaseAuthority,
@@ -707,6 +719,235 @@ async function validateDurableExecutionReceipts(props: {
       return false;
   }
   return true;
+}
+
+async function validateReviewerLifecycleReceipts(props: {
+  readonly scenarioId: string;
+  readonly scenarioReceiptPath: string;
+  readonly receipt: ExecutedV3BehavioralScenario["receipt"];
+}): Promise<boolean> {
+  const lifecycle = props.receipt.reviewerLifecycle;
+  if (lifecycle === undefined) {
+    throw new Error(`scenario ${props.scenarioId} reviewer lifecycle evidence is missing`);
+  }
+  if (!isReviewerLifecycleReceipt(lifecycle)) return false;
+  const receiptDirectory = path.dirname(props.scenarioReceiptPath);
+  const commandTypes = lifecycle.commandReceipts.map((reference) => reference.commandType);
+  if (new Set(commandTypes).size !== commandTypes.length) return false;
+  if (new Set(lifecycle.commandReceipts.map(receiptBindingKey)).size !== lifecycle.commandReceipts.length)
+    return false;
+
+  if (lifecycle.risk === "standard" && lifecycle.namedSessionIdentity !== null) return false;
+  if (
+    lifecycle.risk === "high" &&
+    lifecycle.state !== "not_started" &&
+    (lifecycle.namedSessionIdentity === null ||
+      !/^pressure-review-[A-Za-z0-9-]+$/u.test(lifecycle.namedSessionIdentity))
+  )
+    return false;
+
+  const commands = [] as Array<{
+    readonly commandType: string;
+    readonly successful: boolean;
+  }>;
+  for (const reference of lifecycle.commandReceipts) {
+    const persisted = await readDurableExecutionReceipt(reference, receiptDirectory);
+    if (!isReviewerCommandReceiptFile(persisted)) return false;
+    if (
+      persisted.scenarioId !== props.scenarioId ||
+      persisted.risk !== lifecycle.risk ||
+      persisted.namedSessionIdentity !== lifecycle.namedSessionIdentity ||
+      persisted.providerSessionIdentity !== lifecycle.providerSessionIdentity ||
+      persisted.command.commandType !== reference.commandType
+    )
+      return false;
+    commands.push({
+      commandType: persisted.command.commandType,
+      successful: isSuccessfulReviewerCommand(persisted.command),
+    });
+  }
+
+  if (lifecycle.state === "not_started") {
+    return false;
+  }
+
+  if (!matchesReviewerCommandTopology({ risk: lifecycle.risk, state: lifecycle.state, commands }))
+    return false;
+  if (lifecycle.state === "completed") {
+    return (
+      lifecycle.lifecycleComplete &&
+      lifecycle.failureCommandType === null &&
+      commands.every((command) => command.successful)
+    );
+  }
+  return false;
+}
+
+function isReviewerLifecycleReceipt(
+  value: NonNullable<ExecutedV3BehavioralScenario["receipt"]["reviewerLifecycle"]>,
+): boolean {
+  const lifecycle = value as unknown as Record<string, unknown>;
+  if (
+    !hasExactKeys(lifecycle, [
+      "risk",
+      "state",
+      "lifecycleComplete",
+      "failureCommandType",
+      "namedSessionIdentity",
+      "providerSessionIdentity",
+      "commandReceipts",
+    ]) ||
+    (lifecycle.risk !== "standard" && lifecycle.risk !== "high") ||
+    !["not_started", "completed", "failed"].includes(String(lifecycle.state)) ||
+    typeof lifecycle.lifecycleComplete !== "boolean" ||
+    !isNullableReviewerCommandType(lifecycle.failureCommandType) ||
+    !isNullableNonEmptyString(lifecycle.namedSessionIdentity) ||
+    !isNullableNonEmptyString(lifecycle.providerSessionIdentity) ||
+    !Array.isArray(lifecycle.commandReceipts)
+  )
+    return false;
+  return lifecycle.commandReceipts.every(isReviewerCommandReference);
+}
+
+function isReviewerCommandReference(value: unknown): value is {
+  readonly commandType: string;
+  readonly receiptPath: string;
+  readonly receiptDigest: string;
+} {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["commandType", "receiptPath", "receiptDigest"]) &&
+    isReviewerCommandType(value.commandType) &&
+    typeof value.receiptPath === "string" &&
+    value.receiptPath.trim() !== "" &&
+    typeof value.receiptDigest === "string" &&
+    /^sha256:[a-f0-9]{64}$/u.test(value.receiptDigest)
+  );
+}
+
+function isReviewerCommandReceiptFile(value: unknown): value is {
+  readonly schemaVersion: 1;
+  readonly scenarioId: string;
+  readonly risk: "standard" | "high";
+  readonly namedSessionIdentity: string | null;
+  readonly providerSessionIdentity: string | null;
+  readonly command: {
+    readonly commandType: string;
+    readonly exitCode: number | null;
+    readonly timedOut: boolean;
+    readonly processClosed: boolean;
+    readonly streamsDrained: boolean;
+    readonly cleanupComplete: boolean;
+    readonly termSent: boolean;
+    readonly killSent: boolean;
+  };
+} {
+  if (
+    !isRecord(value) ||
+    !hasExactKeys(value, [
+      "schemaVersion",
+      "scenarioId",
+      "risk",
+      "namedSessionIdentity",
+      "providerSessionIdentity",
+      "command",
+    ]) ||
+    value.schemaVersion !== 1 ||
+    typeof value.scenarioId !== "string" ||
+    (value.risk !== "standard" && value.risk !== "high") ||
+    !isNullableNonEmptyString(value.namedSessionIdentity) ||
+    !isNullableNonEmptyString(value.providerSessionIdentity) ||
+    !isRecord(value.command) ||
+    !hasExactKeys(value.command, [
+      "commandType",
+      "exitCode",
+      "timedOut",
+      "processClosed",
+      "streamsDrained",
+      "cleanupComplete",
+      "termSent",
+      "killSent",
+    ]) ||
+    !isReviewerCommandType(value.command.commandType) ||
+    !isNullableSafeInteger(value.command.exitCode)
+  )
+    return false;
+  return [
+    value.command.timedOut,
+    value.command.processClosed,
+    value.command.streamsDrained,
+    value.command.cleanupComplete,
+    value.command.termSent,
+    value.command.killSent,
+  ].every((field) => typeof field === "boolean");
+}
+
+function matchesReviewerCommandTopology(props: {
+  readonly risk: "standard" | "high";
+  readonly state: "completed" | "failed";
+  readonly commands: readonly { readonly commandType: string; readonly successful: boolean }[];
+}): boolean {
+  const commandTypes = props.commands.map((command) => command.commandType);
+  if (props.risk === "standard") {
+    return commandTypes.length === 1 && commandTypes[0] === "reviewer_prompt";
+  }
+  const expected = [
+    "reviewer_session_create",
+    "reviewer_effort_config",
+    "reviewer_prompt",
+    "reviewer_close",
+  ];
+  if (props.state === "completed") {
+    return JSON.stringify(commandTypes) === JSON.stringify(expected);
+  }
+  return [
+    ["reviewer_session_create"],
+    ["reviewer_session_create", "reviewer_effort_config", "reviewer_close"],
+    expected,
+  ].some((topology) => JSON.stringify(commandTypes) === JSON.stringify(topology));
+}
+
+function isSuccessfulReviewerCommand(command: {
+  readonly exitCode: number | null;
+  readonly timedOut: boolean;
+  readonly processClosed: boolean;
+  readonly streamsDrained: boolean;
+  readonly cleanupComplete: boolean;
+}): boolean {
+  return (
+    command.exitCode === 0 &&
+    !command.timedOut &&
+    command.processClosed &&
+    command.streamsDrained &&
+    command.cleanupComplete
+  );
+}
+
+function isReviewerCommandType(value: unknown): value is string {
+  return [
+    "reviewer_session_create",
+    "reviewer_effort_config",
+    "reviewer_prompt",
+    "reviewer_close",
+  ].includes(String(value));
+}
+
+function isNullableReviewerCommandType(value: unknown): boolean {
+  return value === null || isReviewerCommandType(value);
+}
+
+function isNullableNonEmptyString(value: unknown): boolean {
+  return value === null || (typeof value === "string" && value.trim() !== "");
+}
+
+function isNullableSafeInteger(value: unknown): boolean {
+  return value === null || (typeof value === "number" && Number.isSafeInteger(value));
+}
+
+function hasExactKeys(value: Record<string, unknown>, expectedKeys: readonly string[]): boolean {
+  const actualKeys = Object.keys(value).sort((left, right) => left.localeCompare(right));
+  const expected = [...expectedKeys].sort((left, right) => left.localeCompare(right));
+  return JSON.stringify(actualKeys) === JSON.stringify(expected);
 }
 
 async function readDurableExecutionReceipt(

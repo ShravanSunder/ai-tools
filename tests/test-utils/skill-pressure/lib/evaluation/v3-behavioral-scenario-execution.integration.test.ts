@@ -12,6 +12,10 @@ import type { NormalizedRepetitionEvidence } from "../evidence/repetition-eviden
 import type { AttemptDurableFacts } from "../reporting/attempt-receipt.js";
 import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
 import type { StructuredSemanticReviewPacket } from "../review/semantic-review-contract.js";
+import type {
+  ReviewerCommandReceipt,
+  ReviewerLifecycleEvidence,
+} from "../review/structured-review-runner.js";
 import {
   createRunAcceptanceFixture,
   createClaimedRequirementValidationFixture,
@@ -106,6 +110,56 @@ const COMPLETE_DURABLE_FACTS: AttemptDurableFacts = {
   snapshotsCollected: true,
   cleanupFactsCollected: true,
 };
+
+function successfulReviewerCommand(commandType: ReviewerCommandReceipt["commandType"]): ReviewerCommandReceipt {
+  return {
+    commandType,
+    exitCode: 0,
+    timedOut: false,
+    processClosed: true,
+    streamsDrained: true,
+    cleanupComplete: true,
+    termSent: false,
+    killSent: false,
+  };
+}
+
+function completedReviewerLifecycle(risk: "standard" | "high"): ReviewerLifecycleEvidence {
+  const commandTypes =
+    risk === "high"
+      ? ([
+          "reviewer_session_create",
+          "reviewer_effort_config",
+          "reviewer_prompt",
+          "reviewer_close",
+        ] as const)
+      : (["reviewer_prompt"] as const);
+  return {
+    risk,
+    state: "completed",
+    lifecycleComplete: true,
+    failureCommandType: null,
+    namedSessionIdentity: risk === "high" ? "pressure-review-fixture" : null,
+    providerSessionIdentity: risk === "high" ? "claude-session-fixture" : "codex-session-fixture",
+    commandReceipts: commandTypes.map(successfulReviewerCommand),
+  };
+}
+
+function failedReviewerLifecycle(
+  risk: "standard" | "high",
+  failureCommandType: ReviewerCommandReceipt["commandType"],
+): ReviewerLifecycleEvidence {
+  const completed = completedReviewerLifecycle(risk);
+  return {
+    ...completed,
+    state: "failed",
+    lifecycleComplete: false,
+    failureCommandType,
+    commandReceipts: completed.commandReceipts.map((command) =>
+      command.commandType === failureCommandType ? { ...command, exitCode: 1 } : command,
+    ),
+  };
+}
 
 function evidence(props: {
   readonly repetitionId: string;
@@ -241,6 +295,7 @@ async function runIntegratedFixture(props: {
   readonly claimedRequirementStatus?: "traced" | "not_evaluated";
   readonly calibrationSourceDigestOverride?: AuthorityDigest;
   readonly semanticAnchorEndOffset?: number;
+  readonly reviewerLifecycle?: ReviewerLifecycleEvidence;
 }) {
   const contract = v3Contract(props.comparisonIntent, props.risk);
   const outputDirectory = await mkdtemp(path.join(tmpdir(), "v3-runner-integration-"));
@@ -410,6 +465,7 @@ async function runIntegratedFixture(props: {
         props.semanticAnchorEndOffset,
       ),
       runtimeProfile: props.reviewerProfile ?? VERIFIED_LUNA_PROFILE,
+      lifecycle: props.reviewerLifecycle ?? completedReviewerLifecycle(props.risk ?? "standard"),
     }),
   });
   return { result: await execution, subjectRequest };
@@ -442,6 +498,9 @@ describe("reachable v3 behavioral scenario execution", () => {
       ).toBe(true);
       expect(result.receipt.runtimeProfiles.subjects).toHaveLength(10);
       expect(result.receipt.runtimeProfiles.reviewer.verification.status).toBe("verified");
+      expect(result.receipt.reviewerLifecycle.lifecycleComplete).toBe(true);
+      expect(result.receipt.reviewerLifecycle.commandReceipts).toHaveLength(1);
+      expect(result.receipt.reviewerLifecycle.commandReceipts[0]?.receiptDigest).toMatch(/^sha256:/u);
       expect(result.receiptPath).toMatch(/scenario-receipt\.json$/u);
       expect(subjectRequest).not.toBeNull();
       const serializedSubjectRequest = JSON.stringify(subjectRequest);
@@ -645,6 +704,39 @@ describe("reachable v3 behavioral scenario execution", () => {
       reasonCode: null,
     });
   });
+
+  it.each([
+    ["standard", "reviewer_prompt"],
+    ["high", "reviewer_close"],
+  ] as const)(
+    "reduces a failed %s %s lifecycle to durable incomplete cleanup",
+    async (risk, failureCommandType) => {
+      const { result } = await runIntegratedFixture({
+        comparisonIntent: "improvement",
+        risk,
+        reviewerProfile: risk === "high" ? VERIFIED_OPUS_PROFILE : VERIFIED_LUNA_PROFILE,
+        reviewerLifecycle: failedReviewerLifecycle(risk, failureCommandType),
+      });
+
+      expect(result.receipt.reduction).toMatchObject({
+        outcome: "infrastructure_error",
+        reasonCode: "incomplete_cleanup",
+      });
+      expect(result.receipt.reviewerLifecycle).toMatchObject({
+        state: "failed",
+        lifecycleComplete: false,
+        failureCommandType,
+      });
+      expect(result.receipt.reviewerLifecycle.commandReceipts).toHaveLength(
+        risk === "high" ? 4 : 1,
+      );
+      expect(
+        result.receipt.reviewerLifecycle.commandReceipts.every(({ receiptDigest }) =>
+          receiptDigest.startsWith("sha256:"),
+        ),
+      ).toBe(true);
+    },
+  );
 
   it("refuses to persist an attempt whose durability facts were not observed", async () => {
     await expect(
