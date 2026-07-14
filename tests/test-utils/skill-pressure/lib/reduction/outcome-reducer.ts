@@ -74,25 +74,6 @@ export function reduceScenarioOutcome(
   return reduction("pass", null, ["previous-revision control and treatment both passed"]);
 }
 
-export function reduceObjectiveEvidenceOutcome(props: Omit<ReduceScenarioOutcomeProps, "comparisonIntent">): ScenarioOutcomeReduction {
-  const infrastructureReasons = [...props.baseline, ...props.treatment]
-    .flatMap((repetition) => repetition.infrastructureError === undefined ? [] : [repetition.infrastructureError]);
-  if (infrastructureReasons.length > 0) {
-    return reduction("infrastructure_error", "infrastructure_error", infrastructureReasons);
-  }
-  if (props.baseline.length !== props.expectedRepetitions || props.treatment.length !== props.expectedRepetitions) {
-    return reduction("not_evaluated", "repetition_count_mismatch", ["repetition count does not match the scenario contract"]);
-  }
-  const outcomes = [...props.baseline, ...props.treatment].map((repetition) => repetition.outcome);
-  if (outcomes.includes("not_evaluated")) {
-    return reduction("not_evaluated", "missing_evidence", ["at least one repetition lacks required objective evidence"]);
-  }
-  if (outcomes.includes("behavior_fail")) {
-    return reduction("behavior_fail", "treatment_behavior_failed", ["at least one repetition has an objective behavior failure"]);
-  }
-  return reduction("pass", null, ["all available objective evidence passed"]);
-}
-
 function reduction(
   outcome: ScenarioOutcome,
   reasonCode: ScenarioOutcomeReasonCode | null,

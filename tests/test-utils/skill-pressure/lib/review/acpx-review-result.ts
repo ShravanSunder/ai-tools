@@ -1,6 +1,6 @@
 import type { AcpxTranscriptFacts } from "../collector/acpx-transcript-collector.js";
-import type { ScenarioOutcome } from "../reduction/outcome-reducer.js";
-import type { ReviewCandidateResult } from "./review-packet.js";
+import type { RepetitionOutcome } from "../reduction/outcome-reducer.js";
+import type { ReviewCandidateResult, ReviewRepetitionCandidate } from "./review-packet.js";
 
 export interface AcpxStructuredReviewResult {
   readonly structuredOutput: Readonly<Record<string, unknown>> | null;
@@ -46,8 +46,8 @@ export function parseReviewCandidateResult(
   structuredOutput: Readonly<Record<string, unknown>> | null,
 ): ParsedReviewCandidateResult {
   if (structuredOutput === null) return { result: null, parseError: "review response has no structured object" };
-  const outcome = structuredOutput.outcome;
-  if (!isScenarioOutcome(outcome)) return { result: null, parseError: "review outcome is invalid" };
+  const repetitions = parseRepetitions(structuredOutput.repetitions);
+  if (repetitions === null) return { result: null, parseError: "review repetitions are invalid" };
   const rationalization = nullableString(structuredOutput.rationalization);
   const behaviorRisk = nullableString(structuredOutput.behaviorRisk);
   const smallestWordingChange = nullableString(structuredOutput.smallestWordingChange);
@@ -61,17 +61,44 @@ export function parseReviewCandidateResult(
     return { result: null, parseError: "review rationale fields must be strings or null" };
   }
   return {
-    result: { outcome, rationalization, behaviorRisk, smallestWordingChange, retestTarget },
+    result: { repetitions, rationalization, behaviorRisk, smallestWordingChange, retestTarget },
     parseError: null,
   };
 }
 
-function isScenarioOutcome(value: unknown): value is ScenarioOutcome {
-  return value === "pass" ||
-    value === "behavior_fail" ||
-    value === "inconclusive" ||
-    value === "infrastructure_error" ||
-    value === "not_evaluated";
+function parseRepetitions(value: unknown): readonly ReviewRepetitionCandidate[] | null {
+  if (!Array.isArray(value) || value.length === 0) return null;
+  const repetitions: ReviewRepetitionCandidate[] = [];
+  for (const item of value) {
+    if (typeof item !== "object" || item === null || Array.isArray(item)) return null;
+    const candidate = item as Readonly<Record<string, unknown>>;
+    if (
+      typeof candidate.repetitionId !== "string" || candidate.repetitionId === "" ||
+      (candidate.variant !== "baseline" && candidate.variant !== "treatment") ||
+      !isRepetitionOutcome(candidate.outcome) ||
+      !isEvidenceClass(candidate.evidenceClass)
+    ) return null;
+    repetitions.push({
+      repetitionId: candidate.repetitionId,
+      variant: candidate.variant,
+      outcome: candidate.outcome,
+      evidenceClass: candidate.evidenceClass,
+    });
+  }
+  return repetitions;
+}
+
+function isRepetitionOutcome(value: unknown): value is RepetitionOutcome {
+  return value === "pass" || value === "behavior_fail" || value === "not_evaluated";
+}
+
+function isEvidenceClass(
+  value: unknown,
+): value is ReviewRepetitionCandidate["evidenceClass"] {
+  return value === null ||
+    value === "demonstrated_failure" ||
+    value === "classified_proof_gap" ||
+    value === "passing_control";
 }
 
 function nullableString(value: unknown): string | null | undefined {

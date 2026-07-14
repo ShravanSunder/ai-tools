@@ -55,11 +55,12 @@ const scenarioShape = {
     z.object({
       check_id: identifierSchema,
       fact: deterministicFactSchema,
-      operator: z.enum(["equals", "contains", "matches", "not_matches", "exists", "absent"]),
+        operator: z.enum(["equals", "contains", "excludes", "matches", "not_matches", "exists", "absent"]),
       expected: z.unknown().optional(),
     }).strict().superRefine((check, context) => {
       const requiresExpected = check.operator === "equals" ||
-        check.operator === "contains" ||
+          check.operator === "contains" ||
+          check.operator === "excludes" ||
         check.operator === "matches" ||
         check.operator === "not_matches";
       if (requiresExpected && check.expected === undefined) {
@@ -100,6 +101,56 @@ export const scenarioInputSchema = z
         message: "duplicate check_id",
       });
     }
+    const artifactIds = scenario.expected_artifacts.map((artifact) => artifact.artifact_id);
+    const artifactPaths = scenario.expected_artifacts.map((artifact) => artifact.path);
+    if (new Set(artifactIds).size !== artifactIds.length) {
+      context.addIssue({ code: "custom", path: ["expected_artifacts"], message: "duplicate artifact_id" });
+    }
+    if (new Set(artifactPaths).size !== artifactPaths.length) {
+      context.addIssue({ code: "custom", path: ["expected_artifacts"], message: "duplicate artifact path" });
+    }
+    const declaredArtifactPaths = new Set(artifactPaths);
+    scenario.deterministic_checks.forEach((check, index) => {
+      if (
+        check.fact.startsWith("path:") &&
+        declaredArtifactPaths.has(check.fact.slice("path:".length)) &&
+        check.operator !== "exists" &&
+        check.operator !== "absent"
+      ) {
+        context.addIssue({
+          code: "custom",
+          path: ["deterministic_checks", index, "fact"],
+          message: "declared artifact content and kind checks must use artifact_id",
+        });
+      }
+      if (
+        (check.operator === "matches" || check.operator === "not_matches") &&
+        (typeof check.expected !== "string" || !isBoundedSafePattern(check.expected))
+      ) {
+        context.addIssue({
+          code: "custom",
+          path: ["deterministic_checks", index, "expected"],
+          message: "pattern must be valid, bounded, and free of unbounded quantifiers",
+        });
+      }
+    });
   });
+
+function isBoundedSafePattern(pattern: string): boolean {
+  if (pattern.length === 0 || pattern.length > 512) return false;
+  if (/(^|[^\\])[+*]/u.test(pattern) || /\\[1-9]/u.test(pattern) || /\(\?<([=!])/u.test(pattern)) return false;
+  for (const match of pattern.matchAll(/\{(\d+)(?:,(\d*))?\}/gu)) {
+    const upperBound = match[2] === undefined ? Number(match[1]) : Number(match[2]);
+    if (!Number.isFinite(upperBound) || upperBound > 1_000) return false;
+  }
+  try {
+    const inlineFlags = /^\(\?([is]+)\)/u.exec(pattern);
+    const flags = new Set(["u", ...(inlineFlags?.[1] ?? "")]);
+    new RegExp(inlineFlags === null ? pattern : pattern.slice(inlineFlags[0].length), [...flags].join(""));
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export { hasUniqueCheckIds };

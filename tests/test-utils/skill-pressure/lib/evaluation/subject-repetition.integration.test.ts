@@ -143,7 +143,7 @@ describe("ACPX subject repetition", () => {
       "ACPX exited 3",
       "ACPX timed out",
       "process cleanup is incomplete",
-      "resolved reasoning effort differs from request",
+      "runtime profile is unverified: provider-reported reasoning effort does not match the accepted profile",
     ]));
     expect(receipt.process.supervisorReceipt).toMatchObject({
       outcome: "timed_out",

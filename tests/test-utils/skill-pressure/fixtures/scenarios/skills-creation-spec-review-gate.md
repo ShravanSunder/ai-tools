@@ -25,19 +25,7 @@ risk: standard
 fixture_requirements: []
 allowed_tools: []
 allowed_write_paths: []
-deterministic_checks:
-  - check_id: names-red-before-edit
-    fact: visible_response
-    operator: matches
-    expected: "(?i)red.{0,100}(before|first)|before.{0,100}edit"
-  - check_id: names-spec-review
-    fact: visible_response
-    operator: matches
-    expected: "(?i)skill-spec-review|spec review"
-  - check_id: names-independent-perspective
-    fact: visible_response
-    operator: matches
-    expected: "(?i)fresh-perspective|local (perspective|lane)"
+deterministic_checks: []
 expected_artifacts: []
 ---
 

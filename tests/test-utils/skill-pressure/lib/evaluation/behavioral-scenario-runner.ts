@@ -8,10 +8,11 @@ import {
   evaluateDeterministicChecks,
   reduceDeterministicCheckResults,
 } from "../evidence/repetition-evidence.js";
-import type { ScenarioOutcomeReduction } from "../reduction/outcome-reducer.js";
-import { reduceObjectiveEvidenceOutcome } from "../reduction/outcome-reducer.js";
+import type { ComparisonIntent } from "../contracts/contract-types.js";
+import type { ReductionRepetition, ScenarioOutcomeReduction } from "../reduction/outcome-reducer.js";
+import { reduceScenarioOutcome } from "../reduction/outcome-reducer.js";
 import { executeAutomatedBlindReview, type AutomatedBlindReviewReceipt } from "../review/acpx-blind-review-runner.js";
-import { applyDeterministicReviewPrecedence, type ReviewDeterministicState } from "../review/review-packet.js";
+import { applyDeterministicReviewPrecedence, type ReviewRepetitionCandidate } from "../review/review-packet.js";
 import {
   collectSensitiveEnvironmentValues,
   resolveAcpxLauncher,
@@ -21,6 +22,7 @@ import {
 import { discoverAmbientSkillPaths } from "../runtime/ambient-skill-discovery.js";
 import {
   runScenarioRepetitions,
+  selectBaselineSkillSource,
   type ScenarioRepetitionSetReceipt,
 } from "./repetition-coordinator.js";
 
@@ -38,6 +40,7 @@ export interface DeterministicRepetitionEvaluation {
   readonly checkResults: readonly DeterministicCheckResult[];
   readonly outcome: "pass" | "behavior_fail" | "not_evaluated";
   readonly infrastructureError?: string;
+  readonly infrastructureReasonCode?: "runtime_profile_unverified";
 }
 
 export interface BehavioralScenarioReceipt {
@@ -54,7 +57,6 @@ export interface BehavioralScenarioReceipt {
   readonly deterministicEvaluation: {
     readonly baseline: readonly DeterministicRepetitionEvaluation[];
     readonly treatment: readonly DeterministicRepetitionEvaluation[];
-    readonly reduction: ScenarioOutcomeReduction;
   };
   readonly automatedReview: AutomatedBlindReviewReceipt;
   readonly reduction: ScenarioOutcomeReduction;
@@ -71,9 +73,8 @@ export async function executeBehavioralScenario(
 ): Promise<ExecutedBehavioralScenario> {
   validateProps(props);
   const scenario = await loadScenarioContract({ scenarioPath: path.resolve(props.scenarioPath) });
-  if (scenario.baseline !== "no_skill") {
-    throw new Error("the focused behavioral runner currently requires a no_skill baseline");
-  }
+  const repositoryRoot = path.resolve(props.skillDirectory, "../../../..");
+  const skillRelativePath = path.relative(repositoryRoot, path.resolve(props.skillDirectory)).split(path.sep).join("/");
   const outputDirectory = path.resolve(props.outputDirectory);
   await mkdir(outputDirectory, { recursive: true });
   const launcher = await resolveAcpxLauncher();
@@ -89,7 +90,12 @@ export async function executeBehavioralScenario(
   const result = await runScenarioRepetitions({
     repetitions: scenario.repetitions,
     infrastructureRetries: props.infrastructureRetries,
-    baselineSource: { mode: "none" },
+    baselineSource: selectBaselineSkillSource({
+      baseline: scenario.baseline,
+      baselineRevision: scenario.baselineRevision,
+      repositoryRoot,
+      skillRelativePath,
+    }),
     treatmentSource: { mode: "current", directory: path.resolve(props.skillDirectory) },
     repetitionProps: {
       runRoot: path.join(outputDirectory, "repositories"),
@@ -111,11 +117,6 @@ export async function executeBehavioralScenario(
   });
   const deterministicBaseline = result.baseline.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
   const deterministicTreatment = result.treatment.map((receipt) => evaluateReceipt(receipt, scenario.deterministicChecks));
-  const deterministicReduction = reduceObjectiveEvidenceOutcome({
-    expectedRepetitions: scenario.repetitions,
-    baseline: deterministicBaseline,
-    treatment: deterministicTreatment,
-  });
   const automatedReview = await executeAutomatedBlindReview({
     reviewRoot: path.join(outputDirectory, "blind-review-workspaces"),
     scenario: { scenarioId: scenario.scenarioId, hiddenRubric: scenario.hiddenRubric, risk: scenario.risk },
@@ -135,7 +136,13 @@ export async function executeBehavioralScenario(
       .filter((sessionId): sessionId is string => sessionId !== null),
     redactionSecrets: collectSensitiveEnvironmentValues(),
   });
-  const reduction = reduceWithBlindReview(deterministicReduction, automatedReview);
+  const reduction = reduceWithBlindReview({
+    comparisonIntent: scenario.comparisonIntent,
+    expectedRepetitions: scenario.repetitions,
+    baseline: deterministicBaseline,
+    treatment: deterministicTreatment,
+    automatedReview,
+  });
   const receipt: BehavioralScenarioReceipt = {
     schemaVersion: 2,
     scenario: {
@@ -150,7 +157,6 @@ export async function executeBehavioralScenario(
     deterministicEvaluation: {
       baseline: deterministicBaseline,
       treatment: deterministicTreatment,
-      reduction: deterministicReduction,
     },
     automatedReview,
     reduction,
@@ -202,46 +208,73 @@ function createRuntimeFingerprint(result: ScenarioRepetitionSetReceipt) {
   };
 }
 
-export function reduceWithBlindReview(
-  deterministicReduction: ScenarioOutcomeReduction,
-  automatedReview: Pick<AutomatedBlindReviewReceipt, "outcome" | "infrastructureReasons" | "parseError">,
-): ScenarioOutcomeReduction {
-  if (deterministicReduction.outcome === "inconclusive") {
+export function reduceWithBlindReview(props: {
+  readonly comparisonIntent: ComparisonIntent;
+  readonly expectedRepetitions: number;
+  readonly baseline: readonly DeterministicRepetitionEvaluation[];
+  readonly treatment: readonly DeterministicRepetitionEvaluation[];
+  readonly automatedReview: Pick<
+    AutomatedBlindReviewReceipt,
+    "outcome" | "reviewReceipt" | "infrastructureReasons" | "parseError" | "runtime"
+  >;
+}): ScenarioOutcomeReduction {
+  if (props.automatedReview.outcome === "infrastructure_error") {
+    const runtimeProfileUnverified = props.automatedReview.runtime.profile.verification.status !== "verified";
     return {
-      outcome: "inconclusive",
-      reasons: [...deterministicReduction.reasons, "blind review cannot resolve mixed deterministic repetitions"],
+      outcome: "infrastructure_error",
+      reasonCode: runtimeProfileUnverified ? "runtime_profile_unverified" : "infrastructure_error",
+      reasons: props.automatedReview.infrastructureReasons,
     };
   }
-  const outcome = applyDeterministicReviewPrecedence({
-    semanticOutcome: automatedReview.outcome,
-    deterministicState: deterministicStateForOutcome(deterministicReduction.outcome),
+  if (props.automatedReview.outcome === "not_evaluated" || props.automatedReview.reviewReceipt === null) {
+    return {
+      outcome: "not_evaluated",
+      reasonCode: "missing_evidence",
+      reasons: [props.automatedReview.parseError ?? "blind review receipt is incomplete"],
+    };
+  }
+  const semanticByRepetition = new Map(
+    props.automatedReview.reviewReceipt.result.repetitions.map((repetition) => [repetition.repetitionId, repetition]),
+  );
+  return reduceScenarioOutcome({
+    comparisonIntent: props.comparisonIntent,
+    expectedRepetitions: props.expectedRepetitions,
+    baseline: combineReviewEvidence(props.baseline, semanticByRepetition),
+    treatment: combineReviewEvidence(props.treatment, semanticByRepetition),
   });
-  return {
-    outcome,
-    reasons: [
-      ...deterministicReduction.reasons,
-      automatedReview.outcome === "infrastructure_error"
-        ? `blind review infrastructure error: ${automatedReview.infrastructureReasons.join("; ")}`
-        : automatedReview.outcome === "not_evaluated"
-          ? `blind review was not evaluated: ${automatedReview.parseError ?? "review receipt is incomplete"}`
-          : `blind review candidate outcome: ${automatedReview.outcome}`,
-    ],
-  };
 }
 
-function deterministicStateForOutcome(outcome: ScenarioOutcomeReduction["outcome"]): ReviewDeterministicState {
-  switch (outcome) {
-    case "infrastructure_error":
-      return "infrastructure_error";
-    case "not_evaluated":
-      return "missing_evidence";
-    case "behavior_fail":
-      return "objective_behavior_failure";
-    case "pass":
-      return "pass";
-    case "inconclusive":
-      throw new Error("inconclusive deterministic reduction must be handled before review precedence");
-  }
+function combineReviewEvidence(
+  deterministic: readonly DeterministicRepetitionEvaluation[],
+  semanticByRepetition: ReadonlyMap<string, ReviewRepetitionCandidate>,
+): readonly ReductionRepetition[] {
+  return deterministic.map((evaluation) => {
+    const semantic = semanticByRepetition.get(evaluation.repetitionId);
+    if (semantic === undefined) {
+      return { repetitionId: evaluation.repetitionId, outcome: "not_evaluated" };
+    }
+    const outcome = applyDeterministicReviewPrecedence({
+      semanticOutcome: semantic.outcome,
+      deterministicState: evaluation.infrastructureError !== undefined
+        ? "infrastructure_error"
+        : evaluation.outcome === "not_evaluated"
+          ? "missing_evidence"
+          : evaluation.outcome === "behavior_fail"
+            ? "objective_behavior_failure"
+            : "pass",
+    });
+    if (outcome === "inconclusive" || outcome === "infrastructure_error") {
+      throw new Error(`unexpected repetition review outcome: ${outcome}`);
+    }
+    return {
+      repetitionId: evaluation.repetitionId,
+      outcome,
+      ...(evaluation.infrastructureError === undefined ? {} : { infrastructureError: evaluation.infrastructureError }),
+      ...(evaluation.infrastructureReasonCode === undefined
+        ? {}
+        : { infrastructureReasonCode: evaluation.infrastructureReasonCode }),
+    };
+  });
 }
 
 function evaluateReceipt(
@@ -254,7 +287,12 @@ function evaluateReceipt(
     checkResults,
     outcome: reduceDeterministicCheckResults(checkResults),
     ...(receipt.status === "infrastructure_error"
-      ? { infrastructureError: receipt.infrastructureReasons.join("; ") }
+      ? {
+          infrastructureError: receipt.infrastructureReasons.join("; "),
+          ...(receipt.runtimeProfile?.verification.reasonCode === "runtime_profile_unverified"
+            ? { infrastructureReasonCode: "runtime_profile_unverified" as const }
+            : {}),
+        }
       : {}),
   };
 }

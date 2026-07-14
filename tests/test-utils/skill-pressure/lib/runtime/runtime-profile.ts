@@ -39,9 +39,9 @@ export const ACPX_LUNA_XHIGH_SUBJECT_PROFILE = {
 
 export const ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE = {
   provider: "claude",
-  requestedModel: "claude-opus-4-1",
+  requestedModel: "opus",
   requestedReasoningEffort: "xhigh",
-  acceptedProviderReportedModel: "claude-opus-4-1",
+  acceptedProviderReportedModel: "claude-opus-4-7",
   acceptedProviderReportedReasoningEffort: "xhigh",
 } as const satisfies RuntimeProfile;
 

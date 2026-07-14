@@ -23,13 +23,19 @@ async function loadScenarioJsonSchema(): Promise<AnySchema> {
 
 function validScenarioContract(): Record<string, unknown> {
   return {
-    schema_version: 1,
+    schema_version: 2,
     scenario_id: "json-schema-contract",
-    invocation_mode: "explicit",
-    execution_mode: "workspace",
-    scenario_risk: "standard",
-    operator_prompt: "Create the requested report.",
-    fixture: null,
+    owner_plugin: "workflow",
+    owner_skill: "skill",
+    skill_type: "discipline",
+    prompt: "Create the requested report.",
+    hidden_rubric: "The report must exist.",
+    baseline: "no_skill",
+    comparison_intent: "improvement",
+    repetitions: 5,
+    risk: "standard",
+    fixture_requirements: [],
+    allowed_tools: [],
     allowed_write_paths: ["reports/result.md"],
     expected_artifacts: [
       {
@@ -39,44 +45,24 @@ function validScenarioContract(): Record<string, unknown> {
         content_contract: "markdown report",
       },
     ],
-    deterministic_criteria: [
+    deterministic_checks: [
       {
-        criterion_id: "report-created",
-        fact_kind: "artifact",
+        check_id: "report-created",
+        fact: "artifact:result",
         operator: "exists",
-        expected: true,
       },
     ],
-    semantic_criteria: [],
-    baseline_policy: {
-      target_criteria: [
-        {
-          criterion_id: "report-created",
-          expected_baseline_verdict: "fail",
-          expected_failure_reason: "The baseline does not create the report.",
-        },
-      ],
-      minimum_paired_trials: 2,
-    },
   };
 }
 
 describe("skill pressure scenario JSON schema", () => {
-  it("rejects malformed baseline target rows", async () => {
+  it("rejects an unpinned previous-revision baseline", async () => {
     const validator = createContractJsonSchemaValidator().compile(
       await loadScenarioJsonSchema(),
     );
     const malformedScenario = validScenarioContract();
-    malformedScenario.baseline_policy = {
-      target_criteria: [
-        {
-          criterion_id: "report-created",
-          expected_baseline_verdict: "pass",
-          unexpected: true,
-        },
-      ],
-      minimum_paired_trials: 2,
-    };
+    malformedScenario.baseline = "previous_revision";
+    malformedScenario.comparison_intent = "non_regression";
 
     expect(validator(malformedScenario)).toBe(false);
   });

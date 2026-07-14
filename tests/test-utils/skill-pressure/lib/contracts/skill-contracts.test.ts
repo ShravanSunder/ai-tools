@@ -198,4 +198,37 @@ describe("skill pressure scenario contract", () => {
 
     await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/deterministic_checks/);
   });
+
+  it("rejects direct-path content checks for declared artifact paths", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    const source = scenarioContract({ scenarioId: "duplicate-owner", plugin: "workflow", skill: "skill" })
+      .replace("deterministic_checks: []", `deterministic_checks:
+  - check_id: wrong-owner
+    fact: path:reports/result.md
+    operator: contains
+    expected: required text`)
+      .replace("expected_artifacts: []", `expected_artifacts:
+  - artifact_id: result
+    path: reports/result.md
+    file_type: file
+    content_contract: report`);
+    await writeFile(scenarioPath, source);
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/artifact_id/);
+  });
+
+  it("rejects invalid or unbounded content patterns during loading", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    const source = scenarioContract({ scenarioId: "unsafe-pattern", plugin: "workflow", skill: "skill" })
+      .replace("deterministic_checks: []", `deterministic_checks:
+  - check_id: unsafe
+    fact: tool_observations
+    operator: matches
+    expected: (a+)+$`);
+    await writeFile(scenarioPath, source);
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/bounded/);
+  });
 });

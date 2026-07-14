@@ -15,7 +15,10 @@ function reviewExecution(props: {
   readonly usage?: boolean;
 }): AcpxProcessExecution {
   const response = props.response ?? JSON.stringify({
-    outcome: "pass",
+    repetitions: [
+      { repetitionId: "red-1", variant: "baseline", outcome: "behavior_fail", evidenceClass: "demonstrated_failure" },
+      { repetitionId: "green-1", variant: "treatment", outcome: "pass", evidenceClass: null },
+    ],
     rationalization: null,
     behaviorRisk: null,
     smallestWordingChange: null,
@@ -56,6 +59,21 @@ function reviewExecution(props: {
 }
 
 async function props(risk: "standard" | "high"): Promise<ExecuteBlindReviewProps> {
+  const evidence = (repetitionId: string, variant: "baseline" | "treatment") => ({
+    repetitionId,
+    variant,
+    visibleResponse: `${variant} response`,
+    toolObservations: [],
+    usageObservations: [],
+    process: { outcome: "executed" as const, exitCode: 0, timedOut: false, cleanupComplete: true, infrastructureReasons: [] },
+    repositoryFacts: {
+      files: [],
+      changes: { files: [], pathChanges: [], deletedPaths: [], omissions: [] },
+      artifacts: [],
+      omissions: [],
+    },
+    rationalizationExcerpts: [],
+  });
   return {
     reviewRoot: await mkdtemp(path.join(tmpdir(), "skill-pressure-review-")),
     scenario: {
@@ -68,9 +86,14 @@ async function props(risk: "standard" | "high"): Promise<ExecuteBlindReviewProps
       variant: "baseline",
       outcome: "behavior_fail",
       results: [{ checkId: "proof", outcome: "behavior_fail", reason: "proof was skipped" }],
+    }, {
+      repetitionId: "green-1",
+      variant: "treatment",
+      outcome: "pass",
+      results: [],
     }],
-    baselineEvidence: [],
-    treatmentEvidence: [],
+    baselineEvidence: [evidence("red-1", "baseline")],
+    treatmentEvidence: [evidence("green-1", "treatment")],
     sourceFingerprint: {
       pairSetFingerprint: "sha256:pair",
       baseline: { mode: "none", sourceDigest: null, sourceRevision: null },
@@ -128,23 +151,32 @@ describe("automated ACPX blind review", () => {
 
   it("routes high-risk review to one fresh exact Claude Opus/xhigh ACPX command", async () => {
     const input = await props("high");
+    const observedCommands: Array<{ readonly args: readonly string[]; readonly environment: Readonly<Record<string, string>> }> = [];
     const receipt = await executeAutomatedBlindReview({
       ...input,
       execute: async (command) => {
-        expect(command.args).toContain("claude-opus-4-1[xhigh]");
-        expect(command.args).toContain("claude");
-        expect(command.environment).toEqual({
-          ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1",
-          ANTHROPIC_CUSTOM_MODEL_OPTION: "claude-opus-4-1[xhigh]",
-          ANTHROPIC_MODEL: "claude-opus-4-1[xhigh]",
-        });
-        return reviewExecution({ model: "claude-opus-4-1", reasoningEffort: "xhigh", sessionId: "fresh-opus-session" });
+        observedCommands.push({ args: command.args, environment: command.environment });
+        expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" });
+        return reviewExecution({ model: "claude-opus-4-7", reasoningEffort: "xhigh", sessionId: "fresh-opus-session" });
       },
     });
 
+    expect(observedCommands).toHaveLength(4);
+    expect(observedCommands[0]?.args).toEqual(expect.arrayContaining(["--model", "opus", "sessions", "new"]));
+    expect(observedCommands[1]?.args).toEqual(expect.arrayContaining(["set", "effort", "xhigh"]));
+    expect(observedCommands[2]?.args).toEqual(expect.arrayContaining(["claude", "-s", expect.stringMatching(/^pressure-review-/u), "--file"]));
+    expect(observedCommands[3]?.args).toEqual(expect.arrayContaining(["sessions", "close"]));
     expect(receipt.outcome).toBe("pass");
-    expect(receipt.command).toMatchObject({ provider: "claude", model: "claude-opus-4-1", reasoningEffort: "xhigh", oneFreshExecution: true });
+    expect(receipt.command).toMatchObject({ provider: "claude", model: "opus", reasoningEffort: "xhigh", oneFreshExecution: true });
+    expect(receipt.reviewReceipt?.reviewer).toMatchObject({ model: "claude-opus-4-7", reasoningEffort: "xhigh" });
     expect(receipt.reviewReceipt?.route).toMatchObject({ kind: "blind", freshContext: true });
+    expect(receipt.runtime.sessionLifecycle).toMatchObject({
+      mode: "named_session",
+      create: "completed",
+      setEffort: "completed",
+      prompt: "completed",
+      close: "completed",
+    });
   });
 
   it("never passes malformed reviewer output or missing usage evidence", async () => {
@@ -156,9 +188,51 @@ describe("automated ACPX blind review", () => {
       ...(await props("standard")),
       execute: async () => reviewExecution({ model: "gpt-5.6-luna", reasoningEffort: "xhigh", usage: false }),
     });
+    const incompleteCoverage = await executeAutomatedBlindReview({
+      ...(await props("standard")),
+      execute: async () => reviewExecution({
+        model: "gpt-5.6-luna",
+        reasoningEffort: "xhigh",
+        response: JSON.stringify({
+          repetitions: [{
+            repetitionId: "red-1",
+            variant: "baseline",
+            outcome: "behavior_fail",
+            evidenceClass: "demonstrated_failure",
+          }],
+          rationalization: null,
+          behaviorRisk: null,
+          smallestWordingChange: null,
+          retestTarget: null,
+        }),
+      }),
+    });
 
     expect(malformed).toMatchObject({ outcome: "not_evaluated", reviewReceipt: null, parseError: "review response is not valid JSON" });
     expect(missingUsage).toMatchObject({ outcome: "infrastructure_error", reviewReceipt: null });
     expect(missingUsage.infrastructureReasons).toContain("ACPX review usage evidence is missing");
+    expect(incompleteCoverage).toMatchObject({
+      outcome: "not_evaluated",
+      reviewReceipt: null,
+      parseError: "review candidate must cover every selected repetition exactly once",
+    });
+  });
+
+  it("closes a high-risk named session when effort configuration fails", async () => {
+    const commands: string[][] = [];
+    let callIndex = 0;
+    const receipt = await executeAutomatedBlindReview({
+      ...(await props("high")),
+      execute: async (command) => {
+        commands.push([...command.args]);
+        callIndex += 1;
+        const execution = reviewExecution({ model: "claude-opus-4-7", reasoningEffort: "xhigh" });
+        return callIndex === 2 ? { ...execution, exitCode: 2 } : execution;
+      },
+    });
+
+    expect(receipt.outcome).toBe("infrastructure_error");
+    expect(commands).toHaveLength(3);
+    expect(commands[2]).toEqual(expect.arrayContaining(["sessions", "close"]));
   });
 });

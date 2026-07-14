@@ -4,6 +4,7 @@ import type { AcpxTranscriptFacts } from "../collector/acpx-transcript-collector
 import type { SubjectRepetitionReceipt } from "./subject-repetition.js";
 import {
   runScenarioRepetitions,
+  selectBaselineSkillSource,
   type RunScenarioRepetitionsProps,
 } from "./repetition-coordinator.js";
 
@@ -127,6 +128,26 @@ function props(
 }
 
 describe("scenario repetition coordinator", () => {
+  it("constructs a pinned previous-revision baseline source without a fallback", () => {
+    expect(selectBaselineSkillSource({
+      baseline: "previous_revision",
+      baselineRevision: "0123456789abcdef0123456789abcdef01234567",
+      repositoryRoot: "/tmp/source-repository",
+      skillRelativePath: "plugins/workflow/skills/changed-skill",
+    })).toEqual({
+      mode: "previous_revision",
+      repositoryRoot: "/tmp/source-repository",
+      revision: "0123456789abcdef0123456789abcdef01234567",
+      skillRelativePath: "plugins/workflow/skills/changed-skill",
+    });
+    expect(() => selectBaselineSkillSource({
+      baseline: "previous_revision",
+      baselineRevision: null,
+      repositoryRoot: "/tmp/source-repository",
+      skillRelativePath: "plugins/workflow/skills/changed-skill",
+    })).toThrow(/immutable 40-character Git revision/);
+  });
+
   it("requires at least five fresh baseline and treatment repetitions", async () => {
     await expect(runScenarioRepetitions(props(async () => receipt({ sequence: 1, variant: "baseline" }), 4)))
       .rejects.toThrow(/at least five/);

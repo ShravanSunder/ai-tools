@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import type { NormalizedRepetitionEvidence } from "../evidence/repetition-evidence.js";
-import type { ScenarioOutcome } from "../reduction/outcome-reducer.js";
 import {
   applyDeterministicReviewPrecedence,
   buildBlindReviewPacket,
@@ -68,9 +67,14 @@ function packetInput(): BlindReviewPacketInput {
   };
 }
 
-function candidateResult(outcome: ScenarioOutcome = "pass"): ReviewCandidateResult {
+function candidateResult(): ReviewCandidateResult {
   return {
-    outcome,
+    repetitions: [
+      { repetitionId: "red-1", variant: "baseline", outcome: "behavior_fail", evidenceClass: "demonstrated_failure" },
+      { repetitionId: "red-2", variant: "baseline", outcome: "behavior_fail", evidenceClass: "classified_proof_gap" },
+      { repetitionId: "green-1", variant: "treatment", outcome: "pass", evidenceClass: null },
+      { repetitionId: "green-2", variant: "treatment", outcome: "pass", evidenceClass: null },
+    ],
     rationalization: "The task looked obvious, so the baseline skipped the evidence check.",
     behaviorRisk: "Future changes could be treated as obvious and bypass proof.",
     smallestWordingChange: "Require evidence before acting under urgency.",
@@ -167,7 +171,7 @@ describe("review routing and receipts", () => {
       route: {
         kind: "blind",
         freshContext: true,
-        reviewer: { reviewerId: "opus-1", provider: "claude", model: "claude-opus-4-1", modelCategory: "balanced", reasoningEffort: "xhigh", runtime: "acpx" },
+        reviewer: { reviewerId: "opus-1", provider: "claude", model: "claude-opus-4-7", modelCategory: "balanced", reasoningEffort: "xhigh", runtime: "acpx" },
       },
       rubric: "Confirm every required proof gate before acting.",
       result: candidateResult(),
@@ -175,7 +179,7 @@ describe("review routing and receipts", () => {
 
     expect(receipt).toMatchObject({
       result: candidateResult(),
-      reviewer: { reviewerId: "opus-1", model: "claude-opus-4-1", reasoningEffort: "xhigh" },
+      reviewer: { reviewerId: "opus-1", model: "claude-opus-4-7", reasoningEffort: "xhigh" },
     });
     expect(receipt.rubricDigest).toMatch(/^sha256:/u);
     expect(receipt.resultDigest).toMatch(/^sha256:/u);

@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 
 import type { DeterministicCheckResult, NormalizedRepetitionEvidence } from "../evidence/repetition-evidence.js";
-import type { ScenarioOutcome } from "../reduction/outcome-reducer.js";
+import type { RepetitionOutcome, ScenarioOutcome } from "../reduction/outcome-reducer.js";
+import { ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE } from "../runtime/runtime-profile.js";
 
 export interface ReviewedTranscript {
   readonly variant: "baseline" | "treatment";
@@ -97,11 +98,18 @@ export interface ReviewRoutePolicyResult {
 }
 
 export interface ReviewCandidateResult {
-  readonly outcome: ScenarioOutcome;
+  readonly repetitions: readonly ReviewRepetitionCandidate[];
   readonly rationalization: string | null;
   readonly behaviorRisk: string | null;
   readonly smallestWordingChange: string | null;
   readonly retestTarget: string | null;
+}
+
+export interface ReviewRepetitionCandidate {
+  readonly repetitionId: string;
+  readonly variant: "baseline" | "treatment";
+  readonly outcome: RepetitionOutcome;
+  readonly evidenceClass: "demonstrated_failure" | "classified_proof_gap" | "passing_control" | null;
 }
 
 export interface ReviewReceipt {
@@ -164,7 +172,7 @@ export function validateReviewRoute(props: {
     props.route.kind === "blind" &&
     props.route.freshContext &&
     props.route.reviewer.provider === "claude" &&
-    props.route.reviewer.model === "claude-opus-4-1" &&
+    props.route.reviewer.model === ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE.acceptedProviderReportedModel &&
     props.route.reviewer.reasoningEffort === "xhigh" &&
     props.route.reviewer.runtime === "acpx"
   ) {
@@ -185,6 +193,26 @@ export function createReviewReceipt(props: CreateReviewReceiptProps): ReviewRece
     resultDigest: digest(props.result),
     reviewerDigest: digest(reviewer),
   };
+}
+
+export function assertReviewCandidateCoverage(props: {
+  readonly candidate: ReviewCandidateResult;
+  readonly baselineEvidence: readonly NormalizedRepetitionEvidence[];
+  readonly treatmentEvidence: readonly NormalizedRepetitionEvidence[];
+}): void {
+  const expected = [
+    ...props.baselineEvidence.map((evidence) => `baseline:${evidence.repetitionId}`),
+    ...props.treatmentEvidence.map((evidence) => `treatment:${evidence.repetitionId}`),
+  ].sort();
+  const actual = props.candidate.repetitions
+    .map((repetition) => `${repetition.variant}:${repetition.repetitionId}`)
+    .sort();
+  if (
+    expected.length !== actual.length ||
+    expected.some((identity, index) => identity !== actual[index])
+  ) {
+    throw new Error("review candidate must cover every selected repetition exactly once");
+  }
 }
 
 export function applyDeterministicReviewPrecedence(props: {

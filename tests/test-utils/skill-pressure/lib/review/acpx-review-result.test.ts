@@ -38,14 +38,24 @@ describe("ACPX structured review result", () => {
 
   it("parses the candidate outcome and rationalization fields without assigning final truth", () => {
     expect(parseReviewCandidateResult({
-      outcome: "behavior_fail",
+      repetitions: [{
+        repetitionId: "baseline-1",
+        variant: "baseline",
+        outcome: "behavior_fail",
+        evidenceClass: "demonstrated_failure",
+      }],
       rationalization: "The task looked obvious.",
       behaviorRisk: "The required check may be skipped.",
       smallestWordingChange: "Require evidence before acting.",
       retestTarget: "workflow/pressure-proof",
     })).toEqual({
       result: {
-        outcome: "behavior_fail",
+        repetitions: [{
+          repetitionId: "baseline-1",
+          variant: "baseline",
+          outcome: "behavior_fail",
+          evidenceClass: "demonstrated_failure",
+        }],
         rationalization: "The task looked obvious.",
         behaviorRisk: "The required check may be skipped.",
         smallestWordingChange: "Require evidence before acting.",
@@ -56,9 +66,9 @@ describe("ACPX structured review result", () => {
   });
 
   it("rejects candidate output missing a required rationale field", () => {
-    expect(parseReviewCandidateResult({ outcome: "pass" })).toMatchObject({
+    expect(parseReviewCandidateResult({ repetitions: [] })).toMatchObject({
       result: null,
-      parseError: "review rationale fields must be strings or null",
+      parseError: "review repetitions are invalid",
     });
   });
 });

@@ -14,57 +14,91 @@ export interface AcpxClaudeReviewProfile {
   readonly timeoutSeconds: number;
 }
 
-export function buildAcpxClaudeReviewCommand(
+export interface AcpxClaudeReviewSessionCommands {
+  readonly create: ExecutableAcpxCommand;
+  readonly setEffort: ExecutableAcpxCommand;
+  readonly prompt: ExecutableAcpxCommand;
+  readonly close: ExecutableAcpxCommand;
+}
+
+export function buildAcpxClaudeReviewSessionCommands(
   profile: AcpxClaudeReviewProfile,
-): ExecutableAcpxCommand {
-  validateProfile(profile);
-  return {
+  sessionName: string,
+): AcpxClaudeReviewSessionCommands {
+  validateProfile(profile, sessionName);
+  const boundaryArgs = [
+    ...profile.launcher.prefixArgs,
+    "--cwd",
+    profile.cwd,
+    "--mcp-config",
+    profile.mcpConfigPath,
+    "--deny-all",
+    "--non-interactive-permissions",
+    "fail",
+    "--no-terminal",
+    "--allowed-tools",
+    "",
+    "--max-turns",
+    "1",
+    "--timeout",
+    String(profile.timeoutSeconds),
+  ];
+  const environment = { ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" } as const;
+  const command = (args: readonly string[]): ExecutableAcpxCommand => ({
     executable: profile.launcher.executable,
     cwd: profile.cwd,
-    args: [
-      ...profile.launcher.prefixArgs,
-      "--cwd",
-      profile.cwd,
-      "--mcp-config",
-      profile.mcpConfigPath,
-      "--deny-all",
-      "--non-interactive-permissions",
-      "fail",
-      "--no-terminal",
-      "--allowed-tools",
-      "",
-      "--max-turns",
-      "1",
+    args,
+    environment,
+  });
+  return {
+    create: command([
+      ...boundaryArgs,
       "--model",
-      `${profile.model}[${profile.reasoningEffort}]`,
+      profile.model,
+      "claude",
+      "sessions",
+      "new",
+      "--name",
+      sessionName,
+    ]),
+    setEffort: command([
+      ...boundaryArgs,
+      "claude",
+      "set",
+      "effort",
+      profile.reasoningEffort,
+      "-s",
+      sessionName,
+    ]),
+    prompt: command([
+      ...boundaryArgs,
       "--format",
       "json",
       "--json-strict",
-      "--timeout",
-      String(profile.timeoutSeconds),
       "claude",
-      "exec",
+      "-s",
+      sessionName,
       "--file",
       profile.packetPath,
-    ],
-    environment: {
-      ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1",
-      ANTHROPIC_CUSTOM_MODEL_OPTION: `${profile.model}[${profile.reasoningEffort}]`,
-      ANTHROPIC_MODEL: `${profile.model}[${profile.reasoningEffort}]`,
-    },
+    ]),
+    close: command([
+      ...boundaryArgs,
+      "claude",
+      "sessions",
+      "close",
+      sessionName,
+    ]),
   };
 }
 
-function validateProfile(profile: AcpxClaudeReviewProfile): void {
+function validateProfile(profile: AcpxClaudeReviewProfile, sessionName: string): void {
   for (const [field, value] of [
     ["launcher.executable", profile.launcher.executable],
     ["cwd", profile.cwd],
     ["mcpConfigPath", profile.mcpConfigPath],
     ["packetPath", profile.packetPath],
   ] as const) {
-    if (!path.isAbsolute(value)) {
-      throw new Error(`${field} must be an absolute path`);
-    }
+    if (!path.isAbsolute(value)) throw new Error(`${field} must be an absolute path`);
   }
   const relativePacketPath = path.relative(profile.cwd, profile.packetPath);
   if (
@@ -72,12 +106,9 @@ function validateProfile(profile: AcpxClaudeReviewProfile): void {
     relativePacketPath === ".." ||
     relativePacketPath.startsWith(`..${path.sep}`) ||
     path.isAbsolute(relativePacketPath)
-  ) {
-    throw new Error("packetPath must be a file inside cwd");
-  }
-  if (profile.packetDigest.trim() === "") {
-    throw new Error("packetDigest must be non-empty");
-  }
+  ) throw new Error("packetPath must be a file inside cwd");
+  if (profile.packetDigest.trim() === "") throw new Error("packetDigest must be non-empty");
+  if (!/^[a-z0-9][a-z0-9-]{0,79}$/u.test(sessionName)) throw new Error("sessionName is invalid");
   if (!Number.isInteger(profile.timeoutSeconds) || profile.timeoutSeconds <= 0) {
     throw new Error("timeoutSeconds must be a positive integer");
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildAcpxClaudeReviewCommand, type AcpxClaudeReviewProfile } from "./acpx-review-profile.js";
+import { buildAcpxClaudeReviewSessionCommands, type AcpxClaudeReviewProfile } from "./acpx-review-profile.js";
 
 const profile = {
   launcher: { executable: "/opt/homebrew/bin/acpx", prefixArgs: [], source: "global" },
@@ -8,22 +8,24 @@ const profile = {
   mcpConfigPath: "/tmp/skill-pressure/review-1/mcp.json",
   packetPath: "/tmp/skill-pressure/review-1/packet.md",
   packetDigest: "sha256:packet",
-  model: "claude-opus-4-1",
+  model: "opus",
   reasoningEffort: "xhigh",
   timeoutSeconds: 120,
 } satisfies AcpxClaudeReviewProfile;
 
 describe("ACPX Claude review profile", () => {
   it("builds the isolated exact Opus/xhigh blind-review command", () => {
-    const command = buildAcpxClaudeReviewCommand(profile);
+    const commands = buildAcpxClaudeReviewSessionCommands(profile, "review-session");
 
-    expect(command.args).toContain("claude-opus-4-1[xhigh]");
-    expect(command.args).toContain("--deny-all");
-    expect(command.args).toContain("--no-terminal");
-    expect(command.environment).toEqual({
-      ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1",
-      ANTHROPIC_CUSTOM_MODEL_OPTION: "claude-opus-4-1[xhigh]",
-      ANTHROPIC_MODEL: "claude-opus-4-1[xhigh]",
-    });
+    expect(commands.create.args).toContain("opus");
+    expect(commands.create.args).toContain("review-session");
+    expect(commands.setEffort.args).toEqual(expect.arrayContaining(["set", "effort", "xhigh", "-s", "review-session"]));
+    expect(commands.prompt.args).toEqual(expect.arrayContaining(["claude", "-s", "review-session", "--file", profile.packetPath]));
+    expect(commands.close.args).toEqual(expect.arrayContaining(["sessions", "close", "review-session"]));
+    for (const command of Object.values(commands)) {
+      expect(command.args).toContain("--deny-all");
+      expect(command.args).toContain("--no-terminal");
+      expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" });
+    }
   });
 });

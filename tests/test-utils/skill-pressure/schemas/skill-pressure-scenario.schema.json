@@ -121,6 +121,7 @@
                 "enum": [
                   "equals",
                   "contains",
+                  "excludes",
                   "matches",
                   "not_matches",
                   "exists",
@@ -321,6 +322,7 @@
                 "enum": [
                   "equals",
                   "contains",
+                  "excludes",
                   "matches",
                   "not_matches",
                   "exists",

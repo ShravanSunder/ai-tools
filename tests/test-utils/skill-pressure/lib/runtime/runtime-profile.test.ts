@@ -26,8 +26,8 @@ describe("runtime-profile verification", () => {
   it("rejects null, downgraded, and unreported runtime fields", () => {
     for (const providerReported of [
       { model: null, reasoningEffort: null },
-      { model: "claude-opus-4-1", reasoningEffort: "high" },
-      { model: "claude-opus-4-1", reasoningEffort: null },
+      { model: "claude-opus-4-7", reasoningEffort: "high" },
+      { model: "claude-opus-4-7", reasoningEffort: null },
     ]) {
       expect(verifyRuntimeProfile({
         profile: ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
