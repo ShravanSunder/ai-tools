@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-report-text-contract
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Omits source coverage, trace status, bucket/route, false-positive, proof-gap,
     or lane receipt fields.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

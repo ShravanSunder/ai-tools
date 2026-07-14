@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: ops-security-review-official-scan
 owner_plugin: shravan-dev-workflow
 owner_skill: ops-security-review
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Fixes suspicious findings without validation.
   - Omits authorization or scope.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

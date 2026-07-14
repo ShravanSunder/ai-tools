@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-creation-swarm-no-session-dump-lanes
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Omits source/file inventory.
   - Omits the creation evidence schema.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

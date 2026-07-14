@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: manage-agents-queue-vs-steer
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
@@ -30,6 +30,7 @@ hidden_rubric: |-
   - Skips session status/history or ledger tracking.
   - Treats queue acknowledgement as job completion.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

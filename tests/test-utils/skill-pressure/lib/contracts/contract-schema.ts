@@ -14,6 +14,7 @@ const relativePathSchema = z
     /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.{1,2}(?:\/|$))(?!.*\/\/)(?!.*\/$).+$/u,
     "must be a non-traversing POSIX relative path",
   );
+const immutableRevisionSchema = z.string().regex(/^[a-f0-9]{40}$/u, "must be a full lowercase commit SHA");
 const deterministicFactSchema = z.union([
   z.literal("tool_observations"),
   z.templateLiteral(["path:", z.string().min(1)]),
@@ -36,50 +37,61 @@ function hasUniqueCheckIds(input: unknown): boolean {
   return new Set(ids).size === ids.length;
 }
 
+const scenarioShape = {
+  schema_version: z.literal(2),
+  scenario_id: identifierSchema,
+  owner_plugin: identifierSchema,
+  owner_skill: identifierSchema,
+  skill_type: z.enum(["discipline", "technique", "pattern", "reference"]),
+  prompt: nonEmptyStringSchema,
+  hidden_rubric: nonEmptyStringSchema,
+  comparison_intent: z.enum(["improvement", "non_regression"]),
+  repetitions: z.number().int().min(5),
+  risk: z.enum(["standard", "high"]),
+  fixture_requirements: z.array(nonEmptyStringSchema),
+  allowed_tools: z.array(nonEmptyStringSchema),
+  allowed_write_paths: z.array(relativePathSchema),
+  deterministic_checks: z.array(
+    z.object({
+      check_id: identifierSchema,
+      fact: deterministicFactSchema,
+      operator: z.enum(["equals", "contains", "matches", "not_matches", "exists", "absent"]),
+      expected: z.unknown().optional(),
+    }).strict().superRefine((check, context) => {
+      const requiresExpected = check.operator === "equals" ||
+        check.operator === "contains" ||
+        check.operator === "matches" ||
+        check.operator === "not_matches";
+      if (requiresExpected && check.expected === undefined) {
+        context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} requires expected` });
+      }
+      if (!requiresExpected && check.expected !== undefined) {
+        context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} does not accept expected` });
+      }
+    }),
+  ),
+  expected_artifacts: z.array(
+    z.object({
+      artifact_id: identifierSchema,
+      path: relativePathSchema,
+      file_type: z.enum(["file", "directory"]),
+      content_contract: nonEmptyStringSchema,
+    }).strict(),
+  ),
+} as const;
+
 export const scenarioInputSchema = z
-  .object({
-    schema_version: z.literal(1),
-    scenario_id: identifierSchema,
-    owner_plugin: identifierSchema,
-    owner_skill: identifierSchema,
-    skill_type: z.enum(["discipline", "technique", "pattern", "reference"]),
-    prompt: nonEmptyStringSchema,
-    hidden_rubric: nonEmptyStringSchema,
-    baseline: z.enum(["no_skill", "previous_revision"]),
-    repetitions: z.number().int().min(5),
-    risk: z.enum(["standard", "high"]),
-    fixture_requirements: z.array(nonEmptyStringSchema),
-    allowed_tools: z.array(nonEmptyStringSchema),
-    allowed_write_paths: z.array(relativePathSchema),
-    deterministic_checks: z.array(
-      z.object({
-        check_id: identifierSchema,
-        fact: deterministicFactSchema,
-        operator: z.enum(["equals", "contains", "matches", "not_matches", "exists", "absent"]),
-        expected: z.unknown().optional(),
-      }).strict().superRefine((check, context) => {
-        const requiresExpected = check.operator === "equals" ||
-          check.operator === "contains" ||
-          check.operator === "matches" ||
-          check.operator === "not_matches";
-        if (requiresExpected && check.expected === undefined) {
-          context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} requires expected` });
-        }
-        if (!requiresExpected && check.expected !== undefined) {
-          context.addIssue({ code: "custom", path: ["expected"], message: `${check.operator} does not accept expected` });
-        }
-      }),
-    ),
-    expected_artifacts: z.array(
-      z.object({
-        artifact_id: identifierSchema,
-        path: relativePathSchema,
-        file_type: z.enum(["file", "directory"]),
-        content_contract: nonEmptyStringSchema,
-      }).strict(),
-    ),
-  })
-  .strict()
+  .discriminatedUnion("baseline", [
+    z.object({
+      ...scenarioShape,
+      baseline: z.literal("no_skill"),
+    }).strict(),
+    z.object({
+      ...scenarioShape,
+      baseline: z.literal("previous_revision"),
+      baseline_revision: immutableRevisionSchema,
+    }).strict(),
+  ])
   .superRefine((scenario, context) => {
     if (!hasUniqueCheckIds(scenario)) {
       context.addIssue({

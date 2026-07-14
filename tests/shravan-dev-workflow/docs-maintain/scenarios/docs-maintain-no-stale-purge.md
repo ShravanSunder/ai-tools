@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: docs-maintain-no-stale-purge
 owner_plugin: shravan-dev-workflow
 owner_skill: docs-maintain
@@ -23,6 +23,7 @@ hidden_rubric: |-
   - Lets old plans become source of truth by inertia.
   - Fails to distinguish AGENTS, README, changelog, plans, and workflow artifacts.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

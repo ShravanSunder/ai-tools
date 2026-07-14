@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-review-swarm-semantic-lane-judgment
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
@@ -33,6 +33,7 @@ hidden_rubric: |-
   - Collapses security, planning readiness, and crux review into one broad
     critique.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

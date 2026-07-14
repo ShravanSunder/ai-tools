@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-review-swarm-whole-plan-cohesion-lane
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-review-swarm
@@ -31,6 +31,7 @@ hidden_rubric: |-
   - Omits a whole-plan-cohesion lane.
   - Treats focused lane findings as sufficient for overall readiness.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

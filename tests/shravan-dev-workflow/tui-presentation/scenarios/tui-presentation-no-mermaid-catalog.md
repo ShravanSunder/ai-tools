@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: tui-presentation-no-mermaid-catalog
 owner_plugin: shravan-dev-workflow
 owner_skill: tui-presentation
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Treats Mermaid as the skill's primary abstraction.
   - Ignores the terminal/TUI rendering constraint.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

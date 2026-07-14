@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-runtime-reachability
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -22,6 +22,7 @@ hidden_rubric: |-
   - Omits caller/front door/adapter/router/backend/executor chain.
   - Approves a runtime claim without live proof.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

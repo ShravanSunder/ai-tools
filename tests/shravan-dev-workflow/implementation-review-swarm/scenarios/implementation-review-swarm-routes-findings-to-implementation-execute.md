@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-routes-findings-to-implementation-execute
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -27,6 +27,7 @@ hidden_rubric: |-
   - Omits `implementation-execute-plan` route-back for blocker/important findings.
   - Expands the tiny same-session review-fix exception into the default behavior.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

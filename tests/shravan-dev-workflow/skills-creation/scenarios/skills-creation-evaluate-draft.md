@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-evaluate-draft
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -52,6 +52,7 @@ hidden_rubric: |-
   - Cites a numeric score or point total instead of the verdict/blocker/evidence
     shape.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: manage-agents-json-flows-exit-codes
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
@@ -35,6 +35,7 @@ hidden_rubric: |-
   - Moves flows into generic runtime-control without naming the automation/flows
     branch.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

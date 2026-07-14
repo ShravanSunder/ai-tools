@@ -20,9 +20,133 @@ describe("skill pressure scenario contract", () => {
       prompt: "Follow the requested workflow under time pressure.",
       hiddenRubric: "The response must reject the shortcut and follow the workflow.",
       baseline: "no_skill",
+      baselineRevision: null,
+      comparisonIntent: "improvement",
       repetitions: 5,
       risk: "standard",
+      schemaVersion: 2,
     });
+  });
+
+  it("rejects v1 scenarios instead of applying a compatibility default", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    await writeFile(
+      scenarioPath,
+      scenarioContract({ scenarioId: "legacy", plugin: "workflow", skill: "skill" })
+        .replace("schema_version: 2", "schema_version: 1"),
+    );
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/schema_version/);
+  });
+
+  it("rejects a missing comparison intent", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    await writeFile(
+      scenarioPath,
+      scenarioContract({ scenarioId: "missing-intent", plugin: "workflow", skill: "skill" })
+        .replace("comparison_intent: improvement\n", ""),
+    );
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/comparison_intent/);
+  });
+
+  it("requires a full immutable revision for previous-revision baselines", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    await writeFile(
+      scenarioPath,
+      scenarioContract({
+        scenarioId: "unpinned-control",
+        plugin: "workflow",
+        skill: "skill",
+        baseline: "previous_revision",
+        comparisonIntent: "non_regression",
+      }),
+    );
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/baseline_revision/);
+  });
+
+  it("loads a previous-revision baseline only when pinned to a full commit", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    const baselineRevision = "0123456789abcdef0123456789abcdef01234567";
+    await writeFile(
+      scenarioPath,
+      scenarioContract({
+        scenarioId: "pinned-control",
+        plugin: "workflow",
+        skill: "skill",
+        baseline: "previous_revision",
+        baselineRevision,
+        comparisonIntent: "non_regression",
+      }),
+    );
+
+    await expect(loadScenarioContract({ scenarioPath })).resolves.toMatchObject({
+      baseline: "previous_revision",
+      baselineRevision,
+      comparisonIntent: "non_regression",
+    });
+  });
+
+  it("rejects a baseline revision for no-skill baselines", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const scenarioPath = join(repositoryRoot, "scenario.md");
+    await writeFile(
+      scenarioPath,
+      scenarioContract({
+        scenarioId: "invalid-no-skill-pin",
+        plugin: "workflow",
+        skill: "skill",
+        baselineRevision: "0123456789abcdef0123456789abcdef01234567",
+      }),
+    );
+
+    await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/baseline_revision/);
+  });
+
+  it("hashes the canonical parsed contract instead of markdown formatting", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const firstPath = join(repositoryRoot, "first.md");
+    const secondPath = join(repositoryRoot, "second.md");
+    const source = scenarioContract({ scenarioId: "canonical", plugin: "workflow", skill: "skill" });
+    await writeFile(firstPath, source);
+    await writeFile(secondPath, `${source.trimEnd()}\n\n# Non-contract body\n`);
+
+    const first = await loadScenarioContract({ scenarioPath: firstPath });
+    const second = await loadScenarioContract({ scenarioPath: secondPath });
+
+    expect(first.contractDigest).toBe(second.contractDigest);
+  });
+
+  it("includes comparison intent in the canonical contract digest", async () => {
+    const repositoryRoot = await createRepositoryFixture();
+    const improvementPath = join(repositoryRoot, "improvement.md");
+    const controlPath = join(repositoryRoot, "control.md");
+    const baselineRevision = "0123456789abcdef0123456789abcdef01234567";
+    await writeFile(
+      improvementPath,
+      scenarioContract({ scenarioId: "digest-intent", plugin: "workflow", skill: "skill" }),
+    );
+    await writeFile(
+      controlPath,
+      scenarioContract({
+        scenarioId: "digest-intent",
+        plugin: "workflow",
+        skill: "skill",
+        baseline: "previous_revision",
+        baselineRevision,
+        comparisonIntent: "non_regression",
+      }),
+    );
+
+    const improvement = await loadScenarioContract({ scenarioPath: improvementPath });
+    const control = await loadScenarioContract({ scenarioPath: controlPath });
+
+    expect(improvement.contractDigest).not.toBe(control.contractDigest);
   });
 
   it("rejects fewer than five repetitions", async () => {

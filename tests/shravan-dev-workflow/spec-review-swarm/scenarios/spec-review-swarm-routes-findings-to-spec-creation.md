@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-review-swarm-routes-findings-to-spec-creation
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Routes directly to plan creation despite accepted spec findings.
   - Implements code.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

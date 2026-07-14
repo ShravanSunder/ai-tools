@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-route-back-by-owner
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Ignores plan/spec/human ownership.
   - Starts fixing during review.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

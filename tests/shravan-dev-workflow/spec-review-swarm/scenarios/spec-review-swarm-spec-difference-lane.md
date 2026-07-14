@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-review-swarm-spec-difference-lane
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Ignores implementation-derived hidden decisions.
   - Omits refinement input or parent reducer note.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

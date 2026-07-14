@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-pr-wrapup-wrong-base-branch
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
@@ -22,6 +22,7 @@ hidden_rubric: |-
   - Ignores the base mismatch.
   - Claims the PR is ready to merge.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

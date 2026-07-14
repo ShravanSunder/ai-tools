@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-review-swarm-progressive-disclosure-lane
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Treats "content exists somewhere" as sufficient.
   - Omits routing map and per-finding refinement schema.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

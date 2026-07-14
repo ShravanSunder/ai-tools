@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-creation-swarm-lane-packet-contract
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-creation-swarm
@@ -50,6 +50,7 @@ hidden_rubric: |-
   - Avoids stage artifacts for a substantial swarm without a named exception.
   - Uses review verdicts or adversarial review language inside plan creation.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

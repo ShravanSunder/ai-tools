@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-handoff-existing-plan-only
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-handoff
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Omits the missing implementation plan as a blocker.
   - Asks the next agent to infer task breakdown.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

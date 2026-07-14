@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-pr-wrapup-user-agreement-gate
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
@@ -21,6 +21,7 @@ hidden_rubric: |-
   - Says it would merge automatically.
   - Does not distinguish readiness from authorization.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

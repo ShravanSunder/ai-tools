@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-creation-swarm-lane-prompts-not-generic
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
@@ -31,6 +31,7 @@ hidden_rubric: |-
   - Omits source inputs or completion receipts.
   - Omits lane call order, prerequisites, or parent collection pass.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

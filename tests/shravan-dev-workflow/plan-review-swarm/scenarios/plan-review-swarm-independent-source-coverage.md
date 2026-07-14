@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-review-swarm-independent-source-coverage
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-review-swarm
@@ -30,6 +30,7 @@ hidden_rubric: |-
   - Lets focused lanes replace whole-plan cohesion.
   - Gives ready/not-ready without artifact limitations.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: debug-investigation-background-monitoring
 owner_plugin: shravan-dev-workflow
 owner_skill: debug-investigation
@@ -59,6 +59,7 @@ hidden_rubric: |-
   - Agrees to restart the job automatically.
   - Routes the work to a different workflow instead of debug investigation.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

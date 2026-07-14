@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: ops-observability-agent-vm-boundary
 owner_plugin: shravan-dev-workflow
 owner_skill: ops-observability-stack
@@ -28,6 +28,7 @@ hidden_rubric: |-
   - Duplicates generic Victoria query recipes into Agent VM docs.
   - Omits repo/worktree resource labels.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

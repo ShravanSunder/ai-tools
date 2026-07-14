@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: discuss-clarify-mental-models-drift-interrupt
 owner_plugin: shravan-dev-workflow
 owner_skill: discuss-clarify-mental-models
@@ -31,6 +31,7 @@ hidden_rubric: |-
   - Names a next workflow before the model is marked open or confirmed.
   - Omits the load-bearing assumption.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

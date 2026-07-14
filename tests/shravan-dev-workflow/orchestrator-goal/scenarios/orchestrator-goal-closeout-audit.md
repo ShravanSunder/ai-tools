@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-closeout-audit
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -29,6 +29,7 @@ hidden_rubric: |-
   - Marks a row `done` with no evidence pointer.
   - Treats the missing integration proof as done.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

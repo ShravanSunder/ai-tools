@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: manage-agents-custom-agent-boundary
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
@@ -36,6 +36,7 @@ hidden_rubric: |-
     command.
   - Omits security/sensitive-resource routing for adapter work.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

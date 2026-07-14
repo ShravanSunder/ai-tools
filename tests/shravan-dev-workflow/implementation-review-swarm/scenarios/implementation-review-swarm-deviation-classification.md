@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-deviation-classification
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -22,6 +22,7 @@ hidden_rubric: |-
   - Says the lane owns final classification.
   - Routes by severity alone.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

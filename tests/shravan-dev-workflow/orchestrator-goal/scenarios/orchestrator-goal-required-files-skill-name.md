@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-required-files-skill-name
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -32,6 +32,7 @@ hidden_rubric: |-
   - Drops the requirements/proof matrix or proof gates.
   - Routes to `discuss-clarify-mental-models` despite clear files and scope.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

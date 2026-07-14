@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-plan-creation-matrix-handoff
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -36,6 +36,7 @@ hidden_rubric: |-
   - Leaves proof entirely to the next agent.
   - Treats helper-lane success as the stop condition.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

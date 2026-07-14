@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-security-and-cache-boundary
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -41,6 +41,7 @@ hidden_rubric: |-
   - Claims static validation proves behavior.
   - Omits public-safe provenance.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

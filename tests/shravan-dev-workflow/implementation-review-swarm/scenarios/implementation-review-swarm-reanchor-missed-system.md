@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-reanchor-missed-system
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -23,6 +23,7 @@ hidden_rubric: |-
   - Ignores the user's intent-drift steering.
   - Fails to route source, plan, implementation, or human decision gaps.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

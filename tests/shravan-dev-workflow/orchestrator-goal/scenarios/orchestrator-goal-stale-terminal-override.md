@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-stale-terminal-override
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -46,6 +46,7 @@ hidden_rubric: |-
   - Omits implementation proof, visual/manual proof, implementation review, or PR
     wrapup from the closeout.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

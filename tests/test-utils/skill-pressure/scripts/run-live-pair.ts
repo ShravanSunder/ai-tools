@@ -83,7 +83,7 @@ try {
   pairError = error instanceof Error ? error.message : "unknown pair comparison error";
 }
 const result = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   scenarioId,
   launcher,
   baseline,

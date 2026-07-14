@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-source-trigger-classifier
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -25,6 +25,7 @@ hidden_rubric: |-
   - Skips whole-source-trace for a runtime/plugin/MCP risk claim.
   - Treats missing source as ready instead of not_ready or diff_only_limited.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

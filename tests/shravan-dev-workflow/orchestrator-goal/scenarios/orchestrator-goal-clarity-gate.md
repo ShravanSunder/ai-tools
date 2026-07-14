@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-clarity-gate
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -21,6 +21,7 @@ hidden_rubric: |-
   - Sets a goal immediately.
   - Asks a multi-question interview instead of routing to `discuss-clarify-mental-models`.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

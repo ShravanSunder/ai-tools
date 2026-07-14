@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-accepted-request-steering
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -23,6 +23,7 @@ hidden_rubric: |-
   - Omits quoted steering anchors.
   - Lets reviewers rely on memory instead of inspectable packet inputs.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

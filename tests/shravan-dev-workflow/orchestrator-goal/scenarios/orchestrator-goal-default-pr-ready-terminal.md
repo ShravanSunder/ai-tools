@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-default-pr-ready-terminal
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -45,6 +45,7 @@ hidden_rubric: |-
   - Omits the existing spec or plan paths from the goal contract.
   - Omits state pointers for `details.md` and `events.jsonl`.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

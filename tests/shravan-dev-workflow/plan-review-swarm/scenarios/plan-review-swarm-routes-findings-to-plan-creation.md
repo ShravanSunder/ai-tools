@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-review-swarm-routes-findings-to-plan-creation
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-review-swarm
@@ -27,6 +27,7 @@ hidden_rubric: |-
   - Broadly rewrites the plan inside review instead of routing to creation.
   - Ignores missing proof mapping or parallelization.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

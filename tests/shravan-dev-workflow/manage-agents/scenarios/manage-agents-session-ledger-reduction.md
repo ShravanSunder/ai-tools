@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: manage-agents-session-ledger-reduction
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
@@ -27,6 +27,7 @@ hidden_rubric: |-
   - Fails to distinguish candidate from accepted claims.
   - Lets subordinate agents own final reduction.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

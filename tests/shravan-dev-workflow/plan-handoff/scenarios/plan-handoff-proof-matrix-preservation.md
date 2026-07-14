@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-handoff-proof-matrix-preservation
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-handoff
@@ -27,6 +27,7 @@ hidden_rubric: |-
   - Carries validation commands but drops evidence sources or freshness guards.
   - Lets delegated evidence become completion without parent verification.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

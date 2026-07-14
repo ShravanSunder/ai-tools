@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-spec-review-gate
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -19,6 +19,7 @@ hidden_rubric: |-
   It must state that editing cannot begin before that review gate and must remain
   read-only in this turn.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

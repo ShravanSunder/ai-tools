@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: research-swarm-substantial-stage-artifacts
 owner_plugin: shravan-dev-workflow
 owner_skill: research-swarm
@@ -38,6 +38,7 @@ hidden_rubric: |-
   - Routes to old workflow names.
   - Routes to a generic `review` destination instead of a concrete review skill.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

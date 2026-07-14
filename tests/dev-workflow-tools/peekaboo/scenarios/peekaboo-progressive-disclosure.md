@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: peekaboo-progressive-disclosure
 owner_plugin: dev-workflow-tools
 owner_skill: peekaboo
@@ -33,6 +33,7 @@ hidden_rubric: |-
   - Writes UI JSON to predictable public temp paths.
   - Does not mention deeper references or progressive disclosure.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: high
 fixture_requirements: []

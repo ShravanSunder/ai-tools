@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-execute-plan-parallel-subagents-default
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-execute-plan
@@ -32,6 +32,7 @@ hidden_rubric: |-
   - Omits decision target, inspect list, non-goals, or contradiction handling
     from substantial subagent packets.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

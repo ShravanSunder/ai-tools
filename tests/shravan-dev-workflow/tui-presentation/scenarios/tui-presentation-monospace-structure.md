@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: tui-presentation-monospace-structure
 owner_plugin: shravan-dev-workflow
 owner_skill: tui-presentation
@@ -22,6 +22,7 @@ hidden_rubric: |-
   - Cramps code into Unicode tables.
   - Overuses one huge frame for unrelated concerns.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

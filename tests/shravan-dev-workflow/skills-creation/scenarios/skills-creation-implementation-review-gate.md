@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-implementation-review-gate
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -31,6 +31,7 @@ hidden_rubric: |-
     implementation review reference.
   - Treats review output as authoritative without parent reduction.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

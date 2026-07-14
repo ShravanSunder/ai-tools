@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-handoff-evidence-packet
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-handoff
@@ -27,6 +27,7 @@ hidden_rubric: |-
   - Lets reviewer infer state from branch name alone.
   - Does not mark review-only as read-only.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

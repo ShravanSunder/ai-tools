@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-pr-wrapup-github-api-budget
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
@@ -35,6 +35,7 @@ hidden_rubric: |-
   - Claims readiness from stale cached data.
   - Lets API-budget mechanics decide readiness instead of PR wrapup gates.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: manage-agents-pattern-selection
 owner_plugin: shravan-dev-workflow
 owner_skill: manage-agents
@@ -27,6 +27,7 @@ hidden_rubric: |-
   - Gives the advisor final authority instead of parent-owned reduction.
   - Omits workflow handoff as a separate pattern.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

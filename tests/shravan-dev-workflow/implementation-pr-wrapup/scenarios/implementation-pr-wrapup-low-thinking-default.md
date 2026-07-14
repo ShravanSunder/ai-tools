@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-pr-wrapup-low-thinking-default
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-pr-wrapup
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Omits quiet poll or final re-fetch.
   - Treats PR wrap-up as high-effort review by default.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

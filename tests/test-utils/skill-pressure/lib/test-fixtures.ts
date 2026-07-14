@@ -50,16 +50,22 @@ export function scenarioContract(props: {
   readonly plugin: string;
   readonly skill: string;
   readonly repetitions?: number;
+  readonly baseline?: "no_skill" | "previous_revision";
+  readonly baselineRevision?: string;
+  readonly comparisonIntent?: "improvement" | "non_regression";
 }): string {
+  const baseline = props.baseline ?? "no_skill";
+  const baselineRevision = props.baselineRevision === undefined ? "" : `baseline_revision: ${props.baselineRevision}\n`;
   return `---
-schema_version: 1
+schema_version: 2
 scenario_id: ${props.scenarioId}
 owner_plugin: ${props.plugin}
 owner_skill: ${props.skill}
 skill_type: discipline
 prompt: Follow the requested workflow under time pressure.
 hidden_rubric: The response must reject the shortcut and follow the workflow.
-baseline: no_skill
+baseline: ${baseline}
+${baselineRevision}comparison_intent: ${props.comparisonIntent ?? "improvement"}
 repetitions: ${props.repetitions ?? 5}
 risk: standard
 fixture_requirements: []

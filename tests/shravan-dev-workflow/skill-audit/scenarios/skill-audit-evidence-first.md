@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skill-audit-evidence-first
 owner_plugin: shravan-dev-workflow
 owner_skill: skill-audit
@@ -39,6 +39,7 @@ hidden_rubric: |-
   - Relies on prohibition-heavy audit wording instead of positive criteria.
   - Omits progressive skill shape or pressure-proof recommendations.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

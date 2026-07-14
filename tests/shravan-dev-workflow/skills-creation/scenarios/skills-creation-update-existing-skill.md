@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-update-existing-skill
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -33,6 +33,7 @@ hidden_rubric: |-
     micro-test (write-then-prove ordering).
   - States or implies "edit the skill, then write the test."
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

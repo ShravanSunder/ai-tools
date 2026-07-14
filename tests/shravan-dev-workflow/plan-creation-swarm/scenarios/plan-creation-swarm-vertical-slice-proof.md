@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-creation-swarm-vertical-slice-proof
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-creation-swarm
@@ -42,6 +42,7 @@ hidden_rubric: |-
     fit checks.
   - Lets a subagent invent slice boundaries later.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

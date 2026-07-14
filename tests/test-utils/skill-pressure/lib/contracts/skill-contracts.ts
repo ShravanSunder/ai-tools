@@ -7,6 +7,20 @@ import { parseDocument } from "yaml";
 import { scenarioInputSchema } from "./contract-schema.js";
 import type { ScenarioContract, SkillOwner } from "./contract-types.js";
 
+function canonicalizeContract(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(canonicalizeContract);
+  }
+  if (typeof value !== "object" || value === null) {
+    return value;
+  }
+  return Object.fromEntries(
+    Object.entries(value)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, entryValue]) => [key, canonicalizeContract(entryValue)]),
+  );
+}
+
 export class ContractValidationError extends Error {
   public constructor(message: string) {
     super(message);
@@ -49,8 +63,12 @@ export async function loadScenarioContract(
     throw new ContractValidationError(`scenario owner fields do not match owner path: ${scenarioPath}`);
   }
 
+  const contractDigest = `sha256:${createHash("sha256")
+    .update(JSON.stringify(canonicalizeContract(input.data)))
+    .digest("hex")}`;
+
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     scenarioId: input.data.scenario_id,
     plugin: input.data.owner_plugin,
     skill: input.data.owner_skill,
@@ -58,6 +76,8 @@ export async function loadScenarioContract(
     prompt: input.data.prompt,
     hiddenRubric: input.data.hidden_rubric,
     baseline: input.data.baseline,
+    baselineRevision: input.data.baseline === "previous_revision" ? input.data.baseline_revision : null,
+    comparisonIntent: input.data.comparison_intent,
     repetitions: input.data.repetitions,
     risk: input.data.risk,
     fixtureRequirements: input.data.fixture_requirements,
@@ -76,6 +96,6 @@ export async function loadScenarioContract(
       contentContract: artifact.content_contract,
     })),
     scenarioPath,
-    contractDigest: `sha256:${createHash("sha256").update(source).digest("hex")}`,
+    contractDigest,
   };
 }

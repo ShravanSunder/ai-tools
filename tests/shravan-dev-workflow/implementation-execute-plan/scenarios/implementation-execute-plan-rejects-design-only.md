@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-execute-plan-rejects-design-only
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-execute-plan
@@ -22,6 +22,7 @@ hidden_rubric: |-
   - Treats design/spec as an implementation plan.
   - Invents validation gates while executing.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

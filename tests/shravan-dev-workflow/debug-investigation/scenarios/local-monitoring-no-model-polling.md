@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: local-monitoring-no-model-polling
 owner_plugin: shravan-dev-workflow
 owner_skill: debug-investigation
@@ -29,6 +29,7 @@ hidden_rubric: |-
   - Treats repeated subagent wakeups as the monitor implementation.
   - Omits durable state/cursor/event tracking.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

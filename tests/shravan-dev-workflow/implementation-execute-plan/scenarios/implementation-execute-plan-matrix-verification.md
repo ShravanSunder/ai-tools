@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-execute-plan-matrix-verification
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-execute-plan
@@ -30,6 +30,7 @@ hidden_rubric: |-
   - Treats delegated commands as equivalent to parent-run or parent-inspected
     evidence.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

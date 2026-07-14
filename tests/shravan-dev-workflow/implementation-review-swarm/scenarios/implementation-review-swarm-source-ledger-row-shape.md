@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-review-swarm-source-ledger-row-shape
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-review-swarm
@@ -21,6 +21,7 @@ hidden_rubric: |-
   - Omits candidate bucket or route from the ledger.
   - Omits reachability or false-substitute fields.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

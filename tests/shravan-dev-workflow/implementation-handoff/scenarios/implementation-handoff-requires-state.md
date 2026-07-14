@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-handoff-requires-state
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-handoff
@@ -23,6 +23,7 @@ hidden_rubric: |-
   - Invents changed files, tests, or branch evidence.
   - Treats planned work as implementation handoff.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

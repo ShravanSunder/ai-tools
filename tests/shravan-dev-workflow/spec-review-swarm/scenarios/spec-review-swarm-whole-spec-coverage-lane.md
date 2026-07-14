@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-review-swarm-whole-spec-coverage-lane
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
@@ -31,6 +31,7 @@ hidden_rubric: |-
   - Reviews only local sections.
   - Treats reviewer consensus as accepted truth.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

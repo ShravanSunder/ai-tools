@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-creation-swarm-durable-primary-spec
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Promotes review reports or plans into the specs directory by default.
   - Treats specs, plans, reviews, and lane evidence as one lifecycle.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

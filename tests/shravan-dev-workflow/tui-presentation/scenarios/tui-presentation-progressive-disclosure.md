@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: tui-presentation-progressive-disclosure
 owner_plugin: shravan-dev-workflow
 owner_skill: tui-presentation
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Explains everything in prose with no visual structure.
   - Treats progressive explanation as a list of diagram types.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

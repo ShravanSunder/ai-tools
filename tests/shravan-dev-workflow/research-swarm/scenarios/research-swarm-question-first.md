@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: research-swarm-question-first
 owner_plugin: shravan-dev-workflow
 owner_skill: research-swarm
@@ -30,6 +30,7 @@ hidden_rubric: |-
   - Does not mention evidence ledger/source quality.
   - Treats research as design, plan, or implementation.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

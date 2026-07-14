@@ -25,7 +25,7 @@ export interface DiscoveryInvalidReceipt {
 }
 
 export interface DiscoveryReceipt {
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly discovered: readonly DiscoveredScenario[];
   readonly selected: readonly DiscoveredScenario[];
   readonly skipped: readonly DiscoveredScenario[];
@@ -175,7 +175,7 @@ export async function discoverSkillScenarios(
   const selected = valid.filter((scenario) => selectedIds.has(scenario.scenarioId));
   const skipped = valid.filter((scenario) => !selectedIds.has(scenario.scenarioId));
   const receiptBase = {
-    schemaVersion: 1 as const,
+    schemaVersion: 2 as const,
     discovered,
     selected,
     skipped,

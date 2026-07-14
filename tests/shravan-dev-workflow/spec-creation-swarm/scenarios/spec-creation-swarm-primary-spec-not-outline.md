@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-creation-swarm-primary-spec-not-outline
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
@@ -29,6 +29,7 @@ hidden_rubric: |-
   - Omits product intent / requirements / technical contract distinction.
   - Defers all contracts and proof expectations to implementation.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

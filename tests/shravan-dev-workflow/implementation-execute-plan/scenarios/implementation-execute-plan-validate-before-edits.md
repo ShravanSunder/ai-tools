@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: implementation-execute-plan-validate-before-edits
 owner_plugin: shravan-dev-workflow
 owner_skill: implementation-execute-plan
@@ -29,6 +29,7 @@ hidden_rubric: |-
   - Treats skipped proof as acceptable when the slice needs to split or replan.
   - Claims complete without fresh verification.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

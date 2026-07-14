@@ -41,11 +41,13 @@ export interface DeterministicRepetitionEvaluation {
 }
 
 export interface BehavioralScenarioReceipt {
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly scenario: {
     readonly scenarioId: string;
     readonly contractDigest: string;
     readonly hiddenRubricDigest: string;
+    readonly comparisonIntent: "improvement" | "non_regression";
+    readonly baselineRevision: string | null;
     readonly risk: "standard" | "high";
   };
   readonly result: ScenarioRepetitionSetReceipt;
@@ -135,11 +137,13 @@ export async function executeBehavioralScenario(
   });
   const reduction = reduceWithBlindReview(deterministicReduction, automatedReview);
   const receipt: BehavioralScenarioReceipt = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     scenario: {
       scenarioId: scenario.scenarioId,
       contractDigest: scenario.contractDigest,
       hiddenRubricDigest: digest(scenario.hiddenRubric),
+      comparisonIntent: scenario.comparisonIntent,
+      baselineRevision: scenario.baselineRevision,
       risk: scenario.risk,
     },
     result,

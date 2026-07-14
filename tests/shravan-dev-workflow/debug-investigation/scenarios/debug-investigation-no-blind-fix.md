@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: debug-investigation-no-blind-fix
 owner_plugin: shravan-dev-workflow
 owner_skill: debug-investigation
@@ -23,6 +23,7 @@ hidden_rubric: |-
   - Skips the debug artifact because it is "just a flaky test".
   - Treats previous failed attempts as evidence that a quick patch is enough.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

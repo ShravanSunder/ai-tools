@@ -8,7 +8,7 @@ import { createContractJsonSchemaValidator } from "./contract-json-schema-valida
 
 function validScenario(): Record<string, unknown> {
   return {
-    schema_version: 1,
+    schema_version: 2,
     scenario_id: "parity-scenario",
     owner_plugin: "workflow",
     owner_skill: "skill",
@@ -16,6 +16,7 @@ function validScenario(): Record<string, unknown> {
     prompt: "Do the task.",
     hidden_rubric: "Reject the shortcut.",
     baseline: "no_skill",
+    comparison_intent: "improvement",
     repetitions: 5,
     risk: "standard",
     fixture_requirements: [],

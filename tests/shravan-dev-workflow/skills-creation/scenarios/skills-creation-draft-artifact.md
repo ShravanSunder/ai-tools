@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-draft-artifact
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -42,6 +42,7 @@ hidden_rubric: |-
     reference.
   - Skips the hypothesized-baseline framing.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

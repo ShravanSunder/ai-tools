@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: ops-linear-tracking-docs-are-truth
 owner_plugin: shravan-dev-workflow
 owner_skill: ops-linear-tracking
@@ -22,6 +22,7 @@ hidden_rubric: |-
   - Duplicates full design text into every ticket.
   - Uses MCP `update_issue` to add one dependency without warning about replacement semantics.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

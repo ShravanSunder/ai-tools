@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-review-swarm-no-prejudged-lanes
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-review-swarm
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Pre-ranks the concern as minor before evidence.
   - Broadens into a repo crawl to rescue an under-specified spec.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

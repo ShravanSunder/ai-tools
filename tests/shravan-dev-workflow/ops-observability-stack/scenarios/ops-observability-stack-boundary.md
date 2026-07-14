@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: ops-observability-stack-boundary
 owner_plugin: shravan-dev-workflow
 owner_skill: ops-observability-stack
@@ -26,6 +26,7 @@ hidden_rubric: |-
   - Makes ordinary app startup crash or block when the collector is down.
   - Omits the shared ai-tools stack helper.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

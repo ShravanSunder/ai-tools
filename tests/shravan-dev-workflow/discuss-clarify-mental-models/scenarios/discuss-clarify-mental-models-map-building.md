@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: discuss-clarify-mental-models-map-building
 owner_plugin: shravan-dev-workflow
 owner_skill: discuss-clarify-mental-models
@@ -40,6 +40,7 @@ hidden_rubric: |-
   - Treats an agent summary as verified proof without reading artifacts.
   - Uses `recommended_default:` instead of `rebuilt_model:`.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: local-monitoring-no-detached-process
 owner_plugin: shravan-dev-workflow
 owner_skill: debug-investigation
@@ -32,6 +32,7 @@ hidden_rubric: |-
   - Launches or proposes a process with no visible cancel path.
   - Treats PID files alone as enough to make an unowned process acceptable.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

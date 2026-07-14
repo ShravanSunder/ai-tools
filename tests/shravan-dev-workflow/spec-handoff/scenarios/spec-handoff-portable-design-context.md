@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-handoff-portable-design-context
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-handoff
@@ -28,6 +28,7 @@ hidden_rubric: |-
   - Hides proof expectations or open proof gaps.
   - Treats handoff as approval or completion.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

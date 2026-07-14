@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: plan-creation-swarm-from-spec-not-code
 owner_plugin: shravan-dev-workflow
 owner_skill: plan-creation-swarm
@@ -75,6 +75,7 @@ hidden_rubric: |-
   - Uses proof-owner language instead of source references, owning tasks, proof
     modalities, and parent completion responsibility.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

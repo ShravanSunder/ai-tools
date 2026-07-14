@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-creation-swarm-parent-synthesis
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
@@ -49,6 +49,7 @@ hidden_rubric: |-
   - Uses creation lanes named as adversarial review or assumption pressure.
   - Leaves drafted-spec critique owned by spec creation instead of routing it.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: spec-creation-swarm-spec-folder-chunking
 owner_plugin: shravan-dev-workflow
 owner_skill: spec-creation-swarm
@@ -31,6 +31,7 @@ hidden_rubric: |-
   - Creates many tiny files with no vertical slice or ownership reason.
   - Omits a routing map.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

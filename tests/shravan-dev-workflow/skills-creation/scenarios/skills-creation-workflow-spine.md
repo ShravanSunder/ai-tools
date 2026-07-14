@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: skills-creation-workflow-spine
 owner_plugin: shravan-dev-workflow
 owner_skill: skills-creation
@@ -41,6 +41,7 @@ hidden_rubric: |-
   - Gives a giant manual or proof-status ritual instead of a compact great-skill
     model plus branch references.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: orchestrator-goal-proof-matrix-ownership
 owner_plugin: shravan-dev-workflow
 owner_skill: orchestrator-goal
@@ -35,6 +35,7 @@ hidden_rubric: |-
   - Omits stale-proof avoidance.
   - Routes to `discuss-clarify-mental-models` even though the prompt has enough scope.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

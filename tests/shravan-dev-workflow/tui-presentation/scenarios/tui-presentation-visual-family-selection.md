@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: tui-presentation-visual-family-selection
 owner_plugin: shravan-dev-workflow
 owner_skill: tui-presentation
@@ -24,6 +24,7 @@ hidden_rubric: |-
   - Treats staged disclosure as a diagram family.
   - Uses a table when a relationship sketch is needed.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

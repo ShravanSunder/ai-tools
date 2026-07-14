@@ -1,5 +1,5 @@
 ---
-schema_version: 1
+schema_version: 2
 scenario_id: no-global-runtime-lane-contract
 owner_plugin: shravan-dev-workflow
 owner_skill: skill-audit
@@ -31,6 +31,7 @@ hidden_rubric: |-
   - Moves authoring lessons into spec/plan/review runtime skill files.
   - Treats generic packet anatomy as a substitute for lane judgment.
 baseline: no_skill
+comparison_intent: improvement
 repetitions: 5
 risk: standard
 fixture_requirements: []

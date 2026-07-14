@@ -6,6 +6,7 @@ export interface SkillOwner {
 export type SkillType = "discipline" | "technique" | "pattern" | "reference";
 export type ScenarioRisk = "standard" | "high";
 export type ScenarioBaseline = "no_skill" | "previous_revision";
+export type ComparisonIntent = "improvement" | "non_regression";
 
 export interface ExpectedArtifact {
   readonly artifactId: string;
@@ -25,12 +26,14 @@ export interface DeterministicCheck {
 }
 
 export interface ScenarioContract extends SkillOwner {
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly scenarioId: string;
   readonly skillType: SkillType;
   readonly prompt: string;
   readonly hiddenRubric: string;
   readonly baseline: ScenarioBaseline;
+  readonly baselineRevision: string | null;
+  readonly comparisonIntent: ComparisonIntent;
   readonly repetitions: number;
   readonly risk: ScenarioRisk;
   readonly fixtureRequirements: readonly string[];

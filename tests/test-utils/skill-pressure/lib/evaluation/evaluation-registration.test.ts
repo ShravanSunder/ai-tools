@@ -9,7 +9,7 @@ import {
 
 function scenario(scenarioId: string): DiscoveredScenario {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     scenarioId,
     plugin: "workflow",
     skill: `${scenarioId}-skill`,
@@ -18,6 +18,8 @@ function scenario(scenarioId: string): DiscoveredScenario {
     prompt: "Follow the workflow.",
     hiddenRubric: "The workflow is followed.",
     baseline: "no_skill",
+    baselineRevision: null,
+    comparisonIntent: "improvement",
     repetitions: 5,
     risk: "standard",
     fixtureRequirements: [],
@@ -37,7 +39,7 @@ function receipt(props: {
 } = {}): DiscoveryReceipt {
   const selected = props.selected ?? [scenario("alpha"), scenario("beta")];
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     discovered: [...selected, ...(props.skipped ?? [])],
     selected,
     skipped: props.skipped ?? [],
