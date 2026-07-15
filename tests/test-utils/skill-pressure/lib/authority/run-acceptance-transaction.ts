@@ -43,7 +43,7 @@ export async function acceptScenarioRunFromReceipt(props: {
   if (!props.parentAccepted) throw new Error("run acceptance requires an explicit parent decision");
 
   const repositoryRoot = path.resolve(props.repositoryRoot);
-  const scenarioReceiptPath = path.resolve(props.scenarioReceiptPath);
+  const scenarioReceiptPath = path.resolve(repositoryRoot, props.scenarioReceiptPath);
   const scenarioSource = await readFile(scenarioReceiptPath, "utf8");
   const receipt = JSON.parse(scenarioSource) as V3BehavioralScenarioReceipt;
   const discovery = await discoverSkillScenarios({ repositoryRoot });

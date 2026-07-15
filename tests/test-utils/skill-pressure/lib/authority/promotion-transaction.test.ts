@@ -261,9 +261,13 @@ describe("promotion transaction", () => {
     const candidateSource = `${JSON.stringify(candidate, null, 2)}\n`;
     await writeFile(fixture.scenarioReceiptPath, candidateSource);
 
+    const repositoryRelativeScenarioReceiptPath = path.relative(
+      fixture.repositoryRoot,
+      fixture.scenarioReceiptPath,
+    );
     const accepted = await acceptScenarioRunFromReceipt({
       repositoryRoot: fixture.repositoryRoot,
-      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      scenarioReceiptPath: repositoryRelativeScenarioReceiptPath,
       parentAccepted: true,
       dependencies: {
         validateScenarioExecution: async () => ({}) as never,
