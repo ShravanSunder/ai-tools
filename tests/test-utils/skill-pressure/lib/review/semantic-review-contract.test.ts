@@ -147,6 +147,25 @@ describe("structured semantic review contract", () => {
     expect(quote.indexOf("required terminal condition")).toBeGreaterThan(9_000);
   });
 
+  it("keeps complete normalized response evidence available to the reviewer", () => {
+    const completeResponse = `${"analysis ".repeat(300)}final classification: ordinary reference and lane reference`;
+    const completePacket = buildStructuredSemanticReviewPacket({
+      assertions: [
+        {
+          assertionId: "classification",
+          criterion: "The response classifies both requested documents.",
+          evidenceSurface: "response",
+        },
+      ],
+      evidence: [{ ...evidence("baseline-1", "baseline"), visibleResponse: completeResponse }],
+      redactionSecrets: [],
+    });
+
+    const quote = completePacket.untrustedEvidence.repetitions[0]?.response.text ?? "";
+    expect(quote).toBe(completeResponse);
+    expect(quote.indexOf("final classification")).toBeGreaterThan(2_000);
+  });
+
   it("does not let semantic approval override objective failure", () => {
     expect(applyObjectiveSemanticPrecedence({ objectiveOutcome: "behavior_fail", classifications: ["pass"] })).toBe("behavior_fail");
     expect(applyObjectiveSemanticPrecedence({ objectiveOutcome: "not_evaluated", classifications: ["pass"] })).toBe("not_evaluated");

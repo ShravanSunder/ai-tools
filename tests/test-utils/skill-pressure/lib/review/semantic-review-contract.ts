@@ -75,7 +75,7 @@ export interface SemanticCandidateValidationResult {
   readonly reason: string | null;
 }
 
-const DEFAULT_MAX_EVIDENCE_TEXT_LENGTH = 2_000;
+const DEFAULT_MAX_EVIDENCE_TEXT_LENGTH = 8_000;
 const MAX_REVIEW_REPETITIONS = 40;
 const MAX_TOOL_EVIDENCE_PER_REPETITION = 200;
 const MAX_ARTIFACT_EVIDENCE_PER_REPETITION = 100;
