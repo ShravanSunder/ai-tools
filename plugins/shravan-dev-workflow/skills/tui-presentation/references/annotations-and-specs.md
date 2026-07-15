@@ -1,16 +1,12 @@
 Annotations and Specs
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for annotation patterns — callouts on mockups,
-variant series, visual specs with measurements, and titled frames
-for design proposals.
+Deep-dive reference for annotation patterns — callouts on mockups, variant series, visual specs with measurements, and titled frames for design proposals.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, character palette
-  ▸ shape-catalog.md ──► Shape 1 (Framed card) — title-in-top-border
-    pattern for titled frames; Shape 1 applications (dual-tag,
-    scope inventory) for richer frame title treatments
+  ▸ shape-catalog.md ──► Shape 1 (Framed card) — title-in-top-border pattern for titled frames; Shape 1 applications (dual-tag, scope inventory) for richer frame title treatments
   ▸ ui-layouts.md — UI mockup patterns that annotations live under
 
 
@@ -41,8 +37,7 @@ Long name:       [◫  2 · my-long-na…] (truncate name at 12 chars)
 Focused:         ╔◫  2 · coding╗      (double border for focus)
 ```
 
-Show all important variants together, one per line, label on the
-left, annotation in parens on the right.
+Show all important variants together, one per line, label on the left, annotation in parens on the right.
 
 
 ─── Visual spec with inline measurements ────────────────────────────
@@ -60,8 +55,7 @@ left, annotation in parens on the right.
    shape:              Capsule
 ```
 
-Diagram at top, bulleted spec below.  Keep names/values aligned as
-columns.
+Diagram at top, bulleted spec below.  Keep names/values aligned as columns.
 
 
 ─── State variants (Rest/Hover/Active/Pressed) ──────────────────────
@@ -80,8 +74,7 @@ columns.
             ╚══════════════════╝
 ```
 
-Each state gets a labeled mockup, a brief right-side note
-explaining the change.
+Each state gets a labeled mockup, a brief right-side note explaining the change.
 
 
 ─── Titled frame for a design proposal ──────────────────────────────
@@ -100,7 +93,4 @@ explaining the change.
 ╚═══════════════════════════════════════════════════════╝
 ```
 
-Double border (╔═╗ ║ ╚═╝) wraps the entire proposal.  Title on top
-row.  Separator ╠═╣ between title and body.  Use for design
-proposals that need to stand apart from surrounding chat — this is
-a legitimate "rare focal emphasis" case per the core rules.
+Double border (╔═╗ ║ ╚═╝) wraps the entire proposal.  Title on top row.  Separator ╠═╣ between title and body.  Use for design proposals that need to stand apart from surrounding chat — this is a legitimate "rare focal emphasis" case per the core rules.

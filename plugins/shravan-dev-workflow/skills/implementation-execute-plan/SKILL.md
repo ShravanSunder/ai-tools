@@ -10,37 +10,19 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 ## Core Rules
 
 - Read the whole implementation plan before execution. Show line count and chunk coverage for plan files.
-- Do not execute directly from a spec or design. Use `plan-creation-swarm` first when
-  no written implementation plan exists.
+- Do not execute directly from a spec or design. Use `plan-creation-swarm` first when no written implementation plan exists.
 - Validate against the current repo before editing: branch, diff, code paths, package layout, tests, and instructions.
 - Stop before editing if the plan has critical gaps, stale assumptions, unsafe scope, or unclear ownership.
 - Stop before editing if security assumptions or threat boundaries are missing or stale for sensitive work.
-- Use subagents whenever work is parallelizable into bounded disjoint slices.
-  Inline execution is for tiny, serial, unsafe-to-delegate, or unsupported-tool
-  cases; record that reason. The main agent remains responsible for context,
-  integration, verification, and final claims.
-- Implementation subagent lanes use medium, high, or xhigh reasoning effort
-  according to task complexity, risk, latency cost, and proof difficulty.
-- Do not ask subagents to read the giant plan. The controller extracts exact
-  task packets with source anchors, security context, proof obligations, allowed
-  write scope, and completion receipt, then gives each subagent only what it
-  needs.
+- Use subagents whenever work is parallelizable into bounded disjoint slices. Inline execution is for tiny, serial, unsafe-to-delegate, or unsupported-tool cases; record that reason. The main agent remains responsible for context, integration, verification, and final claims.
+- Implementation subagent lanes use medium, high, or xhigh reasoning effort according to task complexity, risk, latency cost, and proof difficulty.
+- Do not ask subagents to read the giant plan. The controller extracts exact task packets with source anchors, security context, proof obligations, allowed write scope, and completion receipt, then gives each subagent only what it needs.
 - Verify subagent reports by inspecting changed files, diffs, and test output.
-- This skill owns implementation slicing, integration, and proof. Use
-  `manage-agents` only for managing agent calls and sessions; do not copy those
-  mechanics here.
-- Preserve implementation proof as you work: requirement/task coverage, changed
-  files, proof commands with exit codes, red/green evidence for behavior
-  changes, evidence sources, freshness guards, unsatisfied proof gates, and
-  blockers.
-- If a required proof gate cannot pass inside the approved scope, stop and
-  return to `plan-creation-swarm` or split the work into smaller provable slices.
-- Required proof gates have either fresh evidence, an explicit user-approved
-  exception, or a blocker that routes to split/replan. Time pressure, task size,
-  confidence, manual spot-checks, and "CI will catch it" route to split/replan.
-- Never remove, weaken, disable, or relabel a test or proof lane to make a
-  gate pass; a failing required gate is a split/replan trigger, not an editing
-  target.
+- This skill owns implementation slicing, integration, and proof. Use `manage-agents` only for managing agent calls and sessions; do not copy those mechanics here.
+- Preserve implementation proof as you work: requirement/task coverage, changed files, proof commands with exit codes, red/green evidence for behavior changes, evidence sources, freshness guards, unsatisfied proof gates, and blockers.
+- If a required proof gate cannot pass inside the approved scope, stop and return to `plan-creation-swarm` or split the work into smaller provable slices.
+- Required proof gates have either fresh evidence, an explicit user-approved exception, or a blocker that routes to split/replan. Time pressure, task size, confidence, manual spot-checks, and "CI will catch it" route to split/replan.
+- Never remove, weaken, disable, or relabel a test or proof lane to make a gate pass; a failing required gate is a split/replan trigger, not an editing target.
 - Never claim complete without fresh verification evidence.
 
 ## Workflow
@@ -55,8 +37,7 @@ Validate first, then execute. This is controller-owned execution: subagents may 
    - Inline: tightly coupled work or no subagent support.
    - Sequential subagents: tasks share context or write surfaces.
    - Parallel subagents: tasks are independent with disjoint write sets, or are read-only research/review lanes.
-   - If the plan includes an execution DAG, use it to choose lanes, integration
-     gates, and validation gates.
+   - If the plan includes an execution DAG, use it to choose lanes, integration gates, and validation gates.
 3. Create a controller brief under:
    - `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/implementation-execute-plan-brief.md`
 4. Slice tasks.
@@ -71,18 +52,14 @@ Validate first, then execute. This is controller-owned execution: subagents may 
 6. Review after each slice.
    - Spec compliance first.
    - Code quality/adversarial review second for meaningful implementation slices.
-   - These slice-level checks do not replace the later
-     `implementation-review-swarm` gate unless implementation review is
-     explicitly out of scope.
+   - These slice-level checks do not replace the later `implementation-review-swarm` gate unless implementation review is explicitly out of scope.
 7. Verify final state.
    - Re-read the requirements/proof matrix or the plan's compact proof line.
    - Re-read requirements.
    - Inspect diffs.
    - Run targeted and full relevant checks.
-   - Verify each matrix row's owning task, gate, evidence source, and freshness
-     guard before treating it as satisfied.
-   - Report commands, exit codes, red/green evidence or exception, skipped
-     proof gates, proof split status, and remaining blockers.
+   - Verify each matrix row's owning task, gate, evidence source, and freshness guard before treating it as satisfied.
+   - Report commands, exit codes, red/green evidence or exception, skipped proof gates, proof split status, and remaining blockers.
 
 ## Subagent Ownership
 
@@ -96,14 +73,12 @@ The main agent must:
 - reject unsupported claims
 - integrate conflicting results
 - rerun validation
-- cross-check matrix rows whose evidence came from subagents, reviewers, UI
-  drivers, telemetry, or stale artifacts
+- cross-check matrix rows whose evidence came from subagents, reviewers, UI drivers, telemetry, or stale artifacts
 - decide whether the plan is complete
 
 ## Progressive Disclosure
 
-- Load `references/controller-packets.md` before dispatching implementer,
-  reviewer, or research subagents.
+- Load `references/controller-packets.md` before dispatching implementer, reviewer, or research subagents.
 - Load `references/validation-checklist.md` before claiming the plan is executable or complete.
 
 ## Stop Conditions
@@ -126,12 +101,8 @@ Include:
 - files changed
 - subagents used and what they contributed
 - verification commands with results
-- implementation proof: requirement/task coverage, commands, exit codes,
-  red/green evidence or exception, evidence sources, freshness guards,
-  unsatisfied proof gates, blockers
-- proof split status: all required proof passed, or the work was
-  split/replanned because proof could not pass at the current scope
+- implementation proof: requirement/task coverage, commands, exit codes, red/green evidence or exception, evidence sources, freshness guards, unsatisfied proof gates, blockers
+- proof split status: all required proof passed, or the work was split/replanned because proof could not pass at the current scope
 - accepted risks and follow-ups
 - exact blockers if incomplete
-- full clickable artifact links (absolute path + line) for any plans, reports,
-  handoffs, or artifacts the human is expected to open
+- full clickable artifact links (absolute path + line) for any plans, reports, handoffs, or artifacts the human is expected to open

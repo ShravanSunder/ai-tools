@@ -17,13 +17,10 @@ Then compare local `HEAD` to the PR head SHA from GitHub.
 
 ## Gates
 
-- Dirty worktree: not ready until committed, intentionally left out, or
-  explicitly resolved by the user.
+- Dirty worktree: not ready until committed, intentionally left out, or explicitly resolved by the user.
 - Detached HEAD: not ready until branch/PR mapping is clear.
 - Unpushed commits: not ready until pushed or intentionally excluded.
 - Missing upstream: push/create PR intentionally; do not guess.
-- Local `HEAD` differs from PR head: not ready unless the user explicitly
-  decides to leave local-only work out of the PR.
+- Local `HEAD` differs from PR head: not ready unless the user explicitly decides to leave local-only work out of the PR.
 
-Preserve worktrees after PR creation/update. Do not run destructive cleanup
-unless the user explicitly requested it.
+Preserve worktrees after PR creation/update. Do not run destructive cleanup unless the user explicitly requested it.

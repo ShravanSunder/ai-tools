@@ -61,26 +61,16 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 
 ## Skill Work SOP
 
-`AGENTS.md` is the repo operating map for skill work. It should tell agents how
-to work here, which skill owns the next decision, and where deeper instructions
-live. It should not duplicate the full manuals from meta-skills.
+`AGENTS.md` is the repo operating map for skill work. It should tell agents how to work here, which skill owns the next decision, and where deeper instructions live. It should not duplicate the full manuals from meta-skills.
 
-When creating, editing, or evaluating one named skill or accepted draft in this
-repo, use `shravan-dev-workflow:skills-creation` as the owning workflow. It owns
-the great-skill model: YAML trigger design, `SKILL.md` mental model and main
-path, reference depth, steering language, pruning, pressure proof, platform
-mechanics, source-adaptation checks, and sensitive-resource routing.
+When creating, editing, or evaluating one named skill or accepted draft in this repo, use `shravan-dev-workflow:skills-creation` as the owning workflow. It owns the great-skill model: YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pruning, pressure proof, platform mechanics, source-adaptation checks, and sensitive-resource routing.
 
-Use `shravan-dev-workflow:skill-audit` for broad evidence-backed questions about
-which skills to create, update, merge, or skip across the repo. `skills-creation`
-does not own broad repo-wide portfolio audit or duplicate-surface archaeology.
+Use `shravan-dev-workflow:skill-audit` for broad evidence-backed questions about which skills to create, update, merge, or skip across the repo. `skills-creation` does not own broad repo-wide portfolio audit or duplicate-surface archaeology.
 
 When doing skill work in this repo:
 
-1. Start from a concrete need, repeated failure mode, or user-approved workflow
-   change.
-2. If the target is not named, use `skill-audit` for broad portfolio
-   classification or ask for a named target.
+1. Start from a concrete need, repeated failure mode, or user-approved workflow change.
+2. If the target is not named, use `skill-audit` for broad portfolio classification or ask for a named target.
 3. Use `skills-creation` for the named target's create/update/evaluate workflow.
 4. Use `skills-creation` references for trigger/invocation choices, mental-model
    and reference hierarchy, pressure proof, Codex/Claude platform mechanics,
@@ -121,16 +111,11 @@ Detailed mechanics stay in the owning skills and references:
 
 ## Admired-source provenance (ai-dev-skills)
 
-Upstream skill collections are tracked in a separate meta-repo so this plugin
-can keep a **lite** inspiration map while durable provenance lives next to the
-actual upstream checkouts.
+Upstream skill collections are tracked in a separate meta-repo so this plugin can keep a **lite** inspiration map while durable provenance lives next to the actual upstream checkouts.
 
 - **Meta-repo:** `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/`
-- **Lite in-plugin map:**
-  `plugins/shravan-dev-workflow/docs/source-inspiration-catalog.md`
-  (preserve/avoid + workflow-area overview; not a runtime skill reference)
-- **Compatibility pointer:**
-  `plugins/shravan-dev-workflow/references/source-inspirations.md`
+- **Lite in-plugin map:** `plugins/shravan-dev-workflow/docs/source-inspiration-catalog.md` (preserve/avoid + workflow-area overview; not a runtime skill reference)
+- **Compatibility pointer:** `plugins/shravan-dev-workflow/references/source-inspirations.md`
 
 | Need | Open |
 |------|------|
@@ -140,17 +125,11 @@ actual upstream checkouts.
 | Cheap compare between two pinned SHAs | `ai-dev-skills/docs/repo-index-changelog/` |
 | How to bump submodules / keep indexes synced | `ai-dev-skills/AGENTS.md` |
 
-**Maintain both.** Update `ai-dev-skills` for path-level mappings, pin SHAs, and
-bump notes. Refresh the lite catalog here only when the high-level
-preserve/avoid or workflow-area story changes. Do not copy upstream skill prose
-into plugin skills; do not treat inspiration as proof that local behavior works.
+**Maintain both.** Update `ai-dev-skills` for path-level mappings, pin SHAs, and bump notes. Refresh the lite catalog here only when the high-level preserve/avoid or workflow-area story changes. Do not copy upstream skill prose into plugin skills; do not treat inspiration as proof that local behavior works.
 
 ## System Observability Ownership
 
-`observability/` owns the shared local OpenTelemetry and Victoria stack.
-`shravan-dev-workflow:ops-observability-stack` owns agent-facing query and debugging guidance. Do not
-move this stack into `devfiles`, and do not duplicate Docker Compose, collector,
-or generic Victoria query docs into app repos.
+`observability/` owns the shared local OpenTelemetry and Victoria stack. `shravan-dev-workflow:ops-observability-stack` owns agent-facing query and debugging guidance. Do not move this stack into `devfiles`, and do not duplicate Docker Compose, collector, or generic Victoria query docs into app repos.
 
 ### Current Plugin Skills
 
@@ -182,19 +161,7 @@ or generic Victoria query docs into app repos.
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
-**Config locations**:
-- Claude agents: `dot_claude/private_agents/*.md`
-- Codex agent roles: `dot_codex/agents/*.toml.tmpl` (analyst, reviewer, browser) — spawned in-session via `spawn_agent`
-- Codex profiles: `dot_codex/private_config.toml.tmpl` (`[profiles.spark]`, `[profiles.researcher]`) — invoked via `codex --profile X`
-- Codex role/profile prompts (shared): `dot_codex/instructions/*.md`
-
 Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
-
-### Review defaults
-
-Prefer `shravan-dev-workflow:implementation-review-swarm` for Codex reviews. That skill keeps Codex subagents as the default/majority reviewer backend and includes Claude, Gemini/agy, or another outside adversarial lane only when the user explicitly asks.
-
-Oracle is manual-only. Do not invoke it from normal review workflows.
 
 ### Changelog Expectations
 
@@ -230,14 +197,8 @@ Use the changelog system as the durable release memory:
 
 Skills encode judgment, house style, and repeatable failure prevention. Prefer improving an existing skill over adding a near-duplicate.
 
-- Treat this section as repo-local guardrails. Use `Skill Work SOP` above and
-  `skills-creation` for named create/update/evaluate work before relying on
-  these bullets.
-- When creating, editing, evaluating, or pressure-testing one named skill, load
-  `skills-creation`. Its references adapt Matt-style great-skill vocabulary,
-  pressure-proof lessons from `superpowers:writing-skills`, and platform
-  mechanics from `skill-creator`. For broad portfolio questions, use
-  `skill-audit` instead.
+- Treat this section as repo-local guardrails. Use `Skill Work SOP` above and `skills-creation` for named create/update/evaluate work before relying on these bullets.
+- When creating, editing, evaluating, or pressure-testing one named skill, load `skills-creation`. Its references adapt Matt-style great-skill vocabulary, pressure-proof lessons from `superpowers:writing-skills`, and platform mechanics from `skill-creator`. For broad portfolio questions, use `skill-audit` instead.
 - Name skills with active, searchable verbs in hyphen-case.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
@@ -249,6 +210,9 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Validate each changed skill independently before broad rollout. For workflow skills, include at least one realistic trigger evaluation or copy-paste pressure prompt that proves when the skill should and should not load.
 - Keep artifact ownership explicit: spec, plan, research, and debug skills create their lane artifacts for clear substantial work unless the user asks for chat-only/no-files; `docs-maintain` owns cleanup, archival, promotion, and source-of-truth reconciliation after artifacts exist.
 - Keep parent/subagent ownership explicit: subagents produce bounded evidence or candidate findings; the parent agent verifies, reduces, and owns the final claim.
+
+Additional standards:
+- We use word wrap, you dont have to split lines.
 
 ## Plugin Development
 
@@ -313,181 +277,3 @@ plugins/<plugin-name>/
 ## Agent Sidecar
 
 Sandboxed Docker containers for AI coding assistants with network isolation. See `agent_sidecar/README.md` for full documentation.
-
-### Scripts
-
-| Script | Location | Purpose |
-|--------|----------|---------|
-| `run-agent-sidecar.sh` | `agent_sidecar/` | Main entry point, builds/starts container |
-| `sidecar-ctl.sh` | `agent_sidecar/` | Host-side firewall control |
-| `firewall.sh` | `agent_sidecar/setup/` | In-container iptables/dnsmasq management |
-
-### Configuration Hierarchy
-
-Files are resolved in priority order (highest first):
-
-1. **Local** (`.local.` suffix) - Personal overrides, gitignored
-2. **Repo** (`.repo.` suffix) - Team overrides in `.agent_sidecar/`
-3. **Base** (`.base.` suffix) - Defaults in `agent_sidecar/` or `setup/`
-
-**Naming Convention**:
-| Behavior | Pattern | Examples |
-|----------|---------|----------|
-| **Override** (pick one: local > repo > base) | `{name}.{tier}.{ext}` | `sidecar.repo.conf`, `node-py.local.dockerfile` |
-| **Additive** (merge all that exist) | `{name}-extra.{tier}.{ext}` or `extra.{tier}.{ext}` | `firewall-allowlist-extra.repo.txt`, `extra.repo.zshrc` |
-
-### Two-Tier Image Architecture
-
-Images use a shared base + optional per-repo overlay:
-
-1. **Base image** (`agent-sidecar-base:{variant}`) - Shared across all repos. Contains OS, tools, agent CLIs, Playwright. Built once. Uses Python 3.13.
-2. **Per-repo overlay** (`agent-sidecar:{repo-name}`) - Only built when customizations exist (EXTRA_APT_PACKAGES, build-extra.sh, extra zshrc).
-3. If no customizations, the base image is used directly (no overlay build).
-
-Custom Dockerfiles in `.agent_sidecar/` **must** `FROM agent-sidecar-base:{variant}`:
-```dockerfile
-ARG BASE_IMAGE=agent-sidecar-base:node-py
-FROM ${BASE_IMAGE}
-# ... your customizations ...
-```
-
-Resolution for custom Dockerfiles (override pattern):
-```
-1. .agent_sidecar/node-py.local.dockerfile  (personal, gitignored)
-2. .agent_sidecar/node-py.repo.dockerfile   (team, committed)
-3. (no override) -> base image used directly, or overlay if customizations exist
-```
-
-### Firewall System
-
-**Allowlist files** (merged at startup, additive `-extra` pattern):
-- `setup/firewall-allowlist-extra.base.txt` - Always allowed (npm, pypi, AI APIs, etc.)
-- `.agent_sidecar/firewall-allowlist-extra.repo.txt` - Per-repo additions
-- `.agent_sidecar/firewall-allowlist-extra.local.txt` - Personal additions
-
-**Toggle presets** (dynamic via `sidecar-ctl`):
-- `firewall-toggle-presets/github-write.txt` - Push to GitHub
-- `firewall-toggle-presets/notion.txt` - Notion API
-- `firewall-toggle-presets/linear.txt` - Linear API
-
-### Extra APT Packages (per-repo)
-
-Set `EXTRA_APT_PACKAGES` in `sidecar.repo.conf` or `sidecar.local.conf`:
-
-```bash
-# .agent_sidecar/sidecar.repo.conf
-EXTRA_APT_PACKAGES="htop tree"
-```
-
-Setting `EXTRA_APT_PACKAGES` triggers a per-repo **overlay image** build on top of the shared base. Requires `--full-reset` to rebuild when changed.
-
-### Build-Extra Script (per-repo)
-
-For custom build-time installations (AppImages, binaries, etc.), create a build script:
-
-```bash
-# .agent_sidecar/build-extra.repo.sh
-#!/bin/bash
-# Install Obsidian (extracted AppImage, no libfuse2 needed)
-curl -L "https://github.com/.../Obsidian-1.5.3.AppImage" -o /tmp/obsidian.AppImage
-chmod +x /tmp/obsidian.AppImage
-cd /opt && /tmp/obsidian.AppImage --appimage-extract
-mv squashfs-root obsidian && ln -s /opt/obsidian/obsidian /usr/local/bin/obsidian
-rm /tmp/obsidian.AppImage
-```
-
-- Runs as **root** at Docker build time (full network access)
-- Script is deleted after running (agent cannot access it)
-- Resolution: `.local` > `.repo` (no base)
-- Requires `--full-reset` to rebuild when changed
-
-### Init Script Extras
-
-**Extra scripts** (run AFTER base init scripts, additive pattern):
-- `.agent_sidecar/init-background-extra.repo.sh` - Team background commands
-- `.agent_sidecar/init-background-extra.local.sh` - Personal background commands
-- `.agent_sidecar/init-foreground-extra.repo.sh` - Team shell setup
-- `.agent_sidecar/init-foreground-extra.local.sh` - Personal shell setup
-
-These run IN ADDITION to base scripts. The original `init-{bg,fg}.{repo,local}.sh` replacement pattern still works for full overrides.
-
-### Container Naming
-
-Containers are named: `agent-sidecar-{repo-name}-{dir-hash}`
-
-Example: `agent-sidecar-my-project-a1b2c3d4`
-
-### Volume Management
-
-Persistent volumes per workspace:
-- `agent-sidecar-history-{hash}` - Shell history
-- `agent-sidecar-venv-{hash}` - Python virtualenv
-- `agent-sidecar-pnpm-{hash}` - pnpm store
-- `agent-sidecar-cache-{hash}` - pnpm/npm cache (persists across container recreation)
-- `agent-sidecar-uv-{hash}` - uv Python downloads and cache
-- `agent-sidecar-nm-{hash}-*` - node_modules per package
-
-### Initialize a Repository
-
-Use `init_repo_sidecar.sh` to set up `.agent_sidecar/` with template files:
-
-```bash
-# From any repo directory
-init_repo_sidecar.sh --default          # Full setup (both .repo and .local files)
-init_repo_sidecar.sh --repo-only        # Team setup only
-init_repo_sidecar.sh --local-only       # Personal setup only
-init_repo_sidecar.sh --sync-docs        # Only sync INSTRUCTIONS.md (quick doc update)
-init_repo_sidecar.sh --default --override  # Force-overwrite all files
-```
-
-Every run copies `agent_sidecar/INSTRUCTIONS.md` into `.agent_sidecar/INSTRUCTIONS.md` (always overwritten). This gives agents in target repos a concise usage reference with links to config docs. Config files are only created if they don't exist, unless `--override` is used. See [`agent_sidecar/INSTRUCTIONS.md`](agent_sidecar/INSTRUCTIONS.md) for the full usage guide that gets synced.
-
-### Debugging container issues
-
-```bash
-# Check container status
-sidecar-ctl status
-
-# List all sidecar containers
-sidecar-ctl containers
-
-# Reload container (recreate with current image, picks up config/mount changes)
-run-agent-sidecar.sh --reload
-
-# Full reset (rebuild base image + recreate container, updates agent CLIs to latest)
-run-agent-sidecar.sh --full-reset
-
-# Enter container without running agent
-run-agent-sidecar.sh --no-run
-docker exec -it agent-sidecar-{name}-{hash} zsh
-
-# Clean up Docker resources (dangling images, old build cache, orphaned volumes)
-sidecar-ctl cleanup
-```
-
-**Container lifecycle flags**:
-
-| Flag | Base Image | Per-Repo Image | Container | Speed | Use Case |
-|------|-----------|---------------|-----------|-------|----------|
-| *(no flag)* | Reuse (or build if missing) | Skip if no customizations | Reuse existing | ~0-3s | Day-to-day re-entry |
-| `--reload` | Skipped | Skipped | Recreate | ~5-10s | Pick up config/mount changes |
-| `--full-reset` | Rebuild (cache bust) | Rebuild if needed | Recreate | ~2-5min | Update CLIs, Dockerfile, apt packages |
-
-**Note**: `--full-reset` updates all agent CLIs (Claude, Codex, Gemini, etc.) to their latest versions. Named volumes (history, venv, pnpm, node_modules, cache, uv) survive both `--reload` and `--full-reset`.
-
-## Security Model
-
-The agent inside the container has limited access by design:
-
-| Resource | Agent Access | Notes |
-|----------|--------------|-------|
-| `.agent_sidecar/` | **None** | Shadowed with empty tmpfs; config at `/etc/agent-sidecar` for system scripts |
-| APT/Debian repos | **None** | Packages installed at build time only, firewall blocks apt repos |
-| Network | **Allowlist only** | Firewall blocks all except explicitly allowed domains |
-| `.git/` | **Read-only** | Mounted read-only to prevent repo corruption |
-| Playwright/Chromium | **Localhost only** | Can only access 127.0.0.1 by default; use `PLAYWRIGHT_EXTRA_HOSTS` to allow more |
-
-## Important Notes
-
-- All `.local.*` files are gitignored for personal customization
-- The `.generated/` folder contains runtime files (compiled firewall lists)

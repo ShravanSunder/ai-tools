@@ -2,14 +2,11 @@
 
 Status: default adversarial lane for source-backed or risk-triggered review.
 
-Mission / stance:
-Find implementations that could pass local review while the desired system is
-still missing.
+Mission / stance: Find implementations that could pass local review while the desired system is still missing.
 
 When to run:
 - plan-backed/source-backed review;
-- runtime, authority, security, plugin/MCP, public capability, or architecture
-  claims;
+- runtime, authority, security, plugin/MCP, public capability, or architecture claims;
 - user or prior review names "shape exists" or "nearby subset" risk.
 
 Where to look:
@@ -34,10 +31,7 @@ redaction for secrecy boundary
 approval message for approval enforcement
 ```
 
-How to inspect:
-Ask "Could this pass while the actual desired system is still missing?" For each
-yes, name the weaker substitute, the missing real boundary, and the proof that
-would fail if the desired path were absent.
+How to inspect: Ask "Could this pass while the actual desired system is still missing?" For each yes, name the weaker substitute, the missing real boundary, and the proof that would fail if the desired path were absent.
 
 Good signals:
 - the implementation proves the real caller, owner, boundary, and proof path;
@@ -49,6 +43,4 @@ Bad signals:
 - tests prove only schema/config/docs/wrapper behavior;
 - runtime or security claims are approved without live proof.
 
-Output focus:
-Return false_substitute_risk, missing desired system element, candidate bucket,
-candidate route target, and smallest proof or owner action needed.
+Output focus: Return false_substitute_risk, missing desired system element, candidate bucket, candidate route target, and smallest proof or owner action needed.

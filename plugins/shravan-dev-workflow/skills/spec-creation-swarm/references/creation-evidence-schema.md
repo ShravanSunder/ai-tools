@@ -1,7 +1,6 @@
 # Creation Evidence Schema
 
-Use this schema for every substantive spec-creation lane observation before any
-lane-specific context.
+Use this schema for every substantive spec-creation lane observation before any lane-specific context.
 
 ```text
 - claim:
@@ -19,6 +18,5 @@ lane-specific context.
 Rules:
 
 - Prefer one strong decision-shaping observation over several weak observations.
-- Mark unverifiable claims as `unresolved`; do not invent a design to close the
-  gap.
+- Mark unverifiable claims as `unresolved`; do not invent a design to close the gap.
 - Put lane-specific details after the schema fields.

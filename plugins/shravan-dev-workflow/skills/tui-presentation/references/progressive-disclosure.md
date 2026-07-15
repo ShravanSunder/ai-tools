@@ -1,10 +1,7 @@
 Progressive Disclosure
 ══════════════════════════════════════════════════════════════════════
 
-Use this reference when the user needs to understand a difficult
-system, investigation, implementation, or design.  The job is not to
-show every fact.  The job is to reveal the right facts in an order the
-reader can hold.
+Use this reference when the user needs to understand a difficult system, investigation, implementation, or design.  The job is not to show every fact.  The job is to reveal the right facts in an order the reader can hold.
 
 Default disclosure sequence:
 
@@ -13,14 +10,12 @@ Default disclosure sequence:
   3. one small ledger
   4. technical detail
 
-Keep the first response easy to scan.  Add depth only after the reader
-has a stable place to stand.
+Keep the first response easy to scan.  Add depth only after the reader has a stable place to stand.
 
 
 ─── One Map ─────────────────────────────────────────────────────────
 
-Start with the user's named target and current question.  Preserve the
-nouns the user used, then place them in one small relationship map.
+Start with the user's named target and current question.  Preserve the nouns the user used, then place them in one small relationship map.
 
 ```
 ┌─ What Is Fighting? ─────────────────────────────────────────┐
@@ -31,8 +26,7 @@ nouns the user used, then place them in one small relationship map.
 └─────────────────────────────────────────────────────────────┘
 ```
 
-The map should answer: what are the moving parts, and why are they in
-tension?
+The map should answer: what are the moving parts, and why are they in tension?
 
 Avoid:
 
@@ -44,8 +38,7 @@ Avoid:
 
 ─── One Selected Slice ──────────────────────────────────────────────
 
-After the map, pick one path through the system.  A slice is narrower
-than the map and deeper than a label.
+After the map, pick one path through the system.  A slice is narrower than the map and deeper than a label.
 
 ```
 model output
@@ -73,8 +66,7 @@ open        exact visual family depends on the user's question
 next proof  pressure scenario must fail red and pass green
 ```
 
-For research synthesis, render handed-over lanes.  TUI does not define
-lanes, run agents, decide acceptance, or replace parent synthesis.
+For research synthesis, render handed-over lanes.  TUI does not define lanes, run agents, decide acceptance, or replace parent synthesis.
 
 ```
 lane             evidence           status
@@ -86,16 +78,13 @@ outside view     taste concern       open question
 
 ─── Technical Detail ────────────────────────────────────────────────
 
-Only after the map/slice/ledger should the answer name concrete files,
-commands, code, data names, and URLs.  Keep those atoms in semantic
-markdown:
+Only after the map/slice/ledger should the answer name concrete files, commands, code, data names, and URLs.  Keep those atoms in semantic markdown:
 
   ▸ `SKILL.md`
-  ▸ `tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --fast`
+  ▸ `tests/skills/run-skill-pressure-tests.sh --fast`
   ▸ `kind: "agent-channel-provider-health"`
 
-Do not put copyable code or data inside a decorative table cell.  Use
-fenced code blocks when the reader may copy, scan, or run the content.
+Do not put copyable code or data inside a decorative table cell.  Use fenced code blocks when the reader may copy, scan, or run the content.
 
 
 ─── Variants ────────────────────────────────────────────────────────

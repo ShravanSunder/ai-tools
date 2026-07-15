@@ -1,7 +1,6 @@
 # Tool Routing
 
-Use the narrowest source that can answer the question. Prefer primary evidence
-over generated synthesis when the claim is load-bearing.
+Use the narrowest source that can answer the question. Prefer primary evidence over generated synthesis when the claim is load-bearing.
 
 ## Source Classes
 
@@ -23,13 +22,9 @@ security research                          ops-security-review / Codex Security 
 ## Routing Rules
 
 - Use local code/docs first when the research affects a local repo.
-- Use DeepWiki for open-source repository structure and API questions, but
-  verify load-bearing conclusions against cited source files or official docs.
+- Use DeepWiki for open-source repository structure and API questions, but verify load-bearing conclusions against cited source files or official docs.
 - Use Perplexity for current multi-source research and cited web synthesis.
-- Use Tavily extraction/crawl, or Firecrawl/scraper when available, for specific
-  pages or docs sites.
+- Use Tavily extraction/crawl, or Firecrawl/scraper when available, for specific pages or docs sites.
 - Use Readwise/Reader only when the user's saved research is relevant.
-- Use memory/session logs for user workflow patterns, prior decisions, and
-  repeated manual work; treat memory as discovery until confirmed.
-- State when a preferred source class or tool was unavailable and what fallback
-  was used.
+- Use memory/session logs for user workflow patterns, prior decisions, and repeated manual work; treat memory as discovery until confirmed.
+- State when a preferred source class or tool was unavailable and what fallback was used.

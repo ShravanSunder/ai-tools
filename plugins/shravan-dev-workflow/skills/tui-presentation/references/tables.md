@@ -1,17 +1,14 @@
 Tables
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for table patterns.  All tables use Unicode
-box-drawing; no markdown pipe-tables.
+Deep-dive reference for table patterns.  All tables use Unicode box-drawing; no markdown pipe-tables.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
   ▸ progressive-disclosure.md — use ledgers after the first map/slice
-  ▸ shape-catalog.md ──► Shape 4 (Column-ruled) — when to use a table
-    with borders vs. column-ruled (no-border) style
-  ▸ build-discipline.md ──► Alignment recipes — cell-width arithmetic,
-    junction characters, padding, before/after drift repair
+  ▸ shape-catalog.md ──► Shape 4 (Column-ruled) — when to use a table with borders vs. column-ruled (no-border) style
+  ▸ build-discipline.md ──► Alignment recipes — cell-width arithmetic, junction characters, padding, before/after drift repair
 
 
 ─── Named-target ledger ─────────────────────────────────────────────
@@ -31,8 +28,7 @@ Keep rows short.  If cells need paragraphs, switch to a ruled list.
 
 ─── Research lane board ────────────────────────────────────────────
 
-Render research lanes you are handed; do not claim TUI runs the
-research or decides acceptance.
+Render research lanes you are handed; do not claim TUI runs the research or decides acceptance.
 
 ```
 lane          evidence          parent status
@@ -72,8 +68,7 @@ Shortest form when only one option is being evaluated.
 └─────────────┴─────────────────────────┴────────────────────────────────┘
 ```
 
-Row separators (├─┼─┤) between entries when cells wrap.  Pad shorter
-cells with spaces to match the row's line count.
+Row separators (├─┼─┤) between entries when cells wrap.  Pad shorter cells with spaces to match the row's line count.
 
 
 ─── Drift / diff table ──────────────────────────────────────────────
@@ -89,8 +84,7 @@ cells with spaces to match the row's line count.
 └────────────────────────────┴──────────────┴──────────────┘
 ```
 
-Use (missing), (added), or ✓ to show state clearly.  Avoid raw
-empty cells.
+Use (missing), (added), or ✓ to show state clearly.  Avoid raw empty cells.
 
 
 ─── Highlighted "sweet spot" row ────────────────────────────────────
@@ -105,8 +99,7 @@ empty cells.
 └────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Use ★ or similar marker to anchor the reader's eye on the
-recommendation.
+Use ★ or similar marker to anchor the reader's eye on the recommendation.
 
 
 ─── Feature matrix ──────────────────────────────────────────────────
@@ -136,5 +129,4 @@ Markers:
 ▸ 1-space padding on each side of content minimum
 ▸ Wrap long content to multiple lines rather than expanding a column
 
-▸ Align all row borders character-exact — a single off-by-one
-  breaks the grid
+▸ Align all row borders character-exact — a single off-by-one breaks the grid

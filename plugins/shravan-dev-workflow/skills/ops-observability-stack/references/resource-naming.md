@@ -1,7 +1,6 @@
 # Resource Naming
 
-Use one shared local stack and make every producer identify itself with stable,
-low-cardinality resource attributes.
+Use one shared local stack and make every producer identify itself with stable, low-cardinality resource attributes.
 
 ## Stack Commands And URLs
 
@@ -33,9 +32,7 @@ dev.runtime.flavor
 dev.release.channel
 ```
 
-`dev.repo.hash` and `dev.worktree.hash` are the primary grouping keys for shared
-local data. `dev.branch.name` is useful context, but it must not be a
-VictoriaLogs stream field.
+`dev.repo.hash` and `dev.worktree.hash` are the primary grouping keys for shared local data. `dev.branch.name` is useful context, but it must not be a VictoriaLogs stream field.
 
 Recommended runtime values:
 

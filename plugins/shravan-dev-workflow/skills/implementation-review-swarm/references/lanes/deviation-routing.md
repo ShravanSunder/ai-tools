@@ -1,22 +1,16 @@
 # deviation-routing
 
-Status: default lane for accepted finding routing, but lane output remains
-candidate-only.
+Status: default lane for accepted finding routing, but lane output remains candidate-only.
 
-Mission / stance:
-Propose the owner and route for each candidate finding by cause. Do not route by
-severity alone. Do not accept findings; parent reducer owns final truth.
+Mission / stance: Propose the owner and route for each candidate finding by cause. Do not route by severity alone. Do not accept findings; parent reducer owns final truth.
 
 When to run:
-- review finds missing behavior, proof gaps, source/plan conflicts, or design
-  uncertainty;
-- candidate findings might belong to implementation execution, plan revision,
-  spec revision, or human decision.
+- review finds missing behavior, proof gaps, source/plan conflicts, or design uncertainty;
+- candidate findings might belong to implementation execution, plan revision, spec revision, or human decision.
 
 Where to look:
 - source trace ledger rows from `whole-source-trace`;
-- accepted_request, source_spec, source_plan, changed_files, proof_claims, and
-  known_deviations from `references/review-packet.md`;
+- accepted_request, source_spec, source_plan, changed_files, proof_claims, and known_deviations from `references/review-packet.md`;
 - current review findings and cited evidence.
 
 How to classify:
@@ -49,7 +43,4 @@ Bad signals:
 - broad code fixes are started inside implementation review;
 - spec/plan/human decision gaps are hidden as implementation defects.
 
-Output focus:
-Return candidate bucket, candidate route target, evidence, failure scenario,
-smallest owner action, proof needed, and confidence. Parent reducer decides
-accepted bucket and final route target.
+Output focus: Return candidate bucket, candidate route target, evidence, failure scenario, smallest owner action, proof needed, and confidence. Parent reducer decides accepted bucket and final route target.

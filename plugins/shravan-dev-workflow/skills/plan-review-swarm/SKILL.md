@@ -32,37 +32,16 @@ plan artifact
 - Include evidence: file path, symbol or section, failure scenario, smallest fix, and proof/test.
 - For substantial plans, dispatch bounded read-only reviewer lanes by default. Codex subagents are the normal backend because most sessions run in Codex, but the lane contract is not Codex-only.
 - Give every lane a curated packet. Do not rely on inherited session context.
-- For substantial plan reviews, always dispatch a first-class
-  `whole-plan-cohesion` lane. Focused lanes do not replace it; lighter review
-  belongs to another workflow or an explicit chat-only/lightweight exception.
-- When a plan was created from a spec, design, goal contract, or handoff packet,
-  reviewer packets include both the plan artifact and the accepted source
-  artifact, with source anchors or section/header references that constrain the
-  review.
-- Plan-review lanes use medium or high reasoning effort according to plan size,
-  risk, and latency cost. Security-sensitive, broad, or cross-module reviews
-  should use high effort.
+- For substantial plan reviews, always dispatch a first-class `whole-plan-cohesion` lane. Focused lanes do not replace it; lighter review belongs to another workflow or an explicit chat-only/lightweight exception.
+- When a plan was created from a spec, design, goal contract, or handoff packet, reviewer packets include both the plan artifact and the accepted source artifact, with source anchors or section/header references that constrain the review.
+- Plan-review lanes use medium or high reasoning effort according to plan size, risk, and latency cost. Security-sensitive, broad, or cross-module reviews should use high effort.
 - Lane packets must explicitly say "do not edit files"; check the diff after they return if the tool surface permits edits.
 - Include Claude, Gemini, or extra `agy` adversarial lanes only when the user explicitly asks. Use the Claude Code CLI harness for Claude and `agy` for Gemini.
-- Treat subagent and external model output as candidate findings only, with
-  source anchors and completion receipts. The parent reviewer verifies and owns
-  synthesis.
-- This skill owns phase-specific lane packets, reduction, and proof. Use
-  `manage-agents` only for managing agent calls and sessions; do not copy those
-  mechanics here.
-- When a shortcut or missing artifact prevents dispatching lanes in the current
-  run, still name the substantial-lane packet shape: role / mode, edit
-  boundary, bounded question, decision target, source-of-truth inputs, inspect
-  list, non-goals, lane-specific checklist, output schema, contradiction
-  handling, confidence, security context, completion receipt, mandatory
-  `whole-plan-cohesion` lane, and parent verification.
+- Treat subagent and external model output as candidate findings only, with source anchors and completion receipts. The parent reviewer verifies and owns synthesis.
+- This skill owns phase-specific lane packets, reduction, and proof. Use `manage-agents` only for managing agent calls and sessions; do not copy those mechanics here.
+- When a shortcut or missing artifact prevents dispatching lanes in the current run, still name the substantial-lane packet shape: role / mode, edit boundary, bounded question, decision target, source-of-truth inputs, inspect list, non-goals, lane-specific checklist, output schema, contradiction handling, confidence, security context, completion receipt, mandatory `whole-plan-cohesion` lane, and parent verification.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
-- Accepted blocker or important findings normally route back to
-  `plan-creation-swarm` for revision with the full planning context. If a
-  finding exposes a missing or wrong spec boundary, route back to
-  `spec-creation-swarm`. Only make tiny same-session copy edits when they are
-  explicitly scoped and do not affect sequence, proof, parallelization, or
-  task scope.
+- Accepted blocker or important findings normally route back to `plan-creation-swarm` for revision with the full planning context. If a finding exposes a missing or wrong spec boundary, route back to `spec-creation-swarm`. Only make tiny same-session copy edits when they are explicitly scoped and do not affect sequence, proof, parallelization, or task scope.
 - If a finding is unclear, conflicts with user decisions, or would change code scope rather than plan text, stop and ask before changing the plan.
 - If this skill is itself running inside a subagent, stay shallow: do not spawn another swarm unless the parent explicitly asked for nested review.
 - For substantial plan reviews, write a repo-local temp review artifact by default unless the user explicitly asked for chat-only/no-files output.
@@ -75,35 +54,24 @@ plan artifact
    - `plan-file`: source implementation plan path exists.
    - `handoff-packet`: reviewing a packet prepared by another agent.
    - `chat-plan`: reviewing a plan only present in the conversation.
-   - if no full artifact or chat plan is available, block with the required
-     review surfaces instead of proceeding: whole-artifact coverage,
-     requirements/proof mapping, validation-command claims, route-back
-     handling, and substantial-lane packet fields including role / mode, edit
-     boundary, bounded question, decision target, source-of-truth inputs,
-     inspect list, non-goals, lane-specific checklist, output schema,
-     contradiction handling, confidence, security context, completion receipt,
-     mandatory `whole-plan-cohesion` lane, and parent verification
+   - if no full artifact or chat plan is available, block with the required review surfaces instead of proceeding: whole-artifact coverage, requirements/proof mapping, validation-command claims, route-back handling, and substantial-lane packet fields including role / mode, edit boundary, bounded question, decision target, source-of-truth inputs, inspect list, non-goals, lane-specific checklist, output schema, contradiction handling, confidence, security context, completion receipt, mandatory `whole-plan-cohesion` lane, and parent verification
 2. Establish coverage:
    - For files: line count plus chunk ranges.
    - For packets: list packet files read.
    - For chat plans: state that no source file was available.
-   - For source artifacts: accepted spec/design/goal/handoff path, section
-     anchors, and coverage; if no source artifact exists, state the limitation.
+   - For source artifacts: accepted spec/design/goal/handoff path, section anchors, and coverage; if no source artifact exists, state the limitation.
 3. Extract major claims:
    - architecture
    - file/module boundaries
    - API contracts
    - execution order
    - tests and validation gates
-   - requirements/proof matrix coverage, source requirement references, testing
-     pyramid coverage, TDD/red-green expectations, and proof layer sizing
+   - requirements/proof matrix coverage, source requirement references, testing pyramid coverage, TDD/red-green expectations, and proof layer sizing
    - security context or threat model
    - risks and assumptions
 4. Check claims against live repo evidence.
-5. Build a shared plan review packet that includes the review target and the
-   accepted source artifact or explicit source limitation.
-6. Dispatch `whole-plan-cohesion` and bounded plan-review-swarm lanes for
-   substantial plans.
+5. Build a shared plan review packet that includes the review target and the accepted source artifact or explicit source limitation.
+6. Dispatch `whole-plan-cohesion` and bounded plan-review-swarm lanes for substantial plans.
 7. Add optional external model adversarial lanes when requested.
 8. Verify, dedupe, and rank candidate findings.
 9. Receive and route findings:
@@ -129,25 +97,15 @@ Backend rules:
 
 Default lanes:
 
-- `whole-plan-cohesion`: checks whether the whole plan implements the whole
-  accepted spec/source artifact, whether vertical slices fit together, whether
-  proof gates are coherent across slices, and whether task scope, sequence, and
-  validation contradict each other.
+- `whole-plan-cohesion`: checks whether the whole plan implements the whole accepted spec/source artifact, whether vertical slices fit together, whether proof gates are coherent across slices, and whether task scope, sequence, and validation contradict each other.
 - `spec-compliance`: checks whether the plan satisfies the stated goal, user constraints, and source artifact.
 - `architecture-assumptions`: challenges module boundaries, ownership, data flow, dependency direction, and hidden coupling.
-- `testability-validation`: checks whether the proposed tests and commands
-  actually prove behavior and catch likely failures. It also checks whether
-  every material requirement traces back to the source spec/requirements, every
-  proof gate maps to a testing-pyramid layer, lower proof layers are not skipped
-  just because a higher layer exists, behavior changes name whether red/green
-  evidence is required, and manual proof is justified when durable automated
-  proof is not suitable.
+- `testability-validation`: checks whether the proposed tests and commands actually prove behavior and catch likely failures. It also checks whether every material requirement traces back to the source spec/requirements, every proof gate maps to a testing-pyramid layer, lower proof layers are not skipped just because a higher layer exists, behavior changes name whether red/green evidence is required, and manual proof is justified when durable automated proof is not suitable.
 - `security-reliability`: looks for trust-boundary, secret/token, race, cleanup, rollback, observability, and partial-failure gaps.
 - `execution-scope`: checks ordering, cutovers, migration completeness, ambiguous task packets, and overbroad or under-specified work.
 - `adversarial-design`: pokes holes in assumptions, contradictions, tradeoffs, and simpler alternatives.
 
-For tiny plans, run the smallest relevant local review lane set and name the
-lanes used.
+For tiny plans, run the smallest relevant local review lane set and name the lanes used.
 
 Each lane receives the same shared packet plus one lane focus. It must return:
 
@@ -156,10 +114,8 @@ Each lane receives the same shared packet plus one lane focus. It must return:
 - verdict: ready, needs revision, or blocked
 - findings grouped as blocker, important, question, or nit
 - evidence, failure scenario, smallest plan edit, proof/test, and confidence
-- lane-level confidence and remaining uncertainty, including when there are no
-  findings
-- completion receipt with source anchors, proposed artifact path, confidence,
-  and remaining uncertainty
+- lane-level confidence and remaining uncertainty, including when there are no findings
+- completion receipt with source anchors, proposed artifact path, confidence, and remaining uncertainty
 - for security findings: validation status as `validated`, `unvalidated with proof gap`, or `rejected`
 
 ## External Model Lanes
@@ -184,30 +140,20 @@ After lanes return:
 6. Rank accepted findings by execution risk.
 7. Produce the smallest creation-route or tiny plan edit, not implementation patches.
 
-Plans missing a requirements/proof matrix, source requirement references, or
-testing-pyramid proof layers are `needs revision`, not ready for
-`implementation-execute-plan`, unless the plan documents why a compact proof
-line is sufficient for its size.
+Plans missing a requirements/proof matrix, source requirement references, or testing-pyramid proof layers are `needs revision`, not ready for `implementation-execute-plan`, unless the plan documents why a compact proof line is sufficient for its size.
 
-Plans with required proof gates that cannot pass at the proposed task size are
-`needs revision` until split into smaller provable slices.
+Plans with required proof gates that cannot pass at the proposed task size are `needs revision` until split into smaller provable slices.
 
 ## Addressing Accepted Findings
 
-Plan review includes review reception. Load `references/review-checklist.md`
-before routing accepted findings, making tiny scoped plan edits, returning owner
-edits, or deciding whether feedback needs a user decision.
+Plan review includes review reception. Load `references/review-checklist.md` before routing accepted findings, making tiny scoped plan edits, returning owner edits, or deciding whether feedback needs a user decision.
 
-Never convert plan review into code implementation. Accepted findings change the
-plan through `plan-creation-swarm`; `implementation-execute-plan` handles code
-execution after the plan is ready.
+Never convert plan review into code implementation. Accepted findings change the plan through `plan-creation-swarm`; `implementation-execute-plan` handles code execution after the plan is ready.
 
 ## Progressive Disclosure
 
-- Load `references/review-packet.md` before dispatching subagents or writing a
-  copy-paste review prompt.
-- Load `references/lanes/whole-plan-cohesion.md` before dispatching the
-  mandatory whole-picture lane for a substantial plan review.
+- Load `references/review-packet.md` before dispatching subagents or writing a copy-paste review prompt.
+- Load `references/lanes/whole-plan-cohesion.md` before dispatching the mandatory whole-picture lane for a substantial plan review.
 - Load `references/review-checklist.md` when the plan is large, risky, or implementation-facing.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
 - Load `../ops-security-review/references/threat-model-context.md` when packaging or reviewing security-sensitive plans. This cross-skill reference is load-bearing; keep it in sync with `ops-security-review` if that reference moves.
@@ -225,6 +171,5 @@ Return:
 - Swarm coverage: lanes run, lane status, backend used for each lane, external model lane status, and verification notes.
 - Whole-plan cohesion status.
 - Artifact path, or why no artifact was written.
-- Full clickable artifact links (absolute path + line) for review reports,
-  plans, or artifacts the human is expected to open.
+- Full clickable artifact links (absolute path + line) for review reports, plans, or artifacts the human is expected to open.
 - Explicit "do not implement code yet" note unless the user changes scope.

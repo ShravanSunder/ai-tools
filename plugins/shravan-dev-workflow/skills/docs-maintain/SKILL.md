@@ -30,15 +30,11 @@ docs request
    - specs, plans, debug notes, research packets, and handoffs are stage artifacts until this skill classifies them as durable, archived, or disposable.
 - Keep `AGENTS.md` short. Move runbook detail to docs and link it.
 - Do not let old plans/specs/debug notes displace current source-of-truth docs by inertia.
-- Do not replace phase skills for active artifact work: `spec-creation-swarm`,
-  `spec-review-swarm`, `spec-handoff`, `plan-creation-swarm`, `plan-review-swarm`,
-  `plan-handoff`, `implementation-execute-plan`, `implementation-handoff`, and
-  `debug-investigation` own their lanes.
+- Do not replace phase skills for active artifact work: `spec-creation-swarm`, `spec-review-swarm`, `spec-handoff`, `plan-creation-swarm`, `plan-review-swarm`, `plan-handoff`, `implementation-execute-plan`, `implementation-handoff`, and `debug-investigation` own their lanes.
 - Before purging or rewriting docs, propose the change and say what will be preserved.
 - When code and docs disagree, identify the driver and ask the user if it is not obvious.
 - Use subagents for bounded inventory or stale-doc research in large repos, but the parent owns final edits.
-- Use `manage-agents` only for model-agent call/session mechanics; keep doc
-  roles, staleness, and source-of-truth classification here.
+- Use `manage-agents` only for model-agent call/session mechanics; keep doc roles, staleness, and source-of-truth classification here.
 - Use progressive disclosure: load only the workflow reference that matches the docs job.
 
 ## Workflow
@@ -97,6 +93,5 @@ Return:
 - changes made or proposed
 - stale docs preserved, moved, or left alone
 - links/references updated
-- full clickable artifact links (absolute path + line) for docs or artifacts
-  the human is expected to open
+- full clickable artifact links (absolute path + line) for docs or artifacts the human is expected to open
 - validation performed

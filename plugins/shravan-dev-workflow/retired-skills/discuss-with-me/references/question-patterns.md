@@ -4,8 +4,7 @@ Load this before asking a live question when the decision is broad, high-stakes,
 
 ## Universal Form
 
-This mirrors the Grill Contract in `SKILL.md`. Every element appears; obvious
-cases may compress an element to one line.
+This mirrors the Grill Contract in `SKILL.md`. Every element appears; obvious cases may compress an element to one line.
 
 ```text
 What I think you mean:

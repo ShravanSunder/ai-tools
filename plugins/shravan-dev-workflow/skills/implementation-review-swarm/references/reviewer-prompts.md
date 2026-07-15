@@ -1,21 +1,10 @@
 # Reviewer Prompts
 
-These prompts are inputs for read-only reviewer lanes. Codex subagents are the
-normal backend, but the same lane contracts can be sent to another requested
-reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports
-candidate findings. The parent session is the reducer.
+These prompts are inputs for read-only reviewer lanes. Codex subagents are the normal backend, but the same lane contracts can be sent to another requested reviewer system such as Claude Code CLI or `agy`/Gemini. Each reviewer reports candidate findings. The parent session is the reducer.
 
-Use `references/review-packet.md` for implementation-review packet anatomy,
-source-truth handling, source trace, report text contract, route-back semantics,
-and parent reducer ownership. This file owns prompt suffixes and focused
-reviewer lane prompts. It does not authorize implementation.
+Use `references/review-packet.md` for implementation-review packet anatomy, source-truth handling, source trace, report text contract, route-back semantics, and parent reducer ownership. This file owns prompt suffixes and focused reviewer lane prompts. It does not authorize implementation.
 
-For substantial implementation-review swarms, the parent preserves an
-inspectable artifact trail in the existing review workflow home. If review
-artifacts live beside the source plan, PR, or implementation workflow instead,
-the parent ledger must point to that source workflow and to each parent-written
-lane artifact path. Lane outputs are candidate findings; only parent
-verification can accept, reject, contest, defer, or leave them open.
+For substantial implementation-review swarms, the parent preserves an inspectable artifact trail in the existing review workflow home. If review artifacts live beside the source plan, PR, or implementation workflow instead, the parent ledger must point to that source workflow and to each parent-written lane artifact path. Lane outputs are candidate findings; only parent verification can accept, reject, contest, defer, or leave them open.
 
 ## Reviewer Prompt Suffix
 

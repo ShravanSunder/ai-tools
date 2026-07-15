@@ -1,7 +1,6 @@
 # Validation Checklist
 
-Use this before calling an improvement plan ready for review, handoff, or
-execution.
+Use this before calling an improvement plan ready for review, handoff, or execution.
 
 ## Required Checks
 
@@ -13,13 +12,10 @@ execution.
 - Tasks are small enough that proof can pass inside scope.
 - Proof gates are concrete commands or manual checks, not vibes.
 - Focused validation and full validation are separate.
-- Red/green proof is required for behavior changes unless the user explicitly
-  approved an exception.
+- Red/green proof is required for behavior changes unless the user explicitly approved an exception.
 - Security-sensitive surfaces are named when touched.
-- Stop conditions cover stale repo state, unrelated validation failures,
-  unexpected secrets, and changed public contracts.
-- Handoff prompt names repo, plan path, first validation step, and parent
-  ownership.
+- Stop conditions cover stale repo state, unrelated validation failures, unexpected secrets, and changed public contracts.
+- Handoff prompt names repo, plan path, first validation step, and parent ownership.
 
 ## Verdicts
 

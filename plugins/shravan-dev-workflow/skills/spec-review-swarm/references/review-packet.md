@@ -1,44 +1,18 @@
 # Review Packet
 
-Use this skill-local packet contract for spec-review subagent prompts or
-copy-paste prompts. Load only the selected `references/lanes/*.md` files for
-lane-specific behavior. This file owns spec-review packet anatomy, source-truth
-handling, artifact coverage fields, refinement-shaped output contract,
-receipts, parent reducer boundaries, and review-specific route-back rules. It
-intentionally does not define named lane overlays. Use
-`references/finding-schema.md` as the canonical per-finding schema for every
-review lane.
+Use this skill-local packet contract for spec-review subagent prompts or copy-paste prompts. Load only the selected `references/lanes/*.md` files for lane-specific behavior. This file owns spec-review packet anatomy, source-truth handling, artifact coverage fields, refinement-shaped output contract, receipts, parent reducer boundaries, and review-specific route-back rules. It intentionally does not define named lane overlays. Use `references/finding-schema.md` as the canonical per-finding schema for every review lane.
 
-For substantial review swarms, the parent preserves an inspectable artifact
-trail in the existing review workflow home. If review artifacts live beside the
-source workflow instead, the parent ledger must point to that source workflow
-and to each parent-written lane artifact path. Lane files are candidate
-findings; the parent ledger is the reducer synthesis; the reviewed spec/design
-remains the accepted phase artifact only after parent verification.
+For substantial review swarms, the parent preserves an inspectable artifact trail in the existing review workflow home. If review artifacts live beside the source workflow instead, the parent ledger must point to that source workflow and to each parent-written lane artifact path. Lane files are candidate findings; the parent ledger is the reducer synthesis; the reviewed spec/design remains the accepted phase artifact only after parent verification.
 
-Do not pass accumulated session history as lane context. Give each lane a
-fresh, bounded packet with source anchors, source/file inventory, and the exact
-decision target. Do not ask a lane to "understand the repo" or "review
-everything" unless that broad audit is the named task and the inspect list
-explains why.
+Do not pass accumulated session history as lane context. Give each lane a fresh, bounded packet with source anchors, source/file inventory, and the exact decision target. Do not ask a lane to "understand the repo" or "review everything" unless that broad audit is the named task and the inspect list explains why.
 
-For substantial review, include a first-class `whole-spec-coverage` lane. It
-receives the target spec artifact, source anchors, research lane files or
-ledger entries, slice inventory when present, and the focused-lane decision
-surface. Focused lanes do not replace it.
+For substantial review, include a first-class `whole-spec-coverage` lane. It receives the target spec artifact, source anchors, research lane files or ledger entries, slice inventory when present, and the focused-lane decision surface. Focused lanes do not replace it.
 
-Do not pre-judge findings for a lane. The parent packet must not tell a lane to
-treat a category as minor, avoid flagging a concern, or confirm the parent's
-preferred answer. Lanes return candidate findings; the parent reducer verifies
-and ranks them after reading the evidence.
+Do not pre-judge findings for a lane. The parent packet must not tell a lane to treat a category as minor, avoid flagging a concern, or confirm the parent's preferred answer. Lanes return candidate findings; the parent reducer verifies and ranks them after reading the evidence.
 
-If a claim cannot be verified from the supplied artifact, source anchors, or one
-named focused check, return it as open or unresolved. Do not broaden into a repo
-crawl to rescue an under-specified spec.
+If a claim cannot be verified from the supplied artifact, source anchors, or one named focused check, return it as open or unresolved. Do not broaden into a repo crawl to rescue an under-specified spec.
 
-If a shortcut or missing artifact prevents live dispatch, the parent still names
-the mandatory `whole-spec-coverage` lane in the blocked response. Do not
-describe it only as generic whole-picture or whole-artifact coverage.
+If a shortcut or missing artifact prevents live dispatch, the parent still names the mandatory `whole-spec-coverage` lane in the blocked response. Do not describe it only as generic whole-picture or whole-artifact coverage.
 
 ```text
 You are a spec/design review swarmer.
@@ -115,5 +89,4 @@ Do not mark findings accepted. Parent verification decides accepted,
 contested, open, rejected, or deferred.
 ```
 
-Review means pressure-testing the spec. Refinement is the output shape for every
-lane, not a separate phase or one isolated lane.
+Review means pressure-testing the spec. Refinement is the output shape for every lane, not a separate phase or one isolated lane.

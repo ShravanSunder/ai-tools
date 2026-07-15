@@ -1,8 +1,6 @@
 # Skill Review Output Schema
 
-Shared model-readable shapes for skill spec review and skill implementation
-review. This file owns field names, required slots, ordering, and status labels
-only; review judgment stays in the consuming review reference.
+Shared model-readable shapes for skill spec review and skill implementation review. This file owns field names, required slots, ordering, and status labels only; review judgment stays in the consuming review reference.
 
 ## Review Packet
 

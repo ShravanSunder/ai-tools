@@ -12,12 +12,9 @@ Use this before execution and before completion claims.
 - Security assumptions checked against live code/docs when sensitive surfaces are touched.
 - Scope and write boundaries clear.
 - Validation commands identified.
-- Requirements/proof matrix identified, or the plan explains why a compact
-  proof line is sufficient.
+- Requirements/proof matrix identified, or the plan explains why a compact proof line is sufficient.
 - Evidence sources and freshness guards identified for non-trivial matrix rows.
-- Required proof gates are sized so they can pass inside the approved scope; if
-  not, split or replan before editing. Missing proof has either a concrete
-  external blocker, a user-approved exception, or a split/replan route.
+- Required proof gates are sized so they can pass inside the approved scope; if not, split or replan before editing. Missing proof has either a concrete external blocker, a user-approved exception, or a split/replan route.
 - Stop conditions considered.
 
 ## Before Dispatching Subagents
@@ -34,8 +31,7 @@ Use this before execution and before completion claims.
 - Read the returned summary.
 - Inspect changed files and diff.
 - Verify tests or evidence independently.
-- Cross-check the relevant matrix rows before treating subagent, reviewer,
-  UI-driver, telemetry, or other delegated evidence as complete.
+- Cross-check the relevant matrix rows before treating subagent, reviewer, UI-driver, telemetry, or other delegated evidence as complete.
 - Resolve conflicts between subagent outputs.
 - Do not accept DONE_WITH_CONCERNS as done until concerns are evaluated.
 
@@ -48,10 +44,6 @@ Use this before execution and before completion claims.
 - Run full relevant project validation when feasible.
 - Report command, exit code, and result.
 - Label verification precisely: unit, integration, real VM integration, and smoke/e2e are not interchangeable.
-- For sensitive changes, report authz regression, secret non-exposure,
-  command/path safety, dependency/package-script safety, and scan/report status
-  when applicable.
+- For sensitive changes, report authz regression, secret non-exposure, command/path safety, dependency/package-script safety, and scan/report status when applicable.
 - Separate fixed now, blockers, and follow-ups.
-- Report implementation proof: requirement/task coverage, changed files,
-  red/green evidence or exception, evidence sources, freshness guards,
-  unsatisfied proof gates, blockers, and proof split status.
+- Report implementation proof: requirement/task coverage, changed files, red/green evidence or exception, evidence sources, freshness guards, unsatisfied proof gates, blockers, and proof split status.

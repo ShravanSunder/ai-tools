@@ -1,33 +1,14 @@
 # Review Packet Template
 
-Use this skill-local packet contract for a plan-review subagent prompt or
-copy-paste prompt. This file owns plan-review packet anatomy, source-truth
-handling, artifact coverage fields, readiness verdicts, proof-gate review,
-route-back semantics, execution-scope checks, receipts, parent reducer rules,
-and review-specific lane overlays.
+Use this skill-local packet contract for a plan-review subagent prompt or copy-paste prompt. This file owns plan-review packet anatomy, source-truth handling, artifact coverage fields, readiness verdicts, proof-gate review, route-back semantics, execution-scope checks, receipts, parent reducer rules, and review-specific lane overlays.
 
-For substantial plan-review swarms, the parent preserves an inspectable
-artifact trail in the existing review workflow home. If review artifacts live
-beside the source plan workflow instead, the parent ledger must point to that
-source workflow and to each parent-written lane artifact path. Lane files are
-candidate findings; the parent ledger is the reducer synthesis; the
-implementation plan remains the accepted phase artifact only after parent
-verification.
+For substantial plan-review swarms, the parent preserves an inspectable artifact trail in the existing review workflow home. If review artifacts live beside the source plan workflow instead, the parent ledger must point to that source workflow and to each parent-written lane artifact path. Lane files are candidate findings; the parent ledger is the reducer synthesis; the implementation plan remains the accepted phase artifact only after parent verification.
 
-For substantial plan review, include a first-class `whole-plan-cohesion` lane.
-It receives the produced plan, the accepted source spec/design/goal/handoff
-artifact when one exists, required section/header anchors for both artifacts,
-and any research or ledger files that constrain the plan. Focused lanes do not
-replace it.
+For substantial plan review, include a first-class `whole-plan-cohesion` lane. It receives the produced plan, the accepted source spec/design/goal/handoff artifact when one exists, required section/header anchors for both artifacts, and any research or ledger files that constrain the plan. Focused lanes do not replace it.
 
-Review lanes open and read the plan artifact and accepted source artifact
-themselves before judging. Controller summaries, coverage notes, and parent
-claims are routing hints only; they are not substitutes for the lane's own
-source-to-plan inspection.
+Review lanes open and read the plan artifact and accepted source artifact themselves before judging. Controller summaries, coverage notes, and parent claims are routing hints only; they are not substitutes for the lane's own source-to-plan inspection.
 
-If a shortcut or missing artifact prevents live dispatch, the parent still names
-the mandatory `whole-plan-cohesion` lane in the blocked response. Do not
-describe it only as generic whole-artifact or whole-picture review.
+If a shortcut or missing artifact prevents live dispatch, the parent still names the mandatory `whole-plan-cohesion` lane in the blocked response. Do not describe it only as generic whole-artifact or whole-picture review.
 
 ```text
 You are an adversarial plan reviewer. Review only; do not implement.
@@ -131,43 +112,28 @@ Return:
 
 ### whole-plan-cohesion
 
-Check whether the whole plan implements the whole accepted spec/source artifact.
-Findings should name missing source requirements, contradictory slices,
-duplicated work, broken dependency order, proof gates that do not compose, or
-plan sections that cannot be executed together as written.
+Check whether the whole plan implements the whole accepted spec/source artifact. Findings should name missing source requirements, contradictory slices, duplicated work, broken dependency order, proof gates that do not compose, or plan sections that cannot be executed together as written.
 
 ### spec-compliance
 
-Check whether the plan satisfies the stated goal, user constraints, accepted
-spec/design, and requirements. Findings should name the source row or section
-that the plan misses or changes.
+Check whether the plan satisfies the stated goal, user constraints, accepted spec/design, and requirements. Findings should name the source row or section that the plan misses or changes.
 
 ### architecture-assumptions
 
-Challenge module boundaries, ownership, data flow, dependency direction, shared
-state, and hidden coupling. Findings should show the failure or future change
-that makes the assumption costly.
+Challenge module boundaries, ownership, data flow, dependency direction, shared state, and hidden coupling. Findings should show the failure or future change that makes the assumption costly.
 
 ### testability-validation
 
-Check whether proof gates prove the stated requirements. Verify source
-requirement references, testing-pyramid layers, red/green requirements, proof
-modalities, evidence sources, and freshness guards. Include manual UX, visual,
-data/DB/state, logs, traces, metrics, OTel, smoke, e2e, CI, PR, and release
-artifact proof where the plan surface calls for them.
+Check whether proof gates prove the stated requirements. Verify source requirement references, testing-pyramid layers, red/green requirements, proof modalities, evidence sources, and freshness guards. Include manual UX, visual, data/DB/state, logs, traces, metrics, OTel, smoke, e2e, CI, PR, and release artifact proof where the plan surface calls for them.
 
 ### security-reliability
 
-Review trust boundaries, secrets, permissions, rollback, cleanup, races,
-observability, and partial-failure handling. Security findings need a misuse or
-failure path through the planned work.
+Review trust boundaries, secrets, permissions, rollback, cleanup, races, observability, and partial-failure handling. Security findings need a misuse or failure path through the planned work.
 
 ### execution-scope
 
-Check ordering, parallelization, integration gates, task packet clarity,
-allowed write scopes, migration completeness, and parent validation points.
+Check ordering, parallelization, integration gates, task packet clarity, allowed write scopes, migration completeness, and parent validation points.
 
 ### adversarial-design
 
-Probe assumptions, contradictions, tradeoffs, and simpler alternatives that
-would change the implementation plan or route back to spec creation.
+Probe assumptions, contradictions, tradeoffs, and simpler alternatives that would change the implementation plan or route back to spec creation.

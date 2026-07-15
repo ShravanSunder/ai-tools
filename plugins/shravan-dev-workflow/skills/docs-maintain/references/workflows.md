@@ -36,8 +36,7 @@ Use when code, docs, README, AGENTS, tickets, or plans disagree.
 
 1. State the disagreement precisely.
 2. Identify which source should drive.
-3. If unclear, ask the user directly; use `discuss-clarify-mental-models` when
-   the source-of-truth disagreement reflects shared-model drift.
+3. If unclear, ask the user directly; use `discuss-clarify-mental-models` when the source-of-truth disagreement reflects shared-model drift.
 4. Patch the non-driving source.
 5. Add a changelog note when the discrepancy taught a durable repo rule.
 

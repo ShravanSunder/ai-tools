@@ -165,9 +165,7 @@ peekaboo daemon start
 peekaboo bridge status
 ```
 
-Treat the bridge socket as a local trust boundary. Avoid enabling unsigned
-socket clients unless a task explicitly requires it and the caller accepts that
-broader local IPC surface.
+Treat the bridge socket as a local trust boundary. Avoid enabling unsigned socket clients unless a task explicitly requires it and the caller accepts that broader local IPC surface.
 
 ## Daemon Configuration Options
 
@@ -242,6 +240,4 @@ peekaboo permissions status
 
 ## Artifact Hygiene
 
-Headless runs can create screenshots, UI JSON, and logs containing sensitive
-window titles, text, or clipboard-adjacent data. Prefer temporary paths, redact
-artifacts before sharing, and clean up only files created by the current run.
+Headless runs can create screenshots, UI JSON, and logs containing sensitive window titles, text, or clipboard-adjacent data. Prefer temporary paths, redact artifacts before sharing, and clean up only files created by the current run.
