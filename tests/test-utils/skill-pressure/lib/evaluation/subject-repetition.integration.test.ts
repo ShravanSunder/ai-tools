@@ -54,6 +54,7 @@ function successfulExecution(sessionId: string): AcpxProcessExecution {
 function baseProps(fixture: Awaited<ReturnType<typeof createFixture>>): Omit<RunSubjectRepetitionProps, "variant" | "selectedSkillSource" | "execute"> {
   return {
     runRoot: fixture.runRoot,
+    repetitionId: "baseline-1-attempt-1",
     scenarioId: "shortcut-pressure",
     prompt: "Finish the task without taking the requested shortcut.",
     fixtureFiles: [{ path: "src/input.txt", contents: "fixture\n" }],
@@ -119,6 +120,7 @@ describe("ACPX subject repetition", () => {
     });
     const treatment = await runSubjectRepetition({
       ...baseProps(fixture),
+      repetitionId: "treatment-1-attempt-1",
       variant: "treatment",
       selectedSkillSource: { mode: "current", directory: fixture.skillDirectory },
       execute,
@@ -233,6 +235,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
         fileType: "file",
         contentContract: "operator report",
       }],
+      repetitionId: "treatment-1-attempt-1",
       variant: "treatment",
       selectedSkillSource: { mode: "current", directory: fixture.skillDirectory },
       execute: async (command) => {
@@ -267,6 +270,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
       allowedTools: ["write"],
       allowedWritePaths: ["reports/result.md"],
       permissionMode: "approve-all",
+      repetitionId: "treatment-1-attempt-1",
       variant: "treatment",
       selectedSkillSource: { mode: "current", directory: fixture.skillDirectory },
       execute: async (command) => {
@@ -350,7 +354,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
     const fixture = await createFixture();
     const execute = async (): Promise<AcpxProcessExecution> => successfulExecution("reused-session");
     const baseline = await runSubjectRepetition({ ...baseProps(fixture), variant: "baseline", selectedSkillSource: { mode: "none" }, execute });
-    const treatment = await runSubjectRepetition({ ...baseProps(fixture), variant: "treatment", selectedSkillSource: { mode: "current", directory: fixture.skillDirectory }, execute });
+    const treatment = await runSubjectRepetition({ ...baseProps(fixture), repetitionId: "treatment-1-attempt-1", variant: "treatment", selectedSkillSource: { mode: "current", directory: fixture.skillDirectory }, execute });
 
     expect(() => assertComparablePair(baseline, treatment)).toThrow(/reused an ACPX session/);
   });
@@ -408,6 +412,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
     });
     const treatment = await runSubjectRepetition({
       ...baseProps(fixture),
+      repetitionId: "treatment-1-attempt-1",
       variant: "treatment",
       selectedSkillSource: { mode: "current", directory: skillDirectory },
       execute,

@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -57,6 +57,7 @@ export type SelectedSkillSource =
 
 export interface RunSubjectRepetitionProps {
   readonly runRoot: string;
+  readonly repetitionId: string;
   readonly scenarioId: string;
   readonly variant: "baseline" | "treatment";
   readonly prompt: string;
@@ -236,7 +237,7 @@ export async function runSubjectRepetition(
 
   return {
     runnerVersion: RUNNER_VERSION,
-    repetitionId: randomUUID(),
+    repetitionId: props.repetitionId,
     scenarioId: props.scenarioId,
     variant: props.variant,
     repositoryDirectory,
@@ -447,6 +448,9 @@ function redactDiagnosticText(value: string, secrets: readonly string[]): string
 }
 
 function validateProps(props: RunSubjectRepetitionProps): void {
+  if (!new RegExp(`^${props.variant}-[1-9][0-9]*-attempt-[1-9][0-9]*$`, "u").test(props.repetitionId)) {
+    throw new Error("repetitionId must identify the variant, repetition number, and attempt number");
+  }
   if (
     props.runtimeIdentity.launcher.executable !== props.launcher.executable ||
     JSON.stringify(props.runtimeIdentity.launcher.prefixArgs) !== JSON.stringify(props.launcher.prefixArgs) ||
@@ -581,7 +585,7 @@ export function createSubjectInfrastructureFailureReceipt(props: {
   readonly props: RunSubjectRepetitionProps;
   readonly error: unknown;
 }): SubjectRepetitionReceipt {
-  const repetitionId = randomUUID();
+  const repetitionId = props.props.repetitionId;
   const repositoryDirectory = path.join(
     path.resolve(props.props.runRoot),
     `${props.props.scenarioId}-${props.props.variant}-failed-${repetitionId}`,

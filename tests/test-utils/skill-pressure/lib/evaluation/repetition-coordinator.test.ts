@@ -251,8 +251,10 @@ describe("scenario repetition coordinator", () => {
     let sequence = 0;
     let failedOnce = false;
     const launches: Array<{ attemptNumber: number; retry: boolean }> = [];
+    const attemptIdentities: string[] = [];
     const result = await runScenarioRepetitions({
       ...props(async (input) => {
+        attemptIdentities.push(input.repetitionId);
         sequence += 1;
         if (!failedOnce && input.variant === "baseline") {
           failedOnce = true;
@@ -274,6 +276,19 @@ describe("scenario repetition coordinator", () => {
     expect(launches.slice(0, 2)).toEqual([
       { attemptNumber: 1, retry: false },
       { attemptNumber: 2, retry: true },
+    ]);
+    expect(attemptIdentities).toEqual([
+      "baseline-1-attempt-1",
+      "baseline-1-attempt-2",
+      "treatment-1-attempt-1",
+      "baseline-2-attempt-1",
+      "treatment-2-attempt-1",
+      "baseline-3-attempt-1",
+      "treatment-3-attempt-1",
+      "baseline-4-attempt-1",
+      "treatment-4-attempt-1",
+      "baseline-5-attempt-1",
+      "treatment-5-attempt-1",
     ]);
   });
 

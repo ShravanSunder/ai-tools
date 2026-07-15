@@ -14,7 +14,7 @@ const COORDINATOR_VERSION = "skill-pressure-coordinator-v1";
 
 type RepetitionCommonProps = Omit<
   RunSubjectRepetitionProps,
-  "variant" | "selectedSkillSource" | "execute"
+  "repetitionId" | "variant" | "selectedSkillSource" | "execute"
 >;
 
 export interface RunScenarioRepetitionsProps {
@@ -192,6 +192,7 @@ async function runWithInfrastructureRetries(props: {
     });
     const repetitionAttemptProps = {
       ...props.repetitionProps,
+      repetitionId: `${props.variant}-${String(props.repetitionNumber)}-attempt-${String(attempt + 1)}`,
       variant: props.variant,
       selectedSkillSource: props.selectedSkillSource,
     } satisfies RunSubjectRepetitionProps;
