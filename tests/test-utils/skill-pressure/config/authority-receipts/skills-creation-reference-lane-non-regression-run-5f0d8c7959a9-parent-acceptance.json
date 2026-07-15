@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "parent_acceptance",
+  "scenarioId": "skills-creation-reference-lane-non-regression",
+  "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+  "acceptedAuthorityReceiptDigest": "sha256:33e8c0ea447146d45660c8cf3bbfebb46f6bb393b2ec85b3af382c6e6beec8c3",
+  "acceptedRunDigest": "sha256:5f0d8c7959a904b759861c97fb27cc31731db01995c0eb9f224c3eeb191d9f47",
+  "calibrationFingerprintDigest": "sha256:81f12c539b944e0a6783504d560942b2d5e3a8d5c5ffd657e86c3220971ca55d",
+  "claimedRequirementManifestDigest": "sha256:03f6af29b5e46ba48308b9e644b767cd563f5e151d8ebd298842a495cb9a17b8"
+}
