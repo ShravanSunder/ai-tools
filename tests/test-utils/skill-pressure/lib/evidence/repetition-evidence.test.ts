@@ -115,6 +115,7 @@ describe("repetition evidence", () => {
     expect(evidence.toolObservations).toEqual([{ eventId: "tool-1", payload: '{"path":"docs/result.md"}' }]);
     expect(evidence.usageObservations).toEqual(['{"inputTokens":10,"outputTokens":5}']);
     expect(evidence.process).toMatchObject({ exitCode: 0, outcome: "executed" });
+    expect(evidence.writePolicy).toEqual({ status: "pass", unauthorizedPaths: [] });
     expect(evidence.repositoryFacts.files).toHaveLength(1);
     expect(evidence.rationalizationExcerpts).toEqual(["This is obvious, so I skipped the required check."]);
   });

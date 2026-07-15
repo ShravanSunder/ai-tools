@@ -268,7 +268,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
     const receipt = await runSubjectRepetition({
       ...baseProps(fixture),
       allowedTools: ["write"],
-      allowedWritePaths: ["reports/result.md"],
+      allowedWritePaths: ["reports"],
       permissionMode: "approve-all",
       repetitionId: "treatment-1-attempt-1",
       variant: "treatment",
@@ -276,7 +276,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
       execute: async (command) => {
         const materializedPrompt = await readFile(command.args.at(-1) ?? "", "utf8");
         expect(materializedPrompt).toContain("You may write only these repository-relative paths:");
-        expect(materializedPrompt).toContain("- reports/result.md");
+        expect(materializedPrompt).toContain("- reports");
         await mkdir(path.join(command.cwd, "reports"), { recursive: true });
         await writeFile(path.join(command.cwd, "reports", "result.md"), "allowed\n");
         await writeFile(path.join(command.cwd, "unexpected.md"), "not allowed\n");
@@ -285,7 +285,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
     });
 
     expect(receipt.allowedTools).toEqual(["write"]);
-    expect(receipt.allowedWritePaths).toEqual(["reports/result.md"]);
+    expect(receipt.allowedWritePaths).toEqual(["reports"]);
     expect(receipt.writePolicy).toEqual({
       status: "behavior_fail",
       unauthorizedPaths: ["unexpected.md"],

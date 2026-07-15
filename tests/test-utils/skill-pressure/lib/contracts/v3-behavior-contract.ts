@@ -11,6 +11,7 @@ import type {
   SkillOwner,
   SkillType,
 } from "./contract-types.js";
+import { isPathAllowedByWritePolicy } from "./write-path-policy.js";
 
 const nonEmptyStringSchema = z.string().min(1).regex(/\S/u);
 const identifierSchema = z
@@ -90,7 +91,9 @@ const v3ScenarioShape = {
   comparison_intent: z.enum(["improvement", "non_regression"]),
   repetitions: z.literal(3),
   risk: z.enum(["standard", "high"]),
-  fixture_requirements: z.array(nonEmptyStringSchema),
+  fixture_requirements: z
+    .array(nonEmptyStringSchema)
+    .max(0, "fixture_requirements are not executable until the contract defines typed fixture contents"),
   allowed_tools: z.array(nonEmptyStringSchema),
   allowed_write_paths: z.array(relativePathSchema),
   required_tool_observations: z.array(nonEmptyStringSchema),
@@ -266,7 +269,7 @@ function validateArtifactEffects(
       addIssue(context, ["expected_artifacts"], "artifacts effect surface requires expected_artifacts");
     }
     for (const [index, artifact] of contract.expected_artifacts.entries()) {
-      if (!contract.allowed_write_paths.some((allowedPath) => pathContains(allowedPath, artifact.path))) {
+      if (!contract.allowed_write_paths.some((allowedPath) => isPathAllowedByWritePolicy(allowedPath, artifact.path))) {
         addIssue(context, ["allowed_write_paths"], `allowed_write_paths must contain expected artifact ${artifact.path}`);
       }
       if (!contract.deterministic_checks.some((check) => check.fact === `artifact:${artifact.artifact_id}`)) {
@@ -282,7 +285,7 @@ function validateArtifactEffects(
       }
       if (check.fact.startsWith("path:")) {
         const checkedPath = check.fact.slice("path:".length);
-        if (!contract.allowed_write_paths.some((allowedPath) => pathContains(allowedPath, checkedPath))) {
+        if (!contract.allowed_write_paths.some((allowedPath) => isPathAllowedByWritePolicy(allowedPath, checkedPath))) {
           addIssue(context, ["deterministic_checks", index, "fact"], `deterministic path fact must fit allowed_write_paths: ${checkedPath}`);
         }
         const declaredArtifact = contract.expected_artifacts.find((artifact) => artifact.path === checkedPath);
@@ -338,10 +341,6 @@ function requireUnique(
   if (new Set(values).size !== values.length) {
     addIssue(context, path, `duplicate ${label}`);
   }
-}
-
-function pathContains(allowedPath: string, artifactPath: string): boolean {
-  return artifactPath === allowedPath || artifactPath.startsWith(`${allowedPath}/`);
 }
 
 function isBoundedSafePattern(pattern: string): boolean {

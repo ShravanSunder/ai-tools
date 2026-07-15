@@ -18,6 +18,7 @@ function evidence(repetitionId: string, variant: "baseline" | "treatment"): Norm
     toolObservations: [{ eventId: "tool-1", payload: '{"path":"docs/result.md"}' }],
     usageObservations: [],
     process: { outcome: "executed", exitCode: 0, timedOut: false, cleanupComplete: true, infrastructureReasons: [] },
+    writePolicy: { status: "pass", unauthorizedPaths: [] },
     repositoryFacts: {
       files: [],
       changes: { files: [], pathChanges: [], deletedPaths: [], omissions: [] },

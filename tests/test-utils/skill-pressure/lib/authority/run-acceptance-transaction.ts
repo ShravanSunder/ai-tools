@@ -24,6 +24,8 @@ import {
   createRuntimeAuthorityContext,
   persistExplicitParentAcceptance,
 } from "./runtime-authority-context.js";
+import { selectV3SuiteScenarios } from "../evaluation/v3-suite-selection.js";
+import { assertRunnerOwnedReceiptPath } from "./runner-owned-receipt-path.js";
 
 const DEFAULT_REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 
@@ -59,6 +61,7 @@ export async function acceptScenarioRunFromReceipt(props: {
 
   const repositoryRoot = path.resolve(props.repositoryRoot);
   const scenarioReceiptPath = path.resolve(repositoryRoot, props.scenarioReceiptPath);
+  assertRunnerOwnedReceiptPath(repositoryRoot, scenarioReceiptPath, "scenario receipt");
   const scenarioSource = await readFile(scenarioReceiptPath, "utf8");
   const receipt = JSON.parse(scenarioSource) as V3BehavioralScenarioReceipt;
   const discovery = await discoverSkillScenarios({ repositoryRoot });
@@ -185,6 +188,7 @@ export async function aggregateParentAcceptedRun(props: {
 }): Promise<AggregateParentAcceptedRunResult> {
   const repositoryRoot = path.resolve(props.repositoryRoot);
   const aggregateReceiptPath = path.resolve(repositoryRoot, props.aggregateReceiptPath);
+  assertRunnerOwnedReceiptPath(repositoryRoot, aggregateReceiptPath, "aggregate receipt");
   const aggregateSource = await readFile(aggregateReceiptPath, "utf8");
   const aggregate = JSON.parse(aggregateSource) as V3SkillPressureAggregateReceipt;
   if (aggregate.schemaVersion !== 3 || aggregate.suite.kind !== "gate") {
@@ -234,6 +238,31 @@ export async function aggregateParentAcceptedRun(props: {
   if (claimedRequirements.manifestDigest !== aggregate.claimedRequirementInputDigest) {
     throw new Error("parent-accepted aggregation claimed requirements changed after execution");
   }
+  if (aggregate.selectionMode !== "gate") {
+    throw new Error("parent-accepted aggregation requires selector-produced gate scope");
+  }
+  const selectedRisks = new Set(aggregate.selectedScenarioIds.map((scenarioId) => {
+    const contract = discovery.discovered.find((candidate) => candidate.scenarioId === scenarioId);
+    if (contract === undefined) throw new Error(`parent-accepted scenario is no longer discovered: ${scenarioId}`);
+    return contract.risk;
+  }));
+  if (selectedRisks.size !== 1) {
+    throw new Error("parent-accepted aggregation requires exactly one gate risk scope");
+  }
+  const risk = [...selectedRisks][0];
+  if (risk === undefined) throw new Error("parent-accepted aggregation requires at least one selected gate");
+  const currentSelection = selectV3SuiteScenarios({
+    mode: "gate",
+    risk,
+    candidates: discovery.discovered.map((scenario) => ({
+      scenarioId: scenario.scenarioId,
+      risk: scenario.risk,
+      repetitions: scenario.repetitions,
+    })),
+    registry,
+    claimedRequirements,
+  });
+  assertRecomputedGateSelectionMatchesSourceAggregate(currentSelection, aggregate);
 
   const acceptedResults: ValidatedV3ScenarioExecutionSummary[] = [];
   for (const originalResult of aggregate.results) {
@@ -266,6 +295,7 @@ export async function aggregateParentAcceptedRun(props: {
     if (!accepted.releaseAuthority) {
       throw new Error(`scenario is not parent-accepted: ${originalResult.scenarioId}`);
     }
+    assertAcceptedScenarioMatchesSourceAggregate(originalResult, accepted);
     acceptedResults.push(accepted);
   }
 
@@ -288,6 +318,48 @@ export async function aggregateParentAcceptedRun(props: {
     aggregateReceiptDigest: persisted.receiptDigest as AuthorityDigest,
     acceptedScenarioIds: acceptedResults.map((result) => result.scenarioId),
   };
+}
+
+export function assertRecomputedGateSelectionMatchesSourceAggregate(
+  currentSelection: {
+    readonly selectionDigest: string;
+    readonly selectedScenarioIds: readonly string[];
+    readonly selectedScenarios: readonly { readonly scenarioId: string; readonly repetitions: number }[];
+    readonly excludedStaleGateScenarioIds: readonly string[];
+  },
+  sourceAggregate: Pick<
+    V3SkillPressureAggregateReceipt,
+    "selectionDigest" | "selectedScenarioIds" | "selectedScenarios" | "excludedStaleGateScenarioIds"
+  >,
+): void {
+  if (
+    currentSelection.selectionDigest !== sourceAggregate.selectionDigest ||
+    JSON.stringify(currentSelection.selectedScenarioIds) !== JSON.stringify(sourceAggregate.selectedScenarioIds) ||
+    JSON.stringify(currentSelection.selectedScenarios) !== JSON.stringify(sourceAggregate.selectedScenarios) ||
+    JSON.stringify(currentSelection.excludedStaleGateScenarioIds) !==
+      JSON.stringify(sourceAggregate.excludedStaleGateScenarioIds)
+  ) {
+    throw new Error("parent-accepted aggregation gate selection changed after execution");
+  }
+}
+
+export function assertAcceptedScenarioMatchesSourceAggregate(
+  sourceResult: Pick<
+    ValidatedV3ScenarioExecutionSummary,
+    "scenarioId" | "runDigest" | "claimedRequirementManifestDigest" | "registrySnapshotDigest"
+  >,
+  acceptedResult: Pick<
+    ValidatedV3ScenarioExecutionSummary,
+    "runDigest" | "claimedRequirementManifestDigest" | "registrySnapshotDigest"
+  >,
+): void {
+  if (
+    acceptedResult.runDigest !== sourceResult.runDigest ||
+    acceptedResult.claimedRequirementManifestDigest !== sourceResult.claimedRequirementManifestDigest ||
+    acceptedResult.registrySnapshotDigest !== sourceResult.registrySnapshotDigest
+  ) {
+    throw new Error(`parent-accepted scenario does not match source aggregate: ${sourceResult.scenarioId}`);
+  }
 }
 
 async function persistAcceptedScenarioReceipt(props: {

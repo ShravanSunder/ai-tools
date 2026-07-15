@@ -123,6 +123,7 @@
           ]
         },
         "fixture_requirements": {
+          "maxItems": 0,
           "type": "array",
           "items": {
             "type": "string",
@@ -402,6 +403,7 @@
           ]
         },
         "fixture_requirements": {
+          "maxItems": 0,
           "type": "array",
           "items": {
             "type": "string",

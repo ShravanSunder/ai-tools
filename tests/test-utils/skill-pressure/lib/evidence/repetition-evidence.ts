@@ -26,6 +26,7 @@ export interface NormalizedRepetitionEvidence {
     readonly cleanupComplete: boolean;
     readonly infrastructureReasons: readonly string[];
   };
+  readonly writePolicy: SubjectRepetitionReceipt["writePolicy"];
   readonly repositoryFacts: RepositoryEvidence;
   readonly rationalizationExcerpts: readonly string[];
 }
@@ -81,6 +82,11 @@ export function normalizeRepetitionEvidence(
       timedOut: props.receipt.process.timedOut,
       cleanupComplete: props.receipt.process.cleanupComplete,
       infrastructureReasons: props.receipt.infrastructureReasons.map((reason) => bound(reason, DEFAULT_EXCERPT_LIMIT)),
+    },
+    writePolicy: {
+      status: props.receipt.writePolicy.status,
+      unauthorizedPaths: props.receipt.writePolicy.unauthorizedPaths.map((unauthorizedPath) =>
+        bound(unauthorizedPath, DEFAULT_EXCERPT_LIMIT)),
     },
     repositoryFacts,
     rationalizationExcerpts: (props.rationalizationExcerpts ?? [])

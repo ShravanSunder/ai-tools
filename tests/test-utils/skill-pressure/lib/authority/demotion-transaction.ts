@@ -15,6 +15,7 @@ import {
 } from "./authority-receipts.js";
 import { demoteRegistryRow } from "./demotion-registry.js";
 import { loadEvaluationRegistry, type EvaluationRegistryRow } from "./evaluation-registry.js";
+import { assertRunnerOwnedReceiptPath } from "./runner-owned-receipt-path.js";
 
 const DEFAULT_REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 const DEMOTION_REASONS = [
@@ -60,6 +61,7 @@ export async function demoteScenarioFromReceipt(props: {
   }
 
   const resolvedScenarioReceiptPath = path.resolve(props.scenarioReceiptPath);
+  assertRunnerOwnedReceiptPath(repositoryRoot, resolvedScenarioReceiptPath, "demotion scenario receipt");
   const scenarioSource = await readFile(resolvedScenarioReceiptPath, "utf8");
   const receipt = parseObservedScenarioReceipt(scenarioSource);
   const contract = discovery.discovered.find((candidate) => candidate.scenarioId === receipt.scenarioId);
@@ -93,6 +95,7 @@ export async function demoteScenarioFromReceipt(props: {
     },
   });
   const aggregateReceiptPath = path.resolve(props.aggregateReceiptPath);
+  assertRunnerOwnedReceiptPath(repositoryRoot, aggregateReceiptPath, "demotion aggregate receipt");
   const aggregateSource = await readFile(aggregateReceiptPath, "utf8");
   assertAggregateBindsObservedRun({
     source: aggregateSource,

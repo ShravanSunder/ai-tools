@@ -182,6 +182,7 @@ function evidence(props: {
       cleanupComplete: true,
       infrastructureReasons: [],
     },
+    writePolicy: { status: "pass", unauthorizedPaths: [] },
     repositoryFacts: {
       files: [
         {
@@ -290,6 +291,7 @@ function budget() {
 async function runIntegratedFixture(props: {
   readonly comparisonIntent: "improvement" | "non_regression";
   readonly forceTreatmentObjectiveFailure?: boolean;
+  readonly forceTreatmentWritePolicyFailure?: boolean;
   readonly semanticClassification?: "pass" | "behavior_fail" | "inconclusive";
   readonly registryFreshness?: "fresh" | "stale";
   readonly duplicateSessionIds?: boolean;
@@ -414,8 +416,14 @@ async function runIntegratedFixture(props: {
                 : variant === "treatment" && props.forceTreatmentObjectiveFailure === true
                   ? "REJECTED"
                   : "ACCEPTED";
+            const normalizedEvidence = evidence({ repetitionId: `${variant}-${index + 1}`, variant, content });
             const item = {
-              evidence: evidence({ repetitionId: `${variant}-${index + 1}`, variant, content }),
+              evidence: props.forceTreatmentWritePolicyFailure === true && variant === "treatment"
+                ? {
+                    ...normalizedEvidence,
+                    writePolicy: { status: "behavior_fail" as const, unauthorizedPaths: ["unexpected.md"] },
+                  }
+                : normalizedEvidence,
               runtimeProfile: VERIFIED_LUNA_PROFILE,
               durableFacts: COMPLETE_DURABLE_FACTS,
               comparisonIdentity: {
@@ -542,6 +550,21 @@ describe("reachable v3 behavioral scenario execution", () => {
       outcome: "behavior_fail",
       reasonCode: "treatment_behavior_failed",
     });
+  });
+
+  it("lets an unauthorized treatment write defeat semantic approval", async () => {
+    const { result } = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      forceTreatmentWritePolicyFailure: true,
+    });
+    expect(result.receipt.reduction).toMatchObject({
+      outcome: "behavior_fail",
+      reasonCode: "treatment_behavior_failed",
+    });
+    expect(result.receipt.objectiveResults
+      .filter((item) => item.variant === "treatment")
+      .every((item) => item.results.some((check) => check.checkId === "harness-write-policy")))
+      .toBe(true);
   });
 
   it("preserves semantic inconclusive instead of applying comparison intent", async () => {

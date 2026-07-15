@@ -543,9 +543,11 @@ derive the selected count; prose estimates do not authorize spend.
 3. High-risk candidate order:
    - first `ops-security-review-official-scan` after deadline repair;
    - fallback `peekaboo-progressive-disclosure` only if the first fails
-     calibration for behavior rather than infrastructure.
+     calibration for behavior rather than infrastructure;
+   - final fallback `orchestrator-goal-default-pr-ready-terminal` when the first
+     two candidates cannot establish a stable improvement baseline.
    A mixed or all-passing baseline remains diagnostic. Do not use the prior
-   focused/concurrent disagreement as authority. If neither candidate
+   focused/concurrent disagreement as authority. If no listed candidate
    calibrates, release authority and PR-ready completion are blocked.
 
 ### Promotion And Suite Gates

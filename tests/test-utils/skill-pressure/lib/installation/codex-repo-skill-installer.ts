@@ -177,6 +177,10 @@ function walkSourceDirectory(
     if (!entry.isFile()) {
       throw new Error(`source closure contains a non-regular file: ${absolutePath}`);
     }
+    const fileStatus = lstatSync(absolutePath);
+    if (!fileStatus.isFile() || fileStatus.nlink !== 1) {
+      throw new Error(`source closure contains a linked file: ${absolutePath}`);
+    }
     sourceFiles.push({
       absolutePath,
       relativePath: path.relative(sourceRoot, absolutePath).split(path.sep).join("/"),

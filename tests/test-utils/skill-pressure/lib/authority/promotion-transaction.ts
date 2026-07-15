@@ -34,6 +34,7 @@ import {
   type EvaluationRegistryRow,
 } from "./evaluation-registry.js";
 import { promoteRegistryRow } from "./promotion-registry.js";
+import { assertRunnerOwnedReceiptPath } from "./runner-owned-receipt-path.js";
 
 const DEFAULT_REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 
@@ -69,6 +70,8 @@ export async function promoteScenarioFromReceipt(props: {
     throw new Error("promotion requires explicit parent acceptance");
   }
   const repositoryRoot = path.resolve(props.repositoryRoot);
+  const scenarioReceiptPath = path.resolve(repositoryRoot, props.scenarioReceiptPath);
+  assertRunnerOwnedReceiptPath(repositoryRoot, scenarioReceiptPath, "promotion scenario receipt");
   const registryPath = path.resolve(
     repositoryRoot,
     props.registryPath ?? DEFAULT_REGISTRY_PATH,
@@ -77,7 +80,7 @@ export async function promoteScenarioFromReceipt(props: {
   if (discovery.invalid.length > 0) {
     throw new Error(`promotion discovery is invalid: ${discovery.invalid[0]?.detail ?? "unknown error"}`);
   }
-  const scenarioSource = await readFile(path.resolve(props.scenarioReceiptPath), "utf8");
+  const scenarioSource = await readFile(scenarioReceiptPath, "utf8");
   const receipt = JSON.parse(scenarioSource) as ExecutedV3BehavioralScenario["receipt"];
   const contract = discovery.discovered.find((candidate) => candidate.scenarioId === receipt.scenarioId);
   if (contract === undefined) throw new Error(`promotion scenario is not discovered: ${receipt.scenarioId}`);
@@ -101,13 +104,13 @@ export async function promoteScenarioFromReceipt(props: {
     registryRow,
     expectedRepetitions: contract.repetitions,
     executed: {
-      receiptPath: path.resolve(props.scenarioReceiptPath),
+      receiptPath: scenarioReceiptPath,
       receiptDigest: scenarioReceiptDigest,
       receipt,
     },
   });
   await (props.dependencies?.validateAggregateReceipt ?? validateCalibrationAggregateReceipt)({
-    scenarioReceiptPath: path.resolve(props.scenarioReceiptPath),
+    scenarioReceiptPath,
     scenarioReceiptDigest,
     receipt,
   });

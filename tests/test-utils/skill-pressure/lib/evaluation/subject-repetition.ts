@@ -10,6 +10,7 @@ import {
   type CodexRepoSkillInstallReceipt,
 } from "../installation/codex-repo-skill-installer.js";
 import type { ExpectedArtifact } from "../contracts/contract-types.js";
+import { isPathAllowedByWritePolicy } from "../contracts/write-path-policy.js";
 import {
   collectRepositorySnapshot,
   createRepositoryEvidence,
@@ -421,12 +422,12 @@ function evaluateWritePolicy(
   evidence: RepositoryEvidence,
   allowedWritePaths: readonly string[],
 ): SubjectRepetitionReceipt["writePolicy"] {
-  const allowed = new Set(allowedWritePaths);
   const changedPaths = [
     ...evidence.changes.files.map((file) => file.path),
     ...evidence.changes.deletedPaths,
   ];
-  const unauthorizedPaths = [...new Set(changedPaths.filter((changedPath) => !allowed.has(changedPath)))].sort();
+  const unauthorizedPaths = [...new Set(changedPaths.filter((changedPath) =>
+    !allowedWritePaths.some((allowedPath) => isPathAllowedByWritePolicy(allowedPath, changedPath))))].sort();
   return {
     status: unauthorizedPaths.length === 0 ? "pass" : "behavior_fail",
     unauthorizedPaths,

@@ -1,4 +1,5 @@
 import {
+  linkSync,
   mkdtempSync,
   mkdirSync,
   readFileSync,
@@ -82,6 +83,18 @@ describe("Codex repo skill installer", () => {
     expect(() =>
       installCodexRepoSkill({ ...fixture, skillName: "probe-skill" }),
     ).toThrow(/symlink/u);
+  });
+
+  it("rejects hard links in the staged source closure", () => {
+    const fixture = createFixture();
+    linkSync(
+      path.join(fixture.sourceSkillDirectory, "SKILL.md"),
+      path.join(fixture.sourceSkillDirectory, "references", "linked.md"),
+    );
+
+    expect(() =>
+      installCodexRepoSkill({ ...fixture, skillName: "probe-skill" }),
+    ).toThrow(/linked file/u);
   });
 
   it("rejects invalid skill names and non-repository destinations", () => {

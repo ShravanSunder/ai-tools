@@ -55,6 +55,13 @@ function validContract(): V3BehaviorContractInput {
 }
 
 describe("v3 behavior contract", () => {
+  it("rejects fixture requirements until they have typed materialization inputs", () => {
+    expect(() => parseV3BehaviorContract({
+      ...validContract(),
+      fixture_requirements: ["seed reports/input.md"],
+    })).toThrow(/fixture_requirements are not executable/u);
+  });
+
   it("normalizes the complete behavior contract and emits a canonical digest", () => {
     const contract = parseV3BehaviorContract(validContract());
 
