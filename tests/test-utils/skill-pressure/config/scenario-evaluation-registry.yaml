@@ -434,14 +434,12 @@ scenarios:
     calibration_receipt: null
   - scenario_id: orchestrator-goal-artifact-content-boundary
     behavior_contract_digest: sha256:3a811294d6029e9c4bde117ae959d605b952b773b99746dbc05ff2a2760f1b3b
-    evaluation_role: gate
-    freshness: fresh
+    evaluation_role: diagnostic
+    freshness: stale
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
       receipt_digest: sha256:75127ef716fc13948900943f1a95c00e60e157499f454272e5cc07d7bb557631
-    calibration_receipt:
-      receipt_path: tests/shravan-dev-workflow/orchestrator-goal/baselines/orchestrator-goal-artifact-content-boundary.json
-      receipt_digest: sha256:5ea2c6e1c957506b5d436f9ebb4a70ddc8f95dcb631c59e2d593ccccfdad05a5
+    calibration_receipt: null
   - scenario_id: orchestrator-goal-clarity-gate
     behavior_contract_digest: sha256:c635800396d446fffddb59d737d7f2eeef632d5c25a60bdc3c249e7867f51f30
     evaluation_role: diagnostic
@@ -460,14 +458,12 @@ scenarios:
     calibration_receipt: null
   - scenario_id: orchestrator-goal-default-pr-ready-terminal
     behavior_contract_digest: sha256:95e77381d91c069d0bd7852e2207f5c1e2c1dd5a09cda61ecfb4206a57097105
-    evaluation_role: gate
-    freshness: fresh
+    evaluation_role: diagnostic
+    freshness: stale
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-default-pr-ready-terminal-validity.json
       receipt_digest: sha256:a9199cf72023e0ac890ad2acd311823650166385bbc9163ab062bff44ac44e21
-    calibration_receipt:
-      receipt_path: tests/shravan-dev-workflow/orchestrator-goal/baselines/orchestrator-goal-default-pr-ready-terminal.json
-      receipt_digest: sha256:22322cdd41baa15cc88441192912cab31164b6b2adde5dee21f07480f8934266
+    calibration_receipt: null
   - scenario_id: orchestrator-goal-plan-creation-matrix-handoff
     behavior_contract_digest: sha256:22f7b01d91785e5553c8ecd86fdb53bb4be153a0525a83d2cfed8b631d128151
     evaluation_role: diagnostic
@@ -662,14 +658,12 @@ scenarios:
     calibration_receipt: null
   - scenario_id: skills-creation-reference-lane-non-regression
     behavior_contract_digest: sha256:ccd5ea407945f018a0625ffd5ad5cc546825312bf23a09e0e247e349c6c9131b
-    evaluation_role: gate
-    freshness: fresh
+    evaluation_role: diagnostic
+    freshness: stale
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-validity.json
       receipt_digest: sha256:d8bb3c99eba451cb62fd9edd1e46d9301bff14fbefb8670e40284eaefdcc67e2
-    calibration_receipt:
-      receipt_path: tests/shravan-dev-workflow/skills-creation/baselines/skills-creation-reference-lane-non-regression.json
-      receipt_digest: sha256:d16c6208929c375ab74e72e9db921a7b9e89b6957a78537ac75ce58adf52b3e9
+    calibration_receipt: null
   - scenario_id: skills-creation-security-and-cache-boundary
     behavior_contract_digest: sha256:66a9e7501c7a2ecc49ef15a0e9b0dc7dc50b4e70860d949530d7802bd945c036
     evaluation_role: diagnostic

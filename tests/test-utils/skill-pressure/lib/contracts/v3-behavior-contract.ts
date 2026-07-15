@@ -91,9 +91,7 @@ const v3ScenarioShape = {
   comparison_intent: z.enum(["improvement", "non_regression"]),
   repetitions: z.literal(3),
   risk: z.enum(["standard", "high"]),
-  fixture_requirements: z
-    .array(nonEmptyStringSchema)
-    .max(0, "fixture_requirements are not executable until the contract defines typed fixture contents"),
+  fixture_requirements: z.array(nonEmptyStringSchema),
   allowed_tools: z.array(nonEmptyStringSchema),
   allowed_write_paths: z.array(relativePathSchema),
   required_tool_observations: z.array(nonEmptyStringSchema),

@@ -145,6 +145,25 @@ describe("skill pressure eval registration", () => {
     ).toBe(true);
   });
 
+  it("rejects selected fixture requirements before launching model work", () => {
+    const selectedScenario = {
+      ...scenario("alpha"),
+      fixtureRequirements: ["seed input.md"],
+    };
+    const discoveryReceipt = receipt({ selected: [selectedScenario] });
+
+    expect(() => buildSkillPressureEvaluationCases({
+      repositoryRoot: "/repository",
+      discoveryReceipt,
+      configuration: resolveSkillPressureEvaluationConfiguration({
+        ...CAP_ENV,
+        SKILL_PRESSURE_SCENARIO: "alpha",
+      }),
+      runId: "fixture-preflight",
+      ...evaluationAuthority(discoveryReceipt.selected),
+    })).toThrow(/fixture requirements are not executable/u);
+  });
+
   it("selects only the checked fast manifest and rejects conflicting modes", () => {
     const fast = resolveSkillPressureEvaluationConfiguration({
       ...CAP_ENV,

@@ -154,6 +154,11 @@ export function buildSkillPressureEvaluationCases(props: {
     );
   }
   const evaluationCases = selectedScenarios.map((scenario) => {
+    if (scenario.fixtureRequirements.length > 0) {
+      throw new Error(
+        `scenario ${scenario.scenarioId} fixture requirements are not executable until the contract defines typed fixture contents`,
+      );
+    }
     const outputDirectory = path.resolve(
       props.repositoryRoot,
       "tmp/skill-pressure-evals",
