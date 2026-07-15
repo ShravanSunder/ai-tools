@@ -670,12 +670,14 @@ scenarios:
       receipt_digest: sha256:58aa3524080ce4eb785526c122fa6ab517f23d430ee28ac1d77b5735181c513b
   - scenario_id: skills-creation-security-and-cache-boundary
     behavior_contract_digest: sha256:66a9e7501c7a2ecc49ef15a0e9b0dc7dc50b4e70860d949530d7802bd945c036
-    evaluation_role: diagnostic
-    freshness: uncalibrated
+    evaluation_role: gate
+    freshness: fresh
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-security-and-cache-boundary-validity.json
       receipt_digest: sha256:18885301e4444ad2066b657614734fc7b8afcfccd9307fa270fee31d30866476
-    calibration_receipt: null
+    calibration_receipt:
+      receipt_path: tests/shravan-dev-workflow/skills-creation/baselines/skills-creation-security-and-cache-boundary.json
+      receipt_digest: sha256:3c5a5824538919b3c5afc138947ac25200690b83e125db02fab00cb27bd5d7e3
   - scenario_id: skills-creation-spec-review-gate
     behavior_contract_digest: sha256:ab96b417a383e6c289322fcb0b65c7f590c67aab0c126753777bcfe766bda512
     evaluation_role: diagnostic
