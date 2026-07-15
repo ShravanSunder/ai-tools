@@ -5,11 +5,11 @@ description: Use when using an advisor, sidekick, delegate, operator, subagent, 
 
 # Manage Agents
 
-The agent pattern owns work, continuity, authority, cardinality, and the minimum capability category. A model category is a model-plus-thinking combination; runtime follows it:
+The agent pattern owns work, continuity, authority, cardinality, and the minimum capability category. A model category is a model-plus-thinking combination.
 
 ```text
-pattern -> model category -> exact model -> reasoning effort -> lineage
-        -> native or ACPX runtime -> permissions -> packet -> receipt
+pattern -> model category -> model lineage -> exact model id -> reasoning effort -> host/client
+        -> native or ACPX runtime -> provider -> budget (or n/a) -> permissions -> packet -> receipt
 ```
 
 ## Patterns
@@ -27,17 +27,25 @@ Pattern effort floors apply when the selected model exposes a thinking control. 
 
 ## Models
 
-| Model category | Model | Thinking |
+| Model category | Model lineage | Thinking |
 | --- | --- | --- |
 | Frontier | GPT-5.6 Sol | high, xhigh, or max |
 | Frontier | Claude Fable | medium, high, or xhigh |
 | Balanced | GPT-5.6 Sol | low or medium |
 | Balanced | Claude Opus | high+ |
-| Balanced | Grok 4.5 through Cursor | medium+ |
+| Balanced | Grok 4.5 | medium+ |
 | Mini | GPT-5.6 Luna | high+ |
 | Mini | Cursor Composer 2.5 | no thinking setting |
 
-Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable.
+Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Do not treat lineage as a provider. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable on the chosen provider.
+
+## Provider
+
+| Provider | Models |
+| --- | --- |
+| `claude` | Fable, Opus |
+| `cursor` | Grok 4.5, Composer 2.5, (multimodel based on user input) |
+| `codex` | Sol, Luna |
 
 ## Native and ACPX Runtimes
 
@@ -55,7 +63,7 @@ Who are you and what are you running on?
 ## Rules
 
 - Parent owns decisions and validates agent output as candidate evidence.
-- Choose the pattern before the model or runtime.
+- Choose the pattern before the model, provider, or runtime.
 - Operator executes, observes, and reports; it escalates judgment.
 - Every non-trivial call gets one bounded packet. Persistent relationships get a ledger before the first prompt that assumes continuity.
 - Status proves liveness, not correctness. Only assignment-bound output enters parent reduction.

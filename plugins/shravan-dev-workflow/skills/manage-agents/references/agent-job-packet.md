@@ -9,8 +9,10 @@ assignment id:
 lane: single | <swarm name / lane>
 target:
 model category / exact model / reasoning effort:
-lineage requirement:
-provider / runtime:
+model lineage: claude, codex, grok
+host:
+runtime: native | acpx
+provider: <cursor | claude | codex | --agent … | none when native>
 decision target:
 continuity reason: required for Advisor/Sidekick | none for Delegate/Operator
 source anchors:

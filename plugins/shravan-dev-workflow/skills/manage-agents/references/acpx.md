@@ -31,7 +31,7 @@ Troubleshooting: https://acpx.sh/agents.html and https://acpx.sh/config.html
 Global options precede the provider; provider options follow it; command options follow the command.
 
 ```bash
-acpx --cwd /absolute/repo --approve-reads claude -s advisor \
+acpx --cwd /absolute/repo --model '<provider-advertised-id>' --approve-reads claude -s advisor \
   --file tmp/advisor-packet.md
 acpx --format quiet --deny-all --no-terminal codex exec \
   --file tmp/review-packet.md
