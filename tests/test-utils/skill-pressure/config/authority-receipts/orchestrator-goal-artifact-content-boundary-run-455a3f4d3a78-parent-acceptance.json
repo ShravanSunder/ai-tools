@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "parent_acceptance",
+  "scenarioId": "orchestrator-goal-artifact-content-boundary",
+  "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+  "acceptedAuthorityReceiptDigest": "sha256:9f5b9dca7392f84993adf0a07458541af984b46064d8c5073d563cbfa4b2f02c",
+  "acceptedRunDigest": "sha256:455a3f4d3a7873cc937c929e6a6f0bb97c634082d0996fbb29f8fccf6c9d709a",
+  "calibrationFingerprintDigest": "sha256:86dedaeee68db1b733303d3d8338463d83da0f6588db7723bd7211a20f1cc74d",
+  "claimedRequirementManifestDigest": "sha256:0bc3903e09f8c2a39126a519cb91fe6dddcad80d43cb5027e2d9f539eb4a0add"
+}
