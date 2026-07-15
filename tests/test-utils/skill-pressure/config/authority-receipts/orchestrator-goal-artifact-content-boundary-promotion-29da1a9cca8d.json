@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "promotion",
+  "scenarioId": "orchestrator-goal-artifact-content-boundary",
+  "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+  "calibrationFingerprint": {
+    "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+    "baselinePolicyDigest": "sha256:12940b09f3db3417ab30f9d22ebfd14166b2e401afd86e4d59bb6aadfd9d5d4b",
+    "runnerSemanticsDigest": "sha256:1e145a9099bca008929e6b1683b02c8afa2b0fc05d0bf8036e1dd680a4735c97",
+    "subjectProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc",
+    "reviewProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc"
+  },
+  "calibrationRunDigest": "sha256:5343a92d92f51aebf6f81ebf283abcfe11fefe3f2b07e5591abcf0ceb7c292e6",
+  "promotionTreatmentDigest": "sha256:a4d4fe8f9450dfe7c5e64e3f32abd59074fe6c07dad764bd31ba1ef61e039d50",
+  "calibration": {
+    "contractConsistent": true,
+    "contractConsistencyEvidenceDigest": "sha256:dc28a3f533c339925705a9b426ea0361358281623679bd925e04ea6794dbda51",
+    "baselinePolicyValid": true,
+    "baselinePolicyEvidenceDigest": "sha256:12940b09f3db3417ab30f9d22ebfd14166b2e401afd86e4d59bb6aadfd9d5d4b",
+    "baselineRepetitionDigests": [
+      "sha256:86bd542366f4f9628231849eb11d00c99689fa5bb40c7c903cec191a5b993bb0",
+      "sha256:e731fa298166079c6ac521036a8acc6ee520881f97777b07701917ba0bcec6a1",
+      "sha256:1f276d9f4098a878383d00c8d1787ce3b5ace8045fbfcaab49002fd9c8fe3725",
+      "sha256:0aa332289253a72034132f919f690ff78c25693eb5a1a89471ff7d96773a2ba3",
+      "sha256:5e80ddf2a370a23947e66be09a9897762a4e6c56aacbecacac673025b96aca3a"
+    ],
+    "treatmentRepetitionDigests": [
+      "sha256:530dbb9055964df886645910ff221b9dc8ce35a0732fe775a28e2a2eef296ae1",
+      "sha256:a95bd6b24e0f95b0d78338b36c49063255e349dc6c0482865c6bda8e64a904b6",
+      "sha256:0076e867971714cdf0e1ebb4917d485046cd4100bca288ac455eba25d709aa60",
+      "sha256:529b6c20a6c24abd6fe10198d7adc06beb54bc28cb2e92b31ef11693b7dd252b",
+      "sha256:88e7761cc1b431bc56cb79af1a17934acbd3c041fd40fcfc7d0f32412cf4b8e3"
+    ],
+    "comparisonIntentPassed": true,
+    "objectiveEvidenceDigest": "sha256:d29f75c198d1ab16a0394ed5a6a502b5f819203f7ad92c21ec4e8e2841223298",
+    "semanticEvidenceDigest": "sha256:8916cb0791b0d210d66554e501c0c6a1a1d6b2f0d599fe9b88897a4adf3a4812",
+    "attemptReceipts": [
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-1-1-attempt.json",
+        "receiptDigest": "sha256:4c75fc70103cbb7849b9231d5a02f249180f19fe611cc674e9b3edcbae5ffd11"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-2-1-attempt.json",
+        "receiptDigest": "sha256:c430e22a37142954957abbcbcc8a9819d42b7eeb00d4bfba61dc5fbbce207a2d"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-3-1-attempt.json",
+        "receiptDigest": "sha256:7db7f8676e89bdbba987a620410f214156d59b4b6895fb3646dd81cb8b942f8c"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-4-1-attempt.json",
+        "receiptDigest": "sha256:f0bd613c8ae64079f139bf68fefcbe0f09e448b97c3a4b1a3156208fe123d46f"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-5-1-attempt.json",
+        "receiptDigest": "sha256:dc1a99139c952242644104ef07caedc0eae61071ed8c0055700449a6a0fc3ecb"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-1-1-attempt.json",
+        "receiptDigest": "sha256:d8bd214f61c926c0e9ab7c558fb52afe590ad2a6a6ac2e65dc2c1f41ec394979"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-2-1-attempt.json",
+        "receiptDigest": "sha256:c3aa17b1fec1c9bedaf1ab68c2ce5cb6d3bacfce9b941be59df739d7019ec48e"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-3-1-attempt.json",
+        "receiptDigest": "sha256:c00d8489fbd30f20145e469fd2b4bd5da3daeca53763f68e373961a8ff1c2625"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-4-1-attempt.json",
+        "receiptDigest": "sha256:9d48b3ced12a72f2e3651d4f85a74dad6cf8275ff2cdc268c455c86fe3968d28"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-5-1-attempt.json",
+        "receiptDigest": "sha256:2dd637ced0e6524c94681fa58ae56ad59a59909f0460742cffa28f47e1be1154"
+      }
+    ],
+    "cleanupReceipts": [
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-1-1-cleanup.json",
+        "receiptDigest": "sha256:ca4b0f0ea2190f0cd75d6fcf56e57f291d06bdd30dfda23b95d6d3df97a87bfe"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-2-1-cleanup.json",
+        "receiptDigest": "sha256:ec4d0515a51a0754c29de90f3849a637a99ffb298c2b2dbc78b400aa09b756fc"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-3-1-cleanup.json",
+        "receiptDigest": "sha256:6cd4f7d37d2e00823ed7bf671b56baf31ef172de3499ed031580124fe7fe9d34"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-4-1-cleanup.json",
+        "receiptDigest": "sha256:80e4861b24a667544fcd75f3e0fd48d8117a9e665e1d53bb14973813199b5f69"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "baseline",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-baseline-5-1-cleanup.json",
+        "receiptDigest": "sha256:afab71507b5977efc59bfda200c8b735845d814750e8333a15f3455d1cdeb648"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-1-1-cleanup.json",
+        "receiptDigest": "sha256:778153bcf0d918a78aaa11a2a236744b8d7b798e438b27592333497808cf8199"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-2-1-cleanup.json",
+        "receiptDigest": "sha256:e36fb1deef6debf8d95483e3bbfa037cd7499b132135d45efd27bd3be10bbf86"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-3-1-cleanup.json",
+        "receiptDigest": "sha256:8ed9e257cdc959b2a7895cce2297a92459aab0c012ba0282864fdb80e406dfda"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-4-1-cleanup.json",
+        "receiptDigest": "sha256:87b2ebe2a773165caf214657383857676770ee8c26401927d9ac14511bbbfcf4"
+      },
+      {
+        "scenarioId": "orchestrator-goal-artifact-content-boundary",
+        "variant": "treatment",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-5343a92d92f5-treatment-5-1-cleanup.json",
+        "receiptDigest": "sha256:37f0ac9f7a785564885aed23248f4f1dbd1738317ed35f3ba40e32fab429aa29"
+      }
+    ],
+    "deterministicMutationCoverage": true,
+    "subjectProfileVerified": true,
+    "reviewProfileVerified": true
+  },
+  "parentAcceptance": {
+    "schemaVersion": 1,
+    "receiptKind": "parent_acceptance",
+    "scenarioId": "orchestrator-goal-artifact-content-boundary",
+    "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+    "acceptedAuthorityReceiptDigest": "sha256:29da1a9cca8dd68f8b339203ca6266574a826bbceb4676ec3a8dfa28ff1a2dac",
+    "acceptedRunDigest": "sha256:5343a92d92f51aebf6f81ebf283abcfe11fefe3f2b07e5591abcf0ceb7c292e6",
+    "calibrationFingerprintDigest": "sha256:5a666fbbc69089fcfc896b35e363e9f6eef8b92ae852c5f2f240fd3037d38c09",
+    "claimedRequirementManifestDigest": "sha256:0bc3903e09f8c2a39126a519cb91fe6dddcad80d43cb5027e2d9f539eb4a0add"
+  }
+}
