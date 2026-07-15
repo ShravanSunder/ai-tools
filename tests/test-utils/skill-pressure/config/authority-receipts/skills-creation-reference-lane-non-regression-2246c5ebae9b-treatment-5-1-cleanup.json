@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "cleanup",
+  "scenarioId": "skills-creation-reference-lane-non-regression",
+  "variant": "treatment",
+  "repetitionNumber": 5,
+  "attemptNumber": 1,
+  "sourceAttemptReceiptDigest": "sha256:f8ffdb6a1cd97dc3d60a3d210c1cc088dddc6ef005614cacb1b7eef00ef99e5c",
+  "processClosed": true,
+  "streamsDrained": true,
+  "cleanupFactsCollected": true
+}
