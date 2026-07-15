@@ -134,7 +134,15 @@ describe("structured ACPX semantic-review runner", () => {
     expect(commands[0]?.cwd.startsWith(tmpdir())).toBe(true);
     expect(neutralInstructions).toContain("Semantic Review Workspace");
     expect(mcpConfiguration).toBe('{"mcpServers":[]}\n');
-    expect(reviewEnvelope).toMatchObject({ output_contract: { assertions: [expect.any(Object)] } });
+    expect(reviewEnvelope).toMatchObject({
+      output_contract: { assertions: [expect.any(Object)] },
+      allowed_evidence_anchors: [{
+        repetitionId: "treatment-1",
+        variant: "treatment",
+        assertionId: "behavior",
+        evidenceAnchorIds: ["anchor-000001"],
+      }],
+    });
     const serializedEnvelope = JSON.stringify(reviewEnvelope);
     const assertionContract = (reviewEnvelope as { output_contract: { assertions: readonly object[] } })
       .output_contract.assertions[0];
