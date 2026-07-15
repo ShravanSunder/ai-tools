@@ -80,6 +80,7 @@ export const RUNNER_SEMANTICS_MANIFEST = [
   { semanticClass: "runner_package_commands", path: "pnpm-workspace.yaml" },
   { semanticClass: "runner_package_commands", path: "run-skill-pressure-tests.sh" },
   { semanticClass: "runner_package_commands", path: "scripts/accept-scenario-run.ts" },
+  { semanticClass: "runner_package_commands", path: "scripts/aggregate-accepted-run.ts" },
   { semanticClass: "runner_package_commands", path: "scripts/demote-scenario.ts" },
   { semanticClass: "runner_package_commands", path: "scripts/promote-scenario.ts" },
   { semanticClass: "runner_package_commands", path: "vitest.config.ts" },

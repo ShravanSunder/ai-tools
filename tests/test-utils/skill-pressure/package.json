@@ -20,6 +20,7 @@
     "test:standard": "./run-skill-pressure-tests.sh --standard --max-model-prompts 26 --max-acpx-commands 26 --max-retries 12 --max-observed-tokens 1500000",
     "test:high-risk": "./run-skill-pressure-tests.sh --high-risk --max-model-prompts 21 --max-acpx-commands 24 --max-retries 10 --max-observed-tokens 1500000",
     "accept-run": "tsx scripts/accept-scenario-run.ts",
+    "aggregate-accepted-run": "tsx scripts/aggregate-accepted-run.ts",
     "demote": "tsx scripts/demote-scenario.ts",
     "promote": "tsx scripts/promote-scenario.ts",
     "typecheck": "tsc --noEmit"

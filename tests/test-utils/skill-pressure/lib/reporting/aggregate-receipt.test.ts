@@ -11,6 +11,7 @@ import {
 } from "../authority/claimed-requirements.js";
 import { calculateParentAcceptanceReceiptDigest } from "../authority/authority-receipts.js";
 import {
+  createParentAcceptedV3AggregateReceipt,
   createV3AggregateReceipt,
   validateV3ScenarioExecutionForAggregate,
   type ValidatedV3ScenarioExecutionSummary,
@@ -553,6 +554,64 @@ async function validateSummaries(
 }
 
 describe("skill pressure aggregate receipt", () => {
+  it("re-aggregates exact parent-accepted gate receipts into release authority", async () => {
+    const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+    const claims = claimedRequirements(["fixture-behavior"]);
+    const [unaccepted] = await validateSummaries(repositoryRoot, claims, [
+      summary(
+        {
+          scenarioId: "scenario",
+          evaluationRole: "gate",
+          calibrationStatus: "calibrated",
+          behaviorRequirementIds: ["fixture-behavior"],
+          authorityReasonCode: "missing_parent_acceptance",
+        },
+        claims,
+      ),
+    ]);
+    if (unaccepted === undefined) throw new Error("unaccepted fixture is missing");
+    const sourceAggregate = createV3AggregateReceipt({
+      runId: "parent-accepted-run",
+      suiteKind: "gate",
+      discoveredScenarioCount: 1,
+      selectedScenarioIds: ["scenario"],
+      claimedRequirements: claims,
+      registrySnapshotDigest,
+      executionGraphPreflightReceipt,
+      selection: selection("gate", ["scenario"]),
+      invalid: [],
+      results: [unaccepted],
+    });
+    expect(sourceAggregate.suite.success).toBe(false);
+
+    const [accepted] = await validateSummaries(repositoryRoot, claims, [
+      summary(
+        {
+          scenarioId: "scenario",
+          evaluationRole: "gate",
+          calibrationStatus: "calibrated",
+          behaviorRequirementIds: ["fixture-behavior"],
+          releaseAuthority: true,
+        },
+        claims,
+      ),
+    ]);
+    if (accepted === undefined) throw new Error("accepted fixture is missing");
+    const acceptedAggregate = createParentAcceptedV3AggregateReceipt({
+      sourceAggregate,
+      claimedRequirements: claims,
+      results: [accepted],
+    });
+
+    expect(acceptedAggregate.suite).toEqual({
+      kind: "gate",
+      terminalState: "passed",
+      success: true,
+    });
+    expect(acceptedAggregate.counts.releaseAuthorityGranted).toBe(1);
+    expect(acceptedAggregate.untracedBehaviorRequirementIds).toEqual([]);
+  });
+
   it("reports exact v3 authority and outcome counts for an incomplete diagnostic run", async () => {
     const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
     const claims = claimedRequirements(["release-authority", "traceability"]);

@@ -278,6 +278,53 @@ export function createV3AggregateReceipt(props: {
   });
 }
 
+export function createParentAcceptedV3AggregateReceipt(props: {
+  readonly sourceAggregate: V3SkillPressureAggregateReceipt;
+  readonly claimedRequirements: ClaimedRequirementValidation;
+  readonly results: readonly ValidatedV3ScenarioExecutionSummary[];
+}): V3SkillPressureAggregateReceipt {
+  const { receiptDigest, ...sourceWithoutDigest } = props.sourceAggregate;
+  if (digestAggregateReceipt(sourceWithoutDigest) !== receiptDigest) {
+    throw new Error("source aggregate receipt digest does not match");
+  }
+  if (props.sourceAggregate.schemaVersion !== 3 || props.sourceAggregate.suite.kind !== "gate") {
+    throw new Error("parent-accepted aggregation requires a v3 gate aggregate");
+  }
+  if (
+    props.claimedRequirements.manifestDigest !==
+    props.sourceAggregate.claimedRequirementInputDigest
+  ) {
+    throw new Error("parent-accepted aggregate claimed requirements do not match the source run");
+  }
+  if (
+    props.results.length !== props.sourceAggregate.selectedScenarioIds.length ||
+    props.results.some((result) => !result.releaseAuthority)
+  ) {
+    throw new Error("parent-accepted aggregate requires authority for every selected scenario");
+  }
+  return createV3AggregateReceipt({
+    runId: props.sourceAggregate.runId,
+    suiteKind: "gate",
+    discoveredScenarioCount: props.sourceAggregate.counts.discovered,
+    selectedScenarioIds: props.sourceAggregate.selectedScenarioIds,
+    claimedRequirements: props.claimedRequirements,
+    registrySnapshotDigest: props.sourceAggregate.registrySnapshotDigest,
+    executionGraphPreflightReceipt: props.sourceAggregate.executionGraphPreflightReceipt,
+    selection: {
+      mode: props.sourceAggregate.selectionMode,
+      selectionDigest: props.sourceAggregate.selectionDigest,
+      selectedScenarios: props.sourceAggregate.selectedScenarios,
+      excludedStaleGateScenarioIds: props.sourceAggregate.excludedStaleGateScenarioIds,
+    },
+    invalid: [],
+    results: props.results,
+  });
+}
+
+function digestAggregateReceipt(receipt: unknown): string {
+  return `sha256:${createHash("sha256").update(JSON.stringify(receipt)).digest("hex")}`;
+}
+
 export async function validateV3ScenarioExecutionForAggregate(props: {
   readonly scenarioId: string;
   readonly repositoryRoot: string;

@@ -14,6 +14,7 @@ max_retries="${SKILL_PRESSURE_MAX_RETRIES:-}"
 max_observed_tokens="${SKILL_PRESSURE_MAX_OBSERVED_TOKENS:-}"
 promotion_receipt=""
 run_acceptance_receipt=""
+accepted_aggregate_receipt=""
 demotion_receipt=""
 demotion_aggregate=""
 demotion_reason=""
@@ -59,6 +60,12 @@ while [[ $# -gt 0 ]]; do
       [[ $# -ge 2 ]] || { echo "--accept-run requires a scenario receipt path" >&2; exit 2; }
       set_mode "accept-run"
       run_acceptance_receipt="$2"
+      shift 2
+      ;;
+    --aggregate-accepted)
+      [[ $# -ge 2 ]] || { echo "--aggregate-accepted requires an aggregate receipt path" >&2; exit 2; }
+      set_mode "aggregate-accepted"
+      accepted_aggregate_receipt="$2"
       shift 2
       ;;
     --demote)
@@ -130,6 +137,7 @@ while [[ $# -gt 0 ]]; do
 Usage: tests/test-utils/skill-pressure/run-skill-pressure-tests.sh [--fast|--diagnostic|--standard|--high-risk|--scenario ID] [--timeout SECONDS] [--jobs N|--serial] [--dry-run] --max-model-prompts N --max-acpx-commands N --max-retries N --max-observed-tokens N
        tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --promote PATH --accept
        tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --accept-run PATH --accept
+       tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --aggregate-accepted PATH
        tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --demote PATH --aggregate PATH --reason REASON --accept
 
 Runs behavioral skill pressure tests through Vitest Evals. Every authoritative
@@ -154,6 +162,10 @@ fi
 if [[ "$mode" == "accept-run" ]]; then
   [[ "$parent_acceptance" == "true" ]] || { echo "--accept-run requires explicit --accept" >&2; exit 2; }
   exec pnpm --dir "$SCRIPT_DIR" run accept-run -- --scenario-receipt "$run_acceptance_receipt" --accept
+fi
+
+if [[ "$mode" == "aggregate-accepted" ]]; then
+  exec pnpm --dir "$SCRIPT_DIR" run aggregate-accepted-run -- --aggregate-receipt "$accepted_aggregate_receipt"
 fi
 
 if [[ "$mode" == "demote" ]]; then

@@ -2,15 +2,24 @@ import { createHash } from "node:crypto";
 import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
 
+import { validateClaimedRequirementManifest } from "./claimed-requirements.js";
 import { discoverSkillScenarios } from "../discovery/skill-discovery.js";
 import type {
   ExecutedV3BehavioralScenario,
   V3BehavioralScenarioReceipt,
 } from "../evaluation/v3-behavioral-scenario-execution.js";
-import { validateV3ScenarioExecutionForAggregate } from "../reporting/aggregate-receipt.js";
+import {
+  createParentAcceptedV3AggregateReceipt,
+  validateV3ScenarioExecutionForAggregate,
+  type V3SkillPressureAggregateReceipt,
+  type ValidatedV3ScenarioExecutionSummary,
+} from "../reporting/aggregate-receipt.js";
 import { writeJsonReceipt } from "../reporting/attempt-receipt.js";
 import { calculateParentAcceptanceReceiptDigest, type AuthorityDigest } from "./authority-receipts.js";
-import { loadEvaluationRegistry } from "./evaluation-registry.js";
+import {
+  calculateEvaluationRegistrySnapshotDigest,
+  loadEvaluationRegistry,
+} from "./evaluation-registry.js";
 import {
   createRuntimeAuthorityContext,
   persistExplicitParentAcceptance,
@@ -31,6 +40,12 @@ export interface RunAcceptanceTransactionDependencies {
   readonly validateScenarioExecution?: typeof validateV3ScenarioExecutionForAggregate;
   readonly createAuthorityContext?: typeof createRuntimeAuthorityContext;
   readonly beforeAcceptedReceiptCommit?: () => Promise<void>;
+}
+
+export interface AggregateParentAcceptedRunResult {
+  readonly aggregateReceiptPath: string;
+  readonly aggregateReceiptDigest: AuthorityDigest;
+  readonly acceptedScenarioIds: readonly string[];
 }
 
 export async function acceptScenarioRunFromReceipt(props: {
@@ -161,6 +176,118 @@ export async function acceptScenarioRunFromReceipt(props: {
     }
     throw error;
   }
+}
+
+export async function aggregateParentAcceptedRun(props: {
+  readonly repositoryRoot: string;
+  readonly aggregateReceiptPath: string;
+  readonly registryPath?: string;
+}): Promise<AggregateParentAcceptedRunResult> {
+  const repositoryRoot = path.resolve(props.repositoryRoot);
+  const aggregateReceiptPath = path.resolve(repositoryRoot, props.aggregateReceiptPath);
+  const aggregateSource = await readFile(aggregateReceiptPath, "utf8");
+  const aggregate = JSON.parse(aggregateSource) as V3SkillPressureAggregateReceipt;
+  if (aggregate.schemaVersion !== 3 || aggregate.suite.kind !== "gate") {
+    throw new Error("parent-accepted aggregation requires a v3 gate aggregate");
+  }
+  if (aggregate.results.length !== aggregate.selectedScenarioIds.length) {
+    throw new Error("parent-accepted aggregation requires every selected scenario result");
+  }
+
+  const discovery = await discoverSkillScenarios({ repositoryRoot });
+  if (discovery.invalid.length > 0) {
+    throw new Error(`parent-accepted aggregation discovery is invalid: ${discovery.invalid[0]?.detail ?? "unknown error"}`);
+  }
+  const registryPath = path.resolve(repositoryRoot, props.registryPath ?? DEFAULT_REGISTRY_PATH);
+  const registry = await loadEvaluationRegistry({
+    repositoryRoot,
+    registryPath,
+    knownScenarios: discovery.discovered.map((scenario) => ({
+      scenarioId: scenario.scenarioId,
+      behaviorContractDigest: scenario.behaviorContractDigest,
+      plugin: scenario.plugin,
+      skill: scenario.skill,
+    })),
+  });
+  const registrySnapshotDigest = calculateEvaluationRegistrySnapshotDigest(registry);
+  if (registrySnapshotDigest !== aggregate.registrySnapshotDigest) {
+    throw new Error("parent-accepted aggregation registry snapshot changed after execution");
+  }
+  const knownRequirementIds = discovery.discovered.flatMap(
+    (scenario) => scenario.behaviorRequirementIds,
+  );
+  const calibratedGateRequirementIds = discovery.discovered.flatMap((scenario) => {
+    const registryRow = registry.scenarios.find((row) => row.scenarioId === scenario.scenarioId);
+    return registryRow?.evaluationRole === "gate" && registryRow.freshness === "fresh"
+      ? scenario.behaviorRequirementIds
+      : [];
+  });
+  const claimedRequirements = validateClaimedRequirementManifest({
+    manifest: {
+      schemaVersion: 1,
+      source: "cli_manifest",
+      claimedRequirementIds: aggregate.claimedRequirementIds,
+    },
+    knownRequirementIds,
+    calibratedGateRequirementIds,
+  });
+  if (claimedRequirements.manifestDigest !== aggregate.claimedRequirementInputDigest) {
+    throw new Error("parent-accepted aggregation claimed requirements changed after execution");
+  }
+
+  const acceptedResults: ValidatedV3ScenarioExecutionSummary[] = [];
+  for (const originalResult of aggregate.results) {
+    const contract = discovery.discovered.find(
+      (candidate) => candidate.scenarioId === originalResult.scenarioId,
+    );
+    const registryRow = registry.scenarios.find(
+      (candidate) => candidate.scenarioId === originalResult.scenarioId,
+    );
+    if (contract === undefined || registryRow === undefined) {
+      throw new Error(`parent-accepted scenario is no longer discovered: ${originalResult.scenarioId}`);
+    }
+    const acceptedReceiptPath = path.join(
+      path.dirname(originalResult.receiptPath),
+      "scenario-receipt.parent-accepted.json",
+    );
+    const acceptedSource = await readFile(acceptedReceiptPath, "utf8");
+    const acceptedReceipt = JSON.parse(acceptedSource) as V3BehavioralScenarioReceipt;
+    const accepted = await validateV3ScenarioExecutionForAggregate({
+      scenarioId: originalResult.scenarioId,
+      repositoryRoot,
+      registryRow,
+      expectedRepetitions: contract.repetitions,
+      executed: {
+        receiptPath: acceptedReceiptPath,
+        receiptDigest: digestSource(acceptedSource),
+        receipt: acceptedReceipt,
+      },
+    });
+    if (!accepted.releaseAuthority) {
+      throw new Error(`scenario is not parent-accepted: ${originalResult.scenarioId}`);
+    }
+    acceptedResults.push(accepted);
+  }
+
+  const acceptedAggregate = createParentAcceptedV3AggregateReceipt({
+    sourceAggregate: aggregate,
+    claimedRequirements,
+    results: acceptedResults,
+  });
+  if (!acceptedAggregate.suite.success) {
+    throw new Error("parent-accepted aggregate did not satisfy the gate");
+  }
+  const persisted = await writeJsonReceipt({
+    receiptDirectory: path.dirname(aggregateReceiptPath),
+    fileName: "aggregate-receipt.parent-accepted.json",
+    receipt: acceptedAggregate,
+    secrets: [],
+  });
+  return {
+    aggregateReceiptPath: persisted.receiptPath,
+    aggregateReceiptDigest: persisted.receiptDigest as AuthorityDigest,
+    acceptedScenarioIds: acceptedResults.map((result) => result.scenarioId),
+  };
 }
 
 async function persistAcceptedScenarioReceipt(props: {
