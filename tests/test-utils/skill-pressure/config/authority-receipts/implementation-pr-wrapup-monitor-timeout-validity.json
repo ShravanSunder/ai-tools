@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-monitor-timeout",
-  "behaviorContractDigest": "sha256:b42482667272ad3c9ab704fbb5ff34e4e35ad5e6b874a703a3f28629c3b76c04",
+  "behaviorContractDigest": "sha256:b56a6caa0ca7e454b8f2376f98c69a3aa3e50f71037b457c1fef2ae4023ae249",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

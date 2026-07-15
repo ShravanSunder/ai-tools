@@ -84,13 +84,13 @@ export async function acceptScenarioRunFromReceipt(props: {
   const authorityContext = await (
     props.dependencies?.createAuthorityContext ?? createRuntimeAuthorityContext
   )({ repositoryRoot, contract, registryRow });
-  const promotion = authorityContext.calibration?.promotion;
-  if (promotion === undefined || promotion.freshness.status !== "fresh") {
+  const currentBaseline = authorityContext.calibration?.currentBaseline;
+  if (currentBaseline === undefined || currentBaseline.freshness.status !== "fresh") {
     throw new Error("run acceptance requires fresh validated calibration authority");
   }
   if (
-    receipt.authoritySnapshot.calibrationAuthorityReceiptDigest !== promotion.authorityReceiptDigest ||
-    receipt.authoritySnapshot.calibrationFingerprintDigest !== promotion.calibrationFingerprint.digest
+    receipt.authoritySnapshot.calibrationAuthorityReceiptDigest !== currentBaseline.authorityReceiptDigest ||
+    receipt.authoritySnapshot.calibrationFingerprintDigest !== currentBaseline.calibrationFingerprint.digest
   ) {
     throw new Error("run acceptance calibration bindings do not match current authority");
   }
@@ -98,7 +98,7 @@ export async function acceptScenarioRunFromReceipt(props: {
   const acceptance = await persistExplicitParentAcceptance({
     repositoryRoot,
     contract,
-    promotion,
+    currentBaseline,
     request: {
       candidate: {
         scenarioId: receipt.scenarioId,

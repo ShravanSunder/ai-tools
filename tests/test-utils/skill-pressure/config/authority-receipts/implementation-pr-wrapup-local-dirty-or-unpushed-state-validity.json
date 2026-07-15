@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-local-dirty-or-unpushed-state",
-  "behaviorContractDigest": "sha256:a48898f612b4041bd0be5760aaa81e88f7d7bf5b877db72a2562de3f8a2c03c9",
+  "behaviorContractDigest": "sha256:8bc6d4a6881a8f453038c5ef5c1f657e6458bd8eaa51292c1eae2e6cb53be359",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

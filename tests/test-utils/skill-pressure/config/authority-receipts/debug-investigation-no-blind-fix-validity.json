@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "debug-investigation-no-blind-fix",
-  "behaviorContractDigest": "sha256:21ddbdb3a9ba7ad4af21312a69c016d94a668f5720805b8dc3c9fd835cc88d0b",
+  "behaviorContractDigest": "sha256:f33179c703abc6ba5fba2756e4d891984a30b7b19cb45f1f6407b89fcfd72190",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

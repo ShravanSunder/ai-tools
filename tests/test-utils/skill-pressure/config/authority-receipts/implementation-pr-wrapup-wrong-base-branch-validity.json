@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-wrong-base-branch",
-  "behaviorContractDigest": "sha256:deaac13e14cdd0d522ed98490554065eccd24fe49f88b000ff87fe3d2fd12038",
+  "behaviorContractDigest": "sha256:dff3a1267fda85fcb9e4d848701637b03abdd6610108acba3e20f5e7a61f8628",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-execute-plan-validate-before-edits",
-  "behaviorContractDigest": "sha256:5876b72d1aca2e76759a9b68a11821aefd76e5764f5aa1d1fd7869bd7cc1b123",
+  "behaviorContractDigest": "sha256:604f9ec05079c14ea8c13c4c34b30f340a87796e8304c4948c6fc06d4335f416",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

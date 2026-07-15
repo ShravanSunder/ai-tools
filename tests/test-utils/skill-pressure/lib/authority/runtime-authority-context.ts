@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { V3BehaviorContract } from "../contracts/v3-behavior-contract.js";
@@ -10,11 +10,11 @@ import type {
 import { writeJsonReceipt } from "../reporting/attempt-receipt.js";
 import { calculateCurrentCalibrationFreshnessInputs } from "./calibration-freshness.js";
 import {
-  validatePromotionReceipt,
+  validateCurrentBaselineReceipt,
   type AuthorityDigest,
   type CalibrationFreshnessInputs,
   type ParentAcceptanceReceipt,
-  type ValidatedPromotionReceipt,
+  type ValidatedCurrentBaselineReceipt,
 } from "./authority-receipts.js";
 import type {
   AuthorityReceiptReference,
@@ -22,12 +22,12 @@ import type {
 } from "./evaluation-registry.js";
 import { readTrackedAuthorityReceiptFile } from "./tracked-authority-receipt-file.js";
 
-const AUTHORITY_RECEIPT_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
+const RAW_PARENT_ACCEPTANCE_ROOT = "tmp/skill-pressure-evals/parent-acceptance";
 
 export interface RuntimeAuthorityContext {
   readonly freshnessInputs: CalibrationFreshnessInputs;
   readonly calibration: {
-    readonly promotion: ValidatedPromotionReceipt;
+    readonly currentBaseline: ValidatedCurrentBaselineReceipt;
     readonly sourceReceipt: AuthorityReceiptReference;
     readonly source: string;
   } | null;
@@ -61,13 +61,13 @@ export async function createRuntimeAuthorityContext(props: {
   if (digestSource(source) !== props.registryRow.calibrationReceipt.receiptDigest) {
     throw new Error("runtime calibration receipt digest does not match the registry");
   }
-  const promotion = await validatePromotionReceipt({
+  const currentBaseline = await validateCurrentBaselineReceipt({
     receipt: JSON.parse(source) as unknown,
     currentFreshnessInputs: freshnessInputs,
     repositoryRoot: props.repositoryRoot,
   });
   const calibration = {
-    promotion,
+    currentBaseline,
     sourceReceipt: props.registryRow.calibrationReceipt,
     source,
   };
@@ -81,7 +81,7 @@ export async function createRuntimeAuthorityContext(props: {
 export async function persistExplicitParentAcceptance(props: {
   readonly repositoryRoot: string;
   readonly contract: V3BehaviorContract;
-  readonly promotion: ValidatedPromotionReceipt;
+  readonly currentBaseline: ValidatedCurrentBaselineReceipt;
   readonly request: V3ParentAcceptanceRequest;
 }): Promise<V3ParentAcceptanceContext & { readonly newlyCreated: boolean }> {
   if (
@@ -94,13 +94,14 @@ export async function persistExplicitParentAcceptance(props: {
     receiptKind: "parent_acceptance",
     scenarioId: props.contract.scenarioId,
     behaviorContractDigest: props.contract.behaviorContractDigest,
-    acceptedAuthorityReceiptDigest: props.promotion.authorityReceiptDigest,
+    acceptedAuthorityReceiptDigest: props.currentBaseline.authorityReceiptDigest,
     acceptedRunDigest: props.request.runDigest,
-    calibrationFingerprintDigest: props.promotion.calibrationFingerprint.digest,
+    calibrationFingerprintDigest: props.currentBaseline.calibrationFingerprint.digest,
     claimedRequirementManifestDigest: props.request.claimedRequirementManifestDigest,
   };
-  const fileName = `${props.contract.scenarioId}-run-${props.request.runDigest.slice(7, 19)}-parent-acceptance.json`;
-  const receiptDirectory = path.join(props.repositoryRoot, AUTHORITY_RECEIPT_ROOT);
+  const fileName = `${props.contract.scenarioId}-run-${props.request.runDigest.slice(7, 19)}.json`;
+  const receiptDirectory = path.join(props.repositoryRoot, RAW_PARENT_ACCEPTANCE_ROOT);
+  await mkdir(receiptDirectory, { recursive: true });
   const receiptPath = path.join(receiptDirectory, fileName);
   let source: string;
   let newlyCreated = false;
@@ -124,7 +125,7 @@ export async function persistExplicitParentAcceptance(props: {
     receipt,
     source,
     sourceReceipt: {
-      receiptPath: `${AUTHORITY_RECEIPT_ROOT}/${fileName}`,
+      receiptPath: `${RAW_PARENT_ACCEPTANCE_ROOT}/${fileName}`,
       receiptDigest: digestSource(source),
     },
     newlyCreated,

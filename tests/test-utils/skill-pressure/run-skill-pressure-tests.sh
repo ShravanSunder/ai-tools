@@ -133,7 +133,7 @@ Usage: tests/test-utils/skill-pressure/run-skill-pressure-tests.sh [--fast|--dia
        tests/test-utils/skill-pressure/run-skill-pressure-tests.sh --demote PATH --aggregate PATH --reason REASON --accept
 
 Runs behavioral skill pressure tests through Vitest Evals. Every authoritative
-subject call uses ACPX with Codex Luna/xhigh.
+subject call uses ACPX with Codex Luna/high.
 USAGE
       exit 0
       ;;

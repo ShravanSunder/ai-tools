@@ -42,7 +42,7 @@ function successfulExecution(sessionId: string): AcpxProcessExecution {
     },
     stdout: [
       { method: "session/new", params: { mcpServers: [] } },
-      { result: { sessionId, models: { currentModelId: "gpt-5.6-luna[xhigh]" } } },
+      { result: { sessionId, models: { currentModelId: "gpt-5.6-luna[high]" } } },
       { method: "session/prompt" },
       { method: "session/update", params: { update: { sessionUpdate: "agent_message_chunk", content: { text: "Operator-facing answer" } } } },
       { method: "session/update", params: { update: { sessionUpdate: "usage_update", _meta: { usage: { input_tokens: 10, output_tokens: 5 } } } } },
@@ -73,7 +73,7 @@ function baseProps(fixture: Awaited<ReturnType<typeof createFixture>>): Omit<Run
       codexVersion: "codex-cli 0.144.3",
     },
     model: "gpt-5.6-luna",
-    reasoningEffort: "xhigh",
+    reasoningEffort: "high",
     permissionMode: "approve-reads",
     disabledAmbientSkillPaths: [],
     timeoutSeconds: 120,
@@ -146,7 +146,7 @@ describe("ACPX subject repetition", () => {
       `#!/usr/bin/env node
 const messages = [
   { method: "session/new", params: { mcpServers: [] } },
-  { result: { sessionId: "supervised-boundary-session", models: { currentModelId: "gpt-5.6-luna[xhigh]" } } },
+  { result: { sessionId: "supervised-boundary-session", models: { currentModelId: "gpt-5.6-luna[high]" } } },
   { method: "session/prompt" },
   { method: "session/update", params: { update: { sessionUpdate: "agent_message_chunk", content: { text: "Supervised operator answer" } } } },
   { method: "session/update", params: { update: { sessionUpdate: "usage_update", _meta: { usage: { input_tokens: 10, output_tokens: 5 } } } } },
@@ -206,7 +206,7 @@ process.stdout.write(messages.map((message) => JSON.stringify(message)).join("\\
           stderrEof: true,
           cleanup: { processGroupId: 456, termSent: true, killSent: true },
         },
-        stdout: successfulExecution("session-timeout").stdout.replace("gpt-5.6-luna[xhigh]", "gpt-5.6-luna[medium]"),
+        stdout: successfulExecution("session-timeout").stdout.replace("gpt-5.6-luna[high]", "gpt-5.6-luna[medium]"),
       }),
     });
 

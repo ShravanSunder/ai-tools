@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-reference-lane-non-regression",
-  "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+  "behaviorContractDigest": "sha256:ccd5ea407945f018a0625ffd5ad5cc546825312bf23a09e0e247e349c6c9131b",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

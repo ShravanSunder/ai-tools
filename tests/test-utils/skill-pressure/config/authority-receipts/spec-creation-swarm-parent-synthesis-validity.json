@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-creation-swarm-parent-synthesis",
-  "behaviorContractDigest": "sha256:f4556b1dd22ed4acc4e8f6207e19b4e4f0597e51e7eba9af57cad56aac7af9d4",
+  "behaviorContractDigest": "sha256:c310b485edbfbd0b2028980f192269731a8dfda2a5a9ad302c4ba97702b66a65",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

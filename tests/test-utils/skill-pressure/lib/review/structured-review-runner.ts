@@ -14,7 +14,7 @@ import { buildAcpxCodexReviewCommand } from "../runtime/acpx-codex-review-profil
 import { buildAcpxClaudeReviewSessionCommands } from "../runtime/acpx-review-profile.js";
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
   verifyRuntimeProfile,
   type RuntimeProfileReceipt,
 } from "../runtime/runtime-profile.js";
@@ -113,7 +113,7 @@ export async function executeStructuredReview(
     const expectedProfile =
       props.risk === "high"
         ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
-        : ACPX_LUNA_XHIGH_SUBJECT_PROFILE;
+        : ACPX_LUNA_HIGH_SUBJECT_PROFILE;
     const usageObserved = transcript.usageObservations.length > 0;
     const lifecycle = {
       ...review.lifecycle,
@@ -209,8 +209,8 @@ async function executeStandardReview(
         packetPath: props.packetPath,
         packetDigest: digest(props.packetSource),
         disabledSkillPaths: props.disabledAmbientSkillPaths,
-        model: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel,
-        reasoningEffort: ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort,
+        model: ACPX_LUNA_HIGH_SUBJECT_PROFILE.requestedModel,
+        reasoningEffort: ACPX_LUNA_HIGH_SUBJECT_PROFILE.requestedReasoningEffort,
         timeoutSeconds: props.timeoutSeconds,
       }),
       props.signal,

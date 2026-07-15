@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-user-agreement-gate",
-  "behaviorContractDigest": "sha256:a4143b55b0d724f98a61da74c06b21b2bc76f9efe50ce35fff3019d981e7aade",
+  "behaviorContractDigest": "sha256:dde6c98711096f92ea30657688ff5a8fbd6254c9fe9ea2298789957dcf285fd2",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

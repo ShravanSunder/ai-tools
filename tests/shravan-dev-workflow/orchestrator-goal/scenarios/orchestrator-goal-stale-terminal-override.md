@@ -54,7 +54,7 @@ behavior_requirement_ids:
   - orchestrator-goal-stale-terminal-override
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []

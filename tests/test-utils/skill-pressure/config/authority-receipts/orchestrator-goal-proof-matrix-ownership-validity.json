@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-proof-matrix-ownership",
-  "behaviorContractDigest": "sha256:117d922464a3e69a1b6f93962a8c7b035b3e7f129e9329717512c51253ddcd44",
+  "behaviorContractDigest": "sha256:b6b342f0ab0f6015b6311f8c695ed7405e1fc746ad0998759278f092db8db5d6",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

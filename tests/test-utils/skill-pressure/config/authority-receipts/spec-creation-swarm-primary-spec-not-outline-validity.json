@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-creation-swarm-primary-spec-not-outline",
-  "behaviorContractDigest": "sha256:d9125653c10d14ded49ef356a37b7396ad997d6e48a4fe3a2300692865c4b5b2",
+  "behaviorContractDigest": "sha256:d5373d3d303cb90fb80b74c187804fb70e6cbd8fe1a78d4d9a4b78c3c4538dba",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "scenario_validity",
+  "scenarioId": "manage-agents-model-thinking-selection",
+  "behaviorContractDigest": "sha256:5c820efa98bcfb55196ce3b59527019ad65c89fe67a30ed737be202c313510d2",
+  "verdict": "pass",
+  "consistency": {
+    "promptConsistent": true,
+    "effectSurfacesConsistent": true,
+    "semanticAssertionsConsistent": true,
+    "permissionsConsistent": true,
+    "fixturesConsistent": true,
+    "expectedArtifactsConsistent": true
+  }
+}

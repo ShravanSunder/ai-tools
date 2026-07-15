@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-spec-difference-lane",
-  "behaviorContractDigest": "sha256:22e18709aac64701c41854ca9c43fdd5e708a9853558e461dd75623d9fca9549",
+  "behaviorContractDigest": "sha256:fd0caf63a7344d31f30cda97a660c045bf3337ba5e101329bbb7096343b2cbc6",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

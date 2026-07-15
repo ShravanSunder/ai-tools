@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "peekaboo-progressive-disclosure",
-  "behaviorContractDigest": "sha256:62c49f3debb955fd9f1df32a33849d157eeb924d13f92d72e06390cab792c187",
+  "behaviorContractDigest": "sha256:430137468d4f39522d82c95865f0d342c241709a448d0964bdb672aaf7324013",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

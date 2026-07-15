@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-source-trigger-classifier",
-  "behaviorContractDigest": "sha256:9a79b8d6fdd4039080863d5fedb2d4004f8040e8b0a1ced10c83c5c0bd4f05cb",
+  "behaviorContractDigest": "sha256:dd872e17aa8b830c5a32c1c2e2521b1c23bb696287b478c7e746e475e767fa34",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

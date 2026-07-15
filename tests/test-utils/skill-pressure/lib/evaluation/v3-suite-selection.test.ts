@@ -21,11 +21,11 @@ const registry: EvaluationRegistry = {
 };
 
 const candidates = [
-  { scenarioId: "standard-fresh", risk: "standard" as const, repetitions: 5 },
-  { scenarioId: "high-fresh", risk: "high" as const, repetitions: 5 },
-  { scenarioId: "standard-stale", risk: "standard" as const, repetitions: 5 },
-  { scenarioId: "diagnostic", risk: "standard" as const, repetitions: 5 },
-  { scenarioId: "retired", risk: "standard" as const, repetitions: 5 },
+  { scenarioId: "standard-fresh", risk: "standard" as const, repetitions: 3 },
+  { scenarioId: "high-fresh", risk: "high" as const, repetitions: 3 },
+  { scenarioId: "standard-stale", risk: "standard" as const, repetitions: 3 },
+  { scenarioId: "diagnostic", risk: "standard" as const, repetitions: 3 },
+  { scenarioId: "retired", risk: "standard" as const, repetitions: 3 },
 ];
 
 function row(
@@ -42,7 +42,6 @@ function row(
     calibrationReceipt: evaluationRole === "gate"
       ? { receiptPath: `${scenarioId}-calibration.json`, receiptDigest: fixtureAuthorityDigest("c") }
       : null,
-    authorityHistory: [],
   };
 }
 

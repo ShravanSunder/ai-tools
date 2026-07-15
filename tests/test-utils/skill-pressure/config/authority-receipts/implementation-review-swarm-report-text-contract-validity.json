@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-report-text-contract",
-  "behaviorContractDigest": "sha256:93fda897c43dcff796fa7043fffc320a48254e1a4cd7c9c1804cd3e5b7dcdc9a",
+  "behaviorContractDigest": "sha256:fe20a6f40187bdbd309ed699f3234c06e4a48ab545378afc1cf0ca65ea587178",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

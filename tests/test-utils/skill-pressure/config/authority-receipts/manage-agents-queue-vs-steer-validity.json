@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "manage-agents-queue-vs-steer",
-  "behaviorContractDigest": "sha256:f647766eb7369011e76aada1c42a5d9d3078fa4e4883fc885ac399db73c983d4",
+  "behaviorContractDigest": "sha256:02d12bf27ac4177336d3d72eab6dae0dbb82dd5a662ade8f7e61591bbe63fc51",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

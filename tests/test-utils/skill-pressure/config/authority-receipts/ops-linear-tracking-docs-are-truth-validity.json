@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "ops-linear-tracking-docs-are-truth",
-  "behaviorContractDigest": "sha256:88f0b90fc3dfc3b795ecabfac1175e8ca28052fdf6be37bd5094f89891b4c4e1",
+  "behaviorContractDigest": "sha256:6a4b1dd1e662dddbe35044b61f89c1f3a2860dc7d08c3544c4c8f6349c576a6a",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-manage-agents-pointer",
-  "behaviorContractDigest": "sha256:35e3304b95cc591e5e1e1f0b353491a362318d85470e62508e8e365bd68a0e13",
+  "behaviorContractDigest": "sha256:ceb06f94a3f935780656c3e06c8cb894c7bbc443f92b22fb50f3536f375e9a0d",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

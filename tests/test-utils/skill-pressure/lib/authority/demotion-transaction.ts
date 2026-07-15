@@ -1,11 +1,10 @@
 import { createHash } from "node:crypto";
-import { readFile, rm } from "node:fs/promises";
+import { readFile, rename, rm } from "node:fs/promises";
 import path from "node:path";
 
 import { discoverSkillScenarios } from "../discovery/skill-discovery.js";
 import type { ExecutedV3BehavioralScenario } from "../evaluation/v3-behavioral-scenario-execution.js";
 import { validateV3ScenarioExecutionForAggregate } from "../reporting/aggregate-receipt.js";
-import { writeJsonReceipt } from "../reporting/attempt-receipt.js";
 import { digestJson } from "./calibration-freshness.js";
 import {
   calculateAuthorityReceiptDigest,
@@ -17,7 +16,6 @@ import {
 import { demoteRegistryRow } from "./demotion-registry.js";
 import { loadEvaluationRegistry, type EvaluationRegistryRow } from "./evaluation-registry.js";
 
-const AUTHORITY_RECEIPT_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
 const DEFAULT_REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 const DEMOTION_REASONS = [
   "contract_contradiction",
@@ -30,8 +28,6 @@ export type DemotionReason = (typeof DEMOTION_REASONS)[number];
 
 export interface DemoteScenarioResult {
   readonly scenarioId: string;
-  readonly demotionReceiptPath: string;
-  readonly demotionReceiptDigest: AuthorityDigest;
   readonly authorityReceiptDigest: AuthorityDigest;
   readonly observedRunDigest: AuthorityDigest;
   readonly registryPath: string;
@@ -145,50 +141,48 @@ export async function demoteScenarioFromReceipt(props: {
   const demotionReceipt: DemotionReceipt = { ...unsignedDemotion, parentAcceptance };
   validateDemotionReceipt({ receipt: demotionReceipt });
 
-  let createdReceiptPath: string | null = null;
+  if (registryRow.calibrationReceipt === null) throw new Error("current gate is missing its current baseline receipt");
+  const baselinePath = path.join(repositoryRoot, registryRow.calibrationReceipt.receiptPath);
+  const stagedBaseline = await stageCurrentBaselineRemoval(baselinePath);
   try {
-    const fileName = `${receipt.scenarioId}-demotion-${authorityReceiptDigest.slice(7, 19)}.json`;
-    const persistedDemotion = await writeJsonReceipt({
-      receiptDirectory: path.join(repositoryRoot, AUTHORITY_RECEIPT_ROOT),
-      fileName,
-      receipt: demotionReceipt,
-      secrets: [],
-    });
-    createdReceiptPath = persistedDemotion.receiptPath;
-    const demotionReceiptPath = `${AUTHORITY_RECEIPT_ROOT}/${fileName}`;
-    const demotionReceiptDigest = asAuthorityDigest(
-      persistedDemotion.receiptDigest,
-      "persisted demotion receipt digest",
-    );
-    const persistedReceipt = JSON.parse(await readFile(persistedDemotion.receiptPath, "utf8")) as unknown;
-    const validatedDemotion = validateDemotionReceipt({ receipt: persistedReceipt });
-    if (validatedDemotion.authorityReceiptDigest !== authorityReceiptDigest) {
-      throw new Error("persisted demotion authority receipt digest does not match");
-    }
-
     await demoteRegistryRow({
       repositoryRoot,
       registryPath,
       discovery,
       scenarioId: receipt.scenarioId,
-      demotionReceiptPath,
-      demotionReceiptDigest,
       ...(props.dependencies?.beforeRegistryCommit === undefined
         ? {}
         : { beforeRegistryCommit: props.dependencies.beforeRegistryCommit }),
     });
+    await stagedBaseline.discard();
     return {
       scenarioId: receipt.scenarioId,
-      demotionReceiptPath,
-      demotionReceiptDigest,
       authorityReceiptDigest,
       observedRunDigest,
       registryPath,
     };
   } catch (error) {
-    if (createdReceiptPath !== null) await rm(createdReceiptPath, { force: true });
+    await stagedBaseline.restore();
     throw error;
   }
+}
+
+async function stageCurrentBaselineRemoval(baselinePath: string): Promise<{
+  readonly restore: () => Promise<void>;
+  readonly discard: () => Promise<void>;
+}> {
+  const stagedPath = `${baselinePath}.${process.pid}.demotion.tmp`;
+  await rename(baselinePath, stagedPath);
+  return {
+    restore: async () => {
+      try {
+        await rename(stagedPath, baselinePath);
+      } catch (error) {
+        if (!isMissingFile(error)) throw error;
+      }
+    },
+    discard: async () => rm(stagedPath, { force: true }),
+  };
 }
 
 function assertAggregateBindsObservedRun(props: {
@@ -318,4 +312,8 @@ function assertIdentifier(value: unknown, label: string): asserts value is strin
 
 function digestSource(source: string): AuthorityDigest {
   return `sha256:${createHash("sha256").update(source).digest("hex")}`;
+}
+
+function isMissingFile(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
 }

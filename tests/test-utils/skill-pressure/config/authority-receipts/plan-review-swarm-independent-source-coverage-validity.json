@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-review-swarm-independent-source-coverage",
-  "behaviorContractDigest": "sha256:135efa70badef537b533407e7bf2cc59a6cf2f0f86a73d7f3fc04e79ee53004a",
+  "behaviorContractDigest": "sha256:fb7daa33525040d65226cc9cc2354b0d716bb598b166591994fe867b50c4cbab",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

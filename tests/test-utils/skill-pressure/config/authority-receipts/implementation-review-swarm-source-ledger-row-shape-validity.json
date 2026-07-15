@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-source-ledger-row-shape",
-  "behaviorContractDigest": "sha256:269a37d00dd0079732b9048aff6a60cb3a10d54f91e4718be37313577e061b7c",
+  "behaviorContractDigest": "sha256:d6f95b37750dcdb403c235ab6247ef478adfabdccc59375134e0ae99c3433c28",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -6,9 +6,9 @@ import {
   calculateCalibrationFreshnessFingerprint,
   calculateAuthorityReceiptDigest,
   type AuthorityDigest,
+  type CurrentBaselineExecutionRepetition,
   type ParentAcceptanceReceipt,
-  type PromotionEvidenceReceiptReference,
-  type ValidatedPromotionReceipt,
+  type ValidatedCurrentBaselineReceipt,
 } from "./authority/authority-receipts.js";
 import {
   validateClaimedRequirementManifest,
@@ -45,14 +45,12 @@ export function createClaimedRequirementValidationFixture(props: {
   });
 }
 
-export function createValidatedPromotionFixture(props: {
+export function createValidatedCurrentBaselineFixture(props: {
   readonly scenarioId: string;
   readonly behaviorContractDigest: AuthorityDigest;
   readonly freshness?: "fresh" | "stale";
   readonly claimedRequirementManifestDigest?: AuthorityDigest;
-  readonly attemptReceipts?: readonly PromotionEvidenceReceiptReference[];
-  readonly cleanupReceipts?: readonly PromotionEvidenceReceiptReference[];
-}): ValidatedPromotionReceipt {
+}): ValidatedCurrentBaselineReceipt {
   const freshnessInputs = {
     behaviorContractDigest: props.behaviorContractDigest,
     baselinePolicyDigest: fixtureAuthorityDigest("b"),
@@ -63,27 +61,30 @@ export function createValidatedPromotionFixture(props: {
   const calibrationFingerprint = calculateCalibrationFreshnessFingerprint(freshnessInputs);
   const unsignedReceipt = {
     schemaVersion: 1 as const,
-    receiptKind: "promotion" as const,
+    receiptKind: "current_baseline" as const,
     scenarioId: props.scenarioId,
     behaviorContractDigest: props.behaviorContractDigest,
     calibrationFingerprint: freshnessInputs,
     calibrationRunDigest: fixtureAuthorityDigest("1"),
-    promotionTreatmentDigest: fixtureAuthorityDigest("2"),
+    acceptedSkillSourceDigest: fixtureAuthorityDigest("2"),
     calibration: {
       contractConsistent: true as const,
       contractConsistencyEvidenceDigest: fixtureAuthorityDigest("3"),
       baselinePolicyValid: true as const,
       baselinePolicyEvidenceDigest: fixtureAuthorityDigest("4"),
-      baselineRepetitionDigests: ["0", "1", "2", "3", "4"].map(fixtureAuthorityDigest),
-      treatmentRepetitionDigests: ["5", "6", "7", "8", "9"].map(fixtureAuthorityDigest),
+      baselineRepetitionDigests: ["0", "1", "2"].map(fixtureAuthorityDigest),
+      treatmentRepetitionDigests: ["3", "4", "5"].map(fixtureAuthorityDigest),
       comparisonIntentPassed: true as const,
       objectiveEvidenceDigest: fixtureAuthorityDigest("5"),
       semanticEvidenceDigest: fixtureAuthorityDigest("6"),
-      attemptReceipts: props.attemptReceipts ?? createPromotionEvidenceReferenceFixtures(props.scenarioId, "attempt"),
-      cleanupReceipts: props.cleanupReceipts ?? createPromotionEvidenceReferenceFixtures(props.scenarioId, "cleanup"),
       deterministicMutationCoverage: true as const,
       subjectProfileVerified: true as const,
       reviewProfileVerified: true as const,
+    },
+    executionEvidence: {
+      calibrationRunDigest: fixtureAuthorityDigest("1"),
+      acceptedSkillSourceDigest: fixtureAuthorityDigest("2"),
+      repetitions: createCurrentBaselineExecutionRepetitionFixtures(),
     },
   };
   const authorityReceiptDigest = calculateAuthorityReceiptDigest(unsignedReceipt);
@@ -109,23 +110,32 @@ export function createValidatedPromotionFixture(props: {
   };
 }
 
-function createPromotionEvidenceReferenceFixtures(
-  scenarioId: string,
-  receiptKind: "attempt" | "cleanup",
-): readonly PromotionEvidenceReceiptReference[] {
-  return ["baseline", "treatment"].flatMap((variant) =>
-    Array.from({ length: 5 }, (_, index) => ({
-      scenarioId,
-      variant: variant as "baseline" | "treatment",
-      repetitionNumber: index + 1,
-      attemptNumber: 1,
-      receiptPath: `tests/test-utils/skill-pressure/config/authority-receipts/${scenarioId}-${variant}-${index + 1}-${receiptKind}.json`,
-      receiptDigest: fixtureAuthorityDigest(String(index)),
-    })));
+function createCurrentBaselineExecutionRepetitionFixtures(): readonly CurrentBaselineExecutionRepetition[] {
+  const sourceDigestCharacters = ["0", "1", "2", "3", "4", "5"] as const;
+  const repetitionDigestCharacters = ["6", "7", "8", "9", "a", "b"] as const;
+  return (["baseline", "treatment"] as const).flatMap((variant, variantIndex) =>
+    Array.from({ length: 3 }, (_, index) => {
+      const digestIndex = variantIndex * 3 + index;
+      const digestCharacter = sourceDigestCharacters[digestIndex]!;
+      return {
+        variant,
+        repetitionNumber: index + 1,
+        attemptNumber: 1,
+        sourceAttemptReceiptDigest: fixtureAuthorityDigest(digestCharacter),
+        acceptedAttemptReceiptDigest: fixtureAuthorityDigest(digestCharacter),
+        acceptedRepetitionReceiptDigest: fixtureAuthorityDigest(repetitionDigestCharacters[digestIndex]!),
+        processClosed: true as const,
+        streamsDrained: true as const,
+        outputRedacted: true as const,
+        snapshotsCollected: true as const,
+        cleanupFactsCollected: true as const,
+      };
+    }),
+  );
 }
 
 export function createRunAcceptanceFixture(props: {
-  readonly calibration: ValidatedPromotionReceipt;
+  readonly calibration: ValidatedCurrentBaselineReceipt;
   readonly runDigest: AuthorityDigest;
   readonly claimedRequirementManifestDigest: AuthorityDigest;
 }): ParentAcceptanceReceipt {
@@ -200,7 +210,7 @@ behavior_requirement_ids:
   - ${props.scenarioId}
 baseline: ${baseline}
 ${baselineRevision}comparison_intent: ${props.comparisonIntent ?? "improvement"}
-repetitions: ${props.repetitions ?? 5}
+repetitions: ${props.repetitions ?? 3}
 risk: standard
 fixture_requirements: []
 allowed_tools: []

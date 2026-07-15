@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-stale-success-claim",
-  "behaviorContractDigest": "sha256:c7e57b58de8c2a9ea9c13632d3cbad4e1cd6d24caa5b78b4ca240bb967566b3d",
+  "behaviorContractDigest": "sha256:dcd44dc0469bcab88a70722f65667af802fa5851379b3611b4afd796773b16eb",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "current_baseline",
+  "scenarioId": "skills-creation-reference-lane-non-regression",
+  "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+  "calibrationFingerprint": {
+    "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+    "baselinePolicyDigest": "sha256:dce31f382b7e8e180abb0e08bfe9e01d024c1e5b303d9431419e774b2401bcf8",
+    "runnerSemanticsDigest": "sha256:9a1adbb93b4a59441d941a01a74c179edbd487185239d18f8a4730546314a73e",
+    "subjectProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc",
+    "reviewProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc"
+  },
+  "calibrationRunDigest": "sha256:190bafaf726507a853c5c068d9c53d77d1552f3c3c1b4b4a47d028e846b19c98",
+  "acceptedSkillSourceDigest": "sha256:5827926dbc216e1402c3ee2852091ef1f987999900ebcf32d8fec04c1d6bc6bd",
+  "calibration": {
+    "contractConsistent": true,
+    "contractConsistencyEvidenceDigest": "sha256:2f17be55bda7532e8a7755f3e579990d49039abd3470ae9e92d21f00506635b8",
+    "baselinePolicyValid": true,
+    "baselinePolicyEvidenceDigest": "sha256:dce31f382b7e8e180abb0e08bfe9e01d024c1e5b303d9431419e774b2401bcf8",
+    "baselineRepetitionDigests": [
+      "sha256:3da631442264fbc1977e914b1489d17bc9a100c34ae7667cf0620131e2a880fb",
+      "sha256:5be1e9a5c29a57b52d373fe6987a504c7d4e72ab902461ba3c1924f432d5ea22",
+      "sha256:1dfeb640bf2d0ba3029cbb29054fd9a560f61a8c660b8bd96ce7bd144d5a1d53"
+    ],
+    "treatmentRepetitionDigests": [
+      "sha256:6d2d9100e9dee020be6e1338192ca680eb9764c859ec8cf223bfd04533223c42",
+      "sha256:496887903351ecb2356f3cc78ead49c47b54da695544530f908927181c76cc84",
+      "sha256:9789b07789a1a303f2514d0d323d9210a3839f93bf77bbe58a8233dad9ac5eb1"
+    ],
+    "comparisonIntentPassed": true,
+    "objectiveEvidenceDigest": "sha256:2665e4041e45cc6e7992d96390e06a90b85971e0e7fcbc1b3520293e37054b41",
+    "semanticEvidenceDigest": "sha256:b5cb954a5544902cdd85609eea481e26bb7bc642eb505075cbd1d1047e370498",
+    "deterministicMutationCoverage": true,
+    "subjectProfileVerified": true,
+    "reviewProfileVerified": true
+  },
+  "executionEvidence": {
+    "calibrationRunDigest": "sha256:190bafaf726507a853c5c068d9c53d77d1552f3c3c1b4b4a47d028e846b19c98",
+    "acceptedSkillSourceDigest": "sha256:5827926dbc216e1402c3ee2852091ef1f987999900ebcf32d8fec04c1d6bc6bd",
+    "repetitions": [
+      {
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:5595b9c786789cd2960010e14f1340c82ca8177fcb07f3c3119b7b07b31803ec",
+        "acceptedAttemptReceiptDigest": "sha256:5595b9c786789cd2960010e14f1340c82ca8177fcb07f3c3119b7b07b31803ec",
+        "acceptedRepetitionReceiptDigest": "sha256:3da631442264fbc1977e914b1489d17bc9a100c34ae7667cf0620131e2a880fb",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:a3488f46a2bd097b33081a3f3f012c2c3ec48b491c56254d0efffdd125527434",
+        "acceptedAttemptReceiptDigest": "sha256:a3488f46a2bd097b33081a3f3f012c2c3ec48b491c56254d0efffdd125527434",
+        "acceptedRepetitionReceiptDigest": "sha256:5be1e9a5c29a57b52d373fe6987a504c7d4e72ab902461ba3c1924f432d5ea22",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:12a3f2fdf69f12451380dcab2098110f3c277387650c1cb680c8bfa8e1105331",
+        "acceptedAttemptReceiptDigest": "sha256:12a3f2fdf69f12451380dcab2098110f3c277387650c1cb680c8bfa8e1105331",
+        "acceptedRepetitionReceiptDigest": "sha256:1dfeb640bf2d0ba3029cbb29054fd9a560f61a8c660b8bd96ce7bd144d5a1d53",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:7ceb752d44e38bc53da43cc0cc40a0ea1d2278e734dabbc730323e3cbb042c9a",
+        "acceptedAttemptReceiptDigest": "sha256:7ceb752d44e38bc53da43cc0cc40a0ea1d2278e734dabbc730323e3cbb042c9a",
+        "acceptedRepetitionReceiptDigest": "sha256:6d2d9100e9dee020be6e1338192ca680eb9764c859ec8cf223bfd04533223c42",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:4554dcd9c4a3ad0ce64e6ad5743ac691dd7c2f7bf9498b2007a1d84221f7e838",
+        "acceptedAttemptReceiptDigest": "sha256:4554dcd9c4a3ad0ce64e6ad5743ac691dd7c2f7bf9498b2007a1d84221f7e838",
+        "acceptedRepetitionReceiptDigest": "sha256:496887903351ecb2356f3cc78ead49c47b54da695544530f908927181c76cc84",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:a473ccf8855a72da7add2c20ffc43ea2b0eb1bff9286619fed68e663d8e174c1",
+        "acceptedAttemptReceiptDigest": "sha256:a473ccf8855a72da7add2c20ffc43ea2b0eb1bff9286619fed68e663d8e174c1",
+        "acceptedRepetitionReceiptDigest": "sha256:9789b07789a1a303f2514d0d323d9210a3839f93bf77bbe58a8233dad9ac5eb1",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      }
+    ]
+  },
+  "parentAcceptance": {
+    "schemaVersion": 1,
+    "receiptKind": "parent_acceptance",
+    "scenarioId": "skills-creation-reference-lane-non-regression",
+    "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+    "acceptedAuthorityReceiptDigest": "sha256:3d33403f2a92aa1232724feef692a1b91e21ceb8f676a95755813ffcd8d8d3c8",
+    "acceptedRunDigest": "sha256:190bafaf726507a853c5c068d9c53d77d1552f3c3c1b4b4a47d028e846b19c98",
+    "calibrationFingerprintDigest": "sha256:81f12c539b944e0a6783504d560942b2d5e3a8d5c5ffd657e86c3220971ca55d",
+    "claimedRequirementManifestDigest": "sha256:03f6af29b5e46ba48308b9e644b767cd563f5e151d8ebd298842a495cb9a17b8"
+  }
+}

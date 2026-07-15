@@ -1,11 +1,11 @@
 import path from "node:path";
 
 import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
-import { ACPX_LUNA_XHIGH_SUBJECT_PROFILE } from "./runtime-profile.js";
+import { ACPX_LUNA_HIGH_SUBJECT_PROFILE } from "./runtime-profile.js";
 
 export type AcpxPermissionMode = "approve-all" | "approve-reads" | "deny-all";
 
-export { ACPX_LUNA_XHIGH_SUBJECT_PROFILE };
+export { ACPX_LUNA_HIGH_SUBJECT_PROFILE };
 
 export interface AcpxCodexSubjectProfile {
   readonly launcher: AcpxLauncher;

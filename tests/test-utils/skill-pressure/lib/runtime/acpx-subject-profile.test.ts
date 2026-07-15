@@ -13,7 +13,7 @@ const profile = {
   mcpConfigPath: "/tmp/skill-pressure/run-1/mcp.json",
   promptPath: "/tmp/skill-pressure/run-1/prompt.md",
   model: "gpt-5.6-luna",
-  reasoningEffort: "xhigh",
+  reasoningEffort: "high",
   permissionMode: "approve-reads",
   allowedTools: [],
   disabledSkillPaths: ["/tmp/ambient/SKILL.md"],
@@ -21,11 +21,11 @@ const profile = {
 } satisfies AcpxCodexSubjectProfile;
 
 describe("ACPX Codex subject profile", () => {
-  it("builds the one-shot Luna/xhigh command in the disposable repository", () => {
+  it("builds the one-shot Luna/high command in the disposable repository", () => {
     const command = buildAcpxCodexSubjectCommand(profile);
 
     expect(command.cwd).toBe(profile.cwd);
-    expect(command.args).toContain("gpt-5.6-luna[xhigh]");
+    expect(command.args).toContain("gpt-5.6-luna[high]");
     expect(command.args).not.toContain("--allowed-tools");
     expect(command.args.slice(-3)).toEqual(["exec", "--file", profile.promptPath]);
     expect(command.environment.CODEX_CONFIG).toBe(

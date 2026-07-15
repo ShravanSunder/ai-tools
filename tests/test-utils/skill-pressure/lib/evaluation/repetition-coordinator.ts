@@ -11,6 +11,7 @@ import {
 import type { ScenarioBaseline } from "../contracts/contract-types.js";
 
 const COORDINATOR_VERSION = "skill-pressure-coordinator-v1";
+const MIN_PRESSURE_REPETITIONS = 3;
 
 type RepetitionCommonProps = Omit<
   RunSubjectRepetitionProps,
@@ -86,8 +87,8 @@ export function selectBaselineSkillSource(props: {
 export async function runScenarioRepetitions(
   props: RunScenarioRepetitionsProps,
 ): Promise<ScenarioRepetitionSetReceipt> {
-  if (!Number.isInteger(props.repetitions) || props.repetitions < 5) {
-    throw new Error("pressure scenarios require at least five repetitions per variant");
+  if (!Number.isInteger(props.repetitions) || props.repetitions < MIN_PRESSURE_REPETITIONS) {
+    throw new Error("pressure scenarios require at least three repetitions per variant");
   }
   const infrastructureRetries = props.infrastructureRetries ?? 0;
   if (!Number.isInteger(infrastructureRetries) || infrastructureRetries < 0) {
@@ -95,35 +96,35 @@ export async function runScenarioRepetitions(
   }
 
   const runRepetition = props.runRepetition ?? runSubjectRepetition;
-  const baseline: SubjectRepetitionReceipt[] = [];
-  const treatment: SubjectRepetitionReceipt[] = [];
-  const attempts: RepetitionAttemptReceipt[] = [];
-  for (let repetitionIndex = 0; repetitionIndex < props.repetitions; repetitionIndex += 1) {
-    const baselineAttempt = await runWithInfrastructureRetries({
-      runRepetition,
-      repetitionProps: props.repetitionProps,
-      variant: "baseline",
-      selectedSkillSource: props.baselineSource,
-      repetitionNumber: repetitionIndex + 1,
-      infrastructureRetries,
-      persistAttemptReceipt: props.persistAttemptReceipt,
-      beforeAttempt: props.beforeAttempt,
-    });
-    baseline.push(baselineAttempt.selected);
-    attempts.push(baselineAttempt.receipt);
-    const treatmentAttempt = await runWithInfrastructureRetries({
-      runRepetition,
-      repetitionProps: props.repetitionProps,
-      variant: "treatment",
-      selectedSkillSource: props.treatmentSource,
-      repetitionNumber: repetitionIndex + 1,
-      infrastructureRetries,
-      persistAttemptReceipt: props.persistAttemptReceipt,
-      beforeAttempt: props.beforeAttempt,
-    });
-    treatment.push(treatmentAttempt.selected);
-    attempts.push(treatmentAttempt.receipt);
+  const baselineAttempts = await runVariantBatch({
+    runRepetition,
+    repetitionProps: props.repetitionProps,
+    variant: "baseline",
+    selectedSkillSource: props.baselineSource,
+    repetitions: props.repetitions,
+    infrastructureRetries,
+    persistAttemptReceipt: props.persistAttemptReceipt,
+    beforeAttempt: props.beforeAttempt,
+  });
+  if (props.repetitionProps.signal?.aborted) {
+    throw new Error("runner abort signal fired after baseline wave; refusing to launch treatment wave");
   }
+  const treatmentAttempts = await runVariantBatch({
+    runRepetition,
+    repetitionProps: props.repetitionProps,
+    variant: "treatment",
+    selectedSkillSource: props.treatmentSource,
+    repetitions: props.repetitions,
+    infrastructureRetries,
+    persistAttemptReceipt: props.persistAttemptReceipt,
+    beforeAttempt: props.beforeAttempt,
+  });
+  const baseline = baselineAttempts.map((attempt) => attempt.selected);
+  const treatment = treatmentAttempts.map((attempt) => attempt.selected);
+  const attempts = [
+    ...baselineAttempts.map((attempt) => attempt.receipt),
+    ...treatmentAttempts.map((attempt) => attempt.receipt),
+  ];
 
   const infrastructureReasons = collectSetInfrastructureReasons(baseline, treatment);
   return {
@@ -244,7 +245,7 @@ function collectSetInfrastructureReasons(
 ): readonly string[] {
   const reasons: string[] = [];
   const all = [...baseline, ...treatment];
-  if (baseline.length !== treatment.length || baseline.length < 5) {
+  if (baseline.length !== treatment.length || baseline.length < MIN_PRESSURE_REPETITIONS) {
     reasons.push("baseline and treatment repetition counts are invalid");
   }
   if (all.some((item) => item.status !== "executed")) {
@@ -292,6 +293,47 @@ function collectSetInfrastructureReasons(
     }
   }
   return [...new Set(reasons)];
+}
+
+async function runVariantBatch(props: {
+  readonly runRepetition: (props: RunSubjectRepetitionProps) => Promise<SubjectRepetitionReceipt>;
+  readonly repetitionProps: RepetitionCommonProps;
+  readonly variant: "baseline" | "treatment";
+  readonly selectedSkillSource: SelectedSkillSource;
+  readonly repetitions: number;
+  readonly infrastructureRetries: number;
+  readonly persistAttemptReceipt: RunScenarioRepetitionsProps["persistAttemptReceipt"];
+  readonly beforeAttempt: RunScenarioRepetitionsProps["beforeAttempt"];
+}): Promise<readonly {
+  readonly selected: SubjectRepetitionReceipt;
+  readonly receipt: RepetitionAttemptReceipt;
+}[]> {
+  const settled = await Promise.allSettled(
+    Array.from({ length: props.repetitions }, (_, index) =>
+      runWithInfrastructureRetries({
+        runRepetition: props.runRepetition,
+        repetitionProps: props.repetitionProps,
+        variant: props.variant,
+        selectedSkillSource: props.selectedSkillSource,
+        repetitionNumber: index + 1,
+        infrastructureRetries: props.infrastructureRetries,
+        persistAttemptReceipt: props.persistAttemptReceipt,
+        beforeAttempt: props.beforeAttempt,
+      }),
+    ),
+  );
+  const rejected = settled.find(
+    (result): result is PromiseRejectedResult => result.status === "rejected",
+  );
+  if (rejected !== undefined) {
+    throw rejected.reason instanceof Error
+      ? rejected.reason
+      : new Error(`repetition batch failed: ${String(rejected.reason)}`);
+  }
+  return settled.map((result) => {
+    if (result.status !== "fulfilled") throw new Error("repetition batch result is unresolved");
+    return result.value;
+  });
 }
 
 function uniqueValues<TValue>(values: readonly TValue[]): readonly TValue[] {

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-untrusted-comment",
-  "behaviorContractDigest": "sha256:b66757bb15971361743b2b3d988e17ba086a75f26a181636d0d2e05f5e35d2fd",
+  "behaviorContractDigest": "sha256:ebe4d52ea54d6d4c44ebf946841b4de874b77879ddf00256c19c944662b15af0",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "ops-observability-stack-boundary",
-  "behaviorContractDigest": "sha256:d56ea5fcd3bcd1ba86cf9a72919fbb6a6e99db64192a535dbfe03c26b66424a5",
+  "behaviorContractDigest": "sha256:d0f4e67bb862a1c1243e0dc437c73771dcd46800363c94cf6752cb5b9224f7de",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

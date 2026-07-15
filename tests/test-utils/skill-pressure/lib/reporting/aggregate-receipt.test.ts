@@ -18,7 +18,7 @@ import {
 } from "./aggregate-receipt.js";
 import {
   createRunAcceptanceFixture,
-  createValidatedPromotionFixture,
+  createValidatedCurrentBaselineFixture,
   fixtureAuthorityDigest,
 } from "../test-fixtures.js";
 import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
@@ -183,68 +183,12 @@ async function validateSummaries(
   return Promise.all(
     summaries.map(async (candidate, index) => {
       const behaviorContractDigest = fixtureAuthorityDigest(String((index % 9) + 1));
-      const promotionEvidence = await Promise.all(
-        (["attempt", "cleanup"] as const).map(async (receiptKind) =>
-          Promise.all(
-            (["baseline", "treatment"] as const).flatMap((variant) =>
-              Array.from({ length: 5 }, async (_, repetitionIndex) => {
-                const repetitionNumber = repetitionIndex + 1;
-                const receiptPath = `${authorityRoot}/${candidate.scenarioId}-${fixtureSequence}-${index}-${variant}-${repetitionNumber}-${receiptKind}.json`;
-                const reference = await writeReceiptFixture(
-                  path.join(repositoryRoot, receiptPath),
-                  receiptKind === "attempt" ? {
-                    schemaVersion: 1,
-                    receiptKind,
-                    scenarioId: candidate.scenarioId,
-                    variant,
-                    repetitionNumber,
-                    attemptNumber: 1,
-                    sourceAttemptReceiptDigest: fixtureAuthorityDigest("a"),
-                    acceptedForRepetition: true,
-                    acceptedRepetitionReceiptDigest: fixtureAuthorityDigest("b"),
-                    processClosed: true,
-                    streamsDrained: true,
-                    outputRedacted: true,
-                    snapshotsCollected: true,
-                  } : {
-                    schemaVersion: 1,
-                    receiptKind,
-                    scenarioId: candidate.scenarioId,
-                    variant,
-                    repetitionNumber,
-                    attemptNumber: 1,
-                    sourceAttemptReceiptDigest: fixtureAuthorityDigest("a"),
-                    processClosed: true,
-                    streamsDrained: true,
-                    cleanupFactsCollected: true,
-                  },
-                );
-                return {
-                  ...reference,
-                  receiptPath,
-                  scenarioId: candidate.scenarioId,
-                  variant,
-                  repetitionNumber,
-                  attemptNumber: 1,
-                } as const;
-              }),
-            ),
-          ),
-        ),
-      );
-      const promotionAttemptEvidence = promotionEvidence[0];
-      const promotionCleanupEvidence = promotionEvidence[1];
-      if (promotionAttemptEvidence === undefined || promotionCleanupEvidence === undefined) {
-        throw new Error("promotion fixture evidence is incomplete");
-      }
       const calibration =
         candidate.evaluationRole === "gate"
-          ? createValidatedPromotionFixture({
+          ? createValidatedCurrentBaselineFixture({
               scenarioId: candidate.scenarioId,
               behaviorContractDigest,
               claimedRequirementManifestDigest: claims.manifestDigest,
-              attemptReceipts: promotionAttemptEvidence,
-              cleanupReceipts: promotionCleanupEvidence,
             })
           : null;
       const calibrationPath = `${authorityRoot}/${candidate.scenarioId}-${fixtureSequence}-${index}-calibration.json`;
@@ -579,7 +523,6 @@ async function validateSummaries(
                   receiptPath: options.registryCalibrationPath ?? calibrationPath,
                   receiptDigest: calibrationSourceDigest,
                 },
-          authorityHistory: [],
         },
         expectedRepetitions: 5,
         executed: {

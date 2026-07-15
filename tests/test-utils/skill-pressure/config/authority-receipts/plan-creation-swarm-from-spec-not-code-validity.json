@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-creation-swarm-from-spec-not-code",
-  "behaviorContractDigest": "sha256:8b6a4a50ee1fd24a846883bb88a3fa52ebc0b0cc01ad0dad24c0499cfefeefc4",
+  "behaviorContractDigest": "sha256:bc9c14ff6a690ca770916b12d122b217db62485c63d725bbb59db85adc9c5232",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

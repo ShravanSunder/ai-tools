@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "ops-observability-agent-vm-boundary",
-  "behaviorContractDigest": "sha256:57061a0ddae845ea9d1baba94f93f091d4e245013a9b346b464d3d39f4242808",
+  "behaviorContractDigest": "sha256:a91329dfd8f0ae79f67a788c8b7fe4ce8e70f15a938aca6871c1cf340b525cb7",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

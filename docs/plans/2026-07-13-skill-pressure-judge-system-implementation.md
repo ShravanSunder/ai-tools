@@ -60,7 +60,7 @@ The accepted contract is not implemented for:
 - gate-default versus diagnostic suite semantics and complete authority counts;
 - per-row role, validity, calibration, and covered/uncovered requirement ledger.
 
-Live discovery is 109 scenarios: 108 `no_skill/improvement` and one
+Live discovery is 110 scenarios: 109 `no_skill/improvement` and one
 `previous_revision/non_regression`. The fixed legacy baseline remains 107 across
 23 owners; two scenarios were added afterward. Prior high-risk evidence is
 calibration input, not gate authority: eight scenarios had all-passing baselines,
@@ -74,7 +74,7 @@ In scope:
 - add a separate evaluation registry and authority receipts;
 - preserve existing artifact/runtime/reducer work where it satisfies v3;
 - add durable attempt receipts, deadlines, and cancellation recovery;
-- migrate and validity-review all 109 current scenarios;
+- migrate and validity-review all 110 current scenarios;
 - calibrate at least one improvement gate, one non-regression gate, and one
   high-risk gate;
 - report per-owner covered and uncovered behavior requirement IDs;
@@ -97,7 +97,7 @@ proof-heavy, and subprocess/security sensitive.
 
 | Lane | Candidate contribution | Parent disposition |
 | --- | --- | --- |
-| codebase-boundary | current/reusable matrix, write chokepoints, six slices | accepted; corrected scenario count to 109 total |
+| codebase-boundary | current/reusable matrix, write chokepoints, six slices | accepted; current post-merge scenario count is 110 total |
 | validation-proof | requirement/proof matrix, test pyramid, live call estimate | accepted |
 | security-reliability | atomic attempts, cancellation, deadline graph, review isolation | accepted |
 | vertical-slice decomposition | parent synthesis from source and lane evidence | accepted |
@@ -131,7 +131,7 @@ Integration Gate A: one v3 scenario reaches evidence, review, and receipts
 Slice 4: reduction authority, selection, reporting, and stable commands
                   |
                   v
-Slice 5: 109-scenario validity migration and explicit disposition
+Slice 5: 110-scenario validity migration and explicit disposition
                   |
                   v
 Local Gate B: unit + mutation + integration + schema + migration + typecheck
@@ -223,7 +223,7 @@ TDD sequence:
    ignored under `tmp/`; registry pointers to missing, ignored, or
    digest-mismatched current baseline receipts fail.
 8. Freeze v3 interfaces before owner migration, but do not make the v3-only
-   loader/schema authoritative while the 109 scenarios remain v2. The loader,
+   loader/schema authoritative while the 110 scenarios remain v2. The loader,
    generated schema, registry, and migrated corpus switch in one atomic cutover
    in Slice 5; no dual-schema compatibility path is introduced.
 
@@ -456,7 +456,7 @@ tests/test-utils/skill-pressure/fixtures/
 
 Migration rules:
 
-1. Generate a read-only 109-row work ledger from current discovery. Preserve the
+1. Generate a read-only 110-row work ledger from current discovery. Preserve the
    fixed 107-row/23-owner legacy digest and identify the two post-baseline rows.
 2. Add effect surfaces, semantic assertions, and behavior requirement IDs to
    every current scenario. Convert objective rubric bullets to deterministic
@@ -476,14 +476,14 @@ Migration rules:
    receipts. The parent alone edits the central evaluation registry, verifies
    every batch receipt, and reduces disputes by requirement ID.
 8. Retirement remains user-authorized. No retirement is planned by default.
-9. Extend migration proof to report legacy 107, current 109, roles, validity,
+9. Extend migration proof to report legacy 107, current 110, roles, validity,
    calibration state, and per-owner covered/uncovered behavior IDs.
 10. Add an explicit forbidden legacy-surface denylist covering the old scenario
     tree/schema/parser, response-regex or self-report oracle, legacy shell
     authority, and competing runner/reducer/entrypoint. Fixture-injected red
     tests restore each forbidden surface and must fail migration proof.
 11. Atomically cut over the v3-only loader, generated schema, parent-owned
-    registry, all 109 owner scenarios, and denylist proof. No checkpoint may
+    registry, all 110 owner scenarios, and denylist proof. No checkpoint may
     leave the authoritative loader unable to discover the committed corpus.
 
 Local Gate B:
@@ -623,7 +623,7 @@ Split/replan triggers:
 | assertion review, parent acceptance, and precedence | R20-R23 | 2, A, 4 | unit/integration/live | strict review + digest-bound acceptance + objective facts | yes | yes |
 | gate/diagnostic authority and freshness | R24-R27 | 1, 4, 6 | unit/integration/live | current baseline pointer + calibration | yes | yes |
 | requirement traceability | R28 | 1, 4, 5 | schema/report/live | claimed-ID input digest + covered/uncovered IDs | yes | yes |
-| 107 legacy and 109 current accounting | R29-R31 | 5 | migration/absence | immutable map + current discovery + denylist mutations | yes | yes |
+| 107 legacy and 110 current accounting | R29-R31 | 5 | migration/absence | immutable map + current discovery + denylist mutations | yes | yes |
 | exact aggregate authority counts | R32 | 4 | unit/smoke/live | aggregate receipt and selected set | yes | yes |
 | calibrated release-authoritative minimum | proof 5-11 | 6 | live e2e | improvement, non-regression, high-risk gates | yes | yes |
 | reviewed PR-ready unmerged delivery | goal terminal | 7 | review/PR | current head, checks, threads, mergeability | no | yes |
@@ -658,7 +658,7 @@ No red/green exceptions are authorized.
   authoritative cutover.
 - CP5: authority, selection, and reporting proven on isolated fixtures; no
   early authoritative command switch.
-- CP6: atomic v3 loader/schema/registry/109-scenario/absence-proof cutover.
+- CP6: atomic v3 loader/schema/registry/110-scenario/absence-proof cutover.
 - CP7: calibrated gates and tracked live corrections.
 - Final: docs, review fixes, and PR-ready head.
 

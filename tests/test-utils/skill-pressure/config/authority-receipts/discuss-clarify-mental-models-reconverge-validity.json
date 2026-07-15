@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "discuss-clarify-mental-models-reconverge",
-  "behaviorContractDigest": "sha256:6caeba9607cc54f238cd344530d0436f14950c2139e6a1acda6b83fd34bca6eb",
+  "behaviorContractDigest": "sha256:b3283b7288f636c452a7605ef76b0cb7b3c7cb43810a42e9584bf7d9b5e02351",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-creation-swarm-lane-prompts-not-generic",
-  "behaviorContractDigest": "sha256:4b2c1cb855eabb50764e65afd73fb1f60a2ec070341f8d2297043344aa1d1d20",
+  "behaviorContractDigest": "sha256:a710cbf980a7d0d46403d58630613a9fff80735b3eba89bf1a03d4cf7f7d77de",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

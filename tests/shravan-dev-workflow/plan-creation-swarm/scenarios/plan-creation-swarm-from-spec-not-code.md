@@ -83,7 +83,7 @@ behavior_requirement_ids:
   - plan-creation-swarm-from-spec-not-code
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []

@@ -14,15 +14,15 @@ const profile = {
   packetDigest: "sha256:packet",
   disabledSkillPaths: ["/tmp/codex-home/skills/ambient/SKILL.md"],
   model: "gpt-5.6-luna",
-  reasoningEffort: "xhigh",
+  reasoningEffort: "high",
   timeoutSeconds: 120,
 } satisfies AcpxCodexReviewProfile;
 
 describe("ACPX Codex review profile", () => {
-  it("builds the one-shot Luna/xhigh blind-review command", () => {
+  it("builds the one-shot Luna/high blind-review command", () => {
     const command = buildAcpxCodexReviewCommand(profile);
 
-    expect(command.args).toContain("gpt-5.6-luna[xhigh]");
+    expect(command.args).toContain("gpt-5.6-luna[high]");
     expect(command.args).toContain("--deny-all");
     expect(command.args).toContain("--no-terminal");
     expect(command.args.slice(-3)).toEqual(["exec", "--file", profile.packetPath]);

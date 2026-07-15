@@ -48,7 +48,7 @@ function scenario(scenarioId: string, risk: "standard" | "high" = "standard"): D
     baseline: "no_skill",
     baselineRevision: null,
     comparisonIntent: "improvement",
-    repetitions: 5,
+    repetitions: 3,
     risk,
     fixtureRequirements: [],
     allowedTools: [],
@@ -100,7 +100,6 @@ function evaluationAuthority(scenarios: readonly DiscoveredScenario[]): {
           receiptDigest: fixtureAuthorityDigest("d"),
         },
         calibrationReceipt: null,
-        authorityHistory: [],
       })),
     },
     claimedRequirements: createClaimedRequirementValidationFixture({
@@ -136,7 +135,7 @@ describe("skill pressure eval registration", () => {
     expect(new Set(cases.map((evaluationCase) => evaluationCase.outputDirectory)).size).toBe(2);
     expect(cases.every((evaluationCase) => evaluationCase.concurrent)).toBe(true);
     expect(cases.every((evaluationCase) => evaluationCase.timeoutSeconds === 180)).toBe(true);
-    expect(cases.every((evaluationCase) => evaluationCase.scenarioDeadlineMs > 2_400_000)).toBe(
+    expect(cases.every((evaluationCase) => evaluationCase.scenarioDeadlineMs > evaluationCase.timeoutSeconds * 1_000)).toBe(
       true,
     );
     expect(

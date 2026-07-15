@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-update-existing-skill",
-  "behaviorContractDigest": "sha256:79b3db2c6ae117868bf17cd255d507378d6f1473b64a54c992f26b6f61206340",
+  "behaviorContractDigest": "sha256:3383236edcfbf27b5f3b93d741d77394405ba219873641cdf5d2c423f2121d8a",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

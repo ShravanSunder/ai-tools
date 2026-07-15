@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-handoff-requires-state",
-  "behaviorContractDigest": "sha256:ab425afcc55c4f73abdbf64cc0eaec4bc1e334f931a78f79e4f68bb65e5ea441",
+  "behaviorContractDigest": "sha256:9536383755d546221e3cfc0cd5ca85db63e30ff154d3fc841908a489de0d8f0d",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

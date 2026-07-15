@@ -14,7 +14,7 @@ import type { RuntimeProfileReceipt } from "../runtime/runtime-profile.js";
 import {
   createClaimedRequirementValidationFixture,
   createRunAcceptanceFixture,
-  createValidatedPromotionFixture,
+  createValidatedCurrentBaselineFixture,
   fixtureAuthorityDigest,
 } from "../test-fixtures.js";
 import { executeV3SuiteCommand } from "./v3-suite-command.js";
@@ -38,63 +38,10 @@ const COMMAND_REPOSITORY_ROOT = await mkdtemp(path.join(tmpdir(), "v3-command-re
 const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
 const CALIBRATION_PATH = `${AUTHORITY_ROOT}/gate-calibration.json`;
 await mkdir(path.join(COMMAND_REPOSITORY_ROOT, AUTHORITY_ROOT), { recursive: true });
-const PROMOTION_EVIDENCE = await Promise.all(
-  (["attempt", "cleanup"] as const).map(async (receiptKind) =>
-    Promise.all(
-      (["baseline", "treatment"] as const).flatMap((variant) =>
-        Array.from({ length: 5 }, async (_, index) => {
-          const repetitionNumber = index + 1;
-          const receiptPath = `${AUTHORITY_ROOT}/gate-${variant}-${repetitionNumber}-${receiptKind}.json`;
-          const identity = {
-            schemaVersion: 1,
-            receiptKind,
-            scenarioId: "gate",
-            variant,
-            repetitionNumber,
-            attemptNumber: 1,
-            sourceAttemptReceiptDigest: fixtureAuthorityDigest("a"),
-          };
-          const receipt = receiptKind === "attempt"
-            ? {
-                ...identity,
-                acceptedForRepetition: true,
-                acceptedRepetitionReceiptDigest: fixtureAuthorityDigest("b"),
-                processClosed: true,
-                streamsDrained: true,
-                outputRedacted: true,
-                snapshotsCollected: true,
-              }
-            : {
-                ...identity,
-                processClosed: true,
-                streamsDrained: true,
-                cleanupFactsCollected: true,
-              };
-          const source = `${JSON.stringify(receipt, null, 2)}\n`;
-          await writeFile(path.join(COMMAND_REPOSITORY_ROOT, receiptPath), source, { flag: "wx" });
-          return {
-            scenarioId: "gate",
-            variant,
-            repetitionNumber,
-            attemptNumber: 1,
-            receiptPath,
-            receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as const,
-          };
-        }),
-      ),
-    ),
-  ),
-);
-const ATTEMPT_EVIDENCE = PROMOTION_EVIDENCE[0];
-const CLEANUP_EVIDENCE = PROMOTION_EVIDENCE[1];
-if (ATTEMPT_EVIDENCE === undefined || CLEANUP_EVIDENCE === undefined)
-  throw new Error("promotion fixture evidence is incomplete");
-const CALIBRATION = createValidatedPromotionFixture({
+const CALIBRATION = createValidatedCurrentBaselineFixture({
   scenarioId: "gate",
   behaviorContractDigest: fixtureAuthorityDigest("b"),
   claimedRequirementManifestDigest: CLAIMED.manifestDigest,
-  attemptReceipts: ATTEMPT_EVIDENCE,
-  cleanupReceipts: CLEANUP_EVIDENCE,
 });
 const CALIBRATION_SOURCE = `${JSON.stringify(CALIBRATION.receipt, null, 2)}\n`;
 const CALIBRATION_SOURCE_DIGEST = `sha256:${createHash("sha256").update(CALIBRATION_SOURCE).digest("hex")}`;
@@ -118,7 +65,6 @@ const REGISTRY: EvaluationRegistry = {
         receiptPath: CALIBRATION_PATH,
         receiptDigest: CALIBRATION_SOURCE_DIGEST,
       },
-      authorityHistory: [],
     },
     {
       scenarioId: "diagnostic",
@@ -130,20 +76,19 @@ const REGISTRY: EvaluationRegistry = {
         receiptDigest: fixtureAuthorityDigest("f"),
       },
       calibrationReceipt: null,
-      authorityHistory: [],
     },
   ],
 };
 
 const CANDIDATES = [
-  { scenarioId: "gate", risk: "standard" as const, repetitions: 5 },
-  { scenarioId: "diagnostic", risk: "standard" as const, repetitions: 5 },
+  { scenarioId: "gate", risk: "standard" as const, repetitions: 3 },
+  { scenarioId: "diagnostic", risk: "standard" as const, repetitions: 3 },
 ];
 
 const VERIFIED_PROFILE: RuntimeProfileReceipt = {
-  requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
-  acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
-  providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+  requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "high" },
+  acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
+  providerReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
   verification: { status: "verified", reasonCode: null, reasons: [] },
 };
 
@@ -164,9 +109,9 @@ async function executedScenario(props: {
     };
   };
   const attemptReceipts = await Promise.all(
-    Array.from({ length: 10 }, (_, index) => {
-      const variant = index < 5 ? "baseline" : "treatment";
-      const repetitionNumber = (index % 5) + 1;
+    Array.from({ length: 6 }, (_, index) => {
+      const variant = index < 3 ? "baseline" : "treatment";
+      const repetitionNumber = (index % 3) + 1;
       return writeFixture(`attempt-${index + 1}.json`, {
         schemaVersion: 1,
         scenarioId: props.scenarioId,
@@ -183,8 +128,8 @@ async function executedScenario(props: {
   );
   const repetitionReceipts = await Promise.all(
     attemptReceipts.map((attempt, index) => {
-      const variant = index < 5 ? "baseline" : "treatment";
-      const repetitionNumber = (index % 5) + 1;
+      const variant = index < 3 ? "baseline" : "treatment";
+      const repetitionNumber = (index % 3) + 1;
       return writeFixture(`repetition-${index + 1}.json`, {
         schemaVersion: 1,
         scenarioId: props.scenarioId,
@@ -246,7 +191,7 @@ async function executedScenario(props: {
           reasons: ["fixture failure"],
         };
   const executionBudget = deriveScenarioExecutionBudget({
-    repetitions: 5,
+    repetitions: 3,
     infrastructureRetries: 0,
     acceptedCaps: {
       maxModelPrompts: 10,
@@ -274,7 +219,12 @@ async function executedScenario(props: {
   });
   const executionAccounting = {
     preflightReceipt: executionPreflight,
-    observed: { modelPrompts: 10, acpxCommands: 10, retries: 0, observedTokens: 100 },
+    observed: {
+      modelPrompts: executionBudget.executionGraph.maximumModelPrompts,
+      acpxCommands: executionBudget.executionGraph.maximumAcpxCommands,
+      retries: 0,
+      observedTokens: 100,
+    },
   } as const;
   const registrySnapshotDigest = calculateEvaluationRegistrySnapshotDigest(REGISTRY);
   const evidenceDigest = calculateV3ScenarioEvidenceDigest({
@@ -332,7 +282,7 @@ async function executedScenario(props: {
       behaviorContractDigest,
       behaviorRequirementIds: ["behavior-one"],
       comparisonIntent: "non_regression",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
     },
     authoritySnapshot: {
       evaluationRole: gate ? "gate" : "diagnostic",
@@ -379,7 +329,7 @@ async function executedScenario(props: {
     },
     reviewerLifecycle,
     runtimeProfiles: {
-      subjects: Array.from({ length: 10 }, () => VERIFIED_PROFILE),
+      subjects: Array.from({ length: 6 }, () => VERIFIED_PROFILE),
       reviewer: VERIFIED_PROFILE,
     },
     subjects,

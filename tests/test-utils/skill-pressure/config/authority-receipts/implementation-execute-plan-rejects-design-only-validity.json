@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-execute-plan-rejects-design-only",
-  "behaviorContractDigest": "sha256:f8efdf76a5934e203497670e5fd599b9e721adde11d09d51b3b3f5d493ae8f49",
+  "behaviorContractDigest": "sha256:4e80a54949f64181f317edf5092366351526da6750a2e37c900c133ff2d06c72",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-runtime-reachability",
-  "behaviorContractDigest": "sha256:6eb6cdb046e83003351a31158b46ac211114f6bb8c5a61dfd03691eedbf92842",
+  "behaviorContractDigest": "sha256:7fd81ae9a681c9f7c96010b421c04599c152f167871060b5ed8667c024f45ed8",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

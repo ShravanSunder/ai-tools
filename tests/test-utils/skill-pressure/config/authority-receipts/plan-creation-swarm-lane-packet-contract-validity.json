@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-creation-swarm-lane-packet-contract",
-  "behaviorContractDigest": "sha256:2107d57e29ae3ab6ed6081149847b0ecb5df871b91b299b49df33d0e66ded794",
+  "behaviorContractDigest": "sha256:845cd9419d646422b494bb5f412d620b4f9f4343474523d57fb678113dbf73f4",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skill-audit-evidence-first",
-  "behaviorContractDigest": "sha256:717aa52459fa6a1eb06488d953818db888b94c8b0b5d5a94531dc6b0fa3a7de7",
+  "behaviorContractDigest": "sha256:2ae4d333f592a00b2089ab44fafa3e74b37bb6a3d6738546cb887e1550147f89",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

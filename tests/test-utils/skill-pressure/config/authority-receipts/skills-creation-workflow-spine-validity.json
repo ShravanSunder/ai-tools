@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-workflow-spine",
-  "behaviorContractDigest": "sha256:08ffb01823425b90a2f2086511d7a66f5924aa952a7df3e6905ac1f9a4b84737",
+  "behaviorContractDigest": "sha256:4d63cfc55ed1fcd5ac9878f6ebe108cd8dd3b88f66e8fd0adcc59582132ca1f0",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

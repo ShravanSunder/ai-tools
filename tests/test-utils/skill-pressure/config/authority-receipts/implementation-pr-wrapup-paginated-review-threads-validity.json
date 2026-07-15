@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-paginated-review-threads",
-  "behaviorContractDigest": "sha256:3f2da16c700446880d8cee87ed06c9548d6aa2b8af2657e3734131ffc43f8e87",
+  "behaviorContractDigest": "sha256:15e35842fd0cae60eb0217ecabc8792bc1ac0c564b90306cae97dd66f1a3efc8",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

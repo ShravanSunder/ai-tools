@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-required-files-skill-name",
-  "behaviorContractDigest": "sha256:c9fc8bde53ffa10687940b776ac00c0b5e0a2c1b70ba76bcb752cae81a97738d",
+  "behaviorContractDigest": "sha256:a7875e9edce2420f55bc7612bd0e6614ca6a28f85aeac59c647e5898299ba8ac",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

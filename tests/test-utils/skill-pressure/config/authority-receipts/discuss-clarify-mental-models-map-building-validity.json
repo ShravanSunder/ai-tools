@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "discuss-clarify-mental-models-map-building",
-  "behaviorContractDigest": "sha256:f33e06f493fcbb5d8d0b7573f91f4c0babb29183fc45bfccdb20f1becc3c5d35",
+  "behaviorContractDigest": "sha256:d55d4732b6e9efe34550c01c8dd9fd906113cb66b5a86b31088bd2c721cd6f4a",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

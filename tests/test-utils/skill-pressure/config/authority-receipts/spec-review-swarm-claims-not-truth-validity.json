@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-claims-not-truth",
-  "behaviorContractDigest": "sha256:608f2b31cc8675f6171cb3975850f77f05ad84de79f958a08749c6eff17009df",
+  "behaviorContractDigest": "sha256:1a8fb1d59200d9ba9bd185f2ea558a7b2c108ad6e6c51460e8909ebdc97ec9b9",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

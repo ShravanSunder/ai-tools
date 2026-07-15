@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-refinement-inputs",
-  "behaviorContractDigest": "sha256:c0aae2f5d153efe1fa092ac0acaaf0d227a4d7099de4b419dcd29d910f914b49",
+  "behaviorContractDigest": "sha256:07db81bc38f2c2c46f53b17d076331ead85867472ecb07a1bb64aba9bcde88fb",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

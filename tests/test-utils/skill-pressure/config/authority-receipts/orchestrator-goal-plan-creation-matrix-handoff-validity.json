@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-plan-creation-matrix-handoff",
-  "behaviorContractDigest": "sha256:efb29399127054ee21adf93d823c2d2c19c6d654139e281209baf0f8c8cf7941",
+  "behaviorContractDigest": "sha256:22f7b01d91785e5553c8ecd86fdb53bb4be153a0525a83d2cfed8b631d128151",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

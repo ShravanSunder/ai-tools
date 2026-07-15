@@ -27,7 +27,7 @@ describe("skill pressure scenario contract", () => {
       baseline: "no_skill",
       baselineRevision: null,
       comparisonIntent: "improvement",
-      repetitions: 5,
+      repetitions: 3,
       risk: "standard",
       schemaVersion: 3,
     });
@@ -154,10 +154,10 @@ describe("skill pressure scenario contract", () => {
     expect(improvement.behaviorContractDigest).not.toBe(control.behaviorContractDigest);
   });
 
-  it("rejects fewer than five repetitions", async () => {
+  it("rejects fewer than three repetitions", async () => {
     const repositoryRoot = await createRepositoryFixture();
     const scenarioPath = join(repositoryRoot, "scenario.md");
-    await writeFile(scenarioPath, scenarioContract({ scenarioId: "too-few", plugin: "workflow", skill: "skill", repetitions: 4 }));
+    await writeFile(scenarioPath, scenarioContract({ scenarioId: "too-few", plugin: "workflow", skill: "skill", repetitions: 2 }));
 
     await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/repetitions/);
   });

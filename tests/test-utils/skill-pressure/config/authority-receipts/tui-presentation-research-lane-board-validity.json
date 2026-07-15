@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "tui-presentation-research-lane-board",
-  "behaviorContractDigest": "sha256:c532499318a4c940bf2af6a660fd3c128e422540e2765554453cfa310e2794f7",
+  "behaviorContractDigest": "sha256:e802fdbef2764a06f12a0bde664b1fccfdf5a2d6716a5e882d5c7c761f8cb287",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

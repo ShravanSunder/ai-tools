@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-creation-swarm-no-session-dump-lanes",
-  "behaviorContractDigest": "sha256:2c33aef0ac05492efb0c44c4e08d42e0a4567ac6f9ebcee3a83fe947668d03db",
+  "behaviorContractDigest": "sha256:f516ffe933dc93c4e8a733dc467425e06b7d2dd89317e6461578500265d33d48",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

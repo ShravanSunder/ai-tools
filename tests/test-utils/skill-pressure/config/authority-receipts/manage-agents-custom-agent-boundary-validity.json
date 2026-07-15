@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "manage-agents-custom-agent-boundary",
-  "behaviorContractDigest": "sha256:45c1ef84dbd5a7259ef285f4f2a1e729d2f9e6d2f2f0b28154e86f03ed71cb20",
+  "behaviorContractDigest": "sha256:2dd93a3c431cac8bba6e60b3fe6c1961d26d5e43c9d485aad00de6314eb228cc",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

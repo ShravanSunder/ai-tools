@@ -10,7 +10,7 @@ import { loadScenarioContract } from "../contracts/skill-contracts.js";
 import type { ExecutedV3BehavioralScenario } from "../evaluation/v3-behavioral-scenario-execution.js";
 import { calculateSkillSourceClosureDigest } from "../installation/codex-repo-skill-installer.js";
 import {
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
   verifyRuntimeProfile,
 } from "../runtime/runtime-profile.js";
 import type { AuthorityDigest, CalibrationFreshnessInputs } from "./authority-receipts.js";
@@ -26,6 +26,28 @@ const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipt
 const REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 
 describe("promotion transaction", () => {
+  it("publishes one stable owner-local baseline with exactly three ordered repetitions per variant", async () => {
+    const fixture = await createPromotionFixture();
+
+    const result = await promoteScenarioFromReceipt({
+      repositoryRoot: fixture.repositoryRoot,
+      scenarioReceiptPath: fixture.scenarioReceiptPath,
+      parentAccepted: true,
+      verifyMutationCoverage: async () => undefined,
+      dependencies: fixture.dependencies,
+    });
+
+    expect(result.promotionReceiptPath).toBe(
+      "tests/test-plugin/test-skill/baselines/promotion-fixture.json",
+    );
+    const baseline = JSON.parse(
+      await readFile(path.join(fixture.repositoryRoot, result.promotionReceiptPath), "utf8"),
+    ) as { readonly receiptKind: string; readonly executionEvidence: { readonly repetitions: readonly unknown[] } };
+    expect(baseline.receiptKind).toBe("current_baseline");
+    expect(baseline.executionEvidence.repetitions).toHaveLength(6);
+    expect(await readdir(fixture.authorityDirectory)).toEqual(["promotion-fixture-validity.json"]);
+  });
+
   it("creates validated evidence and promotes the registry only after explicit acceptance", async () => {
     const fixture = await createPromotionFixture();
 
@@ -38,7 +60,7 @@ describe("promotion transaction", () => {
     });
 
     const registry = parse(await readFile(path.join(fixture.repositoryRoot, REGISTRY_PATH), "utf8")) as {
-      scenarios: { evaluation_role: string; freshness: string; calibration_receipt: unknown; authority_history: unknown[] }[];
+      scenarios: { evaluation_role: string; freshness: string; calibration_receipt: unknown }[];
     };
     expect(registry.scenarios[0]).toMatchObject({
       evaluation_role: "gate",
@@ -48,15 +70,9 @@ describe("promotion transaction", () => {
         receipt_digest: result.promotionReceiptDigest,
       },
     });
-    expect(registry.scenarios[0]?.authority_history).toHaveLength(1);
     await expect(readFile(path.join(fixture.repositoryRoot, result.promotionReceiptPath), "utf8"))
-      .resolves.toContain('"receiptKind": "promotion"');
-    const evidenceFiles = await Promise.all([
-      readFile(path.join(fixture.repositoryRoot, AUTHORITY_ROOT, "promotion-fixture-111111111111-baseline-1-1-attempt.json"), "utf8"),
-      readFile(path.join(fixture.repositoryRoot, AUTHORITY_ROOT, "promotion-fixture-111111111111-baseline-1-1-cleanup.json"), "utf8"),
-    ]);
-    expect(evidenceFiles[0]).toContain('"acceptedRepetitionReceiptDigest"');
-    expect(evidenceFiles[1]).toContain('"cleanupFactsCollected": true');
+      .resolves.toContain('"receiptKind": "current_baseline"');
+    expect(await readdir(fixture.authorityDirectory)).toEqual(["promotion-fixture-validity.json"]);
   });
 
   it("rejects tampered source evidence without mutating the registry", async () => {
@@ -153,7 +169,7 @@ describe("promotion transaction", () => {
       registryRow,
       calculateFreshnessInputs: fixture.dependencies.calculateFreshnessInputs,
     });
-    expect(authority.calibration?.promotion.freshness).toEqual({ status: "fresh", reasonCode: null });
+    expect(authority.calibration?.currentBaseline.freshness).toEqual({ status: "fresh", reasonCode: null });
 
     const runDigest = DIGEST("8");
     const request = {
@@ -174,7 +190,7 @@ describe("promotion transaction", () => {
     const acceptance = await persistExplicitParentAcceptance({
       repositoryRoot: fixture.repositoryRoot,
       contract: fixture.contract,
-      promotion: authority.calibration.promotion,
+      currentBaseline: authority.calibration.currentBaseline,
       request,
     });
     expect(acceptance?.receipt).toMatchObject({ acceptedRunDigest: runDigest });
@@ -210,7 +226,7 @@ describe("promotion transaction", () => {
         runnerSemanticsDigest: DIGEST("7"),
       }),
     });
-    expect(stale.calibration?.promotion.freshness).toEqual({
+    expect(stale.calibration?.currentBaseline.freshness).toEqual({
       status: "stale",
       reasonCode: "stale_calibration",
     });
@@ -255,8 +271,8 @@ describe("promotion transaction", () => {
       reasonCode: "missing_parent_acceptance",
       parentAcceptanceReceiptDigest: null,
       parentAcceptanceSourceReceipt: null,
-      calibrationAuthorityReceiptDigest: authority.calibration.promotion.authorityReceiptDigest,
-      calibrationFingerprintDigest: authority.calibration.promotion.calibrationFingerprint.digest,
+      calibrationAuthorityReceiptDigest: authority.calibration.currentBaseline.authorityReceiptDigest,
+      calibrationFingerprintDigest: authority.calibration.currentBaseline.calibrationFingerprint.digest,
     };
     const candidateSource = `${JSON.stringify(candidate, null, 2)}\n`;
     await writeFile(fixture.scenarioReceiptPath, candidateSource);
@@ -420,7 +436,7 @@ async function createPromotionFixture(overrides: {
   const subjects = [];
   let firstAttemptReceiptPath = "";
   for (const variant of ["baseline", "treatment"] as const) {
-    for (let repetitionNumber = 1; repetitionNumber <= 5; repetitionNumber += 1) {
+    for (let repetitionNumber = 1; repetitionNumber <= 3; repetitionNumber += 1) {
       const attempt = {
         schemaVersion: 1,
         scenarioId: contract.scenarioId,
@@ -465,8 +481,8 @@ async function createPromotionFixture(overrides: {
     }
   }
   const runtimeProfile = verifyRuntimeProfile({
-    profile: ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
-    providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+    profile: ACPX_LUNA_HIGH_SUBJECT_PROFILE,
+    providerReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
   });
   const freshnessInputs: CalibrationFreshnessInputs = {
     behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
@@ -482,7 +498,7 @@ async function createPromotionFixture(overrides: {
       behaviorContractDigest: contract.behaviorContractDigest,
       behaviorRequirementIds: contract.behaviorRequirementIds,
       comparisonIntent: contract.comparisonIntent,
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
     },
     authoritySnapshot: {
       runDigest: DIGEST("1"),
@@ -492,7 +508,7 @@ async function createPromotionFixture(overrides: {
     comparisonValidation: { valid: true, reasons: [] },
     objectiveResults: [{ checkId: "artifact-exists", outcome: "pass" }],
     semanticReview: { validation: { valid: true, reason: null }, candidate: { assertions: [] } },
-    runtimeProfiles: { subjects: Array.from({ length: 10 }, () => runtimeProfile), reviewer: runtimeProfile },
+    runtimeProfiles: { subjects: Array.from({ length: 6 }, () => runtimeProfile), reviewer: runtimeProfile },
     subjects,
     attemptReceipts: attemptReferences,
     repetitionReceipts: repetitionReferences,
@@ -504,6 +520,7 @@ async function createPromotionFixture(overrides: {
     repositoryRoot,
     scenarioReceiptPath,
     firstAttemptReceiptPath,
+    authorityDirectory,
     contract,
     freshnessInputs,
     dependencies: {
@@ -536,7 +553,7 @@ semantic_assertions:
 behavior_requirement_ids: [promotion-fixture]
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []
@@ -565,7 +582,6 @@ scenarios:
       receipt_path: ${props.validityPath}
       receipt_digest: ${props.validityDigest}
     calibration_receipt: null
-    authority_history: []
 `;
 }
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-github-api-budget",
-  "behaviorContractDigest": "sha256:525884d134ce41de4d38a5bfb5adb85b13660158873400130eb2d41e9c6579f8",
+  "behaviorContractDigest": "sha256:ecdc325f5ebd2e8fefa5298bac326ef5daa9775c6c6ccb1c7492bbe91e12acb1",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

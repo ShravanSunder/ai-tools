@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-plan-review-transition",
-  "behaviorContractDigest": "sha256:ed78622c0dd22298985d46c59f8e337daf7e4021ab682808cf1a4f26e5f057e0",
+  "behaviorContractDigest": "sha256:08186bb8c3a16006807334cc886013646f97f04e3a18b13ff022917665b2ecfc",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

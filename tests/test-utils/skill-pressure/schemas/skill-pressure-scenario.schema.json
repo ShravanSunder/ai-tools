@@ -113,7 +113,7 @@
         },
         "repetitions": {
           "type": "integer",
-          "minimum": 5,
+          "minimum": 3,
           "maximum": 9007199254740991
         },
         "risk": {
@@ -393,7 +393,7 @@
         },
         "repetitions": {
           "type": "integer",
-          "minimum": 5,
+          "minimum": 3,
           "maximum": 9007199254740991
         },
         "risk": {

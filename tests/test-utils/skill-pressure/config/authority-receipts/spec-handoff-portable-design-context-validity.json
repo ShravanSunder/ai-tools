@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-handoff-portable-design-context",
-  "behaviorContractDigest": "sha256:c6d868338f2a5d9347cd046bcb7bef5a002e3df5af810fe764ea17da40468035",
+  "behaviorContractDigest": "sha256:2226fb7f4fa8b70cdba6d4619cf21e24eeb01f103c61fc70c41e38835af4eaa6",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

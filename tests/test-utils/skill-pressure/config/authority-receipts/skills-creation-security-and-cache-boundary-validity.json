@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-security-and-cache-boundary",
-  "behaviorContractDigest": "sha256:a678fbc3318c4406b2c211e1006379833875537c0a3a3c23eefc1c0ebfc3afb0",
+  "behaviorContractDigest": "sha256:66a9e7501c7a2ecc49ef15a0e9b0dc7dc50b4e70860d949530d7802bd945c036",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

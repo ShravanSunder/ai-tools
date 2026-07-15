@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-no-prejudged-lanes",
-  "behaviorContractDigest": "sha256:dfcd408b2ba2b114a947655d0dd476c3be4e300a13c62fd1b421230396147526",
+  "behaviorContractDigest": "sha256:e148a4e3898db3e3c0be7c2127be79d83ac6ab69a1d0a31a16b9b952acd84337",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

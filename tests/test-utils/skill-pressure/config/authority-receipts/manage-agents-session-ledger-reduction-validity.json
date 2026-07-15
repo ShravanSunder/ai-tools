@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "manage-agents-session-ledger-reduction",
-  "behaviorContractDigest": "sha256:450e12fc853c3fc2969567f74ef0f383024066c5854a5096adff37a4ae49340d",
+  "behaviorContractDigest": "sha256:8142382e49e4751c8f7083b3ab86da03ab26e6c87104b6dede20c2c36260c99a",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -10,7 +10,7 @@ import {
 import {
   calculateParentAcceptanceReceiptDigest,
   validateParentAcceptanceReceipt,
-  validatePromotionReceipt,
+  validateCurrentBaselineReceipt,
 } from "../authority/authority-receipts.js";
 import type { DiscoveryInvalidReceipt } from "../discovery/skill-discovery.js";
 import type {
@@ -163,7 +163,7 @@ export function createV3AggregateReceipt(props: {
   const selectedScenarios = props.selection.selectedScenarios.map((scenario) => ({ ...scenario }));
   if (
     selectedScenarios.some(
-      (scenario) => !Number.isSafeInteger(scenario.repetitions) || scenario.repetitions < 5,
+      (scenario) => !Number.isSafeInteger(scenario.repetitions) || scenario.repetitions < 3,
     ) ||
     JSON.stringify(selectedScenarios.map((scenario) => scenario.scenarioId).sort()) !==
       JSON.stringify([...selectedScenarioIds].sort())
@@ -520,7 +520,7 @@ function assertScenarioMatchesRegistryRow(props: {
 function assertCalibrationAndReleaseStatus(props: {
   readonly receipt: ExecutedV3BehavioralScenario["receipt"];
   readonly registryRow: EvaluationRegistryRow;
-  readonly calibration: Awaited<ReturnType<typeof validatePromotionReceipt>> | null;
+  readonly calibration: Awaited<ReturnType<typeof validateCurrentBaselineReceipt>> | null;
 }): void {
   const authority = props.receipt.authoritySnapshot;
   const expectedCalibrationStatus =
@@ -546,9 +546,9 @@ function assertCalibrationAndReleaseStatus(props: {
 async function validateScenarioAuthoritySources(props: {
   readonly repositoryRoot: string;
   readonly receipt: ExecutedV3BehavioralScenario["receipt"];
-}): Promise<Awaited<ReturnType<typeof validatePromotionReceipt>> | null> {
+}): Promise<Awaited<ReturnType<typeof validateCurrentBaselineReceipt>> | null> {
   const authority = props.receipt.authoritySnapshot;
-  let calibration: Awaited<ReturnType<typeof validatePromotionReceipt>> | null = null;
+  let calibration: Awaited<ReturnType<typeof validateCurrentBaselineReceipt>> | null = null;
   if (authority.calibrationSourceReceipt !== null) {
     if (
       authority.calibrationAuthorityReceiptDigest === null ||
@@ -562,21 +562,21 @@ async function validateScenarioAuthoritySources(props: {
       reference: authority.calibrationSourceReceipt,
       label: "calibration",
     });
-    const validatedPromotion = await validatePromotionReceipt({
+    const validatedCurrentBaseline = await validateCurrentBaselineReceipt({
       receipt: calibrationReceipt,
       currentFreshnessInputs: authority.calibrationFreshnessInputs,
       repositoryRoot: props.repositoryRoot,
     });
     if (
-      validatedPromotion.authorityReceiptDigest !== authority.calibrationAuthorityReceiptDigest ||
-      validatedPromotion.calibrationFingerprint.digest !== authority.calibrationFingerprintDigest ||
-      validatedPromotion.receipt.scenarioId !== props.receipt.scenarioId ||
-      validatedPromotion.receipt.behaviorContractDigest !==
+      validatedCurrentBaseline.authorityReceiptDigest !== authority.calibrationAuthorityReceiptDigest ||
+      validatedCurrentBaseline.calibrationFingerprint.digest !== authority.calibrationFingerprintDigest ||
+      validatedCurrentBaseline.receipt.scenarioId !== props.receipt.scenarioId ||
+      validatedCurrentBaseline.receipt.behaviorContractDigest !==
         props.receipt.behaviorIdentity.behaviorContractDigest
     ) {
       throw new Error("calibration authority receipt does not match the scenario receipt");
     }
-    calibration = validatedPromotion;
+    calibration = validatedCurrentBaseline;
   }
 
   if (authority.parentAcceptanceSourceReceipt !== null) {

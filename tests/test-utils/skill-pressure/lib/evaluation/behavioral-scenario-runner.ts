@@ -162,7 +162,7 @@ export async function executeBehavioralScenario(
             codexExecutable,
             runtimeIdentity,
             model: "gpt-5.6-luna",
-            reasoningEffort: "xhigh",
+            reasoningEffort: "high",
             permissionMode: subjectExecutionPolicy.permissionMode,
             disabledAmbientSkillPaths,
             timeoutSeconds: props.timeoutSeconds,
@@ -323,8 +323,8 @@ function requiredRepetition(
 
 function unverifiedRuntimeProfile(): RuntimeProfileReceipt {
   return {
-    requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
-    acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+    requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "high" },
+    acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
     providerReported: { model: null, reasoningEffort: null },
     verification: {
       status: "unverified",

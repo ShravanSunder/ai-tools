@@ -7,7 +7,7 @@ import type { EvaluationRegistry } from "../authority/evaluation-registry.js";
 import type { DiscoveryReceipt } from "../discovery/skill-discovery.js";
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
 } from "../runtime/runtime-profile.js";
 import type { ExecuteBehavioralScenarioProps } from "./behavioral-scenario-runner.js";
 import {
@@ -53,7 +53,7 @@ export interface SkillPressureExecutionGraphReceipt {
   readonly acceptedCaps: ScenarioExecutionCaps;
   readonly perScenarioObservedTokenCap: number;
   readonly runnerSemanticsDigest: string;
-  readonly subjectProfile: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE;
+  readonly subjectProfile: typeof ACPX_LUNA_HIGH_SUBJECT_PROFILE;
   readonly scenarios: readonly {
     readonly scenarioId: string;
     readonly behaviorContractDigest: string;
@@ -62,7 +62,7 @@ export interface SkillPressureExecutionGraphReceipt {
     readonly comparisonIntent: "improvement" | "non_regression";
     readonly risk: "standard" | "high";
     readonly reviewProfile:
-      | typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE
+      | typeof ACPX_LUNA_HIGH_SUBJECT_PROFILE
       | typeof ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE;
     readonly commandBudgets: DerivedScenarioExecutionBudget["commandBudgets"];
     readonly scenarioDeadlineMs: number;
@@ -291,7 +291,7 @@ export function createSkillPressureExecutionGraphReceipt(props: {
     acceptedCaps: props.acceptedCaps,
     perScenarioObservedTokenCap: graph.perScenarioObservedTokenCap,
     runnerSemanticsDigest: props.runnerSemanticsDigest,
-    subjectProfile: ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+    subjectProfile: ACPX_LUNA_HIGH_SUBJECT_PROFILE,
     scenarios: props.evaluationCases.map((evaluationCase) => ({
       scenarioId: evaluationCase.scenarioId,
       behaviorContractDigest: evaluationCase.behaviorContractDigest,
@@ -302,7 +302,7 @@ export function createSkillPressureExecutionGraphReceipt(props: {
       reviewProfile:
         evaluationCase.risk === "high"
           ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
-          : ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+          : ACPX_LUNA_HIGH_SUBJECT_PROFILE,
       commandBudgets: evaluationCase.executionBudget.commandBudgets,
       scenarioDeadlineMs: evaluationCase.scenarioDeadlineMs,
       vitestTimeoutMs: evaluationCase.vitestTimeoutMs,

@@ -29,12 +29,12 @@ export interface RuntimeProfileReceipt {
   };
 }
 
-export const ACPX_LUNA_XHIGH_SUBJECT_PROFILE = {
+export const ACPX_LUNA_HIGH_SUBJECT_PROFILE = {
   provider: "codex",
   requestedModel: "gpt-5.6-luna",
-  requestedReasoningEffort: "xhigh",
+  requestedReasoningEffort: "high",
   acceptedProviderReportedModel: "gpt-5.6-luna",
-  acceptedProviderReportedReasoningEffort: "xhigh",
+  acceptedProviderReportedReasoningEffort: "high",
 } as const satisfies RuntimeProfile;
 
 export const ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE = {

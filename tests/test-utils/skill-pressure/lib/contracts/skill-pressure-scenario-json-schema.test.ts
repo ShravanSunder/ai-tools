@@ -34,7 +34,7 @@ function validScenarioContract(): Record<string, unknown> {
     behavior_requirement_ids: ["report-created"],
     baseline: "no_skill",
     comparison_intent: "improvement",
-    repetitions: 5,
+    repetitions: 3,
     risk: "standard",
     fixture_requirements: [],
     allowed_tools: [],

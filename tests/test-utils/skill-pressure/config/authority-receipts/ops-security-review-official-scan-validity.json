@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "ops-security-review-official-scan",
-  "behaviorContractDigest": "sha256:a6edb2b3661debcf15077e34efbb14efc6c683033799b0dc41fc91af46f2fddd",
+  "behaviorContractDigest": "sha256:b9f4d5cac099428f8f5f4d1c875176912b3c06a03fdbf3b1106f81200d2d5fc5",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

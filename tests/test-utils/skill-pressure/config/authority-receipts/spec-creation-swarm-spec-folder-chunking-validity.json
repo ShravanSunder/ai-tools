@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-creation-swarm-spec-folder-chunking",
-  "behaviorContractDigest": "sha256:3b09f8f05782c4723cbcea39aea974d206d8493b6ca77f3982149c61e092cd00",
+  "behaviorContractDigest": "sha256:40ede46879f0e5c48ebea52cd923ac3dc8a9b7c4a8589f24d69b4fbea41c193f",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

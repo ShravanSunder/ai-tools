@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "research-swarm-question-first",
-  "behaviorContractDigest": "sha256:39adb494e07d2dcb47bee7297e7cc123fbc940b6c97a8eddafeee8e981dba3c7",
+  "behaviorContractDigest": "sha256:c6677a927cf7bcaeebf224a456aec9623ebb5c2da60e2749e72728c1dc5f7fce",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

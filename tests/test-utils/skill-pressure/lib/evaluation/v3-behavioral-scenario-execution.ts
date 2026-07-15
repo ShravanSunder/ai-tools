@@ -10,7 +10,7 @@ import { calculateEvaluationRegistrySnapshotDigest } from "../authority/evaluati
 import type {
   AuthorityDigest,
   CalibrationFreshnessInputs,
-  ValidatedPromotionReceipt,
+  ValidatedCurrentBaselineReceipt,
 } from "../authority/authority-receipts.js";
 import type { ClaimedRequirementValidation } from "../authority/claimed-requirements.js";
 import type { ObjectiveArtifactDeclaration } from "../contracts/objective-check-types.js";
@@ -46,7 +46,7 @@ import type {
 } from "../review/structured-review-runner.js";
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
   type RuntimeProfile,
   type RuntimeProfileReceipt,
 } from "../runtime/runtime-profile.js";
@@ -138,7 +138,7 @@ export interface ExecuteV3BehavioralScenarioProps {
   readonly authorityContext: {
     readonly freshnessInputs: CalibrationFreshnessInputs;
     readonly calibration: {
-      readonly promotion: ValidatedPromotionReceipt;
+      readonly currentBaseline: ValidatedCurrentBaselineReceipt;
       readonly sourceReceipt: AuthorityReceiptReference;
       readonly source: string;
     } | null;
@@ -312,7 +312,7 @@ export async function executeV3BehavioralScenario(
         scenarioId: props.contract.scenarioId,
         status,
         lastDurableStage,
-        completedAttemptReceiptPaths: attemptReceiptPaths,
+        completedAttemptReceiptPaths: [...attemptReceiptPaths].sort((left, right) => left.localeCompare(right)),
         reasonCode,
       }),
       secrets: props.redactionSecrets,
@@ -397,8 +397,8 @@ export async function executeV3BehavioralScenario(
     const comparisonValidation = validateV3ComparisonSet({
       contract: props.contract,
       subjects,
-      attemptReceiptPaths,
-      repetitionReceiptPaths,
+      attemptReceiptPaths: [...attemptReceiptPaths].sort((left, right) => left.localeCompare(right)),
+      repetitionReceiptPaths: [...repetitionReceiptPaths].sort((left, right) => left.localeCompare(right)),
     });
     if (!comparisonValidation.valid) {
       return publishScenarioReceipt({
@@ -530,7 +530,7 @@ export async function executeV3BehavioralScenario(
     const expectedReviewerProfile =
       props.contract.risk === "high"
         ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
-        : ACPX_LUNA_XHIGH_SUBJECT_PROFILE;
+        : ACPX_LUNA_HIGH_SUBJECT_PROFILE;
     const reviewProfileReasons = validateExactRuntimeProfile(
       review.runtimeProfile,
       expectedReviewerProfile,
@@ -597,7 +597,7 @@ export async function executeV3BehavioralScenario(
         };
     const authorityReduction = applyAuthorityFreshness(
       registryRow,
-      props.authorityContext.calibration?.promotion ?? null,
+      props.authorityContext.calibration?.currentBaseline ?? null,
       reduction,
     );
     return publishScenarioReceipt({
@@ -792,9 +792,9 @@ function assertIntegrationInputs(
     }
     if (
       JSON.stringify(parsedCalibrationSource) !==
-      JSON.stringify(calibrationContext.promotion.receipt)
+      JSON.stringify(calibrationContext.currentBaseline.receipt)
     ) {
-      throw new Error("calibration source receipt does not match the validated promotion");
+      throw new Error("calibration source receipt does not match the validated current baseline");
     }
   } else if (props.authorityContext.calibration !== null) {
     throw new Error("diagnostic execution cannot receive gate calibration authority");
@@ -806,7 +806,7 @@ function reduceInfrastructure(
   repetitions: readonly V3ExecutedRepetition[],
 ): V3BehavioralScenarioReceipt["reduction"] | null {
   const unverified = repetitions.flatMap((repetition) =>
-    validateExactRuntimeProfile(repetition.runtimeProfile, ACPX_LUNA_XHIGH_SUBJECT_PROFILE),
+    validateExactRuntimeProfile(repetition.runtimeProfile, ACPX_LUNA_HIGH_SUBJECT_PROFILE),
   );
   if (unverified.length > 0)
     return infrastructureReductionResult("runtime_profile_unverified", unverified);
@@ -916,7 +916,7 @@ function reduceEvidence(props: {
 
 function applyAuthorityFreshness(
   registry: EvaluationRegistryRow,
-  calibration: ValidatedPromotionReceipt | null,
+  calibration: ValidatedCurrentBaselineReceipt | null,
   reduction: V3BehavioralScenarioReceipt["reduction"],
 ): V3BehavioralScenarioReceipt["reduction"] {
   if (
@@ -985,6 +985,9 @@ async function publishScenarioReceipt(props: {
     "reduction_completed",
     props.reduction.reasonCode ?? null,
   );
+  const attemptReceipts = sortReceiptReferences(props.attemptReceipts);
+  const repetitionReceipts = sortReceiptReferences(props.repetitionReceipts);
+  const progressReceipts = sortReceiptReferences(props.progressReceipts);
   const registrySnapshotDigest = calculateEvaluationRegistrySnapshotDigest(
     props.props.registrySnapshot,
   );
@@ -1001,9 +1004,9 @@ async function publishScenarioReceipt(props: {
     subjects: props.subjects,
     reviewerRuntimeProfile: props.reviewerRuntimeProfile,
     reviewerLifecycle: props.reviewerLifecycle,
-    attemptReceipts: props.attemptReceipts,
-    repetitionReceipts: props.repetitionReceipts,
-    progressReceipts: props.progressReceipts,
+    attemptReceipts,
+    repetitionReceipts,
+    progressReceipts,
     executionBudget: props.props.executionBudget,
     executionAccounting,
     reduction: props.reduction,
@@ -1018,7 +1021,7 @@ async function publishScenarioReceipt(props: {
       comparisonIntent: props.props.contract.comparisonIntent,
       evidenceDigest,
     },
-    calibration: props.props.authorityContext.calibration?.promotion ?? null,
+    calibration: props.props.authorityContext.calibration?.currentBaseline ?? null,
     claimedRequirements: props.props.authorityContext.claimedRequirements,
     resolveParentAcceptance: props.props.authorityContext.resolveParentAcceptance,
   });
@@ -1039,7 +1042,7 @@ async function publishScenarioReceipt(props: {
       calibrationStatus:
         props.props.authorityContext.calibration === null
           ? ("uncalibrated" as const)
-          : props.props.authorityContext.calibration.promotion.freshness.status === "fresh" &&
+          : props.props.authorityContext.calibration.currentBaseline.freshness.status === "fresh" &&
               props.registryRow.freshness === "fresh"
             ? ("calibrated" as const)
             : ("stale" as const),
@@ -1051,9 +1054,9 @@ async function publishScenarioReceipt(props: {
       parentAcceptanceSourceReceipt: authority.parentAcceptanceSourceReceipt,
       calibrationSourceReceipt: props.props.authorityContext.calibration?.sourceReceipt ?? null,
       calibrationAuthorityReceiptDigest:
-        props.props.authorityContext.calibration?.promotion.authorityReceiptDigest ?? null,
+        props.props.authorityContext.calibration?.currentBaseline.authorityReceiptDigest ?? null,
       calibrationFingerprintDigest:
-        props.props.authorityContext.calibration?.promotion.calibrationFingerprint.digest ?? null,
+        props.props.authorityContext.calibration?.currentBaseline.calibrationFingerprint.digest ?? null,
       calibrationFreshnessInputs: props.props.authorityContext.freshnessInputs,
       demotedThisRun: false as const,
     },
@@ -1080,9 +1083,9 @@ async function publishScenarioReceipt(props: {
     subjects: props.subjects,
     executionBudget: props.props.executionBudget,
     executionAccounting,
-    attemptReceipts: props.attemptReceipts,
-    repetitionReceipts: props.repetitionReceipts,
-    progressReceipts: props.progressReceipts,
+    attemptReceipts,
+    repetitionReceipts,
+    progressReceipts,
     reduction: props.reduction,
   };
   const persisted = await writeJsonReceipt({
@@ -1096,6 +1099,13 @@ async function publishScenarioReceipt(props: {
     receiptDigest: persisted.receiptDigest,
     receipt: persisted.receipt,
   };
+}
+
+function sortReceiptReferences<TReference extends {
+  readonly receiptPath: string;
+  readonly receiptDigest: string;
+}>(references: readonly TReference[]): readonly TReference[] {
+  return [...references].sort((left, right) => left.receiptPath.localeCompare(right.receiptPath));
 }
 
 export function calculateV3ScenarioEvidenceDigest(props: {

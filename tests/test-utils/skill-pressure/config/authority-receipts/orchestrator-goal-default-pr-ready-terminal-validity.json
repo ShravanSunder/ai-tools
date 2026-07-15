@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-default-pr-ready-terminal",
-  "behaviorContractDigest": "sha256:ec958bade10422d5945783188d30425c98fc619e7d5e15395e35d05d45194709",
+  "behaviorContractDigest": "sha256:95e77381d91c069d0bd7852e2207f5c1e2c1dd5a09cda61ecfb4206a57097105",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

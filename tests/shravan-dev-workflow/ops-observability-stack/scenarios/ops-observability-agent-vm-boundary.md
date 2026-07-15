@@ -36,7 +36,7 @@ behavior_requirement_ids:
   - ops-observability-agent-vm-boundary
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []

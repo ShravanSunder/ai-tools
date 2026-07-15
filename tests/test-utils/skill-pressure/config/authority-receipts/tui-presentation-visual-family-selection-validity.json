@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "tui-presentation-visual-family-selection",
-  "behaviorContractDigest": "sha256:1b4e224c9b578de19b268fa378062bc2f8511bb7ce497a7bd9bf06cdc7428394",
+  "behaviorContractDigest": "sha256:378343a3167b5a6d16c4c60a1f2a94d4598b05ac76c92c7dfb35784156f6a750",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

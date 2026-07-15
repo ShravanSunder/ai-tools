@@ -424,7 +424,7 @@ requirement remains `not_evaluated`, and reports list the untraced IDs.
 R29. The fixed baseline of 107 legacy scenarios across 23 owners is accounted
 for by immutable legacy ID and global scenario ID. Current discovery separately
 accounts for scenarios added after that baseline; the initial current tree has
-109. Every discovered row ends as `gate`, `diagnostic`, or explicitly retired
+110. Every discovered row ends as `gate`, `diagnostic`, or explicitly retired
 with a user-approved reason. Migration may not silently drop or automatically
 promote scenarios.
 

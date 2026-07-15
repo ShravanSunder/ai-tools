@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "local-monitoring-no-detached-process",
-  "behaviorContractDigest": "sha256:5d58df4199b04e7d3de1445bb993e1ac6aed82ab5fb5481237532001d4018492",
+  "behaviorContractDigest": "sha256:5cccaa6833a356c7bf2b7d2225598b04c692d78944c228fdb3106a2817f19cc9",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

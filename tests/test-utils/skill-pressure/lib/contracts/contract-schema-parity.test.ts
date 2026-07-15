@@ -19,7 +19,7 @@ function validScenario(): Record<string, unknown> {
     behavior_requirement_ids: ["parity-requirement"],
     baseline: "no_skill",
     comparison_intent: "improvement",
-    repetitions: 5,
+    repetitions: 3,
     risk: "standard",
     fixture_requirements: [],
     allowed_tools: [],
@@ -43,7 +43,7 @@ async function validateWithJsonSchema(input: unknown): Promise<boolean> {
 describe("Zod and checked JSON schema parity", () => {
   it.each([
     ["valid", validScenario(), true],
-    ["too few repetitions", { ...validScenario(), repetitions: 4 }, false],
+    ["too few repetitions", { ...validScenario(), repetitions: 2 }, false],
     ["path traversal", { ...validScenario(), allowed_write_paths: ["../outside"] }, false],
     ["unknown field", { ...validScenario(), obsolete_capability: true }, false],
   ] as const)("%s", async (_name, input, accepted) => {

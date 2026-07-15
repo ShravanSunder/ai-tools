@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-spec-review-gate",
-  "behaviorContractDigest": "sha256:3671ab8a7e767a8e9bb3333047687306230426ec52b9929e826ca21db6606483",
+  "behaviorContractDigest": "sha256:ab96b417a383e6c289322fcb0b65c7f590c67aab0c126753777bcfe766bda512",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

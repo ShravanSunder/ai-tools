@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-false-positive-substitute",
-  "behaviorContractDigest": "sha256:a4d56f485647c47c48d33dea11940ad1ef1b26f7f10b6bd78471d4bc89a016c6",
+  "behaviorContractDigest": "sha256:c43b7fca9a44cc4623687c0b236c31fea21a0f7698616402b2900f00ef519b0c",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

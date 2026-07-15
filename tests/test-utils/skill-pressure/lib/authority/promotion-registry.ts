@@ -40,26 +40,13 @@ export async function promoteRegistryRow(props: {
         row.scenario_id === props.scenarioId,
     );
     if (rowIndex < 0) throw new Error(`evaluation registry row is missing: ${props.scenarioId}`);
-    const row = assertRecord(scenarioRows[rowIndex], "evaluation registry row");
-    const history = Array.isArray(row.authority_history) ? row.authority_history : [];
+    assertRecord(scenarioRows[rowIndex], "evaluation registry row");
     document.setIn(["scenarios", rowIndex, "evaluation_role"], "gate");
     document.setIn(["scenarios", rowIndex, "freshness"], "fresh");
     document.setIn(["scenarios", rowIndex, "calibration_receipt"], {
       receipt_path: props.promotionReceiptPath,
       receipt_digest: props.promotionReceiptDigest,
     });
-    document.setIn(
-      ["scenarios", rowIndex, "authority_history"],
-      [
-        ...history,
-        {
-          sequence: history.length + 1,
-          event: "promotion",
-          receipt_path: props.promotionReceiptPath,
-          receipt_digest: props.promotionReceiptDigest,
-        },
-      ],
-    );
     const temporaryPath = `${props.registryPath}.promotion-${process.pid}.tmp`;
     try {
       await writeFile(temporaryPath, String(document), { flag: "wx" });

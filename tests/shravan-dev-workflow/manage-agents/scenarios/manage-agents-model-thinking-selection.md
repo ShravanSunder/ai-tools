@@ -1,3 +1,47 @@
+---
+schema_version: 3
+scenario_id: manage-agents-model-thinking-selection
+owner_plugin: shravan-dev-workflow
+owner_skill: manage-agents
+skill_type: reference
+effect_surfaces:
+  - response
+prompt: |-
+  $shravan-dev-workflow:manage-agents
+
+  Chat only. I can run GPT-5.6 Sol at every thinking level its provider currently
+  advertises. Classify each combination into the current capability categories.
+  Also classify Cursor Composer 2.5 and tell me which thinking setting to pass for
+  it. Keep the answer to the model matrix.
+semantic_assertions:
+  - assertion_id: manage-agents-model-thinking-selection-behavior
+    criterion: |-
+      Expected Compliant Behavior:
+      - Sol low and medium are Balanced.
+      - Sol high, xhigh, and max are Frontier.
+      - Composer 2.5 is Mini and has no thinking setting.
+      - The answer explains that category selection uses the model and thinking combination.
+      - The answer does not include Terra or invent a Composer thinking control.
+
+      Failure Signals:
+      - Classifies Sol once regardless of thinking.
+      - Requires a thinking value for Composer 2.5.
+      - Retains Terra in the current matrix.
+    evidence_surface: response
+behavior_requirement_ids:
+  - manage-agents-model-thinking-selection
+baseline: no_skill
+comparison_intent: improvement
+repetitions: 3
+risk: standard
+fixture_requirements: []
+allowed_tools: []
+allowed_write_paths: []
+required_tool_observations: []
+forbidden_tool_observations: []
+deterministic_checks: []
+expected_artifacts: []
+---
 # manage-agents model and thinking selection pressure
 
 scenario_id: manage-agents-model-thinking-selection

@@ -17,9 +17,42 @@ const acceptedCaps = {
 } as const;
 
 describe("scenario execution budget", () => {
-  it("derives the serial critical path from ACPX, supervision, retries, repetitions, and command type", () => {
+  it("budgets subjects as two sequential concurrent waves with lane-local retries", () => {
     const budget = deriveScenarioExecutionBudget({
-      repetitions: 5,
+      repetitions: 3,
+      infrastructureRetries: 1,
+      acceptedCaps,
+      commandSlots: [{
+        commandType: "subject",
+        acpxTimeoutMs: 100,
+        executorOverheadMs: 10,
+        terminationGraceMs: 5,
+      }],
+      fixtureSetupReserveMs: 0,
+      scenarioCleanupReserveMs: 0,
+      receiptFlushReserveMs: 0,
+      schedulingMarginMs: 0,
+      registeredScenarioCount: 1,
+      jobs: 1,
+      vitestEmergencyReserveMs: 0,
+    });
+
+    expect(budget.commandBudgets).toEqual([{
+      commandType: "subject",
+      perCommandMs: 115,
+      criticalPathCount: 4,
+      criticalPathMs: 460,
+    }]);
+    expect(budget.executionGraph).toMatchObject({
+      maximumModelPrompts: 12,
+      maximumAcpxCommands: 12,
+      maximumRetries: 6,
+    });
+  });
+
+  it("derives the two-wave critical path from ACPX, supervision, retries, and command type", () => {
+    const budget = deriveScenarioExecutionBudget({
+      repetitions: 3,
       infrastructureRetries: 1,
       acceptedCaps,
       commandSlots: [
@@ -66,23 +99,23 @@ describe("scenario execution budget", () => {
     expect(budget.commandBudgets).toContainEqual({
       commandType: "subject",
       perCommandMs: 195_000,
-      criticalPathCount: 20,
-      criticalPathMs: 3_900_000,
+      criticalPathCount: 4,
+      criticalPathMs: 780_000,
     });
-    expect(budget.scenarioDeadlineMs).toBe(4_200_000);
+    expect(budget.scenarioDeadlineMs).toBe(1_080_000);
     expect(budget.queueWaves).toBe(3);
-    expect(budget.vitestEmergencyTimeoutMs).toBe(12_630_000);
+    expect(budget.vitestEmergencyTimeoutMs).toBe(3_270_000);
     expect(budget.executionGraph).toEqual({
-      maximumModelPrompts: 21,
-      maximumAcpxCommands: 24,
-      maximumRetries: 10,
+      maximumModelPrompts: 13,
+      maximumAcpxCommands: 16,
+      maximumRetries: 6,
       maximumObservedTokens: 1_500_000,
     });
   });
 
   it("rejects the old fixed high-risk envelope before ACPX can launch", () => {
     const budget = deriveScenarioExecutionBudget({
-      repetitions: 5,
+      repetitions: 3,
       infrastructureRetries: 1,
       acceptedCaps,
       commandSlots: [
@@ -105,7 +138,7 @@ describe("scenario execution budget", () => {
     expect(() =>
       assertScenarioExecutionBudget({
         budget,
-        configuredScenarioDeadlineMs: 2_400_000,
+        configuredScenarioDeadlineMs: 800_000,
         configuredVitestTimeoutMs: 2_400_000,
       }),
     ).toThrow(/scenario deadline is under-budget/u);
@@ -132,13 +165,13 @@ describe("scenario execution budget", () => {
     };
 
     expect(
-      deriveScenarioExecutionBudget({ ...common, repetitions: 5, infrastructureRetries: 0 })
+      deriveScenarioExecutionBudget({ ...common, repetitions: 3, infrastructureRetries: 0 })
         .commandBudgets[0]?.criticalPathMs,
-    ).toBe(115 * 10);
+    ).toBe(115 * 2);
     expect(
       deriveScenarioExecutionBudget({ ...common, repetitions: 6, infrastructureRetries: 1 })
         .commandBudgets[0]?.criticalPathMs,
-    ).toBe(115 * 24);
+    ).toBe(115 * 4);
   });
 
   it("stops a command that cannot fit inside the remaining supervised deadline", async () => {
@@ -159,7 +192,7 @@ describe("scenario execution budget", () => {
 
   it("sizes the outer timeout from the configured scenario deadline and rejects non-finite configuration", () => {
     const budget = deriveScenarioExecutionBudget({
-      repetitions: 5,
+      repetitions: 3,
       infrastructureRetries: 0,
       acceptedCaps,
       commandSlots: [
@@ -205,9 +238,9 @@ describe("scenario execution budget", () => {
   it("rejects an execution graph that exceeds any explicitly accepted cap", () => {
     expect(() =>
       deriveScenarioExecutionBudget({
-        repetitions: 5,
+        repetitions: 3,
         infrastructureRetries: 1,
-        acceptedCaps: { ...acceptedCaps, maxModelPrompts: 20 },
+        acceptedCaps: { ...acceptedCaps, maxModelPrompts: 12 },
         commandSlots: [
           {
             commandType: "subject",

@@ -4,7 +4,7 @@ import type { V3BehaviorContract } from "../contracts/v3-behavior-contract.js";
 import { calculateRunnerSemantics } from "../runtime/runner-semantics.js";
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
   type RuntimeProfile,
 } from "../runtime/runtime-profile.js";
 import type { AuthorityDigest, CalibrationFreshnessInputs } from "./authority-receipts.js";
@@ -18,11 +18,11 @@ export async function calculateCurrentCalibrationFreshnessInputs(props: {
     behaviorContractDigest: asAuthorityDigest(props.contract.behaviorContractDigest),
     baselinePolicyDigest: calculateBaselinePolicyDigest(props.contract),
     runnerSemanticsDigest: asAuthorityDigest(runnerSemantics.runnerSemanticsDigest),
-    subjectProfileDigest: calculateRuntimeProfileDigest(ACPX_LUNA_XHIGH_SUBJECT_PROFILE),
+    subjectProfileDigest: calculateRuntimeProfileDigest(ACPX_LUNA_HIGH_SUBJECT_PROFILE),
     reviewProfileDigest: calculateRuntimeProfileDigest(
       props.contract.risk === "high"
         ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
-        : ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+        : ACPX_LUNA_HIGH_SUBJECT_PROFILE,
     ),
   };
 }

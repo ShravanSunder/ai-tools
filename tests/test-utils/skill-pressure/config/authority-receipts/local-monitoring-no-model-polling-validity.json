@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "local-monitoring-no-model-polling",
-  "behaviorContractDigest": "sha256:d951cb094739d66c23ed88cff1a9cc9cf20b3d9c6c5c5b930790ff5fd76402fa",
+  "behaviorContractDigest": "sha256:91896586457b88d282c3eb6bd988ac1c49200c7b464b0f8627e45779c4ac92df",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

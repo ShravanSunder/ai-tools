@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-review-swarm-routes-findings-to-plan-creation",
-  "behaviorContractDigest": "sha256:f9ae0fc847d2207cf257d116e0fea54f1dcd8a840fcee4d2295dd21c9a1629f0",
+  "behaviorContractDigest": "sha256:fc8aff6b7234bab52d4638d8c29a9c446b1cc5c5c145fea5b40d78638bddd866",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

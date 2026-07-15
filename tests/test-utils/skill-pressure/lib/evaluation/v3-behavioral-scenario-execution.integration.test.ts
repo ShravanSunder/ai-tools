@@ -19,7 +19,7 @@ import type {
 import {
   createRunAcceptanceFixture,
   createClaimedRequirementValidationFixture,
-  createValidatedPromotionFixture,
+  createValidatedCurrentBaselineFixture,
   fixtureAuthorityDigest,
 } from "../test-fixtures.js";
 import { deriveScenarioExecutionBudget } from "./scenario-execution-budget.js";
@@ -29,9 +29,9 @@ import {
 } from "./v3-behavioral-scenario-execution.js";
 
 const VERIFIED_LUNA_PROFILE: RuntimeProfileReceipt = {
-  requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
-  acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
-  providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+  requested: { provider: "codex", model: "gpt-5.6-luna", reasoningEffort: "high" },
+  acceptedProviderReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
+  providerReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
   verification: { status: "verified", reasonCode: null, reasons: [] },
 };
 
@@ -65,7 +65,7 @@ function v3Contract(
     baseline: comparisonIntent === "improvement" ? "no_skill" : "previous_revision",
     ...(comparisonIntent === "non_regression" ? { baseline_revision: "a".repeat(40) } : {}),
     comparison_intent: comparisonIntent,
-    repetitions: 5,
+    repetitions: 3,
     risk,
     fixture_requirements: [],
     allowed_tools: ["write"],
@@ -99,7 +99,6 @@ function registryRow(contract: ReturnType<typeof v3Contract>): EvaluationRegistr
     freshness: "uncalibrated",
     validityReview: { receiptPath: "validity.json", receiptDigest: `sha256:${"b".repeat(64)}` },
     calibrationReceipt: null,
-    authorityHistory: [],
   };
 }
 
@@ -261,7 +260,7 @@ function semanticResult(
 
 function budget() {
   return deriveScenarioExecutionBudget({
-    repetitions: 5,
+    repetitions: 3,
     infrastructureRetries: 0,
     acceptedCaps: {
       maxModelPrompts: 11,
@@ -317,13 +316,13 @@ async function runIntegratedFixture(props: {
   const calibration =
     props.registryFreshness === undefined
       ? null
-      : createValidatedPromotionFixture({
+      : createValidatedCurrentBaselineFixture({
           scenarioId: contract.scenarioId,
           behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
           freshness: props.registryFreshness,
           claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
         });
-  const freshnessInputs = (calibration ?? createValidatedPromotionFixture({
+  const freshnessInputs = (calibration ?? createValidatedCurrentBaselineFixture({
     scenarioId: contract.scenarioId,
     behaviorContractDigest: contract.behaviorContractDigest as AuthorityDigest,
     claimedRequirementManifestDigest: claimedRequirements.manifestDigest,
@@ -363,7 +362,7 @@ async function runIntegratedFixture(props: {
         calibration === null
           ? null
           : {
-              promotion: calibration,
+              currentBaseline: calibration,
               sourceReceipt: calibrationSourceReceipt,
               source: calibrationSource,
             },
@@ -408,7 +407,7 @@ async function runIntegratedFixture(props: {
         subjectRequest = request;
         const createVariant = async (variant: "baseline" | "treatment") => {
           const values = [];
-          for (let index = 0; index < 5; index += 1) {
+          for (let index = 0; index < request.repetitions; index += 1) {
             const content =
               variant === "baseline" && props.comparisonIntent === "improvement"
                 ? "REJECTED"
@@ -498,16 +497,25 @@ describe("reachable v3 behavioral scenario execution", () => {
         createClaimedRequirementValidationFixture({ claimedRequirementIds: ["fixture-behavior"] })
           .manifestDigest,
       );
-      expect(result.receipt.objectiveResults).toHaveLength(10);
+      expect(result.receipt.objectiveResults).toHaveLength(6);
       expect(result.receipt.semanticReview.validation).toEqual({ valid: true, reason: null });
-      expect(result.receipt.attemptReceipts).toHaveLength(10);
-      expect(result.receipt.repetitionReceipts).toHaveLength(10);
+      expect(result.receipt.attemptReceipts).toHaveLength(6);
+      expect(result.receipt.repetitionReceipts).toHaveLength(6);
+      for (const references of [
+        result.receipt.attemptReceipts,
+        result.receipt.repetitionReceipts,
+        result.receipt.progressReceipts,
+      ]) {
+        expect(references.map((receipt) => receipt.receiptPath)).toEqual(
+          references.map((receipt) => receipt.receiptPath).sort((left, right) => left.localeCompare(right)),
+        );
+      }
       expect(
         result.receipt.attemptReceipts.every((receipt) =>
           receipt.receiptDigest.startsWith("sha256:"),
         ),
       ).toBe(true);
-      expect(result.receipt.runtimeProfiles.subjects).toHaveLength(10);
+      expect(result.receipt.runtimeProfiles.subjects).toHaveLength(6);
       expect(result.receipt.runtimeProfiles.reviewer.verification.status).toBe("verified");
       expect(result.receipt.reviewerLifecycle.lifecycleComplete).toBe(true);
       expect(result.receipt.reviewerLifecycle.commandReceipts).toHaveLength(1);

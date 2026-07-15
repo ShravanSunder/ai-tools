@@ -11,7 +11,7 @@ import {
   calculateEvaluationRegistrySnapshotDigest,
   loadEvaluationRegistry,
 } from "./evaluation-registry.js";
-import { validateDemotionReceipt, type AuthorityDigest } from "./authority-receipts.js";
+import { type AuthorityDigest } from "./authority-receipts.js";
 import {
   demoteScenarioFromReceipt,
   type DemotionReason,
@@ -21,7 +21,7 @@ const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipt
 const REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 
 describe("demotion transaction", () => {
-  it("creates a parent-accepted, validated post-run receipt and atomically demotes the current gate", async () => {
+  it("atomically clears the current owner-local baseline without leaving a demotion receipt", async () => {
     const fixture = await createDemotionFixture();
     const sourceBefore = await readFile(fixture.scenarioReceiptPath, "utf8");
 
@@ -40,37 +40,9 @@ describe("demotion transaction", () => {
       evaluationRole: "diagnostic",
       freshness: "stale",
       calibrationReceipt: null,
-      authorityHistory: [
-        { sequence: 1, event: "promotion" },
-        {
-          sequence: 2,
-          event: "demotion",
-          receipt: {
-            receiptPath: result.demotionReceiptPath,
-            receiptDigest: result.demotionReceiptDigest,
-          },
-        },
-      ],
     });
-
-    const persistedReceipt = JSON.parse(
-      await readFile(path.join(fixture.repositoryRoot, result.demotionReceiptPath), "utf8"),
-    ) as unknown;
-    const validatedReceipt = validateDemotionReceipt({ receipt: persistedReceipt });
-    expect(validatedReceipt.authorityReceiptDigest).toBe(result.authorityReceiptDigest);
-    expect(validatedReceipt.receipt).toMatchObject({
-      scenarioId: fixture.contract.scenarioId,
-      behaviorContractDigest: fixture.contract.behaviorContractDigest,
-      observedRunDigest: result.observedRunDigest,
-      evidence: {
-        contractDigest: fixture.contract.behaviorContractDigest,
-        reason: "contract_contradiction",
-      },
-      parentAcceptance: {
-        acceptedAuthorityReceiptDigest: result.authorityReceiptDigest,
-        acceptedRunDigest: result.observedRunDigest,
-      },
-    });
+    await expect(readFile(fixture.baselinePath, "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+    expect((await readdir(path.dirname(fixture.baselinePath))).sort()).toEqual([]);
     await expect(readFile(fixture.scenarioReceiptPath, "utf8")).resolves.toBe(sourceBefore);
   });
 
@@ -97,7 +69,6 @@ describe("demotion transaction", () => {
 
     await expect(readFile(fixture.registryPath, "utf8")).resolves.toBe(originalRegistry);
     expect((await readdir(fixture.authorityDirectory)).sort()).toEqual([
-      "demotion-fixture-promotion.json",
       "demotion-fixture-validity.json",
     ]);
   });
@@ -115,7 +86,6 @@ describe("demotion transaction", () => {
     })).rejects.toThrow(/only current gate rows/u);
 
     expect((await readdir(fixture.authorityDirectory)).sort()).toEqual([
-      "demotion-fixture-promotion.json",
       "demotion-fixture-validity.json",
     ]);
   });
@@ -141,7 +111,6 @@ describe("demotion transaction", () => {
 
     await expect(readFile(fixture.registryPath, "utf8")).resolves.toBe(concurrentRegistry);
     expect((await readdir(fixture.authorityDirectory)).sort()).toEqual([
-      "demotion-fixture-promotion.json",
       "demotion-fixture-validity.json",
     ]);
   });
@@ -155,12 +124,14 @@ async function createDemotionFixture(props: {
   const scenarioDirectory = path.join(repositoryRoot, "tests/test-plugin/test-skill/scenarios");
   const skillDirectory = path.join(repositoryRoot, "plugins/test-plugin/skills/test-skill");
   const authorityDirectory = path.join(repositoryRoot, AUTHORITY_ROOT);
+  const baselineDirectory = path.join(repositoryRoot, "tests/test-plugin/test-skill/baselines");
   const receiptDirectory = path.join(repositoryRoot, "tmp/skill-pressure-evals/test-run/receipts");
   const registryPath = path.join(repositoryRoot, REGISTRY_PATH);
   await Promise.all([
     mkdir(scenarioDirectory, { recursive: true }),
     mkdir(skillDirectory, { recursive: true }),
     mkdir(authorityDirectory, { recursive: true }),
+    mkdir(baselineDirectory, { recursive: true }),
     mkdir(receiptDirectory, { recursive: true }),
     mkdir(path.dirname(registryPath), { recursive: true }),
   ]);
@@ -192,22 +163,74 @@ async function createDemotionFixture(props: {
   const validityPath = `${AUTHORITY_ROOT}/demotion-fixture-validity.json`;
   await writeFile(path.join(repositoryRoot, validityPath), validitySource);
 
-  const promotionReceipt = {
+  const baselineReceipt = {
     schemaVersion: 1,
-    receiptKind: "promotion",
+    receiptKind: "current_baseline",
     scenarioId: contract.scenarioId,
     behaviorContractDigest: contract.behaviorContractDigest,
+    calibrationFingerprint: {
+      behaviorContractDigest: contract.behaviorContractDigest,
+      baselinePolicyDigest: DIGEST("a"),
+      runnerSemanticsDigest: DIGEST("b"),
+      subjectProfileDigest: DIGEST("c"),
+      reviewProfileDigest: DIGEST("d"),
+    },
+    calibrationRunDigest: DIGEST("e"),
+    acceptedSkillSourceDigest: DIGEST("f"),
+    calibration: {
+      contractConsistent: true,
+      contractConsistencyEvidenceDigest: DIGEST("1"),
+      baselinePolicyValid: true,
+      baselinePolicyEvidenceDigest: DIGEST("2"),
+      baselineRepetitionDigests: [DIGEST("3"), DIGEST("4"), DIGEST("5")],
+      treatmentRepetitionDigests: [DIGEST("6"), DIGEST("7"), DIGEST("8")],
+      comparisonIntentPassed: true,
+      objectiveEvidenceDigest: DIGEST("9"),
+      semanticEvidenceDigest: DIGEST("a"),
+      deterministicMutationCoverage: true,
+      subjectProfileVerified: true,
+      reviewProfileVerified: true,
+    },
+    executionEvidence: {
+      calibrationRunDigest: DIGEST("e"),
+      acceptedSkillSourceDigest: DIGEST("f"),
+      repetitions: ["baseline", "treatment"].flatMap((variant) =>
+        [1, 2, 3].map((repetitionNumber) => ({
+          variant,
+          repetitionNumber,
+          attemptNumber: 1,
+          sourceAttemptReceiptDigest: digest(`${variant}-${String(repetitionNumber)}-attempt`),
+          acceptedAttemptReceiptDigest: digest(`${variant}-${String(repetitionNumber)}-attempt`),
+          acceptedRepetitionReceiptDigest: digest(`${variant}-${String(repetitionNumber)}-repetition`),
+          processClosed: true,
+          streamsDrained: true,
+          outputRedacted: true,
+          snapshotsCollected: true,
+          cleanupFactsCollected: true,
+        })),
+      ),
+    },
+    parentAcceptance: {
+      schemaVersion: 1,
+      receiptKind: "parent_acceptance",
+      scenarioId: contract.scenarioId,
+      behaviorContractDigest: contract.behaviorContractDigest,
+      acceptedAuthorityReceiptDigest: DIGEST("f"),
+      acceptedRunDigest: DIGEST("e"),
+      calibrationFingerprintDigest: DIGEST("d"),
+      claimedRequirementManifestDigest: DIGEST("c"),
+    },
   };
-  const promotionSource = `${JSON.stringify(promotionReceipt, null, 2)}\n`;
-  const promotionPath = `${AUTHORITY_ROOT}/demotion-fixture-promotion.json`;
-  await writeFile(path.join(repositoryRoot, promotionPath), promotionSource);
+  const baselineSource = `${JSON.stringify(baselineReceipt, null, 2)}\n`;
+  const baselinePath = "tests/test-plugin/test-skill/baselines/demotion-fixture.json";
+  await writeFile(path.join(repositoryRoot, baselinePath), baselineSource);
   await writeFile(registryPath, registrySource({
     behaviorContractDigest: contract.behaviorContractDigest,
     evaluationRole,
     validityPath,
     validityDigest: digest(validitySource),
-    promotionPath,
-    promotionDigest: digest(promotionSource),
+    baselinePath,
+    baselineDigest: digest(baselineSource),
   }));
 
   const registry = await loadEvaluationRegistry({
@@ -279,6 +302,7 @@ async function createDemotionFixture(props: {
     repositoryRoot,
     registryPath,
     authorityDirectory,
+    baselinePath: path.join(repositoryRoot, baselinePath),
     scenarioReceiptPath,
     aggregateReceiptPath,
     contract,
@@ -315,7 +339,7 @@ semantic_assertions:
 behavior_requirement_ids: [demotion-fixture]
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []
@@ -334,22 +358,16 @@ function registrySource(props: {
   readonly evaluationRole: "gate" | "diagnostic";
   readonly validityPath: string;
   readonly validityDigest: AuthorityDigest;
-  readonly promotionPath: string;
-  readonly promotionDigest: AuthorityDigest;
+  readonly baselinePath: string;
+  readonly baselineDigest: AuthorityDigest;
 }): string {
   const gateAuthority = props.evaluationRole === "gate"
     ? `
     calibration_receipt:
-      receipt_path: ${props.promotionPath}
-      receipt_digest: ${props.promotionDigest}
-    authority_history:
-      - sequence: 1
-        event: promotion
-        receipt_path: ${props.promotionPath}
-        receipt_digest: ${props.promotionDigest}`
+      receipt_path: ${props.baselinePath}
+      receipt_digest: ${props.baselineDigest}`
     : `
-    calibration_receipt: null
-    authority_history: []`;
+    calibration_receipt: null`;
   return `schema_version: 1
 scenarios:
   - scenario_id: demotion-fixture

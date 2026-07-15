@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "no-global-runtime-lane-contract",
-  "behaviorContractDigest": "sha256:9a7fb1ae70edc77f09665f3cbe6e7ec5824ba4e1f5ec1fcda3e49f5c4a8f8203",
+  "behaviorContractDigest": "sha256:206195d1461b53414ddd3c02f24ec85ab34e143737ba30e48f316675de020758",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

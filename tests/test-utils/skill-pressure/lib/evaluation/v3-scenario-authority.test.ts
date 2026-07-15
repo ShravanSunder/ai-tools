@@ -4,16 +4,16 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   type AuthorityDigest,
-  type ValidatedPromotionReceipt,
+  type ValidatedCurrentBaselineReceipt,
 } from "../authority/authority-receipts.js";
 import type { ClaimedRequirementValidation } from "../authority/claimed-requirements.js";
-import { createClaimedRequirementValidationFixture, createValidatedPromotionFixture } from "../test-fixtures.js";
+import { createClaimedRequirementValidationFixture, createValidatedCurrentBaselineFixture } from "../test-fixtures.js";
 import { resolveV3ScenarioAuthority } from "./v3-scenario-authority.js";
 
 const DIGEST = (character: string): AuthorityDigest => `sha256:${character.repeat(64)}`;
 
-function calibration(freshness: "fresh" | "stale"): ValidatedPromotionReceipt {
-  return createValidatedPromotionFixture({
+function calibration(freshness: "fresh" | "stale"): ValidatedCurrentBaselineReceipt {
+  return createValidatedCurrentBaselineFixture({
     scenarioId: "authority-scenario",
     behaviorContractDigest: DIGEST("a"),
     freshness,
@@ -39,7 +39,7 @@ const CANDIDATE = {
 
 describe("v3 scenario authority", () => {
   it("grants release authority only after parent acceptance binds the exact candidate run", async () => {
-    const promotion = calibration("fresh");
+    const baseline = calibration("fresh");
     const claims = claimedRequirements();
     const resolveParentAcceptance = vi.fn(async ({ runDigest }: { readonly runDigest: AuthorityDigest }) => {
       const receipt = {
@@ -47,9 +47,9 @@ describe("v3 scenario authority", () => {
         receiptKind: "parent_acceptance" as const,
         scenarioId: CANDIDATE.scenarioId,
         behaviorContractDigest: CANDIDATE.behaviorContractDigest,
-        acceptedAuthorityReceiptDigest: promotion.authorityReceiptDigest,
+        acceptedAuthorityReceiptDigest: baseline.authorityReceiptDigest,
         acceptedRunDigest: runDigest,
-        calibrationFingerprintDigest: promotion.calibrationFingerprint.digest,
+        calibrationFingerprintDigest: baseline.calibrationFingerprint.digest,
         claimedRequirementManifestDigest: claims.manifestDigest,
       };
       const source = JSON.stringify(receipt);
@@ -65,7 +65,7 @@ describe("v3 scenario authority", () => {
 
     const result = await resolveV3ScenarioAuthority({
       candidate: CANDIDATE,
-      calibration: promotion,
+      calibration: baseline,
       claimedRequirements: claims,
       resolveParentAcceptance,
     });

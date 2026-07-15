@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "tui-presentation-monospace-structure",
-  "behaviorContractDigest": "sha256:710e5d237872290db826a495b77980f7af14b79681549462b58e1a7696d85875",
+  "behaviorContractDigest": "sha256:d6cd98c761dcbd758ece494fe585f2171afa246e990b64417bd3d6ff0769cf19",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

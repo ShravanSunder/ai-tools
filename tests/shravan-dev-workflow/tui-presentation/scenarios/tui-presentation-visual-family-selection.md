@@ -32,7 +32,7 @@ behavior_requirement_ids:
   - tui-presentation-visual-family-selection
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []

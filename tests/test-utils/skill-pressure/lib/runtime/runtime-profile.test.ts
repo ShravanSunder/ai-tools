@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
   verifyRuntimeProfile,
 } from "./runtime-profile.js";
 
@@ -15,11 +15,24 @@ describe("runtime-profile verification", () => {
     });
   });
 
-  it("accepts exact provider-reported Luna/xhigh evidence", () => {
+  it("accepts exact provider-reported Luna/high evidence", () => {
     expect(verifyRuntimeProfile({
-      profile: ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
-      providerReported: { model: "gpt-5.6-luna", reasoningEffort: "xhigh" },
+      profile: ACPX_LUNA_HIGH_SUBJECT_PROFILE,
+      providerReported: { model: "gpt-5.6-luna", reasoningEffort: "high" },
     })).toMatchObject({ verification: { status: "verified", reasonCode: null } });
+  });
+
+  it("uses Luna/high for subjects and standard review while preserving Opus/xhigh for high risk", () => {
+    expect(ACPX_LUNA_HIGH_SUBJECT_PROFILE).toMatchObject({
+      requestedModel: "gpt-5.6-luna",
+      requestedReasoningEffort: "high",
+      acceptedProviderReportedModel: "gpt-5.6-luna",
+      acceptedProviderReportedReasoningEffort: "high",
+    });
+    expect(ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE).toMatchObject({
+      requestedModel: "claude-opus-4-7",
+      requestedReasoningEffort: "xhigh",
+    });
   });
 
   it("rejects a friendly alias instead of treating it as provider verification", () => {

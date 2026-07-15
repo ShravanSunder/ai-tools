@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-handoff-proof-matrix-preservation",
-  "behaviorContractDigest": "sha256:de5bf297235628e190ae00041de35c01e8f83c6b2b5d06dce756bffd21c987c0",
+  "behaviorContractDigest": "sha256:89cd6f60c95eb7832504db188f36e17347d7459bffbb751a88951af440318528",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

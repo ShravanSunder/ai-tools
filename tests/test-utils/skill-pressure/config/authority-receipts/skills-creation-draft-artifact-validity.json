@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-draft-artifact",
-  "behaviorContractDigest": "sha256:8f33dffbea4d0a51661ae026f9a4b636df49a62e850b46780886615aa70fca41",
+  "behaviorContractDigest": "sha256:2211ae1e0fad1e553aac5580f40d48f3905a79c97e4ce51602fa372848c41ba5",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

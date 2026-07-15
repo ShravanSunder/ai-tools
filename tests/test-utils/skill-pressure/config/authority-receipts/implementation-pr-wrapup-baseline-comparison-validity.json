@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-baseline-comparison",
-  "behaviorContractDigest": "sha256:ecc307405b97b3ac7191e89344a452aa593be58f649592c59708ddee62f8a310",
+  "behaviorContractDigest": "sha256:78f0cc4481fef23cb0245de6016185881023cfc3bd8e6a0606edae39877fa0e5",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

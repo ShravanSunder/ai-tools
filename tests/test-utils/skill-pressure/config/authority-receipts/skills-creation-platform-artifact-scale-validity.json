@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "skills-creation-platform-artifact-scale",
-  "behaviorContractDigest": "sha256:5f53e94216610061015dc6fc96f216a71984d4f7ea471db6a7aa9a99cc38f0c7",
+  "behaviorContractDigest": "sha256:7fa2d89248dc5cf003620070e7764f2438a2e91c4261ccdbbdc8d62faade88c6",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

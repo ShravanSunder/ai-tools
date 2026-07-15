@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "manage-agents-json-flows-exit-codes",
-  "behaviorContractDigest": "sha256:332ae724332787f18dc34a8b6ee0105e69243a00334c9c603064b2756f7adc7c",
+  "behaviorContractDigest": "sha256:df0be68e09d6aa6b54f7c531949d3bc7d15e12e15963de59409fde0d5724e210",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

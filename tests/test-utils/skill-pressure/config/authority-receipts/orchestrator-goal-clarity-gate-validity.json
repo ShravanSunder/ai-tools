@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-clarity-gate",
-  "behaviorContractDigest": "sha256:f1cc84e81ddac61bec56d23591cba218c52e477f32addafcabdd892f32c180b2",
+  "behaviorContractDigest": "sha256:c635800396d446fffddb59d737d7f2eeef632d5c25a60bdc3c249e7867f51f30",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

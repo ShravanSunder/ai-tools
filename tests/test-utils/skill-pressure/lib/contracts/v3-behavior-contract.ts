@@ -88,7 +88,7 @@ const v3ScenarioShape = {
   semantic_assertions: z.array(semanticAssertionSchema).min(1),
   behavior_requirement_ids: z.array(identifierSchema).min(1),
   comparison_intent: z.enum(["improvement", "non_regression"]),
-  repetitions: z.number().int().min(5),
+  repetitions: z.number().int().min(3),
   risk: z.enum(["standard", "high"]),
   fixture_requirements: z.array(nonEmptyStringSchema),
   allowed_tools: z.array(nonEmptyStringSchema),

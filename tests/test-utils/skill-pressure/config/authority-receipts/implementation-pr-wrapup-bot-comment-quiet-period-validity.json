@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-bot-comment-quiet-period",
-  "behaviorContractDigest": "sha256:00d528e0021fd1f3ed8b659a6ccac8f88efdfa7e1f5257501025cf3c09618419",
+  "behaviorContractDigest": "sha256:25230ef8326b4941ef2611699567252b428d7900b43409987942febf5fbf8180",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

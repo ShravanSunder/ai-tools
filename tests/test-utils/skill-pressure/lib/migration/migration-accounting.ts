@@ -19,12 +19,13 @@ import {
 } from "../reporting/owner-coverage.js";
 
 export const EXPECTED_LEGACY_SCENARIO_COUNT = 107;
-export const EXPECTED_CURRENT_SCENARIO_COUNT = 109;
-export const EXPECTED_POST_BASELINE_SCENARIO_COUNT = 2;
+export const EXPECTED_CURRENT_SCENARIO_COUNT = 110;
+export const EXPECTED_POST_BASELINE_SCENARIO_COUNT = 3;
 export const EXPECTED_MIGRATED_OWNER_COUNT = 23;
 export const EXPECTED_MIGRATED_SCENARIO_COUNT = EXPECTED_LEGACY_SCENARIO_COUNT;
 export const LEGACY_SCENARIO_ROOT = "tests/skills/pressure-scenarios";
 export const EXPECTED_POST_BASELINE_SCENARIO_IDS = [
+  "manage-agents-model-thinking-selection",
   "orchestrator-goal-artifact-content-boundary",
   "skills-creation-reference-lane-non-regression",
 ] as const;
@@ -217,7 +218,7 @@ export async function verifyMigrationCutover(
     postBaselineScenarioIds.length !== EXPECTED_POST_BASELINE_SCENARIO_COUNT ||
     JSON.stringify(postBaselineScenarioIds) !== JSON.stringify([...EXPECTED_POST_BASELINE_SCENARIO_IDS].sort())
   ) {
-    throw new Error(`current post-baseline scenarios do not match the fixed two-row extension: ${postBaselineScenarioIds.join(", ")}`);
+    throw new Error(`current post-baseline scenarios do not match the fixed three-row extension: ${postBaselineScenarioIds.join(", ")}`);
   }
 
   const currentOwnerCount = new Set(discovery.discovered.map(

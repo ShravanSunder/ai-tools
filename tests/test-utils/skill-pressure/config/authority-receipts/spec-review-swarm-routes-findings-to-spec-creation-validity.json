@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-routes-findings-to-spec-creation",
-  "behaviorContractDigest": "sha256:9413d98e2c6779ee0480e384e6e34eb99e1079bc6cfd9abf1fcdc3008155958a",
+  "behaviorContractDigest": "sha256:c5348a531036e0c4f01fc185937e1ffe5298e895f89fd809ef323021d4c185d0",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

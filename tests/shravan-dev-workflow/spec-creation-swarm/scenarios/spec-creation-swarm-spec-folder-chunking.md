@@ -39,7 +39,7 @@ behavior_requirement_ids:
   - spec-creation-swarm-spec-folder-chunking
 baseline: no_skill
 comparison_intent: improvement
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []

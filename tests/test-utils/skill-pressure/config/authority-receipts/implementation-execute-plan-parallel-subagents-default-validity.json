@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-execute-plan-parallel-subagents-default",
-  "behaviorContractDigest": "sha256:90ba93864b021781a03c29472ab82e0b39fb5bebfe784b2a253a74d63923ef66",
+  "behaviorContractDigest": "sha256:b04a2b7c6eae53b7fa0c26e24ae8a77699b55a65f0d36b2586be12bc661efda3",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

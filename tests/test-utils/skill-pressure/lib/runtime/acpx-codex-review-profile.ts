@@ -2,7 +2,7 @@ import path from "node:path";
 
 import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
 import { serializeDisabledSkillConfig } from "./acpx-subject-profile.js";
-import { ACPX_LUNA_XHIGH_SUBJECT_PROFILE } from "./runtime-profile.js";
+import { ACPX_LUNA_HIGH_SUBJECT_PROFILE } from "./runtime-profile.js";
 
 export interface AcpxCodexReviewProfile {
   readonly launcher: AcpxLauncher;
@@ -12,8 +12,8 @@ export interface AcpxCodexReviewProfile {
   readonly packetPath: string;
   readonly packetDigest: string;
   readonly disabledSkillPaths: readonly string[];
-  readonly model: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedModel;
-  readonly reasoningEffort: typeof ACPX_LUNA_XHIGH_SUBJECT_PROFILE.requestedReasoningEffort;
+  readonly model: typeof ACPX_LUNA_HIGH_SUBJECT_PROFILE.requestedModel;
+  readonly reasoningEffort: typeof ACPX_LUNA_HIGH_SUBJECT_PROFILE.requestedReasoningEffort;
   readonly timeoutSeconds: number;
 }
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "docs-maintain-no-stale-purge",
-  "behaviorContractDigest": "sha256:16d096f0827569a0819e8262d6be3042146415a437642f2e174d9d9a06527b70",
+  "behaviorContractDigest": "sha256:f33e1e1c8f8fa774badf7650cb964689a502896e0e6d5dcb4c2bc8fb95719698",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

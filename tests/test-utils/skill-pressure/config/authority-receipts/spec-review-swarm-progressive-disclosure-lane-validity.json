@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-progressive-disclosure-lane",
-  "behaviorContractDigest": "sha256:7ca9fdf7857652d0df165d177830668dd43f4b8513eb7fa89cfb8044b9068a2c",
+  "behaviorContractDigest": "sha256:44b7b25c71ba2ad8f26fd441846e43b09a1fd48a95c0b4a5b73a8a0a8c8721e1",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

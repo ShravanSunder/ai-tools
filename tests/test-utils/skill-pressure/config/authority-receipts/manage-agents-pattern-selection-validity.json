@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "manage-agents-pattern-selection",
-  "behaviorContractDigest": "sha256:35701d7c38bd2f79452a522e02688de243d06236fce303f6391c936c587f1f8e",
+  "behaviorContractDigest": "sha256:89604636e1da4f9bca9ab7892b4c4d7f70a17d4ac2635955f0f88b1d9ff5403b",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -5,6 +5,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { createValidatedCurrentBaselineFixture, fixtureAuthorityDigest } from "../test-fixtures.js";
 import { discoverSkillScenarios } from "../discovery/skill-discovery.js";
 import {
   loadEvaluationRegistry,
@@ -42,11 +43,9 @@ function registrySource(props?: {
   readonly validityPath?: string;
   readonly validityDigest?: string;
   readonly calibration?: string;
-  readonly history?: string;
 }): string {
   const role = props?.role ?? "diagnostic";
   const calibration = props?.calibration ?? "null";
-  const history = props?.history ?? "[]";
   return `schema_version: 1
 scenarios:
   - scenario_id: ${props?.scenarioId ?? SCENARIO_ID}
@@ -57,7 +56,6 @@ scenarios:
       receipt_path: ${props?.validityPath ?? "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json"}
       receipt_digest: ${props?.validityDigest ?? `sha256:${"b".repeat(64)}`}
     calibration_receipt: ${calibration}
-    authority_history: ${history}
 `;
 }
 
@@ -81,17 +79,15 @@ async function createRegistryFixture(): Promise<{
   return { repositoryRoot, registryPath, validityDigest };
 }
 
-async function writeAuthorityReceipt(
+async function writeCurrentBaselineReceipt(
   fixture: { readonly repositoryRoot: string },
-  receiptKind: "promotion" | "demotion",
 ): Promise<{ readonly path: string; readonly digest: string }> {
-  const receiptPath = `tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-${receiptKind}.json`;
-  const source = `${JSON.stringify({
-    schemaVersion: 1,
-    receiptKind,
+  const receiptPath = "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-baseline.json";
+  const receipt = createValidatedCurrentBaselineFixture({
     scenarioId: SCENARIO_ID,
     behaviorContractDigest: BEHAVIOR_DIGEST,
-  }, null, 2)}\n`;
+  }).receipt;
+  const source = `${JSON.stringify(receipt, null, 2)}\n`;
   await writeFile(path.join(fixture.repositoryRoot, receiptPath), source);
   return {
     path: receiptPath,
@@ -99,13 +95,19 @@ async function writeAuthorityReceipt(
   };
 }
 
+function receiptReference(receipt: { readonly path: string; readonly digest: string }): string {
+  return `
+      receipt_path: ${receipt.path}
+      receipt_digest: ${receipt.digest}`;
+}
+
 describe("evaluation registry", () => {
-  it("loads the complete 109-row repository registry and every tracked validity receipt", async () => {
+  it("loads the complete 110-row repository registry and every tracked validity receipt", async () => {
     const repositoryRoot = path.resolve(import.meta.dirname, "../../../../..");
     const discovery = await discoverSkillScenarios({ repositoryRoot });
 
     expect(discovery.invalid).toEqual([]);
-    expect(discovery.discovered).toHaveLength(109);
+    expect(discovery.discovered).toHaveLength(110);
     const registry = await loadEvaluationRegistry({
       repositoryRoot,
       registryPath: path.join(
@@ -115,31 +117,24 @@ describe("evaluation registry", () => {
       knownScenarios: discovery.discovered,
     });
 
-    expect(registry.scenarios).toHaveLength(109);
-    expect(new Set(registry.scenarios.map((row) => row.validityReview.receiptPath)).size).toBe(109);
+    expect(registry.scenarios).toHaveLength(110);
+    expect(new Set(registry.scenarios.map((row) => row.validityReview.receiptPath)).size).toBe(110);
     const gates = registry.scenarios.filter((row) => row.evaluationRole === "gate");
-    expect(gates.map((row) => row.scenarioId).sort()).toEqual([
-      "orchestrator-goal-artifact-content-boundary",
-      "skills-creation-reference-lane-non-regression",
-    ]);
-    expect(gates.every((row) => row.freshness === "fresh")).toBe(true);
-    expect(gates.every((row) => row.calibrationReceipt !== null)).toBe(true);
-    expect(registry.scenarios.filter((row) => row.evaluationRole === "diagnostic")).toHaveLength(107);
+    expect(gates).toEqual([]);
+    expect(registry.scenarios.filter((row) => row.evaluationRole === "diagnostic")).toHaveLength(110);
   });
 
   it("loads a diagnostic row without changing behavior identity", async () => {
     const fixture = await createRegistryFixture();
 
-    await expect(loadEvaluationRegistry({
-      ...fixture,
-      knownScenarios: knownScenarios(),
-    })).resolves.toMatchObject({
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() })).resolves.toMatchObject({
       schemaVersion: 1,
       scenarios: [{
         scenarioId: SCENARIO_ID,
         behaviorContractDigest: BEHAVIOR_DIGEST,
         evaluationRole: "diagnostic",
         freshness: "uncalibrated",
+        calibrationReceipt: null,
       }],
     });
   });
@@ -188,252 +183,74 @@ describe("evaluation registry", () => {
       .rejects.toThrow(/scenario validity receipt.*verdict.*pass/u);
   });
 
-  it("rejects a validity receipt bound to a different scenario or behavior digest", async () => {
+  it("rejects invalid, untracked, and digest-mismatched current baseline receipts", async () => {
     const fixture = await createRegistryFixture();
-    const validityPath = path.join(
-      fixture.repositoryRoot,
-      "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json",
-    );
+    const baseline = await writeCurrentBaselineReceipt(fixture);
+    const validBaseline = receiptReference(baseline);
 
-    for (const [field, value, expectedError] of [
-      ["scenarioId", "other-scenario", /scenario id does not match/u],
-      ["behaviorContractDigest", `sha256:${"c".repeat(64)}`, /behavior contract digest does not match/u],
-    ] as const) {
-      const forgedSource = `${JSON.stringify({ ...VALIDITY_RECEIPT, [field]: value }, null, 2)}\n`;
-      await writeFile(validityPath, forgedSource);
-      const forgedDigest = `sha256:${createHash("sha256").update(forgedSource).digest("hex")}`;
-      await writeFile(fixture.registryPath, registrySource({ validityDigest: forgedDigest }));
-
-      await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-        .rejects.toThrow(expectedError);
-    }
-  });
-
-  it("rejects missing, ignored, and digest-mismatched authority receipts", async () => {
-    const fixture = await createRegistryFixture();
-    await writeFile(fixture.registryPath, registrySource({
-      validityPath: "tmp/validity.json",
-      validityDigest: fixture.validityDigest,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/tracked authority receipt/u);
-
-    await writeFile(fixture.registryPath, registrySource({
-      validityPath: "tests/test-utils/skill-pressure/config/authority-receipts/missing.json",
-      validityDigest: fixture.validityDigest,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/authority receipt/u);
-
-    await writeFile(fixture.registryPath, registrySource({
-      validityDigest: `sha256:${"d".repeat(64)}`,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/receipt digest/u);
-  });
-
-  it("applies receipt integrity checks to calibration and authority-history pointers", async () => {
-    const fixture = await createRegistryFixture();
-    const promotionReceipt = await writeAuthorityReceipt(fixture, "promotion");
-    const validReceipt = `
-        receipt_path: ${promotionReceipt.path}
-        receipt_digest: ${promotionReceipt.digest}`;
-    const validPromotion = `
-      - sequence: 1
-        event: promotion${validReceipt}`;
     await writeFile(fixture.registryPath, registrySource({
       role: "gate",
       validityDigest: fixture.validityDigest,
       calibration: `
       receipt_path: tmp/calibration.json
       receipt_digest: ${fixture.validityDigest}`,
-      history: `
-      - sequence: 1
-        event: promotion
-        receipt_path: tmp/calibration.json
-        receipt_digest: ${fixture.validityDigest}`,
     }));
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/tracked authority receipt/u);
+      .rejects.toThrow(/tracked validity receipt or owner-local baseline path/u);
 
     await writeFile(fixture.registryPath, registrySource({
       role: "gate",
       validityDigest: fixture.validityDigest,
-      calibration: `
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-      receipt_digest: ${`sha256:${"c".repeat(64)}`}`,
-      history: `
-      - sequence: 1
-        event: promotion
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-        receipt_digest: ${`sha256:${"c".repeat(64)}`}`,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/receipt digest/u);
-
-    await writeFile(fixture.registryPath, registrySource({
-      validityDigest: fixture.validityDigest,
-      history: `${validPromotion}
-      - sequence: 2
-        event: demotion
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/missing-history.json
-        receipt_digest: ${fixture.validityDigest}`,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/authority receipt does not exist/u);
-
-    for (const invalidHistoryReceipt of [
-      {
-        path: "tmp/history.json",
-        digest: fixture.validityDigest,
-        expectedError: /tracked authority receipt/u,
-      },
-      {
+      calibration: receiptReference({
         path: "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json",
-        digest: `sha256:${"d".repeat(64)}`,
-        expectedError: /receipt digest/u,
-      },
-    ]) {
-      await writeFile(fixture.registryPath, registrySource({
-        validityDigest: fixture.validityDigest,
-        history: `${validPromotion}
-      - sequence: 2
-        event: demotion
-        receipt_path: ${invalidHistoryReceipt.path}
-        receipt_digest: ${invalidHistoryReceipt.digest}`,
-      }));
-      await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-        .rejects.toThrow(invalidHistoryReceipt.expectedError);
-    }
-  });
-
-  it("rejects a validity receipt reused as gate calibration authority", async () => {
-    const fixture = await createRegistryFixture();
-    const diagnostic = await loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() });
-    const receipt = `
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-      receipt_digest: ${fixture.validityDigest}`;
-    await writeFile(fixture.registryPath, registrySource({
-      role: "gate",
-      validityDigest: fixture.validityDigest,
-      calibration: receipt,
-      history: `
-      - sequence: 1
-        event: promotion
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-        receipt_digest: ${fixture.validityDigest}`,
+        digest: fixture.validityDigest,
+      }),
     }));
-    expect(diagnostic.scenarios[0]?.behaviorContractDigest).toBe(BEHAVIOR_DIGEST);
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/promotion authority receipt kind/u);
+      .rejects.toThrow(/current_baseline authority receipt is invalid/u);
+
+    await writeFile(fixture.registryPath, registrySource({
+      role: "gate",
+      validityDigest: fixture.validityDigest,
+      calibration: validBaseline.replace(baseline.digest, fixture.validityDigest),
+    }));
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+      .rejects.toThrow(/receipt digest does not match/u);
   });
 
-  it("requires a fresh gate to carry a tracked calibration receipt", async () => {
+  it("accepts a gate with a valid current baseline and requires gate calibration", async () => {
     const fixture = await createRegistryFixture();
+    const baseline = await writeCurrentBaselineReceipt(fixture);
+    await writeFile(fixture.registryPath, registrySource({
+      role: "gate",
+      validityDigest: fixture.validityDigest,
+      calibration: receiptReference(baseline),
+    }));
+
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+      .resolves.toMatchObject({ scenarios: [{ evaluationRole: "gate", freshness: "fresh" }] });
+
     await writeFile(fixture.registryPath, registrySource({
       role: "gate",
       validityDigest: fixture.validityDigest,
     }));
-
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
       .rejects.toThrow(/calibration_receipt/u);
   });
 
-  it("requires role state to agree with the latest authority event", async () => {
+  it("rejects calibration authority on diagnostic rows", async () => {
     const fixture = await createRegistryFixture();
-    const calibration = `
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-      receipt_digest: ${fixture.validityDigest}`;
-    await writeFile(fixture.registryPath, registrySource({
-      role: "gate",
-      validityDigest: fixture.validityDigest,
-      calibration,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/gate.*promotion/u);
-
+    const baseline = await writeCurrentBaselineReceipt(fixture);
     await writeFile(fixture.registryPath, registrySource({
       validityDigest: fixture.validityDigest,
-      calibration,
-      history: `
-      - sequence: 1
-        event: promotion
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-        receipt_digest: ${fixture.validityDigest}`,
-    }));
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/diagnostic.*demotion/u);
-  });
-
-  it("rejects impossible authority-history transitions", async () => {
-    const fixture = await createRegistryFixture();
-    const receipt = `
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-        receipt_digest: ${fixture.validityDigest}`;
-    const invalidHistories = [
-      `
-      - sequence: 1
-        event: demotion${receipt}`,
-      `
-      - sequence: 1
-        event: promotion${receipt}
-      - sequence: 2
-        event: promotion${receipt}`,
-      `
-      - sequence: 1
-        event: promotion${receipt}
-      - sequence: 2
-        event: retirement${receipt}
-      - sequence: 3
-        event: demotion${receipt}`,
-      `
-      - sequence: 1
-        event: retirement${receipt}
-      - sequence: 2
-        event: promotion${receipt}`,
-    ];
-
-    for (const history of invalidHistories) {
-      const finalEvent = /event: promotion\s*$/u.test(history.trim()) ? "gate" : "diagnostic";
-      const calibration = finalEvent === "gate"
-        ? `
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-      receipt_digest: ${fixture.validityDigest}`
-        : undefined;
-      await writeFile(fixture.registryPath, registrySource({
-        role: finalEvent,
-        validityDigest: fixture.validityDigest,
-        ...(calibration === undefined ? {} : { calibration }),
-        history,
-      }));
-
-      await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-        .rejects.toThrow(/authority transition/u);
-    }
-  });
-
-  it("accepts a legal promotion and demotion cycle", async () => {
-    const fixture = await createRegistryFixture();
-    const promotion = await writeAuthorityReceipt(fixture, "promotion");
-    const demotion = await writeAuthorityReceipt(fixture, "demotion");
-    await writeFile(fixture.registryPath, registrySource({
-      validityDigest: fixture.validityDigest,
-      history: `
-      - sequence: 1
-        event: promotion
-        receipt_path: ${promotion.path}
-        receipt_digest: ${promotion.digest}
-      - sequence: 2
-        event: demotion
-        receipt_path: ${demotion.path}
-        receipt_digest: ${demotion.digest}`,
+      calibration: receiptReference(baseline),
     }));
 
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .resolves.toMatchObject({ scenarios: [{ evaluationRole: "diagnostic" }] });
+      .rejects.toThrow(/only a gate may retain a current baseline receipt/u);
   });
 
-  it("rejects authority receipt links even when the link target digest matches", async () => {
+  it("rejects authority receipts reached through symlinked files or parent directories", async () => {
     const fixture = await createRegistryFixture();
     const outsidePath = path.join(fixture.repositoryRoot, "outside.json");
     const outsideSource = "{\"kind\":\"outside\"}\n";
@@ -451,82 +268,24 @@ describe("evaluation registry", () => {
 
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
       .rejects.toThrow(/regular file|symlinked parent/u);
-  });
 
-  it("rejects authority receipts reached through a symlinked parent directory", async () => {
-    const fixture = await createRegistryFixture();
     const outsideDirectory = path.join(fixture.repositoryRoot, "outside-authority");
     await mkdir(outsideDirectory);
-    const outsideSource = "{\"kind\":\"outside-parent\"}\n";
-    await writeFile(path.join(outsideDirectory, "validity.json"), outsideSource);
+    const parentSource = "{\"kind\":\"outside-parent\"}\n";
+    await writeFile(path.join(outsideDirectory, "validity.json"), parentSource);
     const linkedDirectory = path.join(
       fixture.repositoryRoot,
       "tests/test-utils/skill-pressure/config/authority-receipts/alias",
     );
     await symlink(outsideDirectory, linkedDirectory);
-    const linkedDigest = `sha256:${createHash("sha256").update(outsideSource).digest("hex")}`;
+    const parentDigest = `sha256:${createHash("sha256").update(parentSource).digest("hex")}`;
     await writeFile(fixture.registryPath, registrySource({
       validityPath: "tests/test-utils/skill-pressure/config/authority-receipts/alias/validity.json",
-      validityDigest: linkedDigest,
+      validityDigest: parentDigest,
     }));
 
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/symlinked parent|canonical tracked authority root/u);
-  });
-
-  it("rejects a symlinked tracked authority root", async () => {
-    const repositoryRoot = await mkdtemp(path.join(tmpdir(), "skill-pressure-registry-root-link-"));
-    const outsideDirectory = await mkdtemp(path.join(tmpdir(), "skill-pressure-authority-outside-"));
-    const outsideSource = "{\"kind\":\"outside-root\"}\n";
-    await writeFile(path.join(outsideDirectory, "artifact-proof-validity.json"), outsideSource);
-    const authorityParent = path.join(repositoryRoot, "tests/test-utils/skill-pressure/config");
-    await mkdir(authorityParent, { recursive: true });
-    await symlink(outsideDirectory, path.join(authorityParent, "authority-receipts"));
-    const validityDigest = `sha256:${createHash("sha256").update(outsideSource).digest("hex")}`;
-    const registryPath = path.join(repositoryRoot, "registry.yaml");
-    await writeFile(registryPath, registrySource({ validityDigest }));
-
-    await expect(loadEvaluationRegistry({ repositoryRoot, registryPath, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/tracked authority root.*real directory/u);
-  });
-
-  it("rejects reuse of an old promotion receipt after demotion", async () => {
-    const fixture = await createRegistryFixture();
-    const receipt = `
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-        receipt_digest: ${fixture.validityDigest}`;
-    await writeFile(fixture.registryPath, registrySource({
-      validityDigest: fixture.validityDigest,
-      role: "gate",
-      calibration: `
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-      receipt_digest: ${fixture.validityDigest}`,
-      history: `
-      - sequence: 1
-        event: promotion${receipt}
-      - sequence: 2
-        event: demotion${receipt}
-      - sequence: 3
-        event: promotion${receipt}`,
-    }));
-
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/promotion receipt.*reused/u);
-  });
-
-  it("rejects unordered or non-contiguous authority history", async () => {
-    const fixture = await createRegistryFixture();
-    await writeFile(fixture.registryPath, registrySource({
-      validityDigest: fixture.validityDigest,
-      history: `
-      - sequence: 2
-        event: demotion
-        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-validity.json
-        receipt_digest: ${fixture.validityDigest}`,
-    }));
-
-    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/authority history/u);
+      .rejects.toThrow(/real directory|symlinked parent|canonical tracked authority root/u);
   });
 
   it("rejects a silent default role", async () => {

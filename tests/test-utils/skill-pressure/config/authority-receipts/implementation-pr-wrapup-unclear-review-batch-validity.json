@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-unclear-review-batch",
-  "behaviorContractDigest": "sha256:f91e6b72b446cf893c1271a0b1d1bcd6974efdb8962eca285e909a9f0e6591d0",
+  "behaviorContractDigest": "sha256:b8df3d47ae7f126462fd937e5c617c26109f5a2e6138ba43d53b106462e3024f",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

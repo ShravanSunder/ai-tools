@@ -3,7 +3,6 @@ import { open, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { parseDocument } from "yaml";
 
 import type { DiscoveryReceipt } from "../discovery/skill-discovery.js";
-import type { AuthorityDigest } from "./authority-receipts.js";
 import { loadEvaluationRegistry } from "./evaluation-registry.js";
 
 export async function demoteRegistryRow(props: {
@@ -11,8 +10,6 @@ export async function demoteRegistryRow(props: {
   readonly registryPath: string;
   readonly discovery: DiscoveryReceipt;
   readonly scenarioId: string;
-  readonly demotionReceiptPath: string;
-  readonly demotionReceiptDigest: AuthorityDigest;
   readonly beforeRegistryCommit?: () => Promise<void>;
 }): Promise<void> {
   const lockPath = `${props.registryPath}.authority.lock`;
@@ -47,26 +44,9 @@ export async function demoteRegistryRow(props: {
     if (row.evaluation_role !== "gate") {
       throw new Error(`only current gate rows can demote: ${props.scenarioId}`);
     }
-    if (!Array.isArray(row.authority_history)) {
-      throw new Error(`evaluation registry authority history is missing: ${props.scenarioId}`);
-    }
-
-    const history = row.authority_history;
     document.setIn(["scenarios", rowIndex, "evaluation_role"], "diagnostic");
     document.setIn(["scenarios", rowIndex, "freshness"], "stale");
     document.setIn(["scenarios", rowIndex, "calibration_receipt"], null);
-    document.setIn(
-      ["scenarios", rowIndex, "authority_history"],
-      [
-        ...history,
-        {
-          sequence: history.length + 1,
-          event: "demotion",
-          receipt_path: props.demotionReceiptPath,
-          receipt_digest: props.demotionReceiptDigest,
-        },
-      ],
-    );
 
     const temporaryPath = `${props.registryPath}.demotion-${process.pid}.tmp`;
     try {

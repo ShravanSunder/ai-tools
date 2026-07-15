@@ -89,7 +89,7 @@ function transcript(model: string, includeUsage = true): string {
 }
 
 describe("structured ACPX semantic-review runner", () => {
-  it("uses one fresh Luna/xhigh command for standard review", async () => {
+  it("uses one fresh Luna/high command for standard review", async () => {
     const commands: ExecutableAcpxCommand[] = [];
     const controller = new AbortController();
     let neutralInstructions = "";
@@ -114,13 +114,13 @@ describe("structured ACPX semantic-review runner", () => {
         neutralInstructions = await readFile(path.join(command.cwd, "AGENTS.md"), "utf8");
         mcpConfiguration = await readFile(path.join(command.cwd, "mcp.json"), "utf8");
         reviewEnvelope = JSON.parse(await readFile(command.args.at(-1) ?? "", "utf8"));
-        return execution(transcript("gpt-5.6-luna[xhigh]"));
+        return execution(transcript("gpt-5.6-luna[high]"));
       },
     });
 
     expect(commands).toHaveLength(1);
     expect(commands[0]?.args).toEqual(
-      expect.arrayContaining(["--model", "gpt-5.6-luna[xhigh]", "codex", "exec"]),
+      expect.arrayContaining(["--model", "gpt-5.6-luna[high]", "codex", "exec"]),
     );
     expect(commands[0]?.signal).toBe(controller.signal);
     expect(JSON.parse(commands[0]?.environment?.CODEX_CONFIG ?? "null")).toEqual({
@@ -356,7 +356,7 @@ describe("structured ACPX semantic-review runner", () => {
       codexExecutable: "/usr/local/bin/codex",
       timeoutSeconds: 120,
       signal: new AbortController().signal,
-      execute: async () => execution(transcript("gpt-5.6-luna[xhigh]", false)),
+      execute: async () => execution(transcript("gpt-5.6-luna[high]", false)),
     });
 
     expect(result.lifecycle).toMatchObject({

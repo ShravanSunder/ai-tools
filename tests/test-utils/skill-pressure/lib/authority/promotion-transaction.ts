@@ -1,17 +1,16 @@
 import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
-import { mkdir, readFile, rm } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { V3BehaviorContract } from "../contracts/v3-behavior-contract.js";
 import { discoverSkillScenarios } from "../discovery/skill-discovery.js";
 import { calculateSkillSourceClosureDigest } from "../installation/codex-repo-skill-installer.js";
 import type { ExecutedV3BehavioralScenario } from "../evaluation/v3-behavioral-scenario-execution.js";
-import { writeJsonReceipt } from "../reporting/attempt-receipt.js";
 import { validateV3ScenarioExecutionForAggregate } from "../reporting/aggregate-receipt.js";
 import {
   ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE,
-  ACPX_LUNA_XHIGH_SUBJECT_PROFILE,
+  ACPX_LUNA_HIGH_SUBJECT_PROFILE,
   type RuntimeProfile,
   type RuntimeProfileReceipt,
 } from "../runtime/runtime-profile.js";
@@ -23,14 +22,12 @@ import { validateCalibrationAggregateReceipt } from "./calibration-aggregate.js"
 import {
   calculateAuthorityReceiptDigest,
   calculateCalibrationFreshnessFingerprint,
-  validatePromotionReceipt,
+  validateCurrentBaselineReceipt,
   type AuthorityDigest,
   type CalibrationFreshnessInputs,
+  type CurrentBaselineExecutionRepetition,
   type ParentAcceptanceReceipt,
-  type PromotionAttemptEvidenceReceipt,
-  type PromotionCleanupEvidenceReceipt,
-  type PromotionEvidenceReceiptReference,
-  type PromotionReceipt,
+  type CurrentBaselineReceipt,
 } from "./authority-receipts.js";
 import {
   loadEvaluationRegistry,
@@ -38,7 +35,6 @@ import {
 } from "./evaluation-registry.js";
 import { promoteRegistryRow } from "./promotion-registry.js";
 
-const AUTHORITY_RECEIPT_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
 const DEFAULT_REGISTRY_PATH = "tests/test-utils/skill-pressure/config/scenario-evaluation-registry.yaml";
 
 export interface PromoteScenarioResult {
@@ -119,7 +115,6 @@ export async function promoteScenarioFromReceipt(props: {
   const evidence = await collectPromotionEvidence({
     repositoryRoot,
     receipt,
-    runDigest: asAuthorityDigest(receipt.authoritySnapshot.runDigest, "calibration run digest"),
   });
   const freshnessInputs = await (
     props.dependencies?.calculateFreshnessInputs ?? calculateCurrentCalibrationFreshnessInputs
@@ -133,21 +128,21 @@ export async function promoteScenarioFromReceipt(props: {
     contract.behaviorContractDigest,
     "behavior contract digest",
   );
-  const promotionTreatmentDigest = treatmentSourceDigest(receipt);
+  const acceptedSkillSourceDigest = treatmentSourceDigest(receipt);
   const currentTreatmentDigest = calculateSkillSourceClosureDigest(
     path.join(repositoryRoot, "plugins", contract.plugin, "skills", contract.skill),
   );
-  if (promotionTreatmentDigest !== `sha256:${currentTreatmentDigest}`) {
+  if (acceptedSkillSourceDigest !== `sha256:${currentTreatmentDigest}`) {
     throw new Error("promotion treatment source no longer matches the current skill source");
   }
-  const unsignedPromotion = {
+  const unsignedBaseline: Omit<CurrentBaselineReceipt, "parentAcceptance"> = {
     schemaVersion: 1 as const,
-    receiptKind: "promotion" as const,
+    receiptKind: "current_baseline" as const,
     scenarioId: receipt.scenarioId,
     behaviorContractDigest,
     calibrationFingerprint: freshnessInputs,
     calibrationRunDigest: asAuthorityDigest(receipt.authoritySnapshot.runDigest, "calibration run digest"),
-    promotionTreatmentDigest,
+    acceptedSkillSourceDigest,
     calibration: {
       contractConsistent: true as const,
       contractConsistencyEvidenceDigest: digestJson({
@@ -163,52 +158,45 @@ export async function promoteScenarioFromReceipt(props: {
       comparisonIntentPassed: true as const,
       objectiveEvidenceDigest: digestJson(receipt.objectiveResults),
       semanticEvidenceDigest: digestJson(receipt.semanticReview),
-      attemptReceipts: evidence.attemptReferences,
-      cleanupReceipts: evidence.cleanupReferences,
       deterministicMutationCoverage: true as const,
       subjectProfileVerified: true as const,
       reviewProfileVerified: true as const,
     },
+    executionEvidence: {
+      calibrationRunDigest: asAuthorityDigest(receipt.authoritySnapshot.runDigest, "calibration run digest"),
+      acceptedSkillSourceDigest,
+      repetitions: evidence.repetitions,
+    },
   };
-  const authorityReceiptDigest = calculateAuthorityReceiptDigest(unsignedPromotion);
+  const authorityReceiptDigest = calculateAuthorityReceiptDigest(unsignedBaseline);
   const parentAcceptance: ParentAcceptanceReceipt = {
     schemaVersion: 1,
     receiptKind: "parent_acceptance",
     scenarioId: receipt.scenarioId,
     behaviorContractDigest,
     acceptedAuthorityReceiptDigest: authorityReceiptDigest,
-    acceptedRunDigest: unsignedPromotion.calibrationRunDigest,
+    acceptedRunDigest: unsignedBaseline.calibrationRunDigest,
     calibrationFingerprintDigest: calibrationFingerprint.digest,
     claimedRequirementManifestDigest: asAuthorityDigest(
       receipt.claimedRequirements.manifestDigest,
       "claimed requirement manifest digest",
     ),
   };
-  const promotionReceipt: PromotionReceipt = { ...unsignedPromotion, parentAcceptance };
-
-  const createdReceiptPaths: string[] = [];
+  const currentBaselineReceipt: CurrentBaselineReceipt = { ...unsignedBaseline, parentAcceptance };
+  const promotionReceiptPath = `tests/${contract.plugin}/${contract.skill}/baselines/${receipt.scenarioId}.json`;
+  const baselinePath = path.join(repositoryRoot, promotionReceiptPath);
+  const promotionSource = `${JSON.stringify(currentBaselineReceipt, null, 2)}\n`;
+  const promotionReceiptDigest = digestSource(promotionSource);
+  let rollbackBaseline: (() => Promise<void>) | null = null;
   try {
-    await writeEvidenceReceipts({ repositoryRoot, evidence, createdReceiptPaths });
-    await validatePromotionReceipt({
-      receipt: promotionReceipt,
+    await validateCurrentBaselineReceipt({
+      receipt: currentBaselineReceipt,
       currentFreshnessInputs: freshnessInputs,
       repositoryRoot,
     });
-    const promotionFileName = `${receipt.scenarioId}-promotion-${authorityReceiptDigest.slice(7, 19)}.json`;
-    const persistedPromotion = await writeJsonReceipt({
-      receiptDirectory: path.join(repositoryRoot, AUTHORITY_RECEIPT_ROOT),
-      fileName: promotionFileName,
-      receipt: promotionReceipt,
-      secrets: [],
-    });
-    createdReceiptPaths.push(persistedPromotion.receiptPath);
-    const promotionReceiptPath = `${AUTHORITY_RECEIPT_ROOT}/${promotionFileName}`;
-    const promotionReceiptDigest = asAuthorityDigest(
-      persistedPromotion.receiptDigest,
-      "persisted promotion receipt digest",
-    );
-    await validatePromotionReceipt({
-      receipt: JSON.parse(await readFile(persistedPromotion.receiptPath, "utf8")) as unknown,
+    rollbackBaseline = await replaceCurrentBaselineAtomically({ baselinePath, source: promotionSource });
+    await validateCurrentBaselineReceipt({
+      receipt: JSON.parse(await readFile(baselinePath, "utf8")) as unknown,
       currentFreshnessInputs: freshnessInputs,
       repositoryRoot,
     });
@@ -232,7 +220,7 @@ export async function promoteScenarioFromReceipt(props: {
       registryPath,
     };
   } catch (error) {
-    await Promise.all(createdReceiptPaths.map((receiptPath) => rm(receiptPath, { force: true })));
+    await rollbackBaseline?.();
     throw error;
   }
 }
@@ -253,10 +241,7 @@ function assertDiagnosticRunFreshness(props: {
 }
 
 interface CollectedPromotionEvidence {
-  readonly attemptReceipts: readonly { readonly fileName: string; readonly receipt: PromotionAttemptEvidenceReceipt }[];
-  readonly cleanupReceipts: readonly { readonly fileName: string; readonly receipt: PromotionCleanupEvidenceReceipt }[];
-  readonly attemptReferences: readonly PromotionEvidenceReceiptReference[];
-  readonly cleanupReferences: readonly PromotionEvidenceReceiptReference[];
+  readonly repetitions: readonly CurrentBaselineExecutionRepetition[];
   readonly baselineRepetitionDigests: readonly AuthorityDigest[];
   readonly treatmentRepetitionDigests: readonly AuthorityDigest[];
 }
@@ -264,7 +249,6 @@ interface CollectedPromotionEvidence {
 async function collectPromotionEvidence(props: {
   readonly repositoryRoot: string;
   readonly receipt: ExecutedV3BehavioralScenario["receipt"];
-  readonly runDigest: AuthorityDigest;
 }): Promise<CollectedPromotionEvidence> {
   const repetitionReceipts = new Map<string, {
     readonly receiptDigest: AuthorityDigest;
@@ -276,20 +260,18 @@ async function collectPromotionEvidence(props: {
     const variant = assertVariant(repetition.variant, "repetition receipt variant");
     const repetitionNumber = assertPositiveInteger(repetition.repetitionNumber, "repetition receipt number");
     if (repetition.scenarioId !== props.receipt.scenarioId) throw new Error("repetition receipt scenario does not match");
-    repetitionReceipts.set(
-      `${variant}:${String(repetitionNumber)}`,
-      {
-        receiptDigest: asAuthorityDigest(reference.receiptDigest, "repetition receipt digest"),
-        acceptedAttemptReceiptDigest: asAuthorityDigest(
-          assertString(repetition.acceptedAttemptReceiptDigest, "accepted attempt receipt digest"),
-          "accepted attempt receipt digest",
-        ),
-      },
-    );
+    const identity = `${variant}:${String(repetitionNumber)}`;
+    if (repetitionReceipts.has(identity)) throw new Error("promotion contains duplicate repetition receipts");
+    repetitionReceipts.set(identity, {
+      receiptDigest: asAuthorityDigest(reference.receiptDigest, "repetition receipt digest"),
+      acceptedAttemptReceiptDigest: asAuthorityDigest(
+        assertString(repetition.acceptedAttemptReceiptDigest, "accepted attempt receipt digest"),
+        "accepted attempt receipt digest",
+      ),
+    });
   }
 
-  const attemptReceipts: { fileName: string; receipt: PromotionAttemptEvidenceReceipt }[] = [];
-  const cleanupReceipts: { fileName: string; receipt: PromotionCleanupEvidenceReceipt }[] = [];
+  const acceptedAttempts = new Map<string, CurrentBaselineExecutionRepetition>();
   for (const reference of props.receipt.attemptReceipts) {
     const source = await readDigestBoundSource(reference);
     const attempt = assertRecord(JSON.parse(source), "attempt receipt");
@@ -302,104 +284,40 @@ async function collectPromotionEvidence(props: {
     for (const fact of ["processClosed", "streamsDrained", "outputRedacted", "snapshotsCollected", "cleanupFactsCollected"] as const) {
       if (durableFacts[fact] !== true) throw new Error(`promotion requires completed ${fact}`);
     }
-    const acceptedRepetition = repetitionReceipts.get(
-      `${variant}:${String(repetitionNumber)}`,
-    );
+    if (repetitionNumber > 3) continue;
+    const identity = `${variant}:${String(repetitionNumber)}`;
+    const acceptedRepetition = repetitionReceipts.get(identity);
     if (acceptedRepetition === undefined) {
       throw new Error("promotion attempt is missing its accepted repetition receipt");
     }
     const sourceAttemptReceiptDigest = asAuthorityDigest(reference.receiptDigest, "source attempt receipt digest");
-    const acceptedForRepetition = sourceAttemptReceiptDigest === acceptedRepetition.acceptedAttemptReceiptDigest;
-    const identity = `${scenarioId}-${props.runDigest.slice(7, 19)}-${variant}-${String(repetitionNumber)}-${String(attemptNumber)}`;
-    attemptReceipts.push({
-      fileName: `${identity}-attempt.json`,
-      receipt: {
-        schemaVersion: 1,
-        receiptKind: "attempt",
-        scenarioId,
-        variant,
-        repetitionNumber,
-        attemptNumber,
-        sourceAttemptReceiptDigest,
-        acceptedForRepetition,
-        acceptedRepetitionReceiptDigest: acceptedForRepetition
-          ? acceptedRepetition.receiptDigest
-          : null,
-        processClosed: true,
-        streamsDrained: true,
-        outputRedacted: true,
-        snapshotsCollected: true,
-      },
-    });
-    cleanupReceipts.push({
-      fileName: `${identity}-cleanup.json`,
-      receipt: {
-        schemaVersion: 1,
-        receiptKind: "cleanup",
-        scenarioId,
-        variant,
-        repetitionNumber,
-        attemptNumber,
-        sourceAttemptReceiptDigest,
-        processClosed: true,
-        streamsDrained: true,
-        cleanupFactsCollected: true,
-      },
+    if (sourceAttemptReceiptDigest !== acceptedRepetition.acceptedAttemptReceiptDigest) continue;
+    if (acceptedAttempts.has(identity)) throw new Error("promotion has duplicate accepted attempts for a repetition");
+    acceptedAttempts.set(identity, {
+      variant,
+      repetitionNumber,
+      attemptNumber,
+      sourceAttemptReceiptDigest,
+      acceptedAttemptReceiptDigest: acceptedRepetition.acceptedAttemptReceiptDigest,
+      acceptedRepetitionReceiptDigest: acceptedRepetition.receiptDigest,
+      processClosed: true,
+      streamsDrained: true,
+      outputRedacted: true,
+      snapshotsCollected: true,
+      cleanupFactsCollected: true,
     });
   }
-  const byIdentity = <TReceipt extends PromotionAttemptEvidenceReceipt | PromotionCleanupEvidenceReceipt>(
-    left: { readonly receipt: TReceipt },
-    right: { readonly receipt: TReceipt },
-  ): number => `${left.receipt.variant}:${String(left.receipt.repetitionNumber)}`.localeCompare(
-    `${right.receipt.variant}:${String(right.receipt.repetitionNumber)}`,
-  );
-  attemptReceipts.sort(byIdentity);
-  cleanupReceipts.sort(byIdentity);
-  if (attemptReceipts.length < 10 || cleanupReceipts.length < 10 || repetitionReceipts.size !== 10) {
-    throw new Error("promotion requires every attempt and exactly ten accepted repetitions");
-  }
-  const acceptedAttemptCount = attemptReceipts.filter((item) => item.receipt.acceptedForRepetition).length;
-  if (acceptedAttemptCount !== 10) throw new Error("promotion requires one accepted attempt per repetition");
+  const repetitions = ["baseline", "treatment"].flatMap((variant) =>
+    Array.from({ length: 3 }, (_, index) => {
+      const repetition = acceptedAttempts.get(`${variant}:${String(index + 1)}`);
+      if (repetition === undefined) throw new Error(`promotion is missing accepted ${variant} repetition ${String(index + 1)}`);
+      return repetition;
+    }));
   return {
-    attemptReceipts,
-    cleanupReceipts,
-    attemptReferences: attemptReceipts.map((item) => evidenceReference(item.fileName, item.receipt)),
-    cleanupReferences: cleanupReceipts.map((item) => evidenceReference(item.fileName, item.receipt)),
+    repetitions,
     baselineRepetitionDigests: repetitionDigestLane(repetitionReceipts, "baseline"),
     treatmentRepetitionDigests: repetitionDigestLane(repetitionReceipts, "treatment"),
   };
-}
-
-function evidenceReference(
-  fileName: string,
-  receipt: PromotionAttemptEvidenceReceipt | PromotionCleanupEvidenceReceipt,
-): PromotionEvidenceReceiptReference {
-  return {
-    scenarioId: receipt.scenarioId,
-    variant: receipt.variant,
-    repetitionNumber: receipt.repetitionNumber,
-    attemptNumber: receipt.attemptNumber,
-    receiptPath: `${AUTHORITY_RECEIPT_ROOT}/${fileName}`,
-    receiptDigest: digestSource(`${JSON.stringify(receipt, null, 2)}\n`),
-  };
-}
-
-async function writeEvidenceReceipts(props: {
-  readonly repositoryRoot: string;
-  readonly evidence: CollectedPromotionEvidence;
-  readonly createdReceiptPaths: string[];
-}): Promise<void> {
-  const receiptDirectory = path.join(props.repositoryRoot, AUTHORITY_RECEIPT_ROOT);
-  await mkdir(receiptDirectory, { recursive: true });
-  for (const item of [...props.evidence.attemptReceipts, ...props.evidence.cleanupReceipts]) {
-    const persisted = await writeJsonReceipt({
-      receiptDirectory,
-      fileName: item.fileName,
-      receipt: item.receipt,
-      secrets: [],
-    });
-    props.createdReceiptPaths.push(persisted.receiptPath);
-  }
 }
 
 function assertDiagnosticPromotionCandidate(row: EvaluationRegistryRow): void {
@@ -415,14 +333,14 @@ function assertPassingCalibrationReceipt(props: {
   if (props.receipt.reduction.outcome !== "pass") throw new Error("only a passing calibration can be promoted");
   if (!props.receipt.comparisonValidation.valid) throw new Error("promotion comparison is invalid");
   if (!props.receipt.semanticReview.validation.valid) throw new Error("promotion semantic review is invalid");
-  if (props.receipt.subjects.length !== 10 || props.contract.repetitions !== 5) {
-    throw new Error("promotion requires five baseline and five treatment repetitions");
+  if (props.receipt.subjects.length !== 6 || props.contract.repetitions !== 3) {
+    throw new Error("promotion requires three baseline and three treatment repetitions");
   }
   const expectedReviewProfile = props.contract.risk === "high"
     ? ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE
-    : ACPX_LUNA_XHIGH_SUBJECT_PROFILE;
+    : ACPX_LUNA_HIGH_SUBJECT_PROFILE;
   for (const runtimeProfile of props.receipt.runtimeProfiles.subjects) {
-    assertRuntimeProfile(runtimeProfile, ACPX_LUNA_XHIGH_SUBJECT_PROFILE, "subject");
+    assertRuntimeProfile(runtimeProfile, ACPX_LUNA_HIGH_SUBJECT_PROFILE, "subject");
   }
   assertRuntimeProfile(props.receipt.runtimeProfiles.reviewer, expectedReviewProfile, "reviewer");
 }
@@ -462,11 +380,42 @@ function repetitionDigestLane(
   receipts: ReadonlyMap<string, { readonly receiptDigest: AuthorityDigest }>,
   variant: "baseline" | "treatment",
 ): readonly AuthorityDigest[] {
-  return Array.from({ length: 5 }, (_, index) => {
+  return Array.from({ length: 3 }, (_, index) => {
     const receipt = receipts.get(`${variant}:${String(index + 1)}`);
     if (receipt === undefined) throw new Error(`promotion is missing ${variant} repetition ${String(index + 1)}`);
     return receipt.receiptDigest;
   });
+}
+
+async function replaceCurrentBaselineAtomically(props: {
+  readonly baselinePath: string;
+  readonly source: string;
+}): Promise<() => Promise<void>> {
+  await mkdir(path.dirname(props.baselinePath), { recursive: true });
+  const originalSource = await readFile(props.baselinePath, "utf8").catch((error: unknown) => {
+    if (isMissingFile(error)) return null;
+    throw error;
+  });
+  const temporaryPath = `${props.baselinePath}.${process.pid}.tmp`;
+  try {
+    await writeFile(temporaryPath, props.source, { flag: "wx" });
+    await rename(temporaryPath, props.baselinePath);
+  } finally {
+    await rm(temporaryPath, { force: true });
+  }
+  return async () => {
+    if (originalSource === null) {
+      await rm(props.baselinePath, { force: true });
+      return;
+    }
+    const rollbackPath = `${props.baselinePath}.${process.pid}.rollback.tmp`;
+    try {
+      await writeFile(rollbackPath, originalSource, { flag: "wx" });
+      await rename(rollbackPath, props.baselinePath);
+    } finally {
+      await rm(rollbackPath, { force: true });
+    }
+  };
 }
 
 async function readDigestBoundSource(reference: {
@@ -529,4 +478,8 @@ function assertVariant(value: unknown, label: string): "baseline" | "treatment" 
 function assertPositiveInteger(value: unknown, label: string): number {
   if (!Number.isSafeInteger(value) || Number(value) < 1) throw new Error(`${label} is invalid`);
   return Number(value);
+}
+
+function isMissingFile(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
 }

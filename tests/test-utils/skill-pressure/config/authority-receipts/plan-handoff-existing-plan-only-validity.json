@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-handoff-existing-plan-only",
-  "behaviorContractDigest": "sha256:30946b6803eb77228e2bbf42c0bcefd003d317f67cd7547f8c80175f80b0efdb",
+  "behaviorContractDigest": "sha256:25158e4fe333ebc48e7b10fc787e2e7d8c7443b0ff7aae532512bb3a0a634d18",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "current_baseline",
+  "scenarioId": "orchestrator-goal-artifact-content-boundary",
+  "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+  "calibrationFingerprint": {
+    "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+    "baselinePolicyDigest": "sha256:12940b09f3db3417ab30f9d22ebfd14166b2e401afd86e4d59bb6aadfd9d5d4b",
+    "runnerSemanticsDigest": "sha256:9a1adbb93b4a59441d941a01a74c179edbd487185239d18f8a4730546314a73e",
+    "subjectProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc",
+    "reviewProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc"
+  },
+  "calibrationRunDigest": "sha256:db7e92ce5b3c37a116b1f14214e44a358ca7746fca45a36d8d28781a73136e96",
+  "acceptedSkillSourceDigest": "sha256:a4d4fe8f9450dfe7c5e64e3f32abd59074fe6c07dad764bd31ba1ef61e039d50",
+  "calibration": {
+    "contractConsistent": true,
+    "contractConsistencyEvidenceDigest": "sha256:ddbab0bac280b83ae3300004ae5fa2b5161c5dae4681960164c536ee33eb1678",
+    "baselinePolicyValid": true,
+    "baselinePolicyEvidenceDigest": "sha256:12940b09f3db3417ab30f9d22ebfd14166b2e401afd86e4d59bb6aadfd9d5d4b",
+    "baselineRepetitionDigests": [
+      "sha256:cfe74e9c5e748052c07b9509f3db1084fe635c0a020bc24edeb013640dbfdbf9",
+      "sha256:1cc28fc2ef0799c04c1339b9ef24bebe763bd524dac87182abf5c2c736deafb7",
+      "sha256:215f0b13291919746d4b2115f1dc58f53605b77311ed898276f65e5865edea7f"
+    ],
+    "treatmentRepetitionDigests": [
+      "sha256:6f1ba9f1d4447d3db82790adce6a8b3e6e048e12fb4bb08c28c27267b6b702c3",
+      "sha256:7c968a50f2a02458623951e8697ff721a5412f41cfb1b40e2d9cf51af11f3d7e",
+      "sha256:d9a7371a55cb4694bfe21cd4584ecd695193981a6ed41d883d00e4e56f932425"
+    ],
+    "comparisonIntentPassed": true,
+    "objectiveEvidenceDigest": "sha256:d29f75c198d1ab16a0394ed5a6a502b5f819203f7ad92c21ec4e8e2841223298",
+    "semanticEvidenceDigest": "sha256:1388bc7f6f3e9c6facaac6e6c727d1262ef865cb8c07b1980be8ea95471e1a8b",
+    "deterministicMutationCoverage": true,
+    "subjectProfileVerified": true,
+    "reviewProfileVerified": true
+  },
+  "executionEvidence": {
+    "calibrationRunDigest": "sha256:db7e92ce5b3c37a116b1f14214e44a358ca7746fca45a36d8d28781a73136e96",
+    "acceptedSkillSourceDigest": "sha256:a4d4fe8f9450dfe7c5e64e3f32abd59074fe6c07dad764bd31ba1ef61e039d50",
+    "repetitions": [
+      {
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:5eaf487c216dbfea6156e701758e62ef49b6b8a4f1b3264c5fa38c3e611b7f8c",
+        "acceptedAttemptReceiptDigest": "sha256:5eaf487c216dbfea6156e701758e62ef49b6b8a4f1b3264c5fa38c3e611b7f8c",
+        "acceptedRepetitionReceiptDigest": "sha256:cfe74e9c5e748052c07b9509f3db1084fe635c0a020bc24edeb013640dbfdbf9",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:1c39dedeb7f02651b53d8665ce8fbb0bc83d2bab7af73a8f5f4c6f7c87b609db",
+        "acceptedAttemptReceiptDigest": "sha256:1c39dedeb7f02651b53d8665ce8fbb0bc83d2bab7af73a8f5f4c6f7c87b609db",
+        "acceptedRepetitionReceiptDigest": "sha256:1cc28fc2ef0799c04c1339b9ef24bebe763bd524dac87182abf5c2c736deafb7",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:e68966ddc54bdce14ff045bf40ea9b6062b1be80b7709f41d52966402910c175",
+        "acceptedAttemptReceiptDigest": "sha256:e68966ddc54bdce14ff045bf40ea9b6062b1be80b7709f41d52966402910c175",
+        "acceptedRepetitionReceiptDigest": "sha256:215f0b13291919746d4b2115f1dc58f53605b77311ed898276f65e5865edea7f",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:f6c18e96693b8703b43473ab173d9bf9d8aeaa2a59dfbc77a49fb5d628d2b515",
+        "acceptedAttemptReceiptDigest": "sha256:f6c18e96693b8703b43473ab173d9bf9d8aeaa2a59dfbc77a49fb5d628d2b515",
+        "acceptedRepetitionReceiptDigest": "sha256:6f1ba9f1d4447d3db82790adce6a8b3e6e048e12fb4bb08c28c27267b6b702c3",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:1a4eae8f130316861df7110fa449a0943f443860c1b0c9da1f6694cea3b42912",
+        "acceptedAttemptReceiptDigest": "sha256:1a4eae8f130316861df7110fa449a0943f443860c1b0c9da1f6694cea3b42912",
+        "acceptedRepetitionReceiptDigest": "sha256:7c968a50f2a02458623951e8697ff721a5412f41cfb1b40e2d9cf51af11f3d7e",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:2afaef6d5ea1af73f3d553db46b727cafebd4491d321712fdd64b8fec1e5f61f",
+        "acceptedAttemptReceiptDigest": "sha256:2afaef6d5ea1af73f3d553db46b727cafebd4491d321712fdd64b8fec1e5f61f",
+        "acceptedRepetitionReceiptDigest": "sha256:d9a7371a55cb4694bfe21cd4584ecd695193981a6ed41d883d00e4e56f932425",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      }
+    ]
+  },
+  "parentAcceptance": {
+    "schemaVersion": 1,
+    "receiptKind": "parent_acceptance",
+    "scenarioId": "orchestrator-goal-artifact-content-boundary",
+    "behaviorContractDigest": "sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e",
+    "acceptedAuthorityReceiptDigest": "sha256:87b16e9bd9b9856f3a15dac6d0bcd87ef933c353126b2b9612baa3935ee47e52",
+    "acceptedRunDigest": "sha256:db7e92ce5b3c37a116b1f14214e44a358ca7746fca45a36d8d28781a73136e96",
+    "calibrationFingerprintDigest": "sha256:9136d171b173c588a2c54d66d5b08a10c77341cb8f5fb91daf2d8880ab3bc34a",
+    "claimedRequirementManifestDigest": "sha256:0bc3903e09f8c2a39126a519cb91fe6dddcad80d43cb5027e2d9f539eb4a0add"
+  }
+}

@@ -71,10 +71,15 @@ export interface DerivedScenarioExecutionBudget {
   readonly vitestEmergencyTimeoutMs: number;
 }
 
+const MIN_PRESSURE_REPETITIONS = 3;
+
 export function deriveScenarioExecutionBudget(
   input: ScenarioExecutionBudgetInput,
 ): DerivedScenarioExecutionBudget {
   assertPositiveInteger(input.repetitions, "repetitions");
+  if (input.repetitions < MIN_PRESSURE_REPETITIONS) {
+    throw new Error("pressure scenarios require at least three repetitions per variant");
+  }
   assertNonNegativeInteger(input.infrastructureRetries, "infrastructureRetries");
   validateExecutionCaps(input.acceptedCaps);
   assertPositiveInteger(input.registeredScenarioCount, "registeredScenarioCount");
@@ -97,7 +102,7 @@ export function deriveScenarioExecutionBudget(
     assertPositiveInteger(slot.terminationGraceMs, `${slot.commandType}.terminationGraceMs`);
     const criticalPathCount =
       slot.commandType === "subject"
-        ? input.repetitions * 2 * (input.infrastructureRetries + 1)
+        ? 2 * (input.infrastructureRetries + 1)
         : 1;
     const perCommandMs = slot.acpxTimeoutMs + slot.executorOverheadMs + slot.terminationGraceMs;
     return {
@@ -115,10 +120,7 @@ export function deriveScenarioExecutionBudget(
   const reviewerPromptCount = commandTypes.includes("reviewer_prompt") ? 1 : 0;
   const executionGraph = {
     maximumModelPrompts: subjectCommandCount + reviewerPromptCount,
-    maximumAcpxCommands: commandBudgets.reduce(
-      (total, command) => total + command.criticalPathCount,
-      0,
-    ),
+    maximumAcpxCommands: subjectCommandCount + commandTypes.filter((type) => type !== "subject").length,
     maximumRetries: input.repetitions * 2 * input.infrastructureRetries,
     maximumObservedTokens: input.acceptedCaps.maxObservedTokens,
   } satisfies ScenarioExecutionGraph;

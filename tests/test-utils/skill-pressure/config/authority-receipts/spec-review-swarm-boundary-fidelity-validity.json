@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "spec-review-swarm-boundary-fidelity",
-  "behaviorContractDigest": "sha256:2f8af962db2a373b7af6a3ae3b651498c3f28bc86ae97ae96f4b0b0edb91ecff",
+  "behaviorContractDigest": "sha256:4bc2b97a644ab824ca7f74e119e73087045b8870c6c6546c17ad5a30a98a6e7b",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

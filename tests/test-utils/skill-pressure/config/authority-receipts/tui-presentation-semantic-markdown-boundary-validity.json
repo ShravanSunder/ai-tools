@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "tui-presentation-semantic-markdown-boundary",
-  "behaviorContractDigest": "sha256:3e06dde7010d6aa09aa6fdf2abac39f78d8655029aa87fb7fb94433796ca543a",
+  "behaviorContractDigest": "sha256:fd0ff144352167df449f2b60870bdeada92d7460d67fac8c924dfdcce09908bd",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

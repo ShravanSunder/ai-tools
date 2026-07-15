@@ -4,7 +4,7 @@ import {
   calculateParentAcceptanceReceiptDigest,
   evaluateReleaseAuthority,
   type AuthorityDigest,
-  type ValidatedPromotionReceipt,
+  type ValidatedCurrentBaselineReceipt,
 } from "../authority/authority-receipts.js";
 import {
   assertClaimedRequirementValidationIntegrity,
@@ -45,7 +45,7 @@ export interface V3ParentAcceptanceContext {
 
 export async function resolveV3ScenarioAuthority(props: {
   readonly candidate: V3ScenarioAuthorityCandidate;
-  readonly calibration: ValidatedPromotionReceipt | null;
+  readonly calibration: ValidatedCurrentBaselineReceipt | null;
   readonly claimedRequirements: ClaimedRequirementValidation;
   readonly resolveParentAcceptance: (request: V3ParentAcceptanceRequest) => Promise<V3ParentAcceptanceContext | null>;
 }): Promise<V3ScenarioAuthorityResolution> {
@@ -143,7 +143,7 @@ function resolveClaimedRequirementStatus(
 
 function assertCandidateMatchesCalibration(
   candidate: V3ScenarioAuthorityCandidate,
-  calibration: ValidatedPromotionReceipt | null,
+  calibration: ValidatedCurrentBaselineReceipt | null,
 ): void {
   if (calibration === null) return;
   if (calibration.receipt.scenarioId !== candidate.scenarioId) {

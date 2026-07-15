@@ -36,7 +36,7 @@ behavior_requirement_ids:
 baseline: previous_revision
 baseline_revision: 5c60db7bdeae18084990cc765721822fcd2aa744
 comparison_intent: non_regression
-repetitions: 5
+repetitions: 3
 risk: standard
 fixture_requirements: []
 allowed_tools: []

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "orchestrator-goal-stale-terminal-override",
-  "behaviorContractDigest": "sha256:6bf210c79819b00d33fafcaae4afebf7f2d1465780eae01d8a28c0eb21d9605a",
+  "behaviorContractDigest": "sha256:3a158bfd9a715e0331ef16eb5216fece27e32cd5bec9dbc6cb24549f7034baa6",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

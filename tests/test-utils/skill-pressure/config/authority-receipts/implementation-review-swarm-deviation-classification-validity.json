@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-review-swarm-deviation-classification",
-  "behaviorContractDigest": "sha256:fa14c38d94950883182e6ffafd9a0f1cb2fa8fa9bd94e8c03c6775624222b23d",
+  "behaviorContractDigest": "sha256:07631601a60f60613d3b1cba8a91ee748fa7a49dbebde30da00d34996a8dda81",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

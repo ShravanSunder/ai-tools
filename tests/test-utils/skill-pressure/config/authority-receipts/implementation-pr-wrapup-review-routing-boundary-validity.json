@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "implementation-pr-wrapup-review-routing-boundary",
-  "behaviorContractDigest": "sha256:cadaf2734e8d29fa01608297836648873921229f2f40aa5c83bf4cbdc3098652",
+  "behaviorContractDigest": "sha256:7dbd3c221dfdec94a68cd3df81c9780bf8c09e585f26fe0a78c810688ce2f9d9",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,

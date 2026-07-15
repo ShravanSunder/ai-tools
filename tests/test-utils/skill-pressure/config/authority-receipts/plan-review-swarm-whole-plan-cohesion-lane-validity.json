@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "receiptKind": "scenario_validity",
   "scenarioId": "plan-review-swarm-whole-plan-cohesion-lane",
-  "behaviorContractDigest": "sha256:18cfd6ba03c0a8a71b2bab842be122cf5ec5ef98edca1f827ff6aba56799f43a",
+  "behaviorContractDigest": "sha256:f1ded9c58dd14cb92ff5a382093d27d4fd3bc926ad38c0366e55c9088683079c",
   "verdict": "pass",
   "consistency": {
     "promptConsistent": true,
