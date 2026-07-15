@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "promotion",
+  "scenarioId": "skills-creation-reference-lane-non-regression",
+  "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+  "calibrationFingerprint": {
+    "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+    "baselinePolicyDigest": "sha256:dce31f382b7e8e180abb0e08bfe9e01d024c1e5b303d9431419e774b2401bcf8",
+    "runnerSemanticsDigest": "sha256:1e145a9099bca008929e6b1683b02c8afa2b0fc05d0bf8036e1dd680a4735c97",
+    "subjectProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc",
+    "reviewProfileDigest": "sha256:46154b997862f4bb850291a8d2145aba1aedd99905721f3c928f999efe759fbc"
+  },
+  "calibrationRunDigest": "sha256:e2a5c129d5d15d5444634c634369f43ca3b3326be96bd350c164e7050cf022ee",
+  "promotionTreatmentDigest": "sha256:5827926dbc216e1402c3ee2852091ef1f987999900ebcf32d8fec04c1d6bc6bd",
+  "calibration": {
+    "contractConsistent": true,
+    "contractConsistencyEvidenceDigest": "sha256:7defe39ae37661ae1960173f35c76b73a65722c26fadd06fee0f9e247d9b4680",
+    "baselinePolicyValid": true,
+    "baselinePolicyEvidenceDigest": "sha256:dce31f382b7e8e180abb0e08bfe9e01d024c1e5b303d9431419e774b2401bcf8",
+    "baselineRepetitionDigests": [
+      "sha256:55e32c2acfea327ee783fedcc619b419bd98c2ba7dab1ac094b0dc1f00945956",
+      "sha256:e20538ef5fd869f76d820f258acc3efca0bb182709f182b2c538745d3989057a",
+      "sha256:c287108b47f34f5c69edfc41e414e354242bc7dbade225d47ec2d34655aac8f8",
+      "sha256:2956e9fd8968e573230f42926e4167cbc33448529b90eb45800e54aee256b3e2",
+      "sha256:efca1dbe2e5a67d2a854168446bb877c27f38ea2da502a4841b62ea315e8b2cf"
+    ],
+    "treatmentRepetitionDigests": [
+      "sha256:0e246b3b867129a4978e03fb1e6838182106c1ca35c7a30f4e49b218c45cd71e",
+      "sha256:5758158472f2106178d8b0ce69f1113a1d7ff1ae76e389335fa69ed38747c452",
+      "sha256:4db1317d5698df9a8c92d4c8173ddf910475b5de152b0ad95d7fcfd5074aa704",
+      "sha256:d127a8abf364e60f5b8695b8482cb988c5be283cfe0dd06b3b199a66b2127438",
+      "sha256:04dbcfdfa667262461907f0303d95525f926dffe7654d67c280d99aadcc4ef0d"
+    ],
+    "comparisonIntentPassed": true,
+    "objectiveEvidenceDigest": "sha256:2665e4041e45cc6e7992d96390e06a90b85971e0e7fcbc1b3520293e37054b41",
+    "semanticEvidenceDigest": "sha256:6db36d68f5d6601b7c432b0695e13e910a9e26d6ba1574ce59a6d1cfadfb3183",
+    "attemptReceipts": [
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-1-1-attempt.json",
+        "receiptDigest": "sha256:9fd2a33d525b8604e82875fc2bbc110a20e4737fac4f373af5b8a7629935793b"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-2-1-attempt.json",
+        "receiptDigest": "sha256:7e48f75b44eff0f40819b7679e800c3deec006d09950ae91a5c11700d5b6559c"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-3-1-attempt.json",
+        "receiptDigest": "sha256:ccbbecd22d71274384b4f8e08f3b5f272196e2fa850221c2d97740ff5f317b69"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-4-1-attempt.json",
+        "receiptDigest": "sha256:a40187479381276a94d48cc3537dc4f3bd89adad89af96ae280d2372d3b94316"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-5-1-attempt.json",
+        "receiptDigest": "sha256:308c1234b3329bd1df7b1bbdf23a996c5580d6d9a8fe2ac16e7e333a6b4984cd"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-1-1-attempt.json",
+        "receiptDigest": "sha256:9647d2d480c082e73f08944a411f39e884e714203aa80ae3565634919ada7751"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-2-1-attempt.json",
+        "receiptDigest": "sha256:575f2c1a6c5f0576314889f1bf56d978d79166f62e0166a2dccf281d4c8c7b18"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-3-1-attempt.json",
+        "receiptDigest": "sha256:c148a7c9f678141885b9e86d0520252e4abd7918ea04a3635cf0a0df364bc782"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-4-1-attempt.json",
+        "receiptDigest": "sha256:89240ab6d2d1a739f80482272029821fac45b7345ff02b659913ba218c944db2"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-5-1-attempt.json",
+        "receiptDigest": "sha256:632a7cb42878220c30eb325c3236f618d05e58861c95eec11e343b688a5db896"
+      }
+    ],
+    "cleanupReceipts": [
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-1-1-cleanup.json",
+        "receiptDigest": "sha256:265f9c787935d66ef91f03d6c5b1ff5c2ed2e212e513816c43bb0611bae0f41f"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-2-1-cleanup.json",
+        "receiptDigest": "sha256:82d85295069b076b652854332e9ec52908ff0c97856d1dfe4be3c5e391bba8da"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-3-1-cleanup.json",
+        "receiptDigest": "sha256:7a9f452a52ab8a1d17180321041bde336c7b5143b1061780593ea327ac077c9e"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-4-1-cleanup.json",
+        "receiptDigest": "sha256:2b5b91681b5380d2ffeaec2c9a81e6b602e119e1ba640c3effbaef2cae97e8a7"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "baseline",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-baseline-5-1-cleanup.json",
+        "receiptDigest": "sha256:d9e9bbc95c0b618bc36c4fea015d75469074834935a9edc47dea833e97943ffe"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-1-1-cleanup.json",
+        "receiptDigest": "sha256:d7b86dcbd3e9d9a05231afed63674fcbd75616471dbcbc2b47a60aa503a5c0f5"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-2-1-cleanup.json",
+        "receiptDigest": "sha256:c322ab5d442ec8f4c7a785ba1df687bd6a8319d5c54a8c59252b4ccdc0eb460e"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-3-1-cleanup.json",
+        "receiptDigest": "sha256:86de17ab41d6c4622ba716f985dc494ea3ed1e0c31a24f5f868bc6e6265b7221"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 4,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-4-1-cleanup.json",
+        "receiptDigest": "sha256:3dd57112cbb420f7fc3963e4358af7890acbc85f71473dda3cd1e100ce31d6ea"
+      },
+      {
+        "scenarioId": "skills-creation-reference-lane-non-regression",
+        "variant": "treatment",
+        "repetitionNumber": 5,
+        "attemptNumber": 1,
+        "receiptPath": "tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-e2a5c129d5d1-treatment-5-1-cleanup.json",
+        "receiptDigest": "sha256:dbf6e343ca080c706884c7210340bfef483f5def067ed0bc91d56947eae29796"
+      }
+    ],
+    "deterministicMutationCoverage": true,
+    "subjectProfileVerified": true,
+    "reviewProfileVerified": true
+  },
+  "parentAcceptance": {
+    "schemaVersion": 1,
+    "receiptKind": "parent_acceptance",
+    "scenarioId": "skills-creation-reference-lane-non-regression",
+    "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+    "acceptedAuthorityReceiptDigest": "sha256:258b9a2b94690c85c19892da18eadd9b49ccf253041af58a75f62eb0c56d6c75",
+    "acceptedRunDigest": "sha256:e2a5c129d5d15d5444634c634369f43ca3b3326be96bd350c164e7050cf022ee",
+    "calibrationFingerprintDigest": "sha256:1e8ed7e4ef5bb15f73dc701d063b83a596a502c3afa8ae5d51bbb710b8a0682e",
+    "claimedRequirementManifestDigest": "sha256:03f6af29b5e46ba48308b9e644b767cd563f5e151d8ebd298842a495cb9a17b8"
+  }
+}

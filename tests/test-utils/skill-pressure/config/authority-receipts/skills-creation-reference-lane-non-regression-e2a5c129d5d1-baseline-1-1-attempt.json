@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "attempt",
+  "scenarioId": "skills-creation-reference-lane-non-regression",
+  "variant": "baseline",
+  "repetitionNumber": 1,
+  "attemptNumber": 1,
+  "sourceAttemptReceiptDigest": "sha256:636f82c27afa4cb796cf49cbe45107197374f6bee8269f7af09df9501282f49d",
+  "acceptedForRepetition": true,
+  "acceptedRepetitionReceiptDigest": "sha256:55e32c2acfea327ee783fedcc619b419bd98c2ba7dab1ac094b0dc1f00945956",
+  "processClosed": true,
+  "streamsDrained": true,
+  "outputRedacted": true,
+  "snapshotsCollected": true
+}
