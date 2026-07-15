@@ -49,7 +49,7 @@ export function buildAcpxClaudeReviewSessionCommands(
     "--timeout",
     String(timeoutSeconds),
   ];
-  const environment = { ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" } as const;
+  const environment = { ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "0" } as const;
   const command = (args: readonly string[]): ExecutableAcpxCommand => ({
     executable: profile.launcher.executable,
     cwd: profile.cwd,

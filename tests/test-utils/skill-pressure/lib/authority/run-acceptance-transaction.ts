@@ -59,6 +59,8 @@ export async function acceptScenarioRunFromReceipt(props: {
     knownScenarios: discovery.discovered.map((scenario) => ({
       scenarioId: scenario.scenarioId,
       behaviorContractDigest: scenario.behaviorContractDigest,
+      plugin: scenario.plugin,
+      skill: scenario.skill,
     })),
   });
   const registryRow = registry.scenarios.find((row) => row.scenarioId === receipt.scenarioId);

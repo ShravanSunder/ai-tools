@@ -169,9 +169,25 @@ describe("scenario execution budget", () => {
         .commandBudgets[0]?.criticalPathMs,
     ).toBe(115 * 2);
     expect(
-      deriveScenarioExecutionBudget({ ...common, repetitions: 6, infrastructureRetries: 1 })
+      deriveScenarioExecutionBudget({ ...common, repetitions: 3, infrastructureRetries: 1 })
         .commandBudgets[0]?.criticalPathMs,
     ).toBe(115 * 4);
+  });
+
+  it.each([2, 4, 5])("rejects non-canonical repetition count %i", (repetitions) => {
+    expect(() => deriveScenarioExecutionBudget({
+      repetitions,
+      infrastructureRetries: 0,
+      acceptedCaps,
+      commandSlots: [{ commandType: "subject", acpxTimeoutMs: 100, executorOverheadMs: 0, terminationGraceMs: 1 }],
+      fixtureSetupReserveMs: 0,
+      scenarioCleanupReserveMs: 0,
+      receiptFlushReserveMs: 0,
+      schedulingMarginMs: 0,
+      registeredScenarioCount: 1,
+      jobs: 1,
+      vitestEmergencyReserveMs: 0,
+    })).toThrow(/exactly three/u);
   });
 
   it("stops a command that cannot fit inside the remaining supervised deadline", async () => {

@@ -159,6 +159,8 @@ describe("promotion transaction", () => {
       knownScenarios: [{
         scenarioId: fixture.contract.scenarioId,
         behaviorContractDigest: fixture.contract.behaviorContractDigest,
+        plugin: fixture.contract.plugin,
+        skill: fixture.contract.skill,
       }],
     });
     const registryRow = registry.scenarios[0];
@@ -213,6 +215,8 @@ describe("promotion transaction", () => {
       knownScenarios: [{
         scenarioId: fixture.contract.scenarioId,
         behaviorContractDigest: fixture.contract.behaviorContractDigest,
+        plugin: fixture.contract.plugin,
+        skill: fixture.contract.skill,
       }],
     });
     const registryRow = registry.scenarios[0];
@@ -247,6 +251,8 @@ describe("promotion transaction", () => {
       knownScenarios: [{
         scenarioId: fixture.contract.scenarioId,
         behaviorContractDigest: fixture.contract.behaviorContractDigest,
+        plugin: fixture.contract.plugin,
+        skill: fixture.contract.skill,
       }],
     });
     const registryRow = registry.scenarios[0];

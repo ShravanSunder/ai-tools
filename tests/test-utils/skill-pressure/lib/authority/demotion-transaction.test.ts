@@ -239,6 +239,8 @@ async function createDemotionFixture(props: {
     knownScenarios: [{
       scenarioId: contract.scenarioId,
       behaviorContractDigest: contract.behaviorContractDigest,
+      plugin: contract.plugin,
+      skill: contract.skill,
     }],
   });
   const scenarioReceipt = {
@@ -319,6 +321,8 @@ async function loadFixtureRegistry(fixture: Awaited<ReturnType<typeof createDemo
     knownScenarios: [{
       scenarioId: fixture.contract.scenarioId,
       behaviorContractDigest: fixture.contract.behaviorContractDigest,
+      plugin: fixture.contract.plugin,
+      skill: fixture.contract.skill,
     }],
   });
 }

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, mkdtemp, symlink, unlink, writeFile } from "node:fs/promises";
+import { link, mkdir, mkdtemp, symlink, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -36,7 +36,7 @@ let authorityFixtureSequence = 0;
 const selection = (mode: "gate" | "diagnostic" | "focused", scenarioIds: readonly string[]) => ({
   mode,
   selectionDigest: fixtureAuthorityDigest("9"),
-  selectedScenarios: scenarioIds.map((scenarioId) => ({ scenarioId, repetitions: 5 })),
+  selectedScenarios: scenarioIds.map((scenarioId) => ({ scenarioId, repetitions: 3 })),
   excludedStaleGateScenarioIds: [],
 });
 
@@ -156,6 +156,10 @@ async function validateSummaries(
     readonly attemptReceiptCount?: number;
     readonly duplicateAttemptReceipt?: boolean;
     readonly linkCalibrationSource?: boolean;
+    readonly parentAcceptancePath?: string;
+    readonly linkParentAcceptanceSource?: boolean;
+    readonly hardLinkParentAcceptanceSource?: boolean;
+    readonly tamperParentAcceptanceSource?: boolean;
     readonly registryCalibrationPath?: string;
     readonly registryFreshness?: "fresh" | "stale" | "uncalibrated";
     readonly declaredRepetitions?: number;
@@ -178,8 +182,10 @@ async function validateSummaries(
   } = {},
 ): Promise<readonly ValidatedV3ScenarioExecutionSummary[]> {
   const authorityRoot = "tests/test-utils/skill-pressure/config/authority-receipts";
+  const parentAcceptanceRoot = "tmp/skill-pressure-evals/parent-acceptance";
   const fixtureSequence = authorityFixtureSequence++;
   await mkdir(path.join(repositoryRoot, authorityRoot), { recursive: true });
+  await mkdir(path.join(repositoryRoot, parentAcceptanceRoot), { recursive: true });
   return Promise.all(
     summaries.map(async (candidate, index) => {
       const behaviorContractDigest = fixtureAuthorityDigest(String((index % 9) + 1));
@@ -224,13 +230,13 @@ async function validateSummaries(
         await symlink(path.dirname(physicalReceiptDirectory), ancestorPath);
         receiptDirectory = path.join(ancestorPath, path.basename(physicalReceiptDirectory));
       }
-      const receiptCount = options.attemptReceiptCount ?? (candidate.accountingComplete ? 10 : 9);
+      const receiptCount = options.attemptReceiptCount ?? (candidate.accountingComplete ? 6 : 5);
       const attemptReceipts = await Promise.all(
         Array.from({ length: receiptCount }, (_, receiptIndex) => {
-          const canonicalIndex = receiptIndex % 10;
-          const variant = canonicalIndex < 5 ? "baseline" : "treatment";
-          const repetitionNumber = (canonicalIndex % 5) + 1;
-          const attemptNumber = Math.floor(receiptIndex / 10) + 1;
+          const canonicalIndex = receiptIndex % 6;
+          const variant = canonicalIndex < 3 ? "baseline" : "treatment";
+          const repetitionNumber = (canonicalIndex % 3) + 1;
+          const attemptNumber = Math.floor(receiptIndex / 6) + 1;
           return writeReceiptFixture(
             path.join(receiptDirectory, `attempt-${receiptIndex + 1}.json`),
             {
@@ -254,12 +260,12 @@ async function validateSummaries(
         }),
       );
       const repetitionReceipts = await Promise.all(
-        attemptReceipts.slice(0, 10).map((attempt, receiptIndex) => {
-          const variant = receiptIndex < 5 ? "baseline" : "treatment";
-          const repetitionNumber = (receiptIndex % 5) + 1;
+        attemptReceipts.slice(0, 6).map((attempt, receiptIndex) => {
+          const variant = receiptIndex < 3 ? "baseline" : "treatment";
+          const repetitionNumber = (receiptIndex % 3) + 1;
           const acceptedAttempt =
             options.crossVariantAttemptBinding === true && receiptIndex === 0
-              ? attemptReceipts[5]!
+              ? attemptReceipts[3]!
               : attempt;
           return writeReceiptFixture(
             path.join(receiptDirectory, `repetition-${receiptIndex + 1}.json`),
@@ -328,11 +334,11 @@ async function validateSummaries(
         commandReceipts: [{ commandType: "reviewer_prompt", ...reviewerPromptReceipt }],
       } as const;
       const executionBudget = deriveScenarioExecutionBudget({
-        repetitions: 5,
+        repetitions: 3,
         infrastructureRetries: 0,
         acceptedCaps: {
-          maxModelPrompts: 10,
-          maxAcpxCommands: 10,
+          maxModelPrompts: 6,
+          maxAcpxCommands: 6,
           maxRetries: 0,
           maxObservedTokens: 1_000_000,
         },
@@ -387,7 +393,7 @@ async function validateSummaries(
         executionBudget,
         executionAccounting: {
           preflightReceipt: executionPreflight,
-          observed: { modelPrompts: 10, acpxCommands: 10, retries: 0, observedTokens: 100 },
+          observed: { modelPrompts: 6, acpxCommands: 6, retries: 0, observedTokens: 100 },
         },
         reduction,
       });
@@ -413,7 +419,8 @@ async function validateSummaries(
               claimedRequirementManifestDigest: claims.manifestDigest,
             })
           : null;
-      const acceptancePath = `${authorityRoot}/${candidate.scenarioId}-${fixtureSequence}-${index}-acceptance.json`;
+      const acceptancePath = options.parentAcceptancePath ??
+        `${parentAcceptanceRoot}/${candidate.scenarioId}-${fixtureSequence}-${index}-acceptance.json`;
       const acceptanceSource =
         acceptance === null ? null : `${JSON.stringify(acceptance, null, 2)}\n`;
       const acceptanceSourceDigest =
@@ -421,9 +428,19 @@ async function validateSummaries(
           ? null
           : `sha256:${createHash("sha256").update(acceptanceSource).digest("hex")}`;
       if (acceptanceSource !== null) {
-        await writeFile(path.join(repositoryRoot, acceptancePath), acceptanceSource, {
-          flag: "wx",
-        });
+        const acceptanceFilePath = path.join(repositoryRoot, acceptancePath);
+        await mkdir(path.dirname(acceptanceFilePath), { recursive: true });
+        if (options.linkParentAcceptanceSource === true || options.hardLinkParentAcceptanceSource === true) {
+          const externalPath = path.join(repositoryRoot, `external-acceptance-${fixtureSequence}-${index}.json`);
+          await writeFile(externalPath, acceptanceSource, { flag: "wx" });
+          if (options.linkParentAcceptanceSource === true) await symlink(externalPath, acceptanceFilePath);
+          else await link(externalPath, acceptanceFilePath);
+        } else {
+          await writeFile(acceptanceFilePath, acceptanceSource, { flag: "wx" });
+        }
+        if (options.tamperParentAcceptanceSource === true) {
+          await writeFile(acceptanceFilePath, '{"tampered":true}\n');
+        }
       }
       const receipt = {
         schemaVersion: 3,
@@ -433,7 +450,7 @@ async function validateSummaries(
           behaviorRequirementIds:
             options.receiptBehaviorRequirementIds ?? candidate.behaviorRequirementIds,
           comparisonIntent: candidate.comparisonIntent,
-          expectedRepetitions: options.declaredRepetitions ?? 5,
+          expectedRepetitions: options.declaredRepetitions ?? 3,
         },
         authoritySnapshot: {
           evaluationRole: candidate.evaluationRole,
@@ -483,8 +500,8 @@ async function validateSummaries(
         executionAccounting: {
           preflightReceipt: executionPreflight,
           observed: options.receiptObservedAccounting ?? {
-            modelPrompts: 10,
-            acpxCommands: 10,
+            modelPrompts: 6,
+            acpxCommands: 6,
             retries: 0,
             observedTokens: 100,
           },
@@ -524,7 +541,7 @@ async function validateSummaries(
                   receiptDigest: calibrationSourceDigest,
                 },
         },
-        expectedRepetitions: 5,
+        expectedRepetitions: 3,
         executed: {
           receiptPath,
           receiptDigest: `sha256:${createHash("sha256").update(receiptSource).digest("hex")}`,
@@ -908,6 +925,22 @@ describe("skill pressure aggregate receipt", () => {
     ).rejects.toThrow(/calibration source does not match its registry row/u);
   });
 
+  it.each([
+    ["outside root", { parentAcceptancePath: "tmp/skill-pressure-evals/outside.json" }, /ephemeral parent-acceptance root/u],
+    ["symlink", { linkParentAcceptanceSource: true }, /symlinked path components/u],
+    ["hard link", { hardLinkParentAcceptanceSource: true }, /regular file without links/u],
+    ["digest mismatch", { tamperParentAcceptanceSource: true }, /digest does not match/u],
+  ] as const)("rejects %s parent acceptance evidence", async (_label, options, expectedError) => {
+    const claims = claimedRequirements(["fixture-behavior"]);
+    const repositoryRoot = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
+    await expect(validateSummaries(
+      repositoryRoot,
+      claims,
+      [summary({ scenarioId: "scenario", evaluationRole: "gate", releaseAuthority: true }, claims)],
+      options,
+    )).rejects.toThrow(expectedError);
+  });
+
   it("accepts uniquely receipted retries and rejects duplicate attempt bindings", async () => {
     const claims = claimedRequirements(["fixture-behavior"]);
     const retriedRepository = await mkdtemp(path.join(tmpdir(), "aggregate-repository-"));
@@ -915,7 +948,7 @@ describe("skill pressure aggregate receipt", () => {
       retriedRepository,
       claims,
       [summary({ scenarioId: "scenario" }, claims)],
-      { attemptReceiptCount: 11 },
+      { attemptReceiptCount: 7 },
     );
     expect(retried?.accountingComplete).toBe(true);
 
@@ -1123,8 +1156,8 @@ describe("skill pressure aggregate receipt", () => {
     await expect(
       validateSummaries(overCapRepository, claims, [summary({ scenarioId: "scenario" }, claims)], {
         receiptObservedAccounting: {
-          modelPrompts: 10,
-          acpxCommands: 10,
+          modelPrompts: 6,
+          acpxCommands: 6,
           retries: 0,
           observedTokens: 1_000_001,
         },
@@ -1139,8 +1172,8 @@ describe("skill pressure aggregate receipt", () => {
         [summary({ scenarioId: "scenario" }, claims)],
         {
           receiptObservedAccounting: {
-            modelPrompts: 10,
-            acpxCommands: 10,
+            modelPrompts: 6,
+            acpxCommands: 6,
             retries: 0,
             observedTokens: 101,
           },

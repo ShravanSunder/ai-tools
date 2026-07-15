@@ -46,8 +46,8 @@ export function selectV3SuiteScenarios(
   assertClaimedRequirementValidationIntegrity(props.claimedRequirements);
   const rows = validateIdentityClosure(props.candidates, props.registry);
   for (const candidate of props.candidates) {
-    if (!Number.isSafeInteger(candidate.repetitions) || candidate.repetitions < 3) {
-      throw new Error(`selection candidate ${candidate.scenarioId} must require at least three repetitions`);
+    if (candidate.repetitions !== 3) {
+      throw new Error(`selection candidate ${candidate.scenarioId} must require exactly three repetitions`);
     }
   }
   const candidatesById = new Map(props.candidates.map((candidate) => [candidate.scenarioId, candidate]));

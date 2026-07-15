@@ -48,6 +48,8 @@ const evaluationRegistrySchema = z.object({
 export interface EvaluationRegistryScenarioIdentity {
   readonly scenarioId: string;
   readonly behaviorContractDigest: string;
+  readonly plugin: string;
+  readonly skill: string;
 }
 
 export interface LoadEvaluationRegistryProps {
@@ -128,12 +130,19 @@ export async function loadEvaluationRegistry(
     });
     const calibrationReceipt = row.calibration_receipt === null
       ? null
-      : await validateAuthorityReceiptReference({
+        : await validateAuthorityReceiptReference({
           repositoryRoot: props.repositoryRoot,
           reference: row.calibration_receipt,
           expectedKind: "current_baseline",
           scenarioId: row.scenario_id,
           behaviorContractDigest: row.behavior_contract_digest,
+          expectedReceiptPath: path.posix.join(
+            "tests",
+            knownScenario.plugin,
+            knownScenario.skill,
+            "baselines",
+            `${row.scenario_id}.json`,
+          ),
         });
     if (row.evaluation_role !== "gate" && calibrationReceipt !== null) {
       throw new Error(`only a gate may retain a current baseline receipt: ${row.scenario_id}`);
@@ -162,7 +171,13 @@ async function validateAuthorityReceiptReference(props: {
   readonly expectedKind: "current_baseline";
   readonly scenarioId: string;
   readonly behaviorContractDigest: string;
+  readonly expectedReceiptPath: string;
 }): Promise<AuthorityReceiptReference> {
+  if (props.reference.receipt_path !== props.expectedReceiptPath) {
+    throw new Error(
+      `current_baseline authority receipt must use its scenario owner path: ${props.expectedReceiptPath}`,
+    );
+  }
   const validated = await readValidatedReceiptSource({
     repositoryRoot: props.repositoryRoot,
     reference: props.reference,

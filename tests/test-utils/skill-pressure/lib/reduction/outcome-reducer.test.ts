@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { reduceScenarioOutcome } from "./outcome-reducer.js";
 
-function repetitions(outcome: "pass" | "behavior_fail" | "not_evaluated", count = 5) {
+function repetitions(outcome: "pass" | "behavior_fail" | "not_evaluated", count = 3) {
   return Array.from({ length: count }, (_, index) => ({ repetitionId: `run-${index + 1}`, outcome }));
 }
 
@@ -10,7 +10,7 @@ describe("scenario outcome reduction", () => {
   it("reduces consistent improvement to pass", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("behavior_fail"),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "pass", reasonCode: null });
@@ -19,7 +19,7 @@ describe("scenario outcome reduction", () => {
   it("records an already-passing improvement baseline as a proof gap", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("pass"),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "not_evaluated", reasonCode: "improvement_baseline_already_passed" });
@@ -28,17 +28,17 @@ describe("scenario outcome reduction", () => {
   it("rejects mixed treatment repetitions before applying either comparison intent", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "non_regression",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("pass"),
-      treatment: [...repetitions("behavior_fail", 4), ...repetitions("pass", 1)],
+      treatment: [...repetitions("behavior_fail", 2), ...repetitions("pass", 1)],
     })).toMatchObject({ outcome: "inconclusive", reasonCode: "mixed_treatment" });
   });
 
   it("rejects mixed baseline repetitions before applying either comparison intent", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",
-      expectedRepetitions: 5,
-      baseline: [...repetitions("behavior_fail", 4), ...repetitions("pass", 1)],
+      expectedRepetitions: 3,
+      baseline: [...repetitions("behavior_fail", 2), ...repetitions("pass", 1)],
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "inconclusive", reasonCode: "mixed_baseline" });
   });
@@ -46,7 +46,7 @@ describe("scenario outcome reduction", () => {
   it("reduces a passing previous control and passing treatment to non-regression pass", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "non_regression",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("pass"),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "pass", reasonCode: null });
@@ -55,7 +55,7 @@ describe("scenario outcome reduction", () => {
   it("rejects a consistently failing non-regression baseline as an invalid control", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "non_regression",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("behavior_fail"),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "not_evaluated", reasonCode: "invalid_non_regression_control" });
@@ -64,7 +64,7 @@ describe("scenario outcome reduction", () => {
   it("reports consistent treatment failure as behavior failure", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("behavior_fail"),
       treatment: repetitions("behavior_fail"),
     })).toMatchObject({ outcome: "behavior_fail", reasonCode: "treatment_behavior_failed" });
@@ -73,12 +73,12 @@ describe("scenario outcome reduction", () => {
   it("gives runtime-profile infrastructure failures precedence over missing evidence", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "non_regression",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("not_evaluated"),
       treatment: [
-        ...repetitions("pass", 4),
+        ...repetitions("pass", 2),
         {
-          repetitionId: "run-5",
+          repetitionId: "run-3",
           outcome: "pass",
           infrastructureError: "runtime profile was not verified",
           infrastructureReasonCode: "runtime_profile_unverified",
@@ -90,7 +90,7 @@ describe("scenario outcome reduction", () => {
   it("keeps missing evidence distinct from an improvement proof gap", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("not_evaluated"),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "not_evaluated", reasonCode: "missing_evidence" });
@@ -99,11 +99,11 @@ describe("scenario outcome reduction", () => {
   it("preserves a semantic inconclusive repetition without applying comparison intent", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "non_regression",
-      expectedRepetitions: 5,
+      expectedRepetitions: 3,
       baseline: repetitions("pass"),
       treatment: [
-        ...repetitions("pass", 4),
-        { repetitionId: "run-5", outcome: "inconclusive" },
+        ...repetitions("pass", 2),
+        { repetitionId: "run-3", outcome: "inconclusive" },
       ],
     })).toMatchObject({ outcome: "inconclusive", reasonCode: "semantic_inconclusive" });
   });
@@ -111,8 +111,8 @@ describe("scenario outcome reduction", () => {
   it("marks an invalid repetition count before comparison semantics", () => {
     expect(reduceScenarioOutcome({
       comparisonIntent: "improvement",
-      expectedRepetitions: 5,
-      baseline: repetitions("behavior_fail", 4),
+      expectedRepetitions: 3,
+      baseline: repetitions("behavior_fail", 2),
       treatment: repetitions("pass"),
     })).toMatchObject({ outcome: "not_evaluated", reasonCode: "repetition_count_mismatch" });
   });

@@ -34,7 +34,7 @@ describe("ACPX Claude review profile", () => {
         "--append-system-prompt",
         "For this semantic review, return only one strict JSON object. Do not include analysis, commentary, or Markdown fences. The entire response must begin with { and end with }.",
       ]));
-      expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" });
+      expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "0" });
     }
   });
 });

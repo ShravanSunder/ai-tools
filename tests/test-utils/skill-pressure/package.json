@@ -17,7 +17,7 @@
     "test:evals": "vitest run evals --config vitest.evals.config.ts",
     "test:fast": "./run-skill-pressure-tests.sh --fast --max-model-prompts 42 --max-acpx-commands 42 --max-retries 20 --max-observed-tokens 3000000",
     "test:behavior": "./run-skill-pressure-tests.sh",
-    "test:standard": "./run-skill-pressure-tests.sh --standard --max-model-prompts 21 --max-acpx-commands 21 --max-retries 10 --max-observed-tokens 1500000",
+    "test:standard": "./run-skill-pressure-tests.sh --standard --max-model-prompts 26 --max-acpx-commands 26 --max-retries 12 --max-observed-tokens 1500000",
     "test:high-risk": "./run-skill-pressure-tests.sh --high-risk --max-model-prompts 21 --max-acpx-commands 24 --max-retries 10 --max-observed-tokens 1500000",
     "accept-run": "tsx scripts/accept-scenario-run.ts",
     "demote": "tsx scripts/demote-scenario.ts",

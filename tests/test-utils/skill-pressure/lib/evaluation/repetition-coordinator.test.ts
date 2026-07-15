@@ -170,7 +170,7 @@ describe("scenario repetition coordinator", () => {
     expect(result.treatment).toHaveLength(3);
   });
 
-  it("accepts the minimum three repetitions per variant", async () => {
+  it("accepts exactly three repetitions per variant", async () => {
     let sequence = 0;
     const result = await runScenarioRepetitions(
       props(async (input) => receipt({ sequence: ++sequence, variant: input.variant }), 3),
@@ -220,10 +220,11 @@ describe("scenario repetition coordinator", () => {
     ).toThrow(/immutable 40-character Git revision/);
   });
 
-  it("requires at least three fresh baseline and treatment repetitions", async () => {
-    await expect(
-      runScenarioRepetitions(props(async () => receipt({ sequence: 1, variant: "baseline" }), 2)),
-    ).rejects.toThrow(/at least three/);
+  it.each([2, 4, 5])("rejects non-canonical repetition count %i before launch", async (repetitions) => {
+    const runRepetition = vi.fn(async () => receipt({ sequence: 1, variant: "baseline" }));
+    await expect(runScenarioRepetitions(props(runRepetition, repetitions)))
+      .rejects.toThrow(/exactly three/);
+    expect(runRepetition).not.toHaveBeenCalled();
   });
 
   it("returns an executed receipt for three comparable fresh pairs", async () => {

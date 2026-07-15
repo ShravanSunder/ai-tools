@@ -41,6 +41,8 @@ const registrySnapshot = await loadEvaluationRegistry({
   knownScenarios: discoveryReceipt.discovered.map((scenario) => ({
     scenarioId: scenario.scenarioId,
     behaviorContractDigest: scenario.behaviorContractDigest,
+    plugin: scenario.plugin,
+    skill: scenario.skill,
   })),
 });
 const selectedScenarioIds = selectScenarioIds();

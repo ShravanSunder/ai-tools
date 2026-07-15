@@ -36,8 +36,10 @@ const SUITE_PREFLIGHT = {
 } as const;
 const COMMAND_REPOSITORY_ROOT = await mkdtemp(path.join(tmpdir(), "v3-command-repository-"));
 const AUTHORITY_ROOT = "tests/test-utils/skill-pressure/config/authority-receipts";
+const PARENT_ACCEPTANCE_ROOT = "tmp/skill-pressure-evals/parent-acceptance";
 const CALIBRATION_PATH = `${AUTHORITY_ROOT}/gate-calibration.json`;
 await mkdir(path.join(COMMAND_REPOSITORY_ROOT, AUTHORITY_ROOT), { recursive: true });
+await mkdir(path.join(COMMAND_REPOSITORY_ROOT, PARENT_ACCEPTANCE_ROOT), { recursive: true });
 const CALIBRATION = createValidatedCurrentBaselineFixture({
   scenarioId: "gate",
   behaviorContractDigest: fixtureAuthorityDigest("b"),
@@ -264,7 +266,7 @@ async function executedScenario(props: {
           claimedRequirementManifestDigest: CLAIMED.manifestDigest,
         })
       : null;
-  const acceptancePath = `${AUTHORITY_ROOT}/${path.basename(receiptDirectory)}-acceptance.json`;
+  const acceptancePath = `${PARENT_ACCEPTANCE_ROOT}/${path.basename(receiptDirectory)}-acceptance.json`;
   const acceptanceSource = acceptance === null ? null : `${JSON.stringify(acceptance, null, 2)}\n`;
   const acceptanceSourceDigest =
     acceptanceSource === null

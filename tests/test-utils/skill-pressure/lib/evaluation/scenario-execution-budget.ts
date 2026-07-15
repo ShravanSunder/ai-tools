@@ -77,8 +77,8 @@ export function deriveScenarioExecutionBudget(
   input: ScenarioExecutionBudgetInput,
 ): DerivedScenarioExecutionBudget {
   assertPositiveInteger(input.repetitions, "repetitions");
-  if (input.repetitions < MIN_PRESSURE_REPETITIONS) {
-    throw new Error("pressure scenarios require at least three repetitions per variant");
+  if (input.repetitions !== MIN_PRESSURE_REPETITIONS) {
+    throw new Error("pressure scenarios require exactly three repetitions per variant");
   }
   assertNonNegativeInteger(input.infrastructureRetries, "infrastructureRetries");
   validateExecutionCaps(input.acceptedCaps);

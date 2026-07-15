@@ -154,10 +154,10 @@ describe("skill pressure scenario contract", () => {
     expect(improvement.behaviorContractDigest).not.toBe(control.behaviorContractDigest);
   });
 
-  it("rejects fewer than three repetitions", async () => {
+  it.each([2, 4, 5])("rejects non-canonical repetition count %i", async (repetitions) => {
     const repositoryRoot = await createRepositoryFixture();
     const scenarioPath = join(repositoryRoot, "scenario.md");
-    await writeFile(scenarioPath, scenarioContract({ scenarioId: "too-few", plugin: "workflow", skill: "skill", repetitions: 2 }));
+    await writeFile(scenarioPath, scenarioContract({ scenarioId: "wrong-count", plugin: "workflow", skill: "skill", repetitions }));
 
     await expect(loadScenarioContract({ scenarioPath })).rejects.toThrow(/repetitions/);
   });

@@ -21,8 +21,8 @@ import type {
   EvaluationRegistryRow,
 } from "./evaluation-registry.js";
 import { readTrackedAuthorityReceiptFile } from "./tracked-authority-receipt-file.js";
+import { EPHEMERAL_PARENT_ACCEPTANCE_ROOT } from "./ephemeral-parent-acceptance-receipt.js";
 
-const RAW_PARENT_ACCEPTANCE_ROOT = "tmp/skill-pressure-evals/parent-acceptance";
 
 export interface RuntimeAuthorityContext {
   readonly freshnessInputs: CalibrationFreshnessInputs;
@@ -100,7 +100,7 @@ export async function persistExplicitParentAcceptance(props: {
     claimedRequirementManifestDigest: props.request.claimedRequirementManifestDigest,
   };
   const fileName = `${props.contract.scenarioId}-run-${props.request.runDigest.slice(7, 19)}.json`;
-  const receiptDirectory = path.join(props.repositoryRoot, RAW_PARENT_ACCEPTANCE_ROOT);
+  const receiptDirectory = path.join(props.repositoryRoot, EPHEMERAL_PARENT_ACCEPTANCE_ROOT);
   await mkdir(receiptDirectory, { recursive: true });
   const receiptPath = path.join(receiptDirectory, fileName);
   let source: string;
@@ -125,7 +125,7 @@ export async function persistExplicitParentAcceptance(props: {
     receipt,
     source,
     sourceReceipt: {
-      receiptPath: `${RAW_PARENT_ACCEPTANCE_ROOT}/${fileName}`,
+      receiptPath: `${EPHEMERAL_PARENT_ACCEPTANCE_ROOT}/${fileName}`,
       receiptDigest: digestSource(source),
     },
     newlyCreated,

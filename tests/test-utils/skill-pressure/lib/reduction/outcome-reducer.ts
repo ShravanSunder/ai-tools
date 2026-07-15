@@ -35,6 +35,9 @@ export interface ScenarioOutcomeReduction {
 export function reduceScenarioOutcome(
   props: ReduceScenarioOutcomeProps,
 ): ScenarioOutcomeReduction {
+  if (props.expectedRepetitions !== 3) {
+    return reduction("not_evaluated", "repetition_count_mismatch", ["scenario contract must require exactly three repetitions"]);
+  }
   const infrastructureReasons = [...props.baseline, ...props.treatment]
     .flatMap((repetition) => repetition.infrastructureError === undefined ? [] : [repetition.infrastructureError]);
   if (infrastructureReasons.length > 0) {

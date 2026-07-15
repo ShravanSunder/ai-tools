@@ -56,6 +56,8 @@ export async function promoteRegistryRow(props: {
         knownScenarios: props.discovery.discovered.map((scenario) => ({
           scenarioId: scenario.scenarioId,
           behaviorContractDigest: scenario.behaviorContractDigest,
+          plugin: scenario.plugin,
+          skill: scenario.skill,
         })),
       });
       await props.beforeRegistryCommit?.();

@@ -87,8 +87,8 @@ export function selectBaselineSkillSource(props: {
 export async function runScenarioRepetitions(
   props: RunScenarioRepetitionsProps,
 ): Promise<ScenarioRepetitionSetReceipt> {
-  if (!Number.isInteger(props.repetitions) || props.repetitions < MIN_PRESSURE_REPETITIONS) {
-    throw new Error("pressure scenarios require at least three repetitions per variant");
+  if (props.repetitions !== MIN_PRESSURE_REPETITIONS) {
+    throw new Error("pressure scenarios require exactly three repetitions per variant");
   }
   const infrastructureRetries = props.infrastructureRetries ?? 0;
   if (!Number.isInteger(infrastructureRetries) || infrastructureRetries < 0) {

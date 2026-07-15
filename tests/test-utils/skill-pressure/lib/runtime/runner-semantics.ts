@@ -27,6 +27,7 @@ export const RUNNER_SEMANTICS_MANIFEST = [
   { semanticClass: "contract_parser", path: "lib/contracts/v3-behavior-contract.ts" },
   { semanticClass: "contract_parser", path: "schemas/skill-pressure-scenario.schema.json" },
   { semanticClass: "discovery_registry", path: "lib/authority/evaluation-registry.ts" },
+  { semanticClass: "discovery_registry", path: "lib/authority/ephemeral-parent-acceptance-receipt.ts" },
   { semanticClass: "discovery_registry", path: "lib/authority/validity-receipts.ts" },
   { semanticClass: "discovery_registry", path: "lib/authority/authority-receipts.ts" },
   { semanticClass: "discovery_registry", path: "lib/authority/calibration-aggregate.ts" },

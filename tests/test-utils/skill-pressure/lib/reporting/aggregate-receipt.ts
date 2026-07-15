@@ -18,6 +18,7 @@ import type {
   EvaluationRegistryRow,
 } from "../authority/evaluation-registry.js";
 import type { CalibrationFreshnessInputs } from "../authority/authority-receipts.js";
+import { assertEphemeralParentAcceptancePath } from "../authority/ephemeral-parent-acceptance-receipt.js";
 import type { ScenarioOutcome } from "../reduction/outcome-reducer.js";
 import {
   calculateV3ScenarioEvidenceDigest,
@@ -163,7 +164,7 @@ export function createV3AggregateReceipt(props: {
   const selectedScenarios = props.selection.selectedScenarios.map((scenario) => ({ ...scenario }));
   if (
     selectedScenarios.some(
-      (scenario) => !Number.isSafeInteger(scenario.repetitions) || scenario.repetitions < 3,
+      (scenario) => scenario.repetitions !== 3,
     ) ||
     JSON.stringify(selectedScenarios.map((scenario) => scenario.scenarioId).sort()) !==
       JSON.stringify([...selectedScenarioIds].sort())
@@ -587,7 +588,7 @@ async function validateScenarioAuthoritySources(props: {
     ) {
       throw new Error("parent acceptance source receipt is missing authority bindings");
     }
-    const parentAcceptance = await readTrackedAuthorityReceipt({
+    const parentAcceptance = await readEphemeralParentAcceptanceReceipt({
       repositoryRoot: props.repositoryRoot,
       reference: authority.parentAcceptanceSourceReceipt,
       label: "parent acceptance",
@@ -625,6 +626,30 @@ async function readTrackedAuthorityReceipt(props: {
     receiptPath: props.reference.receiptPath,
     label: `${props.label} receipt`,
   });
+  const actualDigest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
+  if (actualDigest !== props.reference.receiptDigest) {
+    throw new Error(`${props.label} source receipt digest does not match`);
+  }
+  return JSON.parse(source.toString("utf8"));
+}
+
+async function readEphemeralParentAcceptanceReceipt(props: {
+  readonly repositoryRoot: string;
+  readonly reference: AuthorityReceiptReference;
+  readonly label: string;
+}): Promise<unknown> {
+  const normalizedPath = assertEphemeralParentAcceptancePath(props.reference.receiptPath);
+  const repositoryRoot = await realpath(path.resolve(props.repositoryRoot));
+  const resolvedPath = path.resolve(repositoryRoot, normalizedPath);
+  const canonicalPath = await realpath(resolvedPath);
+  if (canonicalPath !== resolvedPath) {
+    throw new Error(`${props.label} receipt cannot use symlinked path components`);
+  }
+  const status = await lstat(canonicalPath);
+  if (!status.isFile() || status.nlink !== 1) {
+    throw new Error(`${props.label} receipt must be one regular file without links`);
+  }
+  const source = await readFile(canonicalPath);
   const actualDigest = `sha256:${createHash("sha256").update(source).digest("hex")}`;
   if (actualDigest !== props.reference.receiptDigest) {
     throw new Error(`${props.label} source receipt digest does not match`);

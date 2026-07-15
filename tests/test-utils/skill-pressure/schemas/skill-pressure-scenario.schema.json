@@ -112,9 +112,8 @@
           ]
         },
         "repetitions": {
-          "type": "integer",
-          "minimum": 3,
-          "maximum": 9007199254740991
+          "type": "number",
+          "const": 3
         },
         "risk": {
           "type": "string",
@@ -392,9 +391,8 @@
           ]
         },
         "repetitions": {
-          "type": "integer",
-          "minimum": 3,
-          "maximum": 9007199254740991
+          "type": "number",
+          "const": 3
         },
         "risk": {
           "type": "string",

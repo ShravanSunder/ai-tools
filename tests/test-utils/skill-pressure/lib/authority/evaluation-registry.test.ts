@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdir, mkdtemp, symlink, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -33,7 +33,12 @@ const VALIDITY_RECEIPT: ScenarioValidityReceipt = {
 };
 
 function knownScenarios(): readonly EvaluationRegistryScenarioIdentity[] {
-  return [{ scenarioId: SCENARIO_ID, behaviorContractDigest: BEHAVIOR_DIGEST }];
+  return [{
+    scenarioId: SCENARIO_ID,
+    behaviorContractDigest: BEHAVIOR_DIGEST,
+    plugin: "workflow",
+    skill: "skill",
+  }];
 }
 
 function registrySource(props?: {
@@ -82,12 +87,13 @@ async function createRegistryFixture(): Promise<{
 async function writeCurrentBaselineReceipt(
   fixture: { readonly repositoryRoot: string },
 ): Promise<{ readonly path: string; readonly digest: string }> {
-  const receiptPath = "tests/test-utils/skill-pressure/config/authority-receipts/artifact-proof-baseline.json";
+  const receiptPath = "tests/workflow/skill/baselines/artifact-proof.json";
   const receipt = createValidatedCurrentBaselineFixture({
     scenarioId: SCENARIO_ID,
     behaviorContractDigest: BEHAVIOR_DIGEST,
   }).receipt;
   const source = `${JSON.stringify(receipt, null, 2)}\n`;
+  await mkdir(path.dirname(path.join(fixture.repositoryRoot, receiptPath)), { recursive: true });
   await writeFile(path.join(fixture.repositoryRoot, receiptPath), source);
   return {
     path: receiptPath,
@@ -168,7 +174,12 @@ describe("evaluation registry", () => {
       ...fixture,
       knownScenarios: [
         ...knownScenarios(),
-        { scenarioId: "another-scenario", behaviorContractDigest: `sha256:${"c".repeat(64)}` },
+        {
+          scenarioId: "another-scenario",
+          behaviorContractDigest: `sha256:${"c".repeat(64)}`,
+          plugin: "workflow",
+          skill: "another-skill",
+        },
       ],
     })).rejects.toThrow(/one-to-one.*missing.*another-scenario/u);
   });
@@ -201,7 +212,7 @@ describe("evaluation registry", () => {
       receipt_digest: ${fixture.validityDigest}`,
     }));
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/tracked validity receipt or owner-local baseline path/u);
+      .rejects.toThrow(/scenario owner path/u);
 
     await writeFile(fixture.registryPath, registrySource({
       role: "gate",
@@ -212,7 +223,7 @@ describe("evaluation registry", () => {
       }),
     }));
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
-      .rejects.toThrow(/current_baseline authority receipt is invalid/u);
+      .rejects.toThrow(/scenario owner path/u);
 
     await writeFile(fixture.registryPath, registrySource({
       role: "gate",
@@ -241,6 +252,25 @@ describe("evaluation registry", () => {
     }));
     await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
       .rejects.toThrow(/calibration_receipt/u);
+  });
+
+  it("rejects a valid baseline receipt stored under a different scenario owner", async () => {
+    const fixture = await createRegistryFixture();
+    const baseline = await writeCurrentBaselineReceipt(fixture);
+    const misplacedPath = "tests/other-plugin/other-skill/baselines/artifact-proof.json";
+    await mkdir(path.dirname(path.join(fixture.repositoryRoot, misplacedPath)), { recursive: true });
+    await writeFile(
+      path.join(fixture.repositoryRoot, misplacedPath),
+      await readFile(path.join(fixture.repositoryRoot, baseline.path)),
+    );
+    await writeFile(fixture.registryPath, registrySource({
+      role: "gate",
+      validityDigest: fixture.validityDigest,
+      calibration: receiptReference({ path: misplacedPath, digest: baseline.digest }),
+    }));
+
+    await expect(loadEvaluationRegistry({ ...fixture, knownScenarios: knownScenarios() }))
+      .rejects.toThrow(/scenario owner path/u);
   });
 
   it("rejects calibration authority on diagnostic rows", async () => {

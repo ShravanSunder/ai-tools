@@ -56,7 +56,7 @@ describe("v3 scenario authority", () => {
       return {
         receipt,
         sourceReceipt: {
-          receiptPath: "tests/test-utils/skill-pressure/config/authority-receipts/acceptance.json",
+          receiptPath: "tmp/skill-pressure-evals/parent-acceptance/acceptance.json",
           receiptDigest: `sha256:${createHash("sha256").update(source).digest("hex")}` as AuthorityDigest,
         },
         source,

@@ -46,6 +46,15 @@ function row(
 }
 
 describe("v3 suite selection", () => {
+  it.each([2, 4, 5])("rejects candidate repetition count %i", (repetitions) => {
+    expect(() => selectV3SuiteScenarios({
+      mode: "gate",
+      candidates: candidates.map((candidate, index) => index === 0 ? { ...candidate, repetitions } : candidate),
+      registry,
+      claimedRequirements,
+    })).toThrow(/exactly three repetitions/u);
+  });
+
   it("selects only fresh gates by default and applies risk after authority filtering", () => {
     const standard = selectV3SuiteScenarios({
       mode: "gate",

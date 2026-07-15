@@ -380,7 +380,7 @@ async function runIntegratedFixture(props: {
                 receipt,
                 sourceReceipt: {
                   receiptPath:
-                    "tests/test-utils/skill-pressure/config/authority-receipts/parent-acceptance.json",
+                    "tmp/skill-pressure-evals/parent-acceptance/parent-acceptance.json",
                   receiptDigest:
                     `sha256:${createHash("sha256").update(source).digest("hex")}` as AuthorityDigest,
                 },
@@ -593,7 +593,7 @@ describe("reachable v3 behavioral scenario execution", () => {
       /^sha256:/u,
     );
     expect(accepted.result.receipt.authoritySnapshot.parentAcceptanceSourceReceipt).toMatchObject({
-      receiptPath: expect.stringContaining("authority-receipts"),
+      receiptPath: expect.stringContaining("tmp/skill-pressure-evals/parent-acceptance"),
     });
     expect(accepted.result.receipt.authoritySnapshot.calibrationSourceReceipt).toMatchObject({
       receiptPath: expect.stringContaining("authority-receipts"),

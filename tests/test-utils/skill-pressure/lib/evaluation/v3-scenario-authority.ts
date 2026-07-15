@@ -12,6 +12,7 @@ import {
 } from "../authority/claimed-requirements.js";
 import type { ScenarioOutcome } from "../reduction/outcome-reducer.js";
 import type { AuthorityReceiptReference } from "../authority/evaluation-registry.js";
+import { assertEphemeralParentAcceptancePath } from "../authority/ephemeral-parent-acceptance-receipt.js";
 
 export interface V3ScenarioAuthorityCandidate {
   readonly scenarioId: string;
@@ -104,9 +105,7 @@ export async function resolveV3ScenarioAuthority(props: {
 
 function assertAuthoritySourceReceipt(context: V3ParentAcceptanceContext): void {
   const reference = context.sourceReceipt;
-  if (!reference.receiptPath.startsWith("tests/test-utils/skill-pressure/config/authority-receipts/")) {
-    throw new Error("parent acceptance source receipt must use the tracked authority receipt root");
-  }
+  assertEphemeralParentAcceptancePath(reference.receiptPath);
   if (!/^sha256:[a-f0-9]{64}$/u.test(reference.receiptDigest)) {
     throw new Error("parent acceptance source receipt digest is invalid");
   }
