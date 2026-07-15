@@ -479,14 +479,12 @@ scenarios:
     authority_history: []
   - scenario_id: orchestrator-goal-artifact-content-boundary
     behavior_contract_digest: sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e
-    evaluation_role: gate
-    freshness: fresh
+    evaluation_role: diagnostic
+    freshness: stale
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
       receipt_digest: sha256:9d22f1156fcf90bc207b762e0ce16b58ffebed75a744672115adc35c93f65367
-    calibration_receipt:
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-promotion-3792873f2f0b.json
-      receipt_digest: sha256:32ae5a3b32a76a6adc9dab681f763f7e62c150fc3ff0733f978fc4001f874790
+    calibration_receipt: null
     authority_history:
       - sequence: 1
         event: promotion
@@ -500,6 +498,10 @@ scenarios:
         event: promotion
         receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-promotion-3792873f2f0b.json
         receipt_digest: sha256:32ae5a3b32a76a6adc9dab681f763f7e62c150fc3ff0733f978fc4001f874790
+      - sequence: 4
+        event: demotion
+        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-demotion-dbe689b50256.json
+        receipt_digest: sha256:ddfe8f634a1186089d52cba8964d031f3ee2b201c6740131b636610c0870d809
   - scenario_id: orchestrator-goal-clarity-gate
     behavior_contract_digest: sha256:f1cc84e81ddac61bec56d23591cba218c52e477f32addafcabdd892f32c180b2
     evaluation_role: diagnostic
