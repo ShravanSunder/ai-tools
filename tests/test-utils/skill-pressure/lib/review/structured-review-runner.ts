@@ -153,11 +153,7 @@ function createReviewEnvelope(packet: StructuredSemanticReviewPacket): object {
           variant: "baseline | treatment",
           assertionId: "string",
           classification: "pass | behavior_fail | inconclusive",
-          evidenceAnchor: {
-            kind: "response | tool | artifact",
-            evidenceId: "string",
-            exactQuote: "non-empty exact substring copied from the selected evidence",
-          },
+          evidenceAnchorId: "anchor ID copied from the declared evidence surface",
         },
       ],
       rationalizations: ["string"],

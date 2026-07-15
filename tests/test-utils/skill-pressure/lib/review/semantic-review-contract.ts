@@ -41,13 +41,14 @@ export interface UntrustedRepetitionEvidence {
 export interface QuotedEvidence {
   readonly kind: "response" | "tool" | "artifact" | "rationalization";
   readonly evidenceId: string;
-  readonly text: string;
+  readonly anchors: readonly QuotedEvidenceAnchor[];
 }
 
-export interface SemanticEvidenceAnchor {
-  readonly kind: "response" | "tool" | "artifact";
-  readonly evidenceId: string;
-  readonly exactQuote: string;
+export interface QuotedEvidenceAnchor {
+  readonly anchorId: string;
+  readonly startOffset: number;
+  readonly endOffset: number;
+  readonly text: string;
 }
 
 export interface SemanticAssertionResult {
@@ -55,7 +56,7 @@ export interface SemanticAssertionResult {
   readonly variant: "baseline" | "treatment";
   readonly assertionId: string;
   readonly classification: SemanticAssertionClassification;
-  readonly evidenceAnchor: SemanticEvidenceAnchor;
+  readonly evidenceAnchorId: string;
 }
 
 export interface StructuredSemanticReviewCandidate {
@@ -80,16 +81,19 @@ const MAX_TOOL_EVIDENCE_PER_REPETITION = 200;
 const MAX_ARTIFACT_EVIDENCE_PER_REPETITION = 100;
 const MAX_RATIONALIZATION_EVIDENCE_PER_REPETITION = 20;
 const MAX_REVIEW_PACKET_BYTES = 1_000_000;
+const MAX_EVIDENCE_ANCHOR_TEXT_LENGTH = 1_000;
 
 export function buildStructuredSemanticReviewPacket(
   props: BuildStructuredSemanticReviewPacketProps,
 ): StructuredSemanticReviewPacket {
   assertAssertions(props.assertions);
   assertEvidenceBudgets(props.evidence);
+  let anchorSequence = 0;
   const repetitions = props.evidence.map((item) => createUntrustedEvidence({
     evidence: item,
     redactionSecrets: props.redactionSecrets,
     maxEvidenceTextLength: props.maxEvidenceTextLength ?? DEFAULT_MAX_EVIDENCE_TEXT_LENGTH,
+    nextAnchorId: () => `anchor-${String(++anchorSequence).padStart(6, "0")}`,
   }));
   assertRepetitionIdentities(repetitions);
   const packet: StructuredSemanticReviewPacket = {
@@ -177,17 +181,24 @@ function createUntrustedEvidence(props: {
   readonly evidence: NormalizedRepetitionEvidence;
   readonly redactionSecrets: readonly string[];
   readonly maxEvidenceTextLength: number;
+  readonly nextAnchorId: () => string;
 }): UntrustedRepetitionEvidence {
   const quote = (
     kind: QuotedEvidence["kind"],
     evidenceId: string,
     text: string,
     maxLength = props.maxEvidenceTextLength,
-  ): QuotedEvidence => ({
-    kind,
-    evidenceId,
-    text: boundAndRedact(text, props.redactionSecrets, maxLength),
-  });
+  ): QuotedEvidence => {
+    const boundedText = boundAndRedact(text, props.redactionSecrets, maxLength);
+    return {
+      kind,
+      evidenceId,
+      anchors: chunkEvidenceText(boundedText).map((chunk) => ({
+        anchorId: props.nextAnchorId(),
+        ...chunk,
+      })),
+    };
+  };
   return {
     repetitionId: props.evidence.repetitionId,
     variant: props.evidence.variant,
@@ -216,36 +227,33 @@ function validateAnchor(packet: StructuredSemanticReviewPacket, result: Semantic
     : assertion.evidenceSurface === "tools"
       ? "tool"
       : "artifact";
-  if (result.evidenceAnchor.kind !== expectedKind) return "assertion anchor does not match its declared evidence surface";
-  if (expectedKind === "response" && result.evidenceAnchor.evidenceId !== "response") return "response anchor must target the response quote";
-  if (expectedKind === "artifact" && result.evidenceAnchor.evidenceId !== assertion.evidenceSurface.slice("artifact:".length)) {
-    return "artifact anchor does not match its declared artifact id";
-  }
   const quotes = expectedKind === "response"
     ? [repetition.response]
     : expectedKind === "tool"
       ? repetition.tools
       : repetition.artifacts;
-  const quote = quotes.find((item) => item.evidenceId === result.evidenceAnchor.evidenceId);
-  if (quote === undefined) return "assertion anchor references absent quoted evidence";
-  if (result.evidenceAnchor.exactQuote === "" || !quote.text.includes(result.evidenceAnchor.exactQuote)) {
-    return "assertion anchor exact quote is absent from quoted evidence";
-  }
+  const quote = quotes.find((item) =>
+    item.anchors.some((anchor) => anchor.anchorId === result.evidenceAnchorId)
+  );
+  if (quote === undefined) return "assertion anchor id is absent from the declared evidence surface";
+  if (expectedKind === "response" && quote.evidenceId !== "response") return "response anchor must target the response quote";
+  if (expectedKind === "artifact" && quote.evidenceId !== assertion.evidenceSurface.slice("artifact:".length))
+    return "artifact anchor does not match its declared artifact id";
   return null;
 }
 
 function parseAssertionResult(value: unknown): SemanticAssertionResult | null {
-  if (!isRecord(value) || !hasExactKeys(value, ["repetitionId", "variant", "assertionId", "classification", "evidenceAnchor"])) return null;
+  if (!isRecord(value) || !hasExactKeys(value, ["repetitionId", "variant", "assertionId", "classification", "evidenceAnchorId"])) return null;
   if (typeof value.repetitionId !== "string" || value.repetitionId === "" ||
     (value.variant !== "baseline" && value.variant !== "treatment") ||
     typeof value.assertionId !== "string" || value.assertionId === "" ||
-    !isClassification(value.classification) || !isAnchor(value.evidenceAnchor)) return null;
+    !isClassification(value.classification) || typeof value.evidenceAnchorId !== "string" || value.evidenceAnchorId === "") return null;
   return {
     repetitionId: value.repetitionId,
     variant: value.variant,
     assertionId: value.assertionId,
     classification: value.classification,
-    evidenceAnchor: value.evidenceAnchor,
+    evidenceAnchorId: value.evidenceAnchorId,
   };
 }
 
@@ -277,6 +285,39 @@ function boundAndRedact(value: string, secrets: readonly string[], limit: number
     if (secret !== "") redacted = redacted.split(secret).join("[REDACTED]");
   }
   return redacted.slice(0, limit);
+}
+
+function chunkEvidenceText(text: string): readonly Omit<QuotedEvidenceAnchor, "anchorId">[] {
+  const chunks: Array<Omit<QuotedEvidenceAnchor, "anchorId">> = [];
+  let startOffset = 0;
+  while (startOffset < text.length) {
+    let endOffset = Math.min(startOffset + MAX_EVIDENCE_ANCHOR_TEXT_LENGTH, text.length);
+    if (endOffset < text.length) {
+      if (isLowSurrogate(text.charCodeAt(endOffset)) && isHighSurrogate(text.charCodeAt(endOffset - 1))) {
+        endOffset -= 1;
+      }
+      const minimumBoundary = startOffset + Math.floor(MAX_EVIDENCE_ANCHOR_TEXT_LENGTH * 0.6);
+      const newlineBoundary = text.lastIndexOf("\n", endOffset - 1);
+      const spaceBoundary = text.lastIndexOf(" ", endOffset - 1);
+      const preferredBoundary = Math.max(newlineBoundary, spaceBoundary);
+      if (preferredBoundary >= minimumBoundary) endOffset = preferredBoundary + 1;
+    }
+    chunks.push({
+      startOffset,
+      endOffset,
+      text: text.slice(startOffset, endOffset),
+    });
+    startOffset = endOffset;
+  }
+  return chunks;
+}
+
+function isHighSurrogate(value: number): boolean {
+  return value >= 0xd800 && value <= 0xdbff;
+}
+
+function isLowSurrogate(value: number): boolean {
+  return value >= 0xdc00 && value <= 0xdfff;
 }
 
 function assertionKey(variant: string, repetitionId: string, assertionId: string): string {
@@ -330,12 +371,6 @@ function isNullableString(value: unknown): value is string | null {
 
 function isClassification(value: unknown): value is SemanticAssertionClassification {
   return value === "pass" || value === "behavior_fail" || value === "inconclusive";
-}
-
-function isAnchor(value: unknown): value is SemanticEvidenceAnchor {
-  return isRecord(value) && hasExactKeys(value, ["kind", "evidenceId", "exactQuote"]) &&
-    (value.kind === "response" || value.kind === "tool" || value.kind === "artifact") &&
-    typeof value.evidenceId === "string" && typeof value.exactQuote === "string";
 }
 
 function isEvidenceSurface(value: string): value is SemanticEvidenceSurface {

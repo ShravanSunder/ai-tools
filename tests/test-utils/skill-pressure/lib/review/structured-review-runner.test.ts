@@ -30,7 +30,16 @@ const packet: StructuredSemanticReviewPacket = {
       {
         repetitionId: "treatment-1",
         variant: "treatment",
-        response: { kind: "response", evidenceId: "response", text: "The behavior is present." },
+        response: {
+          kind: "response",
+          evidenceId: "response",
+          anchors: [{
+            anchorId: "anchor-000001",
+            startOffset: 0,
+            endOffset: 24,
+            text: "The behavior is present.",
+          }],
+        },
         tools: [],
         artifacts: [],
         rationalizations: [],
@@ -85,6 +94,7 @@ describe("structured ACPX semantic-review runner", () => {
     const controller = new AbortController();
     let neutralInstructions = "";
     let mcpConfiguration = "";
+    let reviewEnvelope: unknown = null;
     const reviewCommands: string[] = [];
 
     const result = await executeStructuredReview({
@@ -103,6 +113,7 @@ describe("structured ACPX semantic-review runner", () => {
         commands.push(command);
         neutralInstructions = await readFile(path.join(command.cwd, "AGENTS.md"), "utf8");
         mcpConfiguration = await readFile(path.join(command.cwd, "mcp.json"), "utf8");
+        reviewEnvelope = JSON.parse(await readFile(command.args.at(-1) ?? "", "utf8"));
         return execution(transcript("gpt-5.6-luna[xhigh]"));
       },
     });
@@ -123,6 +134,19 @@ describe("structured ACPX semantic-review runner", () => {
     expect(commands[0]?.cwd.startsWith(tmpdir())).toBe(true);
     expect(neutralInstructions).toContain("Semantic Review Workspace");
     expect(mcpConfiguration).toBe('{"mcpServers":[]}\n');
+    expect(reviewEnvelope).toMatchObject({ output_contract: { assertions: [expect.any(Object)] } });
+    const serializedEnvelope = JSON.stringify(reviewEnvelope);
+    const assertionContract = (reviewEnvelope as { output_contract: { assertions: readonly object[] } })
+      .output_contract.assertions[0];
+    expect(assertionContract).toEqual({
+      repetitionId: "string",
+      variant: "baseline | treatment",
+      assertionId: "string",
+      classification: "pass | behavior_fail | inconclusive",
+      evidenceAnchorId: "anchor ID copied from the declared evidence surface",
+    });
+    expect(serializedEnvelope).not.toContain("exactQuote");
+    expect(JSON.stringify(assertionContract)).not.toContain("startOffset");
     expect(reviewCommands).toEqual(["reviewer_prompt"]);
     expect(result.runtimeProfile.verification.status).toBe("verified");
     expect(result.lifecycle).toMatchObject({

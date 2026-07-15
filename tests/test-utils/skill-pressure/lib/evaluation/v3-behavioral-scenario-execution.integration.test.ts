@@ -171,7 +171,7 @@ function evidence(props: {
   return {
     repetitionId: props.repetitionId,
     variant: props.variant,
-    visibleResponse: "Completed the requested report.",
+    visibleResponse: `${"context ".repeat(160)}Completed the requested report. ${"detail ".repeat(160)}`,
     toolObservations: [
       { eventId: "write-1", payload: '{"tool":"write","path":"reports/result.md"}' },
     ],
@@ -230,21 +230,29 @@ function evidence(props: {
 function semanticResult(
   packet: StructuredSemanticReviewPacket,
   classification: "pass" | "behavior_fail" | "inconclusive" = "pass",
-  exactQuote = "Completed",
+  evidenceAnchorIndex = 0,
+  evidenceAnchorIdOverride?: string,
 ): string {
   return JSON.stringify({
     assertions: packet.untrustedEvidence.repetitions.flatMap((repetition) =>
-      packet.instructions.assertions.map((assertion) => ({
-        repetitionId: repetition.repetitionId,
-        variant: repetition.variant,
-        assertionId: assertion.assertionId,
-        classification,
-        evidenceAnchor: {
-          kind: "response",
-          evidenceId: "response",
-          exactQuote,
-        },
-      })),
+      packet.instructions.assertions.map((assertion) => {
+        const quotedEvidence = assertion.evidenceSurface === "response"
+          ? repetition.response
+          : assertion.evidenceSurface === "tools"
+            ? repetition.tools[0]
+            : repetition.artifacts.find((artifact) =>
+              artifact.evidenceId === assertion.evidenceSurface.slice("artifact:".length)
+            );
+        const evidenceAnchorId = evidenceAnchorIdOverride ?? quotedEvidence?.anchors[evidenceAnchorIndex]?.anchorId;
+        if (evidenceAnchorId === undefined) throw new Error("semantic fixture has no matching evidence anchor");
+        return {
+          repetitionId: repetition.repetitionId,
+          variant: repetition.variant,
+          assertionId: assertion.assertionId,
+          classification,
+          evidenceAnchorId,
+        };
+      }),
     ),
     rationalizations: [],
     smallestProposedRetest: null,
@@ -295,7 +303,8 @@ async function runIntegratedFixture(props: {
   readonly grantParentAcceptance?: boolean;
   readonly claimedRequirementStatus?: "traced" | "not_evaluated";
   readonly calibrationSourceDigestOverride?: AuthorityDigest;
-  readonly semanticExactQuote?: string;
+  readonly semanticEvidenceAnchorIndex?: number;
+  readonly semanticEvidenceAnchorIdOverride?: string;
   readonly reviewerLifecycle?: ReviewerLifecycleEvidence;
 }) {
   const contract = v3Contract(props.comparisonIntent, props.risk);
@@ -463,7 +472,8 @@ async function runIntegratedFixture(props: {
       visibleResponse: semanticResult(
         packet,
         props.semanticClassification,
-        props.semanticExactQuote,
+        props.semanticEvidenceAnchorIndex,
+        props.semanticEvidenceAnchorIdOverride,
       ),
       runtimeProfile: props.reviewerProfile ?? VERIFIED_LUNA_PROFILE,
       lifecycle: props.reviewerLifecycle ?? completedReviewerLifecycle(props.risk ?? "standard"),
@@ -590,13 +600,13 @@ describe("reachable v3 behavioral scenario execution", () => {
       comparisonIntent: "non_regression",
       registryFreshness: "fresh",
       grantParentAcceptance: true,
-      semanticExactQuote: "Completed",
+      semanticEvidenceAnchorIndex: 0,
     });
     const second = await runIntegratedFixture({
       comparisonIntent: "non_regression",
       registryFreshness: "fresh",
       grantParentAcceptance: true,
-      semanticExactQuote: "requested report",
+      semanticEvidenceAnchorIndex: 1,
     });
 
     expect(first.result.receipt.reduction.outcome).toBe("pass");
@@ -607,6 +617,18 @@ describe("reachable v3 behavioral scenario execution", () => {
     expect(first.result.receipt.semanticReview.candidate).not.toEqual(
       second.result.receipt.semanticReview.candidate,
     );
+  });
+
+  it("reduces an unknown semantic evidence anchor ID to not evaluated", async () => {
+    const { result } = await runIntegratedFixture({
+      comparisonIntent: "non_regression",
+      semanticEvidenceAnchorIdOverride: "anchor-999999",
+    });
+
+    expect(result.receipt.reduction).toMatchObject({
+      outcome: "not_evaluated",
+      reasonCode: "review_parse_failure",
+    });
   });
 
   it("rejects calibration authority that is not the registry's exact referenced receipt", async () => {
