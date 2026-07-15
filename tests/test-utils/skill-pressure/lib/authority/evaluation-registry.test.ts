@@ -120,8 +120,13 @@ describe("evaluation registry", () => {
     expect(registry.scenarios).toHaveLength(110);
     expect(new Set(registry.scenarios.map((row) => row.validityReview.receiptPath)).size).toBe(110);
     const gates = registry.scenarios.filter((row) => row.evaluationRole === "gate");
-    expect(gates).toEqual([]);
-    expect(registry.scenarios.filter((row) => row.evaluationRole === "diagnostic")).toHaveLength(110);
+    expect(gates.map((row) => row.scenarioId).sort()).toEqual([
+      "orchestrator-goal-artifact-content-boundary",
+      "skills-creation-reference-lane-non-regression",
+    ]);
+    expect(gates.every((row) => row.freshness === "fresh")).toBe(true);
+    expect(gates.every((row) => row.calibrationReceipt !== null)).toBe(true);
+    expect(registry.scenarios.filter((row) => row.evaluationRole === "diagnostic")).toHaveLength(108);
   });
 
   it("loads a diagnostic row without changing behavior identity", async () => {

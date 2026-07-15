@@ -135,6 +135,12 @@ describe("structured ACPX semantic-review runner", () => {
     expect(neutralInstructions).toContain("Semantic Review Workspace");
     expect(mcpConfiguration).toBe('{"mcpServers":[]}\n');
     expect(reviewEnvelope).toMatchObject({
+      classification_rubric: {
+        pass: expect.any(String),
+        behavior_fail: expect.any(String),
+        inconclusive: expect.any(String),
+        interpretation: expect.stringContaining("Do not demand exact"),
+      },
       output_contract: { assertions: [expect.any(Object)] },
       allowed_evidence_anchors: [{
         repetitionId: "treatment-1",

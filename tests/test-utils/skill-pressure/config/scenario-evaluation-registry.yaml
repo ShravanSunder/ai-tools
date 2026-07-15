@@ -434,12 +434,14 @@ scenarios:
     calibration_receipt: null
   - scenario_id: orchestrator-goal-artifact-content-boundary
     behavior_contract_digest: sha256:3a811294d6029e9c4bde117ae959d605b952b773b99746dbc05ff2a2760f1b3b
-    evaluation_role: diagnostic
-    freshness: stale
+    evaluation_role: gate
+    freshness: fresh
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
       receipt_digest: sha256:75127ef716fc13948900943f1a95c00e60e157499f454272e5cc07d7bb557631
-    calibration_receipt: null
+    calibration_receipt:
+      receipt_path: tests/shravan-dev-workflow/orchestrator-goal/baselines/orchestrator-goal-artifact-content-boundary.json
+      receipt_digest: sha256:f5f49f7f22f16bf06c3abe42b7e996bbd9e6dfe091429bfa2c9c83d5bd34dd1d
   - scenario_id: orchestrator-goal-clarity-gate
     behavior_contract_digest: sha256:c635800396d446fffddb59d737d7f2eeef632d5c25a60bdc3c249e7867f51f30
     evaluation_role: diagnostic
@@ -658,12 +660,14 @@ scenarios:
     calibration_receipt: null
   - scenario_id: skills-creation-reference-lane-non-regression
     behavior_contract_digest: sha256:ccd5ea407945f018a0625ffd5ad5cc546825312bf23a09e0e247e349c6c9131b
-    evaluation_role: diagnostic
-    freshness: stale
+    evaluation_role: gate
+    freshness: fresh
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-validity.json
       receipt_digest: sha256:d8bb3c99eba451cb62fd9edd1e46d9301bff14fbefb8670e40284eaefdcc67e2
-    calibration_receipt: null
+    calibration_receipt:
+      receipt_path: tests/shravan-dev-workflow/skills-creation/baselines/skills-creation-reference-lane-non-regression.json
+      receipt_digest: sha256:58aa3524080ce4eb785526c122fa6ab517f23d430ee28ac1d77b5735181c513b
   - scenario_id: skills-creation-security-and-cache-boundary
     behavior_contract_digest: sha256:66a9e7501c7a2ecc49ef15a0e9b0dc7dc50b4e70860d949530d7802bd945c036
     evaluation_role: diagnostic

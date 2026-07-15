@@ -191,8 +191,8 @@ if (!configuration.dryRun) {
           });
 
           expect(result.output.executionStatus).toBe("executed");
-          expect(result.output.baselineCount).toBe(5);
-          expect(result.output.treatmentCount).toBe(5);
+          expect(result.output.baselineCount).toBe(3);
+          expect(result.output.treatmentCount).toBe(3);
           expect(result.output.evidenceDigest).toMatch(/^sha256:/u);
           if (selection.aggregateSuiteKind === "gate") {
             expect(result.output.outcome).toBe("pass");
