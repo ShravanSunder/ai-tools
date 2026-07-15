@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "demotion",
+  "scenarioId": "skills-creation-reference-lane-non-regression",
+  "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+  "observedRunDigest": "sha256:d99a528f9652c2dd5f0974498a5d8677e1443bf86805b452a5b9573ad06c1e5e",
+  "evidence": {
+    "contractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+    "repetitionSetDigest": "sha256:6b6fe3185278fc332382f3f768ef4449748799f50c8f17e2ef13d95c2883c762",
+    "reviewDigest": "sha256:cfdac5718aea51c3ca25de81f5bd361d602b0f1f44d12468dbce04c2c3e93f6f",
+    "aggregateDigest": "sha256:09f71d0e450853efa9e06e518b62582f3f6eea11a571e03827621865b2d69c58",
+    "reason": "reviewer_ambiguity"
+  },
+  "parentAcceptance": {
+    "schemaVersion": 1,
+    "receiptKind": "parent_acceptance",
+    "scenarioId": "skills-creation-reference-lane-non-regression",
+    "behaviorContractDigest": "sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695",
+    "acceptedAuthorityReceiptDigest": "sha256:be6c8e05e27bf0ac7b732d7f831594f734858fad9a9e942f7d8fe1b7607a05d5",
+    "acceptedRunDigest": "sha256:d99a528f9652c2dd5f0974498a5d8677e1443bf86805b452a5b9573ad06c1e5e",
+    "calibrationFingerprintDigest": "sha256:acc97c8d90f81be895cda2d80564d0f4a12a34c8320d744310d4cedbe227b00a",
+    "claimedRequirementManifestDigest": "sha256:03f6af29b5e46ba48308b9e644b767cd563f5e151d8ebd298842a495cb9a17b8"
+  }
+}
