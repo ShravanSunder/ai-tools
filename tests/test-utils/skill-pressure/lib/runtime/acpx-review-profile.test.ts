@@ -30,6 +30,10 @@ describe("ACPX Claude review profile", () => {
     for (const command of Object.values(commands)) {
       expect(command.args).toContain("--deny-all");
       expect(command.args).toContain("--no-terminal");
+      expect(command.args).toEqual(expect.arrayContaining([
+        "--append-system-prompt",
+        "For this semantic review, return only one strict JSON object. Do not include analysis, commentary, or Markdown fences. The entire response must begin with { and end with }.",
+      ]));
       expect(command.environment).toEqual({ ACPX_CLAUDE_INCLUDE_USER_SETTINGS: "1" });
     }
   });

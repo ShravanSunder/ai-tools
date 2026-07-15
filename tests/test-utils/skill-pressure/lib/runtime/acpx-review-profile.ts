@@ -3,6 +3,9 @@ import path from "node:path";
 import type { AcpxLauncher, ExecutableAcpxCommand } from "./acpx-command-executor.js";
 import { ACPX_CLAUDE_OPUS_XHIGH_REVIEW_PROFILE } from "./runtime-profile.js";
 
+export const ACPX_CLAUDE_STRICT_JSON_REVIEW_INSTRUCTION =
+  "For this semantic review, return only one strict JSON object. Do not include analysis, commentary, or Markdown fences. The entire response must begin with { and end with }.";
+
 export interface AcpxClaudeReviewProfile {
   readonly launcher: AcpxLauncher;
   readonly cwd: string;
@@ -37,6 +40,8 @@ export function buildAcpxClaudeReviewSessionCommands(
     "--non-interactive-permissions",
     "fail",
     "--no-terminal",
+    "--append-system-prompt",
+    ACPX_CLAUDE_STRICT_JSON_REVIEW_INSTRUCTION,
     "--allowed-tools",
     "",
     "--max-turns",
