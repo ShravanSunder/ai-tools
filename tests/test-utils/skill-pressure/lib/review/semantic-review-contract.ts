@@ -47,8 +47,7 @@ export interface QuotedEvidence {
 export interface SemanticEvidenceAnchor {
   readonly kind: "response" | "tool" | "artifact";
   readonly evidenceId: string;
-  readonly startOffset: number;
-  readonly endOffset: number;
+  readonly exactQuote: string;
 }
 
 export interface SemanticAssertionResult {
@@ -229,10 +228,8 @@ function validateAnchor(packet: StructuredSemanticReviewPacket, result: Semantic
       : repetition.artifacts;
   const quote = quotes.find((item) => item.evidenceId === result.evidenceAnchor.evidenceId);
   if (quote === undefined) return "assertion anchor references absent quoted evidence";
-  if (!Number.isInteger(result.evidenceAnchor.startOffset) || !Number.isInteger(result.evidenceAnchor.endOffset) ||
-    result.evidenceAnchor.startOffset < 0 || result.evidenceAnchor.endOffset <= result.evidenceAnchor.startOffset ||
-    result.evidenceAnchor.endOffset > quote.text.length) {
-    return "assertion anchor offsets fall outside quoted evidence";
+  if (result.evidenceAnchor.exactQuote === "" || !quote.text.includes(result.evidenceAnchor.exactQuote)) {
+    return "assertion anchor exact quote is absent from quoted evidence";
   }
   return null;
 }
@@ -336,9 +333,9 @@ function isClassification(value: unknown): value is SemanticAssertionClassificat
 }
 
 function isAnchor(value: unknown): value is SemanticEvidenceAnchor {
-  return isRecord(value) && hasExactKeys(value, ["kind", "evidenceId", "startOffset", "endOffset"]) &&
+  return isRecord(value) && hasExactKeys(value, ["kind", "evidenceId", "exactQuote"]) &&
     (value.kind === "response" || value.kind === "tool" || value.kind === "artifact") &&
-    typeof value.evidenceId === "string" && typeof value.startOffset === "number" && typeof value.endOffset === "number";
+    typeof value.evidenceId === "string" && typeof value.exactQuote === "string";
 }
 
 function isEvidenceSurface(value: string): value is SemanticEvidenceSurface {

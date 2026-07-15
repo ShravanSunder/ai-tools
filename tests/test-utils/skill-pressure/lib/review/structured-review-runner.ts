@@ -156,8 +156,7 @@ function createReviewEnvelope(packet: StructuredSemanticReviewPacket): object {
           evidenceAnchor: {
             kind: "response | tool | artifact",
             evidenceId: "string",
-            startOffset: "integer >= 0",
-            endOffset: "integer > startOffset",
+            exactQuote: "non-empty exact substring copied from the selected evidence",
           },
         },
       ],

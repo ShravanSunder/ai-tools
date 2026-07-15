@@ -230,7 +230,7 @@ function evidence(props: {
 function semanticResult(
   packet: StructuredSemanticReviewPacket,
   classification: "pass" | "behavior_fail" | "inconclusive" = "pass",
-  evidenceAnchorEndOffset = 9,
+  exactQuote = "Completed",
 ): string {
   return JSON.stringify({
     assertions: packet.untrustedEvidence.repetitions.flatMap((repetition) =>
@@ -242,8 +242,7 @@ function semanticResult(
         evidenceAnchor: {
           kind: "response",
           evidenceId: "response",
-          startOffset: 0,
-          endOffset: evidenceAnchorEndOffset,
+          exactQuote,
         },
       })),
     ),
@@ -296,7 +295,7 @@ async function runIntegratedFixture(props: {
   readonly grantParentAcceptance?: boolean;
   readonly claimedRequirementStatus?: "traced" | "not_evaluated";
   readonly calibrationSourceDigestOverride?: AuthorityDigest;
-  readonly semanticAnchorEndOffset?: number;
+  readonly semanticExactQuote?: string;
   readonly reviewerLifecycle?: ReviewerLifecycleEvidence;
 }) {
   const contract = v3Contract(props.comparisonIntent, props.risk);
@@ -464,7 +463,7 @@ async function runIntegratedFixture(props: {
       visibleResponse: semanticResult(
         packet,
         props.semanticClassification,
-        props.semanticAnchorEndOffset,
+        props.semanticExactQuote,
       ),
       runtimeProfile: props.reviewerProfile ?? VERIFIED_LUNA_PROFILE,
       lifecycle: props.reviewerLifecycle ?? completedReviewerLifecycle(props.risk ?? "standard"),
@@ -591,13 +590,13 @@ describe("reachable v3 behavioral scenario execution", () => {
       comparisonIntent: "non_regression",
       registryFreshness: "fresh",
       grantParentAcceptance: true,
-      semanticAnchorEndOffset: 9,
+      semanticExactQuote: "Completed",
     });
     const second = await runIntegratedFixture({
       comparisonIntent: "non_regression",
       registryFreshness: "fresh",
       grantParentAcceptance: true,
-      semanticAnchorEndOffset: 8,
+      semanticExactQuote: "requested report",
     });
 
     expect(first.result.receipt.reduction.outcome).toBe("pass");

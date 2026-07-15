@@ -51,10 +51,10 @@ function packet() {
 function candidate() {
   return {
     assertions: [
-      { repetitionId: "baseline-1", variant: "baseline", assertionId: "policy", classification: "behavior_fail", evidenceAnchor: { kind: "response", evidenceId: "response", startOffset: 0, endOffset: 1 } },
-      { repetitionId: "baseline-1", variant: "baseline", assertionId: "artifact", classification: "behavior_fail", evidenceAnchor: { kind: "artifact", evidenceId: "result", startOffset: 0, endOffset: 1 } },
-      { repetitionId: "treatment-1", variant: "treatment", assertionId: "policy", classification: "pass", evidenceAnchor: { kind: "response", evidenceId: "response", startOffset: 0, endOffset: 1 } },
-      { repetitionId: "treatment-1", variant: "treatment", assertionId: "artifact", classification: "pass", evidenceAnchor: { kind: "artifact", evidenceId: "result", startOffset: 0, endOffset: 1 } },
+      { repetitionId: "baseline-1", variant: "baseline", assertionId: "policy", classification: "behavior_fail", evidenceAnchor: { kind: "response", evidenceId: "response", exactQuote: "followed the policy" } },
+      { repetitionId: "baseline-1", variant: "baseline", assertionId: "artifact", classification: "behavior_fail", evidenceAnchor: { kind: "artifact", evidenceId: "result", exactQuote: "policy was checked" } },
+      { repetitionId: "treatment-1", variant: "treatment", assertionId: "policy", classification: "pass", evidenceAnchor: { kind: "response", evidenceId: "response", exactQuote: "followed the policy" } },
+      { repetitionId: "treatment-1", variant: "treatment", assertionId: "artifact", classification: "pass", evidenceAnchor: { kind: "artifact", evidenceId: "result", exactQuote: "policy was checked" } },
     ],
     rationalizations: ["The task looked obvious."],
     smallestProposedRetest: null,
@@ -66,6 +66,24 @@ describe("structured semantic review contract", () => {
     const parsed = parseStructuredSemanticReviewCandidate(JSON.stringify(candidate()));
     expect(parsed.parseError).toBeNull();
     expect(validateStructuredSemanticReviewCandidate({ packet: packet(), candidate: parsed.candidate! })).toEqual({ valid: true, reason: null });
+  });
+
+  it("accepts exact evidence quotes without requiring model-computed offsets", () => {
+    const quoteCandidate = {
+      ...candidate(),
+      assertions: candidate().assertions.map((assertion) => ({
+        ...assertion,
+        evidenceAnchor: assertion.evidenceAnchor.kind === "response"
+          ? { kind: "response" as const, evidenceId: "response", exactQuote: "followed the policy" }
+          : { kind: "artifact" as const, evidenceId: "result", exactQuote: "policy was checked" },
+      })),
+    };
+
+    const parsed = parseStructuredSemanticReviewCandidate(JSON.stringify(quoteCandidate));
+
+    expect(parsed.parseError).toBeNull();
+    expect(validateStructuredSemanticReviewCandidate({ packet: packet(), candidate: parsed.candidate! }))
+      .toEqual({ valid: true, reason: null });
   });
 
   it.each([
@@ -84,6 +102,22 @@ describe("structured semantic review contract", () => {
     {
       name: "extra repetition result",
       mutate: (value: ReturnType<typeof candidate>) => ({ ...value, assertions: [...value.assertions, { ...value.assertions[0]!, repetitionId: "other" }] }),
+    },
+    {
+      name: "invented evidence quote",
+      mutate: (value: ReturnType<typeof candidate>) => ({
+        ...value,
+        assertions: [
+          ...value.assertions.slice(0, -1),
+          {
+            ...value.assertions.at(-1)!,
+            evidenceAnchor: {
+              ...value.assertions.at(-1)!.evidenceAnchor,
+              exactQuote: "text absent from the bounded evidence",
+            },
+          },
+        ],
+      }),
     },
   ])("rejects $name", ({ mutate }) => {
     const parsed = parseStructuredSemanticReviewCandidate(JSON.stringify(mutate(candidate())));
@@ -182,9 +216,9 @@ describe("structured semantic review contract", () => {
       redactionSecrets: [],
     });
     const assertions = [
-      { repetitionId: "a:b", variant: "baseline" as const, assertionId: "c", classification: "pass" as const, evidenceAnchor: { kind: "response" as const, evidenceId: "response", startOffset: 0, endOffset: 1 } },
-      { repetitionId: "a:b", variant: "baseline" as const, assertionId: "b:c", classification: "pass" as const, evidenceAnchor: { kind: "response" as const, evidenceId: "response", startOffset: 0, endOffset: 1 } },
-      { repetitionId: "a", variant: "baseline" as const, assertionId: "c", classification: "pass" as const, evidenceAnchor: { kind: "response" as const, evidenceId: "response", startOffset: 0, endOffset: 1 } },
+      { repetitionId: "a:b", variant: "baseline" as const, assertionId: "c", classification: "pass" as const, evidenceAnchor: { kind: "response" as const, evidenceId: "response", exactQuote: "followed the policy" } },
+      { repetitionId: "a:b", variant: "baseline" as const, assertionId: "b:c", classification: "pass" as const, evidenceAnchor: { kind: "response" as const, evidenceId: "response", exactQuote: "followed the policy" } },
+      { repetitionId: "a", variant: "baseline" as const, assertionId: "c", classification: "pass" as const, evidenceAnchor: { kind: "response" as const, evidenceId: "response", exactQuote: "followed the policy" } },
     ];
 
     expect(validateStructuredSemanticReviewCandidate({
