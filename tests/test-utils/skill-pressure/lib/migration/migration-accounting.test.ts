@@ -70,15 +70,20 @@ describe("post-cutover migration accounting", () => {
     expect(receipt.scenarioRows[0]?.targetPath).toMatch(/^tests\//u);
     expect(receipt.scenarioRows.filter((row) => row.evaluationRole === "gate").map((row) => row.globalScenarioId)).toEqual([
       "orchestrator-goal-artifact-content-boundary",
+      "orchestrator-goal-default-pr-ready-terminal",
       "skills-creation-reference-lane-non-regression",
     ]);
-    expect(receipt.scenarioRows.filter((row) => row.evaluationRole === "diagnostic")).toHaveLength(108);
+    expect(receipt.scenarioRows.filter((row) => row.evaluationRole === "diagnostic")).toHaveLength(107);
     expect(receipt.scenarioRows.every((row) => row.validity === "valid")).toBe(true);
     expect(receipt.scenarioRows.filter((row) => row.evaluationRole === "gate").every((row) => row.calibration === "fresh")).toBe(true);
-    expect(receipt.scenarioRows.filter((row) => row.calibration === "stale")).toEqual([]);
-    expect(receipt.scenarioRows.filter((row) => row.calibration === "uncalibrated")).toHaveLength(108);
-    expect(receipt.scenarioRows.filter((row) => row.diagnosticReason === "stale")).toHaveLength(0);
-    expect(receipt.scenarioRows.filter((row) => row.diagnosticReason === "uncalibrated")).toHaveLength(108);
+    expect(receipt.scenarioRows.filter((row) => row.calibration === "stale").map((row) => row.globalScenarioId)).toEqual([
+      "skills-creation-security-and-cache-boundary",
+    ]);
+    expect(receipt.scenarioRows.filter((row) => row.calibration === "uncalibrated")).toHaveLength(106);
+    expect(receipt.scenarioRows.filter((row) => row.diagnosticReason === "stale").map((row) => row.globalScenarioId)).toEqual([
+      "skills-creation-security-and-cache-boundary",
+    ]);
+    expect(receipt.scenarioRows.filter((row) => row.diagnosticReason === "uncalibrated")).toHaveLength(106);
     expect(receipt.scenarioRows.every((row) => row.validityReview !== null)).toBe(true);
     expect(receipt.legacyScenarioIds).toHaveLength(EXPECTED_LEGACY_SCENARIO_COUNT);
     expect(receipt.legacyScenarioIds.length + receipt.postBaselineScenarioIds.length).toBe(EXPECTED_CURRENT_SCENARIO_COUNT);
@@ -90,6 +95,7 @@ describe("post-cutover migration accounting", () => {
     expect(receipt.ownerCoverage.owners).toHaveLength(EXPECTED_MIGRATED_OWNER_COUNT);
     expect(receipt.ownerCoverage.owners.flatMap((owner) => owner.gateCoveredBehaviorRequirementIds)).toEqual([
       "orchestrator-goal-artifact-content-boundary",
+      "orchestrator-goal-default-pr-ready-terminal",
       "skills-creation-reference-lane-non-regression",
     ]);
     expect(receipt.inventoryDigest).toMatch(/^sha256:/u);

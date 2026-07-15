@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "current_baseline",
+  "scenarioId": "orchestrator-goal-default-pr-ready-terminal",
+  "behaviorContractDigest": "sha256:95e77381d91c069d0bd7852e2207f5c1e2c1dd5a09cda61ecfb4206a57097105",
+  "calibrationFingerprint": {
+    "behaviorContractDigest": "sha256:95e77381d91c069d0bd7852e2207f5c1e2c1dd5a09cda61ecfb4206a57097105",
+    "baselinePolicyDigest": "sha256:12940b09f3db3417ab30f9d22ebfd14166b2e401afd86e4d59bb6aadfd9d5d4b",
+    "runnerSemanticsDigest": "sha256:49a7c115966b8d5c59878cbbc1e87d75aa4829fa748777f4c484101a939c2e3d",
+    "subjectProfileDigest": "sha256:fe22f401ac6a31a8a36438acf0bf83dce0a2c45e65a236db314786838ed9f197",
+    "reviewProfileDigest": "sha256:aeedd408b8509d38175a2a24bf3b12a01065ee580ecc4a5c4f8f2e09f22f3b8b"
+  },
+  "calibrationRunDigest": "sha256:d6bee782b62923619e08bc8ff9657bddf591afadc4110d84a98a7834088dfac8",
+  "acceptedSkillSourceDigest": "sha256:025534f704b762a1888672d17b8256853b9ba7cb5c92f5c7d3fec35c6d167efb",
+  "calibration": {
+    "contractConsistent": true,
+    "contractConsistencyEvidenceDigest": "sha256:cdf254610d73a4b25969132933cfaa2d410613d8a108cbb6e2c5dc526ff7558e",
+    "baselinePolicyValid": true,
+    "baselinePolicyEvidenceDigest": "sha256:12940b09f3db3417ab30f9d22ebfd14166b2e401afd86e4d59bb6aadfd9d5d4b",
+    "baselineRepetitionDigests": [
+      "sha256:581be9d2fe1d8a8bd1edc740850cd208c092cb181927c5d53934533b85d77ae7",
+      "sha256:ff79a5909eef0b2a1421933aa5c7d60a5e0a5607be6ab5c0b05228538917c94d",
+      "sha256:fb9bbe115ed119867ce22f852665e1dc0772c743d84cd0aa3b3564e12c232d18"
+    ],
+    "treatmentRepetitionDigests": [
+      "sha256:ecee989bf2e77e996165559957adf186761d63fc6a00a93c95147b78431bcc9e",
+      "sha256:d8641bd8206083f5d69f9f17fa329e5c899ed54bacb07f69d574234b8fd7d8c4",
+      "sha256:e4be40ad248db800efdb5c4429ff949fd4de9f7baf78d4933b2ea25baa8d3e36"
+    ],
+    "comparisonIntentPassed": true,
+    "objectiveEvidenceDigest": "sha256:67f7591b631577e1eef1cd391aae373148e71c6869166d5b994d39fa8dc79ebe",
+    "semanticEvidenceDigest": "sha256:e0f65d6b98ccb9fca899090f5679576b97c3cf22798b8e4fce6f514f1edc9398",
+    "deterministicMutationCoverage": true,
+    "subjectProfileVerified": true,
+    "reviewProfileVerified": true
+  },
+  "executionEvidence": {
+    "calibrationRunDigest": "sha256:d6bee782b62923619e08bc8ff9657bddf591afadc4110d84a98a7834088dfac8",
+    "acceptedSkillSourceDigest": "sha256:025534f704b762a1888672d17b8256853b9ba7cb5c92f5c7d3fec35c6d167efb",
+    "repetitions": [
+      {
+        "variant": "baseline",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:9d6b88de6b8c9d60e2e72b6bdb449ec9eb6378119423533e3f038020a98b2c31",
+        "acceptedAttemptReceiptDigest": "sha256:9d6b88de6b8c9d60e2e72b6bdb449ec9eb6378119423533e3f038020a98b2c31",
+        "acceptedRepetitionReceiptDigest": "sha256:581be9d2fe1d8a8bd1edc740850cd208c092cb181927c5d53934533b85d77ae7",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "baseline",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:7591c49a20d5ef6d759354a2712383b039c0fca4d6ba3a18e4d015ce3ad40a40",
+        "acceptedAttemptReceiptDigest": "sha256:7591c49a20d5ef6d759354a2712383b039c0fca4d6ba3a18e4d015ce3ad40a40",
+        "acceptedRepetitionReceiptDigest": "sha256:ff79a5909eef0b2a1421933aa5c7d60a5e0a5607be6ab5c0b05228538917c94d",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "baseline",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:c3806ffb78d25c493978d295284733e56849278c9598db703c0beb030ceb958f",
+        "acceptedAttemptReceiptDigest": "sha256:c3806ffb78d25c493978d295284733e56849278c9598db703c0beb030ceb958f",
+        "acceptedRepetitionReceiptDigest": "sha256:fb9bbe115ed119867ce22f852665e1dc0772c743d84cd0aa3b3564e12c232d18",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 1,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:74e04d574491b91a31bc29d79577208aec120eb8ae79f114506ee031be576e95",
+        "acceptedAttemptReceiptDigest": "sha256:74e04d574491b91a31bc29d79577208aec120eb8ae79f114506ee031be576e95",
+        "acceptedRepetitionReceiptDigest": "sha256:ecee989bf2e77e996165559957adf186761d63fc6a00a93c95147b78431bcc9e",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 2,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:bfc8b2fdfa3d41035e8592a14ff63e8f7744e087ff0ddd5b79a065d468cf020e",
+        "acceptedAttemptReceiptDigest": "sha256:bfc8b2fdfa3d41035e8592a14ff63e8f7744e087ff0ddd5b79a065d468cf020e",
+        "acceptedRepetitionReceiptDigest": "sha256:d8641bd8206083f5d69f9f17fa329e5c899ed54bacb07f69d574234b8fd7d8c4",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      },
+      {
+        "variant": "treatment",
+        "repetitionNumber": 3,
+        "attemptNumber": 1,
+        "sourceAttemptReceiptDigest": "sha256:b379827f86133d9c109ce59d570e500cd0288f569e5dad7e9411cdc514cc1bed",
+        "acceptedAttemptReceiptDigest": "sha256:b379827f86133d9c109ce59d570e500cd0288f569e5dad7e9411cdc514cc1bed",
+        "acceptedRepetitionReceiptDigest": "sha256:e4be40ad248db800efdb5c4429ff949fd4de9f7baf78d4933b2ea25baa8d3e36",
+        "processClosed": true,
+        "streamsDrained": true,
+        "outputRedacted": true,
+        "snapshotsCollected": true,
+        "cleanupFactsCollected": true
+      }
+    ]
+  },
+  "parentAcceptance": {
+    "schemaVersion": 1,
+    "receiptKind": "parent_acceptance",
+    "scenarioId": "orchestrator-goal-default-pr-ready-terminal",
+    "behaviorContractDigest": "sha256:95e77381d91c069d0bd7852e2207f5c1e2c1dd5a09cda61ecfb4206a57097105",
+    "acceptedAuthorityReceiptDigest": "sha256:ceb5176e2bc844b3f874d79f9db129353f27082626962f68d4d7eb57d1e04f12",
+    "acceptedRunDigest": "sha256:d6bee782b62923619e08bc8ff9657bddf591afadc4110d84a98a7834088dfac8",
+    "calibrationFingerprintDigest": "sha256:71174439308a3c39a069f631e163f9c88f47c0aa32b0a439d759c4b5ec466817",
+    "claimedRequirementManifestDigest": "sha256:6f30b22e634f6a3c1038652ed4d8b7896b67f3dc6a74d3a787a6fb6417950b48"
+  }
+}
