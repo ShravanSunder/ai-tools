@@ -771,12 +771,14 @@ scenarios:
     authority_history: []
   - scenario_id: skills-creation-reference-lane-non-regression
     behavior_contract_digest: sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695
-    evaluation_role: diagnostic
-    freshness: stale
+    evaluation_role: gate
+    freshness: fresh
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-validity.json
       receipt_digest: sha256:a0fe2af9746d01e4a613d4d51fa422807acbc4de1617dbe7fca552789d284dee
-    calibration_receipt: null
+    calibration_receipt:
+      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-promotion-33e8c0ea4471.json
+      receipt_digest: sha256:f5202f6a539751569f374ddf7b5311195e40ebb4c62d949b92997b3dbc526fca
     authority_history:
       - sequence: 1
         event: promotion
@@ -802,6 +804,10 @@ scenarios:
         event: demotion
         receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-demotion-ed30a7460ea7.json
         receipt_digest: sha256:a3badc00e1d08e15caf2e503375e668be54b3d4a14a4dc0473d9c8484d2e3f34
+      - sequence: 7
+        event: promotion
+        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-promotion-33e8c0ea4471.json
+        receipt_digest: sha256:f5202f6a539751569f374ddf7b5311195e40ebb4c62d949b92997b3dbc526fca
   - scenario_id: skills-creation-security-and-cache-boundary
     behavior_contract_digest: sha256:a678fbc3318c4406b2c211e1006379833875537c0a3a3c23eefc1c0ebfc3afb0
     evaluation_role: diagnostic
