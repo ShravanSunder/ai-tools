@@ -9,8 +9,8 @@ under realistic shortcut pressure. It compares normal operator-facing work, not
 skill summaries or subject self-grading.
 
 Every authoritative evaluation uses Vitest Evals for orchestration and ACPX for
-model execution. The default subject is GPT-5.6 Luna/xhigh. Standard semantic
-review uses a fresh ACPX Luna/xhigh context. High-risk semantic review uses a
+model execution. The default subject is GPT-5.6 Luna/high. Standard semantic
+review uses a fresh ACPX Luna/high context. High-risk semantic review uses a
 fresh, provider-verified ACPX Claude Opus/xhigh context. The parent validates
 reviewer output as candidate evidence and owns the accepted result.
 
@@ -23,7 +23,7 @@ scenario validity
 
 behavior comparison
   Does the baseline/treatment pair prove improvement or non-regression across
-  at least five fresh contexts per side?
+  three fresh contexts per side?
 
 suite authority
   Is this scenario calibrated strongly enough to block a change, or is it a
@@ -84,7 +84,7 @@ is not porous. No one layer substitutes for another.
 | Semantic assertion | A judgment that requires reading the operator response or tool transcript in context. |
 | Calibration receipt | Evidence that a scenario is internally consistent and reliably expresses its declared comparison intent. |
 | Behavior contract digest | Canonical digest of subject inputs, expected effects, objective checks, semantic assertions, and comparison semantics; excludes mutable suite authority. |
-| Evaluation registry | Separate source of truth for `gate | diagnostic | retired`, calibration receipt, authority history, and freshness. |
+| Evaluation registry | Separate source of truth for `gate | diagnostic | retired`, the current baseline receipt pointer, and freshness. |
 | Runner-semantics digest | Canonical digest of the manifest of runner files that can change contract parsing, execution, collection, review, reduction, or reporting semantics. |
 
 RED/GREEN terminology applies only to improvement. Baseline/treatment is the
@@ -114,7 +114,7 @@ behavior_requirement_ids
 baseline: no_skill | previous_revision
 baseline_revision when baseline is previous_revision
 comparison_intent: improvement | non_regression
-repetitions: integer >= 5
+repetitions: integer >= 3
 risk: standard | high
 fixture requirements
 allowed tools and writes
@@ -126,7 +126,7 @@ expected artifacts
 Expected artifact entries carry stable `artifact_id` values. Contract identity
 is the SHA-256 digest of one canonical sorted-key serialization of the complete
 versioned behavior contract. One serializer owns that representation. Evaluation
-role, calibration receipt pointers, and authority history live in the separate
+role and the current baseline receipt pointer live in the separate
 evaluation registry so promotion or demotion cannot change the experiment it is
 authorizing.
 
@@ -164,7 +164,9 @@ effort, operator prompt, fixture, permissions, tool policy, repetition count,
 runner-semantics digest, and reviewer route. Their only behavioral-input difference is
 the target skill source.
 
-R6. Each side runs at least five fresh one-shot contexts. Every repetition has a
+R6. Each side runs three fresh one-shot contexts. The three baseline contexts
+run concurrently; after all baseline contexts settle, the three treatment
+contexts run concurrently. Review starts only after both batches settle. Every repetition has a
 unique disposable Git repository, ACPX session identity, and provider session
 identity when exposed. No conversation or provider session is reused across
 repetitions. Variance remains visible.
@@ -303,9 +305,9 @@ rationalizations, and the smallest proposed retest when behavior fails. It does
 not receive authoring discussion, expected suite outcome, or another reviewer's
 reasoning.
 
-Standard automated review uses fresh ACPX Luna/xhigh. High-risk review uses
+Standard automated review uses fresh ACPX Luna/high. High-risk review uses
 fresh ACPX Claude Opus/xhigh. The runtime-profile verifier requires the exact
-provider-advertised model ID and xhigh effort. Parse failure or profile mismatch
+provider-advertised model ID and declared effort. Parse failure or profile mismatch
 fails closed and is never repaired by extracting JSON from prose.
 
 R22. Reviewer output is candidate evidence. The parent validates semantic
@@ -370,7 +372,7 @@ receipt proving:
 - contract consistency across prompt, effect surfaces, semantic assertions,
   fixtures, permissions, structured checks, and expected effects;
 - a valid baseline policy and immutable previous source when applicable;
-- five fresh baseline and five fresh treatment repetitions;
+- three fresh baseline and three fresh treatment repetitions;
 - the declared comparison-intent truth table passes;
 - objective checks and semantic assertions each have inspectable evidence;
 - exact subject and reviewer profiles are verified;
@@ -378,33 +380,35 @@ receipt proving:
 - runner-wide deterministic mutation coverage rejects malformed evidence for
   every objective check family used by the scenario.
 
-The receipt records its promotion treatment digest as historical evidence. It is
-valid only for its behavior contract digest, baseline policy, runner-semantics
-digest, subject profile, and review profile. A later treatment-source change
-does not stale calibration; evaluating later treatment sources is the gate's
-purpose. Changes to the behavior contract, baseline policy, runner semantics, or
-required profiles make calibration stale until rerun.
+The tracked receipt is the current accepted baseline snapshot for the scenario.
+It lives at `tests/<plugin>/<skill>/baselines/<scenario-id>.json`, embeds compact
+canonical execution facts and parent acceptance, and is replaced atomically
+when a newly accepted skill source is calibrated. Raw transcripts and detailed
+attempt, cleanup, repetition, and review receipts remain under ignored `tmp/`.
+The working tree never accumulates historical baseline files; Git history owns
+historical traceability. The receipt is valid only for its behavior contract
+digest, baseline policy, runner-semantics digest, subject profile, review
+profile, and accepted skill source digest.
 
-R26. Demotion from `gate` to `diagnostic` requires a parent-accepted demotion
-receipt citing the exact contract, repetition, review, and aggregate evidence.
+R26. Demotion from `gate` to `diagnostic` requires a parent-accepted decision
+citing the exact contract, repetition, review, and aggregate evidence.
 Contract contradiction, unstable baseline, reviewer ambiguity, or an execution
 budget that cannot support the contract may justify demotion. Treatment failure
 or instability during the change currently under evaluation is a failing or
 inconclusive gate result, not demotion evidence. Demotion cannot occur as a side
-effect of that same run, cannot turn that run green, and remains visible in
-authority history and aggregate reporting.
+effect of that same run and cannot turn that run green. Demotion clears the
+current baseline pointer; it does not append a tracked historical receipt.
 
-R27. The evaluation registry, not scenario frontmatter, owns role, calibration
-receipt, demotion receipt, and authority history. Authoritative standard and
+R27. The evaluation registry, not scenario frontmatter, owns role and the
+current baseline receipt pointer. Authoritative standard and
 high-risk suites select fresh `gate` scenarios by default. A separate
 calibration command runs valid diagnostics and reports their evidence. Focused
 scenario execution can run either role. Reports always state role, calibration
-freshness, authority-history changes, and whether the result has release
+freshness, current baseline state, and whether the result has release
 authority.
 
 Registry rows contain `scenario_id`, behavior contract digest, evaluation role,
-calibration receipt path and digest when gated, ordered promotion/demotion
-events, and current freshness. A gate suite fails unless every selected gate
+current baseline receipt path and digest when gated, and current freshness. A gate suite fails unless every selected gate
 executes and passes. A diagnostic suite fails on invalid contracts,
 infrastructure, missing execution, or incomplete accounting, but preserves
 behavioral outcomes as findings.
@@ -545,10 +549,10 @@ non-goals.
    collision/traversal, places a target beyond report excerpts, reports a
    forbidden tool event, and pairs semantic approval with objective failure.
    Every mutation fails or becomes `not_evaluated`, never passes.
-5. Focused improvement proof runs five baseline and five treatment ACPX
-   Luna/xhigh contexts with an all-failing baseline and all-passing treatment.
+5. Focused improvement proof runs three baseline and three treatment ACPX
+   Luna/high contexts with an all-failing baseline and all-passing treatment.
 6. Focused non-regression proof runs an immutable previous revision and current
-   revision through five ACPX Luna/xhigh contexts each, with both sides passing.
+   revision through three ACPX Luna/high contexts each, with both sides passing.
 7. High-risk proof uses exact provider-verified ACPX Claude Opus/xhigh, strict
    machine-readable review output, and fail-closed profile and parse handling.
 8. Deadline proof rejects an under-budget Vitest case before model execution and

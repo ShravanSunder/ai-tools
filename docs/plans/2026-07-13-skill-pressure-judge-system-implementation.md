@@ -39,7 +39,7 @@ Reusable implementation already exists for:
 - recursive owner-local discovery and schema-v2 loading;
 - canonical scenario digests and immutable previous-revision pins;
 - fresh disposable repositories and project-scoped skill installation;
-- ACPX Luna/xhigh subjects and fresh semantic reviewers;
+- ACPX Luna/high subjects and fresh standard semantic reviewers;
 - exact Claude `claude-opus-4-7`/xhigh high-risk verification;
 - complete named-artifact evaluation before bounded report excerpts;
 - process-group supervision, TERM/KILL, stream draining, and cleanup facts;
@@ -51,7 +51,7 @@ The accepted contract is not implemented for:
 
 - effect surfaces, structured semantic assertions, and behavior requirement IDs;
 - scenario-validity review for both diagnostics and gates;
-- evaluation role and authority history outside the behavior digest;
+- evaluation role and current baseline authority outside the behavior digest;
 - runner-semantics digest and calibration freshness;
 - append-only atomic attempt receipts written before retries continue;
 - runner-owned scenario cancellation and a larger derived Vitest timeout;
@@ -175,7 +175,7 @@ Behavioral outcome:
 - only schema version 3 is accepted;
 - behavior contracts declare effect surfaces, semantic assertions with stable
   IDs/evidence surfaces, and behavior requirement IDs;
-- behavior digest excludes evaluation role, calibration, and authority history;
+- behavior digest excludes evaluation role and current calibration authority;
 - one separate evaluation registry owns `gate | diagnostic | retired`, validity,
   calibration pointers, ordered authority events, and freshness;
 - one runner-semantics digest owns the files that can change parse, execution,
@@ -203,8 +203,8 @@ TDD sequence:
 3. Add failing digest tests proving authority changes do not alter behavior
    identity and behavior changes do.
 4. Add failing registry tests for unknown scenario IDs, digest mismatch,
-   missing validity review, missing or `tmp/` calibration/demotion pointers,
-   receipt-digest mismatch, unordered history, and silent default role.
+   missing validity review, missing or `tmp/` current-baseline pointers,
+   receipt-digest mismatch, accumulated baseline history, and silent default role.
 5. Implement v3 contract types, parser, canonical serializer, generated schema,
    registry parser, and reason codes.
 6. Implement an explicit runner-semantics manifest covering these inclusion
@@ -214,10 +214,14 @@ TDD sequence:
    Documentation is excluded. Tests mutate every class, reject unmanifested
    semantic modules under owned roots, and prove semantic changes stale
    calibration while documentation-only changes do not.
-7. Store redacted calibration, promotion, demotion, and parent-acceptance
-   authority receipts at the tracked stable path above. Raw transcripts,
-   attempts, and diagnostic evidence remain ignored under `tmp/`; registry
-   pointers to missing, ignored, or digest-mismatched authority receipts fail.
+7. Store one self-contained current baseline receipt per calibrated scenario at
+   `tests/<plugin>/<skill>/baselines/<scenario-id>.json`. Replace it atomically
+   after a newly accepted run; never append digest- or timestamp-named baseline,
+   promotion, demotion, attempt, cleanup, or parent-acceptance files. Embed
+   compact canonical execution facts and parent acceptance. Raw transcripts,
+   attempts, cleanup, repetitions, reviews, and diagnostic evidence remain
+   ignored under `tmp/`; registry pointers to missing, ignored, or
+   digest-mismatched current baseline receipts fail.
 8. Freeze v3 interfaces before owner migration, but do not make the v3-only
    loader/schema authoritative while the 109 scenarios remain v2. The loader,
    generated schema, registry, and migrated corpus switch in one atomic cutover
@@ -270,7 +274,7 @@ Local proof:
 
 - `test:mutation` covers every objective family used by a gate candidate;
 - review packet/result tests cover assertion completeness and untrusted evidence;
-- exact Luna/xhigh and Claude Opus/xhigh profile tests remain green;
+- exact Luna/high and Claude Opus/xhigh profile tests remain green;
 - no semantic candidate can override objective failure.
 
 Checkpoint CP2 may commit independently from CP3 only for additive primitives
@@ -388,7 +392,7 @@ TDD sequence:
    release authority.
 3. Prove treatment-source changes do not stale calibration while behavior
    contract, baseline policy, runner semantics, or profile changes do.
-4. Implement parent-accepted promotion and demotion receipt validators. A
+4. Implement parent-accepted current-baseline replacement and demotion validators. A
    demotion created after a run cannot change that run's snapshot or outcome;
    treatment failure/mix is not valid same-run demotion evidence.
 5. Require a digest-bound parent acceptance receipt before a scenario outcome
@@ -504,18 +508,17 @@ behavioral authority is claimed yet.
 
 Sources: R5-R9, R14, R21-R28, R31; proof expectations 5-11.
 
-This slice is serial and receipt-gated. Each step is interpreted before the next
-expensive run. Under the current one-review-per-comparison topology, calibration
-of one improvement, one non-regression, and one high-risk comparison costs about
-33 model prompts and at least 36 ACPX commands before retries. Fresh
-post-promotion authoritative reruns approximately double that floor to 66 model
-prompts and at least 72 ACPX commands. A dry-run execution-graph receipt must
+This slice is serial and receipt-gated by scenario. Within each comparison, the
+three baseline subjects run concurrently, then the three treatment subjects run
+concurrently, then one reviewer runs. Under this topology, calibration of one
+improvement, one non-regression, and one high-risk comparison costs 21 model
+prompts before retries. A dry-run execution-graph receipt must
 derive the selected count; prose estimates do not authorize spend.
 
 ### Preflight
 
 1. Verify global ACPX, Codex adapter, and Claude adapter versions.
-2. Verify Luna/xhigh subject/standard-review identity and exact
+2. Verify Luna/high subject/standard-review identity and exact
    `claude-opus-4-7`/xhigh high-risk identity in the same relationship that will
    execute each review.
 3. Record candidate scenario, behavior contract digest, baseline policy/source,
@@ -532,11 +535,11 @@ derive the selected count; prose estimates do not authorize spend.
 
 1. Improvement candidate:
    `orchestrator-goal-artifact-content-boundary`.
-   It must produce five baseline failures and five treatment passes under the
+   It must produce three baseline failures and three treatment passes under the
    v3 contract. An all-passing or mixed baseline remains diagnostic.
 2. Non-regression candidate:
    `skills-creation-reference-lane-non-regression` pinned to its existing full
-   previous revision. Both sides must pass five times.
+   previous revision. Both sides must pass three times.
 3. High-risk candidate order:
    - first `ops-security-review-official-scan` after deadline repair;
    - fallback `peekaboo-progressive-disclosure` only if the first fails
@@ -561,14 +564,14 @@ derive the selected count; prose estimates do not authorize spend.
    requirement IDs against the preaccepted caps. Do not extrapolate coverage to
    unrelated skills.
 
-Live receipt acceptance requires ten unique repositories and sessions per
+Live receipt acceptance requires six unique repositories and sessions per
 comparison, equal common-input fingerprints, correct source digests, exact
 requested/provider-reported profiles, complete attempt/cleanup receipts,
 assertion-level review, strict parse, intent outcome, authority snapshot, and
 bounded/redacted evidence.
 
-Checkpoint CP7: commit tracked redacted calibration, promotion, parent-
-acceptance, and registry corrections justified by fresh receipts. Raw
+Checkpoint CP7: commit one current baseline receipt per calibrated scenario and
+registry corrections justified by fresh receipts. Raw
 transcripts, attempt receipts, and secrets remain under ignored `tmp/` and are
 not committed.
 
@@ -613,12 +616,12 @@ Split/replan triggers:
 | --- | --- | --- | --- | --- | --- | --- |
 | v3 behavior contract and hidden criteria | R1-R4 | 1 | unit/schema | current serializer/schema digest | yes | yes |
 | authority outside behavior identity | R2, R24-R27 | 1, 4 | unit/integration | registry + behavior digest snapshot | yes | yes |
-| honest pair identity and intents | R5-R9 | A, 4, 6 | unit/live e2e | five/five receipts and pair fingerprint | yes | yes |
+| honest pair identity and intents | R5-R9 | A, 4, 6 | unit/live e2e | three/three receipts and pair fingerprint | yes | yes |
 | project isolation and exact ACPX profiles | R10-R14 | A, 6 | integration/live | repos, source digests, provider reports | yes | yes |
 | named-artifact/objective correctness | R15-R17 | 2 | mutation/integration | complete-content and mutation receipts | yes | yes |
 | durable attempts and cancellation | R18-R19 | 3 | integration | attempt paths, cleanup, last stage | yes | yes |
 | assertion review, parent acceptance, and precedence | R20-R23 | 2, A, 4 | unit/integration/live | strict review + digest-bound acceptance + objective facts | yes | yes |
-| gate/diagnostic authority and freshness | R24-R27 | 1, 4, 6 | unit/integration/live | ordered authority history + calibration | yes | yes |
+| gate/diagnostic authority and freshness | R24-R27 | 1, 4, 6 | unit/integration/live | current baseline pointer + calibration | yes | yes |
 | requirement traceability | R28 | 1, 4, 5 | schema/report/live | claimed-ID input digest + covered/uncovered IDs | yes | yes |
 | 107 legacy and 109 current accounting | R29-R31 | 5 | migration/absence | immutable map + current discovery + denylist mutations | yes | yes |
 | exact aggregate authority counts | R32 | 4 | unit/smoke/live | aggregate receipt and selected set | yes | yes |
@@ -640,8 +643,8 @@ No red/green exceptions are authorized.
 - Preserve exact model/profile verification and strict review parsing.
 - Use runner-owned cancellation plus per-command process-group cleanup.
 - Larger Vitest timeouts are emergency containment, not process supervision.
-- Authority changes are parent-reviewed, append-only, and unable to rewrite the
-  current run.
+- Authority changes are parent-reviewed current-state replacements and unable
+  to rewrite the raw run evidence.
 - Recovery reads durable receipts for reporting only; it never resumes partial
   comparison evidence.
 
