@@ -602,14 +602,16 @@ Split/replan triggers:
    reject every accepted finding through `implementation-execute-plan`.
 7. After every accepted review fix, rerun affected lower proof layers and every
    calibration/gate suite invalidated by changed behavior, runner, profile, or
-   authority digests. Bind the final aggregate receipt and local proof to the
-   exact commit that will be pushed.
+   authority digests. Bind receipts to exact behavior, runner-semantics,
+   baseline-revision, treatment-source, profile, registry, and evidence digests;
+   the pushed commit must contain those exact bound inputs.
 8. Commit verified fixes, push the branch, and use
    `implementation-pr-wrapup` to open/update the PR and report checks, comments,
    unresolved threads, mergeability, and current head SHA.
-9. Require final local/live receipts and PR checks to name the same head SHA.
-   Any later tracked edit loops back through commit, affected proof, and fresh
-   PR-state verification.
+9. Require final local/live receipts and PR checks to prove that the PR head
+   contains the same bound semantic and source digests. A docs-only or baseline
+   receipt commit may follow a live run; any later change to a bound input loops
+   back through affected proof and fresh PR-state verification.
 10. Stop PR-ready and unmerged. Merge requires separate authorization.
 
 ## Requirements/Proof Matrix

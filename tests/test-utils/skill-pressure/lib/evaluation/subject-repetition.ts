@@ -670,7 +670,7 @@ export function createSubjectInfrastructureFailureReceipt(props: {
     process: {
       exitCode: 1,
       timedOut: false,
-      cleanupComplete: false,
+      cleanupComplete: true,
       stderrDigest: digest(failureMessage),
       stderrExcerpt: redactDiagnosticText(failureMessage, props.props.redactionSecrets),
       supervisorReceipt,

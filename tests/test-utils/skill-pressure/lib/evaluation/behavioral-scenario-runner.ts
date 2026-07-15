@@ -6,7 +6,7 @@ import { createRuntimeAuthorityContext } from "../authority/runtime-authority-co
 import { loadScenarioContract } from "../contracts/skill-contracts.js";
 import { normalizeRepetitionEvidence } from "../evidence/repetition-evidence.js";
 import { executeStructuredReview } from "../review/structured-review-runner.js";
-import { writeJsonReceipt } from "../reporting/attempt-receipt.js";
+import { type AttemptDurableFacts, writeJsonReceipt } from "../reporting/attempt-receipt.js";
 import {
   collectSensitiveEnvironmentValues,
   resolveAcpxLauncher,
@@ -290,16 +290,7 @@ function toV3Repetition(receipt: SubjectRepetitionReceipt): V3ExecutedRepetition
   return {
     evidence: normalizeRepetitionEvidence({ receipt }),
     runtimeProfile: receipt.runtimeProfile ?? unverifiedRuntimeProfile(),
-    durableFacts: {
-      processClosed:
-        receipt.process.supervisorReceipt.exitCode !== null ||
-        receipt.process.supervisorReceipt.signal !== null,
-      streamsDrained:
-        receipt.process.supervisorReceipt.stdoutEof && receipt.process.supervisorReceipt.stderrEof,
-      outputRedacted: true,
-      snapshotsCollected: true,
-      cleanupFactsCollected: true,
-    },
+    durableFacts: deriveAttemptDurableFacts(receipt),
     comparisonIdentity: {
       sessionId: receipt.transcript.sessionId,
       repositoryIdentity: receipt.repositoryIdentity,
@@ -309,6 +300,25 @@ function toV3Repetition(receipt: SubjectRepetitionReceipt): V3ExecutedRepetition
       sourceDigest: receipt.sourceDigest,
       sourceRevision: receipt.sourceRevision,
     },
+  };
+}
+
+export function deriveAttemptDurableFacts(
+  receipt: Pick<SubjectRepetitionReceipt, "process">,
+): AttemptDurableFacts {
+  const supervisor = receipt.process.supervisorReceipt;
+  const processNeverStarted =
+    supervisor.cleanup.processGroupId === null &&
+    supervisor.exitCode === null &&
+    supervisor.signal === null;
+  return {
+    processClosed: receipt.process.cleanupComplete && (
+      processNeverStarted || supervisor.exitCode !== null || supervisor.signal !== null
+    ),
+    streamsDrained: supervisor.stdoutEof && supervisor.stderrEof,
+    outputRedacted: true,
+    snapshotsCollected: true,
+    cleanupFactsCollected: true,
   };
 }
 

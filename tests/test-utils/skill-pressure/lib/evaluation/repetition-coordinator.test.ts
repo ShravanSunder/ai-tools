@@ -443,7 +443,7 @@ describe("scenario repetition coordinator", () => {
     expect(persistedStatuses.slice(0, 2)).toEqual(["infrastructure_error", "executed"]);
     expect(result.attempts[0]?.receipts[0]).toMatchObject({
       status: "infrastructure_error",
-      process: { cleanupComplete: false },
+      process: { cleanupComplete: true },
     });
     expect(result.attempts[0]?.receipts[0]?.infrastructureReasons).toContain(
       "repetition setup or process launch failed: spawn failed before ACPX produced a receipt",
