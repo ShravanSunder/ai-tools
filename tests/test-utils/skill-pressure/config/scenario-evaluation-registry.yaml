@@ -479,14 +479,12 @@ scenarios:
     authority_history: []
   - scenario_id: orchestrator-goal-artifact-content-boundary
     behavior_contract_digest: sha256:555b82aeffd6cb48e19a19303fdf300acecdb7e457611f2903d53286877db12e
-    evaluation_role: gate
-    freshness: fresh
+    evaluation_role: diagnostic
+    freshness: stale
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-validity.json
       receipt_digest: sha256:9d22f1156fcf90bc207b762e0ce16b58ffebed75a744672115adc35c93f65367
-    calibration_receipt:
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-promotion-29da1a9cca8d.json
-      receipt_digest: sha256:dbcde824f6baa8b91812889b78b2143693aef469861bd0e794b80a3fbf42f436
+    calibration_receipt: null
     authority_history:
       - sequence: 1
         event: promotion
@@ -524,6 +522,10 @@ scenarios:
         event: promotion
         receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-promotion-29da1a9cca8d.json
         receipt_digest: sha256:dbcde824f6baa8b91812889b78b2143693aef469861bd0e794b80a3fbf42f436
+      - sequence: 10
+        event: demotion
+        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/orchestrator-goal-artifact-content-boundary-demotion-79f40dbc8644.json
+        receipt_digest: sha256:37a879f1f9d29bef2bfd5f28876b8a9b817fc082eb852479d7819d3b3869caac
   - scenario_id: orchestrator-goal-clarity-gate
     behavior_contract_digest: sha256:f1cc84e81ddac61bec56d23591cba218c52e477f32addafcabdd892f32c180b2
     evaluation_role: diagnostic
@@ -769,14 +771,12 @@ scenarios:
     authority_history: []
   - scenario_id: skills-creation-reference-lane-non-regression
     behavior_contract_digest: sha256:171c8b17b2e4bb2f9fc425670059445663405d26824b84e4c73b3d3ea23dc695
-    evaluation_role: gate
-    freshness: fresh
+    evaluation_role: diagnostic
+    freshness: stale
     validity_review:
       receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-validity.json
       receipt_digest: sha256:a0fe2af9746d01e4a613d4d51fa422807acbc4de1617dbe7fca552789d284dee
-    calibration_receipt:
-      receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-promotion-258b9a2b9469.json
-      receipt_digest: sha256:b10f24d5e33deca41f2b27c84a8af2d4e79b892df6549886be9937abf67f2ed9
+    calibration_receipt: null
     authority_history:
       - sequence: 1
         event: promotion
@@ -798,6 +798,10 @@ scenarios:
         event: promotion
         receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-promotion-258b9a2b9469.json
         receipt_digest: sha256:b10f24d5e33deca41f2b27c84a8af2d4e79b892df6549886be9937abf67f2ed9
+      - sequence: 6
+        event: demotion
+        receipt_path: tests/test-utils/skill-pressure/config/authority-receipts/skills-creation-reference-lane-non-regression-demotion-ed30a7460ea7.json
+        receipt_digest: sha256:a3badc00e1d08e15caf2e503375e668be54b3d4a14a4dc0473d9c8484d2e3f34
   - scenario_id: skills-creation-security-and-cache-boundary
     behavior_contract_digest: sha256:a678fbc3318c4406b2c211e1006379833875537c0a3a3c23eefc1c0ebfc3afb0
     evaluation_role: diagnostic
