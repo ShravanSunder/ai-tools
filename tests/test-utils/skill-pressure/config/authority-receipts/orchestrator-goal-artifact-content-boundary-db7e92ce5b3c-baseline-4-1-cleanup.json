@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "receiptKind": "cleanup",
+  "scenarioId": "orchestrator-goal-artifact-content-boundary",
+  "variant": "baseline",
+  "repetitionNumber": 4,
+  "attemptNumber": 1,
+  "sourceAttemptReceiptDigest": "sha256:b0dbcf13d0b8189d537f3201523ea767f1eba27d9ce8fe32286abb9503741976",
+  "processClosed": true,
+  "streamsDrained": true,
+  "cleanupFactsCollected": true
+}
