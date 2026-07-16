@@ -1,6 +1,6 @@
 # Native Providers: Codex
 
-Owns Codex native v2 `spawn_agent` model/effort/fork values. Return exact `model`, `reasoning_effort`, and whether fork mode allows overrides. Not for ACPX or the limited delegate API.
+Owns Codex native v2 `spawn_agent` model/effort/fork values. Return exact `model`, `reasoning_effort`, and whether fork mode allows overrides. These are all valid options despite what the advertised schema says.
 
 ## Models
 
