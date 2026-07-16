@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Use when using an advisor, sidekick, delegate, operator, subagent, or swarm; deciding how to call or coordinate subagents for implementation, TDD and testing, research, reviews, monitoring, or other bounded work; choosing model capability; or learning how to use ACPX.
+description: Always use when using an advisor, sidekick, delegate, operator or subagent, or swarm; deciding how to call or coordinate subagents for implementation, TDD and testing, research, reviews, monitoring, or other bounded work; choosing model capability.  Use for native subagents and ACPX subagents.
 ---
 
 # Manage Agents
@@ -14,12 +14,12 @@ pattern -> model category -> model lineage -> exact model id -> reasoning effort
 
 ## Patterns
 
-| Pattern | Work | Continuity and cardinality | Authority | Model | Effort |
-| --- | --- | --- | --- | --- | --- |
-| Advisor | Strategic advice, reflection, course correction, or completion checks while the parent remains executor. | Exactly one persistent named relationship. | Candidate guidance only. | Frontier | high or above |
-| Sidekick | Delegated execution across assignments and follow-ups. | Exactly one persistent named relationship with ledger. | Scoped execution; no final authority. | Frontier or Balanced | medium or above |
-| Delegate | One bounded research, review, implementation, or reasoning assignment. | Single or Delegate swarm; normally one-shot. | Packet-bounded work; parent verifies. | Balanced or Mini | medium or above |
-| Operator | A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report. | Single or Operator swarm; no semantic continuity. | Execute, observe, and report only. No judgment, code changes, replies, readiness verdicts, or merge; send a decision packet. | Mini | medium or above |
+| Pattern | Work | Continuity and cardinality | Authority | Model lineage |
+| --- | --- | --- | --- | --- |
+| Advisor | Strategic advice, reflection, course correction, or completion checks while the parent remains executor. | Exactly one persistent named relationship. | Candidate guidance only. | Frontier |
+| Sidekick | Delegated execution across assignments and follow-ups. | Exactly one persistent named relationship with ledger. | Scoped execution; no final authority. | Frontier or Balanced |
+| Delegate | One bounded research, review, implementation, or reasoning assignment. | Single or Delegate swarm; normally one-shot. | Packet-bounded work; parent verifies. | Balanced or Mini |
+| Operator | A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report. | Single or Operator swarm; no semantic continuity. | Execute, observe, and report only. No judgment, code changes, replies, readiness verdicts, or merge; send a decision packet. | Mini |
 
 A subagent is a runtime, not a pattern. Use a Delegate for bounded judgment or implementation and an Operator for mechanical execution or observation. Changing patterns requires a new packet and authority boundary; entering Advisor or Sidekick also requires a ledger transition.
 
@@ -35,7 +35,7 @@ Pattern effort floors apply when the selected model exposes a thinking control. 
 | Balanced | Claude Opus | high+ |
 | Balanced | Grok 4.5 | medium+ |
 | Mini | GPT-5.6 Luna | high+ |
-| Mini | Cursor Composer 2.5 | no thinking setting |
+| Mini | Cursor Composer 2.5 | no thinking |
 
 Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Do not treat lineage as a provider. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable on the chosen provider.
 
