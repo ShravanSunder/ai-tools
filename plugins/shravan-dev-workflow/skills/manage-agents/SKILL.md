@@ -29,12 +29,12 @@ Pattern effort floors apply when the selected model exposes a thinking control. 
 
 | Model category | Model lineage | Thinking |
 | --- | --- | --- |
-| Frontier | GPT-5.6 Sol | high, xhigh, or max |
-| Frontier | Claude Fable | medium, high, or xhigh |
+| Frontier | GPT-5.6 Sol | high, xhigh |
+| Frontier | Claude Fable | medium or high |
 | Balanced | GPT-5.6 Sol | low or medium |
-| Balanced | Claude Opus | high+ |
-| Balanced | Grok 4.5 | medium+ |
-| Mini | GPT-5.6 Luna | high+ |
+| Balanced | Claude Opus | high or xhigh |
+| Balanced | Grok 4.5 | medium or high |
+| Mini | GPT-5.6 Luna | high or xhigh |
 | Mini | Cursor Composer 2.5 | no thinking |
 
 Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Do not treat lineage as a provider. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable on the chosen provider.
