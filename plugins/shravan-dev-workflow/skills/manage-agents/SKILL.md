@@ -17,44 +17,44 @@ pattern -> model category -> model lineage -> exact model id -> reasoning effort
 A subagent is a runtime, not a pattern. Use one of the following patterns to manage the subagent.
 
 ### Advisor
-Parent drives the loop; escalate for strategic, high-stakes, or ambiguous decisions to a Frontier advisor
+Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opinions; get help from a Frontier model.  You drive the loop. 
 
 - **Work:** Strategic advice, reflection, course correction, or completion checks while the parent remains executor.
 - **Continuity and cardinality:** Exactly one persistent named advisor.
 - **Authority:** Candidate guidance only; validate the advice.
-- **Model lineage:** Frontier
+- **Model category:** Frontier
 
 ### Sidekick
-Use for multi-turn delegated work you will resume and steer, A named ongoing co-worker with a ledger.
+Use a Sidekick for multi-turn delegated work you will resume and steer; a named ongoing co-worker with a ledger. You coordinate and validate the work.
 
 - **Work:** Delegated execution across assignments and follow-ups.
 - **Continuity and cardinality:** One or many persistent named relationships with ledger.
 - **Authority:** Provide scope or responsibilities; no final authority; validate the work.
-- **Model lineage:** Frontier or Balanced
+- **Model category:** Frontier or Balanced
 
 ### Delegate
-Use for one clear bounded assignment then discard.
+Use for one clear bounded assignment then discard. You manage and validate the work.
 
 - **Work:** One bounded research, review, implementation, or reasoning assignment.
 - **Continuity and cardinality:** Single or Delegate swarm; one-shot.
 - **Authority:** Packet-bounded work; parent verifies the work.
-- **Model lineage:** Balanced or Mini
+- **Model category:** Balanced or Mini
 
 ### Operator
-Use for mechanical actions: execute / observe / report / scraping / watching; do not ask for reasoning. Helps save context for the parent.
+Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) /  scraping / watching (watching montiors) / report (grouping logs and results); do not ask for reasoning. Helps save context for the you, you dispatch and get data and references.
 
 - **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
 - **Continuity and cardinality:** Single or Operator swarm; no semantic continuity.
 - **Authority:** Execute, observe, and report only. No judgment, code changes, replies, readiness verdicts, or merge; operator provides data or takes a bounded action.
-- **Model lineage:** Mini
+- **Model category:** Mini
 
 
 ## Models
 
 | Model category | Model lineage | Thinking |
 | --- | --- | --- |
-| Frontier | GPT-5.6 Sol | high, xhigh |
-| Frontier | Claude Fable | medium or high |
+| Frontier | GPT-5.6 Sol | high, xhigh, max |
+| Frontier | Claude Fable | medium, high, xhigh |
 | Balanced | GPT-5.6 Sol | low or medium |
 | Balanced | Claude Opus | high or xhigh |
 | Balanced | Grok 4.5 | medium or high |
@@ -73,14 +73,14 @@ Verify the exact provider-advertised model id and thinking option when the provi
 
 ## Native and ACPX Runtimes
 
-| Runtime | What it is | Choose it when |
+| Runtime | What it is |
 | --- | --- | --- |
 | Native subagent | The current host's built-in agent runtime. | 
 | ACPX | A client for calling ACP-compatible provider adapters and persistent sessions outside the host's native runtime. | 
 
 Native describes how the subagent is launched, not its pattern or model. A native subagent still operates as an Advisor, Sidekick, Delegate, or Operator under the same packet, authority, continuity, and parent-verification rules.
 
-Who are you and what are you running on?
+Who are you and what are you running on? Always use your own native subagents for your own models lineage.
 - If you are codex, use native subagent for all GPT native models.
 - If you are claude, use native subagent for all Claude native models.
 

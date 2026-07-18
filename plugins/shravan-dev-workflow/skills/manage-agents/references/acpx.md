@@ -33,7 +33,7 @@ Global options precede the provider; provider options follow it; command options
 ```bash
 acpx --cwd /absolute/repo --model '<provider-advertised-id>' --approve-reads claude -s advisor \
   --file tmp/advisor-packet.md
-acpx --format quiet --deny-all --no-terminal codex exec \
+acpx --format quiet --approve-reads --no-terminal codex exec \
   --file tmp/review-packet.md
 ```
 
