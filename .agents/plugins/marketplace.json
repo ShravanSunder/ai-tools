@@ -37,7 +37,7 @@
         "path": "./plugins/shravan-dev-workflow"
       },
       "policy": {
-        "installation": "INSTALLED_BY_DEFAULT",
+        "installation": "AVAILABLE",
         "authentication": "ON_USE"
       },
       "category": "Coding"
