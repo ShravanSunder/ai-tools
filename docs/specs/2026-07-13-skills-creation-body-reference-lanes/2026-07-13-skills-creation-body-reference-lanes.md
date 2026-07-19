@@ -580,6 +580,15 @@ lane executes from bounded context
 
 Expected allocation: lane authority remains in the lane envelope; the readable payload and machine representation compose through links or one authoritative shape. The design must not duplicate fields, infer lane authority from validation, or call incidental prose assertions a tool schema.
 
+## Delivery And Proof Split
+
+The source contract and its behavioral proof are intentionally delivered in two PRs:
+
+1. PR1 changes the `skills-creation` body/reference/lane authoring contract, completes the hard source-owner cutover, updates review rubrics, and publishes the plugin/version/changelog metadata. Structural validation and source-backed implementation review prove this slice.
+2. PR2 starts from the merged PR1 head and adds the artifact-scoped pressure scenarios and harness assertions required by the behavior cases below.
+
+This is an explicit user-accepted behavior-proof gap, not GREEN. PR1 may claim that the authored source contract is implemented and structurally reviewed. It must not claim demonstrated model improvement, artifact-scoped behavior GREEN, or completed pressure regression coverage. The required cases below remain authoritative for PR2; separating delivery does not weaken them.
+
 ## Proof Expectations
 
 ### Baseline Classification

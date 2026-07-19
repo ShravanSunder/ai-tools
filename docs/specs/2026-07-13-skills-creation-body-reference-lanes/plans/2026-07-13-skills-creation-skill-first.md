@@ -1,16 +1,23 @@
 # Skills Creation Body, Reference, And Lane Source-First Implementation Plan
 
-Status: reviewed and ready for `implementation-execute-plan`; no skill or test source has been edited by planning or review.
+Status: source contract implemented; PR1 review in progress under the accepted two-PR proof split.
 
 Goal id: `2026-07-13-skills-creation-skill-first`
 
 ## Goal
 
-Implement the accepted authored-body, ordinary-reference, lane, and shared-shape design as one source-level hard cutover. The source checkpoint ends when the exact skill surface is implemented, structurally validated, and source-only reviewed. It does not complete the goal: artifact-scoped behavior GREEN, final implementation review, shipping metadata, and PR readiness wait for the separately developed test changes.
+Implement the accepted authored-body, ordinary-reference, lane, and shared-shape design as one source-level hard cutover. PR1 ends when the exact skill surface is implemented, structurally validated, source-backed reviewed, versioned, and documented with an explicit accepted behavior-proof gap. PR2 starts from the merged PR1 head and owns artifact-scoped pressure scenarios, behavior GREEN, and regression proof. PR1 must not claim that deferred behavior proof.
+
+## Accepted Delivery Split
+
+- PR1 owns the source contract, single-owner reference cutover, review rubrics, plugin versions, marketplace metadata, changelog, structural validation, and source-backed implementation review.
+- PR2 owns the new artifact-scoped scenarios, harness/assertion changes, RED/GREEN execution, and behavior regression proof.
+- This split is an explicit user-approved exception to the ordinary behavior-GREEN-before-PR-ready gate. The exception records missing proof; it does not supply GREEN or weaken the deferred cases.
+- PR2 must branch from `master` after PR1 merges so it tests the published source contract.
 
 ## Accepted Sources And Coverage
 
-- Accepted spec: `docs/specs/2026-07-13-skills-creation-body-reference-lanes/2026-07-13-skills-creation-body-reference-lanes.md`, 762/762 lines read, SHA-256 `ccc4508cc1e427452577d11a1fc5be8fd243d280d3478a09a00a45100b58566f`.
+- Accepted spec: `docs/specs/2026-07-13-skills-creation-body-reference-lanes/2026-07-13-skills-creation-body-reference-lanes.md`, 771/771 lines read, SHA-256 `6e0d2f6e68b9a49a0e2c623ad0e03eb47bff5a520e5564720cf7e255d5da54fc`.
 - Accepted spec review: `tmp/spec-workflows/2026-07-13-skills-creation-body-reference-lanes/skill-spec-review-reduction.md`, SHA-256 `4a5f046a916a5b2ff2c23b8186a3f6cbdc13d876b9d3a4516121958b318e8be2`, verdict `great`, implementation decision `accepted-to-implement`.
 - Baseline evidence: `tmp/spec-workflows/2026-07-13-skills-creation-body-reference-lanes/lanes/caller-grammar-and-callee-routing-baseline.md`.
 - Goal boundary and requirements/proof seed: `tmp/workflow-state/2026-07-13-skills-creation-skill-first/details.md`.
@@ -40,13 +47,13 @@ Delete without compatibility aliases or stubs:
 
 ## Non-Goals And Preservation Guards
 
-- Do not edit any path under `tests/skills/`; pressure-test design and integration belong to the user's separate worktree.
-- Do not edit plugin versions, marketplace metadata, changelog, installed caches, push/PR state, or release surfaces.
-- Do not claim behavior GREEN, full R10 completion, final implementation-review completion, or PR readiness from this source-only checkpoint.
-- Do not edit the accepted spec, review reduction, baseline artifacts, or goal-state files except for the orchestrator-owned transition event after plan review.
+- Do not add or edit paths under `tests/skills/`; artifact-scoped pressure tests remain PR2 work.
+- Do not claim behavior GREEN, full artifact-scoped R10 completion, or pressure-regression completion from PR1.
+- Do not refresh installed caches; that remains an explicit post-push or release proof decision.
+- Do not edit the source contract outside the accepted delivery/proof split, or edit review reductions, baseline artifacts, or goal-state files except for an orchestrator-owned transition event.
 - Preserve these pre-existing user-owned files byte-for-byte:
   - `skills-creation/references/platform-mechanics.md`: SHA-256 `3be37f694e6639cb82b52e3a35da5858b0801d2adf7b896b4b09ac97cd644847`.
-  - `spec-creation-swarm/SKILL.md`: SHA-256 `649c4ff1f569302659f31d6a8602078470674b91fc9bc1898daeb006619e904d`.
+  - `spec-creation-swarm/SKILL.md`: current `origin/master` content.
 
 Security context: not applicable. This slice changes Markdown authoring guidance only and authorizes no scripts, hooks, network behavior, secrets, permissions, cache refresh, or home-level mutation.
 
