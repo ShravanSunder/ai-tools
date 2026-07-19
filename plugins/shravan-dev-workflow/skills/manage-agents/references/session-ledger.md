@@ -7,7 +7,7 @@ Persistent Advisors and Sidekicks need one current ledger row before prompts tha
 ```text
 agent name / pattern / assignment / assignment id:
 continuity reason:
-resolved runtime / provider / model / reasoning effort:
+host / runtime / provider / model lineage / exact model / reasoning effort / budget:
 working scope / relationship name:
 runtime ids / provider-native id when exposed:
 permission boundary:
