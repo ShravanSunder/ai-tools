@@ -1,96 +1,99 @@
 # Reference Design
 
-References hold depth that the main path can call when a branch needs it. A good reference changes behavior without making every run carry its weight.
+This reference owns ordinary information placement and the caller/callee contract. Return the placement decision, the exact caller shape, and the result the opened reference returns to the main path.
 
-`SKILL.md` owns load conditions. Once a reference is open, the reference owns the branch work, local rules, and return shape. Start with `SKILL.md` plus ordinary references. Reach for lanes and schemas when the workflow has real independent lanes, shared outputs, or tool-validated shapes.
-
-## Good Reference File
-
-A reference is branch depth the main path already chose to open. It is the home for local judgment, detailed procedure, examples, rubrics, templates, caveats, or schema links that would overload `SKILL.md`.
-
-A good `references/*.md` file:
-
-- opens by naming the branch, decision, or detail it owns;
-- states the concrete result it returns to the main path;
-- holds one coherent kind of depth;
-- keeps rules, examples, caveats, and templates co-located for that branch;
-- lets the parent `SKILL.md` pointer own routing;
-- avoids restating all-run rules from `SKILL.md`;
-- has checkable stop conditions when it asks the agent to do work.
+An ordinary reference may own coherent detailed procedure used on every run or detail used only by one observable branch. Load mode and execution shape are separate decisions: mandatory detail is not a branch, and conditional detail is not automatically a lane.
 
 ## Canonical Placement Test
 
-This reference owns the placement ladder. Use this decision table:
-
 ```text
-every run needs it                  -> SKILL.md
-one judgment branch needs it        -> references/<branch>.md
-independent workflow lane           -> references/lanes/<lane-name>.md
-lane shape shared by lanes          -> references/<name>-lane-schema.md
-shared model output shape           -> references/<name>-output-schema.md
-tool-validated shape                -> schemas/<name>.schema.json or references/<name>-tool-schema.md
-deterministic executable mechanic   -> scripts/
-term meaning only                   -> references/glossary.md
-no behavior change                  -> prune
+all-run obligation, order, decision, required return, invariant, or completion -> SKILL.md
+all-run coherent detailed procedure                      -> MUST load references/<step>.md
+branch-only detail                                       -> IF <predicate>, load references/<branch>.md
+parallel-safe, handoff-ready work                        -> reference-lanes-design.md
+all-run lane handed to a subagent                        -> MUST dispatch via reference-lanes-design.md
+conditional lane handed to a subagent                    -> IF <predicate>, dispatch via reference-lanes-design.md
+multiple consumers need stable model-readable output     -> reference-lanes-design.md
+tool, test, CI, or runtime validates structure            -> reference-lanes-design.md
+deterministic executable mechanic                        -> scripts/
+term meaning only                                        -> references/glossary.md
+no behavior change                                       -> prune
 ```
 
-Branch-only is about who consumes the material, not how long it is. A short provider-specific warning can still belong in a reference if only that provider branch needs it.
+Branch-only is about who consumes the material, not its length. All-run detail may move out when it is one coherent procedure, has enough density to obscure the main path, or changes for a different reason than the body. Do not create arbitrary chapter files merely to reduce line count.
 
-Before promoting a slot set, template, lane context shape, output shape, or tool shape into a schema, use `references/schema-design.md`. Keep small skills in the ordinary reference shape. When a schema is justified, each consumer links to the shared schema and adds only branch- or lane-specific judgment.
+When lane qualification, repeated model output, or machine-validated structure is the hard part, return to the calling `SKILL.md`; its observable predicate routes to `references/reference-lanes-design.md`.
 
-## Context Pointer Quality
+## Caller Owns Routing
 
-A pointer from `SKILL.md` to a reference should include the routing condition. The reference itself should state ownership and return shape, not repeat the routing condition.
-
-Pointer shape:
+Every ordinary reference caller in the authored `SKILL.md` begins with exactly one literal load form:
 
 ```text
-routing condition:
-reference path:
-what to do there:
-what to bring back:
+MUST load `<reference>` and return `<result>`.
+IF `<observable predicate>`, load `<reference>` and return `<result>`.
 ```
 
-Reference opening shape:
+`MUST load` is an all-run reference pass, not a branch. `IF` is a branch and needs an observable predicate that changes the work. Do not combine the markers or replace them with "when useful," "as needed," "should load," or a vague "see this file" pointer.
+
+The caller owns:
+
+```text
+load mode: MUST | IF <observable predicate>
+destination: exact reference path
+requested work: decision, inspection, or procedure performed there
+needed result: concrete result consumed by the continuing main path
+```
+
+For `MUST load`, the caller also keeps the all-run step's obligation, order, decision, required return, invariant, and completion visible. The reference may own the detailed procedure; it must not become the only place that explains why the step exists or when the main path may continue.
+
+## Opened Reference Owns Local Work
+
+Once opened, an ordinary reference owns:
+
+```text
+owned decision or detail
+expected inputs from the caller
+local judgment, procedure, examples, caveats, or templates
+detailed returned result
+checkable stop or completion condition
+```
+
+The opened reference starts from the work already selected by its caller. It does not tell the parent when to load, call, or enter the current file, and it does not repeat or independently own its `MUST`/`IF` mode or caller predicate.
+
+The self-entry prohibition is narrow. A reference may state its owned decision and expected inputs, use local conditional procedure, and call deeper references. Those are local work, not ownership of the current file's entry route.
+
+A useful opening shape is:
 
 ```text
 this reference owns:
+expected inputs:
 return:
+complete when:
 ```
 
-Weak pointer:
+## Reference Fit
 
-```text
-See references/platform-mechanics.md for details.
-```
+A good ordinary reference:
 
-Strong pointer:
+- holds one coherent kind of detail;
+- changes behavior without duplicating the main path;
+- keeps local rules, examples, caveats, and templates together;
+- returns a result the caller can actually use;
+- has a checkable stop when it asks the agent to do work;
+- leaves entry routing and parent completion with the caller.
 
-```text
-When plugin metadata, versioning, changelog, marketplace validation, or cache
-readback is in scope, load references/platform-mechanics.md and return the
-shipping route plus validation commands.
-```
-
-## Reference Fit Signals
-
-- Branch reference: one branch owns it and one result returns.
-- Lane reference: an independent workflow step can run from bounded context.
-- `lane-schema`: independent lanes share route, input, or return fields.
-- `output-schema`: multiple consumers share the same result shape.
-- `tool-schema`: a tool, test, CI check, or runtime validates the fields.
-- Glossary entry: the content is a term definition only.
-- Prune: the content does not change agent behavior.
+A separate file is not enough to make work a lane or a schema. Provider-specific, conditional, long, packet-shaped, delegated, or serialized work still uses the ordinary-reference route unless it satisfies the advanced predicates owned by `reference-lanes-design.md`.
 
 ## Pruning Pass
 
-For each reference section, ask:
+For each body or reference section, ask:
 
 ```text
-what local judgment or detail does this own:
+what decision or detail does this own:
+who consumes it:
 what behavior changes:
 what result returns:
 what would break if deleted:
 ```
 
-If those answers are weak, remove the fluff, inline the material into the main path, merge it with its real owner, or delete it.
+If those answers are weak, inline the detail with its actual owner, merge overlapping references, or delete the no-op prose. Completion: each meaning has one owner, every ordinary caller is complete, and every opened reference can finish its local work without claiming its own entry route.
