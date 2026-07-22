@@ -1,10 +1,40 @@
 # Pressure Testing
 
-Use this as the detailed proof protocol. Pressure testing validates the craft model; it is not a substitute for writing a clear trigger, mental model, main path, and reference hierarchy.
+Use this as the detailed behavior-evidence and claim-boundary protocol. Pressure testing validates the craft model; it is not a substitute for writing a clear trigger, mental model, main path, and reference hierarchy, and it is not the admission gate for drafting from user-approved intent.
 
-This reference owns behavior proof beyond static validation. Return the RED or proof-gap baseline, GREEN rerun result, rationalization evidence, and smallest wording change still needed.
+This reference owns proof interpretation beyond static validation. Return the authoring basis, success definition, reproduction or characterization result, evaluation evidence, rationalizations, strongest demonstrated claim, remaining proof gap, and smallest wording change still needed.
 
-RED captures baseline failure or a scenario-specific proof gap. GREEN reruns after the skill is present. REFACTOR tightens the smallest trigger, pointer, completion criterion, or wording form that still leaks. Keep grader-only assertions out of the prompt -- the model under test sees only the prompt and metadata. Static validation remains structural proof only.
+Keep grader-only assertions out of the prompt -- the model under test sees only the realistic task and permitted context. Static validation remains structural proof only.
+
+## Authoring Basis And Reproduction
+
+For `observed failure`, attempt faithful reproduction when the available evidence can preserve the load-bearing prompt, inputs, environment, context, and expected behavior. Return one result:
+
+- `reproduced`: the targeted failure occurred and establishes scenario-specific RED;
+- `not reproduced`: a credible attempt did not show the targeted failure;
+- `insufficient evidence`: missing information prevents a faithful attempt;
+- `inconclusive`: execution or interpretation cannot support a result.
+
+Only `reproduced` establishes RED. The other results do not prove that guidance is unnecessary or that the historical incident is fixed. Ask the user whether to supply evidence and retry, approve a representative hypothesis, author from the approved success definition with a named proof gap, or defer.
+
+A representative hypothesis is a deliberately simplified or synthetic case the user approves as preserving the suspected mechanism. Evidence from it applies to that representative case, not automatically to the historical incident.
+
+For `user-directed intent`, a first draft may proceed after the user approves the success definition. Evaluation may happen before or after that draft. If it is deferred, report `drafted from user intent; behavior not yet evaluated` rather than inventing RED or GREEN.
+
+## Evidence And Claim Ladder
+
+Use only the strongest claim supported by the evidence:
+
+```text
+intent only                 -> drafted from approved intent
+manual exercise             -> observed in named examples
+baseline characterization   -> behavior characterized without delta claim
+representative comparison   -> delta demonstrated for that approved case
+reproduced RED -> GREEN      -> targeted improvement demonstrated for that run
+repeated regression evidence-> stored cases currently pass at reported strength
+```
+
+A passing control means the comparison did not demonstrate added value. It may expose native model behavior, a weak scenario, or a user preference. It does not automatically forbid authoring. A commit, branch, PR, reviewer verdict, or static validator does not strengthen behavior evidence.
 
 ## Proof By Skill Type
 
@@ -16,12 +46,12 @@ RED captures baseline failure or a scenario-specific proof gap. GREEN reruns aft
 
 ## Micro-Test Protocol
 
-Use micro-tests to verify wording quickly; scenarios remain the gate for discipline skills.
+Use micro-tests to verify wording quickly. Scenarios remain the behavior-proof gate for discipline skills when the completion claim says the rule holds under pressure.
 
-- Run a no-guidance control first. If the control does not fail, do not author the guidance -- there is nothing to fix.
-- Run 5+ fresh-context repetitions of the candidate wording, each inside its realistic surrounding context, not in isolation.
+- When claiming improvement, run a comparable no-guidance or previous-revision control first. When characterizing or drafting from user intent, label that different purpose explicitly.
+- Choose fresh-context repetitions proportionate to stochasticity, observed variance, risk, and the strength of the claim; there is no universal count.
 - Read every flagged transcript by hand; do not trust a keyword match alone.
-- Treat variance across reps as a metric: five different interpretations of the same wording means the wording is not binding yet.
+- Treat variance across repetitions as a proof gap. Inconsistent interpretations mean the wording is not binding at the claimed strength.
 
 ## Rationalization Capture
 
@@ -37,3 +67,5 @@ retest:
 ## Running The Suite
 
 `tests/skills/run-skill-pressure-tests.sh --fast` runs the fast suite; `tests/skills/run-skill-pressure-tests.sh --scenario <id>` runs one scenario. Scenario file format and the runner's grader-only checks are owned by `tests/skills/README.md` -- cite it, do not restate its checklist here.
+
+If no suitable executable scenario exists or the user defers evaluation, return the named proof gap. Do not fabricate a scenario merely to satisfy the protocol. Scenario-authoring and harness expansion are separate work from this reference's proof interpretation.
