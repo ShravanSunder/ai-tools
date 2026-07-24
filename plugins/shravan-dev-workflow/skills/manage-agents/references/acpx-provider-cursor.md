@@ -12,12 +12,17 @@ Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single m
 
 Pass ids with `--model` at session creation or `acpx cursor set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the exact advertised ACP id from `session/new` / `configOptions.model`. Bare prefixes (for example `composer-2.5`) resolve only when exactly one advertised id shares that prefix; otherwise pass the full bracketed id.
 
-Skill-matrix lineages observed on this host's Cursor ACP catalog (verify locally; catalogs change):
+Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
 
-| Lineage | Advertised ACP id | Matrix |
-| --- | --- | --- |
-| Grok 4.5 | `grok-4.5[effort=high,fast=true]` | Balanced |
-| Cursor Composer 2.5 | `composer-2.5[fast=true]` | Mini |
+| Model id                          | Note              |
+| --------------------------------- | ----------------- |
+| `grok-4.5[effort=high,fast=true]` |                   |
+| `composer-2.5[fast=true]`         |                   |
+| `claude-fable-5[1m]`              | user request only |
+| `claude-opus-4-8`                 | user request only |
+| `gpt-5.6-sol`                     | user request only |
+| `gpt-5.6-luna`                    | user request only |
+| `gpt-5.6-terra`                   | user request only |
 
 `agent --list-models` uses different short names (`composer-2.5`, `composer-2.5-fast`, `cursor-grok-4.5-high`, …). Those are Cursor CLI labels, not ACPX `--model` ids. Always record the ACP-advertised id in the ledger.
 
@@ -27,11 +32,11 @@ Cursor may silently resolve a bare model name to a bracketed variant. If usage l
 
 Cursor ACP advertises session modes. Use `acpx cursor set-mode <mode> -s <name>` with an advertised id:
 
-| Mode | Use |
-| --- | --- |
-| `agent` | Full tool access |
-| `plan` | Read-only planning |
-| `ask` | Q&A; no edits or command execution |
+| Mode    | Use                                |
+| ------- | ---------------------------------- |
+| `agent` | Full tool access                   |
+| `plan`  | Read-only planning                 |
+| `ask`   | Q&A; no edits or command execution |
 
 ## Sessions And Identity
 

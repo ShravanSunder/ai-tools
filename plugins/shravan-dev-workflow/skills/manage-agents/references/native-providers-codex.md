@@ -4,12 +4,13 @@ Owns Codex native v2 `spawn_agent` model/effort/fork values. Return exact `model
 
 ## Models
 
-| Name | Id | Matrix |
-| --- | --- | --- |
-| Sol | `gpt-5.6-sol` | Frontier / Balanced |
-| Luna | `gpt-5.6-luna` | Mini |
+| Model id             |
+| -------------------- |
+| `gpt-5.6-sol`        |
+| `gpt-5.6-luna`       |
+| `gpt-5.6-terra`      |
 
-Lib ids: `openai.gpt-5.6-{sol,luna}`. Prefer short form unless the host requires `openai.`.
+Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host requires `openai.`.
 
 ## Effort
 

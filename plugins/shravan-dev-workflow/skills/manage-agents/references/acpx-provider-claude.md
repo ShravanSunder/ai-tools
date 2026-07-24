@@ -1,8 +1,13 @@
 # ACPX Provider: Claude
 
-## Fable
+## Models
 
-The locally verified custom model id is `claude-fable-5[1m]`, not bare `fable`. User settings must expose that custom catalog. Define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
+| Model id             |
+| -------------------- |
+| `claude-fable-5[1m]` |
+| `claude-opus-4-8`    |
+
+The locally verified custom Fable id is `claude-fable-5[1m]`, not bare `fable`. User settings must expose that custom catalog. Opus uses the provider-advertised API id (`claude-opus-4-8`); verify locally if the adapter exposes a bracketed variant. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
 
 ```bash
 REPO=/absolute/repo

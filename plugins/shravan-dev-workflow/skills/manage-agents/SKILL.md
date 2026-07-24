@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Always use when using an advisor, sidekick, delegate, operator or subagent, or swarm; deciding how to call or coordinate subagents for implementation, TDD and testing, research, reviews, monitoring, or other bounded work; choosing model capability.  Use for native subagents and ACPX subagents.
+description: Always use when using an advisor, sidekick, delegate, operator or subagent; deciding how to call or coordinate subagents for implementation, TDD and testing, research, reviews, monitoring, or other bounded work; choosing model capability. Use for native subagents and ACPX subagents.
 ---
 
 # Manage Agents
@@ -12,17 +12,22 @@ pattern -> model category -> model lineage -> exact model id -> reasoning effort
         -> native or ACPX runtime -> provider -> budget (or n/a) -> permissions -> packet -> receipt
 ```
 
-## Patterns  
+## Patterns
 
 A subagent is a runtime, not a pattern. Use one of the following patterns to manage the subagent.
 
 ### Advisor
-Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opinions; get help from a Frontier model.  You drive the loop. 
+Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opinions; get help from a Frontier model. You drive the loop.
 
 - **Work:** Strategic advice, reflection, course correction, or completion checks while the parent remains executor.
 - **Continuity and cardinality:** Exactly one persistent named advisor.
 - **Authority:** Candidate guidance only; validate the advice.
 - **Model category:** Frontier
+
+| Model category | Model lineage       | Thinking            |
+| -------------- | ------------------- | ------------------- |
+| Frontier       | OpenAI Sol          | high, xhigh, max    |
+| Frontier       | Claude Fable        | medium, high, xhigh |
 
 ### Sidekick
 Use a Sidekick for multi-turn delegated work you will resume and steer; a named ongoing co-worker with a ledger. You coordinate and validate the work.
@@ -32,6 +37,11 @@ Use a Sidekick for multi-turn delegated work you will resume and steer; a named 
 - **Authority:** Provide scope or responsibilities; no final authority; validate the work.
 - **Model category:** Frontier or Balanced
 
+| Model category | Model lineage       | Thinking            |
+| -------------- | ------------------- | ------------------- |
+| Frontier       | OpenAI Sol          | high, xhigh         |
+| Balanced       | OpenAI Sol          | low or medium       |
+
 ### Delegate
 Use for one clear bounded assignment then discard. You manage and validate the work.
 
@@ -40,47 +50,58 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 - **Authority:** Packet-bounded work; parent verifies the work.
 - **Model category:** Balanced or Mini
 
+| Model category | Model lineage       | Thinking            |
+| -------------- | ------------------- | ------------------- |
+| Balanced       | OpenAI Sol          | low or medium       |
+| Balanced       | Claude Opus         | high or xhigh       |
+| Balanced       | Cursor Grok 4.5     | medium or high      |
+
 ### Operator
-Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) /  scraping / watching (watching montiors) / report (grouping logs and results); do not ask for reasoning. Helps save context for the you, you dispatch and get data and references.
+Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results); do not ask for reasoning. Helps save context for you: you dispatch and get data and references.
 
 - **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
 - **Continuity and cardinality:** Single or Operator swarm; no semantic continuity.
 - **Authority:** Execute, observe, and report only. No judgment, code changes, replies, readiness verdicts, or merge; operator provides data or takes a bounded action.
 - **Model category:** Mini
 
-
-## Models
-
-| Model category | Model lineage | Thinking |
-| --- | --- | --- |
-| Frontier | GPT-5.6 Sol | high, xhigh, max |
-| Frontier | Claude Fable | medium, high, xhigh |
-| Balanced | GPT-5.6 Sol | low or medium |
-| Balanced | Claude Opus | high or xhigh |
-| Balanced | Grok 4.5 | medium or high |
-| Mini | GPT-5.6 Luna | high or xhigh |
-| Mini | Cursor Composer 2.5 | no thinking |
+| Model category | Model lineage       | Thinking            |
+| -------------- | ------------------- | ------------------- |
+| Mini           | OpenAI Luna         | high or xhigh       |
+| Mini           | OpenAI Terra        | low or medium       |
+| Mini           | Cursor Composer 2.5 | no thinking         |
 
 Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Do not treat lineage as a provider. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable on the chosen provider.
 
-## Provider
+## Model: versions and providers
 
-| Provider | Models |
-| --- | --- |
-| `claude` | Fable, Opus |
-| `cursor` | Grok 4.5, Composer 2.5, (multimodel based on user input) |
-| `codex` | Sol, Luna |
+| Model           | Version     |
+| --------------- | ----------- |
+| OpenAI Sol      | GPT-5.6     |
+| OpenAI Luna     | GPT-5.6     |
+| OpenAI Terra    | GPT-5.6     |
+| Claude Fable    | 5.x         |
+| Claude Opus     | 4.x+ or 5.x |
+| Cursor Grok     | 4.5+        |
+| Cursor Composer | 2.5+        |
+
+
+| Provider | Models                                                                 |
+| -------- | ---------------------------------------------------------------------- |
+| `claude` | Fable, Opus                                                            |
+| `codex`  | Sol, Luna, Terra                                                       |
+| `cursor` | Grok 4.5, Composer 2.5, (other models only if specified by user input) |
+
 
 ## Native and ACPX Runtimes
 
-| Runtime | What it is |
-| --- | --- | --- |
-| Native subagent | The current host's built-in agent runtime. | 
-| ACPX | A client for calling ACP-compatible provider adapters and persistent sessions outside the host's native runtime. | 
+| Runtime         | What it is                                      |
+| --------------- | ----------------------------------------------- |
+| Native subagent | Host built-in agent runtime                     |
+| ACPX            | External ACP provider sessions outside the host |
 
 Native describes how the subagent is launched, not its pattern or model. A native subagent still operates as an Advisor, Sidekick, Delegate, or Operator under the same packet, authority, continuity, and parent-verification rules.
 
-Who are you and what are you running on? Always use your own native subagents for your own models lineage.
+Who are you and what are you running on? Always use your own native subagents for your own model lineage.
 - If you are codex, use native subagent for all GPT native models.
 - If you are claude, use native subagent for all Claude native models.
 
@@ -95,7 +116,7 @@ Who are you and what are you running on? Always use your own native subagents fo
 
 ## Workflow
 
-1. Choose the pattern and model from the tables above.
+1. Choose the pattern and model from the pattern tables above.
    - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, available reasoning effort, and lineage requirement.
 
 2. Choose native or ACPX runtime.
