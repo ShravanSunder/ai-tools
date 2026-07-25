@@ -19,7 +19,7 @@ Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
 | `grok-4.5[effort=high,fast=true]` |                   |
 | `composer-2.5[fast=true]`         |                   |
 | `claude-fable-5[1m]`              | user request only |
-| `claude-opus-4-8`                 | user request only |
+| `claude-opus-5`                   | user request only |
 | `gpt-5.6-sol`                     | user request only |
 | `gpt-5.6-luna`                    | user request only |
 | `gpt-5.6-terra`                   | user request only |

@@ -24,10 +24,11 @@ Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opin
 - **Authority:** Candidate guidance only; validate the advice.
 - **Model category:** Frontier
 
-| Model category | Model lineage       | Thinking            |
-| -------------- | ------------------- | ------------------- |
-| Frontier       | OpenAI Sol          | high, xhigh, max    |
-| Frontier       | Claude Fable        | medium, high, xhigh |
+| Model category | Model lineage       | Thinking         |
+| -------------- | ------------------- | ---------------- |
+| Frontier       | OpenAI Sol          | high, xhigh, max |
+| Frontier       | Claude Fable        | high             |
+| Frontier       | Claude Opus         | high, xhigh      |
 
 ### Sidekick
 Use a Sidekick for multi-turn delegated work you will resume and steer; a named ongoing co-worker with a ledger. You coordinate and validate the work.
@@ -37,10 +38,12 @@ Use a Sidekick for multi-turn delegated work you will resume and steer; a named 
 - **Authority:** Provide scope or responsibilities; no final authority; validate the work.
 - **Model category:** Frontier or Balanced
 
-| Model category | Model lineage       | Thinking            |
-| -------------- | ------------------- | ------------------- |
-| Frontier       | OpenAI Sol          | high, xhigh         |
-| Balanced       | OpenAI Sol          | low or medium       |
+| Model category | Model lineage       | Thinking         |
+| -------------- | ------------------- | ---------------- |
+| Frontier       | OpenAI Sol          | high, xhigh      |
+| Frontier       | Claude Opus         | high             |
+| Balanced       | OpenAI Sol          | low or medium    |
+| Balanced       | Claude Opus         | medium           |
 
 ### Delegate
 Use for one clear bounded assignment then discard. You manage and validate the work.
@@ -50,11 +53,11 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 - **Authority:** Packet-bounded work; parent verifies the work.
 - **Model category:** Balanced or Mini
 
-| Model category | Model lineage       | Thinking            |
-| -------------- | ------------------- | ------------------- |
-| Balanced       | OpenAI Sol          | low or medium       |
-| Balanced       | Claude Opus         | high or xhigh       |
-| Balanced       | Cursor Grok 4.5     | medium or high      |
+| Model category | Model lineage       | Thinking         |
+| -------------- | ------------------- | ---------------- |
+| Balanced       | OpenAI Sol          | low or medium    |
+| Balanced       | Claude Opus         | medium           |
+| Balanced       | Cursor Grok 4.5     | medium or high   |
 
 ### Operator
 Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results); do not ask for reasoning. Helps save context for you: you dispatch and get data and references.
@@ -64,11 +67,11 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 - **Authority:** Execute, observe, and report only. No judgment, code changes, replies, readiness verdicts, or merge; operator provides data or takes a bounded action.
 - **Model category:** Mini
 
-| Model category | Model lineage       | Thinking            |
-| -------------- | ------------------- | ------------------- |
-| Mini           | OpenAI Luna         | high or xhigh       |
-| Mini           | OpenAI Terra        | low or medium       |
-| Mini           | Cursor Composer 2.5 | no thinking         |
+| Model category | Model lineage       | Thinking         |
+| -------------- | ------------------- | ---------------- |
+| Mini           | OpenAI Luna         | high or xhigh    |
+| Mini           | OpenAI Terra        | low or medium    |
+| Mini           | Cursor Composer 2.5 | no thinking      |
 
 Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Do not treat lineage as a provider. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable on the chosen provider.
 
@@ -80,7 +83,7 @@ Verify the exact provider-advertised model id and thinking option when the provi
 | OpenAI Luna     | GPT-5.6     |
 | OpenAI Terra    | GPT-5.6     |
 | Claude Fable    | 5.x         |
-| Claude Opus     | 4.x+ or 5.x |
+| Claude Opus     | 5.x         |
 | Cursor Grok     | 4.5+        |
 | Cursor Composer | 2.5+        |
 

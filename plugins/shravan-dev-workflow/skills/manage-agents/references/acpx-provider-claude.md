@@ -5,9 +5,9 @@
 | Model id             |
 | -------------------- |
 | `claude-fable-5[1m]` |
-| `claude-opus-4-8`    |
+| `claude-opus-5`      |
 
-The locally verified custom Fable id is `claude-fable-5[1m]`, not bare `fable`. User settings must expose that custom catalog. Opus uses the provider-advertised API id (`claude-opus-4-8`); verify locally if the adapter exposes a bracketed variant. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
+The locally verified custom Fable id is `claude-fable-5[1m]`, not bare `fable`. User settings must expose that custom catalog. Opus uses the provider-advertised API id (`claude-opus-5`); verify locally if the adapter exposes a bracketed variant. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
 
 ```bash
 REPO=/absolute/repo
