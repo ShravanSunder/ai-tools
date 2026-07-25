@@ -12,6 +12,8 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-24 Manage Agents Opus 5 Matrix](2026-07-24-manage-agents-opus-5.md)
+- [2026-07-24 Manage Agents Pattern Tables And Terra](2026-07-24-manage-agents-terra-mini.md)
 - [2026-07-17 Shravan Dev Workflow Installation Policy AVAILABLE](2026-07-17-shravan-dev-workflow-installation-available.md)
 - [2026-07-14 Manage Agents Dispatch Layers Terminology](2026-07-14-manage-agents-dispatch-layers.md)
 - [2026-07-13 Manage Agents Native Providers Codex](2026-07-13-manage-agents-native-providers-codex.md)
