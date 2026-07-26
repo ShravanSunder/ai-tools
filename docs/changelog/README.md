@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-26 Manage Agents Reviewer Read-Only Access](2026-07-26-manage-agents-reviewer-read-only.md)
 - [2026-07-26 Manage Agents Binary History](2026-07-26-manage-agents-binary-history.md)
 - [2026-07-26 Manage Agents Reviewer History](2026-07-26-manage-agents-reviewer-history.md)
 - [2026-07-26 Manage Agents Reviewer Context](2026-07-26-manage-agents-reviewer-context.md)
