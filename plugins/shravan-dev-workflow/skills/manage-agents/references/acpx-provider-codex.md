@@ -30,4 +30,4 @@ Keep cwd, resolved `codex` command, model id, effort, and permission boundary st
 
 ## Permissions
 
-Use `--approve-reads` for source-grounded Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. Route Advisor and reviewer write approval to the parent.
+Use `--approve-reads` for source-grounded Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.

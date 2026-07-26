@@ -7,6 +7,7 @@ agent job:
 pattern: advisor | sidekick | delegate | operator
 assignment purpose: review | spec creation | plan creation | implementation | research | operation | advice | other
 parent conversation history: none | all
+workspace access: read-only | write
 assignment id:
 lane: single | <swarm name / lane>
 target:
@@ -18,8 +19,7 @@ provider: cursor | claude | codex | none when native
 decision target:
 continuity reason: required for Advisor/Sidekick | none for Delegate/Operator
 source anchors:
-permission boundary:
-write scope:
+write scope: none | <paths when workspace access is write>
 non-goals:
 receipt expected:
 receipt scope: <session identity, assignment id, decision target, source/head version>

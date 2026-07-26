@@ -56,4 +56,4 @@ Keep cwd, resolved `cursor` command, exact model id, mode, and permission bounda
 
 ## Permissions
 
-Use `--approve-reads` for source-grounded work. Keep `--non-interactive-permissions fail` for unattended runs. Keep Advisor and reviewer write approval with the parent.
+Use `--approve-reads` for source-grounded work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.

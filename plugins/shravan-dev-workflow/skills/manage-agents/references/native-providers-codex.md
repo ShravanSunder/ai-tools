@@ -23,6 +23,11 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
 - Fresh history may pass explicit model and reasoning-effort overrides.
 
+## Workspace Access
+
+- `read-only`: set `workspace access: read-only` and `write scope: none` in the packet; verify the worktree is unchanged after the receipt.
+- `write`: record the parent-approved paths in `write scope`.
+
 ## Examples
 
 ```json

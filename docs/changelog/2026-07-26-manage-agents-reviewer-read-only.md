@@ -7,9 +7,8 @@
 
 ## Change
 
-- Gives reviewers read-only workspace access by default.
-- Leaves history and workspace access for non-reviewers to the parent.
-- Keeps source reads available through the runtime permission contract.
+- Changed the runtime section heading structure.
+- The intended reviewer read-only rule did not land in the released `SKILL.md`; version `1.6.68` corrects the source contract.
 
 ## Validation
 

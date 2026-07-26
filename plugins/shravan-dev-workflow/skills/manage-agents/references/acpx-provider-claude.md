@@ -25,6 +25,6 @@ The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Use
 
 ## Settings And Permissions
 
-`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` also loads user plugins, commands, hooks, and external resources. Keep `--approve-reads --no-terminal --non-interactive-permissions fail` for source-grounded advice and review, set repository and home write scope to none in the packet, and route write approval to the parent.
+`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` also loads user plugins, commands, hooks, and external resources. Keep `--approve-reads --no-terminal --non-interactive-permissions fail` for source-grounded advice and review, and set repository and home write scope to none in review packets. The parent authorizes write access for non-review assignments.
 
 A friendly alias or exit code 0 does not prove Fable launched; verify capability evidence and record the accepted id in the ledger.

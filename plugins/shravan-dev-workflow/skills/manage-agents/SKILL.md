@@ -78,10 +78,17 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 
 Select the pattern, model category, model lineage, and reasoning requirement first. Then route from the parent host's own model lineage. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules.
 
-### Context
+## Context And Access
 
-- Reviewers: start with no parent conversation history and read-only workspace access.
-- Non-reviewers: the parent chooses history and workspace access.
+### Parent Conversation History
+
+- Reviewers: `none`.
+- Non-reviewers: the parent chooses `none` or `all`.
+
+### Workspace Access
+
+- Reviewers: `read-only`.
+- Non-reviewers: the parent chooses `read-only` or `write`.
 
 ### Native Dispatch
 
@@ -110,10 +117,10 @@ Use ACPX for a model lineage owned by a different provider than the parent host.
 1. Choose the pattern before the model, provider, or runtime. Then choose the model category, lineage, and reasoning requirement from the pattern tables above.
    - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, reasoning requirement, and lineage.
 
-2. Choose context and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
-   - Completion: the packet records both selections under **Context**.
-   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, and history encoding are explicit.
-   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, and session-history encoding are explicit.
+2. Choose parent conversation history and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
+   - Dispatch completion: the packet records both selections.
+   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and workspace-access enforcement are explicit.
+   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit.
    - Unsupported completion: report the missing provider contract and stop dispatch.
 
 3. Build one bounded packet for every non-trivial call, dispatch it, and reduce the result.

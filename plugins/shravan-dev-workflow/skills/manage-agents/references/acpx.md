@@ -29,8 +29,8 @@ Start without prior agent-session history by using a one-shot call or a new name
 
 Set the narrowest permission boundary that performs the assignment:
 
-- Agent reads source and packet: `--approve-reads --no-terminal`.
-- Authorized implementation: `--approve-all`.
+- `read-only`: `--approve-reads --no-terminal`.
+- `write`: `--approve-all`.
 - Unattended call: `--non-interactive-permissions fail`.
 
 Resolve one stable `<provider-agent-command>` from the provider contract. It includes the launcher, required environment, absolute cwd, permission boundary, provider token, and exact model selection. Use it for every lifecycle call in the relationship.
