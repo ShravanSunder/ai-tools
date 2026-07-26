@@ -9,7 +9,7 @@ expect_decision_regex: classification:\s*update|treat\w* this as.{0,60}update
 expect_decision_regex: spec review|skill-spec-review
 expect_decision_regex: references/skill-spec-review\.md|skill-spec-review\.md|skill-spec-review
 expect_decision_regex: before (implementation|editing|files are edited)|pre-implementation|before files are edited
-expect_decision_regex: references/lanes|consistency|structure-and-constraints|steering|pruning
+expect_decision_regex: mental-model-fit|trigger-routing|rule-agreement
 expect_decision_regex: fresh[- ]context|not forked|no session history|Delegate
 expect_proof_regex: authoring basis|user-directed intent|observed failure|reproduc\w+|RED.{0,80}(before|first)|proof gap
 expect_proof_regex: accepted-to-implement|accepted to implement|implementation decision|accept the design|spec accepted|required spec review|spec review before implementation

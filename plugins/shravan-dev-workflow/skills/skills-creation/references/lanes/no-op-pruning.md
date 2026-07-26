@@ -1,15 +1,6 @@
-# pruning
-
-Status: mandatory
+# no-op-pruning
 
 Mission / stance: Delete what does not earn its place. The test is behavioral, not aesthetic: would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside the surrounding context, never to whole sections at once.
-
-This lane needs text on disk. It does not run against a proposal.
-
-When to run:
-- any prose was added or edited;
-- a section grew during the change;
-- guidance was added "to be safe" without a named failure.
 
 Where to look:
 - every sentence added or changed by the diff;
@@ -44,4 +35,6 @@ Calibration: Propose deletions, not rewrites. Be aggressive: most prose that fai
 
 Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` owns *two statements disagree*. `steering-strength` owns *a statement is too weak to bind*. A leading word too weak to beat the default is reported here as a no-op with a `steering-strength` route.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.
+Stop when: the deletion test has been applied to every sentence added or changed by the diff.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.

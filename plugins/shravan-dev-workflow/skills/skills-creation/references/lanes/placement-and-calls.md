@@ -1,16 +1,6 @@
-# structure-and-constraints
-
-Status: mandatory
+# placement-and-calls
 
 Mission / stance: Decide whether each obligation lives where the agent will actually meet it, and whether every call site says enough to act on. Material in the wrong home is silently skipped; a call site missing its return shape sends the agent away with nothing to bring back.
-
-This lane needs text on disk. It does not run against a proposal.
-
-When to run:
-- the `SKILL.md` body changed;
-- a reference was added, moved, split, or merged;
-- a call site was added or reworded;
-- a completion criterion or completion blocker changed.
 
 Where to look:
 - every call site in `SKILL.md` and its literal form;
@@ -45,4 +35,6 @@ Calibration: Report placement and call-completeness defects with the exact site.
 
 Overlap boundary: This lane owns *where material lives and whether calls are complete*, including progressive-disclosure judgment. `rule-agreement` owns whether duplicate copies agree, and owns unreachability outright: a reference nothing calls, or a form declared and never used, is a `rule-agreement` finding, not one of this lane's. `no-op-pruning` owns whether a line earns its place at all.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.
+Stop when: every call site has been walked and every reference traced back to a caller.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.

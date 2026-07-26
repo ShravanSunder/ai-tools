@@ -1,15 +1,6 @@
 # sensitive-surface
 
-Status: conditional
-
 Mission / stance: Gate executable and privileged surfaces before they are written, not after. Ordinary authoring judgment does not cover scripts, hooks, third-party source, credentials, or anything that writes outside the repo.
-
-When to run:
-- `scripts/`, hooks, `assets/`, or package scripts changed;
-- shell commands, subprocess behavior, or network access is introduced;
-- third-party source or an upstream skill is being adopted;
-- auth material, tokens, or sensitive-value paths are touched;
-- installed-cache refresh or any home-level write is proposed.
 
 Where to look:
 - the new or changed executable resource and its entry points;
@@ -37,4 +28,6 @@ Calibration: Report unclassified or late-classified surfaces and missing proof. 
 
 Overlap boundary: This lane owns sensitive surfaces, their decision timing, and deterministic tests for executables. `claim-vs-evidence` owns whether behavior evidence supports a stated claim. `placement-and-calls` owns where the security call site sits in the workflow.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.
+Stop when: every sensitive surface in the diff has a decision and every added line has been scanned for public-safety.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.

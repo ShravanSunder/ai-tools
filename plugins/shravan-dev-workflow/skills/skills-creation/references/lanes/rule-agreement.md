@@ -1,14 +1,6 @@
-# consistency
-
-Status: mandatory
+# rule-agreement
 
 Mission / stance: Find where the skill contradicts itself. In a contract skill, contradiction is worse than absence: the agent follows whichever home it read last, and the run varies for reasons nobody can see. Two statements that disagree is this lane's only subject.
-
-When to run:
-- two or more files in the skill changed;
-- a rule, term, or predicate was reworded;
-- a reference was added, renamed, split, or merged;
-- the skill declares a grammar, vocabulary, label set, or schema that other files must speak.
 
 Where to look, when the artifact is a **proposal**: the proposed rules, terms, and labels against what the shipped skill already states, and against the external sources the proposal cites. Nothing on disk has changed yet, so the comparison is proposal-versus-current, not diff-versus-diff.
 
@@ -50,4 +42,6 @@ Calibration: Report contradictions with every home listed and one named as the p
 
 Overlap boundary: This lane owns *two statements disagree* and *unreachability* — a reference nothing calls, or a form declared and never used, is this lane's finding. `placement-and-calls` owns whether a statement sits in the right home and whether a call site is complete; this lane owns whether its copies agree and whether what is declared is actually reached. `no-op-pruning` owns *a statement does nothing*: a weak leading word is `no-op-pruning`, a term carrying two definitions is `rule-agreement`.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.
+Stop when: every rule, term, label set, and external claim in the changed surface has been inventoried across all its homes.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.

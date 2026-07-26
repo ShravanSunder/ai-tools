@@ -1,6 +1,6 @@
 # 2026-07-26 Skills Creation Review Lanes
 
-Plugin: `shravan-dev-workflow` 1.6.70
+Plugin: `shravan-dev-workflow` 1.6.70 (shipping status: source-only; not published, no cache refresh)
 
 ## User-visible behavior change
 
@@ -14,28 +14,32 @@ check*. Reviews checked contract conformance thoroughly and skill quality
 barely.
 
 Now `SKILL.md` carries a `Review Lanes` section that owns lane selection
-outright. Each row is an independent predicate; dispatch the union of every row
-that holds:
+outright, behind two ordered gates and a surface table.
+
+**Gate 1 — change class.** A mechanical change dispatches nothing and takes
+static validation only.
+
+**Gate 2 — artifact.** A proposal exists only in conversation and dispatches
+exactly `mental-model-fit`, `trigger-routing`, and `rule-agreement`.
+`no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level
+text, call sites, and real transcripts — dispatched at spec time they would open
+the currently shipped file, find it consistent because it shipped, and return a
+clean receipt about text nobody proposed. Changed files go to the table.
 
 ```text
-mechanical: typo, version, metadata  -> none; static validation only
-a proposal, before files exist       -> mental-model-fit, trigger-routing,
-                                        rule-agreement
-reference text                       -> rule-agreement, no-op-pruning
-SKILL.md body                        -> placement-and-calls, steering-strength,
-                                        mental-model-fit, no-op-pruning,
-                                        rule-agreement
-frontmatter or description           -> trigger-routing
-a behavior-proof claim exists        -> claim-vs-evidence
-a sensitive surface                  -> sensitive-surface
+SKILL.md body (main path)          -> placement-and-calls, steering-strength,
+                                      mental-model-fit, no-op-pruning,
+                                      rule-agreement
+reference text (depth)             -> rule-agreement, no-op-pruning
+frontmatter or description (trigger)-> trigger-routing
+a behavior-proof claim (proof)     -> claim-vs-evidence
+a sensitive surface                -> sensitive-surface
 ```
 
-**Two artifacts select differently.** A proposal exists only in conversation, so
-only lanes answerable about a design run there. `no-op-pruning`,
-`placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites,
-and real transcripts — dispatched at spec time they would open the currently
-shipped file, find it consistent because it shipped, and return a clean receipt
-about text nobody proposed.
+The rows are the four surfaces of the Great Skill Frame plus the security gate,
+so the table is a visible walk of the skill's own lens. Artifact and change
+class are gates rather than rows because they select *whether* the table
+applies, not *which* surface changed — as rows they contradicted it.
 
 **No collector.** The parent synthesizes: merge duplicates across lanes, resolve
 conflicts against the artifact, name coverage gaps, rank. No lane reads another
@@ -49,8 +53,8 @@ so a proof run is not spent on text the review is about to change.
 - Added `skills/skills-creation/references/lanes/` with eight lane contracts:
   `rule-agreement`, `no-op-pruning`, `placement-and-calls`, `steering-strength`,
   `mental-model-fit`, `trigger-routing`, `claim-vs-evidence`,
-  `sensitive-surface`. Each carries only its own mission, rubric, overlap
-  boundary, and stop condition.
+  `sensitive-surface`. Each carries its own mission, rubric, overlap boundary,
+  and stop condition; selection and the shared contract live outside them.
 - Lane dispatch routes through `manage-agents` as a reviewer, which owns
   `parent conversation history: none` and `workspace access: read-only`. Native
   dispatch is preferred; at least one lane should use a different model lineage
@@ -83,21 +87,33 @@ so a proof run is not spent on text the review is about to change.
 ## Validation
 
 - `claude plugin validate .` passed; JSON manifests parse.
-- All `references/` pointers in `skills-creation` resolve; no dangling paths.
+- `codex plugin list --marketplace ai-tools --available --json` run; the Codex
+  surface resolves `shravan-dev-workflow@ai-tools` (installed cache still at
+  1.6.63, not refreshed).
+- All `references/` pointers in `skills-creation` resolve, including the
+  cross-skill relative paths into `manage-agents`.
 - Markdown tables aligned and code fences balanced across all changed files.
-- Lane selection has one home: every `Status:` line is a bare label and no lane
-  file restates its predicate.
+- Lane selection has one home: the `SKILL.md` table. No lane file carries a
+  `Status:` line or a `When to run:` block.
 - Dispatch terms appear once, in the common lane contract; zero lane files
   restate authority or history.
 - No lane consumes another lane's receipt — single readiness wave confirmed.
-- `pnpm --dir tests/skills exec vitest run lib` and `tsc --noEmit` clean.
+- Every lane's H1 matches its filename, so receipts key on the dispatched name.
+- `pnpm --dir tests/skills exec vitest run lib` and `tsc --noEmit` clean. Note
+  these exercise the harness library, which this change does not touch, so they
+  are not evidence about the changed files.
+- `SKILL_PRESSURE_BACKEND=fake … --scenario skills-creation-review-lane-scaling`
+  run: the new scenario parses and its regexes compile and evaluate. The fake
+  backend returns a canned non-agent response, so this is parse proof only, not
+  assertion proof.
 
 ## Proof gap
 
 Behavior proof is **not** established. `tests/skills/run-skill-pressure-tests.sh
 --fast` has not been run against this change; shipping status is `source-only`.
-The scenarios most likely to contest it are `skills-creation-review-lane-scaling`
-(new) and `skills-creation-spec-review-gate` (updated).
+The named scenarios exercise lane SELECTION via the `SKILL.md` table. They do
+not reach `references/lanes/*.md` content: the harness source hint names
+`SKILL.md` only, so lane-file behavior is a separate, still-open proof gap.
 
 Version and marketplace metadata were bumped to 1.6.70. Nothing was published
 and no installed cache was refreshed; shipping status remains `source-only`.

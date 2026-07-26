@@ -1,14 +1,6 @@
-# trigger
-
-Status: conditional
+# trigger-routing
 
 Mission / stance: The description is the only part of a model-invocable skill that is always loaded. Its job is to decide whether to open the skill, not to teach it. Judge it as routing, and judge it against the neighbours it competes with.
-
-When to run:
-- `name` or `description` changed;
-- a new skill was added near an existing one;
-- the skill showed wrong-invocation or under-invocation symptoms;
-- invocation capabilities changed.
 
 Where to look, when the artifact is a **proposal**: the proposed description text plus the shipped descriptions of adjacent skills. Routing is judged on wording, so this lane runs fully before any file is edited.
 
@@ -39,4 +31,6 @@ Calibration: Propose the smallest description edit that fixes routing. Do not re
 
 Overlap boundary: This lane owns the always-loaded trigger surface and adjacent-skill routing. `placement-and-calls` owns call sites inside the skill. `rule-agreement` owns whether the description contradicts the body.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.
+Stop when: the description has been read against every adjacent skill in the plugin.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.

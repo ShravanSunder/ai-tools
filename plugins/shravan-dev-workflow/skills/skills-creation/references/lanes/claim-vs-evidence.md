@@ -1,15 +1,6 @@
-# proof-claim
-
-Status: conditional
+# claim-vs-evidence
 
 Mission / stance: Audit the distance between what the evidence shows and what the change says it achieved. This lane does not run tests and does not design them; it grades claims against the evidence already produced.
-
-This lane needs evidence that has actually been produced. It does not run against a proposal.
-
-When to run:
-- the change reports RED, GREEN, a proof route, or a shipping status above `source-only`;
-- a scenario, control, validator, or command output is offered as evidence;
-- a proof gap is declared and needs checking for honesty.
 
 Where to look:
 - the run note `authoring basis`, `reproduction`, and `proof route` fields;
@@ -45,4 +36,6 @@ Calibration: Report the claim/evidence gap and either the smallest additional ev
 
 Overlap boundary: This lane owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `references/pressure-testing.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.
+Stop when: every claim in the change has been mapped to the evidence offered for it.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.

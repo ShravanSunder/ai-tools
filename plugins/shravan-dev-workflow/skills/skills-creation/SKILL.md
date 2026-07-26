@@ -117,30 +117,34 @@ Each lane loads one file from `references/lanes/` and returns candidate findings
 
 Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only` for reviewers; `../manage-agents/references/agent-job-packet.md` owns the packet and reduction shapes. A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid. Prefer native dispatch in the parent host's own lineage; when the runtime can reach another lineage, give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
-Lane selection lives here and nowhere else. Each row is an independent predicate; dispatch the union of every row that holds. A lane file never restates when it runs.
+Lane selection lives here and nowhere else. A lane file never states when it runs.
 
-| reviewed surface                    | lanes dispatched                                  |
-| ----------------------------------- | ------------------------------------------------- |
-| mechanical: typo, version, metadata | none; static validation only                      |
-| a proposal, before files exist      | mental-model-fit, trigger-routing, rule-agreement |
-| reference text                      | rule-agreement, no-op-pruning                     |
-| `SKILL.md` body                     | placement-and-calls, steering-strength,           |
-|                                     | mental-model-fit, no-op-pruning, rule-agreement   |
-| frontmatter or description          | trigger-routing                                   |
-| a behavior-proof claim exists       | claim-vs-evidence                                 |
-| a sensitive surface (see below)     | sensitive-surface                                 |
+Two gates run before the table, in order.
 
-The mechanical row is exclusive: it dispatches nothing and no other row applies. Sensitive surfaces are scripts, hooks, assets, package scripts, manifests, shell or network behavior, third-party source, auth material, privileged actions, installed-cache refresh, and home-level writes.
+**Gate 1 — change class.** A mechanical change (typo, version bump, metadata with no behavior claim) dispatches nothing and takes static validation only. Stop here.
 
-Two artifacts, and they select differently. A **proposal** exists only in the conversation, so only lanes whose questions are answerable about a design can run; `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts, and would otherwise open the currently shipped file and return a clean receipt about text nobody proposed. **Changed files** exist on disk, so every applicable lane can run. For classification `create`, the reviewed surface is the new files, not a diff.
+**Gate 2 — artifact.** A **proposal** exists only in conversation and dispatches exactly `mental-model-fit`, `trigger-routing`, and `rule-agreement` — the lanes whose questions are answerable about a design. The table does not apply. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. **Changed files** exist on disk and go to the table.
 
-MUST load `references/skill-review-lane-schema.md` and return the review packet and common lane contract before dispatching anything.
+For changed files, dispatch the union of every row whose surface the change touched. The rows are the four surfaces of the Great Skill Frame, plus the security gate:
+
+| reviewed surface                     | lanes dispatched                                |
+| ------------------------------------ | ----------------------------------------------- |
+| `SKILL.md` body (main path)          | placement-and-calls, steering-strength,         |
+|                                      | mental-model-fit, no-op-pruning, rule-agreement |
+| reference text (depth)               | rule-agreement, no-op-pruning                   |
+| frontmatter or description (trigger) | trigger-routing                                 |
+| a behavior-proof claim (proof)       | claim-vs-evidence                               |
+| a sensitive surface                  | sensitive-surface                               |
+
+For classification `create`, the reviewed surface is the new files, not a diff. Sensitive surfaces are the set owned by `references/skill-security-review.md`; plugin manifests and versioning are not among them and route to `references/platform-mechanics.md` instead.
+
+IF any lane will be dispatched, load `references/skill-review-lane-schema.md` and return the review packet, the common lane contract, and the parent reduction shape before the first dispatch.
 
 Dispatch contract, applied to each selected lane:
 
 ```text
 MUST dispatch `<lane>` to a subagent using `<review packet>`.
-Subagent loads `references/lanes/<lane>.md`.
+Subagent loads `references/skill-review-lane-schema.md` and `references/lanes/<lane>.md`.
 Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
 Instance authority is the reviewer contract in `manage-agents`.
 Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
@@ -208,12 +212,12 @@ Completion: wording changes cite the failure or success gap they are meant to ad
 
 **9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above against the proposed design, and load `references/skill-spec-review.md` and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
 
-**10. Implement.** After the spec is accepted, edit the skill surface inside the accepted boundary. Completion: the changed files match the accepted spec, and any deviation from it is named rather than absorbed silently.
+**10. Implement.** After the spec is accepted, edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
 
 **11. Review the implementation, then prove.** Run this as one loop, review first. Proof that runs before review wastes a run on text the review is about to change.
 
 1. IF the change is behavior-changing, dispatch the lanes selected by Review Lanes above against the changed files, unless the user explicitly says no review is needed.
-2. Synthesize the receipts yourself; no lane does this. Merge findings two lanes reported as one defect, resolve conflicts against the artifact rather than by lane seniority, name what no dispatched lane examined, and rank what to fix first. Completion: every receipt including `partial` and `blocked` is accounted for in the synthesis.
+2. Synthesize the receipts yourself; no lane does this. Merge findings two lanes reported as one defect, resolve conflicts against the artifact rather than by lane seniority, name what no dispatched lane examined, and rank what to fix first. Completion: the Parent Reduction block from `references/skill-review-lane-schema.md` is emitted with merged duplicates, lane conflicts, coverage gaps, and first fix filled; every dispatched lane appears by name with its status, and a lane contributing no accepted finding appears with the reason.
 3. Parent-reduce candidate findings against the actual files and the accepted spec. Accepted findings route back to the phase that owns them: spec mismatch to step 9, wording or placement to step 10, claim honesty to the proof run below, ship surface to step 12.
 4. Apply accepted fixes, then run the proof route chosen in step 2. Evaluation may precede or follow a first user-directed draft. If evaluation is deferred, return a source-only result with a named proof gap; do not claim demonstrated improvement, regression protection, or a verified fix. A reproduced RED may support a candidate GREEN only after a comparable rerun. A passing baseline may characterize native behavior or a weak comparison without prohibiting authoring. Choose proof by skill type:
 
@@ -248,5 +252,5 @@ The run is not done while any of these hold:
 - a behavior-changing skill change reached implementation without required spec review or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - static validation is claimed as behavior proof;
-- a sensitive surface was touched without an allowed/disallowed/blocked/ deferred decision;
+- a sensitive surface was written without an allowed/disallowed/blocked/deferred decision recorded before that surface was written;
 - required platform static validation failed, or was skipped without a stated reason.

@@ -1,13 +1,6 @@
-# steering
-
-Status: mandatory
+# steering-strength
 
 Mission / stance: Judge whether the wording is strong enough to change behavior under pressure. A rule the agent agrees with and then skips is not steering, it is decoration. Match the guidance form to the failure it targets.
-
-When to run:
-- a rule, gate, or completion criterion changed;
-- guidance was added for an observed failure or an approved success gap;
-- the skill reported shallow work, early stopping, or rationalized skipping.
 
 Where to look:
 - completion criteria on every step and reference pass;
@@ -45,4 +38,6 @@ Calibration: Propose the smallest wording change and name the failure form it se
 
 Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *whether a line should exist*. A weak leading word arrives here from `no-op-pruning` for a stronger form; a line that should simply be deleted stays with `no-op-pruning`.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.
+Stop when: every steering sentence added or changed carries a named failure form, and every completion criterion has been tested for both checkability and demand.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.

@@ -1,14 +1,6 @@
-# mental-model
-
-Status: mandatory
+# mental-model-fit
 
 Mission / stance: Judge the lens, not the wording. The Great Skill Frame makes `SKILL.md` the home of the mental model, which means the skill's most load-bearing claim is a concept the agent is asked to think with. A skill whose every sentence binds can still steer the agent toward the wrong shape of the problem.
-
-When to run:
-- the mental model, stance, or governing concept changed;
-- a leading word was introduced, renamed, or retired;
-- a coined term was added to the skill or its glossary;
-- the skill's promise changed but its lens did not, or the reverse.
 
 Where to look, when the artifact is a **proposal**: the stated lens and the workflow the proposal describes. Both exist in the proposal text, so this lane runs fully before any file is edited.
 
@@ -48,4 +40,6 @@ Calibration: Propose the smallest change that makes the lens and the route agree
 
 Overlap boundary: This lane owns *whether the concept is right and whether the skill follows it*. `steering-strength` owns whether wording binds once the concept is chosen. `no-op-pruning` owns whether a line should exist. `placement-and-calls` owns where material lives. A weak leading word that fails the no-op test is `no-op-pruning`; a leading word that is strong but wrong for the work is this lane's.
 
-Output focus: Use `references/skill-review-lane-schema.md`. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.
+Stop when: the lens has been named from the body alone and tested for fit, priors, cost, and coverage.
+
+Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.

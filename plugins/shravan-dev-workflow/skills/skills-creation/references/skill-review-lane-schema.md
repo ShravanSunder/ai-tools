@@ -13,6 +13,14 @@ dispatch terms:    the reviewer contract in
                    owns them; do not restate.
 receipt:           complete | partial | blocked, with evidence and
                    unresolved questions
+                     complete = every `Where to look` item was opened and
+                                the lane's inspection applied to each,
+                                and the lane's stop condition is met
+                     partial  = at least one was not; name which and why
+                     blocked  = the lane could not start; name the
+                                missing input
+                   A `complete` receipt lists the items it opened. A lane
+                   that cannot enumerate them is `partial`.
 finding shape:     the Lane Finding block below
 parent handling:   receipts are candidate findings; the parent verifies
                    them against source, merges duplicates across lanes,
@@ -67,7 +75,11 @@ source evidence:
 behavior risk:
 smallest fix:
 retest required:
+route:            <owning lane, when the defect is outside this lane's
+                  boundary; report it, do not judge it, do not drop it>
 ```
+
+A lane that notices a defect outside its boundary files it with `route:` set. The parent decides whether the owning lane runs. Silent dropping loses the finding entirely when the owning lane was never dispatched.
 
 ## Changed-File Coverage
 
