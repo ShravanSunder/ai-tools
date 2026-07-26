@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-26 Manage Agents Reviewer History](2026-07-26-manage-agents-reviewer-history.md)
 - [2026-07-26 Manage Agents Reviewer Context](2026-07-26-manage-agents-reviewer-context.md)
 - [2026-07-26 Manage Agents Provider-Resolved Dispatch](2026-07-26-manage-agents-provider-resolved-dispatch.md)
 - [2026-07-24 Manage Agents Opus 5 Matrix](2026-07-24-manage-agents-opus-5.md)

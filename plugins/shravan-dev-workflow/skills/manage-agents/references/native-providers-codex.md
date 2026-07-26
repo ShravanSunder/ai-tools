@@ -1,6 +1,6 @@
 # Native Providers: Codex
 
-Owns Codex native v2 `spawn_agent` model, effort, and context values. Return the exact `model`, `reasoning_effort`, and `fork_turns` encoding.
+Owns Codex native v2 `spawn_agent` model, effort, and conversation-history values. Return the exact `model`, `reasoning_effort`, and `fork_turns` encoding.
 
 ## Models
 
@@ -16,12 +16,13 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
 
 `none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. Pattern floors from `SKILL.md` still apply.
 
-## Context
+## Conversation History
 
-- Isolated context: set `fork_turns="none"`.
-- Parent-selected inherited context: set `fork_turns` to a positive integer string or `"all"`.
+- No inherited parent history: set `fork_turns="none"`.
+- Partial parent history: set `fork_turns` to a positive integer string.
+- Full parent history: set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
-- Isolated or partial context may pass explicit model and reasoning-effort overrides.
+- Fresh or partial history may pass explicit model and reasoning-effort overrides.
 
 ## Examples
 

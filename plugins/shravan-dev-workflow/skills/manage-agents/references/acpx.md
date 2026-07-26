@@ -25,7 +25,7 @@ Build the call with the selected provider token, exact model id, and advertised 
 - Delegate or Operator: use `exec` for one bounded assignment and receipt.
 - Advisor or Sidekick: use a named session for ledgered continuity.
 
-Encode isolated context as a one-shot call or a new named session that receives only the bounded packet. Reuse a named session when the parent selects inherited continuity.
+Start without prior agent-session history by using a one-shot call or a new named session. Reuse a named session when the parent selects continuity.
 
 Set the narrowest permission boundary that performs the assignment:
 
@@ -42,7 +42,7 @@ One-shot call:
   --file tmp/agent-packet.md
 ```
 
-Named isolated call:
+New named conversation:
 
 ```bash
 <provider-agent-command> sessions new --name <relationship-name>

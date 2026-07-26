@@ -8,10 +8,10 @@
 
 ## Change
 
-- Gives every reviewer an isolated context containing only its bounded packet.
-- Leaves context inheritance for non-review assignments to the parent.
-- Encodes native Codex isolation as `fork_turns="none"` and keeps fork mechanics in the native provider reference.
-- Encodes ACPX isolation through a fresh one-shot call or new named session.
+- Starts every reviewer without inherited parent or prior agent-session conversation history.
+- Gives reviewers a bounded packet and separately grants the source access required for the assignment.
+- Leaves conversation-history inheritance for non-review assignments to the parent.
+- Encodes native Codex fresh history as `fork_turns="none"` and ACPX fresh history as a one-shot call or new named session.
 - Removes `--deny-all`; source-grounded calls use `--approve-reads`.
 
 ## Validation
@@ -21,7 +21,7 @@
 - JSON manifest parsing and `1.6.64` version consistency: passed.
 - Codex marketplace readback: passed; the installed cache remains at `1.6.63` until refresh.
 - `git diff --check`: passed.
-- Two isolated read-only implementation reviewers found the same named-session reuse risk; the accepted fix reserves `sessions new` for isolated calls and `sessions ensure` for inherited continuity.
+- Two fresh read-only implementation reviewers found the same named-session reuse risk; the accepted fix reserves `sessions new` for fresh calls and `sessions ensure` for continuity.
 - Pressure tests were intentionally not run for this wording-focused release.
 
 ## Refresh / Reinstall
