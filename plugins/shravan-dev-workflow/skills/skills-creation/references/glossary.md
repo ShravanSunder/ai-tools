@@ -33,7 +33,7 @@ Vocabulary for judging great skills. Definitions only -- operational rules live 
 - Branch: a conditional route that changes the work performed by the skill.
 - Branch predicate: the observable condition that selects a branch.
 - Return shape: the concrete result a reference pass or branch brings back to the main path, such as a verdict, filled slots, proof result, route decision, or edit boundary.
-- Lane: a parallel-safe work boundary that a subagent can execute from bounded context once declared prerequisites are satisfied, with an owned mission, context and source anchors, decisions and non-goals, dependency state, authority, shaped receipt, and parent-owned verification and reduction. Independence is semantic: a lane remains a lane when run locally or scheduled sequentially.
+- Lane: a reference a subagent loads. Qualifying work as a lane and handing it over -- parallel safety, bounded packet, dependency state, authority, receipt, and parent reduction -- is owned by `reference-lanes-design.md`. Independence is semantic: a lane remains a lane when run locally or scheduled sequentially.
 - Lane qualification: the complete parallel-safety, bounded-handoff, mission, context, decision, dependency, authority, receipt, and parent-reduction contract. Parallel execution or delegation alone does not qualify work as a lane.
 - Readiness wave: a set of lanes whose prerequisites and required prior results are complete, making them semantically eligible to overlap.
 - Lane receipt: a `complete`, `partial`, or `blocked` lane result carrying evidence and unresolved questions for parent verification.

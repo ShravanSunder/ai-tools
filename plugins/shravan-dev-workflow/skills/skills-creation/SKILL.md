@@ -3,25 +3,87 @@ name: skills-creation
 description: Use when creating, updating, or evaluating one named skill or accepted draft; when skill wording fails under pressure; or when a draft's trigger, main path, or proof needs judgment before shipping.
 ---
 
-# Skills Creation
+# Skills Design & Concepts
+
+A skill exists to wrangle determinism out of a stochastic system; making the agent take a predictable process through a system.  It is process focused.
+
+Predictable means the same process, not the same output. A brainstorming skill should diverge every run and still take the same route to diverge.
 
 ## Stance
 
-Work on exactly one named skill or accepted draft per run. A great skill is a compact behavior-shaping artifact: it makes the agent follow a predictable process, not a fixed script. Broad portfolio inventory, duplicate-surface archaeology, or "which skills should exist" belongs to `skill-audit`.
+Work on exactly one named skill or accepted draft per run. Portfolio inventory, duplicate-surface archaeology, and "which skills should exist" belong to `skill-audit`.
 
 ## Great Skill Frame
 
-A skill has four surfaces: trigger (`YAML/frontmatter`), mental model and main path (`SKILL.md`), reference depth (`references/`), and proof (static or pressure). Author by walking those surfaces in order. YAML says when and why to load; `SKILL.md` owns the behavior route every run must understand; references own coherent detail after the body routes there; proof validates the allocation and behavior.
+A skill has four surfaces:
 
-IF a term in this contract is disputed or unclear, load `references/glossary.md` and return the definition that resolves the allocation.
+| surface   | lives in         | owns                                 |
+| --------- | ---------------- | ------------------------------------ |
+| trigger   | YAML frontmatter | when and why the skill loads         |
+| main path | `SKILL.md`       | the mental model and the route       |
+| depth     | `references/`    | detail the main path calls for       |
+| proof     | tests            | that the other three change behavior |
 
-## Authored Body Contract
+Design them in that order. Each one can only be judged against the one before it: the trigger decides what the path must handle, the path decides what depth is needed, and proof judges the result.
 
-Every authored `SKILL.md` expresses these concepts when applicable. They are flexible content requirements, not mandatory headings, a universal table, or one prose template:
+## Invocation
+
+The trigger surface has two capabilities. Each pays a different cost.
+
+**Model-invocable** — the skill keeps a `description`, so the agent loads it on its own and other skills can reach it. Pays **context load**: the description sits in the window every turn.
+
+**User-invocable** — the human names the skill directly. Pays **cognitive load**: the human is the index that has to remember it exists.
+
+They are not exclusive: a description adds agent reach without removing the human's. Choose model-invocable when the agent must find the skill unprompted, or when another skill must reach it. When user-invocable skills outgrow what a human can hold, a router skill indexes them.
+
+`references/frontmatter-design.md` owns description wording, adjacent-skill boundaries, and the invocation tradeoff. `references/platform-mechanics.md` owns client-specific invocation controls.
+
+## Information Hierarchy
+
+Placement answers one question: who reads this, and when?
+
+| home                     | read by    | when                            |
+| ------------------------ | ---------- | ------------------------------- |
+| `SKILL.md`               | this agent | every run, always in context    |
+| `MUST load` reference    | this agent | every run, on reaching the call |
+| `IF ..., load` reference | this agent | only when the predicate holds   |
+| lane                     | a subagent | when the parent dispatches it   |
+
+A lane is a reference a subagent loads. The contract for handing one over — packet, prerequisites, authority, receipt, parent reduction — is owned by `references/reference-lanes-design.md`.
+
+### Progressive Disclosure
+
+Two different reasons move material out of `SKILL.md`.
+
+**Branch** — only some runs need it. Moving it out keeps every other run from reading it. This is the `IF <predicate>, load` case, and it is an attention decision.
+
+**Module** — every run needs it, but it is one coherent thing that changes for its own reason. Moving it out keeps the main path scannable and lets that piece be maintained on its own. This is the `MUST load` case, and it is a maintenance decision.
+
+Moving all-run procedure behind `MUST load` does not move the obligation. The obligation, order, decision, required return, invariant, and completion stay visible in `SKILL.md`; the reference owns the detail.
+
+Four things never move out: the mental model, the all-run spine, rules every run needs at the decision they govern, and the completion boundary.
+
+## Leading Words
+
+A leading word is a compact concept the model already holds from pretraining — `root cause`, `vertical slice`, `tracer bullet`, `red-green`, `single source of truth`. Repeated as a token, it anchors a region of behavior in a few characters by recruiting priors the model already has.
+
+It works twice. In the body it anchors execution: the agent reaches for the same behavior every time the word appears. In the description it anchors invocation: when the same word lives in the user's prompts, docs, and code, the agent links that language to the skill and loads it more reliably.
+
+Prefer a word the model already has. A coined term recruits nothing — you pay in definition tokens what a pretrained word gives free. When a skill needs coined terms anyway, `references/glossary.md` owns them.
+
+A leading word too weak to beat the model's default changes nothing. `be thorough` is not a leading word when the agent is already thorough-ish.
+
+IF a term is unclear, load `references/glossary.md` and return the applicable definition.
+
+# Skill Creation Process
+
+## What Belongs in SKILL.md
+
+Include every applicable element below. Choose headings and a format that fit the skill:
 
 - **Mental model or stance:** the lens or domain model that improves judgment.
 - **All-run spine:** the work from load to completion in one scan; order steps only when order changes behavior.
-- **Checkable local completion:** each meaningful step or reference pass proves the necessary legwork occurred.
+- **Completion checks:** each meaningful step or reference pass says what must be true before continuing.
 - **Always-needed steering and invariants:** keep rules every run needs inline and near the decision they govern.
 - **Reference calls:** name the load mode, exact destination, requested work, and concrete result the main path consumes.
 - **Lane dispatch, when handed to a subagent:** name the dispatch mode, bounded instance packet, lane reference, parallel-safety basis, instance authority, receipt, and parent reduction point.
@@ -43,9 +105,7 @@ Lane handoff
   Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 ```
 
-`MUST` is the all-run path; `IF` is an observable branch. Use exactly one at a call site. `LOAD` consumes reference content in the current workflow. `DISPATCH` hands a qualified lane to a subagent. A dispatch caller names the lane, supplied packet including prerequisites and dependency state, lane reference, parallel-safety basis, instance authority, expected receipt, and parent reduction point. The caller may equal or narrow the lane reference's stable maximum authority; it must never widen it.
-
-Moving coherent all-run procedure behind `MUST load` does not move the all-run obligation. Keep its obligation, order, decision, required return, invariant, and completion visible in `SKILL.md`.
+`MUST` is the all-run path; `IF` is an observable branch. Use exactly one at a call site. `load` consumes reference content in the current workflow. `dispatch` hands a lane to a subagent. A dispatch caller names the lane, supplied packet including prerequisites and dependency state, lane reference, parallel-safety basis, instance authority, expected receipt, and parent reduction point. The caller may equal or narrow the lane reference's stable maximum authority; it must never widen it.
 
 ## Scaled Run Note
 
@@ -71,9 +131,9 @@ For any classify, scope, or draft response, state the surface allocation in plai
 
 **2. Prove first (behavior-changing work).** A change is behavior-changing when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are mechanical. Before describing or writing any behavior-changing update, name a pressure scenario or micro-test that already fails against the current skill (RED). State the order visibly as RED before edit, wording, or change. Creates may draft from a hypothesized baseline; they still need GREEN before `PR-ready` or `released`. Mechanical changes are static-only and must be labeled that way. "I already know the wording problem" is not a skip. Completion: RED is named, or the change is explicitly static-only.
 
-**3. Design the trigger.** First choose invocation capabilities: model-invocable (the agent can discover the skill from its description) and/or user-invocable (the human can name it directly). Then write the YAML description as a trigger-only context pointer for that choice. It should start with the real loading condition, use words the user/docs/code are likely to use, name distinct branches once, include a brief payoff when useful, and avoid internal step narration. IF the run must decide trigger wording, distinguish an adjacent-skill boundary, or choose an invocation tradeoff, load `references/frontmatter-design.md` and return the trigger and invocation decision. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
+**3. Design the trigger.** Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. It should start with the real loading condition, use words the user/docs/code are likely to use, name distinct branches once, include a brief payoff when useful, and avoid internal step narration. IF the run must decide trigger wording, distinguish an adjacent-skill boundary, or choose an invocation tradeoff, load `references/frontmatter-design.md` and return the trigger and invocation decision. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
 
-**4. Build the mental model.** Decide what concept, lens, or leading word the skill should pull into the model's latent space. Prefer existing domain or engineering language over invented jargon. State the behavior the skill stabilizes and the judgment it should improve. Completion: `SKILL.md` has a clear mental model before details or exceptions.
+**4. Build the mental model.** Decide what concept, lens, or leading word the skill should pull into the model's latent space. State the behavior the skill stabilizes and the judgment it should improve. Completion: `SKILL.md` has a clear mental model before details or exceptions.
 
 **5. Shape the main path.** Express the authored body contract in the form this skill needs: steps, a compact route, references, or a mix. Keep the all-run spine, always-needed steering, and overall completion boundary visible. Put ordered steps in `SKILL.md` only when order changes behavior. End each meaningful step or reference pass with a checkable completion criterion. Completion: the main path is visible in one scan and cannot be mistaken for a loose essay or link-only router.
 
@@ -83,15 +143,15 @@ For any classify, scope, or draft response, state the surface allocation in plai
 
 **8. Steer the failure.** Match the guidance form to the observed or hypothesized failure:
 
-| observed failure | guidance form |
-| --- | --- |
-| known rule skipped under pressure | bright-line rule + rationalization table |
-| wrong output shape | positive output shape or template |
-| omitted element | required slot next to the output |
-| conditional behavior mistake | observable predicate + action |
-| shallow legwork | stronger completion criterion |
-| wrong invocation | sharper description or user-invocable route |
-| reference retrieval gap | stronger context pointer or inline material |
+| observed failure                  | guidance form                               |
+| --------------------------------- | ------------------------------------------- |
+| known rule skipped under pressure | bright-line rule + rationalization table    |
+| wrong output shape                | positive output shape or template           |
+| omitted element                   | required slot next to the output            |
+| conditional behavior mistake      | observable predicate + action               |
+| shallow legwork                   | stronger completion criterion               |
+| wrong invocation                  | sharper description or user-invocable route |
+| reference retrieval gap           | stronger context pointer or inline material |
 
 Completion: wording changes cite the failure form they are meant to fix.
 
