@@ -17,20 +17,17 @@ Model-invocable, user-invocable, context load, cognitive load, and router skills
 
 ## Information Hierarchy
 
+Load mode, mandatory reference, progressive disclosure, branch, and lane are explained in `SKILL.md`.
+
 - Steps: ordered actions the agent performs. They belong in `SKILL.md` when order changes behavior.
 - Workflow topology: the route from trigger through all-run spine, branches, return shapes, and completion/proof.
 - All-run spine: the part of the workflow every invocation needs. It belongs in `SKILL.md`.
 - Reference: coherent mandatory or conditional detail consulted after the calling `SKILL.md` selects the work.
-- Load mode: the caller-owned choice between all-run `MUST load` and conditional `IF <observable predicate>, load` consumption in the current workflow.
 - Execution shape: the work's classification as an ordinary reference or a parallel-safe, handoff-ready lane.
-- Mandatory reference: coherent all-run detail consumed through `MUST load` while its parent obligation and completion remain visible in `SKILL.md`.
 - Context pointer: wording that names when to load a reference and what to do with it. Weak pointer wording is a variance bug.
-- Progressive disclosure: moving coherent detailed procedure or branch-specific depth out of `SKILL.md` behind a complete caller.
 - Co-location: keeping a concept's definition, rules, caveats, and examples near each other once their hierarchy level is chosen.
-- Branch: a conditional route that changes the work performed by the skill.
 - Branch predicate: the observable condition that selects a branch.
 - Return shape: the concrete result a reference pass or branch brings back to the main path, such as a verdict, filled slots, proof result, route decision, or edit boundary.
-- Lane: a reference a subagent loads. Qualifying work as a lane and handing it over -- parallel safety, bounded packet, dependency state, authority, receipt, and parent reduction -- is owned by `reference-lanes-design.md`. Independence is semantic: a lane remains a lane when run locally or scheduled sequentially.
 - Lane qualification: the complete parallel-safety, bounded-handoff, mission, context, decision, dependency, authority, receipt, and parent-reduction contract. Parallel execution or delegation alone does not qualify work as a lane.
 - Readiness wave: a set of lanes whose prerequisites and required prior results are complete, making them semantically eligible to overlap.
 - Lane receipt: a `complete`, `partial`, or `blocked` lane result carrying evidence and unresolved questions for parent verification.

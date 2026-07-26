@@ -111,6 +111,43 @@ Include every applicable element below. Choose headings and a format that fit th
 
 Reference calls and lane dispatches use the Call Grammar above; placement follows Progressive Disclosure above.
 
+## Review Lanes
+
+Review is dispatched to fresh-context subagents, never forked from the authoring session. A forked reviewer inherits the author's rationalizations, which is the one thing review exists to avoid. Each lane loads one file from `references/lanes/` and returns candidate findings; the parent verifies and reduces them.
+
+Lane selection lives here and nowhere else. Each row is an independent predicate; dispatch the union of every row that holds. A lane file never restates when it runs.
+
+| reviewed surface                    | lanes dispatched                                  |
+| ----------------------------------- | ------------------------------------------------- |
+| mechanical: typo, version, metadata | none; static validation only                      |
+| a proposal, before files exist      | mental-model-fit, trigger-routing, rule-agreement |
+| reference text                      | rule-agreement, no-op-pruning                     |
+| `SKILL.md` body                     | placement-and-calls, steering-strength,           |
+|                                     | mental-model-fit, no-op-pruning, rule-agreement   |
+| frontmatter or description          | trigger-routing                                   |
+| a behavior-proof claim exists       | claim-vs-evidence                                 |
+| a sensitive surface (see below)     | sensitive-surface                                 |
+
+The mechanical row is exclusive: it dispatches nothing and no other row applies. Sensitive surfaces are scripts, hooks, assets, package scripts, manifests, shell or network behavior, third-party source, auth material, privileged actions, installed-cache refresh, and home-level writes.
+
+Two artifacts, and they select differently. A **proposal** exists only in the conversation, so only lanes whose questions are answerable about a design can run; `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts, and would otherwise open the currently shipped file and return a clean receipt about text nobody proposed. **Changed files** exist on disk, so every applicable lane can run. For classification `create`, the reviewed surface is the new files, not a diff.
+
+MUST load `references/skill-review-lane-schema.md` and return the review packet and common lane contract before dispatching anything.
+
+Dispatch contract, applied to each selected lane:
+
+```text
+MUST dispatch `<lane>` to a subagent using `<review packet>`.
+Subagent loads `references/lanes/<lane>.md`.
+Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
+Instance authority is read-only, per the common lane contract.
+Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
+```
+
+No lane reads another lane's receipt, so every dispatch is one readiness wave with no barrier. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
+
+Reviewers run in fresh context, never forked from the authoring session — a forked reviewer inherits the author's rationalizations, which is the one thing review exists to avoid. Use `manage-agents` for pattern, model category, lineage, runtime, permissions, and packet mechanics; prefer native subagents, and use at least one reviewer of a different model lineage than the author when the runtime offers one.
+
 ## Scaled Run Note
 
 Use a compact run note when implementation, shipping, disputed scope, or proof needs tracking. Do not make chat-only discussion perform state ceremony.
@@ -124,6 +161,8 @@ authoring basis: observed failure | user-directed intent
 reproduction: reproduced | not reproduced | insufficient evidence | inconclusive | n/a
 invocation: model-invocable | user-invocable
 branches loaded:
+review lanes dispatched:
+lane receipts: complete | partial | blocked, per lane
 security route: allowed | disallowed | blocked | deferred | n/a
 proof route: RED/GREEN | characterization | representative hypothesis | static-only | deferred | proof gap
 shipping status: source-only | PR-ready | released
@@ -133,7 +172,7 @@ shipping status: source-only | PR-ready | released
 
 **1. Name the promise and success.** Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating an existing skill or draft, load `references/skill-spec-review.md` and return one of its allowed verdict labels plus the blocker overrides, rubric evidence, first revision, and proof implication. Completion: classification, owner, reusable behavior, baseline or review target, and success definition are named.
 
-For any classify, scope, or draft response, state the surface allocation in plain words before the details: YAML/frontmatter is the trigger surface, `SKILL.md` will carry the mental model and main path, `references/` will carry coherent mandatory detail and conditional branch depth, and pressure or static proof will validate the change. This is part of alignment, not ceremony.
+For any classify, scope, or draft response, state the surface allocation in plain words before the details: YAML/frontmatter is the trigger surface, `SKILL.md` will carry the mental model and main path, `references/` will carry coherent mandatory detail and conditional branch depth, and pressure or static proof will validate the change.
 
 **2. Choose the authoring basis and proof posture.** A change is behavior-changing when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are mechanical and static-only. Classify behavior-changing work as `observed failure` or `user-directed intent`. For an observed failure, attempt faithful reproduction before claiming a causal fix. If the failure is reproduced, name the targeted RED. If it is not reproduced, evidence is insufficient, or the result is inconclusive, show the gap and ask the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer. A representative hypothesis tests an approved substitute; it does not reproduce the historical incident. User-directed work may draft from an approved success definition without RED. Never manufacture RED or let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip. Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit.
 
@@ -143,7 +182,11 @@ For any classify, scope, or draft response, state the surface allocation in plai
 
 **5. Shape the main path.** Express the authored body contract in the form this skill needs: steps, a compact route, references, or a mix. Keep the all-run spine, always-needed steering, and overall completion boundary visible. Put ordered steps in `SKILL.md` only when order changes behavior. End each meaningful step or reference pass with a checkable completion criterion. Completion: the main path is visible in one scan and cannot be mistaken for a loose essay or link-only router.
 
-**6. Build the workflow and calls.** Name the all-run workflow from load to completion. Add a branch only when an observable condition changes the work; a topic being interesting, provider-specific, or detailed is not enough. Each branch names its predicate, action or destination, and concrete return. A result of only "more context" is incomplete. Strengthen predicates, returns, and completion criteria when the agent would guess or stop early. Completion: one all-run spine is explicit, every branch changes the work, each call follows the literal grammar above, and every route returns something the main path can use.
+**6. Build the workflow and calls.** Name the all-run workflow from load to completion. Add a branch only when an observable condition changes the work; a topic being interesting, provider-specific, or detailed is not enough. Each branch names its predicate, action or destination, and concrete return. A result of only "more context" is incomplete. Strengthen predicates, returns, and completion criteria when the agent would guess or stop early.
+
+Write every call site here, in the literal grammar above. A `load` site names its mode, path, requested work, and needed result. A `dispatch` site names the lane, and then either carries the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, and parent reduction point inline, or cites a named dispatch contract in `SKILL.md` that carries them for a set of lanes. Prefer the shared contract when several sites dispatch under the same terms; repeating six fields at every site is the duplication this skill exists to prevent.
+
+Completion: one all-run spine is explicit, every branch changes the work, every call site is complete under the grammar or under a named dispatch contract, and every route returns something the main path can use.
 
 **7. Place the depth.** Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. IF work is parallel-safe and ready for bounded subagent handoff, load `references/reference-lanes-design.md` and return the lane qualification and job contract. IF multiple consumers need stable model-readable output, load `references/reference-lanes-design.md` and return the output-shape owner. IF a tool, test, CI check, or runtime validates structure, load `references/reference-lanes-design.md` and return the tool-shape owner and validation route. Completion: nothing sits in two homes, every reference has a strong caller, and advanced shape guidance remains discoverable even when no lane exists.
 
@@ -161,9 +204,16 @@ For any classify, scope, or draft response, state the surface allocation in plai
 
 Completion: wording changes cite the failure or success gap they are meant to address without overstating its evidence source.
 
-**9. Review the skill spec.** IF the change is behavior-changing under step 2, load `references/skill-spec-review.md` before implementation and return its verdict and proof implication unless the user explicitly says no review is needed. Use two read-only perspectives: `fresh-perspective` plus a second independent local perspective by default. Use `outside-model` only when the user explicitly requests external counsel; otherwise record `outside-model not requested`. Name both perspectives in the run plan before implementation, including read-only planning responses that stop before edits. The plan line should say `review perspectives: fresh-perspective + local-lane` or `review perspectives: fresh-perspective + outside-model requested`. Mechanical changes with no behavior claim may stay static-only. Accepted findings return to the relevant spec step above before files are edited. `references/skill-review-output-schema.md` remains the shared packet, finding, coverage, and reduction shape. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical/static-only.
+**9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above against the proposed design, and load `references/skill-spec-review.md` and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
 
-**10. Implement and evaluate at the claimed strength.** After the spec is accepted, edit the skill surface and run the chosen proof route. Evaluation may precede or follow a first user-directed draft. If evaluation is deferred, return a source-only result with a named proof gap; do not claim demonstrated improvement, regression protection, or a verified fix. A reproduced RED may support a candidate GREEN only after a comparable rerun. A passing baseline may characterize native behavior or a weak comparison without prohibiting authoring. Choose proof by skill type:
+**10. Implement.** After the spec is accepted, edit the skill surface inside the accepted boundary. Completion: the changed files match the accepted spec, and any deviation from it is named rather than absorbed silently.
+
+**11. Review the implementation, then prove.** Run this as one loop, review first. Proof that runs before review wastes a run on text the review is about to change.
+
+1. IF the change is behavior-changing, dispatch the lanes selected by Review Lanes above against the changed files, unless the user explicitly says no review is needed.
+2. Synthesize the receipts yourself; no lane does this. Merge findings two lanes reported as one defect, resolve conflicts against the artifact rather than by lane seniority, name what no dispatched lane examined, and rank what to fix first. Completion: every receipt including `partial` and `blocked` is accounted for in the synthesis.
+3. Parent-reduce candidate findings against the actual files and the accepted spec. Accepted findings route back to the phase that owns them: spec mismatch to step 9, wording or placement to step 10, claim honesty to the proof run below, ship surface to step 12.
+4. Apply accepted fixes, then run the proof route chosen in step 2. Evaluation may precede or follow a first user-directed draft. If evaluation is deferred, return a source-only result with a named proof gap; do not claim demonstrated improvement, regression protection, or a verified fix. A reproduced RED may support a candidate GREEN only after a comparable rerun. A passing baseline may characterize native behavior or a weak comparison without prohibiting authoring. Choose proof by skill type:
 
 - discipline skill: pressure scenario plus rationalization capture.
 - technique skill: application to a fresh but similar task.
@@ -171,9 +221,9 @@ Completion: wording changes cite the failure or success gap they are meant to ad
 - reference skill: retrieval and correct use of the referenced material.
 - mechanical change: validator, packaging, or metadata proof only.
 
-IF the change is behavior-changing, load `references/pressure-testing.md` and return the proof protocol, evidence, and claim boundaries. Completion: the authoring result, behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
+5. IF a fix changed text a lane already reviewed, dispatch that lane again to a subagent using the refreshed packet, and refresh its changed-file coverage. Do not reuse a receipt for text edited after it was written.
 
-**11. Review the implementation.** After proof exists and before `PR-ready` or `released`, IF the skill change is behavior-changing under step 2, load `references/skill-implementation-review.md` and return changed-file coverage, proof-quality findings, targeted retest, and ship decision unless the user explicitly says no review is needed. For final repo skill-work readiness, route through `implementation-review-swarm` and use that reference as the skill-specific rubric and packet input. Use two read-only perspectives: `fresh-perspective` plus a second independent local perspective by default. Use `outside-model` only when the user explicitly requests external counsel; otherwise record `outside-model not requested`. Name both perspectives in the implementation-review plan and reduction. The review checks the actual changed files, proof quality, pressure coverage, and accepted spec constraints. Accepted findings route back to implementation and proof; parent-reduce candidate findings; after fixes, rerun the targeted proof that could catch the issue and refresh the implementation-review reduction or changed-file coverage for files touched by the fix. Completion: implementation review is parent-reduced, changed-file coverage is accounted for after any review-fix edits, and targeted retest is complete or the user explicitly skipped review.
+IF the change is behavior-changing, load `references/pressure-testing.md` and return the proof protocol, evidence, and claim boundaries. IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/skill-implementation-review.md` and return changed-file coverage, ship decision, and the `implementation-review-swarm` routing. Completion: review is parent-reduced, changed-file coverage is accounted for after every review-fix edit, and the authoring result, behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
 
 **12. Prune and ship.** Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it. IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route. IF scripts, hooks, assets, package scripts, shell/network behavior, third-party source adoption, private auth material, privileged actions, installed-cache refresh, or home-level mutation are in scope, load `references/skill-security-review.md` before outlining or writing them and return its allowed, disallowed, blocked, or deferred decision. Chat-only sensitive-surface reviews still use that reference's return labels, including license/permission and copy-vs-adapt decisions for third-party source. Completion: the skill is compact, valid, public-safe, and proof route matches shipping status.
 
@@ -188,11 +238,13 @@ The run is not done while any of these hold:
 - the workflow has branches without observable predicates or return shapes;
 - an all-run obligation, decision, invariant, required return, or completion boundary is hidden exclusively in a reference;
 - a reference caller omits its literal load mode, path, requested work, or needed result;
-- a dispatched lane omits its bounded packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point;
+- a dispatch site omits its lane, or omits the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, and parent reduction point without citing a named dispatch contract that carries them;
+- review ran outside the Review Lanes contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
+- implementation deviated from the accepted spec without naming the deviation;
 - branch-only depth is inlined without a strong reason;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a behavior-changing skill change reached implementation without required spec review or explicit user skip;
-- a behavior-changing skill change reached `PR-ready` or `released` without implementation-review reduction, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
+- a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - static validation is claimed as behavior proof;
 - a sensitive surface was touched without an allowed/disallowed/blocked/ deferred decision;
 - required platform static validation failed, or was skipped without a stated reason.

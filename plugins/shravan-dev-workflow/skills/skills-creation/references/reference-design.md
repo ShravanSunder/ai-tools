@@ -10,6 +10,7 @@ An ordinary reference may own coherent detailed procedure used on every run or d
 all-run obligation, order, decision, required return, invariant, or completion -> SKILL.md
 all-run coherent detailed procedure                      -> MUST load references/<step>.md
 branch-only detail                                       -> IF <predicate>, load references/<branch>.md
+one lane's own job contract                              -> references/lanes/<lane>.md
 parallel-safe, handoff-ready work                        -> reference-lanes-design.md
 all-run lane handed to a subagent                        -> MUST dispatch via reference-lanes-design.md
 conditional lane handed to a subagent                    -> IF <predicate>, dispatch via reference-lanes-design.md

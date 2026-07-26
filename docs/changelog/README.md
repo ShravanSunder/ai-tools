@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-26 Skills Creation Review Lanes](2026-07-26-skills-creation-review-lanes.md)
 - [2026-07-24 Manage Agents Opus 5 Matrix](2026-07-24-manage-agents-opus-5.md)
 - [2026-07-24 Manage Agents Pattern Tables And Terra](2026-07-24-manage-agents-terra-mini.md)
 - [2026-07-18 Skills Creation Body And Reference Lanes](2026-07-18-skills-creation-body-reference-lanes.md)
