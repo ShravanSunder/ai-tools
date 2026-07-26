@@ -22,8 +22,8 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
 
 ## Fork
 
-- `fork_turns="all"` or `fork_context=true`: reject `model` / `reasoning_effort` overrides.
-- `fork_turns="none"` or partial (e.g. `"1"`): overrides allowed.
+- `fork_turns="all"` or `fork_context=true`: inherit the parent model and reasoning effort; omit overrides.
+- `fork_turns="none"` or partial (e.g. `"1"`): pass explicit model and reasoning-effort overrides when needed.
 
 ## Examples
 
@@ -33,7 +33,7 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
   "task_name": "advisor_completion_check",
   "model": "gpt-5.6-sol",
   "reasoning_effort": "medium",
-  "fork_turns": "all"
+  "fork_turns": "none"
 }
 ```
 

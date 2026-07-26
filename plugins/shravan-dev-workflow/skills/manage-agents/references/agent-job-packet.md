@@ -9,10 +9,10 @@ assignment id:
 lane: single | <swarm name / lane>
 target:
 model category / exact model / reasoning effort:
-model lineage: claude, codex, grok
+model lineage: <exact selected lineage from SKILL.md>
 host:
 runtime: native | acpx
-provider: <cursor | claude | codex | --agent … | none when native>
+provider: cursor | claude | codex | none when native
 decision target:
 continuity reason: required for Advisor/Sidekick | none for Delegate/Operator
 source anchors:
@@ -40,7 +40,7 @@ decision requested:
 safe action while waiting: wait | continue read-only monitoring | stop
 ```
 
-Silence is not approval.
+Proceed after explicit parent approval.
 
 ## Reduction
 

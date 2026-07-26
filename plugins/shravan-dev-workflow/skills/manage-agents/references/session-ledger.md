@@ -8,6 +8,7 @@ Persistent Advisors and Sidekicks need one current ledger row before prompts tha
 agent name / pattern / assignment / assignment id:
 continuity reason:
 host / runtime / provider / model lineage / exact model / reasoning effort / budget:
+resolved launcher / provider command:
 working scope / relationship name:
 runtime ids / provider-native id when exposed:
 permission boundary:
@@ -16,11 +17,11 @@ receipt expected / receipt level / receipt scope:
 parent verification / next follow-up / notes:
 ```
 
-Runtime ids are not interchangeable. Do not pass one runtime's local identity to another runtime unless a provider-native id is exposed and documented as accepted.
+Keep runtime-local ids with their originating runtime. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
 
 ## Create Or Resume
 
-Reuse an existing relationship only when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship only with an explicit continuity-reset reason. Reconnect, auth failure, model rejection, permission failure, or provider limits do not authorize replacement churn.
+Reuse a relationship when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship with an explicit continuity-reset reason. Repair reconnect, authentication, model, permission, or provider-limit failures within the current relationship when possible.
 
 ## Readiness Lifecycle
 
@@ -29,15 +30,15 @@ local record -> provider attached -> selected model active
              -> assignment-bound output -> parent-verified claim
 ```
 
-Identity is the resolved runtime, working scope, relationship name, and exposed ids. Configuration is model, reasoning effort, and permissions. Keep both stable or record a deliberate transition before the next call.
+Identity is the resolved runtime, launcher, provider command, working scope, relationship name, and exposed ids. Configuration is model, reasoning effort, and permissions. Keep both stable or record a deliberate transition before the next call.
 
 | Signal | Action |
 | --- | --- |
 | reconnect requested | Resume/retry the same scope. |
 | local relationship missing | Inspect runtime records for matching runtime and working scope, then resume or intentionally recreate. |
-| auth failure | Repair auth or report blocked; local creation is not provider readiness. |
+| auth failure | Repair auth or report blocked; confirm provider readiness afterward. |
 | model rejected/substituted | Use an advertised equivalent or report degraded/blocked. |
-| permission failure | Correct the narrow policy or report blocked; do not broaden silently. |
+| permission failure | Correct the narrow policy or report blocked; obtain approval for broader permissions. |
 | provider session limit | Stop creating; reuse/resume, use declared fallback, defer, or report blocked. |
 
 ## Progress And Scope
