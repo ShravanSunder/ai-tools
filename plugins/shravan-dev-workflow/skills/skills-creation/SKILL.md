@@ -113,7 +113,9 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 ## Review Lanes
 
-Review is dispatched to fresh-context subagents, never forked from the authoring session. A forked reviewer inherits the author's rationalizations, which is the one thing review exists to avoid. Each lane loads one file from `references/lanes/` and returns candidate findings; the parent verifies and reduces them.
+Each lane loads one file from `references/lanes/` and returns candidate findings; the parent verifies and reduces them.
+
+Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only` for reviewers; `../manage-agents/references/agent-job-packet.md` owns the packet and reduction shapes. A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid. Prefer native dispatch in the parent host's own lineage; when the runtime can reach another lineage, give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
 Lane selection lives here and nowhere else. Each row is an independent predicate; dispatch the union of every row that holds. A lane file never restates when it runs.
 
@@ -140,13 +142,13 @@ Dispatch contract, applied to each selected lane:
 MUST dispatch `<lane>` to a subagent using `<review packet>`.
 Subagent loads `references/lanes/<lane>.md`.
 Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
-Instance authority is read-only, per the common lane contract.
+Instance authority is the reviewer contract in `manage-agents`.
 Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 ```
 
-No lane reads another lane's receipt, so every dispatch is one readiness wave with no barrier. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
+`manage-agents` owns pattern, model category, lineage, runtime, history, workspace access, and packet mechanics. This skill owns only which lanes run and what each returns.
 
-Reviewers run in fresh context, never forked from the authoring session — a forked reviewer inherits the author's rationalizations, which is the one thing review exists to avoid. Use `manage-agents` for pattern, model category, lineage, runtime, permissions, and packet mechanics; prefer native subagents, and use at least one reviewer of a different model lineage than the author when the runtime offers one.
+No lane reads another lane's receipt, so every dispatch is one readiness wave with no barrier. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
 
 ## Scaled Run Note
 

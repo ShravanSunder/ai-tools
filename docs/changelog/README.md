@@ -13,6 +13,13 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 ## Entries
 
 - [2026-07-26 Skills Creation Review Lanes](2026-07-26-skills-creation-review-lanes.md)
+- [2026-07-26 Manage Agents Control Rationale](2026-07-26-manage-agents-control-rationale.md)
+- [2026-07-26 Manage Agents Context And Access](2026-07-26-manage-agents-context-access.md)
+- [2026-07-26 Manage Agents Reviewer Read-Only Access](2026-07-26-manage-agents-reviewer-read-only.md)
+- [2026-07-26 Manage Agents Binary History](2026-07-26-manage-agents-binary-history.md)
+- [2026-07-26 Manage Agents Reviewer History](2026-07-26-manage-agents-reviewer-history.md)
+- [2026-07-26 Manage Agents Reviewer Context](2026-07-26-manage-agents-reviewer-context.md)
+- [2026-07-26 Manage Agents Provider-Resolved Dispatch](2026-07-26-manage-agents-provider-resolved-dispatch.md)
 - [2026-07-24 Manage Agents Opus 5 Matrix](2026-07-24-manage-agents-opus-5.md)
 - [2026-07-24 Manage Agents Pattern Tables And Terra](2026-07-24-manage-agents-terra-mini.md)
 - [2026-07-18 Skills Creation Body And Reference Lanes](2026-07-18-skills-creation-body-reference-lanes.md)

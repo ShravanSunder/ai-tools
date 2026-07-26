@@ -17,7 +17,10 @@ Model-invocable, user-invocable, context load, cognitive load, and router skills
 
 ## Information Hierarchy
 
-Load mode, mandatory reference, progressive disclosure, branch, and lane are explained in `SKILL.md`.
+Progressive disclosure, branch, and lane are explained in `SKILL.md`.
+
+- Load mode: the caller-owned choice between all-run `MUST load` and conditional `IF <observable predicate>, load`.
+- Mandatory reference: coherent all-run detail consumed through `MUST load` while its parent obligation and completion stay visible in `SKILL.md`.
 
 - Steps: ordered actions the agent performs. They belong in `SKILL.md` when order changes behavior.
 - Workflow topology: the route from trigger through all-run spine, branches, return shapes, and completion/proof.

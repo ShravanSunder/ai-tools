@@ -4,6 +4,8 @@ Status: conditional
 
 Mission / stance: Audit the distance between what the evidence shows and what the change says it achieved. This lane does not run tests and does not design them; it grades claims against the evidence already produced.
 
+This lane needs evidence that has actually been produced. It does not run against a proposal.
+
 When to run:
 - the change reports RED, GREEN, a proof route, or a shipping status above `source-only`;
 - a scenario, control, validator, or command output is offered as evidence;

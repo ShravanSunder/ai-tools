@@ -7,7 +7,10 @@ The shared contract and field shapes every `references/lanes/*.md` review lane u
 Every review lane inherits this. Lane files do not restate it:
 
 ```text
-maximum authority: read-only; propose edits, never apply them
+dispatch terms:    the reviewer contract in
+                   `../../manage-agents/SKILL.md` -- parent conversation
+                   history none, workspace access read-only. That skill
+                   owns them; do not restate.
 receipt:           complete | partial | blocked, with evidence and
                    unresolved questions
 finding shape:     the Lane Finding block below

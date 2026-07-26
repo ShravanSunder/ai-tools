@@ -10,7 +10,9 @@ When to run:
 - a reference was added, renamed, split, or merged;
 - the skill declares a grammar, vocabulary, label set, or schema that other files must speak.
 
-Where to look:
+Where to look, when the artifact is a **proposal**: the proposed rules, terms, and labels against what the shipped skill already states, and against the external sources the proposal cites. Nothing on disk has changed yet, so the comparison is proposal-versus-current, not diff-versus-diff.
+
+Where to look, when the artifact is **changed files**:
 - `SKILL.md` against every file in `references/`;
 - `glossary.md` against how the body actually uses each defined term;
 - every declared form, label, status value, or verdict against its real call sites;
@@ -23,7 +25,11 @@ How to inspect: Build the claim inventory before judging. For each rule, term, p
 divergent home    one rule stated in 2+ places with different wording
 orphan term       defined but never used, or used but never defined
 dead declaration  a form, label, or field declared and never instantiated
+unsupported claim a statement about an external tool, adjacent skill, or
+                  runtime that its actual source does not support
 ```
+
+The fourth is the same failure with one statement living outside the skill. Open the cited source and check; a confidently wrong claim about a validator, flag, or adjacent skill passes every other lane.
 
 A rule with one home cannot fail this lane. A rule with five homes fails the moment any one of them is edited.
 

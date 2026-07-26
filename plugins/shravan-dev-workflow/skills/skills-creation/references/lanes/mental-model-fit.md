@@ -10,7 +10,9 @@ When to run:
 - a coined term was added to the skill or its glossary;
 - the skill's promise changed but its lens did not, or the reverse.
 
-Where to look:
+Where to look, when the artifact is a **proposal**: the stated lens and the workflow the proposal describes. Both exist in the proposal text, so this lane runs fully before any file is edited.
+
+Where to look, when the artifact is **changed files**:
 - the mental model or stance section of `SKILL.md`;
 - the leading words the body actually repeats, and how often;
 - `references/glossary.md` for coined terms and their definition cost;

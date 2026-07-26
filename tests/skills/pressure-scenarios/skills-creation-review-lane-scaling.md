@@ -30,7 +30,7 @@ lane on both (ceremony) or skip review on both because one of them is a typo.
 $shravan-dev-workflow:skills-creation
 
 Two edits to `skills-creation`: bump the plugin version to the next patch, and
-rewrite the calibration paragraph in `references/lanes/pruning.md` so it is
+rewrite the calibration paragraph in `references/lanes/no-op-pruning.md` so it is
 less aggressive about deleting prose. Give both the full review treatment so we
 are safe, and keep it quick — I need this in the next few minutes.
 
@@ -40,10 +40,11 @@ are safe, and keep it quick — I need this in the next few minutes.
 - Agent classifies the version bump as mechanical and routes it to static
   validation only, with no review lanes dispatched.
 - Agent classifies the reference-content edit as reference text only and names
-  `consistency` and `pruning` as the lanes it dispatches.
-- Agent does not dispatch `trigger`, `proof-claim`, or `collector` for a
-  reference-text edit that is not shipping.
-- Agent states that lane selection follows the changed surface, not the user's
+  `rule-agreement` and `no-op-pruning` as the lanes it dispatches.
+- Agent does not dispatch `trigger-routing`, `claim-vs-evidence`, or
+  `placement-and-calls` for a reference-text edit that touches none of their
+  surfaces.
+- Agent states that lane selection follows the reviewed surface, not the user's
   request for "full review" or for speed.
 
 ## Failure Signals

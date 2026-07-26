@@ -76,21 +76,33 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 
 ## Choose the Runtime
 
-Select the pattern, model category, model lineage, and reasoning requirement first. Then check whether the parent host exposes the selected model through its native subagent runtime. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules.
+Select the pattern, model category, model lineage, and reasoning requirement first. Then route from the parent host's own model lineage. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules.
+
+## Context And Access
+
+### Parent Conversation History
+
+- Reviewers: `none`. We want reviewers to independently think from first principles.
+- Non-reviewers: the parent chooses `none` or `all`. `all` allows context to help subagents in their tasks. Use `none` when you rebuild mental models from first principles.
+
+### Workspace Access
+
+- Reviewers: `read-only`.
+- Non-reviewers: the parent chooses `read-only` or `write`.  Only use `write` when you need to modify the workspace.
 
 ### Native Dispatch
 
-Use native dispatch when the parent host exposes the selected model through its native subagent runtime.
+Use native dispatch for the parent host's own model lineage when the selected model is available.
 
 - Codex spawning OpenAI models: load `references/native-providers-codex.md`.
 - Claude spawning Claude models: use the host-native agent contract.
 - Use the exact model id and reasoning control supported by the native runtime.
 
-If the selected model is not available through the parent host's native subagent runtime, use ACPX.
+When an own-lineage model is unavailable, choose a declared native fallback or report the route as degraded or blocked.
 
 ### ACPX Dispatch
 
-Use ACPX when the selected model is not available through the parent host's native subagent runtime, or when ACPX persistence is explicitly required.
+Use ACPX for a model lineage owned by a different provider than the parent host.
 
 1. Load `references/acpx.md` for provider-neutral configuration, command, session, permission, and output mechanics.
 2. Select exactly one provider and load its contract before constructing or executing the call:
@@ -105,22 +117,21 @@ Use ACPX when the selected model is not available through the parent host's nati
 1. Choose the pattern before the model, provider, or runtime. Then choose the model category, lineage, and reasoning requirement from the pattern tables above.
    - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, reasoning requirement, and lineage.
 
-2. Follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
-   - Native completion: the parent host exposes the selected model, the native provider reference has been loaded when one exists, and the exact supported model id and reasoning control are explicit.
-   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id and reasoning control are explicit.
+2. Choose parent conversation history and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
+   - Dispatch completion: the packet records both selections.
+   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and workspace-access enforcement are explicit.
+   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit.
    - Unsupported completion: report the missing provider contract and stop dispatch.
 
 3. Build one bounded packet for every non-trivial call, dispatch it, and reduce the result.
    - Load `references/agent-job-packet.md` for packet, dispatch, Operator decision, and reduction shapes.
    - Treat agent output as candidate evidence. The parent owns decisions and verifies assignment-bound claims before accepting them.
-   - Completion: source anchors, non-goals, receipt scope, stop condition, parent verification, and accepted or rejected claims are explicit.
+   - Completion: source anchors, non-goals, receipt scope, stop condition, parent verification, and accepted, rejected, or unverified claims are explicit.
 
 4. Manage persistent relationships.
    - Create the ledger before the first Advisor or Sidekick prompt that assumes continuity.
    - Load `references/session-ledger.md` for creation, resume, reconnect, progress, history, freshness, or reduction.
    - Use status as liveness evidence. Accept completion from a current assignment-bound receipt that matches the source or head version.
    - Completion: the persistent identity is stable and the current receipt matches the assignment and source or head version.
-
-Completion: the parent can name the pattern, model, runtime, permissions, packet, receipt, and verification step.
 
 Extra: If you need to build, modify, or wrap an ACP-compatible adapter, read `references/building-acp-adapters.md`.

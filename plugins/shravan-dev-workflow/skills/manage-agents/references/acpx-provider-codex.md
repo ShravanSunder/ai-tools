@@ -14,7 +14,7 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Allowed levels follow `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh → Frontier; Luna/Terra → Mini). Do not invent a level the adapter does not advertise.
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh → Frontier; Luna/Terra → Mini).
 
 ## Sessions And Identity
 
@@ -30,4 +30,4 @@ Keep cwd, resolved `codex` command, model id, effort, and permission boundary st
 
 ## Permissions
 
-Default source-grounded Advisor/review work to `--approve-reads`. Use `--deny-all` only when the packet already contains every needed excerpt (no repo reads). Keep `--non-interactive-permissions fail` for unattended runs. Do not broaden an Advisor or reviewer to `--approve-all` because a read request failed.
+Use `--approve-reads` for source-grounded Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.

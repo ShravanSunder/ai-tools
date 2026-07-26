@@ -4,6 +4,8 @@ Status: mandatory
 
 Mission / stance: Decide whether each obligation lives where the agent will actually meet it, and whether every call site says enough to act on. Material in the wrong home is silently skipped; a call site missing its return shape sends the agent away with nothing to bring back.
 
+This lane needs text on disk. It does not run against a proposal.
+
 When to run:
 - the `SKILL.md` body changed;
 - a reference was added, moved, split, or merged;

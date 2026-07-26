@@ -10,7 +10,7 @@ Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single m
 
 ## Models
 
-Pass ids with `--model` at session creation or `acpx cursor set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the exact advertised ACP id from `session/new` / `configOptions.model`. Bare prefixes (for example `composer-2.5`) resolve only when exactly one advertised id shares that prefix; otherwise pass the full bracketed id.
+Pass the exact advertised ACP id from `session/new` / `configOptions.model` with `--model` at session creation or `acpx cursor set model <id> -s <name>` afterward.
 
 Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
 
@@ -24,9 +24,9 @@ Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
 | `gpt-5.6-luna`                    | user request only |
 | `gpt-5.6-terra`                   | user request only |
 
-`agent --list-models` uses different short names (`composer-2.5`, `composer-2.5-fast`, `cursor-grok-4.5-high`, …). Those are Cursor CLI labels, not ACPX `--model` ids. Always record the ACP-advertised id in the ledger.
+Treat the short names from `agent --list-models` (`composer-2.5`, `composer-2.5-fast`, `cursor-grok-4.5-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
-Cursor may silently resolve a bare model name to a bracketed variant. If usage limits remove a model, use an equivalent declared fallback or report degraded/blocked. Record config-defined command overrides because the resolved command participates in session identity.
+When usage limits remove a model, use an equivalent declared fallback or report degraded/blocked. Record config-defined command overrides because the resolved command participates in session identity.
 
 ## Modes
 
@@ -56,4 +56,4 @@ Keep cwd, resolved `cursor` command, exact model id, mode, and permission bounda
 
 ## Permissions
 
-Default source-grounded work to `--approve-reads`. Use `--deny-all` only when the packet already contains every needed excerpt (no repo reads). Keep `--non-interactive-permissions fail` for unattended runs. Do not broaden an Advisor or reviewer to `--approve-all` because a read request failed.
+Use `--approve-reads` for source-grounded work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.

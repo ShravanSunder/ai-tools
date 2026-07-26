@@ -4,6 +4,8 @@ Status: mandatory
 
 Mission / stance: Delete what does not earn its place. The test is behavioral, not aesthetic: would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside the surrounding context, never to whole sections at once.
 
+This lane needs text on disk. It does not run against a proposal.
+
 When to run:
 - any prose was added or edited;
 - a section grew during the change;
