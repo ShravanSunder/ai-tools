@@ -82,13 +82,13 @@ Select the pattern, model category, model lineage, and reasoning requirement fir
 
 ### Parent Conversation History
 
-- Reviewers: `none`.
-- Non-reviewers: the parent chooses `none` or `all`.
+- Reviewers: `none`. We want reviewers to independently think from first principles.
+- Non-reviewers: the parent chooses `none` or `all`. `all` allows context to help subagents in their tasks. Use `none` when you rebuild mental models from first principles.
 
 ### Workspace Access
 
 - Reviewers: `read-only`.
-- Non-reviewers: the parent chooses `read-only` or `write`.
+- Non-reviewers: the parent chooses `read-only` or `write`.  Only use `write` when you need to modify the workspace.
 
 ### Native Dispatch
 
