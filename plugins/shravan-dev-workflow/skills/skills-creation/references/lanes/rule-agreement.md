@@ -38,10 +38,10 @@ Bad signals:
 - a rule restated in full inside a review rubric that also lives in its owning reference;
 - a renamed file still referenced under its old name.
 
-Calibration: Report contradictions with every home listed and one named as the proposed owner. Do not report a single statement you merely dislike; that is `no-op-pruning` or `steering-strength`. Do not redesign the rule itself, decide which home wins.
+Calibration: Report contradictions with every home listed and one named as the proposed owner. A single statement you merely dislike belongs to `no-op-pruning` or `steering-strength`: file it with `route:` set rather than judging or dropping it. Do not redesign the rule itself, decide which home wins.
 
 Overlap boundary: This lane owns *two statements disagree* and *unreachability* — a reference nothing calls, or a form declared and never used, is this lane's finding. `placement-and-calls` owns whether a statement sits in the right home and whether a call site is complete; this lane owns whether its copies agree and whether what is declared is actually reached. `no-op-pruning` owns *a statement does nothing*: a weak leading word is `no-op-pruning`, a term carrying two definitions is `rule-agreement`.
 
 Stop when: every rule, term, label set, and external claim in the changed surface has been inventoried across all its homes.
 
-Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.
+Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.

@@ -36,8 +36,8 @@ Bad signals:
 
 Calibration: Propose the smallest wording change and name the failure form it serves. Do not add a gate for a failure nobody observed or approved; unsupported gates are their own defect.
 
-Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *whether a line should exist*. A weak leading word arrives here from `no-op-pruning` for a stronger form; a line that should simply be deleted stays with `no-op-pruning`.
+Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *whether a line should exist*. A weak leading word arrives here from `no-op-pruning` for a stronger form; a line that should simply be deleted is filed with `route: no-op-pruning`.
 
-Stop when: every steering sentence added or changed carries a named failure form, and every completion criterion has been tested for both checkability and demand.
+Stop when: every steering sentence added or changed has been matched against a failure form, and every completion criterion has been tested for both checkability and demand.
 
-Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.
+Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.

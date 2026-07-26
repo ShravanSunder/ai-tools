@@ -7,7 +7,7 @@ Where to look, when the artifact is a **proposal**: the stated lens and the work
 Where to look, when the artifact is **changed files**:
 - the mental model or stance section of `SKILL.md`;
 - the leading words the body actually repeats, and how often;
-- `references/glossary.md` for coined terms and their definition cost;
+- `../glossary.md` for coined terms and their definition cost;
 - the workflow, to see whether the route the skill walks matches the lens it claims;
 - the skill's stated promise and success definition.
 
@@ -38,8 +38,8 @@ Bad signals:
 
 Calibration: Propose the smallest change that makes the lens and the route agree — usually either following the frame in the workflow or replacing the frame with the one the workflow already implies. Do not redesign the skill's purpose. A lens you personally find unfashionable is not a finding; a lens the skill does not follow is.
 
-Overlap boundary: This lane owns *whether the concept is right and whether the skill follows it*. `steering-strength` owns whether wording binds once the concept is chosen. `no-op-pruning` owns whether a line should exist. `placement-and-calls` owns where material lives. A weak leading word that fails the no-op test is `no-op-pruning`; a leading word that is strong but wrong for the work is this lane's.
+Overlap boundary: This lane owns *whether the concept is right and whether the skill follows it*. `steering-strength` owns whether wording binds once the concept is chosen. `no-op-pruning` owns whether a line should exist. `placement-and-calls` owns where material lives. A weak leading word that fails the no-op test is filed with `route: no-op-pruning`; a leading word that is strong but wrong for the work is this lane's.
 
 Stop when: the lens has been named from the body alone and tested for fit, priors, cost, and coverage.
 
-Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.
+Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.

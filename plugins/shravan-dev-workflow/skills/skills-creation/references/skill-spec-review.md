@@ -14,14 +14,14 @@ Allowed verdicts: `great`, `targeted-revision`, `significant-rewrite`, `reject-o
 
 For pre-implementation spec review, `great` means accepted to implement. `targeted-revision` means the intended design needs a bounded spec fix before editing. `significant-rewrite` means the proposed design's promise, trigger, workflow, or proof route must be redesigned before implementation.
 
-Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, branch-critical depth has no owning reference, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
+Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, branch-critical depth has no owning reference, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
 
 ## Rubric
 
-Dispatched lanes own their own checks and each states its rubric in `references/lanes/`. This reference does not restate them; it covers what only a whole-spec verdict can judge:
+Dispatched lanes own their own checks and each states its rubric in `lanes/`. This reference does not restate them; it covers what only a whole-spec verdict can judge:
 
 - promise: the reusable behavior is specific and worth making durable.
-- steering: each proposed rule, gate, and completion criterion names the failure form it serves, and each completion criterion is checkable from the outside. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited.
+- steering: each proposed rule, gate, and completion criterion names the failure form it serves,. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
 - invocation: model-invocable and user-invocable capabilities pay the right load for this skill's real callers.
 - authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
 - lane and shape proposals: any lane the spec proposes satisfies `reference-lanes-design.md`, and any shared shape names a real consumer there. That reference is the single owner of qualification, authority, and shape families.

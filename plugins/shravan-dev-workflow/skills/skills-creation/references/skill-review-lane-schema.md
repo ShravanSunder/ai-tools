@@ -61,6 +61,18 @@ static-only
 out-of-scope
 ```
 
+## Receipt
+
+Every lane opens its return with this block. A `complete` status that does not list the items opened is not `complete`.
+
+```text
+receipt: complete | partial | blocked
+items opened:
+- <each `Where to look` item, with the anchor that proves it was opened>
+stop condition: met | not met, with what remains
+unresolved questions:
+```
+
 ## Lane Finding
 
 `lane` is the content lane name from `references/lanes/`. Runtime facts such as

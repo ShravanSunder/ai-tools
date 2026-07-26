@@ -23,7 +23,7 @@ no behavior change                                       -> prune
 
 Branch-only is about who consumes the material, not its length. All-run detail may move out when it is one coherent procedure, has enough density to obscure the main path, or changes for a different reason than the body. Do not create arbitrary chapter files merely to reduce line count.
 
-When lane qualification, repeated model output, or machine-validated structure is the hard part, return to the calling `SKILL.md`; its observable predicate routes to `references/reference-lanes-design.md`.
+When lane qualification, repeated model output, or machine-validated structure is the hard part, return to the calling `SKILL.md`; its observable predicate routes to `reference-lanes-design.md`.
 
 ## Caller Owns Routing
 

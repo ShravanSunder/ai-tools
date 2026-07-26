@@ -33,4 +33,4 @@ Overlap boundary: This lane owns the always-loaded trigger surface and adjacent-
 
 Stop when: the description has been read against every adjacent skill in the plugin.
 
-Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.
+Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.

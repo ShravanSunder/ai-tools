@@ -4,7 +4,7 @@ Mission / stance: Audit the distance between what the evidence shows and what th
 
 Where to look:
 - the run note `authoring basis`, `reproduction`, and `proof route` fields;
-- the Evidence And Claim Ladder in `references/pressure-testing.md`;
+- the Evidence And Claim Ladder in `../pressure-testing.md`;
 - scenario ids, commands, exit codes, and transcripts actually produced;
 - which files the change touched versus which the scenario exercises.
 
@@ -34,8 +34,8 @@ Bad signals:
 
 Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior.
 
-Overlap boundary: This lane owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `references/pressure-testing.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
+Overlap boundary: This lane owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `../pressure-testing.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
 
 Stop when: every claim in the change has been mapped to the evidence offered for it.
 
-Output focus: MUST load `references/skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.
+Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.

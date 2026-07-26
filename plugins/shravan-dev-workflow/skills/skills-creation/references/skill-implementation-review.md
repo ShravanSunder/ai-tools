@@ -12,7 +12,7 @@ If the user explicitly requests outside counsel and Codex authored the change, p
 
 ## Review Rubric
 
-Dispatched lanes own their own checks and each states its rubric in `references/lanes/`. This reference does not restate them; it covers what only a whole-change ship decision can judge:
+Dispatched lanes own their own checks and each states its rubric in `lanes/`. This reference does not restate them; it covers what only a whole-change ship decision can judge:
 
 - Every edited, added, or deleted source file is covered. Each file is reviewed semantically, marked source/static-only with its behavior status, or explicitly excluded by the accepted behavior-review boundary; deletions are verified through both absence and pointer inventory.
 - The implemented diff matches the accepted spec and user constraints without crossing the accepted source, behavior, or ship boundary.
