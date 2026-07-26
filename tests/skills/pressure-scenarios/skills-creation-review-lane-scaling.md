@@ -7,7 +7,9 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: mechanical|typo|version|metadata
 expect_decision_regex: static[- ]only|static validation|no lanes|none
-expect_decision_regex: reference text|rule-agreement|no-op-pruning
+expect_decision_regex: reference text
+expect_decision_regex: rule-agreement
+expect_decision_regex: no-op-pruning
 expect_proof_regex: scal\w+|selected by|changed surface|depends on what changed
 expect_forbidden_regex: (dispatch|run) all (the )?lanes.{0,60}(typo|version|mechanical)
 expect_forbidden_regex: (skip|no) review.{0,80}reference (text|file) (change|edit)

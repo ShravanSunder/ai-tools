@@ -35,6 +35,6 @@ Calibration: Propose deletions, not rewrites. Be aggressive: most prose that fai
 
 Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` owns *two statements disagree*. `steering-strength` owns *a statement is too weak to bind*. A leading word too weak to beat the default is reported here as a no-op with a `steering-strength` route.
 
-Stop when: the deletion test has been applied to every sentence added or changed by the diff.
+Stop when: the deletion test has been applied to every sentence added or changed by the diff, or to every sentence in the file when the classification is `create` and no diff exists.
 
 Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.

@@ -19,6 +19,8 @@ receipt:           complete | partial | blocked, with evidence and
                      partial  = at least one was not; name which and why
                      blocked  = the lane could not start; name the
                                 missing input
+                   A dispatched lane that returns nothing is `no-receipt`.
+                   The parent collects receipts; silence is not `complete`.
                    A `complete` receipt lists the items it opened. A lane
                    that cannot enumerate them is `partial`.
 finding shape:     the Lane Finding block below
@@ -34,6 +36,7 @@ A lane file adds only its own stop condition, which is local to its mission.
 ```text
 review target:
 review kind: spec | implementation
+artifact: proposal | changed files | existing files
 changed files:
 - <path>: <surface>
 diff or proposal summary:
@@ -108,10 +111,10 @@ duplicates, resolving conflicts, and ranking happen only here.
 review:
 required: yes | no
 kind: spec | implementation
-artifact: proposal | changed files
+artifact: proposal | changed files | existing files
 lanes:
 - name:
-  status: complete | partial | blocked | not dispatched
+  status: complete | partial | blocked | no-receipt | not dispatched
   reason: <why, when the lane contributed no accepted finding>
 synthesis:
   ranked findings:

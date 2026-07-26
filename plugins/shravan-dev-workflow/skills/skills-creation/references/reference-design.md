@@ -30,8 +30,8 @@ When lane qualification, repeated model output, or machine-validated structure i
 Every ordinary reference caller in the authored `SKILL.md` begins with exactly one literal load form:
 
 ```text
-MUST load `<reference>` and return `<result>`.
-IF `<observable predicate>`, load `<reference>` and return `<result>`.
+MUST load `<reference>` to `<requested work>` and return `<result>`.
+IF `<observable predicate>`, load `<reference>` to `<requested work>` and return `<result>`.
 ```
 
 `MUST load` is an all-run reference pass, not a branch. `IF` is a branch and needs an observable predicate that changes the work. Do not combine the markers or replace them with "when useful," "as needed," "should load," or a vague "see this file" pointer.

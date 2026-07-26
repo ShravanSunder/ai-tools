@@ -57,8 +57,8 @@ Every call site uses exactly one of these forms:
 
 ```text
 Reference
-  MUST load `<reference>` and return `<result>`.
-  IF `<predicate>`, load `<reference>` and return `<result>`.
+  MUST load `<reference>` to `<requested work>` and return `<result>`.
+  IF `<predicate>`, load `<reference>` to `<requested work>` and return `<result>`.
 
 Lane handoff
   MUST dispatch `<lane>` to a subagent using `<packet>`.
@@ -123,7 +123,7 @@ Two gates run before the table, in order.
 
 **Gate 1 — change class.** A mechanical change — a typo, version bump, or metadata edit with no behavior claim, outside any executable or privileged surface — dispatches nothing and takes static validation only. Stop here. A typo inside a script, hook, or other sensitive surface is not mechanical: it goes to the table and dispatches `sensitive-surface`.
 
-**Gate 2 — artifact.** A **proposal** exists only in conversation and dispatches exactly `mental-model-fit`, `trigger-routing`, and `rule-agreement` — the lanes whose questions are answerable about a design. The table does not apply. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. **Changed files** exist on disk and go to the table.
+**Gate 2 — artifact.** A **proposal** exists only in conversation and dispatches exactly `mental-model-fit`, `trigger-routing`, and `rule-agreement` — the lanes whose questions are answerable about a design. The table does not apply. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. **Changed files** exist on disk and go to the table. **Existing files** — evaluating a shipped skill nobody has edited — also go to the table, with every row its current surfaces satisfy; there is no diff, so lanes read whole files.
 
 For changed files, dispatch the union of every row whose surface the change touched. The rows are the four surfaces of the Great Skill Frame, plus the security gate:
 
@@ -154,7 +154,9 @@ Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 
 `manage-agents` owns pattern, model category, lineage, runtime, history, workspace access, and packet mechanics. This skill owns only which lanes run and what each returns.
 
-No lane reads another lane's receipt, so every dispatch is one readiness wave with no barrier. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
+No lane reads another lane's receipt, so every dispatch is one readiness wave with no barrier.
+
+The parent collects every receipt explicitly. A dispatched lane that returns nothing is `no-receipt`, not `complete` — silence is never a clean review. Await one terminal receipt per dispatched lane, and ask for it if the lane goes quiet. While any dispatched lane is `partial`, `blocked`, or `no-receipt`, the run may not advance to `PR-ready` or `released` unless the parent closes that exact gap itself and records how. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
 
 ## Scaled Run Note
 
@@ -214,7 +216,7 @@ Completion: wording changes cite the failure or success gap they are meant to ad
 
 **9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above, under the Review Dispatch Contract, against the proposed design, and load `references/skill-spec-review.md` and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
 
-**10. Implement.** After the spec is accepted, edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
+**10. Implement.** IF any surface on the sensitive-surface list in `references/skill-security-review.md` is in scope, load that reference before writing anything and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
 
 **11. Review the implementation, then prove.** Run this as one loop, review first. Proof that runs before review wastes a run on text the review is about to change.
 
@@ -253,6 +255,7 @@ The run is not done while any of these hold:
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a behavior-changing skill change reached implementation without required spec review or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
+- a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded parent closure;
 - static validation is claimed as behavior proof;
 - a sensitive surface was written without an allowed/disallowed/blocked/deferred decision recorded before that surface was outlined or written;
 - required platform static validation failed, or was skipped without a stated reason.
