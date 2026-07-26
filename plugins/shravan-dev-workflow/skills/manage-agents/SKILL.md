@@ -5,23 +5,24 @@ description: Always use when using an advisor, sidekick, delegate, operator or s
 
 # Manage Agents
 
-The agent pattern owns work, continuity, authority, cardinality, and the minimum capability category. A model category is a model-plus-thinking combination.
+The agent pattern owns work, continuity, authority, cardinality, and the minimum capability category. A model category is a model-plus-thinking combination. Dispatch is one ordered decision:
 
 ```text
-pattern -> model category -> model lineage -> exact model id -> reasoning effort -> host/client
-        -> native or ACPX runtime -> provider -> budget (or n/a) -> permissions -> packet -> receipt
+pattern -> model category -> model lineage -> reasoning requirement
+        -> native availability -> native or ACPX runtime -> exact model id
+        -> permissions -> packet -> receipt
 ```
 
 ## Patterns
 
-A subagent is a runtime, not a pattern. Use one of the following patterns to manage the subagent.
+Manage every subagent through one of the following patterns. The runtime supplies the launch mechanism.
 
 ### Advisor
 Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opinions; get help from a Frontier model. You drive the loop.
 
 - **Work:** Strategic advice, reflection, course correction, or completion checks while the parent remains executor.
 - **Continuity and cardinality:** Exactly one persistent named advisor.
-- **Authority:** Candidate guidance only; validate the advice.
+- **Authority:** The Advisor returns candidate guidance; the parent validates it.
 - **Model category:** Frontier
 
 | Model category | Model lineage       | Thinking         |
@@ -35,7 +36,7 @@ Use a Sidekick for multi-turn delegated work you will resume and steer; a named 
 
 - **Work:** Delegated execution across assignments and follow-ups.
 - **Continuity and cardinality:** One or many persistent named relationships with ledger.
-- **Authority:** Provide scope or responsibilities; no final authority; validate the work.
+- **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work.
 - **Model category:** Frontier or Balanced
 
 | Model category | Model lineage       | Thinking         |
@@ -60,11 +61,11 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 | Balanced       | Cursor Grok 4.5     | medium or high   |
 
 ### Operator
-Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results); do not ask for reasoning. Helps save context for you: you dispatch and get data and references.
+Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results). Give the Operator a procedure and reserve reasoning for the parent.
 
 - **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
-- **Continuity and cardinality:** Single or Operator swarm; no semantic continuity.
-- **Authority:** Execute, observe, and report only. No judgment, code changes, replies, readiness verdicts, or merge; operator provides data or takes a bounded action.
+- **Continuity and cardinality:** Single or Operator swarm; each assignment is independent.
+- **Authority:** Execute, observe, and report the bounded procedure. Route judgment, code changes, replies, readiness verdicts, and merge decisions to the parent.
 - **Model category:** Mini
 
 | Model category | Model lineage       | Thinking         |
@@ -73,71 +74,52 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 | Mini           | OpenAI Terra        | low or medium    |
 | Mini           | Cursor Composer 2.5 | no thinking      |
 
-Verify the exact provider-advertised model id and thinking option when the provider exposes one. Do not invent a thinking setting for a model without that control. Do not treat lineage as a provider. Use a declared equivalent fallback or report degraded/blocked when the required category or lineage is unavailable on the chosen provider.
+## Choose the Runtime
 
-## Model: versions and providers
+Select the pattern, model category, model lineage, and reasoning requirement first. Then check whether the parent host exposes the selected model through its native subagent runtime. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules.
 
-| Model           | Version     |
-| --------------- | ----------- |
-| OpenAI Sol      | GPT-5.6     |
-| OpenAI Luna     | GPT-5.6     |
-| OpenAI Terra    | GPT-5.6     |
-| Claude Fable    | 5.x         |
-| Claude Opus     | 5.x         |
-| Cursor Grok     | 4.5+        |
-| Cursor Composer | 2.5+        |
+### Native Dispatch
 
+Use native dispatch when the parent host exposes the selected model through its native subagent runtime.
 
-| Provider | Models                                                                 |
-| -------- | ---------------------------------------------------------------------- |
-| `claude` | Fable, Opus                                                            |
-| `codex`  | Sol, Luna, Terra                                                       |
-| `cursor` | Grok 4.5, Composer 2.5, (other models only if specified by user input) |
+- Codex spawning OpenAI models: load `references/native-providers-codex.md`.
+- Claude spawning Claude models: use the host-native agent contract.
+- Use the exact model id and reasoning control supported by the native runtime.
 
+If the selected model is not available through the parent host's native subagent runtime, use ACPX.
 
-## Native and ACPX Runtimes
+### ACPX Dispatch
 
-| Runtime         | What it is                                      |
-| --------------- | ----------------------------------------------- |
-| Native subagent | Host built-in agent runtime                     |
-| ACPX            | External ACP provider sessions outside the host |
+Use ACPX when the selected model is not available through the parent host's native subagent runtime, or when ACPX persistence is explicitly required.
 
-Native describes how the subagent is launched, not its pattern or model. A native subagent still operates as an Advisor, Sidekick, Delegate, or Operator under the same packet, authority, continuity, and parent-verification rules.
-
-Who are you and what are you running on? Always use your own native subagents for your own model lineage.
-- If you are codex, use native subagent for all GPT native models.
-- If you are claude, use native subagent for all Claude native models.
-
-## Rules
-
-- Parent owns decisions and validates agent output as candidate evidence.
-- Choose the pattern before the model, provider, or runtime.
-- Operator executes, observes, and reports; it escalates judgment.
-- Every non-trivial call gets one bounded packet. Persistent relationships get a ledger before the first prompt that assumes continuity.
-- Status proves liveness, not correctness. Only assignment-bound output enters parent reduction.
-- Queue runs later. It is not immediate steer, and acknowledgement is not completion.
+1. Load `references/acpx.md` for provider-neutral configuration, command, session, permission, and output mechanics.
+2. Select exactly one provider and load its contract before constructing or executing the call:
+   - `codex` -> `references/acpx-provider-codex.md`
+   - `claude` -> `references/acpx-provider-claude.md`
+   - `cursor` -> `references/acpx-provider-cursor.md`
+3. Use the exact model id and reasoning control specified by the provider contract. When the contract requires live catalog verification, use and record the exact id the provider advertises.
+4. When the selected provider has no provider contract, stop dispatch and report the route as unsupported.
 
 ## Workflow
 
-1. Choose the pattern and model from the pattern tables above.
-   - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, available reasoning effort, and lineage requirement.
+1. Choose the pattern before the model, provider, or runtime. Then choose the model category, lineage, and reasoning requirement from the pattern tables above.
+   - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, reasoning requirement, and lineage.
 
-2. Choose native or ACPX runtime.
-Native:
-   - Prefer a native subagent if your harness allows those models as native subagents.
-   - For Codex: see `references/native-providers-codex.md` for spawn schema and properties like model id and reasoning effort.
+2. Follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
+   - Native completion: the parent host exposes the selected model, the native provider reference has been loaded when one exists, and the exact supported model id and reasoning control are explicit.
+   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id and reasoning control are explicit.
+   - Unsupported completion: report the missing provider contract and stop dispatch.
 
-ACPX:
-   - Load `references/acpx.md` for another provider or lineage, persistent cross-provider work, explicit ACPX use, or ACPX configuration and control.
-   - After choosing an ACPX provider, load `references/acpx-provider-claude.md` or `references/acpx-provider-cursor.md`, `references/acpx-provider-codex.md` when that provider has additional behavior.
+3. Build one bounded packet for every non-trivial call, dispatch it, and reduce the result.
+   - Load `references/agent-job-packet.md` for packet, dispatch, Operator decision, and reduction shapes.
+   - Treat agent output as candidate evidence. The parent owns decisions and verifies assignment-bound claims before accepting them.
+   - Completion: source anchors, non-goals, receipt scope, stop condition, parent verification, and accepted or rejected claims are explicit.
 
-3. Dispatch and reduce.
-   - Load `references/agent-job-packet.md` for dispatch, Operator decisions, and reduction shapes.
-   - Completion: source anchors, non-goals, receipt scope, stop condition, and parent verification are present.
-
-4. Manage persistence.
-   - Load `references/session-ledger.md` for Advisor/Sidekick creation, resume, reconnect, progress, history, freshness, or reduction.
-   - Completion: the persistent identity is stable and the current receipt matches the assignment and source/head version.
+4. Manage persistent relationships.
+   - Create the ledger before the first Advisor or Sidekick prompt that assumes continuity.
+   - Load `references/session-ledger.md` for creation, resume, reconnect, progress, history, freshness, or reduction.
+   - Use status as liveness evidence. Accept completion from a current assignment-bound receipt that matches the source or head version.
+   - Completion: the persistent identity is stable and the current receipt matches the assignment and source or head version.
 
 Completion: the parent can name the pattern, model, runtime, permissions, packet, receipt, and verification step.
 
