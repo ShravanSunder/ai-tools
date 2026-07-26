@@ -51,6 +51,26 @@ Placement answers one question: who reads this, and when?
 
 A lane is a reference a subagent loads. The contract for handing one over — packet, prerequisites, authority, receipt, parent reduction — is owned by `references/reference-lanes-design.md`.
 
+### Call Grammar
+
+Every call site uses exactly one of these forms:
+
+```text
+Reference
+  MUST load `<reference>` and return `<result>`.
+  IF `<predicate>`, load `<reference>` and return `<result>`.
+
+Lane handoff
+  MUST dispatch `<lane>` to a subagent using `<packet>`.
+  IF `<predicate>`, dispatch `<lane>` to a subagent using `<packet>`.
+  Subagent loads `<lane-reference>`.
+  Parallel-safe after `<prerequisites>`; actual scheduling may serialize.
+  Instance authority is equal to or narrower than `<lane-reference maximum>`.
+  Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
+```
+
+`MUST` is the all-run path; `IF` is an observable branch. `load` consumes reference content in the current workflow; `dispatch` hands a lane to a subagent. A dispatch caller names the lane, supplied packet including prerequisites and dependency state, lane reference, parallel-safety basis, instance authority, expected receipt, and parent reduction point. The caller may equal or narrow the lane reference's stable maximum authority; it must never widen it.
+
 ### Progressive Disclosure
 
 Two different reasons move material out of `SKILL.md`.
@@ -61,7 +81,7 @@ Two different reasons move material out of `SKILL.md`.
 
 Moving all-run procedure behind `MUST load` does not move the obligation. The obligation, order, decision, required return, invariant, and completion stay visible in `SKILL.md`; the reference owns the detail.
 
-Four things never move out: the mental model, the all-run spine, rules every run needs at the decision they govern, and the completion boundary.
+Long examples, provider mechanics, branch-local rubrics, and exceptional procedure always move out. Four things never do: the mental model, the all-run spine, rules every run needs at the decision they govern, and the completion boundary.
 
 ## Leading Words
 
@@ -89,23 +109,7 @@ Include every applicable element below. Choose headings and a format that fit th
 - **Lane dispatch, when handed to a subagent:** name the dispatch mode, bounded instance packet, lane reference, parallel-safety basis, instance authority, receipt, and parent reduction point.
 - **Overall completion boundary:** name the proof, unresolved conditions, or blockers that prevent a done claim.
 
-Keep the body compact and scan-first. Long examples, provider mechanics, branch-local rubrics, and exceptional procedure belong behind strong callers. Use this mutually exclusive grammar:
-
-```text
-Reference
-  MUST load `<reference>` and return `<result>`.
-  IF `<predicate>`, load `<reference>` and return `<result>`.
-
-Lane handoff
-  MUST dispatch `<lane>` to a subagent using `<packet>`.
-  IF `<predicate>`, dispatch `<lane>` to a subagent using `<packet>`.
-  Subagent loads `<lane-reference>`.
-  Parallel-safe after `<prerequisites>`; actual scheduling may serialize.
-  Instance authority is equal to or narrower than `<lane-reference maximum>`.
-  Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
-```
-
-`MUST` is the all-run path; `IF` is an observable branch. Use exactly one at a call site. `load` consumes reference content in the current workflow. `dispatch` hands a lane to a subagent. A dispatch caller names the lane, supplied packet including prerequisites and dependency state, lane reference, parallel-safety basis, instance authority, expected receipt, and parent reduction point. The caller may equal or narrow the lane reference's stable maximum authority; it must never widen it.
+Reference calls and lane dispatches use the Call Grammar above; placement follows Progressive Disclosure above.
 
 ## Scaled Run Note
 
