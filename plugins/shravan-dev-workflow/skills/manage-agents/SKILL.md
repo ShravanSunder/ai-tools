@@ -78,6 +78,10 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 
 Select the pattern, model category, model lineage, and reasoning requirement first. Then route from the parent host's own model lineage. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules.
 
+## Choose Context
+
+Give every reviewer an isolated context containing only its bounded packet. For every other assignment, the parent chooses isolated or inherited context from the assignment's needs.
+
 ### Native Dispatch
 
 Use native dispatch for the parent host's own model lineage when the selected model is available.
@@ -105,9 +109,10 @@ Use ACPX for a model lineage owned by a different provider than the parent host.
 1. Choose the pattern before the model, provider, or runtime. Then choose the model category, lineage, and reasoning requirement from the pattern tables above.
    - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, reasoning requirement, and lineage.
 
-2. Follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
-   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id and reasoning control are explicit.
-   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id and reasoning control are explicit.
+2. Choose the context policy, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
+   - Context completion: the packet records the policy selected under **Choose Context**.
+   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, and context encoding are explicit.
+   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, and context encoding are explicit.
    - Unsupported completion: report the missing provider contract and stop dispatch.
 
 3. Build one bounded packet for every non-trivial call, dispatch it, and reduce the result.

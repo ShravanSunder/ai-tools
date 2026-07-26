@@ -5,6 +5,8 @@
 ```text
 agent job:
 pattern: advisor | sidekick | delegate | operator
+assignment purpose: review | spec creation | plan creation | implementation | research | operation | advice | other
+context policy: isolated | inherited
 assignment id:
 lane: single | <swarm name / lane>
 target:

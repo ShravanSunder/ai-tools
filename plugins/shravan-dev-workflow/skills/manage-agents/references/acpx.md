@@ -25,10 +25,11 @@ Build the call with the selected provider token, exact model id, and advertised 
 - Delegate or Operator: use `exec` for one bounded assignment and receipt.
 - Advisor or Sidekick: use a named session for ledgered continuity.
 
+Encode isolated context as a one-shot call or a new named session that receives only the bounded packet. Reuse a named session when the parent selects inherited continuity.
+
 Set the narrowest permission boundary that performs the assignment:
 
-- Packet contains all evidence: `--deny-all --no-terminal`.
-- Agent reads source: `--approve-reads --no-terminal`.
+- Agent reads source and packet: `--approve-reads --no-terminal`.
 - Authorized implementation: `--approve-all`.
 - Unattended call: `--non-interactive-permissions fail`.
 
@@ -41,7 +42,16 @@ One-shot call:
   --file tmp/agent-packet.md
 ```
 
-Persistent call:
+Named isolated call:
+
+```bash
+<provider-agent-command> sessions new --name <relationship-name>
+
+<provider-agent-command> -s <relationship-name> \
+  --file tmp/agent-packet.md
+```
+
+Inherited relationship:
 
 ```bash
 <provider-agent-command> sessions ensure --name <relationship-name>
@@ -50,7 +60,7 @@ Persistent call:
   --file tmp/agent-packet.md
 ```
 
-Use `sessions ensure` for idempotent reuse, `sessions new` for a ledgered continuity reset, and `--resume-session <provider-session-id>` to reconnect a documented provider-native session.
+Use `--resume-session <provider-session-id>` to reconnect a documented provider-native session.
 
 ## Continue Or Control A Relationship
 
