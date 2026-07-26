@@ -60,7 +60,7 @@ complete | partial | blocked receipt requirements
 stop conditions
 ```
 
-A `complete` receipt reports accomplished work, evidence, changed surfaces when applicable, and remaining verification. A `partial` receipt separates finished work from unresolved work and states what is still needed. A `blocked` receipt identifies the blocking condition, evidence, and the decision or state change required to continue. None is a final workflow verdict until the parent verifies it, resolves contradictions or overlaps, and reduces it against the parent-owned requirements and completion boundary.
+A `complete` receipt reports accomplished work, evidence, changed surfaces when applicable, and remaining verification. For review lanes, `skill-review-lane-schema.md` owns the stricter predicate and is the authority. A `partial` receipt separates finished work from unresolved work and states what is still needed. A `blocked` receipt identifies the blocking condition, evidence, and the decision or state change required to continue. None is a final workflow verdict until the parent verifies it, resolves contradictions or overlaps, and reduces it against the parent-owned requirements and completion boundary.
 
 Use one parameterized lane reference when the mission, judgment, authority, and stop conditions stay stable and only bounded inputs differ. Use mission-specific lane references when mission, calibration, authority, non-goals, or stop conditions differ materially.
 

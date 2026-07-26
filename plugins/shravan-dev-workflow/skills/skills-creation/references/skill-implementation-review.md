@@ -6,7 +6,7 @@ Return changed-file coverage, accepted/rejected/unverified findings, smallest ed
 
 For final repo skill-work readiness, `implementation-review-swarm` owns review orchestration and this reference supplies the skill-specific rubric, changed file coverage, and targeted retest expectations. Parent authority stays in the main run: subordinate agents return candidate evidence, not the final verdict. The calling `SKILL.md` owns which lanes are dispatched and their fresh-context contract; `manage-agents` owns pattern, model, runtime, and packet mechanics. Use `skill-review-lane-schema.md` for shared packet, finding, coverage, and reduction shapes.
 
-The artifact under review here is the changed files, so every applicable lane can run. Receipts arriving here come from the lanes selected in `SKILL.md` and are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
+The artifact under review here is the changed files. Receipts arriving here come from the lanes selected by Review Lanes in `SKILL.md` and are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
 
 If the user explicitly requests outside counsel and Codex authored the change, prefer a non-Codex provider for at least one lane. When using `implementation-review-swarm`, use this reference as the skill-specific review input rather than a competing orchestration path.
 
@@ -29,13 +29,6 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 
 The parent verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring.
 
-Accepted implementation findings route back to the owning phase:
+Accepted findings route back to the owning phase using the routing in `SKILL.md` step 11; that is the live owner.
 
-```text
-spec mismatch or missing decision -> skill spec step
-wording/reference/platform issue  -> implementation step
-proof-quality issue               -> proof step
-ship-surface issue                -> prune/ship step
-```
-
-After accepted edits, rerun the narrowest pressure scenario or static proof that could catch the issue. If the finding challenges proof quality, rerun the artifact-scoped scenario that produced the questionable proof. If the edit changes placement, call completeness, or reference retrieval, rerun the scenario that exercises the workflow spine or reference loading. When accepted findings cause edits, refresh the targeted retest result, parent reduction, and changed-file coverage for every touched file before returning to ship status; do not reuse stale proof or reviewed-file coverage for changed text.
+After accepted edits, rerun the narrowest pressure scenario or static proof that could catch the issue. If the finding challenges proof quality, rerun the artifact-scoped scenario that produced the questionable proof. If the edit changes placement, call completeness, or reference retrieval, rerun the scenario that exercises the workflow spine or reference loading. When accepted findings cause edits, apply the re-dispatch and refresh rule in `SKILL.md` step 11: dispatch any lane whose reviewed text changed, refresh its coverage, and never reuse a receipt for text edited after it was written.

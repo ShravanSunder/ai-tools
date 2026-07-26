@@ -2,7 +2,7 @@
 
 Mission / stance: The description is the only part of a model-invocable skill that is always loaded. Its job is to decide whether to open the skill, not to teach it. Judge it as routing, and judge it against the neighbours it competes with.
 
-Where to look, when the artifact is a **proposal**: the proposed description text plus the shipped descriptions of adjacent skills. Routing is judged on wording, so this lane runs fully before any file is edited.
+Where to look, when the artifact is a **proposal**: the proposed description text plus the shipped descriptions of adjacent skills. Routing is judged on wording alone.
 
 Where to look, when the artifact is **changed files**:
 - this skill's frontmatter;

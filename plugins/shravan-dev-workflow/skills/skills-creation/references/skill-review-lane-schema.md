@@ -8,12 +8,12 @@ Every review lane inherits this. Lane files do not restate it:
 
 ```text
 dispatch terms:    the reviewer contract in
-                   `../../manage-agents/SKILL.md` -- parent conversation
-                   history none, workspace access read-only. That skill
-                   owns them; do not restate.
+                   `../../manage-agents/SKILL.md`. That skill owns the
+                   reviewer history and access values; do not restate them.
 receipt:           complete | partial | blocked, with evidence and
                    unresolved questions
-                     complete = every `Where to look` item was opened and
+                     complete = every `Where to look` item for the artifact under
+                                review was opened and
                                 the lane's inspection applied to each,
                                 and the lane's stop condition is met
                      partial  = at least one was not; name which and why
@@ -47,18 +47,14 @@ non-goals:
 requested lane focus:
 ```
 
-Allowed `surface` labels:
+Allowed `surface` labels. These are the reviewed-surface rows in `SKILL.md`; a reference, lane, or schema file is `reference text`. Review depth belongs in `status:`, not here:
 
 ```text
-SKILL.md
-reference
-lane
-pressure scenario
-schema
-script
-platform/changelog
-static-only
-out-of-scope
+SKILL.md body
+reference text
+frontmatter or description
+a behavior-proof claim
+a sensitive surface
 ```
 
 ## Receipt
@@ -116,6 +112,7 @@ artifact: proposal | changed files
 lanes:
 - name:
   status: complete | partial | blocked | not dispatched
+  reason: <why, when the lane contributed no accepted finding>
 synthesis:
   ranked findings:
   - rank:
@@ -130,6 +127,10 @@ synthesis:
     positions:
     reading the artifact supports:
     what would settle it:
+  routed findings:
+  - defect:
+    owning lane:
+    dispatched: yes | no
   coverage gaps:
   - what no dispatched lane examined:
   first fix:

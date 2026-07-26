@@ -2,7 +2,7 @@
 
 Mission / stance: Judge the lens, not the wording. The Great Skill Frame makes `SKILL.md` the home of the mental model, which means the skill's most load-bearing claim is a concept the agent is asked to think with. A skill whose every sentence binds can still steer the agent toward the wrong shape of the problem.
 
-Where to look, when the artifact is a **proposal**: the stated lens and the workflow the proposal describes. Both exist in the proposal text, so this lane runs fully before any file is edited.
+Where to look, when the artifact is a **proposal**: the stated lens and the workflow the proposal describes. Both exist in the proposal text.
 
 Where to look, when the artifact is **changed files**:
 - the mental model or stance section of `SKILL.md`;

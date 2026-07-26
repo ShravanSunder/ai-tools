@@ -6,7 +6,7 @@ Return a spec-review verdict, blocker overrides, rubric evidence, accepted and r
 
 Parent authority stays in the main run: lanes return candidate findings, not the final verdict. The calling `SKILL.md` owns which lanes are dispatched and their fresh-context contract; `manage-agents` owns pattern, model, runtime, and packet mechanics. Use `skill-review-lane-schema.md` for shared packet, finding, coverage, and reduction shapes.
 
-The artifact under review here is a proposal, not files on disk, so only lanes whose questions are answerable about a design are dispatched: `lanes/mental-model-fit.md`, `lanes/trigger-routing.md`, and `lanes/rule-agreement.md`. Lanes that need line-level text, call sites, or real transcripts run at implementation review instead. This reference covers the rest of the spec verdict in-parent.
+The artifact under review here is a proposal, not files on disk. Which lanes that selects is owned by Review Lanes in `SKILL.md`; lanes needing line-level text, call sites, or real transcripts run at implementation review instead. This reference covers the rest of the spec verdict in-parent.
 
 ## Verdicts
 
