@@ -10,7 +10,7 @@
 
 - States directly that reviews start with no parent conversation history.
 - Keeps bounded review packets, source-read permissions, and conversation history as separate controls.
-- Records parent conversation history as `none`, `partial`, or `full` in the agent job packet.
+- Records parent conversation history as `none` or `all` in the agent job packet.
 - Maps native Codex history to exact `fork_turns` values and ACPX history to fresh or reused sessions.
 
 ## Validation

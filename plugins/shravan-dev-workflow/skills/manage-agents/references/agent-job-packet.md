@@ -6,7 +6,7 @@
 agent job:
 pattern: advisor | sidekick | delegate | operator
 assignment purpose: review | spec creation | plan creation | implementation | research | operation | advice | other
-parent conversation history: none | partial | full
+parent conversation history: none | all
 assignment id:
 lane: single | <swarm name / lane>
 target:

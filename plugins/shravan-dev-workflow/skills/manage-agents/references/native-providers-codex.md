@@ -19,10 +19,9 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
 ## Conversation History
 
 - No inherited parent history: set `fork_turns="none"`.
-- Partial parent history: set `fork_turns` to a positive integer string.
 - Full parent history: set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
-- Fresh or partial history may pass explicit model and reasoning-effort overrides.
+- Fresh history may pass explicit model and reasoning-effort overrides.
 
 ## Examples
 
