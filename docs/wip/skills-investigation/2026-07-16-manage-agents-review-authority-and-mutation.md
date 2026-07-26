@@ -67,3 +67,12 @@ user authorization.
   schemas, to locate the smallest non-duplicated safeguard.
 - Who or what should inspect it next: `skill-audit`, then separate
   `skills-creation` evaluations for any accepted owning-skill changes.
+
+## Recurrence: AgentStudio PR #192
+
+The AgentStudio PR #192 session repeated the mutation-boundary failure through
+a nominally read-only advisor lane. The stronger requirement is transitive:
+read-only agents may not spawn mutation-capable descendants, and receipts must
+show before/after worktree state. See
+`2026-07-22-pr192-execution-control-and-proof-parity.md` for the combined audit
+and proposed pressure-test shape.

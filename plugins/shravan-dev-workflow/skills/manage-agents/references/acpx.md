@@ -1,157 +1,101 @@
-# ACPX
+# ACPX Agent Calls
 
-## Contents
+Use ACPX for cross-provider agent calls and ACPX-persistent Advisor or Sidekick relationships.
 
-- Launcher and agent resolution
-- Command shape, queue, persistent sessions, and permissions
-- Output, automation, compare, and flows
+## Select The Provider
 
-## Launcher And Agent Resolution
-
-Use the globally installed binary first:
+Use the first available launcher and keep it stable for persistent relationships:
 
 ```text
 acpx -> pnpm dlx acpx -> npx --yes acpx
 ```
 
-Do not pin routine calls to a research version. Persistent work must keep the resolved command stable because it participates in session identity.
+Before every call, select the provider that owns the chosen model lineage and load its contract:
 
-| Shape | Example |
-| --- | --- |
-| Built-in | `acpx codex exec 'summarize changes'` |
-| Raw command | `acpx --agent 'node ./scripts/acp.mjs --mode ci' exec 'summarize'` |
-| Config-defined | Define the command under `agents` in ACPX config, then call its name. |
+- OpenAI lineage: call the `codex` provider and load `acpx-provider-codex.md`.
+- Claude lineage: call the `claude` provider and load `acpx-provider-claude.md`.
+- Cursor lineage: call the `cursor` provider and load `acpx-provider-cursor.md`.
 
-Use either a positional/built-in name or `--agent`, never both. Config-defined names may override built-ins; make that override explicit. Calling an existing ACP command is configuration, not adapter implementation.
+Build the call with that provider token, the exact model id, and its advertised reasoning control. Record provider-command overrides in the relationship ledger. Route adapter implementation to `building-acp-adapters.md`.
 
-Troubleshooting: https://acpx.sh/agents.html and https://acpx.sh/config.html
+## Call An Agent
 
-## Command Shape
+Global options precede the agent, agent options follow it, and command options follow the command.
 
-Global options precede the provider; provider options follow it; command options follow the command.
+- Delegate or Operator: use `exec` for one bounded assignment and receipt.
+- Advisor or Sidekick: use a named session for ledgered continuity.
+
+Set the narrowest permission boundary that performs the assignment:
+
+- Packet contains all evidence: `--deny-all --no-terminal`.
+- Agent reads source: `--approve-reads --no-terminal`.
+- Authorized implementation: `--approve-all`.
+- Unattended call: `--non-interactive-permissions fail`.
+
+One-shot call:
 
 ```bash
-acpx --cwd /absolute/repo --model '<provider-advertised-id>' --approve-reads claude -s advisor \
-  --file tmp/advisor-packet.md
-acpx --format quiet --approve-reads --no-terminal codex exec \
-  --file tmp/review-packet.md
+acpx --cwd /absolute/repo --model '<provider-model-id>' \
+  --approve-reads --no-terminal <agent> exec \
+  --file tmp/agent-packet.md
 ```
 
-| Need | Command | Continuity |
-| --- | --- | --- |
-| One bounded Delegate/Operator | `acpx <agent> exec ...` | none |
-| Persistent Advisor/Sidekick | `sessions ensure/new`, then prompt or bare call with `-s` | ledgered session |
-| Follow-up after active turn | persistent prompt with `--no-wait` | queued in the same session |
-
-`exec` has no resume expectation. Persistent identity and scope belong in `session-ledger.md`.
-
-## Queue And Session Control
-
-- Default queue submission waits for the queued prompt to finish.
-- `--no-wait` returns after acknowledgement; the prompt runs after the active turn drains.
-- Immediate in-flight steering requires an explicit runtime capability. ACPX 0.12 has no generic `steer` command.
-
-Do not report queue acknowledgement as steering or completion.
+Persistent call:
 
 ```bash
-acpx <agent> status -s <name>
-acpx <agent> cancel -s <name>
-acpx <agent> set-mode <mode> -s <name>
-acpx <agent> set model <model-id> -s <name>
-acpx <agent> set effort <level> -s <name>
+acpx --cwd /absolute/repo --model '<provider-model-id>' \
+  --approve-reads --no-terminal \
+  --non-interactive-permissions fail \
+  <agent> sessions ensure --name <relationship-name>
+
+acpx --cwd /absolute/repo --approve-reads --no-terminal \
+  --non-interactive-permissions fail \
+  <agent> -s <relationship-name> \
+  --file tmp/agent-packet.md
 ```
 
-`cancel` is cooperative. Modes and config keys are adapter-advertised. Do not invent creation flags such as `sessions ensure --effort`. Status proves local liveness only.
+Use `sessions ensure` for idempotent reuse, `sessions new` for a ledgered continuity reset, and `--resume-session <provider-session-id>` to reconnect a documented provider-native session.
 
-## Persistent Sessions
+## Continue Or Control A Relationship
+
+Queue a follow-up in the same relationship:
 
 ```bash
-acpx <agent> sessions ensure --name <name>
-acpx <agent> sessions new --name <name>
-acpx <agent> sessions ensure --name <name> \
-  --resume-session <provider-session-id>
-acpx <agent> -s <name> 'continue the scoped job'
+acpx <agent> -s <relationship-name> --no-wait \
+  'continue the current assignment with this additional evidence'
 ```
 
-Use `ensure` for intentional idempotent reuse and `new` only with an explicit continuity-reset reason. Reconnect, auth failure, model rejection, permission failure, or provider limits do not authorize replacement-session churn.
+Default submission waits for completion. `--no-wait` returns after queue acknowledgement; read the assignment receipt after the active turn drains.
+
+Inspect and control the relationship:
 
 ```bash
-acpx <agent> sessions show <name>
-acpx <agent> sessions history <name> --limit 20
-acpx <agent> sessions read <name> --tail 20
+acpx <agent> status -s <relationship-name>
+acpx <agent> cancel -s <relationship-name>
+acpx <agent> set-mode <provider-mode> -s <relationship-name>
+acpx <agent> set model <provider-model-id> -s <relationship-name>
+acpx <agent> set effort <provider-effort> -s <relationship-name>
+```
+
+Use provider-advertised model, effort, and mode values. Record configuration transitions in the relationship ledger. Treat cancellation as cooperative and status as liveness evidence.
+
+## Read The Receipt
+
+Inspect local relationship records:
+
+```bash
+acpx <agent> sessions show <relationship-name>
+acpx <agent> sessions history <relationship-name> --limit 20
+acpx <agent> sessions read <relationship-name> --tail 20
 acpx <agent> sessions list --local
 ```
 
-`status` and `show` prove liveness. `history` is a recent preview; `read` is saved history. Before declaring a session missing, match the resolved command and absolute cwd. Session names are not global. Provider-side `sessions list --filter-cwd` and `--cursor` are separate from local records.
-
-## Permissions
-
-```bash
-acpx --deny-all --no-terminal <agent> exec 'packet-only prompt'
-acpx --approve-reads --no-terminal <agent> exec 'source review'
-acpx --approve-reads <agent> 'inspect files and ask before writes'
-acpx --approve-all <agent> 'apply the explicitly scoped patch'
-```
-
-Use the narrowest boundary that can perform the assignment. Keep `--non-interactive-permissions fail` for unattended runs, and never broaden an Advisor or reviewer merely because a read request failed.
-
-Troubleshooting: https://acpx.sh/prompting.html, https://acpx.sh/session-control.html, and https://acpx.sh/permissions.html
-
-## Output And Automation
+Choose output for the receipt consumer:
 
 | Consumer | Format |
 | --- | --- |
 | Human terminal | text |
-| Full transcript | `--format json` |
-| Strict pipeline | `--format json --json-strict` |
-| Final answer only | `--format quiet` |
-| Large read logs | add `--suppress-reads` |
+| Final agent response | `--format quiet` |
+| Structured transcript evidence | `--format json` |
 
-Scripts never parse human text output. `--format json` emits raw ACP JSON-RPC NDJSON, not an ACPX-specific event envelope.
-
-```bash
-acpx --format json codex exec 'review changed files' \
-  | jq -r 'select(.method=="session/update")'
-```
-
-Quiet mode reserves stdout for final assistant text; wrappers branch on the process exit code.
-
-```text
-0    success
-1    agent / protocol / runtime error
-2    CLI usage error
-3    timeout
-4    no session found
-5    permission denied
-130  interrupted
-```
-
-Handle timeout, no-session, permission-denied, and interrupted outcomes when they change the next step.
-
-## Compare And Flows
-
-`compare` runs the same one-shot prompt serially and does not create persistent sessions or a swarm with independent lane packets:
-
-```bash
-acpx compare codex claude cursor --file tmp/comparison-packet.md
-acpx --format json compare codex claude --file tmp/review-packet.md
-```
-
-Use a Delegate or Operator swarm when lanes need different scopes or adversarial assignments. Provider agreement remains candidate output.
-
-Use flows for a repeatable graph of agent and deterministic steps, not one prompt with a follow-up:
-
-```bash
-acpx flow run examples/flows/branch.flow.ts \
-  --input-json '{"task":"add a regression test for the reconnect bug"}'
-```
-
-- `acp` nodes call agents.
-- `action` nodes run supervised deterministic operations.
-- `compute` nodes transform local data.
-- decision nodes route branches.
-- run artifacts persist under the ACPX flow run directory.
-
-Flows may declare permission requirements and fail before starting when grants are missing.
-
-Troubleshooting: https://acpx.sh/output-formats.html, https://acpx.sh/exit-codes.html, https://acpx.sh/flows.html, and https://acpx.sh/CLI.html
+Use `session-ledger.md` to verify relationship identity and receipt freshness. The parent verifies assignment-bound output before accepting its claims.

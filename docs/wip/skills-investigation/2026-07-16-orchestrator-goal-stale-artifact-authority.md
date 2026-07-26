@@ -53,3 +53,12 @@ the older artifact merely because it is durable and reviewed.
   decision ledger into goal state.
 - Who or what should inspect it next: `skill-audit`, followed by one
   `skills-creation` evaluation using the stale-artifact contradiction scenario.
+
+## Recurrence: AgentStudio PR #192
+
+The AgentStudio PR #192 session added a related resume failure: after the user
+cleared or questioned the goal and rapidly corrected scope, orchestration risked
+reconstructing authority from stale state and repeated narrative. Goal resume
+must reconcile the latest explicit intent and expose one next bounded action and
+proof gate. See `2026-07-22-pr192-execution-control-and-proof-parity.md` for the
+combined audit and proposed pressure-test shape.
