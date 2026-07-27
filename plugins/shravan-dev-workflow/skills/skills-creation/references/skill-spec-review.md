@@ -21,7 +21,7 @@ Blocker overrides: a spec cannot be accepted when the target behavior is not one
 Dispatched lanes own their own checks and each states its rubric in `lanes/`. This reference does not restate them; it covers what only a whole-spec verdict can judge:
 
 - promise: the reusable behavior is specific and worth making durable.
-- steering: each proposed rule, gate, and completion criterion names the failure form it serves,. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
+- steering: each proposed rule, gate, and completion criterion names the failure form it serves. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
 - invocation: model-invocable and user-invocable capabilities pay the right load for this skill's real callers.
 - authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
 - lane and shape proposals: any lane the spec proposes satisfies `reference-lanes-design.md`, and any shared shape names a real consumer there. That reference is the single owner of qualification, authority, and shape families.

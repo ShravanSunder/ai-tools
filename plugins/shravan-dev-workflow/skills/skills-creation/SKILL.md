@@ -40,26 +40,31 @@ They are not exclusive: a description adds agent reach without removing the huma
 
 ## Information Hierarchy
 
-Placement answers one question: who reads this, and when?
+Placement answers one question: who reads this, and when? The answer picks the call form.
 
-| home                     | read by    | when                            |
-| ------------------------ | ---------- | ------------------------------- |
-| `SKILL.md`               | this agent | every run, always in context    |
-| `MUST load` reference    | this agent | every run, on reaching the call |
-| `IF ..., load` reference | this agent | only when the predicate holds   |
-| lane                     | a subagent | when the parent dispatches it   |
+| home                        | read by    | when                            |
+| --------------------------- | ---------- | ------------------------------- |
+| `SKILL.md`                  | this agent | every run, always in context    |
+| `MUST load` reference       | this agent | every run, on reaching the call |
+| `IF ..., load` reference    | this agent | only when the predicate holds   |
+| `MUST dispatch` lane        | a subagent | every run, on reaching the call |
+| `IF ..., dispatch` lane     | a subagent | only when the predicate holds   |
 
-A lane is a reference a subagent loads. The contract for handing one over — packet, prerequisites, authority, receipt, parent reduction — is owned by `references/reference-lanes-design.md`.
+The `read by` column decides `load` or `dispatch`; the `when` column decides `MUST` or `IF`. A lane is a reference a subagent loads.
+
+Handing a lane over takes more than a path. The Lane handoff form below carries the full set, and `references/reference-lanes-design.md` owns the contract underneath it. One invariant belongs at the call site because that is where it gets violated: a caller may narrow the lane reference's maximum authority, never widen it.
 
 ### Call Grammar
 
-Every call site uses exactly one of these forms:
+A call the agent cannot act on sends it away with nothing to bring back. Each form names when to go, where, what to do there, and what to return — and every call site uses exactly one of them.
 
 ```text
 Reference
   MUST load `<reference>` to `<requested work>` and return `<result>`.
   IF `<predicate>`, load `<reference>` to `<requested work>` and return `<result>`.
+```
 
+```text
 Lane handoff
   MUST dispatch `<lane>` to a subagent using `<packet>`.
   IF `<predicate>`, dispatch `<lane>` to a subagent using `<packet>`.
@@ -68,8 +73,6 @@ Lane handoff
   Instance authority is equal to or narrower than `<lane-reference maximum>`.
   Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 ```
-
-`MUST` is the all-run path; `IF` is an observable branch. `load` consumes reference content in the current workflow; `dispatch` hands a lane to a subagent. A dispatch caller names the lane, supplied packet including prerequisites and dependency state, lane reference, parallel-safety basis, instance authority, expected receipt, and parent reduction point. The caller may equal or narrow the lane reference's stable maximum authority; it must never widen it.
 
 ### Progressive Disclosure
 
@@ -93,7 +96,7 @@ Prefer a word the model already has. A coined term recruits nothing — you pay 
 
 A leading word too weak to beat the model's default changes nothing. `be thorough` is not a leading word when the agent is already thorough-ish.
 
-IF a term is unclear, load `references/glossary.md` and return the applicable definition.
+IF a term is unclear, load `references/glossary.md` to resolve the term and return the applicable definition.
 
 # Skill Creation Process
 
@@ -106,7 +109,7 @@ Include every applicable element below. Choose headings and a format that fit th
 - **Completion checks:** each meaningful step or reference pass says what must be true before continuing.
 - **Always-needed steering and invariants:** keep rules every run needs inline and near the decision they govern.
 - **Reference calls:** name the load mode, exact destination, requested work, and concrete result the main path consumes.
-- **Lane dispatch, when handed to a subagent:** name the dispatch mode, bounded instance packet, lane reference, parallel-safety basis, instance authority, receipt, and parent reduction point.
+- **Lane dispatch, when handed to a subagent:** fill every slot of the Lane handoff form in the Call Grammar above.
 - **Overall completion boundary:** name the proof, unresolved conditions, or blockers that prevent a done claim.
 
 Reference calls and lane dispatches use the Call Grammar above; placement follows Progressive Disclosure above.
@@ -115,7 +118,11 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 Each lane loads one file from `references/lanes/` and returns candidate findings; the parent verifies and reduces them.
 
-Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only` for reviewers; `manage-agents` owns the dispatch mechanics; `references/skill-review-lane-schema.md` owns the review packet, lane finding, and parent reduction shapes. A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid. Prefer native dispatch in the parent host's own lineage; when the runtime can reach another lineage, give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
+Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only` for reviewers.
+
+A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid.
+
+Prefer native dispatch in the parent host's own lineage. When the runtime can reach another lineage, give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
 Lane selection lives here and nowhere else. A lane file never states when it runs.
 
@@ -138,7 +145,7 @@ For changed files, dispatch the union of every row whose surface the change touc
 
 For classification `create`, the reviewed surface is the new files, not a diff. Sensitive surfaces are the set owned by `references/skill-security-review.md`; plugin manifests and versioning are not among them and route to `references/platform-mechanics.md` instead.
 
-IF any lane will be dispatched, load `references/skill-review-lane-schema.md` and return the review packet, the common lane contract, and the parent reduction shape before the first dispatch.
+IF any lane will be dispatched, load `references/skill-review-lane-schema.md` to get the shared review shapes and return the review packet, the common lane contract, and the parent reduction shape before the first dispatch.
 
 ### Review Dispatch Contract
 
@@ -180,13 +187,13 @@ shipping status: source-only | PR-ready | released
 
 ## Workflow
 
-**1. Name the promise and success.** Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating an existing skill or draft, load `references/skill-spec-review.md` and return one of its allowed verdict labels plus the blocker overrides, rubric evidence, first revision, and proof implication. Completion: classification, owner, reusable behavior, baseline or review target, and success definition are named.
+**1. Name the promise and success.** Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating an existing skill or draft, load `references/skill-spec-review.md` to evaluate the existing skill or draft and return one of its allowed verdict labels plus the blocker overrides, rubric evidence, first revision, and proof implication. Completion: classification, owner, reusable behavior, baseline or review target, and success definition are named.
 
 For any classify, scope, or draft response, state the surface allocation in plain words before the details: YAML/frontmatter is the trigger surface, `SKILL.md` will carry the mental model and main path, `references/` will carry coherent mandatory detail and conditional branch depth, and pressure or static proof will validate the change.
 
 **2. Choose the authoring basis and proof posture.** A change is behavior-changing when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are mechanical and static-only. Classify behavior-changing work as `observed failure` or `user-directed intent`. For an observed failure, attempt faithful reproduction before claiming a causal fix. If the failure is reproduced, name the targeted RED. If it is not reproduced, evidence is insufficient, or the result is inconclusive, show the gap and ask the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer. A representative hypothesis tests an approved substitute; it does not reproduce the historical incident. User-directed work may draft from an approved success definition without RED. Never manufacture RED or let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip. Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit.
 
-**3. Design the trigger.** Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. It should start with the real loading condition, use words the user/docs/code are likely to use, name distinct branches once, include a brief payoff when useful, and avoid internal step narration. IF the run must decide trigger wording, distinguish an adjacent-skill boundary, or choose an invocation tradeoff, load `references/frontmatter-design.md` and return the trigger and invocation decision. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
+**3. Design the trigger.** Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. It should start with the real loading condition, use words the user/docs/code are likely to use, name distinct branches once, include a brief payoff when useful, and avoid internal step narration. IF the run must decide trigger wording, distinguish an adjacent-skill boundary, or choose an invocation tradeoff, load `references/frontmatter-design.md` to design the trigger surface and return the trigger and invocation decision. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` to encode the client control and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
 
 **4. Build the mental model.** Decide what concept, lens, or leading word the skill should pull into the model's latent space. State the behavior the skill stabilizes and the judgment it should improve. Completion: the mental model is stated before details or exceptions, and a reader of it alone can predict the shape of the workflow.
 
@@ -194,11 +201,11 @@ For any classify, scope, or draft response, state the surface allocation in plai
 
 **6. Build the workflow and calls.** Name the all-run workflow from load to completion. Add a branch only when an observable condition changes the work; a topic being interesting, provider-specific, or detailed is not enough. Each branch names its predicate, action or destination, and concrete return. A result of only "more context" is incomplete. Strengthen predicates, returns, and completion criteria when the agent would guess or stop early.
 
-Write every call site here, in the literal grammar above. A `load` site names its mode, path, requested work, and needed result. A `dispatch` site names the lane, and then either carries the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, and parent reduction point inline, or cites a named dispatch contract in `SKILL.md` that carries them for a set of lanes. Prefer the shared contract when several sites dispatch under the same terms; repeating six fields at every site is the duplication this skill exists to prevent.
+Write every call site here, in the literal grammar above. A `load` site names its mode, path, requested work, and needed result. A `dispatch` site either fills every slot of the Lane handoff form inline, or cites a named dispatch contract in `SKILL.md` that fills them for a set of lanes. Prefer the shared contract when several sites dispatch under the same terms; repeating six fields at every site is the duplication this skill exists to prevent.
 
 Completion: one all-run spine is explicit, every branch changes the work, every call site is complete under the grammar or under a named dispatch contract, and every route returns something the main path can use.
 
-**7. Place the depth.** Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. IF work is parallel-safe and ready for bounded subagent handoff, load `references/reference-lanes-design.md` and return the lane qualification and job contract. IF multiple consumers need stable model-readable output, load `references/reference-lanes-design.md` and return the output-shape owner. IF a tool, test, CI check, or runtime validates structure, load `references/reference-lanes-design.md` and return the tool-shape owner and validation route. Completion: nothing sits in two homes, every reference has a strong caller, and advanced shape guidance remains discoverable even when no lane exists.
+**7. Place the depth.** Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` to decide placement and return the placement decision plus the ordinary caller/callee contract. IF the work is parallel-safe and handoff-ready, or several consumers need one stable output shape, or a tool validates the structure, load `references/reference-lanes-design.md` to pick the owning shape and return which of lane qualification, output shape, or tool shape applies, with its contract. Completion: nothing sits in two homes, every reference has a strong caller, and advanced shape guidance remains discoverable even when no lane exists.
 
 **8. Steer the behavior gap.** Match the guidance form to the observed failure, representative hypothesis, or user-approved success gap:
 
@@ -214,7 +221,7 @@ Completion: one all-run spine is explicit, every branch changes the work, every 
 
 Completion: wording changes cite the failure or success gap they are meant to address without overstating its evidence source.
 
-**9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above, under the Review Dispatch Contract, against the proposed design, and load `references/skill-spec-review.md` and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
+**9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above, under the Review Dispatch Contract, against the proposed design, and load `references/skill-spec-review.md` to judge the proposed design and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
 
 **10. Implement.** IF any surface on the sensitive-surface list in `references/skill-security-review.md` is in scope, load that reference before writing anything and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
 
@@ -233,9 +240,9 @@ Completion: wording changes cite the failure or success gap they are meant to ad
 
 5. IF a fix changed text a lane already reviewed, dispatch that lane again to a subagent under the Review Dispatch Contract using the refreshed packet, and refresh its changed-file coverage. Do not reuse a receipt for text edited after it was written.
 
-IF the change is behavior-changing, load `references/pressure-testing.md` and return the proof protocol, evidence, and claim boundaries. IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/skill-implementation-review.md` and return changed-file coverage, ship decision, and the `implementation-review-swarm` routing. Completion: review is parent-reduced, changed-file coverage is accounted for after every review-fix edit, and the authoring result, behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
+IF the change is behavior-changing, load `references/pressure-testing.md` to choose the proof route and return the proof protocol, evidence, and claim boundaries. IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/skill-implementation-review.md` to judge ship readiness and return changed-file coverage, ship decision, and the `implementation-review-swarm` routing. Completion: review is parent-reduced, changed-file coverage is accounted for after every review-fix edit, and the authoring result, behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
 
-**12. Prune and ship.** Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it. IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route. IF any surface on the sensitive-surface list in `references/skill-security-review.md` is in scope, load that reference before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision. That list is the single owner of the term set; do not restate it here. Chat-only sensitive-surface reviews still use that reference's return labels, including license/permission and copy-vs-adapt decisions for third-party source. Completion: the skill is compact, valid, public-safe, and proof route matches shipping status.
+**12. Prune and ship.** Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it. IF shipping, load `references/platform-mechanics.md` to route the release and return the validation, versioning, changelog, and cache/readback route. IF any surface on the sensitive-surface list in `references/skill-security-review.md` is in scope, load that reference before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision. That list is the single owner of the term set; do not restate it here. Chat-only sensitive-surface reviews still use that reference's return labels, including license/permission and copy-vs-adapt decisions for third-party source. Completion: the skill is compact, valid, public-safe, and proof route matches shipping status.
 
 ## Completion Blockers
 
