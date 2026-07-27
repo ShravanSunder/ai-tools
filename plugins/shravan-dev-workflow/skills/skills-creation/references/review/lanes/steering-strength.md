@@ -40,4 +40,4 @@ Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *
 
 Stop when: every steering sentence added or changed has been matched against a failure form, and every completion criterion has been tested for both checkability and demand.
 
-Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.
+Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.

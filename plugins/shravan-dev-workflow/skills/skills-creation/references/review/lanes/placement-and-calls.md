@@ -5,7 +5,7 @@ Mission / stance: Decide whether each obligation lives where the agent will actu
 Where to look:
 - every call site in `SKILL.md` and its literal form;
 - the all-run spine against what actually sits in references;
-- the placement ladder in `../reference-design.md`;
+- the placement ladder in `../../reference-design.md`;
 - every `references/*.md` path mentioned anywhere in the skill;
 - the Completion Blockers list against the steps it mirrors.
 
@@ -37,4 +37,4 @@ Overlap boundary: This lane owns *where material lives and whether calls are com
 
 Stop when: every call site has been walked and every reference traced back to a caller.
 
-Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.
+Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.

@@ -37,4 +37,4 @@ Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` ow
 
 Stop when: the deletion test has been applied to every sentence added or changed by the diff, or to every sentence in the file when the classification is `create` and no diff exists.
 
-Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.
+Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.

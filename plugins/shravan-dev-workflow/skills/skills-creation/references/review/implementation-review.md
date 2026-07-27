@@ -4,7 +4,7 @@ Review the implemented skill change before proof is generated and before ship st
 
 Return changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
-For final repo skill-work readiness, `implementation-review-swarm` owns review orchestration and this reference supplies the skill-specific rubric, changed file coverage, and targeted retest expectations. Parent authority stays in the main run: subordinate agents return candidate evidence, not the final verdict. The calling `SKILL.md` owns which lanes are dispatched and their fresh-context contract; `manage-agents` owns pattern, model, runtime, and packet mechanics. Use `skill-review-lane-schema.md` for shared packet, finding, coverage, and reduction shapes.
+For final repo skill-work readiness, `implementation-review-swarm` owns review orchestration and this reference supplies the skill-specific rubric, changed file coverage, and targeted retest expectations.
 
 The artifact under review here is the changed files. Receipts arriving here come from the lanes selected by Review Lanes in `SKILL.md` and are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
 
@@ -12,11 +12,11 @@ If the user explicitly requests outside counsel and Codex authored the change, p
 
 ## Review Rubric
 
-Dispatched lanes own their own checks and each states its rubric in `lanes/`. This reference does not restate them; it covers what only a whole-change ship decision can judge:
+Covers what only a whole-change ship decision can judge:
 
 - Every edited, added, or deleted source file is covered. Each file is reviewed semantically, marked source/static-only with its behavior status, or explicitly excluded by the accepted behavior-review boundary; deletions are verified through both absence and pointer inventory.
 - The implemented diff matches the accepted spec and user constraints without crossing the accepted source, behavior, or ship boundary.
-- Any lane or shared shape the change introduces satisfies `reference-lanes-design.md`, which is the single owner of qualification, authority, and shape families.
+- Any lane or shared shape the change introduces satisfies `../reference-lanes-design.md`, which is the single owner of qualification, authority, and shape families.
 - Each rule has one live owner, with no aliases, forwarding stubs, or duplicate prose preserving a retired ownership.
 - Behavior rows in a source-only review are explicitly `unverified/deferred`; source or static review may authorize only the next proof step and cannot authorize ship.
 - The four surfaces still line up: trigger, `SKILL.md`, references, proof.

@@ -7,7 +7,7 @@ Where to look, when the artifact is a **proposal**: the stated lens and the work
 Where to look, when the artifact is **changed files**:
 - the mental model or stance section of `SKILL.md`;
 - the leading words the body actually repeats, and how often;
-- `../glossary.md` for coined terms and their definition cost;
+- `../../glossary.md` for coined terms and their definition cost;
 - the workflow, to see whether the route the skill walks matches the lens it claims;
 - the skill's stated promise and success definition.
 
@@ -42,4 +42,4 @@ Overlap boundary: This lane owns *whether the concept is right and whether the s
 
 Stop when: the lens has been named from the body alone and tested for fit, priors, cost, and coverage.
 
-Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.
+Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.

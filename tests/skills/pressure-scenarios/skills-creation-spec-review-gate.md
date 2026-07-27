@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: classification:\s*update|treat\w* this as.{0,60}update
-expect_decision_regex: spec review|skill-spec-review
-expect_decision_regex: references/skill-spec-review\.md|skill-spec-review\.md|skill-spec-review
+expect_decision_regex: spec review|spec-review
+expect_decision_regex: references/review/spec-review\.md|spec-review\.md|spec-review
 expect_decision_regex: before (implementation|editing|files are edited)|pre-implementation|before files are edited
 expect_decision_regex: mental-model-fit|trigger-routing|rule-agreement
 expect_decision_regex: fresh[- ]context|not forked|no session history|Delegate
@@ -44,7 +44,7 @@ extra review ceremony unless the skill actually requires it.
 - Agent says spec review happens before implementation, not after files are
   edited.
 - Agent routes the pre-implementation review to
-  `references/skill-spec-review.md`.
+  `references/review/spec-review.md`.
 - Agent names the review lanes it would dispatch from `references/lanes/` and
   says reviewers run in fresh context, not forked from this session.
 - Agent says accepted findings return to the spec/design before implementation.

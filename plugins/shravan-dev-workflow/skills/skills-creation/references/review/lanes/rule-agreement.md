@@ -6,7 +6,7 @@ Where to look, when the artifact is a **proposal**: the proposed rules, terms, a
 
 Where to look, when the artifact is **changed files**:
 - `SKILL.md` against every file in `references/`;
-- `glossary.md` against how the body actually uses each defined term;
+- `../../glossary.md` against how the body actually uses each defined term;
 - every declared form, label, status value, or verdict against its real call sites;
 - reference-to-reference restatements of the same rule;
 - pressure scenarios and changelog entries that assert current behavior.
@@ -33,7 +33,7 @@ Good signals:
 
 Bad signals:
 - one predicate named two ways, such as `behavior-changing` in one file and `non-trivial` in another;
-- a term defined in `glossary.md` and redefined differently in `SKILL.md`;
+- a term defined in `../../glossary.md` and redefined differently in `SKILL.md`;
 - a grammar half that is specified, policed by a blocker, and never used;
 - a rule restated in full inside a review rubric that also lives in its owning reference;
 - a renamed file still referenced under its old name.
@@ -44,4 +44,4 @@ Overlap boundary: This lane owns *two statements disagree* and *unreachability* 
 
 Stop when: every rule, term, label set, and external claim in the changed surface has been inventoried across all its homes.
 
-Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.
+Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.

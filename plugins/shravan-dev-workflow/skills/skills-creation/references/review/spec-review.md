@@ -4,8 +4,6 @@ Review the intended skill design before implementation. This reference judges wh
 
 Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
 
-Parent authority stays in the main run: lanes return candidate findings, not the final verdict. The calling `SKILL.md` owns which lanes are dispatched and their fresh-context contract; `manage-agents` owns pattern, model, runtime, and packet mechanics. Use `skill-review-lane-schema.md` for shared packet, finding, coverage, and reduction shapes.
-
 The artifact under review here is a proposal, not files on disk. Which lanes that selects is owned by Review Lanes in `SKILL.md`; lanes needing line-level text, call sites, or real transcripts run at implementation review instead. This reference covers the rest of the spec verdict in-parent.
 
 ## Verdicts
@@ -18,13 +16,13 @@ Blocker overrides: a spec cannot be accepted when the target behavior is not one
 
 ## Rubric
 
-Dispatched lanes own their own checks and each states its rubric in `lanes/`. This reference does not restate them; it covers what only a whole-spec verdict can judge:
+Covers what only a whole-spec verdict can judge:
 
 - promise: the reusable behavior is specific and worth making durable.
 - steering: each proposed rule, gate, and completion criterion names the failure form it serves. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
 - invocation: model-invocable and user-invocable capabilities pay the right load for this skill's real callers.
 - authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
-- lane and shape proposals: any lane the spec proposes satisfies `reference-lanes-design.md`, and any shared shape names a real consumer there. That reference is the single owner of qualification, authority, and shape families.
+- lane and shape proposals: any lane the spec proposes satisfies `../reference-lanes-design.md`, and any shared shape names a real consumer there. That reference is the single owner of qualification, authority, and shape families.
 - ownership and cutover: every concept has one live owner, superseded paths and duplicate prose are removed without aliases or forwarding stubs, and the spec names all active consumers that must cut over together when ownership changes.
 - proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, and the plan preserves the authoring basis chosen in `SKILL.md` step 2.
 - safety/platform: sensitive surfaces, plugin mechanics, changelog, and cache refresh are routed correctly when in scope.

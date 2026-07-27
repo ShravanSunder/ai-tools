@@ -8,7 +8,7 @@ Where to look, when the artifact is **changed files**:
 - this skill's frontmatter;
 - the descriptions of every adjacent skill in the same plugin;
 - the words the user, repo, docs, and logs actually use for this work;
-- `references/frontmatter-design.md`;
+- `../../frontmatter-design.md`;
 - any router or index that names this skill.
 
 How to inspect: Read only the description, as an agent choosing among the plugin's skills, and answer two questions: would this load for the real trigger, and would it stay quiet for the near miss? Then read the adjacent descriptions and find the boundary each confusable pair needs. A boundary stated only in the body arrives after routing already happened, which is too late to change the decision.
@@ -33,4 +33,4 @@ Overlap boundary: This lane owns the always-loaded trigger surface and adjacent-
 
 Stop when: the description has been read against every adjacent skill in the plugin.
 
-Output focus: MUST load `../skill-review-lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.
+Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.

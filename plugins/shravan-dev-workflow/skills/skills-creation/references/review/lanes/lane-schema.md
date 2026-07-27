@@ -1,6 +1,6 @@
 # Skill Review Lane Schema
 
-The shared contract and field shapes every `references/lanes/*.md` review lane uses. This file owns the common lane terms, field names, required slots, ordering, and status labels; the mission, rubric, and judgment stay in each lane file.
+The shared contract and field shapes every `references/review/lanes/*.md` review lane uses. This file owns the common lane terms, field names, required slots, ordering, and status labels; the mission, rubric, and judgment stay in each lane file.
 
 ## Common Lane Contract
 
@@ -8,7 +8,7 @@ Every review lane inherits this. Lane files do not restate it:
 
 ```text
 dispatch terms:    the reviewer contract in
-                   `../../manage-agents/SKILL.md`. That skill owns the
+                   `../../../../manage-agents/SKILL.md`. That skill owns the
                    reviewer history and access values; do not restate them.
 receipt:           complete | partial | blocked, with evidence and
                    unresolved questions
@@ -74,7 +74,7 @@ unresolved questions:
 
 ## Lane Finding
 
-`lane` is the content lane name from `references/lanes/`. Runtime facts such as
+`lane` is the content lane name from `references/review/lanes/`. Runtime facts such as
 model, provider, and reasoning effort are owned by `manage-agents` and recorded
 there, not in the finding.
 

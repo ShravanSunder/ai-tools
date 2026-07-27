@@ -116,7 +116,18 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 ## Review Lanes
 
-Each lane loads one file from `references/lanes/` and returns candidate findings; the parent verifies and reduces them.
+Each lane loads one file from `references/review/lanes/` and returns candidate findings; the parent verifies and reduces them. Lanes return candidate findings, never the final verdict.
+
+Review is one module with one owner per part:
+
+| owner                                        | owns                                                             |
+| -------------------------------------------- | ---------------------------------------------------------------- |
+| `SKILL.md`                                   | when review runs, which lanes, the dispatch contract, completion |
+| `references/review/spec-review.md`           | the spec verdict and its blocker overrides                       |
+| `references/review/implementation-review.md` | the ship decision and changed-file coverage                      |
+| `references/review/lanes/lane-schema.md`     | packet, receipt, finding, coverage, reduction shapes             |
+| `references/review/lanes/<lane>.md`          | that lane mission and rubric                                     |
+| `manage-agents`                              | reviewer history, workspace access, model, runtime               |
 
 Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only` for reviewers.
 
@@ -143,9 +154,9 @@ For changed files, dispatch the union of every row whose surface the change touc
 | a behavior-proof claim (proof)       | claim-vs-evidence                               |
 | a sensitive surface                  | sensitive-surface                               |
 
-For classification `create`, the reviewed surface is the new files, not a diff. Sensitive surfaces are the set owned by `references/skill-security-review.md`; plugin manifests and versioning are not among them and route to `references/platform-mechanics.md` instead.
+For classification `create`, the reviewed surface is the new files, not a diff. Sensitive surfaces are the set owned by `references/security-gate.md`; plugin manifests and versioning are not among them and route to `references/platform-mechanics.md` instead.
 
-IF any lane will be dispatched, load `references/skill-review-lane-schema.md` to get the shared review shapes and return the review packet, the common lane contract, and the parent reduction shape before the first dispatch.
+IF any lane will be dispatched, load `references/review/lanes/lane-schema.md` to get the shared review shapes and return the review packet, the common lane contract, and the parent reduction shape before the first dispatch.
 
 ### Review Dispatch Contract
 
@@ -153,7 +164,7 @@ Applied to each selected lane:
 
 ```text
 MUST dispatch `<lane>` to a subagent using `<review packet>`.
-Subagent loads `references/skill-review-lane-schema.md` and `references/lanes/<lane>.md`.
+Subagent loads `references/review/lanes/lane-schema.md` and `references/review/lanes/<lane>.md`.
 Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
 Instance authority is the reviewer contract in `manage-agents`.
 Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
@@ -187,7 +198,7 @@ shipping status: source-only | PR-ready | released
 
 ## Workflow
 
-**1. Name the promise and success.** Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating an existing skill or draft, load `references/skill-spec-review.md` to evaluate the existing skill or draft and return one of its allowed verdict labels plus the blocker overrides, rubric evidence, first revision, and proof implication. Completion: classification, owner, reusable behavior, baseline or review target, and success definition are named.
+**1. Name the promise and success.** Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating an existing skill or draft, load `references/review/spec-review.md` to evaluate the existing skill or draft and return one of its allowed verdict labels plus the blocker overrides, rubric evidence, first revision, and proof implication. Completion: classification, owner, reusable behavior, baseline or review target, and success definition are named.
 
 For any classify, scope, or draft response, state the surface allocation in plain words before the details: YAML/frontmatter is the trigger surface, `SKILL.md` will carry the mental model and main path, `references/` will carry coherent mandatory detail and conditional branch depth, and pressure or static proof will validate the change.
 
@@ -221,14 +232,14 @@ Completion: one all-run spine is explicit, every branch changes the work, every 
 
 Completion: wording changes cite the failure or success gap they are meant to address without overstating its evidence source.
 
-**9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above, under the Review Dispatch Contract, against the proposed design, and load `references/skill-spec-review.md` to judge the proposed design and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
+**9. Review the spec.** IF the change is behavior-changing, do both of the following before any file is edited, unless the user explicitly says no review is needed: dispatch the lanes selected by Review Lanes above, under the Review Dispatch Contract, against the proposed design, and load `references/review/spec-review.md` to judge the proposed design and return the verdict, blocker overrides, and implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
 
-**10. Implement.** IF any surface on the sensitive-surface list in `references/skill-security-review.md` is in scope, load that reference before writing anything and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
+**10. Implement.** IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load that reference before writing anything and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
 
 **11. Review the implementation, then prove.** Run this as one loop, review first. Proof that runs before review wastes a run on text the review is about to change.
 
 1. IF the change is behavior-changing, dispatch the lanes selected by Review Lanes above, under the Review Dispatch Contract, against the changed files, unless the user explicitly says no review is needed.
-2. Synthesize the receipts yourself; no lane does this. Merge findings two lanes reported as one defect, resolve conflicts against the artifact rather than by lane seniority, name what no dispatched lane examined, and rank what to fix first. Completion: the Parent Reduction block from `references/skill-review-lane-schema.md` is emitted with merged duplicates, lane conflicts, routed findings, coverage gaps, and first fix filled; every dispatched lane appears by name with its status, and a lane contributing no accepted finding appears with the reason.
+2. Synthesize the receipts yourself; no lane does this. Merge findings two lanes reported as one defect, resolve conflicts against the artifact rather than by lane seniority, name what no dispatched lane examined, and rank what to fix first. Completion: the Parent Reduction block from `references/review/lanes/lane-schema.md` is emitted with merged duplicates, lane conflicts, routed findings, coverage gaps, and first fix filled; every dispatched lane appears by name with its status, and a lane contributing no accepted finding appears with the reason.
 3. Parent-reduce candidate findings against the actual files and the accepted spec. Accepted findings route back to the phase that owns them: spec mismatch to step 9, wording or placement to step 10, claim honesty to the proof run below, ship surface to step 12.
 4. Apply accepted fixes, then run the proof route chosen in step 2. Evaluation may precede or follow a first user-directed draft. If evaluation is deferred, return a source-only result with a named proof gap; do not claim demonstrated improvement, regression protection, or a verified fix. A reproduced RED may support a candidate GREEN only after a comparable rerun. A passing baseline may characterize native behavior or a weak comparison without prohibiting authoring. Choose proof by skill type:
 
@@ -240,9 +251,9 @@ Completion: wording changes cite the failure or success gap they are meant to ad
 
 5. IF a fix changed text a lane already reviewed, dispatch that lane again to a subagent under the Review Dispatch Contract using the refreshed packet, and refresh its changed-file coverage. Do not reuse a receipt for text edited after it was written.
 
-IF the change is behavior-changing, load `references/pressure-testing.md` to choose the proof route and return the proof protocol, evidence, and claim boundaries. IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/skill-implementation-review.md` to judge ship readiness and return changed-file coverage, ship decision, and the `implementation-review-swarm` routing. Completion: review is parent-reduced, changed-file coverage is accounted for after every review-fix edit, and the authoring result, behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
+IF the change is behavior-changing, load `references/testing/pressure-testing.md` to choose the proof route and return the proof protocol, evidence, and claim boundaries. IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge ship readiness and return changed-file coverage, ship decision, and the `implementation-review-swarm` routing. Completion: review is parent-reduced, changed-file coverage is accounted for after every review-fix edit, and the authoring result, behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
 
-**12. Prune and ship.** Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it. IF shipping, load `references/platform-mechanics.md` to route the release and return the validation, versioning, changelog, and cache/readback route. IF any surface on the sensitive-surface list in `references/skill-security-review.md` is in scope, load that reference before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision. That list is the single owner of the term set; do not restate it here. Chat-only sensitive-surface reviews still use that reference's return labels, including license/permission and copy-vs-adapt decisions for third-party source. Completion: the skill is compact, valid, public-safe, and proof route matches shipping status.
+**12. Prune and ship.** Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it. IF shipping, load `references/platform-mechanics.md` to route the release and return the validation, versioning, changelog, and cache/readback route. IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load that reference before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision. That list is the single owner of the term set; do not restate it here. Chat-only sensitive-surface reviews still use that reference's return labels, including license/permission and copy-vs-adapt decisions for third-party source. Completion: the skill is compact, valid, public-safe, and proof route matches shipping status.
 
 ## Completion Blockers
 

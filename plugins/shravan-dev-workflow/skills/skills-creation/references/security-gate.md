@@ -18,7 +18,7 @@ This reference owns sensitive-surface inspection for scripts, hooks, assets, pac
 - installed Codex/Claude cache refresh
 - home-level writes
 
-This list is the single owner of the term set. `SKILL.md` and `references/lanes/sensitive-surface.md` cite it rather than restating it. Plugin manifests and versioning are not sensitive surfaces; they belong to `platform-mechanics.md`.
+This list is the single owner of the term set. `SKILL.md` and `review/lanes/sensitive-surface.md` cite it rather than restating it. Plugin manifests and versioning are not sensitive surfaces; they belong to `platform-mechanics.md`.
 
 ## How To Inspect
 
