@@ -9,15 +9,7 @@ Where to look:
 - leading words and whether they carry real weight;
 - the failure-to-guidance-form table in `SKILL.md`.
 
-How to inspect: For each steering sentence, name the failure it targets and check that the form matches:
-
-```text
-rule skipped under pressure   -> bright-line rule + rationalization counter
-wrong output shape            -> positive shape or template
-omitted element               -> required slot beside the output
-conditional mistake           -> observable predicate + action
-shallow work                  -> stronger completion criterion
-```
+How to inspect: For each steering sentence, name the failure it targets and check the form against the failure-to-guidance-form table in `SKILL.md` step 8, which owns that mapping.
 
 Then test each completion criterion twice: can the agent tell done from not-done, and does it demand the legwork? "Understanding reached" fails the first test; "produce a change list" passes it and fails the second.
 

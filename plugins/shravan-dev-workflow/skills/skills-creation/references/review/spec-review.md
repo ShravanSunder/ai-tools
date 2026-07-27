@@ -4,13 +4,25 @@ Review the intended skill design before implementation. This reference judges wh
 
 Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
 
-The artifact under review here is a proposal, not files on disk. Which lanes that selects is owned by Review Lanes in `SKILL.md`; lanes needing line-level text, call sites, or real transcripts run at implementation review instead. This reference covers the rest of the spec verdict in-parent.
+## Lanes
+
+The artifact here is a **proposal** — it exists only in conversation, nothing on disk has changed. That selects exactly three lanes:
+
+```text
+lanes/mental-model-fit.md
+lanes/trigger-routing.md
+lanes/rule-agreement.md
+```
+
+Those are the lanes whose questions are answerable about a design. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. They run at implementation review instead.
+
+MUST load `lanes/lane-schema.md` to get the dispatch contract and shared shapes, and return the review packet and the parent reduction shape, before the first dispatch.
+
+This reference covers the rest of the spec verdict in-parent.
 
 ## Verdicts
 
-Allowed verdicts: `great`, `targeted-revision`, `significant-rewrite`, `reject-or-restart`. Use the exact label; do not replace it with a free-form phrase such as "not great yet."
-
-For pre-implementation spec review, `great` means accepted to implement. `targeted-revision` means the intended design needs a bounded spec fix before editing. `significant-rewrite` means the proposed design's promise, trigger, workflow, or proof route must be redesigned before implementation.
+`lanes/lane-schema.md` owns the verdict labels. Here, `great` means accepted to implement, `targeted-revision` means a bounded spec fix before editing, and `significant-rewrite` means the promise, trigger, workflow, or proof route must be redesigned before implementation.
 
 Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, branch-critical depth has no owning reference, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
 
@@ -49,3 +61,5 @@ implementation decision: accepted-to-implement | revise-first | restart | skippe
 ```
 
 The first required revision is the smallest useful spec change. When the revision changes wording, output shape, omitted slots, conditional behavior, invocation, reference retrieval, or completion criteria, name the matching failure form from `SKILL.md`.
+
+Complete when: the verdict carries one of the allowed labels, every blocker override is checked, and the implementation decision is explicit.

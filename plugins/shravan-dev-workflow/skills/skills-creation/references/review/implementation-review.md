@@ -6,7 +6,26 @@ Return changed-file coverage, accepted/rejected/unverified findings, smallest ed
 
 For final repo skill-work readiness, `implementation-review-swarm` owns review orchestration and this reference supplies the skill-specific rubric, changed file coverage, and targeted retest expectations.
 
-The artifact under review here is the changed files. Receipts arriving here come from the lanes selected by Review Lanes in `SKILL.md` and are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
+## Lanes
+
+The artifact here is **changed files** on disk, so every applicable lane can run. Dispatch the union of every row whose surface the change touched. The rows are the four surfaces of the Great Skill Frame, plus the security gate:
+
+| reviewed surface                     | lanes dispatched                                |
+| ------------------------------------ | ----------------------------------------------- |
+| `SKILL.md` body (main path)          | placement-and-calls, steering-strength,         |
+|                                      | mental-model-fit, no-op-pruning, rule-agreement |
+| reference text (depth)               | rule-agreement, no-op-pruning                   |
+| frontmatter or description (trigger) | trigger-routing                                 |
+| a behavior-proof claim (proof)       | claim-vs-evidence                               |
+| a sensitive surface                  | sensitive-surface                               |
+
+**Existing files** — evaluating a shipped skill nobody has edited — use the same table, with every row its current surfaces satisfy; there is no diff, so lanes read whole files. For classification `create`, the reviewed surface is the new files, not a diff.
+
+Sensitive surfaces are the set owned by `../security-gate.md`; plugin manifests and versioning are not among them and route to `../platform-mechanics.md` instead.
+
+MUST load `lanes/lane-schema.md` to get the dispatch contract and shared shapes, and return the review packet and the parent reduction shape, before the first dispatch.
+
+Receipts are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
 
 If the user explicitly requests outside counsel and Codex authored the change, prefer a non-Codex provider for at least one lane. When using `implementation-review-swarm`, use this reference as the skill-specific review input rather than a competing orchestration path.
 
@@ -32,3 +51,5 @@ The parent verifies candidate findings against source files, pressure output, an
 Accepted findings route back to the owning phase using the routing in `SKILL.md` step 11; that is the live owner.
 
 After accepted edits, rerun the narrowest pressure scenario or static proof that could catch the issue. If the finding challenges proof quality, rerun the artifact-scoped scenario that produced the questionable proof. If the edit changes placement, call completeness, or reference retrieval, rerun the scenario that exercises the workflow spine or reference loading. When accepted findings cause edits, apply the re-dispatch and refresh rule in `SKILL.md` step 11: dispatch any lane whose reviewed text changed, refresh its coverage, and never reuse a receipt for text edited after it was written.
+
+Complete when: every changed file is accounted for as reviewed, static-only, or out-of-scope, and the ship decision is explicit.

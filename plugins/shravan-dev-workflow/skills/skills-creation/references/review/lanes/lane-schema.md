@@ -31,6 +31,39 @@ parent handling:   receipts are candidate findings; the parent verifies
 
 A lane file adds only its own stop condition, which is local to its mission.
 
+## Verdicts
+
+Both stages return one of these exact labels. Do not replace one with a free-form phrase such as "not great yet."
+
+```text
+great               the artifact is sound as it stands
+targeted-revision   a bounded fix is needed
+significant-rewrite promise, trigger, workflow, or proof route must be redesigned
+reject-or-restart   the target behavior is not one named skill, or there is no reusable job
+```
+
+What each means depends on the stage: at spec review `great` means accepted to implement; at implementation review it means the changed files are sound; evaluating an existing skill it means the shipped skill is sound as it stands.
+
+## Dispatch Contract
+
+Both review stages dispatch under this. Applied to each selected lane:
+
+```text
+MUST dispatch `<lane>` to a subagent using `<review packet>`.
+Subagent loads `lane-schema.md` and `<lane>.md`.
+Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
+Instance authority is the reviewer contract in `manage-agents`.
+Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
+```
+
+Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../../../../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only`. A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid.
+
+Prefer native dispatch in the parent host's own lineage. When the runtime can reach another lineage, give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
+
+No lane reads another lane's receipt, so nothing waits.
+
+The parent collects every receipt explicitly. A dispatched lane that returns nothing is `no-receipt`, not `complete` — silence is never a clean review. Await one terminal receipt per dispatched lane, and ask for it if the lane goes quiet. While any dispatched lane is `partial`, `blocked`, or `no-receipt`, the run may not advance to `PR-ready` or `released` unless the parent closes that exact gap itself and records how. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
+
 ## Review Packet
 
 ```text

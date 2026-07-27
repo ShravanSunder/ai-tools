@@ -41,3 +41,7 @@ required proof:
 public-safe constraints:
 review route:
 ```
+
+Complete when: every sensitive surface in scope carries an allowed, disallowed, blocked, or deferred decision recorded before that surface was outlined or written.
+
+Chat-only sensitive-surface reviews still use these return labels, including license/permission and copy-vs-adapt decisions for third-party source.

@@ -13,7 +13,6 @@ Model-invocable, user-invocable, context load, cognitive load, and router skills
 
 - Trigger surface: YAML/frontmatter description plus any router wording that decides whether the skill loads.
 - Description: the always-visible context pointer for a model-invocable skill. It names when to load and why, not how to run the workflow.
-- Granularity: how finely skills are split. More model-invocable skills spend context load; more user-invocable skills spend cognitive load.
 
 ## Information Hierarchy
 
@@ -23,12 +22,10 @@ Progressive disclosure, branch, and lane are explained in `SKILL.md`.
 - Mandatory reference: coherent all-run detail consumed through `MUST load` while its parent obligation and completion stay visible in `SKILL.md`.
 
 - Steps: ordered actions the agent performs. They belong in `SKILL.md` when order changes behavior.
-- Workflow topology: the route from trigger through all-run spine, branches, return shapes, and completion/proof.
 - All-run spine: the part of the workflow every invocation needs. It belongs in `SKILL.md`.
 - Reference: coherent mandatory or conditional detail consulted after the calling `SKILL.md` selects the work.
 - Execution shape: the work's classification as an ordinary reference or a parallel-safe, handoff-ready lane.
 - Context pointer: wording that names when to load a reference and what to do with it. Weak pointer wording is a variance bug.
-- Co-location: keeping a concept's definition, rules, caveats, and examples near each other once their hierarchy level is chosen.
 - Branch predicate: the observable condition that selects a branch.
 - Return shape: the concrete result a reference pass or branch brings back to the main path, such as a verdict, filled slots, proof result, route decision, or edit boundary.
 - Lane qualification: the complete parallel-safety, bounded-handoff, mission, context, decision, dependency, authority, receipt, and parent-reduction contract. Parallel execution or delegation alone does not qualify work as a lane.
@@ -48,18 +45,14 @@ Progressive disclosure, branch, and lane are explained in `SKILL.md`.
 - Leading word: a compact concept that recruits useful model priors and anchors behavior, such as `root cause`, `vertical slice`, or `single source of truth`.
 - Completion criterion: the checkable condition that tells the agent a step or reference pass is complete.
 - Legwork: the work a completion criterion demands inside a step, such as reading files, checking examples, or proving a claim.
-- Premature completion: ending a step before the completion criterion is actually met.
 - Positive shape: wording that states the target shape or behavior directly, rather than describing what not to do.
-- Negation: a prohibition that can pull the forbidden behavior into context.
 
 ## Pruning
 
 - Single source of truth: one authoritative home for each meaning.
 - Duplication: the same meaning stated in more than one home.
 - Sediment: stale guidance kept because deleting it felt risky.
-- Sprawl: live material that is too long for its place in the hierarchy.
 - No-op: wording that does not change model behavior versus the default.
-- Relevance: whether a line still bears on what the skill does.
 
 ## Proof
 

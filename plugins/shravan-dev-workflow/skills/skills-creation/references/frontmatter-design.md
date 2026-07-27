@@ -56,3 +56,5 @@ Use the payoff and boundary clauses only when they sharpen routing. A short desc
 - Under-triggering: add user words and repo/code signals.
 - Workflow summary: move process detail into `SKILL.md`.
 - Hidden payoff: add a short "so that..." phrase only if it improves routing.
+
+Complete when: the description names a real loading condition, survives both the true prompt and the near miss, and any confusable neighbour has a stated boundary.
