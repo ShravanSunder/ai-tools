@@ -182,6 +182,68 @@ The specification defines the externally meaningful contract: the problem and co
 
 Requirements are testable obligations, not tasks. A requirement may constrain a public interface, but it does not assign internal module ownership or prescribe task sequence.
 
+#### How to write the specification
+
+**Facts are looked up; decisions are asked.** If a fact is discoverable from the filesystem, code, or docs, look it up — never spend a user question on it. Decisions are the user's: put each one to them, one question per message, with your recommended answer and confidence attached (a wrong guess gets a faster reaction than a blank question), and wait. Batching questions locks in the wrong framing because the third question usually depends on the first answer.
+
+**Decompose before refining.** If the request spans independent subsystems, split it first and spec the first slice — don't spend questions polishing details of a thing that needs decomposition. "Too simple to need a design" is a named trap: simple projects are where unexamined assumptions waste the most work.
+
+Work in this order — each section derivable from the ones before it: problem → consumers → outcomes → success criteria → requirements → non-goals → constraints and edge cases → acceptance criteria → open decisions. A requirement that traces to no outcome is invented; an outcome with no requirement is unserved.
+
+**Requirement syntax (EARS).** One capability per `REQ-*` (split conjunctions — you cannot pass/fail a compound). Choose the shape by condition class, clauses in temporal order:
+
+```text
+always active     The <system> <response>.
+state-driven      While <state>, the <system> <response>.
+event-driven      When <trigger>, the <system> <response>.
+optional feature  Where <feature present>, the <system> <response>.
+unwanted behavior If <fault/trigger>, then the <system> <response>.
+complex           While <state>, when <trigger>, the <system> <response>.
+```
+
+Error and failure behavior always uses `If/then` — writing a fault with `When` recasts it as a normal trigger and hides that the system is in a bad state.
+
+```text
+bad   REQ-004: The importer MUST handle large files robustly.
+      (two vague verbs, no observable behavior, no threshold)
+
+good  REQ-004: When a CSV up to 2 GB is imported, the importer
+      completes within 512 MB RSS, reporting progress every 5 s.
+        basis: user-decision
+        source: user chose a 2 GB ceiling over a streaming redesign
+      REQ-005: If the CSV exceeds 2 GB, the importer rejects it
+      before reading rows, naming the limit in the error.
+```
+
+**The stranger test.** A requirement passes when someone who has never met you could build exactly what you meant and prove they did. If they'd have to ask a question, it fails — repair it now.
+
+**Vague-verb repair.** Each of these triggers *what would an observer see?* and is unfinished until the answer is in the text: `support` (which operations, what result?), `handle` (what happens, observably?), `robust` (under which failure, degraded how far?), `easy` (which task, how many steps, for whom?), `fast` (which operation, what threshold, at what load?), `secure` (against which actor doing what?).
+
+**Requirement vs task.** "MUST store sessions in Postgres" is a task wearing requirement clothes. State the obligation — "sessions survive process restart; two concurrent writers never corrupt a session" — and let the program design choose Postgres, with a basis. Test: if a different implementation could satisfy the user, the technology name doesn't belong in the requirement.
+
+**Never silently fill ambiguity.** An unresolved branch gets `basis: unresolved` and an `Open Product Decisions` entry — an explicit marker, never a plausible guess. State assumptions as a block the user can strike ("correct me now or I proceed with these").
+
+**Non-goal craft.** A good non-goal names and blocks the *nearest plausible expansion*, not a strawman — a reasonable possibility explicitly declined. Bad: "no unnecessary features." Good: "No multi-tenant isolation: single-workspace deployment is assumed; adding it is a new spec." Half of misalignment is silent disagreement about what is *not* being built.
+
+**External contracts.** For each load-bearing surface fill: owner / consumers / inputs (including invalid and untrusted) / outputs (including errors and side effects) / state read, written, cached, or explicitly untouched / invariant / forbidden edge / one valid and one boundary-invalid example. A field you can't fill is a finding — never "the implementation can decide" unless the spec explicitly delegates that freedom and names the acceptable range.
+
+**Edge cases as failure expectations.** For each main flow, state observable behavior at its boundaries — empty input, duplicate, timeout, partial write, concurrent caller: "a duplicate submission returns the original result and creates nothing."
+
+**User decisions.** One material question at a time, in this shape — and know what does *not* count as agreement: "whatever you think is best" is delegation (re-ask as two concrete options); "sounds good" is ambiguous; silence then "okay let's start" is the user giving up on the interview, not converging.
+
+```text
+Decision needed: <one sentence>
+My current read: <recommended answer and confidence>
+Why it matters:  <what changes if the answer differs>
+Question:        <single question>
+```
+
+**Tradeoffs.** What we gain, what we pay, who pays — one line each. A tradeoff without a payer hasn't been thought through.
+
+**Self-review before review.** Four fresh-eyes passes, fixed inline: placeholders (TBD/TODO/vague), internal contradiction between sections, scope (one design or a decomposition?), and ambiguity — could any requirement be read two ways? Pick one and make it explicit.
+
+Sources: EARS (alistairmavin.com/ears), INCOSE GtWR/29148 singular-verifiable rules, RFC 2119 §6 (normative words sparingly), mattpocock `grilling`, addyosmani `interview-me`/`spec-driven-development`, superpowers `brainstorming`, this repo's `contract-and-scope` lane.
+
 ### Program-design ownership: How
 
 The program design defines the internal structural contract that satisfies the specification: responsibility and module boundaries; internal abstractions, types, interfaces, dependency direction; state ownership and sources of truth; data flow, control flow, lifecycle; concurrency, consistency, ordering; failure handling, retry, cleanup, partial success; security and trust-boundary enforcement; runtime and platform integration; observability and performance structure; test and proof seams the plan must operationalize; alternatives and rejected options; requirement-to-design traceability.
@@ -189,6 +251,30 @@ The program design defines the internal structural contract that satisfies the s
 The `Design Overview` is the integrated system model: one end-to-end account of ownership, dependency direction, state, lifecycle, flow, and failure propagation that every later section and every traceability row must agree with. Detailed sections attach to that model; a complete set of headings and per-requirement rows is an inventory, not a design, until they compose without contradiction.
 
 Pseudocode, type signatures, and flow diagrams are welcome when they make the contract precise. Worker assignment, file-by-file tasks, command sequences, and execution DAGs are not — they belong to the plan.
+
+#### How to write the program design
+
+**Three layers, each following from the last.** Problem and requirements (the specification) → functional behavior as seen from outside → internal structure. Each layer is a branch point with many valid successors; designing *is* choosing among them, and the document's job is to record the choices and their trade-offs. If there were genuinely no trade-offs, you didn't need a design — a design doc that reads as an implementation manual ("this is how we will build it") with no alternatives is the canonical bad one.
+
+**Design Overview first, one page, before any detail section.** It contains: every module with its single reason to change; dependency arrows in one direction only; a state-ownership table (each piece of state → exactly one owner with mutation authority); the main flow traced end to end; the failure path of the riskiest step traced to its containment. If you can't draw this in a page, the design isn't integrated yet — sections written before the overview are inventory.
+
+**Ground before sketching.** Build a traced model of every system the new design touches; naming a file is not grounding. If the design redefines existing ownership or layering, recover the *rationale* of the current shape first, so the rationale becomes a constraint instead of a casualty.
+
+**Design it twice.** For each load-bearing structural choice, sketch at least two shapes under different forcing constraints — minimize the interface; optimize for the most common caller; maximize flexibility — then choose and record why the winner beats the others (gain / pay / who pays). "No alternative existed" is a claim that needs a basis. Be opinionated: a strong recommendation, not a menu.
+
+**Depth is leverage.** A module is deep when callers get a lot of behavior per unit of interface they must learn — and "interface" means everything a caller must know: signature, invariants, ordering constraints, error modes, required configuration, performance character. The deletion test: imagine deleting the module — if complexity vanishes it was a pass-through; if it reappears across N callers it was earning its keep.
+
+**Interrogate the nouns.** For every noun the pair names — state store, service, protocol, queue, agent, UI surface, external system — answer: who owns it? what is its source of truth? who may read it, who may write it? what interface must callers use? which edge is explicitly forbidden? what proof would reveal an illegal edge? Then compare each answer to current code: a mismatch is either a spec correction or a constraint that must be made explicit. Boundary smells: a "shared helper" with no owner and no allowed-caller list; two places that can mutate the same state without an arbitration contract; a lower layer that knows product workflow.
+
+**Write the caller's usage first**, then derive the type sketch from it. The interface is the test surface: callers and tests cross the same seam, and if you want to test *past* the interface, the module is probably the wrong shape. Don't introduce a seam until something actually varies across it — one adapter is a hypothetical seam, two adapters is a real one.
+
+**Assumptions and probes.** Name the hidden assumptions ("the queue delivers in order"), then construct 2–3 falsifying probes: pick an assumption, invent the cheapest concrete scenario that breaks it, and state what the design does then. "Nothing" is a missing requirement or a missing failure-handling entry. Risk is design input, never a verdict: each accepted risk lands as a requirement, non-goal, open decision, or proof seam.
+
+**Failure discipline.** For every cross-boundary call: what happens when it fails halfway? who cleans up? can the step retry or roll back? where is partial success visible? Dependency category picks the proof strategy: in-process (test directly), locally substitutable (real stand-in in the suite), remote-but-owned (port + injected transport), true-external (injected port, mock adapter).
+
+**State the degree of constraint** (greenfield vs boxed in by legacy — reviewers can't calibrate without it), a *What changes / What stays the same* pair (the second is cheap and kills a whole class of reviewer doubt), and where accepted debt lands (non-goal or open decision, with the signal that forces revisiting). No file paths or code snippets — they go stale — except where a snippet encodes a decision more precisely than prose can (state machine, schema, type shape).
+
+Sources: Google design-doc practice (industrialempathy.com), the three-layer construction order, Nygard ADRs, mattpocock `codebase-design`/`DESIGN-IT-TWICE`/`DEEPENING`, pstack `architect`, this repo's `architecture-boundaries` and `risk-and-tradeoff-design` lanes.
 
 ### Boundary invariants
 
@@ -236,6 +322,26 @@ read-only)                 └─ REFRESH ◄────────┘
 There is no fixed multi-lane topology. Small artifacts use the whole-pair review alone.
 
 Every dispatched reviewer loads a lane mission file from `references/lanes/` that names what the lane inspects, its good and bad signals, its overlap boundaries, and its calibration bar. The packet carries the dispatch focus and scope; the lane file carries the judgment. A reviewer dispatched without a lane mission is a defect, not a lighter-weight review.
+
+#### How to review the pair
+
+**Read everything before judging anything.** Count the lines, read every chunk, and comment on nothing until the full pair is read — premature comments are usually answered two sections later. Then review in dependency order and stop at the first fatal flaw: problem → requirements → external behavior → structure. If the problem is misunderstood, the requirements are suspect; if a requirement fails, its structural realization is moot. Section-local review that green-lights an elegant solution to the wrong problem is the named failure this order prevents.
+
+**Trace, don't skim.** Walk every material `REQ-*` end to end: requirement → basis and source → traceability row → owning design sections → proof seam. The artifact is claims to verify, not truth; author confidence and previous praise are not evidence.
+
+**Audit authority.** For each basis, demand the pointer: `code-constraint` — open the file, does it actually compel this? `user-decision` — does the paraphrase state a real decision (who chose what over what), or does it read like a recommendation in decision clothing? Run the four-source drill: every review must be able to sort code-compelled / user-chosen / mislabeled recommendation / contradicts-a-non-goal. If two are indistinguishable from the artifacts, that is itself a finding. Label provenance so product arguments go to the decision owner instead of being re-litigated among reviewers.
+
+**Invert the cruxes.** Trace each major design claim to the condition that must be true for it to work, then invert it: if the inverted condition would force a different owner, contract, data shape, or human decision, that's a crux — name it. The sharpest probe: *which contradiction would cause two implementers to build different things while both believing they followed the spec?*
+
+**Check integration, not sections.** Pick pairs of requirements that share state or flow; verify their traceability rows land on consistent owners. Trace one failure path against the declared dependency direction. After the full read, state the design in three sentences — if you can't, or your three sentences contradict a section, file it.
+
+**The planning-readiness line.** Pretend you are creating the plan, but do not create it. If the planner would have to choose product meaning, boundary ownership, contract semantics, or proof expectations — not ready. If the planner only needs to choose task order, write scopes, and exact commands — that belongs to planning, and it's fine.
+
+**Finding quality.** Severity by behavior effect: would a planner build the wrong thing (blocker), guess (important), or merely stumble (minor)? Every substantive finding carries a concrete failure path, *what the next agent would guess*, and the smallest correction — never bare "add more detail." One strong finding beats several weak ones. Flag only what would cause a real problem downstream: wording preferences and "this section is less detailed" are not findings; silence is a valid verdict, and noise is a real cost.
+
+**Reviewer hygiene (parent's side).** Hand reviewers the artifact and the contract — never your conclusion; handing over a conclusion buys agreement. Reviewer output is data, not verdict: verify evidence before disposition, publish dismissals with one-line rationales so the user can override, and never convert missing evidence into dismissal. Agreement across independent reviewers is signal; a lone finding is worth reading at lower confidence. The doubt-theater check: two or more cycles where reviewers raised substantive findings and zero were upheld means you are validating, not reviewing — stop and escalate. Accept when the pair definitely improves on its predecessor and every gate criterion holds — perfection is not a criterion, and taste is not a finding; unresolved fact disputes go to evidence, unresolved value disputes go to the user.
+
+Sources: dependency-order review (design-review practice), Google eng-practices review standard, pstack `interrogate`/`why`, addyosmani `doubt-driven-development`/`code-review-and-quality`, mattpocock `code-review` two-axis split, this repo's `adversarial-crux`, `whole-spec-coverage`, `planning-readiness`, and `finding-schema` lanes.
 
 **Packets and receipts.** Every reviewer receives both complete artifacts plus a curated packet. The packet is a composition over the `manage-agents` agent job packet: the generic dispatch fields come from that contract, and this workflow adds the exact pair content revision and cycle id, the declared `REQ-* | CLAIM-* | INV-*` identifiers and section/path scopes in focus, decision target, user constraints, source anchors, non-goals, security context, and the schema contract. Reviewers independently inspect named sources rather than trusting author confidence. A curated packet is review context; the authoring transcript is not.
 
@@ -295,7 +401,7 @@ skills/spec-design/
 
 Ownership: `references/review-cycle-schema.md` owns the process shapes — the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, pre-pair receipt — and the per-role dispatch contract (lane, packet composition, authority ceiling, receipt, parent reduction point). The lifecycle header and traceability entry are owned by the Formats section. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
 
-**Teaching contracts.** Each reference opens with one line stating what the agent can do after loading it that it could not before, and carries the full anatomy (mission, where to look, how to inspect, good and bad signals, overlap boundary, calibration bar, stop condition). A reference containing headings, topics, or schemas but not its contracted judgment is non-complete — file presence never satisfies these contracts:
+**Teaching contracts.** The three `How to` sections of this spec (write the specification, write the program design, review the pair) are the authoritative craft content: implementation lifts them into the references verbatim and extends them with the per-lane anatomy — it does not re-derive them. Each reference opens with one line stating what the agent can do after loading it that it could not before, and carries the full anatomy (mission, where to look, how to inspect, good and bad signals, overlap boundary, calibration bar, stop condition). A reference containing headings, topics, or schemas but not its contracted judgment is non-complete — file presence never satisfies these contracts:
 
 ```text
 drafting-specification.md
