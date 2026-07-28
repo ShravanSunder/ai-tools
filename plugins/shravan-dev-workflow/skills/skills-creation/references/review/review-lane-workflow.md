@@ -18,7 +18,7 @@ Instance authority is the reviewer contract in `manage-agents`.
 Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 ```
 
-MUST load `../../../manage-agents/SKILL.md` to select the reviewer runtime and return the reviewer history and workspace-access decision before dispatch.
+MUST load the `manage-agents` skill to select the reviewer runtime and return the reviewer history and workspace-access decision before dispatch.
 
 Each lane reads only its packet and named sources, so ready lanes may run in parallel.
 

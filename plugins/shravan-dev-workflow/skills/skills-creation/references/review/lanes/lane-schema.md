@@ -24,7 +24,7 @@ significant-rewrite promise, trigger, workflow, or proof route must be redesigne
 reject-or-restart   the target behavior is not one named skill, or there is no reusable job
 ```
 
-What each means depends on the stage: at spec review `great` means accepted to implement; at implementation review it means the changed files are sound; evaluating an existing skill it means the shipped skill is sound as it stands.
+Stage-specific meaning of each label is owned by the stage reference that selects the lanes.
 
 ## Review Packet
 

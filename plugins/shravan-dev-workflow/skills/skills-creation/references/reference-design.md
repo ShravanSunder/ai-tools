@@ -13,6 +13,7 @@ branch-only detail                                       -> IF <predicate>, load
 one qualified lane's job contract                        -> references/lanes/<lane>.md
                                                             or references/<workflow>/lanes/<lane>.md
 shared fields used by multiple lanes                     -> references/<name>-lane-schema.md
+                                                            or references/<workflow>/lanes/lane-schema.md
 shared model-readable output                             -> references/<name>-output-schema.md
 machine-validated structure                              -> schemas/<name>.schema.json
                                                             or references/<name>-tool-schema.md

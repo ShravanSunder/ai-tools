@@ -38,7 +38,7 @@ If the user explicitly requests outside counsel and Codex authored the change, p
 
 ## Verdicts
 
-`lanes/lane-schema.md` owns the verdict labels. Here, `great` means the changed files are sound as they stand; evaluating a shipped skill, it means the skill is sound as it stands and `reject-or-restart` means the skill has no reusable job and should be retired rather than revised.
+`lanes/lane-schema.md` owns the verdict labels. Here, `great` means the changed files are sound as they stand. Evaluating a shipped skill, `great` means the skill is sound as it stands, and `reject-or-restart` means the skill has no reusable job and should be retired rather than revised.
 
 ## Review Rubric
 

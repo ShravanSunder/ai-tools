@@ -78,14 +78,7 @@ Keep a field in the lane reference when only that lane consumes it. Extract it i
 
 ## Shared Shape Families
 
-Choose the family from the real consumer rather than from file location or formatting similarity:
-
-```text
-lane input/context/receipt shape -> references/<name>-lane-schema.md
-shared model-readable output     -> references/<name>-output-schema.md
-machine-validated structure      -> schemas/<name>.schema.json
-                                    or references/<name>-tool-schema.md
-```
+Choose the family from the real consumer rather than from file location or formatting similarity; the canonical placement test in `reference-design.md` owns each family's final home.
 
 ```text
 lane-schema
