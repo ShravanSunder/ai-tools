@@ -116,7 +116,14 @@ there, not in the finding.
 ```text
 lane:
 finding:
-severity: blocker | important | minor | observation
+severity:         blocker | important | minor | observation
+                    blocker     = an agent following the skill produces the
+                                  wrong behavior, or a required gate cannot fire
+                    important   = an agent reaches the right behavior only by
+                                  guessing, or reaches it inconsistently
+                    minor       = the wording costs the reader effort but the
+                                  behavior lands
+                    observation = no behavior effect; the parent may prune it
 source evidence:
 behavior risk:
 smallest fix:
@@ -125,22 +132,19 @@ route:            <owning lane, when the defect is outside this lane's
                   boundary; report it, do not judge it, do not drop it>
 ```
 
+Severity is graded by effect on behavior, not by how wrong the text reads. A blocker is what the parent must fix before the run advances.
+
 A lane that notices a defect outside its boundary files it with `route:` set. The parent decides whether the owning lane runs. Silent dropping loses the finding entirely when the owning lane was never dispatched.
-
-## Changed-File Coverage
-
-```text
-changed-file coverage:
-- path:
-  surface:
-  status: reviewed | static-only | out-of-scope
-  evidence:
-```
 
 ## Parent Reduction
 
 The parent owns synthesis. No lane sees another lane's receipt, so merging
 duplicates, resolving conflicts, and ranking happen only here.
+
+Every field below is the parent's to fill. `changed-file coverage` in particular
+is derived, not collected: lanes report findings against text, and the parent
+maps them onto the packet's changed-file list. Do not wait for a lane to return
+coverage, and do not read a lane's silence about a file as coverage of it.
 
 ```text
 review:
@@ -155,6 +159,7 @@ synthesis:
   ranked findings:
   - rank:
     defect:
+    severity: blocker | important | minor | observation
     lanes reporting it:
     evidence:
   merged duplicates:

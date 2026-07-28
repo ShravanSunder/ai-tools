@@ -2,7 +2,7 @@
 
 Review the implemented skill change before proof is generated and before ship status advances. This reference audits the actual changed files, proof quality, pressure coverage, accepted spec constraints, and remaining ship risk.
 
-Return changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
+Return a verdict, changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
 For final repo skill-work readiness, `implementation-review-swarm` owns review orchestration and this reference supplies the skill-specific rubric, changed file coverage, and targeted retest expectations.
 
@@ -30,6 +30,10 @@ Receipts are synthesized by the parent, not by another lane. `lanes/claim-vs-evi
 
 If the user explicitly requests outside counsel and Codex authored the change, prefer a non-Codex provider for at least one lane. When using `implementation-review-swarm`, use this reference as the skill-specific review input rather than a competing orchestration path.
 
+## Verdicts
+
+`lanes/lane-schema.md` owns the verdict labels. Here, `great` means the changed files are sound as they stand; evaluating a shipped skill, it means the skill is sound as it stands and `reject-or-restart` means the skill has no reusable job and should be retired rather than revised.
+
 ## Review Rubric
 
 Covers what only a whole-change ship decision can judge:
@@ -53,4 +57,4 @@ Accepted findings route back to the owning phase using the routing in the skills
 
 After accepted edits, rerun the narrowest pressure scenario or static proof that could catch the issue. If the finding challenges proof quality, rerun the artifact-scoped scenario that produced the questionable proof. If the edit changes placement, call completeness, or reference retrieval, rerun the scenario that exercises the workflow spine or reference loading. When accepted findings cause edits, apply the re-dispatch and refresh rule in the skills-creation step `Review the implementation`: dispatch any lane whose reviewed text changed, refresh its coverage, and never reuse a receipt for text edited after it was written.
 
-Complete when: every changed file is accounted for as reviewed, static-only, or out-of-scope, and the ship decision is explicit.
+Complete when: the verdict carries one of the allowed labels, every changed file is accounted for as reviewed, static-only, or out-of-scope, and the ship decision is explicit.

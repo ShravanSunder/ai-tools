@@ -155,6 +155,8 @@ First classify the change, then classify why you are making it.
 
 A change is **behavior-changing** when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are **mechanical** and static-only.
 
+`mechanical` skips both reviews, and this session makes the call about its own work. So state the claim in a form the next reader can check: name the surfaces the change touches and show that none of them is on the list above. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
+
 Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 - **`user-directed intent`** may draft from an approved success definition without RED.
@@ -162,7 +164,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` classification names the surfaces it touched.
 
 ### 3. Design the trigger
 
@@ -255,6 +257,7 @@ The run is not done while any of these hold:
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
+- a change was classified `mechanical` without naming the surfaces it touched;
 - a behavior-changing skill change reached implementation without required spec review or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded parent closure;
