@@ -57,4 +57,17 @@ Use the payoff and boundary clauses only when they sharpen routing. A short desc
 - Workflow summary: move process detail into `SKILL.md`.
 - Hidden payoff: add a short "so that..." phrase only if it improves routing.
 
+One repair, worked:
+
+```text
+before: Reviews database migration scripts for common problems and
+        suggests fixes using the project's migration checklist.
+after:  Use when writing or reviewing a database migration,
+        especially schema changes on live tables, backfills, or
+        rollback paths. Not for ORM model edits with no migration
+        file.
+```
+
+The before summarizes a workflow and names no trigger; the after loads on the situation and stays quiet for the near miss.
+
 Complete when: the description names a real loading condition, survives both the true prompt and the near miss, and any confusable neighbour has a stated boundary.

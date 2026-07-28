@@ -22,6 +22,8 @@ MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review
 
 IF the proposal includes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, and real shape consumers and return the applicable contract before the verdict.
 
+IF the change is scoped, the three lanes above do not dispatch: judge the proposal in-parent against the Verdicts and Rubric below and record the verdict. Rule drift a scoped edit could introduce is caught at implementation review, where `rule-agreement` dispatches against the actual diff.
+
 This reference covers the rest of the spec verdict in-parent.
 
 ## Verdicts

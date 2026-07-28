@@ -131,7 +131,7 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 Behavior-changing work is reviewed twice: the proposal before any file is edited, and the changed files before ship. Lanes return candidate findings; the parent verifies, reduces, and owns the verdict. Mechanical changes are not reviewed.
 
-Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. Both dispatch under `references/review/review-lane-workflow.md` and use the shared shapes in `references/review/lanes/lane-schema.md`.
+Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. A scoped change keeps both stages but narrows them; each stage reference owns its scoped form. Both dispatch under `references/review/review-lane-workflow.md` and use the shared shapes in `references/review/lanes/lane-schema.md`.
 
 Collect every receipt explicitly and ask a lane that goes quiet; silence is never a clean review. Prefer native dispatch in the parent host's own lineage, and when the runtime can reach another lineage give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
@@ -169,6 +169,8 @@ A change is **behavior-changing** when it alters the skill's trigger or invocati
 
 `mechanical` skips both reviews, and this session makes the call about its own work. So state the claim in a form the next reader can check: name the surfaces the change touches and show that none of them is on the list above. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
 
+A behavior-changing change is additionally **scoped** when its entire diff is wording inside one owned home — `SKILL.md` prose or a single reference — and it touches no trigger, call site, branch predicate, lane, schema, label set, security surface, or ownership boundary. Scoped narrows review, not proof: the proof posture rules below still apply. Like `mechanical`, the claim must be checkable: name the home and show each item on that list is untouched.
+
 Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 - **`user-directed intent`** may draft from an approved success definition without RED.
@@ -176,7 +178,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` classification names the surfaces it touched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` or `scoped` classification names the surfaces it touched.
 
 ### 3. Design the trigger
 
@@ -192,9 +194,9 @@ Decide what concept, lens, or leading word the skill should pull into the model'
 
 #### The route
 
-Express the body in the form this skill needs: steps, a compact route, references, or a mix. Keep the all-run spine, always-needed steering, and the overall completion boundary visible. Put ordered steps in `SKILL.md` only when order changes behavior. Name the workflow from load to completion.
+Express the body in the form this skill needs: steps, a compact route, references, or a mix. IF the classification is `create` or the main-path shape is contested, load `references/worked-examples.md` to anchor the small end of the range and return the shape choice for this skill. Keep the all-run spine, always-needed steering, and the overall completion boundary visible. Put ordered steps in `SKILL.md` only when order changes behavior. Name the workflow from load to completion.
 
-Add a branch only when an observable condition changes the work; a topic being interesting, provider-specific, or detailed is not enough. Each branch names its predicate, action or destination, and concrete return. A result of only "more context" is incomplete.
+Add a branch only when an observable condition changes the work; a topic being interesting, provider-specific, or detailed is not enough. `IF the skill needs more depth, load ...` is a topic wearing IF clothing; `IF the diff adds a script, load references/security-gate.md` is a branch — the condition is observable and the work changes. Each branch names its predicate, action or destination, and concrete return. A result of only "more context" is incomplete.
 
 #### The call sites
 
@@ -270,7 +272,7 @@ The run is not done while any of these hold:
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
-- a change was classified `mechanical` without naming the surfaces it touched;
+- a change was classified `mechanical` or `scoped` without naming the surfaces it touched;
 - a behavior-changing skill change reached implementation without required spec review or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded parent closure;
