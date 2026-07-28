@@ -119,4 +119,4 @@ Extract shared shapes consumer-first:
 5. keep single-use slots local;
 6. use JSON Schema only when a machine validator exists.
 
-Completion: the lane either satisfies all nine qualifications or stays ordinary/parent-owned; owner and authority boundaries are explicit; every receipt has a parent reduction point; and each extracted shape has a named consumer, one authoritative owner, and the validation form its consumer actually requires.
+Complete when: the lane either satisfies all nine qualifications or stays ordinary/parent-owned; owner and authority boundaries are explicit; every receipt has a parent reduction point; and each extracted shape has a named consumer, one authoritative owner, and the validation form its consumer actually requires.

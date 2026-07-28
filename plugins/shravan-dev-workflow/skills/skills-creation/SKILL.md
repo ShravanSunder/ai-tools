@@ -146,10 +146,10 @@ reusable behavior:
 success definition:
 authoring basis: observed failure | user-directed intent
 reproduction: reproduced | not reproduced | insufficient evidence | inconclusive | n/a
-invocation: model-invocable | user-invocable
+invocation: model-invocable | user-invocable | both
 branches loaded:
 review lanes dispatched:
-lane receipts: complete | partial | blocked, per lane
+lane receipts: complete | partial | blocked | no-receipt, per lane
 security route: allowed | disallowed | blocked | deferred | n/a
 proof route: RED/GREEN | characterization | representative hypothesis | static-only | deferred | proof gap
 shipping status: source-only | PR-ready | released
@@ -159,7 +159,7 @@ shipping status: source-only | PR-ready | released
 
 ### 1. Name the promise and success
 
-Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first revision. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named.
+Classify the run; search the owning plugin for an existing skill or reference that already owns the named behavior and return the matching paths or `none`; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first required revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first fix. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named.
 
 ### 2. Choose the authoring basis and proof posture
 
@@ -178,7 +178,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` or `scoped` classification names the surfaces it touched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 
@@ -272,7 +272,7 @@ The run is not done while any of these hold:
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
-- a change was classified `mechanical` or `scoped` without naming the surfaces it touched;
+- a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
 - a behavior-changing skill change reached implementation without required spec review or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded parent closure;

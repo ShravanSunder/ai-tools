@@ -14,7 +14,7 @@ Apply this contract to each lane selected by the calling review stage:
 MUST dispatch `<lane>` to a subagent using `<review packet>`.
 Subagent loads `lane-schema.md` and `<lane>.md`.
 Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
-Instance authority is the reviewer contract in `manage-agents`.
+Instance authority follows the reviewer contract in `manage-agents` and stays equal to or narrower than the maximum authority in `<lane>.md`.
 Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 ```
 
@@ -33,7 +33,7 @@ selected
   -> closed
 ```
 
-A `complete` receipt lists every required item opened and meets the lane's stop condition. A `partial` receipt names what remains. A `blocked` receipt names the missing input. Record silence as `no-receipt`.
+Apply the status semantics from `lanes/lane-schema.md`; record silence as `no-receipt`.
 
 The parent collects every receipt, verifies candidate findings against source, merges duplicates, resolves conflicts, derives changed-file coverage, and fills the Parent Reduction shape from `lanes/lane-schema.md`.
 

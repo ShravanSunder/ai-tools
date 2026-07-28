@@ -4,7 +4,7 @@ Use this as the detailed behavior-evidence and claim-boundary protocol. Pressure
 
 This reference owns proof interpretation beyond static validation. Return the authoring basis, success definition, reproduction or characterization result, evaluation evidence, rationalizations, strongest demonstrated claim, remaining proof gap, and smallest wording change still needed.
 
-Keep grader-only assertions out of the prompt -- the model under test sees only the realistic task and permitted context. Static validation remains structural proof only.
+Keep grader-only assertions out of the prompt — the model under test sees only the realistic task and permitted context. Static validation remains structural proof only.
 
 ## Authoring Basis And Reproduction
 
@@ -66,7 +66,7 @@ retest:
 
 ## Running The Suite
 
-`tests/skills/run-skill-pressure-tests.sh --fast` runs the fast suite; `tests/skills/run-skill-pressure-tests.sh --scenario <id>` runs one scenario. Scenario file format and the runner's grader-only checks are owned by `tests/skills/README.md` -- cite it, do not restate its checklist here.
+`tests/skills/run-skill-pressure-tests.sh --fast` runs the fast suite; `tests/skills/run-skill-pressure-tests.sh --scenario <id>` runs one scenario. Scenario file format and the runner's grader-only checks are owned by `tests/skills/README.md` — cite it, do not restate its checklist here.
 
 If no suitable executable scenario exists or the user defers evaluation, return the named proof gap. Do not fabricate a scenario merely to satisfy the protocol. Scenario-authoring and harness expansion are separate work from this reference's proof interpretation.
 

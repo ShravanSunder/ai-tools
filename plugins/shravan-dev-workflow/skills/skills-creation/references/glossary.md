@@ -1,6 +1,6 @@
 # Glossary
 
-Vocabulary for judging great skills. Definitions only -- operational rules live in `SKILL.md` or the reference that owns them.
+Vocabulary for judging great skills. Definitions only — operational rules live in `SKILL.md` or the reference that owns them.
 
 ## Root Virtue
 

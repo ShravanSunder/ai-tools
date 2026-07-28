@@ -10,7 +10,7 @@ Where to look:
 - rationale paragraphs, motivational prose, and section preambles;
 - guidance inherited from an earlier revision that nobody currently owns.
 
-How to inspect: For each sentence, in isolation, ask whether it changes behavior versus the model's default. Sort into:
+How to inspect: For each sentence inside its surrounding context, ask whether it changes behavior versus the model's default. Sort into:
 
 ```text
 no-op      the model already does this without being told

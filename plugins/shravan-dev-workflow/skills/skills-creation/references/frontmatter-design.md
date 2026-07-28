@@ -68,6 +68,6 @@ after:  Use when writing or reviewing a database migration,
         file.
 ```
 
-The before summarizes a workflow and names no trigger; the after loads on the situation and stays quiet for the near miss.
+The before leaves the loading condition and near-miss boundary implicit; the after makes both explicit without summarizing the workflow.
 
 Complete when: the description names a real loading condition, survives both the true prompt and the near miss, and any confusable neighbour has a stated boundary.

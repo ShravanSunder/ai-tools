@@ -31,8 +31,9 @@ The calling `SKILL.md` loads `reference-lanes-design.md` when lane qualification
 Every ordinary reference caller in the authored `SKILL.md` begins with exactly one literal load form:
 
 ```text
-MUST load `<reference>` to `<requested work>` and return `<result>`.
-IF `<observable predicate>`, load `<reference>` to `<requested work>` and return `<result>`.
+MUST load `<reference>` and return `<result>`.
+IF `<observable predicate>`, load `<reference>` and return `<result>`.
+...add `to <requested work>` when the result alone does not say what to do there.
 ```
 
 Use `MUST load` for an all-run reference pass. Use `IF` with an observable predicate for a branch that changes the work. Give every caller exactly one of those literal markers.
@@ -98,4 +99,4 @@ what result returns:
 what would break if deleted:
 ```
 
-If those answers are weak, inline the detail with its actual owner, merge overlapping references, or delete the no-op prose. Completion: each meaning has one owner, every ordinary caller is complete, and every opened reference can finish its local work without claiming its own entry route.
+If those answers are weak, inline the detail with its actual owner, merge overlapping references, or delete the no-op prose. Complete when: each meaning has one owner, every ordinary caller is complete, and every opened reference can finish its local work without claiming its own entry route.
