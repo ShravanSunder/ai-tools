@@ -60,7 +60,7 @@ Two principles shape everything below:
 - Redesigning adjacent skills. Their triggers and bodies keep shipped wording, with exactly three body exceptions named in Changes: `spec-handoff` gains the accepted-pair record and a boundary-statement update, `manage-agents` gains one generic packet field plus a reviewer capability note, and plan creation's entry contract cuts over to the accepted-pair gate. Otherwise only dangling references to the two retired skills cut over.
 - The mandatory named-skill routing path. Recreating `skills-creation` around this workflow is follow-up work that consumes `spec-design`; its routing contract belongs to that follow-up spec.
 - Portable cryptographic acceptance receipts. Handoff freshness is carried by statuses, the shared content revision, and plain file digests in `spec-handoff` — nothing more.
-- Pressure scenarios and the skill-testing system (explicitly deferred; static validation and review are not pressure proof).
+- The skill-testing harness redesign. The skill's own pressure scenarios are not deferred: replacements for the six named behavior claims ship inside the hard cutover (see Changes), and static validation and review are never pressure proof.
 - Recording review chronology, agent identities, or conversation history as design rationale.
 
 ## What
@@ -74,14 +74,17 @@ The invocation completes only when the parent accepts the pair, the user explici
 Trigger description for the future skill:
 
 ```text
-Use when writing, revising, reviewing, resuming, or accepting a spec,
+Use when turning bare requirements or product intent into a spec,
 design doc, or architecture doc before an implementation plan exists,
-even with no document yet — critique, attack, poke holes, pressure-test
-assumptions, remediate findings. Not for one named skill's
-create/update/evaluate work, reviewing an implementation plan or
-handoff, shared-model reconvergence, docs housekeeping, evidence-only
-research, handoff packaging, or standalone security review and
-security-finding remediation.
+or when writing, revising, reviewing, resuming, or accepting one —
+critique, attack, poke holes, pressure-test assumptions, threat-model
+the design in-cycle, remediate findings. Not for one named skill's
+create/update/evaluate work; reviewing an implementation plan or
+handoff; shared-model reconvergence; documentation-only
+reconciliation, cleanup, archival, or promotion that changes no
+requirement or design decision; evidence-only research; handoff
+packaging; or standalone security scans, audits, repository threat
+models, and security-finding remediation.
 ```
 
 ### Two sibling artifacts
@@ -116,7 +119,7 @@ Shared lifecycle header, identical in both files:
 
 - `Status: draft | accepted | blocked | deferred` — always synchronized.
 - `Content revision: r<N>` — a monotonic integer shared by both siblings. A semantic change to a requirement, claim, invariant, basis, boundary, flow, failure policy, or rationale increments it in both files; a typo- or format-only change with no semantic meaning change does not. A synchronized status write never changes it. A newly created or reconstructed pair starts at `r1`; a lone artifact's prior revision belongs to no pair lifecycle and is void.
-- `Review cycle: none | c<M> in-cycle @ r<N> | c<M> covered @ r<N>` — written by the parent when the cycle's first reviewer dispatches (`in-cycle`) and when the REVIEW guard passes (`covered`). `<M>` is a monotonic cycle counter; guards that say "this cycle" resolve against it.
+- `Review cycle: none | c<M> in-cycle @ r<N> | c<M> covered @ r<N>` — written by the parent on REVIEW entry, before the first dispatch (`in-cycle`), and when the REVIEW guard passes (`covered`). REVIEW entry is the single owner of cycle-id assignment; `<M>` is a monotonic counter, guards that say "this cycle" resolve against it, and after a terminal re-entry the prior value stands as history until the next REVIEW entry.
 - `Stop reason: <text>` — present, with the same text in both files, only while status is `blocked` or `deferred`; names the smallest material decision or missing source and the exact resume inputs.
 
 **Synchronized-write field set.** A synchronized status write changes exactly: both `Status` fields, the `Review cycle` field when the parent records cycle state, and the presence or text of `Stop reason:`. `Content revision` and all design content are unchanged. The parent verifies every synchronized write — accepting, non-accepting, and resume alike — against this field set. Every other section cites this rule rather than restating it.
@@ -140,7 +143,7 @@ CLAIM-001: <load-bearing current-state, product, or design claim>
 INV-001: <material behavioral, structural, state, or security invariant>
 ```
 
-Every normative requirement, every material `INV-*`, and every traceability entry's structural realization declares its basis:
+Every `REQ-*` — regardless of modal wording — plus every material `INV-*` and every traceability entry's structural realization declares its basis. A requirement is an obligation whether it says `MUST`, `support X`, `required`, or appears as an acceptance criterion; wording never exempts it from the basis discipline:
 
 ```text
 REQ-001: <obligation>
@@ -150,7 +153,7 @@ REQ-001: <obligation>
 
 - `code-constraint` — compelled by current code, platform, or verified external fact; `source` names it.
 - `user-decision` — explicitly selected by the user; `source` paraphrases the decision (never a transcript dump).
-- `author-recommendation` — the author's derived preference. Non-accepting for any normative obligation: the gate converts it into a decision returned to the user.
+- `author-recommendation` — the author's derived preference. Non-accepting for any requirement or normative-force statement: the gate converts it into a decision returned to the user.
 - `unresolved` — a known open branch. Non-accepting for the obligation that declares it.
 
 ```text
@@ -165,13 +168,13 @@ basis: code-constraint ─────┐
                                  the smallest decision to the user
 ```
 
-**Normative** means a `MUST`/`MUST NOT` obligation. Normative obligations live only in `REQ-*`: an `INV-*` or `CLAIM-*` stating a normative obligation is a defect the whole-pair reviewer flags. A structural decision that eliminates, replaces, or forecloses an existing production dependency, module, or user-visible mechanism carries normative force and requires an accepting basis or an entry in `Open Design Decisions`.
+**Normative force** means stating or foreclosing an obligation — semantically, not by keyword. `MUST`/`MUST NOT` is the canonical form, not the trigger: `support X`, `required`, an acceptance criterion, and a binding non-goal carry the same force, and none of them escapes the basis or confirmation gates by avoiding the word. Obligations live only in `REQ-*`: an `INV-*` or `CLAIM-*` stating one is a defect the whole-pair reviewer flags. A structural decision that eliminates, replaces, or forecloses an existing production dependency, module, or user-visible mechanism carries normative force and requires an accepting basis or an entry in `Open Design Decisions`.
 
 **Material** means load-bearing for acceptance: every requirement is material; a finding is material when its severity is `blocker` or `important`; a decision or tradeoff is material when it changes a requirement, a public contract, an ownership boundary, or a normative basis. Other sections cite these definitions rather than restating them.
 
 Authority-bearing statements are not only requirements. Material non-goals, constraints, and externally meaningful commitments in the specification carry identifiers (`CLAIM-*` or `INV-*`) and, where they bind design choices, a basis. A program design that contradicts a user-owned non-goal or constraint is non-accepting regardless of wording force — the recorded failure's second branch was exactly a non-goal overridden without authority.
 
-The whole-pair reviewer audits every declared basis in both artifacts against its named source — the basis field is what carries provenance to reviewers who never saw the conversation. A `user-decision` basis is auditable only by the user: a fresh reviewer can check that the paraphrase exists, not that the decision happened. The acceptance gate therefore surfaces the full inventory of normative `user-decision` obligations (identifier plus source paraphrase) to the user for confirmation before the accepting status write.
+The whole-pair reviewer audits every declared basis in both artifacts against its named source — the basis field is what carries provenance to reviewers who never saw the conversation. A `user-decision` basis is auditable only by the user: a fresh reviewer can check that the paraphrase exists, not that the decision happened. The acceptance gate therefore surfaces every load-bearing `user-decision` basis — across requirements, material non-goals and constraints, material invariants, and normative-force structural realizations — (identifier plus source paraphrase) to the user for confirmation before the accepting status write.
 
 ### Specification ownership: Why and What
 
@@ -236,7 +239,7 @@ Every dispatched reviewer loads a lane mission file from `references/lanes/` tha
 
 **Packets and receipts.** Every reviewer receives both complete artifacts plus a curated packet. The packet is a composition over the `manage-agents` agent job packet: the generic dispatch fields come from that contract, and this workflow adds the exact pair content revision and cycle id, the declared `REQ-* | CLAIM-* | INV-*` identifiers and section/path scopes in focus, decision target, user constraints, source anchors, non-goals, security context, and the schema contract. Reviewers independently inspect named sources rather than trusting author confidence. A curated packet is review context; the authoring transcript is not.
 
-Every responding reviewer returns a revision- and cycle-bound receipt with status `complete | partial | not-started` (`not-started` means the lane could not begin for a named missing input). Silence is recorded by the parent as `no-receipt`; a reviewer never returns that state. Which receipts credit coverage is owned by Scope and invalidation below.
+Every responding reviewer returns a revision- and cycle-bound receipt with status `complete | partial | blocked` (receipt-sense `blocked`: the lane could not begin for a named missing input — the house lane-schema vocabulary; pair-status `blocked` is a different field and the header keeps them apart). Silence is recorded by the parent as `no-receipt`; a reviewer never returns that state. Which receipts credit coverage is owned by Scope and invalidation below.
 
 Finding severity is `blocker | important | minor | observation` — graded by behavior effect. `observation` has no acceptance effect and the parent may prune it.
 
@@ -247,7 +250,7 @@ Finding severity is `blocker | important | minor | observation` — graded by be
 - `contested` — a real tradeoff or product decision evidence alone cannot settle; it exits only through the gate's `decision-needed` outcome;
 - `unverified` — potentially valid, missing the evidence needed to judge; it exits through an evidence Delegate or a re-dispatch, then re-enters reduction. Missing evidence is never converted to `dismissed`.
 
-Every upheld finding tracks a resolution: `open` → `remediated` (the parent applies the correction and records the traceability effect) → `verified-closed`. The parent verifies each correction in REDUCE and closes it immediately when the remediation invalidated no receipt, otherwise after the required refreshed receipt is reduced. A failed correction returns to `open`. Within this workflow, `open` is only an upheld-finding resolution, `deferred` is only a pair status, and `blocked` is only a pair status (receipts use `not-started`); adjacent skills' vocabularies are untouched.
+Every upheld finding tracks a resolution: `open` → `remediated` (the parent applies the correction and records the traceability effect) → `verified-closed`. The parent verifies each correction in REDUCE and closes it immediately when the remediation invalidated no receipt, otherwise after the required refreshed receipt is reduced. A failed correction returns to `open`. Within this workflow, `open` is only an upheld-finding resolution and `deferred` is only a pair status; `blocked` carries exactly two senses — receipt (lane could not begin) and pair status — and every use is sense-qualified. Adjacent skills' vocabularies are untouched.
 
 Reviewer count and apparent consensus never determine acceptance; evidence and parent-verified reduction do.
 
@@ -261,7 +264,7 @@ Reviewer count and apparent consensus never determine acceptance; evidence and p
 - The whole-pair receipt's declared scope is the identifier and basis inventory, cross-artifact traceability, and the main-flow sections of both artifacts (main-flow = the specification's `Observable Behavior` and the program design's `Data Flow and Control Flow`); the category rule below — not the per-edit rule above — is what invalidates it.
 - A requirement, basis, material claim or invariant, public contract, ownership boundary, source-of-truth, or main-flow change invalidates the whole-pair review plus affected focused reviews. A security or trust-boundary change additionally invalidates the security review.
 - When a revision leaves a complete receipt's declared scopes semantically unchanged, the parent may carry it forward; doing so requires a carry-forward attestation (prior receipt, both revisions, unchanged scopes, non-invalidation evidence, parent verification). An affected receipt is never carried forward — it is freshly dispatched.
-- Terminal re-entry: resuming an `accepted`, `blocked`, or `deferred` pair opens a new cycle `c<M+1>` and requires a fresh whole-pair review from that cycle, because the world outside the pair can drift while the artifact bytes do not. Focused reviews are refreshed where their risk predicate still holds; other prior receipts remain historical evidence and may be carried forward under the rule above.
+- Terminal re-entry: resuming an `accepted`, `blocked`, or `deferred` pair invalidates the prior acceptance; the next REVIEW entry — the single owner of cycle-id assignment — opens `c<M+1>`, and that cycle requires a fresh whole-pair review, because the world outside the pair can drift while the artifact bytes do not. Focused reviews are refreshed where their risk predicate still holds; other prior receipts remain historical evidence and may be carried forward under the rule above.
 
 **Reference tree and teaching contract.** The implemented skill ships this tree; craft and ceremony are segregated, and the ceremony gets exactly one home:
 
@@ -292,7 +295,90 @@ skills/spec-design/
 
 Ownership: `references/review-cycle-schema.md` owns the process shapes — the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, pre-pair receipt — and the per-role dispatch contract (lane, packet composition, authority ceiling, receipt, parent reduction point). The lifecycle header and traceability entry are owned by the Formats section. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
 
-Teaching rule: each craft and lane reference opens with one line stating what the agent can do after loading it that it could not before, and carries the lane-mission anatomy (mission, where to look, how to inspect, good signals, bad signals, overlap boundary, calibration bar). A promised stage without an owning teaching reference is an implementation completion blocker.
+**Teaching contracts.** Each reference opens with one line stating what the agent can do after loading it that it could not before, and carries the full anatomy (mission, where to look, how to inspect, good and bad signals, overlap boundary, calibration bar, stop condition). A reference containing headings, topics, or schemas but not its contracted judgment is non-complete — file presence never satisfies these contracts:
+
+```text
+drafting-specification.md
+  capability: turn fuzzy intent into testable Why/What
+  teaches: the user-decision question shape (decision needed / my
+    current read / why it matters / one question); requirement
+    quality — a testable obligation, not a task or a wish, with
+    vague-verb repair (support, robust, easy, handle → observable
+    behavior + measurable condition); non-goal craft that blocks
+    plausible adjacent expansion; edge cases as observable failure
+    expectations; tradeoffs stated with who pays
+  result the guard consumes: a requirement-quality pass (every
+    REQ-* testable, no vague verb unrepaired) and the open-decision
+    list (each entry in Open Product Decisions or a user question)
+  calibration: raise only gaps that change requirements, non-goals,
+    boundaries, or proof
+
+drafting-program-design.md
+  capability: compose one implementable end-to-end How
+  teaches: build the Design Overview as the integrated system model
+    FIRST and attach every section to it; ownership and dependency-
+    direction decisions with named alternatives and rejection
+    reasons; hidden-assumption naming plus 2-3 falsifying scenario
+    probes; failure containment and reversibility; proof seams the
+    plan can operationalize
+  result the guard consumes: an integration pass (no cross-
+    requirement contradiction in state ownership, dependency
+    direction, lifecycle, or failure propagation) and the
+    assumption list (each named, tested, or routed to evidence/user)
+  calibration: risk is design input — each accepted risk becomes a
+    requirement, non-goal, open decision, or proof seam, never a
+    bare verdict
+
+lanes/whole-pair-integrity.md   (mission stated in Reviewer selection)
+  inspects: every identifier and basis against its named source;
+    every traceability row against the Design Overview; the pair
+    read end-to-end as one design
+  finding result: violated obligation or contradiction, both
+    artifact locations, smallest correction
+
+lanes/security-threat-boundary.md
+  mission: design-time threats and trust-boundary violations
+  inspects: each predicate surface the conditional-review rule
+    names; entry points, privilege transitions, data crossing trust
+    boundaries; mitigations present as requirements or invariants,
+    never prose reassurance
+  finding result: threat, violated or missing invariant, required
+    mitigation, affected identifiers
+
+lanes/contract-review.md
+  mission: public API, protocol, storage, migration, compatibility
+  inspects: every externally visible contract for owner, versioning,
+    breakage behavior, migration path; contract claims against
+    current source
+  finding result: the under-specified or breaking contract, its
+    consumers, smallest correction
+
+lanes/platform-fit.md
+  mission: cross-runtime and cross-harness behavior
+  inspects: platform claims against actual platform contracts;
+    per-runtime behavior differences named, never averaged
+  finding result: the failing platform assumption, where, and its
+    design consequence
+
+lanes/difference-review.md
+  mission: hidden behavior in an existing implementation the
+    artifacts do not state
+  inspects: current code against the pair; undocumented decisions
+    the design silently inherits or contradicts
+  finding result: the hidden decision, its code anchor, and whether
+    the pair adopts or replaces it — as a basis-bearing statement
+
+lanes/failure-mode.md
+  mission: operational, concurrency, performance, and data-integrity
+    failure under load and partial failure
+  inspects: failure propagation against containment claims; ordering
+    and consistency boundaries; recovery and partial-success paths;
+    proof burden on the riskiest path
+  finding result: the falsifying scenario, the boundary it breaks,
+    and the requirement or proof seam that must exist
+```
+
+A promised stage without an owning teaching reference, or a reference failing its contract above, is an implementation completion blocker.
 
 ### Agents
 
@@ -311,7 +397,7 @@ evidence         Delegate   fresh, packet only  read-only   0..n one-shot
 
 - **The parent is the author.** It holds all information, drafts and integrates both artifacts, and preserves one mental model across Why, What, and How. There is no persistent author fork and no multi-author topology.
 - **Section writers** produce bounded candidate text from a packet naming the section outline, the `REQ-*` it must answer, source anchors, non-goals, and the parent-decided structural claims the section expresses. Where structure is undecided, the writer returns a gap — never prose that chooses. They may not mint `REQ-*`, `basis`, status, or revision values; a needed new requirement routes through the parent into the specification. The parent integrates every word before it becomes artifact content.
-- **Reviewers** start with no inherited conversation history and read-only access (the `manage-agents` reviewer rules: parent conversation history `none`, workspace access `read-only`), and return candidate findings only. The whole-pair reviewer additionally requires Frontier capability at high reasoning — dispatched as a Delegate, but above the Delegate pattern's default capability ceiling; the packet records this floor. The authority audit is judgment work, and the recorded failure was a judgment miss.
+- **Reviewers** start with no inherited conversation history and read-only access (the `manage-agents` reviewer rules: parent conversation history `none`, workspace access `read-only`), and return candidate findings only. The whole-pair reviewer requires Frontier capability at high reasoning. `manage-agents` remains the sole owner of pattern and category allowances: the cutover adds an explicit Frontier one-shot reviewer case to its Delegate pattern table rather than overriding it — a packet records the pattern-supported selection; it can never raise a ceiling the pattern does not grant. The authority audit is judgment work, and the recorded failure was a judgment miss.
 - **Evidence contributors** answer one named observable question with source-backed candidate evidence; they return no prose destined for the artifacts.
 
 ### Acceptance gate
@@ -319,10 +405,10 @@ evidence         Delegate   fresh, packet only  read-only   0..n one-shot
 The parent verifies every criterion while both artifacts are `draft` at the same revision:
 
 - Both artifacts exist, synchronized `draft`, same content revision.
-- Every requirement is testable; every normative requirement's basis is `code-constraint` or `user-decision` with a named source.
+- Every requirement is testable; every requirement's basis is `code-constraint` or `user-decision` with a named source.
 - Every normative-force structural decision (per Decision authority) carries an accepting basis or an `Open Design Decisions` entry.
 - No artifact statement contradicts a user-owned non-goal or constraint; material non-goals and constraints carry identifiers and, where they bind design choices, an accepting basis.
-- Every normative `user-decision` obligation has been surfaced to the user (identifier and paraphrase) and confirmed or corrected in the current cycle `c<M>`.
+- Every load-bearing `user-decision` basis — across requirements, material non-goals and constraints, material invariants, and normative-force structural realizations — has been surfaced to the user (identifier and paraphrase) and confirmed or corrected in the current cycle `c<M>`.
 - Internal structure is absent from the specification unless externally contractual; the program design contains no task sequence.
 - Every requirement has a traceability entry with status `satisfied` (see format below).
 - Module ownership, dependency direction, sources of truth, flows, and material failure behavior are explicit and mutually consistent: no known-open cross-requirement or intra-How contradiction remains.
@@ -383,7 +469,8 @@ resume edge: any terminal state (DECISION NEEDED is Status:
              verified per the header field set)──►
              DRAFTING when the re-entry will change content —
              a new change, or a returned decision or evidence
-             to apply — else REVIEW, as a fresh cycle c<M+1>
+             to apply — else REVIEW; the next REVIEW entry
+             opens cycle c<M+1>
 ```
 
 ### FRAMING
@@ -398,11 +485,11 @@ Two visible sub-stages, each with its owning craft reference. The parent loads `
 
 The parent drafts the specification first and validates its load-bearing claims, then drafts the program design constrained by it. A discovered requirement gap or meaning change goes to the specification first; program design resumes from the revised meaning. Missing product decisions are resolved — or returned to the user — before they are disguised as internal design. Section writers may be dispatched here under the rules above; evidence Delegates for named gaps.
 
-Guard out (all artifact-readable): every normative obligation carries a basis and no normative obligation sits outside `REQ-*` (per Decision authority); every requirement has a traceability entry with status `satisfied`; every `CLAIM-*`/`INV-*` has an owning section; the How sections agree with the integrated `Design Overview`; no mandatory heading is missing without a stated reason. A `gap` entry keeps this state active; a `decision-blocked` entry routes its decision to the user and, when material (per Decision authority), stops the run as `decision-needed`.
+Guard out (all artifact-readable): every requirement carries a basis and no obligation sits outside `REQ-*` (per Decision authority); the requirement-quality pass from `drafting-specification.md` and the integration pass from `drafting-program-design.md` are recorded, with their open-decision and assumption lists; every requirement has a traceability entry with status `satisfied`; every `CLAIM-*`/`INV-*` has an owning section; the How sections agree with the integrated `Design Overview`; no mandatory heading is missing without a stated reason. A `gap` entry keeps this state active; a `decision-blocked` entry routes its decision to the user and, when material (per Decision authority), stops the run as `decision-needed`.
 
 ### REVIEW
 
-The only reviewer fan-out. On entry the parent assigns cycle id `c<M>`, writes `Review cycle: c<M> in-cycle @ r<N>` to both headers, and opens the mandatory ledger. Four sub-states, all edges returning to the parent:
+The only reviewer fan-out. REVIEW entry is the single owner of cycle-id assignment: on entry, before the first dispatch, the parent assigns the next cycle id `c<M>`, writes `Review cycle: c<M> in-cycle @ r<N>` to both headers, and opens the mandatory ledger. Four sub-states, all edges returning to the parent:
 
 1. **DISPATCH** — the mandatory whole-pair reviewer plus predicate-selected focused reviewers, in parallel, fresh context, read-only, packet-bound to the current revision and cycle.
 2. **REDUCE** — the parent verifies every candidate finding against artifacts and source, classifies disposition, merges duplicates, records conflicts, logs receipt states (recording `no-receipt` for silence), and verifies remediated corrections — moving each to `verified-closed` immediately when no receipt was invalidated, otherwise after the refreshed receipt is reduced.
@@ -417,12 +504,12 @@ The parent evaluates the acceptance criteria (What → Acceptance gate). Exactly
 
 ### Resume
 
-Any terminal pair re-enters through a parent-authorized synchronized write to `draft`, verified against the header field set (revision preserved; `Stop reason:` removed; a new cycle `c<M+1>` begins). Route by entry reason: a re-entry that will change content — a new design change, or a returned decision or evidence gap to apply — enters DRAFTING, where the parent writes the change into the owning artifact (a semantic change, so the revision increments per the header rule). A re-entry that only re-verifies unchanged content enters REVIEW directly, and if no remediation is needed, re-acceptance uses the unchanged revision. An accepted pair therefore always re-enters through DRAFTING unless the parent is only re-verifying.
+Any terminal pair re-enters through a parent-authorized synchronized write to `draft`, verified against the header field set (revision preserved; `Stop reason:` removed; the prior `Review cycle` value stands as history until the next REVIEW entry assigns `c<M+1>`). Route by entry reason: a re-entry that will change content — a new design change, or a returned decision or evidence gap to apply — enters DRAFTING, where the parent writes the change into the owning artifact (a semantic change, so the revision increments per the header rule). A re-entry that only re-verifies unchanged content enters REVIEW directly, and if no remediation is needed, re-acceptance uses the unchanged revision. An accepted pair therefore always re-enters through DRAFTING unless the parent is only re-verifying.
 
 ### Scaling
 
 - A truly mechanical change that alters no behavior, contract, ownership, or structure does not invoke `spec-design`; record why no design artifact is required.
-- A tiny behavior or design change still separates Why/What from How: both siblings, short. The tiny-form floor is fixed: the shared lifecycle header; basis on every normative obligation; a traceability entry per requirement; the whole-pair review; and the gate criteria for basis, traceability, user-decision confirmation, and whole-pair coverage. Sections that are demonstrably not applicable may be omitted in the tiny form without per-heading justification (the two security sections always remain).
+- A tiny behavior or design change still separates Why/What from How: both siblings, short. The tiny-form floor is fixed: the shared lifecycle header; basis on every requirement; a traceability entry per requirement; the whole-pair review; and the gate criteria for basis, traceability, user-decision confirmation, and whole-pair coverage. Sections that are demonstrably not applicable may be omitted with a one-line reason each — the same rule the Formats section owns — and the two security sections always remain.
 - Chat-only exploration may use the same mental model without artifacts, but cannot claim acceptance or plan readiness.
 - Substantial, ambiguous, cross-module, public-contract, stateful, or high-risk work uses the full cycle. Reviewer count scales with observable risk, never document length.
 
@@ -536,18 +623,18 @@ Only `satisfied` is accepting. `gap` routes to DRAFTING (a structural answer is 
 Implementation of this proposal is a hard cutover:
 
 - Create `spec-design` as a wholly new workflow skill with the state chart as its main path and the full tree from Reference tree and teaching contract — both drafting-craft references and all six lane missions included. Implementation cannot be claimed complete while any promised stage lacks its owning teaching reference.
-- Adapt, do not rewrite from nothing: `drafting-specification.md` draws from the retired `user-decision-questions.md`, `product-intent.md`, and `requirements-testability.md`; `drafting-program-design.md` from `risk-and-tradeoff-design.md` and the architecture lanes' judgment content; the lane missions from `whole-spec-coverage.md`, `security-threat-model.md`, `contract-and-scope.md`, `harness-fit.md`, `spec-difference.md`, and `validation-and-testability.md` — reshaped to the pair model and authority audit, with their swarm-topology framing dropped.
+- Adapt, do not rewrite from nothing: `drafting-specification.md` draws from the retired `user-decision-questions.md`, `product-intent.md`, and `requirements-testability.md`; `drafting-program-design.md` from `risk-and-tradeoff-design.md` and the architecture lanes' judgment content; the lane missions from `whole-spec-coverage.md` (whole-pair-integrity), `security-threat-model.md` (security-threat-boundary), `contract-and-scope.md` (contract-review), `harness-fit.md` (platform-fit), `spec-difference.md` (difference-review), and — for `failure-mode.md` — `risk-and-tradeoff-design.md`'s falsifying-scenario, failure-containment, and reversibility craft composed with `validation-and-testability.md` for proof burden. All reshaped to the pair model and authority audit, with their swarm-topology framing dropped.
 - Retire `spec-creation-swarm` and `spec-review-swarm` into `plugins/shravan-dev-workflow/retired-skills/` per the repo convention (`SKILL.retired.md`, outside the loadable `skills/` tree, historical content verbatim). No aliases, shims, or dual paths.
-- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted; authoring replacements is deferred with the testing system. The cutover gate is `grep -rn --exclude-dir=retired-skills 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches; the retired archive keeps its historical content verbatim.
+- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted only after their `spec-design` replacements exist and pass (the replacement-first rule in the deferred list below). The cutover gate is `grep -rn --exclude-dir=retired-skills 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches; the retired archive keeps its historical content verbatim. The sweep may add one mirrored boundary line to the `docs-maintain` and `ops-security-review` descriptions where needed to keep their near misses quiet — a frontmatter boundary only, never a body redesign.
 - Add the accepted-pair record (paths, synchronized statuses, shared revision, both file SHA-256 digests) to the `spec-handoff` packet alongside its existing context contents, and update its boundary statement so a resumable packet stays portability-only while an accepted-pair record is the portable acceptance transport.
 - Cut over plan creation's entry contract (the third body exception): for work that owns a product or architecture design, its source-resolution rule accepts only the synchronously accepted pair — direct handoff or the `spec-handoff` record — and routes bare requirements, chat decisions, and unpaired documents to `spec-design`. One owner states the rule; every plan entry cites it. No other plan-workflow redesign occurs here.
-- Extend `manage-agents/references/agent-job-packet.md` with a generic target-artifact-version field (used here to bind dispatches to the pair content revision and cycle id); the new dispatch field is the value the packet's existing receipt-scope `source/head version` echoes. Record alongside it that a dispatch may declare a capability floor above its pattern's default, as `spec-design`'s whole-pair reviewer does (Frontier, high reasoning, under the Delegate pattern).
+- Extend `manage-agents/references/agent-job-packet.md` with a generic target-artifact-version field (used here to bind dispatches to the pair content revision and cycle id); the new dispatch field is the value the packet's existing receipt-scope `source/head version` echoes. Extend the `manage-agents` Delegate pattern table with an explicit Frontier-capability, high-reasoning one-shot reviewer case (used by the whole-pair reviewer); the pattern table remains the sole owner of allowed categories, and no packet field overrides it.
 - Update plugin documentation, marketplace descriptions, changelog, and version metadata during implementation; validate both Claude and Codex plugin surfaces.
 
 Explicitly deferred to follow-up work, not silently dropped:
 
 - The `skills-creation` recreation: its reorganization around this workflow, the named-skill routing path and its plan gate, and the alignment between `references/review-cycle-schema.md` and `skills-creation`'s review lane schema.
 - Any repurposing of `plan-improve-repo` and any adjacent-skill trigger redesign.
-- Pressure scenarios, the evaluation harness, and rollout claims that depend on them. Future skill implementation may advance as source-only; it cannot be claimed rollout-complete until the pressure-proof gate closes, per `AGENTS.md`'s requirement to add scenarios and run `tests/skills/run-skill-pressure-tests.sh --fast` before rollout. The future scenarios must cover these named behavior claims: authority laundering across all four sources; a design contradicting a user-owned non-goal; unintegrated How (every traceability row `satisfied` while two modules disagree on state ownership or failure propagation); partial-scope loss through packet narrowing; a stale receipt surviving remediation; and interrupted-state recovery from disk alone.
+- The evaluation-harness redesign only. Replacement pressure proof is inside the hard cutover, not deferred: implementation authors scenarios for the six named behavior claims — authority laundering across all four sources; a design contradicting a user-owned non-goal; unintegrated How (every traceability row `satisfied` while two modules disagree on state ownership or failure propagation); partial-scope loss through packet narrowing; a stale receipt surviving remediation; and interrupted-state recovery from disk alone — plus positive/negative trigger evaluation. Retired-skill scenarios are deleted only after their replacements exist and pass, and `tests/skills/run-skill-pressure-tests.sh --fast` passes before any PR-ready claim, per `AGENTS.md`.
 
 This proposal changes only the design contract. Actual skill edits, reference moves, manifests, version bumps, changelog entries, and implementation planning are out of scope for this change.
