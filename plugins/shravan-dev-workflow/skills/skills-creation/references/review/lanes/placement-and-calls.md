@@ -2,12 +2,15 @@
 
 Mission / stance: Decide whether each obligation lives where the agent will actually meet it, and whether every call site says enough to act on. Material in the wrong home is silently skipped; a call site missing its return shape sends the agent away with nothing to bring back.
 
+Maximum authority: read-only inspection of placement, call sites, and reference reachability. Return candidate findings; the parent owns moves, edits, dispatch, and the final verdict.
+
 Where to look:
 - every call site and its literal form, in `SKILL.md` and in any reference under review; references hold call sites too, and are the callee half of every caller/callee contract;
 - the all-run spine against what actually sits in references;
-- the placement ladder in `../../reference-design.md`;
 - every `references/*.md` path mentioned anywhere in the skill;
 - the Completion Blockers list against the steps it mirrors.
+
+MUST load `../../reference-design.md` to apply the canonical placement test and caller/callee contract and return the correct home and complete call shape for each finding.
 
 How to inspect: Walk every call site and fill this row. A blank cell is the finding:
 
@@ -39,4 +42,4 @@ Overlap boundary: This lane owns *where material lives and whether calls are com
 
 Stop when: every call site has been walked and every reference traced back to a caller.
 
-Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.
+Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.

@@ -1,11 +1,11 @@
 ---
 name: skills-creation
-description: Always use when creating, updating, editing or reviewing a skill.  Also pressure test and validate the skill.
+description: Use when creating, updating, or evaluating one named skill or accepted draft, especially when its trigger, main path, reference hierarchy, steering, or proof quality needs judgment.
 ---
 
 # Skills Design & Concepts
 
-A skill exists to wrangle determinism out of a stochastic system; making the agent take a predictable process through a system.  It is process focused.
+A skill wrangles determinism out of a stochastic system by making the agent follow a predictable process.
 
 Predictable means the same process, not the same output. A brainstorming skill should diverge every run and still take the same route to diverge.
 
@@ -50,7 +50,7 @@ Placement answers one question: who reads this, and when? The answer picks the c
 | `MUST dispatch` lane        | a subagent | every run, on reaching the call |
 | `IF ..., dispatch` lane     | a subagent | only when the predicate holds   |
 
-The `read by` column decides `load` or `dispatch`; the `when` column decides `MUST` or `IF`. A lane is a reference a subagent loads.
+The `read by` column decides `load` or `dispatch`; the `when` column decides `MUST` or `IF`. A lane is bounded work dispatched to a subagent; its lane reference is the file the subagent loads to perform that work.
 
 Handing a lane over takes more than a path. The Lane handoff form below carries the full set, and `references/reference-lanes-design.md` owns the contract underneath it. One invariant belongs at the call site because that is where it gets violated: a caller may narrow the lane reference's maximum authority, never widen it.
 
@@ -109,7 +109,7 @@ Steering is the wording that changes what the agent does. Three moves carry most
 
 **The deletion test.** Would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside its surrounding context, never to whole sections at once. Rationale that changes no behavior is padding however true it is.
 
-State the target rather than banning the mistake. A prohibition tells the agent where not to go and leaves it guessing where to go instead.
+Lead with the positive shape: tell the agent what action to take, what result to produce, and what good judgment looks like. Add a prohibition only when a known failure still needs a bright-line boundary, and pair it with the positive target.
 
 # Skill Creation Process
 
@@ -131,7 +131,7 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 Behavior-changing work is reviewed twice: the proposal before any file is edited, and the changed files before ship. Lanes return candidate findings; the parent verifies, reduces, and owns the verdict. Mechanical changes are not reviewed.
 
-Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. Both dispatch under the Dispatch Contract in `references/review/lanes/lane-schema.md`.
+Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. Both dispatch under `references/review/review-lane-workflow.md` and use the shared shapes in `references/review/lanes/lane-schema.md`.
 
 Collect every receipt explicitly and ask a lane that goes quiet; silence is never a clean review. Prefer native dispatch in the parent host's own lineage, and when the runtime can reach another lineage give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
@@ -172,7 +172,7 @@ A change is **behavior-changing** when it alters the skill's trigger or invocati
 Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 - **`user-directed intent`** may draft from an approved success definition without RED.
-- **`observed failure`** attempts faithful reproduction before any causal fix is claimed. Reproduced means a targeted RED. Any other result means showing the gap and asking the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer. `references/testing/pressure-testing.md` owns the reproduction result labels and defines a representative hypothesis.
+- **`observed failure`** attempts faithful reproduction before any causal fix is claimed. IF the authoring basis is `observed failure`, load `references/testing/pressure-testing.md` to attempt faithful reproduction and return the reproduction result, representative-hypothesis boundary, and available next decisions. Reproduced means a targeted RED. Any other result means showing the gap and asking the user to supply evidence and retry, approve a representative hypothesis, author from the success definition with a named proof gap, or defer.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
@@ -236,9 +236,9 @@ Review before proving. Proof run first is spent on text the review is about to c
 
 IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, and the parent reduction.
 
-Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate finding against the actual files before accepting it. And a receipt expires when its text changes: re-dispatch any lane whose reviewed text a fix touched, under the Dispatch Contract, with a refreshed packet.
+Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate finding against the actual files before accepting it. And a receipt expires when its text changes: re-dispatch any lane whose reviewed text a fix touched, under the Dispatch Contract in `references/review/review-lane-workflow.md`, with a refreshed packet.
 
-Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Prove`, ship surface to `Prune and ship`.
+Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Proof of quality, proof of work`, ship surface to `Prune and ship`.
 
 Completion: every dispatched lane has a terminal receipt, and the Parent Reduction block from `references/review/lanes/lane-schema.md` is emitted with every field filled.
 
@@ -266,7 +266,7 @@ The run is not done while any of these hold:
 - behavior-changing authoring lacks a human-readable success definition or authoring basis;
 - an observed-failure path hides a failed, missing, or inconclusive reproduction result instead of returning the user decision;
 - the workflow has branches without observable predicates or return shapes;
-- a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/lanes/lane-schema.md`;
+- a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;

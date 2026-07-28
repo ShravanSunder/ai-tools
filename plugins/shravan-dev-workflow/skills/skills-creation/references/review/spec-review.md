@@ -16,7 +16,11 @@ lanes/rule-agreement.md
 
 Those are the lanes whose questions are answerable about a design. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. They run at implementation review instead.
 
-MUST load `lanes/lane-schema.md` to get the dispatch contract and shared shapes, and return the review packet and the parent reduction shape, before the first dispatch.
+MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
+
+MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review packet and parent reduction shape before the first dispatch.
+
+IF the proposal includes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, and real shape consumers and return the applicable contract before the verdict.
 
 This reference covers the rest of the spec verdict in-parent.
 
@@ -31,10 +35,10 @@ Blocker overrides: a spec cannot be accepted when the target behavior is not one
 Covers what only a whole-spec verdict can judge:
 
 - promise: the reusable behavior is specific and worth making durable.
-- steering: each proposed rule, gate, and completion criterion names the failure form it serves. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
+- steering: proposed guidance leads with the action, result, and taste that define strong work; prohibitions are reserved for named failure boundaries and paired with the positive target. Each proposed rule, gate, and completion criterion names the failure form it serves. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
 - invocation: model-invocable and user-invocable capabilities pay the right load for this skill's real callers.
 - authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
-- lane and shape proposals: any lane the spec proposes satisfies `../reference-lanes-design.md`, and any shared shape names a real consumer there. That reference is the single owner of qualification, authority, and shape families.
+- lane and shape proposals: apply the returned lane or shared-shape contract; every proposed lane qualifies, authority stays bounded, and every shared shape names a real consumer.
 - ownership and cutover: every concept has one live owner, superseded paths and duplicate prose are removed without aliases or forwarding stubs, and the spec names all active consumers that must cut over together when ownership changes.
 - proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, and the plan preserves the authoring basis chosen in the skills-creation step `Choose the authoring basis and proof posture`.
 - safety/platform: sensitive surfaces, plugin mechanics, changelog, and cache refresh are routed correctly when in scope.

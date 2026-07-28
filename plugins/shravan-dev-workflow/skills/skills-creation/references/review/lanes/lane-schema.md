@@ -1,39 +1,21 @@
 # Skill Review Lane Schema
 
-The shared contract and field shapes every `references/review/lanes/*.md` review lane uses. This file owns the common lane terms, field names, required slots, ordering, and status labels; the mission, rubric, and judgment stay in each lane file.
+The shared field shapes every `references/review/lanes/*.md` review lane uses. This file owns field names, required slots, ordering, allowed values, and field semantics only.
 
-## Common Lane Contract
+Its review contracts are: status and verdict labels, the review packet, each lane's receipt, each lane finding, and the parent's reduction. Review-stage and lane references own the behavior that produces and consumes these shapes.
 
-Every review lane inherits this. Lane files do not restate it:
+## Status Labels
 
 ```text
-dispatch terms:    the reviewer contract in
-                   `../../../../manage-agents/SKILL.md`. That skill owns the
-                   reviewer history and access values; do not restate them.
-receipt:           complete | partial | blocked, with evidence and
-                   unresolved questions
-                     complete = every `Where to look` item for the artifact under
-                                review was opened and
-                                the lane's inspection applied to each,
-                                and the lane's stop condition is met
-                     partial  = at least one was not; name which and why
-                     blocked  = the lane could not start; name the
-                                missing input
-                   A dispatched lane that returns nothing is `no-receipt`.
-                   The parent collects receipts; silence is not `complete`.
-                   A `complete` receipt lists the items it opened. A lane
-                   that cannot enumerate them is `partial`.
-finding shape:     the Lane Finding block below
-parent handling:   receipts are candidate findings; the parent verifies
-                   them against source, merges duplicates across lanes,
-                   resolves conflicts, names coverage gaps, and reduces
+complete    every required item was opened and inspected, and the lane's stop condition is met
+partial     at least one required item was not completed; the receipt names what remains
+blocked     the lane could not start; the receipt names the missing input
+no-receipt  a dispatched lane returned nothing
 ```
-
-A lane file adds only its own stop condition, which is local to its mission.
 
 ## Verdicts
 
-Both stages return one of these exact labels. Do not replace one with a free-form phrase such as "not great yet."
+Use exactly these verdict labels:
 
 ```text
 great               the artifact is sound as it stands
@@ -43,24 +25,6 @@ reject-or-restart   the target behavior is not one named skill, or there is no r
 ```
 
 What each means depends on the stage: at spec review `great` means accepted to implement; at implementation review it means the changed files are sound; evaluating an existing skill it means the shipped skill is sound as it stands.
-
-## Dispatch Contract
-
-Both review stages dispatch under this. Applied to each selected lane:
-
-```text
-MUST dispatch `<lane>` to a subagent using `<review packet>`.
-Subagent loads `lane-schema.md` and `<lane>.md`.
-Parallel-safe after the reviewed artifact exists; actual scheduling may serialize.
-Instance authority is the reviewer contract in `manage-agents`.
-Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
-```
-
-Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../../../../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only`. A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid.
-
-No lane reads another lane's receipt, so nothing waits.
-
-Receipt semantics and parent handling are in the Common Lane Contract above; the run-level obligations they create belong to the calling workflow, not to this schema.
 
 ## Review Packet
 
@@ -81,9 +45,9 @@ non-goals:
 requested lane focus:
 ```
 
-The `artifact` value sets the lane's scope. `proposal` is conversation only, nothing on disk. `changed files` scopes the lane to the diff. `existing files` is an already-shipped skill with no diff: read whole files and apply the lane to all of their text. A stop condition worded around a diff is satisfied vacuously against zero changed lines, so a lane that reads nothing returns a false `complete` — the one failure a review system cannot detect from its own output.
+The `artifact` value sets the lane's scope. `proposal` is conversation only, `changed files` scopes the lane to the diff, and `existing files` scopes the lane to whole files when there is no diff.
 
-Allowed `surface` labels. This schema owns the label set; a stage rubric maps labels to lanes but does not redefine them. A reference, lane, or schema file is `reference text`. Review depth belongs in `status:`, not here:
+Allowed `surface` labels. This schema owns the label set, and each stage rubric maps these labels to lanes. Classify a reference, lane, or schema file as `reference text`; record review depth in `status:`:
 
 ```text
 SKILL.md body
@@ -95,7 +59,7 @@ a sensitive surface
 
 ## Receipt
 
-Every lane opens its return with this block. A `complete` status that does not list the items opened is not `complete`.
+Every lane opens its return with this block:
 
 ```text
 receipt: complete | partial | blocked
@@ -107,9 +71,7 @@ unresolved questions:
 
 ## Lane Finding
 
-`lane` is the content lane name from `references/review/lanes/`. Runtime facts such as
-model, provider, and reasoning effort are owned by `manage-agents` and recorded
-there, not in the finding.
+`lane` is the content lane name from `references/review/lanes/`.
 
 ```text
 lane:
@@ -126,23 +88,14 @@ source evidence:
 behavior risk:
 smallest fix:
 retest required:
-route:            <owning lane, when the defect is outside this lane's
-                  boundary; report it, do not judge it, do not drop it>
+route:            <owning lane when the defect is outside this lane's boundary>
 ```
 
-Severity is graded by effect on behavior, not by how wrong the text reads. A blocker is what the parent must fix before the run advances.
-
-A lane that notices a defect outside its boundary files it with `route:` set. The parent decides whether the owning lane runs. Silent dropping loses the finding entirely when the owning lane was never dispatched.
+Severity is graded by effect on behavior, not by how wrong the text reads. `route` names the owning lane when the defect is outside the reporting lane's boundary.
 
 ## Parent Reduction
 
-The parent owns synthesis. No lane sees another lane's receipt, so merging
-duplicates, resolving conflicts, and ranking happen only here.
-
-Every field below is the parent's to fill. `changed-file coverage` in particular
-is derived, not collected: lanes report findings against text, and the parent
-maps them onto the packet's changed-file list. Do not wait for a lane to return
-coverage, and do not read a lane's silence about a file as coverage of it.
+Every field below is filled by the parent. `changed-file coverage` is derived from the review packet's changed-file list and parent-verified lane evidence.
 
 ```text
 review:

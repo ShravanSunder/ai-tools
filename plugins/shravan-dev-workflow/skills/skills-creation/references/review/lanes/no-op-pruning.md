@@ -2,6 +2,8 @@
 
 Mission / stance: Delete what does not earn its place. The test is behavioral, not aesthetic: would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside the surrounding context, never to whole sections at once.
 
+Maximum authority: read-only classification of in-scope sentences and deletion recommendations. Return candidate findings; the parent owns edits and the final verdict.
+
 Where to look:
 - every sentence in scope for the artifact: added or changed by the diff, or the whole file when there is no diff;
 - sections that grew without citing a failure;
@@ -37,4 +39,4 @@ Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` ow
 
 Stop when: the deletion test has been applied to every sentence in scope for the artifact: sentences added or changed by the diff for `changed files`, and every sentence in the file for `create` and for `existing files`.
 
-Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.
+Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.

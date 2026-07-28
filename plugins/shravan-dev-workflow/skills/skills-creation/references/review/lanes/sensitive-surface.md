@@ -1,16 +1,19 @@
 # sensitive-surface
 
-Mission / stance: Gate executable and privileged surfaces before they are written, not after. Ordinary authoring judgment does not cover scripts, hooks, third-party source, credentials, or anything that writes outside the repo.
+Mission / stance: Gate executable and privileged surfaces before they are written. Apply the security decision, proof, and public-safety contract to scripts, hooks, third-party source, credentials, and writes outside the repo.
+
+Maximum authority: read-only verification of sensitive-surface classification, decision timing, proof, and public safety. Return candidate findings; the parent owns security decisions, edits, escalation, and the final verdict.
 
 Where to look:
 - the new or changed executable resource and its entry points;
 - the inputs it accepts and where they originate;
 - actions it performs outside the repo;
 - license or permission state for anything copied;
-- `../../security-gate.md` for inspection procedure and decision labels;
 - the run note `security route` field, which `../../security-gate.md` names as where the decision is recorded. That field is the observable proxy for decision timing.
 
-How to inspect: Follow `../../security-gate.md`; this lane supplies review coverage, not a competing policy. Confirm the `allowed | disallowed | blocked | deferred` decision exists and predates the edit rather than accompanying it. Then confirm public-safe constraints hold: no resolved secrets, `op://` refs, account emails or UUIDs, or local cache identifiers in anything shipped.
+MUST load `../../security-gate.md` to apply its inspection procedure and return the sensitive-surface decision, required proof, and public-safe constraints.
+
+How to inspect: Confirm the returned `allowed | disallowed | blocked | deferred` decision exists and predates the edit rather than accompanying it. Then confirm the returned public-safe constraints hold.
 
 Good signals:
 - a decision exists and its timing predates the write;
@@ -31,4 +34,4 @@ Overlap boundary: This lane owns sensitive surfaces, their decision timing, and 
 
 Stop when: every sensitive surface in scope for the artifact — in the diff for `changed files`, in the whole file for `existing files` — has been checked for a decision, and every added line has been scanned for public-safety.
 
-Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.
+Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.

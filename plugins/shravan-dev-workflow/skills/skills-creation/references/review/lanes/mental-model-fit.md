@@ -2,14 +2,17 @@
 
 Mission / stance: Judge the lens, not the wording. The Great Skill Frame makes `SKILL.md` the home of the mental model, which means the skill's most load-bearing claim is a concept the agent is asked to think with. A skill whose every sentence binds can still steer the agent toward the wrong shape of the problem.
 
+Maximum authority: read-only inspection of the supplied lens, vocabulary, and workflow. Return candidate findings; the parent owns purpose changes, edits, and the final verdict.
+
 Where to look, when the artifact is a **proposal**: the stated lens and the workflow the proposal describes. Both exist in the proposal text.
 
 Where to look, when the artifact is **changed files**:
 - the mental model or stance section of `SKILL.md`;
 - the leading words the body actually repeats, and how often;
-- `../../glossary.md` for coined terms and their definition cost;
 - the workflow, to see whether the route the skill walks matches the lens it claims;
 - the skill's stated promise and success definition.
+
+IF the artifact uses a coined term, load `../../glossary.md` to compare its definition with body usage and return the term's definition cost and agreement.
 
 How to inspect: Name the lens in your own words after reading only the body, then test it four ways:
 
@@ -42,4 +45,4 @@ Overlap boundary: This lane owns *whether the concept is right and whether the s
 
 Stop when: the lens has been named from the body alone and tested for fit, priors, cost, and coverage.
 
-Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.
+Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names the lens as stated, where the workflow diverges from it, and the smallest change that reconciles them.

@@ -1,12 +1,15 @@
 # claim-vs-evidence
 
-Mission / stance: Audit the distance between what the evidence shows and what the change says it achieved. This lane does not run tests and does not design them; it grades claims against the evidence already produced.
+Mission / stance: Audit the distance between what the evidence shows and what the change says it achieved. Grade claims against the evidence already produced; the proof step owns test design and execution.
+
+Maximum authority: read-only comparison of supplied claims and existing evidence. Return candidate findings; the parent owns proof execution, edits, and the final verdict.
 
 Where to look:
 - the run note `authoring basis`, `reproduction`, and `proof route` fields;
-- the Evidence And Claim Ladder in `../../testing/pressure-testing.md`;
 - scenario ids, commands, exit codes, and transcripts actually produced;
 - which files the change touched versus which the scenario exercises.
+
+MUST load `../../testing/pressure-testing.md` to apply the Evidence And Claim Ladder and return the strongest supported claim and its claim boundary.
 
 How to inspect: Map the claim to its evidence, find the strongest claim the evidence actually supports, and compare:
 
@@ -38,4 +41,4 @@ Overlap boundary: This lane owns *claim versus evidence*. Designing scenarios, c
 
 Stop when: every claim in the change has been mapped to the evidence offered for it.
 
-Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.
+Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.

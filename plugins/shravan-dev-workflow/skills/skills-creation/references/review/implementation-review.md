@@ -26,7 +26,11 @@ Each lane named above is `lanes/<name>.md`: `lanes/placement-and-calls.md`, `lan
 
 Sensitive surfaces are the set owned by `../security-gate.md`; plugin manifests and versioning are not among them and route to `../platform-mechanics.md` instead.
 
-MUST load `lanes/lane-schema.md` to get the dispatch contract and shared shapes, and return the review packet and the parent reduction shape, before the first dispatch.
+MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
+
+MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review packet and parent reduction shape before the first dispatch.
+
+IF the changed surface adds or changes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, schema ownership, and real consumers and return the applicable contract before reduction.
 
 Receipts are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
 
@@ -42,7 +46,11 @@ Covers what only a whole-change ship decision can judge:
 
 - Every edited, added, or deleted source file is covered. Each file is reviewed semantically, marked source/static-only with its behavior status, or explicitly excluded by the accepted behavior-review boundary; deletions are verified through both absence and pointer inventory.
 - The implemented diff matches the accepted spec and user constraints without crossing the accepted source, behavior, or ship boundary.
-- Any lane or shared shape the change introduces satisfies `../reference-lanes-design.md`, which is the single owner of qualification, authority, and shape families.
+- Every added or changed lane satisfies the returned lane contract: the work qualifies as a lane, its lane reference contains the complete bounded job contract, and caller authority stays equal to or narrower than the reference maximum.
+- Every added or changed lane, output, or tool schema names its real consumers and contains shared fields, required slots, allowed values, field semantics, ordering, and shape invariants. Verify one clear meaning per field, explicit required or optional status, defined enum values, and an identifiable consumer. Verify that calling workflows own workflow policy and dispatch, lane references own missions, rubrics, calibration, and single-lane fields, and schemas own their shared contracts.
+- For review lanes specifically, award a `great` verdict when `lanes/lane-schema.md` clearly and completely defines the status and verdict labels, review packet, lane receipt, lane finding, and parent reduction consumed by the review workflow.
+- Check every added or changed term against the glossary, including cases where `glossary.md` stayed unchanged. Award a `great` verdict when each definition in scope is concrete, has one owner, and matches how `SKILL.md` and the references use the term.
+- Guidance leads with the positive shape: the action to take, the result to produce, and the taste or judgment that distinguishes strong work. Use prohibitions only as bright-line boundaries for named failures, paired with the positive target.
 - Each rule has one live owner, with no aliases, forwarding stubs, or duplicate prose preserving a retired ownership.
 - Behavior rows in a source-only review are explicitly `unverified/deferred`; source or static review may authorize only the next proof step and cannot authorize ship.
 - The four surfaces still line up: trigger, `SKILL.md`, references, proof.

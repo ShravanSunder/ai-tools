@@ -16,7 +16,7 @@ that tells the agent when to invoke the skill.
 
 ## Invocation Controls
 
-First decide whether the skill is model-invocable, user-invocable, or both. Do not add platform-specific invocation-control frontmatter by default. When a client-specific control is needed, route the exact encoding through `platform-mechanics.md`.
+First decide whether the skill is model-invocable, user-invocable, or both. Return that capability decision in portable skill terms. The calling workflow separately loads `platform-mechanics.md` when the user requests a client-specific encoding.
 
 ## Good Description
 
