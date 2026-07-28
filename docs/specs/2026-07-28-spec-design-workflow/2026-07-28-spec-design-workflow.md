@@ -41,6 +41,7 @@ Two principles shape everything below:
 
 - **Creation needs one integrating mind; verification needs independent minds — at least one always, more only where an observable risk predicate holds.** Fan-out exists in exactly two places, and for exactly one concern each: bounded section-writing inside drafting (text production, never decisions) and reviewer dispatch inside review (skepticism, never authorship). Everything else is a single thread through the parent.
 - **The workflow is first-class.** It is defined as a state chart: named states, transitions, and guards. Every guard is an observable predicate readable from the artifacts and the mandatory review ledger, so a fresh agent can recover the current state from disk. Subagents are called only inside states that declare dispatch rights.
+- **The skill teaches the craft; the state chart only keeps it honest.** Every stage the workflow promises — drafting the specification, drafting the program design, and each review lane — has an owning reference that carries its judgment: what good output looks like, which questions to ask, what to inspect, and the calibration bar. Depth coverage is a named implementation gate, not an assumption: a first implementation of this contract shipped state machinery with no craft, and five consistency-focused review rounds missed it.
 
 ### Goals
 
@@ -231,6 +232,8 @@ read-only)                 └─ REFRESH ◄────────┘
 
 There is no fixed multi-lane topology. Small artifacts use the whole-pair review alone.
 
+Every dispatched reviewer loads a lane mission file from `references/lanes/` that names what the lane inspects, its good and bad signals, its overlap boundaries, and its calibration bar. The packet carries the dispatch focus and scope; the lane file carries the judgment. A reviewer dispatched without a lane mission is a defect, not a lighter-weight review.
+
 **Packets and receipts.** Every reviewer receives both complete artifacts plus a curated packet. The packet is a composition over the `manage-agents` agent job packet: the generic dispatch fields come from that contract, and this workflow adds the exact pair content revision and cycle id, the declared `REQ-* | CLAIM-* | INV-*` identifiers and section/path scopes in focus, decision target, user constraints, source anchors, non-goals, security context, and the schema contract. Reviewers independently inspect named sources rather than trusting author confidence. A curated packet is review context; the authoring transcript is not.
 
 Every responding reviewer returns a revision- and cycle-bound receipt with status `complete | partial | not-started` (`not-started` means the lane could not begin for a named missing input). Silence is recorded by the parent as `no-receipt`; a reviewer never returns that state. Which receipts credit coverage is owned by Scope and invalidation below.
@@ -260,7 +263,36 @@ Reviewer count and apparent consensus never determine acceptance; evidence and p
 - When a revision leaves a complete receipt's declared scopes semantically unchanged, the parent may carry it forward; doing so requires a carry-forward attestation (prior receipt, both revisions, unchanged scopes, non-invalidation evidence, parent verification). An affected receipt is never carried forward — it is freshly dispatched.
 - Terminal re-entry: resuming an `accepted`, `blocked`, or `deferred` pair opens a new cycle `c<M+1>` and requires a fresh whole-pair review from that cycle, because the world outside the pair can drift while the artifact bytes do not. Focused reviews are refreshed where their risk predicate still holds; other prior receipts remain historical evidence and may be carried forward under the rule above.
 
-**Schema ownership.** The implemented skill owns one reference, `references/review-cycle-schema.md`, which owns these shapes: the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, and pre-pair receipt. It also owns the per-role dispatch contract — lane, packet composition, authority ceiling, receipt, and parent reduction point — for reviewer, section-writer, and evidence dispatches. The lifecycle header and the traceability entry are owned by the Formats section of this contract. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
+**Reference tree and teaching contract.** The implemented skill ships this tree; craft and ceremony are segregated, and the ceremony gets exactly one home:
+
+```text
+skills/spec-design/
+├── SKILL.md                       mental model, state chart, gates —
+│                                  slim; every stage points below
+└── references/
+    ├── drafting-specification.md  Why/What craft: user-decision
+    │                              questions, requirement quality and
+    │                              testability, non-goals, tradeoffs
+    ├── drafting-program-design.md How craft: the integrated system
+    │                              model, boundaries and ownership,
+    │                              alternatives, failure containment,
+    │                              reversibility, proof seams
+    ├── artifact-formats.md        lifecycle header, both skeletons,
+    │                              traceability entry
+    ├── review-cycle-schema.md     process shapes + per-role dispatch
+    │                              contract (parent-only ceremony)
+    └── lanes/
+        ├── whole-pair-integrity.md      mandatory reviewer mission
+        ├── security-threat-boundary.md
+        ├── contract-review.md
+        ├── platform-fit.md
+        ├── difference-review.md
+        └── failure-mode.md
+```
+
+Ownership: `references/review-cycle-schema.md` owns the process shapes — the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, pre-pair receipt — and the per-role dispatch contract (lane, packet composition, authority ceiling, receipt, parent reduction point). The lifecycle header and traceability entry are owned by the Formats section. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
+
+Teaching rule: each craft and lane reference opens with one line stating what the agent can do after loading it that it could not before, and carries the lane-mission anatomy (mission, where to look, how to inspect, good signals, bad signals, overlap boundary, calibration bar). A promised stage without an owning teaching reference is an implementation completion blocker.
 
 ### Agents
 
@@ -361,6 +393,8 @@ The parent restates problem, consumers, outcomes, constraints, non-goals, and su
 Guard out: a parent-verified synchronized `draft` pair exists at one revision, with decision target, source anchors, open questions, and security sensitivity explicit — or the run stops with the pre-pair receipt and no plan-ready claim.
 
 ### DRAFTING
+
+Two visible sub-stages, each with its owning craft reference. The parent loads `references/drafting-specification.md` before drafting Why/What and `references/drafting-program-design.md` before drafting How; section-writer packets cite the same references so delegated text is written to the same bar.
 
 The parent drafts the specification first and validates its load-bearing claims, then drafts the program design constrained by it. A discovered requirement gap or meaning change goes to the specification first; program design resumes from the revised meaning. Missing product decisions are resolved — or returned to the user — before they are disguised as internal design. Section writers may be dispatched here under the rules above; evidence Delegates for named gaps.
 
@@ -501,9 +535,10 @@ Only `satisfied` is accepting. `gap` routes to DRAFTING (a structural answer is 
 
 Implementation of this proposal is a hard cutover:
 
-- Create `spec-design` as a wholly new workflow skill with the state chart above as its main path and `references/review-cycle-schema.md` owning the shapes enumerated in Schema ownership.
-- Remove `spec-creation-swarm` and `spec-review-swarm`. No aliases, shims, or dual paths.
-- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted; authoring replacements is deferred with the testing system. The cutover gate is `grep -rn 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches.
+- Create `spec-design` as a wholly new workflow skill with the state chart as its main path and the full tree from Reference tree and teaching contract — both drafting-craft references and all six lane missions included. Implementation cannot be claimed complete while any promised stage lacks its owning teaching reference.
+- Adapt, do not rewrite from nothing: `drafting-specification.md` draws from the retired `user-decision-questions.md`, `product-intent.md`, and `requirements-testability.md`; `drafting-program-design.md` from `risk-and-tradeoff-design.md` and the architecture lanes' judgment content; the lane missions from `whole-spec-coverage.md`, `security-threat-model.md`, `contract-and-scope.md`, `harness-fit.md`, `spec-difference.md`, and `validation-and-testability.md` — reshaped to the pair model and authority audit, with their swarm-topology framing dropped.
+- Retire `spec-creation-swarm` and `spec-review-swarm` into `plugins/shravan-dev-workflow/retired-skills/` per the repo convention (`SKILL.retired.md`, outside the loadable `skills/` tree, historical content verbatim). No aliases, shims, or dual paths.
+- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted; authoring replacements is deferred with the testing system. The cutover gate is `grep -rn --exclude-dir=retired-skills 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches; the retired archive keeps its historical content verbatim.
 - Add the accepted-pair record (paths, synchronized statuses, shared revision, both file SHA-256 digests) to the `spec-handoff` packet alongside its existing context contents, and update its boundary statement so a resumable packet stays portability-only while an accepted-pair record is the portable acceptance transport.
 - Cut over plan creation's entry contract (the third body exception): for work that owns a product or architecture design, its source-resolution rule accepts only the synchronously accepted pair — direct handoff or the `spec-handoff` record — and routes bare requirements, chat decisions, and unpaired documents to `spec-design`. One owner states the rule; every plan entry cites it. No other plan-workflow redesign occurs here.
 - Extend `manage-agents/references/agent-job-packet.md` with a generic target-artifact-version field (used here to bind dispatches to the pair content revision and cycle id); the new dispatch field is the value the packet's existing receipt-scope `source/head version` echoes. Record alongside it that a dispatch may declare a capability floor above its pattern's default, as `spec-design`'s whole-pair reviewer does (Frontier, high reasoning, under the Delegate pattern).
