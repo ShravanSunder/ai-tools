@@ -1,0 +1,71 @@
+# Skill Spec Review
+
+Review the intended skill design before implementation. This reference judges whether the proposed promise, trigger, workflow, reference split, and proof plan would make a trustworthy skill if implemented.
+
+Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
+
+## Lanes
+
+The artifact here is a **proposal** — it exists only in conversation, nothing on disk has changed. That selects exactly three lanes:
+
+```text
+lanes/mental-model-fit.md
+lanes/trigger-routing.md
+lanes/rule-agreement.md
+```
+
+Those are the lanes whose questions are answerable about a design. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. They run at implementation review instead.
+
+MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
+
+MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review packet and parent reduction shape before the first dispatch.
+
+IF the proposal includes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, and real shape consumers and return the applicable contract before the verdict.
+
+IF the change is scoped, the three lanes above do not dispatch: judge the proposal in-parent against the Verdicts and Rubric below and record the verdict. Rule drift a scoped edit could introduce is caught at implementation review, where `rule-agreement` dispatches against the actual diff.
+
+This reference covers the rest of the spec verdict in-parent.
+
+## Verdicts
+
+`lanes/lane-schema.md` owns the verdict labels. Here, `great` means accepted to implement, `targeted-revision` means a bounded spec fix before editing, and `significant-rewrite` means the promise, trigger, workflow, or proof route must be redesigned before implementation.
+
+Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, branch-critical depth has no owning reference, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
+
+## Rubric
+
+Covers what only a whole-spec verdict can judge:
+
+- promise: the reusable behavior is specific and worth making durable.
+- steering: proposed guidance leads with the action, result, and taste that define strong work; prohibitions are reserved for named failure boundaries and paired with the positive target. Each proposed rule, gate, and completion criterion names the failure form it serves. `steering-strength` does not run on a proposal, so this is the only gate on proposed wording before files are edited; checkability is covered by the `authored body` item below.
+- invocation: model-invocable and user-invocable capabilities pay the right load for this skill's real callers.
+- authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
+- lane and shape proposals: apply the returned lane or shared-shape contract; every proposed lane qualifies, authority stays bounded, and every shared shape names a real consumer.
+- ownership and cutover: every concept has one live owner, superseded paths and duplicate prose are removed without aliases or forwarding stubs, and the spec names all active consumers that must cut over together when ownership changes.
+- proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, and the plan preserves the authoring basis chosen in the skills-creation step `Choose the authoring basis and proof posture`.
+- safety/platform: sensitive surfaces, plugin mechanics, changelog, and cache refresh are routed correctly when in scope.
+
+Cover each item with source-backed evidence. When a lane receipt already covers an item, cite the receipt rather than re-deriving it.
+
+## Reduction
+
+The parent reduces candidate findings into the spec-review result. Accepted findings return to the design step they affect before implementation starts. Implementation may start only after the parent marks the spec accepted-to-implement. If the verdict is `targeted-revision`, `significant-rewrite`, or `reject-or-restart`, revise the spec and run a fresh parent reduction before editing files, unless the user explicitly skips review.
+
+Report with these exact labels:
+
+```text
+review target:
+verdict:
+blocker overrides:
+rubric evidence:
+highest risk:
+accepted findings:
+rejected findings:
+first required revision:
+proof or retest implication:
+implementation decision: accepted-to-implement | revise-first | restart | skipped-by-user
+```
+
+The first required revision is the smallest useful spec change. When the revision changes wording, output shape, omitted slots, conditional behavior, invocation, reference retrieval, or completion criteria, name the matching failure form from `SKILL.md`.
+
+Complete when: the verdict carries one of the allowed labels, every blocker override is checked, and the implementation decision is explicit.

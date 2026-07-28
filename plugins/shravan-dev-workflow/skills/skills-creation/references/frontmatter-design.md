@@ -16,7 +16,7 @@ that tells the agent when to invoke the skill.
 
 ## Invocation Controls
 
-First decide whether the skill is model-invocable, user-invocable, or both. Do not add platform-specific invocation-control frontmatter by default. When a client-specific control is needed, route the exact encoding through `references/platform-mechanics.md`.
+First decide whether the skill is model-invocable, user-invocable, or both. Return that capability decision in portable skill terms. The calling workflow separately loads `platform-mechanics.md` when the user requests a client-specific encoding.
 
 ## Good Description
 
@@ -56,3 +56,18 @@ Use the payoff and boundary clauses only when they sharpen routing. A short desc
 - Under-triggering: add user words and repo/code signals.
 - Workflow summary: move process detail into `SKILL.md`.
 - Hidden payoff: add a short "so that..." phrase only if it improves routing.
+
+One repair, worked:
+
+```text
+before: Reviews database migration scripts for common problems and
+        suggests fixes using the project's migration checklist.
+after:  Use when writing or reviewing a database migration,
+        especially schema changes on live tables, backfills, or
+        rollback paths. Not for ORM model edits with no migration
+        file.
+```
+
+The before leaves the loading condition and near-miss boundary implicit; the after makes both explicit without summarizing the workflow.
+
+Complete when: the description names a real loading condition, survives both the true prompt and the near miss, and any confusable neighbour has a stated boundary.

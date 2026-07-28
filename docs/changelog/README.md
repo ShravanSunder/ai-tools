@@ -12,6 +12,8 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-28 Skills Creation Lane And Reference Contracts](2026-07-28-skills-creation-lane-reference-contracts.md)
+- [2026-07-26 Skills Creation Review Lanes](2026-07-26-skills-creation-review-lanes.md)
 - [2026-07-26 Manage Agents Control Rationale](2026-07-26-manage-agents-control-rationale.md)
 - [2026-07-26 Manage Agents Context And Access](2026-07-26-manage-agents-context-access.md)
 - [2026-07-26 Manage Agents Reviewer Read-Only Access](2026-07-26-manage-agents-reviewer-read-only.md)
@@ -21,6 +23,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - [2026-07-26 Manage Agents Provider-Resolved Dispatch](2026-07-26-manage-agents-provider-resolved-dispatch.md)
 - [2026-07-24 Manage Agents Opus 5 Matrix](2026-07-24-manage-agents-opus-5.md)
 - [2026-07-24 Manage Agents Pattern Tables And Terra](2026-07-24-manage-agents-terra-mini.md)
+- [2026-07-18 Skills Creation Body And Reference Lanes](2026-07-18-skills-creation-body-reference-lanes.md)
 - [2026-07-17 Shravan Dev Workflow Installation Policy AVAILABLE](2026-07-17-shravan-dev-workflow-installation-available.md)
 - [2026-07-14 Manage Agents Dispatch Layers Terminology](2026-07-14-manage-agents-dispatch-layers.md)
 - [2026-07-13 Manage Agents Native Providers Codex](2026-07-13-manage-agents-native-providers-codex.md)

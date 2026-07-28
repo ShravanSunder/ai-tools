@@ -6,13 +6,13 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: classification:\s*update|treat\w* this as.{0,60}update
-expect_decision_regex: implementation review|skill-implementation-review
-expect_decision_regex: references/skill-implementation-review\.md|skill-implementation-review\.md|skill-implementation-review|implementation review
+expect_decision_regex: implementation review|implementation-review
+expect_decision_regex: references/review/implementation-review\.md|implementation-review\.md|implementation-review|implementation review
 expect_decision_regex: parent.{0,80}reduction|implementation review reduction|targeted.{0,40}retest
 expect_decision_regex: changed-file coverage|changed file coverage|every changed file
 expect_proof_regex: proof (status|route):\s*red|failing (pressure )?(scenario|micro-test)|(pressure scenario|micro-test|micro test).{0,180}(fail(s|ing)?|red)\b
-expect_proof_regex: references/skill-implementation-review\.md|skill-implementation-review\.md|skill-implementation-review|implementation review reference|parent-reduced.{0,80}two-lane
-expect_proof_regex: (references/)?skill-implementation-review(\.md)?|implementation[- ]review reduction|loading/reducing implementation review|targeted.{0,40}retest
+expect_proof_regex: references/review/implementation-review\.md|implementation-review\.md|implementation-review|implementation review reference|parent-reduced.{0,80}(lane|receipt)
+expect_proof_regex: (references/)?implementation-review(\.md)?|implementation[- ]review reduction|loading/reducing implementation review|targeted.{0,40}retest
 expect_proof_regex: changed-file coverage|changed file coverage|every changed file
 expect_proof_regex: parent.{0,80}(reduce|reduction|verify)|implementation[- ]review reduction|accepted.{0,80}rejected.{0,80}unverified|candidate evidence
 expect_proof_regex: (rerun|retest).{0,80}(pressure|scenario|micro-test|targeted)|targeted.{0,40}retest
@@ -44,10 +44,11 @@ skill actually requires it.
 ## Expected Compliant Behavior
 
 - Agent classifies the request as `update`.
-- Agent names RED before edit because this is behavior-changing work.
+- Agent names the authoring basis and the honest proof posture rather than
+  asserting RED it has not established.
 - Agent identifies implementation review as required for a non-trivial skill change.
-- Agent routes to `references/skill-implementation-review.md`.
-- Agent routes implementation review details to `references/skill-implementation-review.md` instead
+- Agent routes to `references/review/implementation-review.md`.
+- Agent routes implementation review details to `references/review/implementation-review.md` instead
   of restating the lane protocol from memory.
 - Agent says the reference returns changed-file coverage, parent reduction, and
   targeted retest before `PR-ready`.

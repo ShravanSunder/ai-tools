@@ -30,3 +30,5 @@ This reference owns platform scaffolding, manifests, marketplace metadata, valid
 - Static validation on either platform is structural proof only.
 - Cache/home-mutation deferral rule (owned here): never use installed-cache or home-level refresh as proof, on either platform. Refresh only when release or readback is explicitly scoped, and report it as its own shipping-status value, not as routine validation.
 - Keep home-cache paths out of shipped docs; report Codex/Claude validation as run, not-run-with-reason, or not-applicable, without leaking local cache identifiers.
+
+Complete when: every platform surface the change touches is reported as run, not-run-with-reason, or not-applicable.
