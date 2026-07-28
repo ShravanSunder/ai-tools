@@ -32,7 +32,7 @@ Bad signals:
 - a passing control relabeled as RED;
 - a commit, branch, PR, reviewer verdict, or CI run offered as proof strength.
 
-Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior.
+Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior. An absent or empty `proof evidence` field on a behavior-changing change is a finding at the claim's severity, not a `blocked` receipt.
 
 Overlap boundary: This lane owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `../../testing/pressure-testing.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
 

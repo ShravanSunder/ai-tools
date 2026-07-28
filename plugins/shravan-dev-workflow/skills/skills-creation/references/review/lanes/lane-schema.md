@@ -83,7 +83,9 @@ non-goals:
 requested lane focus:
 ```
 
-Allowed `surface` labels. These are the reviewed-surface rows in `SKILL.md`; a reference, lane, or schema file is `reference text`. Review depth belongs in `status:`, not here:
+The `artifact` value sets the lane's scope. `proposal` is conversation only, nothing on disk. `changed files` scopes the lane to the diff. `existing files` is an already-shipped skill with no diff: read whole files and apply the lane to all of their text. A stop condition worded around a diff is satisfied vacuously against zero changed lines, so a lane that reads nothing returns a false `complete` — the one failure a review system cannot detect from its own output.
+
+Allowed `surface` labels. These are the reviewed-surface rows in `../implementation-review.md`; a reference, lane, or schema file is `reference text`. Review depth belongs in `status:`, not here:
 
 ```text
 SKILL.md body

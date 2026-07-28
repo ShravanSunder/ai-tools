@@ -3,7 +3,7 @@
 Mission / stance: Delete what does not earn its place. The test is behavioral, not aesthetic: would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside the surrounding context, never to whole sections at once.
 
 Where to look:
-- every sentence added or changed by the diff;
+- every sentence in scope for the artifact: added or changed by the diff, or the whole file when there is no diff;
 - sections that grew without citing a failure;
 - rationale paragraphs, motivational prose, and section preambles;
 - guidance inherited from an earlier revision that nobody currently owns.
@@ -35,6 +35,6 @@ Calibration: Propose deletions, not rewrites. Be aggressive: most prose that fai
 
 Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` owns *two statements disagree*. `steering-strength` owns *a statement is too weak to bind*. A leading word too weak to beat the default is reported here as a no-op with a `steering-strength` route.
 
-Stop when: the deletion test has been applied to every sentence added or changed by the diff, or to every sentence in the file when the classification is `create` and no diff exists.
+Stop when: the deletion test has been applied to every sentence in scope for the artifact: sentences added or changed by the diff for `changed files`, and every sentence in the file for `create` and for `existing files`.
 
 Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding quotes the sentence with its `path:line` and states what behavior is unchanged by its removal.

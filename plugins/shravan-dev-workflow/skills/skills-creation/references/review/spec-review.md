@@ -36,7 +36,7 @@ Covers what only a whole-spec verdict can judge:
 - authored body: `SKILL.md` will name the mental model or stance, show a scan-visible all-run spine, end each meaningful step or reference pass with checkable completion, and state the overall proof, unresolved-condition, or blocker boundary.
 - lane and shape proposals: any lane the spec proposes satisfies `../reference-lanes-design.md`, and any shared shape names a real consumer there. That reference is the single owner of qualification, authority, and shape families.
 - ownership and cutover: every concept has one live owner, superseded paths and duplicate prose are removed without aliases or forwarding stubs, and the spec names all active consumers that must cut over together when ownership changes.
-- proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, and the plan preserves the authoring basis chosen in `SKILL.md` step 2.
+- proof plan: structural proof and artifact-scoped behavior proof are separated, behavior proof matches the skill type, and the plan preserves the authoring basis chosen in the skills-creation step `Choose the authoring basis and proof posture`.
 - safety/platform: sensitive surfaces, plugin mechanics, changelog, and cache refresh are routed correctly when in scope.
 
 Cover each item with source-backed evidence. When a lane receipt already covers an item, cite the receipt rather than re-deriving it.

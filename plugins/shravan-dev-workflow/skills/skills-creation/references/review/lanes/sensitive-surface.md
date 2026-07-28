@@ -7,7 +7,8 @@ Where to look:
 - the inputs it accepts and where they originate;
 - actions it performs outside the repo;
 - license or permission state for anything copied;
-- `../../security-gate.md` for inspection procedure and decision labels.
+- `../../security-gate.md` for inspection procedure and decision labels;
+- the run note `security route` field, which `../../security-gate.md` names as where the decision is recorded. That field is the observable proxy for decision timing.
 
 How to inspect: Follow `../../security-gate.md`; this lane supplies review coverage, not a competing policy. Confirm the `allowed | disallowed | blocked | deferred` decision exists and predates the edit rather than accompanying it. Then confirm public-safe constraints hold: no resolved secrets, `op://` refs, account emails or UUIDs, or local cache identifiers in anything shipped.
 
@@ -28,6 +29,6 @@ Calibration: Report unclassified or late-classified surfaces and missing proof. 
 
 Overlap boundary: This lane owns sensitive surfaces, their decision timing, and deterministic tests for executables. `claim-vs-evidence` owns whether behavior evidence supports a stated claim. `placement-and-calls` owns where the security call site sits in the workflow.
 
-Stop when: every sensitive surface in the diff has been checked for a decision, and every added line has been scanned for public-safety.
+Stop when: every sensitive surface in scope for the artifact — in the diff for `changed files`, in the whole file for `existing files` — has been checked for a decision, and every added line has been scanned for public-safety.
 
 Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.

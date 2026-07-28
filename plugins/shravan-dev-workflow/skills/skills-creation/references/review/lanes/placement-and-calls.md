@@ -3,7 +3,7 @@
 Mission / stance: Decide whether each obligation lives where the agent will actually meet it, and whether every call site says enough to act on. Material in the wrong home is silently skipped; a call site missing its return shape sends the agent away with nothing to bring back.
 
 Where to look:
-- every call site in `SKILL.md` and its literal form;
+- every call site and its literal form, in `SKILL.md` and in any reference under review; references hold call sites too, and are the callee half of every caller/callee contract;
 - the all-run spine against what actually sits in references;
 - the placement ladder in `../../reference-design.md`;
 - every `references/*.md` path mentioned anywhere in the skill;
@@ -12,10 +12,12 @@ Where to look:
 How to inspect: Walk every call site and fill this row. A blank cell is the finding:
 
 ```text
-site:  load mode | destination | requested work | needed result
+load site:      load mode | destination | requested work | needed result
+dispatch site:  packet | lane reference | parallel-safety | instance authority |
+                receipt | parent reduction
 ```
 
-Then walk the reverse direction: for each reference, name the caller that opens it, and check that caller's return shape. A caller with no return shape is a dead end. Finally, confirm that no all-run obligation, order, decision, required return, invariant, or completion boundary is visible only inside a reference.
+A dispatch site that cites a named dispatch contract filling those slots for a set of lanes is complete; check that the contract exists and covers this site. Then walk the reverse direction: for each reference, name the caller that opens it, and check that caller's return shape. A caller with no return shape is a dead end. Finally, confirm that no all-run obligation, order, decision, required return, invariant, or completion boundary is visible only inside a reference.
 
 Good signals:
 - every call site uses exactly one literal form and fills all four slots;

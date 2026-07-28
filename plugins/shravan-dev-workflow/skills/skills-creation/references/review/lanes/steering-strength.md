@@ -7,9 +7,9 @@ Where to look:
 - gates and the pressure language around them;
 - prohibitions and the behavior each one names;
 - leading words and whether they carry real weight;
-- the failure-to-guidance-form table in `SKILL.md`.
+- the failure-to-guidance-form table in `../../../SKILL.md`, under `Build the main path`.
 
-How to inspect: For each steering sentence, name the failure it targets and check the form against the failure-to-guidance-form table in `SKILL.md` step 8, which owns that mapping.
+How to inspect: For each steering sentence, name the failure it targets and MUST load `../../../SKILL.md` and return the failure-to-guidance-form table under `Build the main path`, which owns that mapping, then check each form against it.
 
 Then test each completion criterion twice: can the agent tell done from not-done, and does it demand the legwork? "Understanding reached" fails the first test; "produce a change list" passes it and fails the second.
 
@@ -30,6 +30,6 @@ Calibration: Propose the smallest wording change and name the failure form it se
 
 Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *whether a line should exist*. A weak leading word arrives here from `no-op-pruning` for a stronger form; a line that should simply be deleted is filed with `route: no-op-pruning`.
 
-Stop when: every steering sentence added or changed has been matched against a failure form, and every completion criterion has been tested for both checkability and demand.
+Stop when: every steering sentence in scope for the artifact — added or changed for `changed files`, every one in the file for `existing files` — has been matched against a failure form, and every completion criterion has been tested for both checkability and demand.
 
 Output focus: MUST load `lane-schema.md` and return the Lane Finding and receipt shape it defines. Each finding names the targeted failure, the current form, the proposed form, and how a reviewer would tell it worked.
