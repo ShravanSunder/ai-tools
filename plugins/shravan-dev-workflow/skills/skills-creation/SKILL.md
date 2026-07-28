@@ -99,6 +99,18 @@ A leading word too weak to beat the model's default changes nothing. `be thoroug
 
 IF a term is unclear, load `references/glossary.md` and return the applicable definition.
 
+## Steering
+
+Steering is the wording that changes what the agent does. Three moves carry most of it.
+
+**Completion criteria.** Test every one twice: can the agent tell done from not-done, and does it demand the legwork? `Understanding reached` fails the first — there is nothing to check. `Produce a change list` passes the first and fails the second — a list of nothing satisfies it. `Name every caller of the changed function and say which ones break` passes both, because it cannot be written without opening the callers. The second test is the one that gets skipped, and it is the one that buys depth.
+
+**Rule strength.** Match the rule to how the agent fails. A rule it already follows needs no wording at all. A rule it skips under pressure needs a bright line — one unambiguous condition, no judgment call left at the moment of temptation — with the rationalization named beside it in the words the agent actually used. `I already know this` and `I'll verify later` belong in the skill, not in the postmortem.
+
+**The deletion test.** Would the agent act differently if this sentence disappeared? Apply it sentence by sentence inside its surrounding context, never to whole sections at once. Rationale that changes no behavior is padding however true it is.
+
+State the target rather than banning the mistake. A prohibition tells the agent where not to go and leaves it guessing where to go instead.
+
 # Skill Creation Process
 
 ## What Belongs in SKILL.md
@@ -120,6 +132,8 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 Behavior-changing work is reviewed twice: the proposal before any file is edited, and the changed files before ship. Lanes return candidate findings; the parent verifies, reduces, and owns the verdict. Mechanical changes are not reviewed.
 
 Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. Both dispatch under the Dispatch Contract in `references/review/lanes/lane-schema.md`.
+
+Collect every receipt explicitly and ask a lane that goes quiet; silence is never a clean review. Prefer native dispatch in the parent host's own lineage, and when the runtime can reach another lineage give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
 ## Scaled Run Note
 
@@ -147,8 +161,6 @@ shipping status: source-only | PR-ready | released
 
 Classify the run; run an existing-surface check; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first revision. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation are named.
 
-For any classify, scope, or draft response, state the surface allocation in plain words before the details: YAML/frontmatter is the trigger surface, `SKILL.md` will carry the mental model and main path, `references/` will carry coherent mandatory detail and conditional branch depth, and pressure or static proof will validate the change.
-
 ### 2. Choose the authoring basis and proof posture
 
 First classify the change, then classify why you are making it.
@@ -168,7 +180,7 @@ Completion: authoring basis, reproduction result when applicable, user decision,
 
 ### 3. Design the trigger
 
-Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. It should start with the real loading condition, use words the user/docs/code are likely to use, name distinct branches once, include a brief payoff when useful, and avoid internal step narration. IF the run must decide trigger wording, distinguish an adjacent-skill boundary, or choose an invocation tradeoff, load `references/frontmatter-design.md` and return the trigger and invocation decision. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
+Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. MUST load `references/frontmatter-design.md` and return the trigger and invocation decision; that reference owns description wording, the description pattern, adjacent-skill boundaries, and the shapes to avoid. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
 
 ### 4. Build the main path
 
@@ -222,12 +234,13 @@ IF any surface on the sensitive-surface list in `references/security-gate.md` is
 
 Review before proving. Proof run first is spent on text the review is about to change.
 
-1. IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set and every receipt.
-2. Synthesize the receipts yourself; no lane does this. `references/review/lanes/lane-schema.md` owns what synthesis must produce.
-3. Parent-reduce candidate findings against the actual files and the accepted spec. Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Prove`, ship surface to `Prune and ship`.
-4. Apply accepted fixes. IF a fix changed text a lane already reviewed, dispatch that lane again to a subagent under the Dispatch Contract in `references/review/lanes/lane-schema.md`, using the refreshed packet, and refresh its changed-file coverage. Never reuse a receipt for text edited after it was written.
+IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, and the parent reduction.
 
-Completion: every dispatched lane has a terminal receipt; the Parent Reduction block from `references/review/lanes/lane-schema.md` is emitted with merged duplicates, lane conflicts, routed findings, coverage gaps, and first fix filled; every dispatched lane appears by name with its status and a lane contributing no accepted finding appears with the reason; and changed-file coverage is refreshed for every file a review fix touched.
+Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate finding against the actual files before accepting it. And a receipt expires when its text changes: re-dispatch any lane whose reviewed text a fix touched, under the Dispatch Contract, with a refreshed packet.
+
+Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Prove`, ship surface to `Prune and ship`.
+
+Completion: every dispatched lane has a terminal receipt, and the Parent Reduction block from `references/review/lanes/lane-schema.md` is emitted with every field filled.
 
 ### 9. Proof of quality, proof of work
 

@@ -58,11 +58,9 @@ Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 
 Dispatch every lane through `manage-agents` as a reviewer. Its `Context And Access` section (`../../../../manage-agents/SKILL.md`) sets `parent conversation history: none` and `workspace access: read-only`. A reviewer carrying the authoring session's history inherits its rationalizations, which is the one thing review exists to avoid.
 
-Prefer native dispatch in the parent host's own lineage. When the runtime can reach another lineage, give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
-
 No lane reads another lane's receipt, so nothing waits.
 
-The parent collects every receipt explicitly. A dispatched lane that returns nothing is `no-receipt`, not `complete` — silence is never a clean review. Await one terminal receipt per dispatched lane, and ask for it if the lane goes quiet. While any dispatched lane is `partial`, `blocked`, or `no-receipt`, the run may not advance to `PR-ready` or `released` unless the parent closes that exact gap itself and records how. Synthesis is the parent's: merge duplicate findings across lanes, resolve conflicts against the artifact, name what no lane examined, and rank.
+Receipt semantics and parent handling are in the Common Lane Contract above; the run-level obligations they create belong to the calling workflow, not to this schema.
 
 ## Review Packet
 
@@ -85,7 +83,7 @@ requested lane focus:
 
 The `artifact` value sets the lane's scope. `proposal` is conversation only, nothing on disk. `changed files` scopes the lane to the diff. `existing files` is an already-shipped skill with no diff: read whole files and apply the lane to all of their text. A stop condition worded around a diff is satisfied vacuously against zero changed lines, so a lane that reads nothing returns a false `complete` — the one failure a review system cannot detect from its own output.
 
-Allowed `surface` labels. These are the reviewed-surface rows in `../implementation-review.md`; a reference, lane, or schema file is `reference text`. Review depth belongs in `status:`, not here:
+Allowed `surface` labels. This schema owns the label set; a stage rubric maps labels to lanes but does not redefine them. A reference, lane, or schema file is `reference text`. Review depth belongs in `status:`, not here:
 
 ```text
 SKILL.md body

@@ -20,6 +20,8 @@ The artifact here is **changed files** on disk, so every applicable lane can run
 | a behavior-proof claim (proof)       | claim-vs-evidence                               |
 | a sensitive surface                  | sensitive-surface                               |
 
+Each lane named above is `lanes/<name>.md`: `lanes/placement-and-calls.md`, `lanes/steering-strength.md`, `lanes/mental-model-fit.md`, `lanes/no-op-pruning.md`, `lanes/rule-agreement.md`, `lanes/trigger-routing.md`, `lanes/claim-vs-evidence.md`, `lanes/sensitive-surface.md`.
+
 **Existing files** — evaluating a shipped skill nobody has edited — use the same table, with every row its current surfaces satisfy; there is no diff, so lanes read whole files. For classification `create`, the reviewed surface is the new files, not a diff.
 
 Sensitive surfaces are the set owned by `../security-gate.md`; plugin manifests and versioning are not among them and route to `../platform-mechanics.md` instead.
