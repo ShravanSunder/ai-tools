@@ -227,11 +227,9 @@ Review before proving. Proof run first is spent on text the review is about to c
 
 Completion: every dispatched lane has a terminal receipt; the Parent Reduction block from `references/review/lanes/lane-schema.md` is emitted with merged duplicates, lane conflicts, routed findings, coverage gaps, and first fix filled; every dispatched lane appears by name with its status and a lane contributing no accepted finding appears with the reason; and changed-file coverage is refreshed for every file a review fix touched.
 
-### 9. Prove
+### 9. Proof of quality, proof of work
 
 Run the proof route chosen in `Choose the authoring basis and proof posture`, after review rather than before it. IF the change is behavior-changing, load `references/testing/pressure-testing.md` to choose and run the proof route and return the proof protocol, evidence, and claim boundaries; that reference owns proof by skill type.
-
-Evaluation may precede or follow a first user-directed draft. If it is deferred, return a source-only result with a named proof gap and claim no demonstrated improvement, regression protection, or verified fix. A reproduced RED supports a candidate GREEN only after a comparable rerun. A passing baseline may characterize native behavior without prohibiting authoring.
 
 Completion: the authoring result, the behavior evidence, and the remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
 
