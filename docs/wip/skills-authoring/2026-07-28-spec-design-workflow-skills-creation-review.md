@@ -1,334 +1,434 @@
-# Spec Design Workflow — `skills-creation` Proposal Re-review
+# Spec Design Workflow — Ground-Up `skills-creation` Re-review
 
-Date: 2026-07-28
+Date: 2026-07-29
 
-Status: targeted revision required; current-digest review complete
+Status: current-digest review complete; targeted revision required; implementation remains blocked
 
 Review target: `docs/specs/2026-07-28-spec-design-workflow/2026-07-28-spec-design-workflow.md`
 
-## Target Binding
+## Target binding
 
-- Repository head: `48b5206d441f8a559e0b45d8617657be0fc3e9d7`
-- Proposal Git blob: `260e0137bb55ee76416715e5536aad6ff33802c9`
-- Proposal SHA-256: `f2ccbf22cf5166d5ae9c91db7df051434c65af08bd5f047d5d61616f817719d4`
-- Proposal length: 746 lines
-- Owning workflow: `shravan-dev-workflow:skills-creation`
+- Repository HEAD: `7142c0aa64caf222ec4952f2561847b603f76fe8`
+- Proposal Git blob: `22484b7a54d945ec8cbf654cb1dd8b6a788321fa`
+- Proposal SHA-256: `729cf79b4123f6974836a92b250b7aeb563ec405b502757419a4d8b551d34aaf`
+- Proposal length: 819 lines
+- Owning evaluation workflow: `shravan-dev-workflow:skills-creation`
 - Agent coordination: `shravan-dev-workflow:manage-agents`
-- Reviewer runtime: native Codex, OpenAI Sol `gpt-5.6-sol`, `xhigh`, fresh history, read-only
-- Stale-review rule: every receipt bound to the former 553-line `811e…` proposal was discarded
+- Formal review lanes: `mental-model-fit`, `trigger-routing`, `rule-agreement`
+- Independent advisors: Cursor ACPX Claude Fable high, Cursor ACPX Kimi K3 max, native OpenAI Sol xhigh
+- Formal lane reviewers: native OpenAI Sol xhigh, fresh history, read-only
+- Pressure tests: not run, per explicit user instruction
+- Stale-review rule: all receipts for earlier 553-line and 746-line proposal digests received zero credit
 
-## Direct Answer
+## Direct answer
 
-The updated proposal no longer has the original “machinery with no craft” failure.
+The remediation is real, but the proposal is not ready to implement.
 
-It now contains substantive, usable teaching:
+It now contains substantive specification, program-design, and review craft. This is no longer the prior “state machinery with no teaching” draft. The useful content includes:
 
-- specification authoring at lines 185–245: decision interviewing, decomposition, outcome-to-requirement order, EARS forms, vague-verb repair, stranger test, requirement/task separation, non-goal craft, contract fields, edge cases, and tradeoffs;
-- program-design authoring at lines 255–277: integrated overview first, current-system grounding, alternatives, deep modules, ownership/source-of-truth interrogation, caller-first interfaces, falsifying probes, failure containment, and proof seams;
-- pair review at lines 326–344: dependency-order reading, end-to-end trace, authority audit, crux inversion, cross-requirement integration, planning readiness, finding quality, and parent-side reviewer hygiene.
+- specification construction: problem → consumers → outcomes → success criteria → requirements; user-decision questions; EARS; vague-verb repair; requirement-versus-task separation; non-goals; contracts; edge cases; tradeoffs;
+- program design: integrated overview first; grounding; alternatives; deep modules; ownership and source-of-truth interrogation; caller-first interfaces; assumption probes; failure containment; proof seams;
+- pair review: dependency-order reading; traceability; authority audit; crux inversion; cross-requirement integration; planning readiness; evidence-bound finding quality.
 
-That is real spec design, program design, and review teaching. The remaining failure is not absence. It is that the proposal does not yet make all of that teaching retrievable, recoverable, independently rechecked, and internally consistent under the skill-authoring contract.
+The remaining defect is that the operational contracts do not reliably force that craft. A fresh agent can still satisfy the observable guards while:
 
-## Review Frame
+1. solving the wrong product problem with formally testable requirements;
+2. producing a consistent inventory of modules rather than a composed program design;
+3. writing schema-owned records before loading their schema;
+4. following contradictory ledger, authority, invalidation, and routing rules.
 
-Classification: evaluate one behavior-changing proposal for the named `spec-design` skill.
-
-Reusable behavior: reliably turn bare requirements or product intent into an authoritative Specification, an integrated Program Design, and a closed review/remediation/acceptance cycle before planning.
-
-Success definition: an agent must know how to construct strong Why/What and integrated How artifacts, independent reviewers must know what to inspect and reject, every craft pass must have a recoverable result, and no acceptance path may depend on guessing or an impossible predicate.
-
-Authoring basis: user-directed intent informed by recorded authority-laundering and review failures.
-
-Surface allocation:
-
-- trigger: bare requirements, semantic design work, in-cycle review/remediation, and precise adjacent-skill boundaries;
-- main path: FRAMING → DRAFTING → REVIEW → GATE;
-- depth: drafting craft, common pair-review craft, artifact formats, lifecycle schema, and lane-specific judgment;
-- proof: pressure scenarios plus trigger evaluation and the repository fast suite.
-
-## Outcome
-
-review target: proposed `spec-design` skill contract
-
-verdict: `targeted-revision`
-
-blocker overrides:
-
-- The DRAFTING guard consumes craft results that have no owned, revision-bound disk record, so the state is not recoverable as promised.
-- The common pair-review method has no single reference owner or mandatory call, while the lane contracts do not yet contain the full judgment anatomy the proposal promises.
-- The future reference and Delegate call sites do not satisfy the literal `skills-creation` call/dispatch grammar.
-- A first-ever design cannot satisfy the instruction to improve on its predecessor.
-- A code-constrained program design cannot simultaneously obey the file-path ban and the mandatory source-anchor contract.
-
-highest risk: the implementation can contain excellent craft prose yet fail to load it in the right agent, fail to preserve its pass results across interruption, or block a valid first design at acceptance. That is a retrieval-and-contract version of the same failure the rewrite is meant to prevent.
-
-first required revision: make the craft executable as one contract: give common review craft one owner, add literal load/dispatch calls and concrete returns, give DRAFTING checks a revision-bound process record, and make the mandatory whole-pair reviewer independently repeat both drafting-quality checks.
-
-proof or retest implication: re-review the revised proposal at a new digest; then pressure-test a shallow-but-formally-complete pair, a first-ever design, an interrupted post-DRAFTING pair, a code-constrained structural choice, an unmapped section-writer decision, and both adjacent trigger pairs.
-
-implementation decision: `revise-first`
-
-ship decision: `blocked`
-
-## Ranked Accepted Findings
-
-### 1. DRAFTING craft results have no recoverable record
-
-Severity: blocker
-
-Evidence:
-
-- Lines 43–44 require guards to be observable and state recoverable from disk.
-- Lines 416–418 define the requirement-quality pass and open-decision list.
-- Lines 430–433 define the integration pass and assumption list.
-- Line 594 requires those results to be recorded before REVIEW.
-- The artifact formats at lines 640–725 contain no record for them.
-- The mandatory ledger begins only with the first reviewer dispatch at lines 132 and 598, after DRAFTING must already have passed.
-
-Behavior risk: after an interruption, a fresh parent cannot determine whether the pair passed DRAFTING without transcript memory, an invented storage location, or rerunning an undefined pass.
-
-Smallest fix: create the mandatory process ledger when the pair lifecycle begins, not at first reviewer dispatch, and let `review-cycle-schema.md` own a revision-bound drafting-check record containing requirement-quality status, integration status, open-decision identifiers, assumption identifiers/dispositions, evidence anchors, and remaining failures. Keep process receipts out of the design artifacts.
-
-Retest: give a fresh agent only the pair and ledger immediately after DRAFTING. It must determine whether REVIEW entry is permitted and name every unresolved decision or assumption.
-
-### 2. Common review craft has no owner or mandatory retrieval path
-
-Severity: blocker
-
-Evidence:
-
-- Lines 326–342 contain the common review method.
-- The reference tree at lines 375–400 has drafting references, schemas, and lane missions, but no common review-craft reference.
-- Line 324 says each reviewer loads a lane mission.
-- Line 404 says the three `How to` sections are lifted “into the references” without naming which reference owns the common review section.
-- `skills-creation` requires one owner, an exact load destination, and a concrete returned result.
-
-Behavior risk: focused reviewers can load only their lane-specific mission and never receive dependency-order reading, authority audit, crux inversion, integration checking, planning-readiness calibration, or finding-quality rules. Copying the common section into six lanes avoids omission but creates six drifting owners.
-
-Smallest fix: add `references/reviewing-pair.md` as the sole owner of lines 326–344. The reviewer dispatch contract must require every reviewer to load it and return its common review result before applying the selected lane mission.
-
-Retest: dispatch only `contract-review` and prove the reviewer still applies dependency order, authority audit, integration, and planning readiness before its contract-specific inspection.
-
-### 3. The promised teaching anatomy is still incomplete at the lane boundary
-
-Severity: important; blocker override because incomplete branch-critical depth cannot be accepted to implement
-
-Evidence:
-
-- Line 404 requires every reference to contain mission, where to look, how to inspect, good/bad signals, overlap, calibration, and stop condition, and says implementation must not re-derive them.
-- Lines 407–436 give drafting references capability, topics, results, and calibration, but not the complete promised anatomy.
-- Lines 438–484 give focused lanes mostly mission, inspection nouns, and finding result; lane-specific good/bad signals, overlap, calibration, and stop conditions are absent.
-- The whole-pair contract at lines 438–443 does not explicitly consume and independently repeat the requirement-quality and integration passes even though it is the only reviewer for small pairs.
-
-Behavior risk: the implementer must invent judgment the proposal calls authoritative. A small pair can receive authority/traceability/coherence review while vague requirements or a shallow integrated design remain only author self-checks.
-
-Smallest fix: fill every promised anatomy slot for all eight references in the proposal, and require `whole-pair-integrity` to independently repeat both drafting-quality passes. Keep generic review mechanics in `reviewing-pair.md`; keep only domain-specific judgment in each lane.
-
-Retest: use a pair with complete identifiers, bases, and traceability, but one vague requirement and contradictory state ownership. The mandatory reviewer alone must find both.
-
-### 4. Future skill calls do not use the required literal grammar
-
-Severity: important; blocker override because incomplete calls are an explicit `skills-creation` completion blocker
-
-Evidence:
-
-- Lines 590–594 say the parent “loads” drafting references; the concrete results appear later in the guard rather than in actionable call forms.
-- Section-writer packets merely “cite” those references at line 590.
-- `artifact-formats.md` and `review-cycle-schema.md` are only “cited” at lines 402 and 640.
-- `skills-creation` requires `MUST load <reference> and return <result>` or a complete lane-handoff contract.
-
-Behavior risk: excellent reference files can exist without the parent or subagent reliably opening them or returning the result the next guard consumes.
-
-Smallest fix: add an implementation call-contract block with exact `MUST load` calls and concrete results for `artifact-formats.md`, both drafting references, `reviewing-pair.md`, and `review-cycle-schema.md`; require section writers to load the applicable drafting reference.
-
-Retest: one parent-drafting prompt and one section-writer prompt must both show the required reference opened and its named result returned before the guard.
-
-### 5. First-design acceptance is unreachable
-
-Severity: blocker
-
-Evidence:
-
-- Lines 48–55 and the FRAMING entry at lines 542–584 make this the general entry point for bare requirements and first designs.
-- Line 342 says to accept only when the pair “definitely improves on its predecessor” and every gate criterion holds.
-- A first design has no predecessor.
-
-Behavior risk: a greenfield pair cannot be accepted without inventing a comparison baseline.
-
-Smallest fix: replace the sentence with: “Where a predecessor exists, require a definite improvement; otherwise require the pair to satisfy every acceptance criterion against current evidence and constraints.”
-
-Retest: one first-design scenario and one revision-of-existing-design scenario must both have deterministic acceptance predicates.
-
-### 6. The program-design path ban contradicts provenance requirements
-
-Severity: blocker
-
-Evidence:
-
-- Lines 146–177 require basis and named source anchors in both artifacts.
-- Line 261 requires grounding against current systems.
-- Line 275 bans file paths in the program design.
-- Lines 713–720 require each structural realization to carry a source such as a code path.
-
-Behavior risk: for a code-constrained structural choice, the author must violate either the path ban or the authority/provenance contract.
-
-Smallest fix: ban task-oriented file inventories and incidental implementation paths, not evidentiary anchors. Explicitly allow paths required by basis and traceability.
-
-Retest: a `code-constraint` structural realization must satisfy both the grounding and content-placement rules without an inferred exception.
-
-### 7. Section-writer and evidence Delegate contracts are incomplete
-
-Severity: blocker
-
-Evidence:
-
-- Line 42 declares exactly two fan-out concerns: section text and review skepticism.
-- Lines 491–507 define section-writer and evidence Delegates.
-- Those definitions provide no lane-reference path, parallel-safety basis, or shaped terminal receipt; the generic agent job packet does not provide the missing lane-reference or parallel-safety fields.
-- Evidence dispatch is also a third fan-out concern under the literal statement at line 42.
-- `skills-creation` requires every dispatch to fill or cite the full lane-handoff contract.
-
-Behavior risk: the implementation cannot qualify these dispatches consistently, and agents can disagree about prerequisites, authority, completion, and whether evidence fan-out is even permitted.
-
-Smallest fix: either keep evidence work parent-owned or change line 42 to distinguish evidence lookup from the two artifact-producing/judgment fan-outs. Define and cite complete dispatch contracts for section writers and evidence contributors: predicate, packet, lane reference, prerequisites/parallel-safety, maximum and instance authority, terminal receipt, stop condition, and parent reduction.
-
-Retest: validate one section-writer and one evidence dispatch against every lane-handoff slot and all lane-qualification properties.
-
-### 8. Section writers can still originate semantic decisions
-
-Severity: important
-
-Evidence:
-
-- Lines 42 and 52 make the parent the sole author and decision integrator.
-- Lines 171–177 show that obligations, material invariants, non-goals, constraints, and structural realizations can carry authority.
-- Line 505 forbids section writers from minting only `REQ-*`, basis, status, and revision values; it does not forbid new `CLAIM-*`, `INV-*`, structural realizations, option selections, failure policies, or normative-force prose.
-
-Behavior risk: a writer can introduce a decision as fluent candidate prose, and the parent can integrate it without recognizing that it was absent from the packet. That recreates authority laundering inside the boundary intended to prevent it.
-
-Smallest fix: require every semantic sentence to map to packet-supplied identifiers or parent-decided claims. Explicitly forbid originating requirements, claims, invariants, structural realizations, option selections, failure policies, bases, or normative-force statements; return unmapped needs as gaps.
-
-Retest: omit retry policy from a writer packet. The writer must return a gap, not invent an invariant or realization, and parent integration must reject unmapped normative prose.
-
-### 9. Reciprocal trigger boundaries are optional and scope wording disagrees
-
-Severity: important
-
-Evidence:
-
-- Lines 77–87 assign semantic revision and in-cycle threat modeling to `spec-design`.
-- The shipped `docs-maintain` description still claims updating architecture docs and existing spec artifacts.
-- The shipped `ops-security-review` description still claims every threat-model request.
-- Line 60 says adjacent triggers keep shipped wording.
-- Line 734 says those descriptions “may” receive mirrored boundaries.
-
-Behavior risk: semantic spec revision can route to docs maintenance and integrated design threat review can route to standalone security review, splitting the closed cycle. The implementer also has contradictory permission about whether those trigger edits are in scope.
-
-Smallest fix: name the two reciprocal frontmatter edits as mandatory, explicit exceptions in Non-goals and Changes; retain the ban on broader adjacent-trigger redesign.
-
-Retest: semantic revision versus typo/archive cleanup, and in-cycle threat review versus standalone repository threat modeling/security audit.
-
-### 10. Admired-source provenance maintenance is omitted
-
-Severity: important
-
-Evidence:
-
-- Lines 245, 277, and 344 cite external and admired-source inputs.
-- Lines 731–732 materially remap those inputs into new drafting and review references.
-- Line 738 names plugin documentation, changelog, manifests, and metadata, but not the paired admired-source provenance update.
-- `AGENTS.md` requires path-level mappings, pins, and bump notes in `ai-dev-skills`, with the lite catalog refreshed only when the high-level story changes.
-
-Behavior risk: implementation can ship with stale provenance, hiding what was adapted and making future upstream comparisons unreliable.
-
-Smallest fix: add the required `ai-dev-skills` mapping/pin/bump-note update to Changes, plus an explicit decision on whether the lite catalog needs refreshing.
-
-Retest: every new adapted reference has a current path-level provenance entry and a recorded lite-catalog decision.
-
-## Findings Rejected or Not Reopened
-
-### “The proposal still contains no teaching”
-
-Rejected for the current digest. Lines 185–277 and 326–344 are substantive craft. The problem is ownership, retrieval, pass recording, and incomplete lane-specific anatomy—not total absence.
-
-### Reviewer consensus contradicts evidence primacy
-
-Rejected. Line 342 treats agreement as a confidence signal; lines 352–361 still require source verification and explicitly prohibit reviewer count or apparent consensus from determining acceptance. Whether the confidence calibration is ideal is not a rule-agreement contradiction.
-
-### Reintroduce a pre-draft architecture-option swarm
-
-Rejected. The proposal deliberately chooses one integrating parent, and line 263 already requires that parent to design load-bearing choices twice. No current evidence proves a new creation fan-out is necessary; adding one would reopen the chosen ownership boundary.
-
-### Bare requirements must route directly instead of through plan creation
-
-Not reopened. The new description explicitly names bare requirements at lines 77–78, and line 736 deliberately makes plan creation a first-hop router that sends unpaired requirements back to `spec-design`.
-
-## Prior Review Defects Confirmed Fixed
-
-The current digest resolves the stale review’s following defects:
-
-- bare requirements and product intent now appear in the proposed trigger;
-- semantic revision and integrated threat review now have positive/negative boundaries in the proposed trigger;
-- authority applies regardless of modal wording and user-owned bases are confirmed at the gate;
-- `blocked` and `no-receipt` now match the current lane vocabulary;
-- REVIEW entry is the single owner of cycle assignment;
-- tiny artifacts use the same omission-reason rule as Formats;
-- failure-mode review now maps to risk/tradeoff craft composed with proof burden;
-- Frontier reviewer capability is added at the `manage-agents` pattern owner rather than through a packet override;
-- replacement pressure scenarios and the fast suite are inside the hard cutover and replacement-first rule.
-
-## Parent Reduction
+The proposal therefore receives:
 
 ```text
-review:
-  required: yes
-  kind: spec
-  artifact: proposal
-lanes:
-- name: mental-model-fit
-  status: complete
-  reason: current 746-line digest verified; fit, priors, cost, and coverage inspected
-- name: trigger-routing
-  status: complete
-  reason: current digest verified; adjacent frontmatter and true/near-miss prompts inspected
-- name: rule-agreement
-  status: complete
-  reason: current digest verified by the terminal replacement; two earlier silent attempts were not credited
-synthesis:
-  merged duplicates:
-  - common review owner + incomplete teaching anatomy + literal call grammar
-  - incomplete Delegate qualification + section-writer authority leakage
-  lane conflicts:
-  - subject: consensus language
-    positions: candidate contradiction versus confidence-only signal
-    reading the artifact supports: confidence-only signal; evidence remains authoritative
-    what would settle it: no change required for rule agreement
-  coverage gaps:
-  - none in the selected proposal-review lanes
-  first fix: make the drafting and common-review craft results owned, retrievable, and revision-bound
-changed-file coverage:
-- path: docs/specs/2026-07-28-spec-design-workflow/2026-07-28-spec-design-workflow.md
-  status: reviewed
-  reason: all 746 lines read by the parent and full-artifact lanes; current digest verified by every credited lane
+verdict: targeted-revision
 implementation decision: revise-first
 ship decision: blocked
 ```
 
-## Reviewer Receipts
+The promise and one-workflow mental model remain viable. The required revisions are substantial but bounded to quality gates, ownership/call contracts, recovery semantics, routing wording, and proof design. If the user selects three separately invocable skills instead of three modules inside one workflow, this proposal becomes `significant-rewrite` because its trigger, state owner, transitions, and acceptance ownership all change.
 
-All credited receipts are bound to SHA-256 `f2ccbf22cf5166d5ae9c91db7df051434c65af08bd5f047d5d61616f817719d4`, 746 lines.
+## Skill-boundary decision
 
-- `mental-model-fit`: complete; OpenAI Sol `gpt-5.6-sol`, `xhigh`, fresh history, read-only.
-- `trigger-routing`: complete; OpenAI Sol `gpt-5.6-sol`, `xhigh`, fresh history, read-only.
-- `rule-agreement`: complete terminal replacement; OpenAI Sol `gpt-5.6-sol`, `xhigh`, fresh history, read-only.
-- Two non-terminal rule-agreement attempts were interrupted and credited with no coverage or findings.
+### Recommendation
 
-## Required Re-review
+Keep one model-invocable `spec-design` workflow with three deep, mandatory capability modules:
+
+```text
+spec-design/SKILL.md
+  owns: one invocation, lifecycle, transitions, ledger routing,
+        remediation loop, and final acceptance
+
+  drafting-specification.md
+    owns: Why/What construction and local specification-quality check
+    cannot: accept the pair
+
+  drafting-program-design.md
+    owns: How construction and local program-design integration check
+    cannot: accept the pair
+
+  reviewing-pair.md + focused lane references
+    own: independent pair-review judgment and candidate findings
+    cannot: author semantic corrections or accept by reviewer consensus
+```
+
+Why: the three crafts are distinct, but their lifecycle is not. Program design can expose missing requirements; review findings can affect either artifact; a specification change invalidates downstream How and pair-review coverage. Keeping the completion boundary around the whole cycle makes those returns mandatory rather than optional-looking handoffs.
+
+The independent advice was intentionally not unanimous:
+
+- Fable, Kimi, mental-model-fit, and rule-agreement recommend one workflow with three deep modules.
+- Sol recommends three named skills joined by one canonical persisted lifecycle and mandatory successor transitions.
+- Trigger-routing found that three peer skills alone are incoherent: if separate invocation is load-bearing, a fourth workflow owner is the clean routing shape; otherwise one of the three secretly becomes the orchestrator.
+
+The three-skill alternative is not rejected forever. Reconsider it only if implementation evidence shows the unified workflow cannot route direct stage asks, exceeds useful context, or cannot resume reliably. If selected, first write a replacement architecture contract naming one canonical state owner, `next owner`, mandatory transition semantics, revision-bound local receipts, invalidation, remediation return, and sole pair-acceptance authority. Ordinary “run the next skill” recommendations are insufficient.
+
+### Program design is a real discipline inside the workflow
+
+Program design must not be reduced to prose headings. Its teaching reference should explain when to use and how to judge:
+
+- component/responsibility trees;
+- current and target production call graphs;
+- test/proof call graphs and substitution points;
+- state-ownership and mutation maps;
+- normal, failure, recovery, and partial-success flows;
+- dependency direction and forbidden edges;
+- module-depth/deletion tests;
+- alternatives under different forcing constraints;
+- proof reachability through real seams.
+
+These are conditional forms, not universal headings. A diagram is useful only when it makes composition inspectable; an unwalked diagram can be another inventory.
+
+## What held
+
+The following remediation claims are genuinely present at this digest:
+
+- the process ledger begins with the pair lifecycle at line 132;
+- `reviewing-pair.md` is named as the sole common-review owner and mandatory reviewer load at lines 324 and 375–410;
+- first-design acceptance no longer requires a predecessor at line 342;
+- the path ban permits evidentiary anchors at line 275;
+- all six focused lane blocks include good/bad signals, overlap, and stop language at lines 444–535;
+- the implementation call-contract block exists at lines 538–557;
+- section writers cannot originate semantic decisions at line 577;
+- reciprocal `docs-maintain` and `ops-security-review` boundary edits are mandatory at line 806;
+- admired-source provenance maintenance is required at line 811;
+- useful old skill judgment is substantially adapted while fixed swarm topology is dropped.
+
+The useful old-skill carryover is not imaginary:
+
+- `user-decision-questions.md` → one material question, recommendation, consequence, and no vague approval;
+- `product-intent.md` and `requirements-testability.md` → Why/What ordering, traceability, testable obligations, and vague-verb repair;
+- architecture option lanes → “design it twice,” explicit alternatives, smallest boundary, debt, payer, and revisit signal without separate option agents;
+- `risk-and-tradeoff-design.md` → assumptions, falsifying probes, containment, reversibility, and proof burden;
+- `whole-spec-coverage`, `adversarial-crux`, `planning-readiness`, `architecture-boundaries`, contract, security, harness, difference, and validation lanes → common/focused review judgment.
+
+What must be dropped remains correct: fixed option-agent topology, mandatory broad review swarm, agent count as confidence, optional phase handoffs, and duplicated packet mechanics already owned by `manage-agents`.
+
+## Ranked accepted findings
+
+### 1. Wrong-but-formally-complete specifications can pass
+
+Severity: blocker
+
+Evidence:
+
+- Line 191 teaches bidirectional outcome/requirement reasoning.
+- Line 328 says review starts from the problem and stops on a fatal upstream flaw.
+- Lines 422–424 reduce the drafting result to requirement testability and open decisions.
+- Lines 448–451 require the whole-pair reviewer to repeat requirement-quality and integration passes, not product-intent quality.
+- Lines 583–595 contain no explicit problem/consumer/outcome/success-criteria authority and coverage gate.
+
+Behavior risk: a coherent set of testable requirements can solve the wrong problem, serve the wrong consumer, or omit an outcome while every ID, basis, traceability row, and ledger record is formally complete.
+
+Smallest fix: make `drafting-specification.md` and the independent whole-pair review return a specification-quality result that proves:
+
+- problem, consumers, outcomes, and success criteria are source-backed or user-confirmed;
+- every outcome has at least one requirement;
+- every requirement traces to an outcome or named external constraint without changing meaning;
+- success criteria are observable;
+- no missing product decision is disguised as a technical choice.
+
+Add these predicates to DRAFTING and acceptance, not only to craft prose.
+
+### 2. Consistent inventory-only program designs can pass
+
+Severity: blocker
+
+Evidence:
+
+- Lines 251–259 correctly say headings and traceability can be inventory, not design, and demand an integrated overview.
+- Lines 428–439 reduce the drafting result to absence of contradictions in ownership, direction, lifecycle, and failure propagation.
+- Line 666 checks agreement with the overview, not whether the overview demonstrates composition or useful depth.
+- Line 592 checks explicitness and mutual consistency.
+- Line 817's `unintegrated How` scenario covers contradictory owners/failure propagation, not a shallow but consistent inventory.
+
+Behavior risk: a one-page list of modules, owners, flows, and proof seams can be internally consistent and still fail to show how the system works, where state moves, how production and tests compose dependencies, or whether modules earn their interfaces.
+
+Smallest fix: make `drafting-program-design.md` return a program-design-quality result, separate from consistency, that conditionally includes the component/call/state/flow forms above and proves one normal path plus one falsifying failure path end to end. Require alternatives and module-depth judgment for load-bearing choices. The whole-pair reviewer independently challenges composition rather than trusting the author's result.
+
+### 3. Lane authority is assigned to the wrong owner
+
+Severity: blocker
+
+Evidence:
+
+- Line 408 assigns maximum authority, stop condition, and per-role contract content to `review-cycle-schema.md`.
+- `reference-lanes-design.md` lines 29–48 and 69–77 assign stable maximum authority, non-goals, local receipt detail, calibration, and stop condition to the lane reference; the caller owns dispatch mode, instance authority, scheduling, and reduction; a schema owns common fields only.
+- Line 408 calls an instance question packet the evidence contributor's lane reference.
+
+Behavior risk: schema and lane references can state different authority ceilings or stop conditions, and evidence lookup becomes an unqualified lane with no stable job contract.
+
+Smallest fix: let the workflow/schema own caller-side predicate, packet fields, prerequisites, parallel-safety basis, instance authority, expected receipt envelope, and reduction point. Keep stable mission, maximum authority, non-goals, local judgment, lane receipt detail, and stop condition in each lane reference. Give evidence lookup one parameterized lane reference or classify it as an ordinary bounded Delegate call rather than a lane.
+
+### 4. The schema is loaded after earlier consumers need it
+
+Severity: blocker
+
+Evidence:
+
+- Line 408 makes `review-cycle-schema.md` own pre-pair receipts, drafting-check records, and dispatch shapes.
+- Lines 554–556 load it only before first dispatch.
+- Lines 656–658 can emit a pre-pair receipt before any dispatch.
+- Line 666 must write drafting-check records before REVIEW.
+
+Behavior risk: a no-subagent run invents the schema-owned ledger and drafting records without opening their authority; a pre-pair stop can invent its receipt shape.
+
+Smallest fix: load the schema before the earliest of lifecycle-ledger creation, pre-pair receipt emission, drafting-check write, or dispatch. Retain a first-dispatch check as a separate guard.
+
+### 5. Ledger lifecycle and recovery still contradict themselves
+
+Severity: blocker
+
+Evidence:
+
+- Line 132 creates the process ledger at pair-lifecycle start and gives phase-sensitive missing-proof recovery.
+- Line 611 says any missing ledger starts a fresh cycle.
+- Line 670 says REVIEW entry “opens” the mandatory ledger.
+- Drafting records exist before a review cycle id, although line 132 describes records as keyed by revision and cycle.
+
+Behavior risk: a resumed agent can create the ledger at initialization, wait until REVIEW, or skip missing drafting checks and open a review cycle. Only the first is compatible with DRAFTING.
+
+Smallest fix: use one term, `workflow process ledger`. Create it immediately after synchronized pair initialization. Key drafting checks by revision; key review/reduction/remediation records by revision and cycle. REVIEW verifies the ledger and appends a cycle—it does not create it. Missing drafting proof reruns DRAFTING checks; missing review proof opens a fresh review cycle.
+
+### 6. The teaching contracts still omit contracted judgment
+
+Severity: blocker
+
+Evidence:
+
+- Line 410 promises drafting anatomy: capability, inputs, construction questions, decision boundaries, result, good/bad examples, calibration, completion.
+- Lines 413–442 explicitly state only capability, teaches, result, and calibration.
+- Line 410 promises lane-specific calibration bars.
+- Lines 444–535 give focused lane missions, inspection, good/bad, overlap, stop, and result, but no explicit lane-specific calibration.
+- Lines 552–553 require a `common review result`, but no `reviewing-pair.md` anatomy block defines that result or its stop condition.
+
+Behavior risk: implementation can create every promised file and heading while inventing the actual inputs, authority boundary, completion bar, common result, or lane calibration. Generic prose can satisfy file existence.
+
+Smallest fix: explicitly complete every contracted anatomy slot. Define the common result as at least: dependency-order coverage attestation, four-source authority sort, crux list, three-sentence design restatement, planning-readiness verdict, and candidate findings. Load common and focused reviewer references before inspection and return one combined receipt after both passes.
+
+### 7. Requirement proof expectations have no stable Why/What owner
+
+Severity: important
+
+Evidence:
+
+- Line 338 says planning may not invent proof expectations.
+- The specification skeleton at lines 727–746 has no proof-expectations surface.
+- Program Design owns `Test and Proof Seams` at line 778 and each traceability row owns a proof seam at line 793.
+- The old validation craft distinguishes requirement-level proof modality from the structural seam that enables it.
+
+Behavior risk: “API boundary” can be recorded as a proof seam without deciding whether a user-visible requirement needs unit, integration, runtime, manual/visual, state/data, trace/metric, smoke, or release proof. Planning then invents proof expectations.
+
+Smallest fix: Specification owns requirement-level observable proof expectation and applicable modality/layer without commands. Program Design owns the structural seam enabling it. Pair review checks expectation-to-seam compatibility.
+
+### 8. Current-system grounding has no consumed result
+
+Severity: important
+
+Evidence:
+
+- Line 261 requires a traced current-system model and recovered rationale.
+- FRAMING at lines 654–658 can pass with sources, open questions, and security classification.
+- Lines 428–439 and 548–550 consume only integration status and assumptions.
+
+Behavior risk: filenames can be listed as sources while the design is built around the wrong owner, accidental implementation shape, or misunderstood proof pattern.
+
+Smallest fix: adapt the successful non-swarm part of `codebase-explorer` into a parent-owned current-system model: owners/sources of truth, interfaces/invariants, nearby patterns, proof patterns, current rationale or explicit unknown, observation versus inference, and files personally opened. Make it a revision-bound FRAMING/program-design input.
+
+### 9. Whole-pair receipt invalidation under-covers its own judgment
+
+Severity: important
+
+Evidence:
+
+- Line 371 invalidates whole-pair coverage for requirements, bases, material claims/invariants, public contracts, ownership, source of truth, and main flow.
+- Lines 314, 336, 437–438, and 592 also judge dependency direction, lifecycle, and material failure behavior.
+
+Behavior risk: a remediation changing only dependency direction, lifecycle, or failure policy can reuse a stale whole-pair receipt.
+
+Smallest fix: make invalidation mirror the acceptance/integration dimensions and explicitly include Design Overview, dependency direction, lifecycle, and material failure behavior.
+
+### 10. Trigger cutover remains incomplete at the always-loaded surface
+
+Severity: blocker for routing
+
+Evidence:
+
+- The proposal makes `spec-design` the single pre-plan entry and plan creation accept only an accepted pair at lines 21, 55, and 808.
+- The shipped `plan-creation-swarm` description still accepts a `product requirement`.
+- Line 808 changes plan creation's body entry contract, not its frontmatter.
+- Line 806 requires `docs-maintain` and `ops-security-review` reciprocal boundaries but does not provide literal future wording.
+
+Behavior risk: bare requirements still route first to plan creation; semantic spec revision can route to docs maintenance; in-cycle threat modeling can route to standalone security review. Body-only correction arrives after the routing decision.
+
+Smallest fix: make exact frontmatter wording part of the proposal for all three reciprocal boundaries. Plan creation should trigger only on a synchronously accepted pair and explicitly reject bare requirements, chat decisions, and unpaired artifacts.
+
+### 11. Acceptance permits unresolved material design decisions
+
+Severity: blocker
+
+Evidence:
+
+- Line 587 allows a normative-force structural decision to carry an accepting basis **or an `Open Design Decisions` entry**.
+- Lines 583–595 do not require every material open product/design decision to be resolved.
+- Line 595's contested rule applies to review findings, not artifact-native open decisions.
+
+Behavior risk: planning receives an accepted pair while a structural choice that can alter ownership, contract, or behavior remains open.
+
+Smallest fix: accepted pairs contain zero material open product or design decisions. Deliberate implementation freedom is a bounded allowed range with proof expectations, not an open decision.
+
+### 12. Review and confirmation semantics have smaller rule conflicts
+
+Severity: important
+
+The following should be corrected in the same contract pass:
+
+- Lines 544–550 allow drafting references to load before completion, while line 662 requires them before drafting. Use the earlier load point.
+- Lines 324 and 552–553 return common review before loading the lane mission. Load both before inspection; apply common then focused judgment; return one receipt.
+- Lines 54/314 say exactly one whole-pair reviewer, while invalidating remediation requires a fresh second instance. Say one mandatory lane per cycle; every dispatch uses a fresh one-shot instance.
+- Line 356 says every contested finding exits only through `decision-needed`; line 595 blocks only material contested findings. Pick one owner and rule.
+- Line 177 permits confirmation before acceptance; line 589 requires confirmation in the current cycle. Define whether content-unchanged confirmations carry forward and persist the confirmation record.
+- Desynchronized sibling recovery is unstated: never silently adopt one revision; treat the pair as reconstruction input.
+- Line 60 understates the `manage-agents` change as a reviewer capability note, while line 809 changes the Delegate pattern table. Use one scope description.
+
+### 13. Source adaptation needs a behavior-level preservation map
+
+Severity: important, user-required
+
+Evidence:
+
+- Line 804 names source files and broad destinations.
+- The actual proposal carries substantial old judgment, but phrases such as “architecture lanes' judgment content” still leave implementation selection implicit.
+
+Behavior risk: an implementer can cite the old file while omitting its useful question/calibration, or accidentally preserve swarm topology instead of craft.
+
+Smallest fix: add a source-adaptation matrix with columns:
+
+```text
+old file + exact section/judgment
+new owner reference
+preserve verbatim | adapt | drop
+transformation rule
+reason / failure prevented
+```
+
+At minimum map the user-decision question form; product-intent tracing; requirement quality; current-system grounding; minimal/clean/pragmatic decision lenses; risk/probes/reversibility; architecture-boundary interrogation; whole-pair coverage; crux inversion; planning readiness; contract/security/platform/difference/failure review; finding schema and parent reduction. Explicitly drop fixed fan-out, mandatory swarms, optional handoffs, and duplicated agent packet mechanics.
+
+## Proof-plan gaps
+
+No pressure tests were run in this review. The future proof plan itself remains incomplete.
+
+Line 817 should add scenarios for:
+
+1. formally complete pair solving the wrong or unsupported problem;
+2. correct-looking IDs and bases with weak consumers/outcomes/success criteria;
+3. consistent but inventory-only How with shallow modules and no walkable composition;
+4. component/call/state diagrams present but not connected to requirements or proof;
+5. schema-owned drafting record attempted before schema load;
+6. missing ledger at each lifecycle phase;
+7. failure-policy-only remediation invalidating whole-pair coverage;
+8. material `Open Design Decisions` surviving to acceptance;
+9. exact reciprocal trigger cases for bare-requirements-to-plan, semantic spec revision, and in-cycle threat modeling;
+10. behavior-level source adaptation: useful old judgment present while swarm topology is absent.
+
+These are future implementation proof requirements only. This review did not execute them.
+
+## Findings rejected or narrowed
+
+### “The proposal still contains no actual teaching”
+
+Rejected. Lines 185–277 and 326–344 contain substantive craft. The remaining problem is that guards, records, and reference contracts do not force all of it.
+
+### “The old skills contributed nothing useful”
+
+Rejected. Several old references contain strong judgment worth preserving. What failed was the fixed creation/review swarm topology, authority blindness, and optional handoff—not every underlying question or calibration.
+
+### “Three separately invocable skills are obviously better”
+
+Not established. One independent Sol advisor supports the split; four independent perspectives prefer one workflow with three deep modules. Three peer skills without one lifecycle owner are rejected. The split remains a deliberate future option contingent on trigger/context/resume evidence.
+
+### “Add a fourth orchestrator immediately”
+
+Rejected for now. It becomes necessary only if separate invocation is chosen and no phase skill can own generic start/resume/remediation routing without losing its single job. There is no current implementation evidence requiring that added surface.
+
+### “A component tree or call graph alone proves program design”
+
+Rejected. These forms make structure inspectable; they do not prove composition without requirement trace, state/flow semantics, failure behavior, alternatives, and proof reachability.
+
+## Parent reduction of independent receipts
+
+```text
+mental-model-fit: complete; targeted-revision
+  accepted: proof ownership; current-system grounding
+  architecture addendum: one workflow, three modules
+
+trigger-routing: complete; targeted-revision
+  accepted: plan-creation reciprocal frontmatter; literal docs/security wording
+  architecture addendum: three peer skills need one workflow owner
+
+rule-agreement: complete; targeted-revision with blocker overrides
+  accepted: lane authority owner; schema timing; ledger contradictions;
+            load order; reviewer lane/instance cardinality
+  architecture addendum: one workflow, three internal jobs
+
+Fable advisor: complete; targeted-revision
+  accepted: invalidation, common-result anatomy, contested/confirmation rules,
+            recovery, routing asymmetry, consistent-inventory proof gap
+  architecture: one workflow, three modules
+
+Kimi K3 advisor: complete; targeted-revision
+  accepted: reviewer-lineage diversity; confirmation persistence
+  parent rejected Kimi's claim that current wrong-problem and shallow-consistent-
+  design gates are already sufficient; the cited prose does not create a hard
+  product-intent or composition result consumed by the guards
+  architecture: one workflow, three modules
+
+Sol xhigh advisor: complete; significant-rewrite recommendation
+  accepted: wrong-problem gate; inventory-only How gate; material open-decision
+            loophole; conditional structural views; explicit preserve/adapt/drop
+  contested/rejected for this proposal: immediate three-skill split and canonical
+  state ownership by spec-program-review
+  architecture: three skills, one persisted lifecycle, no fourth skill initially
+```
+
+Silence was not counted as clean. Every advisor and lane returned a terminal receipt bound to this digest.
+
+## First required revision
+
+Strengthen the two craft gates before adding more lifecycle machinery:
+
+1. Define a complete specification-quality result that rejects wrong problem/consumer/outcome/success framing.
+2. Define a complete program-design-quality result that rejects consistent inventory and requires inspectable composition, using component/call/state/flow forms where relevant.
+3. Make the mandatory independent reviewer repeat those two results.
+
+Then repair ownership, schema load timing, ledger recovery, invalidation, acceptance, and trigger wording around those stronger results. Otherwise the workflow will recover and review the wrong artifacts very reliably.
+
+## Retest and next decision
 
 After revision:
 
-1. compute and record the new head, blob, SHA-256, and line count;
-2. dispatch fresh-history Sol `xhigh` `mental-model-fit`, `trigger-routing`, and `rule-agreement` lanes;
-3. reject any receipt bound to the current digest;
-4. parent-verify every finding against the revised proposal and owning source;
-5. do not start skill implementation until the reduced verdict is `great` / `accepted-to-implement` or the user explicitly skips the remaining spec review.
+- bind the new review to the new HEAD/blob/SHA-256/line count;
+- rerun `skills-creation` proposal review from zero;
+- rerun exactly `mental-model-fit`, `trigger-routing`, and `rule-agreement` with fresh reviewers;
+- do not credit this digest's receipts;
+- decide explicitly whether the architecture remains one skill with three modules or changes to separately invocable skills before implementation begins.
+
+Implementation may not start from this proposal digest.
