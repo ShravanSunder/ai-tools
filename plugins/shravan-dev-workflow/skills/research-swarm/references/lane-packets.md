@@ -55,18 +55,13 @@ Return:
 - confidence: high | medium | low
 ```
 
+## Countercheck Lane
+
+When the parent dispatches the fresh-context countercheck (SKILL.md verify step), the lane's job is attempted disproof, not confirmation. Its packet carries the claim under check, the evidence question, and the anchors the parent relied on — never the parent's conclusion or reasoning. The lane independently reopens the primary anchors and searches for what contradicts, limits, or reinterprets them. Return `survived | refuted | unresolved | blocked` with the evidence found either way. Stop when the claim's primary anchors have been independently reopened and one contradiction search has run dry or landed.
+
 ## Parent Research Ledger
 
-For substantial work, the parent `research-ledger.md` records:
-
-- source-of-truth inputs and lane packets issued
-- lane artifact paths under `lanes/`
-- which observations the parent accepted, contested, rejected, or left open
-- contradictions and stale assumptions that affect the next phase
-- route recommendation to `spec-creation-swarm` or `plan-creation-swarm`, when the evidence is ready for a creation or planning workflow
-- completion receipt with source anchors, artifact paths, named exceptions, and remaining uncertainty
-
-Research ledgers do not create specs or implementation plans. They preserve evidence for the next parent reducer.
+`evidence-ledger.md` owns the parent ledger shape, including coverage, finding states, competing hypotheses, and the parent disposition with its completion receipt. The parent additionally records the lane packets issued and lane artifact paths under `lanes/`. Research ledgers do not create specs or implementation plans; they preserve evidence for the next parent reducer.
 
 ## Local Re-Anchor Lane
 

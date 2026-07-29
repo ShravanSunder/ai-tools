@@ -163,7 +163,9 @@ Classify the run; search the owning plugin for an existing skill or reference th
 
 ### 2. Choose the authoring basis and proof posture
 
-First classify the change, then classify why you are making it.
+IF the work the skill teaches lives in someone's head and is not yet understood, use `discuss-pathfinding` and return its records and confirmed restatement. IF it lives in artifacts the run has not read, use `research-swarm` and return its evidence-ledger summary and coverage. `Build the main path`, `Place the depth`, and `Implement` consume these returns.
+
+Then classify the change, and classify why you are making it.
 
 A change is **behavior-changing** when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are **mechanical** and static-only.
 
@@ -178,7 +180,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: the records and confirmed restatement when `discuss-pathfinding` ran, the evidence-ledger summary and coverage when `research-swarm` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 
@@ -222,7 +224,7 @@ Completion: the mental model is stated before details or exceptions; one all-run
 
 ### 5. Place the depth
 
-Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. IF the work is parallel-safe and handoff-ready, or several consumers need one stable output shape, or a tool validates the structure, load `references/reference-lanes-design.md` and return which of lane qualification, output shape, or tool shape applies, with its contract. Completion: nothing sits in two homes, every reference exists because a named call site asked for it, and advanced shape guidance remains discoverable even when no lane exists.
+Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. Depth must teach: a reference owning a promised stage carries what to inspect, what good and bad look like, and when to stop — written from the step-2 sourcing records or a named source; a reference that only pins output shape (schemas, label sets, packet forms) is ceremony, justified by a named consumer and never a stage's owner. IF the work is parallel-safe and handoff-ready, or several consumers need one stable output shape, or a tool validates the structure, load `references/reference-lanes-design.md` and return which of lane qualification, output shape, or tool shape applies, with its contract. Completion: nothing sits in two homes, every reference exists because a named call site asked for it, every promised stage names its teaching owner — an inline body section or a teaching reference — and advanced shape guidance remains discoverable even when no lane exists.
 
 ### 6. Review the spec
 
@@ -268,6 +270,7 @@ The run is not done while any of these hold:
 - behavior-changing authoring lacks a human-readable success definition or authoring basis;
 - an observed-failure path hides a failed, missing, or inconclusive reproduction result instead of returning the user decision;
 - the workflow has branches without observable predicates or return shapes;
+- a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;

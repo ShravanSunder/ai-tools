@@ -6,7 +6,8 @@ Use this reference to connect a clear goal to the workflow skill that should own
 
 | Goal state | Next skill | Why |
 | --- | --- | --- |
-| Goal itself is unclear | `discuss-clarify-mental-models` | Shared model must be clear before a long-running goal starts. |
+| Goal was never articulated — it lives in someone's head | `discuss-pathfinding` | Extract the goal before contracting it. |
+| Goal was shared but the model has drifted | `discuss-clarify-mental-models` | Shared model must be repaired before a long-running goal starts. |
 | Need spec/design direction before a plan exists | `spec-creation-swarm` | Bounded lanes shape the spec contract, separability, and architecture. |
 | Drafted spec/design needs critique | `spec-review-swarm` | Adversarial review swarms pre-plan design. |
 | Spec/design context needs a portable packet | `spec-handoff` | Packages pre-plan decisions, non-goals, open questions, and evidence. |

@@ -31,7 +31,7 @@ Bad signals:
 
 Calibration: Propose the smallest wording change, state the positive action and quality bar first, and name the failure form it serves. Reserve gates for observed or user-approved failures.
 
-Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *whether a line should exist*. A weak leading word arrives here from `no-op-pruning` for a stronger form; a line that should simply be deleted is filed with `route: no-op-pruning`.
+Overlap boundary: This lane owns *whether wording binds*. `no-op-pruning` owns *whether a line should exist*. `depth-coverage` owns *whether depth teaches at all*: a present-but-soft rule inside a teaching reference arrives here from `depth-coverage` for a stronger form. A weak leading word arrives here from `no-op-pruning`; a line that should simply be deleted is filed with `route: no-op-pruning`.
 
 Stop when: every steering sentence in scope for the artifact — added or changed for `changed files`, every one in the file for `existing files` — has been matched against a failure form, and every completion criterion has been tested for both checkability and demand.
 

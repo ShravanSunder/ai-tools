@@ -6,15 +6,16 @@ Return a spec-review verdict, blocker overrides, rubric evidence, accepted and r
 
 ## Lanes
 
-The artifact here is a **proposal** — it exists only in conversation, nothing on disk has changed. That selects exactly three lanes:
+The artifact here is a **proposal** — it exists only in conversation, nothing on disk has changed. That selects exactly four lanes:
 
 ```text
 lanes/mental-model-fit.md
 lanes/trigger-routing.md
 lanes/rule-agreement.md
+lanes/depth-coverage.md
 ```
 
-Those are the lanes whose questions are answerable about a design. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. They run at implementation review instead.
+Those are the lanes whose questions are answerable about a design. `depth-coverage` runs here because a proposal carries what it judges: the promised stages and the planned reference tree. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. They run at implementation review instead.
 
 MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
 
@@ -22,7 +23,7 @@ MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review
 
 IF the proposal includes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, and real shape consumers and return the applicable contract before the verdict.
 
-IF the change is scoped, the three lanes above do not dispatch: judge the proposal in-parent against the Verdicts and Rubric below and record the verdict. Rule drift a scoped edit could introduce is caught at implementation review, where `rule-agreement` dispatches against the actual diff.
+IF the change is scoped, the four lanes above do not dispatch: judge the proposal in-parent against the Verdicts and Rubric below and record the verdict. Rule drift a scoped edit could introduce is caught at implementation review, where `rule-agreement` dispatches against the actual diff.
 
 This reference covers the rest of the spec verdict in-parent.
 
@@ -30,7 +31,7 @@ This reference covers the rest of the spec verdict in-parent.
 
 `lanes/lane-schema.md` owns the verdict labels. Here, `great` means accepted to implement, `targeted-revision` means a bounded spec fix before editing, and `significant-rewrite` means the promise, trigger, workflow, or proof route must be redesigned before implementation.
 
-Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, branch-critical depth has no owning reference, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
+Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, a promised stage or branch has no teaching owner, a shape-only reference lacks a named consumer, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
 
 ## Rubric
 

@@ -5,24 +5,20 @@ description: Use when a task needs source gathering, prior-art research, current
 
 # Research Swarm
 
-Use this skill as the evidence-gathering workflow. It turns fuzzy research into sharp questions, sends bounded lanes to the right source classes, and returns an evidence ledger the parent can use for discussion, spec design, planning, or review.
-
-This is not a discussion skill. Discussion rebuilds the shared model or chooses the next question. Research-swarm goes out and gathers information. The parent owns the question, lane packets, verification, synthesis, and final claim.
+Turn fuzzy research into sharp questions, gather evidence through bounded source lanes, and return a verified ledger the parent can use for discussion, spec design, planning, or review. The parent owns framing, lane packets, verification, synthesis, and the final claim; discussion skills rebuild models — this skill gathers.
 
 ## Core Rules
 
 - Stay read-only against product code unless the user explicitly switches to implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
 - When evidence feeds design, recommend `spec-creation-swarm`; when evidence feeds implementation planning from an accepted spec/design, recommend `plan-creation-swarm`. Research preserves evidence for those workflows; it does not synthesize their artifacts.
-- When the user asks for a combined answer from substantial research, still include the recommended next workflow explicitly in the synthesis, even when no artifact is written.
 - Start with the local system when the research affects a local repo: current code, docs, specs, plans, runbooks, and live file tree beat memory and older notes.
 - Convert the ask into 1-5 researchable questions before spawning lanes. Name what would support, refute, or complicate each question.
 - Use subagents for independent, bounded lanes when the evidence can be gathered in parallel. Do not ask a lane to "research everything".
 - Preserve user-named systems, repos, tools, and articles. Do not replace them with generic searches.
-- Label claims as direct observation, cited source summary, user-memory evidence, inference, or unresolved.
-- Verify load-bearing secondary summaries against primary code, docs, or source pages before treating them as facts.
-- For substantial research, write a repo-local parent ledger and per-lane artifacts under `tmp/research-workflows/<date>-<slug>/` unless the user says chat-only or no-files. Substantial fan-out uses inspectable lane files, and lane outputs stay candidate evidence until parent synthesis verifies them. Keep durable promotion or cleanup with `docs-maintain`.
-- For fast, chat-only, or no-artifact runs, still name the intended evidence ledger columns and claim classes so the next agent knows how proof would be recorded.
+- Label every claim with its class — direct observation, cited source summary, user-memory evidence, inference, or unresolved — and put the citation at the claim, not in a bibliography. A load-bearing conclusion enters `supported` only with a primary anchor (code, official docs, spec, first-party source) or an explicitly labeled evidence gap.
+- Null results are evidence. Record what was searched — with the verbatim query — and found nothing, and what was not searched with the reason; "no route available" and "searched, nothing found" are different facts.
+- For substantial research, write a repo-local parent ledger and per-lane artifacts under `tmp/research-workflows/<date>-<slug>/`; lane outputs stay candidate evidence until parent synthesis verifies them, and durable promotion or cleanup stays with `docs-maintain`. `references/lane-packets.md` owns the chat-only and no-file exceptions, which still name the ledger shape and claim classes.
 - Send short progress updates during long research: after re-anchor, after lane dispatch, and before synthesis.
 
 ## Workflow
@@ -47,12 +43,15 @@ This is not a discussion skill. Discussion rebuilds the shared model or chooses 
    - run local reads/searches for critical-path facts
    - dispatch independent subagent lanes when useful
    - use current web/docs tools only when freshness or external sources matter
+   - record each lane's verbatim queries and coverage: what was searched, and what was not
 5. Verify:
    - primary-source check for load-bearing claims
    - stale-memory check when memory conflicts with live files
    - contradiction check across spec/plan/runbook/finding artifacts
-6. Synthesize by decision, not by source:
-   - what the evidence supports
+   - when evidence splits, present competing hypotheses side by side with evidence for and against each; do not force a winner
+   - IF a conclusion is load-bearing or embeds the user's own hypothesis, dispatch one bounded fresh-context countercheck to disprove it before synthesis — `references/lane-packets.md` (Countercheck Lane) owns the packet, return, and stop; the reviewer rules come from `manage-agents`
+6. Synthesize by decision, not by source. Each finding carries a state — `lead` when surfaced, `investigated` when its evidence was opened, then `accepted`, `refuted`, or `unresolved`; zero accepted findings is a valid result:
+   - what the evidence supports (accepted findings only, each with its primary anchor or labeled gap)
    - what it refutes
    - what it complicates
    - what remains unknown
@@ -70,11 +69,8 @@ Load `references/evidence-ledger.md` before writing a research artifact or when 
 
 Return:
 
-- research questions asked
-- sources and lanes used
+- research questions and coverage (verbatim queries; searched / not searched / null results)
 - artifact path, or why no artifact was written
-- ledger shape, including claim classes: direct observation, cited source summary, user-memory evidence, inference, unresolved
-- evidence ledger summary
-- supported / refuted / complicated / unresolved findings
-- source-quality caveats
+- the verified evidence ledger summary (claim classes and finding states live in the ledger shape)
+- caveats, competing hypotheses where evidence split, and unresolved gaps
 - recommended next workflow: usually `discuss-clarify-mental-models`, `spec-creation-swarm`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-review-swarm`, or `docs-maintain`
