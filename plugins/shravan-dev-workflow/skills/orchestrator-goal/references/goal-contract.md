@@ -108,7 +108,7 @@ Avoid goals that hide scope or proof:
 Make the workflow better.
 ```
 
-This does not name the expected state, allowed scope, validation, or stopping condition. Route it to `discuss-clarify-mental-models`.
+This does not name the expected state, allowed scope, validation, or stopping condition. The intent was never articulated — route it to `discuss-pathfinding`; only a previously shared goal whose model has drifted routes to `discuss-clarify-mental-models`.
 
 ## Required Files
 

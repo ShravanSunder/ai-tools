@@ -19,24 +19,24 @@ my read: <recommended answer, confidence, and the reason for it>
 why it matters: <what changes downstream if the answer differs>
 ```
 
-Attach concrete options when the answer space is knowable — reacting to options is faster and surfaces the real preference; leave it open only when enumerating would bias the answer. (Adapted from `spec-creation-swarm/references/user-decision-questions.md` and interview-me's attached-guess mechanic — addyosmani.)
+Attach concrete options when the answer space is knowable — reacting to options is faster and surfaces the real preference; leave it open only when enumerating would bias the answer.
 
 ## Probes
 
-- **Want vs should-want.** Convention-signaling answers — "scalable", "clean", "the standard approach", "I should probably..." — are not answers. Counter: "If you didn't have to justify this to anyone, what would you actually want?" (Adapted from interview-me — addyosmani.)
-- **Edge scenario.** A fuzzy boundary gets a concrete case that forces it: invent the specific situation where the stated rule must either fire or not, and ask which. (Adapted from domain-modeling's concrete scenarios — mattpocock.)
-- **Process markers**, for tacit process knowledge — the how that lives in someone's hands: what do you open first? what tells you it is going well or badly? where does the bar sit between acceptable and strong? when do you stop?
-- **Stated vs actual.** Diff what they said against what the transcript, commit history, or log shows they did — and bring the discrepancy back as a question, never a correction: "you said you always X first, but the last three runs started with Y — what decides it?" (Adapted from domain-modeling's code cross-reference — mattpocock.)
+- **Want vs should-want.** Convention-signaling answers — "scalable", "clean", "the standard approach", "I should probably..." — are not answers. Counter: "If you didn't have to justify this to anyone, what would you actually want?"
+- **Edge scenario.** A fuzzy boundary gets a concrete case that forces it: invent the specific situation where the stated rule must either fire or not, and ask which.
+- **Process walk**, for tacit process knowledge — the how that lives in someone's hands. Anchor on a real occurrence, not the idealized version: "walk me through the last time this actually happened, event by event." Then draw the structure out of the walk: what did you open first? what happened next, and what made you choose that branch? what told you it was going well or badly? what threshold would have changed the action? who took ownership, and what changed at the handoff? where does the bar sit between acceptable and strong? what exception breaks the normal order? when did you stop?
+- **Stated vs actual.** Diff what they said against what the transcript, commit history, log, or runbook shows — and bring the discrepancy back as a question, never a correction: "you said you always X first, but the last three runs started with Y — what decides it?" When a document disagrees with their account, ask which should govern the record.
 
 ## Counters — resolved and unresolved responses
 
-A response resolves its question only two ways: an explicit yes, or a concrete correction — a correction is a full resolution and needs no separate yes. Everything else is unresolved and gets its counter:
+A response resolves its question only by being concrete: a selection, a constraint, an example, or a correction — a correction is a full resolution and needs no separate yes. Everything else is unresolved and gets its counter:
 
 - **Delegation** ("whatever you think is best"): re-ask as two concrete options.
 - **Ambiguous assent** ("sounds good", "that's fine", "go ahead" without addressing the content): name the load-bearing assumption inside it and ask about that.
-- **Topic change**: park the unresolved question visibly, follow the user's new thread, and return to it before validation.
-- **Silence, then "okay let's start"**: the user is giving up on the session, not converging — shrink the batch, switch the axis, or stop and say what is missing.
+- **Topic change**: park the question in working state, follow the user's new thread, and revisit at validation.
+- **Silence, then "okay let's start"**: the user is giving up on the session, not converging — shrink the batch, switch the axis, or stop provisionally and say what is missing.
 
 ## Pacing
 
-One axis per turn, one to three questions, never a wall — a turn buys one well-answered axis. If the same axis needs a fourth question, the axis is probably two axes — split it. (Facts-vs-decisions discipline adapted from grilling — mattpocock; pacing bound is this skill's own, derived from the lens.)
+One axis per turn, one to three questions, never a wall — a turn buys one well-answered axis. Order axes by decision leverage, not discovery order. If the same axis needs a fourth question, the axis is probably two axes — split it.

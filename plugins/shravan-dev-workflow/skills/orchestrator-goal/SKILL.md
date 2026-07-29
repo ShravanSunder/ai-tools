@@ -272,7 +272,8 @@ Missing:
 <load-bearing unknowns>
 
 Next workflow:
-shravan-dev-workflow:discuss-clarify-mental-models
+shravan-dev-workflow:discuss-pathfinding when the goal was never articulated;
+shravan-dev-workflow:discuss-clarify-mental-models when a shared model drifted
 ```
 
 For goal closeout:

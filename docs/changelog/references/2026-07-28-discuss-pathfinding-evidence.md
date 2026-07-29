@@ -45,9 +45,18 @@ Run at the post-review-fix state committed alongside this file.
 | decision-record shape and supersede-never-delete lifecycle | documentation-and-adrs (addyosmani) |
 | reader test with a fresh-context Delegate | doc-coauthoring (getsentry); dispatch rules from `manage-agents` |
 | provenance slots in validation | `discuss-clarify-mental-models` (cited owner) |
-| non-yes list; predictive stop test | interview-me (addyosmani); spec-design draft's false-convergence bar (this repo) |
+| resolved/unresolved response classes; predictive stop test | interview-me (addyosmani); spec-design draft's false-convergence bar (this repo) |
 | process-marker interview questions | original — no source taught interviewing about a repeatable process |
 | one-axis batching (departure from one-question-per-message) | user-directed; derived from the lens |
+
+## Shaping round 1 (after commit fd04c8f)
+
+Four sol lanes on the committed text; parent-reduced and reshaped whole:
+
+- `rule-agreement` refresh — 1 blocker: orchestrator-goal's concrete examples (unclear-goal output template, goal-contract's "Make the workflow better") still routed every unclear goal to discuss-clarify while the abstract rule was two-way; fixed at both example sites. 2 important: skills-creation's completion collapsed the split sourcing returns (fixed — each return named); release vocabulary lagged the resolution classes (fixed — "explicit-resolution bar", "resolved/unresolved response classes").
+- over-tightening probe — verdict `bureaucratic-in-places`: the review round had collapsed three layers into one visible "record everything" surface. The three-layer separation (private working state / conversational surface / durable records) is now the mental model's second paragraph, and each gate demands its own layer: classification is working state, challenges run as natural follow-ups without announced categories, counters own resolution and validation revisits only parked items, one unresolved ledger carries through steps 2/7/8.
+- simulation A (greenfield intent under time pressure) — the skill had turn-level pacing but no session-level compression; added the depth contract (quick/standard/deep scaled to the stated time budget, "speed may reduce breadth, never honesty"), leverage-ordered axes, the minimum viable destination, the private predictive self-check, and the provisional-stop shape.
+- simulation B (tacit process, hard user) — the record shapes were decision-only while the skill promises process extraction; added the process record (trigger, owner, ordered steps, branch conditions, signals/thresholds, handoffs, stop, exceptions, source conflicts), the process-walk probe anchored on a real occurrence, reader-test receipt gating in step 6's completion and the blockers, and the chat-only wording fix (changes where records live, never whether they exist). Inline "adapted from" parentheticals moved out of runtime files; this map is their single home.
 
 ## Proof route
 
