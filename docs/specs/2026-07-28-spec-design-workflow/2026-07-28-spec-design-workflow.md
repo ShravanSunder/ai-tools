@@ -39,7 +39,7 @@ one parent, all information, one integrating mental model
 
 Two principles shape everything below:
 
-- **Creation needs one integrating mind; verification needs independent minds — at least one always, more only where an observable risk predicate holds.** Fan-out exists in exactly two places, and for exactly one concern each: bounded section-writing inside drafting (text production, never decisions) and reviewer dispatch inside review (skepticism, never authorship). Everything else is a single thread through the parent.
+- **Creation needs one integrating mind; verification needs independent minds — at least one always, more only where an observable risk predicate holds.** Fan-out that produces artifact text or judgment exists in exactly two places, for exactly one concern each: bounded section-writing inside drafting (text production, never decisions) and reviewer dispatch inside review (skepticism, never authorship). Bounded evidence lookup — one named observable question per dispatch, producing neither artifact text nor findings — is the only other delegation. Everything else is a single thread through the parent.
 - **The workflow is first-class.** It is defined as a state chart: named states, transitions, and guards. Every guard is an observable predicate readable from the artifacts and the mandatory review ledger, so a fresh agent can recover the current state from disk. Subagents are called only inside states that declare dispatch rights.
 - **The skill teaches the craft; the state chart only keeps it honest.** Every stage the workflow promises — drafting the specification, drafting the program design, and each review lane — has an owning reference that carries its judgment: what good output looks like, which questions to ask, what to inspect, and the calibration bar. Depth coverage is a named implementation gate, not an assumption: a first implementation of this contract shipped state machinery with no craft, and five consistency-focused review rounds missed it.
 
@@ -57,7 +57,7 @@ Two principles shape everything below:
 ### Non-goals
 
 - Creating an implementation plan, or editing code, configuration, manifests, or infrastructure.
-- Redesigning adjacent skills. Their triggers and bodies keep shipped wording, with exactly three body exceptions named in Changes: `spec-handoff` gains the accepted-pair record and a boundary-statement update, `manage-agents` gains one generic packet field plus a reviewer capability note, and plan creation's entry contract cuts over to the accepted-pair gate. Otherwise only dangling references to the two retired skills cut over.
+- Redesigning adjacent skills. Their triggers and bodies keep shipped wording, with exactly three body exceptions named in Changes: `spec-handoff` gains the accepted-pair record and a boundary-statement update, `manage-agents` gains one generic packet field plus a reviewer capability note, and plan creation's entry contract cuts over to the accepted-pair gate — plus two mandatory reciprocal frontmatter boundary lines on `docs-maintain` and `ops-security-review`, named in Changes. Otherwise only dangling references to the two retired skills cut over.
 - The mandatory named-skill routing path. Recreating `skills-creation` around this workflow is follow-up work that consumes `spec-design`; its routing contract belongs to that follow-up spec.
 - Portable cryptographic acceptance receipts. Handoff freshness is carried by statuses, the shared content revision, and plain file digests in `spec-handoff` — nothing more.
 - The skill-testing harness redesign. The skill's own pressure scenarios are not deferred: replacements for the six named behavior claims ship inside the hard cutover (see Changes), and static validation and review are never pressure proof.
@@ -129,7 +129,7 @@ Lifecycle rules:
 - The pair lifecycle begins only after both siblings exist. From zero or one artifact, the parent creates or reconstructs the missing sibling and initializes both as synchronized `draft` at `r1` per the header rule. A lone artifact's prior status, revision, or receipts never establish pair acceptance or review coverage.
 - After the pair exists, design content is mutable only while both statuses are `draft`.
 - If framing or reconstruction blocks while zero or one artifact exists, the run stops with a pre-pair receipt (shape owned by the review-cycle schema, below) and claims no plan readiness. It never fabricates an empty sibling.
-- The review ledger is mandatory from the first reviewer dispatch: it lives at a deterministic repo-local path (`tmp/spec-design/<slug>/ledger.md`) and collects the reduction and remediation records keyed by cycle id. A missing ledger means coverage cannot be shown, and the parent starts a fresh cycle. Research ledgers, packets, and scratch remain optional process evidence and are never promoted into the design artifacts.
+- The process ledger is mandatory from the moment the pair lifecycle begins — not from first review dispatch. It lives at a deterministic repo-local path (`tmp/spec-design/<slug>/ledger.md`) and collects, keyed by revision and cycle: the revision-bound drafting-check records (requirement-quality status, integration status, open-decision and assumption identifiers with dispositions, evidence anchors, remaining failures) and, once review begins, the reduction and remediation records. A missing ledger means neither DRAFTING passage nor review coverage can be shown, and the parent reruns the missing pass or starts a fresh cycle. Research ledgers, packets, and scratch remain optional process evidence and are never promoted into the design artifacts.
 
 ### Decision authority
 
@@ -272,7 +272,7 @@ Pseudocode, type signatures, and flow diagrams are welcome when they make the co
 
 **Failure discipline.** For every cross-boundary call: what happens when it fails halfway? who cleans up? can the step retry or roll back? where is partial success visible? Dependency category picks the proof strategy: in-process (test directly), locally substitutable (real stand-in in the suite), remote-but-owned (port + injected transport), true-external (injected port, mock adapter).
 
-**State the degree of constraint** (greenfield vs boxed in by legacy — reviewers can't calibrate without it), a *What changes / What stays the same* pair (the second is cheap and kills a whole class of reviewer doubt), and where accepted debt lands (non-goal or open decision, with the signal that forces revisiting). No file paths or code snippets — they go stale — except where a snippet encodes a decision more precisely than prose can (state machine, schema, type shape).
+**State the degree of constraint** (greenfield vs boxed in by legacy — reviewers can't calibrate without it), a *What changes / What stays the same* pair (the second is cheap and kills a whole class of reviewer doubt), and where accepted debt lands (non-goal or open decision, with the signal that forces revisiting). Ban task-oriented file inventories and incidental implementation paths — they go stale and smuggle plan content — but evidentiary anchors required by a `basis`, `source`, or traceability realization are always allowed, and a snippet may appear where it encodes a decision more precisely than prose can (state machine, schema, type shape).
 
 Sources: Google design-doc practice (industrialempathy.com), the three-layer construction order, Nygard ADRs, mattpocock `codebase-design`/`DESIGN-IT-TWICE`/`DEEPENING`, pstack `architect`, this repo's `architecture-boundaries` and `risk-and-tradeoff-design` lanes.
 
@@ -321,7 +321,7 @@ read-only)                 └─ REFRESH ◄────────┘
 
 There is no fixed multi-lane topology. Small artifacts use the whole-pair review alone.
 
-Every dispatched reviewer loads a lane mission file from `references/lanes/` that names what the lane inspects, its good and bad signals, its overlap boundaries, and its calibration bar. The packet carries the dispatch focus and scope; the lane file carries the judgment. A reviewer dispatched without a lane mission is a defect, not a lighter-weight review.
+Every dispatched reviewer first loads `references/reviewing-pair.md` — the sole owner of the common review method below — and returns its common review result, then loads its lane mission file from `references/lanes/` and applies the lane-specific judgment. The packet carries the dispatch focus and scope; the references carry the judgment. A reviewer dispatched without both loads is a defect, not a lighter-weight review.
 
 #### How to review the pair
 
@@ -339,7 +339,7 @@ Every dispatched reviewer loads a lane mission file from `references/lanes/` tha
 
 **Finding quality.** Severity by behavior effect: would a planner build the wrong thing (blocker), guess (important), or merely stumble (minor)? Every substantive finding carries a concrete failure path, *what the next agent would guess*, and the smallest correction — never bare "add more detail." One strong finding beats several weak ones. Flag only what would cause a real problem downstream: wording preferences and "this section is less detailed" are not findings; silence is a valid verdict, and noise is a real cost.
 
-**Reviewer hygiene (parent's side).** Hand reviewers the artifact and the contract — never your conclusion; handing over a conclusion buys agreement. Reviewer output is data, not verdict: verify evidence before disposition, publish dismissals with one-line rationales so the user can override, and never convert missing evidence into dismissal. Agreement across independent reviewers is signal; a lone finding is worth reading at lower confidence. The doubt-theater check: two or more cycles where reviewers raised substantive findings and zero were upheld means you are validating, not reviewing — stop and escalate. Accept when the pair definitely improves on its predecessor and every gate criterion holds — perfection is not a criterion, and taste is not a finding; unresolved fact disputes go to evidence, unresolved value disputes go to the user.
+**Reviewer hygiene (parent's side).** Hand reviewers the artifact and the contract — never your conclusion; handing over a conclusion buys agreement. Reviewer output is data, not verdict: verify evidence before disposition, publish dismissals with one-line rationales so the user can override, and never convert missing evidence into dismissal. Agreement across independent reviewers is signal; a lone finding is worth reading at lower confidence. The doubt-theater check: two or more cycles where reviewers raised substantive findings and zero were upheld means you are validating, not reviewing — stop and escalate. Where a predecessor exists, require a definite improvement; a first design instead satisfies every acceptance criterion against current evidence and constraints. Perfection is not a criterion, and taste is not a finding; unresolved fact disputes go to evidence, unresolved value disputes go to the user.
 
 Sources: dependency-order review (design-review practice), Google eng-practices review standard, pstack `interrogate`/`why`, addyosmani `doubt-driven-development`/`code-review-and-quality`, mattpocock `code-review` two-axis split, this repo's `adversarial-crux`, `whole-spec-coverage`, `planning-readiness`, and `finding-schema` lanes.
 
@@ -386,6 +386,12 @@ skills/spec-design/
     │                              model, boundaries and ownership,
     │                              alternatives, failure containment,
     │                              reversibility, proof seams
+    ├── reviewing-pair.md          common pair-review craft: dependency-
+    │                              order reading, end-to-end trace,
+    │                              authority audit, crux inversion,
+    │                              integration, planning readiness,
+    │                              finding quality — every reviewer
+    │                              loads it before its lane mission
     ├── artifact-formats.md        lifecycle header, both skeletons,
     │                              traceability entry
     ├── review-cycle-schema.md     process shapes + per-role dispatch
@@ -399,9 +405,9 @@ skills/spec-design/
         └── failure-mode.md
 ```
 
-Ownership: `references/review-cycle-schema.md` owns the process shapes — the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, pre-pair receipt — and the per-role dispatch contract (lane, packet composition, authority ceiling, receipt, parent reduction point). The lifecycle header and traceability entry are owned by the Formats section. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
+Ownership: `references/review-cycle-schema.md` owns the process shapes — the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, pre-pair receipt — the drafting-check record, and the per-role dispatch contract: predicate, packet composition, lane reference (`reviewing-pair.md` plus a lane mission for reviewers; the applicable drafting reference for section writers; the question packet with named sources for evidence contributors), prerequisites and parallel-safety basis, maximum and instance authority, terminal receipt, stop condition, and parent reduction point — for reviewer, section-writer, and evidence dispatches. The lifecycle header and traceability entry are owned by the Formats section. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
 
-**Teaching contracts.** The three `How to` sections of this spec (write the specification, write the program design, review the pair) are the authoritative craft content: implementation lifts them into the references verbatim and extends them with the per-lane anatomy — it does not re-derive them. Each reference opens with one line stating what the agent can do after loading it that it could not before, and carries the full anatomy (mission, where to look, how to inspect, good and bad signals, overlap boundary, calibration bar, stop condition). A reference containing headings, topics, or schemas but not its contracted judgment is non-complete — file presence never satisfies these contracts:
+**Teaching contracts.** The three `How to` sections of this spec are the authoritative craft content with an exact lift mapping: *How to write the specification* → `drafting-specification.md`; *How to write the program design* → `drafting-program-design.md`; *How to review the pair* → `reviewing-pair.md`. Implementation lifts them verbatim and completes the anatomy below — it does not re-derive the craft. Each reference opens with one line stating what the agent can do after loading it that it could not before. The two drafting references carry authoring anatomy (capability, inputs, construction questions, decision boundaries, result, good and bad examples, calibration, completion); `reviewing-pair.md` and the lane missions carry review anatomy (mission, where to look, how to inspect, good and bad signals, overlap boundary, calibration bar, stop condition). A reference containing headings, topics, or schemas but not its contracted judgment is non-complete — file presence never satisfies these contracts:
 
 ```text
 drafting-specification.md
@@ -439,6 +445,17 @@ lanes/whole-pair-integrity.md   (mission stated in Reviewer selection)
   inspects: every identifier and basis against its named source;
     every traceability row against the Design Overview; the pair
     read end-to-end as one design
+  independently repeats: BOTH drafting-quality passes — requirement
+    quality and integration — never trusting the author's ledger
+    self-check; for a small pair this lane is the only reviewer,
+    so these repeats are its floor
+  good: findings cite both artifacts and name what the next agent
+    would guess; bad: section-local nitpicks, style notes,
+    re-litigated user decisions
+  overlap: domain depth routes to the focused lanes; this lane owns
+    cross-artifact truth
+  stop: every material identifier traced, both passes repeated, and
+    the three-sentence design restatement written
   finding result: violated obligation or contradiction, both
     artifact locations, smallest correction
 
@@ -448,14 +465,27 @@ lanes/security-threat-boundary.md
     names; entry points, privilege transitions, data crossing trust
     boundaries; mitigations present as requirements or invariants,
     never prose reassurance
+  good: a threat names actor, entry, asset, and the invariant that
+    stops it; bad: "consider adding auth", mitigation as prose,
+    findings outside the declared trust boundaries
+  overlap: standalone scans and audits are ops-security-review's;
+    contract-shape questions route to contract-review
+  stop: every true predicate surface carries a threat statement or
+    an explicit none-found naming the entry points inspected
   finding result: threat, violated or missing invariant, required
     mitigation, affected identifiers
 
 lanes/contract-review.md
   mission: public API, protocol, storage, migration, compatibility
-  inspects: every externally visible contract for owner, versioning,
-    breakage behavior, migration path; contract claims against
-    current source
+  inspects: every externally visible contract against the 8-field
+    checklist (owner, consumers, inputs, outputs, state, invariant,
+    forbidden edge, examples) and against current source
+  good: findings name the consumer that breaks and the field that
+    breaks it; bad: hypothetical consumers, naming-style opinions
+  overlap: internal interfaces route to whole-pair integration;
+    contract security routes to the security lane
+  stop: every externally visible contract checked against all eight
+    fields and current source
   finding result: the under-specified or breaking contract, its
     consumers, smallest correction
 
@@ -463,6 +493,12 @@ lanes/platform-fit.md
   mission: cross-runtime and cross-harness behavior
   inspects: platform claims against actual platform contracts;
     per-runtime behavior differences named, never averaged
+  good: each claim tested against the platform's documented contract
+    with a citation; bad: "should work on both", averaged behavior
+  overlap: general structure routes to whole-pair; behavior under
+    load routes to failure-mode
+  stop: every cross-runtime claim verified or explicitly named
+    unverifiable
   finding result: the failing platform assumption, where, and its
     design consequence
 
@@ -471,6 +507,14 @@ lanes/difference-review.md
     artifacts do not state
   inspects: current code against the pair; undocumented decisions
     the design silently inherits or contradicts
+  good: hidden decision + code anchor + adopt-or-replace posed as a
+    basis-bearing statement; bad: inventories of code trivia the
+    design need not state
+  overlap: whether the decision SHOULD hold belongs to the parent
+    and user; this lane only surfaces it
+  stop: every artifact claim about current behavior checked against
+    code, and every load-bearing code behavior absent from the pair
+    listed
   finding result: the hidden decision, its code anchor, and whether
     the pair adopts or replaces it — as a basis-bearing statement
 
@@ -480,8 +524,36 @@ lanes/failure-mode.md
   inspects: failure propagation against containment claims; ordering
     and consistency boundaries; recovery and partial-success paths;
     proof burden on the riskiest path
+  good: a falsifying scenario with a concrete trigger and the
+    boundary it breaks; bad: generic "add retries", risks with no
+    scenario attached
+  overlap: security-motivated failure routes to the security lane;
+    proof mechanics beyond the seam route forward to planning
+  stop: the riskiest path traced to containment and 2-3 probes run
+    against the design's own claims
   finding result: the falsifying scenario, the boundary it breaks,
     and the requirement or proof seam that must exist
+```
+
+**Implementation call contract.** The implemented skill states these as literal calls; a stage that skips one fails its guard:
+
+```text
+MUST load references/artifact-formats.md and return the lifecycle
+  header, skeletons, and traceability form — before creating or
+  editing either artifact.
+MUST load references/drafting-specification.md and return its
+  requirement-quality pass and open-decision list — before the
+  specification draft completes. Section-writer packets for Why/What
+  sections carry this reference as their lane reference.
+MUST load references/drafting-program-design.md and return its
+  integration pass and assumption list — before the program-design
+  draft completes. Section-writer packets for How sections carry it
+  likewise.
+MUST load references/reviewing-pair.md and return the common review
+  result — every reviewer, before applying its lane mission.
+MUST load references/review-cycle-schema.md and return the packet
+  composition, receipt shapes, drafting-check record, and per-role
+  dispatch contract — before the first dispatch of any kind.
 ```
 
 A promised stage without an owning teaching reference, or a reference failing its contract above, is an implementation completion blocker.
@@ -502,7 +574,7 @@ evidence         Delegate   fresh, packet only  read-only   0..n one-shot
 ```
 
 - **The parent is the author.** It holds all information, drafts and integrates both artifacts, and preserves one mental model across Why, What, and How. There is no persistent author fork and no multi-author topology.
-- **Section writers** produce bounded candidate text from a packet naming the section outline, the `REQ-*` it must answer, source anchors, non-goals, and the parent-decided structural claims the section expresses. Where structure is undecided, the writer returns a gap — never prose that chooses. They may not mint `REQ-*`, `basis`, status, or revision values; a needed new requirement routes through the parent into the specification. The parent integrates every word before it becomes artifact content.
+- **Section writers** produce bounded candidate text from a packet naming the section outline, the `REQ-*` it must answer, source anchors, non-goals, and the parent-decided structural claims the section expresses. Where structure is undecided, the writer returns a gap — never prose that chooses. They may not originate `REQ-*`, `CLAIM-*`, `INV-*`, bases, statuses, revisions, structural realizations, option selections, failure policies, or normative-force prose: every semantic sentence in returned text maps to a packet-supplied identifier or parent-decided claim, and an unmapped need returns as a gap; a needed new requirement routes through the parent into the specification. The parent integrates every word before it becomes artifact content.
 - **Reviewers** start with no inherited conversation history and read-only access (the `manage-agents` reviewer rules: parent conversation history `none`, workspace access `read-only`), and return candidate findings only. The whole-pair reviewer requires Frontier capability at high reasoning. `manage-agents` remains the sole owner of pattern and category allowances: the cutover adds an explicit Frontier one-shot reviewer case to its Delegate pattern table rather than overriding it — a packet records the pattern-supported selection; it can never raise a ceiling the pattern does not grant. The authority audit is judgment work, and the recorded failure was a judgment miss.
 - **Evidence contributors** answer one named observable question with source-backed candidate evidence; they return no prose destined for the artifacts.
 
@@ -591,7 +663,7 @@ Two visible sub-stages, each with its owning craft reference. The parent loads `
 
 The parent drafts the specification first and validates its load-bearing claims, then drafts the program design constrained by it. A discovered requirement gap or meaning change goes to the specification first; program design resumes from the revised meaning. Missing product decisions are resolved — or returned to the user — before they are disguised as internal design. Section writers may be dispatched here under the rules above; evidence Delegates for named gaps.
 
-Guard out (all artifact-readable): every requirement carries a basis and no obligation sits outside `REQ-*` (per Decision authority); the requirement-quality pass from `drafting-specification.md` and the integration pass from `drafting-program-design.md` are recorded, with their open-decision and assumption lists; every requirement has a traceability entry with status `satisfied`; every `CLAIM-*`/`INV-*` has an owning section; the How sections agree with the integrated `Design Overview`; no mandatory heading is missing without a stated reason. A `gap` entry keeps this state active; a `decision-blocked` entry routes its decision to the user and, when material (per Decision authority), stops the run as `decision-needed`.
+Guard out (all artifact-readable): every requirement carries a basis and no obligation sits outside `REQ-*` (per Decision authority); the requirement-quality pass from `drafting-specification.md` and the integration pass from `drafting-program-design.md` are written to the process ledger as revision-bound drafting-check records, with their open-decision and assumption lists; every requirement has a traceability entry with status `satisfied`; every `CLAIM-*`/`INV-*` has an owning section; the How sections agree with the integrated `Design Overview`; no mandatory heading is missing without a stated reason. A `gap` entry keeps this state active; a `decision-blocked` entry routes its decision to the user and, when material (per Decision authority), stops the run as `decision-needed`.
 
 ### REVIEW
 
@@ -731,11 +803,12 @@ Implementation of this proposal is a hard cutover:
 - Create `spec-design` as a wholly new workflow skill with the state chart as its main path and the full tree from Reference tree and teaching contract — both drafting-craft references and all six lane missions included. Implementation cannot be claimed complete while any promised stage lacks its owning teaching reference.
 - Adapt, do not rewrite from nothing: `drafting-specification.md` draws from the retired `user-decision-questions.md`, `product-intent.md`, and `requirements-testability.md`; `drafting-program-design.md` from `risk-and-tradeoff-design.md` and the architecture lanes' judgment content; the lane missions from `whole-spec-coverage.md` (whole-pair-integrity), `security-threat-model.md` (security-threat-boundary), `contract-and-scope.md` (contract-review), `harness-fit.md` (platform-fit), `spec-difference.md` (difference-review), and — for `failure-mode.md` — `risk-and-tradeoff-design.md`'s falsifying-scenario, failure-containment, and reversibility craft composed with `validation-and-testability.md` for proof burden. All reshaped to the pair model and authority audit, with their swarm-topology framing dropped.
 - Retire `spec-creation-swarm` and `spec-review-swarm` into `plugins/shravan-dev-workflow/retired-skills/` per the repo convention (`SKILL.retired.md`, outside the loadable `skills/` tree, historical content verbatim). No aliases, shims, or dual paths.
-- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted only after their `spec-design` replacements exist and pass (the replacement-first rule in the deferred list below). The cutover gate is `grep -rn --exclude-dir=retired-skills 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches; the retired archive keeps its historical content verbatim. The sweep may add one mirrored boundary line to the `docs-maintain` and `ops-security-review` descriptions where needed to keep their near misses quiet — a frontmatter boundary only, never a body redesign.
+- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted only after their `spec-design` replacements exist and pass (the replacement-first rule in the deferred list below). The cutover gate is `grep -rn --exclude-dir=retired-skills 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches; the retired archive keeps its historical content verbatim. The sweep adds one mandatory mirrored boundary line to each of the `docs-maintain` and `ops-security-review` descriptions (documentation-only reconciliation vs semantic design change; standalone security work vs in-cycle threat review) — frontmatter boundaries only, never a body redesign.
 - Add the accepted-pair record (paths, synchronized statuses, shared revision, both file SHA-256 digests) to the `spec-handoff` packet alongside its existing context contents, and update its boundary statement so a resumable packet stays portability-only while an accepted-pair record is the portable acceptance transport.
 - Cut over plan creation's entry contract (the third body exception): for work that owns a product or architecture design, its source-resolution rule accepts only the synchronously accepted pair — direct handoff or the `spec-handoff` record — and routes bare requirements, chat decisions, and unpaired documents to `spec-design`. One owner states the rule; every plan entry cites it. No other plan-workflow redesign occurs here.
 - Extend `manage-agents/references/agent-job-packet.md` with a generic target-artifact-version field (used here to bind dispatches to the pair content revision and cycle id); the new dispatch field is the value the packet's existing receipt-scope `source/head version` echoes. Extend the `manage-agents` Delegate pattern table with an explicit Frontier-capability, high-reasoning one-shot reviewer case (used by the whole-pair reviewer); the pattern table remains the sole owner of allowed categories, and no packet field overrides it.
 - Update plugin documentation, marketplace descriptions, changelog, and version metadata during implementation; validate both Claude and Codex plugin surfaces.
+- Update admired-source provenance in the `ai-dev-skills` meta-repo — path-level mappings, pins, and bump notes for every source adapted above — and record an explicit decision on whether the lite catalog (`plugins/shravan-dev-workflow/docs/source-inspiration-catalog.md`) needs a refresh.
 
 Explicitly deferred to follow-up work, not silently dropped:
 
