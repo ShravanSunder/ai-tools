@@ -57,16 +57,7 @@ Return:
 
 ## Parent Research Ledger
 
-For substantial work, the parent `research-ledger.md` records:
-
-- source-of-truth inputs and lane packets issued
-- lane artifact paths under `lanes/`
-- which observations the parent accepted, contested, rejected, or left open
-- contradictions and stale assumptions that affect the next phase
-- route recommendation to `spec-creation-swarm` or `plan-creation-swarm`, when the evidence is ready for a creation or planning workflow
-- completion receipt with source anchors, artifact paths, named exceptions, and remaining uncertainty
-
-Research ledgers do not create specs or implementation plans. They preserve evidence for the next parent reducer.
+`evidence-ledger.md` owns the parent ledger shape, including coverage, finding states, competing hypotheses, and the parent disposition with its completion receipt. The parent additionally records the lane packets issued and lane artifact paths under `lanes/`. Research ledgers do not create specs or implementation plans; they preserve evidence for the next parent reducer.
 
 ## Local Re-Anchor Lane
 

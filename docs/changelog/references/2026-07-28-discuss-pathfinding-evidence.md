@@ -58,6 +58,15 @@ Four sol lanes on the committed text; parent-reduced and reshaped whole:
 - simulation A (greenfield intent under time pressure) — the skill had turn-level pacing but no session-level compression; added the depth contract (quick/standard/deep scaled to the stated time budget, "speed may reduce breadth, never honesty"), leverage-ordered axes, the minimum viable destination, the private predictive self-check, and the provisional-stop shape.
 - simulation B (tacit process, hard user) — the record shapes were decision-only while the skill promises process extraction; added the process record (trigger, owner, ordered steps, branch conditions, signals/thresholds, handoffs, stop, exceptions, source conflicts), the process-walk probe anchored on a real occurrence, reader-test receipt gating in step 6's completion and the blockers, and the chat-only wording fix (changes where records live, never whether they exist). Inline "adapted from" parentheticals moved out of runtime files; this map is their single home.
 
+## Shaping round 2 (after commit 567f265)
+
+Two sol lanes on the reshaped text; parent-reduced:
+
+- combined rule-agreement + steering re-read — strong passes on the three-layer rewrite (challenges still mandatory, reader receipt gates, process extraction demands occurrence-level legwork). Two importants fixed: an observable unknown could be classified and then never read (step 2 completion now requires each observable unknown to carry its bounded-read result before its axis proceeds); the fatigue counter allowed immediate provisional stops (now ordered: shrink/switch first, then renegotiate depth explicitly). The private predictive test's execution is now bound to step 8's completion via working state.
+- re-simulation of both round-1 scenarios — 9 of 10 round-1 failures verified fixed against old-vs-new wording; the remaining one (topic drift lacked switch/follow/park destination control) fixed in the topic-change counter, plus the conflicting-source disposition and vague-time-budget interpretation soft spots.
+
+Luna research lanes (three, on gpt-5.6-luna) fed the research-swarm and discuss-clarify-mental-models improvements recorded in `../2026-07-29-research-swarm-clarify-improvements.md`, and the parked-recommendation decisions recorded there.
+
 ## Proof route
 
 Behavior not evaluated: no pressure scenario or behavior proof exists for this change. The user explicitly directed that pressure testing be excluded from this effort ("no pressure testing"; "focus on the creation") and accepted shipping on static validation plus the reviews above. Acceptance is recorded here as the persisted decision.

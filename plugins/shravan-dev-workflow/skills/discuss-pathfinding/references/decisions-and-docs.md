@@ -35,7 +35,7 @@ steps: <ordered; each branch condition named>
 signals and thresholds: <what tells the runner it is going well or badly; what changes the action>
 stop condition: <how the runner knows it is done>
 exceptions: <what breaks the normal order, and what happens instead>
-source conflicts: <where the stated process and the artifacts disagreed, and which governs>
+source conflicts: <where the stated process and the artifacts disagreed, which governs, and the disposition of the losing source — update it, mark it superseded, or return it as unresolved>
 unresolved: <questions the walk left open>
 status: proposed | accepted | superseded
 ```

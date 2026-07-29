@@ -34,8 +34,8 @@ A response resolves its question only by being concrete: a selection, a constrai
 
 - **Delegation** ("whatever you think is best"): re-ask as two concrete options.
 - **Ambiguous assent** ("sounds good", "that's fine", "go ahead" without addressing the content): name the load-bearing assumption inside it and ask about that.
-- **Topic change**: park the question in working state, follow the user's new thread, and revisit at validation.
-- **Silence, then "okay let's start"**: the user is giving up on the session, not converging — shrink the batch, switch the axis, or stop provisionally and say what is missing.
+- **Topic change**: consult the destination before following. In scope — follow the thread, parking the open question in working state. A different destination — ask the user to choose: switch the session's destination, or park the new topic and finish the current one ("postmortems feel like a separate extraction — switch to it, or park it and finish triage?"). Parked items are revisited at validation.
+- **Silence, then "okay let's start"**: the user is giving up on the session, not converging. First shrink the batch or switch the axis; if the user still wants to stop, renegotiate the depth to quick and stop provisionally with the unresolved items named — one tired answer never abandons a standard or deep extraction silently.
 
 ## Pacing
 

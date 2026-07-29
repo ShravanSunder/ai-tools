@@ -7,7 +7,7 @@ description: Use when either side notices drift or misalignment - repeated corre
 
 ## Stance
 
-Use this skill to rebuild the shared picture before artifact work. The job is not to facilitate, summarize politely, or force a decision ritual. The job is to make the current map inspectable: what shape it has, what it hides, what was inherited, what is evidenced, what remains assumed, what could be wrong, and what route follows.
+Use this skill to rebuild the shared picture before artifact work. The job is not to facilitate, summarize politely, or force a decision ritual. The job is to make the current map inspectable: what shape it has, what it hides, what was inherited, what is evidenced, what remains assumed, what could be wrong, and what route follows. A map that was never built cannot be repaired — extraction of understanding that exists only in one person's head belongs to `discuss-pathfinding`; this skill repairs a map both sides already hold.
 
 Stay read-only. Do not write specs, plans, docs, code, review findings, or research ledgers. If the next useful move is broad evidence gathering, route to `research-swarm`; if the model is stable enough for a durable artifact, route to the owning phase skill.
 
@@ -44,14 +44,14 @@ next_workflow:
 
 Field obligations:
 
-- `model`: current map; start with one literal shape word from this list: `terms`, `boundary`, `flow`, `state`, `ownership`, `constraint`, or `tradeoff`, then name what the map hides or simplifies.
+- `model`: current map; start with one literal shape word from this list: `terms`, `boundary`, `flow`, `state`, `ownership`, `constraint`, or `tradeoff`, then name what the map hides or simplifies — and the repair target: the falsifiable statement of where the shared map failed, which every later field must answer to.
 - `evidence_checked`: read this turn vs inferred; use `none -- answering from session memory` when no direct evidence was checked.
 - `inherited_frame`: what we believe because of analogy, old names, prior specs, agent reports, habit, or convention; `none surfaced` is legal.
 - `first_principles`: directly evidenced truths and hard constraints from code, docs, run output, artifacts, or the user's stated goal.
 - `assumptions`: unproven beliefs carried knowingly; do not use this slot for inherited claims or direct evidence.
 - `branches`: competing framings or model types that need different evidence.
-- `countercase`: what would falsify or weaken the rebuilt map, including the load-bearing assumption or tradeoff.
-- `rebuilt_model`: the clarified map to carry forward.
+- `countercase`: what would falsify or weaken the rebuilt map, including the load-bearing assumption or tradeoff. Reconcile every contradiction or counterexample raised against the map into one of four dispositions: the source contradicts the model — repair the model; the source is ambiguous — record a bounded evidence gap; the challenge assumed missing context — enrich the model; the challenge is a preference — dismiss it as non-load-bearing. A countercase with no disposition is a hedge.
+- `rebuilt_model`: the clarified map to carry forward, including each canonical term that changed and the old interpretation it replaces.
 - `open_or_confirmed`: whether the model is confirmed or what remains open.
 - `next_workflow`: route plus the decision this map improves.
 
@@ -61,6 +61,7 @@ Branch references:
 
 - Load `references/model-shapes.md` when drawing the chosen shape would help and the shape is not obvious in prose.
 - Load `references/provenance-decomposition.md` when `inherited_frame`, `first_principles`, and `assumptions` start collapsing, or the user asks for first-principles reconstruction.
+- IF the repaired map gates a spec, plan, or irreversible decision, dispatch one fresh-context divergent reviewer (reviewer rules per `manage-agents`: history none, read-only) asking what the repaired map still fails to explain; its findings enter `countercase` reconciliation as candidates. This stays bounded and read-only — it does not make this skill a review swarm.
 
 ## Workflow
 
