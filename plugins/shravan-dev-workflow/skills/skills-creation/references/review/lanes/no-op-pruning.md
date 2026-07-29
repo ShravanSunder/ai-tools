@@ -35,7 +35,7 @@ Bad signals:
 
 Calibration: Propose deletions, not rewrites. Be aggressive: most prose that fails the test should go rather than be reworded. When a failing sentence protects something real, say so and route it to `steering-strength` for a stronger form instead of trying to fix it here.
 
-Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` owns *two statements disagree*. `steering-strength` owns *a statement is too weak to bind*. A leading word too weak to beat the default is reported here as a no-op with a `steering-strength` route.
+Overlap boundary: This lane owns *a statement does nothing*. `rule-agreement` owns *two statements disagree*. `steering-strength` owns *a statement is too weak to bind*. `depth-coverage` owns *a whole reference teaches nothing* — a file whose every sentence passes here can still be ceremony there. A leading word too weak to beat the default is reported here as a no-op with a `steering-strength` route.
 
 Stop when: the deletion test has been applied to every sentence in scope for the artifact: sentences added or changed by the diff for `changed files`, and every sentence in the file for `create` and for `existing files`.
 

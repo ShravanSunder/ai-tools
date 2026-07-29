@@ -18,6 +18,8 @@ Plugin: `shravan-dev-workflow` 1.6.72 (same unreleased version as the discuss-pa
   - `rebuilt_model` carries each changed canonical term and the old interpretation it replaces;
   - IF the repaired map gates a spec, plan, or irreversible decision: one bounded fresh-context divergent reviewer asks what the repaired map still fails to explain.
 
+- `skills-creation` gains the depth-teaching gate, completing the pipeline its step 2 supplies: `Place the depth` requires every promised stage to name a teaching owner (what to inspect, what good and bad look like, when to stop — written from the step-2 sourcing records or a named source; shape-only references are ceremony with a named consumer, never a stage's owner); a new `depth-coverage` review lane runs at both spec review (proposals carry the promised stages and planned tree) and implementation review (both the body and reference-text rows), with reciprocal overlap boundaries in placement-and-calls, no-op-pruning, and steering-strength; a Completion Blocker backstops the run. This re-lands the lesson from the recorded schema-only-references failure, without the discarded attempt's inventory bureaucracy.
+
 ## Parked recommendations (recorded, not implemented — user decisions)
 
 - Artifactization (settled discussion → PRD/spec → vertical-slice issues; from mattpocock to-prd/to-issues): planning territory, later effort.
