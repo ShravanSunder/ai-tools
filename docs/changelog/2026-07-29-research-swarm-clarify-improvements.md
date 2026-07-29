@@ -9,7 +9,7 @@ Plugin: `shravan-dev-workflow` 1.6.72 (same unreleased version as the discuss-pa
   - null results are first-class evidence — verbatim queries recorded for what was searched (including nothing found) and reasons for what was not searched;
   - competing hypotheses presented side by side with evidence for and against; no forced winner;
   - findings carry states: `lead → investigated → accepted | refuted | unresolved`; zero accepted findings is a valid result;
-  - optional bounded fresh-context countercheck before synthesis when a conclusion is load-bearing or embeds the user's own hypothesis;
+  - predicate-gated fresh-context countercheck before synthesis when a conclusion is load-bearing or embeds the user's own hypothesis, with its own lane contract (packet, `survived | refuted | unresolved | blocked` return, stop);
   - `evidence-ledger.md` owns the full parent ledger shape (coverage, states, hypotheses, parent disposition); lane-packets' duplicate section is now a pointer. One prune overruled deliberately: tool-routing's per-tool bullets stay — no owning tool skills exist for those routes.
 - `discuss-clarify-mental-models` (name kept by user decision) narrows and sharpens as repair:
   - stance names the boundary: a map that was never built cannot be repaired — extraction belongs to `discuss-pathfinding`;

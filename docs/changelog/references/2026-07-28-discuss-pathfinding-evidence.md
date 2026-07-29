@@ -67,6 +67,17 @@ Two sol lanes on the reshaped text; parent-reduced:
 
 Luna research lanes (three, on gpt-5.6-luna) fed the research-swarm and discuss-clarify-mental-models improvements recorded in `../2026-07-29-research-swarm-clarify-improvements.md`, and the parked-recommendation decisions recorded there.
 
+## Full-validation round (after commit 2d24935)
+
+Six sol jobs over the whole changed surface; parent-reduced:
+
+- ensemble linkage (re-dispatched single-threaded after a sub-swarm timeout) — verdict `composes-with-fixes`: "validated understanding" named no real output (skills-creation 2a now asks for the records and confirmed restatement); "evidence consumed" undersold research-swarm's return (now the evidence-ledger summary and coverage); pathfinding's provenance citation now says the four slots are borrowed alone. No description collisions; handoff floor clean.
+- readability/craft — best prose decisions-and-docs.md; research-swarm folds applied (opening paragraphs, Output Shape dedup); discuss-clarify red-flag table merged and retired-ritual rows deleted.
+- discuss-pathfinding depth-coverage + mental-model-fit — clean: both references classify as teaching with named lost markers; one compound lens, walked throughout; zero findings.
+- research-swarm (first lane review of the reshape) — the countercheck stage had no teaching owner: `lane-packets.md` gains the Countercheck Lane (disproof packet, `survived | refuted | unresolved | blocked`, stop condition); ledger names its consumers; `supported` gate carried into the synthesis step; changelog's "optional" corrected to predicate-gated.
+- discuss-clarify (first lane review of the reshape) — blocker fixed: the divergent-reviewer branch is now a complete Delegate dispatch (packet, parallel-safety, non-widening authority, receipt, parent reduction); repair-target and disposition obligations aligned into step completions and blockers; three no-op sentences deleted (one via lane-conflict resolution toward pruning).
+- skills-creation reflexive (4 missions) — timed out twice against a moving tree; re-dispatched against the stabilized commit; its reduction is recorded below when complete.
+
 ## Proof route
 
 Behavior not evaluated: no pressure scenario or behavior proof exists for this change. The user explicitly directed that pressure testing be excluded from this effort ("no pressure testing"; "focus on the creation") and accepted shipping on static validation plus the reviews above. Acceptance is recorded here as the persisted decision.

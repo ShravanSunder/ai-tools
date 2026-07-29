@@ -5,9 +5,7 @@ description: Use when a task needs source gathering, prior-art research, current
 
 # Research Swarm
 
-Use this skill as the evidence-gathering workflow. It turns fuzzy research into sharp questions, sends bounded lanes to the right source classes, and returns an evidence ledger the parent can use for discussion, spec design, planning, or review.
-
-This is not a discussion skill. Discussion rebuilds the shared model or chooses the next question. Research-swarm goes out and gathers information. The parent owns the question, lane packets, verification, synthesis, and final claim.
+Turn fuzzy research into sharp questions, gather evidence through bounded source lanes, and return a verified ledger the parent can use for discussion, spec design, planning, or review. The parent owns framing, lane packets, verification, synthesis, and the final claim; discussion skills rebuild models — this skill gathers.
 
 ## Core Rules
 
@@ -51,9 +49,9 @@ This is not a discussion skill. Discussion rebuilds the shared model or chooses 
    - stale-memory check when memory conflicts with live files
    - contradiction check across spec/plan/runbook/finding artifacts
    - when evidence splits, present competing hypotheses side by side with evidence for and against each; do not force a winner
-   - IF a conclusion is load-bearing or embeds the user's own hypothesis, dispatch one bounded fresh-context countercheck (a reviewer per `manage-agents`) to disprove it before synthesis
+   - IF a conclusion is load-bearing or embeds the user's own hypothesis, dispatch one bounded fresh-context countercheck to disprove it before synthesis — `references/lane-packets.md` (Countercheck Lane) owns the packet, return, and stop; the reviewer rules come from `manage-agents`
 6. Synthesize by decision, not by source. Each finding carries a state — `lead` when surfaced, `investigated` when its evidence was opened, then `accepted`, `refuted`, or `unresolved`; zero accepted findings is a valid result:
-   - what the evidence supports
+   - what the evidence supports (accepted findings only, each with its primary anchor or labeled gap)
    - what it refutes
    - what it complicates
    - what remains unknown
@@ -71,11 +69,8 @@ Load `references/evidence-ledger.md` before writing a research artifact or when 
 
 Return:
 
-- research questions asked
-- sources and lanes used, with verbatim queries and coverage (searched / not searched / null results)
+- research questions and coverage (verbatim queries; searched / not searched / null results)
 - artifact path, or why no artifact was written
-- ledger shape, including claim classes: direct observation, cited source summary, user-memory evidence, inference, unresolved
-- evidence ledger summary with finding states (lead / investigated / accepted / refuted / unresolved)
-- supported / refuted / complicated / unresolved findings, and competing hypotheses side by side where evidence split
-- source-quality caveats
+- the verified evidence ledger summary (claim classes and finding states live in the ledger shape)
+- caveats, competing hypotheses where evidence split, and unresolved gaps
 - recommended next workflow: usually `discuss-clarify-mental-models`, `spec-creation-swarm`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-review-swarm`, or `docs-maintain`

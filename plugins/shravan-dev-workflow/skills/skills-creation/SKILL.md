@@ -163,7 +163,7 @@ Classify the run; search the owning plugin for an existing skill or reference th
 
 ### 2. Choose the authoring basis and proof posture
 
-IF the work the skill teaches lives in someone's head and is not yet understood, use `discuss-pathfinding` to extract it and return the validated understanding and its records. IF it lives in artifacts the run has not read, use `research-swarm` and return the evidence consumed. `Build the main path`, `Place the depth`, and `Implement` consume these returns.
+IF the work the skill teaches lives in someone's head and is not yet understood, use `discuss-pathfinding` and return its records and confirmed restatement. IF it lives in artifacts the run has not read, use `research-swarm` and return its evidence-ledger summary and coverage. `Build the main path`, `Place the depth`, and `Implement` consume these returns.
 
 Then classify the change, and classify why you are making it.
 
@@ -180,7 +180,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: validated understanding and records when `discuss-pathfinding` ran, evidence consumed when `research-swarm` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: the records and confirmed restatement when `discuss-pathfinding` ran, the evidence-ledger summary when `research-swarm` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 

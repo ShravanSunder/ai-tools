@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Use this structure for substantial research artifacts under `tmp/research-workflows/<date>-<slug>/research-ledger.md`.
+Use this structure for substantial research artifacts under `tmp/research-workflows/<date>-<slug>/research-ledger.md`. Its immediate consumer is the parent reducer synthesizing this run; its downstream consumer is the recommended next workflow or continuation agent named at the bottom.
 
 ```text
 Research Ledger
