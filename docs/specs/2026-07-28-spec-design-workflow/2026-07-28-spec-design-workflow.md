@@ -1,819 +1,637 @@
-# Spec Design Workflow Proposal
-
-Status: proposal
+# Spec Design Orchestration Skill Specification
 
 Date: 2026-07-28
 
-## Why
+Status: proposed
 
-### Problem
+Target runtime skill: `spec-design`
 
-One design cycle is currently split across two skills, and three failure modes — the first two recorded in `docs/wip/skills-investigation/` — are uncovered:
+Companion skill specifications:
 
-1. **Fragmented creation.** `spec-creation-swarm` fans design reasoning out to a fixed parallel option-lane topology (minimal-change, clean-boundary, pragmatic). Creation is synthesis: it needs one integrating mind holding all information. Splitting candidate reasoning across lanes leaves the parent reconstructing a coherent design from fragments, and the reconstruction burden is where meaning drifts.
+- [`specification-design`](./2026-07-28-specification-design.md)
+- [`program-design`](./2026-07-28-program-design.md)
+- [`spec-program-review`](./2026-07-28-spec-program-review.md)
 
-2. **Coherence-only review.** `spec-review-swarm` audits internal coherence, boundary cleanliness, and testability — never decision authority. Recorded failure (Perseus `HC-004`, 2026-07-15/16; see `2026-07-16-spec-creation-swarm-unapproved-requirements.md` for the laundered requirement and `2026-07-16-spec-review-swarm-authority-blind-spot.md` for the review miss): an architecture lane's recommendation was written into the spec as a normative `MUST NOT`, reviewers verified coherence and passed it, and implementation removed a production library the user never chose. Nothing in either skill asks: who decided this?
+## Decision
 
-3. **Open loop.** Review lives in a separate, optional-looking skill with its own packet model and vocabulary. Findings can be reduced without the artifact owner remediating them, and remediated surfaces are not reliably re-reviewed. The design cycle never provably closes.
+Create `spec-design` as the orchestration skill for a closed pre-plan design workflow. It routes work through three independently invocable craft skills, owns one canonical orchestration record, closes review/remediation loops, and alone records pair acceptance.
 
-### Desired outcome
+`spec-design` does not teach or perform specification craft, program-design craft, or review judgment. Those meanings belong to the three companion skills. The orchestrator owns composition and lifecycle because direct skill descriptions cannot resolve resume, invalidation, or cross-artifact remediation from persisted state.
 
-One `spec-design` workflow that carries a design from framing to an accepted specification/program-design pair. It hard-replaces `spec-creation-swarm` and removes `spec-review-swarm` as a separate phase.
-
-The governing frame:
-
-```text
-Why + What = Specification
-How        = Program Design
-
-one parent, all information, one integrating mental model
-  -> pair drafted (sections may be delegated as bounded text work)
-  -> independent fresh-context review: traceability + authority
-  -> parent reduction of candidate findings
-  -> parent remediation of upheld findings
-  -> refreshed review of affected scopes
-  -> repeat until every upheld finding is verified-closed
-  -> acceptance gate
-  -> plan creation
-```
-
-Two principles shape everything below:
-
-- **Creation needs one integrating mind; verification needs independent minds — at least one always, more only where an observable risk predicate holds.** Fan-out that produces artifact text or judgment exists in exactly two places, for exactly one concern each: bounded section-writing inside drafting (text production, never decisions) and reviewer dispatch inside review (skepticism, never authorship). Bounded evidence lookup — one named observable question per dispatch, producing neither artifact text nor findings — is the only other delegation. Everything else is a single thread through the parent.
-- **The workflow is first-class.** It is defined as a state chart: named states, transitions, and guards. Every guard is an observable predicate readable from the artifacts and the mandatory review ledger, so a fresh agent can recover the current state from disk. Subagents are called only inside states that declare dispatch rights.
-- **The skill teaches the craft; the state chart only keeps it honest.** Every stage the workflow promises — drafting the specification, drafting the program design, and each review lane — has an owning reference that carries its judgment: what good output looks like, which questions to ask, what to inspect, and the calibration bar. Depth coverage is a named implementation gate, not an assumption: a first implementation of this contract shipped state machinery with no craft, and five consistency-focused review rounds missed it.
-
-### Goals
-
-- Establish `spec-design` as the single pre-plan workflow for specification and program design.
-- Produce a specification document that owns Why and What, and a sibling program-design document that owns How.
-- Keep creation, review, reduction, remediation, and acceptance inside one invocation as one closed cycle.
-- Make decision authority a first-class, checkable dimension in both artifacts: every normative obligation and material structural decision declares its basis, and review audits that basis against named sources.
-- Make the parent the sole author and reducer: it holds all information, authors and integrates both artifacts, and reduces findings. Product decisions and every `user-decision` basis remain the user's authority.
-- Give reviewers fresh context, read-only access, and curated packets; treat every reviewer result as candidate evidence until the parent validates it.
-- Scale review to observable risk, with exactly one mandatory whole-pair reviewer.
-- Route only an accepted pair to plan creation.
-
-### Non-goals
-
-- Creating an implementation plan, or editing code, configuration, manifests, or infrastructure.
-- Redesigning adjacent skills. Their triggers and bodies keep shipped wording, with exactly three body exceptions named in Changes: `spec-handoff` gains the accepted-pair record and a boundary-statement update, `manage-agents` gains one generic packet field plus a reviewer capability note, and plan creation's entry contract cuts over to the accepted-pair gate — plus two mandatory reciprocal frontmatter boundary lines on `docs-maintain` and `ops-security-review`, named in Changes. Otherwise only dangling references to the two retired skills cut over.
-- The mandatory named-skill routing path. Recreating `skills-creation` around this workflow is follow-up work that consumes `spec-design`; its routing contract belongs to that follow-up spec.
-- Portable cryptographic acceptance receipts. Handoff freshness is carried by statuses, the shared content revision, and plain file digests in `spec-handoff` — nothing more.
-- The skill-testing harness redesign. The skill's own pressure scenarios are not deferred: replacements for the six named behavior claims ship inside the hard cutover (see Changes), and static validation and review are never pressure proof.
-- Recording review chronology, agent identities, or conversation history as design rationale.
-
-## What
-
-### One workflow, one closed cycle
-
-`spec-design` owns the complete pre-plan design cycle. Review is not a later skill recommendation and remediation is not an owner-facing handoff that ends the run; both are inner loops of the same invocation.
-
-The invocation completes only when the parent accepts the pair, the user explicitly stops or defers, or a material decision or evidence gap blocks further design.
-
-Trigger description for the future skill:
+The runtime architecture is four skills, not four documents hiding one monolith:
 
 ```text
-Use when turning bare requirements or product intent into a spec,
-design doc, or architecture doc before an implementation plan exists,
-or when writing, revising, reviewing, resuming, or accepting one —
-critique, attack, poke holes, pressure-test assumptions, threat-model
-the design in-cycle, remediate findings. Not for one named skill's
-create/update/evaluate work; reviewing an implementation plan or
-handoff; shared-model reconvergence; documentation-only
-reconciliation, cleanup, archival, or promotion that changes no
-requirement or design decision; evidence-only research; handoff
-packaging; or standalone security scans, audits, repository threat
-models, and security-finding remediation.
+spec-design
+  owns: lifecycle, routing, revision binding, invalidation, acceptance
+  calls:
+    specification-design
+      owns: authoritative Why / What
+    program-design
+      owns: structural How
+    spec-program-review
+      owns: local-review-requirement classification and independent review judgment
 ```
 
-### Two sibling artifacts
+## Problem
 
-Substantial design work produces:
+The previous workflow mixed four different reasons to change:
+
+- how to construct an authoritative specification;
+- how to design the program that realizes it;
+- how to review either artifact and the pair;
+- how to keep the multi-artifact lifecycle closed.
+
+That made the workflow large without giving each craft a complete teaching spine. It also allowed the word “swarm” to stand in for orchestration, even though the useful behavior was bounded delegation and parent reduction rather than a fixed fan-out.
+
+The replacement must prevent four failures:
+
+1. optional handoffs leave a specification without program design, a design without review, or findings without refreshed verification;
+2. independently invoked phase skills accidentally claim pair readiness;
+3. lifecycle truth is copied into both artifacts, ledgers, and receipts until they disagree;
+4. planning invents ownership, state, interfaces, failure policy, or proof seams that program design never settled.
+
+## Success Definition
+
+When a user starts, resumes, revises, or remediates substantial pre-plan design work, `spec-design` identifies the current valid phase from disk, invokes the semantic owner of the next work, rejects stale results, repeats review after invalidating edits, and returns either an accepted specification/program-design pair or an explicit blocked/deferred result. For a bounded planning request, it can instead return an exact, source-backed `implementation-mechanics-only | design-required` classification. No phase skill must guess lifecycle state, and no planner must invent missing Why, What, or structural How.
+
+## Mental Model
+
+`spec-design` is a transaction coordinator for meaning.
+
+The specification and program design are independently authored artifacts, but acceptance is an atomic property of an exact pair. Review results are observations about exact artifact digests. A semantic edit invalidates downstream observations; it does not mutate them into freshness. The orchestrator advances only when the required results cover the current artifacts.
+
+The planning-basis classifier is the transaction admission gate. If any design-bearing category is applicable or unresolved, classification opens or resumes the meaning transaction at its owning phase. Only a complete finding that every design-bearing category is inapplicable returns `implementation-mechanics-only` without creating lifecycle state.
+
+This mental model predicts the workflow:
 
 ```text
-docs/specs/<yyyy-mm-dd-slug>/
-├── <yyyy-mm-dd-slug>.md                    # specification: Why + What
-└── <yyyy-mm-dd-slug>-program-design.md     # program design: How
+intent
+  -> authoritative Why / What
+  -> structural How
+  -> independent pair review
+  -> semantic-owner remediation
+  -> refreshed review
+  -> accepted pair
+  -> planning handoff
 ```
 
-Neither is an appendix to the other. The specification is authoritative for Why and What; the program design is authoritative for How; the specification constrains the program design; the program design traces every structural decision to the specification; both are accepted together or not at all.
+Meaning flows forward. Gaps route backward to the owner of the missing meaning.
+
+## Scope
+
+`spec-design` owns:
+
+- generic start, continue, resume, revise, remediate, and acceptance routing;
+- one canonical orchestration record;
+- artifact identity, digest, revision, and result freshness;
+- required phase transitions and prerequisite checks;
+- finding ownership, remediation routing, invalidation, and refresh;
+- pair acceptance and planning handoff readiness;
+- authoritative planning-basis classification for bounded implementation requests;
+- stop/resume inputs when evidence or a user decision blocks progress.
+
+It does not own:
+
+- problem framing, requirements, or observable contract craft;
+- component, ownership, interface, state, flow, failure, security, reliability, or proof-seam design;
+- review rubrics, findings, or review verdicts;
+- generic model, provider, permission, session, packet, or receipt mechanics;
+- implementation task decomposition, file scopes, order, commands, checkpoints, or evidence capture;
+- implementation, proof execution, documentation cleanup, or old-skill retirement.
+
+## Trigger Surface
+
+Invocation capability: model-invocable and user-invocable.
+
+Proposed trigger description:
+
+```yaml
+name: spec-design
+description: Use when starting, continuing, resuming, remediating, or completing a pre-plan design workflow that must produce an accepted specification and program-design pair, or when classifying whether a planning request is implementation-mechanics-only with no unresolved design decision. Not for directly authoring only Why/What, only structural How, only reviewing named artifacts, authoring or evaluating a runtime skill package—its trigger, main path, references, lanes, scripts, steering, platform mechanics, or behavior proof—or an explicitly requested legacy spec-creation-swarm/spec-review-swarm run.
+```
+
+Routing boundaries:
+
+- direct authoritative Why/What work routes to `specification-design`;
+- direct structural How work with an authoritative specification routes to `program-design`;
+- direct review of named artifacts routes to `spec-program-review`;
+- implementation task sequencing routes to plan creation only with an exact accepted-pair handoff or a current `spec-design` planning-basis classification that returned `implementation-mechanics-only` for the exact bounded request;
+- generic agent coordination composes with `manage-agents` rather than being redefined here.
+
+`spec-design` is selected when persisted phase state, multiple design capabilities, remediation, or pair acceptance must be resolved. It must not swallow an explicit one-phase request merely because that phase could later participate in a pair.
+
+## Independently Invocable Contract
+
+### Inputs
+
+One of:
+
+- bare intent or an unresolved design question;
+- a specification candidate;
+- a specification/program-design pair;
+- a review result or finding set;
+- an existing orchestration record;
+- a request to resume, continue, revise, remediate, accept, or prepare for planning.
+
+Inputs may be chat context, artifact paths, or exact prior results. Artifact-backed inputs are preferred for substantial work.
+
+### Output
+
+The normal orchestration entry returns the current orchestration record plus exactly one terminal invocation result:
 
 ```text
-┌─ specification ──────────┐   ┌─ program design ─────────┐
-│ WHY + WHAT               │   │ HOW                      │
-│                          │   │                          │
-│ problem, outcomes        │   │ modules, boundaries,     │
-│ requirements  REQ-*      │   │ dependency direction     │
-│   normative ⇒ basis      │◄──┤ every REQ-* answered:    │
-│ claims       CLAIM-*     │ traces to  owner, flow,      │
-│ invariants   INV-*       │   │  failure, proof seam     │
-│ non-goals, constraints   │   │ material INV-* ⇒ basis   │
-└──────────────────────────┘   └──────────────────────────┘
-         constrains ──────────────────────────►
-         Status, Content revision, Review cycle identical
-         in both: the pair moves together or not at all
+accepted-pair
+decision-needed
+evidence-blocked
+phase-blocked
+deferred
 ```
 
-Shared lifecycle header, identical in both files:
+An `accepted-pair` result names exact specification and program-design digests, the covering review result, closed findings, and planning-handoff input. Other results name the next semantic owner and the precise input required to continue.
 
-- `Status: draft | accepted | blocked | deferred` — always synchronized.
-- `Content revision: r<N>` — a monotonic integer shared by both siblings. A semantic change to a requirement, claim, invariant, basis, boundary, flow, failure policy, or rationale increments it in both files; a typo- or format-only change with no semantic meaning change does not. A synchronized status write never changes it. A newly created or reconstructed pair starts at `r1`; a lone artifact's prior revision belongs to no pair lifecycle and is void.
-- `Review cycle: none | c<M> in-cycle @ r<N> | c<M> covered @ r<N>` — written by the parent on REVIEW entry, before the first dispatch (`in-cycle`), and when the REVIEW guard passes (`covered`). REVIEW entry is the single owner of cycle-id assignment; `<M>` is a monotonic counter, guards that say "this cycle" resolve against it, and after a terminal re-entry the prior value stands as history until the next REVIEW entry.
-- `Stop reason: <text>` — present, with the same text in both files, only while status is `blocked` or `deferred`; names the smallest material decision or missing source and the exact resume inputs.
-
-**Synchronized-write field set.** A synchronized status write changes exactly: both `Status` fields, the `Review cycle` field when the parent records cycle state, and the presence or text of `Stop reason:`. `Content revision` and all design content are unchanged. The parent verifies every synchronized write — accepting, non-accepting, and resume alike — against this field set. Every other section cites this rule rather than restating it.
-
-Lifecycle rules:
-
-- The pair lifecycle begins only after both siblings exist. From zero or one artifact, the parent creates or reconstructs the missing sibling and initializes both as synchronized `draft` at `r1` per the header rule. A lone artifact's prior status, revision, or receipts never establish pair acceptance or review coverage.
-- After the pair exists, design content is mutable only while both statuses are `draft`.
-- If framing or reconstruction blocks while zero or one artifact exists, the run stops with a pre-pair receipt (shape owned by the review-cycle schema, below) and claims no plan readiness. It never fabricates an empty sibling.
-- The process ledger is mandatory from the moment the pair lifecycle begins — not from first review dispatch. It lives at a deterministic repo-local path (`tmp/spec-design/<slug>/ledger.md`) and collects, keyed by revision and cycle: the revision-bound drafting-check records (requirement-quality status, integration status, open-decision and assumption identifiers with dispositions, evidence anchors, remaining failures) and, once review begins, the reduction and remediation records. A missing ledger means neither DRAFTING passage nor review coverage can be shown, and the parent reruns the missing pass or starts a fresh cycle. Research ledgers, packets, and scratch remain optional process evidence and are never promoted into the design artifacts.
-
-### Decision authority
-
-This section exists because of the recorded failure: an author recommendation laundered into a normative requirement passes every coherence check. Authority is therefore a declared, reviewable dimension — in both artifacts, because structural decisions can foreclose product choices just as requirements can.
-
-Material semantic statements carry stable inline identifiers, unique across the pair (the same identifier never appears in both siblings):
+The separate planning-basis classification entry does not create a design workflow or accepted-pair result:
 
 ```text
-REQ-001: <testable obligation>            # specification only
-CLAIM-001: <load-bearing current-state, product, or design claim>
-INV-001: <material behavioral, structural, state, or security invariant>
+operation: classify-planning-basis
+input identity and exact bounded request/artifact digests
+candidate implementation work and claimed design decisions
+
+complete result:
+  immutable classification identity and freshness
+  implementation-mechanics-only | design-required
+  matched no-unresolved-design predicate or exact unresolved decision
+  exact bounded request plus every load-bearing inspected source identity/digest/version
+  basis and inspected sources
+
+blocked invocation:
+  invocation state: blocked
+  classification result: omitted
+  exact missing input
 ```
 
-Every `REQ-*` — regardless of modal wording — plus every material `INV-*` and every traceability entry's structural realization declares its basis. A requirement is an obligation whether it says `MUST`, `support X`, `required`, or appears as an acceptance criterion; wording never exempts it from the basis discipline:
+`implementation-mechanics-only` requires that the bounded work contain no new or changed design-bearing Why/What/How semantics: requirement, ownership, interface, state, failure/recovery, concurrency/consistency, compatibility/cutover, trust, or proof-seam categories are inapplicable to the requested change. A design-bearing category described as “settled” in an unaccepted source is not mechanics-only; it requires an accepted pair or returns `design-required` into the normal `spec-design` lifecycle. Missing or ambiguous input blocks classification rather than guessing.
+
+### Local completion boundary
+
+The normal lifecycle invocation is locally complete when the orchestrator has either:
+
+- accepted an exact reviewed pair and produced the planning handoff input; or
+- persisted an honest stop state with the next required skill, missing input, invalidated results, and resume condition.
+
+It is not complete merely because a phase skill or reviewer returned.
+
+The planning-basis classification invocation is locally complete only when it returns a current identified result for the exact bounded input, or a blocked invocation with the missing input and no classification value.
+
+## Canonical Orchestration Record
+
+One record is the sole lifecycle source of truth. The exact serialization is implementation work, but the semantic fields are fixed:
 
 ```text
-REQ-001: <obligation>
-  basis: code-constraint | user-decision | author-recommendation | unresolved
-  source: <code path, doc, or public-safe paraphrase of the user's decision>
+workflow identity
+authoritative record locator
+status: active | blocked | deferred | accepted
+phase: orient | specification | program-design | review | remediation-specification | remediation-program | refresh | acceptance
+next skill and reason
+
+planning-basis classification when requested:
+  invocation state: complete | blocked
+  immutable classification-result identity or verbatim embedded result
+  exact bounded request plus every load-bearing inspected source identity/digest/version
+  freshness
+  implementation-mechanics-only | design-required when complete
+  matched predicate/basis or exact unresolved/missing input
+
+result source coverage:
+  immutable governing-source coverage identity for each imported author, classification, and review result
+  exact source identity, digest/version, authority status, and completeness basis live in the result, not copied here
+
+specification:
+  path, artifact identity, revision, digest
+  author result identity, covered digest
+  phase terminal result: locally-ready | decision-needed | evidence-blocked | deferred
+  invocation state: complete | partial | blocked | no-receipt
+  local review classification invocation state: complete | blocked
+  local review requirement when complete: mode, covered digest, review-required | non-substantial, basis, orchestration override
+  independent local review identity, covered digest, verdict when review-required
+
+program design:
+  path, artifact identity, revision, digest
+  governing specification digest
+  author result identity, covered digests
+  phase terminal result: locally-ready | specification-gap | decision-needed | evidence-blocked | deferred
+  invocation state: complete | partial | blocked | no-receipt
+  local review classification invocation state: complete | blocked
+  local review requirement when complete: mode, covered digests, review-required | non-substantial, basis, orchestration override
+  independent local review identity, covered digests, verdict when review-required
+
+pair review:
+  result identity, covered pair digests, mode, verdict, coverage
+  invocation state: complete | partial | blocked | no-receipt
+
+findings:
+  finding identity, severity, source anchor, semantic owner
+  review disposition: accepted | rejected | contested | unverified
+  remediation status: open | blocked | corrected-awaiting-refresh | closed
+  user decision or correction evidence, invalidation effect
+
+stop / resume:
+  missing evidence or decision
+  exact continuation input
+
+acceptance:
+  accepted pair digests
+  covering review result
+  confirmed load-bearing user-decision bases: claim identity, source paraphrase, authorized confirmer, confirmation evidence
+  planning handoff identity
 ```
 
-- `code-constraint` — compelled by current code, platform, or verified external fact; `source` names it.
-- `user-decision` — explicitly selected by the user; `source` paraphrases the decision (never a transcript dump).
-- `author-recommendation` — the author's derived preference. Non-accepting for any requirement or normative-force statement: the gate converts it into a decision returned to the user.
-- `unresolved` — a known open branch. Non-accepting for the obligation that declares it.
+The planning-basis classification result is one immutable identified result owned by the classification operation. A lifecycle record may reference that result or embed it verbatim for the same identity; it must not restate, recompute, or become a second owner of the classification. Consumers validate the result's identity and complete covered-source set before use.
+
+Every imported author, classification, and review result owns one immutable governing-source coverage value. It contains the exact identity and digest/version of every source that governed the result, each source's authority status, the scoped inventory rule used to establish completeness, and any unresolved discovery gap. The canonical orchestration record stores only that coverage identity with the result identity; it never copies or weakens the covered-source set. A result with an unresolved completeness gap cannot advance the workflow.
+
+Artifact-local metadata may identify the artifact, revision, digest, governing input, local status, and authoritative orchestration-record locator. It must not duplicate workflow phase, next skill, open finding state, planning classification, or pair acceptance.
+
+Phase terminal results and invocation states are separate contracts. A semantic result says what the phase concluded; an invocation state says whether the call produced a usable receipt. `partial`, `blocked`, and `no-receipt` never overwrite or masquerade as a phase terminal result.
+
+The shared local-review classification is persisted for the exact covered digest set. “Locally covered” means either a current required review exists or a current `non-substantial` classification records its basis. A missing classification is not local coverage.
+
+Finding state uses one total mapping:
+
+- `accepted` starts `open`, becomes `corrected-awaiting-refresh` after correction evidence, and becomes `closed` only after required refreshed coverage;
+- `rejected` is `closed` with no remediation;
+- `contested` is `blocked` until an authorized decision reclassifies it as `accepted` or `rejected`;
+- `unverified` is `blocked` until evidence allows reclassification.
+
+An accepted finding never changes its remediation status to `blocked`. If its correction cannot proceed, the finding remains `open`, the workflow status/result becomes `blocked`, and `stop / resume` records the exact missing evidence or authorized decision. On resume, the same finding continues from `open`. This keeps finding disposition/remediation separate from workflow liveness.
+
+`upheld`, `resolved-contested`, and other unstated aliases are not persisted states.
+
+## Planning-Basis Classification Path
+
+This is a callable sibling entry to the lifecycle path, not a shortcut through acceptance:
+
+1. IF this skill was directly invoked for one named runtime skill package and no `skills-creation` parent packet/result authorizes composition, route to `skills-creation`; otherwise bind the exact bounded request and supplied artifact identities/digests.
+2. Derive the complete scoped governing-source inventory before judging categories. Start with supplied inputs; follow their direct authority/provenance references; include current accepted and settled-but-unaccepted specifications, program designs, decision records, contracts, and repository source-of-truth instructions that govern the same bounded component or behavior. Stop only when every discovered authority claim is classified as governing or non-governing and no unresolved source claims authority over the scoped design categories. If that denominator cannot be established, return blocked with the discovery gap and no classification value.
+3. Inspect whether executing it would require any new or changed product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility/cutover realization, trust control, or proof seam.
+4. Return `implementation-mechanics-only` only when every design-bearing category is explicitly inapplicable to the requested change with source-backed basis. A category that is applicable but merely described as settled requires an accepted pair. Return `design-required` with the first applicable or unresolved semantic owner otherwise. If the input is insufficient to decide, return blocked invocation state with no classification result.
+
+Completion: one immutable result identity covers the exact bounded request plus every load-bearing inspected source identity/digest/version and records its evidence basis and freshness; consumers preserve and verify that result rather than reclassifying the request or copying its conclusion into a second owner.
+
+## All-Run Main Path
+
+### 1. Resolve or create the workflow identity
+
+IF this skill was directly invoked for one named runtime skill package and no `skills-creation` parent packet/result authorizes composition, route to `skills-creation` before creating workflow state. `skills-creation` may call this skill back with that explicit parent authority.
+
+Resolve the authoritative record before creating state. Use an explicitly supplied record locator first; otherwise inspect supplied artifacts for a shared authoritative locator, then search the configured durable workflow-record home for a record whose workflow identity or bound artifact identities match. A locator is a pointer, not lifecycle truth.
+
+If exactly one matching record exists, load it. If records or artifact pointers conflict, stop with every candidate locator and identity; never merge or choose by recency. If lifecycle-bearing artifacts name an identity but the record is missing or corrupt, enter source-backed reconstruction or return blocked with the missing evidence—never silently create a replacement. Create a new record only after the lookup proves that no matching workflow identity, artifact pointer, or lifecycle-bearing state exists.
+
+After loading a terminal record, revalidate current artifact digests and every immutable governing-source coverage set before reusing its result. A `blocked` or `deferred` record remains terminal until its exact continuation input exists; then mark it `active`, invalidate changed coverage, and derive the earliest affected phase. An `accepted` record may return the existing accepted pair only when artifact digests, governing-source identities/digests/versions, authority statuses, and completeness bases are unchanged. Any change or newly discovered governing source invalidates acceptance and downstream results, marks the workflow `active`, and derives the earliest semantic owner affected by that change. Persist the re-entry transition before invoking the owner or returning.
+
+Persist the canonical record after creation and after every transition, invalidation, remediation-state change, stop/defer decision, and acceptance update, before returning the corresponding terminal result. A failed persistence leaves the invocation blocked and cannot advance or claim acceptance.
+
+Completion: the workflow has one discoverable canonical record at one authoritative locator, all supplied artifacts/results are inventoried, conflicts or reconstruction gaps are explicit, and the durable record contains the latest completed transition before the invocation returns.
+
+### 2. Bind current artifact identity and freshness
+
+Compute or verify current artifact digests. Bind every imported author or review result to the digests it actually covered. Reject a result whose source identity, digest, or prerequisites do not match current files.
+
+Completion: every retained result proves exactly which artifact version it covers; stale or ambiguous results are marked invalid and cannot satisfy a transition.
+
+### 3. Derive the next semantic owner
+
+Use the state and transition rules below. Do not infer missing meaning in the orchestrator.
 
 ```text
-basis: code-constraint ─────┐
-       user-decision   ─────┴──► accepting at the gate
-                                 (source anchor required)
-
-       author-recommendation ─┐
-       unresolved ────────────┴► a normative obligation cannot
-                                 be accepted: the gate converts
-                                 it to decision-needed and returns
-                                 the smallest decision to the user
+missing or unsettled Why / What          -> specification-design
+authoritative Why / What, missing How    -> program-design
+missing/stale local-review classification -> spec-program-review classification entry
+locally covered current pair             -> spec-program-review pair mode
+specification-owned finding              -> specification-design
+program-design-owned finding             -> program-design
+remediation invalidated review           -> spec-program-review refresh
+current pair, every accepted finding closed, ready review -> acceptance gate
 ```
 
-**Normative force** means stating or foreclosing an obligation — semantically, not by keyword. `MUST`/`MUST NOT` is the canonical form, not the trigger: `support X`, `required`, an acceptance criterion, and a binding non-goal carry the same force, and none of them escapes the basis or confirmation gates by avoiding the word. Obligations live only in `REQ-*`: an `INV-*` or `CLAIM-*` stating one is a defect the whole-pair reviewer flags. A structural decision that eliminates, replaces, or forecloses an existing production dependency, module, or user-visible mechanism carries normative force and requires an accepting basis or an entry in `Open Design Decisions`.
+Completion: exactly one next skill or one honest stop condition is recorded with its prerequisite evidence.
 
-**Material** means load-bearing for acceptance: every requirement is material; a finding is material when its severity is `blocker` or `important`; a decision or tradeoff is material when it changes a requirement, a public contract, an ownership boundary, or a normative basis. Other sections cite these definitions rather than restating them.
+### 4. Invoke the owner and consume only its terminal result
 
-Authority-bearing statements are not only requirements. Material non-goals, constraints, and externally meaningful commitments in the specification carry identifiers (`CLAIM-*` or `INV-*`) and, where they bind design choices, a basis. A program design that contradicts a user-owned non-goal or constraint is non-accepting regardless of wording force — the recorded failure's second branch was exactly a non-goal overridden without authority.
+Dispatch/invoke the selected phase skill using exact paths, digests, governing inputs, accepted decisions, open findings routed to that owner, and the required result shape. Generic agent mechanics remain governed by `manage-agents`.
 
-The whole-pair reviewer audits every declared basis in both artifacts against its named source — the basis field is what carries provenance to reviewers who never saw the conversation. A `user-decision` basis is auditable only by the user: a fresh reviewer can check that the paraphrase exists, not that the decision happened. The acceptance gate therefore surfaces every load-bearing `user-decision` basis — across requirements, material non-goals and constraints, material invariants, and normative-force structural realizations — (identifier plus source paraphrase) to the user for confirmation before the accepting status write.
+The orchestrator may continue parent work while qualified subagent lanes run, but it may not replace a phase skill's result with its own prose.
 
-### Specification ownership: Why and What
+Completion: the called skill's phase terminal result and invocation state are recorded separately and bound to exact inputs. `partial`, `blocked`, or `no-receipt` invocation state cannot advance the workflow without a verified semantic result.
 
-The specification defines the externally meaningful contract: the problem and consumers; outcomes and success criteria; goals, scope, non-goals; functional and non-functional requirements (normative ones with basis); user-, API-, protocol-, or operator-visible behavior; constraints; edge cases and observable failure expectations; security, privacy, and operational obligations; acceptance criteria and open product decisions.
+### 5. Apply transition and invalidation rules
 
-Requirements are testable obligations, not tasks. A requirement may constrain a public interface, but it does not assign internal module ownership or prescribe task sequence.
+Import the verified result, recompute artifact digests, and apply invalidation before selecting the next phase.
 
-#### How to write the specification
+Completion: no stale downstream result remains marked current and the next transition is derived from the updated record.
 
-**Facts are looked up; decisions are asked.** If a fact is discoverable from the filesystem, code, or docs, look it up — never spend a user question on it. Decisions are the user's: put each one to them, one question per message, with your recommended answer and confidence attached (a wrong guess gets a faster reaction than a blank question), and wait. Batching questions locks in the wrong framing because the third question usually depends on the first answer.
+### 6. Close remediation rather than handing it off optionally
 
-**Decompose before refining.** If the request spans independent subsystems, split it first and spec the first slice — don't spend questions polishing details of a thing that needs decomposition. "Too simple to need a design" is a named trap: simple projects are where unexamined assumptions waste the most work.
+For each accepted review finding, route the correction to the semantic artifact owner. After each edit, invalidate affected local/pair results and require refreshed coverage. Continue until every accepted finding is `closed`; when correction cannot proceed, retain its remediation status as `open`, set the workflow result to `blocked`, and record the exact missing evidence or authorized decision in `stop / resume`.
 
-Work in this order — each section derivable from the ones before it: problem → consumers → outcomes → success criteria → requirements → non-goals → constraints and edge cases → acceptance criteria → open decisions. A requirement that traces to no outcome is invented; an outcome with no requirement is unserved.
+Completion: every finding has a disposition, semantic owner, artifact revision, correction evidence or blocking input, and refresh effect.
 
-**Requirement syntax (EARS).** One capability per `REQ-*` (split conjunctions — you cannot pass/fail a compound). Choose the shape by condition class, clauses in temporal order:
+### 7. Gate pair acceptance
+
+Accept only when all acceptance predicates hold:
+
+- current specification author result covers the current specification digest;
+- current program-design author result covers the current pair and governing specification digest;
+- fresh local reviews required by the shared review-requirement classification in `spec-program-review` cover current artifacts;
+- pair review covers the exact current pair;
+- every accepted finding is closed;
+- every load-bearing user-chosen requirement, non-goal, constraint, or normative structural realization has a durable decision source or current confirmation from the authorized decision maker;
+- contested material decisions are resolved by the authorized user/source;
+- review says ready for planning and names no missing Why/What/How;
+- current artifacts do not contradict the orchestration record.
+
+Completion: the accepted pair and its covering results are atomically recorded, or the exact failed predicate selects the next phase.
+
+### 8. Produce the planning handoff input
+
+Return accepted artifact paths/digests, requirement identifiers, target component/owner/interface/state/failure contracts, concurrency/consistency policy, compatibility/cutover realization, trust/security/reliability controls, proof modalities/seams, remaining implementation constraints, and explicitly deferred non-design decisions.
+
+Completion: a planner can choose tasks, exact files, order, commands, checkpoints, and evidence capture without inventing product meaning or architecture.
+
+## State Transitions
 
 ```text
-always active     The <system> <response>.
-state-driven      While <state>, the <system> <response>.
-event-driven      When <trigger>, the <system> <response>.
-optional feature  Where <feature present>, the <system> <response>.
-unwanted behavior If <fault/trigger>, then the <system> <response>.
-complex           While <state>, when <trigger>, the <system> <response>.
+orient
+  -> specification
+
+specification
+  -> blocked                       missing decision/evidence
+  -> program-design                current locally covered specification
+
+program-design
+  -> specification                 requirement/authority gap
+  -> blocked                       missing technical evidence/decision
+  -> review                        current locally covered pair
+
+review
+  -> remediation-specification     accepted/open Why/What finding
+  -> remediation-program           accepted/open How finding
+  -> blocked                       incomplete review or user decision
+  -> acceptance                    ready verdict, every accepted finding closed
+
+remediation-specification
+  -> program-design                specification semantics changed
+  -> refresh                       non-semantic change; all text-bound receipts still refresh
+  -> blocked                       missing correction evidence/decision; finding remains open
+
+remediation-program
+  -> refresh
+  -> blocked                       missing correction evidence/decision; finding remains open
+
+refresh
+  -> review                        re-run invalidated local/pair coverage
+
+acceptance
+  -> accepted                      all predicates hold
+  -> derived next state            failed predicate
+
+blocked | deferred
+  -> same terminal state           continuation input still missing
+  -> derived active phase          continuation input present; freshness revalidated
+
+accepted
+  -> accepted                      artifacts and complete governing-source coverage unchanged
+  -> derived active phase          artifact, source, authority, or completeness change invalidates acceptance
 ```
 
-Error and failure behavior always uses `If/then` — writing a fault with `When` recasts it as a normal trigger and hides that the system is in a bad state.
+## Invalidation Rules
 
-```text
-bad   REQ-004: The importer MUST handle large files robustly.
-      (two vague verbs, no observable behavior, no threshold)
+- A semantic specification edit invalidates its author/local-review results, the program-design result unless it is explicitly revalidated against the new digest, all pair reviews, and pair acceptance.
+- A program-design edit invalidates its author/local-review results, all pair reviews, and pair acceptance.
+- Any edit to reviewed text, including copy-only normalization, invalidates receipts that covered the prior text. Exact-digest freshness has no normalization exception.
+- A classification result is bound to its complete covered set. Any change to the exact request or any load-bearing inspected source identity, digest, version, or authority status invalidates a local-review-requirement or planning-basis classification and requires fresh classification.
+- A load-bearing user-decision confirmation is bound to the exact claim meaning it confirmed. A semantic change to that claim invalidates the confirmation; a copy-only edit does not alter its authority meaning but still invalidates text-bound review receipts.
+- A new authoritative external constraint invalidates every result whose reasoning depends on the superseded constraint.
+- Focused review results never substitute for the mandatory review mode that selected them.
+- A result may be current for one artifact and stale for the pair; freshness is coverage-specific.
 
-good  REQ-004: When a CSV up to 2 GB is imported, the importer
-      completes within 512 MB RSS, reporting progress every 5 s.
-        basis: user-decision
-        source: user chose a 2 GB ceiling over a streaming redesign
-      REQ-005: If the CSV exceeds 2 GB, the importer rejects it
-      before reading rows, naming the limit in the error.
-```
+## Direct-Invocation Import Rules
 
-**The stranger test.** A requirement passes when someone who has never met you could build exactly what you meant and prove they did. If they'd have to ask a question, it fails — repair it now.
+Independent phase use remains first-class:
 
-**Vague-verb repair.** Each of these triggers *what would an observer see?* and is unfinished until the answer is in the text: `support` (which operations, what result?), `handle` (what happens, observably?), `robust` (under which failure, degraded how far?), `easy` (which task, how many steps, for whom?), `fast` (which operation, what threshold, at what load?), `secure` (against which actor doing what?).
+- import a `specification-design` result after verifying its artifact digest and local review coverage;
+- import a `program-design` result only when its governing specification digest matches the workflow's current specification;
+- import a `spec-program-review` result as advisory coverage; pair acceptance still runs through this orchestrator;
+- never reinterpret `locally-ready` or review `ready` as `accepted`;
+- when an imported result lacks a required local review, route to `spec-program-review` local mode rather than silently upgrading it.
 
-**Requirement vs task.** "MUST store sessions in Postgres" is a task wearing requirement clothes. State the obligation — "sessions survive process restart; two concurrent writers never corrupt a session" — and let the program design choose Postgres, with a basis. Test: if a different implementation could satisfy the user, the technology name doesn't belong in the requirement.
+## Delegation and Lane Policy
 
-**Never silently fill ambiguity.** An unresolved branch gets `basis: unresolved` and an `Open Product Decisions` entry — an explicit marker, never a plausible guess. State assumptions as a block the user can strike ("correct me now or I proceed with these").
+`spec-design` does not own authoring or review lanes. Its only potential delegation is bounded orchestration assistance such as artifact inventory or evidence lookup that does not decide meaning.
 
-**Non-goal craft.** A good non-goal names and blocks the *nearest plausible expansion*, not a strawman — a reasonable possibility explicitly declined. Bad: "no unnecessary features." Good: "No multi-tenant isolation: single-workspace deployment is assumed; adding it is a new spec." Half of misalignment is silent disagreement about what is *not* being built.
+Any subagent call must:
 
-**External contracts.** For each load-bearing surface fill: owner / consumers / inputs (including invalid and untrusted) / outputs (including errors and side effects) / state read, written, cached, or explicitly untouched / invariant / forbidden edge / one valid and one boundary-invalid example. A field you can't fill is a finding — never "the implementation can decide" unless the spec explicitly delegates that freedom and names the acceptable range.
+- use `manage-agents` for pattern, capability, runtime, permissions, packet, and receipt mechanics;
+- receive exact workflow/artifact identities and a non-widening authority boundary;
+- return candidate evidence or a terminal phase result;
+- remain subject to parent verification and reduction.
 
-**Edge cases as failure expectations.** For each main flow, state observable behavior at its boundaries — empty input, duplicate, timeout, partial write, concurrent caller: "a duplicate submission returns the original result and creates nothing."
+No fixed number of agents or fixed fan-out is required. Parallelism follows qualified independence, not a workflow brand.
 
-**User decisions.** One material question at a time, in this shape — and know what does *not* count as agreement: "whatever you think is best" is delegation (re-ask as two concrete options); "sounds good" is ambiguous; silence then "okay let's start" is the user giving up on the interview, not converging.
-
-```text
-Decision needed: <one sentence>
-My current read: <recommended answer and confidence>
-Why it matters:  <what changes if the answer differs>
-Question:        <single question>
-```
-
-**Tradeoffs.** What we gain, what we pay, who pays — one line each. A tradeoff without a payer hasn't been thought through.
-
-**Self-review before review.** Four fresh-eyes passes, fixed inline: placeholders (TBD/TODO/vague), internal contradiction between sections, scope (one design or a decomposition?), and ambiguity — could any requirement be read two ways? Pick one and make it explicit.
-
-Sources: EARS (alistairmavin.com/ears), INCOSE GtWR/29148 singular-verifiable rules, RFC 2119 §6 (normative words sparingly), mattpocock `grilling`, addyosmani `interview-me`/`spec-driven-development`, superpowers `brainstorming`, this repo's `contract-and-scope` lane.
-
-### Program-design ownership: How
-
-The program design defines the internal structural contract that satisfies the specification: responsibility and module boundaries; internal abstractions, types, interfaces, dependency direction; state ownership and sources of truth; data flow, control flow, lifecycle; concurrency, consistency, ordering; failure handling, retry, cleanup, partial success; security and trust-boundary enforcement; runtime and platform integration; observability and performance structure; test and proof seams the plan must operationalize; alternatives and rejected options; requirement-to-design traceability.
-
-The `Design Overview` is the integrated system model: one end-to-end account of ownership, dependency direction, state, lifecycle, flow, and failure propagation that every later section and every traceability row must agree with. Detailed sections attach to that model; a complete set of headings and per-requirement rows is an inventory, not a design, until they compose without contradiction.
-
-Pseudocode, type signatures, and flow diagrams are welcome when they make the contract precise. Worker assignment, file-by-file tasks, command sequences, and execution DAGs are not — they belong to the plan.
-
-#### How to write the program design
-
-**Three layers, each following from the last.** Problem and requirements (the specification) → functional behavior as seen from outside → internal structure. Each layer is a branch point with many valid successors; designing *is* choosing among them, and the document's job is to record the choices and their trade-offs. If there were genuinely no trade-offs, you didn't need a design — a design doc that reads as an implementation manual ("this is how we will build it") with no alternatives is the canonical bad one.
-
-**Design Overview first, one page, before any detail section.** It contains: every module with its single reason to change; dependency arrows in one direction only; a state-ownership table (each piece of state → exactly one owner with mutation authority); the main flow traced end to end; the failure path of the riskiest step traced to its containment. If you can't draw this in a page, the design isn't integrated yet — sections written before the overview are inventory.
-
-**Ground before sketching.** Build a traced model of every system the new design touches; naming a file is not grounding. If the design redefines existing ownership or layering, recover the *rationale* of the current shape first, so the rationale becomes a constraint instead of a casualty.
-
-**Design it twice.** For each load-bearing structural choice, sketch at least two shapes under different forcing constraints — minimize the interface; optimize for the most common caller; maximize flexibility — then choose and record why the winner beats the others (gain / pay / who pays). "No alternative existed" is a claim that needs a basis. Be opinionated: a strong recommendation, not a menu.
-
-**Depth is leverage.** A module is deep when callers get a lot of behavior per unit of interface they must learn — and "interface" means everything a caller must know: signature, invariants, ordering constraints, error modes, required configuration, performance character. The deletion test: imagine deleting the module — if complexity vanishes it was a pass-through; if it reappears across N callers it was earning its keep.
-
-**Interrogate the nouns.** For every noun the pair names — state store, service, protocol, queue, agent, UI surface, external system — answer: who owns it? what is its source of truth? who may read it, who may write it? what interface must callers use? which edge is explicitly forbidden? what proof would reveal an illegal edge? Then compare each answer to current code: a mismatch is either a spec correction or a constraint that must be made explicit. Boundary smells: a "shared helper" with no owner and no allowed-caller list; two places that can mutate the same state without an arbitration contract; a lower layer that knows product workflow.
-
-**Write the caller's usage first**, then derive the type sketch from it. The interface is the test surface: callers and tests cross the same seam, and if you want to test *past* the interface, the module is probably the wrong shape. Don't introduce a seam until something actually varies across it — one adapter is a hypothetical seam, two adapters is a real one.
-
-**Assumptions and probes.** Name the hidden assumptions ("the queue delivers in order"), then construct 2–3 falsifying probes: pick an assumption, invent the cheapest concrete scenario that breaks it, and state what the design does then. "Nothing" is a missing requirement or a missing failure-handling entry. Risk is design input, never a verdict: each accepted risk lands as a requirement, non-goal, open decision, or proof seam.
-
-**Failure discipline.** For every cross-boundary call: what happens when it fails halfway? who cleans up? can the step retry or roll back? where is partial success visible? Dependency category picks the proof strategy: in-process (test directly), locally substitutable (real stand-in in the suite), remote-but-owned (port + injected transport), true-external (injected port, mock adapter).
-
-**State the degree of constraint** (greenfield vs boxed in by legacy — reviewers can't calibrate without it), a *What changes / What stays the same* pair (the second is cheap and kills a whole class of reviewer doubt), and where accepted debt lands (non-goal or open decision, with the signal that forces revisiting). Ban task-oriented file inventories and incidental implementation paths — they go stale and smuggle plan content — but evidentiary anchors required by a `basis`, `source`, or traceability realization are always allowed, and a snippet may appear where it encodes a decision more precisely than prose can (state machine, schema, type shape).
-
-Sources: Google design-doc practice (industrialempathy.com), the three-layer construction order, Nygard ADRs, mattpocock `codebase-design`/`DESIGN-IT-TWICE`/`DEEPENING`, pstack `architect`, this repo's `architecture-boundaries` and `risk-and-tradeoff-design` lanes.
-
-### Boundary invariants
-
-```text
-Program design may only make an authoritative requirement's structural
-realization concrete. It may not invent a requirement.
-
-Any clarification that changes requirement meaning is written into the
-specification first; program design resumes from the revised meaning.
-
-Planning may translate accepted design into executable work.
-Planning may not invent missing program design.
-
-Implementation may not silently change either artifact.
-```
-
-If program design reveals a missing or contradictory requirement, the workflow routes back to the specification. If review reveals that a structural choice needs a product decision, it routes to the specification and, when material, to the user. If plan creation discovers an unowned responsibility, interface, state transition, or failure policy, it routes back to `spec-design`.
-
-### The review cycle
-
-```text
-DISPATCH ──────────► REDUCE ─[all verified-closed]─► GATE
-whole-pair            parent verifies each     │
-reviewer:             finding: upheld │        │ open
-traceability          dismissed │ contested │  │ upheld
-+ AUTHORITY           unverified               ▼
-+ coherence                ▲               REMEDIATE
-+ focused                  │               parent applies upheld
-reviewers by               │               findings; a semantic edit
-observable risk            │               bumps rN ──► rN+1
-(parallel, fresh,          │                   │
-read-only)                 └─ REFRESH ◄────────┘
-                              (only when receipts
-                               were invalidated)
-```
-
-**Reviewer selection.** Every pair receives exactly one mandatory whole-pair integrity reviewer that reads both artifacts and checks three things: Why → What → How traceability; decision authority in both artifacts — every declared basis audited against its named source, every normative obligation and normative-force structural decision challenged for who decided it; and whether the pair composes into one implementable end-to-end design at the current revision — flagging cross-requirement contradictions in state ownership, dependency direction, lifecycle, and failure propagation, not just section completeness. Additional focused reviewers are dispatched only when an observable predicate holds:
-
-- security-sensitive surface → security/threat-boundary review;
-- public API, protocol, storage, migration, or compatibility contract → contract review;
-- cross-runtime or cross-harness behavior → platform-fit review;
-- an existing implementation may hide behavior absent from the artifacts → difference review;
-- unusually high operational, concurrency, performance, or data-integrity risk → focused failure-mode review.
-
-There is no fixed multi-lane topology. Small artifacts use the whole-pair review alone.
-
-Every dispatched reviewer first loads `references/reviewing-pair.md` — the sole owner of the common review method below — and returns its common review result, then loads its lane mission file from `references/lanes/` and applies the lane-specific judgment. The packet carries the dispatch focus and scope; the references carry the judgment. A reviewer dispatched without both loads is a defect, not a lighter-weight review.
-
-#### How to review the pair
-
-**Read everything before judging anything.** Count the lines, read every chunk, and comment on nothing until the full pair is read — premature comments are usually answered two sections later. Then review in dependency order and stop at the first fatal flaw: problem → requirements → external behavior → structure. If the problem is misunderstood, the requirements are suspect; if a requirement fails, its structural realization is moot. Section-local review that green-lights an elegant solution to the wrong problem is the named failure this order prevents.
-
-**Trace, don't skim.** Walk every material `REQ-*` end to end: requirement → basis and source → traceability row → owning design sections → proof seam. The artifact is claims to verify, not truth; author confidence and previous praise are not evidence.
-
-**Audit authority.** For each basis, demand the pointer: `code-constraint` — open the file, does it actually compel this? `user-decision` — does the paraphrase state a real decision (who chose what over what), or does it read like a recommendation in decision clothing? Run the four-source drill: every review must be able to sort code-compelled / user-chosen / mislabeled recommendation / contradicts-a-non-goal. If two are indistinguishable from the artifacts, that is itself a finding. Label provenance so product arguments go to the decision owner instead of being re-litigated among reviewers.
-
-**Invert the cruxes.** Trace each major design claim to the condition that must be true for it to work, then invert it: if the inverted condition would force a different owner, contract, data shape, or human decision, that's a crux — name it. The sharpest probe: *which contradiction would cause two implementers to build different things while both believing they followed the spec?*
-
-**Check integration, not sections.** Pick pairs of requirements that share state or flow; verify their traceability rows land on consistent owners. Trace one failure path against the declared dependency direction. After the full read, state the design in three sentences — if you can't, or your three sentences contradict a section, file it.
-
-**The planning-readiness line.** Pretend you are creating the plan, but do not create it. If the planner would have to choose product meaning, boundary ownership, contract semantics, or proof expectations — not ready. If the planner only needs to choose task order, write scopes, and exact commands — that belongs to planning, and it's fine.
-
-**Finding quality.** Severity by behavior effect: would a planner build the wrong thing (blocker), guess (important), or merely stumble (minor)? Every substantive finding carries a concrete failure path, *what the next agent would guess*, and the smallest correction — never bare "add more detail." One strong finding beats several weak ones. Flag only what would cause a real problem downstream: wording preferences and "this section is less detailed" are not findings; silence is a valid verdict, and noise is a real cost.
-
-**Reviewer hygiene (parent's side).** Hand reviewers the artifact and the contract — never your conclusion; handing over a conclusion buys agreement. Reviewer output is data, not verdict: verify evidence before disposition, publish dismissals with one-line rationales so the user can override, and never convert missing evidence into dismissal. Agreement across independent reviewers is signal; a lone finding is worth reading at lower confidence. The doubt-theater check: two or more cycles where reviewers raised substantive findings and zero were upheld means you are validating, not reviewing — stop and escalate. Where a predecessor exists, require a definite improvement; a first design instead satisfies every acceptance criterion against current evidence and constraints. Perfection is not a criterion, and taste is not a finding; unresolved fact disputes go to evidence, unresolved value disputes go to the user.
-
-Sources: dependency-order review (design-review practice), Google eng-practices review standard, pstack `interrogate`/`why`, addyosmani `doubt-driven-development`/`code-review-and-quality`, mattpocock `code-review` two-axis split, this repo's `adversarial-crux`, `whole-spec-coverage`, `planning-readiness`, and `finding-schema` lanes.
-
-**Packets and receipts.** Every reviewer receives both complete artifacts plus a curated packet. The packet is a composition over the `manage-agents` agent job packet: the generic dispatch fields come from that contract, and this workflow adds the exact pair content revision and cycle id, the declared `REQ-* | CLAIM-* | INV-*` identifiers and section/path scopes in focus, decision target, user constraints, source anchors, non-goals, security context, and the schema contract. Reviewers independently inspect named sources rather than trusting author confidence. A curated packet is review context; the authoring transcript is not.
-
-Every responding reviewer returns a revision- and cycle-bound receipt with status `complete | partial | blocked` (receipt-sense `blocked`: the lane could not begin for a named missing input — the house lane-schema vocabulary; pair-status `blocked` is a different field and the header keeps them apart). Silence is recorded by the parent as `no-receipt`; a reviewer never returns that state. Which receipts credit coverage is owned by Scope and invalidation below.
-
-Finding severity is `blocker | important | minor | observation` — graded by behavior effect. `observation` has no acceptance effect and the parent may prune it.
-
-**Parent reduction.** The parent opens the claimed evidence for every candidate finding and classifies its disposition:
-
-- `upheld` — supported, in scope, requires a correction;
-- `dismissed` — unsupported, already satisfied, or out of scope;
-- `contested` — a real tradeoff or product decision evidence alone cannot settle; it exits only through the gate's `decision-needed` outcome;
-- `unverified` — potentially valid, missing the evidence needed to judge; it exits through an evidence Delegate or a re-dispatch, then re-enters reduction. Missing evidence is never converted to `dismissed`.
-
-Every upheld finding tracks a resolution: `open` → `remediated` (the parent applies the correction and records the traceability effect) → `verified-closed`. The parent verifies each correction in REDUCE and closes it immediately when the remediation invalidated no receipt, otherwise after the required refreshed receipt is reduced. A failed correction returns to `open`. Within this workflow, `open` is only an upheld-finding resolution and `deferred` is only a pair status; `blocked` carries exactly two senses — receipt (lane could not begin) and pair status — and every use is sense-qualified. Adjacent skills' vocabularies are untouched.
-
-Reviewer count and apparent consensus never determine acceptance; evidence and parent-verified reduction do.
-
-**Scope and invalidation.** This subsection is the single authority for receipt validity and coverage; every other section cites it.
-
-- Only `complete` receipts from the current cycle (or parent-verified carry-forwards, below) credit coverage. A `partial` receipt credits none of its declared scopes; the parent re-dispatches the lane or narrows the packet. Narrowing partitions the original predicate-required scope: complete successor receipts must cover its union, or the uncovered remainder keeps the pair non-accepting.
-- Every receipt declares the identifiers and section/path scopes it inspected. Opening a file does not expand a declared scope.
-- A synchronized status write does not invalidate a content receipt.
-- A typo- or format-only change with no semantic meaning change does not invalidate receipts whose scope it touches.
-- A semantic change inside a receipt's declared scope invalidates that receipt. Renaming or removing an identifier invalidates every receipt naming it. This declared-scope rule governs focused receipts.
-- The whole-pair receipt's declared scope is the identifier and basis inventory, cross-artifact traceability, and the main-flow sections of both artifacts (main-flow = the specification's `Observable Behavior` and the program design's `Data Flow and Control Flow`); the category rule below — not the per-edit rule above — is what invalidates it.
-- A requirement, basis, material claim or invariant, public contract, ownership boundary, source-of-truth, or main-flow change invalidates the whole-pair review plus affected focused reviews. A security or trust-boundary change additionally invalidates the security review.
-- When a revision leaves a complete receipt's declared scopes semantically unchanged, the parent may carry it forward; doing so requires a carry-forward attestation (prior receipt, both revisions, unchanged scopes, non-invalidation evidence, parent verification). An affected receipt is never carried forward — it is freshly dispatched.
-- Terminal re-entry: resuming an `accepted`, `blocked`, or `deferred` pair invalidates the prior acceptance; the next REVIEW entry — the single owner of cycle-id assignment — opens `c<M+1>`, and that cycle requires a fresh whole-pair review, because the world outside the pair can drift while the artifact bytes do not. Focused reviews are refreshed where their risk predicate still holds; other prior receipts remain historical evidence and may be carried forward under the rule above.
-
-**Reference tree and teaching contract.** The implemented skill ships this tree; craft and ceremony are segregated, and the ceremony gets exactly one home:
+## Proposed Runtime Skill Tree
 
 ```text
 skills/spec-design/
-├── SKILL.md                       mental model, state chart, gates —
-│                                  slim; every stage points below
-└── references/
-    ├── drafting-specification.md  Why/What craft: user-decision
-    │                              questions, requirement quality and
-    │                              testability, non-goals, tradeoffs
-    ├── drafting-program-design.md How craft: the integrated system
-    │                              model, boundaries and ownership,
-    │                              alternatives, failure containment,
-    │                              reversibility, proof seams
-    ├── reviewing-pair.md          common pair-review craft: dependency-
-    │                              order reading, end-to-end trace,
-    │                              authority audit, crux inversion,
-    │                              integration, planning readiness,
-    │                              finding quality — every reviewer
-    │                              loads it before its lane mission
-    ├── artifact-formats.md        lifecycle header, both skeletons,
-    │                              traceability entry
-    ├── review-cycle-schema.md     process shapes + per-role dispatch
-    │                              contract (parent-only ceremony)
-    └── lanes/
-        ├── whole-pair-integrity.md      mandatory reviewer mission
-        ├── security-threat-boundary.md
-        ├── contract-review.md
-        ├── platform-fit.md
-        ├── difference-review.md
-        └── failure-mode.md
+  SKILL.md
+  references/
+    orchestration-record.md
+    transitions-and-invalidation.md
+    acceptance-and-planning-handoff.md
+    direct-result-import.md
 ```
 
-Ownership: `references/review-cycle-schema.md` owns the process shapes — the review packet (as the composition over the agent job packet named above), receipt, finding, reduction record, remediation record, carry-forward attestation, pre-pair receipt — the drafting-check record, and the per-role dispatch contract: predicate, packet composition, lane reference (`reviewing-pair.md` plus a lane mission for reviewers; the applicable drafting reference for section writers; the question packet with named sources for evidence contributors), prerequisites and parallel-safety basis, maximum and instance authority, terminal receipt, stop condition, and parent reduction point — for reviewer, section-writer, and evidence dispatches. The lifecycle header and traceability entry are owned by the Formats section. `SKILL.md` cites the schema, keeps only operational gates, and may name label values inside gates — but never redefines a shape. Alignment with `skills-creation`'s review lane schema is decided in the skills-creation follow-up, not here.
+The main `SKILL.md` must retain the transaction-coordinator mental model, scan-visible all-run route, transition guard, semantic-owner routing, and completion boundary. References may own dense record fields and transition tables; they must not become alternate workflow owners.
 
-**Teaching contracts.** The three `How to` sections of this spec are the authoritative craft content with an exact lift mapping: *How to write the specification* → `drafting-specification.md`; *How to write the program design* → `drafting-program-design.md`; *How to review the pair* → `reviewing-pair.md`. Implementation lifts them verbatim and completes the anatomy below — it does not re-derive the craft. Each reference opens with one line stating what the agent can do after loading it that it could not before. The two drafting references carry authoring anatomy (capability, inputs, construction questions, decision boundaries, result, good and bad examples, calibration, completion); `reviewing-pair.md` and the lane missions carry review anatomy (mission, where to look, how to inspect, good and bad signals, overlap boundary, calibration bar, stop condition). A reference containing headings, topics, or schemas but not its contracted judgment is non-complete — file presence never satisfies these contracts:
+## Depth and Call Architecture
+
+Proposed all-run calls:
 
 ```text
-drafting-specification.md
-  capability: turn fuzzy intent into testable Why/What
-  teaches: the user-decision question shape (decision needed / my
-    current read / why it matters / one question); requirement
-    quality — a testable obligation, not a task or a wish, with
-    vague-verb repair (support, robust, easy, handle → observable
-    behavior + measurable condition); non-goal craft that blocks
-    plausible adjacent expansion; edge cases as observable failure
-    expectations; tradeoffs stated with who pays
-  result the guard consumes: a requirement-quality pass (every
-    REQ-* testable, no vague verb unrepaired) and the open-decision
-    list (each entry in Open Product Decisions or a user question)
-  calibration: raise only gaps that change requirements, non-goals,
-    boundaries, or proof
+MUST load `references/orchestration-record.md` and return the current normalized workflow state and freshness inventory before selecting a phase.
 
-drafting-program-design.md
-  capability: compose one implementable end-to-end How
-  teaches: build the Design Overview as the integrated system model
-    FIRST and attach every section to it; ownership and dependency-
-    direction decisions with named alternatives and rejection
-    reasons; hidden-assumption naming plus 2-3 falsifying scenario
-    probes; failure containment and reversibility; proof seams the
-    plan can operationalize
-  result the guard consumes: an integration pass (no cross-
-    requirement contradiction in state ownership, dependency
-    direction, lifecycle, or failure propagation) and the
-    assumption list (each named, tested, or routed to evidence/user)
-  calibration: risk is design input — each accepted risk becomes a
-    requirement, non-goal, open decision, or proof seam, never a
-    bare verdict
+MUST load `references/transitions-and-invalidation.md` and return the next semantic owner plus invalidated results after every imported terminal result.
 
-lanes/whole-pair-integrity.md   (mission stated in Reviewer selection)
-  inspects: every identifier and basis against its named source;
-    every traceability row against the Design Overview; the pair
-    read end-to-end as one design
-  independently repeats: BOTH drafting-quality passes — requirement
-    quality and integration — never trusting the author's ledger
-    self-check; for a small pair this lane is the only reviewer,
-    so these repeats are its floor
-  good: findings cite both artifacts and name what the next agent
-    would guess; bad: section-local nitpicks, style notes,
-    re-litigated user decisions
-  overlap: domain depth routes to the focused lanes; this lane owns
-    cross-artifact truth
-  stop: every material identifier traced, both passes repeated, and
-    the three-sentence design restatement written
-  finding result: violated obligation or contradiction, both
-    artifact locations, smallest correction
-
-lanes/security-threat-boundary.md
-  mission: design-time threats and trust-boundary violations
-  inspects: each predicate surface the conditional-review rule
-    names; entry points, privilege transitions, data crossing trust
-    boundaries; mitigations present as requirements or invariants,
-    never prose reassurance
-  good: a threat names actor, entry, asset, and the invariant that
-    stops it; bad: "consider adding auth", mitigation as prose,
-    findings outside the declared trust boundaries
-  overlap: standalone scans and audits are ops-security-review's;
-    contract-shape questions route to contract-review
-  stop: every true predicate surface carries a threat statement or
-    an explicit none-found naming the entry points inspected
-  finding result: threat, violated or missing invariant, required
-    mitigation, affected identifiers
-
-lanes/contract-review.md
-  mission: public API, protocol, storage, migration, compatibility
-  inspects: every externally visible contract against the 8-field
-    checklist (owner, consumers, inputs, outputs, state, invariant,
-    forbidden edge, examples) and against current source
-  good: findings name the consumer that breaks and the field that
-    breaks it; bad: hypothetical consumers, naming-style opinions
-  overlap: internal interfaces route to whole-pair integration;
-    contract security routes to the security lane
-  stop: every externally visible contract checked against all eight
-    fields and current source
-  finding result: the under-specified or breaking contract, its
-    consumers, smallest correction
-
-lanes/platform-fit.md
-  mission: cross-runtime and cross-harness behavior
-  inspects: platform claims against actual platform contracts;
-    per-runtime behavior differences named, never averaged
-  good: each claim tested against the platform's documented contract
-    with a citation; bad: "should work on both", averaged behavior
-  overlap: general structure routes to whole-pair; behavior under
-    load routes to failure-mode
-  stop: every cross-runtime claim verified or explicitly named
-    unverifiable
-  finding result: the failing platform assumption, where, and its
-    design consequence
-
-lanes/difference-review.md
-  mission: hidden behavior in an existing implementation the
-    artifacts do not state
-  inspects: current code against the pair; undocumented decisions
-    the design silently inherits or contradicts
-  good: hidden decision + code anchor + adopt-or-replace posed as a
-    basis-bearing statement; bad: inventories of code trivia the
-    design need not state
-  overlap: whether the decision SHOULD hold belongs to the parent
-    and user; this lane only surfaces it
-  stop: every artifact claim about current behavior checked against
-    code, and every load-bearing code behavior absent from the pair
-    listed
-  finding result: the hidden decision, its code anchor, and whether
-    the pair adopts or replaces it — as a basis-bearing statement
-
-lanes/failure-mode.md
-  mission: operational, concurrency, performance, and data-integrity
-    failure under load and partial failure
-  inspects: failure propagation against containment claims; ordering
-    and consistency boundaries; recovery and partial-success paths;
-    proof burden on the riskiest path
-  good: a falsifying scenario with a concrete trigger and the
-    boundary it breaks; bad: generic "add retries", risks with no
-    scenario attached
-  overlap: security-motivated failure routes to the security lane;
-    proof mechanics beyond the seam route forward to planning
-  stop: the riskiest path traced to containment and 2-3 probes run
-    against the design's own claims
-  finding result: the falsifying scenario, the boundary it breaks,
-    and the requirement or proof seam that must exist
+MUST load `references/acceptance-and-planning-handoff.md` and return the acceptance predicate result and planning-handoff input before any accepted claim.
 ```
 
-**Implementation call contract.** The implemented skill states these as literal calls; a stage that skips one fails its guard:
+Proposed branch call:
 
 ```text
-MUST load references/artifact-formats.md and return the lifecycle
-  header, skeletons, and traceability form — before creating or
-  editing either artifact.
-MUST load references/drafting-specification.md and return its
-  requirement-quality pass and open-decision list — before the
-  specification draft completes. Section-writer packets for Why/What
-  sections carry this reference as their lane reference.
-MUST load references/drafting-program-design.md and return its
-  integration pass and assumption list — before the program-design
-  draft completes. Section-writer packets for How sections carry it
-  likewise.
-MUST load references/reviewing-pair.md and return the common review
-  result — every reviewer, before applying its lane mission.
-MUST load references/review-cycle-schema.md and return the packet
-  composition, receipt shapes, drafting-check record, and per-role
-  dispatch contract — before the first dispatch of any kind.
+IF an independently produced artifact or review result is supplied, load `references/direct-result-import.md` and return its verified coverage, freshness, and import decision.
 ```
 
-A promised stage without an owning teaching reference, or a reference failing its contract above, is an implementation completion blocker.
+These are ordinary references, not lanes. They are all parent-consumed lifecycle procedure.
 
-### Agents
+## Planning Boundary
 
-Every dispatch routes through `manage-agents` using its real contracts: the agent job packet (`manage-agents/references/agent-job-packet.md`) for every dispatch this workflow makes, with parent-conversation-history and workspace-access decisions recorded per packet. Where this workflow needs generic support the packet lacks — a field binding a dispatch to a target artifact version (here, the pair content revision and cycle id) — `manage-agents` is extended directly during implementation rather than mirrored.
+The accepted pair must already determine:
 
-```text
-role             pattern    context             access      cardinality
-──────────────   ────────   ─────────────────   ─────────   ───────────
-parent           —          owns everything     authors,    1
-                                                decides
-section writer   Delegate   fresh, packet only  read-only   0..n one-shot
-reviewer         Delegate   fresh, no history   read-only   1 mandatory
-                                                            + risk-based
-evidence         Delegate   fresh, packet only  read-only   0..n one-shot
-```
+- target owners, component boundaries, and dependency direction;
+- target interfaces and sources of truth;
+- state ownership and transitions;
+- normal, failure, partial-success, retry, cleanup, and recovery semantics;
+- concurrency and consistency policy;
+- compatibility and cutover realization;
+- trust boundaries and security/reliability architecture;
+- proof modalities and structural proof seams.
 
-- **The parent is the author.** It holds all information, drafts and integrates both artifacts, and preserves one mental model across Why, What, and How. There is no persistent author fork and no multi-author topology.
-- **Section writers** produce bounded candidate text from a packet naming the section outline, the `REQ-*` it must answer, source anchors, non-goals, and the parent-decided structural claims the section expresses. Where structure is undecided, the writer returns a gap — never prose that chooses. They may not originate `REQ-*`, `CLAIM-*`, `INV-*`, bases, statuses, revisions, structural realizations, option selections, failure policies, or normative-force prose: every semantic sentence in returned text maps to a packet-supplied identifier or parent-decided claim, and an unmapped need returns as a gap; a needed new requirement routes through the parent into the specification. The parent integrates every word before it becomes artifact content.
-- **Reviewers** start with no inherited conversation history and read-only access (the `manage-agents` reviewer rules: parent conversation history `none`, workspace access `read-only`), and return candidate findings only. The whole-pair reviewer requires Frontier capability at high reasoning. `manage-agents` remains the sole owner of pattern and category allowances: the cutover adds an explicit Frontier one-shot reviewer case to its Delegate pattern table rather than overriding it — a packet records the pattern-supported selection; it can never raise a ceiling the pattern does not grant. The authority audit is judgment work, and the recorded failure was a judgment miss.
-- **Evidence contributors** answer one named observable question with source-backed candidate evidence; they return no prose destined for the artifacts.
+Planning owns:
 
-### Acceptance gate
+- implementation task slices and exact write scopes;
+- execution sequence, DAG, parallel lanes, checkpoints, and integration gates;
+- exact tests, commands, red/green order, evidence capture, and freshness;
+- implementation/deployment rollback procedure.
 
-The parent verifies every criterion while both artifacts are `draft` at the same revision:
+If the first list is missing, `spec-design` routes backward. It never asks planning to finish the design.
 
-- Both artifacts exist, synchronized `draft`, same content revision.
-- Every requirement is testable; every requirement's basis is `code-constraint` or `user-decision` with a named source.
-- Every normative-force structural decision (per Decision authority) carries an accepting basis or an `Open Design Decisions` entry.
-- No artifact statement contradicts a user-owned non-goal or constraint; material non-goals and constraints carry identifiers and, where they bind design choices, an accepting basis.
-- Every load-bearing `user-decision` basis — across requirements, material non-goals and constraints, material invariants, and normative-force structural realizations — has been surfaced to the user (identifier and paraphrase) and confirmed or corrected in the current cycle `c<M>`.
-- Internal structure is absent from the specification unless externally contractual; the program design contains no task sequence.
-- Every requirement has a traceability entry with status `satisfied` (see format below).
-- Module ownership, dependency direction, sources of truth, flows, and material failure behavior are explicit and mutually consistent: no known-open cross-requirement or intra-How contradiction remains.
-- Load-bearing current-state and platform claims are parent-validated.
-- Every selected review scope is covered per the Scope and invalidation rules, including terminal re-entry's fresh-receipt requirement.
-- Every upheld finding is `verified-closed`; no material finding remains `contested` or `unverified`; security readiness satisfies the conditional-review rule below.
+## Adjacent Skill Coexistence and Cutover
 
-When all criteria hold, the parent authorizes the status write `draft → accepted` in both files and verifies it against the synchronized-write field set (header rule).
+The old skills are not deleted or retired by this proposal. They contain useful source material and remain available for explicit legacy invocation. They cannot retain overlapping generic model-invocable descriptions when the four new skills ship, because two equally valid trigger owners would make routing nondeterministic.
 
-Non-accepting outcomes (each writes `Stop reason:` so the state is recoverable from disk, and each is verified against the same field set):
+Implementation through `skills-creation` must make this non-deletion coexistence cut in the same behavior-changing changeset:
 
-- `decision-needed` → both statuses `blocked`; the smallest material decision returns to the user; resumable.
-- `blocked` → both statuses `blocked`; names the missing source or authority.
-- `deferred` → both statuses `deferred`; user parked the work; no plan-readiness claim.
+- generic Why/What, structural How, closed lifecycle, and specification/program-design review prompts route to the four new skills;
+- `spec-creation-swarm` and `spec-review-swarm` remain callable only when the user explicitly asks to run the named legacy workflow; authoring or evaluating either legacy skill package routes to `skills-creation`;
+- the old skill files and their useful craft references remain on disk unless a separate future decision authorizes retirement;
+- `plan-creation-swarm` changes its entry contract to require an accepted specification/program-design pair for design-bearing work, while preserving an explicit mechanical/no-program-design route;
+- `plan-improve-repo` may audit for improvement opportunities, but it cannot turn unresolved requirement or structural-design choices into an implementation plan; plan writing consumes an accepted pair or an implementation-mechanics-only classification;
+- every planning consumer preserves and checks the same entry classification: `accepted-pair` with exact pair/handoff identity, or a current `spec-design` planning-basis classification identity that returned `implementation-mechanics-only` for the exact bounded input;
+- planning references stop choosing target ownership, interfaces, state semantics, failure/recovery policy, concurrency, trust boundaries, or proof seams; they consume those decisions and retain file mapping, tasks, sequence, commands, evidence capture, and rollout procedure;
+- `docs-maintain` remains the documentation-lifecycle owner after product and structural decisions are settled; its description must exclude authoritative Why/What revision, structural How revision, and independent specification/program-design review;
+- adjacent handoff/router descriptions are updated only as needed to point to the new semantic owners without duplicating their manuals.
 
-### Handoff
+The cutover is repository-wide executable routing, not frontmatter-only. Implementation must classify every current `spec-creation-swarm` or `spec-review-swarm` occurrence as an identity/provenance mention, an explicit legacy-only entry, or an executable route. Every executable route must cut to one new semantic owner in the same changeset. This baseline inventory is mandatory and any newly discovered routing home joins it:
 
-Within the invocation, the parent hands plan creation both paths, the accepted revision, and the traceability contract directly. Across agents, machines, or sessions, `spec-handoff` carries — alongside its existing context packet, not replacing it — the accepted-pair record: both repository-relative paths, both synchronized statuses, the shared content revision, and both plain file SHA-256 digests so a receiver can detect a stale or edited artifact. Plan creation rejects a pair that is not synchronously `accepted` at one revision and routes back to `spec-design` rather than inventing missing design.
-
-## How — the workflow
-
-The workflow is a state chart. States own dispatch rights; guards are observable predicates; the current state is recoverable from disk (statuses + content revision + `Review cycle` + `Stop reason:` + the mandatory review ledger). A missing ledger means coverage cannot be shown, and the parent starts a fresh cycle.
-
-```text
-entry: bare requirements │ lone artifact │ existing pair
-                     │
-                     ▼
-┌─ FRAMING ─────────────────────────────────────────────────┐
-│ parent re-anchors and reads source; resolves both paths   │
-└──────┬───────────────────────────────────────┬────────────┘
-       │ cannot proceed                        │ pair exists,
-       ▼                                       │ draft, synchronized
- ((PRE-PAIR STOP))                             ▼
-                                  ┌─ DRAFTING ──────────────┐
-                                  │ parent writes; section  │
-                                  │ writers optional        │
-                                  └───────────┬─────────────┘
-                                              │ guard: basis +
-                                              │ traceability satisfied
-                                              ▼
-                                  ┌─ REVIEW  (cycle c<M>) ──┐
-                                  │ DISPATCH → REDUCE →     │
-                                  │ REMEDIATE → REFRESH ⟲   │
-                                  └───────────┬─────────────┘
-                                              │ all upheld findings
-                                              │ verified-closed
-                                              ▼
-                                  ┌─ GATE ──────────────────┐
-                                  └─┬──────┬───────┬────┬───┘
-                                    ▼      ▼       ▼    ▼
-                              ACCEPTED  DECISION BLOCKED DEFERRED
-                                  │     NEEDED
-                                  ▼
-                            plan creation
-
-resume edge: any terminal state (DECISION NEEDED is Status:
-             blocked on disk) ──(status-only write to draft,
-             verified per the header field set)──►
-             DRAFTING when the re-entry will change content —
-             a new change, or a returned decision or evidence
-             to apply — else REVIEW; the next REVIEW entry
-             opens cycle c<M+1>
-```
-
-### FRAMING
-
-The parent restates problem, consumers, outcomes, constraints, non-goals, and success shape; reads current code, docs, and prior decisions; resolves authoritative inputs and both target paths. Evidence Delegates may be dispatched for named gaps. From zero or one artifact the parent creates or reconstructs the missing sibling and initializes the synchronized `draft` pair at `r1` per the header rule.
-
-Guard out: a parent-verified synchronized `draft` pair exists at one revision, with decision target, source anchors, open questions, and security sensitivity explicit — or the run stops with the pre-pair receipt and no plan-ready claim.
-
-### DRAFTING
-
-Two visible sub-stages, each with its owning craft reference. The parent loads `references/drafting-specification.md` before drafting Why/What and `references/drafting-program-design.md` before drafting How; section-writer packets cite the same references so delegated text is written to the same bar.
-
-The parent drafts the specification first and validates its load-bearing claims, then drafts the program design constrained by it. A discovered requirement gap or meaning change goes to the specification first; program design resumes from the revised meaning. Missing product decisions are resolved — or returned to the user — before they are disguised as internal design. Section writers may be dispatched here under the rules above; evidence Delegates for named gaps.
-
-Guard out (all artifact-readable): every requirement carries a basis and no obligation sits outside `REQ-*` (per Decision authority); the requirement-quality pass from `drafting-specification.md` and the integration pass from `drafting-program-design.md` are written to the process ledger as revision-bound drafting-check records, with their open-decision and assumption lists; every requirement has a traceability entry with status `satisfied`; every `CLAIM-*`/`INV-*` has an owning section; the How sections agree with the integrated `Design Overview`; no mandatory heading is missing without a stated reason. A `gap` entry keeps this state active; a `decision-blocked` entry routes its decision to the user and, when material (per Decision authority), stops the run as `decision-needed`.
-
-### REVIEW
-
-The only reviewer fan-out. REVIEW entry is the single owner of cycle-id assignment: on entry, before the first dispatch, the parent assigns the next cycle id `c<M>`, writes `Review cycle: c<M> in-cycle @ r<N>` to both headers, and opens the mandatory ledger. Four sub-states, all edges returning to the parent:
-
-1. **DISPATCH** — the mandatory whole-pair reviewer plus predicate-selected focused reviewers, in parallel, fresh context, read-only, packet-bound to the current revision and cycle.
-2. **REDUCE** — the parent verifies every candidate finding against artifacts and source, classifies disposition, merges duplicates, records conflicts, logs receipt states (recording `no-receipt` for silence), and verifies remediated corrections — moving each to `verified-closed` immediately when no receipt was invalidated, otherwise after the refreshed receipt is reduced.
-3. **REMEDIATE** — the parent applies upheld findings to the owning artifact sections; any semantic content change increments the revision in both files (header rule). Findings move `open → remediated`, each written as a remediation record in the ledger.
-4. **REFRESH** — entered only when a remediation invalidated receipts under Scope and invalidation; affected receipts are freshly dispatched and refreshed findings re-enter REDUCE.
-
-Guard out: every upheld finding is `verified-closed`; every selected scope is covered per Scope and invalidation. The parent writes `Review cycle: c<M> covered @ r<N>`.
-
-### GATE
-
-The parent evaluates the acceptance criteria (What → Acceptance gate). Exactly one outcome fires: `accepted`, `decision-needed`, `blocked`, or `deferred`, each with its synchronized status write verified against the header field set, and `Stop reason:` when non-accepting.
-
-### Resume
-
-Any terminal pair re-enters through a parent-authorized synchronized write to `draft`, verified against the header field set (revision preserved; `Stop reason:` removed; the prior `Review cycle` value stands as history until the next REVIEW entry assigns `c<M+1>`). Route by entry reason: a re-entry that will change content — a new design change, or a returned decision or evidence gap to apply — enters DRAFTING, where the parent writes the change into the owning artifact (a semantic change, so the revision increments per the header rule). A re-entry that only re-verifies unchanged content enters REVIEW directly, and if no remediation is needed, re-acceptance uses the unchanged revision. An accepted pair therefore always re-enters through DRAFTING unless the parent is only re-verifying.
-
-### Scaling
-
-- A truly mechanical change that alters no behavior, contract, ownership, or structure does not invoke `spec-design`; record why no design artifact is required.
-- A tiny behavior or design change still separates Why/What from How: both siblings, short. The tiny-form floor is fixed: the shared lifecycle header; basis on every requirement; a traceability entry per requirement; the whole-pair review; and the gate criteria for basis, traceability, user-decision confirmation, and whole-pair coverage. Sections that are demonstrably not applicable may be omitted with a one-line reason each — the same rule the Formats section owns — and the two security sections always remain.
-- Chat-only exploration may use the same mental model without artifacts, but cannot claim acceptance or plan readiness.
-- Substantial, ambiguous, cross-module, public-contract, stateful, or high-risk work uses the full cycle. Reviewer count scales with observable risk, never document length.
-
-### Route-back table
-
-Routes name the owning artifact, never a state: inside REVIEW, every upheld finding is applied in REMEDIATE; outside a cycle, changes are authored in DRAFTING.
-
-| defect discovered | owning destination |
+| Current executable routing home | Required owner after cutover |
 | --- | --- |
-| requirement, public contract, observable behavior | specification |
-| internal ownership, interface, state, flow, failure policy | program design |
-| missing fact | evidence Delegate |
-| value judgment, material product tradeoff, non-accepting basis | user (`decision-needed`) |
-| task ordering, proof commands | forward to planning, only after acceptance |
+| `.codex-plugin/plugin.json`, `.claude-plugin/plugin.json`, plugin `README.md`, and `references/trigger-evals.md` | default prompts, public routing prose, and trigger cases route generic design/review to the four new owners; planning prompts require accepted-pair input or a current `spec-design` implementation-mechanics-only result; legacy names remain only as explicit legacy entries or provenance |
+| repository `AGENTS.md` current-skill inventory and skill-work routing prose | list the four new skills and their semantic boundaries while retaining both old skill entries as explicit legacy workflows |
+| `spec-design/SKILL.md`, `specification-design/SKILL.md`, `program-design/SKILL.md`, and `spec-program-review/SKILL.md` | each all-run path routes direct one-named-runtime-skill-package work to `skills-creation` unless an explicit `skills-creation` parent packet/result authorizes composition |
+| `skill-audit/SKILL.md`, `agents/openai.yaml` | preserve portfolio-wide audit only; route creation, update, or evaluation of one named skill or accepted draft to `skills-creation` |
+| `orchestrator-goal/SKILL.md`, `references/routing-map.md`, `references/goal-contract.md` | `spec-design` for lifecycle, `spec-program-review` for named review, planning only after accepted pair |
+| `discuss-pathfinding/SKILL.md`, `references/question-craft.md` | route a converged Why/What need to `specification-design`, structural How to `program-design`, a closed lifecycle to `spec-design`, and independent review to `spec-program-review`; do not default to legacy swarm topology |
+| `discuss-clarify-mental-models/SKILL.md` | `spec-design` or the directly named semantic author after reconvergence |
+| `research-swarm/SKILL.md`, `references/evidence-ledger.md`, `references/lane-packets.md` | `spec-design` for a closed design workflow; direct author/reviewer only when the requested phase is explicit |
+| `spec-handoff/SKILL.md` | `spec-program-review` for review; `spec-design` for acceptance/planning readiness |
+| `plan-creation-swarm/SKILL.md`, `agents/openai.yaml`, and planning references | the scan-visible main path routes direct named-runtime-skill-package work to `skills-creation`; otherwise require and preserve an exact accepted-pair handoff or a current `spec-design` implementation-mechanics-only classification before task planning and route missing design backward rather than selecting ownership, interfaces, state, failure/recovery, concurrency/consistency, compatibility/cutover, trust, or proof seams |
+| `plan-improve-repo/SKILL.md`, `agents/openai.yaml` | audits may discover unsettled design, but plan writing uses the same accepted-pair/current-`spec-design`-classification gate; the scan-visible main path routes named runtime skill-package work to `skills-creation` even under direct invocation |
+| `plan-handoff/SKILL.md`, `agents/openai.yaml` | preserve accepted-pair/mechanics-only identity and basis in every portable plan packet; reject a design-bearing plan that lacks the accepted pair |
+| `implementation-execute-plan/SKILL.md`, `agents/openai.yaml` | route direct execution of a named-runtime-skill-package update to `skills-creation`; otherwise validate the accepted-pair/mechanics-only provenance before execution and route a missing or contradicted design decision back through `spec-design` |
+| `plan-review-swarm/SKILL.md`, `references/lanes/whole-plan-cohesion.md` | `spec-design` remediation, which routes the finding to `specification-design` or `program-design` |
+| `implementation-review-swarm/SKILL.md`, `references/review-packet.md`, `references/lanes/deviation-routing.md` | `specification-design` or `program-design` for owned gaps, `spec-program-review` for review-only work, `spec-design` when lifecycle/acceptance must resume |
+| `docs-maintain/SKILL.md` | the directly named new semantic owner; documentation maintenance starts only after decisions settle |
+| `spec-creation-swarm/SKILL.md`, `agents/openai.yaml`, `references/swarm-packets.md` | preserve explicit legacy execution, but any next-work route leaves through the new semantic owner unless the user explicitly names the next legacy skill |
+| `spec-review-swarm/SKILL.md`, `agents/openai.yaml`, `references/finding-schema.md`, `references/lanes/*.md` | preserve explicit legacy execution, but findings route to new semantic authors/orchestrator and planning requires new pair acceptance unless the user explicitly names another legacy step |
 
-### Security-sensitive conditional review
+Identity headings, source-provenance discussions, and the explicit legacy trigger descriptions remain allowed. They are not executable routes.
 
-Evaluate whether the pair touches authentication, authorization, secrets, untrusted input, parsing, filesystem or network access, subprocesses, plugins, MCP, CI, package scripts, agents, external services, data retention, or trust-boundary changes. Any true predicate makes focused security review and threat-boundary treatment mandatory — never waivable by claiming a threat model is unnecessary. If every predicate is false, both owning security sections record `Security context: not applicable` with the predicate evaluation in their evidence line — no review-plus-waiver ceremony. Standalone repository threat models, scans, and security-finding remediation route to `ops-security-review`; the integrated design-time review stays here.
+The table is a baseline, not a closed allowlist. Implementation must also inventory every active `SKILL.md`, reference, `agents/openai.yaml`, plugin manifest/default prompt, README, trigger-evaluation case, repository instruction, command, and marketplace-facing description that can route design, review, handoff, planning, or execution. Each discovered executable entry receives one classified owner and the accepted-pair/mechanics-only planning gate where applicable.
 
-## Formats
+This is a routing and ownership cutover, not old-skill deletion.
 
-Headings may be omitted only when demonstrably not applicable, with the reason stated — except both security sections, which are mandatory. The lifecycle header and the traceability entry are owned by this section. In the implemented skill, this section ships as its own artifact-contract reference (`references/artifact-formats.md`) cited by `SKILL.md`; the mental model, state spine, guards, and completion boundary stay in the body.
+The cutover must use this exact planned trigger contract for `plan-creation-swarm`:
 
-### Specification document
-
-`docs/specs/<yyyy-mm-dd-slug>/<yyyy-mm-dd-slug>.md`
-
-```text
-# <Title> Specification
-
-Status: draft | accepted | blocked | deferred
-Date: <yyyy-mm-dd>
-Content revision: r<N>
-Review cycle: none | c<M> in-cycle @ r<N> | c<M> covered @ r<N>
-Stop reason: <only while blocked or deferred>
-
-## Why
-### Problem
-### Consumers
-### Desired Outcomes
-### Success Criteria
-### Goals
-### Non-goals
-
-## What
-### Scope
-### Requirements            # REQ-*; basis + source per normative item
-### Observable Behavior
-### External Contracts
-### Constraints
-### Edge Cases and Failure Expectations
-### Security, Privacy, and Operational Obligations
-Security context: sensitive | not applicable
-Security context evidence: <predicate evaluation>
-### Acceptance Criteria
-### Open Product Decisions
+```yaml
+description: Use when turning an accepted specification/program-design pair into an implementation plan, or when a current spec-design planning-basis classification returned implementation-mechanics-only for the exact bounded request. Not for creating, updating, or evaluating a named runtime skill package.
 ```
 
-### Program-design document
+Its scan-visible all-run main path must route direct creation, update, evaluation, or implementation planning for one named runtime skill package to `skills-creation`, unless a `skills-creation` parent packet/result explicitly authorizes composition.
 
-`docs/specs/<yyyy-mm-dd-slug>/<yyyy-mm-dd-slug>-program-design.md`
+The cutover must use this exact planned trigger contract for `plan-improve-repo`:
 
-```text
-# <Title> Program Design
-
-Status: draft | accepted | blocked | deferred
-Date: <yyyy-mm-dd>
-Content revision: r<N>
-Review cycle: none | c<M> in-cycle @ r<N> | c<M> covered @ r<N>
-Stop reason: <only while blocked or deferred>
-Specification: <sibling path>
-
-## How
-### Design Overview
-### Current-System Constraints
-### Responsibility and Ownership Boundaries
-### Modules and Dependency Direction
-### Internal Types and Interfaces
-### State Ownership and Sources of Truth
-### Data Flow and Control Flow
-### Concurrency, Consistency, and Ordering
-### Failure Handling, Retry, and Cleanup
-### Security and Trust Boundaries
-Security context: sensitive | not applicable
-Security context evidence: <predicate evaluation>
-### Runtime and Platform Integration
-### Observability and Performance
-### Test and Proof Seams
-### Requirements-to-Design Traceability
-### Alternatives and Tradeoffs
-### Planning Constraints
-### Open Design Decisions
+```yaml
+description: Use when auditing a repository for improvement opportunities, backlog-worthy refactors, quality gaps, or leverage points and, after design is settled, writing self-contained implementation plans. Plan writing requires an accepted specification/program-design pair, or a current spec-design planning-basis classification that returned implementation-mechanics-only for the exact bounded request. Not for creating, updating, or evaluating a named runtime skill package.
 ```
 
-Each traceability entry (owned by this format section):
+Its scan-visible all-run main path must also enforce direct invocation: a request to create, update, evaluate, or plan changes to one named runtime skill package routes to `skills-creation` before audit lanes or plan writing. The trigger exclusion alone is insufficient because explicit human invocation remains possible.
 
-```text
-REQ-001
-  structural realization: <owner, contract, flow, or invariant>
-    basis: code-constraint | user-decision | author-recommendation | unresolved
-    source: <code path, doc, or public-safe paraphrase>
-  design location: <program-design section>
-  proof seam: <observable boundary the plan must operationalize>
-  status: satisfied | gap | decision-blocked
+The cutover must use this exact planned trigger contract for `skill-audit`:
+
+```yaml
+description: Use when auditing a portfolio of skills, comparing admired upstream skill repositories, finding stale or duplicated behavior across skills, or deciding which skills to create, update, merge, or skip from real session evidence. Not for creating, updating, or evaluating one named skill or accepted draft; use skills-creation.
 ```
 
-Only `satisfied` is accepting. `gap` routes to DRAFTING (a structural answer is still authorable); `decision-blocked` pauses for missing evidence, authority, or a decision.
+Every planning entry and handoff uses this shared provenance shape:
 
-## Changes
+```text
+planning basis: accepted-pair | implementation-mechanics-only
+accepted-pair basis: exact specification digest, program-design digest, acceptance record, planning-handoff identity
+implementation-mechanics-only basis: `spec-design` classification identity, exact covered input/digests, freshness, evidence basis, and no-unresolved-design predicate result
+```
 
-Implementation of this proposal is a hard cutover:
+Missing or contradicted provenance routes to `spec-design`; no planning consumer may silently reclassify it.
 
-- Create `spec-design` as a wholly new workflow skill with the state chart as its main path and the full tree from Reference tree and teaching contract — both drafting-craft references and all six lane missions included. Implementation cannot be claimed complete while any promised stage lacks its owning teaching reference.
-- Adapt, do not rewrite from nothing: `drafting-specification.md` draws from the retired `user-decision-questions.md`, `product-intent.md`, and `requirements-testability.md`; `drafting-program-design.md` from `risk-and-tradeoff-design.md` and the architecture lanes' judgment content; the lane missions from `whole-spec-coverage.md` (whole-pair-integrity), `security-threat-model.md` (security-threat-boundary), `contract-and-scope.md` (contract-review), `harness-fit.md` (platform-fit), `spec-difference.md` (difference-review), and — for `failure-mode.md` — `risk-and-tradeoff-design.md`'s falsifying-scenario, failure-containment, and reversibility craft composed with `validation-and-testability.md` for proof burden. All reshaped to the pair model and authority audit, with their swarm-topology framing dropped.
-- Retire `spec-creation-swarm` and `spec-review-swarm` into `plugins/shravan-dev-workflow/retired-skills/` per the repo convention (`SKILL.retired.md`, outside the loadable `skills/` tree, historical content verbatim). No aliases, shims, or dual paths.
-- Route cutover is a derived sweep, not a hand list: every occurrence of either retired skill name across `plugins/`, `AGENTS.md`, `tests/`, and both marketplace/plugin manifests points at `spec-design` or is deleted — this includes skill bodies and their `references/` files, `plugins/shravan-dev-workflow/README.md`, the `.codex-plugin/plugin.json` prompt examples, `plugins/README.md`, `plugins/shravan-dev-workflow/references/trigger-evals.md`, the pressure-scenario README, and surviving skills' scenarios that mention the retired names. The retired skills' own pressure scenarios are deleted only after their `spec-design` replacements exist and pass (the replacement-first rule in the deferred list below). The cutover gate is `grep -rn --exclude-dir=retired-skills 'spec-creation-swarm\|spec-review-swarm' plugins AGENTS.md tests .claude-plugin .agents` returning zero matches; the retired archive keeps its historical content verbatim. The sweep adds one mandatory mirrored boundary line to each of the `docs-maintain` and `ops-security-review` descriptions (documentation-only reconciliation vs semantic design change; standalone security work vs in-cycle threat review) — frontmatter boundaries only, never a body redesign.
-- Add the accepted-pair record (paths, synchronized statuses, shared revision, both file SHA-256 digests) to the `spec-handoff` packet alongside its existing context contents, and update its boundary statement so a resumable packet stays portability-only while an accepted-pair record is the portable acceptance transport.
-- Cut over plan creation's entry contract (the third body exception): for work that owns a product or architecture design, its source-resolution rule accepts only the synchronously accepted pair — direct handoff or the `spec-handoff` record — and routes bare requirements, chat decisions, and unpaired documents to `spec-design`. One owner states the rule; every plan entry cites it. No other plan-workflow redesign occurs here.
-- Extend `manage-agents/references/agent-job-packet.md` with a generic target-artifact-version field (used here to bind dispatches to the pair content revision and cycle id); the new dispatch field is the value the packet's existing receipt-scope `source/head version` echoes. Extend the `manage-agents` Delegate pattern table with an explicit Frontier-capability, high-reasoning one-shot reviewer case (used by the whole-pair reviewer); the pattern table remains the sole owner of allowed categories, and no packet field overrides it.
-- Update plugin documentation, marketplace descriptions, changelog, and version metadata during implementation; validate both Claude and Codex plugin surfaces.
-- Update admired-source provenance in the `ai-dev-skills` meta-repo — path-level mappings, pins, and bump notes for every source adapted above — and record an explicit decision on whether the lite catalog (`plugins/shravan-dev-workflow/docs/source-inspiration-catalog.md`) needs a refresh.
+The cutover must use this exact planned trigger contract for `docs-maintain`:
 
-Explicitly deferred to follow-up work, not silently dropped:
+```yaml
+description: Use when maintaining project documentation after its product and structural decisions are settled: cleaning, reconciling, archiving, promoting, or updating AGENTS.md, READMEs, changelogs, runbooks, architecture docs, and existing workflow artifacts. Not for defining or revising authoritative Why/What, structural How, or independently reviewing a specification, program design, or their pair.
+```
 
-- The `skills-creation` recreation: its reorganization around this workflow, the named-skill routing path and its plan gate, and the alignment between `references/review-cycle-schema.md` and `skills-creation`'s review lane schema.
-- Any repurposing of `plan-improve-repo` and any adjacent-skill trigger redesign.
-- The evaluation-harness redesign only. Replacement pressure proof is inside the hard cutover, not deferred: implementation authors scenarios for the six named behavior claims — authority laundering across all four sources; a design contradicting a user-owned non-goal; unintegrated How (every traceability row `satisfied` while two modules disagree on state ownership or failure propagation); partial-scope loss through packet narrowing; a stale receipt surviving remediation; and interrupted-state recovery from disk alone — plus positive/negative trigger evaluation. Retired-skill scenarios are deleted only after their replacements exist and pass, and `tests/skills/run-skill-pressure-tests.sh --fast` passes before any PR-ready claim, per `AGENTS.md`.
+The two retained legacy skills use these exact explicit-run descriptions:
 
-This proposal changes only the design contract. Actual skill edits, reference moves, manifests, version bumps, changelog entries, and implementation planning are out of scope for this change.
+```yaml
+name: spec-creation-swarm
+description: Use when the user explicitly asks to run spec-creation-swarm by name as the legacy spec/design creation workflow. Not for authoring or evaluating the skill package.
+```
+
+```yaml
+name: spec-review-swarm
+description: Use when the user explicitly asks to run spec-review-swarm by name as the legacy spec/design review workflow. Not for authoring or evaluating the skill package.
+```
+
+## Proof Plan
+
+This design pass does not run pressure tests. Implementation through `skills-creation` must later define proof for these behavior claims:
+
+| Claim | Static proof | Behavioral proof family |
+| --- | --- | --- |
+| trigger routes lifecycle asks without swallowing direct phase work | frontmatter boundary audit | true/near-miss invocation cases |
+| resume finds exactly one record and derives the next phase from disk | record-locator/discovery/persistence and transition audit | interrupted workflow resume plus missing, duplicate, corrupt, and stale record cases |
+| planning classification has one owner and complete freshness coverage | result-owner and covered-source inventory audit | unchanged request with changed governing source; settled-but-unaccepted design source |
+| stale receipts cannot satisfy a transition | digest-binding audit | edit-after-review invalidation |
+| specification findings return to the specification owner | route table audit | mixed finding remediation |
+| review cannot accept the pair | authority audit across four skills | ready review imported without acceptance |
+| a claimed user decision cannot self-authenticate | acceptance-record and authority-inventory audit | author recommendation mislabeled as user choice versus durable decision source/current confirmation |
+| planning cannot receive missing structural How as accepted | handoff field audit | planning-readiness gap route-back |
+| delegation is available without fixed fan-out | lane/call audit | small serial and substantial parallel examples |
+| old skills coexist without trigger collision or deletion | adjacent-description and inventory audit | generic prompt versus explicit legacy invocation |
+| repository-improvement planning cannot bypass structural design | `plan-improve-repo` and planning-entry description audit | unresolved-design audit prompt versus settled-design plan prompt |
+| documentation maintenance cannot author or review design meaning | `docs-maintain` reciprocal-boundary audit | semantic design update/review versus settled-doc maintenance |
+| standalone security-primary work does not collide with design review | `spec-program-review`/`ops-security-review` description audit | holistic design review with security concerns versus standalone scan/audit/threat model |
+
+Static validation proves structure only. Behavioral proof is deferred to skill implementation and is not claimed by this specification.
+
+## Acceptance Criteria for the Skill Implementation
+
+- The trigger has a real lifecycle loading condition and adjacent phase boundaries.
+- `SKILL.md` shows the all-run route in one scan and contains no phase craft.
+- One canonical record owns lifecycle truth.
+- The canonical record is durably discoverable, conflicts block instead of forking identity, and every transition is persisted before return.
+- Every result is bound to exact artifact identities/digests.
+- Direct phase results can be imported but cannot self-accept.
+- Semantic edits invalidate downstream results deterministically.
+- Review/remediation/refresh is mandatory for pair acceptance.
+- Only `spec-design` records pair acceptance.
+- Pair acceptance cannot rely on an artifact merely asserting that the user chose something; every load-bearing user-decision basis has durable source evidence or current authorized confirmation.
+- Planning handoff cannot omit structural design decisions.
+- Planning-basis classification is one immutable result covering the exact request and every load-bearing inspected source; lifecycle records and planning consumers never become second owners.
+- Agent runtime mechanics remain in `manage-agents`.
+- No fixed swarm topology is introduced.
+- No old skill is deleted or retired by implementing this proposal without a separate cutover decision.
+- Current plan creation and legacy spec skills do not remain competing generic owners after the cutover.
+
+## Source Basis
+
+This specification preserves useful behavior from the existing `spec-creation-swarm`, `spec-review-swarm`, and `plan-creation-swarm` while changing ownership and topology. The source-to-owner mapping and three-advisor reduction are recorded in [`2026-07-29-spec-design-source-classification.md`](../../wip/skills-authoring/2026-07-29-spec-design-source-classification.md).
+
+`skills-creation` remains the implementation-time owner of trigger wording, `SKILL.md` shape, reference/lane placement, steering, platform mechanics, pruning, and proof design. `manage-agents` remains the owner of all generic agent coordination mechanics.
