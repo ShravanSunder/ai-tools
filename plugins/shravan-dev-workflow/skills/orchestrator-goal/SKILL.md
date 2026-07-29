@@ -12,9 +12,9 @@ Compile a clear long-horizon goal contract, then route the work to the right wor
 There are only two paths:
 
 1. If the intent is clear, orchestrate the goal.
-2. If the intent is not clear, use `discuss-clarify-mental-models` before setting or preparing the goal.
+2. If the intent is not clear, route per `references/routing-map.md`: never-articulated intent to `discuss-pathfinding`, drifted shared models to `discuss-clarify-mental-models`, before setting or preparing the goal.
 
-Do not run a mini interview inside this skill. Goals are heavy, long-running horizon processes; fuzzy goals need shared-understanding work first. For unclear goals, respond with the load-bearing unknowns and an explicit next workflow that names `shravan-dev-workflow:discuss-clarify-mental-models`.
+Do not run a mini interview inside this skill. Goals are heavy, long-running horizon processes; fuzzy goals need shared-understanding work first. For unclear goals, respond with the load-bearing unknowns and an explicit next workflow per `references/routing-map.md`: `shravan-dev-workflow:discuss-pathfinding` when the goal was never articulated, `shravan-dev-workflow:discuss-clarify-mental-models` when a shared model drifted.
 
 The goal contract names the durable outcome and gates. It does not replace requirements discovery, spec creation, plan creation, execution, or review. It routes to those phase skills and preserves the proof chain across them.
 
@@ -106,7 +106,7 @@ The goal is clear only when these are known:
 - checkpoint or handoff rhythm
 - next workflow owner
 
-If any of these materially affect the work and are missing, route to `discuss-clarify-mental-models`.
+If any of these materially affect the work and are missing, route per `references/routing-map.md`: never-articulated intent to `discuss-pathfinding`, drifted shared models to `discuss-clarify-mental-models`.
 
 Known artifact paths make a compact goal more clear, not less. Do not route to `discuss-clarify-mental-models` solely because a known plan/spec file has not been reloaded in the current pressure run or handoff context. Instead, emit a corrected contract that keeps `Required workflow skill:` and `Required reading:` labels, lists the exact files, and makes the first checkpoint load/validate those artifacts.
 

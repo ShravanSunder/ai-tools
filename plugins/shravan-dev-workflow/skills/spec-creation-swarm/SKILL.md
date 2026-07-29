@@ -48,7 +48,7 @@ fuzzy goal or design question
 - Produce explicit tradeoffs, not a single happy path.
 - Record security context when the design touches auth, secrets, parsing, filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents, or external services.
 - If substantial design/spec work is clear and the user did not ask for chat-only output, write the primary spec as a durable repo artifact and write the parent ledger/lane artifacts by default.
-- If the desired design/spec output is unclear, do not create files yet; use `discuss-pathfinding` when the intent was never articulated, `discuss-clarify-mental-models` for shared-model drift, or ask one material question first.
+- If the desired design/spec output is unclear, do not create files yet; use `discuss-pathfinding` when the intent was never articulated, `discuss-clarify-mental-models` for shared-model drift, or, when only one narrow design branch remains, ask one material question first.
 - Design artifacts contain decisions and technical rationale, not process history. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
 ## Workflow

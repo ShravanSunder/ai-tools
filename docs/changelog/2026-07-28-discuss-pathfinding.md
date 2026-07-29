@@ -20,14 +20,16 @@ Plugin: `shravan-dev-workflow` 1.6.72
 
 ## Sources
 
-Adapted with per-judgment citations from this repo's user-decision-questions.md and discuss-clarify provenance craft, and from admired sources: grilling/domain-modeling/grill-with-docs (mattpocock), interview-me and documentation-and-adrs (addyosmani), doc-coauthoring reader testing (getsentry), pstack classify-before-you-ask (cursor). Process-marker interviewing is original — no source taught interviewing about a repeatable process.
+Inline citations sit at each adapted judgment in the reference files; the full judgment-to-source map is in [references/2026-07-28-discuss-pathfinding-evidence.md](references/2026-07-28-discuss-pathfinding-evidence.md). Process-marker interviewing is original — no source taught interviewing about a repeatable process.
 
 ## Validation
 
-- Spec review: three fresh-context proposal lanes (mental-model-fit, trigger-routing, rule-agreement); all receipts complete; one blocker (router boundary collision) resolved via the coordinated neighbour edits above; all accepted findings folded before authoring.
-- `claude plugin validate .`: passed.
-- Implementation review: different-lineage acpx reviewer (sol) attempted twice; agent spawn failed (environment offline). Parent self-review performed (caller/callee return alignment, bright-line/blocker agreement, description-vs-body, boundary edits, single-owner citations); two return-line mismatches found and fixed. Sol review owed before merge.
-- Proof route: proof gap, user-accepted — pressure testing explicitly excluded by user direction; no behavior proof is claimed.
+Verdict-level evidence for every claim below is persisted in [references/2026-07-28-discuss-pathfinding-evidence.md](references/2026-07-28-discuss-pathfinding-evidence.md).
+
+- Spec review: three fresh-context proposal lanes; receipts complete; one blocker (router boundary collision) resolved via the coordinated neighbour edits above.
+- Implementation review: seven lanes run on gpt-5.6-sol via acpx (different lineage); two blockers and the accepted importants fixed before commit; reductions in the evidence file.
+- `claude plugin validate .`: passed at the post-fix state (output in the evidence file).
+- Proof route: proof gap, user-accepted — pressure testing excluded by user direction (decision persisted in the evidence file); behavior not evaluated; no behavior proof is claimed.
 
 ## Refresh / reinstall
 

@@ -163,7 +163,7 @@ Classify the run; search the owning plugin for an existing skill or reference th
 
 ### 2. Choose the authoring basis and proof posture
 
-Ground truth comes before design. IF the skill teaches work the run does not yet understand, extract what lives in people with `discuss-pathfinding` and gather what lives in artifacts with `research-swarm`, and return the validated understanding and kept notes; `Build the main path`, `Place the depth`, and `Implement` consume them.
+IF the work the skill teaches lives in someone's head and is not yet understood, use `discuss-pathfinding` to extract it and return the validated understanding and its records. IF it lives in artifacts the run has not read, use `research-swarm` and return the evidence consumed. `Build the main path`, `Place the depth`, and `Implement` consume these returns.
 
 Then classify the change, and classify why you are making it.
 
