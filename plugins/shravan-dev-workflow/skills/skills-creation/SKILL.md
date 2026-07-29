@@ -163,7 +163,9 @@ Classify the run; search the owning plugin for an existing skill or reference th
 
 ### 2. Choose the authoring basis and proof posture
 
-First classify the change, then classify why you are making it.
+Ground truth comes before design. IF the skill teaches work the run does not yet understand, extract what lives in people with `discuss-pathfinding` and gather what lives in artifacts with `research-swarm`, and return the validated understanding and kept notes; `Build the main path`, `Place the depth`, and `Implement` consume them.
+
+Then classify the change, and classify why you are making it.
 
 A change is **behavior-changing** when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are **mechanical** and static-only.
 
@@ -178,7 +180,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and when the sourcing pass ran, the validated understanding and kept notes exist. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 

@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-28 Discuss Pathfinding And Skills-Creation Sourcing](2026-07-28-discuss-pathfinding.md)
 - [2026-07-28 Skills Creation Lane And Reference Contracts](2026-07-28-skills-creation-lane-reference-contracts.md)
 - [2026-07-26 Skills Creation Review Lanes](2026-07-26-skills-creation-review-lanes.md)
 - [2026-07-26 Manage Agents Control Rationale](2026-07-26-manage-agents-control-rationale.md)

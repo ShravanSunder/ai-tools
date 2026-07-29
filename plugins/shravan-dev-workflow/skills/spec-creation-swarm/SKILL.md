@@ -48,7 +48,7 @@ fuzzy goal or design question
 - Produce explicit tradeoffs, not a single happy path.
 - Record security context when the design touches auth, secrets, parsing, filesystem, network, subprocesses, plugins, MCP, CI, package scripts, agents, or external services.
 - If substantial design/spec work is clear and the user did not ask for chat-only output, write the primary spec as a durable repo artifact and write the parent ledger/lane artifacts by default.
-- If the desired design/spec output is unclear, do not create files yet; use `discuss-clarify-mental-models` for shared-model drift or ask one material question first.
+- If the desired design/spec output is unclear, do not create files yet; use `discuss-pathfinding` when the intent was never articulated, `discuss-clarify-mental-models` for shared-model drift, or ask one material question first.
 - Design artifacts contain decisions and technical rationale, not process history. Later cleanup, promotion, or archival belongs to `docs-maintain`.
 
 ## Workflow
@@ -172,7 +172,7 @@ If this diagram is not useful for the domain, replace it with an equivalent owne
 - Load `references/swarm-packets.md` before spawning design, research, or architecture subagents.
 - Load `references/creation-evidence-schema.md`; every substantive creation lane observation uses this schema before lane-specific context.
 - Load only the selected `references/lanes/*.md` files. Each selected lane reference is a job contract; the parent still curates the task instance.
-- Use `discuss-clarify-mental-models` when intent is unclear because the shared model is unstable; load `references/user-decision-questions.md` when a narrow design branch needs a direct user decision.
+- Use `discuss-pathfinding` when intent is unclear because it was never extracted from the user; use `discuss-clarify-mental-models` when intent is unclear because the shared model is unstable; load `references/user-decision-questions.md` when a narrow design branch needs a direct user decision.
 - Use `research-swarm` when the design depends on external prior art, current web/docs, DeepWiki-style repository research, saved-reader sources, memory, session logs, or a portable evidence ledger.
 - Load `../../docs/source-inspiration-catalog.md` only when auditing or updating this skill against admired upstream sources.
 
