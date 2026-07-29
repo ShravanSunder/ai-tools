@@ -180,7 +180,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: the records and confirmed restatement when `discuss-pathfinding` ran, the evidence-ledger summary when `research-swarm` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: the records and confirmed restatement when `discuss-pathfinding` ran, the evidence-ledger summary and coverage when `research-swarm` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 
@@ -270,7 +270,7 @@ The run is not done while any of these hold:
 - behavior-changing authoring lacks a human-readable success definition or authoring basis;
 - an observed-failure path hides a failed, missing, or inconclusive reproduction result instead of returning the user decision;
 - the workflow has branches without observable predicates or return shapes;
-- a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it — and no named consumer justifying a shape-only reference;
+- a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;
