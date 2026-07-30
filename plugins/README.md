@@ -48,6 +48,7 @@ Shravan's Codex-first development workflow plugin. Provides:
 
 - **spec-creation-swarm** skill -- creates specs/designs with bounded codebase explorer, architecture, security, separability, and adversarial lanes before implementation planning
 - **discuss-clarify-mental-models** skill -- reconverges unstable shared mental models before artifact work without the old one-question grill shape
+- **discuss-pathfinding** skill -- Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/process/glossary records as they crystallize.
 - **manage-agents** skill -- coordinates advisors, sidekicks, delegates, operators, subagents, and swarms across model categories and native or ACPX runtimes, with ACP adapter implementation kept separate
 - **docs-maintain** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
 - **spec-review-swarm** skill -- attacks drafted specs/designs with adversarial review lanes and accepted/contested/open synthesis before execution

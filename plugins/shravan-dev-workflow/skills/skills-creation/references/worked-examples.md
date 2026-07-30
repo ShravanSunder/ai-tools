@@ -2,7 +2,7 @@
 
 This reference owns the small end of the size range. Return the shape choice for the skill being authored: how much machinery its job actually earns.
 
-The review module in this skill — stage references, eight lanes, a shared schema, a dispatch contract — is the heavy end of the range, shown in place. Below is the light end: a complete skill, small because its job is small. Most skills live between. Match the machinery to the job, not to this skill.
+The review module in this skill — stage references, the review lanes, a shared schema, a dispatch contract — is the heavy end of the range, shown in place. Below is the light end: a complete skill, small because its job is small. Most skills live between. Match the machinery to the job, not to this skill.
 
 ## A Complete Small Skill
 

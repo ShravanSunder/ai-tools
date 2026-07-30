@@ -38,7 +38,7 @@ Bad signals:
 
 Calibration: Report placement and call-completeness defects with the exact site. Do not judge whether the rule itself is well worded; that is `steering-strength`. Do not count lines; length alone is not a finding here.
 
-Overlap boundary: This lane owns *where material lives and whether calls are complete*, including progressive-disclosure judgment. `rule-agreement` owns whether duplicate copies agree, and owns unreachability outright: a reference nothing calls, or a form declared and never used, is a `rule-agreement` finding, not one of this lane's. `no-op-pruning` owns whether a line earns its place at all.
+Overlap boundary: This lane owns *where material lives and whether calls are complete*, including progressive-disclosure judgment. `rule-agreement` owns whether duplicate copies agree, and owns unreachability outright: a reference nothing calls, or a form declared and never used, is a `rule-agreement` finding, not one of this lane's. `no-op-pruning` owns whether a line earns its place at all. `depth-coverage` owns whether depth teaches — a reference can sit in the right home with a complete caller and still make nothing about its stage predictable.
 
 Stop when: every call site has been walked and every reference traced back to a caller.
 

@@ -10,19 +10,20 @@ For final repo skill-work readiness, `implementation-review-swarm` owns review o
 
 The artifact here is **changed files** on disk, so every applicable lane can run. Dispatch the union of every row whose surface the change touched. The rows are the four surfaces of the Great Skill Frame, plus the security gate:
 
-| reviewed surface                     | lanes dispatched                                |
-| ------------------------------------ | ----------------------------------------------- |
-| `SKILL.md` body (main path)          | placement-and-calls, steering-strength,         |
-|                                      | mental-model-fit, no-op-pruning, rule-agreement |
-| reference text (depth)               | rule-agreement, no-op-pruning,                  |
-|                                      | placement-and-calls                             |
+| reviewed surface                     | lanes dispatched                                 |
+| ------------------------------------ | ------------------------------------------------ |
+| `SKILL.md` body (main path)          | placement-and-calls, steering-strength,          |
+|                                      | mental-model-fit, no-op-pruning, rule-agreement, |
+|                                      | depth-coverage                                   |
+| reference text (depth)               | rule-agreement, no-op-pruning,                   |
+|                                      | placement-and-calls, depth-coverage              |
 | frontmatter or description (trigger) | trigger-routing                                 |
 | a behavior-proof claim (proof)       | claim-vs-evidence                               |
 | a sensitive surface                  | sensitive-surface                               |
 
-Each lane named above is `lanes/<name>.md`: `lanes/placement-and-calls.md`, `lanes/steering-strength.md`, `lanes/mental-model-fit.md`, `lanes/no-op-pruning.md`, `lanes/rule-agreement.md`, `lanes/trigger-routing.md`, `lanes/claim-vs-evidence.md`, `lanes/sensitive-surface.md`.
+Each lane named above is `lanes/<name>.md`: `lanes/placement-and-calls.md`, `lanes/steering-strength.md`, `lanes/mental-model-fit.md`, `lanes/no-op-pruning.md`, `lanes/rule-agreement.md`, `lanes/depth-coverage.md`, `lanes/trigger-routing.md`, `lanes/claim-vs-evidence.md`, `lanes/sensitive-surface.md`.
 
-**Scoped changes** dispatch exactly two lanes instead of the union: the lane whose mission owns the failure form the wording change targets (a completion-criterion fix goes to `steering-strength`; a deleted no-op to `no-op-pruning`), plus `rule-agreement`, because wording in one home can still drift against the homes that cite it. The union rule governs every other change.
+**Scoped changes** dispatch exactly two lanes instead of the union: the lane whose mission owns the failure form the wording change targets (a completion-criterion fix goes to `steering-strength`; a deleted no-op to `no-op-pruning`; a ceremony-only-depth fix to `depth-coverage`), plus `rule-agreement`, because wording in one home can still drift against the homes that cite it. The union rule governs every other change.
 
 **Existing files** — evaluating a shipped skill nobody has edited — use the same table, with every row its current surfaces satisfy; there is no diff, so lanes read whole files. For classification `create`, the reviewed surface is the new files, not a diff.
 

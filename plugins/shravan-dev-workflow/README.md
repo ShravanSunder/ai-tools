@@ -24,6 +24,7 @@ design/review/handoff       create/review/handoff     execute/review/handoff
 Namespace            Concern                      Skills
 -------------------  ---------------------------  ----------------------------
 discuss-*            shared understanding          discuss-clarify-mental-models
+                                                  discuss-pathfinding
 research-*           evidence gathering            research-swarm
 manage-*             subordinate agents            manage-agents
 orchestrator-*       long-horizon coordination     orchestrator-goal
@@ -100,6 +101,8 @@ flowchart LR
 ### Shared understanding
 
 Use `discuss-clarify-mental-models` when the shared picture is unstable before artifact work: terms, boundaries, assumptions, source-of-truth questions, or tradeoffs need to be made inspectable. It stays read-only, checks bounded evidence, maps branches, names the countercase, and routes only after the model is confirmed or explicitly open. It is not the old one-forcing-question grill.
+
+`discuss-pathfinding`: Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/process/glossary records as they crystallize.
 
 Use `research-swarm` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, routes source-specific lanes, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial swarm lanes use explicit packet contracts with source anchors, security context, candidate-evidence labels, and completion receipts; parent ledgers reduce lane evidence before anything becomes accepted truth.
 
