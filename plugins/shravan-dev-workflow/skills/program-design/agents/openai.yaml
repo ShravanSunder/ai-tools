@@ -1,0 +1,4 @@
+interface:
+  display_name: "Program Design"
+  short_description: "Design structural How"
+  default_prompt: "Use program-design to turn settled observable obligations into structural How: components, ownership, interfaces, state, flows, recovery, concurrency, trust boundaries, and proof seams. Route one named skill package to skills-creation and standalone security audits or threat models to ops-security-review."

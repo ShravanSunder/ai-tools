@@ -2,13 +2,13 @@
 
 Date: 2026-07-28
 
-Status: proposed
+Status: accepted-to-implement after the 2026-07-30 naming correction
 
 Target runtime skill: `program-design`
 
-Orchestrated by: [`spec-design`](./2026-07-28-spec-design-workflow.md)
+Workflow contract: [`spec and program design workflow`](./2026-07-28-spec-design-workflow.md)
 
-Requires: an authoritative result from [`specification-design`](./2026-07-28-specification-design.md) or equivalent Why/What source
+Requires: an authoritative result from [`spec-design`](./2026-07-28-spec-design.md) or equivalent Why/What source
 
 Independent review owner: [`spec-program-review`](./2026-07-28-spec-program-review.md)
 
@@ -24,7 +24,7 @@ This is a general program-design skill. It must work for application features, s
 
 Given an authoritative specification and current-system evidence, the skill produces a versioned program design that makes structural ownership and runtime behavior explicit enough that planning can map it to files, tasks, order, commands, checkpoints, and proof execution without inventing architecture.
 
-If the specification is missing, stale, contradictory, or insufficient, the skill routes the exact Why/What gap back to `specification-design` rather than patching it locally.
+If the specification is missing, stale, contradictory, or insufficient, the skill routes the exact Why/What gap back to `spec-design` rather than patching it locally.
 
 ## Mental Model
 
@@ -83,17 +83,17 @@ Proposed trigger description:
 
 ```yaml
 name: program-design
-description: Use when defining or revising structural How against settled observable obligations: components, ownership, internal interfaces, state, calls, flows, failure/retry/recovery realization, concurrency/consistency, compatibility/cutover realization, trust boundaries, or proof seams. Not for a full start/resume/remediation/acceptance workflow; use spec-design. Not for independent review-only requests, inventing requirements, implementation task planning, pair acceptance, a standalone security scan, security audit, or threat model, authoring or evaluating a runtime skill package—its trigger, main path, references, lanes, scripts, steering, platform mechanics, or behavior proof—or an explicitly requested legacy spec-creation-swarm run.
+description: Use when defining or revising structural How against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/retry/recovery realization, concurrency/consistency, compatibility/cutover realization, trust boundaries, or proof seams. Not for authoring Why/What; use spec-design. Not for independent review-only requests, inventing requirements, implementation task planning, pair acceptance, a standalone security scan, security audit, or threat model, authoring or evaluating a runtime skill package—its trigger, main path, references, lanes, scripts, steering, platform mechanics, or behavior proof—or an explicitly requested legacy spec-creation-swarm run.
 ```
 
 True prompts include “design the component tree,” “show the call flow,” “where should state live,” “eliminate these effects by redesigning ownership,” “choose the consistency model,” “design compatibility and cutover from the legacy store,” “design the service boundaries,” and program-owned findings routed from review.
 
 Near misses:
 
-- unresolved behavior/product questions route to `specification-design`;
+- unresolved behavior/product questions route to `spec-design`;
 - review-only requests route to `spec-program-review` program-only or pair mode;
-- task/file/order/command work routes through `spec-design` pair review and acceptance before design-bearing planning; direct planning is allowed only when a current `spec-design` planning-basis classification returned `implementation-mechanics-only` for the exact bounded request;
-- full lifecycle work routes to `spec-design`.
+- task/file/order/command work routes to plan creation after a current pair-ready review result; direct planning remains subject to the planning workflow's own implementation-mechanics-only input classification;
+- full lifecycle work is composed by the caller through `spec-design`, `program-design`, and `spec-program-review`.
 
 ## Independently Invocable Contract
 
@@ -105,14 +105,14 @@ Required:
 - exact specification identity/revision/digest;
 - current-system sources sufficient to verify relevant owners, calls, state, constraints, and proof patterns.
 
-An equivalent Why/What source must be versioned or digest-bound, carry authoritative consumer/outcome/obligation/constraint/failure/proof meaning sufficient for the specification spine, and expose unresolved decisions. A chat summary or recommendation does not qualify merely because it is concise. When equivalence cannot be established, return `specification-gap` and route through `specification-design`.
+An equivalent Why/What source must be versioned or digest-bound, carry authoritative consumer/outcome/obligation/constraint/failure/proof meaning sufficient for the specification spine, and expose unresolved decisions. A chat summary or recommendation does not qualify merely because it is concise. When equivalence cannot be established, return `specification-gap` and route through `spec-design`.
 
 Optional:
 
 - existing program-design artifact;
 - prototypes, traces, diagrams, tests, or current implementation;
 - review findings owned by structural How;
-- orchestrator record with accepted decisions and invalidations.
+- caller record with accepted decisions and invalidations, when one exists.
 
 The skill does not start structural design from bare fuzzy intent. It returns the missing specification input.
 
@@ -426,11 +426,11 @@ Completion: a digest-bound author self-check records what held and exact gaps. I
 
 ### 16. Obtain fresh local review when substantial
 
-Call the `spec-program-review` review-requirement classification entry for program-only mode and the exact current design and governing-specification digests. Consume its `review-required | non-substantial` result, matched predicate/basis, and orchestration override. A `review-required` result requires program-only review; a `non-substantial` result records the returned basis and cannot be upgraded by this authoring skill. Classification is not a review invocation and dispatches no reviewer.
+Call the `spec-program-review` review-requirement classification entry for program-only mode and the exact current design and governing-specification digests. Consume its `review-required | non-substantial` result and matched predicate/basis. A `review-required` result requires program-only review; a `non-substantial` result records the returned basis and cannot be upgraded by this authoring skill. Classification is not a review invocation and dispatches no reviewer.
 
 When required, invoke `spec-program-review` in program-only mode with the program-design digest, governing specification digest, current-system sources, constraints, and risk predicates. The fresh read-only reviewer judges internal coherence separately from specification satisfaction.
 
-Parent-accepted Why/What findings route to `specification-design`; parent-accepted How findings return here. Any edit to reviewed text invalidates every receipt that covered the prior digest; semantic edits additionally invalidate downstream design results under `spec-design`.
+Parent-accepted Why/What findings route to `spec-design`; parent-accepted How findings return here. Any edit to reviewed text invalidates every receipt that covered the prior digest; semantic edits additionally invalidate downstream results held by the composing caller.
 
 Completion: a current independent local program-design result covers the exact design/specification digests, or the block/non-substantial classification is explicit.
 
@@ -438,7 +438,7 @@ Completion: a current independent local program-design result covers the exact d
 
 Return artifact identity/digest, governing specification digest, coverage map, current evidence, self-check, independent review, debt/assumptions/proof gaps, and non-acceptance boundary.
 
-Completion: the caller can request pair review or import the result into `spec-design`; design-bearing planning waits for `spec-design` to record pair acceptance. Otherwise the caller provides the exact missing specification decision/evidence.
+Completion: the caller can request pair review through `spec-program-review`; design-bearing planning waits for a current pair-ready review result covering the exact specification and program-design digests. Otherwise the caller provides the exact missing specification decision/evidence.
 
 ## Required Design Views
 
@@ -600,7 +600,7 @@ Behavioral proof is deferred to implementation.
 
 ## Acceptance Criteria for the Skill Implementation
 
-- The trigger distinguishes structural How from specification, review, orchestration, and planning.
+- The trigger distinguishes structural How from specification authoring, review, and planning.
 - The skill refuses bare intent without authoritative Why/What.
 - The mental model and program-design spine are scan-visible.
 - The skill teaches current modeling, alternatives, component trees, ownership, interfaces, state, flows, failure, concurrency, security/reliability, and proof architecture.

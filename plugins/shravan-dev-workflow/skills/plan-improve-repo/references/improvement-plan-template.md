@@ -11,6 +11,14 @@ Repo: <absolute path>
 Status: proposed
 Flow: quick | deep | focus | branch
 
+## Planning Admission
+
+- Basis: current-pair-ready | implementation-mechanics-only
+- Evidence identity:
+  - current-pair-ready: <specification digest, program-design digest, pair-review result identity>
+  - implementation-mechanics-only: <classification result identity and inspected-source identities>
+- Freshness checked at: <git sha or artifact digests>
+
 ## Problem
 
 <What is wrong, why it matters, who pays the cost.>

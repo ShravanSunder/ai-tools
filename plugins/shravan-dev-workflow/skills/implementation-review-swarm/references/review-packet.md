@@ -166,7 +166,8 @@ Route by cause:
 - bad implementation against an accepted plan: `implementation-execute-plan`;
 - plan translation error or missing plan proof: `plan-creation-swarm`;
 - plan needing adversarial validation before revision: `plan-review-swarm`;
-- spec ambiguity, missing contract, or missing requirement: `spec-creation-swarm`;
-- spec needing adversarial validation before revision: `spec-review-swarm`;
+- specification ambiguity, missing observable contract, or missing requirement: `spec-design`;
+- missing component, owner, interface, state/failure policy, or proof seam: `program-design`;
+- specification/program-design pair needing independent validation: `spec-program-review`;
 - unresolved user/product/design choice: direct user clarification, or `discuss-clarify-mental-models` when the issue is shared-model drift;
 - PR thread follow-through: `implementation-pr-wrapup`.

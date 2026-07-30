@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-30 Spec And Program Design Routing Cutover](2026-07-30-spec-program-design-routing-cutover.md)
 - [2026-07-29 Research Swarm Epistemics And Mental-Model Repair Improvements](2026-07-29-research-swarm-clarify-improvements.md)
 - [2026-07-28 Discuss Pathfinding And Skills-Creation Sourcing](2026-07-28-discuss-pathfinding.md)
 - [2026-07-28 Skills Creation Lane And Reference Contracts](2026-07-28-skills-creation-lane-reference-contracts.md)

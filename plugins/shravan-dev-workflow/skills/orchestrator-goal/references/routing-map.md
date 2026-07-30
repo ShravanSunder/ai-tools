@@ -8,8 +8,9 @@ Use this reference to connect a clear goal to the workflow skill that should own
 | --- | --- | --- |
 | Goal was never articulated — it lives in someone's head | `discuss-pathfinding` | Extract the goal before contracting it. |
 | Goal was shared but the model has drifted | `discuss-clarify-mental-models` | Shared model must be repaired before a long-running goal starts. |
-| Need spec/design direction before a plan exists | `spec-creation-swarm` | Bounded lanes shape the spec contract, separability, and architecture. |
-| Drafted spec/design needs critique | `spec-review-swarm` | Adversarial review swarms pre-plan design. |
+| Need authoritative Why/What before a plan exists | `spec-design` | Define problem, outcomes, requirements, observable contracts, constraints, and proof obligations. |
+| Need structural How before a plan exists | `program-design` | Define components, owners, interfaces, state, flows, failure behavior, and proof seams. |
+| Drafted specification/program design needs critique | `spec-program-review` | Independently review either artifact or their pair without editing or accepting it. |
 | Spec/design context needs a portable packet | `spec-handoff` | Packages pre-plan decisions, non-goals, open questions, and evidence. |
 | Need to turn spec/design into an implementation plan | `plan-creation-swarm` | Creates task sequence, write surfaces, validation gates, and risks without editing code. |
 | Existing implementation plan needs a portable packet | `plan-handoff` | Writes temp artifacts and copy-paste prompt for the plan. |

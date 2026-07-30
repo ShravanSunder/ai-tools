@@ -51,7 +51,7 @@ Pick one mode before dispatch:
 - `files`: named files or directories.
 - `adversarial`: challenge an implementation decision in code, diff, PR, commit, or named files.
 
-Route design, spec, implementation-plan, prompt, or handoff text to `spec-review-swarm` or `plan-review-swarm` instead of this skill unless those artifacts are only context for reviewing code.
+Route specification, program-design, or pair review to `spec-program-review`; route implementation-plan or plan-handoff review to `plan-review-swarm` instead of this skill unless those artifacts are only context for reviewing code.
 
 For implementation reviews, run spec compliance before broader quality lanes. For broad PR or diff reviews, lanes can run in parallel, but intent/spec findings take priority in reduction.
 
@@ -119,7 +119,7 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
 8. Review reception and routing
    - Load `../../references/review-reception.md` to receive accepted findings, decide what this workflow owns, and handle feedback produced or validated by this review.
    - Route accepted blocker/important implementation findings to `implementation-execute-plan` unless a tiny same-session review-fix is explicitly scoped.
-   - Route plan translation errors to `plan-creation-swarm`, plan validation issues to `plan-review-swarm`, spec ambiguity or missing contracts to `spec-creation-swarm`, proposed spec validation to `spec-review-swarm`, and unresolved product/design choices to direct user clarification, or to `discuss-clarify-mental-models` when the issue is shared-model drift.
+   - Route plan translation errors to `plan-creation-swarm`, plan validation issues to `plan-review-swarm`, missing or ambiguous Why/What to `spec-design`, missing structural How to `program-design`, proposed specification/program-design validation to `spec-program-review`, and unresolved user-owned choices to direct clarification, or to `discuss-clarify-mental-models` when the issue is shared-model drift.
    - Pure follow-through on existing GitHub PR comments or review threads belongs to `implementation-pr-wrapup`.
 
 9. Verdict

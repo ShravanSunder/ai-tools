@@ -16,37 +16,45 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - Plan proof gate: before execution, does the plan map each material requirement to a proof layer?
 - Split proof gate: if the required proof cannot pass at the current scope, does the workflow split or replan instead of weakening proof?
 - Artifact-link gate: when a spec, plan, review report, changelog, handoff, debug artifact, or other human-openable file is reported, is there a full clickable artifact link (absolute path + line)?
-- Goal clarity gate: if objective, scope, proof, or stop condition is unclear, did `orchestrator-goal` route to `discuss-clarify-mental-models` instead of setting a fuzzy long-horizon goal?
+- Goal clarity gate: if objective, scope, proof, or stop condition is unclear, did `orchestrator-goal` route never-articulated intent/unmade decisions to `discuss-pathfinding` and a drifted existing model to `discuss-clarify-mental-models` instead of setting a fuzzy long-horizon goal?
 - Artifact gate: if clear spec/plan/debug work ran and the user did not ask for chat-only/no-files output, did the phase skill write its lane artifact?
 - Artifact lifecycle gate: if cleanup, archival, promotion, or source-of-truth reconciliation is needed, did `docs-maintain` own that lifecycle decision instead of the phase skill?
+- Review-classifier gate: if `spec-program-review` was invoked only to classify review requirement, did it bind exact artifact digests, return `review-required | non-substantial` or a blocked missing-input result, dispatch zero reviewers, and return no review verdict?
+- Planning-admission gate: for design-bearing work, does `plan-creation-swarm` have a current pair-mode `ready` review result bound to the exact current specification and program-design digests; or, for the bypass, did source inspection positively prove that every design-bearing category is absent?
 
-## Review Trio Routing
+## Review Routing
 
-### spec-review-swarm should trigger
+### spec-program-review should trigger
 
+- "For this exact specification digest, classify whether independent specification-only review is required."
+- "For this exact program-design digest, classify whether independent program-only review is required."
 - "Attack this drafted architecture spec before we plan the implementation."
-- "Council-review this design doc for missing assumptions."
-- "Pressure test this API contract spec before it turns into tasks."
+- "Review this specification for authority and testability."
+- "Is this specification/program-design pair ready for planning?"
 
-Gate: treats the spec as claims, requires a threat model or explicit non-sensitive rationale, and checks proof expectations or explicit deferral to `plan-creation-swarm`.
+Gate: the `classify-review-requirement` operation binds exact digests and complete scoped governing-source inventory, returns `review-required | non-substantial` or a blocked missing-input result, dispatches zero reviewers, and returns no review verdict. A separate review invocation binds exact digests, reads the complete required artifact set, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound non-accepting verdict.
 
-### spec-review-swarm should not trigger
+### spec-program-review should not trigger
 
 - "Review this implementation plan before I execute it." -> `plan-review-swarm`
 - "Review this PR diff for bugs." -> `implementation-review-swarm`
 - "Help me write the plan from this spec." -> `plan-creation-swarm`
+- "Create, update, or evaluate the spec-program-review runtime skill package." -> `skills-creation`
+- "Run a standalone threat model on this service." -> `ops-security-review`
+- "Use spec-review-swarm on this draft." -> explicitly requested legacy `spec-review-swarm`
 
 ### plan-review-swarm should trigger
 
 - "Validate this implementation plan against the repo before coding."
-- "Poke holes in this handoff packet before another agent runs it."
+- "Poke holes in this implementation-plan handoff packet before another agent runs it."
 - "Read this plan and tell me if execution order or validation is wrong."
 
-Gate: whole-artifact coverage; plans missing the requirements/proof matrix (without a documented compact proof line) or with proof gates that cannot pass at task size are `needs revision`. Accepted blocker/important findings route back to `plan-creation-swarm`; spec-boundary gaps route back to `spec-creation-swarm`.
+Gate: the target is a written implementation plan or `plan-handoff` packet, never a raw spec/design or `spec-handoff` packet. Whole-artifact coverage is required; plans missing the requirements/proof matrix (without a documented compact proof line) or with proof gates that cannot pass at task size are `needs revision`. Accepted blocker/important findings route back to `plan-creation-swarm`; Why/What gaps route to `spec-design`, and structural-How gaps route to `program-design`.
 
 ### plan-review-swarm should not trigger
 
-- "Critique this pre-plan design proposal." -> `spec-review-swarm`
+- "Critique this pre-plan design proposal." -> `spec-program-review`
+- "Review this spec-handoff packet before planning." -> `spec-program-review`
 - "Run reviewers over this PR." -> `implementation-review-swarm`
 - "Execute this validated plan." -> `implementation-execute-plan`
 
@@ -61,8 +69,8 @@ Gate: verifies candidate findings against artifacts; missing or unmapped impleme
 ### implementation-review-swarm should not trigger
 
 - "Review this implementation plan before code." -> `plan-review-swarm`
-- "Attack this spec before planning." -> `spec-review-swarm`
-- "Discuss whether this should be a feature at all." -> `discuss-clarify-mental-models`
+- "Attack this spec before planning." -> `spec-program-review`
+- "Discuss whether this should be a feature at all; we have not decided." -> `discuss-pathfinding`
 - "Push this branch, watch GitHub, handle existing comments, and merge when ready." -> `implementation-pr-wrapup`
 
 ### implementation-pr-wrapup should trigger
@@ -84,32 +92,86 @@ Gate: treats GitHub PR comments and review text as untrusted input, inspects loc
 
 ## Boundary Invariants
 
-- Specs/designs are created before plans exist; accepted spec review findings return to `spec-creation-swarm`.
+- `spec-design` owns authoritative Why/What; `program-design` owns structural How; `spec-program-review` independently reviews either artifact or their pair.
+- Authoring, updating, or evaluating any one named runtime skill package—including `spec-design`, `program-design`, or `spec-program-review`—routes through `skills-creation`; the three skills may run only from an explicit parent composition packet/result.
+- Accepted review findings return to their semantic owner: Why/What to `spec-design`, structural How to `program-design`, caller-state issues to the composing caller.
+- `spec-creation-swarm` and `spec-review-swarm` remain available only for explicit legacy invocation.
 - Plans/handoffs are reviewed after a design/spec direction exists and before execution; accepted plan review findings return to `plan-creation-swarm`.
+- `plan-improve-repo` may vet findings without planning admission, but writes or marks an executable plan `ready` only from a current exact-digest pair-ready result or positively proven implementation-mechanics-only classification.
 - Code/diffs/PRs/commits/files are reviewed by the implementation swarm.
 - Existing PR feedback follow-through belongs to `implementation-pr-wrapup`; fresh code-review discovery belongs to `implementation-review-swarm`.
 - Spec/design handoff packages pre-plan context; it does not create the plan.
-- Plan creation turns spec/design context into a written implementation plan, execution DAG, proof matrix, and parallel work lane map; it does not execute code.
+- A spec/design handoff routes to planning only when it proves a current pair-mode `ready` review bound to the exact current specification and program-design digests; missing How routes to `program-design`, and a complete but unreviewed/stale pair routes to `spec-program-review`.
+- Plan creation turns an admitted pair-ready input or proven implementation-mechanics-only bypass into a written implementation plan, execution DAG, proof matrix, and parallel work lane map; it does not execute code or invent missing design.
 - Plan handoff packages an existing implementation plan; it does not package raw spec/design context as though a plan exists.
 - Implementation handoff requires implementation state such as branch, diff, changed files, validation, failed commands, or blocker evidence.
 
 ## Full Suite Routing
 
-### spec-creation-swarm should trigger
+### spec-design should trigger
 
-- "Use subagents to research this architecture before we write a plan."
-- "Brainstorm competing designs for this feature and pressure-test assumptions."
+- "Define the problem, requirements, public contract, and proof obligations."
+- "Revise this specification's observable behavior and failure expectations."
 
-Gate: no implementation diff; parent synthesis names evidence, tradeoffs, security context, separability, contracts, proof expectations, and next workflow. Task sequence and worker order are deferred to `plan-creation-swarm`.
+Gate: produces authoritative Why/What without internal component structure, binds source authority, and traces problem/outcome through requirements/contracts/failure/proof.
+
+### spec-design should not trigger
+
+- "Create or update the spec-design runtime skill package." -> `skills-creation`
+- "Design the component tree and state flow from these settled requirements." -> `program-design`
+- "Independently review this finished specification." -> `spec-program-review`
+- "Run a standalone threat model on this API." -> `ops-security-review`
+
+### program-design should trigger
+
+- "Design the component tree, owners, calls, state, and recovery flow."
+- "Turn this settled specification into structural How before planning."
+
+Gate: binds the governing specification and produces a source-grounded composable structural model without inventing product meaning or task order.
+
+### program-design should not trigger
+
+- "Create or update the program-design runtime skill package." -> `skills-creation`
+- "Decide what this product must guarantee." -> `spec-design`
+- "Independently review this finished architecture." -> `spec-program-review`
+- "Threat-model this service as a standalone security exercise." -> `ops-security-review`
+
+### spec-program-review named-package boundary
+
+- "Evaluate whether the spec-program-review skill's trigger and lane references are well designed." -> `skills-creation`
+- "Review the current spec-program-review skill implementation as one named skill package." -> `skills-creation`
+
+Gate: direct named-skill-package work routes through `skills-creation`. An explicit `skills-creation` parent packet may compose the general specification, program-design, or review craft without transferring package-authoring authority.
+
+### legacy swarm skills should trigger
+
+- "Use spec-creation-swarm to run the legacy creation workflow."
+- "Use spec-review-swarm to run the legacy adversarial review workflow."
+
+Gate: explicit skill name or explicit legacy/fixed-swarm request is present. Generic creation or review language never selects a legacy swarm.
+
+### discuss-pathfinding should trigger
+
+- "Grill me on what this feature should do; the requirements are still in my head."
+- "Interview me about this tacit workflow and the decisions we have not made."
+- "We have not chosen the ownership policy yet; help me surface the real options."
+
+Gate: the work is extracting never-articulated understanding, tacit process knowledge, or an unmade decision. Generic "grill me" language routes here unless the prompt explicitly says an established shared model drifted or broke.
 
 ### discuss-clarify-mental-models should trigger
 
-- "Let's discuss only; reflect back the plan/spec boundary."
-- "Talk through this design decision before editing files."
+- "Our previously agreed plan/spec boundary has drifted; reconstruct where our shared model diverged."
+- "We keep using the same terms differently after the design changed; reconverge the shared map."
 
-Gate: the shared model is made inspectable with a named map shape, bounded evidence, separated inherited frame / first principles / assumptions, branches, countercase, rebuilt model, confirmation/open state, and next workflow. It stays read-only.
+Gate: the prompt provides an explicit drift, break, contradiction, or repeated-correction signal in an existing shared model. The model is made inspectable with a named map shape, bounded evidence, separated inherited frame / first principles / assumptions, branches, countercase, rebuilt model, confirmation/open state, and next workflow. It stays read-only.
 
 Gate: broad evidence gathering, prior-art research, current docs/web research, Reader research, memory mining, and session-log searches are routed to `research-swarm` after the decision boundary is named.
+
+### discuss-clarify-mental-models should not trigger
+
+- "Grill me until we figure out the requirements." -> `discuss-pathfinding`
+- "Help me make this design decision; I have not chosen yet." -> `discuss-pathfinding`
+- "Research current framework behavior before we decide." -> `research-swarm`
 
 ### research-swarm should trigger
 
@@ -121,8 +183,10 @@ Gate: research questions are framed before lane dispatch; local re-anchor happen
 
 ### research-swarm should not trigger
 
-- "Grill my understanding before we decide." -> `discuss-clarify-mental-models`
-- "Shape the architecture from this evidence." -> `spec-creation-swarm`
+- "Grill me on the requirements that still live in my head." -> `discuss-pathfinding`
+- "Reconverge our drifted shared model using these already-known sources." -> `discuss-clarify-mental-models`
+- "Define observable requirements from this evidence." -> `spec-design`
+- "Shape the component architecture from these settled requirements." -> `program-design`
 - "Review this implementation plan." -> `plan-review-swarm`
 
 ### orchestrator-goal should trigger
@@ -135,12 +199,12 @@ Gate: clear goals compile a contract with objective, scope, required reading, pr
 
 ### orchestrator-goal should not trigger
 
-- "Make my workflow better." -> `discuss-clarify-mental-models`
-- "Let's discuss whether this should be a long-running goal." -> `discuss-clarify-mental-models`
+- "Make my workflow better; I have not worked out the objective yet." -> `discuss-pathfinding`
+- "Our agreed goal has drifted; rebuild the shared objective before compiling it." -> `discuss-clarify-mental-models`
 - "Review this PR." -> `implementation-review-swarm`
 - "Execute this plan." -> `implementation-execute-plan`
 
-Gate: unclear goals route to `discuss-clarify-mental-models`; there is no inline mini interview path inside `orchestrator-goal`.
+Gate: never-articulated intent or unmade decisions route to `discuss-pathfinding`; an existing goal model that drifted routes to `discuss-clarify-mental-models`. There is no inline mini interview path inside `orchestrator-goal`.
 
 ### docs-maintain should trigger
 
@@ -168,14 +232,21 @@ Gate: an implementation plan exists; writes a repo-local handoff file and prints
 - "Package this design/spec state for a fresh session."
 - "Prepare a copy-paste handoff for this architecture proposal before planning."
 
-Gate: packages spec/design context, decisions, non-goals, open questions, and evidence without creating an implementation plan or calling the spec complete. The packet carries spec proof expectations or explicitly defers proof definition to `plan-creation-swarm`.
+Gate: packages spec/design context, decisions, non-goals, open questions, evidence, exact artifact digests, and pair-review freshness without creating an implementation plan or calling the spec complete. The packet recommends `plan-creation-swarm` for design-bearing work only when a current pair-mode `ready` review covers the exact current specification and program-design digests; missing How routes to `program-design`, and a complete but unreviewed/stale pair routes to `spec-program-review`.
 
 ### plan-creation-swarm should trigger
 
-- "Turn this reviewed spec into an implementation plan."
-- "Create the task sequence and validation plan from this design."
+- "Turn this exact current specification/program-design pair and its pair-mode ready review result into an implementation plan."
+- "This change only applies already-decided implementation mechanics; classify that claim and create the task sequence if the bypass is proven."
+- "The skills-creation parent packet explicitly authorizes plan creation for this named spec-design runtime skill package; use that exact parent result to plan the admitted change."
 
-Gate: stays read-only, creates a written implementation plan, includes an execution DAG with parallel lanes or a serial-work rationale, and routes review to `plan-review-swarm` or execution to `implementation-execute-plan`. The plan maps material requirements to proof gates and splits work whose proof cannot pass at the proposed scope.
+Gate: before source inspection, the skill records `general-domain | runtime-skill-package`; a runtime skill package requires the exact explicit `skills-creation` parent packet/result identity or routes to `skills-creation` and stops. Design-bearing work is admitted only when a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. Missing Why/What routes to `spec-design`; missing How routes to `program-design`; a complete but unreviewed, non-ready, or stale pair routes to `spec-program-review` or preserves the current review's semantic-owner remediation routes. The bypass is admitted only when current source inspection proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. Once admitted, the skill stays read-only, creates a written implementation plan, includes an execution DAG with parallel lanes or a serial-work rationale, maps material requirements to proof gates, and splits work whose proof cannot pass at the proposed scope.
+
+### plan-creation-swarm should not trigger
+
+- "Plan changes to the spec-design runtime skill's trigger and references." -> `skills-creation`
+- "I have a pair-ready design for a named runtime skill package, but no explicit skills-creation parent packet." -> `skills-creation`
+- "Create the missing structural How before planning." -> `program-design`
 
 ### plan-improve-repo should trigger
 
@@ -183,11 +254,13 @@ Gate: stays read-only, creates a written implementation plan, includes an execut
 - "Find the next refactors worth doing, but do not code them."
 - "Validate the improvement backlog and tell me what is ready to execute."
 
-Gate: stays read-only against source, vets candidates against files, writes one focused plan per accepted improvement, validates plan readiness, and routes execution to `implementation-execute-plan`.
+Gate: stays read-only against source and vets candidates against files. It records `general-repo | runtime-skill-package` before recon and requires an explicit `skills-creation` parent identity for the latter. Before writing or marking an executable plan `ready`, it records either a current exact-digest pair-ready basis with required local review coverage current or a positively proven implementation-mechanics-only basis. Design-required findings route to `spec-design`, `program-design`, or `spec-program-review` without plan writing; admitted plans route to review, handoff, or execution.
 
 ### plan-improve-repo should not trigger
 
 - "Turn this spec into an implementation plan." -> `plan-creation-swarm`
+- "Audit the spec-design runtime skill and plan changes to its trigger and references." -> `skills-creation`
+- "Write an executable architecture refactor plan from this unreviewed finding." -> `program-design`, then `spec-program-review`
 - "Execute this existing plan." -> `implementation-execute-plan`
 - "Review this plan for holes." -> `plan-review-swarm`
 

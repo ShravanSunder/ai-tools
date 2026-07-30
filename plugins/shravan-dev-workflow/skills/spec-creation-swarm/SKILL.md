@@ -1,9 +1,11 @@
 ---
 name: spec-creation-swarm
-description: Use when creating or revising a spec, design, or architecture contract before an implementation plan exists, especially when the work needs bounded subagents, current-state exploration, separability mapping, or tradeoff clarification.
+description: Use only when the user explicitly requests spec-creation-swarm or the legacy fixed-swarm spec-creation workflow for a pre-plan spec, design, or architecture contract. Generic Why/What routes to spec-design; generic structural How routes to program-design.
 ---
 
 # Spec Creation Swarm
+
+This legacy workflow remains available for explicit invocation. Generic specification and program-design requests use `spec-design` and `program-design`.
 
 Use this skill to create the spec/design contract before writing an implementation plan. The parent session owns the mental model, synthesis, and recommendation. Subagents provide bounded research, exploration, and architecture comparison, not final decisions.
 

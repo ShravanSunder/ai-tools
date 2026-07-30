@@ -1,5 +1,7 @@
 # Spec Design Workflow Skills — Final Review
 
+> **Superseded on 2026-07-30.** This file is historical process evidence for the retired four-skill proposal. The accepted current design has exactly three runtime skills—`spec-design`, `program-design`, and `spec-program-review`—and is defined by the [Spec and Program Design Workflow Specification](../../specs/2026-07-28-spec-design-workflow/2026-07-28-spec-design-workflow.md).
+
 Date: 2026-07-29
 
 Status: proposal accepted to implement; runtime implementation waits for authorized `origin/master` integration

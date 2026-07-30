@@ -1,6 +1,6 @@
 ---
 name: discuss-pathfinding
-description: Use when understanding lives only in someone's head or an unmade decision — interview or grill the user to extract requirements, tacit process knowledge, domain terms, or design decisions, especially "grill me", "interview me", "think through with me", or "help me figure out what I actually want". Not for repairing a drifted shared model (discuss-clarify-mental-models), gathering evidence from artifacts (research-swarm), or adversarial review of a drafted spec or plan (spec-review-swarm, plan-review-swarm).
+description: Use when understanding lives only in someone's head or an unmade decision — interview or grill the user to extract requirements, tacit process knowledge, domain terms, or design decisions, especially "grill me", "interview me", "think through with me", or "help me figure out what I actually want". Not for repairing a drifted shared model (discuss-clarify-mental-models), gathering evidence from artifacts (research-swarm), or independent review of a drafted specification, program design, or plan (spec-program-review, plan-review-swarm).
 ---
 
 # Discuss Pathfinding

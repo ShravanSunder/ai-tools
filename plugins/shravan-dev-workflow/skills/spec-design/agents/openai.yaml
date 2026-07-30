@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Design"
+  short_description: "Define authoritative Why and What"
+  default_prompt: "Use spec-design to define or revise authoritative Why/What—problem, outcomes, requirements, observable contracts, constraints, failure obligations, and proof obligations—without inventing structural How. Route tacit/unmade decisions to discuss-pathfinding, drift reconvergence to discuss-clarify-mental-models, and one named skill package to skills-creation."

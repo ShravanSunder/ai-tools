@@ -5,6 +5,7 @@ Use this before calling an improvement plan ready for review, handoff, or execut
 ## Required Checks
 
 - Plan was read end to end after writing or loading.
+- Planning admission is `current-pair-ready` or `implementation-mechanics-only`, its exact evidence identity is recorded, and that evidence is current. Missing or stale admission is `blocked`, not `needs-refresh`.
 - Planned-at SHA and current SHA are recorded.
 - Target branch/base branch are recorded when branch-specific.
 - Every cited file exists, or the plan says the file is intentionally new.
@@ -36,6 +37,7 @@ Coverage:
 - commands checked: <commands or not run/read-only reason>
 
 Proof:
+- planning admission:
 - red/green:
 - focused validation:
 - full validation:
@@ -45,5 +47,5 @@ Issues:
 - <missing proof, stale path, oversized task, blocker, or none>
 
 Next:
-- plan-review-swarm | plan-handoff | implementation-execute-plan | refresh plan
+- spec-design | program-design | spec-program-review | plan-review-swarm | plan-handoff | implementation-execute-plan | refresh plan
 ```

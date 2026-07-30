@@ -1,6 +1,6 @@
 # Question Craft
 
-This reference owns question craft for interactive pathfinding sessions. A single blocking decision during spec convergence belongs to `spec-creation-swarm`'s `user-decision-questions.md` — one material question at a time is that home's rule, not this one's. That home's non-interactive fallback also does not apply here: pathfinding refuses non-interactive contexts outright.
+This reference owns question craft for interactive pathfinding sessions. A blocking authoritative Why/What decision during specification convergence belongs to `spec-design` step 4, not this reference. Its bounded decision rule does not apply here: pathfinding follows one extraction axis per turn and refuses non-interactive contexts outright.
 
 ```text
 this reference owns: the question forms, probes, and counters for one session

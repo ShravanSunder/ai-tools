@@ -1,20 +1,20 @@
-# Specification Design Skill Specification
+# Spec Design Skill Specification
 
 Date: 2026-07-28
 
-Status: proposed
+Status: accepted-to-implement after the 2026-07-30 naming correction
 
-Target runtime skill: `specification-design`
+Target runtime skill: `spec-design`
 
-Orchestrated by: [`spec-design`](./2026-07-28-spec-design-workflow.md)
+Workflow contract: [`spec and program design workflow`](./2026-07-28-spec-design-workflow.md)
 
 Independent review owner: [`spec-program-review`](./2026-07-28-spec-program-review.md)
 
 ## Decision
 
-Create `specification-design` as an independently invocable skill for constructing and revising authoritative Why/What before structural program design or implementation planning.
+Create `spec-design` as an independently invocable skill for constructing and revising authoritative Why/What before structural program design or implementation planning.
 
-It teaches general specification craft. It is not a reduced checklist, a requirements template, a skill-authoring adapter, or the first hidden stage of an orchestrator. It may be called directly and returns a complete local result. When called by `spec-design`, the same result participates in the larger lifecycle without gaining acceptance authority.
+It teaches general specification craft. It is not a reduced checklist, a requirements template, a skill-authoring adapter, or the first hidden stage of an orchestrator. It may be called directly and returns a complete local result. A caller may compose that result with `program-design` and `spec-program-review`, but composition does not move Why/What ownership out of this skill.
 
 ## Success Definition
 
@@ -82,8 +82,8 @@ Invocation capability: model-invocable and user-invocable.
 Proposed trigger description:
 
 ```yaml
-name: specification-design
-description: Use when defining or revising authoritative Why/What: the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for discussion-only extraction of requirements or decisions that still live only in the user's head, reconverging a drifted shared mental model, independent review-only requests, internal architecture, implementation tasks, pair acceptance, authoring or evaluating a runtime skill package—its trigger, main path, references, lanes, scripts, steering, platform mechanics, or behavior proof—or an explicitly requested legacy spec-creation-swarm run.
+name: spec-design
+description: Use when defining or revising authoritative Why/What, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for discussion-only extraction of requirements or decisions that still live only in the user's head, reconverging a drifted shared mental model, independent review-only requests, internal architecture or structural How—use program-design, implementation tasks, pair acceptance, authoring or evaluating a runtime skill package—its trigger, main path, references, lanes, scripts, steering, platform mechanics, or behavior proof—a standalone security scan, security audit, or threat model, or an explicitly requested legacy spec-creation-swarm run.
 ```
 
 True prompts include “write the requirements,” “clarify the product contract,” “what should this feature guarantee,” “revise the specification,” and specification-owned findings routed from program design or review.
@@ -94,8 +94,9 @@ Near misses:
 
 - “design the component tree/state model” routes to `program-design` when Why/What is authoritative;
 - “review this finished specification” routes to `spec-program-review` specification-only mode when no authoring is requested;
+- “run a standalone security scan, security audit, or threat model” routes to `ops-security-review`; broader specification work still owns its security obligations;
 - “take this accepted design and make tasks” routes to plan creation;
-- “create the full pair and carry it through review” routes to `spec-design`.
+- “create the full pair and carry it through review” is composed by the caller through `spec-design`, `program-design`, and `spec-program-review`; no fourth skill absorbs those phases.
 
 ## Independently Invocable Contract
 
@@ -108,7 +109,7 @@ At least one of:
 - current docs, code, logs, interfaces, policies, or decision records;
 - an existing specification;
 - review findings owned by specification meaning;
-- an orchestrator packet naming exact artifacts, decisions, and gaps.
+- a caller packet naming exact artifacts, decisions, and gaps.
 
 The skill may start from incomplete intent. It may not represent inferred authority as settled authority.
 
@@ -139,7 +140,7 @@ A `locally-ready` result contains:
 
 Direct invocation completes when the owned artifact and digest-bound local result are returned or an exact decision/evidence gap is recorded. It does not require program design or pair review. It cannot mark a pair accepted.
 
-When invoked by `spec-design`, the orchestrator consumes the same terminal result and owns all later transitions.
+A composing caller consumes the same terminal result and owns later workflow transitions without rewriting its semantic result.
 
 ## The Specification Spine
 
@@ -342,7 +343,7 @@ Completion: a digest-bound self-check result records passed items and exact rema
 
 ### 11. Obtain fresh local review when substantial
 
-Call the `spec-program-review` review-requirement classification entry for specification-only mode and the exact current digest. Consume its `review-required | non-substantial` result, matched predicate/basis, and orchestration override. A `review-required` result requires specification-only review; a `non-substantial` result records the returned basis and cannot be upgraded by this authoring skill. Classification is not a review invocation and dispatches no reviewer.
+Call the `spec-program-review` review-requirement classification entry for specification-only mode and the exact current digest. Consume its `review-required | non-substantial` result and matched predicate/basis. A `review-required` result requires specification-only review; a `non-substantial` result records the returned basis and cannot be upgraded by this authoring skill. Classification is not a review invocation and dispatches no reviewer.
 
 When classification returns `review-required`, invoke `spec-program-review` in specification-only mode with the exact artifact digest, normative sources, constraints, and known risk predicates. The reviewer is fresh-context and read-only. Parent-accepted findings return here for semantic correction; any edit to reviewed text invalidates the prior review and requires refresh.
 
@@ -352,7 +353,7 @@ Completion: a current independent local review result covers the current digest,
 
 Report the artifact identity/digest, authority coverage, requirement/proof inventory, self-check, independent local review coverage, remaining gaps, and explicit non-acceptance boundary.
 
-Completion: the caller can either invoke `program-design`, import the result into `spec-design`, or supply the exact missing decision/evidence without reinterpreting the artifact.
+Completion: the caller can either invoke `program-design`, compose the result into its own workflow state, or supply the exact missing decision/evidence without reinterpreting the artifact.
 
 ## Specification Artifact Anatomy
 
@@ -408,7 +409,7 @@ Every dispatched lane must meet the nine lane-qualification properties at implem
 ## Proposed Runtime Skill Tree
 
 ```text
-skills/specification-design/
+skills/spec-design/
   SKILL.md
   references/
     authority-and-problem-framing.md
@@ -484,7 +485,7 @@ Behavioral proof remains deferred; this specification claims only a proof plan.
 
 ## Acceptance Criteria for the Skill Implementation
 
-- The trigger clearly distinguishes specification, program design, review, orchestration, and planning.
+- The trigger clearly distinguishes specification craft from program design, review, caller orchestration, and planning.
 - The mental model predicts the workflow.
 - The full specification spine is visible in the main path.
 - The skill teaches authority, problem framing, requirements, contracts, failure expectations, and proof obligations rather than listing headings.
@@ -498,4 +499,4 @@ Behavioral proof remains deferred; this specification claims only a proof plan.
 
 ## Source Basis
 
-The design preserves product-intent, user-decision, observable-surface, requirements-testability, contract/scope, security-obligation, proof-modality, and progressive-disclosure judgment from the existing creation/review skills. It also preserves the research-backed requirement construction that partially worked in the earlier proposal: facts-versus-decisions discipline, decomposition before refinement, conditional/EARS shapes, fault `If/then`, the stranger test, vague-verb repair, contract-field inspection, and decision-resolution counters. The source classification identifies the exact ownership changes. It deliberately leaves target architecture and skill-package mechanics to `program-design` and `skills-creation`, respectively.
+The design preserves product-intent, user-decision, observable-surface, requirements-testability, contract/scope, security-obligation, proof-modality, and progressive-disclosure judgment from the existing creation/review skills. It also preserves the research-backed requirement construction that partially worked in the earlier proposal: facts-versus-decisions discipline, decomposition before refinement, conditional/EARS shapes, fault `If/then`, the stranger test, vague-verb repair, contract-field inspection, and decision-resolution counters. The historical source classification records the prior-art mapping; its four-skill names are superseded by this specification set's 2026-07-30 three-skill correction. Target architecture and skill-package mechanics remain with `program-design` and `skills-creation`, respectively.

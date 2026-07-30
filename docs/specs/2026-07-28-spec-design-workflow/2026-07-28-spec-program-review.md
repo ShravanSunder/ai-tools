@@ -2,13 +2,13 @@
 
 Date: 2026-07-28
 
-Status: proposed
+Status: accepted-to-implement after the 2026-07-30 naming correction
 
 Target runtime skill: `spec-program-review`
 
-Orchestrated by: [`spec-design`](./2026-07-28-spec-design-workflow.md)
+Workflow contract: [`spec and program design workflow`](./2026-07-28-spec-design-workflow.md)
 
-Reviews artifacts produced by: [`specification-design`](./2026-07-28-specification-design.md) and [`program-design`](./2026-07-28-program-design.md)
+Reviews artifacts produced by: [`spec-design`](./2026-07-28-spec-design.md) and [`program-design`](./2026-07-28-program-design.md)
 
 ## Decision
 
@@ -22,7 +22,7 @@ pair
 
 It owns the digest-bound predicate that decides whether local independent review is required, the common review method, local specification and program-design review craft, whole-pair integrity review, predicate-selected focused review lanes, finding quality, coverage, and readiness verdicts.
 
-It never edits artifacts, runs remediation, mutates orchestration state, or accepts a pair. `spec-design` owns lifecycle and acceptance; the semantic authoring skills own corrections.
+It never edits artifacts, runs remediation, mutates caller-owned workflow state, or accepts a pair. The composing caller owns lifecycle and acceptance; `spec-design` and `program-design` own semantic corrections.
 
 ## Success Definition
 
@@ -88,9 +88,9 @@ True prompts include “review this spec,” “challenge this architecture,” 
 
 Near misses:
 
-- authoring or revising Why/What routes to `specification-design`;
+- authoring or revising Why/What routes to `spec-design`;
 - authoring or revising How routes to `program-design`;
-- closed remediation and acceptance routes to `spec-design`;
+- closed remediation and acceptance stay with the composing caller;
 - plan review routes to plan review after a plan exists;
 - implementation review routes to implementation review.
 - standalone security scans, security audits, and threat models route to `ops-security-review`; security concerns inside a broader specification/program-design review remain in this skill's qualified security/trust lane.
@@ -115,7 +115,7 @@ Additional requirements:
 
 - `program-only` requires the governing specification identity/digest;
 - `pair` requires current specification and program-design artifacts and normally their author/local results;
-- missing local results do not authorize a false pair-ready verdict; the review may still report bounded evidence and exact missing prerequisites.
+- missing local results do not authorize a pair-ready verdict unless the pair reviewer independently repeats the missing local checks and records that complete coverage; the review may still report bounded evidence and exact missing prerequisites.
 
 ### Review-mode outputs
 
@@ -130,7 +130,7 @@ verdict
 what held
 ranked findings
 accepted, rejected, contested, and unverified candidate findings
-finding routes to specification-design | program-design | spec-design
+finding routes to spec-design | program-design | caller
 correction-verification and refresh requirements
 planning-readiness boundary
 explicit non-acceptance statement
@@ -157,7 +157,7 @@ A review-mode invocation completes when every selected reviewer lane has a termi
 
 IF this skill was directly invoked to classify or review one named runtime skill package and no `skills-creation` parent packet/result authorizes composition, route to `skills-creation` before classification or reviewer dispatch. `skills-creation` may call this review skill with explicit parent authority.
 
-This skill owns the classification consumed by both authoring skills and `spec-design`:
+This skill owns the classification consumed by both authoring skills and any composing caller:
 
 ```text
 review-required
@@ -173,7 +173,7 @@ exact covered artifact digests
 change/artifact scope and claimed semantic effect
 complete scoped governing-source inventory: exact identities/digests/versions, authority statuses, and completeness basis
 matched material-risk predicates
-orchestration override: required | not-required
+caller requirement: required | none
 
 complete return:
   invocation state: complete
@@ -183,7 +183,7 @@ complete return:
   review-required | non-substantial
   decision branch: forced | matched-risk | non-substantial | semantic-fallback
   matched predicate, non-substantial basis, or remaining semantic effect
-  orchestration override
+  caller requirement
 
 blocked return:
   invocation state: blocked
@@ -191,7 +191,7 @@ blocked return:
   exact missing or ambiguous input
 ```
 
-When no orchestrator packet is present, `orchestration override` defaults to `not-required`. The ordinary material-risk predicates and an explicit user request can still return `review-required`.
+When no caller packet requires review, `caller requirement` defaults to `none`. It can escalate review to required; it can never suppress an explicit user request, a matched material-risk predicate, or the semantic fallback.
 
 The caller may invoke this entry directly before deciding whether a review invocation is required. It performs no review, selects no reviewer lanes, returns no readiness verdict, and never satisfies pair-mode review. Completion requires a total predicate decision bound to the exact digests. A blocked invocation is not a third classification value, never counts as local coverage, and supplies only the missing input needed to retry.
 
@@ -199,17 +199,17 @@ The runtime `SKILL.md` keeps this classification branch scan-visible before the 
 
 Apply this ordered decision table after blocking missing or ambiguous inputs:
 
-1. Return `review-required` with branch `forced` when the user requests independent review or the orchestrator requires it.
+1. Return `review-required` with branch `forced` when the user requests independent review or the composing caller requires it.
 2. Return `review-required` with branch `matched-risk` for specification-only work when product meaning is load-bearing; more than one requirement, consumer, or contract is affected; public/security-sensitive behavior changes; multiple decisions/surfaces interact; or a material ambiguity was resolved.
 3. Return `review-required` with branch `matched-risk` for program-only work when more than one component, owner, or interface is affected; state, failure, concurrency, trust, platform, data, compatibility, or proof architecture is material; or structural ownership/dependency direction changes.
 4. Return `non-substantial` only for copy, format, link, or metadata-only work with no semantic effect, or one bounded factual clarification that makes no readiness claim.
 5. Return `review-required` with branch `semantic-fallback` for every remaining semantic specification or program-design change and record the remaining semantic effect.
 
-Pair mode is always required for orchestrated acceptance and for any direct pair-readiness verdict; it does not use this local two-value classifier.
+Pair mode is always required for caller-recorded acceptance and for any direct pair-readiness verdict; it does not use this local two-value classifier.
 
-Once a review mode is invoked, one fresh mode-complete reviewer is always dispatched. The classification entry determines whether authoring/orchestration must make that separate review invocation; it never turns classification into same-context self-review.
+Once a review mode is invoked, one fresh mode-complete reviewer is always dispatched. The classification entry determines whether an authoring skill or composing caller must make that separate review invocation; it never turns classification into same-context self-review.
 
-The classification result names the requested review mode, exact covered digests, matched predicate or non-substantial basis, and whether orchestration requires review. No consuming skill restates or weakens this predicate.
+The classification result names the requested review mode, exact covered digests, matched predicate or non-substantial basis, and whether the caller requires review. No consumer restates or weakens this predicate.
 
 ## Review Modes
 
@@ -231,7 +231,7 @@ It independently checks:
 - hidden internal How or unresolved product meaning;
 - artifact navigation and traceability.
 
-It returns findings to `specification-design` except lifecycle/input issues routed to `spec-design`.
+It returns Why/What findings to `spec-design`; lifecycle or input issues return to the caller.
 
 ### Program-only
 
@@ -257,7 +257,7 @@ It independently checks:
 - requirement-to-design coverage;
 - plan leakage and hidden requirement invention.
 
-How findings route to `program-design`. Missing/contradictory meaning routes to `specification-design` through `spec-design` when orchestrated.
+How findings route to `program-design`. Missing or contradictory Why/What routes to `spec-design`; caller-state issues return to the caller.
 
 ### Pair
 
@@ -274,7 +274,7 @@ Repeats the load-bearing local checks independently and adds cross-artifact inte
 - no review/author self-check is being used outside its covered digest;
 - a planner can select tasks and execution mechanics without inventing product meaning or structural How.
 
-Pair mode is mandatory for orchestrated pair acceptance. It remains non-accepting.
+Pair mode is mandatory before a caller records pair acceptance. It remains non-accepting.
 
 ## Common All-Run Review Method
 
@@ -377,7 +377,7 @@ failure path or contradiction
 behavior/design risk
 what the next author/planner would have to guess
 smallest semantic correction target
-semantic owner: specification-design | program-design | spec-design
+semantic owner: spec-design | program-design | caller
 validation note
 refresh / retest required
 contested evidence when applicable
@@ -521,11 +521,11 @@ review ready
   = the exact covered artifact(s) satisfy the invoked review mode
 
 pair accepted
-  = spec-design verified current author/local/pair results,
+  = the composing caller verified current author/local/pair results,
     closed findings, freshness, and planning handoff for the exact pair
 ```
 
-`spec-program-review` may recommend readiness. It cannot write the acceptance record. Direct pair review remains advisory until imported and gated by `spec-design`.
+`spec-program-review` may recommend readiness. It cannot write caller-owned lifecycle or acceptance state. Direct pair review is usable only for the exact covered digests and becomes stale after either artifact changes.
 
 ## Planning-Readiness Contract
 
@@ -564,7 +564,7 @@ Behavioral proof is deferred to implementation.
 
 ## Acceptance Criteria for the Skill Implementation
 
-- The trigger distinguishes review from authoring, orchestration, plan review, and implementation review.
+- The trigger distinguishes review from authoring, caller orchestration, plan review, and implementation review.
 - Specification-only, program-only, and pair modes are independently invocable and digest-bound.
 - Review-requirement classification is a scan-visible independently callable branch that completes without reviewer dispatch and cannot return a review verdict.
 - All reviewers load one common method before their mode/lane mission.
