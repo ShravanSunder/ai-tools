@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-31 Spec/Program Review Semantic Freshness](2026-07-31-spec-review-semantic-freshness.md)
 - [2026-07-31 Skills-Creation Multi-Run Spec Artifact, Acceptance Binding, And Slice-Execution Route](2026-07-31-skills-creation-multirun-spec-artifact-and-acceptance-route.md)
 - [2026-07-31 Skills-Creation Evaluate Route, Run-Note Trigger, And Classification Table](2026-07-31-skills-creation-evaluate-route-and-run-note.md)
 - [2026-07-31 Retire Legacy Spec Swarms](2026-07-31-retire-legacy-spec-swarms.md)

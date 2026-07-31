@@ -11,7 +11,7 @@ lane: mode-complete-reviewer | specification-authority | contract |
       platform-harness | implementation-difference | proof |
       artifact-navigation
 review mode: specification-only | program-only | pair
-exact target paths/identities, line counts, and digests
+exact target paths/identities and review snapshot identifiers
 governing-source identities/digests/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
 observable selection predicate
@@ -27,7 +27,7 @@ stop condition
 expected return
 ```
 
-The mode-complete packet uses predicate `mandatory for every review invocation`. A focused packet names the exact predicate that selected it. Missing or ambiguous targets, digests, governing sources, or authority stop inspection and produce a blocked receipt.
+The mode-complete packet uses predicate `mandatory for every review invocation`. A focused packet names the exact predicate that selected it. Missing or ambiguous targets, snapshot identifiers, governing sources, or authority stop inspection and produce a blocked receipt. Snapshot metadata stays in packets and results; reviewers never add it to the artifacts under review.
 
 ## Authority Field
 
@@ -39,7 +39,7 @@ Only these lane receipt states exist:
 
 ```text
 complete
-  assignment and covered digests
+  assignment and covered review snapshot identifiers
   sources inspected and source gaps
   coverage performed
   reconstructed model or bounded model slice

@@ -1,6 +1,6 @@
 ---
 name: spec-program-review
-description: Use when classifying whether independent specification-only or program-only review is required for exact artifact digests, or when independently reviewing a specification, program design, or their pair for authority, requirements, architecture, failure, traceability, crux, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan/implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: Use when classifying whether a specification or program-design change needs independent review, or when independently reviewing a specification, program design, or their pair for authority, requirements, architecture, failure, traceability, crux, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan/implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Specification and Program Design Review
@@ -34,7 +34,15 @@ review
   dispatches: exactly one fresh mode-complete reviewer plus qualified focused lanes
 ```
 
-All results bind exact artifact and governing-source identities/digests. A changed target makes prior coverage stale.
+Review packets and results record the exact snapshot inspected so the parent can prove what reviewers saw. Snapshot identifiers and digests are process metadata: keep them in review packets/results, never in durable requirements, specification, or program-design prose.
+
+Review freshness follows meaning, not changed bytes. After an artifact changes, the parent performs and records a semantic-diff check before dispatching anyone:
+
+- if meaning changed, invalidate the affected mode coverage and only the focused lanes whose selection predicates the change affects;
+- if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward and dispatch no model reviewer;
+- if semantic effect is uncertain, classify it as semantic and rerun the affected coverage.
+
+Never edit an upstream or downstream artifact merely to mirror another artifact's hash, digest, version string, or snapshot metadata.
 
 ## 1. Guard the Skill-Authoring Boundary
 
@@ -46,7 +54,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 
 ## 2. Classify Review Requirement
 
-IF operation is `classify-review-requirement`, load `references/classifying-review-requirement.md` and return the digest-bound `review-required | non-substantial` result or blocked missing-input result.
+IF operation is `classify-review-requirement`, load `references/classifying-review-requirement.md` and return the parent-verified `review-required | non-substantial` result or blocked missing-input result.
 
 Dispatch no reviewer, select no lanes, and return no review verdict. `review-required` instructs the caller to make a separate fresh review invocation.
 
@@ -60,18 +68,19 @@ For operation `review`, require:
 target classification: general-domain | runtime-skill-package
 skills-creation parent packet/result identity when target is runtime-skill-package
 mode
-exact target paths/identities and digests
+exact target paths/identities and review snapshot identifiers
 governing source identities/digests/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
 constraints and non-goals
 risk predicates
 claimed proof evidence or gaps
 review question when narrower than readiness
+prior review coverage and semantic-diff record when coverage is being reused
 ```
 
-`program-only` also requires the governing specification digest. `pair` requires current specification and program-design artifacts; a pair-ready verdict additionally requires current local results or independently repeated and recorded local checks.
+`program-only` also requires the current governing specification. `pair` requires current specification and program-design artifacts; a pair-ready verdict additionally requires current local results or independently repeated and recorded local checks.
 
-Completion: target, mode, sources, and current digests are unambiguous.
+Completion: target, mode, sources, inspected snapshots, and any prior-coverage semantic-diff record are unambiguous.
 
 ## 4. Select the Mode
 
@@ -99,7 +108,7 @@ Every reviewer gets:
 - no caller conclusion, expected verdict, author confidence, prior praise, or hidden conversation;
 - candidate-only authority.
 
-Record the resolved model/runtime, reasoning control, `parent history: none`, read-only enforcement, permission boundary, and conclusion-free packet decision before dispatch. A receipt expires after reviewed text changes. Silence is never a clean result.
+Record the resolved model/runtime, reasoning control, `parent history: none`, read-only enforcement, permission boundary, and conclusion-free packet decision before dispatch. A receipt expires when a later semantic change affects the coverage it supplied; non-semantic edits do not expire it. Silence is never a clean result.
 
 Completion: dispatch mechanics and independence are resolved and recorded before any reviewer runs.
 
@@ -108,10 +117,10 @@ Completion: dispatch mechanics and independence are resolved and recorded before
 Every reviewer dispatch instantiates this caller-owned packet contract from `references/lanes/lane-schema.md`:
 
 ```text
-assignment identity: unique and digest-bound
+assignment identity: unique and snapshot-bound
 lane: exact selected lane
 review mode: selected mode
-target paths/identities, line counts, and digests: exact current values
+target paths/identities and review snapshot identifiers: exact current values
 governing-source identities/digests/versions, authority statuses, and freshness/applicability: exact inventory
 governing-source coverage completeness basis: why the scoped inventory is complete
 observable selection predicate: mandatory predicate or exact focused predicate
@@ -162,15 +171,17 @@ normative claims are distributed or the artifact/pair is hard to navigate
 
 IF a focused predicate holds, dispatch the selected lane using every field in the complete caller-owned packet contract above, instantiated from the exact focused-lane reference and current sources.
 
+After a later semantic edit, rerun a focused lane only when the changed meaning affects that lane's selection predicate or prior finding coverage. Do not fan out unaffected lanes.
+
 The subagent loads `references/lanes/lane-schema.md`, `references/reviewing-common-method.md`, and the exact selected lane path. Parallel-safe only after the complete target/source set exists; focused lanes may run beside the mode-complete reviewer. Instance authority is fresh-context, read-only, candidate-only, equal to or narrower than the lane maximum, and excludes mode recommendation, final verdict, editing, remediation, planning, and acceptance. Return `complete | partial | blocked` or parent-recorded `no-receipt`; the parent verifies and reduces.
 
 Completion: selected predicates and unselected ambiguous predicates are recorded, and every selected lane has a terminal state.
 
 ## 8. Verify Reviewer Independence
 
-Verify every receipt against the pre-dispatch independence record. Recompute the covered target digests and compare the worktree or equivalent workspace-change observation with the pre-dispatch record; confirm assignment/digest binding, no inherited history, read-only access, candidate-only authority, and no reviewer mutation.
+Verify every receipt against the pre-dispatch independence record. Recompute or re-read the covered target snapshot identifiers and compare the worktree or equivalent workspace-change observation with the pre-dispatch record; confirm assignment/snapshot binding, no inherited history, read-only access, candidate-only authority, and no reviewer mutation.
 
-Completion: each receipt is assignment- and digest-bound, and reviewer execution did not widen authority or mutate the worktree.
+Completion: each receipt names the snapshot inspected, and reviewer execution did not widen authority or mutate the worktree.
 
 ## 9. Verify and Reduce Findings
 
@@ -182,9 +193,9 @@ Completion: every candidate is accepted, rejected, contested, or unverified with
 
 ## 10. Return the Coverage-Bound Result
 
-Return every field in the `Coverage-Bound Result` owned by the already-loaded `references/finding-and-reduction-schema.md`, bound to the current mode, exact covered digests, and immutable governing-source inventory.
+Return every field in the `Coverage-Bound Result` owned by the already-loaded `references/finding-and-reduction-schema.md`, including the inspected snapshot metadata, current semantic-coverage statement, and immutable governing-source inventory.
 
-`ready` means the exact covered artifact(s) satisfy the invoked mode. It does not write caller-owned acceptance state.
+`ready` means the current artifact meaning is covered and satisfies the invoked mode. It does not write caller-owned acceptance state.
 
 Completion: the result names the first required revision, receipt freshness, coverage gaps, and what a planner would still have to invent.
 
@@ -193,7 +204,7 @@ Completion: the result names the first required revision, receipt freshness, cov
 Do not return `ready` while any of these hold:
 
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
-- target/source identity or digest is missing, stale, or ambiguous;
+- target/source identity, inspected snapshot, or semantic scope is missing or ambiguous;
 - the complete required artifact set was not read;
 - no complete fresh mode-complete receipt exists;
 - a selected lane is silent without explicit follow-up;

@@ -2,13 +2,13 @@
 
 This reference owns the baseline every mode-complete and focused reviewer follows before its mission.
 
-Expected inputs: exact mode, targets/digests, governing sources, constraints, risk predicates, and selected mission.
+Expected inputs: exact mode, target identities and review snapshots, governing sources, constraints, risk predicates, and selected mission.
 
 Return: coverage, reconstructed claims/model slice, authority/traceability evidence, crux evidence, candidate findings, gaps, and stop boundary.
 
 ## Bind and Read Completely
 
-Verify paths, line counts, digests, governing specification, and source versions. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
+Verify paths, review snapshot identifiers, governing specification, and source versions. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
 
 Partial coverage cannot return a clean recommendation.
 

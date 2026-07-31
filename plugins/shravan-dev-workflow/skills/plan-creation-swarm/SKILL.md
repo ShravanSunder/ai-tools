@@ -1,11 +1,11 @@
 ---
 name: plan-creation-swarm
-description: Use when creating a written implementation plan from a specification, program design, or accepted design context. Start design-bearing planning only with a current pair-ready spec-program-review result bound to the exact current digests; a positively proven implementation-mechanics-only input retains the narrow bypass. Not for directly planning changes to one named runtime skill package without explicit skills-creation composition.
+description: Use when creating a written implementation plan from a specification, program design, or accepted design context. Start design-bearing planning only with a semantically current pair-ready spec-program-review result; a positively proven implementation-mechanics-only input retains the narrow bypass. Not for directly planning changes to one named runtime skill package without explicit skills-creation composition.
 ---
 
 # Plan Creation Swarm
 
-Create an implementation plan only after verifying that planning can start. Design-bearing planning starts only when a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. A narrow implementation-mechanics-only route is available only after positive classification proves that no design-bearing decision exists. This boundary turns authoritative Why/What plus settled structural How into "how we will change the repo and prove it." It does not redefine product intent, rewrite requirements, invent structural How, or execute the plan.
+Create an implementation plan only after verifying that planning can start. Design-bearing planning starts only when a pair-mode `spec-program-review` result is `ready` and its semantic coverage is current for the specification and program design. A narrow implementation-mechanics-only route is available only after positive classification proves that no design-bearing decision exists. This boundary turns authoritative Why/What plus settled structural How into "how we will change the repo and prove it." It does not redefine product intent, rewrite requirements, invent structural How, or execute the plan.
 
 The reviewed pair defines meaning and structure; this skill defines sequence. It turns current requirements, design decisions, and proof seams into ordered tasks, parallel work lanes, disjoint write scopes, integration gates, validation gates, and evidence requirements. Non-trivial plans carry a requirements/proof matrix; tasks whose required proof cannot pass at their size are split before execution.
 
@@ -19,10 +19,10 @@ IF the request directly plans changes to one named runtime skill package, requir
 
 Then classify the request before planning:
 
-- `current-pair-ready`: the current specification and program-design digests are known; required local review coverage is current; a pair-mode `spec-program-review` result is `ready` and covers those exact digests; accepted findings are corrected and covered by refreshed review; and no blocking decision or evidence gap remains. Planning may start.
+- `current-pair-ready`: the current specification and program-design identities are known; required local review coverage is semantically current; a pair-mode `spec-program-review` result is `ready`; accepted semantic corrections are covered by rerunning the affected review coverage; any later non-semantic edits have a parent-verified semantic-diff record carrying coverage forward; and no blocking decision or evidence gap remains. Planning may start.
 - `missing-why-what`: authoritative consumer, outcome, obligation, observable contract, constraint, failure expectation, or proof modality is missing or unsettled. Route to `spec-design` and stop planning.
 - `missing-how`: structural ownership, boundary, interface, state, flow, failure/recovery policy, concurrency/consistency, compatibility realization, trust control, or proof seam is missing or unsettled. Route to `program-design` and stop planning.
-- `unreviewed-or-stale-pair`: the specification and program design are complete, but pair review is absent, non-ready, stale, or bound to different digests. Route to `spec-program-review` and stop planning. If a current non-ready review contains findings, preserve its semantic-owner routes rather than treating another review as remediation.
+- `unreviewed-or-stale-pair`: the specification and program design are complete, but pair review is absent, non-ready, semantically stale, or cannot be shown to cover the current meaning. Route to `spec-program-review` and stop planning. If a current non-ready review contains findings, preserve its semantic-owner routes rather than treating another review as remediation.
 - `implementation-mechanics-only`: allow the bypass only when current source inspection positively proves that the work requires no new product obligation, owner or boundary, interface, state semantic, failure or recovery policy, concurrency or consistency decision, compatibility realization, trust control, or proof seam. Record the evidence and the result; a caller label, small diff, or lack of an existing design artifact is not proof.
 
 Any remaining semantic uncertainty is design-bearing. Do not downgrade it to implementation mechanics to begin planning.
@@ -33,7 +33,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 
 - Stay read-only against product surfaces. Do not edit product code, tests, configs, or non-plan docs as part of plan creation.
 - Write a plan artifact unless the user explicitly asks for chat-only output.
-- For `current-pair-ready`, read the complete current specification, program design, and pair-review result; verify that the reviewed digests match the current artifact bytes before planning. For `implementation-mechanics-only`, read the complete authority/context used by the classification. If a source file exists, count lines and read all chunks.
+- For `current-pair-ready`, read the complete current specification, program design, and pair-review result. Compare any post-review changes semantically: reuse coverage for parent-verified non-semantic edits without reviewer dispatch; route semantic or uncertain changes back to `spec-program-review` for affected coverage. For `implementation-mechanics-only`, read the complete authority/context used by the classification. If a source file exists, read it completely.
 - Verify major assumptions against live repo evidence before turning them into tasks.
 - Use subagents by default for substantial plan creation when codebase boundary, validation/proof, execution-order, security/reliability, or scope-and-proof-fit lanes can run independently. Plan-creation lanes use medium or high reasoning effort according to task complexity, latency cost, and risk. For tiny plans, name the smaller lane set used.
 - Reject requests for low-effort planning lanes as a planning-quality shortcut. In the live response or plan artifact, name the lane reasoning-effort policy: medium for bounded/simple planning lanes, high for proof-heavy, security, reliability, cross-module, or complex sequencing lanes.
@@ -59,13 +59,13 @@ Completion: target classification and, when applicable, the exact `skills-creati
 
 1. Classify the input and decide whether planning can start:
    - record `general-domain | runtime-skill-package` and, for a runtime skill package, verify the exact explicit `skills-creation` parent packet/result identity before source inspection;
-   - verify the current specification and program-design identities/digests plus the exact pair-mode `ready` review result; or
+   - verify the current specification/program-design identities plus the pair-mode `ready` result and semantically current coverage; or
    - prove and record the `implementation-mechanics-only` bypass;
    - otherwise route the exact gap to `spec-design`, `program-design`, or `spec-program-review` and stop.
 2. Establish source coverage and freshness:
-   - line count and chunk ranges for files
-   - exact specification, program-design, and pair-review digests for design-bearing work
-   - packet files and freshness evidence for handoffs
+   - complete-file coverage for file-backed sources
+   - specification, program-design, pair-review identities, and semantic-coverage evidence for design-bearing work
+   - packet files and semantic-freshness evidence for handoffs
    - implementation-mechanics-only classification evidence when that bypass applies
    - limitations for chat-only input
 3. Inspect current repo evidence:
@@ -163,7 +163,7 @@ If the work is genuinely serial, say so and replace the lane fan-out with a seri
 
 Return:
 
-- planning-readiness result: exact current pair digests and pair-review identity/result, or the evidence-backed implementation-mechanics-only classification
+- planning-readiness result: current pair identities, pair-review identity/result, and semantic-coverage evidence, or the evidence-backed implementation-mechanics-only classification
 - target classification and, for a runtime skill package, the exact explicit `skills-creation` parent packet/result identity
 - source coverage
 - implementation plan path or chat-only plan
@@ -184,7 +184,9 @@ Return:
 
 - Starting Task 1 while creating the plan.
 - Planning changes to one named runtime skill package without an exact explicit `skills-creation` parent packet/result identity.
-- Planning design-bearing work from a specification alone, a program design alone, a summary, or a pair review bound to stale digests.
+- Planning design-bearing work from a specification alone, a program design alone, a summary, or pair-review coverage that is semantically stale or uncertain.
+- Rerunning reviewers for formatting, links, review metadata, or typo-only edits after the parent has verified that meaning did not change.
+- Editing design or planning artifacts only to keep embedded hashes synchronized.
 - Calling work implementation-mechanics-only because it is small or because design artifacts are absent instead of proving that every design-bearing category is absent.
 - Omitting the execution DAG and forcing the executor to invent parallelization later.
 - Treating a spec summary as enough when material source context is missing.

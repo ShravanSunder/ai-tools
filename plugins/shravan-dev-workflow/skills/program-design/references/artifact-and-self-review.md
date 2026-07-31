@@ -2,9 +2,9 @@
 
 This reference owns view selection, artifact navigation, simplification, trace-integrity verification, and author integration self-check. `proof-architecture-and-traceability.md` owns construction of the requirement/design/proof trace; this reference consumes that trace.
 
-Expected inputs: governing specification/digest, current/target models, decisions, debt, proof map, and repo documentation conventions.
+Expected inputs: current governing specification, current/target models, decisions, debt, proof map, and repo documentation conventions.
 
-Return in workflow order: first the artifact structure/view selection, artifact identity/digest, verification of the consumed requirement/design/proof trace, and pruned elements; after the caller runs the complete integration self-check stage, return the digest-bound self-check gaps.
+Return in workflow order: first the artifact structure/view selection, artifact identity, verification of the consumed requirement/design/proof trace, and pruned elements; after the caller runs the complete integration self-check stage, return the current-state self-check gaps.
 
 ## Select Views by Need
 
@@ -62,6 +62,6 @@ Re-read the whole artifact:
 - no missing Why/What was invented;
 - two capable implementers would build the same structural behavior.
 
-Bind the self-check to both artifact and governing-specification digests. It is not independent review.
+Run the self-check against the current program design and governing specification. It is not independent review.
 
 Complete when: the artifact composes as one executable mental model, unnecessary structure is pruned, and every known gap is exact.
