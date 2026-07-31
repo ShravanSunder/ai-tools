@@ -90,6 +90,33 @@ describe("user requirements and design-view contracts", () => {
     expect(traceability).toContain("traceable in both directions through U when present");
   });
 
+  test("keeps specification scope, correction, and artifact-state boundaries explicit", () => {
+    const specDesign = readPluginFile("skills/spec-design/SKILL.md");
+    const authority = readPluginFile(
+      "skills/spec-design/references/authority-and-problem-framing.md",
+    );
+    const artifact = readPluginFile(
+      "skills/spec-design/references/artifact-and-self-review.md",
+    );
+
+    for (const boundaryField of [
+      "existing behavior or foundation to reuse",
+      "actual missing capabilities or observable differences",
+      "explicit non-goals",
+      "complexity budget and the machinery that reopens scope",
+    ]) {
+      expect(authority).toContain(boundaryField);
+    }
+    expect(authority).toContain("Mutually narrowed current requirements");
+    expect(specDesign).toContain("requirements/Why/What, structural How, or both");
+    expect(specDesign).toContain("tmp/design-workflows/<date>-<slug>/");
+    expect(specDesign).toContain("returned workflow state");
+    expect(artifact).toContain("Human Deletion Test");
+    expect(artifact).toContain("smallest Why/What model");
+    expect(specDesign).not.toContain("artifact identity/digest");
+    expect(artifact).not.toContain("digest-bound");
+  });
+
   test("keeps view predicates in target SKILL files only", () => {
     const discussPathfinding = readPluginFile(
       "skills/discuss-pathfinding/SKILL.md",

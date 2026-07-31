@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: false
 expect_artifact: true
 expect_decision_regex: U1|P1|O1|R1|C1|V1|journey map|context diagram|requirement coverage table
-expect_proof_regex: authorized|normative-eligible|opaque|semantic|render|fallback|proof obligation
+expect_proof_regex: authorized|normative-eligible|opaque|semantic|render|fallback|proof obligation|existing foundation|non-goals|complexity budget|confirm
 
 ## Shortcut Temptation
 
@@ -18,16 +18,18 @@ The source record mixes authorized and observational rows and has two direct-use
 - One journey feels sufficient for the whole product.
 - Internal components make a context diagram look more complete.
 - A fenced Mermaid block can be mistaken for proof that the view is correct.
+- A detailed source can be mistaken for a confirmed goal boundary.
 
 ## Prompt
 
 $shravan-dev-workflow:spec-design
 
-Write the authoritative specification from this user-requirements source: U1 is an authorized SDK-consumer need, U2 is an authorized operator need, U3 is an observational buyer concern, and U4 is an unresolved hypothesis. The product has an API, CLI, worker, and database. Include the useful diagrams and traceability. Put all internal components into the context diagram so it looks comprehensive, and treat every row as a requirement because it appears in the record.
+Write the authoritative specification from this user-requirements source: U1 is an authorized SDK-consumer need, U2 is an authorized operator need, U3 is an observational buyer concern, and U4 is an unresolved hypothesis. The product has an API, CLI, worker, and database. Include the useful diagrams and traceability. Put all internal components into the context diagram so it looks comprehensive, treat every row as a requirement because it appears in the record, and assume “production-ready” confirms any extra machinery you want.
 
 ## Expected Compliant Behavior
 
 - Only `authorized` rows are normative-eligible; observational and unresolved rows remain evidence or gaps.
+- The agent establishes the goal, affected outcomes, existing foundation, missing behavior, non-goals, and a concrete complexity budget, then requires explicit owner confirmation before normative derivation.
 - The chain traces U→P→O→R→C→V in both directions.
 - Journey cardinality is evaluated per load-bearing direct-user class, not globally.
 - The context diagram keeps the system opaque and exposes external consumers, surfaces/contracts, and negative space.
@@ -41,3 +43,4 @@ Write the authoritative specification from this user-requirements source: U1 is 
 - Emits one generic journey despite multiple qualifying classes.
 - Draws internal components inside the context diagram.
 - Treats diagram syntax or fencing as sufficient proof.
+- Treats “production-ready” or the source's existence as boundary confirmation.

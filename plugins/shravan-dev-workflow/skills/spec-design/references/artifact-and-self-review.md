@@ -1,17 +1,17 @@
 # Artifact and Author Self-Review
 
-This reference owns artifact structure choice, normative-home integrity, navigation, and the digest-bound author self-check.
+This reference owns artifact structure choice, normative-home integrity, navigation, view verification, pruning, and the author self-check.
 
 Expected inputs: authority/problem model, outcomes/non-goals, requirement and contract inventories, cross-cutting obligations, proof coverage, and repo documentation conventions.
 
-Return in workflow order: first the artifact structure decision, artifact identity/digest, and traceability/navigation result; after the caller runs the complete author self-check stage, return the digest-bound author self-check with exact gaps.
+Return in workflow order: first the artifact structure decision, artifact identity, traceability/navigation result, view-verification result, and pruned elements; after the caller runs the complete author self-check stage, return the author self-check with exact gaps.
 
 ## Choose Structure for the Reader
 
 A substantial specification normally needs semantic homes for:
 
 ```text
-decision / status
+load-bearing decisions
 problem and current observable reality
 consumers and authority
 goals, outcomes, success conditions
@@ -30,18 +30,19 @@ These are not mandatory headings. Organize by journey, capability, protocol, dom
 
 Use linked slice specifications only when a vertical capability, protocol, domain boundary, or independently governed contract has its own consumers and reason to change. Do not create appendix-style mini-doc sprawl or duplicate normative claims.
 
-Keep process history, advisor names, review-cycle narrative, and research ledgers out of the design artifact. Rationale must stand on technical or product constraints.
+Keep target classification, source/review coverage, self-check state, readiness, acceptance narration, process history, advisor names, PR lifecycle, and research ledgers out of the design artifact. A compact source pointer may remain when readers or tooling use it for authoritative lookup. Rationale must stand on technical or product constraints.
 
 ## Navigation and Traceability
 
-Add a compact map when relationships are not obvious:
+Lead with the smallest Why/What model that lets a human confirm the problem and intended outcome, then reveal requirements, observable contracts, failure behavior, constraints, and proof. Add a compact map when relationships are not obvious:
 
 ```text
-problem P1
-  -> outcome O1
-      -> requirement R1
-          -> contract C1
-              -> proof modality V1
+need U1 when present
+  -> problem P1
+      -> outcome O1
+          -> requirement R1
+              -> contract C1
+                  -> proof modality V1
 ```
 
 Diagrams may explain relationships but may not be the only home of normative meaning.
@@ -55,6 +56,14 @@ Consume the predicates, cardinality, and must-expose fields from the `SKILL.md` 
 - Requirement coverage tables expose missing U/P/O/R/C/V links rather than filling gaps with guessed meaning.
 
 Prune a view that adds no decision clarity. View application is complete when every fired predicate has the required number of passed views, each required semantic field is visible, and adding another view would only duplicate an existing relationship.
+
+## Human Deletion Test
+
+For every heading, paragraph, list, table, and diagram, ask what first confirmation, correction, decision, trace, failure simulation, proof path, or later authoritative lookup becomes underdetermined if it disappears. Delete or merge the element when the answer is none.
+
+Preserve authority and negative space; problems, outcomes, requirements, observable contracts, failure obligations, constraints, and proof; and the rationale, example, or relationship a human needs to challenge them. Flag process/review/PR narration, sibling-role recitals, summaries that repeat the preceding model, and decorative views. Across companion documents, give shared authority or boundary meaning one smallest useful home and link to it elsewhere.
+
+Use plain, specific headings that tell the reader what they will learn or decide. A specialized domain term is fine when it carries stable meaning; formal-sounding prose that adds no decision, relationship, rationale, boundary, example, or correction point is not.
 
 ## Author Self-Check
 
@@ -70,10 +79,15 @@ Re-read the complete artifact and record:
 - duplicated normative homes;
 - missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
 - journey maps that fail to cite their U rows or context diagrams that cross into internal How;
-- whether the specification spine is readable without review notes.
+- accepted requirements lost or superseded without owner authority;
+- changes from boundary check 1 hidden as specification completeness;
+- process state, obscure headings, repeated companion narration, or reader-facing elements that fail the human deletion test;
+- whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
 
-Bind the result to the artifact digest. Record exact failures, not “needs more detail.”
+For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion. A shorter artifact that loses users, variants, defaults, scenarios, contracts, or proof obligations is scope loss, not pruning.
+
+Record exact failures, not “needs more detail.”
 
 Self-check is author evidence only. It never substitutes for fresh independent review.
 
-Complete when: the artifact has one normative home per meaning, the reader can navigate problem to proof, and the digest-bound self-check names every known gap.
+Complete when: the artifact has one normative home per meaning, the reader can navigate need to proof, every reader-facing element earns its attention cost, boundary and accepted-requirements coverage are intact, and the self-check names every known gap.
