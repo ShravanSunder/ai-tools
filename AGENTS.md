@@ -63,7 +63,7 @@ Claude Code can load the same skill tree when a plugin also has `.claude-plugin/
 
 `AGENTS.md` is the repo operating map for skill work. It should tell agents how to work here, which skill owns the next decision, and where deeper instructions live. It should not duplicate the full manuals from meta-skills.
 
-When creating, editing, or evaluating one named skill or accepted draft in this repo, use `shravan-dev-workflow:skills-creation` as the owning workflow. It owns the great-skill model: YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pruning, pressure proof, platform mechanics, source-adaptation checks, and sensitive-resource routing.
+When creating, editing, or evaluating one named skill or accepted draft in this repo—or executing one run or slice of an accepted multi-run skill-change spec—use `shravan-dev-workflow:skills-creation` as the owning workflow. It owns the great-skill model: YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pruning, pressure proof, platform mechanics, source-adaptation checks, and sensitive-resource routing.
 
 Use `shravan-dev-workflow:skill-audit` for broad evidence-backed questions about which skills to create, update, merge, or skip across the repo. `skills-creation` does not own broad repo-wide portfolio audit or duplicate-surface archaeology.
 
@@ -71,7 +71,7 @@ When doing skill work in this repo:
 
 1. Start from a concrete need, repeated failure mode, or user-approved workflow change.
 2. If the target is not named, use `skill-audit` for broad portfolio classification or ask for a named target.
-3. Use `skills-creation` for the named target's create/update/evaluate workflow.
+3. Use `skills-creation` for the named target's create/update/evaluate workflow or for one run or slice of an accepted multi-run skill-change spec.
 4. Use `skills-creation` references for trigger/invocation choices, mental-model and reference hierarchy, pressure proof, Codex/Claude platform mechanics, source adaptation, pruning, and sensitive resources.
 5. Keep `SKILL.md` compact and progressive. Put depth in `references/` and deterministic mechanics in `scripts/`.
 6. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios under `tests/skills/pressure-scenarios/` and run `tests/skills/run-skill-pressure-tests.sh --fast`.
@@ -80,7 +80,7 @@ When doing skill work in this repo:
 
 Detailed mechanics stay in the owning skills and references:
 
-- `skills-creation` owns create/update/evaluate for one named skill or accepted draft, including YAML trigger design, the `SKILL.md` mental model and main path, reference depth, great-skill evaluation, pressure-proof design, platform mechanics, source adaptation, and sensitive-resource routing.
+- `skills-creation` owns create/update/evaluate for one named skill or accepted draft, plus execution of one run or slice of an accepted multi-run skill-change spec, including YAML trigger design, the `SKILL.md` mental model and main path, reference depth, great-skill evaluation, pressure-proof design, platform mechanics, source adaptation, and sensitive-resource routing.
 - `skill-audit` owns evidence-backed recommendations about what to update, create, merge, or skip across a broader skill surface.
 - `superpowers:writing-skills` is source inspiration for pressure proof and rationalization traps; Matt-style great-skill vocabulary is source inspiration for invocation, hierarchy, steering, and pruning. Normal repo skill authoring routes through `skills-creation`.
 - `skill-creator` owns Codex skill anatomy and generated metadata as platform support loaded through `skills-creation/references/platform-mechanics.md`.
@@ -123,7 +123,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 |-------|----------|---------|
 | spec-design | `plugins/shravan-dev-workflow/skills/spec-design/` | Authoritative Why/What: problem, consumers, outcomes, requirements, observable contracts, constraints, failure obligations, and proof obligations |
 | program-design | `plugins/shravan-dev-workflow/skills/program-design/` | Structural How: components, ownership, interfaces, state, flows, failure/recovery, concurrency, trust boundaries, and proof seams |
-| spec-program-review | `plugins/shravan-dev-workflow/skills/spec-program-review/` | Proportional independent specification, program-design, or pair review with reader understanding, scope fidelity, and no editing or acceptance |
+| spec-program-review | `plugins/shravan-dev-workflow/skills/spec-program-review/` | Proportional independent specification, program-design, or pair review with reader understanding, scope fidelity, no editing or acceptance, and reruns limited to coverage affected by meaning changes |
 | discuss-clarify-mental-models | `plugins/shravan-dev-workflow/skills/discuss-clarify-mental-models/` | Read-only reconvergence for unstable shared mental models before specs, plans, docs, or code: terms, boundaries, assumptions, source-of-truth questions, tradeoffs, branches, and countercase |
 | discuss-pathfinding | `plugins/shravan-dev-workflow/skills/discuss-pathfinding/` | Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/glossary records as they crystallize |
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
@@ -131,7 +131,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals: never-articulated intent to discuss-pathfinding, drifted models to discuss-clarify-mental-models |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
-| plan-creation-swarm | `plugins/shravan-dev-workflow/skills/plan-creation-swarm/` | Create written implementation plans from a current pair-ready review or proven implementation-mechanics-only input, with proof gates and parallel work lanes, without editing code |
+| plan-creation-swarm | `plugins/shravan-dev-workflow/skills/plan-creation-swarm/` | Create written implementation plans from an admitted semantically current pair-ready review or proven implementation-mechanics-only input, with proof gates and parallel work lanes, without editing code |
 | plan-improve-repo | `plugins/shravan-dev-workflow/skills/plan-improve-repo/` | Audit a repository for high-leverage improvements; write or validate executable plans only after planning admission |
 | ops-security-review | `plugins/shravan-dev-workflow/skills/ops-security-review/` | Routes authorized security scans to the official Codex Security workflows |
 | implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, and explicit opt-in Claude/Gemini/agy adversarial lanes |
@@ -142,7 +142,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | implementation-execute-plan | `plugins/shravan-dev-workflow/skills/implementation-execute-plan/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
 | ops-observability-stack | `plugins/shravan-dev-workflow/skills/ops-observability-stack/` | Shared local OTel and Victoria stack operations, producer boundaries, resource naming, and debug/beta query loops |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
-| skills-creation | `plugins/shravan-dev-workflow/skills/skills-creation/` | Create, update, or evaluate one named skill or accepted draft with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
+| skills-creation | `plugins/shravan-dev-workflow/skills/skills-creation/` | Create, update, or evaluate one named skill or accepted draft, or execute one run or slice of an accepted multi-run skill-change spec, with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed portfolio audits using current plugin inventory, session patterns, and upstream inspirations |
 | tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
@@ -187,8 +187,8 @@ Use the changelog system as the durable release memory:
 
 Skills encode judgment, house style, and repeatable failure prevention. Prefer improving an existing skill over adding a near-duplicate.
 
-- Treat this section as repo-local guardrails. Use `Skill Work SOP` above and `skills-creation` for named create/update/evaluate work before relying on these bullets.
-- When creating, editing, evaluating, or pressure-testing one named skill, load `skills-creation`. Its references adapt Matt-style great-skill vocabulary, pressure-proof lessons from `superpowers:writing-skills`, and platform mechanics from `skill-creator`. For broad portfolio questions, use `skill-audit` instead.
+- Treat this section as repo-local guardrails. Use `Skill Work SOP` above and `skills-creation` for named create/update/evaluate or accepted multi-run slice work before relying on these bullets.
+- When creating, editing, evaluating, executing an accepted multi-run slice, or pressure-testing one named skill, load `skills-creation`. Its references adapt Matt-style great-skill vocabulary, pressure-proof lessons from `superpowers:writing-skills`, and platform mechanics from `skill-creator`. For broad portfolio questions, use `skill-audit` instead.
 - Name skills with active, searchable verbs in hyphen-case.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.

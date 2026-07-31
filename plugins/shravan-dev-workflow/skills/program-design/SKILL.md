@@ -209,9 +209,9 @@ Completion: the current artifact has exact passes and gaps, boundary check 2 is 
 
 Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; current program-design and governing-specification identities; scope and claimed semantic effect; governing-source coverage; boundary-check-2 result; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
 
-When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route Why/What findings to `spec-design`; route How findings back here. Edits invalidate prior coverage.
+When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route Why/What findings to `spec-design`; route How findings back here. After a later edit to either artifact, use `spec-program-review` to refresh affected coverage when meaning changed; parent-verified non-semantic edits may retain coverage.
 
-Completion: current independent review covers the specification and program-design meaning, or the exact non-substantial basis/block is recorded.
+Completion: current independent review semantically covers the current specification and program design, or the exact non-substantial basis/block is recorded.
 
 ### 17. Return the local result
 

@@ -1,6 +1,6 @@
 ---
 name: skills-creation
-description: Use when creating, updating, or evaluating one named skill or accepted draft, especially when its trigger, main path, reference hierarchy, steering, or proof quality needs judgment.
+description: Use when creating, updating, or evaluating one named skill or accepted draft, including executing one run or slice of an accepted multi-run skill-change spec, especially when the skill's trigger, main path, reference hierarchy, steering, or proof quality needs judgment.
 ---
 
 # Skills Design & Concepts
@@ -129,7 +129,7 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 ## Review
 
-Behavior-changing work is reviewed twice: the proposal before any file is edited, and the changed files before ship. Lanes return candidate findings; the parent verifies, reduces, and owns the verdict. Mechanical changes are not reviewed.
+Behavior-changing work is reviewed twice: the proposal before any skill file is edited, and the changed files before ship. Lanes return candidate findings; the parent verifies, reduces, and owns the verdict. Mechanical changes are not reviewed.
 
 Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. A scoped change keeps both stages but narrows them; each stage reference owns its scoped form. Both dispatch under `references/review/review-lane-workflow.md` and use the shared shapes in `references/review/lanes/lane-schema.md`.
 
@@ -137,19 +137,20 @@ Collect every receipt explicitly and ask a lane that goes quiet; silence is neve
 
 ## Scaled Run Note
 
-Use a compact run note when implementation, shipping, disputed scope, or proof needs tracking. Do not make chat-only discussion perform state ceremony.
+Emit the run note whenever the run dispatches review lanes, returns an evaluate verdict, cites or verifies an accepted spec, edits skill files, or runs a proof route. A run that does none of these is chat-only discussion and skips the ceremony.
 
 ```text
 classification: create | update | evaluate
 target skill / owner plugin:
 reusable behavior:
-success definition:
-authoring basis: observed failure | user-directed intent
+success definition: <text> | n/a (evaluate)
+authoring basis: observed failure | user-directed intent | n/a (evaluate)
 reproduction: reproduced | not reproduced | insufficient evidence | inconclusive | n/a
 invocation: model-invocable | user-invocable | both
 branches loaded:
-review lanes dispatched:
-lane receipts: complete | partial | blocked | no-receipt, per lane
+review lanes dispatched: <lanes> | none (no review this run) | none — cited accepted spec <revision/result identity>
+lane receipts: complete | partial | blocked | no-receipt, per lane | n/a (no lanes dispatched this run)
+deviations: spec-boundary none | <named list>; reviewer-runtime none | <named list>
 security route: allowed | disallowed | blocked | deferred | n/a
 proof route: RED/GREEN | characterization | representative hypothesis | static-only | deferred | proof gap
 shipping status: source-only | PR-ready | released
@@ -157,9 +158,13 @@ shipping status: source-only | PR-ready | released
 
 ## Workflow
 
+An `evaluate` run walks a shorter spine: complete step 1, follow the review branch it selects, and end at the parent-reduced verdict with that stage's required returns plus the run note. Steps 2-10 begin only as a new `update` run whose own step 1 records a user-supplied success definition and an authoring basis; an invitation like "just quickly fix it" that names neither is not a commission.
+
+A run implementing one slice — one run of an accepted multi-run skill-change spec's sequenced runs — reads the accepted spec doc and takes its step-1 and step-2 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing; the doc is the commission for that slice, and each slice still names exactly one skill target.
+
 ### 1. Name the promise and success
 
-Classify the run; search the owning plugin for an existing skill or reference that already owns the named behavior and return the matching paths or `none`; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first required revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first fix. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named.
+Classify the run; search the owning plugin for an existing skill or reference that already owns the named behavior and return the matching paths or `none`; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first required revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first fix. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named; an `evaluate` run completes with classification, owner, reusable behavior, and review target.
 
 ### 2. Choose the authoring basis and proof posture
 
@@ -167,11 +172,13 @@ IF the work the skill teaches lives in someone's head and is not yet understood,
 
 Then classify the change, and classify why you are making it.
 
-A change is **behavior-changing** when it alters the skill's trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract. Typos, formatting, version-only changes, and metadata-only changes with no behavior claim are **mechanical** and static-only.
+| change class        | qualifies when                                                                                                                                                                                                                      | consequence                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `mechanical`        | typos, formatting, version-only, or metadata-only edits with no behavior claim                                                                                                                                                       | static-only; skips both reviews                           |
+| `behavior-changing` | the diff alters trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract                                                                        | both review stages plus the proof posture below           |
+| `scoped` (behavior-changing) | behavior-changing, and the entire diff is wording inside one owned home — `SKILL.md` prose or a single reference — touching no trigger, call site, branch predicate, lane, schema, label set, security surface, or ownership boundary | each review stage narrows to its scoped form; proof rules unchanged |
 
-`mechanical` skips both reviews, and this session makes the call about its own work. So state the claim in a form the next reader can check: name the surfaces the change touches and show that none of them is on the list above. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
-
-A behavior-changing change is additionally **scoped** when its entire diff is wording inside one owned home — `SKILL.md` prose or a single reference — and it touches no trigger, call site, branch predicate, lane, schema, label set, security surface, or ownership boundary. Scoped narrows review, not proof: the proof posture rules below still apply. Like `mechanical`, the claim must be checkable: name the home and show each item on that list is untouched.
+Every classification is a claim the next reader can check, and this session makes the call about its own work: `mechanical` names the surfaces the change touches and shows none is in the behavior-changing row; `behavior-changing` names which listed surface the diff alters; `scoped` names its one home and shows each excluded surface is untouched. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
 
 Behavior-changing work is either `observed failure` or `user-directed intent`.
 
@@ -228,11 +235,11 @@ Keep all-run obligations, decisions, invariants, required returns, and completio
 
 ### 6. Review the spec
 
-IF the change is behavior-changing, before any file is edited and unless the user explicitly says no review is needed, load `references/review/spec-review.md` to select and dispatch the spec-review lanes and judge the proposed design, and return the dispatched lane set, every receipt, the verdict, blocker overrides, and the implementation decision. Accepted findings return to the design step that owns them before implementation starts. Completion: spec review is parent-reduced to accepted-to-implement, explicitly skipped by the user, or not applicable because the change is mechanical.
+IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, load `references/review/spec-review.md` to select and dispatch the spec-review lanes and judge the proposed design, and return the dispatched lane set, every receipt, the verdict, blocker overrides, and the implementation decision. Accepted findings return to the design step that owns them before implementation starts. IF the run implements one slice of a multi-run spec a prior spec review already accepted, load `references/review/spec-review.md` to verify the acceptance under its Acceptance Binding and return the acceptance-verification evidence and the revision cited, instead of re-dispatching; the Acceptance Binding owns when acceptance expires, and expired semantic coverage sends only the affected delta back through spec review before any skill file is edited. Completion: spec review is parent-reduced to accepted-to-implement, cited from an accepted spec whose semantic coverage remains current, explicitly skipped by the user, or not applicable because the change is mechanical.
 
 ### 7. Implement
 
-IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated as either `deviations: none` or a named list.
+IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated on the run note's deviations line as `spec-boundary none` or a named list.
 
 ### 8. Review the implementation
 
@@ -240,7 +247,7 @@ Review before proving. Proof run first is spent on text the review is about to c
 
 IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, and the parent reduction.
 
-Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate finding against the actual files before accepting it. And a receipt expires when its text changes: re-dispatch any lane whose reviewed text a fix touched, under the Dispatch Contract in `references/review/review-lane-workflow.md`, with a refreshed packet.
+Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate finding against the actual files before accepting it. And receipts expire when reviewed text changes: re-dispatch every touched lane with a refreshed packet, per the Receipt Lifecycle and Dispatch Contract in `references/review/review-lane-workflow.md`.
 
 Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Proof of quality, proof of work`, ship surface to `Prune and ship`.
 
@@ -273,10 +280,10 @@ The run is not done while any of these hold:
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
-- implementation completed without stating `deviations: none` or a named list against the accepted spec boundary;
+- implementation completed without stating `spec-boundary none` or a named deviation list against the accepted spec boundary;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
-- a behavior-changing skill change reached implementation without required spec review or explicit user skip;
+- a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded parent closure;
 - static validation is claimed as behavior proof;

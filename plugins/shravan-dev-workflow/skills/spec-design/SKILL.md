@@ -174,9 +174,9 @@ Completion: the current artifact has a self-check result with exact passes and g
 
 Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the current artifact identity; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
 
-When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. Any semantic edit requires review of the changed meaning before the result is current.
+When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. After a later edit, use `spec-program-review` to refresh coverage when meaning changed; parent-verified non-semantic edits may retain coverage.
 
-Completion: current independent review covers the artifact's meaning, or the exact `non-substantial` basis or blocking input is recorded.
+Completion: current independent review semantically covers the current artifact, or the exact `non-substantial` basis or blocking input is recorded.
 
 ### 12. Return the local result
 

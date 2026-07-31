@@ -16,7 +16,7 @@ what the next author/planner would guess
 smallest semantic correction target
 semantic owner: spec-design | program-design | caller
 validation note
-refresh / retest required
+semantic coverage to rerun
 contested evidence
 confirmed requirement or boundary served
 whether deletion of the questioned mechanism removes the failure
@@ -47,6 +47,7 @@ Missing evidence is `unverified`, not rejection. Style preference without reader
 
 ```text
 mode and covered targets
+semantic coverage statement and any later semantic-change records
 governing-source coverage
 accepted-requirements and boundary-check coverage
 lane terminal states
@@ -55,13 +56,13 @@ accepted/rejected/contested/unverified findings
 what held
 verdict: ready | needs-revision | blocked | decision-needed
 first required revision
-correction verification and receipt refresh
+correction verification and affected-coverage rerun
 planning-readiness boundary
 owner decision when correction would expand or subtract confirmed scope
 non-edit / non-acceptance statement
 ```
 
-`ready` requires a complete fresh mode-complete receipt, no required coverage gap, no open blocker/important accepted finding, no unapproved scope expansion or requirement subtraction, and no remaining planner-owned semantic invention.
+`ready` requires complete semantically current mode coverage, no required coverage gap, no open blocker/important accepted finding, no unapproved scope expansion or requirement subtraction, and no remaining planner-owned semantic invention.
 
 Produce exactly one verdict:
 
@@ -72,4 +73,6 @@ Produce exactly one verdict:
 
 When states mix, apply precedence `blocked -> needs-revision -> decision-needed -> ready`.
 
-Complete when: every candidate and lane terminal state is accounted for, accepted requirements and goal relevance are preserved, deletion was tested before addition, and the verdict cannot exceed current coverage.
+After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
+
+Complete when: every candidate and lane terminal state is accounted for, accepted requirements and goal relevance are preserved, deletion was tested before addition, the verdict cannot exceed semantically current coverage, and any later semantic-change records are explicit.

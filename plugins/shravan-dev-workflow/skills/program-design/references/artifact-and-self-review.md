@@ -57,6 +57,6 @@ Re-read the whole artifact:
 - no missing Why/What was invented;
 - two capable implementers would build the same structural behavior.
 
-Keep target classification, source/review coverage, readiness, acceptance, planning, PR, and release state in the returned result rather than durable program-design prose. A source pointer may remain when later readers need it for authoritative lookup. The self-check is not independent review.
+Run the self-check against the current program design and governing specification. Keep target classification, source/review coverage, readiness, acceptance, planning, PR, and release state in the returned result rather than durable program-design prose. A source pointer may remain when later readers need it for authoritative lookup. The self-check is not independent review.
 
 Complete when: the artifact composes as one proportional executable mental model; every fired view has a passed rendering result with preserved semantics; current/proposed call deltas, accepted-requirements coverage, and boundary check 2 are visible; unnecessary structure is pruned; and every known gap is exact.

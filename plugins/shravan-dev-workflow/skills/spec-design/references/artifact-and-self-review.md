@@ -86,7 +86,7 @@ Re-read the complete artifact and record:
 
 For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion. A shorter artifact that loses users, variants, defaults, scenarios, contracts, or proof obligations is scope loss, not pruning.
 
-Record exact failures, not “needs more detail.”
+Run the result against the current artifact state. Record exact failures, not “needs more detail.”
 
 Self-check is author evidence only. It never substitutes for fresh independent review.
 

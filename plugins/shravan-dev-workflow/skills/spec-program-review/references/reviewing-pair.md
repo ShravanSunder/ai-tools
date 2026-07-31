@@ -17,7 +17,7 @@ Inspect:
 - security/reliability and other applicable qualities map to owner, mechanism, failure/degradation, and proof;
 - retained requirements match the owner-confirmed or last inspectable owner-accepted baseline, including any named variants, defaults, constraints, and proof obligations;
 - every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case, with added, removed, changed, and intentionally unchanged edges;
-- all coverage matches the current target text;
+- all coverage is semantically current for the current artifacts, with any post-review non-semantic changes recorded by the parent;
 - a planner can choose tasks/order/commands without inventing meaning or How.
 
 If local results are missing, pair `ready` requires independently repeating and recording the missing local checks. Missing prerequisites may still yield bounded findings, never false readiness.

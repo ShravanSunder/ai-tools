@@ -4,7 +4,7 @@ Mission: independently reconstruct and challenge the complete selected review mo
 
 Predicate: mandatory for every `review` invocation.
 
-Expected inputs: the complete lane-schema packet, exact target and governing-source set, and one selected mode reference.
+Expected inputs: the complete lane-schema packet, complete current target set, complete governing-source set, and one selected mode reference.
 
 Prerequisites: the complete target set, governing-source coverage, accepted requirements set, and applicable boundary results are complete and unambiguous.
 

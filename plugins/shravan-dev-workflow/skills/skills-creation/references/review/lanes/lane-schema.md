@@ -45,7 +45,7 @@ non-goals:
 requested lane focus:
 ```
 
-The `artifact` value sets the lane's scope. `proposal` is conversation only, `changed files` scopes the lane to the diff, and `existing files` scopes the lane to whole files when there is no diff.
+The `artifact` value sets the lane's scope. `proposal` is a design the skill's files do not yet implement — conversational or a spec doc; `changed files` scopes the lane to the diff, and `existing files` scopes the lane to whole files when there is no diff.
 
 Allowed `surface` labels. This schema owns the label set, and each stage rubric maps these labels to lanes. Classify a reference, lane, or schema file as `reference text`; record review depth in `status:`:
 

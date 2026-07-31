@@ -111,6 +111,8 @@ describe("user requirements and design-view contracts", () => {
     expect(specDesign).toContain("requirements/Why/What, structural How, or both");
     expect(specDesign).toContain("tmp/design-workflows/<date>-<slug>/");
     expect(specDesign).toContain("returned workflow state");
+    expect(specDesign).toContain("parent-verified non-semantic edits may retain coverage");
+    expect(specDesign).not.toContain("Any later artifact edit makes");
     expect(artifact).toContain("Human Deletion Test");
     expect(artifact).toContain("smallest Why/What model");
     expect(specDesign).not.toContain("artifact identity/digest");
@@ -172,6 +174,8 @@ describe("user requirements and design-view contracts", () => {
     expect(programDesign).toContain("which part of the complexity budget it spends");
     expect(programDesign).toContain("perform boundary check 2");
     expect(programDesign).toContain("tmp/design-workflows/<date>-<slug>/");
+    expect(programDesign).toContain("parent-verified non-semantic edits may retain coverage");
+    expect(programDesign).not.toContain("Any later edit to either artifact makes");
     expect(artifact).toContain("human deletion test");
     expect(artifact).toContain("Architecture documentation impact");
     expect(artifact).toContain("Design completion boundary");

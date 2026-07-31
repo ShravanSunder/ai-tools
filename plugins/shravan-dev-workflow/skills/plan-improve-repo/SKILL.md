@@ -20,9 +20,10 @@ Vetted findings and prioritized backlogs may be returned without planning admiss
 ```text
 current-pair-ready
   complete current specification and program design
-  required local review coverage is current
-  current pair-mode spec-program-review result: ready and covers both artifacts
+  required local review coverage is semantically current
+  current pair-mode spec-program-review result: ready and covers both current artifacts
   accepted findings corrected under refreshed review
+  review coverage matches both artifacts' current meaning
   no blocking decision or evidence gap
 
 implementation-mechanics-only
@@ -37,7 +38,7 @@ design-required
 
 `design-required` returns the vetted finding and exact missing semantic owner: Why/What to `spec-design`, structural How to `program-design`, or a complete but unreviewed/stale pair to `spec-program-review`. Do not write a new executable plan. For an existing plan, return `blocked` for execution readiness without rewriting it.
 
-Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written or `ready` plan carries one current admissible planning basis and its exact evidence identity.
+Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written or `ready` plan carries one current admissible planning basis and its evidence identity plus semantic-freshness record.
 
 ## Core Rules
 

@@ -1,6 +1,6 @@
 # 2026-07-31 User Requirements and Design Views
 
-Plugin: `shravan-dev-workflow` 1.7.3
+Plugin: `shravan-dev-workflow` 1.7.4
 
 ## What Changed
 
@@ -30,6 +30,6 @@ Plugin: `shravan-dev-workflow` 1.7.3
 
 ## Refresh Status
 
-- Source metadata targets `1.7.3` for Codex and Claude.
+- Source metadata targets `1.7.4` for Codex and Claude.
 - No Codex or Claude refresh/reinstall was performed.
 - Installed-cache readback remains pending and is not required for source/PR readiness.

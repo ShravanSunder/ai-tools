@@ -16,6 +16,7 @@ governing-source identities/versions, authority statuses, and freshness/applicab
 governing-source coverage completeness basis
 boundary check 1 and accepted requirements set, or exact authority gap
 boundary check 2 for program-only or pair, or exact owner decision needed
+prior review coverage and semantic-change record when coverage is reused
 observable selection predicate
 bounded review question
 source scope

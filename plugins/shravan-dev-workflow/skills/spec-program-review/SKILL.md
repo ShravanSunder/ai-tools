@@ -1,6 +1,6 @@
 ---
 name: spec-program-review
-description: Use when independently reviewing a specification, program design, or their pair for authority, requirements, reader understanding or readability, architecture, failure, traceability, scope fidelity, crux, or planning-readiness gaps, or when classifying whether specification-only or program-only review is required. Review only; not for editing, remediation, acceptance, plan or implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan, audit, or threat model.
+description: Use when classifying whether a specification-only or program-only change semantically requires independent review, or when independently reviewing a specification, program design, or their pair for authority, requirements, reader understanding or readability, architecture, failure, traceability, scope fidelity, crux, call-path, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan or implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan, audit, or threat model.
 ---
 
 # Specification and Program Design Review
@@ -33,6 +33,14 @@ review
   dispatches: exactly one mode-complete reviewer first, then at most one focused reviewer by default
 ```
 
+Review freshness follows meaning, not changed bytes. After an artifact changes, the parent performs and records a semantic-change check before dispatching anyone:
+
+- if meaning changed, invalidate the affected mode coverage and only the focused lanes whose selection predicates the change affects;
+- if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward and dispatch no model reviewer;
+- if semantic effect is uncertain, classify it as semantic and rerun the affected coverage.
+
+Freshness is established by comparing the current artifact's meaning with the meaning covered by the review result. Keep review-process state in the returned result rather than the durable design artifacts.
+
 ## 1. Guard the Skill-Authoring Boundary
 
 Record `target classification: general-domain | runtime-skill-package`.
@@ -63,13 +71,14 @@ constraints and non-goals
 risk predicates
 claimed proof evidence or gaps
 review question when narrower than readiness
+prior review coverage and semantic-change record when coverage is being reused
 ```
 
 Use the owner-confirmed requirements record and boundary-check-1 result when available. Otherwise use the last inspectable owner-accepted governing baseline. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
 
 `program-only` also requires the governing specification. `pair` requires the current specification and program design. Missing boundary confirmation may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
-Completion: the complete target set, governing sources, accepted requirements, boundaries, and open authority decisions are unambiguous.
+Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous.
 
 ## 4. Select the Mode
 
@@ -90,6 +99,8 @@ Completion: exactly one mode and its complete required artifact set are selected
 MUST use `manage-agents` before each reviewer dispatch and return the one-shot `Delegate` pattern, model and reasoning, reviewer history `none`, read-only workspace access, runtime, permissions, packet, and receipt mechanics.
 
 Every reviewer gets the complete targets and governing sources but no parent conversation history, author conclusion, expected verdict, prior praise, or hidden context. Reviewer findings remain candidate-only. Silence is `no-receipt`, never a clean review.
+
+Coverage from a receipt expires when a later semantic change affects the mode dimensions, focused-lane predicate, or finding coverage it supplied. A parent-verified non-semantic edit does not expire that coverage.
 
 Completion: fresh-context, read-only, candidate-only dispatch mechanics are recorded before the reviewer runs.
 
@@ -134,15 +145,17 @@ IF one focused risk qualifies, dispatch the single best-matched lane using the s
 
 After the first focused receipt, return the coverage-bound result with remaining gaps. Dispatch another focused lane only when the user or caller explicitly authorizes the named residual risk after seeing current coverage and review cost; carry that authority in the existing packet constraints and bounded-review-question fields.
 
+After a later semantic edit, rerun a focused lane only when the changed meaning affects that lane's selection predicate or prior finding coverage. Do not fan out unaffected lanes.
+
 Stop focused review when the risk is resolved, unsupported, outside the confirmed boundary, or needs an owner decision.
 
 Completion: the selected risk, non-selected residual risks, terminal receipt, and any explicit authority for an additional lane are recorded.
 
 ## 8. Verify Reviewer Independence
 
-Confirm each receipt matches its assignment, reviewer history was empty, access remained read-only, authority stayed candidate-only, and reviewed targets were not edited after inspection. If a reviewed target changed, rerun only the affected coverage before using it.
+Confirm each receipt matches its assignment, reviewer history was empty, access remained read-only, authority stayed candidate-only, and the reviewer did not mutate the reviewed targets. Compare the covered target text to the current target text. If a later edit changed meaning, invalidate and rerun only the affected coverage; if the parent verifies that it did not change meaning, carry coverage forward; if uncertain, treat it as semantic.
 
-Completion: each used receipt covers the current target text and reviewer execution did not widen authority or mutate the worktree.
+Completion: each used receipt supplies semantically current coverage for the current target text, and reviewer execution did not widen authority or mutate the worktree.
 
 ## 9. Verify and Reduce Findings
 
@@ -160,7 +173,7 @@ Completion: every candidate has a source-backed disposition and no accepted find
 
 Return every field in the `Coverage-Bound Result` owned by `references/finding-and-reduction-schema.md` for the current mode and targets.
 
-`ready` means the reviewed targets satisfy the invoked mode. The returned result is the sole home of review state; durable artifacts remain about their subject matter.
+`ready` means the current artifact meaning is covered and satisfies the invoked mode. The returned result is the sole home of review state; durable artifacts remain about their subject matter and do not acquire review lifecycle or acceptance status.
 
 Completion: the result names the first required revision, coverage gaps, any owner decision, and what a downstream program designer or planner would still have to invent.
 
@@ -169,9 +182,10 @@ Completion: the result names the first required revision, coverage gaps, any own
 Do not return `ready` while any of these hold:
 
 - target classification or required runtime-skill-package parent identity is missing;
+- the current target identity or semantic scope is missing or ambiguous;
 - the complete target or governing-source set was not read;
 - boundary check 1, accepted requirements, or applicable boundary check 2 is missing or conflicting without an explicit returned authority gap;
-- no complete fresh mode-complete receipt exists;
+- no complete semantically current mode-complete receipt exists;
 - a selected lane is silent without explicit follow-up;
 - partial, blocked, or `no-receipt` coverage affects a required dimension;
 - a finding lacks a source-backed failure path, goal-relevance record, deletion test, scope effect, or disposition;

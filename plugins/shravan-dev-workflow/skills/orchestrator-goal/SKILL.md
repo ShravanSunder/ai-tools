@@ -27,7 +27,7 @@ Only the starting point is mutable. Choose `Current workflow` and `Next workflow
 - authoritative Why/What missing: `spec-design`
 - structural How missing: `program-design`
 - specification/program design drafted but unreviewed: `spec-program-review`
-- current pair-ready review result covering the current specification and program design, or proven implementation-mechanics-only admission, exists with no implementation plan: `plan-creation-swarm`
+- semantically current pair-ready review result covering the current specification and program design, or proven implementation-mechanics-only admission, exists with no implementation plan: `plan-creation-swarm`
 - implementation plan exists but is unreviewed: `plan-review-swarm`
 - reviewed plan exists, implementation is not proven: `implementation-execute-plan`
 - implementation proof exists, review is not done or findings are unresolved: `implementation-review-swarm`
