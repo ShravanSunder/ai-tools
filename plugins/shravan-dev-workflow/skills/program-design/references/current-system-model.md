@@ -2,9 +2,9 @@
 
 This reference owns source-grounded reconstruction of the current runtime and its proof path before target design.
 
-Expected inputs: governing specification/digest, bounded system surface, repo source roots, current docs/tests/logs/traces, and known platform constraints.
+Expected inputs: governing specification and accepted boundary, bounded system surface, repo source roots, current docs/tests/logs/traces, and known platform constraints.
 
-Return: current component/owner tree, production and proof flows, state/mutation map, failure behavior, constraint degree, `changes / remains authoritative`, contradictions, evidence gaps, and immutable source coverage. Each source row records exact identity, version or digest, authority status, freshness/applicability, and the scoped-completeness basis covering current-system, constraint, platform, and external sources in scope.
+Return: current component/owner tree, production and proof flows, state/mutation map, failure behavior, constraint degree, `changes / remains authoritative`, contradictions, evidence gaps, and source identities with current applicability and coverage.
 
 ## Trace Relationships, Not File Lists
 

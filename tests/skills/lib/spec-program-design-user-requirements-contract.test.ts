@@ -151,6 +151,34 @@ describe("user requirements and design-view contracts", () => {
     );
   });
 
+  test("keeps program design proportional and makes call-path deltas visible", () => {
+    const programDesign = readPluginFile("skills/program-design/SKILL.md");
+    const stateCalls = readPluginFile(
+      "skills/program-design/references/state-calls-and-flows.md",
+    );
+    const artifact = readPluginFile(
+      "skills/program-design/references/artifact-and-self-review.md",
+    );
+
+    for (const marker of [
+      "added",
+      "removed",
+      "changed",
+      "intentionally unchanged",
+    ]) {
+      expect(stateCalls).toContain(marker);
+    }
+    expect(programDesign).toContain("satisfied by the existing system");
+    expect(programDesign).toContain("which part of the complexity budget it spends");
+    expect(programDesign).toContain("perform boundary check 2");
+    expect(programDesign).toContain("tmp/design-workflows/<date>-<slug>/");
+    expect(artifact).toContain("human deletion test");
+    expect(artifact).toContain("Architecture documentation impact");
+    expect(artifact).toContain("Design completion boundary");
+    expect(programDesign).not.toContain("program-design identity/digest");
+    expect(artifact).not.toContain("digest-bound");
+  });
+
   test("indexes every view owner and rendering consumer", () => {
     const vocabulary = readPluginFile("docs/diagram-vocabulary.md");
 
