@@ -17,6 +17,8 @@
 
 ## Skill Improvement Workflow
 
+This funnel governs raw-signal notes. An accepted multi-run skill-change spec under `skills-authoring/` is its own commission per `skills-creation` (slice-run spine and Acceptance Binding) — it needs no plan promotion, and it is deleted, archived, or promoted per the rules above after its last run lands.
+
 Use WIP skill docs as an intake funnel:
 
 1. Capture the raw signal in the relevant file.

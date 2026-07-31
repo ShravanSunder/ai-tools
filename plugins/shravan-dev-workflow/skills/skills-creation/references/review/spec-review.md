@@ -4,9 +4,29 @@ Review the intended skill design before implementation. This reference judges wh
 
 Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
 
+## Spec Artifact
+
+A proposal that meets none of the doc predicates below stays conversational: it lives in the run's messages and the review packet carries it.
+
+IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, write it as a spec doc before dispatch and make the doc the reviewed artifact; the review packet's `review target` carries the doc's path, revision, and digest. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
+
+```text
+targets and owner plugin, with the runs in sequence
+problem and evidence
+success definition
+decisions table — defaults taken with rationale; the user may strike any row
+per-run surface allocation: trigger / main path / depth / proof
+authoring basis and proof plan, with each run's proof posture
+coordination: base branch and commit, pending edits, version and changelog landing
+non-goals
+spec-review record: accepted revision label, digest and algorithm (only the digest value excluded from its computation), lanes, receipts, verdict, acceptance
+```
+
+Each decisions row records the default taken and its rationale so the user can strike it cheaply — after acceptance, striking a row is an edit like any other, and a row without a rationale gives the user nothing to strike against. Every problem or evidence claim names its source or is labeled a hypothesis. The coordination slot is read at implement and ship time: a slice run checks its base, pending edits, and version/changelog landing against it before editing. The doc is dispatch-ready when every slot carries what its consuming run can execute from without guessing, or its exact unknown; a slot holding TBD is neither.
+
 ## Lanes
 
-The artifact here is a **proposal** — it exists only in conversation, nothing on disk has changed. That selects exactly four lanes:
+The artifact here is a **proposal** — conversational or a spec doc — describing a design the skill's files do not yet implement. That selects exactly four lanes:
 
 ```text
 lanes/mental-model-fit.md
@@ -31,7 +51,7 @@ This reference covers the rest of the spec verdict in-parent.
 
 `lanes/lane-schema.md` owns the verdict labels. Here, `great` means accepted to implement, `targeted-revision` means a bounded spec fix before editing, and `significant-rewrite` means the promise, trigger, workflow, or proof route must be redesigned before implementation.
 
-Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill, the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, a promised stage or branch has no teaching owner, a shape-only reference lacks a named consumer, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
+Blocker overrides: a spec cannot be accepted when the target behavior is not one named skill (for a multi-run spec doc: per run in its sequence), the trigger is not a loading condition, the authored body contract or usable main path is incomplete, a reference or lane call is vague or incomplete, a callee owns its entry routing, proposed lane work misses any qualification or widens authority, a promised stage or branch has no teaching owner, a shape-only reference lacks a named consumer, shared shapes lack real consumers or duplicate authority, a hard cutover retains competing owners, a proposed rule, gate, or completion criterion names no failure form, behavior-changing guidance has no proof route, sensitive surfaces are unclassified, or the proposed text is mostly no-op prose.
 
 ## Rubric
 
@@ -51,6 +71,10 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 ## Reduction
 
 The parent reduces candidate findings into the spec-review result. Accepted findings return to the design step they affect before implementation starts. Implementation may start only after the parent marks the spec accepted-to-implement. If the verdict is `targeted-revision`, `significant-rewrite`, or `reject-or-restart`, revise the spec and run a fresh parent reduction before editing files, unless the user explicitly skips review.
+
+### Acceptance Binding
+
+The parent closes a review by writing the spec-review record into the doc, then computing the content digest over the whole doc with only the digest value excluded; the record carries the accepted revision label, the digest, and its algorithm. That closing write is the acceptance act; any edit after it, body or record, changes the digest and expires the acceptance. A later run implementing one slice of an accepted multi-run spec cites the acceptance instead of re-dispatching — after recomputing the digest and stating the recorded and recomputed values, or confirming from version-control history that no commit or uncommitted working-tree change touched the doc since the record; a status line that still reads accepted-to-implement is not verification, and an instruction to keep going under the existing acceptance is not an explicit review skip. An expired acceptance sends the delta back through spec review under this reference's lane selection with the revised doc as the reviewed artifact, and acceptance re-binds to its new revision label and digest.
 
 Report with these exact labels:
 
