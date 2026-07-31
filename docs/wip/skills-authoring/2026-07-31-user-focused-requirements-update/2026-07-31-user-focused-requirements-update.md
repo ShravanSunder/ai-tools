@@ -168,6 +168,14 @@ Pressure scenario files are added for later execution, but model pressure execut
 - No removal of load-bearing material merely because it is dense or lengthy.
 - No claim that a reviewer receipt, static validator, commit, or PR proves runtime behavior.
 
+## Spec Review Result
+
+Accepted revision: `2026-07-31-r3`
+
+The mental-model-fit and depth-coverage reviews completed with no findings. Trigger-routing found and verified the adjacent `docs-maintain` collisions; the scoped trigger repair passed its focused retest. Rule-agreement found and verified the call-path marker, shared-rendering ownership, and stale journey-view index conflicts; each correction passed a focused retest. The parent accepted only those concrete behavior failures and rejected no reviewer finding.
+
+Verdict: `great`; implementation decision: `accepted-to-implement`. Semantic coverage includes the four child contracts, their shared ownership and call-path interfaces, and the scoped `docs-maintain` routing prerequisite. Model pressure execution remains the user-accepted deferred proof gap named above.
+
 ## Scope Boundary
 
-This changeset updates only the four existing runtime skills, their shared diagram support, the maintainer index, focused static checks, deferred pressure-scenario files, plugin metadata, and changelog. It does not create `orchestrator-spec`, retire `skill-audit`, modify retired skills, or redesign the wider planning and implementation workflow. The generic `manage-agents` resource budget remains a separate focused follow-up; this changeset closes the reproduced failure inside `spec-program-review` by using mode-first serialized dispatch and no automatic reviewer multiplication.
+This changeset updates only the four primary runtime skills, the scoped `docs-maintain` trigger boundary needed to route semantic authoring and independent review correctly, their shared diagram support, the maintainer index, focused static checks, deferred pressure-scenario files, plugin metadata, and changelog. It does not create `orchestrator-spec`, retire `skill-audit`, modify retired skills, or redesign the wider planning and implementation workflow. The generic `manage-agents` resource budget remains a separate focused follow-up; this changeset closes the reproduced failure inside `spec-program-review` by using mode-first serialized dispatch and no automatic reviewer multiplication.

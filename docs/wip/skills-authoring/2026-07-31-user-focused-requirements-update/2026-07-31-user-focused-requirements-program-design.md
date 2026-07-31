@@ -45,7 +45,7 @@ These are applicability judgments, not mandatory artifact sections. Never invent
 
 Keep the existing Required Views names as the sole structural-view vocabulary. Tighten the existing `call graph/sequence` predicate and change two must-expose contracts so the table makes behavior already required elsewhere visible in the artifact:
 
-- `call graph/sequence` fires when the change adds, removes, or changes a material runtime entrypoint-to-effect path, when that path is needed to explain how a material obligation works, or when control crosses owners or async boundaries. It exposes the source-anchored current path and proposed path, or proposed-only with the explicit absence of a predecessor; entrypoint, callers/callees, owning component, sync/async/event edges, state reads/writes or external side effects, result/error propagation, evidence anchors for current behavior, and added/removed/changed/unchanged edges;
+- `call graph/sequence` fires when the change adds, removes, or changes a material runtime entrypoint-to-effect path, when that path is needed to explain how a material obligation works, or when control crosses owners or async boundaries. It exposes the source-anchored current path and proposed path, or proposed-only with the explicit absence of a predecessor; entrypoint, callers/callees, owning component, sync/async/event edges, state reads/writes or external side effects, result/error propagation, evidence anchors for current behavior, and added/removed/changed/intentionally-unchanged edges;
 - `requirement/design/proof trace` additionally exposes the immediate specification scenario or observable contract between the requirement and structural owner.
 
 Do not add an `integrated architecture`, timeline, current-versus-target, or call-stack-delta view name. An integrated overview composes the smallest already-fired canonical views; timeline, current-versus-target, and call-stack delta are rendering forms of the existing call, state, or flow views, not new view tokens.
@@ -125,7 +125,7 @@ At terminal return, consume the already-selected rendering result. Invoke `tui-p
 - fallback when the first medium is unavailable, malformed, unreadable, or semantically lossy;
 - a visual-check result that lists the predicate, required semantic fields, chosen medium, preserved/missing fields, readability, fallback, and pass/fail.
 
-This shared reference is also consumed by `spec-design`. It owns medium and fallback procedure only; each target `SKILL.md` owns view predicates and required semantics, while skill-local artifact references consume those decisions.
+This shared reference is also consumed by `spec-design`. It owns medium selection, fallback, semantic-preservation inspection, and visual-check procedure; each target `SKILL.md` owns view predicates and required semantics, while skill-local artifact references consume those decisions.
 
 ## Maintainer Index
 
