@@ -36,7 +36,7 @@ The executor can work out the actual task DAG later.
 - Parent verifies candidate findings.
 - Accepted blocker or important plan findings route back to
   `plan-creation-swarm`.
-- Findings that expose missing spec boundaries route to `spec-creation-swarm`.
+- Findings that expose missing Why/What boundaries route to `spec-design`; missing structural How routes to `program-design`.
 - Plan is not ready for `implementation-execute-plan` until accepted findings
   are addressed.
 

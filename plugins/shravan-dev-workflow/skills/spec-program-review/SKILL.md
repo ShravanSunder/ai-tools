@@ -1,6 +1,6 @@
 ---
 name: spec-program-review
-description: Use when classifying whether independent specification-only or program-only review is required for exact artifact digests, or when independently reviewing a specification, program design, or their pair for authority, requirements, architecture, failure, traceability, crux, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan/implementation review, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-review-swarm run.
+description: Use when classifying whether independent specification-only or program-only review is required for exact artifact digests, or when independently reviewing a specification, program design, or their pair for authority, requirements, architecture, failure, traceability, crux, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan/implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Specification and Program Design Review

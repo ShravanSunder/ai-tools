@@ -33,8 +33,6 @@ spec-*               design/spec boundary          spec-design
                                                   program-design
                                                   spec-program-review
                                                   spec-handoff
-                                                  spec-creation-swarm (legacy)
-                                                  spec-review-swarm (legacy)
 plan-*               implementation-plan boundary  plan-creation-swarm
                                                   plan-improve-repo
                                                   plan-review-swarm
@@ -128,7 +126,7 @@ Use `program-design` to define structural How against the settled specification:
 
 Use `spec-program-review` to independently classify and review a specification, a program design, or their pair. It binds exact digests, reconstructs the model, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound verdict without editing artifacts or accepting the pair. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
-`spec-creation-swarm` and `spec-review-swarm` remain available only when explicitly requested as legacy fixed-swarm workflows. Generic creation and review prompts route to the three skills above.
+The superseded `spec-creation-swarm` and `spec-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills; creation and review route through the three skills above.
 
 Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, exact artifact digests, and pair-review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves the current exact-digest pair-ready gate.
 
@@ -185,8 +183,6 @@ Use discuss-pathfinding to grill me on tacit requirements or unmade decisions.
 Use spec-design to define the authoritative Why and What.
 Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review this specification/program-design pair.
-Use spec-creation-swarm to run the explicitly requested legacy creation swarm.
-Use spec-review-swarm to run the explicitly requested legacy review swarm.
 Use spec-handoff to package this design for another agent without creating a plan.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
 Use plan-creation-swarm to turn this exact-digest pair-ready specification/program-design result into an implementation plan.

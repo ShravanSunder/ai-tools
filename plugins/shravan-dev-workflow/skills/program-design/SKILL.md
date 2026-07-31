@@ -1,6 +1,6 @@
 ---
 name: program-design
-description: Use when defining or revising structural How—the internal architecture—against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/recovery, concurrency/consistency, compatibility/cutover, trust boundaries, or proof seams. Not for authoring Why/What, review-only requests, implementation task planning, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-creation-swarm run.
+description: Use when defining or revising structural How—the internal architecture—against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/recovery, concurrency/consistency, compatibility/cutover, trust boundaries, or proof seams. Not for authoring Why/What, review-only requests, implementation task planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Program Design

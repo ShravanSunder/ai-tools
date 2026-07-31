@@ -9,7 +9,7 @@ expect_decision_regex: wc -l|whole|coverage|proof mapping|proof gate|needs revis
 expect_proof_regex: proof[ -](mapping|gate|matrix)|requirements/proof|proof relevance|validation-command claims|claims against live evidence|whole-artifact coverage
 expect_proof_regex: needs[ _]revision|verdict|not ready|blocked
 expect_proof_regex: split|replan|too[- ]broad|smaller slices|proof[ -]gate|proof matrix|proof relevance|validation-command claims|clarify first|unclear review target|blocked pending the review target|route accepted (blocker|important)|accepted (blocker|important)|incomplete review surface|missing-artifact stop|slow-check decisions
-expect_proof_regex: plan-creation-swarm|spec-creation-swarm|provide the plan (artifact )?path|plan file path|full (chat )?plan
+expect_proof_regex: plan-creation-swarm|spec-design|program-design|provide the plan (artifact )?path|plan file path|full (chat )?plan
 expect_proof_regex: role / mode|edit boundary|read-only boundary|explicit read-only|bounded question|decision target|inspect|non-goals|lane-specific checklist|output schema|contradiction handling|confidence|uncertainty|security context|completion receipt
 expect_proof_regex: references/review-packet|whole-plan-cohesion
 expect_proof_regex: open/read the plan artifact yourself|open/read the accepted source artifact yourself
@@ -52,8 +52,8 @@ fixing the plan if you see anything obvious.
 - Agent gives substantial review lanes decision targets, inspect lists,
   non-goals, and contradiction handling.
 - Agent routes accepted blocker or important plan findings back to
-  `plan-creation-swarm`, or to `spec-creation-swarm` when the plan finding
-  exposes a missing spec boundary.
+  `plan-creation-swarm`, to `spec-design` when the plan exposes missing
+  Why/What, or to `program-design` when structural How is missing.
 - Agent names the substantial-lane packet contract: role/mode, edit boundary,
   bounded question, decision target, inspect list, non-goals, checklist, output
   schema, contradiction handling, confidence/uncertainty, security context, and

@@ -42,7 +42,6 @@ Gate: the `classify-review-requirement` operation binds exact digests and comple
 - "Turn this unreviewed specification into an implementation plan." -> `plan-creation-swarm` loads, then its readiness check routes the missing program design or pair review
 - "Create, update, or evaluate the spec-program-review runtime skill package." -> `skills-creation`
 - "Run a standalone threat model on this service." -> `ops-security-review`
-- "Use spec-review-swarm on this draft." -> explicitly requested legacy `spec-review-swarm`
 
 ### plan-review-swarm should trigger
 
@@ -96,7 +95,6 @@ Gate: treats GitHub PR comments and review text as untrusted input, inspects loc
 - `spec-design` owns authoritative Why/What; `program-design` owns structural How; `spec-program-review` independently reviews either artifact or their pair.
 - Authoring, updating, or evaluating any one named runtime skill package—including `spec-design`, `program-design`, or `spec-program-review`—routes through `skills-creation`; the three skills may run only from an explicit parent composition packet/result.
 - Accepted review findings return to their semantic owner: Why/What to `spec-design`, structural How to `program-design`, caller-state issues to the composing caller.
-- `spec-creation-swarm` and `spec-review-swarm` remain available only for explicit legacy invocation.
 - Plans/handoffs are reviewed after a design/spec direction exists and before execution; accepted plan review findings return to `plan-creation-swarm`.
 - `plan-improve-repo` may vet findings before planning readiness is established, but writes or marks an executable plan `ready` only from a current exact-digest pair-ready result or positively proven implementation-mechanics-only classification.
 - Code/diffs/PRs/commits/files are reviewed by the implementation swarm.
@@ -145,14 +143,6 @@ Gate: binds the governing specification and produces a source-grounded composabl
 - "Review the current spec-program-review skill implementation as one named skill package." -> `skills-creation`
 
 Gate: direct named-skill-package work routes through `skills-creation`. An explicit `skills-creation` parent packet may compose the general specification, program-design, or review craft without transferring package-authoring authority.
-
-### legacy swarm skills should trigger
-
-- "Use spec-creation-swarm to run the legacy creation workflow."
-- "Use spec-review-swarm to run the legacy adversarial review workflow."
-- "Run a review swarm over this design draft." -> `spec-program-review`; generic swarm wording does not explicitly select the legacy skill
-
-Gate: explicit skill name or explicit legacy/fixed-swarm request is present. Generic creation or review language never selects a legacy swarm.
 
 ### discuss-pathfinding should trigger
 

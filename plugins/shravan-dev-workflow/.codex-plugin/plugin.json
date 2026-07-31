@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.7.0",
-  "description": "Shravan's development workflow plugin with goal orchestration, research, authoritative spec design, structural program design, independent spec/program review, retained legacy spec swarms, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
+  "version": "1.7.1",
+  "description": "Shravan's development workflow plugin with goal orchestration, research, authoritative spec design, structural program design, independent spec/program review, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -66,7 +66,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Spec/program design, review, planning, implementation, operations, agents, and TUI workflows",
-    "longDescription": "Use Shravan Dev Workflow to define authoritative Why/What with spec-design, turn settled obligations into structural How with program-design, and independently review either artifact or their pair with spec-program-review before planning. The explicit-invocation legacy spec-creation-swarm and spec-review-swarm remain available. The plugin also gathers source-grounded evidence, packages handoffs, creates and reviews implementation plans, executes plans, reviews implementations, finishes PRs, orchestrates goals and subordinate agents, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
+    "longDescription": "Use Shravan Dev Workflow to define authoritative Why/What with spec-design, turn settled obligations into structural How with program-design, and independently review either artifact or their pair with spec-program-review before planning. The plugin also gathers source-grounded evidence, packages handoffs, creates and reviews implementation plans, executes plans, reviews implementations, finishes PRs, orchestrates goals and subordinate agents, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
