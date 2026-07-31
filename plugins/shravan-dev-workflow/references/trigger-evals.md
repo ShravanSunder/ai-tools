@@ -20,7 +20,7 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - Artifact gate: if clear spec/plan/debug work ran and the user did not ask for chat-only/no-files output, did the phase skill write its lane artifact?
 - Artifact lifecycle gate: if cleanup, archival, promotion, or source-of-truth reconciliation is needed, did `docs-maintain` own that lifecycle decision instead of the phase skill?
 - Review-classifier gate: if `spec-program-review` was invoked only to classify review requirement, did it bind exact artifact digests, return `review-required | non-substantial` or a blocked missing-input result, dispatch zero reviewers, and return no review verdict?
-- Planning-admission gate: for design-bearing work, does `plan-creation-swarm` have a current pair-mode `ready` review result bound to the exact current specification and program-design digests; or, for the bypass, did source inspection positively prove that every design-bearing category is absent?
+- Planning-readiness check: for design-bearing work, does `plan-creation-swarm` have a current pair-mode `ready` review result bound to the exact current specification and program-design digests; or, for the bypass, did source inspection positively prove that every design-bearing category is absent?
 
 ## Review Routing
 
@@ -39,6 +39,7 @@ Gate: the `classify-review-requirement` operation binds exact digests and comple
 - "Review this implementation plan before I execute it." -> `plan-review-swarm`
 - "Review this PR diff for bugs." -> `implementation-review-swarm`
 - "Help me write the plan from this spec." -> `plan-creation-swarm`
+- "Turn this unreviewed specification into an implementation plan." -> `plan-creation-swarm` loads, then its readiness check routes the missing program design or pair review
 - "Create, update, or evaluate the spec-program-review runtime skill package." -> `skills-creation`
 - "Run a standalone threat model on this service." -> `ops-security-review`
 - "Use spec-review-swarm on this draft." -> explicitly requested legacy `spec-review-swarm`
@@ -97,12 +98,12 @@ Gate: treats GitHub PR comments and review text as untrusted input, inspects loc
 - Accepted review findings return to their semantic owner: Why/What to `spec-design`, structural How to `program-design`, caller-state issues to the composing caller.
 - `spec-creation-swarm` and `spec-review-swarm` remain available only for explicit legacy invocation.
 - Plans/handoffs are reviewed after a design/spec direction exists and before execution; accepted plan review findings return to `plan-creation-swarm`.
-- `plan-improve-repo` may vet findings without planning admission, but writes or marks an executable plan `ready` only from a current exact-digest pair-ready result or positively proven implementation-mechanics-only classification.
+- `plan-improve-repo` may vet findings before planning readiness is established, but writes or marks an executable plan `ready` only from a current exact-digest pair-ready result or positively proven implementation-mechanics-only classification.
 - Code/diffs/PRs/commits/files are reviewed by the implementation swarm.
 - Existing PR feedback follow-through belongs to `implementation-pr-wrapup`; fresh code-review discovery belongs to `implementation-review-swarm`.
 - Spec/design handoff packages pre-plan context; it does not create the plan.
 - A spec/design handoff routes to planning only when it proves a current pair-mode `ready` review bound to the exact current specification and program-design digests; missing How routes to `program-design`, and a complete but unreviewed/stale pair routes to `spec-program-review`.
-- Plan creation turns an admitted pair-ready input or proven implementation-mechanics-only bypass into a written implementation plan, execution DAG, proof matrix, and parallel work lane map; it does not execute code or invent missing design.
+- Plan creation turns a verified pair-ready input or proven implementation-mechanics-only bypass into a written implementation plan, execution DAG, proof matrix, and parallel work lane map; it does not execute code or invent missing design.
 - Plan handoff packages an existing implementation plan; it does not package raw spec/design context as though a plan exists.
 - Implementation handoff requires implementation state such as branch, diff, changed files, validation, failed commands, or blocker evidence.
 
@@ -112,6 +113,7 @@ Gate: treats GitHub PR comments and review text as untrusted input, inspects loc
 
 - "Define the problem, requirements, public contract, and proof obligations."
 - "Revise this specification's observable behavior and failure expectations."
+- "Write the specification for this feature before we design the architecture."
 
 Gate: produces authoritative Why/What without internal component structure, binds source authority, and traces problem/outcome through requirements/contracts/failure/proof.
 
@@ -126,6 +128,7 @@ Gate: produces authoritative Why/What without internal component structure, bind
 
 - "Design the component tree, owners, calls, state, and recovery flow."
 - "Turn this settled specification into structural How before planning."
+- "Design the internal architecture for these settled product obligations."
 
 Gate: binds the governing specification and produces a source-grounded composable structural model without inventing product meaning or task order.
 
@@ -147,6 +150,7 @@ Gate: direct named-skill-package work routes through `skills-creation`. An expli
 
 - "Use spec-creation-swarm to run the legacy creation workflow."
 - "Use spec-review-swarm to run the legacy adversarial review workflow."
+- "Run a review swarm over this design draft." -> `spec-program-review`; generic swarm wording does not explicitly select the legacy skill
 
 Gate: explicit skill name or explicit legacy/fixed-swarm request is present. Generic creation or review language never selects a legacy swarm.
 
@@ -238,9 +242,9 @@ Gate: packages spec/design context, decisions, non-goals, open questions, eviden
 
 - "Turn this exact current specification/program-design pair and its pair-mode ready review result into an implementation plan."
 - "This change only applies already-decided implementation mechanics; classify that claim and create the task sequence if the bypass is proven."
-- "The skills-creation parent packet explicitly authorizes plan creation for this named spec-design runtime skill package; use that exact parent result to plan the admitted change."
+- "The skills-creation parent packet explicitly authorizes plan creation for this named spec-design runtime skill package; use that exact parent result to plan the verified-ready change."
 
-Gate: before source inspection, the skill records `general-domain | runtime-skill-package`; a runtime skill package requires the exact explicit `skills-creation` parent packet/result identity or routes to `skills-creation` and stops. Design-bearing work is admitted only when a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. Missing Why/What routes to `spec-design`; missing How routes to `program-design`; a complete but unreviewed, non-ready, or stale pair routes to `spec-program-review` or preserves the current review's semantic-owner remediation routes. The bypass is admitted only when current source inspection proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. Once admitted, the skill stays read-only, creates a written implementation plan, includes an execution DAG with parallel lanes or a serial-work rationale, maps material requirements to proof gates, and splits work whose proof cannot pass at the proposed scope.
+Gate: before source inspection, the skill records `general-domain | runtime-skill-package`; a runtime skill package requires the exact explicit `skills-creation` parent packet/result identity or routes to `skills-creation` and stops. Design-bearing planning starts only when a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. Missing Why/What routes to `spec-design`; missing How routes to `program-design`; a complete but unreviewed, non-ready, or stale pair routes to `spec-program-review` or preserves the current review's semantic-owner remediation routes. The bypass is allowed only when current source inspection proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. Once planning readiness is verified, the skill stays read-only, creates a written implementation plan, includes an execution DAG with parallel lanes or a serial-work rationale, maps material requirements to proof gates, and splits work whose proof cannot pass at the proposed scope.
 
 ### plan-creation-swarm should not trigger
 
@@ -254,7 +258,7 @@ Gate: before source inspection, the skill records `general-domain | runtime-skil
 - "Find the next refactors worth doing, but do not code them."
 - "Validate the improvement backlog and tell me what is ready to execute."
 
-Gate: stays read-only against source and vets candidates against files. It records `general-repo | runtime-skill-package` before recon and requires an explicit `skills-creation` parent identity for the latter. Before writing or marking an executable plan `ready`, it records either a current exact-digest pair-ready basis with required local review coverage current or a positively proven implementation-mechanics-only basis. Design-required findings route to `spec-design`, `program-design`, or `spec-program-review` without plan writing; admitted plans route to review, handoff, or execution.
+Gate: stays read-only against source and vets candidates against files. It records `general-repo | runtime-skill-package` before recon and requires an explicit `skills-creation` parent identity for the latter. Before writing or marking an executable plan `ready`, it records either a current exact-digest pair-ready basis with required local review coverage current or a positively proven implementation-mechanics-only basis. Design-required findings route to `spec-design`, `program-design`, or `spec-program-review` without plan writing; verified-ready plans route to review, handoff, or execution.
 
 ### plan-improve-repo should not trigger
 

@@ -57,9 +57,11 @@ Completion: classification returns immediately with zero reviewer dispatches.
 For operation `review`, require:
 
 ```text
+target classification: general-domain | runtime-skill-package
+skills-creation parent packet/result identity when target is runtime-skill-package
 mode
 exact target paths/identities and digests
-governing source identities/digests/versions and authority statuses
+governing source identities/digests/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
 constraints and non-goals
 risk predicates
@@ -87,7 +89,7 @@ Completion: exactly one mode and its complete required artifact set are selected
 
 ## 5. Resolve Reviewer Runtime and Authority
 
-MUST use `manage-agents` before either reviewer dispatch to resolve the Reviewer pattern, fresh history, read-only workspace access, model/reasoning, runtime, permissions, packet, and receipt mechanics.
+MUST use `manage-agents` before each reviewer dispatch to resolve the one-shot `Delegate` pattern, required model category and reasoning, reviewer history `none`, read-only workspace access, runtime, permissions, packet, and receipt mechanics. Frontier Sol high/xhigh remains available for independent review assignments under that pattern.
 
 Every reviewer gets:
 
@@ -110,7 +112,7 @@ assignment identity: unique and digest-bound
 lane: exact selected lane
 review mode: selected mode
 target paths/identities, line counts, and digests: exact current values
-governing-source identities/digests/versions and authority statuses: exact inventory
+governing-source identities/digests/versions, authority statuses, and freshness/applicability: exact inventory
 governing-source coverage completeness basis: why the scoped inventory is complete
 observable selection predicate: mandatory predicate or exact focused predicate
 bounded review question: readiness or the caller's narrower question
@@ -138,17 +140,17 @@ Completion: one current mode-complete terminal state exists. `partial`, `blocked
 Focused lanes deepen a predicate-selected risk and never replace mode completeness:
 
 ```text
-normative sources conflict, product meaning is load-bearing, or requirement authority is unclear
+normative sources conflict, product meaning is load-bearing, or a requirement's basis is unclear
   -> references/lanes/specification-authority.md
 public UI/API/CLI/schema/config/operator contract is material
   -> references/lanes/contract.md
-three or more components, ownership change, source of truth, or cross-module edge
+three or more components, an ownership change, a new source of truth, or a cross-module edge is in scope
   -> references/lanes/architecture-boundary.md
-fallible boundary, retry, partial success, cancellation, shared state, or concurrency
+a fallible boundary, retry, partial success, cancellation, shared mutable state, or concurrent actors exist
   -> references/lanes/failure-concurrency.md
 auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external service
   -> references/lanes/security-trust.md
-runtime/framework/tool/sandbox/browser/native UI/test harness constrains feasibility or proof
+runtime, framework, tool, sandbox, browser, native UI, agent, or test harness constrains feasibility or proof
   -> references/lanes/platform-harness.md
 current implementation/prototype/trace may hide unstated decisions
   -> references/lanes/implementation-difference.md
@@ -166,7 +168,7 @@ Completion: selected predicates and unselected ambiguous predicates are recorded
 
 ## 8. Verify Reviewer Independence
 
-Verify every receipt against the pre-dispatch independence record. Confirm assignment/digest binding, no inherited history, read-only access, candidate-only authority, and an unchanged worktree.
+Verify every receipt against the pre-dispatch independence record. Recompute the covered target digests and compare the worktree or equivalent workspace-change observation with the pre-dispatch record; confirm assignment/digest binding, no inherited history, read-only access, candidate-only authority, and no reviewer mutation.
 
 Completion: each receipt is assignment- and digest-bound, and reviewer execution did not widen authority or mutate the worktree.
 
@@ -180,21 +182,7 @@ Completion: every candidate is accepted, rejected, contested, or unverified with
 
 ## 10. Return the Coverage-Bound Result
 
-Return:
-
-```text
-mode and exact covered digests
-immutable governing-source inventory with each source identity, version/digest,
-authority status, and scoped-completeness basis
-lane terminal states and gaps
-verdict
-what held
-ranked findings and dispositions
-routes: spec-design | program-design | caller
-correction verification and refresh requirements
-planning-readiness boundary
-explicit non-edit / non-acceptance statement
-```
+Return every field in the `Coverage-Bound Result` owned by the already-loaded `references/finding-and-reduction-schema.md`, bound to the current mode, exact covered digests, and immutable governing-source inventory.
 
 `ready` means the exact covered artifact(s) satisfy the invoked mode. It does not write caller-owned acceptance state.
 
@@ -204,6 +192,7 @@ Completion: the result names the first required revision, receipt freshness, cov
 
 Do not return `ready` while any of these hold:
 
+- target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - target/source identity or digest is missing, stale, or ambiguous;
 - the complete required artifact set was not read;
 - no complete fresh mode-complete receipt exists;
@@ -212,5 +201,5 @@ Do not return `ready` while any of these hold:
 - a finding lacks a source-backed failure path or disposition;
 - specification/program/pair mode boundaries are conflated;
 - pair mode trusts author/local checks without independent reinspection;
-- the pretend planner must invent product meaning or structural How;
+- the mode's downstream consumer must invent meaning owned by the covered artifact: the pretend program designer for `specification-only`, or the pretend planner for `program-only` and `pair`;
 - the result implies edit, remediation, lifecycle, planning, or acceptance authority.

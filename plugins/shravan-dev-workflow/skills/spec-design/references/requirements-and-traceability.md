@@ -62,7 +62,7 @@ For repeated requests with the same idempotency key and equivalent payload,
 the service must return the original outcome without repeating the external side effect.
 ```
 
-The technology-name test: if a materially different implementation could satisfy the same observable obligation, the technology name is normally structural How rather than requirement meaning.
+The technology-name test: if a materially different implementation could satisfy the same observable obligation, the technology name is structural How rather than requirement meaning unless an authorized contract makes that technology normative.
 
 Replace `support`, `handle`, `robust`, `easy`, `secure`, `fast`, and similar adjectives with the behavior that distinguishes pass from fail.
 

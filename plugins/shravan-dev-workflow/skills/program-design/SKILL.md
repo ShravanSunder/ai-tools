@@ -1,6 +1,6 @@
 ---
 name: program-design
-description: Use when defining or revising structural How against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/recovery, concurrency/consistency, compatibility/cutover, trust boundaries, or proof seams. Not for authoring Why/What, review-only requests, implementation task planning, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-creation-swarm run.
+description: Use when defining or revising structural How—the internal architecture—against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/recovery, concurrency/consistency, compatibility/cutover, trust boundaries, or proof seams. Not for authoring Why/What, review-only requests, implementation task planning, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-creation-swarm run.
 ---
 
 # Program Design
@@ -11,6 +11,9 @@ It explains how authoritative obligations become owned runtime behavior:
 
 ```text
 requirement
+  -> current-system evidence and constraint degree
+  -> structural crux and credible alternatives
+  -> selected target composition
   -> responsible target component
   -> owned truth / decision
   -> interface contract
@@ -47,7 +50,7 @@ decision-needed
 deferred
 ```
 
-A `locally-ready` result includes the program-design identity/digest; governing specification identity/digest; an immutable source inventory containing every current-system, constraint, platform, and external source identity, version or digest, authority status, and scoped-completeness basis; structural model; requirement-realization inventory; author self-check; required independent local-review coverage; debt/gaps; and explicit non-acceptance.
+A `locally-ready` result includes the program-design identity/digest; governing specification identity/digest; an immutable source inventory containing every current-system, constraint, platform, and external source identity, version or digest, authority status, freshness/applicability, and scoped-completeness basis; structural model; requirement-realization inventory; author self-check; required independent local-review coverage; debt/gaps; and explicit non-acceptance.
 
 Produce terminal labels by observable condition:
 
@@ -71,7 +74,7 @@ Completion: governing digest, requirement inventory, non-goals, and route-back g
 
 ### 2. Build the current-system model from sources
 
-MUST load `references/current-system-model.md` to trace current owners, calls, state, flows, failures, platform constraints, and proof paths, and return the source-grounded current-system model plus inference gaps.
+MUST load `references/current-system-model.md` to reconstruct representative execution paths from real entrypoints through named callers/callees, owners, state mutations or side effects, and observable results/errors; use runtime stack traces, logs, traces, tests, and source navigation when available to validate the dynamic path. Return the source-grounded current-system model, normalized current call paths, and inference gaps.
 
 IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`. IF delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Delegation contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
 
@@ -125,7 +128,7 @@ Completion: every write path reaches one owner and illegal transitions have defi
 
 Trace each material requirement from consumer to owner and observable outcome. Include async/background, event, persistence, cache, and proof-harness paths when they alter semantics.
 
-Using the already-loaded `references/state-calls-and-flows.md`, return the state transitions, end-to-end control/data/call flows, and compatibility/migration/cutover phase models.
+Using the already-loaded `references/state-calls-and-flows.md`, return the state transitions, source-anchored target call graph or sequence from entrypoint to effect and result/error, end-to-end control/data flows, and compatibility/migration/cutover phase models.
 
 Completion: there is no “and then magic happens” hop; migration phases each name authority, version skew, transition, rollback/reconciliation, failure, and proof.
 
@@ -145,7 +148,7 @@ Completion: every material interleaving preserves invariants or has defined conf
 
 ### 12. Realize cross-cutting obligations
 
-MUST load `references/cross-cutting-realization.md` to map each applicable quality obligation to a structural owner, mechanism/boundary, failure or degradation behavior, and proof seam.
+MUST load `references/cross-cutting-realization.md` to map each applicable quality obligation and return its structural owner, mechanism/boundary, failure or degradation behavior, proof seam, or reasoned not-applicable result.
 
 Standalone security scans remain separate; ordinary trust-boundary architecture remains program design.
 
@@ -163,6 +166,8 @@ Completion: every material requirement has an observable seam and every load-bea
 
 MUST load `references/artifact-and-self-review.md` to select the smallest useful design views, consume and verify the requirement/design/proof trace, prune no-op mechanisms, and return the artifact decision, artifact identity/digest, trace-navigation result, and pruned elements.
 
+Render each selected view in a form the destination supports: prefer Mermaid in durable Markdown when the repository renders it, use `tui-presentation` for chat or terminal explanation, use tables for dense ownership or transition data, and fall back to readable plain text when no renderer exists.
+
 Section writers/modelers may express only already selected requirements, components, ownership, interfaces, state/failure policies, and claims. Unmapped needs return as gaps.
 
 Completion: each design element serves an obligation, constraint, failure policy, or proof need.
@@ -175,15 +180,17 @@ Completion: the current digest has exact passes and gaps. Self-check is never in
 
 ### 16. Obtain fresh local review when required
 
-Call `spec-program-review` using `classify-review-requirement` with: requested future mode `program-only`; exact program-design and governing-specification identities/digests; scope and claimed semantic effect; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the digest-bound `review-required | non-substantial` result, decision branch, basis, source coverage, and caller requirement.
+Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; exact program-design and governing-specification identities/digests; scope and claimed semantic effect; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the digest-bound `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
 
-When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority. Route Why/What findings to `spec-design`; route How findings back here. Edits invalidate prior coverage.
+When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route Why/What findings to `spec-design`; route How findings back here. Edits invalidate prior coverage.
 
 Completion: current independent review covers both digests, or the exact non-substantial basis/block is recorded.
 
 ### 17. Return the local result
 
-Return artifact and governing-specification identities/digests; immutable source inventory with identity, version/digest, authority status, and scoped-completeness basis; structural and requirement-realization maps; self-check; independent review; debt/gaps; and non-acceptance.
+Return artifact and governing-specification identities/digests; immutable source inventory with identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis; structural and requirement-realization maps; self-check; independent review; debt/gaps; and non-acceptance.
+
+IF returning a substantial program design in chat, use `tui-presentation` to render the selected component, call, state, or failure views before the compact result summary. The durable artifact remains the source of truth.
 
 Completion: the caller can request pair review through `spec-program-review` or supply the exact missing specification decision/evidence.
 
@@ -194,12 +201,13 @@ Use a view only when it exposes a load-bearing relationship:
 | View | Use when | Must expose |
 | --- | --- | --- |
 | component tree | three or more components/levels or contested ownership | responsibility, owner, consumers, reason to change |
-| call graph/sequence | control crosses owners or async boundaries | direction, sync/async, result/error |
+| call graph/sequence | control crosses owners or async boundaries | entrypoint-to-effect caller/callee chain, sync/async/event edges, result/error path, evidence anchors |
 | proof call graph | proof harness differs from production path | seam, real/fake boundary, observation |
 | state machine/table | lifecycle/order changes correctness | owner, states, transitions, guards, illegal paths |
 | data/event flow | data crosses storage/process/service boundaries | authority, transformations, persistence/privacy |
 | failure/recovery flow | partial failure, retry, or compensation exists | detection, containment, retry, cleanup, recovery owner |
 | trust-boundary view | untrusted actors/input/secrets/processes exist | assets, entry points, policy owner, enforcement, containment |
+| requirement/design/proof trace | multiple requirements or components interact | realization owner and proof seam per requirement |
 
 Paths are valid current-source or traceability anchors; the design must not become a future task inventory.
 
@@ -212,7 +220,7 @@ current sources constrain ownership/calls/state/proof and the parent lacks a mod
   -> references/lanes/current-system-explorer.md
 one bounded external question could change feasibility/structure/proof
   -> references/lanes/external-prior-art-platform.md
-selected claims need one component/call/state/failure view
+selected claims need one component/call/state/data/failure view
   -> references/lanes/component-flow-modeler.md
 a named crux has at least two credible structural choices
   -> references/lanes/alternatives-advisor.md
@@ -224,22 +232,7 @@ one section has fully mapped meaning and only needs expression
 
 Before any optional dispatch, MUST use `manage-agents` to resolve the agent pattern, exact Sol model/reasoning when constrained by the caller, runtime, history, workspace access, permissions, packet, and receipt mechanics.
 
-IF a predicate holds and delegation is useful, dispatch the selected lane under this complete caller-owned packet contract:
-
-```text
-lane and assignment identity: exact selected lane plus unique assignment
-governing specification identity/digest: always required
-program-design identity/digest: current artifact identity/digest when it exists;
-                                otherwise `not-yet-produced` plus current stage
-selection predicate: exact observed predicate
-prerequisites and dependency state: exact satisfied/missing lane prerequisites
-bounded question and source scope: exact question plus inspectable sources
-settled requirements/decisions/claims: only already authorized/selected meaning
-mission and maximum authority: copied from the selected lane reference
-non-goals: excluded work, especially meaning invention and final integration
-expected evidence/model/advice/prose return: selected-lane return shape
-stop condition: copied or narrowed from the selected lane reference
-```
+IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared packet and receipt contract. Dispatch the selected lane by instantiating every packet field from that contract with the exact assignment, governing and current artifact state, observed predicate and prerequisites, bounded question and sources, settled meaning, selected-lane authority, non-goals, expected return, and stop condition.
 
 The subagent loads `references/lanes/lane-schema.md` and the exact selected lane path named above.
 
@@ -253,9 +246,13 @@ Program design settles owners, boundaries, interfaces, state, flows, recovery/co
 
 Do not return `locally-ready` while any of these hold:
 
+- target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - authoritative Why/What is missing, stale, conflicting, or silently rewritten;
 - target structure was selected without current-system evidence or a named greenfield basis;
+- a material structural choice lacks credible alternatives, explicit tradeoffs, accepted debt and payer, or falsifiers/revisit signals;
 - a material component lacks one owner, reason to change, consumer, or behavioral interface;
+- a material behavior with current implementation lacks a source-grounded current call path, or any material behavior lacks a target entrypoint-to-effect call graph or sequence with result/error return;
+- an applicable Required View was selected but not rendered in an inspectable form, or a substantial design with contested ownership or cross-owner control remains prose-only;
 - state, flow, failure/recovery, concurrency, migration, trust, or proof semantics are applicable but undefined;
 - a delegated writer/modeler originated design meaning;
 - planning would still need to invent an owner, interface, state/failure policy, trust control, or proof seam;

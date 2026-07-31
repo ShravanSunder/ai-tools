@@ -1,31 +1,33 @@
 ---
 name: plan-creation-swarm
-description: Use when turning a current specification/program-design pair with a pair-ready spec-program-review result bound to the exact current digests, or an input proven implementation-mechanics-only, into a written implementation plan. Not for directly planning changes to one named runtime skill package without explicit skills-creation composition.
+description: Use when creating a written implementation plan from a specification, program design, or accepted design context. Start design-bearing planning only with a current pair-ready spec-program-review result bound to the exact current digests; a positively proven implementation-mechanics-only input retains the narrow bypass. Not for directly planning changes to one named runtime skill package without explicit skills-creation composition.
 ---
 
 # Plan Creation Swarm
 
-Create an implementation plan from an admitted planning input. Design-bearing work is admitted only when a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. A narrow implementation-mechanics-only route is available only after positive classification proves that no design-bearing decision exists. This is a planning boundary: it turns authoritative Why/What plus settled structural How into "how we will change the repo and prove it." It does not redefine product intent, rewrite requirements, invent structural How, or execute the plan.
+Create an implementation plan only after verifying that planning can start. Design-bearing planning starts only when a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. A narrow implementation-mechanics-only route is available only after positive classification proves that no design-bearing decision exists. This boundary turns authoritative Why/What plus settled structural How into "how we will change the repo and prove it." It does not redefine product intent, rewrite requirements, invent structural How, or execute the plan.
 
 The reviewed pair defines meaning and structure; this skill defines sequence. It turns current requirements, design decisions, and proof seams into ordered tasks, parallel work lanes, disjoint write scopes, integration gates, validation gates, and evidence requirements. Non-trivial plans carry a requirements/proof matrix; tasks whose required proof cannot pass at their size are split before execution.
 
-## Input Admission Gate
+## Entry And Planning Admission
 
-Before source inspection or planning admission, record `target classification: general-domain | runtime-skill-package`.
+Verify the design is ready before source inspection or plan writing.
+
+Before source inspection or planning, record `target classification: general-domain | runtime-skill-package`.
 
 IF the request directly plans changes to one named runtime skill package, require the exact explicit `skills-creation` parent packet/result identity authorizing this composition. Without it, return the `skills-creation` route and stop before source inspection.
 
-Then classify every admitted request before planning:
+Then classify the request before planning:
 
-- `current-pair-ready`: the current specification and program-design digests are known; required local review coverage is current; a pair-mode `spec-program-review` result is `ready` and covers those exact digests; accepted findings are corrected and covered by refreshed review; and no blocking decision or evidence gap remains. Admit the design-bearing work.
+- `current-pair-ready`: the current specification and program-design digests are known; required local review coverage is current; a pair-mode `spec-program-review` result is `ready` and covers those exact digests; accepted findings are corrected and covered by refreshed review; and no blocking decision or evidence gap remains. Planning may start.
 - `missing-why-what`: authoritative consumer, outcome, obligation, observable contract, constraint, failure expectation, or proof modality is missing or unsettled. Route to `spec-design` and stop planning.
 - `missing-how`: structural ownership, boundary, interface, state, flow, failure/recovery policy, concurrency/consistency, compatibility realization, trust control, or proof seam is missing or unsettled. Route to `program-design` and stop planning.
 - `unreviewed-or-stale-pair`: the specification and program design are complete, but pair review is absent, non-ready, stale, or bound to different digests. Route to `spec-program-review` and stop planning. If a current non-ready review contains findings, preserve its semantic-owner routes rather than treating another review as remediation.
-- `implementation-mechanics-only`: admit the bypass only when current source inspection positively proves that the work requires no new product obligation, owner or boundary, interface, state semantic, failure or recovery policy, concurrency or consistency decision, compatibility realization, trust control, or proof seam. Record the evidence and the result; a caller label, small diff, or lack of an existing design artifact is not proof.
+- `implementation-mechanics-only`: allow the bypass only when current source inspection positively proves that the work requires no new product obligation, owner or boundary, interface, state semantic, failure or recovery policy, concurrency or consistency decision, compatibility realization, trust control, or proof seam. Record the evidence and the result; a caller label, small diff, or lack of an existing design artifact is not proof.
 
 Any remaining semantic uncertainty is design-bearing. Do not downgrade it to implementation mechanics to begin planning.
 
-Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded before source inspection; the planning basis is either admitted with its exact evidence identity or routed to its semantic owner before plan writing.
+Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded before source inspection; the planning basis is either verified ready with its exact evidence identity or routed to its semantic owner before plan writing.
 
 ## Core Rules
 
@@ -55,7 +57,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 
 ## Workflow
 
-1. Classify and admit the input:
+1. Classify the input and decide whether planning can start:
    - record `general-domain | runtime-skill-package` and, for a runtime skill package, verify the exact explicit `skills-creation` parent packet/result identity before source inspection;
    - verify the current specification and program-design identities/digests plus the exact pair-mode `ready` review result; or
    - prove and record the `implementation-mechanics-only` bypass;
@@ -161,7 +163,7 @@ If the work is genuinely serial, say so and replace the lane fan-out with a seri
 
 Return:
 
-- planning admission result: exact current pair digests and pair-review identity/result, or the evidence-backed implementation-mechanics-only classification
+- planning-readiness result: exact current pair digests and pair-review identity/result, or the evidence-backed implementation-mechanics-only classification
 - target classification and, for a runtime skill package, the exact explicit `skills-creation` parent packet/result identity
 - source coverage
 - implementation plan path or chat-only plan

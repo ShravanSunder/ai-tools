@@ -54,6 +54,8 @@ Use applicable probes:
 - proof break;
 - pretend planner.
 
+Use the downstream consumer for the selected mode: a pretend program designer for `specification-only`, and a pretend planner for `program-only` or `pair`. The consumer may decide only its downstream-owned work; a required invention of meaning owned by the reviewed artifact is a readiness failure.
+
 After the full pass, restate the selected model in three sentences. Inability to do so is evidence of an incoherent mental model, not automatically a prose finding.
 
 ## Finding Calibration

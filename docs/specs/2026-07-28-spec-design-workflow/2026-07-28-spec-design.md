@@ -39,6 +39,15 @@ evidence and authority
 
 Every `MUST` needs a legitimate basis. Every requirement needs an observable consequence. Every unresolved product choice stays visible until an authorized source resolves it. Structural implementation choices belong downstream unless they are themselves public constraints.
 
+```mermaid
+flowchart LR
+    authority[Evidence and authority] --> problem[Problem and consumers]
+    problem --> outcome[Intended outcomes]
+    outcome --> requirement[Normative obligations]
+    requirement --> contract[Observable contracts and failures]
+    contract --> proof[Proof obligations]
+```
+
 The specification answers:
 
 - Why does this need to exist or change?
@@ -384,6 +393,8 @@ problem P1
           -> observable contract C1
               -> proof modality V1
 ```
+
+Use visualization to reduce reader effort: prefer Mermaid in durable Markdown when the repository renders it, use `tui-presentation` for chat or terminal explanation, use tables for dense authority or requirement coverage, and fall back to readable plain text when no renderer exists. Keep specification visuals on Why/What relationships—problem, consumer, authority, journey, observable behavior, and requirement-to-proof traceability. Internal component, call, state, and failure-mechanism views belong to `program-design`.
 
 Do not add empty headings for inapplicable concerns. Do not hide normative requirements only inside diagrams, review reports, or prose rationale.
 

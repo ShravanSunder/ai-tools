@@ -35,6 +35,8 @@ backpressure/capacity boundary
 
 Construct a concrete failure or interleaving. “Use retries,” “add a lock,” or “eventual consistency” is not a design until owner, eligibility, invariant, failure consequence, and proof seam are known.
 
+Use a failure/recovery flow when detection, containment, retry, cleanup, compensation, or degraded behavior branches; use a sequence view when actor ordering or interleaving is the risk; use a state machine when retry/recovery lifecycle and illegal transitions are the risk.
+
 Do not invent product failure policy. Route missing externally visible behavior to `spec-design`.
 
 Good: exact timeout-after-side-effect path with duplicate prevention, recovery truth, user-visible outcome, and proof seam.

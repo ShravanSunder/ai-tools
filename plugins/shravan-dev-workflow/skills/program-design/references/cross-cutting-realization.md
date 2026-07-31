@@ -20,6 +20,8 @@ platform compatibility
 
 For security/trust, trace assets, actors, entry points, authentication/authorization decision owner, parsing/validation, secrets, least privilege, misuse containment, auditability, and proof.
 
+Use a trust-boundary view when untrusted actors, inputs, secrets, privilege changes, process boundaries, or external services cross enforcement points. Label the policy owner, enforcement point, assets, and containment boundary rather than drawing a generic network map.
+
 For privacy/data lifecycle/compliance, trace collection/minimization, retention/deletion, residency/export, policy enforcement, audit, failure, and proof.
 
 For reliability/operability, trace isolation, fallback/degradation, health, logs/traces/metrics, operator recovery, and proof.

@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when defining or revising authoritative Why/What, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-creation-swarm run.
+description: Use when defining or revising a specification's authoritative Why/What, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-creation-swarm run.
 ---
 
 # Spec Design
@@ -46,7 +46,7 @@ evidence-blocked
 deferred
 ```
 
-A `locally-ready` result includes the artifact identity and digest; an immutable governing-source inventory containing every source identity, version or digest, authority status, and scoped-completeness basis; the load-bearing decision inventory; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed.
+A `locally-ready` result includes the artifact identity and digest; an immutable governing-source inventory containing every source identity, version or digest, authority status, freshness/applicability, and scoped-completeness basis; the load-bearing decision inventory; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed.
 
 Produce terminal labels by observable condition:
 
@@ -61,7 +61,7 @@ Produce terminal labels by observable condition:
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
-MUST load `references/authority-and-problem-framing.md` for stages 1-2 to classify sources, authority, consumers, the current/desired gap, and unresolved decisions. At this stage, return the artifact boundary, consumer/authority model, and immutable source inventory with exact identity, version/digest, authority status, and scoped-completeness basis.
+MUST load `references/authority-and-problem-framing.md` for stages 1-2 to classify sources, authority, consumers, the current/desired gap, and unresolved decisions. At this stage, return the artifact boundary, consumer/authority model, and immutable source inventory with exact identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis.
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
@@ -139,15 +139,17 @@ Completion: the current digest has a self-check result with exact passes and gap
 
 ### 11. Obtain fresh local review when required
 
-Call `spec-program-review` using its `classify-review-requirement` operation with: requested future mode `specification-only`; the exact current artifact identity/digest; scope and claimed semantic effect; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the digest-bound `review-required | non-substantial` result, decision branch, basis, source coverage, and caller requirement.
+Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the exact current artifact identity/digest; scope and claimed semantic effect; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the digest-bound `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
 
-When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority. Route accepted Why/What findings back here. Any edit invalidates review of the prior digest.
+When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. Any edit invalidates review of the prior digest.
 
 Completion: current independent review covers the digest, or the exact `non-substantial` basis or blocking input is recorded.
 
 ### 12. Return the local result
 
-Return the artifact identity/digest; immutable governing-source inventory with identity, version/digest, authority status, and scoped-completeness basis; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
+Return the artifact identity/digest; immutable governing-source inventory with identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
+
+IF returning a substantial specification in chat and problem, consumer, authority, journey, or requirement-to-proof relationships are non-obvious, use `tui-presentation` to render only those Why/What relationships. Keep normative meaning in the artifact and route internal component, call, state, or failure-mechanism views to `program-design`.
 
 Completion: the caller can invoke `program-design`, compose the result into caller-owned workflow state, or provide the exact missing decision/evidence without reinterpreting the artifact.
 
@@ -161,9 +163,11 @@ The packet names the exact question, sources, accepted claims when writing, maxi
 
 Do not return `locally-ready` while any of these hold:
 
+- target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - a normative claim lacks authority or an explicit decision gap;
 - the problem, outcome, requirement, contract/failure, and proof chain cannot be traced;
 - unresolved product meaning is disguised as an assumption;
+- a material non-goal is omitted, or an applicable cross-cutting quality lacks an observable obligation or constraint or a reasoned not-applicable result;
 - internal architecture or implementation tasks are presented as requirements without an externally authoritative constraint;
 - a section writer originated meaning;
 - a required independent review is missing, stale, partial, silent, or blocked;

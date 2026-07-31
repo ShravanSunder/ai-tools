@@ -26,6 +26,8 @@ target system
 
 Components are semantic owners, not directories. For UI work, show state-owning containers, pure views, derived state, and integration/effect boundaries.
 
+Use a component tree when hierarchy/composition matters and a topology view when peer boundaries or dependency direction matter more than nesting. Label owners and consumers on the view; do not infer ownership from box position alone.
+
 ## Depth and Ownership
 
 Apply the deletion test: if removing a component makes its complexity disappear rather than move to callers, it is probably pass-through. If callers must learn nearly all its policy, lifecycle, or failure rules, it is shallow.

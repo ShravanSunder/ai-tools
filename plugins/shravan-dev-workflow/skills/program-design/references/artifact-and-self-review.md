@@ -11,7 +11,7 @@ Return in workflow order: first the artifact structure/view selection, artifact 
 Use only views that expose a load-bearing relationship:
 
 - component tree for ownership/composition;
-- sequence/call graph for cross-owner or async control;
+- source-anchored sequence/call graph for cross-owner or async control, normalized from current call-stack/call-path evidence rather than copied as a raw stack trace;
 - proof call graph when harness boundaries differ;
 - state machine/table for lifecycle/order;
 - data/event flow for authority/transformation;
@@ -20,6 +20,19 @@ Use only views that expose a load-bearing relationship:
 - requirement/design/proof trace when relationships are non-obvious.
 
 Diagrams do not replace behavioral interface or failure prose. Paths may anchor current evidence; do not turn the design into a future file/task list.
+
+## Render for the Destination
+
+- Prefer Mermaid for durable Markdown when the repository renders it.
+- Use `tui-presentation` for chat or terminal explanation.
+- Use a table when dense ownership, states, transitions, or comparisons matter more than topology or time.
+- Use readable plain text when no renderer exists.
+
+For a substantial design, lead with the integrated component/ownership view and render each additional view whose predicate fired. Show a representative call or flow view when control crosses owners or async boundaries. The view must preserve the semantic fields selected by the caller; format never excuses a missing owner, edge, state, result/error path, or evidence anchor.
+
+Good: the smallest set of views lets a reader simulate composition, execution, and the riskiest failure.
+
+Bad: prose labeled as a diagram, decorative boxes with no semantic owners, every possible view emitted mechanically, or Mermaid/TUI syntax chosen before the relationship is understood.
 
 ## Simplify
 

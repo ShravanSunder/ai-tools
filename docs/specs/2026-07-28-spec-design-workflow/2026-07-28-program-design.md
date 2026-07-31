@@ -46,6 +46,15 @@ The core test is not “does this architecture sound reasonable?” It is “can
 
 Diagrams are design instruments here. Component trees, call graphs, state machines, and failure flows expose misplaced ownership and hidden coupling before a plan turns them into code tasks.
 
+```mermaid
+flowchart LR
+    specification[Settled Why and What] --> current[Current system evidence]
+    current --> alternatives[Structural crux and alternatives]
+    alternatives --> composition[Target composition and ownership]
+    composition --> execution[Calls, state, failure, and recovery]
+    execution --> proof[Proof seams and integration check]
+```
+
 ## Scope
 
 The skill owns:
@@ -443,6 +452,8 @@ Completion: the caller can request pair review through `spec-program-review`; de
 ## Required Design Views
 
 Use only views that expose a load-bearing relationship. A substantial program design normally needs more than prose, but not every view in every domain.
+
+Render selected views in a form the destination supports: prefer Mermaid in durable Markdown when the repository renders it, use `tui-presentation` for chat or terminal explanation, use tables for dense ownership or transition data, and fall back to readable plain text when no renderer exists. The semantic `Must expose` contract matters more than diagram syntax.
 
 | View | Use when | Must expose |
 | --- | --- | --- |

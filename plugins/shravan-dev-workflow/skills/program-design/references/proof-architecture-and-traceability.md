@@ -29,6 +29,8 @@ true external
 
 State what must be real, what may be replaced through the designed seam, and what observation proves the behavior. A mockable signature without a production-realistic observation path is not proof architecture.
 
+Use a proof call graph when the test or operational harness follows materially different owners or boundaries than production. Show the driver/fixture, real versus replaced boundaries, observation point, and evidence returned; otherwise keep proof on the requirement/design/proof trace.
+
 Choose enforcement class where appropriate:
 
 ```text

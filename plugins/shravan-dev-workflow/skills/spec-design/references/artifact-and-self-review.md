@@ -46,6 +46,8 @@ problem P1
 
 Diagrams may explain relationships but may not be the only home of normative meaning.
 
+When presenting a substantial specification in chat, use `tui-presentation` only for non-obvious problem, consumer, authority, journey, or requirement-to-proof relationships. Prefer Mermaid in durable Markdown when the repository renders it; otherwise use a readable table or plain-text view. Internal component, call, state, and failure-mechanism diagrams belong to `program-design`.
+
 ## Author Self-Check
 
 Re-read the complete artifact and record:

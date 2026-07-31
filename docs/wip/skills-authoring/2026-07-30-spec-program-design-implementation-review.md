@@ -88,7 +88,9 @@ Rejected findings:
 
 Unverified findings: none at the static/source layer.
 
-## Final Fresh Review
+## Baseline Fresh Review
+
+This July 30 receipt is baseline evidence for commit `1bd4339ceab59e9e584227b21db15c33d81ca81a`. It expired when the July 31 remediation changed reviewed behavior text. The current remediation evidence, parent reduction, final completion receipt, and ship decision are recorded in [2026-07-31-spec-program-design-fable5-review-findings.md](2026-07-31-spec-program-design-fable5-review-findings.md).
 
 A fresh read-only ACPX OpenAI Sol review used `gpt-5.6-sol` with adapter-confirmed `reasoning_effort=xhigh`, no inherited authoring conversation, and candidate-only authority.
 
@@ -169,8 +171,8 @@ Authoring basis: user-directed intent grounded in the accepted specifications an
 
 Proof posture: static-only with an explicit user-accepted proof gap.
 
-Pressure tests and behavioral smoke were not run because the harness is not ready and the user explicitly deferred them. No claim is made that model invocation, routing, compaction resistance, stale-source recovery, delegation, or pair-review behavior has been demonstrated at runtime.
+The pressure-test harness exists, but no scenarios were added or updated for these three skills and the user explicitly deferred scenario execution. Scenario authoring and execution remain an accepted open gap. No claim is made that model invocation, routing, compaction resistance, stale-source recovery, delegation, or pair-review behavior has been demonstrated at runtime.
 
-Implementation decision: accepted-to-implement and implemented.
+Implementation decision for the July 30 baseline: accepted-to-implement and implemented.
 
-Ship decision: PR-ready candidate at the static/source layer; not behavior-proven and not released.
+Ship decision for the July 30 baseline: superseded by the July 31 remediation review; not behavior-proven and not released.

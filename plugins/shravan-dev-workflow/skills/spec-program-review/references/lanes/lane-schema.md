@@ -12,7 +12,7 @@ lane: mode-complete-reviewer | specification-authority | contract |
       artifact-navigation
 review mode: specification-only | program-only | pair
 exact target paths/identities, line counts, and digests
-governing-source identities/digests/versions and authority statuses
+governing-source identities/digests/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
 observable selection predicate
 bounded review question

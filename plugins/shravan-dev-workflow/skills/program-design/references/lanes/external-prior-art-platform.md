@@ -16,6 +16,6 @@ Prefer primary sources. Compare:
 
 Good returns borrow/adapt/do-not-borrow with source anchors and fit/conflict evidence. Bad copies an admired pattern without proving transfer.
 
-Stop when the bounded question is answered at the required confidence or source/version uncertainty is explicit.
+Stop when the bounded question satisfies the packet's expected-evidence return or source/version uncertainty is explicit.
 
 Return: source-backed answer, transfer assumptions, candidate implications, conflicts, confidence, and gaps.
