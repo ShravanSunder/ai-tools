@@ -46,7 +46,15 @@ problem P1
 
 Diagrams may explain relationships but may not be the only home of normative meaning.
 
-When presenting a substantial specification in chat, use `tui-presentation` only for non-obvious problem, consumer, authority, journey, or requirement-to-proof relationships. Prefer Mermaid in durable Markdown when the repository renders it; otherwise use a readable table or plain-text view. Internal component, call, state, and failure-mechanism diagrams belong to `program-design`.
+## Apply Required Why/What Views
+
+Consume the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Consume the shared rendering results and reject any view with a missing semantic field, failed visual check, or unresolved fallback.
+
+- Journey maps cite the stable U rows they re-render; the source record remains normative. Good steps express the user's job and observable pain. A screen tour or component name is not a journey.
+- Context diagrams keep the system opaque and place external consumers, stakeholders, surfaces, contracts, and relevant non-consumers around the boundary. Internal components, owners, stores, or enforcement points are structural How and route to `program-design`.
+- Requirement coverage tables expose missing U/P/O/R/C/V links rather than filling gaps with guessed meaning.
+
+Prune a view that adds no decision clarity. View application is complete when every fired predicate has the required number of passed views, each required semantic field is visible, and adding another view would only duplicate an existing relationship.
 
 ## Author Self-Check
 
@@ -60,6 +68,8 @@ Re-read the complete artifact and record:
 - contradictory goals and non-goals;
 - unresolved questions disguised as assumptions;
 - duplicated normative homes;
+- missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
+- journey maps that fail to cite their U rows or context diagrams that cross into internal How;
 - whether the specification spine is readable without review notes.
 
 Bind the result to the artifact digest. Record exact failures, not “needs more detail.”

@@ -111,6 +111,8 @@ Upstream skill collections are tracked in a separate meta-repo so this plugin ca
 
 Keep this directory small. Skill-specific stages, lane contracts, packet shapes, schemas, route-backs, proof rules, and examples remain under the owning skill's `references/`. Maintainer documentation belongs in `plugins/shravan-dev-workflow/docs/`; repository tests and evals belong under `tests/`. Do not preserve forwarding stubs when moving a runtime reference: update every active caller in the same hard cutover and let historical artifacts retain their original paths.
 
+Design-view ownership follows the same split: `shared-references/diagram-rendering-and-fallbacks.md` owns runtime medium selection, fallback, semantic preservation, and visual checks; each design skill's `SKILL.md` owns its view predicates and required semantic fields; `docs/diagram-vocabulary.md` is the maintainer index of tokens, altitude, owners, and consumers.
+
 ## System Observability Ownership
 
 `observability/` owns the shared local OpenTelemetry and Victoria stack. `shravan-dev-workflow:ops-observability-stack` owns agent-facing query and debugging guidance. Do not move this stack into `devfiles`, and do not duplicate Docker Compose, collector, or generic Victoria query docs into app repos.

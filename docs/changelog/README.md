@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-07-31 User Requirements and Design Views](2026-07-31-user-requirements-and-design-views.md)
 - [2026-07-31 Shared Runtime References](2026-07-31-shared-runtime-references.md)
 - [2026-07-31 Retire Legacy Spec Swarms](2026-07-31-retire-legacy-spec-swarms.md)
 - [2026-07-30 Spec And Program Design Routing Cutover](2026-07-30-spec-program-design-routing-cutover.md)

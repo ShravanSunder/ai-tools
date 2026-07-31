@@ -164,13 +164,13 @@ Completion: every material requirement has an observable seam and every load-bea
 
 ### 14. Trace, simplify, and author the artifact
 
-MUST load `references/artifact-and-self-review.md` to select the smallest useful design views, consume and verify the requirement/design/proof trace, prune no-op mechanisms, and return the artifact decision, artifact identity/digest, trace-navigation result, and pruned elements.
+Apply the Required Views predicates. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
 
-Render each selected view in a form the destination supports: prefer Mermaid in durable Markdown when the repository renders it, use `tui-presentation` for chat or terminal explanation, use tables for dense ownership or transition data, and fall back to readable plain text when no renderer exists.
+MUST load `references/artifact-and-self-review.md` with the Required Views decisions and rendering results to consume and verify the requirement/design/proof trace, apply view examples and pruning, and return the artifact decision, artifact identity/digest, trace-navigation result, pruned elements, and exact view gaps.
 
 Section writers/modelers may express only already selected requirements, components, ownership, interfaces, state/failure policies, and claims. Unmapped needs return as gaps.
 
-Completion: each design element serves an obligation, constraint, failure policy, or proof need.
+Completion: each design element serves an obligation, constraint, failure policy, or proof need, and every fired Required View has a passed rendering result with its semantic fields preserved.
 
 ### 15. Run the author integration self-check
 
@@ -253,6 +253,7 @@ Do not return `locally-ready` while any of these hold:
 - a material component lacks one owner, reason to change, consumer, or behavioral interface;
 - a material behavior with current implementation lacks a source-grounded current call path, or any material behavior lacks a target entrypoint-to-effect call graph or sequence with result/error return;
 - an applicable Required View was selected but not rendered in an inspectable form, or a substantial design with contested ownership or cross-owner control remains prose-only;
+- a fired Required View lacks a passed rendering result or any required semantic field was lost in the selected medium;
 - state, flow, failure/recovery, concurrency, migration, trust, or proof semantics are applicable but undefined;
 - a delegated writer/modeler originated design meaning;
 - planning would still need to invent an owner, interface, state/failure policy, trust control, or proof seam;

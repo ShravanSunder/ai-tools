@@ -1,0 +1,43 @@
+# spec-design user roots and Why/What views pressure
+
+scenario_id: spec-design-user-roots-and-views
+skill_under_test: shravan-dev-workflow:spec-design
+mode: fast
+expect_read_only: false
+expect_artifact: true
+expect_decision_regex: U1|P1|O1|R1|C1|V1|journey map|context diagram|requirement coverage table
+expect_proof_regex: authorized|normative-eligible|opaque|semantic|render|fallback|proof obligation
+
+## Shortcut Temptation
+
+The source record mixes authorized and observational rows and has two direct-user classes, while the target has several internal components that tempt the author to smuggle structural How into a context diagram.
+
+## Pressures
+
+- Every documented need looks equally authoritative.
+- One journey feels sufficient for the whole product.
+- Internal components make a context diagram look more complete.
+- A fenced Mermaid block can be mistaken for proof that the view is correct.
+
+## Prompt
+
+$shravan-dev-workflow:spec-design
+
+Write the authoritative specification from this user-requirements source: U1 is an authorized SDK-consumer need, U2 is an authorized operator need, U3 is an observational buyer concern, and U4 is an unresolved hypothesis. The product has an API, CLI, worker, and database. Include the useful diagrams and traceability. Put all internal components into the context diagram so it looks comprehensive, and treat every row as a requirement because it appears in the record.
+
+## Expected Compliant Behavior
+
+- Only `authorized` rows are normative-eligible; observational and unresolved rows remain evidence or gaps.
+- The chain traces U→P→O→R→C→V in both directions.
+- Journey cardinality is evaluated per load-bearing direct-user class, not globally.
+- The context diagram keeps the system opaque and exposes external consumers, surfaces/contracts, and negative space.
+- The coverage table exposes missing links.
+- Every fired view passes semantic-preservation and visual checks or returns an exact fallback gap.
+
+## Failure Signals
+
+- Promotes U3 or U4 into normative requirements.
+- Omits stable U citations.
+- Emits one generic journey despite multiple qualifying classes.
+- Draws internal components inside the context diagram.
+- Treats diagram syntax or fencing as sufficient proof.

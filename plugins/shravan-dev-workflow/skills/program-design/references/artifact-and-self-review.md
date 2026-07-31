@@ -1,38 +1,24 @@
 # Program-Design Artifact and Self-Review
 
-This reference owns view selection, artifact navigation, simplification, trace-integrity verification, and author integration self-check. `proof-architecture-and-traceability.md` owns construction of the requirement/design/proof trace; this reference consumes that trace.
+This reference owns view application, artifact navigation, simplification, trace-integrity verification, and author integration self-check. `SKILL.md` owns view selection and required semantic fields. `proof-architecture-and-traceability.md` owns construction of the requirement/design/proof trace; this reference consumes that trace.
 
 Expected inputs: governing specification/digest, current/target models, decisions, debt, proof map, and repo documentation conventions.
 
-Return in workflow order: first the artifact structure/view selection, artifact identity/digest, verification of the consumed requirement/design/proof trace, and pruned elements; after the caller runs the complete integration self-check stage, return the digest-bound self-check gaps.
+Return in workflow order: first the artifact structure/view application, artifact identity/digest, verification of the consumed requirement/design/proof trace, and pruned elements; after the caller runs the complete integration self-check stage, return the digest-bound self-check gaps.
 
-## Select Views by Need
+## Apply Required Views
 
-Use only views that expose a load-bearing relationship:
+Consume the selected predicates and required semantic fields from the `SKILL.md` Required Views table without restating them. Consume the shared rendering result for every firing and reject missing fields, failed visual checks, or unresolved fallbacks.
 
-- component tree for ownership/composition;
-- source-anchored sequence/call graph for cross-owner or async control, normalized from current call-stack/call-path evidence rather than copied as a raw stack trace;
-- proof call graph when harness boundaries differ;
-- state machine/table for lifecycle/order;
-- data/event flow for authority/transformation;
-- failure/recovery flow for partial failure/retry;
-- trust-boundary view for untrusted actors/input/secrets/processes;
-- requirement/design/proof trace when relationships are non-obvious.
+For call graph/sequence views, normalize current call-stack and call-path evidence into a source-anchored entrypoint-to-effect chain rather than copying a raw stack trace. Keep owner crossings, sync/async/event edges, state reads/writes or side effects, result/error propagation, and evidence anchors visible.
 
 Diagrams do not replace behavioral interface or failure prose. Paths may anchor current evidence; do not turn the design into a future file/task list.
 
-## Render for the Destination
-
-- Prefer Mermaid for durable Markdown when the repository renders it.
-- Use `tui-presentation` for chat or terminal explanation.
-- Use a table when dense ownership, states, transitions, or comparisons matter more than topology or time.
-- Use readable plain text when no renderer exists.
-
-For a substantial design, lead with the integrated component/ownership view and render each additional view whose predicate fired. Show a representative call or flow view when control crosses owners or async boundaries. The view must preserve the semantic fields selected by the caller; format never excuses a missing owner, edge, state, result/error path, or evidence anchor.
+For a substantial design, lead with the integrated component/ownership view and render each additional view whose predicate fired. Make every selected call or flow view representative of the actual boundary crossing. The view must preserve the semantic fields selected by the caller; format never excuses a missing owner, edge, state, result/error path, or evidence anchor.
 
 Good: the smallest set of views lets a reader simulate composition, execution, and the riskiest failure.
 
-Bad: prose labeled as a diagram, decorative boxes with no semantic owners, every possible view emitted mechanically, or Mermaid/TUI syntax chosen before the relationship is understood.
+Bad: prose labeled as a diagram, decorative boxes with no semantic owners, every possible view emitted mechanically, syntax chosen before the relationship is understood, or a passed result claimed with missing semantic fields.
 
 ## Simplify
 
@@ -64,4 +50,4 @@ Re-read the whole artifact:
 
 Bind the self-check to both artifact and governing-specification digests. It is not independent review.
 
-Complete when: the artifact composes as one executable mental model, unnecessary structure is pruned, and every known gap is exact.
+Complete when: the artifact composes as one executable mental model, every fired view has a passed rendering result with preserved semantics, unnecessary structure is pruned, and every known gap is exact.

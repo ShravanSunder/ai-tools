@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when defining or revising a specification's authoritative Why/What, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: Use when defining or revising a specification's authoritative Why/What or its required Why/What views and diagrams, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, in-chat explanation with no durable specification artifact, pure format-only maintenance of settled specification artifacts, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Spec Design
@@ -65,6 +65,21 @@ MUST load `references/authority-and-problem-framing.md` for stages 1-2 to classi
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
+IF load-bearing user or stakeholder meaning is unwritten, use `discuss-pathfinding` with the user-requirements destination and return the record identity/digest and rows. Classify the returned record in the governing-source inventory using `references/authority-and-problem-framing.md`. If the user declines extraction, reassess the remaining sources: continue when an alternate authoritative source exists; return `decision-needed` when owner meaning is missing; return `evidence-blocked` when necessary evidence is missing; keep only non-load-bearing uncertainty as a visible hypothesis gap. Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
+
+The minimum accepted user-requirements source contract is:
+
+```text
+source identity
+affected user and stakeholder classes
+stable U identifiers
+row-level evidence and producer-owned authority state
+priority and priority assigner
+unresolved hypotheses
+```
+
+A row is normative-eligible only when its producer-owned authority state is `authorized`. A pathfinding record or an equivalent source may satisfy this contract; equivalent sources need not copy the pathfinding document shape.
+
 IF an external platform, protocol, library, policy, or empirical claim could change product meaning or an observable obligation and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`; return the exact external source identity/version, authority status, transfer assumptions, and remaining evidence gap before deriving the affected obligation.
 
 Completion: artifact boundary, consumers, decision authority, source classes, current observable reality, and authority conflicts are explicit.
@@ -123,7 +138,9 @@ Completion: every material obligation names evidence that could prove it, and no
 
 ### 9. Author the smallest coherent artifact
 
-MUST load `references/artifact-and-self-review.md` to choose the artifact structure, preserve the specification spine, and return the structure decision, traceability/navigation result, and artifact identity/digest.
+Apply the Required Why/What Views predicates. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
+
+MUST load `references/artifact-and-self-review.md` with the Required Why/What Views decisions and rendering results to choose the artifact structure, preserve the specification spine, apply view discrimination and pruning, and return the structure decision, traceability/navigation result, artifact identity/digest, and exact view gaps.
 
 Follow the repository's documented spec location; otherwise use `docs/specs/` for substantial file-backed work. Keep research ledgers and review reports out of the normative design artifact.
 
@@ -153,6 +170,18 @@ IF returning a substantial specification in chat and problem, consumer, authorit
 
 Completion: the caller can invoke `program-design`, compose the result into caller-owned workflow state, or provide the exact missing decision/evidence without reinterpreting the artifact.
 
+## Required Why/What Views
+
+Use a view only when it exposes a load-bearing Why/What relationship. This table is the sole owner of view predicates, cardinality, and required semantic fields:
+
+| View | Use when | Must expose |
+| --- | --- | --- |
+| journey map | per normative-eligible load-bearing direct-user class | one view for that class exposing user-worded steps, observed pain and evidence, desired observable difference, and cited U rows; the user-requirements source remains the normative home |
+| context diagram | two or more external consumers or observable surfaces exist | consumers and stakeholders, observable surfaces/contracts, relevant negative space, and the system as one opaque node |
+| requirement coverage table | material requirements exist | U when present, P, O, R, C, and V links plus gaps |
+
+The first internal component, owner, dependency edge, state store, or enforcement point inside the system crosses into `program-design`. Diagrams may explain relationships but may not be the only home of normative meaning.
+
 ## Bounded Delegation
 
 There is no default swarm. IF one bounded evidence, observable-surface, product-intent, contract, or already-mapped section-writing question benefits from independent work, use `manage-agents` to select the agent pattern and runtime.
@@ -165,10 +194,12 @@ Do not return `locally-ready` while any of these hold:
 
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - a normative claim lacks authority or an explicit decision gap;
+- a user-facing normative requirement is based on a row whose authority state is not `authorized`, or normative-eligible user-requirements rows cannot be traced by stable U identifier;
 - the problem, outcome, requirement, contract/failure, and proof chain cannot be traced;
 - unresolved product meaning is disguised as an assumption;
 - a material non-goal is omitted, or an applicable cross-cutting quality lacks an observable obligation or constraint or a reasoned not-applicable result;
 - internal architecture or implementation tasks are presented as requirements without an externally authoritative constraint;
+- an applicable Required Why/What View lacks the required cardinality, semantic fields, passed rendering result, or separate normative home;
 - a section writer originated meaning;
 - a required independent review is missing, stale, partial, silent, or blocked;
 - the artifact digest, source coverage, or non-acceptance boundary is missing.

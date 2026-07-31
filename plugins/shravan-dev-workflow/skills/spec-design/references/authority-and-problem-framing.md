@@ -33,6 +33,12 @@ Bad:
 
 ## Frame the Problem
 
+Classify affected people before describing the gap: end users, developer users consuming an API/CLI/SDK, customers or buyers, operators, and downstream agents may carry different jobs, evidence, authority, and constraints. Preserve customers as stakeholders even when they never operate the surface; do not erase their need or fabricate a direct-user journey.
+
+Good: “Analyst class exports weekly for compliance; support tickets show the current export misses the deadline; the operations owner authorizes the desired timing.”
+
+Bad: “Users want exports,” or treating a buyer as generic decision authority without capturing the buyer's need and affected outcome.
+
 Describe:
 
 ```text
@@ -46,6 +52,16 @@ hypotheses that remain unproven
 ```
 
 Separate symptom, cause, and requested mechanism. The specification may state an observable problem without proving implementation root cause. It may not use an unproven root cause to authorize product behavior.
+
+## Accept User-Requirements Sources
+
+Use the minimum accepted user-requirements source contract owned by `spec-design/SKILL.md`; do not require an equivalent source to reproduce the pathfinding document shape. Inspect row-level evidence and producer-owned authority independently, then classify the source itself in the governing-source inventory using Classify Sources above.
+
+Only rows whose producer-owned authority state is `authorized` are normative-eligible. Observational evidence can prove a current pain without authorizing desired product meaning. Advisory and unresolved rows remain visible inputs or gaps.
+
+Good: a mixed record retains observational and hypothesis rows while requirements cite only authorized U rows.
+
+Bad: assigning one aggregate authority label to a mixed record, silently promoting evidence to authority, or discarding stakeholder rows because no journey applies.
 
 ## Resolve Authority
 
@@ -65,4 +81,4 @@ durable decision source or current confirmation identity
 
 A paraphrase by the author is not evidence that a user chose it. Vague assent, delegation, silence, or topic change does not settle the branch.
 
-Complete when: every load-bearing source is classified, every product decision has inspectable authority or an exact gap, and the current/desired problem is observable without assuming the solution.
+Complete when: every load-bearing source is classified, every product decision has inspectable authority or an exact gap, user/stakeholder classes remain distinct, normative-eligible rows are identifiable by stable U identifier, and the current/desired problem is observable without assuming the solution.

@@ -19,6 +19,7 @@ observable success condition
 negative or failure expectation
 proof-obligation identifier or uncovered slot
 dependencies or conflicts
+authorized user-requirement identifiers when present
 ```
 
 Use a conditional form that makes context and response unambiguous. EARS-style forms are construction tools, not mandatory output syntax:
@@ -68,15 +69,18 @@ Replace `support`, `handle`, `robust`, `easy`, `secure`, `fast`, and similar adj
 
 ## Traceability
 
-Construct the chain:
+When normative-eligible user-requirements rows exist, construct the chain from their stable U identifiers. Otherwise begin at the problem:
 
 ```text
-problem P1
-  -> outcome O1
-      -> requirement R1
-          -> observable contract C1
-              -> proof-obligation slot V1
+user or stakeholder need U1
+  -> problem P1
+      -> outcome O1
+          -> requirement R1
+              -> observable contract C1
+                  -> proof-obligation slot V1
 ```
+
+The U identifier resolves to the source row; do not restate or fork the producer's need. Preserve stakeholder U roots even when no direct-user journey exists.
 
 Flag:
 
@@ -86,7 +90,10 @@ Flag:
 - a requirement whose negative case is undefined;
 - a missing proof-obligation slot for the claimed behavior;
 - duplicate requirements with different wording or authority.
+- a user-facing requirement with no cited U row when normative-eligible rows exist;
+- a normative requirement derived from an `observational`, `advisory`, or `unresolved` row;
+- a declined-extraction requirement that cites neither an alternate authoritative source nor the exact decision/evidence gap.
 
 Apply the stranger test: a capable reader with no session history must state the same pass/fail behavior and proof obligation.
 
-Complete when: every material requirement is authoritative, singular, observable, traceable in both directions, and separated from implementation tasks.
+Complete when: every material requirement is authoritative, singular, observable, traceable in both directions through U when present, and separated from implementation tasks.

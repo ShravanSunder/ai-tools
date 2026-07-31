@@ -110,7 +110,7 @@ flowchart LR
 
 Use `discuss-clarify-mental-models` when the shared picture is unstable before artifact work: terms, boundaries, assumptions, source-of-truth questions, or tradeoffs need to be made inspectable. It stays read-only, checks bounded evidence, maps branches, names the countercase, and routes only after the model is confirmed or explicitly open. It is not the old one-forcing-question grill.
 
-`discuss-pathfinding`: Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/process/glossary records as they crystallize.
+`discuss-pathfinding`: Extract unwritten understanding from the user — user and stakeholder requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and records as they crystallize. User-requirements extraction separates evidence from row-level authority, preserves direct users and non-operating stakeholders, forces priority ownership, and renders journeys only for load-bearing direct-user classes.
 
 Use `research-swarm` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, routes source-specific lanes, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial swarm lanes use explicit packet contracts with source anchors, security context, candidate-evidence labels, and completion receipts; parent ledgers reduce lane evidence before anything becomes accepted truth.
 
@@ -120,9 +120,9 @@ Use `orchestrator-goal` when the objective is long-running and already clear eno
 
 ### Spec boundary
 
-Use `spec-design` to define authoritative Why/What before program design or planning: consumer and problem, current observable reality, outcomes, non-goals, requirements, public or externally observable contracts, constraints, failure obligations, and proof modalities. It keeps unresolved product meaning visible and leaves internal component structure downstream.
+Use `spec-design` to define authoritative Why/What before program design or planning: consumer and problem, current observable reality, outcomes, non-goals, requirements, public or externally observable contracts, constraints, failure obligations, and proof modalities. It traces authorized user/stakeholder roots through U→P→O→R→C→V and adds journey, context, and coverage views when their predicates fire. It keeps unresolved product meaning visible and leaves internal component structure downstream.
 
-Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, calls and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It produces an executable mental model, not a task list.
+Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, source-anchored call paths and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It turns stack/trace evidence into implementable entrypoint-to-effect views and produces an executable mental model, not a task list.
 
 Use `spec-program-review` to independently classify and review a specification, a program design, or their pair. It binds exact digests, reconstructs the model, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound verdict without editing artifacts or accepting the pair. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
@@ -199,6 +199,7 @@ Use docs-maintain to reconcile this README and AGENTS.md with current plugin sta
 
 - Skill source: [`skills/`](skills/)
 - Shared runtime references: [`shared-references/`](shared-references/)
+- Design-view vocabulary and ownership index: [`docs/diagram-vocabulary.md`](docs/diagram-vocabulary.md)
 - Source inspiration catalog: [`docs/source-inspiration-catalog.md`](docs/source-inspiration-catalog.md)
 - Release smoke and behavioral checks: [`../../docs/changelog/references/shravan-dev-workflow-smoke.md`](../../docs/changelog/references/shravan-dev-workflow-smoke.md)
 - Release notes: [`../../docs/changelog/`](../../docs/changelog/)
