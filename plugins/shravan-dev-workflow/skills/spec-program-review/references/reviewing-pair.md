@@ -4,7 +4,7 @@ This reference owns `pair` mode judgment.
 
 Pair review independently repeats load-bearing local checks; it does not trust author self-checks or prior local review as the only evidence.
 
-Before pair-specific integration checks, MUST load `reviewing-specification.md` and return its complete specification-mode judgment for the current specification digest. Then MUST load `reviewing-program-design.md` and return its complete program-mode judgment for the current program-design and governing-specification digests. Pair judgment consumes both results and may not replace either with author or prior-review summaries.
+Before pair-specific integration checks, MUST load `reviewing-specification.md` and return its complete specification-mode judgment for the current specification. Then MUST load `reviewing-program-design.md` and return its complete program-mode judgment for the current program design and governing specification. Pair judgment consumes both results and may not replace either with author or prior-review summaries.
 
 Inspect:
 
@@ -15,7 +15,9 @@ Inspect:
 - proof modality and structural seam form a sufficient chain;
 - non-goals and compatibility survive realization;
 - security/reliability and other applicable qualities map to owner, mechanism, failure/degradation, and proof;
-- all coverage matches current digests;
+- retained requirements match the owner-confirmed or last inspectable owner-accepted baseline, including any named variants, defaults, constraints, and proof obligations;
+- every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case, with added, removed, changed, and intentionally unchanged edges;
+- all coverage matches the current target text;
 - a planner can choose tasks/order/commands without inventing meaning or How.
 
 If local results are missing, pair `ready` requires independently repeating and recording the missing local checks. Missing prerequisites may still yield bounded findings, never false readiness.
@@ -29,4 +31,4 @@ must consume: requirements/contracts, components/owners/interfaces,
               state/flows/failure/concurrency/cutover/trust/proof seams
 ```
 
-Complete when: cross-artifact traceability is bidirectional, contradictions are resolved or blocked, and planning has no semantic design decisions left.
+Complete when: cross-artifact traceability is bidirectional, accepted requirements remain covered, applicable call-path deltas are visible, contradictions are resolved or blocked, and planning has no semantic design decisions left.

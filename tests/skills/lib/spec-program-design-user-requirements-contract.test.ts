@@ -179,6 +179,82 @@ describe("user requirements and design-view contracts", () => {
     expect(artifact).not.toContain("digest-bound");
   });
 
+  test("keeps spec-program review proportional and reader-focused", () => {
+    const reviewSkill = readPluginFile("skills/spec-program-review/SKILL.md");
+    const commonMethod = readPluginFile(
+      "skills/spec-program-review/references/reviewing-common-method.md",
+    );
+    const modeComplete = readPluginFile(
+      "skills/spec-program-review/references/lanes/mode-complete-reviewer.md",
+    );
+    const readerUnderstanding = readPluginFile(
+      "skills/spec-program-review/references/lanes/reader-understanding.md",
+    );
+    const laneSchema = readPluginFile(
+      "skills/spec-program-review/references/lanes/lane-schema.md",
+    );
+    const reduction = readPluginFile(
+      "skills/spec-program-review/references/finding-and-reduction-schema.md",
+    );
+
+    expect(reviewSkill).toContain("reader understanding or readability");
+    expect(reviewSkill).toContain("exactly one mode-complete reviewer first");
+    expect(reviewSkill).toContain(
+      "The parent verifies and reduces it before selecting any focused lane",
+    );
+    expect(reviewSkill).toContain("at most one focused reviewer by default");
+    expect(reviewSkill).toContain(
+      "explicitly authorizes the named residual risk",
+    );
+    expect(reviewSkill).toContain(
+      "requirements/Why/What`, `structural How`, or `both",
+    );
+    expect(laneSchema).toContain("reader-understanding");
+    expect(commonMethod).toContain("mutually narrowed current files");
+    expect(commonMethod).toContain("satisfied by the existing system");
+    expect(modeComplete).toContain("compact human-reader reconstruction");
+    expect(readerUnderstanding).toContain("Apply the Human Deletion Test");
+    expect(readerUnderstanding).toContain(
+      "Only a caller-authorized full-artifact audit",
+    );
+    expect(reduction).toContain("confirmed requirement or boundary served");
+    expect(reduction).toContain(
+      "whether deletion of the questioned mechanism removes the failure",
+    );
+    expect(reduction).toContain("requires owner expansion decision");
+  });
+
+  test("reviews accepted requirements and call-path deltas without digest ceremony", () => {
+    const reviewSkill = readPluginFile("skills/spec-program-review/SKILL.md");
+    const programReview = readPluginFile(
+      "skills/spec-program-review/references/reviewing-program-design.md",
+    );
+    const pairReview = readPluginFile(
+      "skills/spec-program-review/references/reviewing-pair.md",
+    );
+    const classification = readPluginFile(
+      "skills/spec-program-review/references/classifying-review-requirement.md",
+    );
+
+    for (const marker of [
+      "added",
+      "removed",
+      "changed",
+      "intentionally unchanged",
+    ]) {
+      expect(programReview).toContain(marker);
+      expect(pairReview).toContain(marker);
+    }
+    expect(reviewSkill).toContain("last inspectable owner-accepted governing baseline");
+    expect(reviewSkill).toContain("Mutually narrowed current files");
+    expect(programReview).toContain("explicit no-predecessor case");
+    expect(pairReview).toContain("accepted requirements remain covered");
+    expect(reviewSkill).not.toContain("digest");
+    expect(programReview).not.toContain("digest");
+    expect(pairReview).not.toContain("digest");
+    expect(classification).not.toContain("digest");
+  });
+
   test("indexes every view owner and rendering consumer", () => {
     const vocabulary = readPluginFile("docs/diagram-vocabulary.md");
 

@@ -9,11 +9,13 @@ assignment identity
 lane: mode-complete-reviewer | specification-authority | contract |
       architecture-boundary | failure-concurrency | security-trust |
       platform-harness | implementation-difference | proof |
-      artifact-navigation
+      artifact-navigation | reader-understanding
 review mode: specification-only | program-only | pair
-exact target paths/identities, line counts, and digests
-governing-source identities/digests/versions, authority statuses, and freshness/applicability
+complete target paths/identities and current workspace state
+governing-source identities/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
+boundary check 1 and accepted requirements set, or exact authority gap
+boundary check 2 for program-only or pair, or exact owner decision needed
 observable selection predicate
 bounded review question
 source scope
@@ -27,7 +29,7 @@ stop condition
 expected return
 ```
 
-The mode-complete packet uses predicate `mandatory for every review invocation`. A focused packet names the exact predicate that selected it. Missing or ambiguous targets, digests, governing sources, or authority stop inspection and produce a blocked receipt.
+The mode-complete packet uses predicate `mandatory for every review invocation`. A focused packet names the exact concrete unresolved risk that selected it and why the mode-complete receipt did not settle it. Missing or ambiguous targets, governing sources, accepted requirements, or authority stop inspection and produce a blocked receipt.
 
 ## Authority Field
 
@@ -39,7 +41,7 @@ Only these lane receipt states exist:
 
 ```text
 complete
-  assignment and covered digests
+  assignment and covered targets
   sources inspected and source gaps
   coverage performed
   reconstructed model or bounded model slice

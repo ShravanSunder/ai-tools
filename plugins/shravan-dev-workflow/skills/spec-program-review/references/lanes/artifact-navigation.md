@@ -27,7 +27,7 @@ Bad: index-only primary file; lane/review notes required for meaning; appendices
 
 Calibration: more files are not automatically clearer. Recommend the smallest merge, split, link, or authority move that restores a readable spine.
 
-Overlap boundary: this lane owns placement, navigation, and duplicate authority. Other lanes own semantic quality after the claim is found.
+Overlap boundary: this lane owns entry paths, link targets, placement, and authoritative homes. `reader-understanding` owns disclosure order, human reconstruction, attention cost, process leakage, and redundant content. Other lanes own semantic quality after the claim is found.
 
 Return: lane-schema receipt with entry-path walk, broken/ambiguous routes, duplicate homes, reader consequence, and smallest navigation correction.
 

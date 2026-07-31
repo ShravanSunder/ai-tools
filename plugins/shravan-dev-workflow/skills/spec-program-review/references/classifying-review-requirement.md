@@ -8,7 +8,7 @@ Expected inputs:
 target classification: general-domain | runtime-skill-package
 skills-creation parent packet/result identity when target is runtime-skill-package
 requested future mode: specification-only | program-only
-exact covered artifact digests
+complete covered artifact set
 scope and claimed semantic effect
 complete scoped governing-source inventory
 matched material-risk predicates
@@ -20,8 +20,8 @@ Return either:
 ```text
 invocation state: complete
 target classification and skills-creation parent packet/result identity when applicable
-requested mode and covered digests
-immutable governing-source inventory: each source identity, version/digest,
+requested mode and covered artifacts
+governing-source inventory: each source identity and version,
 authority status, freshness/applicability, and scoped-completeness basis
 review-required | non-substantial
 decision branch: forced | matched-risk | non-substantial | semantic-fallback
@@ -49,4 +49,4 @@ An absent `caller requirement` is `none`. `caller requirement` only escalates. I
 
 Pair mode is never classified here: any pair-readiness verdict requires pair review.
 
-Complete when: one total digest-bound decision exists, or the exact missing input blocks without fabricating a third classification value.
+Complete when: one total decision exists for the current artifact set, or the exact missing input blocks without fabricating a third classification value.
