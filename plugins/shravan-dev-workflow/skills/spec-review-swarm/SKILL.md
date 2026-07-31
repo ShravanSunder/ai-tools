@@ -1,9 +1,11 @@
 ---
 name: spec-review-swarm
-description: Use when adversarially reviewing a drafted spec, design, or architecture proposal before an implementation plan exists, especially when the user asks for a review swarm, critique, council, or assumption attack.
+description: Use only when the user explicitly requests spec-review-swarm or the legacy fixed-swarm adversarial review workflow for a pre-plan spec, design, or architecture proposal. Generic specification, program-design, or pair review routes to spec-program-review.
 ---
 
 # Spec Review Swarm
+
+This legacy workflow remains available for explicit invocation. Generic specification, program-design, and pair review requests use `spec-program-review`.
 
 Run a post-draft, pre-plan review swarm over a spec, design, or architecture proposal. This is not implementation, not implementation-plan review, and not a normal code review. It pressure-tests product intent, requirements, claims, assumptions, contracts, security context, and unresolved decision branches.
 

@@ -13,8 +13,8 @@ Package spec/design context so another agent can continue without reconstructing
 - Package decisions, non-goals, open questions, source evidence, contracts, tradeoffs, security context, and proof expectations.
 - Always name proof expectations in the handoff response: validation strategy, proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps.
 - Preserve uncertainty. Do not hide open questions to make the packet feel done.
-- Do not create an implementation plan here. Use `plan-creation-swarm` for that.
-- Do not review the spec here. Use `spec-review-swarm` for adversarial review.
+- Do not create an implementation plan here. Recommend `plan-creation-swarm` for design-bearing work only when the packet proves a current pair-mode `spec-program-review` result is `ready` for the exact current specification and program-design digests. Missing structural How routes to `program-design`; a complete but unreviewed or stale pair routes to `spec-program-review`; missing Why/What routes to `spec-design`.
+- Do not review the specification or program design here. Use `spec-program-review`.
 - Do not package code, branch, diff, commits, or test state. Use `implementation-handoff` when implementation state exists.
 - Always write a file artifact and also print the copy-paste prompt in the response unless the user explicitly asks for chat-only output.
 
@@ -37,7 +37,7 @@ Package spec/design context so another agent can continue without reconstructing
    - decisions and non-goals
    - open questions
    - proof expectations or proof gaps
-   - recommended next skill: usually `plan-creation-swarm`, `spec-review-swarm`, or `docs-maintain`
+   - recommended next skill: `spec-design` for missing Why/What, `program-design` for missing How, `spec-program-review` for a complete but unreviewed/stale pair, `plan-creation-swarm` only when the exact-digest pair-ready gate is proven, or `docs-maintain` for artifact lifecycle work
    - full clickable artifact links (absolute path + line) for handoff artifacts the human is expected to open
 
 ## Packet Contents
@@ -49,6 +49,7 @@ Package spec/design context so another agent can continue without reconstructing
 - Tradeoffs and who pays their cost
 - Security context or reason it is not security-sensitive
 - Proof expectations: validation strategy, proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps
+- Planning-admission evidence: exact specification and program-design identities/digests, current pair-review identity/result and covered digests, or the exact missing/stale prerequisite
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent
@@ -56,6 +57,7 @@ Package spec/design context so another agent can continue without reconstructing
 ## Common Mistakes
 
 - Treating handoff as spec approval or phase completion.
+- Routing a handoff to planning without a current pair-mode `ready` review result bound to the exact current specification and program-design digests.
 - Turning design context into an implementation plan inside the handoff.
 - Hiding open questions.
 - Asking the next agent to infer source files from chat history.

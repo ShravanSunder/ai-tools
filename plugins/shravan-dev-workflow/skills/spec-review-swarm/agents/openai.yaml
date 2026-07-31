@@ -1,4 +1,4 @@
 interface:
-  display_name: "Spec Review Swarm"
-  short_description: "Attack specs before planning"
+  display_name: "Spec Review Swarm (Legacy)"
+  short_description: "Run legacy fixed-swarm spec review"
   default_prompt: "Use spec-review-swarm to review this spec with adversarial review lanes before planning."

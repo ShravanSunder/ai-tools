@@ -87,7 +87,7 @@ the user explicitly authorized it.
 
 Only the starting point is mutable. Existing artifacts decide the first unproven lifecycle gate:
 
-- no accepted spec/design: start at `spec-creation-swarm` or `spec-review-swarm`
+- missing authoritative Why/What: start at `spec-design`; missing structural How: start at `program-design`; drafted artifacts needing independent review: start at `spec-program-review`
 - accepted spec/design but no plan: start at `plan-creation-swarm`
 - unreviewed plan: start at `plan-review-swarm`
 - reviewed plan but no implementation proof: start at `implementation-execute-plan`

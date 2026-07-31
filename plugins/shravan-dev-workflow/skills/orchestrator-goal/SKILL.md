@@ -24,15 +24,16 @@ For implementation goals, default to the whole delivery lifecycle. If the user w
 
 Only the starting point is mutable. Choose `Current workflow` and `Next workflow` from the first unproven lifecycle gate:
 
-- no shared design/spec: `spec-creation-swarm`
-- design/spec drafted but unreviewed: `spec-review-swarm`
-- accepted spec/design exists, no implementation plan: `plan-creation-swarm`
+- authoritative Why/What missing: `spec-design`
+- structural How missing: `program-design`
+- specification/program design drafted but unreviewed: `spec-program-review`
+- current exact-digest pair-ready result or proven implementation-mechanics-only admission exists, no implementation plan: `plan-creation-swarm`
 - implementation plan exists but is unreviewed: `plan-review-swarm`
 - reviewed plan exists, implementation is not proven: `implementation-execute-plan`
 - implementation proof exists, review is not done or findings are unresolved: `implementation-review-swarm`
 - implementation review is addressed, PR is not created or readiness is not proven: `implementation-pr-wrapup`
 
-Review findings route back to the owning phase instead of skipping ahead: accepted spec findings return to `spec-creation-swarm`; accepted plan findings return to `plan-creation-swarm`; accepted implementation findings return to `implementation-execute-plan`.
+Review findings route back to the semantic owner instead of skipping ahead: Why/What findings return to `spec-design`; structural-How findings return to `program-design`; accepted plan findings return to `plan-creation-swarm`; accepted implementation findings return to `implementation-execute-plan`.
 
 Default implementation terminal: PR created or updated and proven ready, but not merged. Completion normally requires implementation complete, required proof gates passing or explicitly not-applicable, the full proof loop captured, implementation review findings addressed or explicitly rejected, PR checks and review-thread state freshly reported, mergeability/readiness stated, and merge left out of scope unless the user explicitly authorizes it.
 
@@ -128,8 +129,9 @@ When the user asks to omit the orchestrator skill name, exact files, or required
    - Use the exact labels `Required workflow skill:` and `Required reading:` when preparing copy-paste goal text.
    - `Required workflow skill:` is always `shravan-dev-workflow:orchestrator-goal`. Put the phase skill (`plan-creation-swarm`, `implementation-execute-plan`, etc.) under `Next workflow:`, not in the required-skill field.
 4. Select the next workflow:
-   - early spec, design, or architecture creation: `spec-creation-swarm`
-   - drafted spec/design needs critique: `spec-review-swarm`
+   - authoritative Why/What creation: `spec-design`
+   - structural How creation: `program-design`
+   - drafted specification, program design, or pair needs critique: `spec-program-review`
    - spec/design packet for another agent: `spec-handoff`
    - implementation plan creation: `plan-creation-swarm`
    - implementation plan packet for another agent: `plan-handoff`

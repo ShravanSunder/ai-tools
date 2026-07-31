@@ -22,15 +22,15 @@ implementation_scope_underdelivery -> implementation-execute-plan
 proof_gap -> implementation-execute-plan unless proof scope is a plan defect
 unapproved_deviation -> direct user clarification or owner workflow
 plan_translation_error -> plan-creation-swarm
-spec_plan_conflict -> spec-creation-swarm or discuss-clarify-mental-models
-spec_ambiguity -> spec-creation-swarm
-architecture_decision_gap -> spec-creation-swarm or discuss-clarify-mental-models
+spec_plan_conflict -> spec-design or program-design by semantic owner, or discuss-clarify-mental-models for shared-model drift
+spec_ambiguity -> spec-design
+architecture_decision_gap -> program-design or discuss-clarify-mental-models
 human_decision_needed -> direct user clarification
 ```
 
 When review is needed before revision:
 - proposed plan needs adversarial validation: `plan-review-swarm`;
-- proposed spec needs adversarial validation: `spec-review-swarm`.
+- proposed specification/program design needs independent validation: `spec-program-review`.
 
 Good signals:
 - route target follows the source of the defect;

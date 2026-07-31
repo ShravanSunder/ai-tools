@@ -52,10 +52,11 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 - **Work:** One bounded research, review, implementation, or reasoning assignment.
 - **Continuity and cardinality:** Single or Delegate swarm; one-shot.
 - **Authority:** Packet-bounded work; parent verifies the work.
-- **Model category:** Balanced or Mini
+- **Model category:** Frontier, Balanced, or Mini
 
 | Model category | Model lineage       | Thinking         |
 | -------------- | ------------------- | ---------------- |
+| Frontier       | OpenAI Sol          | high or xhigh    |
 | Balanced       | OpenAI Sol          | low or medium    |
 | Balanced       | Claude Opus         | medium           |
 | Balanced       | Cursor Grok 4.5     | medium or high   |

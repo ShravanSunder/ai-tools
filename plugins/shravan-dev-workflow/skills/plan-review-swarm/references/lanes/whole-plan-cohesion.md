@@ -36,4 +36,4 @@ Output format: Use the plan-review return schema from `references/review-packet.
 
 Advisory boundary: This lane does not accept findings, rewrite the plan, or implement code.
 
-Parent handoff notes: Focused lanes do not replace this lane. Parent reducer verifies candidate whole-plan findings against the plan, source artifact, and live repo evidence before routing accepted findings to `plan-creation-swarm` or `spec-creation-swarm`.
+Parent handoff notes: Focused lanes do not replace this lane. Parent reducer verifies candidate whole-plan findings against the plan, source artifacts, and live repo evidence before routing accepted findings to `plan-creation-swarm`, `spec-design` for Why/What gaps, or `program-design` for structural-How gaps.

@@ -11,7 +11,7 @@ Turn fuzzy research into sharp questions, gather evidence through bounded source
 
 - Stay read-only against product code unless the user explicitly switches to implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
-- When evidence feeds design, recommend `spec-creation-swarm`; when evidence feeds implementation planning from an accepted spec/design, recommend `plan-creation-swarm`. Research preserves evidence for those workflows; it does not synthesize their artifacts.
+- When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when it feeds implementation planning from a current exact-digest pair-ready spec/program-design result, recommend `plan-creation-swarm`. Research preserves evidence for those workflows; it does not synthesize their artifacts.
 - Start with the local system when the research affects a local repo: current code, docs, specs, plans, runbooks, and live file tree beat memory and older notes.
 - Convert the ask into 1-5 researchable questions before spawning lanes. Name what would support, refute, or complicate each question.
 - Use subagents for independent, bounded lanes when the evidence can be gathered in parallel. Do not ask a lane to "research everything".
@@ -73,4 +73,4 @@ Return:
 - artifact path, or why no artifact was written
 - the verified evidence ledger summary (claim classes and finding states live in the ledger shape)
 - caveats, competing hypotheses where evidence split, and unresolved gaps
-- recommended next workflow: usually `discuss-clarify-mental-models`, `spec-creation-swarm`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-review-swarm`, or `docs-maintain`
+- recommended next workflow: usually `discuss-clarify-mental-models`, `spec-design`, `program-design`, `spec-program-review`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-review-swarm`, or `docs-maintain`

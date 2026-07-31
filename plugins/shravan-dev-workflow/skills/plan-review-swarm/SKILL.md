@@ -1,6 +1,6 @@
 ---
 name: plan-review-swarm
-description: Use when adversarially reviewing an implementation plan or handoff before code changes, especially when the user asks to validate, poke holes in, or review a plan without executing it.
+description: Use when adversarially reviewing an implementation plan or plan-handoff packet before code changes, especially when the user asks to validate, poke holes in, or review a plan without executing it.
 ---
 
 # Plan Review Swarm
@@ -41,7 +41,7 @@ plan artifact
 - This skill owns phase-specific lane packets, reduction, and proof. Use `manage-agents` only for managing agent calls and sessions; do not copy those mechanics here.
 - When a shortcut or missing artifact prevents dispatching lanes in the current run, still name the substantial-lane packet shape: role / mode, edit boundary, bounded question, decision target, source-of-truth inputs, inspect list, non-goals, lane-specific checklist, output schema, contradiction handling, confidence, security context, completion receipt, mandatory `whole-plan-cohesion` lane, and parent verification.
 - After review, validate every candidate finding before accepting it. Do not blindly apply reviewer suggestions.
-- Accepted blocker or important findings normally route back to `plan-creation-swarm` for revision with the full planning context. If a finding exposes a missing or wrong spec boundary, route back to `spec-creation-swarm`. Only make tiny same-session copy edits when they are explicitly scoped and do not affect sequence, proof, parallelization, or task scope.
+- Accepted blocker or important findings normally route back to `plan-creation-swarm` for revision with the full planning context. If a finding exposes missing or wrong Why/What, route to `spec-design`; if it exposes missing or wrong structural How, route to `program-design`. Only make tiny same-session copy edits when they are explicitly scoped and do not affect sequence, proof, parallelization, or task scope.
 - If a finding is unclear, conflicts with user decisions, or would change code scope rather than plan text, stop and ask before changing the plan.
 - If this skill is itself running inside a subagent, stay shallow: do not spawn another swarm unless the parent explicitly asked for nested review.
 - For substantial plan reviews, write a repo-local temp review artifact by default unless the user explicitly asked for chat-only/no-files output.
@@ -77,7 +77,7 @@ plan artifact
 9. Receive and route findings:
    - load `references/review-checklist.md` for review reception rules
    - accepted blocker/important plan findings route to `plan-creation-swarm`
-   - accepted spec-boundary findings route to `spec-creation-swarm`
+   - accepted Why/What findings route to `spec-design`; structural-How findings route to `program-design`
    - tiny explicitly scoped copy edits may be applied to a writable plan
 10. Re-check revised plan sections when tiny edits were made.
 11. Write a review report in chat.
