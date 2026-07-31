@@ -148,7 +148,7 @@ authoring basis: observed failure | user-directed intent | n/a (evaluate)
 reproduction: reproduced | not reproduced | insufficient evidence | inconclusive | n/a
 invocation: model-invocable | user-invocable | both
 branches loaded:
-review lanes dispatched: <lanes> | none (no review this run) | none — cited accepted spec <revision/digest>
+review lanes dispatched: <lanes> | none (no review this run) | none — cited accepted spec <revision/result identity>
 lane receipts: complete | partial | blocked | no-receipt, per lane | n/a (no lanes dispatched this run)
 deviations: spec-boundary none | <named list>; reviewer-runtime none | <named list>
 security route: allowed | disallowed | blocked | deferred | n/a
@@ -235,7 +235,7 @@ Keep all-run obligations, decisions, invariants, required returns, and completio
 
 ### 6. Review the spec
 
-IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, load `references/review/spec-review.md` to select and dispatch the spec-review lanes and judge the proposed design, and return the dispatched lane set, every receipt, the verdict, blocker overrides, and the implementation decision. Accepted findings return to the design step that owns them before implementation starts. IF the run implements one slice of a multi-run spec a prior spec review already accepted, load `references/review/spec-review.md` to verify the acceptance under its Acceptance Binding and return the acceptance-verification evidence and the revision cited, instead of re-dispatching; the Acceptance Binding owns when acceptance expires, and an expired acceptance sends the delta back through spec review before any skill file is edited. Completion: spec review is parent-reduced to accepted-to-implement, cited from an accepted spec verified unchanged since its acceptance, explicitly skipped by the user, or not applicable because the change is mechanical.
+IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, load `references/review/spec-review.md` to select and dispatch the spec-review lanes and judge the proposed design, and return the dispatched lane set, every receipt, the verdict, blocker overrides, and the implementation decision. Accepted findings return to the design step that owns them before implementation starts. IF the run implements one slice of a multi-run spec a prior spec review already accepted, load `references/review/spec-review.md` to verify the acceptance under its Acceptance Binding and return the acceptance-verification evidence and the revision cited, instead of re-dispatching; the Acceptance Binding owns when acceptance expires, and expired semantic coverage sends only the affected delta back through spec review before any skill file is edited. Completion: spec review is parent-reduced to accepted-to-implement, cited from an accepted spec whose semantic coverage remains current, explicitly skipped by the user, or not applicable because the change is mechanical.
 
 ### 7. Implement
 

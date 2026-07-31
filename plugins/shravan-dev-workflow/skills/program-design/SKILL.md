@@ -50,7 +50,7 @@ decision-needed
 deferred
 ```
 
-A `locally-ready` result includes the program-design and governing-specification identities plus process-level snapshot metadata; an immutable source inventory containing every current-system, constraint, platform, and external source identity, version or digest, authority status, freshness/applicability, and scoped-completeness basis; structural model; requirement-realization inventory; author self-check; required independent local-review coverage; debt/gaps; and explicit non-acceptance. Snapshot metadata belongs in the workflow result or review packet, never in durable specification or program-design prose.
+A `locally-ready` result includes the program-design and governing-specification identities; an immutable source inventory containing every current-system, constraint, platform, and external source identity, version or digest, authority status, freshness/applicability, and scoped-completeness basis; structural model; requirement-realization inventory; author self-check; required independent local-review coverage; debt/gaps; and explicit non-acceptance.
 
 Produce terminal labels by observable condition:
 
@@ -66,11 +66,11 @@ Produce terminal labels by observable condition:
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
-Read the entire governing specification and record the inspected snapshot in process state. Extract requirements, observable contracts, constraints, failure expectations, proof modalities, non-goals, and open decisions.
+Read the entire current governing specification. Extract requirements, observable contracts, constraints, failure expectations, proof modalities, non-goals, and open decisions.
 
 Classify gaps as `missing meaning | conflicting meaning | feasibility question | design choice | planning detail`. Missing or conflicting meaning returns `specification-gap`; do not patch it locally.
 
-Completion: governing specification identity/inspected snapshot, requirement inventory, non-goals, and route-back gaps are explicit.
+Completion: governing specification identity, requirement inventory, non-goals, and route-back gaps are explicit.
 
 ### 2. Build the current-system model from sources
 
@@ -164,7 +164,7 @@ Completion: every material requirement has an observable seam and every load-bea
 
 ### 14. Trace, simplify, and author the artifact
 
-MUST load `references/artifact-and-self-review.md` to select the smallest useful design views, consume and verify the requirement/design/proof trace, prune no-op mechanisms, and return the artifact decision, artifact identity, process-level snapshot metadata, trace-navigation result, and pruned elements.
+MUST load `references/artifact-and-self-review.md` to select the smallest useful design views, consume and verify the requirement/design/proof trace, prune no-op mechanisms, and return the artifact decision, artifact identity, trace-navigation result, and pruned elements.
 
 Render each selected view in a form the destination supports: prefer Mermaid in durable Markdown when the repository renders it, use `tui-presentation` for chat or terminal explanation, use tables for dense ownership or transition data, and fall back to readable plain text when no renderer exists.
 
@@ -174,13 +174,13 @@ Completion: each design element serves an obligation, constraint, failure policy
 
 ### 15. Run the author integration self-check
 
-Using the Integration Self-Check procedure in the already-loaded `references/artifact-and-self-review.md`, re-read the complete artifact for component composition, singular ownership, dependency direction, interfaces, state/flow/failure consistency, concurrency, cross-cutting realization, proof seams, plan leakage, and unresolved specification meaning, then return the snapshot-bound integration self-check with exact gaps.
+Using the Integration Self-Check procedure in the already-loaded `references/artifact-and-self-review.md`, re-read the complete artifact for component composition, singular ownership, dependency direction, interfaces, state/flow/failure consistency, concurrency, cross-cutting realization, proof seams, plan leakage, and unresolved specification meaning, then return the integration self-check with exact gaps.
 
-Completion: the current authored snapshot has exact passes and gaps. Self-check is never independent review.
+Completion: the current artifact has exact passes and gaps. Self-check is never independent review.
 
 ### 16. Obtain fresh local review when required
 
-Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; current program-design and governing-specification identities plus review snapshot identifiers; scope and claimed semantic effect; prior review coverage plus the parent semantic-diff record when coverage may be reused; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the parent-verified `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, reused coverage when applicable, and preserved target/parent identity.
+Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; current program-design and governing-specification identities; scope and claimed semantic effect; prior review coverage plus the parent semantic-diff record when coverage may be reused; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the parent-verified `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, reused coverage when applicable, and preserved target/parent identity.
 
 When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route Why/What findings to `spec-design`; route How findings back here. After an edit, the parent records whether meaning changed: semantic changes invalidate affected review coverage; parent-verified non-semantic edits such as formatting, link repair, review/process metadata, or typo-only corrections reuse coverage without model dispatch.
 
@@ -188,7 +188,7 @@ Completion: current independent review semantically covers both artifacts, or th
 
 ### 17. Return the local result
 
-Return artifact and governing-specification identities plus process-level snapshot metadata; immutable source inventory with identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis; structural and requirement-realization maps; self-check; independent review; debt/gaps; and non-acceptance.
+Return artifact and governing-specification identities; immutable source inventory with identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis; structural and requirement-realization maps; self-check; independent review; debt/gaps; and non-acceptance.
 
 IF returning a substantial program design in chat, use `tui-presentation` to render the selected component, call, state, or failure views before the compact result summary. The durable artifact remains the source of truth.
 
@@ -257,4 +257,4 @@ Do not return `locally-ready` while any of these hold:
 - a delegated writer/modeler originated design meaning;
 - planning would still need to invent an owner, interface, state/failure policy, trust control, or proof seam;
 - required independent review is missing, stale, partial, silent, or blocked;
-- artifact/specification identities or process snapshot metadata, source coverage, or non-acceptance are missing from the workflow result.
+- artifact/specification identities, source coverage, or non-acceptance are missing from the workflow result.

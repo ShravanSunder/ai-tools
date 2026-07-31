@@ -17,7 +17,7 @@ shared understanding
 
 `handoff` means portability. It does not mean the phase is approved, complete, or ready for the next phase. A handoff packet makes context transferable so a future agent, another CLI, or another machine can continue without guessing.
 
-Design-bearing planning is admitted only from a pair-mode `spec-program-review` result that is `ready` and semantically current for the specification and program design. Review snapshot identifiers record what reviewers inspected, but byte equality is not the freshness rule. A handoff preserves that evidence; it does not create it. The only direct planning bypass is work positively classified as implementation-mechanics-only with no new design-bearing decision.
+Design-bearing planning is admitted only from a pair-mode `spec-program-review` result that is `ready` and semantically current for the specification and program design. A handoff preserves that evidence; it does not create it. The only direct planning bypass is work positively classified as implementation-mechanics-only with no new design-bearing decision.
 
 ## Namespace Map
 
@@ -128,7 +128,7 @@ Use `spec-program-review` to independently classify and review a specification, 
 
 The superseded `spec-creation-swarm` and `spec-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills; creation and review route through the three skills above.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, review snapshot metadata, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves semantically current pair readiness.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, the pair-review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves semantically current pair readiness.
 
 ### Plan boundary
 

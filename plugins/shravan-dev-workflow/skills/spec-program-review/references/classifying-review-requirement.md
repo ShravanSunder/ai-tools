@@ -8,7 +8,7 @@ Expected inputs:
 target classification: general-domain | runtime-skill-package
 skills-creation parent packet/result identity when target is runtime-skill-package
 requested future mode: specification-only | program-only
-covered artifact identities and current review snapshot identifiers
+covered artifact identities
 scope and claimed semantic effect
 complete scoped governing-source inventory
 matched material-risk predicates
@@ -21,7 +21,7 @@ Return either:
 ```text
 invocation state: complete
 target classification and skills-creation parent packet/result identity when applicable
-requested mode, covered artifact identities, and current review snapshot identifiers
+requested mode and covered artifact identities
 immutable governing-source inventory: each source identity, version/digest,
 authority status, freshness/applicability, and scoped-completeness basis
 review-required | non-substantial

@@ -46,7 +46,7 @@ evidence-blocked
 deferred
 ```
 
-A `locally-ready` result includes the artifact identity and process-level snapshot metadata; an immutable governing-source inventory containing every source identity, version or digest, authority status, freshness/applicability, and scoped-completeness basis; the load-bearing decision inventory; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed. Snapshot metadata belongs in the workflow result or review packet, never in the durable specification prose.
+A `locally-ready` result includes the artifact identity; an immutable governing-source inventory containing every source identity, version or digest, authority status, freshness/applicability, and scoped-completeness basis; the load-bearing decision inventory; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed.
 
 Produce terminal labels by observable condition:
 
@@ -123,7 +123,7 @@ Completion: every material obligation names evidence that could prove it, and no
 
 ### 9. Author the smallest coherent artifact
 
-MUST load `references/artifact-and-self-review.md` to choose the artifact structure, preserve the specification spine, and return the structure decision, traceability/navigation result, artifact identity, and process-level snapshot metadata.
+MUST load `references/artifact-and-self-review.md` to choose the artifact structure, preserve the specification spine, and return the structure decision, traceability/navigation result, and artifact identity.
 
 Follow the repository's documented spec location; otherwise use `docs/specs/` for substantial file-backed work. Keep research ledgers and review reports out of the normative design artifact.
 
@@ -133,13 +133,13 @@ Completion: every normative claim has one home and a stranger can navigate from 
 
 ### 10. Run the author self-check
 
-Using the Author Self-Check procedure in the already-loaded `references/artifact-and-self-review.md`, re-read the whole artifact. Check authority conflicts, traceability, vague obligations, missing contract/failure behavior, hidden How, contradictory goals/non-goals, proof gaps, and assumptions disguised as decisions, then return the snapshot-bound author self-check with exact gaps.
+Using the Author Self-Check procedure in the already-loaded `references/artifact-and-self-review.md`, re-read the whole artifact. Check authority conflicts, traceability, vague obligations, missing contract/failure behavior, hidden How, contradictory goals/non-goals, proof gaps, and assumptions disguised as decisions, then return the author self-check with exact gaps.
 
-Completion: the current authored snapshot has a self-check result with exact passes and gaps. Self-check is never independent review.
+Completion: the current artifact has a self-check result with exact passes and gaps. Self-check is never independent review.
 
 ### 11. Obtain fresh local review when required
 
-Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the current artifact identity and review snapshot identifier; scope and claimed semantic effect; prior review coverage plus the parent semantic-diff record when coverage may be reused; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the parent-verified `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, reused coverage when applicable, and preserved target/parent identity.
+Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the current artifact identity; scope and claimed semantic effect; prior review coverage plus the parent semantic-diff record when coverage may be reused; the immutable governing-source inventory and scoped-completeness basis; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the parent-verified `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, reused coverage when applicable, and preserved target/parent identity.
 
 When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. After an edit, the parent records whether meaning changed: semantic changes invalidate affected review coverage; parent-verified non-semantic edits such as formatting, link repair, review/process metadata, or typo-only corrections reuse coverage without model dispatch.
 
@@ -147,7 +147,7 @@ Completion: current independent review semantically covers the artifact, or the 
 
 ### 12. Return the local result
 
-Return the artifact identity and process-level snapshot metadata; immutable governing-source inventory with identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
+Return the artifact identity; immutable governing-source inventory with identity, version/digest, authority status, freshness/applicability, and scoped-completeness basis; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
 
 IF returning a substantial specification in chat and problem, consumer, authority, journey, or requirement-to-proof relationships are non-obvious, use `tui-presentation` to render only those Why/What relationships. Keep normative meaning in the artifact and route internal component, call, state, or failure-mechanism views to `program-design`.
 
@@ -171,4 +171,4 @@ Do not return `locally-ready` while any of these hold:
 - internal architecture or implementation tasks are presented as requirements without an externally authoritative constraint;
 - a section writer originated meaning;
 - a required independent review is missing, stale, partial, silent, or blocked;
-- artifact identity/process snapshot metadata, source coverage, or non-acceptance boundary is missing from the workflow result.
+- artifact identity, source coverage, or non-acceptance boundary is missing from the workflow result.

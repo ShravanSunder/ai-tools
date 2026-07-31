@@ -8,7 +8,7 @@ Return a spec-review verdict, blocker overrides, rubric evidence, accepted and r
 
 A proposal that meets none of the doc predicates below stays conversational: it lives in the run's messages and the review packet carries it.
 
-IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, write it as a spec doc before dispatch and make the doc the reviewed artifact; the review packet's `review target` carries the doc's path, revision, and digest. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
+IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, write it as a spec doc before dispatch and make the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
 
 ```text
 targets and owner plugin, with the runs in sequence
@@ -19,7 +19,7 @@ per-run surface allocation: trigger / main path / depth / proof
 authoring basis and proof plan, with each run's proof posture
 coordination: base branch and commit, pending edits, version and changelog landing
 non-goals
-spec-review record: accepted revision label, digest and algorithm (only the digest value excluded from its computation), lanes, receipts, verdict, acceptance
+spec-review record: accepted revision label, lanes, receipts, verdict, semantic coverage, acceptance
 ```
 
 Each decisions row records the default taken and its rationale so the user can strike it cheaply — after acceptance, striking a row is an edit like any other, and a row without a rationale gives the user nothing to strike against. Every problem or evidence claim names its source or is labeled a hypothesis. The coordination slot is read at implement and ship time: a slice run checks its base, pending edits, and version/changelog landing against it before editing. The doc is dispatch-ready when every slot carries what its consuming run can execute from without guessing, or its exact unknown; a slot holding TBD is neither.
@@ -74,7 +74,7 @@ The parent reduces candidate findings into the spec-review result. Accepted find
 
 ### Acceptance Binding
 
-The parent closes a review by writing the spec-review record into the doc, then computing the content digest over the whole doc with only the digest value excluded; the record carries the accepted revision label, the digest, and its algorithm. That closing write is the acceptance act; any edit after it, body or record, changes the digest and expires the acceptance. A later run implementing one slice of an accepted multi-run spec cites the acceptance instead of re-dispatching — after recomputing the digest and stating the recorded and recomputed values, or confirming from version-control history that no commit or uncommitted working-tree change touched the doc since the record; a status line that still reads accepted-to-implement is not verification, and an instruction to keep going under the existing acceptance is not an explicit review skip. An expired acceptance sends the delta back through spec review under this reference's lane selection with the revised doc as the reviewed artifact, and acceptance re-binds to its new revision label and digest.
+The parent closes a review by writing the spec-review record into the doc with the accepted revision label and semantic coverage. A later run implementing one slice compares changes since that accepted revision by meaning. Parent-verified formatting, typo, link, or process-only changes preserve acceptance without reviewer dispatch. A semantic change expires only the affected coverage; uncertain semantic effect is treated as semantic. Expired coverage sends the affected delta back through spec review under this reference's lane selection, and acceptance re-binds to the revised meaning. A status line that still reads accepted-to-implement is not verification, and an instruction to keep going under the existing acceptance is not an explicit review skip.
 
 Report with these exact labels:
 

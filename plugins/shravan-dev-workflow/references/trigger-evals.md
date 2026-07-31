@@ -19,7 +19,7 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - Goal clarity gate: if objective, scope, proof, or stop condition is unclear, did `orchestrator-goal` route never-articulated intent/unmade decisions to `discuss-pathfinding` and a drifted existing model to `discuss-clarify-mental-models` instead of setting a fuzzy long-horizon goal?
 - Artifact gate: if clear spec/plan/debug work ran and the user did not ask for chat-only/no-files output, did the phase skill write its lane artifact?
 - Artifact lifecycle gate: if cleanup, archival, promotion, or source-of-truth reconciliation is needed, did `docs-maintain` own that lifecycle decision instead of the phase skill?
-- Review-classifier gate: if `spec-program-review` was invoked only to classify review requirement, did the parent record the artifact identities, inspected snapshots, and semantic effect; return `review-required | non-substantial` or a blocked missing-input result; dispatch zero reviewers; and return no review verdict?
+- Review-classifier gate: if `spec-program-review` was invoked only to classify review requirement, did the parent record the artifact identities and semantic effect; return `review-required | non-substantial` or a blocked missing-input result; dispatch zero reviewers; and return no review verdict?
 - Planning-readiness check: for design-bearing work, does `plan-creation-swarm` have a pair-mode `ready` result with semantically current coverage for the specification and program design; or, for the bypass, did source inspection positively prove that every design-bearing category is absent?
 
 ## Review Routing
@@ -32,7 +32,7 @@ These are objective gates, not soft rules. If the answer to the gate question is
 - "Review this specification for authority and testability."
 - "Is this specification/program-design pair ready for planning?"
 
-Gate: the `classify-review-requirement` operation records artifact identities, review snapshots, semantic-diff evidence, and complete scoped governing-source inventory; returns `review-required | non-substantial` or a blocked missing-input result; dispatches zero reviewers; and returns no review verdict. A separate review invocation records the inspected snapshots, reads the complete required artifact set, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound non-accepting verdict. Non-semantic edits carry coverage forward without model dispatch; semantic edits rerun only affected coverage.
+Gate: the `classify-review-requirement` operation records artifact identities, semantic-diff evidence, and complete scoped governing-source inventory; returns `review-required | non-substantial` or a blocked missing-input result; dispatches zero reviewers; and returns no review verdict. A separate review invocation records what it inspected, reads the complete required artifact set, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound non-accepting verdict. Non-semantic edits carry coverage forward without model dispatch; semantic edits rerun only affected coverage.
 
 ### spec-program-review should not trigger
 
@@ -226,7 +226,7 @@ Gate: an implementation plan exists; writes a repo-local handoff file and prints
 - "Package this design/spec state for a fresh session."
 - "Prepare a copy-paste handoff for this architecture proposal before planning."
 
-Gate: packages spec/design context, decisions, non-goals, open questions, evidence, review snapshot metadata, and semantic pair-review freshness without creating an implementation plan or calling the spec complete. The packet recommends `plan-creation-swarm` for design-bearing work only when pair-mode `ready` coverage is semantically current for the specification and program design; missing How routes to `program-design`, and a complete but unreviewed/semantically stale pair routes to `spec-program-review`.
+Gate: packages spec/design context, decisions, non-goals, open questions, evidence, the pair-review result identity, and semantic pair-review freshness without creating an implementation plan or calling the spec complete. The packet recommends `plan-creation-swarm` for design-bearing work only when pair-mode `ready` coverage is semantically current for the specification and program design; missing How routes to `program-design`, and a complete but unreviewed/semantically stale pair routes to `spec-program-review`.
 
 ### plan-creation-swarm should trigger
 

@@ -15,7 +15,7 @@ Flow: quick | deep | focus | branch
 
 - Basis: current-pair-ready | implementation-mechanics-only
 - Evidence identity:
-  - current-pair-ready: <specification/program-design identities, pair-review result identity, inspected review snapshots>
+  - current-pair-ready: <specification/program-design identities, pair-review result identity, semantic-coverage statement>
   - implementation-mechanics-only: <classification result identity and inspected-source identities>
 - Semantic freshness: <current coverage or parent-verified non-semantic change record>
 

@@ -49,7 +49,7 @@ Package spec/design context so another agent can continue without reconstructing
 - Tradeoffs and who pays their cost
 - Security context or reason it is not security-sensitive
 - Proof expectations: validation strategy, proof assumptions, explicit deferrals to `plan-creation-swarm`, or open proof gaps
-- Planning-admission evidence: specification/program-design identities, current pair-review identity/result and inspected review snapshots, semantic-coverage evidence including any parent-verified non-semantic change record, or the exact missing/stale prerequisite
+- Planning-admission evidence: specification/program-design identities, current pair-review identity/result, semantic-coverage evidence including any parent-verified non-semantic change record, or the exact missing/stale prerequisite
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent

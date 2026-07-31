@@ -5,7 +5,7 @@ description: Use when creating a written implementation plan from a specificatio
 
 # Plan Creation Swarm
 
-Create an implementation plan only after verifying that planning can start. Design-bearing planning starts only when a pair-mode `spec-program-review` result is `ready` and its semantic coverage is current for the specification and program design. Review snapshot identifiers may accompany the result as process evidence, but byte equality is not the admission rule. A narrow implementation-mechanics-only route is available only after positive classification proves that no design-bearing decision exists. This boundary turns authoritative Why/What plus settled structural How into "how we will change the repo and prove it." It does not redefine product intent, rewrite requirements, invent structural How, or execute the plan.
+Create an implementation plan only after verifying that planning can start. Design-bearing planning starts only when a pair-mode `spec-program-review` result is `ready` and its semantic coverage is current for the specification and program design. A narrow implementation-mechanics-only route is available only after positive classification proves that no design-bearing decision exists. This boundary turns authoritative Why/What plus settled structural How into "how we will change the repo and prove it." It does not redefine product intent, rewrite requirements, invent structural How, or execute the plan.
 
 The reviewed pair defines meaning and structure; this skill defines sequence. It turns current requirements, design decisions, and proof seams into ordered tasks, parallel work lanes, disjoint write scopes, integration gates, validation gates, and evidence requirements. Non-trivial plans carry a requirements/proof matrix; tasks whose required proof cannot pass at their size are split before execution.
 
@@ -34,7 +34,6 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Stay read-only against product surfaces. Do not edit product code, tests, configs, or non-plan docs as part of plan creation.
 - Write a plan artifact unless the user explicitly asks for chat-only output.
 - For `current-pair-ready`, read the complete current specification, program design, and pair-review result. Compare any post-review changes semantically: reuse coverage for parent-verified non-semantic edits without reviewer dispatch; route semantic or uncertain changes back to `spec-program-review` for affected coverage. For `implementation-mechanics-only`, read the complete authority/context used by the classification. If a source file exists, read it completely.
-- Keep review snapshot metadata in review/admission records. Never edit a specification, program design, handoff, or plan merely to mirror another artifact's hash, digest, version string, or snapshot metadata.
 - Verify major assumptions against live repo evidence before turning them into tasks.
 - Use subagents by default for substantial plan creation when codebase boundary, validation/proof, execution-order, security/reliability, or scope-and-proof-fit lanes can run independently. Plan-creation lanes use medium or high reasoning effort according to task complexity, latency cost, and risk. For tiny plans, name the smaller lane set used.
 - Reject requests for low-effort planning lanes as a planning-quality shortcut. In the live response or plan artifact, name the lane reasoning-effort policy: medium for bounded/simple planning lanes, high for proof-heavy, security, reliability, cross-module, or complex sequencing lanes.
@@ -65,7 +64,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - otherwise route the exact gap to `spec-design`, `program-design`, or `spec-program-review` and stop.
 2. Establish source coverage and freshness:
    - complete-file coverage for file-backed sources
-   - specification, program-design, pair-review identities, inspected review snapshots, and semantic-coverage evidence for design-bearing work
+   - specification, program-design, pair-review identities, and semantic-coverage evidence for design-bearing work
    - packet files and semantic-freshness evidence for handoffs
    - implementation-mechanics-only classification evidence when that bypass applies
    - limitations for chat-only input
