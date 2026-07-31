@@ -195,10 +195,10 @@ Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.
 ```
 
-## References
+## Source And Maintainer Resources
 
 - Skill source: [`skills/`](skills/)
-- Trigger and routing evals: [`references/trigger-evals.md`](references/trigger-evals.md)
+- Shared runtime references: [`shared-references/`](shared-references/)
 - Source inspiration catalog: [`docs/source-inspiration-catalog.md`](docs/source-inspiration-catalog.md)
 - Release smoke and behavioral checks: [`../../docs/changelog/references/shravan-dev-workflow-smoke.md`](../../docs/changelog/references/shravan-dev-workflow-smoke.md)
 - Release notes: [`../../docs/changelog/`](../../docs/changelog/)

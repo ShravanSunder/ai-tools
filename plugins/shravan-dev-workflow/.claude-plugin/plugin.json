@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Development workflow skills for goal orchestration, research swarms, authoritative spec design, structural program design, independent spec/program review, handoffs, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"

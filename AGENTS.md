@@ -94,7 +94,6 @@ Upstream skill collections are tracked in a separate meta-repo so this plugin ca
 
 - **Meta-repo:** `/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/`
 - **Lite in-plugin map:** `plugins/shravan-dev-workflow/docs/source-inspiration-catalog.md` (preserve/avoid + workflow-area overview; not a runtime skill reference)
-- **Compatibility pointer:** `plugins/shravan-dev-workflow/references/source-inspirations.md`
 
 | Need | Open |
 |------|------|
@@ -105,6 +104,12 @@ Upstream skill collections are tracked in a separate meta-repo so this plugin ca
 | How to bump submodules / keep indexes synced | `ai-dev-skills/AGENTS.md` |
 
 **Maintain both.** Update `ai-dev-skills` for path-level mappings, pin SHAs, and bump notes. Refresh the lite catalog here only when the high-level preserve/avoid or workflow-area story changes. Do not copy upstream skill prose into plugin skills; do not treat inspiration as proof that local behavior works.
+
+## Shared Runtime References
+
+`plugins/shravan-dev-workflow/shared-references/` contains model-readable runtime procedures loaded by two or more active skills for the same cross-skill behavior. Name each file for the specific domain and action it owns, such as `code-review-feedback-handling.md`; do not use generic names such as `common.md`, `workflow.md`, or `shared-rules.md`.
+
+Keep this directory small. Skill-specific stages, lane contracts, packet shapes, schemas, route-backs, proof rules, and examples remain under the owning skill's `references/`. Maintainer documentation belongs in `plugins/shravan-dev-workflow/docs/`; repository tests and evals belong under `tests/`. Do not preserve forwarding stubs when moving a runtime reference: update every active caller in the same hard cutover and let historical artifacts retain their original paths.
 
 ## System Observability Ownership
 

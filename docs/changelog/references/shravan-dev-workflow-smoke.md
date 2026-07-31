@@ -3,12 +3,13 @@
 Use this after installing or refreshing `shravan-dev-workflow` and restarting
 Codex. This is maintainer/release guidance, not human overview content.
 
-## 1.7.1 Execution Status
+## 1.7.2 Execution Status
 
-Not executed for the 2026-07-31 retirement update. Pressure testing remains
-deferred by user direction. No Codex or Claude refresh/reinstall was performed.
-The checks below are future post-refresh behavior proof, not evidence already
-obtained.
+Not executed for the 2026-07-31 shared-reference reorganization. The source
+change includes a narrow feedback-ownership clarification, but model pressure
+proof remains deferred by user direction. No Codex or Claude refresh/reinstall
+was performed. The checks below remain future post-refresh behavior proof, not
+evidence already obtained.
 
 ## Post-Restart Smoke Test
 
@@ -29,6 +30,7 @@ obtained.
 15. Ask `orchestrator-goal` for an already-clear goal, never-articulated intent, and a drifted existing goal. Confirm they route to goal compilation, `discuss-pathfinding`, and `discuss-clarify-mental-models`.
 16. Exercise `docs-maintain`, `debug-investigation`, `skill-audit`, `implementation-execute-plan`, `implementation-pr-wrapup`, and both handoff skills with their normal true prompts.
 17. Confirm final reports include coverage, terminal receipts or explicit gaps, artifact links where expected, and only parent-verified findings.
+18. Give `implementation-review-swarm` one accepted implementation finding, then give `implementation-pr-wrapup` one existing pull-request review comment. Confirm both load `shared-references/code-review-feedback-handling.md`, verify the feedback before accepting it, and preserve their distinct remediation versus PR-lifecycle ownership.
 
 ## Behavioral Pass Criteria
 

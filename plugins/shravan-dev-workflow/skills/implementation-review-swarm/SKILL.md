@@ -116,8 +116,8 @@ Reviewers must not trust implementation summaries, previous agent reports, test 
    - Reject claims that cannot be proven from current artifacts.
    - Deduplicate by root cause.
 
-8. Review reception and routing
-   - Load `../../references/review-reception.md` to receive accepted findings, decide what this workflow owns, and handle feedback produced or validated by this review.
+8. Review feedback and routing
+   - Load `../../shared-references/code-review-feedback-handling.md` to receive accepted findings, decide what this workflow owns, and handle feedback produced or validated by this review.
    - Route accepted blocker/important implementation findings to `implementation-execute-plan` unless a tiny same-session review-fix is explicitly scoped.
    - Route plan translation errors to `plan-creation-swarm`, plan validation issues to `plan-review-swarm`, missing or ambiguous Why/What to `spec-design`, missing structural How to `program-design`, proposed specification/program-design validation to `spec-program-review`, and unresolved user-owned choices to direct clarification, or to `discuss-clarify-mental-models` when the issue is shared-model drift.
    - Pure follow-through on existing GitHub PR comments or review threads belongs to `implementation-pr-wrapup`.
@@ -184,7 +184,7 @@ Rejected findings should not be listed by default. Mention them only when a reje
 
 ## Addressing Accepted Findings
 
-Implementation review includes review reception when the parent agent owns the implementation. Load `../../references/review-reception.md` before routing accepted findings, making a tiny explicitly scoped same-session review-fix, replying to review findings produced by this review, or closing threads for accepted findings from this review. Existing PR comment/thread follow-through belongs to `implementation-pr-wrapup`.
+Implementation review includes verified feedback handling when the parent agent owns the implementation. Load `../../shared-references/code-review-feedback-handling.md` before routing accepted findings, making a tiny explicitly scoped same-session review-fix, replying to review findings produced by this review, or closing threads for accepted findings from this review. Existing PR comment/thread follow-through belongs to `implementation-pr-wrapup`.
 
 ## Progressive Disclosure
 
@@ -197,7 +197,7 @@ Implementation review includes review reception when the parent agent owns the i
 - Load `references/lanes/false-positive-substitutes.md` when a review can pass while the desired system may still be missing.
 - Load `references/reviewer-prompts.md` before dispatching reviewers or writing a copy-paste review prompt.
 - Load `references/external-counsel.md` when user-requested Claude, Gemini, `agy`, or another outside model lane is included.
-- Load `../../references/review-reception.md` before addressing accepted findings from this review. Use the route-back rule unless a tiny same-session review-fix is explicitly scoped.
+- Load `../../shared-references/code-review-feedback-handling.md` before addressing accepted findings from this review. Use the route-back rule unless a tiny same-session review-fix is explicitly scoped.
 
 ## Report Shape
 
