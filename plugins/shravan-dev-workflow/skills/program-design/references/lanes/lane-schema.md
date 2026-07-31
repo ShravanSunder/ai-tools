@@ -6,8 +6,8 @@ Packet:
 
 ```text
 lane and assignment identity
-exact governing specification identity/digest
-program-design identity/digest when the selected lane's prerequisites say it
+governing specification path and current text
+program-design path and current text when the selected lane's prerequisites say it
 exists; otherwise `not-yet-produced` plus the current workflow stage
 selection predicate and prerequisites
 bounded question and source scope
@@ -32,4 +32,4 @@ parent verification required
 
 `no-receipt` is parent-recorded after one explicit follow-up; it is never a fabricated receipt or clean result.
 
-Complete when: the lane output is bound to the assignment/digests, stays within authority, and gives the parent enough source evidence to verify or reject it.
+Complete when: the lane output covers the current assigned targets, stays within authority, and gives the parent enough source evidence to verify or reject it.

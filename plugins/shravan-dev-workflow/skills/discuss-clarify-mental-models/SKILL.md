@@ -80,7 +80,7 @@ Branch references:
 - `research-swarm`: evidence gathering, prior art, current docs, memory/session mining, or source ledgers.
 - `spec-design`: durable authoritative Why/What contract.
 - `program-design`: durable structural How once observable obligations are settled.
-- `plan-creation-swarm`: implementation sequencing after current exact-digest pair readiness or a positively proven implementation-mechanics-only admission.
+- `plan-creation-swarm`: implementation sequencing after a pair-ready review covering the current specification and program design, or a positively proven implementation-mechanics-only admission.
 - open in this skill: blocked work, broken model, conflicting artifacts, repeated loop, or missing authority when no shipped owner exists yet.
 
 ## Red Flags

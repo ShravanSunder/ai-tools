@@ -19,9 +19,9 @@ Vetted findings and prioritized backlogs may be returned without planning admiss
 
 ```text
 current-pair-ready
-  exact current specification and program-design digests
+  complete current specification and program design
   required local review coverage is current
-  current pair-mode spec-program-review result: ready for those digests
+  current pair-mode spec-program-review result: ready and covers both artifacts
   accepted findings corrected under refreshed review
   no blocking decision or evidence gap
 
