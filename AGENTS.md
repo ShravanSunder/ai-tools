@@ -117,14 +117,12 @@ Upstream skill collections are tracked in a separate meta-repo so this plugin ca
 | spec-design | `plugins/shravan-dev-workflow/skills/spec-design/` | Authoritative Why/What: problem, consumers, outcomes, requirements, observable contracts, constraints, failure obligations, and proof obligations |
 | program-design | `plugins/shravan-dev-workflow/skills/program-design/` | Structural How: components, ownership, interfaces, state, flows, failure/recovery, concurrency, trust boundaries, and proof seams |
 | spec-program-review | `plugins/shravan-dev-workflow/skills/spec-program-review/` | Independent digest-bound specification, program-design, or pair review without editing or acceptance |
-| spec-creation-swarm | `plugins/shravan-dev-workflow/skills/spec-creation-swarm/` | Explicit-invocation legacy fixed-swarm spec/design creation workflow; retained, not deleted |
 | discuss-clarify-mental-models | `plugins/shravan-dev-workflow/skills/discuss-clarify-mental-models/` | Read-only reconvergence for unstable shared mental models before specs, plans, docs, or code: terms, boundaries, assumptions, source-of-truth questions, tradeoffs, branches, and countercase |
 | discuss-pathfinding | `plugins/shravan-dev-workflow/skills/discuss-pathfinding/` | Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/glossary records as they crystallize |
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
 | manage-agents | `plugins/shravan-dev-workflow/skills/manage-agents/` | Choose and manage advisors, sidekicks, delegates, operators, subagents, and their allowed swarms across Frontier/Balanced/Mini models, native runtimes, ACPX usage, and ACP adapter boundaries |
 | orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals: never-articulated intent to discuss-pathfinding, drifted models to discuss-clarify-mental-models |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
-| spec-review-swarm | `plugins/shravan-dev-workflow/skills/spec-review-swarm/` | Explicit-invocation legacy fixed-swarm spec/design review workflow; retained, not deleted |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
 | plan-creation-swarm | `plugins/shravan-dev-workflow/skills/plan-creation-swarm/` | Create written implementation plans from an admitted exact-digest pair-ready or proven implementation-mechanics-only input, with proof gates and parallel work lanes, without editing code |
 | plan-improve-repo | `plugins/shravan-dev-workflow/skills/plan-improve-repo/` | Audit a repository for high-leverage improvements; write or validate executable plans only after planning admission |
@@ -143,6 +141,8 @@ Upstream skill collections are tracked in a separate meta-repo so this plugin ca
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
+
+Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The retired `spec-creation-swarm` and `spec-review-swarm` trees remain there as provenance for the active `spec-design`, `program-design`, and `spec-program-review` workflows.
 
 Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
 

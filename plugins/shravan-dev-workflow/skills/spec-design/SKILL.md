@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when defining or revising a specification's authoritative Why/What, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, a standalone security scan/audit/threat model, or an explicitly requested legacy spec-creation-swarm run.
+description: Use when defining or revising a specification's authoritative Why/What, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Spec Design

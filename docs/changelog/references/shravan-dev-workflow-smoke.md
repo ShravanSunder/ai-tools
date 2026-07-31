@@ -3,16 +3,16 @@
 Use this after installing or refreshing `shravan-dev-workflow` and restarting
 Codex. This is maintainer/release guidance, not human overview content.
 
-## 1.7.0 Execution Status
+## 1.7.1 Execution Status
 
-Not executed for the 2026-07-30 source update. Pressure testing was deferred by
-user direction. No Codex or Claude refresh/reinstall was performed; installed
-readback remains `1.6.72`. The checks below are future post-refresh behavior
-proof, not evidence already obtained.
+Not executed for the 2026-07-31 retirement update. Pressure testing remains
+deferred by user direction. No Codex or Claude refresh/reinstall was performed.
+The checks below are future post-refresh behavior proof, not evidence already
+obtained.
 
 ## Post-Restart Smoke Test
 
-1. Confirm `spec-design`, `program-design`, and `spec-program-review` appear as the three primary spec/program skills. Confirm `spec-creation-swarm` and `spec-review-swarm` still appear with legacy display labels.
+1. Confirm `spec-design`, `program-design`, and `spec-program-review` appear as the three primary spec/program skills. Confirm the retired spec swarm skills do not appear in runtime discovery.
 2. Ask: `Define the problem, requirements, observable contract, and proof obligations for this feature.` Confirm generic Why/What routes to `spec-design`, not a legacy swarm.
 3. Ask: `Turn this settled specification into a component, ownership, state, failure, and proof-seam design.` Confirm structural How routes to `program-design`.
 4. Ask: `For this exact specification digest, classify whether independent specification-only review is required.` Confirm `spec-program-review` returns the classifier result or a blocked missing-input result with zero reviewer dispatch and no review verdict.
@@ -20,7 +20,7 @@ proof, not evidence already obtained.
 6. Ask generic `Grill me on requirements I have not decided.` Confirm it routes to `discuss-pathfinding`. Ask `Our previously agreed model drifted after this constraint changed; reconverge it.` Confirm only the explicit drift case routes to `discuss-clarify-mental-models`.
 7. Ask: `Threat-model this service as a standalone security exercise.` Confirm it routes to `ops-security-review`, while security obligations inside broader specification/program-design work remain with the owning design/review skill.
 8. Ask to create or evaluate each new skill as a runtime skill package. Confirm all three named-package requests route through `skills-creation`.
-9. Ask for `spec-creation-swarm` and `spec-review-swarm` by exact name. Confirm explicit legacy invocation still works and generic design/review prompts never select them.
+9. Confirm generic and explicitly named legacy spec-swarm requests route by intent to `spec-design`, `program-design`, or `spec-program-review`, and never discover a retired runtime skill.
 10. Ask `spec-handoff` to package a design whose How is missing, then one with complete but stale pair review, then one with a current exact-digest pair-mode `ready` result. Confirm next routes are `program-design`, `spec-program-review`, and `plan-creation-swarm`, respectively.
 11. Ask plan creation from a specification alone, from a complete pair with stale review, and from a current pair-mode `ready` review bound to exact current digests. Confirm the first two route upstream and only the third admits design-bearing planning.
 12. Ask plan creation for a claimed implementation-mechanics-only change. Confirm the planner inspects current sources and admits the bypass only after positively excluding every design-bearing category.
@@ -53,8 +53,8 @@ proof, not evidence already obtained.
   independent review. None is a fourth orchestration skill.
 - Direct named-package creation/update/evaluation for any of those three routes
   through `skills-creation`.
-- `spec-creation-swarm` and `spec-review-swarm` remain explicit-only legacy
-  workflows and do not win generic spec/design/review prompts.
+- Retired spec-swarm source remains preserved for provenance but is absent from
+  runtime discovery and active routing.
 - Standalone threat-model prompts route to `ops-security-review`; ordinary
   security obligations and trust-boundary realization remain inside their
   broader specification/program-design/review context.

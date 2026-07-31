@@ -58,6 +58,10 @@ minimal metadata needed for its JSON report. `Expected Compliant Behavior`,
 `Failure Signals`, and the `expect_*` assertions are grader-only; showing them
 to the model lets it parrot compliance it never demonstrated.
 
+Scenarios for retired skills live under `retired-pressure-scenarios/` and are
+excluded from the active runner. They are preserved as historical behavior
+records, not as proof for current runtime skills.
+
 Limitations:
 
 - The harness still evaluates the agent's final self-reported JSON. Scenario
