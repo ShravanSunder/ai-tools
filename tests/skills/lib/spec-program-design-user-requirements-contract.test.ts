@@ -21,19 +21,14 @@ describe("user requirements and design-view contracts", () => {
     const sharedReference = readFileSync(sharedPath, "utf8");
 
     expect(existsSync(sharedPath)).toBe(true);
-    for (const skill of [discussPathfinding, specDesign, programDesign]) {
+    for (const skill of [specDesign, programDesign]) {
       expect(skill).toContain(
         "../../shared-references/diagram-rendering-and-fallbacks.md",
       );
     }
 
-    expect(
-      discussPathfinding.indexOf("references/user-requirements-extraction.md"),
-    ).toBeLessThan(
-      discussPathfinding.indexOf("diagram-rendering-and-fallbacks.md"),
-    );
-    expect(discussPathfinding.indexOf("6. **Write")).toBeLessThan(
-      discussPathfinding.indexOf("diagram-rendering-and-fallbacks.md"),
+    expect(discussPathfinding).not.toContain(
+      "../../shared-references/diagram-rendering-and-fallbacks.md",
     );
     expect(specDesign.indexOf("diagram-rendering-and-fallbacks.md")).toBeLessThan(
       specDesign.indexOf("MUST load `references/artifact-and-self-review.md`"),
@@ -75,6 +70,18 @@ describe("user requirements and design-view contracts", () => {
     }
 
     expect(discussPathfinding).toContain("draft rows");
+    for (const boundaryField of [
+      "existing foundation",
+      "actual missing behavior",
+      "non-goals",
+      "complexity budget",
+      "explicit confirmation or correction",
+    ]) {
+      expect(discussPathfinding).toContain(boundaryField);
+    }
+    expect(extraction).toContain("Confirm The Goal Boundary");
+    expect(extraction).toContain("Silence, generic assent");
+    expect(extraction).toContain("file-permission boundary");
     expect(specDesign).toContain("stable U identifiers");
     expect(specDesign).toContain(
       "normative-eligible only when its producer-owned authority state is `authorized`",
@@ -99,7 +106,7 @@ describe("user requirements and design-view contracts", () => {
       "skills/program-design/references/artifact-and-self-review.md",
     );
 
-    expect(discussPathfinding).toContain(
+    expect(discussPathfinding).not.toContain(
       "per direct-user class carrying at least one must-priority need",
     );
     expect(extraction).not.toContain(
@@ -121,7 +128,6 @@ describe("user requirements and design-view contracts", () => {
     const vocabulary = readPluginFile("docs/diagram-vocabulary.md");
 
     for (const viewToken of [
-      "journey map — user-requirements record",
       "journey map — specification",
       "context diagram",
       "requirement coverage table",
@@ -138,7 +144,6 @@ describe("user requirements and design-view contracts", () => {
     }
 
     for (const consumer of [
-      "skills/discuss-pathfinding/SKILL.md",
       "skills/spec-design/SKILL.md",
       "skills/program-design/SKILL.md",
       "shared-references/diagram-rendering-and-fallbacks.md",

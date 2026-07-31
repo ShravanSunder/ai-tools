@@ -6,7 +6,6 @@ This maintainer index records current view names, artifact altitude, semantic ow
 
 | View token | Altitude | Runtime semantic owner | Runtime rendering consumer |
 | --- | --- | --- | --- |
-| journey map — user-requirements record | Why/What extraction | `skills/discuss-pathfinding/SKILL.md` User-Requirements Journey Views | `skills/discuss-pathfinding/SKILL.md` |
 | journey map — specification | Why/What specification | `skills/spec-design/SKILL.md` Required Why/What Views | `skills/spec-design/SKILL.md` |
 | context diagram | Why/What specification | `skills/spec-design/SKILL.md` Required Why/What Views | `skills/spec-design/SKILL.md` |
 | requirement coverage table | Why/What specification | `skills/spec-design/SKILL.md` Required Why/What Views | `skills/spec-design/SKILL.md` |

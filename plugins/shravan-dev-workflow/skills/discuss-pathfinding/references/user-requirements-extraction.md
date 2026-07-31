@@ -1,10 +1,10 @@
 # User-Requirements Extraction
 
-This reference owns user/stakeholder classification, grill axes, row construction, journey-request preparation, record scaling, and local completion for a user-requirements pathfinding destination. `SKILL.md` owns the journey-map predicate and required semantic fields.
+This reference owns user/stakeholder classification, grill axes, row construction, useful user-job sequence inputs, record scaling and identity, the goal boundary, and local completion for a user-requirements pathfinding destination.
 
-Expected inputs: clarified destination and depth, live authoritative participants, candidate evidence, artifact conventions, and the `SKILL.md` User-Requirements Journey Views contract.
+Expected inputs: clarified destination and depth, participant and source identities, claimed decision authority, candidate evidence, file-permission boundary, and artifact conventions.
 
-Return: grill axes, classified user/stakeholder inventory, draft row-level requirements record, fired journey-map requests with required semantic fields, artifact scale/home, and exact authority/evidence gaps.
+Return: grill axes, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, goal-boundary model with explicit owner confirmation or the exact decision needed, refusal/fallback result, and exact authority/evidence gaps.
 
 ## Classify Users and Stakeholders
 
@@ -53,24 +53,52 @@ Evidence and authority are separate. Usage, tickets, observation, and quotations
 
 Classify each row in mixed-authority records. A document-level label never replaces row authority.
 
-## Prepare Journey Requests
+## Establish Authority Or Return The Gap
 
-Apply the `SKILL.md` User-Requirements Journey Views table without restating its predicate or required fields. Return one request per firing and the exact semantic fields the shared renderer must preserve.
+Do not infer authority from participation. Binding authority comes from an explicit decision-owner statement or a governing source whose scope covers the need; record its evidence anchor. An interviewee may supply strong observational evidence without owning product meaning.
+
+If the user declines extraction, return `extraction declined`, the authoritative sources already available, the rows or evidence established so far, and the remaining owner/evidence gaps. Do not select a specification readiness label; `spec-design` owns that decision after it classifies the complete source inventory.
+
+Stop this stage when every row has an evidenced authority state and any missing authority is an exact owner decision rather than an inferred answer.
+
+## Capture User-Job Sequence Inputs
+
+Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return the class, user-worded steps or transitions, observed pain and evidence, desired observable difference, and cited U rows. `spec-design` decides whether that input needs a journey view and owns any rendering.
 
 Teach the relationship through examples:
 
 - Good: “SDK consumer requests credentials → makes first call → receives an actionable result; pain: authentication failure requires reading source.”
 - Bad: “user opens `ExportModal`,” which is an implementation screen tour rather than the user's job.
-- Bad: a stakeholder with no direct interaction receives a fabricated journey.
+- Bad: a stakeholder with no direct interaction receives a fabricated sequence.
 
-A journey with no observable pain and evidence anchor is decoration. The caller completes the record only after the shared rendering result passes or returns the exact unresolved rendering gap.
+A high priority alone does not make a need sequence-shaped. Keep stakeholder needs and constraints without fabricating interaction.
+
+## Confirm The Goal Boundary
+
+Before specification handoff, build a compact boundary from the stabilized rows:
+
+```text
+primary customer, developer, contract, or library goal
+affected classes and the outcome that matters to each
+existing behavior or foundation that should be reused
+actual missing capabilities or observable differences
+explicit non-goals
+complexity budget: expected change shape and machinery that requires renewed approval
+unresolved owner choices or evidence gaps
+```
+
+Existing foundation means observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here. Missing pieces name the outcome gap, not every feature a complete platform might have. A useful complexity budget names the expected change shape and the additions that reopen scope. “Production-ready and complete” is not a budget because it cannot reject expansion.
+
+Challenge an addition by asking which U row it serves and what user-visible or contract outcome fails without it. Keep an unconfirmed expansion as an owner decision.
+
+Show this same current model to the authorized owner for explicit confirmation or correction. Silence, generic assent, and the agent's own restatement do not confirm it. Return an unconfirmed record with the exact decision needed; do not call it ready for specification design.
 
 ## Scale the Record
 
-- quick: return the record in chat unless durable handoff is requested or necessary;
-- standard, deep, or substantial handoff: write `docs/specs/<slug>/user-requirements.md`;
+- quick: return the record in chat unless a durable handoff is requested and files are allowed;
+- standard, deep, or substantial handoff: write `docs/specs/<slug>/user-requirements.md` when files are allowed; otherwise return the complete record in chat;
 - record classes and rows as they crystallize rather than reconstructing them at the end.
 
-A durable record also carries identity/digest, out-of-scope classes, unresolved questions, and `proposed | accepted | superseded` status. `decisions-and-docs.md` owns the general record-home discipline and reader test.
+A durable record uses its path as its inspectable identity. An in-chat record returns its complete text and uses a session or message anchor only when the host exposes one. Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record; keep confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
 
-Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, every journey predicate has a request with its required semantic fields, and the scaled draft record can be completed from the caller's rendering results without inventing meaning.
+Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the goal boundary and complexity budget are explicit, and the result carries owner confirmation of that same boundary or the exact decision still needed.
