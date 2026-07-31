@@ -16,7 +16,7 @@ what the next author/planner would guess
 smallest semantic correction target
 semantic owner: spec-design | program-design | caller
 validation note
-refresh / retest required
+semantic coverage to rerun
 contested evidence
 ```
 
@@ -43,7 +43,8 @@ Missing evidence is `unverified`, not rejection. Style preference without behavi
 ## Coverage-Bound Result
 
 ```text
-mode and exact covered digests
+mode, covered artifact identities, and inspected review snapshot identifiers
+semantic coverage statement and any later semantic-diff records
 governing-source coverage
 lane terminal states
 coverage gaps
@@ -51,12 +52,12 @@ accepted/rejected/contested/unverified findings
 what held
 verdict: ready | needs-revision | blocked | decision-needed
 first required revision
-correction verification and receipt refresh
+correction verification and affected-coverage rerun
 planning-readiness boundary
 non-edit / non-acceptance statement
 ```
 
-`ready` requires a complete fresh mode-complete receipt, no required coverage gap, no open blocker/important accepted finding, and no remaining planner-owned semantic invention.
+`ready` requires complete semantically current mode coverage, no required coverage gap, no open blocker/important accepted finding, and no remaining planner-owned semantic invention. Snapshot metadata proves what was inspected; it does not make byte equality the freshness rule.
 
 Produce exactly one verdict:
 
@@ -67,4 +68,6 @@ Produce exactly one verdict:
 
 When states mix, apply precedence `blocked -> needs-revision -> decision-needed -> ready`.
 
-Complete when: every candidate and lane terminal state is accounted for, the verdict cannot exceed coverage, and the result is bound to current digests.
+After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
+
+Complete when: every candidate and lane terminal state is accounted for, the verdict cannot exceed semantically current coverage, and the inspected snapshots plus any later semantic-diff records are explicit.

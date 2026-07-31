@@ -4,9 +4,9 @@ Mission: independently reconstruct and challenge the complete selected review mo
 
 Predicate: mandatory for every `review` invocation.
 
-Expected inputs: the complete lane-schema packet, exact target and governing-source set, and one selected mode reference.
+Expected inputs: the complete lane-schema packet, exact target snapshots and governing-source set, and one selected mode reference.
 
-Prerequisites: target identities/digests and governing-source coverage are complete and unambiguous.
+Prerequisites: target identities/snapshot identifiers and governing-source coverage are complete and unambiguous.
 
 Maximum authority: fresh-context, read-only, candidate-only. This lane may recommend `ready | needs-revision | blocked | decision-needed`; it may not issue the parent verdict, edit, remediate, plan, mutate lifecycle, or accept.
 

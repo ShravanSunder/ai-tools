@@ -4,7 +4,7 @@ This reference owns `pair` mode judgment.
 
 Pair review independently repeats load-bearing local checks; it does not trust author self-checks or prior local review as the only evidence.
 
-Before pair-specific integration checks, MUST load `reviewing-specification.md` and return its complete specification-mode judgment for the current specification digest. Then MUST load `reviewing-program-design.md` and return its complete program-mode judgment for the current program-design and governing-specification digests. Pair judgment consumes both results and may not replace either with author or prior-review summaries.
+Before pair-specific integration checks, MUST load `reviewing-specification.md` and return its complete specification-mode judgment for the current specification snapshot. Then MUST load `reviewing-program-design.md` and return its complete program-mode judgment for the current program-design and governing-specification snapshots. Pair judgment consumes both results and may not replace either with author or prior-review summaries.
 
 Inspect:
 
@@ -15,7 +15,7 @@ Inspect:
 - proof modality and structural seam form a sufficient chain;
 - non-goals and compatibility survive realization;
 - security/reliability and other applicable qualities map to owner, mechanism, failure/degradation, and proof;
-- all coverage matches current digests;
+- all coverage is semantically current for the current artifacts, with any post-review non-semantic changes recorded by the parent;
 - a planner can choose tasks/order/commands without inventing meaning or How.
 
 If local results are missing, pair `ready` requires independently repeating and recording the missing local checks. Missing prerequisites may still yield bounded findings, never false readiness.

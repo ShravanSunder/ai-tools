@@ -10,14 +10,14 @@ The plugin is built around one idea: each workflow phase should have a clear own
 shared understanding
   -> spec-design: authoritative Why/What
   -> program-design: structural How
-  -> spec-program-review: exact-digest independent pair review
+  -> spec-program-review: independent pair review; rerun only for meaning changes
   -> plan + proof matrix
   -> implementation proof
 ```
 
 `handoff` means portability. It does not mean the phase is approved, complete, or ready for the next phase. A handoff packet makes context transferable so a future agent, another CLI, or another machine can continue without guessing.
 
-Design-bearing planning is admitted only from a current pair-mode `spec-program-review` result that is `ready` for the exact current specification and program-design digests. A handoff preserves that evidence; it does not create it. The only direct planning bypass is work positively classified as implementation-mechanics-only with no new design-bearing decision.
+Design-bearing planning is admitted only from a pair-mode `spec-program-review` result that is `ready` and semantically current for the specification and program design. Review snapshot identifiers record what reviewers inspected, but byte equality is not the freshness rule. A handoff preserves that evidence; it does not create it. The only direct planning bypass is work positively classified as implementation-mechanics-only with no new design-bearing decision.
 
 ## Namespace Map
 
@@ -85,7 +85,7 @@ flowchart LR
     specReview --> specHandoff
     specReview --> specDesign
     specReview --> programDesign
-    specReview -->|"pair ready for exact current digests"| planCreate
+    specReview -->|"pair ready with current semantic coverage"| planCreate
     specHandoff -->|"packet proves the same gate"| planCreate
 
     planCreate --> planReview
@@ -124,17 +124,17 @@ Use `spec-design` to define authoritative Why/What before program design or plan
 
 Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, calls and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It produces an executable mental model, not a task list.
 
-Use `spec-program-review` to independently classify and review a specification, a program design, or their pair. It binds exact digests, reconstructs the model, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound verdict without editing artifacts or accepting the pair. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
+Use `spec-program-review` to independently classify and review a specification, a program design, or their pair. It records the inspected snapshot, reconstructs the model, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound verdict without editing artifacts or accepting the pair. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
 The superseded `spec-creation-swarm` and `spec-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills; creation and review route through the three skills above.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, exact artifact digests, and pair-review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves the current exact-digest pair-ready gate.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, review snapshot metadata, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves semantically current pair readiness.
 
 ### Plan boundary
 
-Use `plan-creation-swarm` to turn an admitted source into a written implementation plan. Design-bearing work requires a current pair-mode `spec-program-review` result that is `ready` for the exact current specification and program-design digests; missing How routes to `program-design`, and a complete but unreviewed or stale pair routes to `spec-program-review`. A direct bypass is allowed only when source inspection positively proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. The skill stays read-only against product code and captures task sequence, dependency graph, parallel work lanes, write surfaces, validation gates, rollback or recovery notes, risks, and open questions. Non-trivial plans include a requirements/proof matrix with source requirements, owning tasks, proof modalities, evidence sources, freshness guards, and proof layers; if proof cannot pass at the planned scope, the plan should split or replan before execution.
+Use `plan-creation-swarm` to turn an admitted source into a written implementation plan. Design-bearing work requires a pair-mode `spec-program-review` result that is `ready` with semantically current coverage; missing How routes to `program-design`, and a complete but unreviewed or semantically stale pair routes to `spec-program-review`. A direct bypass is allowed only when source inspection positively proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. The skill stays read-only against product code and captures task sequence, dependency graph, parallel work lanes, write surfaces, validation gates, rollback or recovery notes, risks, and open questions. Non-trivial plans include a requirements/proof matrix with source requirements, owning tasks, proof modalities, evidence sources, freshness guards, and proof layers; if proof cannot pass at the planned scope, the plan should split or replan before execution.
 
-Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog before planning admission, but writes or marks an executable plan `ready` only from a current exact-digest pair-ready result or a positively proven implementation-mechanics-only classification. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
+Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog before planning admission, but writes or marks an executable plan `ready` only from a semantically current pair-ready result or a positively proven implementation-mechanics-only classification. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
 
 Use `plan-review-swarm` to review a written implementation plan before code changes. It checks the whole artifact and verifies claims against the repo. Accepted blocker/important findings route back to `plan-creation-swarm`; missing Why/What routes to `spec-design`, and missing structural How routes to `program-design`.
 
@@ -185,7 +185,7 @@ Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review this specification/program-design pair.
 Use spec-handoff to package this design for another agent without creating a plan.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
-Use plan-creation-swarm to turn this exact-digest pair-ready specification/program-design result into an implementation plan.
+Use plan-creation-swarm to turn this semantically current pair-ready specification/program-design result into an implementation plan.
 Use plan-improve-repo to audit this repo and write executable improvement plans.
 Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.

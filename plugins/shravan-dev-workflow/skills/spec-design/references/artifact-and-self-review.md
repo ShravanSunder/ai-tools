@@ -1,10 +1,10 @@
 # Artifact and Author Self-Review
 
-This reference owns artifact structure choice, normative-home integrity, navigation, and the digest-bound author self-check.
+This reference owns artifact structure choice, normative-home integrity, navigation, and the snapshot-bound author self-check.
 
 Expected inputs: authority/problem model, outcomes/non-goals, requirement and contract inventories, cross-cutting obligations, proof coverage, and repo documentation conventions.
 
-Return in workflow order: first the artifact structure decision, artifact identity/digest, and traceability/navigation result; after the caller runs the complete author self-check stage, return the digest-bound author self-check with exact gaps.
+Return in workflow order: first the artifact structure decision, artifact identity, process-level snapshot metadata, and traceability/navigation result; after the caller runs the complete author self-check stage, return the snapshot-bound author self-check with exact gaps. Keep snapshot metadata in the workflow result; do not add it to the specification prose.
 
 ## Choose Structure for the Reader
 
@@ -62,8 +62,8 @@ Re-read the complete artifact and record:
 - duplicated normative homes;
 - whether the specification spine is readable without review notes.
 
-Bind the result to the artifact digest. Record exact failures, not “needs more detail.”
+Bind the result to the inspected artifact snapshot in process state. Record exact failures, not “needs more detail.”
 
 Self-check is author evidence only. It never substitutes for fresh independent review.
 
-Complete when: the artifact has one normative home per meaning, the reader can navigate problem to proof, and the digest-bound self-check names every known gap.
+Complete when: the artifact has one normative home per meaning, the reader can navigate problem to proof, and the snapshot-bound self-check names every known gap.
