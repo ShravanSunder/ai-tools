@@ -25,7 +25,7 @@ Plugin: `shravan-dev-workflow` 1.7.4
 - `claude plugin validate .` passed.
 - Four JSON manifests and all active OpenAI YAML metadata files parsed successfully.
 - The deterministic skills test suite passed: 8 files and 42 tests. TypeScript validation passed with pnpm 11.8.0.
-- Manual semantic/readability previews passed for one Mermaid context view, one Markdown requirement-coverage table, and one fenced plain-text call fallback. See [proof details](references/2026-07-31-user-requirements-design-view-proof.md).
+- Manual previews passed for one Markdown requirement-coverage table and one fenced plain-text call fallback. Mermaid source retained the required fields, but rendered readability was not inspected and remains an explicit gap. See [proof details](references/2026-07-31-user-requirements-design-view-proof.md).
 - Full model pressure tests were not run by explicit user direction. Stored scenarios and static/manual proof do not establish runtime behavior.
 
 ## Refresh Status

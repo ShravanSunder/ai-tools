@@ -43,6 +43,12 @@ describe("user requirements and design-view contracts", () => {
     );
     expect(sharedReference).toContain("format override: honored");
     expect(sharedReference).toContain("semantic preservation:");
+    expect(sharedReference).toContain(
+      "source-text inspection alone is never a visual pass",
+    );
+    expect(sharedReference).toContain(
+      "visual check: readable | unreadable | unverified",
+    );
     expect(sharedReference).toContain("result: pass | gap");
   });
 
@@ -180,6 +186,15 @@ describe("user requirements and design-view contracts", () => {
     expect(programDesign).toContain("satisfied by the existing system");
     expect(programDesign).toContain("which part of the complexity budget it spends");
     expect(programDesign).toContain("perform boundary check 2");
+    expect(programDesign).toContain(
+      "affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations",
+    );
+    expect(artifact).toContain(
+      "one compact row per stable identity or accepted group",
+    );
+    expect(programDesign).not.toContain(
+      "accepted-requirements coverage is intact",
+    );
     expect(programDesign).toContain("tmp/design-workflows/<date>-<slug>/");
     expect(programDesign).toContain("parent-verified non-semantic edits may retain coverage");
     expect(programDesign).not.toContain("Any later edit to either artifact makes");

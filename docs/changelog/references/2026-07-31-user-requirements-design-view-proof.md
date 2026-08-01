@@ -1,8 +1,8 @@
 # User-Requirements and Design-View Manual Proof
 
 Date: 2026-07-31
-Scope: manual semantic/readability preview for one Mermaid view, one Markdown table, and one fenced plain-text fallback
-Boundary: no Mermaid renderer is installed in this checkout; Mermaid source was inspected manually and is not claimed as machine-rendered syntax proof
+Scope: manual preview of one Mermaid fenced source, one Markdown table, and one fenced plain-text fallback
+Boundary: no Mermaid renderer is installed in this checkout; Mermaid source text was inspected, but rendered Mermaid output was not inspected. Per `shared-references/diagram-rendering-and-fallbacks.md`, rendered-readability for Mermaid is an explicit gap. The Markdown table and plain-text fallback remain valid text-inspectable previews.
 
 ## Mermaid Context View
 
@@ -15,13 +15,13 @@ flowchart LR
     excluded["Internal worker<br/>structural How"] -. "excluded from context view" .-> system
 ```
 
-Visual check:
+Source-text check (not a rendered visual check):
 
-- external consumers/stakeholder and observable surfaces are visible;
-- the system remains one opaque node;
+- external consumers/stakeholder and observable surfaces are named in the fenced source;
+- the system remains one opaque node in the source;
 - the internal worker is named as excluded negative space rather than drawn inside the system;
-- U1/U2 and C1/C2 anchors survive;
-- result: pass by manual source inspection; renderer availability remains not applicable to this preview.
+- U1/U2 and C1/C2 anchors survive in the source;
+- result: gap — Mermaid source was inspected, but rendered Mermaid readability was not performed (shared rendering rule requires inspecting rendered output; mark as explicit gap, not pass).
 
 ## Markdown Requirement Coverage Table
 
@@ -58,4 +58,4 @@ Visual check:
 
 ## Proof Boundary
 
-These previews show that the three supported media can preserve representative required fields. They do not prove stochastic skill invocation or behavior under pressure. Model pressure execution is deferred by explicit user direction.
+The table and plain-text previews preserve their representative required fields. The Mermaid source retains its fields, but rendered readability remains unverified and therefore cannot pass the visual check. These previews do not prove stochastic skill invocation or behavior under pressure. Model pressure execution is deferred by explicit user direction.

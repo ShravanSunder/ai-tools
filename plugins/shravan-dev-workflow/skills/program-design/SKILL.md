@@ -193,9 +193,9 @@ Author top-down. Begin with the smallest integrated overview—composed from alr
 
 Section writers/modelers may express only already selected requirements, components, ownership, interfaces, state/failure policies, and claims. Unmapped needs return as gaps.
 
-After deletion or simplification, compare coverage with the accepted requirements set. Many mechanisms may become fewer; accepted users, variants, defaults, scenarios, contracts, constraints, and proof obligations may not disappear without owner authority. Stop on a conflict with mutually narrowed current files.
+After deletion or simplification, compare coverage with the accepted requirements set. Many mechanisms may become fewer; the complete accepted requirements set from `spec-design` — affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations — may not lose any item without owner authority. Stop on a conflict with mutually narrowed current files.
 
-Completion: each design element serves an obligation, constraint, failure policy, or proof need; accepted-requirements coverage is intact; and every fired Required View has a passed rendering result with its semantic fields preserved.
+Completion: each design element serves an obligation, constraint, failure policy, or proof need; every accepted identity or accepted group has an inspectable `covered | owner-authorized supersession | gap` disposition and anchor; and every fired Required View has a passed rendering result with its semantic fields preserved.
 
 ### 15. Run the author integration self-check
 
