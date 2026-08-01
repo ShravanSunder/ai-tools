@@ -13,7 +13,7 @@ This is not the same as having no diagrams. The artifacts contain diagrams. The 
 
 ### Customer eval program design
 
-Source: `perseus-agent.spec-v2-data-guidance/docs/specs/2026-07-31-customer-eval-specification/2026-07-31-customer-eval-program-design.md`
+Source: private customer-eval program-design artifact; the checkout name and location are intentionally omitted.
 
 - The execution sequence at lines 120-142 shows conceptual participants: Voyager/Vitest, preflight, runtime, factual evaluator, and semantic judge.
 - The two minimal Voyager changes at lines 206-237 name `normalizeObservation`, PI `buildOutput`, `defineVoyagerEval`, and the proposed judge gate.
@@ -21,7 +21,7 @@ Source: `perseus-agent.spec-v2-data-guidance/docs/specs/2026-07-31-customer-eval
 
 ### Observability program design
 
-Source: `perseus-agent.logging-llmops/docs/specs/2026-07-31-perseus-agent-observability/2026-07-31-perseus-agent-observability-program-design.md`
+Source: private observability program-design artifact; the checkout name and location are intentionally omitted.
 
 - Lines 82-105 explain current runtime facts and identify the synchronous `streamFn` execution scope as the crux.
 - Lines 233-270 map current hooks to proposed lifecycle actions and define `runWithModelRequestContext`.

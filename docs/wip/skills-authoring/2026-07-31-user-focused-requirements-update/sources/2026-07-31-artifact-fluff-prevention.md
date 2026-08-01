@@ -32,7 +32,7 @@ After this update:
 
 ## Observed Failure (Reproduction Evidence)
 
-Source artifact set: `/Users/shravan.sunder/Documents/code/perseus-agent.spec-v2-data-guidance/docs/specs/2026-07-31-customer-eval-specification/` (requirements, eval specification, program design), authored under the current skills.
+Source artifact set: a private application repository's customer-eval requirements, specification, and program design, authored under the current skills. The excerpts below retain only the evidence needed to reproduce the workflow failure; the private checkout location is intentionally omitted.
 
 | # | Anchor | Fluff class |
 | --- | --- | --- |

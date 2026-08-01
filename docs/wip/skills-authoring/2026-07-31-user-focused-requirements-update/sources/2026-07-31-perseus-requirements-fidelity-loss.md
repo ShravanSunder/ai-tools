@@ -1,7 +1,7 @@
 # Perseus Requirements Fidelity Loss During Design Simplification
 
 Date: 2026-07-31
-Source checkout: `perseus-agent.better-skills`
+Source: private application skill-behavior checkout; the checkout name and location are intentionally omitted.
 Purpose: observed-failure evidence for `spec-design`, `program-design`, and `spec-program-review`; not a proposal contract
 
 ## Confirmed Failure
