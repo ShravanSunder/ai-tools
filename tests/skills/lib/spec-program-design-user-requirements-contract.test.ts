@@ -132,6 +132,12 @@ describe("user requirements and design-view contracts", () => {
     expect(specDesign).not.toContain("Any later artifact edit makes");
     expect(artifact).toContain("Human Deletion Test");
     expect(artifact).toContain("smallest Why/What model");
+    expect(artifact).toContain(
+      "one compact row per stable identity or accepted group",
+    );
+    expect(artifact).toContain(
+      'a bare "coverage intact" assertion is not a report',
+    );
     expect(specDesign).not.toContain("artifact identity/digest");
     expect(artifact).not.toContain("digest-bound");
   });
