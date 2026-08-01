@@ -84,7 +84,7 @@ Re-read the complete artifact and record:
 - process state, obscure headings, repeated companion narration, or reader-facing elements that fail the human deletion test;
 - whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
 
-For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion — one compact row per stable identity or accepted group with `covered | owner-authorized supersession | gap` plus its anchor, reusing the existing coverage view; a bare "coverage intact" assertion is not a report. A shorter artifact that loses users, variants, defaults, scenarios, contracts, or proof obligations is scope loss, not pruning.
+For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion — one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor, reusing the existing coverage view. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a report. A shorter artifact that loses users, variants, defaults, scenarios, contracts, or proof obligations is scope loss, not pruning.
 
 Run the result against the current artifact state. Record exact failures, not “needs more detail.”
 

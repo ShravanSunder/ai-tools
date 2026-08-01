@@ -65,7 +65,7 @@ blocked
   missing input, decision, access, or state change needed
 ```
 
-When the review involves simplification, baseline recovery, or requirement subtraction, `coverage performed` returns one compact row per stable identity or accepted group with `covered | owner-authorized supersession | gap` plus its anchor; a bare "coverage intact" assertion is not a result in those cases. Unrelated reviews do not invent a universal ledger.
+When the review involves simplification, baseline recovery, or requirement subtraction, `coverage performed` returns one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a result in those cases. Unrelated reviews do not invent a universal ledger.
 
 `no-receipt` is parent-recorded after explicit follow-up; it is not a reviewer receipt and carries no invented evidence. Every reviewer candidate finding MUST use the Finding shape in `../finding-and-reduction-schema.md`; disposition and final reduction remain parent-only.
 

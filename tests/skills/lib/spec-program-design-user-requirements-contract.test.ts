@@ -132,9 +132,8 @@ describe("user requirements and design-view contracts", () => {
     expect(specDesign).not.toContain("Any later artifact edit makes");
     expect(artifact).toContain("Human Deletion Test");
     expect(artifact).toContain("smallest Why/What model");
-    expect(artifact).toContain(
-      "one compact row per stable identity or accepted group",
-    );
+    expect(artifact).toContain("one compact row per stable identity");
+    expect(artifact).toContain("every member identity is enumerated");
     expect(artifact).toContain(
       'a bare "coverage intact" assertion is not a report',
     );
@@ -199,9 +198,9 @@ describe("user requirements and design-view contracts", () => {
     expect(programDesign).toContain(
       "affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations",
     );
-    expect(artifact).toContain(
-      "one compact row per stable identity or accepted group",
-    );
+    expect(artifact).toContain("one compact row per stable identity");
+    expect(artifact).toContain("every member identity is enumerated");
+    expect(programDesign).toContain("every member identity is enumerated");
     expect(programDesign).not.toContain(
       "accepted-requirements coverage is intact",
     );
@@ -262,9 +261,9 @@ describe("user requirements and design-view contracts", () => {
     expect(reduction).toContain("bounded evidence-lookup result");
     expect(reduction).toContain("non-goal `no redesign or review recommendation`");
     expect(reduction).toContain("Reviewers never spawn reviewers or evidence lookups");
-    expect(laneSchema).toContain(
-      "one compact row per stable identity or accepted group",
-    );
+    expect(laneSchema).toContain("one compact row per stable identity");
+    expect(laneSchema).toContain("every member identity is enumerated");
+    expect(commonMethod).toContain("every member identity is enumerated");
     expect(reduction).toContain(
       "whether deletion of the questioned mechanism removes the failure",
     );

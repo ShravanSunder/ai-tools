@@ -26,9 +26,8 @@ dirty artifact set
 
 ## Evidence Checked
 
-Baseline customer requirements at `HEAD`:
+Baseline private customer-requirements artifact at `HEAD`:
 
-- `docs/specs/2026-07-30-customer-first-skill-behavior-requirements/2026-07-30-customer-first-skill-behavior-requirements.md`
 - title: `Customer-First Requirements for Phase A Analysis Skills`
 - universal requirements `CUS-01` through `CUS-18`
 - separate contracts for Spend Anomaly, Cash Coverage, Recurring Spend, Missing Receipt, Upload Reconciliation, and Payables
@@ -42,9 +41,8 @@ Failure snapshot observed during the first inspection:
 - status changed to `Accepted customer contract`
 - the customer-requirements file had shrunk from the six-skill contract to 111 lines; the diff replaced 330 lines of the tracked file
 
-Baseline specification at `HEAD`:
+Baseline private specification artifact at `HEAD`:
 
-- `docs/specs/2026-07-30-phase-a-skill-defaults-and-evals/2026-07-30-phase-a-skill-defaults-and-evals.md`
 - shared parameter resolution and disclosure contract
 - six per-skill default/prerequisite sections
 - six-skill minimum behavior scenario matrix
@@ -55,9 +53,8 @@ Specification in the same failure snapshot:
 - completion and scenario coverage are Upload-only
 - the tracked-file diff replaces 1,142 lines across the requirements/specification pair
 
-Program design in the same failure snapshot:
+Private program-design artifact in the same failure snapshot:
 
-- `docs/specs/2026-07-30-phase-a-skill-defaults-and-evals/2026-07-30-phase-a-skill-defaults-and-evals-program-design.md`
 - title and declared scope are Upload Reconciliation only
 - it embeds governing-document SHA-256 values and workflow status in durable prose
 - its minimal structural design is locally reasonable for Upload, but it realizes the wrong narrowed requirement set
