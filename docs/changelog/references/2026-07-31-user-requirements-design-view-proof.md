@@ -21,7 +21,7 @@ Source-text check (not a rendered visual check):
 - the system remains one opaque node in the source;
 - the internal worker is named as excluded negative space rather than drawn inside the system;
 - U1/U2 and C1/C2 anchors survive in the source;
-- result: gap — Mermaid source was inspected, but rendered Mermaid readability was not performed (shared rendering rule requires inspecting rendered output; mark as explicit gap, not pass).
+- result: gap — Mermaid source was inspected, but rendered Mermaid inspection was not performed (shared rendering rule requires inspecting rendered output; mark as explicit gap, not pass).
 
 ## Markdown Requirement Coverage Table
 
