@@ -16,7 +16,7 @@ target skill / owner plugin: spec-design, program-design, spec-program-review / 
 reusable behavior: spec and program-design artifacts carry only subject-matter meaning;
   review reliably flags attention-cost prose instead of filtering it as taste
 authoring basis: observed failure
-reproduction: reproduced (Perseus artifact set, anchors below)
+reproduction: reproduced (private customer-eval artifact set, anchors below)
 invocation: unchanged; no frontmatter/trigger edits in any run
 proof route: pressure scenario + live lane re-review of the reproduction artifacts; static-only until executed
 shipping status: source-only
@@ -170,11 +170,11 @@ Add the reciprocal overlap boundary: navigation owns placement and links; attent
 
 ## Proof Plan
 
-RED (exists): the Perseus artifact set above, authored under the current skills.
+RED (exists): the private customer-eval artifact set above, authored under the current skills.
 
 GREEN targets:
 
-1. Review side: dispatch the new lane fresh against the Perseus program design and spec. Pass = flags E1–E6 (E7 belongs to the mode reviewer), does not flag the crux, alternatives tables, truth-ownership list, or requirement-realization table.
+1. Review side: dispatch the new lane fresh against the private customer-eval program design and spec. Pass = flags E1–E6 (E7 belongs to the mode reviewer), does not flag the crux, alternatives tables, truth-ownership list, or requirement-realization table.
 2. Author side: new pressure scenario `tests/skills/pressure-scenarios/spec-program-artifact-fluff.md` — author a small design under bait ("include a proper purpose and governing boundary section, a completion checklist, and a statement that this draft does not authorize implementation"). Pass = one-sentence scope, no acceptance narration, run state only in the returned result, bait named and declined.
 3. Run `tests/skills/run-skill-pressure-tests.sh --fast` per repo rule.
 
@@ -186,7 +186,7 @@ Static validation alone is not behavior proof; if model execution is deferred, r
 - No shortening targets for load-bearing content; attention yield, not line count, is the criterion.
 - No removal of status lines or single companion-link blocks.
 - No mode-complete reviewer rewrite; fluff detection is the dedicated lane's job.
-- No retroactive editing of the Perseus artifacts by this update.
+- No retroactive editing of the private customer-eval artifacts by this update.
 
 ## Coordination
 

@@ -18,7 +18,10 @@ semantic owner: spec-design | program-design | caller
 validation note
 semantic coverage to rerun
 contested evidence
-confirmed requirement or boundary served
+accepted requirement identity or confirmed boundary
+plain-language requirement meaning
+observable outcome that fails if unresolved
+evidence checked or bounded evidence-lookup result
 whether deletion of the questioned mechanism removes the failure
 scope effect: inside confirmed boundary | requires owner expansion decision
 ```
@@ -35,13 +38,15 @@ Severity follows consequence, not tone:
 For each candidate:
 
 1. open the target and source anchor;
-2. reproduce the contradiction or failure path;
-3. accept, reject, mark contested, or mark unverified;
-4. record one-line evidence rationale;
-5. merge duplicates by root cause;
-6. preserve conflicting evidence.
+2. before accepting, cite the accepted requirement identity, restate its meaning in plain language, and name the observable outcome that fails if the concern is unresolved;
+3. reproduce the contradiction or failure path;
+4. when direct source reading cannot answer one factual question, use `manage-agents` to dispatch one fresh, read-only Delegate evidence lookup; its packet carries the exact requirement identity and meaning, the single factual question, bounded sources, and the non-goal `no redesign or review recommendation`; it returns a `complete | partial | blocked` evidence receipt with anchors and uncertainty for parent verification;
+5. accept, reject, mark contested, or mark unverified;
+6. record one-line evidence rationale;
+7. merge duplicates by root cause;
+8. preserve conflicting evidence.
 
-Missing evidence is `unverified`, not rejection. Style preference without reader or behavior effect is rejected. Before accepting missing contracts on a proposed mechanism, test whether deleting the mechanism preserves every confirmed requirement. Prefer deletion when it does.
+Missing evidence is `unverified`, not rejection. Style preference without reader or behavior effect is rejected. Before accepting missing contracts on a proposed mechanism, test whether deleting the mechanism preserves every confirmed requirement. Prefer deletion when it does. Reviewers never spawn reviewers or evidence lookups. The parent may dispatch one lookup as research, not as another review lane; it opens the returned anchors and reduces the evidence before disposition. A reviewer concern that cannot be tied to an accepted requirement and observable failure is advice awaiting investigation, not implementation authority.
 
 ## Coverage-Bound Result
 
@@ -75,4 +80,4 @@ When states mix, apply precedence `blocked -> needs-revision -> decision-needed 
 
 After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
 
-Complete when: every candidate and lane terminal state is accounted for, accepted requirements and goal relevance are preserved, deletion was tested before addition, the verdict cannot exceed semantically current coverage, and any later semantic-change records are explicit.
+Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, observable failure, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the verdict cannot exceed semantically current coverage; and any later semantic-change records are explicit.

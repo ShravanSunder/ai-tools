@@ -143,7 +143,7 @@ authoritative entry path, links, placement, or homes remain ambiguous
 
 IF one focused risk qualifies, dispatch the single best-matched lane using the shared packet contract. The subagent loads `references/lanes/lane-schema.md`, `references/reviewing-common-method.md`, and the selected lane. It runs only after parent reduction of the mode-complete receipt. Instance authority remains fresh-context, read-only, candidate-only, and excludes mode recommendation, verdict, editing, remediation, planning, and acceptance. Return `complete | partial | blocked` or parent-recorded `no-receipt`; the parent verifies and reduces it.
 
-After the first focused receipt, return the coverage-bound result with remaining gaps. Dispatch another focused lane only when the user or caller explicitly authorizes the named residual risk after seeing current coverage and review cost; carry that authority in the existing packet constraints and bounded-review-question fields.
+After the first focused receipt, return the coverage-bound result with remaining gaps. Dispatch another focused lane only when (a) the human user authorizes that named residual risk after seeing current coverage and review cost, or (b) the pre-dispatch caller packet already named that residual risk and authorized a second lane before the mode-complete dispatch. The reviewing parent may not grant this authority to itself mid-review, and reviewer output never creates it. Carry that authority in the existing packet constraints and bounded-review-question fields.
 
 After a later semantic edit, rerun a focused lane only when the changed meaning affects that lane's selection predicate or prior finding coverage. Do not fan out unaffected lanes.
 
@@ -161,7 +161,7 @@ Completion: each used receipt supplies semantically current coverage for the cur
 
 MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result.
 
-Before accepting a finding, identify the confirmed requirement or boundary it serves, the concrete failure if unresolved, the smallest correction, whether deleting the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. A missing contract on an unnecessary mechanism is a deletion candidate, not an invitation to finish the mechanism.
+Before accepting a finding, identify the confirmed requirement or boundary it serves, the concrete failure if unresolved, the smallest correction, whether deleting the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. When evidence is missing, follow that reference's evidence-lookup branch before accepting. A missing contract on an unnecessary mechanism is a deletion candidate, not an invitation to finish the mechanism.
 
 Classify each requested correction as `requirements/Why/What`, `structural How`, or `both`. A How-only correction preserves the accepted requirements set unless the owner explicitly changes it.
 
@@ -188,10 +188,10 @@ Do not return `ready` while any of these hold:
 - no complete semantically current mode-complete receipt exists;
 - a selected lane is silent without explicit follow-up;
 - partial, blocked, or `no-receipt` coverage affects a required dimension;
-- a finding lacks a source-backed failure path, goal-relevance record, deletion test, scope effect, or disposition;
+- a finding lacks an accepted requirement identity or confirmed boundary, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, or disposition;
 - specification, program, or pair mode boundaries are conflated;
 - `program-only` or `pair` omits an applicable current/proposed call path, explicit no-predecessor case, or added/removed/changed/intentionally-unchanged edge status;
 - pair mode trusts author or local checks without independent reinspection;
-- focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without explicit caller authority, or a broad predicate was treated as sufficient selection;
+- focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
 - the result implies edit, remediation, lifecycle, planning, or acceptance authority.

@@ -10,7 +10,7 @@ Return: coverage, reconstructed claims/model slice, authority/traceability evide
 
 Verify the complete target set, governing specification, and source authority. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
 
-Verify the accepted requirements set against the current owner-confirmed requirements record and boundary-check-1 result. Otherwise use the last inspectable owner-accepted governing baseline. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority.
+Verify the accepted requirements set against the current owner-confirmed requirements record and boundary-check-1 result. Otherwise use the last inspectable owner-accepted governing baseline. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority. For simplification, baseline recovery, or requirement subtraction, return one compact disposition row per stable identity or accepted group (`covered | owner-authorized supersession | gap` plus anchor); a bare "coverage intact" assertion is not a result in those cases.
 
 For `program-only` and `pair`, inspect the complete boundary-check-2 result or return its exact missing owner decision. Treat design dimensions as `required | satisfied by the existing system | not applicable | unresolved`; a general review category is not a reason to invent a subsystem.
 
