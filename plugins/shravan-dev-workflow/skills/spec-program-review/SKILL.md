@@ -161,7 +161,7 @@ Completion: each used receipt supplies semantically current coverage for the cur
 
 MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result.
 
-Before accepting a finding, identify the confirmed requirement or boundary it serves, the concrete failure if unresolved, the smallest correction, whether deleting the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. When evidence is missing, follow that reference's evidence-lookup branch before accepting. A missing contract on an unnecessary mechanism is a deletion candidate, not an invitation to finish the mechanism.
+Re-anchor before accepting a finding: identify the confirmed requirement or boundary it serves, whether the existing foundation already satisfies it or can supply the correction, the concrete failure if unresolved, the smallest correction, whether deleting the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. Then return the existing `accepted | rejected | contested | unverified` disposition; do not create a second checkpoint status. When evidence is missing, follow that reference's evidence-lookup branch before accepting. A missing contract on an unnecessary mechanism is a deletion candidate, not an invitation to finish the mechanism.
 
 Classify each requested correction as `requirements/Why/What`, `structural How`, or `both`. A How-only correction preserves the accepted requirements set unless the owner explicitly changes it.
 

@@ -7,6 +7,7 @@ expect_read_only: false
 expect_artifact: true
 expect_decision_regex: U1|P1|O1|R1|C1|V1|journey map|context diagram|requirement coverage table
 expect_proof_regex: authorized|normative-eligible|opaque|semantic|render|fallback|proof obligation|existing foundation|non-goals|complexity budget|confirm
+expect_proof_regex: Re-anchor|aligned|mismatch
 
 ## Shortcut Temptation
 
@@ -30,6 +31,7 @@ Write the authoritative specification from this user-requirements source: U1 is 
 
 - Only `authorized` rows are normative-eligible; observational and unresolved rows remain evidence or gaps.
 - The agent establishes the goal, affected outcomes, existing foundation, missing behavior, non-goals, and a concrete complexity budget, then requires explicit owner confirmation before normative derivation.
+- Before normative derivation, `Re-anchor` compares proposed meaning with that confirmed boundary and returns alignment or the exact mismatch in workflow state rather than specification prose.
 - The chain traces U→P→O→R→C→V in both directions.
 - Journey cardinality is evaluated per load-bearing direct-user class, not globally.
 - The context diagram keeps the system opaque and exposes external consumers, surfaces/contracts, and negative space.

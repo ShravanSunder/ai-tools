@@ -94,8 +94,6 @@ Name what happens today, who bears the cost, where it is observable, what proves
 
 Using the already-loaded `references/authority-and-problem-framing.md`, return the complete authority/problem model after this stage.
 
-Completion: the current/desired gap is inspectable and each causal claim is evidenced or labeled as a hypothesis.
-
 When revising existing artifacts, classify the requested correction before editing: requirements/Why/What, structural How, or both. Removing unrelated concurrency, cleanup, reporter, or lifecycle machinery is a How correction unless the authorized owner also changes users, outcomes, requirements, scenarios, defaults, or proof obligations. A How-only correction routes to `program-design` and does not authorize narrowing governing Why/What. When both change, settle the revised Why/What first.
 
 For a semantic correction to an existing Why/What view, re-open its governing sources, re-run correction classification and the affected view predicate and semantic-field check, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction invalidates their source or decision result. Pure rendering-format changes route to `docs-maintain`.
@@ -103,6 +101,10 @@ For a semantic correction to an existing Why/What view, re-open its governing so
 Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and boundary-check-1 result. If unavailable, recover the last inspectable owner-accepted governing baseline. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the baseline by themselves. Reuse the existing identities and coverage links for affected classes, U/P/O/R/C/V requirements, priorities and assigners, named variants such as skills or scenarios, customer defaults, observable contracts, constraints, and proof obligations. Do not create a separate ledger or duplicate document. Every removed or superseded item needs explicit owner authority.
 
 Produce inspectable per-item coverage that names each accepted identity, authoritative meaning, and specification destination or owner-authorized supersession. A count or an assertion that coverage is intact is not coverage evidence.
+
+Re-anchor before deriving or revising normative requirements: compare the proposed meaning with the confirmed goal, accepted requirements and non-goals, and existing foundation from boundary check 1. Return `aligned` or the exact mismatch. On mismatch, stop normative authoring and return the existing owner decision, or use `discuss-clarify-mental-models` when the shared model itself drifted. Keep the comparison in returned workflow state, not durable specification prose.
+
+Completion: the current/desired gap is inspectable, each causal claim is evidenced or labeled as a hypothesis, accepted-requirements coverage is inspectable when applicable, and the Re-anchor comparison is aligned or has returned the exact mismatch and owner route.
 
 ### 3. Define outcomes, non-goals, and semantic slices
 

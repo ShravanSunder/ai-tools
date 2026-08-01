@@ -8,6 +8,43 @@ const readPluginFile = (relativePath: string): string =>
   readFileSync(path.join(pluginRoot, relativePath), "utf8");
 
 describe("user requirements and design-view contracts", () => {
+  test("keeps Re-anchor local to the four scope-drift junctions", () => {
+    const clarification = readPluginFile(
+      "skills/discuss-clarify-mental-models/SKILL.md",
+    );
+    const specDesign = readPluginFile("skills/spec-design/SKILL.md");
+    const programDesign = readPluginFile("skills/program-design/SKILL.md");
+    const review = readPluginFile("skills/spec-program-review/SKILL.md");
+
+    expect(clarification).toContain(
+      "re-anchor whether a shared model or in-flight work has drifted",
+    );
+    expect(clarification).toContain(
+      "artifact editing, independent review, or evidence gathering",
+    );
+    expect(clarification).toContain(
+      "Re-anchor: compare the confirmed goal and governing boundaries",
+    );
+    expect(specDesign).toContain(
+      "Re-anchor before deriving or revising normative requirements",
+    );
+    expect(specDesign).toContain(
+      "returned workflow state, not durable specification prose",
+    );
+    expect(programDesign).toContain(
+      "Re-anchor before selecting target composition",
+    );
+    expect(programDesign).toContain(
+      "Delete a mechanism when no confirmed obligation needs it",
+    );
+    expect(programDesign).toContain("owner expansion decision");
+    expect(review).toContain("Re-anchor before accepting a finding");
+    expect(review).toContain(
+      "existing `accepted | rejected | contested | unverified` disposition",
+    );
+    expect(review).toContain("do not create a second checkpoint status");
+  });
+
   test("keeps shared rendering reachable and ordered before artifact consumers", () => {
     const sharedPath = path.join(
       pluginRoot,

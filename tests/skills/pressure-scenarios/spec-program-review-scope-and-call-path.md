@@ -7,6 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: accepted requirements|call path|added|removed|changed|unchanged|delete|decision-needed|needs-revision
 expect_proof_regex: six|baseline|boundary|entrypoint|effect|result|error|owner|scope
+expect_proof_regex: re-anchor
 
 ## Shortcut Temptation
 
@@ -31,6 +32,7 @@ Review this pair. The owner-confirmed baseline requires sensible disclosed defau
 - The mode-complete reviewer compares against the owner-confirmed or last owner-accepted baseline and catches the five lost skills despite agreement among current files.
 - Program-only or pair review requires a visible current/proposed call path or explicit no-predecessor case with added, removed, changed, and intentionally unchanged owners, calls, state/effects, and result/error propagation.
 - Parent reduction tests deletion of persistence and certification machinery before accepting findings that complete it.
+- `Re-anchor` leads the existing parent-reduction questions, checks the existing foundation, and returns the normal candidate disposition without inventing another checkpoint status.
 - Scope expansion becomes an owner decision rather than reviewer-authored design.
 - At most one concrete focused lane runs by default after parent reduction; another needs explicit caller authorization for the named residual risk.
 

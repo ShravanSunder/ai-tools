@@ -7,6 +7,7 @@ expect_read_only: false
 expect_artifact: true
 expect_decision_regex: call graph|sequence|entrypoint|effect|result|error|owner|state|fallback|added|removed|changed|unchanged
 expect_proof_regex: semantic|visual check|Mermaid|table|plain text|exact format|pass|gap|existing foundation|complexity budget|confirm
+expect_proof_regex: Re-anchor|selected direction|target composition
 
 ## Shortcut Temptation
 
@@ -36,6 +37,7 @@ Design the structural How for this settled specification. The current runtime st
 - Dense state/transition data may use a table; unreadable or lossy views fall back to another supported medium.
 - Every fired view records semantic preservation and visual-check pass/gap before artifact completion.
 - New machinery must name the accepted requirement it serves, what breaks without it, why the existing foundation cannot serve it, and the complexity it spends; boundary check 2 requires owner confirmation.
+- Before target composition, `Re-anchor` compares the selected direction with the existing foundation and minimal-change realization, deletes unsupported machinery, and escalates only a real boundary expansion.
 
 ## Failure Signals
 

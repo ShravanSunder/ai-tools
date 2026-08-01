@@ -109,7 +109,9 @@ Using the already-loaded `references/alternatives-and-crux.md`, return the credi
 
 New durable identity or history, persistence, certification or governance, a control plane, an external service, cross-run state, or a broad migration is material scope expansion when boundary check 1 did not authorize it. Return the owner decision needed to expand the complexity budget rather than making the mechanism inevitable through design prose.
 
-Completion: the selected direction names what improves, where cost moves, accepted debt/payer, complexity spent, and evidence that would reopen the choice.
+Re-anchor before selecting target composition: compare the selected direction with the confirmed goal, accepted requirements and non-goals, existing foundation, minimal-change realization, and complexity budget. Delete a mechanism when no confirmed obligation needs it. If pursuing it would widen the confirmed boundary or budget, return the exact mismatch and owner expansion decision instead of completing the mechanism. Keep this comparison in returned workflow state, not durable program-design prose.
+
+Completion: the selected direction names what improves, where cost moves, accepted debt/payer, complexity spent, and evidence that would reopen the choice; the Re-anchor comparison is aligned, has deleted unsupported machinery, or has returned the exact expansion decision.
 
 ### 5. Select the target composition
 

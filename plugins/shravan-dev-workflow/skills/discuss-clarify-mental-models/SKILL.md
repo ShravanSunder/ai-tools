@@ -1,6 +1,6 @@
 ---
 name: discuss-clarify-mental-models
-description: Use when either side notices drift or misalignment - repeated corrections, hollow or instant agreement, surprise at a plan or architecture, the same term meaning different things - or when the user asks to reconverge, share understanding, reflect back, clarify a mental model, force an alignment check, or rebuild a shared map that has drifted, including what agents in a swarm session are doing, before specs, plans, docs, or code. Not for first-pass extraction of knowledge that lives only in one person's head (discuss-pathfinding).
+description: Use when either side notices drift or misalignment - repeated corrections, hollow or instant agreement, surprise at a plan or architecture, the same term meaning different things - or when the user asks to reconverge, share understanding, reflect back, clarify a mental model, force an alignment check, rebuild a shared map, or re-anchor whether a shared model or in-flight work has drifted from the confirmed goal, including what agents in a swarm session are doing, before specs, plans, docs, or code. Not for first-pass extraction of knowledge that lives only in one person's head (discuss-pathfinding), or for artifact editing, independent review, or evidence gathering merely because the prompt uses re-anchor, rails, or scope drift.
 ---
 
 # Discuss Clarify Mental Models
@@ -65,7 +65,7 @@ Branch references:
 
 ## Workflow
 
-1. Frame the map. Name what is unstable: terms, boundary, flow, state, ownership, constraint, tradeoff, source of truth, or competing framing. Completion: `model` starts with a literal shape word from the contract and names what the map hides or simplifies, and the repair target.
+1. Frame the map. Name what is unstable: terms, boundary, flow, state, ownership, constraint, tradeoff, source of truth, or competing framing. When the user asks whether the shared model or in-flight work remains on the rails, asks to re-anchor a drifted shared model, or artifact-to-goal displacement is detected, Re-anchor: compare the confirmed goal and governing boundaries with the in-flight work, then state `aligned` or the exact mismatch instead of answering only “yes.” Continue the full provenance, branches, countercase, and rebuilding route after this comparison; other kinds of drift keep the existing map-repair lens without forcing a goal checkpoint. Completion: `model` starts with a literal shape word from the contract and names what the map hides or simplifies, and the repair target; an applicable Re-anchor comparison names its evidence-backed alignment or exact mismatch.
 
 2. Check bounded evidence. Read the specific code, docs, or saved artifact that can sharpen the model in this turn. If nothing was read, write `none -- answering from session memory`; never imply evidence you did not check. Completion: `evidence_checked` distinguishes direct observation from inference or missing evidence.
 

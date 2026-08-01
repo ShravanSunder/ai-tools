@@ -13,10 +13,12 @@ Applied the parent-verified fixes from the PR #37 implementation-review reductio
 - `shared-references/diagram-rendering-and-fallbacks.md`: named acceptable rendered-inspection methods (repository/browser preview, local renderer); when no rendered inspection is available the result is `visual check: unverified (no renderer available)` with fallback or an explicit gap — never a bare pass. The rendered-view proof record was corrected accordingly.
 - `plugins/README.md`: the `spec-program-review` summary now describes semantic-freshness review instead of the retired exact-digest contract.
 - Public-safety scrub: absolute local paths and private checkout identifiers were removed from the tracked evidence documents under `docs/wip/skills-authoring/2026-07-31-user-focused-requirements-update/`.
+- `discuss-clarify-mental-models`, `spec-design`, `program-design`, and `spec-program-review`: `Re-anchor` now leads four existing drift checks. Each check compares the current work with the confirmed goal and boundaries, deletes unsupported machinery before expanding the design, and reuses the workflow's existing result instead of adding a ledger, digest, durable checkpoint section, or second review status.
 
 ## Validation
 
-- Vitest deterministic suite: 8 files, 42 tests passed (after the contract test was aligned with the corrected wording).
+- Vitest deterministic suite: 8 files, 43 tests passed.
+- Fake-backend prompt-leak check for the changed `discuss-clarify-mental-models` drift scenario: 1 file, 1 test passed; no model was invoked.
 - TypeScript: passed.
 - `claude plugin validate .`: passed.
 - `git diff --check`: passed.
