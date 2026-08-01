@@ -240,10 +240,10 @@ describe("user requirements and design-view contracts", () => {
     );
     expect(reviewSkill).toContain("at most one focused reviewer by default");
     expect(reviewSkill).toContain(
-      "The reviewing parent may not grant this authority to itself",
+      "The reviewing parent may not grant this authority to itself before or during review",
     );
     expect(reviewSkill).toContain(
-      "pre-dispatch caller packet already named that residual risk",
+      "pre-dispatch external-caller packet already named that residual risk",
     );
     expect(reviewSkill).toContain(
       "requirements/Why/What`, `structural How`, or `both",
