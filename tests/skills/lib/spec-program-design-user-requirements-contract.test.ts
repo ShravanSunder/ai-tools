@@ -86,6 +86,10 @@ describe("user requirements and design-view contracts", () => {
       expect(discussPathfinding).toContain(boundaryField);
     }
     expect(extraction).toContain("Confirm The Goal Boundary");
+    expect(discussPathfinding).toContain(
+      "goal-boundary model (boundary check 1)",
+    );
+    expect(extraction).toContain("goal-boundary model (boundary check 1)");
     expect(extraction).toContain("Silence, generic assent");
     expect(extraction).toContain("file-permission boundary");
     expect(specDesign).toContain("stable U identifiers");

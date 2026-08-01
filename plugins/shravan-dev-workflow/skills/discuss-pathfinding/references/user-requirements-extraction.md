@@ -4,7 +4,7 @@ This reference owns user/stakeholder classification, grill axes, row constructio
 
 Expected inputs: clarified destination and depth, participant and source identities, claimed decision authority, candidate evidence, file-permission boundary, and artifact conventions.
 
-Return: grill axes, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, goal-boundary model with explicit owner confirmation or the exact decision needed, refusal/fallback result, and exact authority/evidence gaps.
+Return: grill axes, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, goal-boundary model (boundary check 1) with explicit owner confirmation or the exact decision needed, refusal/fallback result, and exact authority/evidence gaps.
 
 ## Classify Users and Stakeholders
 
@@ -75,7 +75,7 @@ A high priority alone does not make a need sequence-shaped. Keep stakeholder nee
 
 ## Confirm The Goal Boundary
 
-Before specification handoff, build a compact boundary from the stabilized rows:
+Before specification handoff, build a compact goal-boundary model (boundary check 1) from the stabilized rows:
 
 ```text
 primary customer, developer, contract, or library goal
