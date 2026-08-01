@@ -109,6 +109,13 @@ describe("user requirements and design-view contracts", () => {
     }
     expect(authority).toContain("Mutually narrowed current requirements");
     expect(specDesign).toContain("requirements/Why/What, structural How, or both");
+    expect(specDesign).toContain("inspectable per-item coverage");
+    expect(specDesign).toContain(
+      "accepted identity, authoritative meaning, and specification destination",
+    );
+    expect(specDesign).toContain(
+      "A count or an assertion that coverage is intact is not coverage evidence",
+    );
     expect(specDesign).toContain("tmp/design-workflows/<date>-<slug>/");
     expect(specDesign).toContain("returned workflow state");
     expect(specDesign).toContain("parent-verified non-semantic edits may retain coverage");

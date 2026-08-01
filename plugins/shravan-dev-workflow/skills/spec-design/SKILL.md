@@ -65,7 +65,7 @@ MUST load `references/authority-and-problem-framing.md` for stages 1-2 to classi
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
-IF load-bearing user or stakeholder meaning is unwritten, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, boundary-check-1 model, and explicit owner confirmation of that same current model or the exact owner decision needed. Classify the returned record in the governing-source inventory using `references/authority-and-problem-framing.md`. If the user declines extraction, reassess the remaining sources: continue when an alternate authoritative source exists; return `decision-needed` when owner meaning is missing; return `evidence-blocked` when necessary evidence is missing; keep only non-load-bearing uncertainty as a visible hypothesis gap. Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
+IF load-bearing user or stakeholder meaning is unwritten, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, goal-boundary model (boundary check 1), and explicit owner confirmation of that same current model or the exact owner decision needed. Classify the returned record in the governing-source inventory using `references/authority-and-problem-framing.md`. If the user declines extraction, reassess the remaining sources: continue when an alternate authoritative source exists; return `decision-needed` when owner meaning is missing; return `evidence-blocked` when necessary evidence is missing; keep only non-load-bearing uncertainty as a visible hypothesis gap. Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
 
 The minimum accepted user-requirements source contract is:
 
@@ -101,6 +101,8 @@ When revising existing artifacts, classify the requested correction before editi
 For a semantic correction to an existing Why/What view, re-open its governing sources, re-run correction classification and the affected view predicate and semantic-field check, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction invalidates their source or decision result. Pure rendering-format changes route to `docs-maintain`.
 
 Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and boundary-check-1 result. If unavailable, recover the last inspectable owner-accepted governing baseline. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the baseline by themselves. Reuse the existing identities and coverage links for affected classes, U/P/O/R/C/V requirements, priorities and assigners, named variants such as skills or scenarios, customer defaults, observable contracts, constraints, and proof obligations. Do not create a separate ledger or duplicate document. Every removed or superseded item needs explicit owner authority.
+
+Produce inspectable per-item coverage that names each accepted identity, authoritative meaning, and specification destination or owner-authorized supersession. A count or an assertion that coverage is intact is not coverage evidence.
 
 ### 3. Define outcomes, non-goals, and semantic slices
 
@@ -162,7 +164,7 @@ Author top-down: begin with the smallest Why/What map a human needs to confirm t
 
 Section writers may organize already mapped meaning only. Their packet must name accepted claims and bases, prose boundary, prohibited invention, and required gap return. They may not originate requirements, invariants, option selections, failure policy, realizations, or normative prose.
 
-Completion: every normative claim has one home; a stranger can navigate from user need through problem, obligation, observable behavior, and proof; and the accepted requirements set is fully covered or each owner-authorized supersession is named.
+Completion: every normative claim has one home; a stranger can navigate from user need through problem, obligation, observable behavior, and proof; and every accepted identity has an inspectable destination or owner-authorized supersession.
 
 ### 10. Run the author self-check
 
@@ -212,7 +214,7 @@ Do not return `locally-ready` while any of these hold:
 - a normative claim lacks authority or an explicit decision gap;
 - a user-facing normative requirement is based on a row whose authority state is not `authorized`, or normative-eligible user-requirements rows cannot be traced by stable U identifier;
 - boundary check 1 lacks explicit owner confirmation, or the specification expands its goal, affected classes, missing outcomes, non-goals, or complexity budget without a new owner decision;
-- the accepted requirements set cannot be recovered from the current owner-confirmed source or last inspectable owner-accepted baseline, conflicts with those sources, or loses an item without owner-authorized supersession;
+- the accepted requirements set cannot be recovered from the current owner-confirmed source or last inspectable owner-accepted baseline, conflicts with those sources, lacks inspectable per-item coverage, or loses an item without owner-authorized supersession;
 - the problem, outcome, requirement, contract/failure, and proof chain cannot be traced;
 - unresolved product meaning is disguised as an assumption;
 - a material non-goal is omitted, or an applicable cross-cutting quality lacks an observable obligation or constraint or a reasoned not-applicable result;
