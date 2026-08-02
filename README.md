@@ -13,13 +13,23 @@ codex plugin marketplace add ~/dev/ai-tools
 /plugin marketplace add ShravanSunder/ai-tools
 ```
 
-Then install individual plugins with `codex plugin add <name>@ai-tools` in Codex or `/plugin install <name>@ai-tools` in Claude Code.
+Install IDs are client-specific for the legacy scaffolding plugin; the workflow and tool plugins use the same ID in both clients.
+
+| Client | Scaffolding | Dev workflow | Dev tools |
+|--------|-------------|--------------|-----------|
+| Codex | `scaffold-project@ai-tools` | `shravan-dev-workflow@ai-tools` | `dev-workflow-tools@ai-tools` |
+| Claude Code | `scaffold-project@ai-tools` | `shravan-dev-workflow@ai-tools` | `dev-workflow-tools@ai-tools` |
+
+```bash
+codex plugin add <name>@ai-tools
+/plugin install <name>@ai-tools
+```
 
 | Plugin | Description |
 |--------|-------------|
-| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, plan, implementation, PR wrap-up, review, handoff, debugging, TUI presentation, and ops Linear tracking workflows |
+| [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, program design, pathfinding, plan, implementation, PR wrap-up, review, handoff, debugging, TUI presentation, and ops workflows |
 | [`dev-workflow-tools`](plugins/dev-workflow-tools/) | Common development tool skills, including native macOS UI testing with Peekaboo CLI |
-| [`ai-scaffold`](plugins/ai-scaffold/) | Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
+| [`scaffold-project`](plugins/ai-scaffold/) | AI Scaffold project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
 
 See [`plugins/`](plugins/) for full details.
 
@@ -31,15 +41,17 @@ The main workflow plugin is organized by namespace and phase boundary:
 
 ```mermaid
 flowchart LR
-    discuss["discuss-with-me<br/>shared understanding"]
+    pathfinding["Discuss: Pathfinding<br/>unwritten requirements and decisions"]
+    clarify["Discuss: Clarify Mental Models<br/>shared-model reconvergence"]
     goal["orchestrator-goal<br/>long-horizon coordination"]
 
     spec["spec-*<br/>design, review, handoff"]
     plan["plan-*<br/>create, review, handoff"]
     impl["implementation-*<br/>execute, review, PR wrap-up, handoff"]
 
-    discuss --> spec
-    discuss --> plan
+    pathfinding --> spec
+    clarify --> spec
+    clarify --> plan
     goal --> spec
     goal --> plan
     goal --> impl

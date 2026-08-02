@@ -3,7 +3,7 @@
   "interface": {
     "displayName": "AI Tools",
     "shortDescription": "Personal Codex plugins and skills for review, scaffolding, UI testing, and agent workflows",
-    "longDescription": "AI Tools is Shravan Sunder's personal Codex marketplace for reusable agent workflows, including project scaffolding, native UI testing, authoritative spec design, structural program design, independent spec/program review, planning, subordinate agent management, docs maintenance, bounded review lanes, PR wrap-up, operations security review routing, and TUI presentation guidance."
+    "longDescription": "AI Tools is Shravan Sunder's personal Codex marketplace for reusable agent workflows, including project scaffolding, native UI testing, authoritative spec design, structural program design, independent spec/program review, user-requirements pathfinding, planning, subordinate agent management, docs maintenance, bounded review lanes, PR wrap-up, operations security review routing, and TUI presentation guidance."
   },
   "plugins": [
     {

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Discuss: Pathfinding"
+  short_description: "Extract unwritten requirements and decisions"
+  default_prompt: "Use $discuss-pathfinding to extract unwritten requirements, tacit process knowledge, domain terms, or design decisions through bounded, user-led questioning before specification or implementation work."

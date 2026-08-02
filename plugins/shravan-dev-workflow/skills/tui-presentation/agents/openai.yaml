@@ -1,0 +1,4 @@
+interface:
+  display_name: "TUI: Presentation"
+  short_description: "Structure readable terminal explanations"
+  default_prompt: "Use $tui-presentation to structure this design, comparison, flow, or multi-section explanation for a monospace chat surface."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tools: Peekaboo"
+  short_description: "Inspect and automate native macOS UI"
+  default_prompt: "Use $peekaboo to inspect or automate a native macOS app through the Accessibility API."

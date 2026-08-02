@@ -1,4 +1,4 @@
 interface:
-  display_name: "Spec Design"
+  display_name: "Spec: Design"
   short_description: "Define authoritative Why and What"
   default_prompt: "Use $spec-design to define or revise authoritative Why/What and its required views—problem, outcomes, requirements, observable contracts, constraints, failure obligations, and proof obligations—without inventing structural How."
