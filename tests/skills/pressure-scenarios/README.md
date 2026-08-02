@@ -23,7 +23,7 @@ shortcut the skill exists to prevent.
 Default command:
 
 ```bash
-CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
+CODEX_PRESSURE_MODEL=gpt-5.6-luna CODEX_PRESSURE_REASONING_EFFORT=xhigh \
 SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
   pnpm --dir tests/skills run test:evals
 ```

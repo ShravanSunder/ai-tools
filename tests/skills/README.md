@@ -6,9 +6,9 @@ need the same shortcut-resistance harness.
 
 Default backend: `codex exec`
 
-Default model: `gpt-5.5`
+Default model: `gpt-5.6-luna`
 
-Default reasoning effort: `low`
+Default reasoning effort: `xhigh`
 
 Default safety: read-only sandbox
 

@@ -9,6 +9,7 @@ Plugin: `shravan-dev-workflow` 1.7.7
 - Keeps `program-design` responsible for structural How while requiring explicit added, removed, and changed call-path edges. Unchanged edges are labeled only when preservation is requirement-critical, safety-critical, or contested.
 - Reduces `program-design` and `spec-program-review` ceremony by keeping invariant lane behavior in lane references, assignment-specific evidence in packets, and review consequence in one failure-and-downstream-ambiguity field.
 - Reorganizes active and retired pressure scenarios under `<pressure-root>/<plugin>/<skill>/`, validates active paths against namespaced `skill_under_test`, and keeps scenario IDs as the CLI selectors.
+- Replaces the obsolete `gpt-5.5`/low pressure-subject default with `gpt-5.6-luna`/xhigh across the active runner and test documentation.
 
 ## Changed surfaces
 
@@ -19,7 +20,7 @@ Plugin: `shravan-dev-workflow` 1.7.7
 ## Validation
 
 - Skill harness unit tests and TypeScript checks pass.
-- Focused Luna high-reasoning pressure scenarios cover pathfinding ambiguity, specification human views, program-design rendering semantics, and review reader understanding.
+- Focused Luna pressure scenarios cover pathfinding ambiguity, specification human views, program-design rendering semantics, and review reader understanding; future default runs use xhigh reasoning.
 - `git diff --check` passes.
 
 ## Refresh / reinstall
