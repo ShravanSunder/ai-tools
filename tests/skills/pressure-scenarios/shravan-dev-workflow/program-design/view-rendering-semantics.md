@@ -5,11 +5,6 @@ skill_under_test: shravan-dev-workflow:program-design
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: call graph|sequence|entrypoint|effect|result|error|owner|state|fallback|added|removed|changed|unchanged
-expect_proof_regex: semantic preservation
-expect_proof_regex: visual check|visual-check
-expect_proof_regex: unsupported persistence|unsupported machinery|rejected.*persistence
-expect_proof_regex: re-anchor
 
 ## Shortcut Temptation
 

@@ -5,14 +5,6 @@ skill_under_test: shravan-dev-workflow:discuss-pathfinding
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: current model|current ownership
-expect_decision_regex: alternative|runner-owned|host-owned
-expect_decision_regex: countercase|retry|concurren|ordering
-expect_decision_regex: downstream|under each|changes if
-expect_proof_regex: provisional
-expect_proof_regex: authorized|no owner answer|owner.*select
-expect_proof_regex: bounded repository inspection|bounded repository search|no matching implementation
-expect_proof_regex: unresolved|open
 
 ## Shortcut Temptation
 

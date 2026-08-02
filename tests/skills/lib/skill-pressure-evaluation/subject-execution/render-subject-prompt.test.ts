@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { parseScenarioMarkdown } from "./scenario-parser.js";
+import { parseScenarioMarkdown } from "../scenario-cases/parse-scenario-fixture.js";
 import {
   findPromptRegexLeaks,
   renderCodexPressurePrompt,
-} from "./prompt-renderer.js";
+} from "./render-subject-prompt.js";
 
 const scenario = parseScenarioMarkdown({
   filePath: "/repo/tests/skills/pressure-scenarios/render.md",
@@ -26,11 +26,17 @@ hidden proof phrase
 failure phrase
 `,
 });
+const input = {
+  scenarioId: scenario.scenarioId,
+  skillUnderTest: scenario.skillUnderTest,
+  mode: scenario.mode,
+  prompt: scenario.prompt,
+};
 
 describe("renderCodexPressurePrompt", () => {
   test("renders the current pressure-test envelope and operator prompt", () => {
     const prompt = renderCodexPressurePrompt({
-      scenario,
+      input,
       includeLocalSourceHint: true,
     });
 
@@ -47,7 +53,7 @@ describe("renderCodexPressurePrompt", () => {
   });
 
   test("does not render grader-only sections or regex metadata", () => {
-    const prompt = renderCodexPressurePrompt({ scenario });
+    const prompt = renderCodexPressurePrompt({ input });
 
     expect(prompt).not.toContain("Expected Compliant Behavior");
     expect(prompt).not.toContain("Failure Signals");

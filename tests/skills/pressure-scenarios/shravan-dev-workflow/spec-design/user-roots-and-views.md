@@ -5,11 +5,6 @@ skill_under_test: shravan-dev-workflow:spec-design
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: U1|P1|O1|R1|C1|V1|journey map|context diagram|requirement coverage table
-expect_proof_regex: u3.*cannot become a must|u3.*cannot authorize
-expect_proof_regex: opaque
-expect_proof_regex: no artifact.*self-check.*fresh local review
-expect_proof_regex: conflicts with.*confirmed boundary|without a new owner-confirmed boundary
 
 ## Shortcut Temptation
 

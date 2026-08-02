@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { parseScenarioMarkdown } from "./scenario-parser.js";
-import type { SkillPressureResult } from "./result-schema.js";
-import { validateSkillPressureResult } from "./result-schema.js";
-import { evaluatePressureAssertions } from "./pressure-assertions.js";
+import { parseScenarioMarkdown } from "../../scenario-cases/parse-scenario-fixture.js";
+import type { SkillPressureResult } from "../../subject-execution/validate-subject-result.js";
+import { validateSkillPressureResult } from "../../subject-execution/validate-subject-result.js";
+import { evaluatePressureAssertions } from "./legacy-pressure-assertions.js";
 
 const scenario = parseScenarioMarkdown({
   filePath: "/repo/tests/skills/pressure-scenarios/assertions.md",
@@ -57,6 +57,26 @@ describe("validateSkillPressureResult", () => {
 });
 
 describe("evaluatePressureAssertions", () => {
+  test("can leave artifact expectation to semantic evaluation", () => {
+    const result = evaluatePressureAssertions({
+      scenario: {
+        ...scenario,
+        expectArtifact: false,
+      },
+      result: {
+        ...validResult,
+        artifact_expected: true,
+      },
+      renderedPrompt: "prompt",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/evidence.json"],
+      includeArtifactExpectation: false,
+      includeLegacySemanticAssertions: false,
+    });
+
+    expect(result.failures).toEqual([]);
+  });
+
   test("passes when all deterministic expectations are satisfied", () => {
     const result = evaluatePressureAssertions({
       scenario,

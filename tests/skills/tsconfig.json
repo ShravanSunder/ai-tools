@@ -12,5 +12,11 @@
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["lib/**/*.ts", "evals/**/*.ts", "vitest.config.ts"]
+  "include": [
+    "lib/**/*.ts",
+    "evals/**/*.ts",
+    "fixtures/**/*.case.ts",
+    "pressure-scenarios/**/*.case.ts",
+    "vitest.config.ts"
+  ]
 }
