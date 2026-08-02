@@ -7,6 +7,9 @@
 - Related workflow: `implementation-review-swarm`, `manage-agents`, and the
   parent reducer's transition from implementation review back to a design stop.
 - Date observed: 2026-08-01 through 2026-08-02.
+- Primary session evidence: Codex rollout
+  `019fb84a-4af6-72a1-abd4-13db1b03c3ef`. The local JSONL was inspected
+  directly; raw transcript content is not copied into this public repository.
 - Private/local evidence:
   `/Users/shravan.sunder/Documents/code/perseus-agent.headless-hooks/tmp/implementation-review-workflows/2026-08-01-perseus-headless-hooks-83d9f240/review-result.md`.
 
@@ -43,6 +46,46 @@ The user surfaced the missing ownership fact by asking whether uploads already
 used separate sandboxes. Only then did the parent inspect the factory and
 sandbox construction and reject the proposed Core defect.
 
+## Session Log Reconstruction
+
+The session chronology shows a continuity and reconciliation failure, not only
+an incomplete first investigation:
+
+1. At `2026-08-01T12:32:32Z`, the parent had already reported the correct
+   source model: an already-started Core upload touched per-runtime Bash,
+   manifest, and Agent objects, while shared-engine detach completed before
+   `setOrg`. At `12:34:58Z`, it explicitly said that no design break had been
+   demonstrated.
+2. At `15:59:49Z`, a reliability reviewer reported a high-confidence
+   quiescence finding. The report correctly identified missing proof for an
+   already-started Core upload, but it assumed that continued old-runtime
+   mutation required organization switching to await global upload quiescence.
+   It proposed changing Core disposal before proving resource aliasing.
+3. At `15:59:59Z`, the parent adopted that framing and announced a likely Core
+   quiescence gap before independently rebuilding the resource-ownership path.
+4. Source reads at `16:00:03Z`, `16:00:34Z`, and `16:00:40Z` inspected
+   organization-transition ordering, runtime release, disposal, and upload
+   implementation. They did not reopen `AgentRuntimeFactory.createRuntime()`,
+   `createBashContext()`, the per-call `new Bash()`, or the existing test that
+   proves two runtimes receive distinct Bash contexts.
+5. By `16:01:46Z`, the parent declared a design break. At `16:03:00Z`, it wrote
+   a `not_ready` review result accepting the Core-quiescence finding; at
+   `16:03:10Z`, it changed the plan to require a user decision; and at
+   `16:03:32Z`, it marked the long-running goal blocked.
+6. On the next status turn, the parent reread its own `review-result.md` and at
+   `2026-08-02T10:32:01Z` repeated the false blocker without reopening live
+   construction and ownership source.
+7. Only after the user asked whether uploads used separate sandboxes did the
+   `10:33:16Z` and `10:33:25Z` reads trace runtime construction,
+   `createBashContext()`, `new Bash()`, the distinct-context test, and the
+   runtime-ID database namespace. At `10:34:24Z`, the parent rejected the Core
+   defect and reduced the issue to the missing integration proof it had been
+   before the reliability finding arrived.
+
+The decisive error was therefore contradiction blindness: a new candidate
+finding conflicted with an earlier accepted source trace in the same session,
+but the reducer did not notice or reconcile the conflict.
+
 ## What Went Wrong
 
 - Observed behavior:
@@ -52,6 +95,8 @@ sandbox construction and reject the proposed Core defect.
     mutate shared or new-organization state."
   - It accepted the reviewer's proposed correction—making Core disposal await
     upload work—without first proving that the upload touched a shared resource.
+  - It failed to reconcile the proposed blocker with the session's earlier
+    accepted conclusion that the upload mutation targets were runtime-private.
   - It escalated the finding into a design stop and requested permission for a
     Core change that was outside the accepted implementation scope.
   - After automatic continuations, it marked the long-running goal blocked on
@@ -76,6 +121,61 @@ sandbox construction and reject the proposed Core defect.
     against new or expanded runtime systems.
   - Delay to the real remaining work: integration proof, bounded review fixes,
     manual consumer proof, and PR wrap-up.
+
+## Contributing Conditions
+
+### Reviewer framing narrowed the proof search
+
+The reliability report used the language of "quiescence" and proposed a Core
+disposal correction. The reducer then inspected whether disposal awaited upload
+work. That proved only that private upload work could still be settling; it did
+not prove that the work could mutate reachable shared or new-organization
+state. The proposed fix became the frame for the investigation instead of a
+hypothesis to falsify.
+
+### Repeated proof-gap reports amplified confidence
+
+Several review lanes correctly reported that the required Core-upload-started
+integration case was missing. Only the reliability lane promoted the gap into
+a source defect, but the repetition of the missing-proof concern made the
+stronger interpretation feel corroborated. Agreement on a missing test did not
+constitute independent agreement on resource ownership or the need for a Core
+change.
+
+### Narrow reads created the appearance of verification
+
+The reducer performed several current-source reads and therefore appeared to
+follow the instruction to verify reviewer output. All of those reads were
+inside the disposal/upload-ordering frame. None classified mutation targets or
+tested the strongest countercase: whether old and new runtimes shared the same
+Bash, upload manifest, or database namespace. Verification count substituted
+for verification coverage.
+
+### Session continuity was not treated as evidence
+
+The correct per-runtime ownership conclusion had already been stated hours
+earlier. The later reduction neither searched prior accepted source traces nor
+checked the new candidate against the current handoff model. Context length and
+compaction may have reduced salience, but the log does not prove compaction was
+the root cause. The actionable failure is that no explicit reconciliation gate
+made prior accepted evidence load-bearing.
+
+### Workflow state amplified an epistemic error
+
+Once accepted, the unproven finding propagated mechanically:
+
+```text
+reviewer candidate
+  -> reducer accepts Core defect
+  -> not_ready review result
+  -> plan rewritten around user decision
+  -> goal marked blocked
+  -> later status turn trusts the reducer-authored result
+```
+
+The goal machinery behaved consistently with the false premise. The missing
+control was before propagation: a fresh, source-backed failure path should be
+required before a finding can expand into prohibited scope or block a goal.
 
 ## Guidance That Already Existed
 
@@ -127,7 +227,15 @@ Candidate clarification for the existing implementation-review workflow:
 5. Before a finding expands scope into a prohibited owner or triggers a design
    stop, require one explicit source-backed sentence proving why the accepted
    owner cannot satisfy the requirement with existing isolation boundaries.
-6. If a user supplies a missing ownership fact, reopen the whole finding and
+6. Reconcile every blocker candidate against earlier accepted source traces,
+   handoffs, and review conclusions. If they conflict, state the contradiction
+   and reopen both claims from live source before choosing one.
+7. Do not treat reviewer agreement on a proof gap as agreement on the proposed
+   failure mechanism. Record separately what is missing, what can fail, what
+   resource mutates, and whether that resource is still reachable.
+8. During a later status or resume turn, reopen the source behind a blocked
+   finding instead of treating a reducer-authored review result as source truth.
+9. If a user supplies a missing ownership fact, reopen the whole finding and
    its route; do not merely patch the proposed fix.
 
 This should be an update to existing reducer/review-reception guidance, not a
@@ -141,6 +249,13 @@ target.
   aliasing, and the distinction between isolation and quiescence.
 - Inspect whether review reception requires renewed verification before a
   candidate finding expands into a prohibited owner or design stop.
+- Inspect whether the reducer records contradictions between new candidates and
+  prior accepted source traces, instead of allowing the newest framing to
+  silently replace the earlier model.
+- Add a pressure case in which several reviewers identify the same missing test
+  but only one asserts an unproven shared-resource failure mechanism.
+- Add a resume/status pressure case in which an existing `not_ready` result is
+  wrong and live source must be reopened before repeating its blocker.
 - Preserve the relevant source anchors showing per-runtime Bash and database
   construction without copying sensitive session transcripts into this repo.
 
