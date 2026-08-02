@@ -15,8 +15,8 @@
   "include": [
     "lib/**/*.ts",
     "evals/**/*.ts",
-    "fixtures/**/*.case.ts",
-    "pressure-scenarios/**/*.case.ts",
+    "fixtures/**/cases.ts",
+    "pressure-scenarios/**/cases.ts",
     "vitest.config.ts"
   ]
 }

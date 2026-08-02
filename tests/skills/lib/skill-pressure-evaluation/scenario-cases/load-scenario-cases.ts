@@ -1,4 +1,5 @@
 import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { SkillPressureScenario } from "./parse-scenario-fixture.js";
 import { createSemanticCriteriaEvaluator } from "../evaluators/semantic/semantic-criteria-evaluator.js";
@@ -16,19 +17,30 @@ const REQUIRED_EVALUATOR_SKILLS = new Set([
   "shravan-dev-workflow:spec-program-review",
 ]);
 
-export function validateNoOrphanCaseDefinitions(props: {
-  readonly caseDefinitionFiles: readonly string[];
-  readonly scenarioFixtureFiles: readonly string[];
-}): void {
-  const fixtureStems = new Set(
-    props.scenarioFixtureFiles.map((filePath) => filePath.replace(/\.md$/, "")),
-  );
-  for (const caseDefinitionFile of props.caseDefinitionFiles) {
-    const caseStem = caseDefinitionFile.replace(/\.case\.ts$/, "");
-    if (!fixtureStems.has(caseStem)) {
-      throw new Error(
-        `Case definition has no colocated Markdown fixture: ${caseDefinitionFile}`,
-      );
+export async function validateNoOrphanCaseDefinitions(props: {
+  readonly caseRegistryFiles: readonly string[];
+  readonly scenarios: readonly SkillPressureScenario[];
+}): Promise<void> {
+  const scenarioIdentitiesByDirectory = new Map<string, Set<string>>();
+  for (const scenario of props.scenarios) {
+    const scenarioDirectory = dirname(scenario.filePath);
+    const scenarioIdentities =
+      scenarioIdentitiesByDirectory.get(scenarioDirectory) ?? new Set<string>();
+    scenarioIdentities.add(scenario.scenarioId);
+    scenarioIdentitiesByDirectory.set(scenarioDirectory, scenarioIdentities);
+  }
+  for (const caseRegistryFile of props.caseRegistryFiles) {
+    const scenarioIdentities =
+      scenarioIdentitiesByDirectory.get(dirname(caseRegistryFile)) ??
+      new Set<string>();
+    const caseDefinitions =
+      await loadSkillPressureCaseDefinitions(caseRegistryFile);
+    for (const caseDefinition of caseDefinitions) {
+      if (!scenarioIdentities.has(caseDefinition.scenarioId)) {
+        throw new Error(
+          `Case registry definition has no colocated Markdown fixture: ${caseDefinition.scenarioId} (${caseRegistryFile})`,
+        );
+      }
     }
   }
 }
@@ -47,6 +59,21 @@ export function validateUniqueSkillPressureCaseIdentities(
   }
 }
 
+export function validateUniqueSkillPressureCaseDefinitionIdentities(props: {
+  readonly caseDefinitions: readonly SkillPressureCaseDefinition[];
+  readonly caseRegistryPath: string;
+}): void {
+  const observedScenarioIdentities = new Set<string>();
+  for (const caseDefinition of props.caseDefinitions) {
+    if (observedScenarioIdentities.has(caseDefinition.scenarioId)) {
+      throw new Error(
+        `Duplicate skill pressure case definition identity: ${caseDefinition.scenarioId} (${props.caseRegistryPath})`,
+      );
+    }
+    observedScenarioIdentities.add(caseDefinition.scenarioId);
+  }
+}
+
 export async function loadSkillPressureCase(
   scenario: SkillPressureScenario,
 ): Promise<SkillPressureCase> {
@@ -56,11 +83,11 @@ export async function loadSkillPressureCase(
     mode: scenario.mode,
     prompt: scenario.prompt,
   };
-  const casePath = scenario.filePath.replace(/\.md$/, ".case.ts");
-  if (!existsSync(casePath)) {
+  const caseRegistryPath = join(dirname(scenario.filePath), "cases.ts");
+  if (!existsSync(caseRegistryPath)) {
     if (REQUIRED_EVALUATOR_SKILLS.has(scenario.skillUnderTest)) {
       throw new Error(
-        `Scenario requires a colocated evaluator definition: ${casePath}`,
+        `Scenario requires a skill-folder evaluator registry: ${caseRegistryPath}`,
       );
     }
     return {
@@ -73,12 +100,15 @@ export async function loadSkillPressureCase(
       usesLegacyEvaluation: true,
     };
   }
-  const importedModule: unknown = await import(pathToFileURL(casePath).href);
-  if (!isSkillPressureCaseModule(importedModule)) {
-    throw new Error(`Case definition must export default: ${casePath}`);
-  }
-  if (importedModule.default.scenarioId !== scenario.scenarioId) {
-    throw new Error(`Case definition scenario mismatch: ${casePath}`);
+  const caseDefinitions =
+    await loadSkillPressureCaseDefinitions(caseRegistryPath);
+  const caseDefinition = caseDefinitions.find(
+    (definition) => definition.scenarioId === scenario.scenarioId,
+  );
+  if (caseDefinition === undefined) {
+    throw new Error(
+      `Case registry does not define scenario ${scenario.scenarioId}: ${caseRegistryPath}`,
+    );
   }
   return {
     id: scenario.scenarioId,
@@ -87,22 +117,43 @@ export async function loadSkillPressureCase(
     scenario,
     input,
     deterministicEvaluators: createDeterministicEvaluators({
-      definition: importedModule.default,
+      definition: caseDefinition,
       scenario,
     }),
-    semanticEvaluator: createSemanticCriteriaEvaluator(importedModule.default),
+    semanticEvaluator: createSemanticCriteriaEvaluator(caseDefinition),
     usesLegacyEvaluation: false,
   };
 }
 
-function isSkillPressureCaseModule(
+async function loadSkillPressureCaseDefinitions(
+  caseRegistryPath: string,
+): Promise<readonly SkillPressureCaseDefinition[]> {
+  const importedModule: unknown = await import(
+    pathToFileURL(caseRegistryPath).href
+  );
+  if (!isSkillPressureCaseRegistryModule(importedModule)) {
+    throw new Error(
+      `Case registry must export named skillPressureCaseDefinitions: ${caseRegistryPath}`,
+    );
+  }
+  validateUniqueSkillPressureCaseDefinitionIdentities({
+    caseDefinitions: importedModule.skillPressureCaseDefinitions,
+    caseRegistryPath,
+  });
+  return importedModule.skillPressureCaseDefinitions;
+}
+
+function isSkillPressureCaseRegistryModule(
   value: unknown,
-): value is { readonly default: SkillPressureCaseDefinition } {
+): value is {
+  readonly skillPressureCaseDefinitions: readonly SkillPressureCaseDefinition[];
+} {
   return (
     typeof value === "object" &&
     value !== null &&
-    "default" in value &&
-    isSkillPressureCaseDefinition(value.default)
+    "skillPressureCaseDefinitions" in value &&
+    Array.isArray(value.skillPressureCaseDefinitions) &&
+    value.skillPressureCaseDefinitions.every(isSkillPressureCaseDefinition)
   );
 }
 

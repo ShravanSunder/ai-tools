@@ -34,8 +34,8 @@ Revisit this choice only if Vitest Evals gains ordered conditional evaluator gro
 ```text
 skill pressure evaluation system
   scenario case catalog
-    owns: fixture/definition pairing and stable scenario identity
-    consumes: colocated .md and .case.ts files
+    owns: skill-folder registry coverage and stable scenario identity
+    consumes: colocated .md fixtures and named cases.ts registry
     changes when: scenario authoring rules change
 
   ACPX agent runner
@@ -76,10 +76,10 @@ skill pressure evaluation system
 ## Dependency and information boundaries
 
 ```text
-.md fixture ────────────────> SkillPressureInput ─────> subject harness
+.md fixtures ───────────────> SkillPressureInput ─────> subject harness
                                                          │
                                                          ▼
-.case.ts ──> bound evaluator definitions ───────────> HarnessRun
+cases.ts registry ──> bound evaluator definitions ──> HarnessRun
                                                          │
                                ┌─────────────────────────┴────────────┐
                                ▼                                      ▼
@@ -164,9 +164,9 @@ interface SkillPressureInput {
 
 `SkillPressureEvaluator` is the repository name for a typed Vitest Evals `Judge` used as an evaluator. Both deterministic and model-backed evaluators return the native `JudgeResult` shape so `toSatisfyJudge` records their name, score, rationale metadata, and failure status on the same test task.
 
-The case loader validates the colocated pair and projects the parsed Markdown fixture into the exact four-field `SkillPressureInput`. Grader sections, failure signals, regexes, artifact expectations, criteria, and scores remain on the evaluation side and cannot reach the subject harness. Criteria are bound when evaluators are constructed.
+The case loader validates the skill-folder registry and projects each parsed Markdown fixture into the exact four-field `SkillPressureInput`. Grader sections, failure signals, regexes, artifact expectations, criteria, and scores remain on the evaluation side and cannot reach the subject harness. Criteria are bound when evaluators are constructed.
 
-Scenarios for `discuss-pathfinding`, `spec-design`, `program-design`, and `spec-program-review` require a colocated `.case.ts`; absence fails collection. Scenarios for other skills remain eligible for the legacy path during this slice.
+Scenario folders for `discuss-pathfinding`, `spec-design`, `program-design`, and `spec-program-review` require a named `cases.ts` registry entry for every Markdown fixture; missing registries, missing entries, and orphan entries fail collection. Scenarios for other skills remain eligible for the legacy path during this slice.
 
 ## Evaluation state and failure flow
 
@@ -201,7 +201,7 @@ The semantic evaluator is the singular writer of `semantic-judge.json` beside th
 | R5 | Semantic evaluator makes one `context.runJudge` call through the ACPX harness | Judge-harness call count and model/reasoning configuration evidence |
 | R6 | Semantic evaluator maps malformed/uncertain results to inconclusive and owns the complete evidence artifact | Unit cases plus artifact inspection |
 | R7 | Vitest/Vitest Evals retain scheduling, filtering, timeout, task metadata, and reporter ownership | Native filtered/concurrent invocation and terminal output |
-| R8 | Case catalog requires companions for the four named skills and preserves legacy eligibility outside them | Loader unit tests for valid, required-missing, legacy-missing, duplicate, and mismatched pairs |
+| R8 | Case catalog requires complete named folder registries for the four named skills and preserves legacy eligibility outside them | Loader unit tests for valid, required-missing, legacy-missing, duplicate, missing-entry, and orphan-entry cases |
 
 Real boundaries in live proof are ACPX/Codex Luna and ACPX Terra. Unit tests may replace both transports while exercising case loading, evidence normalization, evaluator reduction, call ordering, and reporting metadata. A fake backend proves plumbing only.
 

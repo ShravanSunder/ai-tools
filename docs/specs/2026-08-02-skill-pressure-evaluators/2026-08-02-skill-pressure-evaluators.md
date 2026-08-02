@@ -92,11 +92,12 @@ Each in-scope scenario MUST remain organized under:
 
 ```text
 tests/skills/pressure-scenarios/<plugin>/<skill>/
-  <scenario>.md
-  <scenario>.case.ts
+  cases.ts
+  <scenario-a>.md
+  <scenario-b>.md
 ```
 
-The Markdown file is inert subject-input fixture content. The TypeScript companion declares evaluator selection and criteria. Pairing errors, duplicate scenario identities, and missing required companions MUST fail during collection rather than after model execution.
+Each Markdown file is inert subject-input fixture content. The skill folder's named `skillPressureCaseDefinitions` export declares evaluator selection and criteria for its scenarios. Missing registry entries, orphan definitions, duplicate scenario identities, and missing required registries MUST fail during collection rather than after model execution.
 
 Basis: U2, U3, and U6.
 

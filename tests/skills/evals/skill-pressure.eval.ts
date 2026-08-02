@@ -34,24 +34,26 @@ const scenarioFixtureFiles = discoverFilesEndingWith(
   scenarioDirectory,
   ".md",
 ).filter((filePath) => !filePath.endsWith("/README.md"));
-const caseDefinitionFiles = discoverFilesEndingWith(
+const caseRegistryFiles = discoverFilesEndingWith(
   scenarioDirectory,
-  ".case.ts",
+  "cases.ts",
 );
-validateNoOrphanCaseDefinitions({
-  caseDefinitionFiles,
-  scenarioFixtureFiles,
+const parsedScenarios = scenarioFixtureFiles.map((filePath) => {
+  const scenario = parseScenarioMarkdown({
+    filePath,
+    markdown: readFileSync(filePath, "utf8"),
+  });
+  validateScenarioFilePlacement({ scenarioDirectory, scenario });
+  return scenario;
+});
+await validateNoOrphanCaseDefinitions({
+  caseRegistryFiles,
+  scenarios: parsedScenarios,
 });
 const loadedScenarios = await Promise.all(
-  scenarioFixtureFiles.map(
-    async (filePath): Promise<SkillPressureCase> => {
-      const scenario = parseScenarioMarkdown({
-        filePath,
-        markdown: readFileSync(filePath, "utf8"),
-      });
-      validateScenarioFilePlacement({ scenarioDirectory, scenario });
-      return await loadSkillPressureCase(scenario);
-    },
+  parsedScenarios.map(
+    async (scenario): Promise<SkillPressureCase> =>
+      await loadSkillPressureCase(scenario),
   ),
 );
 validateUniqueSkillPressureCaseIdentities(loadedScenarios);

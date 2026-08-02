@@ -8,7 +8,7 @@ The existing Markdown scenarios, Vitest runner, and Vitest Evals integration rem
 
 Allowed scope is the repository-local `tests/skills/` pressure system and the eight existing scenarios for the four named skills. The change may update the test-local Vitest dependencies. It must not create a reusable package, scheduler, run database, replay system, scenario lifecycle framework, target projection system, calibration system, or additional judge chain.
 
-The complexity budget is one scenario fixture plus one declarative case definition, one subject execution, named evaluators over one normalized observation, and one native Vitest result row. Any cross-run state, multiple evaluator report rows, retries, weighted scoring, or Voyager-style lifecycle machinery requires a new decision.
+The complexity budget is one Markdown scenario fixture plus one declarative entry in its skill folder's typed registry, one subject execution, named evaluators over one normalized observation, and one native Vitest result row. Any cross-run state, multiple evaluator report rows, retries, weighted scoring, or Voyager-style lifecycle machinery requires a new decision.
 
 ## Authorized needs
 
