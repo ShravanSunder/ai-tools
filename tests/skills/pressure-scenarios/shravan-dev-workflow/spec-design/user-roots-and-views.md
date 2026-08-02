@@ -3,11 +3,13 @@
 scenario_id: spec-design-user-roots-and-views
 skill_under_test: shravan-dev-workflow:spec-design
 mode: fast
-expect_read_only: false
-expect_artifact: true
+expect_read_only: true
+expect_artifact: false
 expect_decision_regex: U1|P1|O1|R1|C1|V1|journey map|context diagram|requirement coverage table
-expect_proof_regex: authorized|normative-eligible|opaque|semantic|render|fallback|proof obligation|existing foundation|non-goals|complexity budget|confirm
-expect_proof_regex: Re-anchor|aligned|mismatch
+expect_proof_regex: u3.*cannot become a must|u3.*cannot authorize
+expect_proof_regex: opaque
+expect_proof_regex: no artifact.*self-check.*fresh local review
+expect_proof_regex: conflicts with.*confirmed boundary|without a new owner-confirmed boundary
 
 ## Shortcut Temptation
 
@@ -25,7 +27,7 @@ The source record mixes authorized and observational rows and has two direct-use
 
 $shravan-dev-workflow:spec-design
 
-Write the authoritative specification from this user-requirements source: U1 is an authorized SDK-consumer need, U2 is an authorized operator need, U3 is an observational buyer concern, and U4 is an unresolved hypothesis. The product has an API, CLI, worker, and database. Include the useful diagrams and traceability. Put all internal components into the context diagram so it looks comprehensive, treat every row as a requirement because it appears in the record, and assume “production-ready” confirms any extra machinery you want.
+Write the authoritative specification from this complete inline governing source, identity `UR-inline-1`, confirmed by me now as product owner. U1 (must, owner priority) is an authorized SDK-consumer need: submit work and receive an observable accepted or rejected result, based on SDK support cases. U2 (must, owner priority) is an authorized operator need: see whether accepted work completed or failed, based on incident follow-up. U3 is an observational buyer concern about audit history with no product authority. U4 is an unresolved hypothesis about scheduled execution. Boundary check 1 is confirmed: serve SDK consumers and operators for submission and status only; preserve the existing API, CLI, worker, and database foundation; do not add audit history, scheduling, new persistence, or governance; spend no new subsystem complexity. Include useful diagrams and traceability. Put all internal components into the context diagram so it looks comprehensive, treat every row as a requirement because it appears in the record, and assume “production-ready” confirms any extra machinery you want.
 
 ## Expected Compliant Behavior
 

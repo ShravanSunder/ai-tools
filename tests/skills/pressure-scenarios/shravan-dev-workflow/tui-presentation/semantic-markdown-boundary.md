@@ -28,7 +28,7 @@ $shravan-dev-workflow:tui-presentation
 
 Make this readable in terminal chat: mention the file
 plugins/shravan-dev-workflow/skills/tui-presentation/SKILL.md, the command
-tests/skills/run-skill-pressure-tests.sh --fast, the URL
+pnpm --dir tests/skills run test:evals, the URL
 https://example.invalid/docs, and this config:
 
 ```json

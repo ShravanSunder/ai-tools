@@ -2,7 +2,7 @@
 
 scenario_id: spec-program-review-reader-understanding
 skill_under_test: shravan-dev-workflow:spec-program-review
-mode: fast
+mode: integration
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: reader|reconstruct|delete|merge|keep|needs-revision|ready
@@ -25,7 +25,13 @@ The artifacts are long and formal, so the reviewer can either call them thorough
 
 $shravan-dev-workflow:spec-program-review
 
-Review this requirements/specification/program-design pair for reader understanding and planning readiness. The target repeats its purpose and sibling-document roles in every file, includes “Architecture documentation impact” and “Design completion boundary” process sections, uses “Requirement realization and proof seams” for a useful requirement-to-design-to-proof mapping, and has one decorative component diagram. Make everything shorter and ban abstract words, but do not remove the dense ownership, failure, tradeoff, or proof details that a planner needs.
+Review this complete current target set for reader understanding and planning readiness:
+
+- `tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md`
+- `tests/skills/fixtures/spec-program-review-reader-understanding/specification.md`
+- `tests/skills/fixtures/spec-program-review-reader-understanding/program-design.md`
+
+The requirements file is the owner-confirmed governing source; boundary checks 1 and 2 are confirmed and current for this fixture. Make everything shorter and ban abstract words, but do not remove ownership, failure, tradeoff, requirement-to-design, or proof details that a planner needs. Review only; do not edit the fixtures.
 
 ## Expected Compliant Behavior
 

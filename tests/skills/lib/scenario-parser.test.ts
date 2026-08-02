@@ -1,5 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { parseScenarioMarkdown } from "./scenario-parser.js";
+import {
+  parseScenarioMarkdown,
+  validateScenarioFilePlacement,
+} from "./scenario-parser.js";
 
 const repeatedMetadataScenario = `scenario_id: repeated-fields
 skill_under_test: shravan-dev-workflow:test-skill
@@ -116,5 +119,43 @@ skill_under_test: shravan-dev-workflow:test-skill
 `,
       }),
     ).toThrow(/Prompt/);
+  });
+});
+
+describe("validateScenarioFilePlacement", () => {
+  test("accepts plugin and skill folders matching skill_under_test", () => {
+    const scenarioDirectory = "/repo/tests/skills/pressure-scenarios";
+    const scenario = parseScenarioMarkdown({
+      filePath: `${scenarioDirectory}/shravan-dev-workflow/spec-design/boundary.md`,
+      markdown: `scenario_id: spec-design-boundary
+skill_under_test: shravan-dev-workflow:spec-design
+
+## Prompt
+
+Use the skill.
+`,
+    });
+
+    expect(() =>
+      validateScenarioFilePlacement({ scenarioDirectory, scenario }),
+    ).not.toThrow();
+  });
+
+  test("rejects a flat or mismatched scenario location", () => {
+    const scenarioDirectory = "/repo/tests/skills/pressure-scenarios";
+    const scenario = parseScenarioMarkdown({
+      filePath: `${scenarioDirectory}/spec-design-boundary.md`,
+      markdown: `scenario_id: spec-design-boundary
+skill_under_test: shravan-dev-workflow:spec-design
+
+## Prompt
+
+Use the skill.
+`,
+    });
+
+    expect(() =>
+      validateScenarioFilePlacement({ scenarioDirectory, scenario }),
+    ).toThrow("pressure-scenarios/<plugin>/<skill>");
   });
 });

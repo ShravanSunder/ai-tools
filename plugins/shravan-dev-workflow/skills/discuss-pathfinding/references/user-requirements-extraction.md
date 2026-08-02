@@ -63,7 +63,7 @@ Stop this stage when every row has an evidenced authority state and any missing 
 
 ## Capture User-Job Sequence Inputs
 
-Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return the class, user-worded steps or transitions, observed pain and evidence, desired observable difference, and cited U rows. `spec-design` decides whether that input needs a journey view and owns any rendering.
+Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return the class, user-worded steps or transitions, observed pain and evidence, desired observable difference, and cited U rows. Pathfinding may use a non-normative conversational sequence map to clarify an ambiguity; `spec-design` alone decides whether the durable specification needs a journey view and owns its normative rendering.
 
 Teach the relationship through examples:
 
@@ -82,12 +82,13 @@ primary customer, developer, contract, or library goal
 affected classes and the outcome that matters to each
 existing behavior or foundation that should be reused
 actual missing capabilities or observable differences
+allowed and protected system or capability surface at the clearest authoritative altitude
 explicit non-goals
 complexity budget: expected change shape and machinery that requires renewed approval
 unresolved owner choices or evidence gaps
 ```
 
-Existing foundation means observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here. Missing pieces name the outcome gap, not every feature a complete platform might have. A useful complexity budget names the expected change shape and the additions that reopen scope. “Production-ready and complete” is not a budget because it cannot reject expansion.
+Existing foundation means observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here. Missing pieces name the outcome gap, not every feature a complete platform might have. Establish allowed and no-touch systems or capability areas; require repositories, packages, forks, or modules only when they are already known or materially constrained. Otherwise preserve the higher-level boundary for `program-design` to realize. The agent may propose a provisional boundary for the owner to correct, but it remains provisional until confirmed. A useful complexity budget names the expected change shape and the additions that reopen scope. “Production-ready and complete” is not a budget because it cannot reject expansion.
 
 Challenge an addition by asking which U row it serves and what user-visible or contract outcome fails without it. Keep an unconfirmed expansion as an owner decision.
 

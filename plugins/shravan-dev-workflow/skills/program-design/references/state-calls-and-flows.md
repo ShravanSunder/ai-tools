@@ -39,7 +39,7 @@ Include async callbacks, jobs, events, storage, caches, and proof paths when the
 
 For every material runtime-behavior group, pair the source-anchored current entrypoint-to-effect chain from `current-system-model.md` with the proposed chain. A first design records proposed-only and explicitly states that no predecessor exists. Requirements sharing one path may cite the same delta.
 
-Compare by owner and caller/callee edge. Mark every relevant owner, call, state read/write or external effect, and result/error edge as:
+Compare by owner and caller/callee edge. Mark every added, removed, or changed owner, call, state read/write or external effect, and result/error edge. Also mark an unchanged edge when its preservation is requirement-critical, safety-critical, or contested:
 
 ```text
 added
@@ -48,9 +48,11 @@ changed
 intentionally unchanged
 ```
 
+Ordinary unaffected edges need no ceremony.
+
 For each edge, keep the owning component, operation or event, sync/async/event semantics, input authority, state read/write or side effect, result/error propagation, and the requirement or failure obligation it realizes. Preserve current-source anchors and explain the consequence of every removed or changed edge.
 
-Do not make a human mentally diff two separate prose sections or raw stack traces. Render the comparison as the smallest readable call graph, sequence, compact call tree, or delta table that keeps each edge status visible.
+Do not make a human mentally diff two separate prose sections or raw stack traces. Render the comparison as the smallest readable call graph, sequence, compact call tree, or delta table that keeps each applicable edge status visible.
 
 Runtime call stacks and traces validate current execution; they are not copied as the target design. Normalize the target into a source-anchored call graph or sequence view that an implementer can follow from entrypoint to effect and back to the observable outcome. Branches, callbacks, retries, queue/event hops, cancellation, and partial failure stay visible when they change behavior.
 
@@ -74,4 +76,4 @@ proof seam
 
 A temporary dual path is one coordination boundary with an authority rule per phase, not two sources of truth.
 
-Complete when: every material runtime-behavior group has a source-anchored current/proposed call-path delta or proposed-only no-predecessor result; each relevant owner, call, state/effect, and result/error edge has one of the four markers; a human can trace effect and return without mentally diffing separate prose; state writes cannot bypass owners; and each migration phase has explicit authority, transition, rollback, failure, and proof.
+Complete when: every material runtime-behavior group has a source-anchored current/proposed call-path delta or proposed-only no-predecessor result; every added, removed, or changed owner, call, state/effect, and result/error edge is explicit, with preservation-critical or contested unchanged edges marked; a human can trace effect and return without mentally diffing separate prose; state writes cannot bypass owners; and each migration phase has explicit authority, transition, rollback, failure, and proof.

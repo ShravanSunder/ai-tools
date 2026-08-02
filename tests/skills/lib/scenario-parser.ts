@@ -20,6 +20,11 @@ export interface SkillPressureScenario {
   readonly failureSignals: string;
 }
 
+export interface ValidateScenarioFilePlacementProps {
+  readonly scenarioDirectory: string;
+  readonly scenario: SkillPressureScenario;
+}
+
 const DEFAULT_DECISION_REGEXES = ["."] as const;
 
 export function parseScenarioMarkdown(
@@ -65,6 +70,30 @@ export function parseScenarioMarkdown(
       sections.get("Expected Compliant Behavior")?.trim() ?? "",
     failureSignals: sections.get("Failure Signals")?.trim() ?? "",
   };
+}
+
+export function validateScenarioFilePlacement(
+  props: ValidateScenarioFilePlacementProps,
+): void {
+  const relativeDirectory = relative(
+    props.scenarioDirectory,
+    dirname(props.scenario.filePath),
+  );
+  const pathSegments = relativeDirectory.split(sep);
+  const [expectedPluginName, expectedSkillName] =
+    props.scenario.skillUnderTest.split(":");
+
+  if (
+    !expectedPluginName ||
+    !expectedSkillName ||
+    pathSegments.length !== 2 ||
+    pathSegments[0] !== expectedPluginName ||
+    pathSegments[1] !== expectedSkillName
+  ) {
+    throw new Error(
+      `Scenario must live under pressure-scenarios/<plugin>/<skill> matching skill_under_test: ${props.scenario.filePath}`,
+    );
+  }
 }
 
 function parseMetadata(markdown: string): Map<string, string[]> {
@@ -144,3 +173,4 @@ function parseBooleanMetadata(
   }
   throw new Error(`Expected boolean metadata value, received: ${value}`);
 }
+import { dirname, relative, sep } from "node:path";

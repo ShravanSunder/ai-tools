@@ -16,7 +16,7 @@ Inspect:
 - state ownership/transitions;
 - normal control/data/call flows;
 - source-anchored current entrypoint-to-effect paths and proposed paths, or proposed-only paths with an explicit no-predecessor case;
-- added, removed, changed, or intentionally unchanged owners, caller/callee edges, state reads/writes or effects, and result/error propagation for every applicable material runtime-behavior group;
+- added, removed, and changed owners, caller/callee edges, state reads/writes or effects, and result/error propagation for every applicable material runtime-behavior group, plus unchanged edges whose preservation is requirement-critical, safety-critical, or contested;
 - failure, retry, idempotency, partial success, cancellation, cleanup, recovery;
 - concurrency, ordering, consistency, backpressure;
 - trust/security/reliability/operability and other applicable qualities;
@@ -31,4 +31,4 @@ Bad: architecture nouns without composition or visible call relationships, curre
 
 Route How corrections to `program-design`; missing/contradictory Why/What to `spec-design`; caller-state issues to the caller.
 
-Complete when: internal coherence and specification satisfaction each have an evidence-backed result, and every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case with all four edge statuses.
+Complete when: internal coherence and specification satisfaction each have an evidence-backed result, and every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case with added/removed/changed edges and any preservation-critical or contested unchanged edge.

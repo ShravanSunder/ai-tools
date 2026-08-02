@@ -1,9 +1,12 @@
 import { readFileSync, readdirSync } from "node:fs";
-import { basename, join } from "node:path";
+import { join } from "node:path";
 import { describeEval } from "vitest-evals";
 import { expect } from "vitest";
 import { evaluatePressureAssertions } from "../lib/pressure-assertions.js";
-import { parseScenarioMarkdown } from "../lib/scenario-parser.js";
+import {
+  parseScenarioMarkdown,
+  validateScenarioFilePlacement,
+} from "../lib/scenario-parser.js";
 import { shouldRunSkillPressureCase } from "../lib/scenario-selection.js";
 import {
   createSkillPressureHarness,
@@ -17,23 +20,20 @@ const selectedScenario = process.env["SKILL_PRESSURE_SCENARIO"];
 const selectedMode = process.env["SKILL_PRESSURE_MODE"];
 const backend = process.env["SKILL_PRESSURE_BACKEND"] ?? "codex";
 
-const scenarios = readdirSync(scenarioDirectory)
-  .filter((fileName) => fileName.endsWith(".md") && fileName !== "README.md")
-  .filter((fileName) => {
-    if (!selectedScenario) {
-      return true;
-    }
-    return basename(fileName, ".md") === selectedScenario;
+const scenarios = discoverScenarioFiles(scenarioDirectory)
+  .map((filePath): SkillPressureCase => {
+    const scenario = parseScenarioMarkdown({
+      filePath,
+      markdown: readFileSync(filePath, "utf8"),
+    });
+    validateScenarioFilePlacement({ scenarioDirectory, scenario });
+    return { scenario };
   })
-  .map((fileName): SkillPressureCase => {
-    const filePath = join(scenarioDirectory, fileName);
-    return {
-      scenario: parseScenarioMarkdown({
-        filePath,
-        markdown: readFileSync(filePath, "utf8"),
-      }),
-    };
-  })
+  .filter(
+    (skillPressureCase) =>
+      !selectedScenario ||
+      skillPressureCase.scenario.scenarioId === selectedScenario,
+  )
   .filter((skillPressureCase) =>
     shouldRunSkillPressureCase({
       skillPressureCase,
@@ -41,6 +41,18 @@ const scenarios = readdirSync(scenarioDirectory)
       selectedScenario,
     }),
   );
+
+function discoverScenarioFiles(directoryPath: string): readonly string[] {
+  return readdirSync(directoryPath, { recursive: true, withFileTypes: true })
+    .filter(
+      (directoryEntry) =>
+        directoryEntry.isFile() &&
+        directoryEntry.name.endsWith(".md") &&
+        directoryEntry.name !== "README.md",
+    )
+    .map((directoryEntry) => join(directoryEntry.parentPath, directoryEntry.name))
+    .sort();
+}
 
 describeEval(
   "skill pressure",

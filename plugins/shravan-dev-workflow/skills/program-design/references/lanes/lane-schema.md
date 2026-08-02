@@ -6,17 +6,17 @@ Packet:
 
 ```text
 lane and assignment identity
+selected lane reference
 governing specification path and current text
 program-design path and current text when the selected lane's prerequisites say it
 exists; otherwise `not-yet-produced` plus the current workflow stage
 selection predicate and prerequisites
 bounded question and source scope
 settled requirements/decisions/claims
-mission and maximum authority
-non-goals
-expected evidence/model/advice/prose return
-stop condition
+instance constraints that narrow the lane reference, or `none`
 ```
+
+The selected lane reference owns its invariant mission, maximum authority, non-goals, expected return, and stop boundary. The packet supplies assignment-specific state and may narrow those invariants; it does not restate or widen them.
 
 Receipt:
 

@@ -44,6 +44,16 @@ status: proposed | accepted | superseded
 
 One line per term, the user's word choice, written when the term is settled — which is usually right after a challenge ("you're saying 'account' — the Customer or the User?"). A term that conflicts with an existing project glossary is called out at the moment it appears, not archived as a discrepancy.
 
+## Closing Boundary
+
+Use the existing record homes. At validation and handoff, attach a proportional closing restatement that lets the next reader distinguish:
+
+- confirmed meaning and scope, including negative space;
+- provisional assumptions the agent proposed but the owner did not confirm;
+- exact open choices or evidence gaps.
+
+For user requirements, the goal-boundary record already owns this distinction. For decisions, processes, and terms, keep it with the existing record or closing restatement rather than creating another artifact. Stop when a downstream reader can tell what is authoritative, what is merely the agent's current read, and what still needs an owner.
+
 ## Where Records Live
 
 Follow the repo's conventions: durable design decisions belong with the artifact they shape (a spec folder under `docs/specs/`, working notes under `docs/wip/`); a project glossary stays wherever the repo already keeps one.

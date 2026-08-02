@@ -10,6 +10,7 @@ lane: mode-complete-reviewer | specification-authority | contract |
       architecture-boundary | failure-concurrency | security-trust |
       platform-harness | implementation-difference | proof |
       artifact-navigation | reader-understanding
+selected lane reference
 review mode: specification-only | program-only | pair
 complete target paths/identities and current workspace state
 governing-source identities/versions, authority statuses, and freshness/applicability
@@ -20,21 +21,18 @@ prior review coverage and semantic-change record when coverage is reused
 observable selection predicate
 bounded review question
 source scope
-constraints and non-goals
+assignment-specific constraints that narrow the lane reference, or `none`
 risk predicates
-mission
-maximum authority
-overlap boundary and non-goals
 prerequisites and dependency state
-stop condition
-expected return
 ```
+
+The selected lane reference owns its invariant mission, maximum authority, overlap/non-goal boundary, expected return, and stop boundary. The packet carries assignment-specific evidence and constraints and may narrow those invariants; it does not restate or widen them.
 
 The mode-complete packet uses predicate `mandatory for every review invocation`. A focused packet names the exact concrete unresolved risk that selected it and why the mode-complete receipt did not settle it. Missing or ambiguous targets, governing sources, accepted requirements, or authority stop inspection and produce a blocked receipt.
 
 ## Authority Field
 
-The packet records `maximum authority` using the exact selected lane reference as semantic owner. The caller may narrow that instance authority and may never widen it. The receipt may include the optional `candidate recommendation` slot only when the selected lane reference permits it.
+The selected lane reference is the semantic owner of maximum authority. The caller may narrow that authority through assignment-specific constraints and may never widen it. The receipt may include the optional `candidate recommendation` slot only when the selected lane reference permits it.
 
 ## Receipt
 

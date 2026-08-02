@@ -10,7 +10,7 @@ Return in workflow order: first the artifact structure/view application, artifac
 
 Consume the selected predicates and required semantic fields from the `SKILL.md` Required Views table without restating them. Consume the shared rendering result for every firing and reject missing fields, failed visual checks, or unresolved fallbacks.
 
-For call graph/sequence views, consume the current-to-proposed delta from `state-calls-and-flows.md` rather than copying a raw stack trace. Keep the current and proposed paths or explicit no-predecessor case; owner crossings; sync/async/event edges; state reads/writes or side effects; result/error propagation; evidence anchors; and added/removed/changed/intentionally-unchanged markers visible.
+For call graph/sequence views, consume the current-to-proposed delta from `state-calls-and-flows.md` rather than copying a raw stack trace. Keep the current and proposed paths or explicit no-predecessor case; owner crossings; sync/async/event edges; state reads/writes or side effects; result/error propagation; evidence anchors; added/removed/changed markers; and preservation-critical or contested unchanged edges visible.
 
 Diagrams do not replace behavioral interface or failure prose. Paths may anchor current evidence; do not turn the design into a future file/task list.
 
@@ -44,7 +44,7 @@ Re-read the whole artifact:
 - integrated overview matches detailed models;
 - ownership is singular and dependency rules consistent;
 - interfaces match state and flows;
-- every applicable current/proposed call-path delta exposes all four edge markers;
+- every applicable current/proposed call-path delta exposes added, removed, and changed edges plus preservation-critical or contested unchanged edges;
 - happy/failure/recovery/concurrency paths agree;
 - cross-cutting obligations map to structure/failure/proof;
 - every requirement has realization and seam;

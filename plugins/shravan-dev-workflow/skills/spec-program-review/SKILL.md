@@ -190,7 +190,7 @@ Do not return `ready` while any of these hold:
 - partial, blocked, or `no-receipt` coverage affects a required dimension;
 - a finding lacks an accepted requirement identity or confirmed boundary, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, or disposition;
 - specification, program, or pair mode boundaries are conflated;
-- `program-only` or `pair` omits an applicable current/proposed call path, explicit no-predecessor case, or added/removed/changed/intentionally-unchanged edge status;
+- `program-only` or `pair` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
 - pair mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
