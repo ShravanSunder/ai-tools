@@ -10,7 +10,7 @@ The plugin is built around one idea: each workflow phase should have a clear own
 shared understanding
   -> spec-design: authoritative Why/What
   -> program-design: structural How
-  -> spec-program-review: independent pair review; rerun only for meaning changes
+  -> spec-program-review: proportional independent pair review; rerun only for meaning changes
   -> plan + proof matrix
   -> implementation proof
 ```
@@ -85,7 +85,7 @@ flowchart LR
     specReview --> specHandoff
     specReview --> specDesign
     specReview --> programDesign
-    specReview -->|"pair ready with current semantic coverage"| planCreate
+    specReview -->|"pair ready for current artifacts with current semantic coverage"| planCreate
     specHandoff -->|"packet proves the same gate"| planCreate
 
     planCreate --> planReview
@@ -110,7 +110,7 @@ flowchart LR
 
 Use `discuss-clarify-mental-models` when the shared picture is unstable before artifact work: terms, boundaries, assumptions, source-of-truth questions, or tradeoffs need to be made inspectable. It stays read-only, checks bounded evidence, maps branches, names the countercase, and routes only after the model is confirmed or explicitly open. It is not the old one-forcing-question grill.
 
-`discuss-pathfinding`: Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/process/glossary records as they crystallize.
+`discuss-pathfinding`: Extract unwritten understanding from the user — user and stakeholder requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and records as they crystallize. User-requirements extraction separates evidence from row-level authority, preserves direct users and non-operating stakeholders, forces priority ownership, and captures user-job sequence inputs for later specification views.
 
 Use `research-swarm` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, routes source-specific lanes, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial swarm lanes use explicit packet contracts with source anchors, security context, candidate-evidence labels, and completion receipts; parent ledgers reduce lane evidence before anything becomes accepted truth.
 
@@ -120,21 +120,21 @@ Use `orchestrator-goal` when the objective is long-running and already clear eno
 
 ### Spec boundary
 
-Use `spec-design` to define authoritative Why/What before program design or planning: consumer and problem, current observable reality, outcomes, non-goals, requirements, public or externally observable contracts, constraints, failure obligations, and proof modalities. It keeps unresolved product meaning visible and leaves internal component structure downstream.
+Use `spec-design` to define authoritative Why/What before program design or planning: consumer and problem, current observable reality, outcomes, non-goals, requirements, public or externally observable contracts, constraints, failure obligations, and proof modalities. It traces authorized user/stakeholder roots through U→P→O→R→C→V and adds journey, context, and coverage views when their predicates fire. It keeps unresolved product meaning visible and leaves internal component structure downstream.
 
-Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, calls and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It produces an executable mental model, not a task list.
+Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, source-anchored call paths and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It turns stack/trace evidence into implementable entrypoint-to-effect views and produces an executable mental model, not a task list.
 
-Use `spec-program-review` to independently classify and review a specification, a program design, or their pair. It records the inspected snapshot, reconstructs the model, dispatches one fresh mode-complete reviewer plus predicate-selected focused lanes, and returns a coverage-bound verdict without editing artifacts or accepting the pair. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
+Use `spec-program-review` to independently classify and proportionally review a specification, a program design, or their pair. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the pair. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
 The superseded `spec-creation-swarm` and `spec-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills; creation and review route through the three skills above.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, the pair-review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves semantically current pair readiness.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the pair-review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves semantically current pair readiness.
 
 ### Plan boundary
 
-Use `plan-creation-swarm` to turn an admitted source into a written implementation plan. Design-bearing work requires a pair-mode `spec-program-review` result that is `ready` with semantically current coverage; missing How routes to `program-design`, and a complete but unreviewed or semantically stale pair routes to `spec-program-review`. A direct bypass is allowed only when source inspection positively proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. The skill stays read-only against product code and captures task sequence, dependency graph, parallel work lanes, write surfaces, validation gates, rollback or recovery notes, risks, and open questions. Non-trivial plans include a requirements/proof matrix with source requirements, owning tasks, proof modalities, evidence sources, freshness guards, and proof layers; if proof cannot pass at the planned scope, the plan should split or replan before execution.
+Use `plan-creation-swarm` to turn an admitted source into a written implementation plan. Design-bearing work requires a current pair-mode `spec-program-review` result that is `ready` with semantically current coverage of the specification and program design; missing How routes to `program-design`, and a complete but unreviewed or semantically stale pair routes to `spec-program-review`. A direct bypass is allowed only when source inspection positively proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. The skill stays read-only against product code and captures task sequence, dependency graph, parallel work lanes, write surfaces, validation gates, rollback or recovery notes, risks, and open questions. Non-trivial plans include a requirements/proof matrix with source requirements, owning tasks, proof modalities, evidence sources, freshness guards, and proof layers; if proof cannot pass at the planned scope, the plan should split or replan before execution.
 
-Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog before planning admission, but writes or marks an executable plan `ready` only from a semantically current pair-ready result or a positively proven implementation-mechanics-only classification. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
+Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog before planning admission, but writes or marks an executable plan `ready` only from a semantically current pair-ready review covering the current specification and program design, or a positively proven implementation-mechanics-only classification. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
 
 Use `plan-review-swarm` to review a written implementation plan before code changes. It checks the whole artifact and verifies claims against the repo. Accepted blocker/important findings route back to `plan-creation-swarm`; missing Why/What routes to `spec-design`, and missing structural How routes to `program-design`.
 
@@ -156,7 +156,7 @@ Use `implementation-handoff` when real implementation state exists: branch, diff
 - `docs-maintain`: durable documentation maintenance after source-of-truth drift is identified. It keeps README human-facing, `AGENTS.md` compact, and workflow history in changelog/runbook docs.
 - `ops-security-review`: routes explicit authorized security scans to the official Codex Security plugin workflows.
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and dependencies while keeping docs as the design source of truth.
-- `skills-creation`: creates, updates, or evaluates one named skill or accepted draft with YAML trigger design, a `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source-adaptation checks, and sensitive-resource routing.
+- `skills-creation`: creates, updates, or evaluates one named skill or accepted draft, or executes one run or slice of an accepted multi-run skill-change spec, with YAML trigger design, a `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source-adaptation checks, and sensitive-resource routing. Evaluate runs stop at a parent-reduced verdict and run note; post-verdict edits start a new update run.
 - `skill-audit`: audits current skill portfolios, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions.
 - `tui-presentation`: gives agents a shared structure for readable chat/TUI explanations, diagrams, comparisons, and multi-section responses. It teaches disclosure sequence and visual-family selection while preserving semantic markdown for code, paths, URLs, and technical tokens.
 
@@ -185,7 +185,7 @@ Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review this specification/program-design pair.
 Use spec-handoff to package this design for another agent without creating a plan.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
-Use plan-creation-swarm to turn this semantically current pair-ready specification/program-design result into an implementation plan.
+Use plan-creation-swarm to turn this semantically current pair-ready review of the current specification and program design into an implementation plan.
 Use plan-improve-repo to audit this repo and write executable improvement plans.
 Use plan-review-swarm to validate this plan against the repo before coding.
 Use implementation-execute-plan to validate and execute this written plan.
@@ -195,10 +195,11 @@ Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.
 ```
 
-## References
+## Source And Maintainer Resources
 
 - Skill source: [`skills/`](skills/)
-- Trigger and routing evals: [`references/trigger-evals.md`](references/trigger-evals.md)
+- Shared runtime references: [`shared-references/`](shared-references/)
+- Design-view vocabulary and ownership index: [`docs/diagram-vocabulary.md`](docs/diagram-vocabulary.md)
 - Source inspiration catalog: [`docs/source-inspiration-catalog.md`](docs/source-inspiration-catalog.md)
 - Release smoke and behavioral checks: [`../../docs/changelog/references/shravan-dev-workflow-smoke.md`](../../docs/changelog/references/shravan-dev-workflow-smoke.md)
 - Release notes: [`../../docs/changelog/`](../../docs/changelog/)

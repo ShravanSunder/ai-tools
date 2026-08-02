@@ -15,9 +15,9 @@ Flow: quick | deep | focus | branch
 
 - Basis: current-pair-ready | implementation-mechanics-only
 - Evidence identity:
-  - current-pair-ready: <specification/program-design identities, pair-review result identity, semantic-coverage statement>
+  - current-pair-ready: <current specification path, current program-design path, pair-review result identity, covered artifacts>
   - implementation-mechanics-only: <classification result identity and inspected-source identities>
-- Semantic freshness: <current coverage or parent-verified non-semantic change record>
+- Semantic freshness: <evidence that review covers both artifacts' current meaning>
 
 ## Problem
 

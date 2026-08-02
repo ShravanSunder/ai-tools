@@ -11,7 +11,7 @@ Turn fuzzy research into sharp questions, gather evidence through bounded source
 
 - Stay read-only against product code unless the user explicitly switches to implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
-- When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when it feeds implementation planning from a semantically current pair-ready spec/program-design result, recommend `plan-creation-swarm`. Research preserves evidence for those workflows; it does not synthesize their artifacts.
+- When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when it feeds implementation planning from a semantically current pair-ready review covering the current specification and program design, recommend `plan-creation-swarm`. Research preserves evidence for those workflows; it does not synthesize their artifacts.
 - Start with the local system when the research affects a local repo: current code, docs, specs, plans, runbooks, and live file tree beat memory and older notes.
 - Convert the ask into 1-5 researchable questions before spawning lanes. Name what would support, refute, or complicate each question.
 - Use subagents for independent, bounded lanes when the evidence can be gathered in parallel. Do not ask a lane to "research everything".

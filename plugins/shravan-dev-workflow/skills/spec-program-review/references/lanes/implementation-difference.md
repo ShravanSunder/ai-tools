@@ -26,7 +26,7 @@ Trace at least one normal and one failure path when current behavior is load-bea
 
 Good: current code supplies constraints and discovery evidence while desired behavior is separately authorized.
 
-Bad: code treated as normative because it exists; every implementation detail copied into the design; migration/cutover consequences left implicit; traces cited without exact version/digest.
+Bad: code treated as normative because it exists; every implementation detail copied into the design; migration/cutover consequences left implicit; traces cited without an inspectable source version.
 
 Calibration: report only differences that would cause material reimplementation, compatibility, migration, state, failure, or proof divergence.
 

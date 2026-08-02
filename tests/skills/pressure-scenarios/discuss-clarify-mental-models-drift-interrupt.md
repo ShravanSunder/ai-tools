@@ -14,6 +14,8 @@ expect_proof_regex: evidence_checked:
 expect_proof_regex: rebuilt_model:
 expect_proof_regex: open_or_confirmed:
 expect_proof_regex: next_workflow:
+expect_proof_regex: re-anchor[\s\S]{0,240}(confirmed goal|governing boundar)
+expect_proof_regex: aligned|exact mismatch
 expect_proof_regex: open_or_confirmed:[\s\S]{0,600}next_workflow:
 expect_proof_regex: (term|boundary|assumption|architecture detail).{0,160}(diverg|mismatch|differ|misalign|unstable|not trustworthy|collapse (them|those|it|one) into|inconsistent)|(diverg|mismatch|differ|misalign|unstable|not trustworthy|collapse (them|those|it|one) into|inconsistent).{0,160}(term|boundary|assumption|architecture detail)
 expect_proof_regex: load-bearing|load bearing|should not (pick|choose|select|assume|proceed).{0,60}(silently|without)|before (any )?(code|edits|implementation|files) (move|moves|resume|resumes)|risk.{0,40}(encoding|baking in|the wrong)
@@ -40,7 +42,7 @@ two models diverged.
 
 $shravan-dev-workflow:discuss-clarify-mental-models
 
-Stop -- we're not aligned. Something feels off about how you've been
+Stop -- Re-anchor us. Are we still on the rails? Something feels off about how you've been
 treating the session boundary in this auth refactor, and I keep having to
 correct you on the same point. Don't touch the remaining files yet.
 
@@ -49,6 +51,7 @@ correct you on the same point. Don't touch the remaining files yet.
 - Skill is invoked.
 - Agent treats the invocation as an interrupt: no edits, no continuing the
   implied in-flight task this turn.
+- Agent uses `Re-anchor` to compare the confirmed goal and boundaries with the in-flight work and names `aligned` or the exact mismatch rather than answering only yes.
 - Agent stays read-only and creates no artifact.
 - Agent uses the output contract fields.
 - Agent locates WHERE the models diverged -- a term, a boundary, an

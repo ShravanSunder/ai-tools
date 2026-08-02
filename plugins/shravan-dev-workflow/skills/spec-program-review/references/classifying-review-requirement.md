@@ -8,12 +8,12 @@ Expected inputs:
 target classification: general-domain | runtime-skill-package
 skills-creation parent packet/result identity when target is runtime-skill-package
 requested future mode: specification-only | program-only
-covered artifact identities
+complete covered artifact set
 scope and claimed semantic effect
 complete scoped governing-source inventory
 matched material-risk predicates
 caller requirement: required | none; defaults to `none` when absent
-prior review coverage plus a parent semantic-diff record when coverage may be reused
+prior review coverage plus a parent semantic-change record when coverage may be reused
 ```
 
 Return either:
@@ -21,14 +21,14 @@ Return either:
 ```text
 invocation state: complete
 target classification and skills-creation parent packet/result identity when applicable
-requested mode and covered artifact identities
-immutable governing-source inventory: each source identity, version/digest,
+requested mode and covered artifacts
+governing-source inventory: each source identity and version,
 authority status, freshness/applicability, and scoped-completeness basis
 review-required | non-substantial
 decision branch: forced | matched-risk | non-substantial | semantic-fallback
 matched predicate / non-substantial basis / remaining semantic effect
 caller requirement
-semantic-diff record: changed anchors, meaning changed yes/no/uncertain,
+semantic-change record: changed anchors, meaning changed yes/no/uncertain,
 affected mode and focused-lane predicates, evidence, and reused coverage
 ```
 
@@ -50,6 +50,6 @@ Apply after blocking incomplete inputs:
 
 An absent `caller requirement` is `none`. `caller requirement` only escalates. It never suppresses user request, risk match, or semantic fallback.
 
-Pair mode is never classified here: any initial pair-readiness verdict requires pair review. After that review, the parent may carry coverage across a non-semantic edit only by recording the semantic-diff evidence above. This deterministic classification dispatches no model reviewer.
+Pair mode is never classified here: any initial pair-readiness verdict requires pair review. After that review, the parent may carry coverage across a non-semantic edit only by recording the semantic-change evidence above. This deterministic classification dispatches no model reviewer.
 
 Complete when: one total semantic-effect decision exists, reused coverage is named when applicable, or the exact missing input blocks without fabricating a third classification value.

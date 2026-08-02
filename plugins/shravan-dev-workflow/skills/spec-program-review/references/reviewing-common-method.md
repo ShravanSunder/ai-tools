@@ -2,13 +2,17 @@
 
 This reference owns the baseline every mode-complete and focused reviewer follows before its mission.
 
-Expected inputs: exact mode, target identities and review snapshots, governing sources, constraints, risk predicates, and selected mission.
+Expected inputs: exact mode, complete targets, governing sources, boundary check 1, accepted requirements set, applicable boundary check 2, constraints, risk predicates, and selected mission.
 
 Return: coverage, reconstructed claims/model slice, authority/traceability evidence, crux evidence, candidate findings, gaps, and stop boundary.
 
-## Bind and Read Completely
+## Establish Authority and Read Completely
 
-Verify paths, review snapshot identifiers, governing specification, and source versions. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
+Verify the complete target set, governing specification, and source authority. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
+
+Verify the accepted requirements set against the current owner-confirmed requirements record and boundary-check-1 result. Otherwise use the last inspectable owner-accepted governing baseline. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority. For simplification, baseline recovery, or requirement subtraction, return one compact disposition row per stable identity (`covered | owner-authorized supersession | gap` plus anchor). Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a result in those cases.
+
+For `program-only` and `pair`, inspect the complete boundary-check-2 result or return its exact missing owner decision. Treat design dimensions as `required | satisfied by the existing system | not applicable | unresolved`; a general review category is not a reason to invent a subsystem.
 
 Partial coverage cannot return a clean recommendation.
 
@@ -56,11 +60,25 @@ Use applicable probes:
 
 Use the downstream consumer for the selected mode: a pretend program designer for `specification-only`, and a pretend planner for `program-only` or `pair`. The consumer may decide only its downstream-owned work; a required invention of meaning owned by the reviewed artifact is a readiness failure.
 
-After the full pass, restate the selected model in three sentences. Inability to do so is evidence of an incoherent mental model, not automatically a prose finding.
+## Reconstruct for the Human Reader
+
+After the full pass, restate the selected model compactly and point to where a human would correct it. Check progressive disclosure and apply this deletion question at section/view level and obvious process-residue or duplication sites:
+
+```text
+If this element disappeared, which first understanding, decision, trace,
+failure simulation, proof path, or authoritative lookup would become
+underdetermined?
+```
+
+For `specification-only`, reconstruct requirements -> authoritative Why/What -> observable contract -> proof obligation. For `program-only`, reconstruct governing obligation -> scenario/contract -> current/proposed call-path delta -> owner/state/failure behavior -> proof seam. For `pair`, reconstruct requirements -> specification -> scenario/contract -> program-design call path and other How -> proof.
+
+Flag a concrete comprehension failure, process narration, obscure heading, decorative view, or deletion candidate only when its reader consequence is named. Inability to restate the model is evidence of incoherence, not automatically a prose finding. A material unresolved comprehension risk may route to `reader-understanding` after parent reduction.
 
 ## Finding Calibration
 
-Report only source-backed behavior/design effects. Each candidate names exact anchor, contradiction/failure path, consequence, next-agent guess, smallest semantic correction, owner, validation, and refresh.
+Report only source-backed reader, behavior, or design effects. Each candidate names exact anchor, contradiction/failure path, consequence, next-agent guess, smallest semantic correction, owner, validation, and refresh.
+
+Test deletion before completing a questioned mechanism. A finding may repair the confirmed design; it may not expand the goal, accepted requirements, or complexity budget without an owner decision.
 
 Stop at the mission boundary. Do not edit, redesign beyond the smallest target, or issue the parent verdict.
 

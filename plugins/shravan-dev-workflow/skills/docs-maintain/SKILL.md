@@ -1,6 +1,6 @@
 ---
 name: docs-maintain
-description: Use when the user asks to update, clean up, reconcile, audit, purge, archive, promote, or maintain project docs, AGENTS.md, README.md, changelogs, runbooks, architecture docs, or existing spec/plan/debug artifacts.
+description: Use when maintaining project docs from settled code or decisions, including updating, cleaning up, reconciling, purging, archiving, or promoting AGENTS.md, README, changelogs, runbooks, architecture docs, or existing workflow artifacts. Not for deciding or authoring unsettled specification or program-design meaning, or independently reviewing specifications or program designs.
 ---
 
 # Docs Maintain

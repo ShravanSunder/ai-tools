@@ -19,11 +19,11 @@ Vetted findings and prioritized backlogs may be returned without planning admiss
 
 ```text
 current-pair-ready
-  current specification and program-design identities
+  complete current specification and program design
   required local review coverage is semantically current
-  current pair-mode spec-program-review result: ready
-  accepted semantic findings corrected and affected review coverage rerun
-  later non-semantic edits have a parent-verified semantic-diff record
+  current pair-mode spec-program-review result: ready and covers both current artifacts
+  accepted findings corrected under refreshed review
+  review coverage matches both artifacts' current meaning
   no blocking decision or evidence gap
 
 implementation-mechanics-only
