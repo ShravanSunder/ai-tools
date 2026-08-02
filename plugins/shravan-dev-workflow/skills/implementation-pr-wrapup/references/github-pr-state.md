@@ -12,7 +12,7 @@ Use `gh pr view --json` for:
 - mergeStateStatus and reviewDecision;
 - latest reviews and high-level comments when useful.
 
-Use `gh pr checks` or `gh pr status` for check summaries.
+Use `gh pr checks` or `gh pr status` for check summaries. For blocking monitoring, use `gh pr checks <pr> --watch --interval 120`; use `--interval 240` for slow jobs or systems that require a slower cadence. For a specific Actions run, use `gh run watch <id> --exit-status --interval 120`, with the same 240-second slow-system fallback.
 
 ## API Budget And Cache State
 

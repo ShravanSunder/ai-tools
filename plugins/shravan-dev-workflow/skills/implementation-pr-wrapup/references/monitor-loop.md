@@ -19,7 +19,7 @@ The monitor may fetch and classify checks, comments, thread state, mergeability,
 
 Completion: delegated monitoring returns assignment-bound state evidence, and every authority-bearing action remains with the main agent.
 
-Default cadence for general checks/comments/review-state monitoring is about 2 minutes. Use 30-60 seconds only for short active windows, such as a fresh push, checks starting, or quiet-poll confirmation. Use a bounded timeout. If the window expires, report remaining blockers and stop.
+Default cadence for general checks/comments/review-state monitoring is 120 seconds. Use 240 seconds for slow jobs or systems that require a slower cadence. Use a bounded timeout. If the window expires, report remaining blockers and stop.
 
 ## API Budget
 

@@ -53,6 +53,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-review-swarm` | `implementation-review-swarm-report-text-contract.md` | Do not defer schema expansion without a complete text-contract report proof. |
 | `implementation-review-swarm` | `implementation-review-swarm-source-matrix-required.md` | Do not replace source/spec/plan/code/proof matrix rows with prose-only source trace summaries. |
 | `implementation-review-swarm` | `implementation-review-swarm-manage-agents-pointer.md` | Do not copy agent-call mechanics into review skills; point to `manage-agents` while preserving review packets, reduction, and verdict ownership. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-gh-watch-cadence-defaults.md` | Use a 120-second watch cadence by default and 240 seconds for slow jobs or systems; do not preserve shorter polling exceptions. |
 | `orchestrator-goal` | `orchestrator-goal-clarity-gate.md` | Do not set a fuzzy long-horizon goal; route unclear goals to `discuss-clarify-mental-models`. |
 | `orchestrator-goal` | `orchestrator-goal-closeout-audit.md` | Do not mark a goal complete without accounting for lifecycle gates, matrix rows, evidence, and remaining work. |
 | `orchestrator-goal` | `orchestrator-goal-plan-creation-matrix-handoff.md` | Do not route a clear goal to planning while dropping matrix rows that `plan-creation-swarm` must define. |

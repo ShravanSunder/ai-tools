@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-02 GH watch cadence defaults](2026-08-02-gh-watch-cadence-defaults.md)
 - [2026-08-02 Design Workflow Boundaries And Organized Pressure Tests](2026-08-02-design-workflow-boundaries-and-organized-pressure-tests.md)
 - [2026-08-02 Consistent Plugin And Skill Names](2026-08-02-consistent-plugin-and-skill-names.md)
 - [2026-08-01 Review Feedback Remediation](2026-08-01-review-feedback-remediation.md)
