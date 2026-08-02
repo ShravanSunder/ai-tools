@@ -13,7 +13,7 @@ codex plugin marketplace add ~/dev/ai-tools
 /plugin marketplace add ShravanSunder/ai-tools
 ```
 
-Install IDs are client-specific for the legacy scaffolding plugin; the workflow and tool plugins use the same ID in both clients.
+The plugin IDs below are shared across Codex and Claude Code.
 
 | Client | Scaffolding | Dev workflow | Dev tools |
 |--------|-------------|--------------|-----------|
