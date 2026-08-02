@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation: PR Wrap-up"
+  short_description: "Finish and verify a GitHub pull request"
+  default_prompt: "Use $implementation-pr-wrapup to finish this pull request, including checks, comments, review threads, mergeability, and final readiness proof."

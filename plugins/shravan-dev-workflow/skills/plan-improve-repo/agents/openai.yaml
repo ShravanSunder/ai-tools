@@ -1,4 +1,4 @@
 interface:
-  display_name: "Plan Improve Repo"
+  display_name: "Plan: Improve Repo"
   short_description: "Audit repos into admitted improvement plans"
   default_prompt: "Audit this repo for high-leverage improvements; write executable plans only for pair-ready or proven implementation-mechanics-only findings, without editing source code."

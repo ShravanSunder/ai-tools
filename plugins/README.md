@@ -12,9 +12,21 @@ AI tools distributed through the local marketplaces in this repository.
 # Add the marketplace
 /plugin marketplace add ShravanSunder/ai-tools
 
-# Install a plugin
+# Install a plugin (use the IDs in the client table below)
 /plugin install <plugin-name>@ai-tools
 ```
+
+Client install IDs:
+
+```text
+Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
+Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
+Cursor      agent --plugin-dir <plugin-directory>
+```
+
+Cursor loads these Claude-format plugin directories through its explicit
+`--plugin-dir` path; it does not install them from this repository's Codex or
+Claude marketplace manifests.
 
 ### Managing Plugins
 
@@ -27,16 +39,18 @@ AI tools distributed through the local marketplaces in this repository.
 
 ## Available Plugins
 
-### [ai-scaffold](ai-scaffold/)
+### [scaffold-project](ai-scaffold/)
 
-Project scaffolding with standard dev configs. Supports TypeScript (biome, vitest, Playwright), Python (ruff, basedpyright, pytest), and Swift (swiftlint, swiftformat). Includes cursor rules and claude hooks.
+AI Scaffold (`scaffold-project`) provides project scaffolding with standard dev configs. Supports TypeScript (biome, vitest, Playwright), Python (ruff, basedpyright, pytest), and Swift (swiftlint, swiftformat). Includes cursor rules and Claude hooks.
+
+Install it as `scaffold-project@ai-tools` in both Codex and Claude Code. The directory remains `ai-scaffold` for source organization.
 
 - `/scaffold-project` -- scaffold a new project or retrofit an existing one
 - `/scaffold-project-update-templates` -- update templates with latest standards
 
 ### [dev-workflow-tools](dev-workflow-tools/)
 
-Common development tool skills that work across Codex and Claude Code.
+Common development tool skills that work across Codex, Claude Code, and Cursor's explicit `--plugin-dir` loading path.
 Currently includes `peekaboo`, an alternative to Playwright for native macOS
 app automation via the Accessibility API. The Peekaboo skill uses live CLI
 discovery, snapshot-scoped interaction, and progressive references for

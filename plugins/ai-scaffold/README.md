@@ -1,12 +1,16 @@
-# AI Scaffold - Claude Code Plugin
+# AI Scaffold — `scaffold-project`
 
-A Claude Code plugin for scaffolding new projects or retrofitting existing ones with standardized development configurations.
+A cross-client plugin for scaffolding new projects or retrofitting existing ones with standardized development configurations.
 
 ## Installation
 
 ```bash
 /plugin marketplace add ShravanSunder/ai-tools
-/plugin install ai-scaffold@ai-tools
+/plugin install scaffold-project@ai-tools
+
+# Codex
+codex plugin marketplace add ~/dev/ai-tools
+codex plugin add scaffold-project@ai-tools
 ```
 
 ### Managing Plugins

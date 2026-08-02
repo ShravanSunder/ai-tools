@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-02 Consistent Plugin And Skill Names](2026-08-02-consistent-plugin-and-skill-names.md)
 - [2026-08-01 Review Feedback Remediation](2026-08-01-review-feedback-remediation.md)
 - [2026-07-31 User Requirements and Design Views](2026-07-31-user-requirements-and-design-views.md)
 - [2026-07-31 Spec/Program Review Semantic Freshness](2026-07-31-spec-review-semantic-freshness.md)

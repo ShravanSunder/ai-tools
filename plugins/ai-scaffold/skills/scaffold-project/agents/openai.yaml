@@ -1,0 +1,4 @@
+interface:
+  display_name: "Scaffold: Project"
+  short_description: "Create or retrofit project configuration"
+  default_prompt: "Use $scaffold-project to create a new project or retrofit an existing one with the repository's standard development configuration."
