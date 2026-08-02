@@ -25,7 +25,7 @@ export interface ValidateScenarioFilePlacementProps {
   readonly scenario: SkillPressureScenario;
 }
 
-const DEFAULT_DECISION_REGEXES = ["."] as const;
+const DEFAULT_DECISION_REGEXES: readonly string[] = ["."];
 
 export function parseScenarioMarkdown(
   props: ParseScenarioMarkdownProps,

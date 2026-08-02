@@ -4,11 +4,13 @@ This harness pressure-tests Codex skills through Codex. Most scenarios cover
 `shravan-dev-workflow`; plugin-specific skill scenarios may live here when they
 need the same shortcut-resistance harness.
 
-Default backend: `codex exec`
+Default model transport: ACPX with the `codex` adapter
 
 Default model: `gpt-5.6-luna`
 
-Default reasoning effort: `xhigh`
+Default subject reasoning effort: `high`
+
+Default semantic judge: `gpt-5.6-terra` at `medium`
 
 Default safety: read-only sandbox
 
@@ -30,8 +32,9 @@ pnpm --dir tests/skills run test:evals
 Run one scenario:
 
 ```bash
-SKILL_PRESSURE_SCENARIO=orchestrator-goal-closeout-audit \
-  pnpm --dir tests/skills run test:evals
+pnpm --dir tests/skills exec vitest run evals \
+  --config vitest.config.ts \
+  -t orchestrator-goal-closeout-audit
 ```
 
 The Vitest runner lives in this directory as a standalone test package. Run its
@@ -47,15 +50,22 @@ live agent:
 
 ```bash
 SKILL_PRESSURE_BACKEND=fake \
-SKILL_PRESSURE_SCENARIO=orchestrator-goal-closeout-audit \
-  pnpm --dir tests/skills run test:evals
+  pnpm --dir tests/skills exec vitest run evals \
+  --config vitest.config.ts \
+  -t orchestrator-goal-closeout-audit
 ```
 
-Vitest owns selection and execution. Set `SKILL_PRESSURE_MODE=integration` for
-integration scenarios, `SKILL_PRESSURE_SCENARIO=<scenario-id>` for one case,
-and `SKILL_PRESSURE_TIMEOUT_SECONDS=<seconds>` for its timeout.
+Vitest owns selection and execution for the four-skill evaluator path; use
+native `-t` test-name filtering for one scenario. The legacy path still accepts
+`SKILL_PRESSURE_MODE=integration` and `SKILL_PRESSURE_SCENARIO=<scenario-id>`
+during the focused cutover. Set `SKILL_PRESSURE_TIMEOUT_SECONDS=<seconds>` for
+the ACPX subject timeout.
 
 Vitest eval artifacts are written under `tmp/skill-pressure-evals/`.
+
+Subject and judge execution both use ACPX. Override their model, effort, and timeout through `CODEX_PRESSURE_MODEL`, `CODEX_PRESSURE_REASONING_EFFORT`, `SKILL_PRESSURE_TIMEOUT_SECONDS`, `SKILL_PRESSURE_JUDGE_MODEL`, `SKILL_PRESSURE_JUDGE_REASONING_EFFORT`, and `SKILL_PRESSURE_JUDGE_TIMEOUT_SECONDS`.
+
+Codex profiles do not currently apply when `codex-acp` starts app-server. As a temporary profile-equivalent bridge, `SKILL_PRESSURE_CODEX_CONFIG` accepts an explicit JSON object and `SKILL_PRESSURE_CODEX_MODEL_PROVIDER` selects a provider defined by that configuration. The harness does not read a local Codex profile automatically.
 
 The model under test sees only the scenario's `## Prompt` section plus the
 minimal metadata needed for its JSON report. `Expected Compliant Behavior`,
@@ -69,9 +79,9 @@ behavior records, not as proof for current runtime skills.
 
 Limitations:
 
-- The harness still evaluates the agent's final self-reported JSON. Scenario
-  checks should include independent `expect_proof_regex` assertions for behavior
-  that must not be satisfied by the broad decision-shape regex alone.
+- Legacy scenarios still evaluate the agent's final self-reported JSON. The four
+  in-scope skills use deterministic evaluators over stable evidence and one
+  semantic judge for obligations that require understanding.
 - For skill behavior changes, pair pressure runs with a baseline source or prior
   plugin check when possible so RED/GREEN proof does not rely only on a
   cooperative model answer.
@@ -80,6 +90,4 @@ Use `--integration` only for slower tests that create temporary projects or
 exercise real files. Claude and `agy` are optional future backends, not the
 default harness.
 
-The Vitest eval path stores Codex event streams raw in the first implementation.
-Deterministic assertions remain the pass/fail source of truth; model judges are
-not part of the first runner.
+The Vitest eval path stores ACP events raw in the first implementation.

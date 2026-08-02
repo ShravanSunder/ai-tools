@@ -305,6 +305,20 @@ Complexity budget: strengthen the current mental model, question craft, destinat
 
 ## Coordination
 
+### Follow-up: coherent question batches
+
+The current proposal and skill over-constrain pacing with “one axis per turn.” A live run showed the agent serializing closely coupled boundary questions even when the user could answer them more effectively as one coherent decision packet.
+
+TODO for the next `discuss-pathfinding` update:
+
+- add a pressure scenario where scope, protected systems, and unresolved requirements are coupled and the user explicitly invites a coherent batch;
+- revise `SKILL.md`, `question-craft.md`, and the completion blocker so multiple related axes may be asked together when their answers form one understandable decision packet;
+- preserve the prohibition on walls of unrelated questions and keep explanations proportional;
+- judge success semantically: the batch must help the user understand and answer the connected decisions, not merely contain several questions;
+- rerun the new scenario and the existing material-ambiguity and user-requirements scenarios.
+
+This correction invalidates “preserve one extraction axis per turn” as an accepted design constraint and requires refreshed proposal review before that skill is edited.
+
 - Base: `spec-orchestration`, aligned with `origin/master` when drafted; re-check before implementation.
 - Working tree when drafted: clean before this proposal file was added.
 - Pending skill edits: none.

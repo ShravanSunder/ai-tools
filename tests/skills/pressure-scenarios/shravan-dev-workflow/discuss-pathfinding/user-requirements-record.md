@@ -3,10 +3,8 @@
 scenario_id: discuss-pathfinding-user-requirements-record
 skill_under_test: shravan-dev-workflow:discuss-pathfinding
 mode: fast
-expect_read_only: false
-expect_artifact: true
-expect_decision_regex: user class|stakeholder|developer user|customer|operator|U1|authority state|must|should|could
-expect_proof_regex: evidence anchor|authorized|observational|advisory|unresolved|existing foundation|missing capabilities|non-goals|complexity budget|confirm
+expect_read_only: true
+expect_artifact: false
 
 ## Shortcut Temptation
 

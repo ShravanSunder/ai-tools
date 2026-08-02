@@ -28,6 +28,34 @@ acpx --cwd /absolute/repo --approve-reads --no-terminal \
 
 Keep cwd, resolved `codex` command, model id, effort, and permission boundary stable for ledgered relationships. Record the accepted model id in the ledger; exit code 0 alone does not prove the intended model launched.
 
+## Codex Adapter Configuration
+
+ACPX project configuration can replace the Codex ACP adapter command through `<cwd>/.acpxrc.json`:
+
+```json
+{
+  "agents": {
+    "codex": {
+      "command": "npx -y @agentclientprotocol/codex-acp@^1.1.5",
+      "args": []
+    }
+  }
+}
+```
+
+`agents.codex.args` are arguments to `codex-acp`, not Codex CLI global arguments. Current `codex-acp` 1.1.x starts `codex app-server` itself and does not forward `--profile <name>`. Do not claim that adding `["--profile", "codex-router"]` there selected the Codex profile.
+
+Codex CLI profiles currently do not apply to `app-server`; a `CODEX_PATH` launcher that expands to `codex --profile <name> app-server` is therefore invalid. When ACPX needs profile-equivalent app-server settings, temporarily pass the required settings explicitly to the `codex-acp` child:
+
+```bash
+CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
+  acpx --cwd /absolute/repo --model gpt-5.6-luna \
+  --approve-reads --no-terminal --non-interactive-permissions fail \
+  codex --file request.md
+```
+
+`CODEX_CONFIG` is a JSON object merged into the Codex session configuration; `MODEL_PROVIDER` selects a provider defined there. Keep this bridge caller-owned and explicit: do not read, copy, or expose a local profile automatically. Record the ACPX token, model, effort, permissions, timeout, and whether explicit adapter configuration was supplied; do not record secret configuration values. Verify environment propagation deterministically and verify the live provider/model separately.
+
 ## Permissions
 
 Use `--approve-reads` for source-grounded Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.

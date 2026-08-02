@@ -1,4 +1,4 @@
-import type { SkillPressureCase } from "./skill-pressure-harness.js";
+import type { SkillPressureCase } from "./scenario-case-types.js";
 
 export interface ShouldRunSkillPressureCaseProps {
   readonly skillPressureCase: SkillPressureCase;
@@ -9,8 +9,11 @@ export interface ShouldRunSkillPressureCaseProps {
 export function shouldRunSkillPressureCase(
   props: ShouldRunSkillPressureCaseProps,
 ): boolean {
-  if (props.selectedScenario !== undefined && props.selectedScenario !== "") {
+  if (!props.skillPressureCase.usesLegacyEvaluation) {
     return true;
+  }
+  if (props.selectedScenario !== undefined && props.selectedScenario !== "") {
+    return props.skillPressureCase.id === props.selectedScenario;
   }
   if (props.selectedMode === undefined || props.selectedMode === "") {
     return true;

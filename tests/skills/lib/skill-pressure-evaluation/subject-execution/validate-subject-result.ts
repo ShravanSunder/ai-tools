@@ -29,12 +29,16 @@ export type SkillPressureResultValidation =
       readonly errors: readonly string[];
     };
 
-const schema = JSON.parse(
+const schema: unknown = JSON.parse(
   readFileSync(
-    new URL("../schemas/skill-pressure-result.schema.json", import.meta.url),
+    new URL("../../../schemas/skill-pressure-result.schema.json", import.meta.url),
     "utf8",
   ),
-) as object;
+);
+
+if (typeof schema !== "object" || schema === null || Array.isArray(schema)) {
+  throw new Error("Skill pressure result schema must be a JSON object.");
+}
 
 const ajv = new Ajv2020({ allErrors: true });
 const validate = ajv.compile<SkillPressureResult>(schema);
@@ -45,7 +49,7 @@ export function validateSkillPressureResult(
   if (validate(value)) {
     return {
       ok: true,
-      value: value as SkillPressureResult,
+      value,
     };
   }
 

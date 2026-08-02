@@ -3,10 +3,8 @@
 scenario_id: spec-design-declined-user-extraction
 skill_under_test: shravan-dev-workflow:spec-design
 mode: fast
-expect_read_only: false
+expect_read_only: true
 expect_artifact: false
-expect_decision_regex: decision-needed|evidence-blocked|authoritative source|hypothesis|decline
-expect_proof_regex: owner meaning|evidence|normative|locally-ready|gap
 
 ## Shortcut Temptation
 

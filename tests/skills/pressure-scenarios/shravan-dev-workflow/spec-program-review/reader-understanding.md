@@ -5,8 +5,6 @@ skill_under_test: shravan-dev-workflow:spec-program-review
 mode: integration
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: reader|reconstruct|delete|merge|keep|needs-revision|ready
-expect_proof_regex: requirement|boundary|consequence|authoritative|call path|proof|scope
 
 ## Shortcut Temptation
 

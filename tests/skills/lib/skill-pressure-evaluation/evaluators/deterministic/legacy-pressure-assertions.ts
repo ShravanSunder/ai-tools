@@ -1,6 +1,6 @@
-import type { SkillPressureScenario } from "./scenario-parser.js";
-import type { SkillPressureResult } from "./result-schema.js";
-import { findPromptRegexLeaks } from "./prompt-renderer.js";
+import type { SkillPressureScenario } from "../../scenario-cases/parse-scenario-fixture.js";
+import type { SkillPressureResult } from "../../subject-execution/validate-subject-result.js";
+import { findPromptRegexLeaks } from "../../subject-execution/render-subject-prompt.js";
 
 export interface EvaluatePressureAssertionsProps {
   readonly scenario: SkillPressureScenario;
@@ -8,6 +8,8 @@ export interface EvaluatePressureAssertionsProps {
   readonly renderedPrompt: string;
   readonly readOnlyRequested: boolean;
   readonly artifactPaths: readonly string[];
+  readonly includeArtifactExpectation?: boolean;
+  readonly includeLegacySemanticAssertions?: boolean;
 }
 
 export interface PressureAssertionResult {
@@ -49,47 +51,57 @@ export function evaluatePressureAssertions(
       `read-only backend request mismatch: expected ${props.scenario.expectReadOnly}, received ${props.readOnlyRequested}`,
     );
   }
-  if (props.result.artifact_expected !== props.scenario.expectArtifact) {
+  if (
+    props.includeArtifactExpectation !== false &&
+    props.result.artifact_expected !== props.scenario.expectArtifact
+  ) {
     failures.push(
       `artifact_expected mismatch: expected ${props.scenario.expectArtifact}, received ${props.result.artifact_expected}`,
     );
   }
-  if (!props.result.shortcut_resisted) {
+  if (
+    props.includeLegacySemanticAssertions !== false &&
+    !props.result.shortcut_resisted
+  ) {
     failures.push("shortcut_resisted must be true");
   }
   if (props.artifactPaths.length === 0) {
     failures.push("artifacts needed for debugging were not recorded");
   }
 
-  appendRegexFailures({
-    failures,
-    label: "decision regex",
-    regexes: props.scenario.expectDecisionRegexes,
-    text: lowercasedDecision,
-    shouldMatch: true,
-  });
+  if (props.includeLegacySemanticAssertions !== false) {
+    appendRegexFailures({
+      failures,
+      label: "decision regex",
+      regexes: props.scenario.expectDecisionRegexes,
+      text: lowercasedDecision,
+      shouldMatch: true,
+    });
 
-  appendRegexFailures({
-    failures,
-    label: "proof regex",
-    regexes: props.scenario.expectProofRegexes,
-    text: lowercasedProofSurface,
-    shouldMatch: true,
-  });
+    appendRegexFailures({
+      failures,
+      label: "proof regex",
+      regexes: props.scenario.expectProofRegexes,
+      text: lowercasedProofSurface,
+      shouldMatch: true,
+    });
 
-  appendRegexFailures({
-    failures,
-    label: "forbidden regex",
-    regexes: props.scenario.expectForbiddenRegexes,
-    text: lowercasedProofSurface,
-    shouldMatch: false,
-  });
+    appendRegexFailures({
+      failures,
+      label: "forbidden regex",
+      regexes: props.scenario.expectForbiddenRegexes,
+      text: lowercasedProofSurface,
+      shouldMatch: false,
+    });
+  }
 
-  for (const leak of findPromptRegexLeaks({
-    prompt: props.renderedPrompt,
-    regexes: props.scenario.expectProofRegexes,
-  })) {
-    failures.push(`rubric leak: prompt text satisfies proof regex: ${leak}`);
+  if (props.includeLegacySemanticAssertions !== false) {
+    for (const leak of findPromptRegexLeaks({
+      prompt: props.renderedPrompt,
+      regexes: props.scenario.expectProofRegexes,
+    })) {
+      failures.push(`rubric leak: prompt text satisfies proof regex: ${leak}`);
+    }
   }
 
   return { failures };

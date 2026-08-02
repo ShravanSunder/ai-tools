@@ -5,14 +5,6 @@ skill_under_test: shravan-dev-workflow:discuss-pathfinding
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: confirmed
-expect_decision_regex: provisional
-expect_decision_regex: open|unresolved
-expect_decision_regex: allowed
-expect_decision_regex: protected
-expect_proof_regex: authority|owner.confirm
-expect_proof_regex: session|governing|inspect
-expect_proof_regex: assumption|provenance|source classification
 
 ## Shortcut Temptation
 

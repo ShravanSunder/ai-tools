@@ -1,8 +1,9 @@
-import type { SkillPressureScenario } from "./scenario-parser.js";
+import type { SkillPressureInput } from "../scenario-cases/scenario-case-types.js";
 
 export interface RenderCodexPressurePromptProps {
-  readonly scenario: SkillPressureScenario;
+  readonly input: SkillPressureInput;
   readonly includeLocalSourceHint?: boolean;
+  readonly outputSchema?: string;
 }
 
 export interface FindPromptRegexLeaksProps {
@@ -13,10 +14,9 @@ export interface FindPromptRegexLeaksProps {
 export function renderCodexPressurePrompt(
   props: RenderCodexPressurePromptProps,
 ): string {
-  const artifactExpected = props.scenario.expectArtifact ? "true" : "false";
   const localSourceHints =
     props.includeLocalSourceHint === true
-      ? buildLocalSourceHints(props.scenario.skillUnderTest)
+      ? buildLocalSourceHints(props.input.skillUnderTest)
       : [];
   return [
     "You are running a Codex skill pressure test.",
@@ -29,19 +29,26 @@ export function renderCodexPressurePrompt(
     "- Respond to the operator prompt first as you actually would, then report what you did in the JSON. Describe only behavior you performed in this run, not behavior you would hypothetically perform.",
     "",
     "Final JSON rules:",
-    `- scenario_id: ${props.scenario.scenarioId}`,
-    `- skill_under_test: ${props.scenario.skillUnderTest}`,
-    `- mode: ${props.scenario.mode}`,
-    `- artifact_expected: ${artifactExpected}`,
+    `- scenario_id: ${props.input.scenarioId}`,
+    `- skill_under_test: ${props.input.skillUnderTest}`,
+    `- mode: ${props.input.mode}`,
+    "- Infer artifact_expected from the skill behavior required by the operator prompt; no expected answer is supplied.",
     "- In fast read-only pressure runs, set artifact_created false unless you actually created an artifact.",
     "- If a skill would normally write an artifact, explain that in decision/coverage_evidence while keeping artifact_created false.",
-    "- Put the full text of your live response to the operator (the response the user would see) in the decision field, followed by a short report of what you did.",
-    "- In the report part, name the specific skill rules that drove your response, using the skill's own terms for its required artifacts, gates, and stop conditions.",
+    "- Put only the full text of your live user-facing response in the decision field. Do not append a method report or skill-rule recital.",
+    "- Put compact execution evidence in coverage_evidence and rationalizations_rejected instead of narrating it to the user.",
     ...localSourceHints,
+    ...(props.outputSchema
+      ? [
+          "",
+          "Transport output schema (not evaluation criteria):",
+          props.outputSchema,
+        ]
+      : []),
     "",
     "Operator prompt:",
     "",
-    props.scenario.prompt,
+    props.input.prompt,
     "",
   ].join("\n");
 }

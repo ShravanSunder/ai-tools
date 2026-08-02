@@ -1,13 +1,15 @@
 import { describe, expect, test } from "vitest";
-import { parseScenarioMarkdown } from "./scenario-parser.js";
-import { shouldRunSkillPressureCase } from "./scenario-selection.js";
-import type { SkillPressureCase } from "./skill-pressure-harness.js";
+import { parseScenarioMarkdown } from "./parse-scenario-fixture.js";
+import { shouldRunSkillPressureCase } from "./select-legacy-scenarios.js";
+import type { SkillPressureCase } from "./scenario-case-types.js";
 
-function createCase(mode: "fast" | "integration" | "baseline"): SkillPressureCase {
-  return {
-    scenario: parseScenarioMarkdown({
-      filePath: `/repo/tests/skills/pressure-scenarios/${mode}.md`,
-      markdown: `scenario_id: ${mode}
+function createCase(
+  mode: "fast" | "integration" | "baseline",
+  usesLegacyEvaluation = true,
+): SkillPressureCase {
+  const scenario = parseScenarioMarkdown({
+    filePath: `/repo/tests/skills/pressure-scenarios/${mode}.md`,
+    markdown: `scenario_id: ${mode}
 skill_under_test: shravan-dev-workflow:test-skill
 mode: ${mode}
 
@@ -15,7 +17,20 @@ mode: ${mode}
 
 Use the skill.
 `,
-    }),
+  });
+  return {
+    id: scenario.scenarioId,
+    name: scenario.scenarioId,
+    tags: [scenario.skillUnderTest],
+    scenario,
+    input: {
+      scenarioId: scenario.scenarioId,
+      skillUnderTest: scenario.skillUnderTest,
+      mode: scenario.mode,
+      prompt: scenario.prompt,
+    },
+    deterministicEvaluators: [],
+    usesLegacyEvaluation,
   };
 }
 
@@ -52,6 +67,16 @@ describe("shouldRunSkillPressureCase", () => {
       shouldRunSkillPressureCase({
         skillPressureCase: createCase("baseline"),
         selectedMode: undefined,
+        selectedScenario: undefined,
+      }),
+    ).toBe(true);
+  });
+
+  test("leaves evaluator cases to native Vitest selection", () => {
+    expect(
+      shouldRunSkillPressureCase({
+        skillPressureCase: createCase("integration", false),
+        selectedMode: "fast",
         selectedScenario: undefined,
       }),
     ).toBe(true);

@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   parseScenarioMarkdown,
   validateScenarioFilePlacement,
-} from "./scenario-parser.js";
+} from "./parse-scenario-fixture.js";
 
 const repeatedMetadataScenario = `scenario_id: repeated-fields
 skill_under_test: shravan-dev-workflow:test-skill
