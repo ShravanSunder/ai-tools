@@ -2,6 +2,36 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "program-design-working-baseline-minimal-delta",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/program-design/SKILL.md",
+    ],
+    maximumToolCalls: 55,
+    semanticCriteria: [
+      {
+        name: "minimal-structural-delta",
+        requirement:
+          "Starts from the working main call path and realizes only per-agent Hermes process/configuration multiplicity plus existing stock Kanban behavior.",
+        failureExample:
+          "Uses the failed branch architecture as the baseline or redesigns generic Gateway startup and recovery.",
+      },
+      {
+        name: "deletion-inventory",
+        requirement:
+          "Explicitly removes or declines unsupported observer planes, interpreter probes, startup failure counters, runtime rosters, supervisors, and new recovery ownership.",
+        failureExample:
+          "Repairs or completes unsupported machinery instead of testing whether it should exist.",
+      },
+      {
+        name: "human-readable-delta-flow",
+        requirement:
+          "Shows a compact current-to-proposed flow with changed and preservation-critical unchanged owners, calls, state/effects, and failure boundaries.",
+        failureExample:
+          "Lists components without showing the behavioral delta or produces a decorative diagram.",
+      },
+    ],
+  },
+  {
     scenarioId: "program-design-view-rendering-semantics",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/program-design/SKILL.md",

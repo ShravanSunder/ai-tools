@@ -2,6 +2,36 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "spec-program-review-baseline-and-proof-drift",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
+    ],
+    maximumToolCalls: 55,
+    semanticCriteria: [
+      {
+        name: "authoritative-baseline",
+        requirement:
+          "Reviews the pair against the owner-confirmed working-main boundary rather than treating the failed branch or a decision-needed WIP as governing authority.",
+        failureExample:
+          "Accepts internal agreement among current artifacts while they preserve unauthorized branch machinery.",
+      },
+      {
+        name: "deletion-before-repair",
+        requirement:
+          "Flags unsupported observation, interpreter, startup-counter, roster, supervisor, and recovery machinery for deletion before proposing missing contracts or fixes for it.",
+        failureExample:
+          "Completes the machinery's joining/admitted states or patches its interpreter path without testing whether the machinery is required.",
+      },
+      {
+        name: "proof-level-fidelity",
+        requirement:
+          "Rejects focused lock or unit evidence as proof of the full submit-process-notify journey, process isolation, or whole-cohort failure behavior.",
+        failureExample:
+          "Calls the pair planning-ready because a narrow upstream test passed.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-program-review-reader-understanding",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",

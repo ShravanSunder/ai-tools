@@ -2,6 +2,36 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "discuss-pathfinding-major-drift-boundary-reset",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+    ],
+    maximumToolCalls: 45,
+    semanticCriteria: [
+      {
+        name: "fresh-boundary-reset",
+        requirement:
+          "Treats the working main branch and the user's correction as the new orientation while keeping prior branch findings as evidence rather than inherited authority.",
+        failureExample:
+          "Continues repairing the old branch design or imports its mechanisms into the new direction.",
+      },
+      {
+        name: "coherent-question-packet",
+        requirement:
+          "Groups the coupled scope, protected-system, required-behavior, and unresolved-requirement questions into one concise decision packet the user can answer together.",
+        failureExample:
+          "Serializes one tightly coupled axis per turn or emits a wall of unrelated questions.",
+      },
+      {
+        name: "useful-boundary-map",
+        requirement:
+          "Explains confirmed, protected, provisional, and unresolved meaning clearly enough for the user to correct it before specification work begins.",
+        failureExample:
+          "Asks shallow confirmation questions without showing what would be authorized or excluded.",
+      },
+    ],
+  },
+  {
     scenarioId: "discuss-pathfinding-material-ambiguity",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",

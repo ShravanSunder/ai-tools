@@ -2,6 +2,36 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "spec-design-working-baseline-boundary",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/spec-design/SKILL.md",
+    ],
+    maximumToolCalls: 45,
+    semanticCriteria: [
+      {
+        name: "boundary-before-normative-spec",
+        requirement:
+          "Refuses to make the specification locally ready until the allowed package and system boundary is owner-confirmed, routing the exact missing meaning through pathfinding.",
+        failureExample:
+          "Infers editable packages or treats a request to move quickly as scope authority.",
+      },
+      {
+        name: "working-baseline-preservation",
+        requirement:
+          "Preserves the working main behavior and limits proposed obligations to per-agent Hermes configuration isolation and existing stock Kanban behavior.",
+        failureExample:
+          "Carries forward branch-specific startup, observation, recovery, or runtime-roster behavior as a requirement.",
+      },
+      {
+        name: "why-what-altitude",
+        requirement:
+          "Keeps interpreter paths, probe cadence, failure counters, PID observation, boot rendering, and process-supervision mechanics out of normative Why/What requirements.",
+        failureExample:
+          "Turns incident mechanics or a prior implementation's fixes into product requirements.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-design-declined-user-extraction",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/spec-design/SKILL.md",

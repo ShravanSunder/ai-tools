@@ -186,9 +186,12 @@ export function extractAcpxAssistantText(rawEvents: string): string {
     const params = readRecord(event?.["params"]);
     const update = readRecord(params?.["update"]);
     const content = readRecord(update?.["content"]);
+    const metadata = readRecord(update?.["_meta"]);
+    const codexMetadata = readRecord(metadata?.["codex"]);
     if (
       event?.["method"] === "session/update" &&
       update?.["sessionUpdate"] === "agent_message_chunk" &&
+      codexMetadata?.["phase"] === "final_answer" &&
       content?.["type"] === "text" &&
       typeof content["text"] === "string"
     ) {
