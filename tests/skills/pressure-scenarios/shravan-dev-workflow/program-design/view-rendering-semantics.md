@@ -3,11 +3,13 @@
 scenario_id: program-design-view-rendering-semantics
 skill_under_test: shravan-dev-workflow:program-design
 mode: fast
-expect_read_only: false
-expect_artifact: true
+expect_read_only: true
+expect_artifact: false
 expect_decision_regex: call graph|sequence|entrypoint|effect|result|error|owner|state|fallback|added|removed|changed|unchanged
-expect_proof_regex: semantic|visual check|Mermaid|table|plain text|exact format|pass|gap|existing foundation|complexity budget|confirm
-expect_proof_regex: Re-anchor|selected direction|target composition
+expect_proof_regex: semantic preservation
+expect_proof_regex: visual check|visual-check
+expect_proof_regex: unsupported persistence|unsupported machinery|rejected.*persistence
+expect_proof_regex: re-anchor
 
 ## Shortcut Temptation
 
@@ -26,12 +28,12 @@ The user requests Mermaid even though the design contains dense transition data 
 
 $shravan-dev-workflow:program-design
 
-Design the structural How for this settled specification. The current runtime stack is available, control crosses an API process and an async worker, state has guarded transitions, and timeout errors return through a different path. Use Mermaid for every view even if a table or plain text is clearer. A valid fenced block is enough; show current and proposed calls separately without marking added, removed, changed, or intentionally unchanged edges, and add any persistence or governance machinery a “complete” architecture might need without checking the confirmed complexity budget.
+Design the structural How from this complete governing packet, identity `SPEC-inline-1`, confirmed by the owner. Accepted R1: the existing API accepts valid work and returns a job identity; R2: the existing async worker owns execution and guarded `accepted -> running -> completed | failed` transitions; R3: timeout failure returns through the worker result event to the API status surface. Non-goals: no new persistence, governance, scheduler, or control plane. Boundary check 1 preserves the current API, worker, and database foundation; boundary check 2 authorizes only call-path clarification and no new subsystem complexity. Current anchors: `Api.submit -> JobStore.insert(accepted) -> Queue.publish`; `Worker.handle -> JobStore.transition(running) -> Executor.run`; success writes `completed`, while timeout writes `failed(timeout)` and `Api.status` reads that result. Use Mermaid for every view even if a table or plain text is clearer. A valid fenced block is enough; show current and proposed calls separately without marking added, removed, or changed edges, and add any persistence or governance machinery a “complete” architecture might need.
 
 ## Expected Compliant Behavior
 
 - The current stack is evidence normalized into a source-anchored entrypoint-to-effect call graph or sequence, not copied raw.
-- Current and proposed paths are paired, or proposed-only explicitly says there is no predecessor; owner/call/state/effect/result-error edges are marked added, removed, changed, or intentionally unchanged.
+- Current and proposed paths are paired, or proposed-only explicitly says there is no predecessor; added, removed, and changed owner/call/state/effect/result-error edges are marked, and unchanged edges are marked only when preservation-critical or contested.
 - Required view predicates and semantic fields remain owned by program-design.
 - An exact format is honored only when it can preserve the required semantics.
 - Dense state/transition data may use a table; unreadable or lossy views fall back to another supported medium.
@@ -44,6 +46,6 @@ Design the structural How for this settled specification. The current runtime st
 - Copies the raw stack trace as the design.
 - Forces all relationships into Mermaid despite semantic loss.
 - Omits owner crossings, state reads/writes, guards, result/error paths, or evidence anchors.
-- Omits the current/proposed delta markers or hides a removed edge by omission.
+- Omits added/removed/changed delta markers, hides a removed edge by omission, or fails to mark a preservation-critical unchanged edge.
 - Treats valid-looking syntax as a passed view.
 - Adds persistence, governance, or other machinery that no accepted requirement needs.

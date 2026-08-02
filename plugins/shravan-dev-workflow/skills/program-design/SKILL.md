@@ -97,7 +97,7 @@ These are inspection questions, not mandatory artifact sections. Never invent a 
 
 ### 3. State the crux and forces
 
-MUST load `references/alternatives-and-crux.md` for stages 3-4 to identify the structural crux, forces, viable alternatives, tradeoffs, falsifiers, and selection method. At this stage, return the crux, forces, and any evidence gap that blocks credible alternatives.
+MUST load `references/alternatives-and-crux.md` for stages 3-4 and apply its structural-crux, forces, alternatives, tradeoff, falsifier, and selection method in working state. Surface only an evidence gap that blocks credible alternatives.
 
 Completion: the design problem is expressed as falsifiable structural choices rather than generic quality goals.
 
@@ -105,7 +105,7 @@ Completion: the design problem is expressed as falsifiable structural choices ra
 
 Start with the existing foundation and its minimal-change realization. Use clean-boundary, pragmatic, and risk perspectives only when they produce a materially different credible structure. Compare alternatives only when a real choice exists; do not manufacture an architecture to fill the alternatives stage.
 
-Using the already-loaded `references/alternatives-and-crux.md`, return the credible alternatives, comparison, selected direction, tradeoffs, debt/payer, falsifiers/revisit signals, and unresolved decision/evidence gaps.
+Using the already-loaded `references/alternatives-and-crux.md`, select the direction and record its tradeoffs, debt/payer, falsifiers/revisit signals, and unresolved decision/evidence gaps for the terminal result.
 
 New durable identity or history, persistence, certification or governance, a control plane, an external service, cross-run state, or a broad migration is material scope expansion when boundary check 1 did not authorize it. Return the owner decision needed to expand the complexity budget rather than making the mechanism inevitable through design prose.
 
@@ -115,7 +115,7 @@ Completion: the selected direction names what improves, where cost moves, accept
 
 ### 5. Select the target composition
 
-MUST load `references/components-ownership-interfaces.md` for stages 5-7 to construct the target component tree, apply depth/deletion tests, assign singular ownership and dependency direction, and define behavioral interface contracts. At this stage, return the integrated overview and target component tree.
+MUST load `references/components-ownership-interfaces.md` for stages 5-7 and apply its target-tree, depth/deletion, ownership, dependency, and behavioral-interface method in working state.
 
 Build the integrated overview before detailing mechanisms. For UI/refactor work, include the render/component tree and distinguish state owners, pure views, integration/effect boundaries, and derived state.
 
@@ -133,13 +133,13 @@ Completion: no second source of truth or unexplained shared responsibility remai
 
 Specify caller-visible guarantees, not only signatures. Derive at least one representative interaction from consumer needs while hiding owner policy.
 
-Using the already-loaded `references/components-ownership-interfaces.md`, return the component tree, ownership/dependency maps, behavioral interface contracts, forbidden edges, and gaps.
+Using the already-loaded `references/components-ownership-interfaces.md`, complete the component tree, ownership/dependency maps, behavioral interface contracts, forbidden edges, and gaps for the artifact and terminal result.
 
 Completion: a planner can later locate implementation surfaces without deciding interface semantics.
 
 ### 8. Model state and lifecycle
 
-MUST load `references/state-calls-and-flows.md` for stages 8-9 to construct applicable state transitions, current-to-proposed call-path deltas, end-to-end flows, and compatibility/migration/cutover phase models. At this stage, return the state/lifecycle model and call-path comparison procedure.
+MUST load `references/state-calls-and-flows.md` for stages 8-9 and apply its state/lifecycle, current-to-proposed call-path, flow, and migration/cutover method in working state.
 
 Use a state machine or table when timing/order changes correctness. Distinguish persisted, derived, cached, and synchronized state.
 
@@ -149,13 +149,13 @@ Completion: every write path reaches one owner and illegal transitions have defi
 
 Trace each material requirement from consumer to owner and observable outcome. Include async/background, event, persistence, cache, and proof-harness paths when they alter semantics.
 
-Using the already-loaded `references/state-calls-and-flows.md`, return the state transitions; for every material runtime-behavior group, the source-anchored current and proposed entrypoint-to-effect paths or proposed-only with explicit no predecessor; added, removed, changed, and intentionally unchanged owner/caller/callee/state/effect/result-error edges; end-to-end control/data flows; and compatibility/migration/cutover phase models. Requirements sharing one path may cite one delta. A raw stack trace is evidence, not the design output.
+Using the already-loaded `references/state-calls-and-flows.md`, return the state transitions; for every material runtime-behavior group, the source-anchored current and proposed entrypoint-to-effect paths or proposed-only with explicit no predecessor; added, removed, and changed owner/caller/callee/state/effect/result-error edges plus unchanged edges whose preservation is requirement-critical, safety-critical, or contested; end-to-end control/data flows; and compatibility/migration/cutover phase models. Requirements sharing one path may cite one delta. A raw stack trace is evidence, not the design output.
 
 Completion: there is no “and then magic happens” hop; every applicable runtime-behavior design has a visible call path and marked delta edges; migration phases each name authority, version skew, transition, rollback/reconciliation, failure, and proof.
 
 ### 10. Design failure, partial success, and recovery
 
-MUST load `references/failure-concurrency-recovery.md` for stages 10-11 to construct detection, containment, retry, idempotency, timeout/cancellation, cleanup, partial-success, recovery, ordering, and consistency decisions. At this stage, return the failure/partial-success/recovery model.
+MUST load `references/failure-concurrency-recovery.md` for stages 10-11 and apply its detection, containment, retry, idempotency, timeout/cancellation, cleanup, partial-success, recovery, ordering, and consistency method in working state.
 
 Completion: failure flows are as explicit as happy paths and every recovery action has one owner.
 
@@ -230,7 +230,7 @@ Use a view only when it exposes a load-bearing relationship:
 | View | Use when | Must expose |
 | --- | --- | --- |
 | component tree | three or more components/levels or contested ownership | responsibility, owner, consumers, reason to change |
-| call graph/sequence | a material runtime entrypoint-to-effect path is added, removed, or changed; the path explains how a material obligation works; or control crosses owners or async boundaries | current and proposed source-anchored paths, or proposed-only with explicit no predecessor; entrypoint, callers/callees, owning component, sync/async/event edges, state reads/writes or external effects, result/error propagation, current evidence anchors, and added/removed/changed/intentionally-unchanged edges |
+| call graph/sequence | a material runtime entrypoint-to-effect path is added, removed, or changed; the path explains how a material obligation works; or control crosses owners or async boundaries | current and proposed source-anchored paths, or proposed-only with explicit no predecessor; entrypoint, callers/callees, owning component, sync/async/event edges, state reads/writes or external effects, result/error propagation, current evidence anchors, added/removed/changed edges, and preservation-critical or contested unchanged edges |
 | proof call graph | proof harness differs from production path | seam, real/fake boundary, observation |
 | state machine/table | lifecycle/order changes correctness | owner, states, transitions, guards, illegal paths |
 | data/event flow | data crosses storage/process/service boundaries | authority, transformations, persistence/privacy |
@@ -261,7 +261,7 @@ one section has fully mapped meaning and only needs expression
 
 Before any optional dispatch, MUST use `manage-agents` to resolve the agent pattern, exact Sol model/reasoning when constrained by the caller, runtime, history, workspace access, permissions, packet, and receipt mechanics.
 
-IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared packet and receipt contract. Dispatch the selected lane by instantiating every packet field from that contract with the exact assignment, governing and current artifact state, observed predicate and prerequisites, bounded question and sources, settled meaning, selected-lane authority, non-goals, expected return, and stop condition.
+IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared packet and receipt contract. Dispatch the selected lane with the exact assignment, governing and current artifact state, observed predicate and prerequisites, bounded question and sources, settled meaning, and any instance constraint that narrows the selected lane reference. The lane reference owns the invariant mission, maximum authority, return, and stop boundary.
 
 The subagent loads `references/lanes/lane-schema.md` and the exact selected lane path named above.
 
@@ -281,7 +281,7 @@ Do not return `locally-ready` while any of these hold:
 - target structure was selected without current-system evidence or a named greenfield basis;
 - a material structural choice lacks credible alternatives, explicit tradeoffs, accepted debt and payer, or falsifiers/revisit signals;
 - a material component lacks one owner, reason to change, consumer, or behavioral interface;
-- a material runtime-behavior group lacks a source-grounded current and proposed entrypoint-to-effect path, or proposed-only with explicit no predecessor, including added/removed/changed/intentionally-unchanged owner/call/state/effect/result-error edges;
+- a material runtime-behavior group lacks a source-grounded current and proposed entrypoint-to-effect path, or proposed-only with explicit no predecessor, including added/removed/changed owner/call/state/effect/result-error edges and any preservation-critical or contested unchanged edge;
 - an applicable Required View was selected but not rendered in an inspectable form, or a substantial design with contested ownership or cross-owner control remains prose-only;
 - a fired Required View lacks a passed rendering result or any required semantic field was lost in the selected medium;
 - state, flow, failure/recovery, concurrency, migration, trust, or proof semantics are applicable but undefined;

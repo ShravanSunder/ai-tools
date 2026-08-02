@@ -76,7 +76,7 @@ Flag a concrete comprehension failure, process narration, obscure heading, decor
 
 ## Finding Calibration
 
-Report only source-backed reader, behavior, or design effects. Each candidate names exact anchor, contradiction/failure path, consequence, next-agent guess, smallest semantic correction, owner, validation, and refresh.
+Report only source-backed reader, behavior, or design effects. Each candidate names the exact anchor; one consolidated failure and downstream ambiguity statement covering the contradiction or failure path, observable consequence, and next-agent guess; the smallest semantic correction; owner; validation; and refresh.
 
 Test deletion before completing a questioned mechanism. A finding may repair the confirmed design; it may not expand the goal, accepted requirements, or complexity budget without an owner decision.
 

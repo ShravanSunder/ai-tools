@@ -81,7 +81,7 @@ outside view     taste concern       open question
 Only after the map/slice/ledger should the answer name concrete files, commands, code, data names, and URLs.  Keep those atoms in semantic markdown:
 
   ▸ `SKILL.md`
-  ▸ `tests/skills/run-skill-pressure-tests.sh --fast`
+  ▸ `pnpm --dir tests/skills run test:evals`
   ▸ `kind: "agent-channel-provider-health"`
 
 Do not put copyable code or data inside a decorative table cell.  Use fenced code blocks when the reader may copy, scan, or run the content.

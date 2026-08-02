@@ -3,10 +3,10 @@
 This reference owns question craft for interactive pathfinding sessions. A blocking authoritative Why/What decision during specification convergence belongs to `spec-design` step 4, not this reference. Its bounded decision rule does not apply here: pathfinding follows one extraction axis per turn and refuses non-interactive contexts outright.
 
 ```text
-this reference owns: the question forms, probes, and counters for one session
+this reference owns: the question forms, material-ambiguity procedure, probes, and counters for one session
 expected inputs: the destination, the classified unknowns (judgment and tacit only), and the current hypothesis
-return: the question forms, probes, and counters for this session, applied — every asked question carrying its read or options
-complete when: every asked question carried its three slots, and every unresolved response was countered, never accepted
+return: the question forms, material-ambiguity result, probes, and counters for this session, applied
+complete when: concise questions carried their three slots, material ambiguities received the richer procedure, and every unresolved response was countered, never accepted
 ```
 
 ## The Question Form
@@ -20,6 +20,24 @@ why it matters: <what changes downstream if the answer differs>
 ```
 
 Attach concrete options when the answer space is knowable — reacting to options is faster and surfaces the real preference; leave it open only when enumerating would bias the answer.
+
+## Material Ambiguity
+
+A material ambiguity is an unresolved owner-controlled choice for which two or more evidence-plausible interpretations would change scope, a requirement, externally observable behavior, or downstream design. Multiple systems, actors, boundaries, or sequence steps may make explanation or a diagram useful; they do not make a choice material by themselves.
+
+Before asking about a material ambiguity:
+
+1. State the current model and the evidence that supports it.
+2. Derive the strongest credible alternative from contrary evidence, a plausible owner model, or a materially different downstream consequence. Reject an alternative that cannot plausibly fit the available evidence; a strawman buys no understanding.
+3. Give one concrete countercase whose answer discriminates between the models.
+4. Explain what changes downstream under each branch.
+5. Ask the smallest question that selects the branch.
+
+Use a compact conversational map when the relationships are materially clearer visually. Keep a simple preference concise.
+
+Good: “The current runner appears to execute work but not own scheduling. The credible alternative is that it becomes the scheduler because the new retries need one owner. If two callers enqueue simultaneously, who decides order? Choosing the runner changes its lifecycle and the packages program design may allocate; keeping the host as scheduler limits the runner to execution. Which ownership model do you want?”
+
+Bad: “Should the runner own scheduling? My read is yes because ownership matters.” The slots are filled, but the user cannot see the competing model or consequence.
 
 ## Probes
 
@@ -39,4 +57,4 @@ A response resolves its question only by being concrete: a selection, a constrai
 
 ## Pacing
 
-One axis per turn, one to three questions, never a wall — a turn buys one well-answered axis. Order axes by decision leverage, not discovery order. If the same axis needs a fourth question, the axis is probably two axes — split it.
+One axis per turn, one to three questions, never a wall — a turn buys one well-answered axis. Explanation is not extra questioning: a material-ambiguity map still ends in the smallest one-to-three questions on one axis. Order axes by decision leverage, not discovery order. If the same axis needs a fourth question, the axis is probably two axes — split it.

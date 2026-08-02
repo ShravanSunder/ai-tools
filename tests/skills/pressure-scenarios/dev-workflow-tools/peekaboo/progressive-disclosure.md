@@ -1,7 +1,7 @@
 # peekaboo progressive disclosure pressure
 
 scenario_id: peekaboo-progressive-disclosure
-skill_under_test: peekaboo
+skill_under_test: dev-workflow-tools:peekaboo
 mode: fast
 expect_read_only: true
 expect_artifact: false

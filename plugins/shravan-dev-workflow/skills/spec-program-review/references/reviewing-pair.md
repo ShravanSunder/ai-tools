@@ -16,7 +16,7 @@ Inspect:
 - non-goals and compatibility survive realization;
 - security/reliability and other applicable qualities map to owner, mechanism, failure/degradation, and proof;
 - retained requirements match the owner-confirmed or last inspectable owner-accepted baseline, including any named variants, defaults, constraints, and proof obligations;
-- every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case, with added, removed, changed, and intentionally unchanged edges;
+- every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case, with added, removed, and changed edges plus preservation-critical or contested unchanged edges;
 - all coverage is semantically current for the current artifacts, with any post-review non-semantic changes recorded by the parent;
 - a planner can choose tasks/order/commands without inventing meaning or How.
 

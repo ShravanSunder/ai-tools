@@ -61,7 +61,7 @@ Produce terminal labels by observable condition:
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
-MUST load `references/authority-and-problem-framing.md` for stages 1-2 to classify sources, authority, consumers, the current/desired gap, boundary check 1, accepted-requirements recovery, and unresolved decisions. At this stage, return the artifact boundary, consumer/authority model, governing-source identities and current applicability, confirmed boundary or exact owner decision needed, and accepted-requirements recovery result.
+MUST load `references/authority-and-problem-framing.md` for stages 1-2 and apply its source, authority, consumer, current/desired-gap, boundary-check-1, accepted-requirements-recovery, and unresolved-decision method in working state. Surface an exact owner decision immediately when it blocks authoring; otherwise retain the results for the terminal return.
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
@@ -92,7 +92,7 @@ Completion: artifact boundary, consumers, decision authority, source classes, cu
 
 Name what happens today, who bears the cost, where it is observable, what proves it, and what would remain wrong if the requested feature existed only nominally. Keep implementation root cause separate from the observable problem.
 
-Using the already-loaded `references/authority-and-problem-framing.md`, return the complete authority/problem model after this stage.
+Using the already-loaded `references/authority-and-problem-framing.md`, complete the authority/problem model in working state for the artifact and terminal return.
 
 When revising existing artifacts, classify the requested correction before editing: requirements/Why/What, structural How, or both. Removing unrelated concurrency, cleanup, reporter, or lifecycle machinery is a How correction unless the authorized owner also changes users, outcomes, requirements, scenarios, defaults, or proof obligations. A How-only correction routes to `program-design` and does not authorize narrowing governing Why/What. When both change, settle the revised Why/What first.
 
@@ -198,7 +198,7 @@ Use a view only when it exposes a load-bearing Why/What relationship. This table
 | --- | --- | --- |
 | journey map | per normative-eligible load-bearing direct-user class when the job has a material sequence or pain relationship and the view makes that relationship easier to confirm or correct | one view for that class exposing user-worded steps, observed pain and evidence, desired observable difference, and cited U rows; reuse or link a current requirements-level sequence when it already exposes these fields, and keep the user-requirements source as the normative home |
 | context diagram | two or more external consumers or observable surfaces exist | consumers and stakeholders, observable surfaces/contracts, relevant negative space, and the system as one opaque node |
-| requirement coverage table | material requirements exist | U when present, P, O, R, C, and V links plus gaps |
+| requirement coverage table | multiple or interacting material requirements exist, or their U/P/O/R/C/V trace is non-obvious | U when present, P, O, R, C, and V links plus gaps; keep one simple trace inline instead of creating a table |
 
 The first internal component, owner, dependency edge, state store, or enforcement point inside the system crosses into `program-design`. Diagrams may explain relationships but may not be the only home of normative meaning.
 

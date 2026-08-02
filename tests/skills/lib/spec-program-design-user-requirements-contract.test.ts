@@ -319,15 +319,12 @@ describe("user requirements and design-view contracts", () => {
       "skills/spec-program-review/references/classifying-review-requirement.md",
     );
 
-    for (const marker of [
-      "added",
-      "removed",
-      "changed",
-      "intentionally unchanged",
-    ]) {
+    for (const marker of ["added", "removed", "changed"]) {
       expect(programReview).toContain(marker);
       expect(pairReview).toContain(marker);
     }
+    expect(programReview).toContain("preservation-critical or contested unchanged");
+    expect(pairReview).toContain("preservation-critical or contested unchanged");
     expect(reviewSkill).toContain("last inspectable owner-accepted governing baseline");
     expect(reviewSkill).toContain("Mutually narrowed current files");
     expect(programReview).toContain("explicit no-predecessor case");

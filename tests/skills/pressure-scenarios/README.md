@@ -4,6 +4,18 @@ This directory contains fast Codex pressure scenarios for skill behavior. Most
 scenarios cover `shravan-dev-workflow`; plugin-specific scenarios may live here
 when they need the same shortcut-resistance harness.
 
+Every active scenario lives at:
+
+```text
+<plugin-name>/<skill-name>/<scenario-name>.md
+```
+
+The first two path segments must exactly match the namespaced
+`skill_under_test: <plugin-name>:<skill-name>` metadata. Keep the filename local
+to the skill (`material-ambiguity.md`, not
+`discuss-pathfinding-material-ambiguity.md`); `scenario_id` remains the stable,
+globally unique CLI selector.
+
 The goal is not to test whether a model can summarize each skill. The goal is to
 test whether the model still follows the skill when prompted to take the exact
 shortcut the skill exists to prevent.
@@ -11,13 +23,14 @@ shortcut the skill exists to prevent.
 Default command:
 
 ```bash
-CODEX_PRESSURE_MODEL=gpt-5.5 CODEX_PRESSURE_REASONING_EFFORT=low \
-  tests/skills/run-skill-pressure-tests.sh --fast --timeout 900
+CODEX_PRESSURE_MODEL=gpt-5.6-luna CODEX_PRESSURE_REASONING_EFFORT=xhigh \
+SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
+  pnpm --dir tests/skills run test:evals
 ```
 
 ## Matrix
 
-| Skill | Scenario | Pressure target |
+| Skill | Scenario ID | Pressure target |
 |-------|----------|-----------------|
 | `debug-investigation` | `debug-investigation-background-monitoring.md` | Do not burn model tokens on long-running monitors; use stateful, redacted, harness-visible watcher jobs. |
 | `debug-investigation` | `debug-investigation-no-blind-fix.md` | Do not patch before reproduction, evidence, hypothesis, and root-cause proof. |

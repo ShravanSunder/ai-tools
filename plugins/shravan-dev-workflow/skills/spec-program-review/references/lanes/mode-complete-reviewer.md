@@ -12,9 +12,9 @@ Maximum authority: fresh-context, read-only, candidate-only. This lane may recom
 
 ## Method
 
-MUST load `../reviewing-common-method.md` and return the baseline inspection procedure, coverage requirements, dependency order, common result fields, and stop boundary to apply during the combined inspection.
+MUST load `../reviewing-common-method.md` and apply its baseline inspection procedure, coverage requirements, dependency order, common result fields, and stop boundary during the combined inspection.
 
-MUST load exactly one selected mode reference and return its mode-specific judgment dimensions, ownership routes, and completion condition to apply during that same inspection:
+MUST load exactly one selected mode reference and apply its mode-specific judgment dimensions, ownership routes, and completion condition during that same inspection:
 
 ```text
 specification-only -> ../reviewing-specification.md

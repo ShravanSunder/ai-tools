@@ -10,9 +10,7 @@ review mode / lane
 severity: blocker | important | minor | observation
 artifact and source anchor
 claim or rule
-failure path or contradiction
-behavior/design risk
-what the next author/planner would guess
+failure and downstream ambiguity: contradiction or failure path, observable consequence, and what the next author/planner would otherwise have to guess
 smallest semantic correction target
 semantic owner: spec-design | program-design | caller
 validation note
@@ -20,7 +18,6 @@ semantic coverage to rerun
 contested evidence
 accepted requirement identity or confirmed boundary
 plain-language requirement meaning
-observable outcome that fails if unresolved
 evidence checked or bounded evidence-lookup result
 whether deletion of the questioned mechanism removes the failure
 scope effect: inside confirmed boundary | requires owner expansion decision
@@ -80,4 +77,4 @@ When states mix, apply precedence `blocked -> needs-revision -> decision-needed 
 
 After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
 
-Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, observable failure, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the verdict cannot exceed semantically current coverage; and any later semantic-change records are explicit.
+Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the verdict cannot exceed semantically current coverage; and any later semantic-change records are explicit.

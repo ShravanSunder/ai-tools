@@ -31,6 +31,9 @@ export interface CreateSkillPressureHarnessProps {
   readonly backend: string;
 }
 
+export const DEFAULT_PRESSURE_MODEL = "gpt-5.6-luna";
+export const DEFAULT_PRESSURE_REASONING_EFFORT = "xhigh";
+
 export function createSkillPressureHarness(
   props: CreateSkillPressureHarnessProps,
 ) {
@@ -72,9 +75,10 @@ export function createSkillPressureHarness(
         scenario: input.scenario,
         renderedPrompt,
         repoRoot: props.repoRoot,
-        model: process.env["CODEX_PRESSURE_MODEL"] ?? "gpt-5.5",
+        model: process.env["CODEX_PRESSURE_MODEL"] ?? DEFAULT_PRESSURE_MODEL,
         reasoningEffort:
-          process.env["CODEX_PRESSURE_REASONING_EFFORT"] ?? "low",
+          process.env["CODEX_PRESSURE_REASONING_EFFORT"] ??
+          DEFAULT_PRESSURE_REASONING_EFFORT,
         timeoutSeconds: parseSkillPressureTimeoutSeconds(
           process.env["SKILL_PRESSURE_TIMEOUT_SECONDS"],
         ),
@@ -120,7 +124,7 @@ export function createSkillPressureHarness(
         ],
         usage: {
           provider: "openai",
-          model: process.env["CODEX_PRESSURE_MODEL"] ?? "gpt-5.5",
+          model: process.env["CODEX_PRESSURE_MODEL"] ?? DEFAULT_PRESSURE_MODEL,
         },
         artifacts: {
           backend,
