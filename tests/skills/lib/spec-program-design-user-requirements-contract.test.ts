@@ -117,16 +117,16 @@ describe("user requirements and design-view contracts", () => {
       "existing foundation",
       "actual missing behavior",
       "non-goals",
-      "complexity budget",
+      "acceptable complexity",
       "explicit confirmation or correction",
     ]) {
       expect(discussPathfinding).toContain(boundaryField);
     }
     expect(extraction).toContain("Confirm The Goal Boundary");
     expect(discussPathfinding).toContain(
-      "goal-boundary model (boundary check 1)",
+      "confirmed requirements boundary",
     );
-    expect(extraction).toContain("goal-boundary model (boundary check 1)");
+    expect(extraction).toContain("confirmed requirements boundary");
     expect(extraction).toContain("Silence, generic assent");
     expect(extraction).toContain("file-permission boundary");
     expect(specDesign).toContain("stable U identifiers");
@@ -150,7 +150,7 @@ describe("user requirements and design-view contracts", () => {
       "existing behavior or foundation to reuse",
       "actual missing capabilities or observable differences",
       "explicit non-goals",
-      "complexity budget and the machinery that reopens scope",
+      "acceptable complexity and the machinery that reopens scope",
     ]) {
       expect(authority).toContain(boundaryField);
     }
@@ -230,7 +230,7 @@ describe("user requirements and design-view contracts", () => {
       expect(stateCalls).toContain(marker);
     }
     expect(programDesign).toContain("satisfied by the existing system");
-    expect(programDesign).toContain("which part of the complexity budget it spends");
+    expect(programDesign).toContain("agreed acceptable complexity");
     expect(programDesign).toContain("perform boundary check 2");
     expect(programDesign).toContain(
       "affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations",
@@ -325,7 +325,7 @@ describe("user requirements and design-view contracts", () => {
     }
     expect(programReview).toContain("preservation-critical or contested unchanged");
     expect(pairReview).toContain("preservation-critical or contested unchanged");
-    expect(reviewSkill).toContain("last inspectable owner-accepted governing baseline");
+    expect(reviewSkill).toContain("last inspectable owner-accepted governing source");
     expect(reviewSkill).toContain("Mutually narrowed current files");
     expect(programReview).toContain("explicit no-predecessor case");
     expect(pairReview).toContain("accepted requirements remain covered");

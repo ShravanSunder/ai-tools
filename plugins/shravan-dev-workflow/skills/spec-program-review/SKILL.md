@@ -65,7 +65,7 @@ For operation `review`, require:
 target classification and skills-creation parent identity when applicable
 mode and complete target artifact paths
 governing sources, authority states, and coverage basis
-boundary check 1 and accepted requirements set, or the exact authority gap
+confirmed requirements boundary and accepted requirements set, or the exact authority gap
 boundary check 2 for program-only or pair, or the exact owner decision still needed
 constraints and non-goals
 risk predicates
@@ -74,7 +74,7 @@ review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
 ```
 
-Use the owner-confirmed requirements record and boundary-check-1 result when available. Otherwise use the last inspectable owner-accepted governing baseline. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
+Use the owner-confirmed requirements record and confirmed requirements boundary when available. Otherwise use the last inspectable owner-accepted governing source. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
 
 `program-only` also requires the governing specification. `pair` requires the current specification and program design. Missing boundary confirmation may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
@@ -161,7 +161,11 @@ Completion: each used receipt supplies semantically current coverage for the cur
 
 MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result.
 
-Re-anchor before accepting a finding: identify the confirmed requirement or boundary it serves, whether the existing foundation already satisfies it or can supply the correction, the concrete failure if unresolved, the smallest correction, whether deleting the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. Then return the existing `accepted | rejected | contested | unverified` disposition; do not create a second checkpoint status. When evidence is missing, follow that reference's evidence-lookup branch before accepting. A missing contract on an unnecessary mechanism is a deletion candidate, not an invitation to finish the mechanism.
+Re-anchor before accepting a finding: identify the confirmed requirement or boundary it serves, whether the existing foundation already satisfies it or can supply the correction, the concrete failure if unresolved, the smallest correction, whether removing the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. Then return the existing `accepted | rejected | contested | unverified` disposition; do not create a second checkpoint status. When evidence is missing, follow that reference's evidence-lookup branch before accepting. Question whether a proposed mechanism is needed before accepting findings that merely complete its missing contracts.
+
+Write every accepted finding in ordinary language. State what is wrong, which confirmed requirement or design relationship it affects, the concrete consequence, the smallest correction, its semantic owner, and the evidence or affected review coverage that would confirm the correction. A review label is not a substitute for this explanation.
+
+For each material proof claim, compare the claimed outcome with the supplied evidence's actual observation boundary. State what the evidence proves, what it cannot observe, and the smallest missing proof modality or structural observation seam. For each applicable diagram, name the reader question it should answer and compare its visible owners, direction, state or effect, normal and error behavior, and changed edges with the written requirements and design. Rendering or repeated labels alone do not establish usefulness or agreement.
 
 Classify each requested correction as `requirements/Why/What`, `structural How`, or `both`. A How-only correction preserves the accepted requirements set unless the owner explicitly changes it.
 
@@ -184,13 +188,14 @@ Do not return `ready` while any of these hold:
 - target classification or required runtime-skill-package parent identity is missing;
 - the current target identity or semantic scope is missing or ambiguous;
 - the complete target or governing-source set was not read;
-- boundary check 1, accepted requirements, or applicable boundary check 2 is missing or conflicting without an explicit returned authority gap;
+- the confirmed requirements boundary, accepted requirements, or applicable boundary check 2 is missing or conflicting without an explicit returned authority gap;
 - no complete semantically current mode-complete receipt exists;
 - a selected lane is silent without explicit follow-up;
 - partial, blocked, or `no-receipt` coverage affects a required dimension;
 - a finding lacks an accepted requirement identity or confirmed boundary, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, or disposition;
 - specification, program, or pair mode boundaries are conflated;
 - `program-only` or `pair` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
+- a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - pair mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
 - the downstream consumer must invent meaning owned by the reviewed artifact;

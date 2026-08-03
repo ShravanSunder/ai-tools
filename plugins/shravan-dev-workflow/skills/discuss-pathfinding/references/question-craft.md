@@ -1,6 +1,6 @@
 # Question Craft
 
-This reference owns question craft for interactive pathfinding sessions. A blocking authoritative Why/What decision during specification convergence belongs to `spec-design` step 4, not this reference. Its bounded decision rule does not apply here: pathfinding follows one extraction axis per turn and refuses non-interactive contexts outright.
+This reference owns question craft for interactive pathfinding sessions. A blocking authoritative Why/What decision during specification convergence belongs to `spec-design` step 4, not this reference. Its bounded decision rule does not apply here: pathfinding groups related questions according to what the user can answer from one current context and refuses non-interactive contexts outright.
 
 ```text
 this reference owns: the question forms, material-ambiguity procedure, probes, and counters for one session
@@ -51,10 +51,20 @@ Bad: “Should the runner own scheduling? My read is yes because ownership matte
 A response resolves its question only by being concrete: a selection, a constraint, an example, or a correction — a correction is a full resolution and needs no separate yes. Everything else is unresolved and gets its counter:
 
 - **Delegation** ("whatever you think is best"): re-ask as two concrete options.
-- **Ambiguous assent** ("sounds good", "that's fine", "go ahead" without addressing the content): name the load-bearing assumption inside it and ask about that.
+- **Ambiguous assent** ("sounds good", "that's fine", "go ahead" without addressing the content): name the important assumption inside it and ask about that.
 - **Topic change**: consult the destination before following. In scope — follow the thread, parking the open question in working state. A different destination — ask the user to choose: switch the session's destination, or park the new topic and finish the current one ("postmortems feel like a separate extraction — switch to it, or park it and finish triage?"). Parked items are revisited at validation.
-- **Silence, then "okay let's start"**: the user is giving up on the session, not converging. First shrink the batch or switch the axis; if the user still wants to stop, renegotiate the depth to quick and stop provisionally with the unresolved items named — one tired answer never abandons a standard or deep extraction silently.
+- **Silence, then "okay let's start"**: the user is giving up on the session, not converging. First shrink the question group or switch to a different decision; if the user still wants to stop, renegotiate the depth to quick and stop provisionally with the unresolved items named — one tired answer never abandons a standard or deep extraction silently.
 
 ## Pacing
 
-One axis per turn, one to three questions, never a wall — a turn buys one well-answered axis. Explanation is not extra questioning: a material-ambiguity map still ends in the smallest one-to-three questions on one axis. Order axes by decision leverage, not discovery order. If the same axis needs a fourth question, the axis is probably two axes — split it.
+Ask one to three related questions together when the user can answer them from the same current context and they jointly clarify one decision. If the answer to one question determines whether another question applies, ask the determining question first and follow its answer. Ask unrelated questions separately. Explanation is not extra questioning: a material-ambiguity map still ends in the smallest answerable question or question group. Order decisions by leverage, not discovery order. If a group needs a fourth question, split it at the clearest decision boundary.
+
+Use those ordinary names in the conversation: call a decision a decision and related questions related questions. Do not rename either one as an axis.
+
+Good grouping: package permission, protected existing behavior, and acceptable evidence can be answered together when they define the boundary of one proposed change.
+
+Bad grouping: package permission, failure-recovery policy, release timing, and documentation style merely concern the same project; they do not clarify one decision from one context.
+
+Dependent follow-up: if package ownership determines which configuration questions are relevant, settle the package boundary first. Do not make the user answer hypothetical configuration questions for packages that may be out of scope.
+
+Acceptance evidence is usually part of the same proposed-change boundary as permitted packages and protected behavior: the user can say what observable result or proof they will accept before exact test locations are known. Ask that outcome-level evidence question with the boundary. Wait only on package-specific test placement or mechanics that genuinely depend on the package answer.

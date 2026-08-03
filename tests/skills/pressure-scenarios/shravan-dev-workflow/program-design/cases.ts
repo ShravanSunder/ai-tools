@@ -1,62 +1,117 @@
 import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-evaluation/scenario-cases/scenario-case-types.js";
 
+const requiredSourceReads = [
+  "plugins/shravan-dev-workflow/skills/program-design/SKILL.md",
+] as const;
+
 export const skillPressureCaseDefinitions = [
   {
-    scenarioId: "program-design-working-baseline-minimal-delta",
-    requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/program-design/SKILL.md",
-    ],
-    maximumToolCalls: 55,
+    scenarioId: "program-design-stay-within-specification",
+    requiredSourceReads,
+    maximumToolCalls: 50,
     semanticCriteria: [
       {
-        name: "minimal-structural-delta",
-        requirement:
-          "Starts from the working main call path and realizes only per-agent Hermes process/configuration multiplicity plus existing stock Kanban behavior.",
-        failureExample:
-          "Uses the failed branch architecture as the baseline or redesigns generic Gateway startup and recovery.",
+        name: "keeps-the-confirmed-boundary",
+        requirement: "Realizes only the accepted requirements inside the permitted and protected system boundary, without treating completeness as authority for adjacent systems.",
+        failureExample: "Adds persistence, scheduling, governance, or a control plane that the specification excludes.",
       },
       {
-        name: "deletion-inventory",
-        requirement:
-          "Explicitly removes or declines unsupported observer planes, interpreter probes, startup failure counters, runtime rosters, supervisors, and new recovery ownership.",
-        failureExample:
-          "Repairs or completes unsupported machinery instead of testing whether it should exist.",
+        name: "returns-real-specification-gaps",
+        requirement: "Returns to spec-design only for genuinely missing or conflicting product meaning, not for internal choices the current specification already permits program-design to make.",
+        failureExample: "Invents product ambiguity to avoid making a bounded structural decision, or silently fills a real specification gap.",
       },
       {
-        name: "human-readable-delta-flow",
-        requirement:
-          "Shows a compact current-to-proposed flow with changed and preservation-critical unchanged owners, calls, state/effects, and failure boundaries.",
-        failureExample:
-          "Lists components without showing the behavioral delta or produces a decorative diagram.",
+        name: "respects-package-and-system-limits",
+        requirement: "Treats owner-set package and system limits as implementation boundaries and does not design changes in protected packages.",
+        failureExample: "Moves ownership into a protected package because it would make the architecture cleaner.",
       },
     ],
   },
   {
-    scenarioId: "program-design-view-rendering-semantics",
-    requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/program-design/SKILL.md",
+    scenarioId: "program-design-make-smallest-necessary-change",
+    requiredSourceReads,
+    maximumToolCalls: 55,
+    semanticCriteria: [
+      {
+        name: "starts-from-the-working-system",
+        requirement: "Uses the working-main owners and call path as the foundation rather than the failed branch architecture.",
+        failureExample: "Repairs the failed branch as though its new machinery were authoritative.",
+      },
+      {
+        name: "adds-only-required-structure",
+        requirement: "Adds only the process and configuration isolation needed for the accepted Hermes and stock Kanban outcomes.",
+        failureExample: "Introduces a supervisor, roster, observer plane, recovery owner, generic framework, or persistence that no accepted requirement needs.",
+      },
+      {
+        name: "names-what-is-removed",
+        requirement: "Clearly identifies the failed-branch mechanisms that should be deleted or declined rather than repaired.",
+        failureExample: "Leaves unsupported probes, polling, counters, observers, containment, or supervision in the design without justification.",
+      },
     ],
+  },
+  {
+    scenarioId: "program-design-show-current-and-proposed-system",
+    requiredSourceReads,
     maximumToolCalls: 50,
     semanticCriteria: [
       {
-        name: "call-path-deltas",
-        requirement:
-          "Makes added, removed, and changed call, owner, state/effect, and result/error edges explicit; unchanged edges appear only when preservation-critical or contested.",
-        failureExample:
-          "Shows separate current and proposed paths that require the reader to infer changes.",
+        name: "shows-current-and-proposed-paths",
+        requirement: "Shows the source-grounded current path and proposed path so a reader can follow each from entrypoint to effect and result or error.",
+        failureExample: "Lists components or shows only the proposed happy path.",
       },
       {
-        name: "proportional-views",
-        requirement:
-          "Chooses readable media that preserve semantic fields instead of forcing every relationship into Mermaid.",
-        failureExample: "Uses valid-looking but lossy or unreadable diagrams.",
+        name: "marks-the-actual-change",
+        requirement: "Marks added, removed, and changed owner, call, state or effect, and result or error edges; unchanged edges appear when preserving them matters.",
+        failureExample: "Shows two diagrams and makes the reader infer the difference.",
       },
       {
-        name: "minimal-realization",
-        requirement:
-          "Keeps the existing foundation and deletes persistence, governance, or machinery unsupported by accepted requirements.",
-        failureExample:
-          "Adds completeness machinery despite the confirmed non-goals.",
+        name: "keeps-preserved-boundaries-visible",
+        requirement: "Makes the protected Gateway, Tool Portal, recovery, and stock Kanban boundaries visible without redesigning them.",
+        failureExample: "Hides or casually moves ownership that the specification requires to remain unchanged.",
+      },
+    ],
+  },
+  {
+    scenarioId: "program-design-choose-helpful-diagrams",
+    requiredSourceReads,
+    maximumToolCalls: 50,
+    semanticCriteria: [
+      {
+        name: "chooses-view-by-reader-question",
+        requirement: "Uses component, call, state, failure, and requirement-to-proof views only when each answers a distinct reader question.",
+        failureExample: "Forces every relationship into one diagram or emits every available view mechanically.",
+      },
+      {
+        name: "uses-a-readable-medium",
+        requirement: "Uses the medium that makes the actual relationship readable and preserves required meaning, including a table or plain text when Mermaid would obscure it.",
+        failureExample: "Treats valid Mermaid syntax as proof that dense state or failure behavior is understandable.",
+      },
+      {
+        name: "diagrams-match-the-design",
+        requirement: "The shown views actually preserve owners, state or effects, normal and error paths, changed edges, and proof seams required by the selected relationship.",
+        failureExample: "Shows attractive boxes that omit behavior or disagree with the written design.",
+      },
+    ],
+  },
+  {
+    scenarioId: "program-design-explain-design-choices-clearly",
+    requiredSourceReads,
+    maximumToolCalls: 45,
+    semanticCriteria: [
+      {
+        name: "explains-the-choice-in-ordinary-language",
+        requirement: "Explains what changes, what stays the same, and why the selected structure is enough without relying on unexplained workflow labels or architecture slogans.",
+        failureExample: "Returns labels such as minimal structural delta or clean architecture without explaining the actual system choice.",
+      },
+      {
+        name: "states-the-real-tradeoff",
+        requirement: "Names what the design gains, what it costs, who bears that cost, and what evidence would justify revisiting it.",
+        failureExample: "Calls the selected option simpler or scalable without naming concrete costs and beneficiaries.",
+      },
+      {
+        name: "does-not-invent-a-larger-design",
+        requirement: "Rejects unsupported completeness machinery and explains why the existing foundation plus the bounded change satisfies the accepted requirements.",
+        failureExample: "Chooses a new abstraction because it might support future use cases outside the specification.",
       },
     ],
   },

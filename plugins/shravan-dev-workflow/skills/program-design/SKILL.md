@@ -66,7 +66,7 @@ Produce terminal labels by observable condition:
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
-Read the entire governing specification and the boundary-check-1 result accepted by `spec-design`. Extract requirements, observable contracts, constraints, failure expectations, proof modalities, non-goals, open decisions, and the accepted requirements set. If the specification does not carry or point to the accepted boundary and set, return the exact `spec-design` gap before selecting target structure; program design does not reconstruct Why/What authority.
+Read the entire governing specification and the confirmed requirements boundary accepted by `spec-design`. Extract requirements, observable contracts, constraints, failure expectations, proof modalities, non-goals, open decisions, owner-set package or system limits, and the accepted requirements set. If the specification does not carry or point to the accepted boundary and set, return the exact `spec-design` gap before selecting target structure; program design does not reconstruct Why/What authority.
 
 Classify gaps as `missing meaning | conflicting meaning | feasibility question | design choice | planning detail`. Missing or conflicting meaning returns `specification-gap`; do not patch it locally.
 
@@ -107,11 +107,13 @@ Start with the existing foundation and its minimal-change realization. Use clean
 
 Using the already-loaded `references/alternatives-and-crux.md`, select the direction and record its tradeoffs, debt/payer, falsifiers/revisit signals, and unresolved decision/evidence gaps for the terminal result.
 
-New durable identity or history, persistence, certification or governance, a control plane, an external service, cross-run state, or a broad migration is material scope expansion when boundary check 1 did not authorize it. Return the owner decision needed to expand the complexity budget rather than making the mechanism inevitable through design prose.
+New durable identity or history, persistence, certification or governance, a control plane, an external service, cross-run state, or a broad migration is material scope expansion when the confirmed requirements boundary did not authorize it. Return the owner decision needed to allow that additional complexity rather than making the mechanism inevitable through design prose.
 
-Re-anchor before selecting target composition: compare the selected direction with the confirmed goal, accepted requirements and non-goals, existing foundation, minimal-change realization, and complexity budget. Delete a mechanism when no confirmed obligation needs it. If pursuing it would widen the confirmed boundary or budget, return the exact mismatch and owner expansion decision instead of completing the mechanism. Keep this comparison in returned workflow state, not durable program-design prose.
+Re-anchor before selecting target composition: compare the selected direction with the confirmed goal, accepted requirements and non-goals, permitted and protected systems, owner-set package limits, existing foundation, smallest workable change, and acceptable complexity. Delete a mechanism when no confirmed obligation needs it. If pursuing it would widen the confirmed boundary or budget, return the exact mismatch and owner expansion decision instead of completing the mechanism. Keep this comparison in returned workflow state, not durable program-design prose.
 
-Completion: the selected direction names what improves, where cost moves, accepted debt/payer, complexity spent, and evidence that would reopen the choice; the Re-anchor comparison is aligned, has deleted unsupported machinery, or has returned the exact expansion decision.
+Explain the selection in ordinary language: what changes, what stays the same, why the smaller structure is enough, what it costs, who bears that cost, and what evidence would justify a larger design. Do not make the reader decode internal workflow labels to understand the tradeoff.
+
+Completion: the selected direction names what improves, where cost moves, accepted debt/payer, complexity spent, and evidence that would reopen the choice; the Re-anchor comparison is aligned, has deleted unsupported machinery, or has returned the exact expansion decision; and the actual choice and tradeoff are explained in ordinary language.
 
 ### 5. Select the target composition
 
@@ -119,7 +121,7 @@ MUST load `references/components-ownership-interfaces.md` for stages 5-7 and app
 
 Build the integrated overview before detailing mechanisms. For UI/refactor work, include the render/component tree and distinguish state owners, pure views, integration/effect boundaries, and derived state.
 
-For every new component, state store, identity, interface, contract, dependency, migration, operating surface, or proof mechanism, name the specification obligation it serves, what breaks if removed, why the existing foundation cannot supply it, and which part of the complexity budget it spends. Delete it when no confirmed obligation breaks; do not complete missing contracts for an unnecessary mechanism.
+For every new component, state store, identity, interface, contract, dependency, migration, operating surface, or proof mechanism, name the specification obligation it serves, what breaks if removed, why the existing foundation cannot supply it, and why it remains within the agreed acceptable complexity. Delete it when no confirmed obligation breaks; do not complete missing contracts for an unnecessary mechanism.
 
 Completion: each component has one job, reason to change, consumers, owned behavior, and justified interface.
 
@@ -185,7 +187,7 @@ Completion: every material requirement has an observable seam and every load-bea
 
 ### 14. Trace, simplify, and author the artifact
 
-Apply the Required Views predicates. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
+Apply the Required Views predicates. For each selected view, state the reader question it answers: who owns what, how a request reaches its effect and returns a result, how state changes, how failure is contained or recovered, or how requirements map to owners and proof. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
 
 Rejecting a requested medium as lossy does not complete a fired view. Select and render the clearest supported alternative that preserves the required semantic fields. In a read-only or chat-only run, show that view in the response; explaining the fallback without producing it leaves the view incomplete.
 
@@ -205,7 +207,7 @@ Completion: each design element serves an obligation, constraint, failure policy
 
 Using the Integration Self-Check procedure in the already-loaded `references/artifact-and-self-review.md`, re-read the complete artifact for component composition, singular ownership, dependency direction, interfaces, call-path deltas, state/flow/failure consistency, concurrency, cross-cutting realization, proof seams, accepted-requirements coverage, process residue, obscure headings, plan leakage, and unresolved specification meaning, then return the integration self-check with exact gaps.
 
-Before review or planning, perform boundary check 2. Show the authorized owner the original goal and missing pieces, reused foundation, every new component or contract, a representative entrypoint-to-effect path, complexity spent, retained non-goals, unresolved structural decisions, deviations from boundary check 1, and accepted-requirements coverage. Reuse confirmation only when it covers this same current structure. When the governing packet already confirms the same minimal-change structure, reject requested out-of-boundary machinery and continue with the authorized design; that rejected pressure does not create a new owner decision. Missing confirmation or a real material expansion in the selected design returns `decision-needed`; confirmation state stays in the returned result rather than a durable status field.
+Before review or planning, perform boundary check 2. Show the authorized owner the original goal and missing pieces, reused foundation, every new component or contract, a representative entrypoint-to-effect path, complexity spent, retained non-goals, unresolved structural decisions, deviations from the confirmed requirements boundary, and accepted-requirements coverage. Reuse confirmation only when it covers this same current structure. When the governing packet already confirms the same minimal-change structure, reject requested out-of-boundary machinery and continue with the authorized design; that rejected pressure does not create a new owner decision. Missing confirmation or a real material expansion in the selected design returns `decision-needed`; confirmation state stays in the returned result rather than a durable status field.
 
 Completion: the current artifact has exact passes and gaps, boundary check 2 is explicitly confirmed, and every accepted requirement remains covered or has owner-authorized supersession. Self-check is never independent review.
 
@@ -227,7 +229,7 @@ Completion: the caller can request pair review through `spec-program-review` or 
 
 ## Required Views
 
-Use a view only when it exposes a load-bearing relationship:
+Use a view only when it makes an important structural or behavioral relationship easier for a human to understand, confirm, or correct:
 
 | View | Use when | Must expose |
 | --- | --- | --- |
@@ -279,7 +281,7 @@ Do not return `locally-ready` while any of these hold:
 
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - authoritative Why/What is missing, stale, conflicting, or silently rewritten;
-- boundary check 1 or the accepted requirements set is missing, unrecoverable, conflicting, or rebuilt from mutually narrowed current files;
+- the confirmed requirements boundary or accepted requirements set is missing, unrecoverable, conflicting, or rebuilt from mutually narrowed current files;
 - target structure was selected without current-system evidence or a named greenfield basis;
 - a material structural choice lacks credible alternatives, explicit tradeoffs, accepted debt and payer, or falsifiers/revisit signals;
 - a material component lacks one owner, reason to change, consumer, or behavioral interface;

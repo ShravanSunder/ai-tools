@@ -52,7 +52,7 @@ Flag jargon or an obscure heading only when it prevents a human from locating or
 
 Preserve governing-source pointers that affect decisions, scope and negative space, singular ownership, constraints, alternatives and tradeoffs, behavioral interfaces, state and flow, failure/recovery, concurrency, migration, trust decisions, proof seams, and one useful navigation home. Dense or long is not automatically low signal.
 
-Audit each diagram for enough direction, timing, ownership, cardinality, state authority, and failure information to reconstruct the model. Flag decorative or under-specified diagrams here. Route semantically suspect content to the applicable semantic lane rather than redesigning it.
+For each diagram, state the reader question it appears intended to answer, then compare the visible meaning with the written requirements or design. Check the applicable owners, direction, timing, cardinality, state or effect, normal and error behavior, changed edges, and proof seams. Keep a view when it makes that relationship easier to understand. Flag a decorative or under-specified view with the exact missing or conflicting meaning; valid syntax, successful rendering, or repeated headings are not enough. Route semantically suspect content to the applicable semantic lane rather than redesigning it.
 
 ## Calibrate and Return
 

@@ -26,7 +26,7 @@ Every `MUST` needs a legitimate basis. Every material requirement needs an obser
 This skill owns authoritative Why/What:
 
 - problem, consumers, current observable behavior, outcomes, and non-goals;
-- source authority and load-bearing user decisions;
+- source authority and important user decisions;
 - normative requirements and traceability;
 - public or externally observable UI, API, CLI, data, configuration, and operational contracts;
 - externally required failure, compatibility, security, reliability, performance, accessibility, privacy, and operability obligations;
@@ -61,11 +61,13 @@ Produce terminal labels by observable condition:
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
-MUST load `references/authority-and-problem-framing.md` for stages 1-2 and apply its source, authority, consumer, current/desired-gap, boundary-check-1, accepted-requirements-recovery, and unresolved-decision method in working state. Surface an exact owner decision immediately when it blocks authoring; otherwise retain the results for the terminal return.
+MUST load `references/authority-and-problem-framing.md` for stages 1-2 and apply its source, authority, consumer, current/desired-gap, confirmed-requirements-boundary, accepted-requirements-recovery, and unresolved-decision method in working state. Surface an exact owner decision immediately when it blocks authoring; otherwise retain the results for the terminal return.
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
-IF load-bearing user or stakeholder meaning is unwritten, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, goal-boundary model (boundary check 1), and explicit owner confirmation of that same current model or the exact owner decision needed. Classify the returned record in the governing-source inventory using `references/authority-and-problem-framing.md`. If the user declines extraction, reassess the remaining sources: continue when an alternate authoritative source exists; return `decision-needed` when owner meaning is missing; return `evidence-blocked` when necessary evidence is missing; keep only non-load-bearing uncertainty as a visible hypothesis gap. Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
+When implementation or incident evidence names internal mechanisms, classify it as evidence and return every authorized observable outcome before any remaining gap. That evidence does not create an owner choice between retaining the mechanism and turning it into a product contract. Route structural choices to `program-design`; ask only about missing product meaning or an actual external compatibility or operational constraint established by a legitimate source.
+
+IF important user or stakeholder meaning is unwritten, or an authoritative source cannot settle a required boundary field, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, goal-boundary model, explicit owner confirmation, and exact gaps. Required boundary fields include the goal, affected people and outcomes, existing foundation, actual missing behavior, systems or capabilities that may and may not change, owner-set repository or package limits when material, non-goals, acceptable complexity, acceptable outcome-level evidence, and unresolved choices. Consume pathfinding's complete return as the inputs to this confirmed requirements boundary; do not create a second requirements record or re-ask an already confirmed decision. If any required field is absent, keep it as an exact gap rather than pretending the pathfinding model contained it. A package limit constrains implementation; it is not product behavior and does not authorize this skill to invent internal structure. Classify the returned record in the governing-source inventory using `references/authority-and-problem-framing.md`. If the user declines extraction, reassess the remaining sources: continue when an alternate authoritative source exists; return `decision-needed` when owner meaning is missing; return `evidence-blocked` when necessary evidence is missing; keep only non-blocking uncertainty as a visible hypothesis gap. Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
 
 The minimum accepted user-requirements source contract is:
 
@@ -82,11 +84,11 @@ unresolved hypotheses
 
 A row is normative-eligible only when its producer-owned authority state is `authorized`. A pathfinding record or an equivalent source may satisfy this contract; equivalent sources need not copy the pathfinding document shape and are normalized into the same stable specification identities, evidence/authority classifications, priorities, and gaps.
 
-Before deriving normative requirements, consume the explicitly confirmed boundary check 1 or perform the same compact check from another governing source using `references/authority-and-problem-framing.md`. A new requirement outside the confirmed goal, affected classes, missing outcomes, non-goals, or complexity budget returns `decision-needed`; specification completeness does not authorize it.
+Before deriving normative requirements, consume the explicitly confirmed requirements boundary or perform the same compact check from another governing source using `references/authority-and-problem-framing.md`. A new requirement outside the confirmed goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity returns `decision-needed`; specification completeness does not authorize it.
 
 IF an external platform, protocol, library, policy, or empirical claim could change product meaning or an observable obligation and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`; return the exact external source identity/version, authority status, transfer assumptions, and remaining evidence gap before deriving the affected obligation.
 
-Completion: artifact boundary, consumers, decision authority, source classes, current observable reality, boundary check 1, accepted-requirements recovery, and authority conflicts are explicit.
+Completion: artifact boundary, consumers, decision authority, source classes, current observable reality, confirmed requirements boundary, accepted-requirements recovery, and authority conflicts are explicit.
 
 ### 2. Model the problem before proposing obligations
 
@@ -98,11 +100,11 @@ When revising existing artifacts, classify the requested correction before editi
 
 For a semantic correction to an existing Why/What view, re-open its governing sources, re-run correction classification and the affected view predicate and semantic-field check, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction invalidates their source or decision result. Pure rendering-format changes route to `docs-maintain`.
 
-Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and boundary-check-1 result. If unavailable, recover the last inspectable owner-accepted governing baseline. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the baseline by themselves. Reuse the existing identities and coverage links for affected classes, U/P/O/R/C/V requirements, priorities and assigners, named variants such as skills or scenarios, customer defaults, observable contracts, constraints, and proof obligations. Do not create a separate ledger or duplicate document. Every removed or superseded item needs explicit owner authority.
+Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and confirmed requirements boundary. If unavailable, recover the last inspectable owner-accepted governing source. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the accepted starting point by themselves. Reuse the existing identities and coverage links for affected classes, U/P/O/R/C/V requirements, priorities and assigners, named variants such as skills or scenarios, customer defaults, observable contracts, constraints, and proof obligations. Do not create a separate ledger or duplicate document. Every removed or superseded item needs explicit owner authority.
 
 Produce inspectable per-item coverage that names each accepted identity, authoritative meaning, and specification destination or owner-authorized supersession. A count or an assertion that coverage is intact is not coverage evidence.
 
-Re-anchor before deriving or revising normative requirements: compare the proposed meaning with the confirmed goal, accepted requirements and non-goals, and existing foundation from boundary check 1. Return `aligned` or the exact mismatch. On mismatch, stop normative authoring and return the existing owner decision, or use `discuss-clarify-mental-models` when the shared model itself drifted. Keep the comparison in returned workflow state, not durable specification prose.
+Re-anchor before deriving or revising normative requirements: compare the proposed meaning with the confirmed goal, accepted requirements, permitted and protected systems, owner-set package limits, non-goals, and existing foundation from the confirmed requirements boundary. Return `aligned` or the exact mismatch. On mismatch, stop normative authoring and return the existing owner decision, or use `discuss-clarify-mental-models` when the shared model itself drifted. Keep the comparison in returned workflow state, not durable specification prose.
 
 Completion: the current/desired gap is inspectable, each causal claim is evidenced or labeled as a hypothesis, accepted-requirements coverage is inspectable when applicable, and the Re-anchor comparison is aligned or has returned the exact mismatch and owner route.
 
@@ -128,7 +130,7 @@ MUST load `references/requirements-and-traceability.md` to construct requirement
 
 For substantial or uncertain work, stage source notes, alternative wording, prototype views, and temporary U→P→O→R→C→V comparisons in private working state, the repository's ignored scratch convention, or `tmp/design-workflows/<date>-<slug>/`. Quick work keeps the comparison in working state. Scratch never owns normative meaning or becomes required reading.
 
-For each requirement, contract, failure obligation, constraint, and proof obligation, name the confirmed need it serves and what becomes observably false or unverifiable if removed. Delete an element that changes neither the confirmed outcome nor a necessary truth boundary; a template slot does not authorize adjacent work.
+For each requirement, contract, failure obligation, constraint, and proof obligation, name the confirmed need it serves and what becomes observably false or unverifiable if removed. Owner-set repository or package limits may constrain implementation without becoming normative product behavior. Delete an element that changes neither the confirmed outcome nor a necessary truth boundary; a template slot does not authorize adjacent work.
 
 Completion: every goal is covered, every requirement has a basis and observable pass/fail consequence, and two capable implementers would not need to invent different product behavior.
 
@@ -156,7 +158,9 @@ Completion: every material obligation names evidence that could prove it, and no
 
 ### 9. Author the smallest coherent artifact
 
-Apply the Required Why/What Views predicates. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
+Apply the Required Why/What Views predicates. For each selected view, state the reader question it answers: whose job and pain must be understood, who interacts with the opaque system and across which observable surfaces, or which need-to-proof link is missing. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
+
+Rejecting a requested all-in-one or internally focused diagram does not complete the selected views and does not require owner approval of their presentation. Render the clearest valid replacements that preserve the required meaning. In a read-only or chat-only run, show those views in the response; describing the diagrams without producing and checking them leaves the view work incomplete.
 
 MUST load `references/artifact-and-self-review.md` with the Required Why/What Views decisions and rendering results to choose the artifact structure, preserve the specification spine, apply view discrimination and pruning, and return the structure decision, traceability/navigation result, view-verification result, pruned elements, artifact identity, and exact view gaps.
 
@@ -192,7 +196,7 @@ Completion: the caller can invoke `program-design`, compose the result into call
 
 ## Required Why/What Views
 
-Use a view only when it exposes a load-bearing Why/What relationship. This table is the sole owner of view predicates, cardinality, and required semantic fields:
+Use a view only when it makes an important Why/What relationship easier for a human to understand, confirm, or correct. This table is the sole owner of view predicates, cardinality, and required semantic fields:
 
 | View | Use when | Must expose |
 | --- | --- | --- |
@@ -215,10 +219,11 @@ Do not return `locally-ready` while any of these hold:
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - a normative claim lacks authority or an explicit decision gap;
 - a user-facing normative requirement is based on a row whose authority state is not `authorized`, or normative-eligible user-requirements rows cannot be traced by stable U identifier;
-- boundary check 1 lacks explicit owner confirmation, or the specification expands its goal, affected classes, missing outcomes, non-goals, or complexity budget without a new owner decision;
+- the requirements boundary lacks explicit owner confirmation, acceptable outcome-level evidence, or the specification expands its goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity without a new owner decision;
 - the accepted requirements set cannot be recovered from the current owner-confirmed source or last inspectable owner-accepted baseline, conflicts with those sources, lacks inspectable per-item coverage, or loses an item without owner-authorized supersession;
 - the problem, outcome, requirement, contract/failure, and proof chain cannot be traced;
 - unresolved product meaning is disguised as an assumption;
+- a returned gap omits an authorized observable outcome, or `decision-needed` is based only on whether implementation or incident mechanisms should be retained or made normative;
 - a material non-goal is omitted, or an applicable cross-cutting quality lacks an observable obligation or constraint or a reasoned not-applicable result;
 - internal architecture or implementation tasks are presented as requirements without an externally authoritative constraint;
 - an applicable Required Why/What View lacks the required cardinality, semantic fields, passed rendering result, or separate normative home;

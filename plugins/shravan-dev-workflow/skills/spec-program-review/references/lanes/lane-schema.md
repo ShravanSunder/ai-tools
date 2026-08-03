@@ -15,7 +15,7 @@ review mode: specification-only | program-only | pair
 complete target paths/identities and current workspace state
 governing-source identities/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
-boundary check 1 and accepted requirements set, or exact authority gap
+confirmed requirements boundary and accepted requirements set, or exact authority gap
 boundary check 2 for program-only or pair, or exact owner decision needed
 prior review coverage and semantic-change record when coverage is reused
 observable selection predicate

@@ -4,7 +4,7 @@ This reference owns source classification, decision authority, consumer framing,
 
 Expected inputs: bounded request, current artifact when revising, candidate sources, repo instructions, and known decision makers.
 
-Return in workflow order: first the artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, boundary-check result, and accepted-requirements recovery; after the caller completes problem modeling, return the complete authority/problem model with current reality, desired gap, load-bearing decisions, conflicts, and evidence gaps.
+Return in workflow order: first the artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, confirmed requirements boundary, and accepted-requirements recovery; after the caller completes problem modeling, return the complete authority/problem model with current reality, desired gap, important decisions, conflicts, and evidence gaps.
 
 ## Classify Sources
 
@@ -63,7 +63,7 @@ Good: a mixed record retains observational and hypothesis rows while requirement
 
 Bad: assigning one aggregate authority label to a mixed record, silently promoting evidence to authority, or discarding stakeholder rows because no journey applies.
 
-## Confirm Boundary Check 1
+## Confirm the Requirements Boundary
 
 Before normative derivation, inspect or establish this compact Why/What boundary:
 
@@ -72,12 +72,15 @@ primary customer, developer, contract, or library goal
 affected classes and outcomes
 existing behavior or foundation to reuse
 actual missing capabilities or observable differences
+allowed and protected system or capability surface
+owner-set repository, package, fork, or module limits when material
 explicit non-goals
-complexity budget and the machinery that reopens scope
+acceptable complexity and the machinery that reopens scope
+acceptable outcome-level evidence
 unresolved owner choices or evidence gaps
 ```
 
-Distinguish current foundation from the missing outcome without designing internal components. Good: “extend the existing runner with customer scenarios and two proven seams; no run database, certification, or cross-run governance.” Bad: “production-ready and complete,” which cannot reject adjacent machinery.
+Distinguish current foundation from the missing outcome without designing internal components. Ask which repositories, packages, forks, or modules may change when the owner already has such a limit or leaving it open could materially expand the work. Record the answer as an implementation boundary, not as product behavior or permission to invent internal structure. Otherwise preserve the higher-level system or capability boundary for `program-design` to realize. Good: “extend the existing runner for the confirmed customer scenarios; package A may change, package B is protected; no run database, certification, or cross-run governance.” Bad: “production-ready and complete,” which cannot reject adjacent machinery.
 
 Prefer the exact current model already confirmed by its authorized owner. Otherwise show the compact model for explicit confirmation or correction. Silence, delegation, vague assent, and the author's own restatement do not confirm the boundary. A requirement outside the confirmed boundary returns the exact owner decision needed.
 
@@ -86,8 +89,8 @@ Prefer the exact current model already confirmed by its authorized owner. Otherw
 Use this precedence:
 
 ```text
-current owner-confirmed requirements record plus boundary check 1
-  -> otherwise last inspectable owner-accepted governing baseline
+current owner-confirmed requirements record plus confirmed requirements boundary
+  -> otherwise last inspectable owner-accepted governing source
       -> otherwise authority conflict and decision-needed
 ```
 
@@ -117,4 +120,4 @@ durable decision source or current confirmation identity
 
 A paraphrase by the author is not evidence that a user chose it. Vague assent, delegation, silence, or topic change does not settle the branch.
 
-Complete when: every load-bearing source is classified, every product decision has inspectable authority or an exact gap, user/stakeholder classes remain distinct, normative-eligible rows are identifiable by stable U identifier, boundary check 1 is explicitly confirmed, the accepted requirements set is recoverable and compared, and the current/desired problem is observable without assuming the solution.
+Complete when: every important source is classified, every product decision has inspectable authority or an exact gap, user/stakeholder classes remain distinct, normative-eligible rows are identifiable by stable U identifier, the requirements boundary is explicitly confirmed, the accepted requirements set is recoverable and compared, and the current/desired problem is observable without assuming the solution.

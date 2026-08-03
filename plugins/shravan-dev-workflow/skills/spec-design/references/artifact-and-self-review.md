@@ -49,7 +49,7 @@ Diagrams may explain relationships but may not be the only home of normative mea
 
 ## Apply Required Why/What Views
 
-Consume the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Consume the shared rendering results and reject any view with a missing semantic field, failed visual check, or unresolved fallback.
+Consume each selected view's reader question plus the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Consume the shared rendering results and reject any view with a missing semantic field, failed visual check, unresolved fallback, or content that does not answer its stated reader question.
 
 - Journey maps cite the stable U rows they re-render; the source record remains normative. Good steps express the user's job and observable pain. A screen tour or component name is not a journey.
 - Context diagrams keep the system opaque and place external consumers, stakeholders, surfaces, contracts, and relevant non-consumers around the boundary. Internal components, owners, stores, or enforcement points are structural How and route to `program-design`.
@@ -80,7 +80,7 @@ Re-read the complete artifact and record:
 - missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
 - journey maps that fail to cite their U rows or context diagrams that cross into internal How;
 - accepted requirements lost or superseded without owner authority;
-- changes from boundary check 1 hidden as specification completeness;
+- changes from the confirmed requirements boundary hidden as specification completeness;
 - process state, obscure headings, repeated companion narration, or reader-facing elements that fail the human deletion test;
 - whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
 

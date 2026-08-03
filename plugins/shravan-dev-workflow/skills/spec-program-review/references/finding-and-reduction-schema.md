@@ -51,7 +51,7 @@ Missing evidence is `unverified`, not rejection. Style preference without reader
 mode and covered targets
 semantic coverage statement and any later semantic-change records
 governing-source coverage
-accepted-requirements and boundary-check coverage
+accepted-requirements and confirmed-requirements-boundary coverage
 lane terminal states
 coverage gaps
 accepted/rejected/contested/unverified findings

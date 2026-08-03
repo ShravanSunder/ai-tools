@@ -8,7 +8,7 @@ Return in workflow order: first the artifact structure/view application, artifac
 
 ## Apply Required Views
 
-Consume the selected predicates and required semantic fields from the `SKILL.md` Required Views table without restating them. Consume the shared rendering result for every firing and reject missing fields, failed visual checks, or unresolved fallbacks.
+Consume each selected view's reader question plus the selected predicates and required semantic fields from the `SKILL.md` Required Views table without restating them. Consume the shared rendering result for every firing and reject missing fields, failed visual checks, unresolved fallbacks, or a view that does not answer its stated reader question.
 
 For call graph/sequence views, consume the current-to-proposed delta from `state-calls-and-flows.md` rather than copying a raw stack trace. Keep the current and proposed paths or explicit no-predecessor case; owner crossings; sync/async/event edges; state reads/writes or side effects; result/error propagation; evidence anchors; added/removed/changed markers; and preservation-critical or contested unchanged edges visible.
 
@@ -52,7 +52,7 @@ Re-read the whole artifact:
 - every design element has a legitimate basis;
 - every reader-facing element passes the human deletion test;
 - progressive disclosure leads from specification obligation through owner, call/state/failure behavior, and proof without scratch or process notes;
-- boundary check 2 exposes complexity spent and every deviation from boundary check 1;
+- boundary check 2 exposes complexity spent and every deviation from the confirmed requirements boundary;
 - no planner-owned sequence/command detail leaked in;
 - no missing Why/What was invented;
 - two capable implementers would build the same structural behavior.
