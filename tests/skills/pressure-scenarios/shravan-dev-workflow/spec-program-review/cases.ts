@@ -4,6 +4,13 @@ const requiredSourceReads = [
   "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
 ] as const;
 
+const diagramReviewRequiredSourceReads = [
+  ...requiredSourceReads,
+  "tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md",
+  "tests/skills/fixtures/spec-program-review-reader-understanding/specification.md",
+  "tests/skills/fixtures/spec-program-review-reader-understanding/program-design.md",
+] satisfies readonly string[];
+
 export const skillPressureCaseDefinitions = [
   {
     scenarioId: "spec-program-review-find-unapproved-design",
@@ -73,7 +80,7 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "spec-program-review-check-diagrams-explain-system",
-    requiredSourceReads,
+    requiredSourceReads: diagramReviewRequiredSourceReads,
     maximumToolCalls: 60,
     semanticCriteria: [
       {

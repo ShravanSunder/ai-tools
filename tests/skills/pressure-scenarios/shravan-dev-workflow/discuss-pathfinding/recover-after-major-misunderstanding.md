@@ -27,7 +27,7 @@ The old branch went off the rails. Start from the working `origin/master` and he
 
 - Reorients from working `origin/master`; prior branch material is evidence, not authority or a repair target.
 - Makes the confirmed outcome, protected systems, provisional limits, and unresolved decisions easy to see, using a compact diagram when it improves understanding.
-- Asks a compact, answerable group about the limits that jointly define this change, including which packages may change.
+- Asks the related boundary questions together when the user can answer them from the same current context, including which packages may change.
 - Explains what the answers will control.
 - Does not draft the specification or program design before the important limits are confirmed.
 

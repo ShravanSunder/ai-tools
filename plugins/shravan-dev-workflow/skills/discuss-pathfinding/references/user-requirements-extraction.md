@@ -57,13 +57,28 @@ Classify each row in mixed-authority records. A document-level label never repla
 
 Do not infer authority from participation. Binding authority comes from an explicit decision-owner statement or a governing source whose scope covers the need; record its evidence anchor. An interviewee may supply strong observational evidence without owning product meaning.
 
-If the user declines extraction, return `extraction declined`, the authoritative sources already available, the rows or evidence established so far, and the remaining owner/evidence gaps. Do not select a specification readiness label; `spec-design` owns that decision after it classifies the complete source inventory.
+If the user declines extraction, return:
+
+- `extraction declined`;
+- the authoritative sources already available;
+- the rows or evidence established so far;
+- the remaining owner and evidence gaps.
+
+Do not select a specification readiness label; `spec-design` owns that decision after it classifies the complete source inventory.
 
 Stop this stage when every row has an evidenced authority state and any missing authority is an exact owner decision rather than an inferred answer.
 
 ## Capture User-Job Sequence Inputs
 
-Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return the class, user-worded steps or transitions, observed pain and evidence, desired observable difference, and cited U rows. Pathfinding may use a non-normative conversational sequence map to clarify an ambiguity; `spec-design` alone decides whether the durable specification needs a journey view and owns its normative rendering.
+Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return:
+
+- the affected class;
+- user-worded steps or transitions;
+- observed pain and its evidence;
+- the desired observable difference;
+- the cited U rows.
+
+Pathfinding may use a non-normative conversational sequence map to clarify an ambiguity; `spec-design` alone decides whether the durable specification needs a journey view and owns its normative rendering.
 
 Teach the relationship through examples:
 
@@ -88,13 +103,20 @@ acceptable complexity: expected change shape and machinery that requires renewed
 unresolved owner choices or evidence gaps
 ```
 
-Existing foundation means observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here. Missing pieces name the outcome gap, not every feature a complete platform might have. Establish allowed and no-touch systems or capability areas. Ask which repositories, packages, forks, or modules may change when the owner already has such a limit or when leaving it open could materially expand the work. Record that answer as an implementation boundary, not as product behavior and not as permission to invent internal structure. Otherwise preserve the higher-level boundary for `program-design` to realize. The agent may propose a provisional boundary for the owner to correct, but it remains provisional until confirmed. Useful acceptable-complexity guidance names the expected change shape and the additions that require renewed approval. “Production-ready and complete” is not useful guidance because it cannot reject expansion.
+Apply these rules while building the boundary:
+
+- Name observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here.
+- Name the outcome gap, not every feature a complete platform might have.
+- Ask which repositories, packages, forks, or modules may change when the owner already has a limit or leaving it open could materially expand the work.
+- Record allowed and protected packages as an implementation boundary, not as product behavior or permission to invent internal structure. Otherwise preserve the higher-level system or capability boundary for `program-design` to realize.
+- Treat an agent-proposed boundary as provisional until the owner confirms it.
+- Describe the expected change shape and which additions require renewed approval. “Production-ready and complete” is too vague to reject expansion.
 
 Challenge an addition by asking which U row it serves and what user-visible or contract outcome fails without it. Keep an unconfirmed expansion as an owner decision.
 
 Show this same current model to the authorized owner for explicit confirmation or correction. Silence, generic assent, and the agent's own restatement do not confirm it. Return an unconfirmed record with the exact decision needed; do not call it ready for specification design.
 
-Keep every boundary item visible even when its answer is still unknown. Name the missing observable behavior, permitted and protected systems, non-goals, and acceptable complexity separately; do not hide several unknowns inside one general scope question. An unresolved item stays in the record as an exact owner question.
+Keep missing observable behavior, permitted and protected systems, non-goals, and acceptable complexity visible as separate boundary items even when their answers remain unknown. Do not hide several unknowns inside one general scope question. An unresolved item stays in the record as an exact owner question.
 
 ## Scale the Record
 
@@ -102,6 +124,8 @@ Keep every boundary item visible even when its answer is still unknown. Name the
 - standard, deep, or substantial handoff: write `docs/specs/<slug>/user-requirements.md` when files are allowed; otherwise return the complete record in chat;
 - record classes and rows as they crystallize rather than reconstructing them at the end.
 
-A durable record uses its path as its inspectable identity. An in-chat record returns its complete text and uses a session or message anchor only when the host exposes one. Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record; keep confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
+A durable record uses its path as its inspectable identity. An in-chat record returns its complete text and uses a session or message anchor only when the host exposes one.
+
+Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record, while keeping confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
 
 Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the requirements boundary and acceptable complexity are explicit, and the result carries owner confirmation of that same boundary or the exact decision still needed.

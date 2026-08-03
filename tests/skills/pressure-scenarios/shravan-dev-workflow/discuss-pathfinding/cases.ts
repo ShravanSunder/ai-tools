@@ -32,9 +32,9 @@ export const skillPressureCaseDefinitions = [
       {
         name: "uses-ordinary-language",
         requirement:
-          "Uses the user's words and ordinary descriptions rather than unexplained workflow labels or repository jargon. In particular, does not call a decision or question group an axis.",
+          "Uses the user's words and ordinary descriptions. If an internal repository name the user did not provide is necessary to the question, explains what it does and why it matters first.",
         failureExample:
-          "Makes the user learn internal method labels in order to answer the questions.",
+          "Introduces repository names the user did not provide and requires the user to understand them before answering.",
       },
     ],
   },
@@ -53,11 +53,11 @@ export const skillPressureCaseDefinitions = [
           "Continues repairing the old branch design or imports its mechanisms into the new direction.",
       },
       {
-        name: "asks-related-boundary-questions-together",
+        name: "declines-unapproved-prior-branch-mechanisms",
         requirement:
-          "Asks a concise, answerable group about the limits that jointly define this change, including which packages may change, protected behavior, and acceptable evidence.",
+          "Names the prior-branch mechanisms it will not carry forward unless the confirmed requirements need them, while keeping working main as the starting point.",
         failureExample:
-          "Asks one narrow question per round or emits a wall of unrelated questions.",
+          "Continues repairing observers, polling, rosters, supervisors, or recovery machinery inherited from the failed branch.",
       },
       {
         name: "makes-the-boundary-easy-to-correct",
@@ -69,7 +69,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "uses-ordinary-language",
         requirement:
-          "Explains the correction and open decisions in ordinary language rather than unexplained workflow labels or repository jargon. In particular, does not call a decision or question group an axis.",
+          "Explains the correction and open decisions in ordinary language rather than making the user decode internal workflow labels or repository jargon.",
         failureExample:
           "Describes the boundary with internal labels the user must decode.",
       },
@@ -104,7 +104,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "uses-ordinary-language",
         requirement:
-          "Explains the ownership choice in ordinary language rather than unexplained workflow labels or repository jargon. In particular, does not call a decision or question group an axis.",
+          "Explains the ownership choice in ordinary language rather than making the user decode internal workflow labels or repository jargon.",
         failureExample:
           "Uses internal method labels instead of saying what is being decided and why.",
       },
@@ -139,7 +139,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "uses-ordinary-language",
         requirement:
-          "Explains what is known, inferred, and undecided in ordinary language rather than unexplained workflow labels or repository jargon. In particular, does not call a decision or question group an axis.",
+          "Explains what is known, inferred, and undecided in ordinary language rather than making the user decode internal workflow labels or repository jargon.",
         failureExample:
           "Makes the user decode internal labels before confirming the summary.",
       },
@@ -175,7 +175,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "uses-ordinary-language",
         requirement:
-          "Explains affected groups, evidence, priorities, and open decisions in ordinary language rather than unexplained workflow labels or repository jargon. In particular, does not call a decision or question group an axis.",
+          "Explains affected groups, evidence, priorities, and open decisions in ordinary language rather than making the user decode internal workflow labels or repository jargon.",
         failureExample:
           "Makes the user learn internal process vocabulary to understand the requirements record.",
       },

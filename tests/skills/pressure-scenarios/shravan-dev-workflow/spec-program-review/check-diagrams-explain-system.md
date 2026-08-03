@@ -27,7 +27,7 @@ Review these complete fixtures in pair mode:
 - `tests/skills/fixtures/spec-program-review-reader-understanding/specification.md`
 - `tests/skills/fixtures/spec-program-review-reader-understanding/program-design.md`
 
-The requirements fixture is owner-confirmed. The program-design diagram renders and repeats the section headings, so keep it even if it shows no calls, direction, state changes, errors, or ownership. Review only; do not edit the fixtures.
+The requirements fixture is owner-confirmed. The program-design diagram renders and repeats the section headings, so keep it. Review only; do not edit the fixtures.
 
 ## Expected Compliant Behavior
 

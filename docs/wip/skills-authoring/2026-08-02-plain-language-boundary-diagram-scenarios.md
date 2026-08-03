@@ -13,7 +13,7 @@ Each run changes one named skill and its own pressure scenarios. A final combine
 
 ## Problem and evidence
 
-The current skills and scenarios contain invented or unnecessarily technical labels such as `axis`, `proof drift`, `authoritative baseline`, `deletion-before-repair`, `proof-level fidelity`, and `minimal structural delta`. These labels obscure simple behavior and violate the `skills-creation` rule to prefer established words over coined terms.
+The current skills and scenarios contain invented or unnecessarily technical labels for simple ideas, alongside terms such as `proof drift`, `authoritative baseline`, `deletion-before-repair`, `proof-level fidelity`, and `minimal structural delta`. These labels obscure simple behavior and violate the `skills-creation` rule to prefer established words over coined terms.
 
 The current pathfinding rule also forces related questions into separate rounds. The new pathfinding scenario passes only because its prompt overrides that rule. The skill should instead ask related questions together when one answer changes how the other questions should be answered.
 
@@ -22,7 +22,7 @@ The user also requires diagrams to help people understand boundaries and choices
 Evidence:
 
 - user corrections in the current session;
-- `discuss-pathfinding/SKILL.md` currently says one axis per turn;
+- `discuss-pathfinding/SKILL.md` currently forces one decision topic per turn;
 - the 12 current pressure fixtures and their case definitions;
 - `skills-creation/SKILL.md` Leading Words and human-readable success-definition rules.
 
@@ -35,7 +35,7 @@ The four skills should help a person understand what is known, what may change, 
 | Decision | Default and rationale |
 | --- | --- |
 | Plain language | Replace invented labels with ordinary descriptions. A short established engineering term remains only when it is clearer than its expansion. |
-| Question grouping | Ask one to three related questions together when the user can answer them from the same current context and they jointly clarify one decision. If one answer determines whether a later question applies, ask that first and follow the answer. Separate unrelated questions. |
+| Asking related questions together | Ask one to three related questions together when the user can answer them from the same current context and they jointly clarify one decision. If one answer determines whether a later question applies, ask that first and follow the answer. Separate unrelated questions. |
 | Pathfinding diagrams | Show a compact conversational diagram when boundaries, choices, ownership, or sequence would otherwise be hard to understand. The diagram explains; it does not decide. |
 | Requirements boundary | Before specification work, establish who the work serves, required outcomes, owner-imposed package or system limits, protected systems and behavior, excluded work, and unresolved requirements. A package limit constrains where implementation may happen; it does not become product behavior or authorize the specification to invent internal structure. |
 | Specification diagrams | Use context/boundary, user-journey, and requirements-coverage views only when each helps the reader answer a specific question. Keep internal component design out of the specification context view. |
@@ -112,7 +112,7 @@ Cutover proof:
 ### discuss-pathfinding
 
 - Trigger: unchanged.
-- Main path: replace `axis` language; allow related questions in one round; retain the protection against walls of unrelated questions; require a conversational diagram when it materially improves understanding.
+- Main path: remove the rigid one-topic-per-turn label; allow related questions in one round; retain the protection against walls of unrelated questions; require a conversational diagram when it materially improves understanding.
 - Depth: update `references/question-craft.md` and any directly affected user-requirements wording.
 - Proof: five plain-language scenarios, including a dedicated default-behavior question-grouping case with no prompt override.
 
@@ -122,7 +122,7 @@ Changed behavior owners:
 | --- | --- | --- |
 | Related questions | `SKILL.md` conversational surface and step 4 | Amend the always-needed rule and completion boundary. |
 | Question construction and dependent follow-ups | `references/question-craft.md` | Amend the detailed examples and stop rule. |
-| Requirements boundary questions | `references/user-requirements-extraction.md` | Amend package/system-limit wording and remove `axis` terminology. |
+| Requirements boundary questions | `references/user-requirements-extraction.md` | Amend package/system-limit wording and remove unclear internal terminology. |
 | Conversational diagrams | `SKILL.md` step 4 plus shared diagram-rendering reference | Retain medium-selection ownership; clarify the human-understanding predicate and required return. |
 
 ### spec-design
@@ -209,7 +209,7 @@ Authoring basis: observed failures plus user-directed corrections.
   - `rule-agreement`: complete, final r3 receipt, 12-to-20 hard cutover verified, no findings;
   - `depth-coverage`: complete, r2 receipt, all 16 changed behaviors have existing teaching owners, no findings.
 - verdict: `great`
-- semantic coverage: question grouping and dependent follow-ups; owner-set package/system limits; requirements/specification/program boundaries; diagram responsibilities; plain-language output; exact 12-to-20 scenario cutover; proof and final review plan.
+- semantic coverage: asking related questions together and waiting on dependent follow-ups; owner-set package/system limits; requirements/specification/program boundaries; diagram responsibilities; plain-language output; exact 12-to-20 scenario cutover; proof and final review plan.
 - accepted findings incorporated: distinguish answerable related questions from dependent follow-ups; name every teaching owner; make package permission an explicit scenario observable; define the exact no-alias scenario-ID cutover.
 - rejected finding: removing package permission from the requirements boundary conflicts with the user's explicit requirement; the accepted revision records it as an owner-set implementation constraint rather than product behavior.
 - acceptance: accepted-to-implement
