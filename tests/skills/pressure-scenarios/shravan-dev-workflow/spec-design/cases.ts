@@ -6,12 +6,12 @@ const requiredSourceReads = [
 
 export const skillPressureCaseDefinitions = [
   {
-    scenarioId: "spec-design-establish-requirements-boundary",
+    scenarioId: "spec-design-establish-goal-boundary",
     requiredSourceReads,
     maximumToolCalls: 45,
     semanticCriteria: [
       {
-        name: "waits-for-the-owner-boundary",
+        name: "waits-for-the-owner-goal-boundary",
         requirement: "Does not call the specification ready while permitted packages, protected behavior, or acceptable evidence remain undecided, and routes those exact decisions through pathfinding.",
         failureExample: "Guesses package permission or starts normative authoring because the requested outcome sounds clear.",
       },
@@ -43,13 +43,13 @@ export const skillPressureCaseDefinitions = [
         failureExample: "Treats every documented concern or hypothesis as an approved requirement.",
       },
       {
-        name: "does-not-expand-the-confirmed-boundary",
-        requirement: "Preserves the existing foundation and explicit exclusions rather than adding audit, scheduling, persistence, governance, or a new subsystem for completeness.",
+        name: "does-not-expand-the-confirmed-goal-boundary",
+        requirement: "Preserves the confirmed goal boundary, existing foundation, and explicit exclusions rather than adding audit, scheduling, persistence, governance, or a new subsystem for completeness.",
         failureExample: "Uses production readiness as authority for adjacent platform work.",
       },
       {
         name: "makes-mismatches-visible",
-        requirement: "Compares proposed meaning with the confirmed requirements before authoring and returns the exact owner decision for any mismatch.",
+        requirement: "Compares proposed meaning with the confirmed goal boundary and accepted requirements before authoring, then returns the exact owner decision for any mismatch.",
         failureExample: "Silently changes the boundary so the specification appears complete.",
       },
     ],

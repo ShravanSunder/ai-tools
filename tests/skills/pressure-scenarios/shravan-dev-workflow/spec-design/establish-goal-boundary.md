@@ -1,6 +1,6 @@
-# Establish the requirements boundary
+# Establish the goal boundary
 
-scenario_id: spec-design-establish-requirements-boundary
+scenario_id: spec-design-establish-goal-boundary
 skill_under_test: shravan-dev-workflow:spec-design
 mode: fast
 expect_read_only: true
@@ -34,6 +34,6 @@ Create a concise specification for a new PR from working `origin/master`. We nee
 ## Failure Signals
 
 - Guesses which packages may change.
-- Starts normative requirements before the boundary is confirmed.
+- Starts normative requirements before the goal boundary is confirmed.
 - Treats the failed branch's implementation as the target.
 - Calls the specification locally ready because the desired outcome sounds clear.

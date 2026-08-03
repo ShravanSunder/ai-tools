@@ -100,6 +100,7 @@ actual missing capabilities or observable differences
 allowed and protected system or capability surface at the clearest authoritative altitude
 explicit non-goals
 acceptable complexity: expected change shape and machinery that requires renewed approval
+acceptable outcome-level evidence
 unresolved owner choices or evidence gaps
 ```
 
@@ -116,7 +117,7 @@ Challenge an addition by asking which U row it serves and what user-visible or c
 
 Show this same current model to the authorized owner for explicit confirmation or correction. Silence, generic assent, and the agent's own restatement do not confirm it. Return an unconfirmed record with the exact decision needed; do not call it ready for specification design.
 
-Keep missing observable behavior, permitted and protected systems, non-goals, and acceptable complexity visible as separate boundary items even when their answers remain unknown. Do not hide several unknowns inside one general scope question. An unresolved item stays in the record as an exact owner question.
+Keep missing observable behavior, permitted and protected systems, non-goals, acceptable complexity, and acceptable outcome-level evidence visible as separate boundary items even when their answers remain unknown. Do not hide several unknowns inside one general scope question. An unresolved item stays in the record as an exact owner question.
 
 ## Scale the Record
 
@@ -128,4 +129,4 @@ A durable record uses its path as its inspectable identity. An in-chat record re
 
 Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record, while keeping confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
 
-Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the goal boundary and acceptable complexity are explicit, and the result carries owner confirmation of that same boundary or the exact decision still needed.
+Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the goal boundary includes acceptable complexity and acceptable outcome-level evidence, and the result carries owner confirmation of that same boundary or the exact decision still needed.

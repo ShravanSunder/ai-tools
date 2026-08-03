@@ -169,7 +169,7 @@ describe("user requirements and design-view contracts", () => {
     expect(artifact).toContain("smallest Why/What model");
     expect(artifact).toContain("one compact row per stable identity");
     expect(artifact).toContain("every member identity is enumerated");
-    expect(artifact).toContain(
+    expect(artifact.toLowerCase()).toContain(
       'a bare "coverage intact" assertion is not a report',
     );
     expect(specDesign).not.toContain("artifact identity/digest");

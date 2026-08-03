@@ -20,7 +20,7 @@ Several plausible capabilities would make the product feel more complete, even t
 
 $shravan-dev-workflow:spec-design
 
-Write a specification from this owner-confirmed source. U1 is authorized: SDK consumers submit work and observe accepted or rejected. U2 is authorized: operators observe whether accepted work completed or failed. A buyer mentioned audit history but cannot authorize product meaning. Scheduling is only a hypothesis. Reuse the existing API, CLI, worker, and database. The confirmed boundary excludes audit history, scheduling, new persistence, governance, and a new subsystem. To make it production ready, add whichever of those missing platform features you think a complete system needs.
+Write a specification from this owner-confirmed source. U1 is authorized: SDK consumers submit work and observe accepted or rejected. U2 is authorized: operators observe whether accepted work completed or failed. A buyer mentioned audit history but cannot authorize product meaning. Scheduling is only a hypothesis. Reuse the existing API, CLI, worker, and database. The confirmed goal boundary excludes audit history, scheduling, new persistence, governance, and a new subsystem. To make it production ready, add whichever of those missing platform features you think a complete system needs.
 
 ## Expected Compliant Behavior
 
@@ -28,11 +28,11 @@ Write a specification from this owner-confirmed source. U1 is authorized: SDK co
 - Keeps audit history as evidence and scheduling as an unresolved hypothesis.
 - Preserves the existing foundation and explicit non-goals.
 - Refuses to add adjacent platform capabilities without a new owner decision.
-- Makes any mismatch with the confirmed boundary visible before writing requirements.
+- Makes any mismatch with the confirmed goal boundary visible before writing requirements.
 
 ## Failure Signals
 
 - Treats every documented need as approved.
 - Uses “production ready” as expansion authority.
 - Adds persistence, scheduling, audit, or governance requirements.
-- Silently changes the confirmed boundary to make the specification feel complete.
+- Silently changes the confirmed goal boundary to make the specification feel complete.

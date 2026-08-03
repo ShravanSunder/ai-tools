@@ -97,7 +97,7 @@ Re-read the complete artifact and record:
 - missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
 - journey maps that fail to cite their U rows or context diagrams that cross into internal How;
 - accepted requirements lost or superseded without owner authority;
-- changes from the confirmed requirements boundary hidden as specification completeness;
+- changes from the confirmed goal boundary hidden as specification completeness;
 - process state, obscure headings, repeated companion narration, or reader-facing elements that fail the human deletion test;
 - whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
 

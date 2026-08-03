@@ -5,7 +5,7 @@ description: Use when defining or revising a specification's authoritative Why/W
 
 # Spec Design
 
-A specification is an authority map for observable obligations.
+A specification is the observable contract for authorized product meaning.
 
 It turns evidence and authorized decisions into a contract that another capable agent can realize without inventing product meaning:
 
@@ -19,7 +19,7 @@ consumer and problem
   -> proof obligation
 ```
 
-Every `MUST` needs a legitimate basis. Every material requirement needs an observable consequence. Unresolved product meaning stays visible; internal component structure stays downstream in `program-design`.
+Source authority establishes which meaning is legitimate; it supports the contract rather than replacing it as the primary model. Every `MUST` needs a legitimate basis. Every material requirement needs an observable consequence. Unresolved product meaning stays visible; internal component structure stays downstream in `program-design`.
 
 ## Boundary
 
@@ -61,13 +61,24 @@ Produce terminal labels by observable condition:
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
-MUST load `references/authority-and-problem-framing.md` for stages 1-2 and apply its source, authority, consumer, current/desired-gap, confirmed-requirements-boundary, accepted-requirements-recovery, and unresolved-decision method in working state. Surface an exact owner decision immediately when it blocks authoring; otherwise retain the results for the terminal return.
+MUST load `references/authority-and-problem-framing.md` and return its first result for stage 1: artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, confirmed goal boundary, and accepted-requirements recovery. Retain the loaded reference and working state for stage 2 and the terminal return. Surface an exact owner decision immediately when it blocks authoring.
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
 When implementation or incident evidence names internal mechanisms, classify it as evidence and return every authorized observable outcome before any remaining gap. That evidence does not create an owner choice between retaining the mechanism and turning it into a product contract. Route structural choices to `program-design`; ask only about missing product meaning or an actual external compatibility or operational constraint established by a legitimate source.
 
-IF important user or stakeholder meaning is unwritten, or an authoritative source cannot settle a required boundary field, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, goal-boundary model, explicit owner confirmation, and exact gaps. Required boundary fields include the goal, affected people and outcomes, existing foundation, actual missing behavior, systems or capabilities that may and may not change, owner-set repository or package limits when material, non-goals, acceptable complexity, acceptable outcome-level evidence, and unresolved choices. Consume pathfinding's complete return as the inputs to this confirmed requirements boundary; do not create a second requirements record or re-ask an already confirmed decision. If any required field is absent, keep it as an exact gap rather than pretending the pathfinding model contained it. A package limit constrains implementation; it is not product behavior and does not authorize this skill to invent internal structure. Classify the returned record in the governing-source inventory using `references/authority-and-problem-framing.md`. If the user declines extraction, reassess the remaining sources: continue when an alternate authoritative source exists; return `decision-needed` when owner meaning is missing; return `evidence-blocked` when necessary evidence is missing; keep only non-blocking uncertainty as a visible hypothesis gap. Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
+IF important user or stakeholder meaning is unwritten, or an authoritative source cannot settle a required goal-boundary field, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, goal boundary established by `discuss-pathfinding` and checked against the fields in the already-loaded reference, explicit confirmation or correction by the authorized owner, refusal or fallback result, and exact gaps.
+
+Consume pathfinding's complete return as the inputs to the confirmed goal boundary. Do not create a second requirements record or re-ask an already confirmed decision. If a field required by the already-loaded reference is absent, keep it as an exact gap. Classify the returned record in the governing-source inventory.
+
+If the user declines extraction, reassess the remaining sources:
+
+- continue when an alternate authoritative source exists;
+- return `decision-needed` when owner meaning is missing;
+- return `evidence-blocked` when necessary evidence is missing;
+- keep only non-blocking uncertainty as a visible hypothesis gap.
+
+Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
 
 The minimum accepted user-requirements source contract is:
 
@@ -84,27 +95,37 @@ unresolved hypotheses
 
 A row is normative-eligible only when its producer-owned authority state is `authorized`. A pathfinding record or an equivalent source may satisfy this contract; equivalent sources need not copy the pathfinding document shape and are normalized into the same stable specification identities, evidence/authority classifications, priorities, and gaps.
 
-Before deriving normative requirements, consume the explicitly confirmed requirements boundary or perform the same compact check from another governing source using `references/authority-and-problem-framing.md`. A new requirement outside the confirmed goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity returns `decision-needed`; specification completeness does not authorize it.
+Before deriving normative requirements, consume the explicitly confirmed goal boundary or apply the already-loaded reference's goal-boundary check to another governing source. Proposed meaning outside that boundary returns `decision-needed`; specification completeness does not authorize it.
 
 IF an external platform, protocol, library, policy, or empirical claim could change product meaning or an observable obligation and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`; return the exact external source identity/version, authority status, transfer assumptions, and remaining evidence gap before deriving the affected obligation.
 
-Completion: artifact boundary, consumers, decision authority, source classes, current observable reality, confirmed requirements boundary, accepted-requirements recovery, and authority conflicts are explicit.
+Completion: artifact boundary, consumers, decision authority, source classes, confirmed goal boundary, accepted-requirements recovery, and authority conflicts are explicit.
 
 ### 2. Model the problem before proposing obligations
 
 Name what happens today, who bears the cost, where it is observable, what proves it, and what would remain wrong if the requested feature existed only nominally. Keep implementation root cause separate from the observable problem.
 
-Using the already-loaded `references/authority-and-problem-framing.md`, complete the authority/problem model in working state for the artifact and terminal return.
+Using the already-loaded `references/authority-and-problem-framing.md`, complete problem modeling and return its second result: the authority/problem model with current reality, desired gap, important decisions, conflicts, and evidence gaps. Retain it in working state for the artifact and terminal return.
 
 When revising existing artifacts, classify the requested correction before editing: requirements/Why/What, structural How, or both. Removing unrelated concurrency, cleanup, reporter, or lifecycle machinery is a How correction unless the authorized owner also changes users, outcomes, requirements, scenarios, defaults, or proof obligations. A How-only correction routes to `program-design` and does not authorize narrowing governing Why/What. When both change, settle the revised Why/What first.
 
 For a semantic correction to an existing Why/What view, re-open its governing sources, re-run correction classification and the affected view predicate and semantic-field check, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction invalidates their source or decision result. Pure rendering-format changes route to `docs-maintain`.
 
-Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and confirmed requirements boundary. If unavailable, recover the last inspectable owner-accepted governing source. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the accepted starting point by themselves. Reuse the existing identities and coverage links for affected classes, U/P/O/R/C/V requirements, priorities and assigners, named variants such as skills or scenarios, customer defaults, observable contracts, constraints, and proof obligations. Do not create a separate ledger or duplicate document. Every removed or superseded item needs explicit owner authority.
+Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and confirmed goal boundary. If unavailable, recover the last inspectable owner-accepted governing source. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the accepted starting point by themselves.
+
+Reuse the existing identities and coverage links for:
+
+- affected classes and stable U/P/O/R/C/V identities;
+- priorities and assigners;
+- named variants such as skills or scenarios;
+- customer defaults;
+- observable contracts, constraints, and proof obligations.
+
+Do not create a separate ledger or duplicate document. Every removed or superseded item needs explicit owner authority.
 
 Produce inspectable per-item coverage that names each accepted identity, authoritative meaning, and specification destination or owner-authorized supersession. A count or an assertion that coverage is intact is not coverage evidence.
 
-Re-anchor before deriving or revising normative requirements: compare the proposed meaning with the confirmed goal, accepted requirements, permitted and protected systems, owner-set package limits, non-goals, and existing foundation from the confirmed requirements boundary. Return `aligned` or the exact mismatch. On mismatch, stop normative authoring and return the existing owner decision, or use `discuss-clarify-mental-models` when the shared model itself drifted. Keep the comparison in returned workflow state, not durable specification prose.
+Re-anchor before deriving or revising normative requirements: compare the proposed meaning with the confirmed goal, accepted requirements, permitted and protected systems, owner-set package limits, non-goals, and existing foundation from the confirmed goal boundary. Return `aligned` or the exact mismatch. On mismatch, stop normative authoring and return the existing owner decision, or use `discuss-clarify-mental-models` when the shared model itself drifted. Keep the comparison in returned workflow state, not durable specification prose.
 
 Completion: the current/desired gap is inspectable, each causal claim is evidenced or labeled as a hypothesis, accepted-requirements coverage is inspectable when applicable, and the Re-anchor comparison is aligned or has returned the exact mismatch and owner route.
 
@@ -188,7 +209,7 @@ Completion: current independent review semantically covers the current artifact,
 
 ### 12. Return the local result
 
-Return the artifact identity; governing-source identities, authority, current applicability, and coverage; confirmed boundary; accepted requirements set; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
+Return the artifact identity; governing-source identities, authority, current applicability, and coverage; confirmed goal boundary; accepted requirements set; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
 
 IF returning a substantial specification in chat and problem, consumer, authority, journey, or requirement-to-proof relationships are non-obvious, use `tui-presentation` to render only those Why/What relationships. Keep normative meaning in the artifact and route internal component, call, state, or failure-mechanism views to `program-design`.
 
@@ -219,7 +240,7 @@ Do not return `locally-ready` while any of these hold:
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
 - a normative claim lacks authority or an explicit decision gap;
 - a user-facing normative requirement is based on a row whose authority state is not `authorized`, or normative-eligible user-requirements rows cannot be traced by stable U identifier;
-- the requirements boundary lacks explicit owner confirmation, acceptable outcome-level evidence, or the specification expands its goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity without a new owner decision;
+- the goal boundary lacks explicit confirmation or correction by the authorized owner, acceptable outcome-level evidence, or the specification expands its goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity without a new owner decision;
 - the accepted requirements set cannot be recovered from the current owner-confirmed source or last inspectable owner-accepted baseline, conflicts with those sources, lacks inspectable per-item coverage, or loses an item without owner-authorized supersession;
 - the problem, outcome, requirement, contract/failure, and proof chain cannot be traced;
 - unresolved product meaning is disguised as an assumption;

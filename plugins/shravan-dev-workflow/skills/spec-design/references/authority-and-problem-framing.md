@@ -6,7 +6,7 @@ Expected inputs: bounded request, current artifact when revising, candidate sour
 
 Return in workflow order:
 
-1. Artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, confirmed requirements boundary, and accepted-requirements recovery.
+1. Artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, confirmed goal boundary, and accepted-requirements recovery.
 2. After the caller completes problem modeling, the complete authority/problem model with current reality, desired gap, important decisions, conflicts, and evidence gaps.
 
 ## Classify Sources
@@ -66,9 +66,9 @@ Good: a mixed record retains observational and hypothesis rows while requirement
 
 Bad: assigning one aggregate authority label to a mixed record, silently promoting evidence to authority, or discarding stakeholder rows because no journey applies.
 
-## Confirm the Requirements Boundary
+## Confirm the Goal Boundary
 
-Before normative derivation, inspect or establish this compact Why/What boundary:
+Before normative derivation, inspect the confirmed goal boundary returned by `discuss-pathfinding` or established by an equivalent authoritative governing source:
 
 ```text
 primary customer, developer, contract, or library goal
@@ -94,14 +94,14 @@ Good: “extend the existing runner for the confirmed customer scenarios; packag
 
 Bad: “production-ready and complete,” which cannot reject adjacent machinery.
 
-Prefer the exact current model already confirmed by its authorized owner. Otherwise show the compact model for explicit confirmation or correction. Silence, delegation, vague assent, and the author's own restatement do not confirm the boundary. A requirement outside the confirmed boundary returns the exact owner decision needed.
+Prefer the exact current model already confirmed by its authorized owner. If no current authoritative source establishes the complete boundary, return its exact missing fields through `discuss-pathfinding`; `spec-design` does not establish or confirm the boundary itself. Silence, delegation, vague assent, and the author's own restatement do not confirm the goal boundary. A requirement outside the confirmed goal boundary returns the exact owner decision needed.
 
 ## Recover And Compare Accepted Requirements
 
 Use this precedence:
 
 ```text
-current owner-confirmed requirements record plus confirmed requirements boundary
+current owner-confirmed requirements record plus confirmed goal boundary
   -> otherwise last inspectable owner-accepted governing source
       -> otherwise authority conflict and decision-needed
 ```
@@ -138,6 +138,6 @@ Complete when:
 - every product decision has inspectable authority or an exact gap;
 - user and stakeholder classes remain distinct;
 - normative-eligible rows are identifiable by stable U identifier;
-- the requirements boundary is explicitly confirmed;
+- the goal boundary is established by `discuss-pathfinding` or an equivalent authoritative governing source and explicitly confirmed or corrected by the authorized owner;
 - the accepted requirements set is recoverable and compared;
 - the current/desired problem is observable without assuming the solution.
