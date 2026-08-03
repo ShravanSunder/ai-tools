@@ -6,7 +6,7 @@ Predicate: mandatory for every `review` invocation.
 
 Expected inputs: the complete lane-schema packet, complete current target set, complete governing-source set, and one selected mode reference.
 
-Prerequisites: the complete target set, governing-source coverage, accepted requirements set, and applicable boundary results are complete and unambiguous.
+Prerequisites: the complete target set, governing-source coverage, confirmed goal boundary and accepted requirements set, plus structural-realization confirmation for `program-only` or `pair`, are complete and unambiguous.
 
 Maximum authority: fresh-context, read-only, candidate-only. This lane may recommend `ready | needs-revision | blocked | decision-needed`; it may not issue the parent verdict, edit, remediate, plan, mutate lifecycle, or accept.
 

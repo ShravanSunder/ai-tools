@@ -12,15 +12,15 @@ artifact and source anchor
 claim or rule
 failure and downstream ambiguity: contradiction or failure path, observable consequence, and what the next author/planner would otherwise have to guess
 smallest semantic correction target
-semantic owner: spec-design | program-design | caller
+semantic correction route: spec-design | program-design | caller | spec-design -> program-design
 validation note
 semantic coverage to rerun
 contested evidence
-accepted requirement identity or confirmed boundary
+accepted requirement identity or confirmed goal-boundary field
 plain-language requirement meaning
 evidence checked or bounded evidence-lookup result
 whether deletion of the questioned mechanism removes the failure
-scope effect: inside confirmed boundary | requires owner expansion decision
+scope effect: inside confirmed goal boundary | requires owner expansion decision
 ```
 
 Severity follows consequence, not tone:
@@ -51,7 +51,7 @@ Missing evidence is `unverified`, not rejection. Style preference without reader
 mode and covered targets
 semantic coverage statement and any later semantic-change records
 governing-source coverage
-accepted-requirements and confirmed-requirements-boundary coverage
+accepted-requirements and confirmed-goal-boundary coverage
 lane terminal states
 coverage gaps
 accepted/rejected/contested/unverified findings

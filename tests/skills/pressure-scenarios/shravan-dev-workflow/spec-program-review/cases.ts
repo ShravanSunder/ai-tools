@@ -18,8 +18,8 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 55,
     semanticCriteria: [
       {
-        name: "checks-against-confirmed-requirements",
-        requirement: "Reviews the pair against the owner-confirmed requirements and protected systems rather than trusting agreement between the current documents or existing code.",
+        name: "checks-against-confirmed-goal-boundary",
+        requirement: "Reviews the pair against the owner-confirmed goal boundary, accepted requirements, and protected systems rather than trusting agreement between the current documents or existing code.",
         failureExample: "Accepts new observer, supervisor, roster, or recovery machinery because the specification and program design agree about it.",
       },
       {
@@ -51,8 +51,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "routes-each-gap-to-its-owner",
-        requirement: "Routes missing Why/What to spec-design, missing structural How to program-design, and owner-controlled expansion to the user without filling those gaps in review.",
-        failureExample: "Authors requirements or architecture while claiming to review them.",
+        requirement: "Routes a separate Why/What gap to spec-design, a separate structural How gap to program-design, a mixed finding to spec-design first and waits to resume structural work until the observable contract is settled, and an owner-controlled expansion to the caller or user. Review does not fill any of those gaps itself.",
+        failureExample: "Authors requirements or architecture while claiming to review them, or sends mixed observable and structural corrections directly to program-design.",
       },
     ],
   },
@@ -107,13 +107,13 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "writes-findings-in-ordinary-language",
-        requirement: "Each finding says what is wrong, why it matters to a person or downstream agent, and where the evidence appears without unexplained review jargon.",
-        failureExample: "Returns labels such as proof drift, authoritative baseline, or deletion-before-repair without explaining the concrete problem.",
+        requirement: "Every caller-visible finding has a title naming the concrete problem, then says why it matters and where the evidence appears. Formal method labels may summarize later but do not satisfy the title requirement.",
+        failureExample: "Titles findings proof drift, authoritative baseline, or deletion-before-repair instead of naming the concrete problem.",
       },
       {
         name: "gives-the-smallest-correction",
-        requirement: "Each accepted finding names the smallest correction and the skill or owner responsible for it rather than broadly redesigning or demanding arbitrary shortening.",
-        failureExample: "Says make it clearer, shorten everything, or redesign the architecture without an exact correction target.",
+        requirement: "Every finding shown to the caller, including an unreduced candidate, names the smallest correction and has its own explicit Route to spec-design, program-design, caller, or ordered spec-design then program-design. A file name or a route attached to another finding does not satisfy this.",
+        failureExample: "Says make it clearer, shorten everything, or redesign the architecture without an exact correction target and explicit route for that finding.",
       },
       {
         name: "explains-how-to-confirm-the-fix",

@@ -5,6 +5,7 @@ skill_under_test: shravan-dev-workflow:program-design
 mode: fast
 expect_read_only: true
 expect_artifact: false
+expect_forbidden_regex: boundary[- ]check[- ]?2
 
 ## Shortcut Temptation
 

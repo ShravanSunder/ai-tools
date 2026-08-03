@@ -229,7 +229,9 @@ describe("user requirements and design-view contracts", () => {
     }
     expect(programDesign).toContain("satisfied by the existing system");
     expect(programDesign).toContain("agreed acceptable complexity");
-    expect(programDesign).toContain("perform boundary check 2");
+    expect(programDesign).toContain(
+      "confirm the current structural realization",
+    );
     expect(programDesign).toContain(
       "affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations",
     );
@@ -251,6 +253,10 @@ describe("user requirements and design-view contracts", () => {
 
   test("keeps spec-program review proportional and reader-focused", () => {
     const reviewSkill = readPluginFile("skills/spec-program-review/SKILL.md");
+    const programDesign = readPluginFile("skills/program-design/SKILL.md");
+    const programArtifact = readPluginFile(
+      "skills/program-design/references/artifact-and-self-review.md",
+    );
     const commonMethod = readPluginFile(
       "skills/spec-program-review/references/reviewing-common-method.md",
     );
@@ -266,6 +272,16 @@ describe("user requirements and design-view contracts", () => {
     const reduction = readPluginFile(
       "skills/spec-program-review/references/finding-and-reduction-schema.md",
     );
+    const hardCutoverSources = [
+      programDesign,
+      programArtifact,
+      reviewSkill,
+      commonMethod,
+      modeComplete,
+      readerUnderstanding,
+      laneSchema,
+      reduction,
+    ].join("\n");
 
     expect(reviewSkill).toContain("reader understanding or readability");
     expect(reviewSkill).toContain("exactly one mode-complete reviewer first");
@@ -282,15 +298,42 @@ describe("user requirements and design-view contracts", () => {
     expect(reviewSkill).toContain(
       "requirements/Why/What`, `structural How`, or `both",
     );
+    expect(reviewSkill).toContain(
+      "`both` returns to `spec-design` first, then `program-design` after the observable contract is settled",
+    );
+    expect(programDesign).toContain(
+      "`both` returns to `spec-design` first and resumes here only after the observable contract is settled",
+    );
+    expect(reviewSkill).toContain(
+      "`caller` returns the exact owner/caller decision; review does not resume until that decision is resolved",
+    );
+    expect(programDesign).toContain(
+      "caller-owned decisions return to the caller and this design does not resume until they are resolved",
+    );
+    expect(hardCutoverSources).not.toContain("boundary check 2");
+    expect(hardCutoverSources).not.toContain("boundary-check-2");
     expect(laneSchema).toContain("reader-understanding");
     expect(commonMethod).toContain("mutually narrowed current files");
     expect(commonMethod).toContain("satisfied by the existing system");
     expect(modeComplete).toContain("compact human-reader reconstruction");
+    expect(modeComplete).toContain("confirmed goal boundary");
+    expect(modeComplete).toContain("structural-realization confirmation");
     expect(readerUnderstanding).toContain("Apply the Human Deletion Test");
+    expect(readerUnderstanding).toContain("confirmed goal boundary");
+    expect(readerUnderstanding).toContain(
+      "structural-realization confirmation",
+    );
     expect(readerUnderstanding).toContain(
       "Only a caller-authorized full-artifact audit",
     );
-    expect(reduction).toContain("accepted requirement identity or confirmed boundary");
+    expect(reduction).toContain(
+      "accepted requirement identity or confirmed goal-boundary field",
+    );
+    expect(reduction).toContain("semantic correction route");
+    expect(reduction).toContain("spec-design -> program-design");
+    expect(reduction).toContain(
+      "accepted-requirements and confirmed-goal-boundary coverage",
+    );
     expect(reduction).toContain("plain-language requirement meaning");
     expect(reduction).toContain("observable outcome that fails");
     expect(reduction).toContain("bounded evidence-lookup result");

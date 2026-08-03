@@ -11,8 +11,8 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 50,
     semanticCriteria: [
       {
-        name: "keeps-the-confirmed-boundary",
-        requirement: "Realizes only the accepted requirements inside the permitted and protected system boundary, without treating completeness as authority for adjacent systems.",
+        name: "keeps-the-confirmed-goal-boundary",
+        requirement: "Realizes only the accepted requirements inside the confirmed goal boundary and its permitted and protected systems, without treating completeness as authority for adjacent systems.",
         failureExample: "Adds persistence, scheduling, governance, or a control plane that the specification excludes.",
       },
       {
@@ -24,6 +24,11 @@ export const skillPressureCaseDefinitions = [
         name: "respects-package-and-system-limits",
         requirement: "Treats owner-set package and system limits as implementation boundaries and does not design changes in protected packages.",
         failureExample: "Moves ownership into a protected package because it would make the architecture cleaner.",
+      },
+      {
+        name: "returns-an-honest-non-terminal-result",
+        requirement: "Does not claim locally-ready from this bounded chat decision because the complete artifact, source-backed model, structural-realization confirmation, self-check, and independent review are not present. It may explicitly explain that locally-ready is unavailable.",
+        failureExample: "Returns locally-ready merely because the selected bounded structure is sound.",
       },
     ],
   },
@@ -83,8 +88,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "uses-a-readable-medium",
-        requirement: "Uses the medium that makes the actual relationship readable and preserves required meaning, including a table or plain text when Mermaid would obscure it.",
-        failureExample: "Treats valid Mermaid syntax as proof that dense state or failure behavior is understandable.",
+        requirement: "Delivers each relationship in a medium that is readable in the current response and preserves required meaning. If Mermaid cannot be rendered and inspected, uses another inspectable fallback such as fenced plain text, or a table only when its rendered cells or borders are visible and inspectable; an honest unverified-visual gap is not readability proof.",
+        failureExample: "Treats valid or unrendered Mermaid syntax as proof that dense state or failure behavior is understandable.",
       },
       {
         name: "diagrams-match-the-design",

@@ -2,7 +2,7 @@
 
 This reference owns view application, artifact navigation, simplification, trace-integrity verification, and author integration self-check. `SKILL.md` owns view selection and required semantic fields. `proof-architecture-and-traceability.md` owns construction of the requirement/design/proof trace; this reference consumes that trace.
 
-Expected inputs: governing specification, accepted requirements set, confirmed boundary, current/target models, decisions, debt, proof map, selected rendering results, and repo documentation conventions.
+Expected inputs: governing specification, accepted requirements set, confirmed goal boundary, current/target models, decisions, debt, proof map, selected rendering results, and repo documentation conventions.
 
 Return in workflow order:
 
@@ -93,7 +93,7 @@ Re-read the whole artifact:
 - every design element has a legitimate basis;
 - every reader-facing element passes the human deletion test;
 - progressive disclosure leads from specification obligation through owner, call/state/failure behavior, and proof without scratch or process notes;
-- boundary check 2 exposes complexity spent and every deviation from the confirmed requirements boundary;
+- structural-realization confirmation exposes complexity spent and every deviation from the confirmed goal boundary;
 - no planner-owned sequence/command detail leaked in;
 - no missing Why/What was invented;
 - two capable implementers would build the same structural behavior.
@@ -102,8 +102,8 @@ Run the self-check against the current program design and governing specificatio
 
 Complete when:
 
-- the artifact composes as one proportional executable mental model;
+- the artifact composes as one proportional structural realization;
 - every fired view has a passed rendering result with preserved semantics;
-- current/proposed call deltas, accepted-requirements coverage, and boundary check 2 are visible;
+- current/proposed call deltas, accepted-requirements coverage, and structural-realization confirmation are visible;
 - unnecessary structure is pruned;
 - every known gap is exact.
