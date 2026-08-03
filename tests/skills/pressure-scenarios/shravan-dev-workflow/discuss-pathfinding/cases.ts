@@ -166,7 +166,7 @@ export const skillPressureCaseDefinitions = [
         failureExample: "Promotes every ticket claim into a must.",
       },
       {
-        name: "confirms-the-requirements-boundary",
+        name: "confirms-the-goal-boundary",
         requirement:
           "Keeps the existing foundation, missing behavior, permitted and protected systems, non-goals, acceptable complexity, and unresolved choices visible for owner confirmation before specification handoff. In a quick pass, related questions may be asked together; dependent or unrelated questions remain explicit follow-ups.",
         failureExample:

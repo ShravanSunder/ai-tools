@@ -4,7 +4,7 @@ This reference owns user/stakeholder classification, requirement questions, row 
 
 Expected inputs: clarified destination and depth, participant and source identities, claimed decision authority, candidate evidence, file-permission boundary, and artifact conventions.
 
-Return: requirement questions, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, confirmed requirements boundary or the exact owner decision needed, refusal/fallback result, and exact authority/evidence gaps.
+Return: requirement questions, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, confirmed goal boundary or the exact owner decision needed, refusal/fallback result, and exact authority/evidence gaps.
 
 ## Classify Users and Stakeholders
 
@@ -90,7 +90,7 @@ A high priority alone does not make a need sequence-shaped. Keep stakeholder nee
 
 ## Confirm The Goal Boundary
 
-Before specification handoff, build a compact requirements boundary from the stabilized rows:
+Before specification handoff, build a compact goal boundary from the stabilized rows:
 
 ```text
 primary customer, developer, contract, or library goal
@@ -128,4 +128,4 @@ A durable record uses its path as its inspectable identity. An in-chat record re
 
 Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record, while keeping confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
 
-Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the requirements boundary and acceptable complexity are explicit, and the result carries owner confirmation of that same boundary or the exact decision still needed.
+Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the goal boundary and acceptable complexity are explicit, and the result carries owner confirmation of that same boundary or the exact decision still needed.

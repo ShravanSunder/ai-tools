@@ -5,13 +5,31 @@ description: Use when user or stakeholder requirements, user needs, behavioral p
 
 # Discuss Pathfinding
 
-The knowledge exists — in the user's head, unwritten — and the session is the instrument that gets it out and onto the page before it shapes work. The job is extraction; pathfinding names the route discipline: the question sequence cannot be planned in advance, each answer opens the next branch, and every step still pays extraction's economics. Asking is expensive — a user turn spent on an observable fact is a turn stolen from a judgment call only the user can make. Ask one to three related questions together when the user can answer them from the same current context and they jointly clarify one decision. If one answer determines whether another question applies, ask the determining question first and follow the answer. Separate unrelated questions. Raw extract is vague and contaminated until challenged.
+The knowledge exists — in the user's head, unwritten — and the session is the instrument that gets it out before it shapes work. The job is extraction. The question sequence cannot be planned in advance because each answer opens the next branch.
+
+Asking is expensive: a turn spent on an observable fact is stolen from a judgment call only the user can make. Ask one to three related questions together when they share context and clarify one decision. Ask a determining question first when its answer decides whether another question applies. Separate unrelated questions. Raw understanding remains provisional until it has been checked and challenged.
 
 Pathfinding is self-contained judgment, not isolated execution. A caller may supply artifacts, conversation context, hypotheses, or constraints; treat them as useful leads rather than authority. Inspect what can be inspected, distinguish what the owner confirmed from what an agent inferred, expose the credible branches, and return the clearest proportional understanding the next skill can use.
 
-The session runs on three layers, and keeping them apart is what keeps it conversational: **working state** (private notes about evidence, unanswered questions, and challenges), the **conversational surface** (answerable groups of related questions and assumptions the user can correct), and **durable records** (each decision, process, or term written once, in one home). On the conversational surface, use the user's words and ordinary terms such as decision, related questions, and unresolved choice; keep private method labels private. Show the user evidence that changes a question or a conclusion; never show them your bookkeeping.
+The session keeps three layers separate:
 
-Scale extraction to the user's stated time budget. Quick: the one or two highest-leverage decisions, one compact question group each, records as an in-chat ledger, and a provisional stop. Standard: resolve every implementation-shaping judgment. Deep: full extraction with durable records and reader-tested handoffs. Speed may reduce breadth, never honesty about what remains unknown. When the stated budget is vague ("don't take forever"), name the depth you inferred — it is strikeable like any assumption. The minimum viable destination at any depth: the user's job, the scope, the core behavior, and the highest-risk unresolved decision — at quick depth, repo evidence and one well-chosen decision may satisfy it.
+| Layer | Owns |
+| --- | --- |
+| working state | private notes about evidence, unanswered questions, and challenges |
+| conversation | related questions, useful explanations, and assumptions the user can correct |
+| durable records | each settled decision, process, term, or requirement written once in one home |
+
+Use the user's words on the conversational surface. Keep method labels and bookkeeping private. Show evidence only when it changes a question or conclusion.
+
+Scale extraction to the user's stated time budget:
+
+| Depth | Work |
+| --- | --- |
+| quick | resolve the one or two highest-leverage decisions, keep an in-chat record, and stop provisionally |
+| standard | resolve every implementation-shaping judgment |
+| deep | complete the extraction with durable records and reader-tested handoffs |
+
+Speed may reduce breadth, never honesty about what remains unknown. When the budget is vague, state the inferred depth so the user can correct it. At every depth establish the user's job, scope, core behavior, and highest-risk unresolved decision; at quick depth, repo evidence and one well-chosen decision may be enough.
 
 ## Bright Lines
 
@@ -21,27 +39,96 @@ Scale extraction to the user's stated time budget. Quick: the one or two highest
 
 ## Workflow
 
-1. **Name the destination.** State what this session must extract — the decision, process, terms, or user requirements — the depth the user's time budget buys, and what is out of scope; half of misalignment is silent disagreement about what is not being decided. IF the destination is a proposed change headed to specification work, establish the desired outcome, what systems or packages may change, what behavior and systems must stay unchanged, excluded work, and acceptable evidence before handoff. An owner-set package limit constrains implementation; it is not product behavior and does not authorize internal design. IF the destination includes user requirements for future specification or product work, load `references/user-requirements-extraction.md` and apply its requirement questions, classification, row, sequence, record-scale, and goal-boundary procedure through steps 4-7; keep that method in working state and return its resulting records and exact gaps at step 6. Completion: destination, depth, and out-of-scope are stated where the user can correct them; a proposed change headed to specification work has the permitted/protected boundary and acceptable evidence confirmed or returns the exact owner decisions still needed; for a user-requirements destination, the extraction procedure is loaded before questioning begins.
+1. **Name the destination.** State what the session must extract—decision, process, terms, or user requirements—the depth, and what is out of scope.
 
-2. **Classify before asking.** Sort each unknown as it surfaces, in working state: observable now — read the file, doc, log, or available session history in this session, bounded; broad evidence — IF an unknown needs prior art or multi-source research, use `research-swarm` and return the evidence consumed before the related question is asked; judgment or tacit knowledge — only the user can answer, and this is what questions are for. Also classify each important caller claim: inspected artifacts and behavior are **observed**; explicit owner confirmation or a governing source is **authorized**; agent inference is **provisional**; evidence-plausible branch-changing meaning is **unresolved**. A user's description of inspectable current behavior is useful context, but remains provisional until the bounded read confirms it; recording it as `evidence_checked` or `inherited_frame` does not make it observed. Completion: every currently known unknown is classified before it is asked; each important claim is marked observed, authorized, provisional, or unresolved; no agent-authored or uninspected caller claim has been promoted to observed fact or authority; each observable unknown carries its bounded-read result and each broad unknown its returned evidence before its questions proceed; the user sees only evidence that changed a question or a conclusion.
+   For a proposed change headed to specification work, establish the goal boundary before handoff:
 
-3. **Hypothesize first.** Before the first question, state your current read and a confidence with its reason. Completion: the guess and confidence are on the record before any question is asked.
+   - affected people and desired outcomes;
+   - existing behavior or foundation to preserve;
+   - actual missing behavior or observable difference;
+   - systems or packages that may change and those that must remain unchanged;
+   - excluded work and acceptable complexity;
+   - acceptable outcome-level evidence;
+   - unresolved owner decisions.
 
-4. **Make the decision space visible, then ask an answerable group.** Take decisions in order of leverage, not discovery order. Ask one to three related questions together when they use the same current context and jointly clarify one decision. If one answer determines whether another question applies, ask the determining question first and follow its answer. Ask unrelated questions separately. MUST load `references/question-craft.md` and apply its question form, material-ambiguity procedure, probes, and counters in working state; the conversational return is the useful explanation and smallest answerable question group, not narration of the method. For a material ambiguity, show the current model, strongest evidence-plausible alternative, concrete countercase, and downstream difference before asking the smallest question that selects a real branch. IF systems, ownership, sequence, boundaries, or competing interpretations are materially easier to understand visually, use `tui-presentation` and return a compact non-normative map that helps the user correct the model or choose between branches; durable specification views remain downstream. Follow the branch the answers open before starting an unrelated decision. For a user-requirements destination, apply the already-loaded requirement questions and build classified rows as answers crystallize. Completion: every question group is answerable from one current context and clarifies one decision; dependent questions wait for the answer that makes them applicable; concise questions carry the three-slot form; a selected conversational map makes the boundary, choice, owner, or sequence easier to correct; material ambiguities satisfy the richer procedure instead of mechanically filling slots; user-requirements answers are mapped to the loaded row contract or an exact gap.
+   An owner-set package limit constrains implementation. It is not product behavior and does not authorize internal design.
 
-5. **Challenge as you go.** When a vague term, a glossary conflict, a claimed behavior, or a fuzzy boundary appears, apply the matching challenge as a natural follow-up — propose the canonical, call out the conflict, cross-reference the code ("the code does X, you said Y — which is it?"), pose the edge case. Track privately whether each resolved or stays open; never announce the challenge category. Completion: each challengeable answer encountered was challenged and is tracked as resolved or open.
+   Preserve every explicit exclusion in the correctable boundary. Do not replace a named exclusion list with a summary such as "the old architecture."
 
-6. **Write the moment it crystallizes.** For a user-requirements destination, use the already-loaded extraction reference to return the classified inventory, draft rows, useful user-job sequence inputs, record identity and permitted home, unresolved authority/evidence gaps, and the confirmed requirements boundary. Decisions use the decision record; processes use the process record; terms use glossary entries; user requirements use the classified rows and boundary model — each written once, in the user's own language, as it lands, not at session end. MUST load `references/decisions-and-docs.md` and return the records plus the proportional confirmed/provisional/open boundary summary — and, IF a record is a durable handoff artifact whose ambiguity could change implementation ownership, behavior, or proof, the reader-test receipt. Completion: every crystallized decision, process, settled term, and user requirement has its record; every destination distinguishes confirmed meaning and negative space from provisional assumptions and exact open choices; the user-requirements record has a stable identity; and any required reader test returned `complete`.
+   IF the destination includes user requirements for future specification or product work, load `references/user-requirements-extraction.md` and return its questions, classified rows, sequence inputs, record, confirmed goal boundary, refusal or fallback result, and exact gaps through steps 4-7.
 
-7. **Validate.** Reflect the understanding back using the four evidence and assumption fields owned by `discuss-clarify-mental-models` — `evidence_checked`, `inherited_frame`, `first_principles`, `assumptions`, borrowed alone; that skill's wider contract stays with drift repair. Present the assumptions together and say, "correct me now or I proceed with these." Counters own resolution mid-session; validation revisits only items still parked in working state. For a user-requirements destination, show the goal, affected classes and outcomes, existing foundation, actual missing behavior, permitted and protected systems or packages, non-goals, acceptable complexity, and unresolved choices to the authorized owner. Ordinary assumptions that do not block the work may proceed after this correction opportunity; specification handoff requires explicit confirmation or correction of this same current boundary. Completion: every parked item is resolved concretely or explicitly carried as unresolved, and a user-requirements result carries either the explicit boundary confirmation or the exact owner decision still needed.
+   Completion: the destination, depth, and negative space are correctable by the user, with every explicit exclusion still visible. A product-change handoff carries a confirmed goal boundary or the exact owner decisions still needed. Other destinations remain extraction-led.
 
-8. **Stop test.** Stop when the destination is satisfied at the agreed depth: every in-scope judgment or tacit unknown is resolved and recorded, or explicitly carried as unresolved. Run the predictive test privately as a self-check — write the next three questions you would ask and your predicted answers; surface only a prediction whose uncertainty exposes a remaining material question. A quick session may stop provisionally: state the provisional model, decisions reached, unresolved items, and the recommended next question. IF three consecutive rounds fail the predictive self-check, name what is foundationally missing and return it to the user rather than grinding on. Completion: the predictive self-check ran with its questions and predictions in working state, and the destination check and the restatement — including out-of-scope and unresolved items — are delivered. A user-requirements record without explicit confirmation of its current goal boundary returns with the exact decision needed and is not presented as ready for specification design.
+2. **Classify before asking.** Sort each unknown in working state:
+
+   - **Observable now:** inspect the bounded file, document, log, behavior, or available session history.
+   - **Broad evidence:** use `research-swarm` when prior art or multiple sources are required, and consume its evidence before asking the related question.
+   - **Judgment or tacit knowledge:** ask the user because only they can answer.
+
+   Mark each important claim separately as **observed**, **authorized**, **provisional**, or **unresolved**. A user's description of inspectable behavior is useful context, but remains provisional until checked.
+
+   Completion: every known unknown is classified before questioning; each observable unknown has a bounded-read result and each broad-evidence unknown has returned evidence before its related question proceeds; no uninspected or agent-authored claim is promoted to fact or authority; the user sees only evidence that changes a question or conclusion.
+
+3. **Hypothesize first.** Before the first question, state the current read, confidence, and reason.
+
+   Completion: the hypothesis and confidence are on the record before questioning starts.
+
+4. **Show the decision, then ask related questions.** Take decisions in order of leverage, not discovery order.
+
+   - Ask one to three questions together when they share context and clarify one decision.
+   - Ask a determining question first when its answer decides whether a later question applies.
+   - Separate unrelated decisions and follow the branch opened by the current answer.
+
+   MUST load `references/question-craft.md` and return its question form, material-ambiguity explanation, probes, and counters applied. Return the useful explanation and smallest answerable question group, not narration of the method.
+
+   For a material ambiguity, make the choice understandable before asking: show the current model, strongest credible alternative, one discriminating countercase, and what changes downstream. IF a compact diagram materially clarifies boundaries, ownership, sequence, or competing interpretations, use `tui-presentation` to show the map. The diagram explains; it does not decide or replace downstream specification views.
+
+   Completion: the user can understand and answer the current decision without reconstructing the method; dependent questions wait until they apply; a material ambiguity shows the current model, credible alternative, discriminating countercase, and downstream difference before asking; user-requirements answers map to the loaded row contract or an exact gap.
+
+5. **Challenge as you go.** Challenge vague terms, glossary conflicts, claimed behavior, and fuzzy boundaries as natural follow-ups. Propose the canonical term, show the source conflict, or pose the edge case; keep the challenge label private.
+
+   Completion: every challengeable answer receives the applicable natural follow-up and is tracked as resolved or open.
+
+6. **Write the moment it crystallizes.** Use one home per kind of meaning: decisions use the decision record, processes use the process record, terms use glossary entries, and user requirements use classified rows plus the goal boundary.
+
+   For a user-requirements destination where extraction proceeds, return the classified inventory, draft rows, useful user-job sequence inputs, record identity and permitted home, confirmed goal boundary or exact owner decision still needed, and unresolved authority or evidence gaps. If extraction is declined, return the loaded reference's refusal or fallback result and exact gaps instead.
+
+   MUST load `references/decisions-and-docs.md` and return the records plus the proportional confirmed/provisional/open summary. IF a durable handoff could change implementation ownership, behavior, or proof when misunderstood, also return its reader-test receipt.
+
+   Completion: every crystallized item has one record in the user's language; confirmed meaning and negative space remain separate from assumptions and open choices; every required reader test is complete.
+
+7. **Validate the current understanding.** Reflect the result using `evidence_checked`, `inherited_frame`, `first_principles`, and `assumptions`, borrowed from `discuss-clarify-mental-models` without importing its wider drift-repair contract. Present the assumptions together so the user can correct them.
+
+   Keep the four sources distinct:
+
+   - `evidence_checked`: artifacts or behavior inspected in this session;
+   - `inherited_frame`: prior artifacts, agent reports, analogy, names, habit, or convention;
+   - `first_principles`: directly evidenced truths, hard constraints, and the user's stated goal;
+   - `assumptions`: unproven beliefs carried knowingly, excluding inherited claims and direct evidence.
+
+   For a user-requirements destination, show the following current model to the authorized owner:
+
+   - goal, affected classes, and desired outcomes;
+   - existing foundation and actual missing behavior;
+   - permitted and protected systems or packages;
+   - non-goals and acceptable complexity;
+   - acceptable outcome-level evidence;
+   - unresolved choices.
+
+   Completion: every parked item is resolved or explicitly open. Specification handoff carries explicit confirmation or correction of this same goal boundary, or the exact owner decision still needed.
+
+8. **Apply the stop test.** Stop when every in-scope judgment or tacit unknown is resolved and recorded, or explicitly carried as unresolved.
+
+   Privately predict the next three questions and answers; surface only uncertainty that exposes a remaining material question. A quick session may stop provisionally with the model, decisions, unresolved items, and recommended next question. After three rounds that still cannot predict the path, name the foundational gap instead of grinding on.
+
+   Completion: the predictive check ran and the final restatement includes negative space and unresolved items. An unconfirmed product-change goal boundary returns the exact owner decision needed and is not presented as ready for `spec-design`.
 
 ## Routes
 
 - `research-swarm` — the broad-evidence bin in step 2 owns this call; never single facts a bounded read answers.
 - `discuss-clarify-mental-models` — IF mid-session the two of you disagree about a model you both already hold, use it to repair the drift and return the rebuilt shared model before extraction continues.
 - `tui-presentation` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use it for the conversational map; it does not select or own durable specification views.
+- `spec-design` — a confirmed goal boundary from a user-requirements destination or proposed-change handoff routes here; otherwise return the exact owner decision rather than claiming readiness.
 - `docs-maintain` — maintaining or reformatting settled content in an existing artifact; do not restart extraction when meaning is already accepted.
 - `manage-agents` — the reader-test dispatch contract in `references/decisions-and-docs.md` owns this call.
 
@@ -51,8 +138,10 @@ The session is not done while any of these hold:
 
 - a question was asked whose answer was readable from an artifact;
 - an important caller claim was used without being marked observed, authorized, provisional, or unresolved, or agent inference was treated as owner authority;
+- questioning started before the current read, confidence, and reason were recorded;
 - a turn split directly related questions into needless rounds, asked a dependent question before knowing it applied, or presented a wall of unrelated questions;
 - a material ambiguity was reduced to a mechanically complete question without an evidence-plausible alternative, discriminating countercase, or downstream difference;
+- a challengeable answer did not receive its applicable follow-up or lacks a resolved/open state;
 - an unresolved response — delegation, ambiguous assent, topic change, silence — was treated as resolution;
 - the run proceeded without a live user instead of returning a blocker;
 - a crystallized decision, process, settled term, or user requirement has no record — chat-only changes where records live, never whether they exist;

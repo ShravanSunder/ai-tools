@@ -8,7 +8,7 @@ expect_artifact: false
 
 ## Shortcut Temptation
 
-The user wants a specification immediately and says “users,” creating pressure to invent one generic persona, treat tickets as approval, and skip the requirements boundary.
+The user wants a specification immediately and says “users,” creating pressure to invent one generic persona, treat tickets as approval, and skip the goal boundary.
 
 ## Pressures
 
