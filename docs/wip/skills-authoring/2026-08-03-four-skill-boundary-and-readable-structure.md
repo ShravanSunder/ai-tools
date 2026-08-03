@@ -4,7 +4,7 @@ This is the compact requirements and program design for the first-pass correctio
 
 ## Goal boundary
 
-The four skills must keep agents inside the meaning the owner authorized and make their instructions and outputs easy for a human to understand.
+The four skills must keep agents inside the meaning the owner authorized and make their instructions and outputs easy for a human to understand. The three-part boundary model governs product-change work; it does not replace pathfinding's broader extraction model for decisions, processes, or terms unrelated to specification work.
 
 Authorized work:
 
@@ -44,7 +44,7 @@ These replace procedural phrases such as `boundary check 1` and `boundary check 
 
 **R1 — Requirements establish the goal boundary.**
 
-Pathfinding or an equivalent authoritative source establishes:
+When pathfinding is producing user requirements or a proposed-change handoff toward `spec-design`, pathfinding or an equivalent authoritative source establishes:
 
 - affected people and desired outcomes;
 - existing behavior or foundation to preserve;
@@ -53,7 +53,7 @@ Pathfinding or an equivalent authoritative source establishes:
 - acceptable outcome-level evidence;
 - unresolved owner decisions.
 
-An owner-imposed package limit constrains implementation. It does not become product behavior and does not authorize specification or program design to invent structure.
+An owner-imposed package limit constrains implementation. It does not become product behavior and does not authorize specification or program design to invent structure. Other pathfinding destinations remain extraction-led and do not acquire a product goal-boundary ceremony.
 
 **R2 — Specification defines the observable contract.**
 
@@ -83,7 +83,7 @@ The review must reject unsupported scope expansion and must not turn an unnecess
 
 **R5 — Human-readable structure follows information shape.**
 
-Headings identify real document sections and workflow stages. They do not introduce every instruction, decision, rule, example, or completion check.
+For this update, headings identify real document sections and workflow stages. They do not introduce every instruction, decision, rule, example, or completion check. This is an authoring constraint on the changed skill files, verified by review rather than a new runtime stage every skill must teach.
 
 Within a section:
 
@@ -100,6 +100,15 @@ A long paragraph is not automatically a wall of prose. It becomes one when it hi
 > Add a subsection only when it creates a useful navigation target containing several related instructions or content shapes.
 
 No arbitrary paragraph-length, heading-count, or bullet-count rule is introduced.
+
+The human-readable runtime result remains locally owned:
+
+| Skill | Teaching owner | Good signal | Bad signal | Completion |
+| --- | --- | --- | --- | --- |
+| `discuss-pathfinding` | `SKILL.md` conversational surface and step 4 | the user sees the decision, evidence, related questions, and a useful map when needed | private method bookkeeping, needless question rounds, or a wall of unrelated questions | the user can understand and answer the current decision without reconstructing the method |
+| `spec-design` | `references/artifact-and-self-review.md` structure, deletion test, and author self-check | prose, lists, tables, and Why/What views match the relationship and preserve one normative home | heading soup, mixed-information walls, duplicated meaning, or decorative views | a reader can navigate from need through observable contract and proof |
+| `program-design` | `references/artifact-and-self-review.md` Apply Required Views, Simplify, and integration self-check | the selected expression lets a reader simulate ownership, execution, state, failure, and proof | decorative boxes, raw traces, mechanically emitted views, or repeated summaries | the artifact is a proportional structural realization with unnecessary structure removed and required meaning preserved |
+| `spec-program-review` | `SKILL.md` finding reduction and `references/lanes/reader-understanding.md` | findings begin with the concrete problem and diagrams/prose answer their reader questions | internal labels, prose taste, or findings that omit consequence, owner, smallest correction, or confirming evidence | the person who must act can understand the consequence, smallest correction, owner, and confirming evidence |
 
 **R6 — Diagrams answer a reader question.**
 
@@ -141,13 +150,13 @@ direct references  20 scenarios  existing evaluators
 
 | Surface | Structural change |
 | --- | --- |
-| `discuss-pathfinding/SKILL.md` | Keep its current sections and eight-step workflow. Strengthen the goal-boundary destination, related-question grouping, conversational diagrams, and route to `spec-design` without adding per-rule headings. |
+| `discuss-pathfinding/SKILL.md` | Keep extraction as its general lens and preserve non-product destinations. For user-requirements or proposed-change handoffs, strengthen the goal-boundary result, related-question grouping, conversational diagrams, and route to `spec-design` without adding per-rule headings. |
 | Pathfinding references | Keep detailed question construction and requirements extraction in their existing owners. Use bullets where items are parallel; retain prose where it explains judgment. |
 | `spec-design/SKILL.md` | Make `observable contract` the primary mental model. Retain source-authority work as supporting evidence. Keep the existing workflow-stage headings and Required Why/What Views table. |
 | Spec references | Preserve source classification, requirements recovery, artifact structure, and self-review. Replace procedural boundary language and remove only formatting that obscures the hierarchy. |
-| `program-design/SKILL.md` | Make `structural realization` the primary mental model. Preserve the current workflow-stage headings and Required Views table. Route missing product meaning back to `spec-design`. |
-| Program references | Preserve current-system, simplification, view, and self-review ownership. Express parallel inspection fields as lists without creating headings for each field. |
-| `spec-program-review/SKILL.md` | Keep its ten-stage workflow. In finding reduction, use short prose plus one list of required finding fields; do not split each reduction decision into a subsection. Route accepted findings to their semantic owner. |
+| `program-design/SKILL.md` | Make `structural realization` the primary mental model. Preserve the current workflow-stage headings and Required Views table. Route missing product meaning back to `spec-design`. Stage 15 becomes the sole teaching owner of owner confirmation for the current structural realization. |
+| Program references | Preserve current-system, simplification, view, and self-review ownership. Express parallel inspection fields as lists without creating headings for each field. `artifact-and-self-review.md` consumes the structural-realization confirmation contract without redefining it. |
+| `spec-program-review/SKILL.md` | Keep its ten-stage workflow. Consume the structural-realization confirmation from `program-design`; update active lane/schema/common-method consumers in the same hard cutover. In finding reduction, use short prose plus one list of required finding fields; do not split each reduction decision into a subsection. Route accepted findings to their semantic owner. |
 | Scenarios and evaluators | Preserve the accepted 20-scenario inventory. Add or refine criteria only when needed to distinguish boundary vocabulary, readable structure, routing, and diagram usefulness. |
 
 ### Editing rule
@@ -161,7 +170,7 @@ For each existing section:
 5. Add a subsection only when a reader must navigate to it independently and it contains more than one related element.
 6. Apply the human deletion test without deleting accepted behavior.
 
-The four main skill files are rebuilt one at a time. Each rebuild is compared with the accepted behavior and its directly owned references before the next skill begins.
+The four main skill files are rebuilt one at a time. Each rebuild is compared with the accepted behavior and its directly owned references before the next skill begins. Active `boundary check 2` uses cut over together to the program-owned structural-realization confirmation; no competing primary anchor or forwarding term remains.
 
 ## Proof
 
@@ -181,3 +190,15 @@ The four main skill files are rebuilt one at a time. Each rebuild is compared wi
 After owner confirmation, `skills-creation` applies this design as four sequential skill updates. Each update retains its existing trigger unless evidence requires a change, edits only its owned files, runs its focused scenarios, and receives implementation review. The combined branch then runs all 20 scenarios, static checks, manual artifact inspection, plugin version/changelog work, final independent review, and PR wrap-up.
 
 This artifact does not authorize planning, implementation-workflow changes, or `orchestrator-design` work.
+
+## Spec review record
+
+- accepted revision: `four-skill-boundary-readable-structure-r3`;
+- `mental-model-fit`: complete; product-change boundary model fits all four skills, while pathfinding remains extraction-led outside requirements/specification handoffs;
+- `trigger-routing`: complete; current descriptions remain correctly separated and require no change;
+- `rule-agreement`: complete; `program-design/SKILL.md` is the sole proposed teaching owner of structural-realization confirmation and all active consumers are named for hard cutover;
+- `depth-coverage`: complete; every runtime readability behavior has a local teaching owner, good signal, bad signal, and completion condition;
+- accepted findings: scope goal-boundary behavior to pathfinding's product-change handoff, name the structural-realization confirmation owner and consumers, and distinguish the edit-time formatting constraint from locally owned runtime behavior;
+- rejected findings: none;
+- verdict: `great`;
+- implementation decision: `accepted-to-implement`.
