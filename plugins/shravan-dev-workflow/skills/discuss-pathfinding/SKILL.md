@@ -33,13 +33,15 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
 ## Bright Lines
 
-- **Live user required.** No responsive user in the loop — CI, autonomous run, background job — means return a blocker naming the unanswered questions. Never answer your own questions; a session that interviews itself has extracted nothing.
+- **Live user required.** No responsive user in the loop — CI, autonomous run, background job — means stop and name the unanswered questions. For an orchestrated continuation, return `decision-needed`; otherwise return a blocker. Never answer your own questions; a session that interviews itself has extracted nothing.
 - **Resolution is concrete.** A concrete selection, constraint, example, or correction resolves a question; generic assent does not. Delegation ("whatever you think is best"), ambiguous assent ("sounds good"), a topic change, and silence never resolve — each has a named counter in `references/question-craft.md`.
 - **Chat-only on request.** The user may decline files; the records still get written, in-chat, in the same shapes.
 
 ## Workflow
 
 1. **Name the destination.** State what the session must extract—decision, process, terms, or user requirements—the depth, and what is out of scope.
+
+   IF a calling phase supplies a return destination, record that exact destination before questioning. It is a boundary, not a suggestion: this session may return confirmed meaning only to that destination and may not replace it with another plausible phase.
 
    For a proposed change headed to specification work, establish the goal boundary before handoff:
 
@@ -57,7 +59,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    IF the destination includes user requirements for future specification or product work, load `references/user-requirements-extraction.md` and return its questions, classified rows, sequence inputs, record, confirmed goal boundary, refusal or fallback result, and exact gaps through steps 4-7.
 
-   Completion: the destination, depth, and negative space are correctable by the user, with every explicit exclusion still visible. A product-change handoff carries a confirmed goal boundary or the exact owner decisions still needed. Other destinations remain extraction-led.
+   Completion: the destination, depth, and negative space are correctable by the user, with every explicit exclusion still visible. A product-change handoff carries a confirmed goal boundary or the exact owner decisions still needed. An orchestrated continuation also carries its exact caller-supplied return destination. Other destinations remain extraction-led.
 
 2. **Classify before asking.** Sort each unknown in working state:
 
@@ -121,7 +123,9 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    Privately predict the next three questions and answers; surface only uncertainty that exposes a remaining material question. A quick session may stop provisionally with the model, decisions, unresolved items, and recommended next question. After three rounds that still cannot predict the path, name the foundational gap instead of grinding on.
 
-   Completion: the predictive check ran and the final restatement includes negative space and unresolved items. An unconfirmed product-change goal boundary returns the exact owner decision needed and is not presented as ready for `spec-design`.
+   For an orchestrated continuation, inspect the caller-supplied destination's requested decision and declared input needs before returning. In one compact handoff, name the record identity or in-chat record and boundary status, state confirmed meaning separately from open items, then name the exact recorded return destination and why it owns the return. Keep examples separate from normative meaning. If confirmed meaning no longer fits the recorded destination, stop `decision-needed` with the exact mismatch instead of selecting another phase. No live user or unresolved meaning also stops `decision-needed` with the unanswered questions and no next skill. In either `decision-needed` case, the recorded return destination is frozen context only: do not return to it, recommend it, or put it in `next_action` until the owner decision is confirmed.
+
+   Completion: the predictive check ran and the final restatement includes negative space and unresolved items. An unconfirmed product-change goal boundary returns the exact owner decision needed and is not presented as ready for `spec-design`. An orchestrated return contains one compact handoff to the exact recorded destination or an exact stop; it never chooses another phase.
 
 ## Routes
 
@@ -129,6 +133,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 - `discuss-clarify-mental-models` — IF mid-session the two of you disagree about a model you both already hold, use it to repair the drift and return the rebuilt shared model before extraction continues.
 - `tui-presentation` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use it for the conversational map; it does not select or own durable specification views.
 - `spec-design` — a confirmed goal boundary from a user-requirements destination or proposed-change handoff routes here; otherwise return the exact owner decision rather than claiming readiness.
+- caller-supplied return destination — for an orchestrated continuation, this exact phase is the only permitted return; a mismatch stops instead of rerouting.
 - `docs-maintain` — maintaining or reformatting settled content in an existing artifact; do not restart extraction when meaning is already accepted.
 - `manage-agents` — the reader-test dispatch contract in `references/decisions-and-docs.md` owns this call.
 
@@ -143,10 +148,14 @@ The session is not done while any of these hold:
 - a material ambiguity was reduced to a mechanically complete question without an evidence-plausible alternative, discriminating countercase, or downstream difference;
 - a challengeable answer did not receive its applicable follow-up or lacks a resolved/open state;
 - an unresolved response — delegation, ambiguous assent, topic change, silence — was treated as resolution;
-- the run proceeded without a live user instead of returning a blocker;
+- the run proceeded without a live user instead of returning `decision-needed` for an orchestrated continuation or a blocker otherwise;
 - a crystallized decision, process, settled term, or user requirement has no record — chat-only changes where records live, never whether they exist;
 - a destination closes without distinguishing confirmed meaning and negative space from provisional assumptions and exact open choices;
 - a user-requirements record lacks stable U identities, separate evidence and authority, priority ownership, or the goal-boundary model;
 - a user-requirements result is presented as ready for specification design without explicit owner confirmation of the same current boundary model;
 - a required reader test is missing, `partial`, or `blocked`;
 - stop was claimed without the destination check and the restatement, or a provisional stop hid an unresolved item.
+- an orchestrated call changed, omitted, or treated its caller-supplied return destination as optional;
+- an orchestrated confirmed return lacks its compact record identity, confirmed meaning, boundary status, exact destination, or destination reason, or turns an illustrative mechanism into normative meaning;
+- an orchestrated `decision-needed` result presents the frozen return destination as a current route or next action;
+- confirmed meaning that does not fit the recorded destination was routed to another phase instead of returned as an exact mismatch.

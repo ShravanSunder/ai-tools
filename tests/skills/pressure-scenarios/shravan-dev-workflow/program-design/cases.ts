@@ -6,6 +6,28 @@ const requiredSourceReads = [
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "program-design-route-specification-gap",
+    requiredSourceReads,
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      {
+        name: "returns-missing-product-meaning-to-spec-design",
+        requirement: "Classifies the consumer-visible unknown-acceptance timeout outcome as a specification gap, returns specification-gap, and recommends exactly one next skill: spec-design.",
+        failureExample: "Invents a retry policy as the product answer, calls pathfinding directly, or offers several possible owners.",
+      },
+      {
+        name: "returns-the-exact-gap-compactly",
+        requirement: "Returns a compact handoff with the governing specification identity, boundary status, exact missing consumer-visible decision, and why spec-design owns it, without unrelated implementation history.",
+        failureExample: "Says requirements are unclear without naming the observable choice the specification must settle.",
+      },
+      {
+        name: "direct-call-has-no-orchestration-budget",
+        requirement: "Treats this direct program-design invocation as phase work with no design-orchestration counters, state, or cycle budget.",
+        failureExample: "Invents orchestration state or reports remaining design-cycle calls for a direct phase request.",
+      },
+    ],
+  },
+  {
     scenarioId: "program-design-stay-within-specification",
     requiredSourceReads,
     maximumToolCalls: 50,

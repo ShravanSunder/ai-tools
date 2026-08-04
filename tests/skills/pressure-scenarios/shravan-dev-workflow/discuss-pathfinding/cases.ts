@@ -2,6 +2,92 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "discuss-pathfinding-preserve-caller-return-owner",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+    ],
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      {
+        name: "returns-only-to-the-recorded-owner",
+        requirement: "Preserves spec-design as the exact caller-supplied return destination and does not choose program-design merely because the answer mentions a process.",
+        failureExample: "Lets pathfinding re-route the workflow to another allowed phase.",
+      },
+      {
+        name: "separates-outcome-from-example",
+        requirement: "Returns the confirmed account-isolation outcome while keeping one process per account as a non-normative example.",
+        failureExample: "Turns the user's example into a structural requirement.",
+      },
+      {
+        name: "returns-a-compact-destination-handoff",
+        requirement: "Provides a compact handoff whose response is itself an in-chat record or points to a durable record, states the confirmed meaning and any boundary still open, preserves the recorded return destination, and explains why spec-design owns the return; if meaning cannot fit, stops with the exact mismatch instead of choosing another phase.",
+        failureExample: "Leaves confirmed versus open meaning unclear, omits the return owner, or invents a destination without exposing the mismatch.",
+      },
+      {
+        name: "direct-call-has-no-orchestration-budget",
+        requirement: "Treats this direct pathfinding invocation as phase work with no design-orchestration counters, state, or cycle budget.",
+        failureExample: "Invents orchestration state or reports remaining design-cycle calls for a direct phase request.",
+      },
+    ],
+  },
+  {
+    scenarioId: "discuss-pathfinding-no-live-user-return",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "returns-decision-needed-with-unanswered-questions",
+        requirement: "For an orchestrated continuation with no responsive user, stops decision-needed and preserves the exact unanswered owner questions.",
+        failureExample: "Returns blocked, answers the questions itself, or claims the decision is confirmed.",
+      },
+      {
+        name: "preserves-the-recorded-return-owner-without-routing",
+        requirement: "Preserves spec-design as the recorded return owner for context but invokes or recommends no destination until the owner answers.",
+        failureExample: "Routes to spec-design, program-design, or another phase despite unresolved meaning.",
+      },
+    ],
+  },
+  {
+    scenarioId: "discuss-pathfinding-direct-no-live-user-blocker",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "returns-the-existing-direct-call-blocker",
+        requirement: "For a direct non-orchestrated pathfinding request with no responsive user, returns a blocker naming the unanswered questions rather than decision-needed or a guessed answer.",
+        failureExample: "Returns the orchestration-only decision-needed terminal or answers the owner questions itself.",
+      },
+      {
+        name: "does-not-invent-orchestration-state",
+        requirement: "Returns no design-run identity, route owner, counters, or cycle budget for this direct phase call.",
+        failureExample: "Creates orchestration state or recommends a design phase despite the direct blocked request.",
+      },
+    ],
+  },
+  {
+    scenarioId: "discuss-pathfinding-confirmed-meaning-does-not-fit-return-owner",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      {
+        name: "stops-decision-needed-for-return-owner-mismatch",
+        requirement: "When confirmed meaning cannot fit the recorded spec-design destination, stops decision-needed with the exact mismatch instead of returning to another phase.",
+        failureExample: "Returns blocked as though pathfinding named the wrong phase, or reroutes to program-design.",
+      },
+      {
+        name: "distinguishes-meaning-mismatch-from-wrong-target",
+        requirement: "Explains that the owner-confirmed meaning conflicts with the caller-supplied destination, while preserving that destination as the only authorized return target.",
+        failureExample: "Treats another allowed phase as an acceptable substitute or rewrites the caller's boundary.",
+      },
+    ],
+  },
+  {
     scenarioId: "discuss-pathfinding-ask-related-questions-together",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",

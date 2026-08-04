@@ -8,9 +8,11 @@ The plugin is built around one idea: each workflow phase should have a clear own
 
 ```text
 shared understanding
-  -> spec-design: authoritative Why/What
-  -> program-design: structural How
-  -> spec-program-review: proportional independent pair review; rerun only for meaning changes
+  -> orchestrator-design: bounded routing only
+       -> spec-design: authoritative Why/What
+       -> program-design: structural How
+       -> spec-program-review: proportional independent pair review
+       -> stop at reviewed pair or explicit gap; never enter planning automatically
   -> plan + proof matrix
   -> implementation proof
 ```
@@ -28,7 +30,8 @@ discuss-*            shared understanding          discuss-clarify-mental-models
                                                   discuss-pathfinding
 research-*           evidence gathering            research-swarm
 manage-*             subordinate agents            manage-agents
-orchestrator-*       long-horizon coordination     orchestrator-goal
+orchestrator-*       bounded workflow routing      orchestrator-design
+                                                  orchestrator-goal
 spec-*               design/spec boundary          spec-design
                                                   program-design
                                                   spec-program-review
@@ -57,6 +60,7 @@ flowchart LR
     pathfinding["discuss-pathfinding<br/>extract tacit or unmade understanding"]
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
     goal["orchestrator-goal<br/>coordination contract"]
+    designCycle["orchestrator-design<br/>bounded routing only"]
 
     specDesign["spec-design<br/>authoritative Why/What"]
     programDesign["program-design<br/>structural How"]
@@ -74,6 +78,10 @@ flowchart LR
 
     pathfinding --> specDesign
     mentalModels --> specDesign
+    designCycle -.->|"first phase"| specDesign
+    designCycle -.->|"follows phase-selected routes"| programDesign
+    designCycle -.->|"one pair review"| specReview
+    designCycle -.->|"only for unmade owner meaning"| pathfinding
     goal --> specDesign
     goal -->|"after planning admission gate"| planCreate
     goal --> implExecute
@@ -119,6 +127,8 @@ Use `research-swarm` when the next step is to gather evidence: local code/docs, 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
 Use `orchestrator-goal` when the objective is long-running and already clear enough to become a verifiable Codex or Claude `/goal` contract. Never-articulated intent or unmade decisions route to `discuss-pathfinding`; an existing shared model that has drifted routes to `discuss-clarify-mental-models`. For substantial goals, the contract carries a requirements/proof matrix and parent-owned completion gate; child agents, reviewers, UI drivers, and observability queries produce evidence, not completion by themselves. At closeout, `orchestrator-goal` accounts for lifecycle gates with the simple statuses `done`, `not-applicable`, `open`, and `blocked`; `done` requires an evidence pointer and does not imply rerunning already-completed review cycles.
+
+Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one pair review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
 
 ### Spec boundary
 

@@ -62,6 +62,20 @@ Produce terminal labels by observable condition:
 - `decision-needed`: two or more viable structural directions remain and selection requires owner-controlled cost, risk, compatibility, or policy tolerance not settled by the specification; return the decision owner, alternatives, tradeoffs, falsifiers, and deferral consequence.
 - `deferred`: an authorized caller explicitly postpones scoped work after its consequence is recorded; return completed coverage, deferred scope, authority for deferral, consequence, and re-entry condition.
 
+After producing the terminal result, return exactly one phase-guided route:
+
+```text
+locally-ready      -> recommend spec-program-review in pair mode
+specification-gap  -> recommend spec-design
+decision-needed    -> recommend discuss-pathfinding only when this skill's
+                      method identifies an unmade owner-controlled structural
+                      choice; required return owner: program-design;
+                      otherwise stop with the exact owner decision
+evidence-blocked | deferred -> stop with the exact reason
+```
+
+Before recommending a skill, inspect that destination's declared inputs and return a compact pointer-based handoff containing relevant artifact and governing-source pointers, the phase result and current boundary status, the exact gap or decision, and why that destination owns the next work. A pair-review handoff includes the specification and program-design identities, confirmed goal boundary and accepted requirements set, structural-realization confirmation, constraints/non-goals, claimed proof and gaps, and review question. Exclude copied artifacts, unrelated implementation history, and orchestration counters. A direct program-design invocation carries no cycle budget.
+
 ## Workflow
 
 ### 1. Validate authoritative Why/What
@@ -314,3 +328,6 @@ Do not return `locally-ready` while any of these hold:
 - required independent review is missing, stale, partial, silent, or blocked;
 - target classification, source/review coverage, self-check, readiness, acceptance, planning, PR, or release narration appears as durable program-design prose instead of returned workflow state;
 - artifact/specification identities, source coverage, or non-acceptance are missing.
+- a continuation omits a next skill, recommends more than one, or contradicts the terminal mapping above;
+- a pathfinding recommendation lacks an unmade owner-controlled structural choice or omits `program-design` as its return owner;
+- a continuation handoff omits the destination's required exact gap, boundary state, or artifact pointers, or copies unrelated history.

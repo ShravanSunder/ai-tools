@@ -6,6 +6,28 @@ const requiredSourceReads = [
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "spec-design-return-one-program-design-handoff",
+    requiredSourceReads,
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      {
+        name: "recommends-program-design-only",
+        requirement: "For a complete locally-ready specification result, recommends exactly one next skill, program-design, and does not route to planning, implementation, or pathfinding.",
+        failureExample: "Offers several next steps, skips structural design for planning, or reopens settled requirements.",
+      },
+      {
+        name: "returns-program-design-inputs-compactly",
+        requirement: "Returns a compact pointer-based handoff containing the specification and requirements identities, confirmed boundary and accepted-set status, locally-ready result, exact remaining gaps, and why program-design owns the next work.",
+        failureExample: "Copies full artifact contents or omits the authority and boundary state program-design must consume.",
+      },
+      {
+        name: "direct-call-has-no-orchestration-budget",
+        requirement: "Treats this direct spec-design invocation as phase work with no design-orchestration counters, state, or cycle budget.",
+        failureExample: "Invents orchestration state or reports remaining design-cycle calls for a direct phase request.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-design-establish-goal-boundary",
     requiredSourceReads,
     maximumToolCalls: 45,
