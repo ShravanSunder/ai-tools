@@ -36,7 +36,7 @@ This skill owns:
 - proof seams and structural enforcement classes;
 - program-design artifacts and author integration self-check.
 
-It does not invent product meaning, observable obligations, task/file order, exact commands, or review verdicts. Route missing Why/What to `spec-design`, review-only work to `spec-program-review`, planning mechanics to plan creation, and one named runtime-skill package to `skills-creation`.
+It does not invent product meaning, observable obligations, task/file order, exact commands, or review verdicts. Requirements owns WHY, for whom, and the authorized boundary; Specification owns WHAT must be observably true; Program Design owns HOW the internal system satisfies that fixed observable contract. Route missing Why/What to `spec-design`, review-only work to `spec-program-review`, planning mechanics to plan creation, and one named runtime-skill package to `skills-creation`.
 
 ## Terminal Contract
 
@@ -50,7 +50,7 @@ decision-needed
 deferred
 ```
 
-A `locally-ready` result includes the program-design and governing-specification identities; the confirmed goal boundary and accepted requirements set from `spec-design`; current-system, constraint, platform, and external source identities with current applicability; structural model and call-path deltas; requirement-realization inventory; structural-realization confirmation; author self-check; required independent local-review coverage; debt/gaps; and explicit non-acceptance. These are returned workflow state, not narrative sections in the program-design artifact.
+A `locally-ready` result includes the distinct Requirements, Specification, and Program Design identities; the confirmed goal boundary and accepted requirements set from `spec-design`; current-system, constraint, platform, and external source identities with current applicability; structural model and call-path deltas; requirement-realization inventory; structural-realization confirmation; author self-check; required independent local-review coverage; debt/gaps; and explicit non-acceptance. These are returned workflow state, not narrative sections in the program-design artifact.
 
 A bounded scope decision, design excerpt, or chat explanation without that complete return cannot be `locally-ready`, even when its selected structure is sound.
 
@@ -74,7 +74,7 @@ decision-needed    -> recommend discuss-pathfinding only when this skill's
 evidence-blocked | deferred -> stop with the exact reason
 ```
 
-Before recommending a skill, inspect that destination's declared inputs and return a compact pointer-based handoff containing relevant artifact and governing-source pointers, the phase result and current boundary status, the exact gap or decision, and why that destination owns the next work. A pair-review handoff includes the specification and program-design identities, confirmed goal boundary and accepted requirements set, structural-realization confirmation, constraints/non-goals, claimed proof and gaps, and review question. Exclude copied artifacts, unrelated implementation history, and orchestration counters. A direct program-design invocation carries no cycle budget.
+Before recommending a skill, inspect that destination's declared inputs and return a compact pointer-based handoff containing relevant artifact and governing-source pointers, the phase result and current boundary status, the exact gap or decision, and why that destination owns the next work. A pair-review handoff includes the distinct Requirements, Specification, and Program Design identities, confirmed goal boundary and accepted requirements set, structural-realization confirmation, constraints/non-goals, claimed proof and gaps, and review question. Exclude copied artifacts, unrelated implementation history, and orchestration counters. A direct program-design invocation carries no cycle budget.
 
 ## Workflow
 
@@ -82,7 +82,9 @@ Before recommending a skill, inspect that destination's declared inputs and retu
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
-Read the entire governing specification and the confirmed goal boundary accepted by `spec-design`. Extract requirements, observable contracts, constraints, failure expectations, proof modalities, non-goals, open decisions, owner-set package or system limits, and the accepted requirements set. If the specification does not carry or point to the confirmed goal boundary and accepted requirements set, return the exact `spec-design` gap before selecting target structure; program design does not reconstruct Why/What authority.
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements and Specification identity check plus the fixed observable-contract boundary. Require one Requirements identity and one different Specification identity using the valid representation for the work's medium. A combined `Requirements/spec` artifact, a Requirements-titled artifact that also serves as the observable contract, or either missing identity returns `specification-gap` to `spec-design` before structural work begins. Do not infer separation from headings inside one artifact and do not create or copy either upstream artifact.
+
+Read the entire Requirements source, governing Specification, and confirmed goal boundary accepted by `spec-design`. Extract authorized needs, outcomes, priorities, boundaries, observable contracts, constraints, failure expectations, proof modalities, non-goals, open decisions, owner-set package or system limits, and the accepted requirements set. Treat the Specification's observable contract as fixed input. If the Specification does not carry or point to the confirmed goal boundary and accepted requirements set, return the exact `spec-design` gap before selecting target structure; Program Design does not reconstruct or rewrite upstream authority.
 
 Classify gaps as `missing meaning | conflicting meaning | feasibility question | design choice | planning detail`. Missing or conflicting meaning returns `specification-gap`; do not patch it locally.
 
@@ -90,7 +92,7 @@ Classify a requested correction as requirements/Why/What, structural How, or bot
 
 For a semantic correction to a structural view, reload current-system evidence and the governing obligation, re-run the affected ownership/interface/call/state/flow decision and view predicate, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction changes their source, owner, or invariant. Pure rendering-format changes route to `docs-maintain`.
 
-Completion: governing specification, confirmed goal boundary, accepted requirements set, requirement inventory, non-goals, correction class, and route-back gaps are explicit.
+Completion: distinct Requirements and Specification identities, confirmed goal boundary, accepted requirements set, requirement inventory, non-goals, fixed observable contract, correction class, and route-back gaps are explicit.
 
 ### 2. Build the current-system model from sources
 
@@ -235,12 +237,12 @@ Completion: the current artifact has exact passes and gaps, the current structur
 
 ### 16. Obtain fresh local review when required
 
-Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; current program-design and governing-specification identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
+Call `spec-program-review` using `classify-review-requirement` with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `program-only`; current Requirements, Specification, and Program Design identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
 
 When required, invoke `spec-program-review` separately in `program-only` mode with fresh context and read-only authority, carrying:
 
 - target classification and the exact `skills-creation` parent packet/result identity when applicable;
-- current program-design and governing-specification identities;
+- current distinct Requirements, Specification, and Program Design identities;
 - governing sources, authority states, and coverage;
 - confirmed goal boundary and accepted requirements set;
 - structural-realization confirmation;
@@ -253,7 +255,7 @@ Completion: current independent review semantically covers the current specifica
 
 ### 17. Return the local result
 
-Return artifact and governing-specification identities; confirmed goal boundary and accepted requirements set; current-system, constraint, platform, and external source identities with current applicability; structural, call-path-delta, and requirement-realization maps; structural-realization confirmation; self-check; independent review; debt/gaps; and non-acceptance.
+Return the distinct Requirements, Specification, and Program Design identities; confirmed goal boundary and accepted requirements set; current-system, constraint, platform, and external source identities with current applicability; structural, call-path-delta, and requirement-realization maps; structural-realization confirmation; self-check; independent review; debt/gaps; and non-acceptance.
 
 IF returning a substantial program design in chat, use `tui-presentation` to render the selected component, call, state, or failure views before the compact result summary. The durable artifact remains the source of truth.
 
@@ -312,6 +314,7 @@ Program design settles owners, boundaries, interfaces, state, flows, recovery/co
 Do not return `locally-ready` while any of these hold:
 
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
+- Requirements and Specification lack separate identities for the current medium, either identity is missing, or one combined artifact or record is serving both roles;
 - authoritative Why/What is missing, stale, conflicting, or silently rewritten;
 - the confirmed goal boundary or accepted requirements set is missing, unrecoverable, conflicting, or rebuilt from mutually narrowed current files;
 - target structure was selected without current-system evidence or a named greenfield basis;
@@ -327,7 +330,7 @@ Do not return `locally-ready` while any of these hold:
 - planning would still need to invent an owner, interface, state/failure policy, trust control, or proof seam;
 - required independent review is missing, stale, partial, silent, or blocked;
 - target classification, source/review coverage, self-check, readiness, acceptance, planning, PR, or release narration appears as durable program-design prose instead of returned workflow state;
-- artifact/specification identities, source coverage, or non-acceptance are missing.
+- Requirements, Specification, or Program Design identities, source coverage, or non-acceptance are missing.
 - a continuation omits a next skill, recommends more than one, or contradicts the terminal mapping above;
 - a pathfinding recommendation lacks an unmade owner-controlled structural choice or omits `program-design` as its return owner;
 - a continuation handoff omits the destination's required exact gap, boundary state, or artifact pointers, or copies unrelated history.

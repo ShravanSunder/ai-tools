@@ -296,10 +296,10 @@ describe("user requirements and design-view contracts", () => {
       "pre-dispatch external-caller packet already named that residual risk",
     );
     expect(reviewSkill).toContain(
-      "requirements/Why/What`, `structural How`, or `both",
+      "`Requirements`, `Specification`, `Program Design`, or a named combination",
     );
     expect(reviewSkill).toContain(
-      "`both` returns to `spec-design` first, then `program-design` after the observable contract is settled",
+      "any correction spanning Requirements or Specification plus Program Design returns to `spec-design` first, then `program-design` after the observable contract is settled",
     );
     expect(programDesign).toContain(
       "`both` returns to `spec-design` first and resumes here only after the observable contract is settled",

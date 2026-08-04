@@ -37,9 +37,9 @@ End any material-ambiguity explanation or map with the smallest useful set of re
 
 Use a compact conversational map when the relationships are materially clearer visually. Keep a simple preference concise.
 
-Good: “The current runner appears to execute work but not own scheduling. The credible alternative is that it becomes the scheduler because the new retries need one owner. If two callers enqueue simultaneously, who decides order? Choosing the runner changes its lifecycle and the packages program design may allocate; keeping the host as scheduler limits the runner to execution. Which ownership model do you want?”
+Good: “The current obligation permits up to five minutes of migration downtime. The credible alternative is zero downtime, but that may require parallel infrastructure and a longer cutover. If an urgent security migration cannot preserve both availability and speed, which matters more? Your answer sets the tolerance that Program Design must satisfy; it does not select the migration mechanism. Which downtime and compatibility boundary do you want?”
 
-Bad: “Should the runner own scheduling? My read is yes because ownership matters.” The slots are filled, but the user cannot see the competing model or consequence.
+Bad: “Should the runner own scheduling?” That asks the user to perform structural synthesis. Return settled obligations to `program-design`; pathfinding asks only for missing owner meaning such as acceptable cost, risk, downtime, compatibility, or policy.
 
 ## Probes
 

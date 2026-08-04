@@ -11,7 +11,36 @@ const diagramReviewRequiredSourceReads = [
   "tests/skills/fixtures/spec-program-review-reader-understanding/program-design.md",
 ] satisfies readonly string[];
 
+const separateArtifactReviewRequiredSourceReads = [
+  ...requiredSourceReads,
+  "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
+  "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-specification.md",
+  "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-pair.md",
+] satisfies readonly string[];
+
 export const skillPressureCaseDefinitions = [
+  {
+    scenarioId: "spec-program-review-reject-combined-requirements-specification",
+    requiredSourceReads: separateArtifactReviewRequiredSourceReads,
+    maximumToolCalls: 50,
+    semanticCriteria: [
+      {
+        name: "reconstructs-three-separate-concepts",
+        requirement: "Reconstructs Requirements as WHY/for whom/within what boundary, Specification as observable WHAT, and Program Design as internal HOW instead of treating document agreement as sufficient.",
+        failureExample: "Treats the combined Requirements/spec document and Program Design as a complete pair because their contents agree.",
+      },
+      {
+        name: "rejects-collapsed-requirements-and-specification",
+        requirement: "Identifies the combined Requirements/spec as a missing separate Specification identity, returns a clear needs-revision result, and does not infer that a Requirements title creates both identities.",
+        failureExample: "Calls the pair ready, asks only for a rename, or accepts one file as both Requirements and Specification.",
+      },
+      {
+        name: "routes-smallest-read-only-correction",
+        requirement: "Routes the first and smallest correction to spec-design so the existing Requirements source is reused and a separate Specification is created, without editing, splitting, or redesigning the artifacts in review.",
+        failureExample: "Edits the documents, routes first to program-design, duplicates Requirements, or proposes a broad workflow redesign.",
+      },
+    ],
+  },
   {
     scenarioId: "spec-program-review-find-unapproved-design",
     requiredSourceReads,
