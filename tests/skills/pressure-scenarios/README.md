@@ -68,6 +68,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact stored phase handoff without reconstructing meaning from chat. |
 | `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
 | `orchestrator-design` | `orchestrator-design-stops-before-second-review` | Stop with stale review after a semantic correction instead of automatically reviewing again. |
+| `orchestrator-design` | `orchestrator-design-enters-post-review-correction` | Move pair-review corrections into the matching post-review allowance before invoking them. |
 | `orchestrator-design` | `orchestrator-design-blocks-pathfinding-return-mismatch` | Block a completed pathfinding handoff that names a different phase than its initiating handoff. |
 | `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep specification-gap recovery within pre-review allowances and preserve post-review capacity. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |

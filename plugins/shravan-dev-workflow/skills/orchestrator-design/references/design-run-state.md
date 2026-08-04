@@ -19,7 +19,7 @@ complete when:
   most one next invocation
 ```
 
-This procedure records routing evidence; it does not decide semantic content. There is no parser, schema, hash, digest, database, or shared service.
+This procedure records routing evidence in plain temporary files; it does not decide semantic content or require executable infrastructure.
 
 ## Temporary Homes
 
@@ -40,8 +40,6 @@ tmp/design-orchestration/<design_id>/events.jsonl
 - each compact continuation handoff under one fresh local identity;
 - the active initiating-pathfinding handoff identity when applicable;
 - terminal condition and one exact terminal payload when stopped.
-
-The stored phase handoff is unchanged. Its recommended next skill, reason, exact gap, and pathfinding return owner remain in that handoff only. Orchestration context does not copy them.
 
 `events.jsonl` is an append-only transition history. Each event records the applied skill, `continue | stop`, resulting counters, and identities needed to connect the event to the stored handoff or terminal payload. It does not copy semantic routing fields.
 
@@ -89,9 +87,10 @@ Return `blocked`, the exact contradiction, and no invocation. Do not repair stat
 After one phase completes:
 
 1. increment only that completed invocation's applicable stage counter;
-2. if it stops directly, store one terminal payload and no accepted continuation identity;
-3. if it recommends continuation, allocate one fresh local handoff identity, store the exact compact handoff unchanged, and record the same identity in the event;
-4. verify `details.md` and `events.jsonl` agree before another invocation.
+2. when pair review recommends `spec-design` or `program-design`, set the stage to `post-review` before invoking that correction; a terminal pair-review result records its stop without a stage transition;
+3. if it stops directly, store one terminal payload and no accepted continuation identity;
+4. if it recommends continuation, allocate one fresh local handoff identity, store the exact compact handoff unchanged, and record the same identity in the event;
+5. verify `details.md` and `events.jsonl` agree before another invocation.
 
 Missing or contradictory post-call state stops `blocked`. Counters record completed calls; there is no reserved future edge.
 
@@ -156,6 +155,6 @@ Every terminal payload carries the design identity, terminal condition, phase re
 - `blocked`: exact missing input, contradiction, invalid route, or rejected pathfinding target;
 - `ready`: current pair-review target identities and its exact ready result.
 
-Complete recording only after the final event and terminal payload agree. Resume then replays this payload and invokes nothing.
+Complete recording only after the final event and terminal payload agree.
 
 When the caller requests a read-only simulation, do not write these files. Return the exact fresh, active, terminal, or blocked payload that the procedure would record, including remaining limits and terminal-specific pointers; read-only changes the write location, not the returned fields.

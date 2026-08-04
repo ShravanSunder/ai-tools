@@ -80,6 +80,23 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
+    scenarioId: "orchestrator-design-enters-post-review-correction",
+    requiredSourceReads,
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      {
+        name: "transitions-to-post-review-before-correction",
+        requirement: "For both independently simulated pair-review continuations, changes the run stage from pre-review to post-review before invoking the correction owner.",
+        failureExample: "Leaves either correction in pre-review or changes stage only after the correction call.",
+      },
+      {
+        name: "charges-the-correct-post-review-allowance",
+        requirement: "Routes Why/What to spec-design and structural How to program-design, charging only the matching post-review allowance in each run without starting another review.",
+        failureExample: "Uses a pre-review or wrong-phase counter, swaps correction owners, or invokes pair review.",
+      },
+    ],
+  },
+  {
     scenarioId: "orchestrator-design-blocks-pathfinding-return-mismatch",
     requiredSourceReads,
     maximumToolCalls: 35,
