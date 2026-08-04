@@ -23,8 +23,8 @@ Plugin: `shravan-dev-workflow` 1.7.12
 - Codex `skill-creator` quick validation passed for `spec-design`, `discuss-pathfinding`, `program-design`, `spec-program-review`, and `orchestrator-design`.
 - `claude plugin validate .`: passed.
 - `git diff --check origin/master`: passed.
-- A focused Luna-high/Terra-medium run passed seven affected scenarios and all 21 semantic criteria. The added chat-only navigation scenario did not start: its ACPX invocation remained in queue-owner for 360 seconds without subject events and was interrupted. This is an open behavior-proof gap, not a passing result.
-- The unfiltered 142-scenario `pnpm --dir tests/skills run test:evals` suite was not run. Historical RED/GREEN was not reproduced.
+- Focused Luna-high/Terra-medium runs passed eight affected scenarios and all 24 semantic criteria, including the Spec Design review-handoff case. The chat-only review-navigation case was attempted twice. The second attempt reached Luna but returned no subject artifact after 377 seconds; it was interrupted. This remains an open behavior-proof gap, not a passing result.
+- The unfiltered 143-scenario `pnpm --dir tests/skills run test:evals` suite was not run. Historical RED/GREEN was not reproduced.
 
 ## Refresh / reinstall
 

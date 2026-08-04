@@ -78,6 +78,28 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
+    scenarioId: "spec-design-preserves-identities-in-review-handoff",
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
+    maximumToolCalls: 45,
+    semanticCriteria: [
+      {
+        name: "carries-both-identities-through-classification",
+        requirement: "Shows the local-review classification input with the distinct Requirements and Specification identities rather than a singular current artifact identity or a combined Requirements/spec identity.",
+        failureExample: "Classifies review using only the Specification path or a generic current artifact identity.",
+      },
+      {
+        name: "carries-the-complete-review-context",
+        requirement: "When review is required, preserves both identities together with governing sources, confirmed goal boundary, accepted requirements, constraints, non-goals, and proof claims or gaps in the specification-only review handoff.",
+        failureExample: "Invokes review with only target classification and parent identity, leaving the reviewer without the Requirements source or governing state.",
+      },
+      {
+        name: "does-not-collapse-or-bypass-review",
+        requirement: "Keeps Requirements and Specification separate, does not copy them into one review artifact, and does not route to Program Design until the required independent review returns current coverage.",
+        failureExample: "Combines the records, skips review, or declares the work ready for Program Design from author self-check alone.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-design-return-one-program-design-handoff",
     requiredSourceReads,
     maximumToolCalls: 35,
