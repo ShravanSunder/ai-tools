@@ -55,6 +55,15 @@ Produce terminal labels by observable condition:
 - `evidence-blocked`: required governing or observational evidence is missing, inaccessible, stale, or contradictory enough that a truthful obligation cannot be derived; return the exact evidence and access/state change needed.
 - `deferred`: an authorized caller explicitly postpones scoped work after its consequence is recorded; return completed coverage, deferred scope, authority for deferral, consequence, and re-entry condition.
 
+After producing the terminal result, return exactly one phase-guided route:
+
+```text
+locally-ready -> recommend program-design
+decision-needed | evidence-blocked | deferred -> stop with the exact reason
+```
+
+Initial requirements pathfinding remains inside this skill's authority and source-admission work; it is not a separate next phase after `locally-ready`. Before recommending `program-design`, inspect its declared inputs and return a compact pointer-based handoff containing the requirements and specification identities, confirmed goal boundary and accepted-requirements status, phase result, exact remaining gaps, and why structural How is next. Do not copy full artifacts, unrelated history, or orchestration counters. A direct spec-design invocation carries no cycle budget.
+
 ## Workflow
 
 ### 1. Establish authority, audience, and artifact boundary
@@ -252,3 +261,6 @@ Do not return `locally-ready` while any of these hold:
 - a required independent review is missing, stale, partial, silent, or blocked;
 - target classification, governing-source coverage, self-check, readiness, review state, or acceptance/PR narration appears as specification prose instead of returned workflow state;
 - the artifact identity, source coverage, or non-acceptance boundary is missing.
+- a `locally-ready` result omits `program-design`, recommends more than one next skill, or routes to planning, implementation, or pathfinding;
+- a non-ready terminal invents a continuation instead of returning its exact decision, evidence, or deferral stop;
+- the continuation handoff omits the destination's required boundary and authority state or copies full artifacts and unrelated history.

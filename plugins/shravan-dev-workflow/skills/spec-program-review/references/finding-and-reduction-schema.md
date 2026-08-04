@@ -64,6 +64,44 @@ owner decision when correction would expand or subtract confirmed scope
 non-edit / non-acceptance statement
 ```
 
+## Phase-Guided Route And Handoff
+
+Only the parent-reduced result may select what happens next. Return exactly one of these shapes:
+
+```text
+stop
+  verdict and exact reason
+  exact caller action, missing evidence, unanswered owner choice,
+  or deferral condition when applicable
+
+continue
+  recommended next skill: discuss-pathfinding | spec-design | program-design
+  phase-owned reason
+  compact handoff:
+    relevant governing-source and artifact pointers
+    review mode, verdict, and current boundary status
+    one exact accepted correction or one unmade owner decision
+    accepted findings needed by the destination
+    rejected, contested, and unverified findings only when needed to prevent
+      the destination from treating them as work
+    pathfinding return owner when pathfinding is recommended
+```
+
+Before returning `continue`, inspect the destination skill's declared inputs and include only what that destination needs. State the current boundary status and select one smallest evidence-backed correction; do not hand the destination alternatives to choose between. When deletion preserves the accepted meaning and removes the verified defect, deletion is the correction. Use pointers instead of copied artifacts. Exclude full conversation history, repeated background, unrelated evidence, and unreduced reviewer candidates.
+
+Select one route from the reduced result:
+
+- accepted Why/What only -> `spec-design`;
+- accepted structural How only -> `program-design`;
+- accepted Why/What and structural How -> `spec-design` first, carrying the complete accepted set;
+- accepted caller-owned correction -> stop with `needs-revision` and the exact caller action;
+- complete review evidence proves the current model fails and replacement owner meaning is unmade -> `discuss-pathfinding`, with return owner `spec-design` for Why/What, `program-design` for structural How, or `spec-design` first for both;
+- unresolved owner choice that is not the unmade-replacement case -> stop `decision-needed`;
+- invalid input or missing evidence -> stop `blocked`;
+- no required correction -> stop `ready`.
+
+An authoritative correction is not pathfinding work. A reviewer suggestion is not a route until the parent verifies and accepts it. `discuss-pathfinding` resolves only the named unmade meaning and returns to the supplied owner; it does not choose another phase.
+
 `ready` requires complete semantically current mode coverage, no required coverage gap, no open blocker/important accepted finding, no unapproved scope expansion or requirement subtraction, and no remaining planner-owned semantic invention.
 
 Produce exactly one verdict:
@@ -77,4 +115,4 @@ When states mix, apply precedence `blocked -> needs-revision -> decision-needed 
 
 After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
 
-Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the verdict cannot exceed semantically current coverage; and any later semantic-change records are explicit.
+Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the verdict cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.

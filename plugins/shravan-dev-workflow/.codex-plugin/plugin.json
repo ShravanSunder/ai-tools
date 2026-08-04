@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.7.10",
-  "description": "Shravan's development workflow plugin with goal orchestration, research, authoritative spec design, structural program design, independent spec/program review, user-requirements pathfinding, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
+  "version": "1.7.11",
+  "description": "Shravan's development workflow plugin with bounded design orchestration, goal orchestration, research, authoritative spec design, structural program design, independent spec/program review, user-requirements pathfinding, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -24,6 +24,7 @@
     "program-design",
     "spec-program-review",
     "goal",
+    "orchestrator-design",
     "orchestrator-goal",
     "discuss-clarify-mental-models",
     "discuss-pathfinding",
@@ -69,7 +70,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Spec/program design, review, planning, implementation, operations, agents, and TUI workflows",
-    "longDescription": "Use Shravan Dev Workflow to define authoritative Why/What with spec-design, extract unwritten requirements and decisions with discuss-pathfinding, turn settled obligations into structural How with program-design, and independently review either artifact or their pair with spec-program-review before planning. The plugin also gathers source-grounded evidence, packages handoffs, creates and reviews implementation plans, executes plans, reviews implementations, finishes PRs, orchestrates goals and subordinate agents, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
+    "longDescription": "Use Shravan Dev Workflow to coordinate one bounded design cycle with orchestrator-design, define authoritative Why/What with spec-design, extract unwritten requirements and decisions with discuss-pathfinding, turn settled obligations into structural How with program-design, and independently review either artifact or their pair with spec-program-review before planning. The plugin also gathers source-grounded evidence, packages handoffs, creates and reviews implementation plans, executes plans, reviews implementations, finishes PRs, orchestrates goals and subordinate agents, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -87,6 +88,7 @@
       "Use discuss-pathfinding to extract unwritten requirements or decisions before artifact work.",
       "Use research-swarm to gather source-grounded evidence into a tmp ledger.",
       "Use manage-agents to spawn, resume, monitor, or reduce subordinate agent work.",
+      "Use orchestrator-design to run this through one bounded specification, program-design, and pair-review cycle before planning.",
       "Use orchestrator-goal to turn this into a verifiable long-horizon goal.",
       "Use docs-maintain to reconcile these docs with current code and plans.",
       "Use spec-program-review to independently review this specification and program design.",

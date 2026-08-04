@@ -42,6 +42,11 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `discuss-pathfinding` | `discuss-pathfinding-explain-meaningful-choice` | Explain the real alternatives and consequence before asking the user to choose. |
 | `discuss-pathfinding` | `discuss-pathfinding-confirm-agent-summary` | Treat another agent's summary as provisional until the owner confirms it. |
 | `discuss-pathfinding` | `discuss-pathfinding-gather-requirements-from-affected-people` | Preserve different affected groups, evidence, authority, priorities, and open decisions. |
+| `discuss-pathfinding` | `discuss-pathfinding-preserve-caller-return-owner` | Return orchestrated decisions only to the caller-recorded phase without promoting examples into requirements. |
+| `discuss-pathfinding` | `discuss-pathfinding-no-live-user-return` | Stop `decision-needed` with unanswered questions when an orchestrated pathfinding call has no live owner. |
+| `discuss-pathfinding` | `discuss-pathfinding-direct-no-live-user-blocker` | Preserve the existing blocker and omit orchestration state for a direct pathfinding call with no live owner. |
+| `discuss-pathfinding` | `discuss-pathfinding-confirmed-meaning-does-not-fit-return-owner` | Expose confirmed meaning that cannot fit the recorded return owner without rerouting it. |
+| `spec-design` | `spec-design-return-one-program-design-handoff` | Return one compact program-design handoff from a locally ready specification and no orchestration state for a direct call. |
 | `spec-design` | `spec-design-establish-goal-boundary` | Establish affected groups, outcomes, permitted changes, protected systems, non-goals, and missing decisions before normative requirements. |
 | `spec-design` | `spec-design-stay-within-confirmed-requirements` | Do not turn adjacent completeness machinery into authorized product requirements. |
 | `spec-design` | `spec-design-separate-evidence-from-requirements` | Keep observations and hypotheses non-normative until an authorized source establishes product meaning. |
@@ -52,11 +57,20 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `program-design` | `program-design-show-current-and-proposed-system` | Show current and proposed entrypoint-to-effect behavior and mark actual changes. |
 | `program-design` | `program-design-choose-helpful-diagrams` | Choose each structural view and medium by the relationship a reader needs to understand. |
 | `program-design` | `program-design-explain-design-choices-clearly` | Explain what changes, what remains, the tradeoff, its cost, and when to reconsider. |
+| `program-design` | `program-design-route-specification-gap` | Return missing observable product meaning to spec-design with one compact handoff and no direct-call orchestration state. |
 | `spec-program-review` | `spec-program-review-find-unapproved-design` | Catch machinery that document agreement or existing code did not authorize. |
 | `spec-program-review` | `spec-program-review-find-missing-requirements-or-design` | Catch lost accepted requirements and missing executable structural behavior. |
 | `spec-program-review` | `spec-program-review-check-tests-match-claims` | Compare each claimed outcome with evidence that can actually observe it. |
 | `spec-program-review` | `spec-program-review-check-diagrams-explain-system` | Check that diagrams answer their reader question and agree with written meaning. |
 | `spec-program-review` | `spec-program-review-give-useful-findings` | Return concrete findings, consequences, smallest corrections, owners, and confirming evidence in ordinary language. |
+| `spec-program-review` | `spec-program-review-route-only-validated-findings` | Let only parent-validated findings select one correction owner and keep direct review outside orchestration state. |
+| `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |
+| `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact stored phase handoff without reconstructing meaning from chat. |
+| `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
+| `orchestrator-design` | `orchestrator-design-stops-before-second-review` | Stop with stale review after a semantic correction instead of automatically reviewing again. |
+| `orchestrator-design` | `orchestrator-design-enters-post-review-correction` | Move pair-review corrections into the matching post-review allowance before invoking them. |
+| `orchestrator-design` | `orchestrator-design-blocks-pathfinding-return-mismatch` | Block a completed pathfinding handoff that names a different phase than its initiating handoff. |
+| `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep specification-gap recovery within pre-review allowances and preserve post-review capacity. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |

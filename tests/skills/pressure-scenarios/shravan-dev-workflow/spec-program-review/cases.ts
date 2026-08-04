@@ -101,6 +101,33 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
+    scenarioId: "spec-program-review-route-only-validated-findings",
+    requiredSourceReads: diagramReviewRequiredSourceReads,
+    maximumToolCalls: 60,
+    semanticCriteria: [
+      {
+        name: "routes-only-parent-validated-findings",
+        requirement: "Treats reviewer statements as candidates, validates each against the accepted requirements and cited artifacts, rejects the audit-history pathfinding suggestion because audit history is an explicit non-goal, and lets only verified findings affect the route.",
+        failureExample: "Routes to pathfinding because a reviewer proposed an unapproved requirement or forwards the candidate without parent verification.",
+      },
+      {
+        name: "recommends-one-semantic-owner",
+        requirement: "After reduction, recommends exactly one next skill selected by the accepted correction: program-design for the verified structural explanation gap, with no competing pathfinding or spec-design route.",
+        failureExample: "Lists several possible next skills, leaves the route implicit, or lets orchestration choose between them.",
+      },
+      {
+        name: "returns-a-compact-phase-handoff",
+        requirement: "Returns a compact pointer-based handoff containing the review result, current boundary status, exact accepted correction, relevant artifact pointers, and why program-design owns the next work, without copying artifact contents or including rejected candidates as work.",
+        failureExample: "Copies the full artifacts, omits the exact correction or boundary, or sends rejected reviewer claims to the next phase.",
+      },
+      {
+        name: "direct-call-has-no-orchestration-budget",
+        requirement: "Treats this direct pair-review invocation as phase work with no design-orchestration counters, state, or cycle budget.",
+        failureExample: "Invents orchestration state or reports remaining design-cycle calls for a direct phase request.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-program-review-give-useful-findings",
     requiredSourceReads,
     maximumToolCalls: 60,

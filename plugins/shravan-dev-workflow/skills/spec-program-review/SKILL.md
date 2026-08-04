@@ -194,7 +194,9 @@ Return every field in the `Coverage-Bound Result` owned by `references/finding-a
 
 `ready` means the current artifact meaning is covered and satisfies the invoked mode. The returned result is the sole home of review state; durable artifacts remain about their subject matter and do not acquire review lifecycle or acceptance status.
 
-Completion: the result names the first required revision, coverage gaps, any owner decision, and what a downstream program designer or planner would still have to invent.
+After parent reduction, return either a stop or exactly one recommended next skill using the route and compact-handoff procedure in the loaded reference. Reviewer candidates never select this route. When validated findings span Why/What and structural How, recommend `spec-design` first and carry the complete accepted set; the later specification result decides whether `program-design` follows. Recommend `discuss-pathfinding` only when complete review evidence establishes that the current model fails and replacement owner meaning is genuinely unmade, and include the review-selected return owner. A current authoritative correction routes directly to its semantic owner; missing evidence stops.
+
+Completion: the result names the first required revision, coverage gaps, any owner decision, what a downstream program designer or planner would still have to invent, and one parent-selected compact continuation handoff or an exact stop reason.
 
 ## Completion Blockers
 
@@ -214,4 +216,8 @@ Do not return `ready` while any of these hold:
 - pair mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
+- the result recommends no next skill, more than one next skill, or a route selected from an unreduced reviewer candidate when a validated continuation exists;
+- a continuation omits the current boundary status or makes the destination choose among correction alternatives instead of carrying one smallest verified correction;
+- a pathfinding recommendation omits the review-selected return owner, or complete current authority/evidence already settles the correction;
+- a continuation copies artifact contents or unrelated history instead of returning the destination's compact pointer-based handoff;
 - the result implies edit, remediation, lifecycle, planning, or acceptance authority.
