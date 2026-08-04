@@ -4,10 +4,16 @@ const requiredSourceReads = [
   "plugins/shravan-dev-workflow/skills/spec-design/SKILL.md",
 ] as const;
 
+const requirementsSpecificationBoundarySourceReads = [
+  ...requiredSourceReads,
+  "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
+  "plugins/shravan-dev-workflow/skills/spec-design/references/authority-and-problem-framing.md",
+] satisfies readonly string[];
+
 export const skillPressureCaseDefinitions = [
   {
     scenarioId: "spec-design-create-separate-specification-after-requirements",
-    requiredSourceReads,
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
     maximumToolCalls: 40,
     semanticCriteria: [
       {
@@ -29,7 +35,7 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "spec-design-reuse-existing-requirements-source",
-    requiredSourceReads,
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
     maximumToolCalls: 40,
     semanticCriteria: [
       {
@@ -46,6 +52,28 @@ export const skillPressureCaseDefinitions = [
         name: "avoids-ceremonial-pathfinding",
         requirement: "Does not invoke pathfinding because the prompt establishes complete, settled owner meaning; pathfinding is reserved for genuinely unwritten or undecided meaning.",
         failureExample: "Interviews the user again or calls pathfinding merely to produce a Requirements file.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-design-complete-requirements-only-request",
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "completes-only-requirements",
+        requirement: "Completes or describes the durable Requirements identity from the settled owner-confirmed meaning without creating or drafting a Specification.",
+        failureExample: "Authors observable Specification obligations despite the caller explicitly limiting the work to Requirements.",
+      },
+      {
+        name: "returns-a-clean-scoped-stop",
+        requirement: "Returns deferred for Specification as a successful scoped stop, records the caller's authority, consequence, and re-entry condition, and does not call the full design locally ready.",
+        failureExample: "Uses locally-ready, returns no terminal result, or treats the Requirements-only request as an error.",
+      },
+      {
+        name: "does-not-route-to-program-design",
+        requirement: "Stops after Requirements and does not recommend Program Design until a separate Specification exists.",
+        failureExample: "Routes directly from Requirements to Program Design or planning.",
       },
     ],
   },

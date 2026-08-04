@@ -71,9 +71,8 @@ The Requirements artifact records authorized needs, outcomes, priorities, and bo
 
 `discuss-pathfinding` helps the user and agent clarify unmade owner meaning that blocks Requirements, Specification, or a Program Design choice. It inspects evidence, explains the ambiguity, groups related questions, challenges assumptions, and uses a diagram when that materially improves shared understanding.
 
-Pathfinding returns clarified meaning to the phase that requested it. It does not replace or merge that phase's artifact. For structural work, it may clarify an owner-controlled tolerance or constraint such as acceptable cost, risk, compatibility, or policy; it does not invent components, interfaces, mechanisms, or architecture.
+Pathfinding returns clarified meaning to the recorded return owner. It does not replace or merge that owner's artifact. For structural work, it may clarify an owner-controlled tolerance or constraint such as acceptable cost, risk, compatibility, or policy; it does not invent components, interfaces, mechanisms, or architecture.
 
 ## Downstream Handoffs
 
 `program-design` consumes distinct Requirements and Specification identities plus their current phase state. Pair review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records, not copied companion artifacts.
-

@@ -25,7 +25,7 @@ Program Design
 
 For substantial file-backed design, all three must have separately identifiable homes. An existing Requirements source may be reused and linked; it must not be duplicated. A combined `Requirements/spec` artifact is never a valid substitute for separate Requirements and Specification identities.
 
-Pathfinding helps the user and agent resolve unmade owner meaning that blocks Requirements, Specification, or a Program Design choice. For structural work, it may clarify owner-controlled cost, risk, compatibility, or policy tolerance; it does not generate components, interfaces, mechanisms, or architecture. It returns clarified meaning to the phase that requested it and does not replace, merge, or silently author that phase's artifact.
+Pathfinding helps the user and agent resolve unmade owner meaning that blocks Requirements, Specification, or a Program Design choice. For structural work, it may clarify owner-controlled cost, risk, compatibility, or policy tolerance; it does not generate components, interfaces, mechanisms, or architecture. It returns clarified meaning to the recorded return owner and does not replace, merge, or silently author that phase's artifact.
 
 ## Problem and Evidence
 
@@ -103,7 +103,7 @@ The accepted requirements set remains separate returned coverage state in both c
 Candidate description:
 
 ```text
-Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations or its journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How, review-only requests, implementation planning, a full Requirements -> Specification -> Program Design -> review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations or its journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How, review-only requests, implementation planning, a full Requirements through Specification, Program Design, and review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ```
 
 Routing cases:

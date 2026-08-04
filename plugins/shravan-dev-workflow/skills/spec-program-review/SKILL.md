@@ -66,7 +66,7 @@ For operation `review`, require:
 
 ```text
 target classification and skills-creation parent identity when applicable
-mode and complete target artifact paths
+mode and complete target identities: file paths or separately labeled in-chat records
 governing sources, authority states, and coverage basis
 confirmed goal boundary and accepted requirements set, or the exact authority gap
 structural-realization confirmation for program-only or pair, or the exact owner decision still needed
@@ -77,7 +77,7 @@ review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
 ```
 
-MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `pair` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse pointers to the authoritative artifacts; do not copy them into a combined review artifact.
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `pair` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
 
 Use the owner-confirmed requirements record and confirmed goal boundary when available. Otherwise use the last inspectable owner-accepted governing source. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
 

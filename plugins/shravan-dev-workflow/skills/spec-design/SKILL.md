@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations or its journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How, review-only requests, implementation planning, a full Requirements -> Specification -> Program Design -> review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations or its journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How, review-only requests, implementation planning, a full Requirements through Specification, Program Design, and review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Spec Design
@@ -77,6 +77,8 @@ deferred
 
 A `locally-ready` result includes distinct Requirements and Specification identities; governing-source identities, authority, current applicability, and coverage; the confirmed goal boundary; the accepted requirements set; load-bearing decisions; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed. These are returned workflow state, not narrative sections in the specification.
 
+For an explicitly Requirements-only request, finish the Requirements identity and return `deferred` for Specification. Record the caller's authority to stop there, the consequence that Specification and Program Design are not ready, and the condition for re-entering Specification work. Do not create a Specification or recommend `program-design`.
+
 Produce terminal labels by observable condition:
 
 - `locally-ready`: every completion blocker is cleared and the complete return above exists.
@@ -147,9 +149,9 @@ Name what happens today, who bears the cost, where it is observable, what proves
 
 Using the already-loaded `references/authority-and-problem-framing.md`, complete problem modeling and return its second result: the authority/problem model with current reality, desired gap, important decisions, conflicts, and evidence gaps. Retain it in working state for the artifact and terminal return.
 
-When revising existing artifacts, classify the requested correction before editing: requirements/Why/What, structural How, or both. Removing unrelated concurrency, cleanup, reporter, or lifecycle machinery is a How correction unless the authorized owner also changes users, outcomes, requirements, scenarios, defaults, or proof obligations. A How-only correction routes to `program-design` and does not authorize narrowing governing Why/What. When both change, settle the revised Why/What first.
+When revising existing artifacts, classify the requested correction before editing: Requirements, Specification, Program Design, or a named combination. Removing unrelated concurrency, cleanup, reporter, or lifecycle machinery is a Program Design correction unless the authorized owner also changes users, outcomes, requirements, scenarios, defaults, observable obligations, or proof obligations. A Program Design-only correction routes to `program-design` and does not authorize narrowing the governing Requirements or Specification. When upstream meaning and Program Design both change, settle Requirements and Specification first.
 
-For a semantic correction to an existing Why/What view, re-open its governing sources, re-run correction classification and the affected view predicate and semantic-field check, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction invalidates their source or decision result. Pure rendering-format changes route to `docs-maintain`.
+For a semantic correction to an existing Requirements or Specification view, re-open its governing sources, re-run correction classification and the affected view predicate and semantic-field check, update affected trace links, and run artifact self-review. Skip unrelated stages unless the correction invalidates their source or decision result. Pure rendering-format changes route to `docs-maintain`.
 
 Using the comparison taught by `references/authority-and-problem-framing.md`, build the accepted requirements set from the current owner-confirmed requirements record and confirmed goal boundary. If unavailable, recover the last inspectable owner-accepted governing source. If neither exists or the sources conflict, return `decision-needed` with the authority conflict; mutually narrowed current files never establish the accepted starting point by themselves.
 
@@ -241,9 +243,9 @@ Completion: the current artifact has a self-check result with exact passes and g
 
 ### 11. Obtain fresh local review when required
 
-Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the current artifact identity; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identity.
+Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the distinct Requirements and Specification identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identities.
 
-When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification and exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. After a later edit, use `spec-program-review` to refresh coverage when meaning changed; parent-verified non-semantic edits may retain coverage.
+When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps, and the exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. After a later edit, use `spec-program-review` to refresh coverage when meaning changed; parent-verified non-semantic edits may retain coverage.
 
 Completion: current independent review semantically covers the current artifact, or the exact `non-substantial` basis or blocking input is recorded.
 

@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-04 Separate Requirements And Specification](2026-08-04-separate-requirements-and-specification.md)
 - [2026-08-03 Bounded Design Orchestration](2026-08-03-bounded-design-orchestration.md)
 - [2026-08-03 Four-Skill Boundary And Readable Structure](2026-08-03-four-skill-boundary-and-readable-structure.md)
 - [2026-08-02 GH watch cadence defaults](2026-08-02-gh-watch-cadence-defaults.md)
