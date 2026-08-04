@@ -12,8 +12,8 @@ Every active scenario lives at:
 
 The first two path segments must exactly match the namespaced
 `skill_under_test: <plugin-name>:<skill-name>` metadata. Keep the filename local
-to the skill (`material-ambiguity.md`, not
-`discuss-pathfinding-material-ambiguity.md`); `scenario_id` remains the stable,
+to the skill (`explain-meaningful-choice.md`, not
+`discuss-pathfinding-explain-meaningful-choice.md`); `scenario_id` remains the stable,
 globally unique CLI selector.
 
 The goal is not to test whether a model can summarize each skill. The goal is to
@@ -37,6 +37,26 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `discuss-clarify-mental-models` | `discuss-clarify-mental-models-reconverge.md` | Do not collapse unstable shared understanding into the old one-question grill or premature artifact work. |
 | `discuss-clarify-mental-models` | `discuss-clarify-mental-models-drift-interrupt.md` | Do not apologize-and-continue or summarize past a drift signal; treat invocation as an interrupt and locate where the models diverged. |
 | `discuss-clarify-mental-models` | `discuss-clarify-mental-models-map-building.md` | Do not turn agent-work uncertainty into status prose; name the map shape, separate inherited report/direct evidence/assumptions, and say what the evidence does not prove when that split is the hard part. |
+| `discuss-pathfinding` | `discuss-pathfinding-ask-related-questions-together` | Ask related questions together without creating a wall of unrelated questions. |
+| `discuss-pathfinding` | `discuss-pathfinding-recover-after-major-misunderstanding` | Reorient to the corrected goal and boundary after a major misunderstanding. |
+| `discuss-pathfinding` | `discuss-pathfinding-explain-meaningful-choice` | Explain the real alternatives and consequence before asking the user to choose. |
+| `discuss-pathfinding` | `discuss-pathfinding-confirm-agent-summary` | Treat another agent's summary as provisional until the owner confirms it. |
+| `discuss-pathfinding` | `discuss-pathfinding-gather-requirements-from-affected-people` | Preserve different affected groups, evidence, authority, priorities, and open decisions. |
+| `spec-design` | `spec-design-establish-goal-boundary` | Establish affected groups, outcomes, permitted changes, protected systems, non-goals, and missing decisions before normative requirements. |
+| `spec-design` | `spec-design-stay-within-confirmed-requirements` | Do not turn adjacent completeness machinery into authorized product requirements. |
+| `spec-design` | `spec-design-separate-evidence-from-requirements` | Keep observations and hypotheses non-normative until an authorized source establishes product meaning. |
+| `spec-design` | `spec-design-use-helpful-diagrams` | Select specification views by the reader question and keep internal structural How out. |
+| `spec-design` | `spec-design-keep-implementation-choices-out-of-requirements` | State observable Why/What without promoting implementation mechanisms into requirements. |
+| `program-design` | `program-design-stay-within-specification` | Realize only accepted requirements inside permitted and protected system boundaries. |
+| `program-design` | `program-design-make-smallest-necessary-change` | Start from the working system, add only required structure, and remove unsupported machinery. |
+| `program-design` | `program-design-show-current-and-proposed-system` | Show current and proposed entrypoint-to-effect behavior and mark actual changes. |
+| `program-design` | `program-design-choose-helpful-diagrams` | Choose each structural view and medium by the relationship a reader needs to understand. |
+| `program-design` | `program-design-explain-design-choices-clearly` | Explain what changes, what remains, the tradeoff, its cost, and when to reconsider. |
+| `spec-program-review` | `spec-program-review-find-unapproved-design` | Catch machinery that document agreement or existing code did not authorize. |
+| `spec-program-review` | `spec-program-review-find-missing-requirements-or-design` | Catch lost accepted requirements and missing executable structural behavior. |
+| `spec-program-review` | `spec-program-review-check-tests-match-claims` | Compare each claimed outcome with evidence that can actually observe it. |
+| `spec-program-review` | `spec-program-review-check-diagrams-explain-system` | Check that diagrams answer their reader question and agree with written meaning. |
+| `spec-program-review` | `spec-program-review-give-useful-findings` | Return concrete findings, consequences, smallest corrections, owners, and confirming evidence in ordinary language. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |

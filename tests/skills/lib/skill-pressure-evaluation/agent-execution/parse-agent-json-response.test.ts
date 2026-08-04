@@ -1,5 +1,32 @@
 import { describe, expect, it } from "vitest";
-import { parseAgentJsonResponse } from "./parse-agent-json-response.js";
+import {
+  parseAgentJsonResponse,
+  parseExactAgentJsonResponse,
+} from "./parse-agent-json-response.js";
+
+describe("parseExactAgentJsonResponse", () => {
+  it("parses a JSON-only response", () => {
+    expect(parseExactAgentJsonResponse('{"status":"complete"}')).toEqual({
+      status: "complete",
+    });
+  });
+
+  it("rejects commentary before otherwise valid JSON", () => {
+    const response = 'I completed the task.\n{"status":"complete"}';
+
+    expect(() => parseExactAgentJsonResponse(response)).toThrow(
+      "Agent response must contain only JSON.",
+    );
+  });
+
+  it("rejects fenced JSON", () => {
+    const response = '```json\n{"status":"complete"}\n```';
+
+    expect(() => parseExactAgentJsonResponse(response)).toThrow(
+      "Agent response must contain only JSON.",
+    );
+  });
+});
 
 describe("parseAgentJsonResponse", () => {
   it("parses a JSON-only response", () => {

@@ -27,7 +27,7 @@ Bad: decorative boxes, prose labeled as a diagram, unreadable Mermaid, a table t
 
 ## Inspect and Fall Back
 
-Inspect the rendered output rather than inferring success from a fenced block or valid-looking syntax. When the destination renderer is not observable in-session, accept only an actual repository or browser preview of the rendered diagram, or a local Mermaid renderer when available; source-text inspection alone is never a visual pass for a rendered medium. When no rendered inspection is available, return `visual check: unverified (no renderer available)` with the reason, and either apply the required plain-text/table fallback or record the rendered result as an explicit gap — never a bare pass. Check:
+Inspect the rendered output rather than inferring success from a fenced block or valid-looking syntax. A directly visible fenced plain-text view can be inspected as shown. A table can be inspected as shown only when its rendered cells or borders are visible at the destination. When the destination renderer is not observable in-session, accept only an actual repository or browser preview of the rendered diagram, or a local Mermaid renderer when available; source-text inspection alone is never a visual pass for a rendered medium. When no rendered inspection is available, return `visual check: unverified (no renderer available)` with the reason, and either apply the required plain-text/table fallback or record the rendered result as an explicit gap — never a bare pass. Check:
 
 - every required semantic field is visible;
 - labels and edges are readable at the destination;

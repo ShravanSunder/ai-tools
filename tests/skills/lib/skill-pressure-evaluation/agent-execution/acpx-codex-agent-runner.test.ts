@@ -41,7 +41,18 @@ describe("extractAcpxAssistantText", () => {
         params: {
           update: {
             sessionUpdate: "agent_message_chunk",
+            content: { type: "text", text: "Progress update." },
+            _meta: { codex: { phase: "commentary" } },
+          },
+        },
+      }),
+      JSON.stringify({
+        method: "session/update",
+        params: {
+          update: {
+            sessionUpdate: "agent_message_chunk",
             content: { type: "text", text: "{\"ok\":" },
+            _meta: { codex: { phase: "final_answer" } },
           },
         },
       }),
@@ -51,6 +62,7 @@ describe("extractAcpxAssistantText", () => {
           update: {
             sessionUpdate: "agent_message_chunk",
             content: { type: "text", text: "true}" },
+            _meta: { codex: { phase: "final_answer" } },
           },
         },
       }),
@@ -89,6 +101,7 @@ describe("createAcpxCodexAgentRunner", () => {
                 update: {
                   sessionUpdate: "agent_message_chunk",
                   content: { type: "text", text: "result" },
+                  _meta: { codex: { phase: "final_answer" } },
                 },
               },
             }),

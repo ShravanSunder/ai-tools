@@ -1,3 +1,11 @@
+export function parseExactAgentJsonResponse(response: string): unknown {
+  const exactResponse = tryParseJson(response.trim());
+  if (exactResponse.parsed) {
+    return exactResponse.value;
+  }
+  throw new Error("Agent response must contain only JSON.");
+}
+
 export function parseAgentJsonResponse(response: string): unknown {
   const trimmedResponse = response.trim();
   const completeResponse = tryParseJson(trimmedResponse);

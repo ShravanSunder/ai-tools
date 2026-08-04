@@ -2,7 +2,7 @@
 
 This reference owns the baseline every mode-complete and focused reviewer follows before its mission.
 
-Expected inputs: exact mode, complete targets, governing sources, boundary check 1, accepted requirements set, applicable boundary check 2, constraints, risk predicates, and selected mission.
+Expected inputs: exact mode, complete targets, governing sources, confirmed goal boundary, accepted requirements set, applicable structural-realization confirmation, constraints, risk predicates, and selected mission.
 
 Return: coverage, reconstructed claims/model slice, authority/traceability evidence, crux evidence, candidate findings, gaps, and stop boundary.
 
@@ -10,9 +10,9 @@ Return: coverage, reconstructed claims/model slice, authority/traceability evide
 
 Verify the complete target set, governing specification, and source authority. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
 
-Verify the accepted requirements set against the current owner-confirmed requirements record and boundary-check-1 result. Otherwise use the last inspectable owner-accepted governing baseline. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority. For simplification, baseline recovery, or requirement subtraction, return one compact disposition row per stable identity (`covered | owner-authorized supersession | gap` plus anchor). Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a result in those cases.
+Verify the accepted requirements set against the current owner-confirmed requirements record and confirmed goal boundary. Otherwise use the last inspectable owner-accepted governing source. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority. For simplification, recovery of the accepted starting point, or requirement subtraction, return one compact disposition row per stable identity (`covered | owner-authorized supersession | gap` plus anchor). Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a result in those cases.
 
-For `program-only` and `pair`, inspect the complete boundary-check-2 result or return its exact missing owner decision. Treat design dimensions as `required | satisfied by the existing system | not applicable | unresolved`; a general review category is not a reason to invent a subsystem.
+For `program-only` and `pair`, inspect the complete structural-realization confirmation or return its exact missing owner decision. Treat design dimensions as `required | satisfied by the existing system | not applicable | unresolved`; a general review category is not a reason to invent a subsystem.
 
 Partial coverage cannot return a clean recommendation.
 
@@ -76,9 +76,9 @@ Flag a concrete comprehension failure, process narration, obscure heading, decor
 
 ## Finding Calibration
 
-Report only source-backed reader, behavior, or design effects. Each candidate names the exact anchor; one consolidated failure and downstream ambiguity statement covering the contradiction or failure path, observable consequence, and next-agent guess; the smallest semantic correction; owner; validation; and refresh.
+Report only source-backed reader, behavior, or design effects. Each candidate names the exact anchor and explains in ordinary language what is wrong, the observable consequence, what the next agent would otherwise have to guess, the smallest correction, the semantic owner, and how the correction is confirmed.
 
-Test deletion before completing a questioned mechanism. A finding may repair the confirmed design; it may not expand the goal, accepted requirements, or complexity budget without an owner decision.
+Test removal before completing a questioned mechanism. A finding may repair the confirmed design; it may not expand the goal, accepted requirements, or agreed acceptable complexity without an owner decision.
 
 Stop at the mission boundary. Do not edit, redesign beyond the smallest target, or issue the parent verdict.
 

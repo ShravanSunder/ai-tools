@@ -7,7 +7,7 @@ export default defineConfig({
     },
     globals: true,
     include: ["lib/**/*.test.ts", "evals/**/*.eval.ts"],
-    maxConcurrency: 4,
+    maxConcurrency: 8,
     reporters: ["vitest-evals/reporter"],
     testTimeout: 900_000,
   },

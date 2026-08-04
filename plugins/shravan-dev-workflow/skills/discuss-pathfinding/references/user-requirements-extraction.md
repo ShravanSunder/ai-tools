@@ -1,10 +1,10 @@
 # User-Requirements Extraction
 
-This reference owns user/stakeholder classification, grill axes, row construction, useful user-job sequence inputs, record scaling and identity, the goal boundary, and local completion for a user-requirements pathfinding destination.
+This reference owns user/stakeholder classification, requirement questions, row construction, useful user-job sequence inputs, record scaling and identity, the goal boundary, and local completion for a user-requirements pathfinding destination.
 
 Expected inputs: clarified destination and depth, participant and source identities, claimed decision authority, candidate evidence, file-permission boundary, and artifact conventions.
 
-Return: grill axes, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, goal-boundary model (boundary check 1) with explicit owner confirmation or the exact decision needed, refusal/fallback result, and exact authority/evidence gaps.
+Return: requirement questions, classified user/stakeholder inventory, draft row-level requirements record, useful user-job sequence inputs, verified record identity and permitted home, confirmed goal boundary or the exact owner decision needed, refusal/fallback result, and exact authority/evidence gaps.
 
 ## Classify Users and Stakeholders
 
@@ -22,9 +22,9 @@ Good: “SDK consumer making a first authenticated call” and “buyer accounta
 
 Bad: one generic “users” bucket, or erasing the buyer because no journey map applies.
 
-## Grill the Load-Bearing Axes
+## Ask the Questions That Define the Requirement
 
-For every in-scope class, ask one axis at a time using `question-craft.md`:
+For every in-scope class, use `question-craft.md` to ask related questions together when they can be answered from the same current context. Keep dependent or unrelated questions for a later turn:
 
 1. Job and outcome: what is the class hiring the surface to accomplish, in its own terms?
 2. Pain and evidence: where is the missed outcome observable, and what usage data, ticket, observation, quotation, or other anchor supports it?
@@ -57,13 +57,28 @@ Classify each row in mixed-authority records. A document-level label never repla
 
 Do not infer authority from participation. Binding authority comes from an explicit decision-owner statement or a governing source whose scope covers the need; record its evidence anchor. An interviewee may supply strong observational evidence without owning product meaning.
 
-If the user declines extraction, return `extraction declined`, the authoritative sources already available, the rows or evidence established so far, and the remaining owner/evidence gaps. Do not select a specification readiness label; `spec-design` owns that decision after it classifies the complete source inventory.
+If the user declines extraction, return:
+
+- `extraction declined`;
+- the authoritative sources already available;
+- the rows or evidence established so far;
+- the remaining owner and evidence gaps.
+
+Do not select a specification readiness label; `spec-design` owns that decision after it classifies the complete source inventory.
 
 Stop this stage when every row has an evidenced authority state and any missing authority is an exact owner decision rather than an inferred answer.
 
 ## Capture User-Job Sequence Inputs
 
-Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return the class, user-worded steps or transitions, observed pain and evidence, desired observable difference, and cited U rows. Pathfinding may use a non-normative conversational sequence map to clarify an ambiguity; `spec-design` alone decides whether the durable specification needs a journey view and owns its normative rendering.
+Capture sequence only when a direct-user job's steps, transitions, or pain relationship materially help the human confirm or correct the need. Return:
+
+- the affected class;
+- user-worded steps or transitions;
+- observed pain and its evidence;
+- the desired observable difference;
+- the cited U rows.
+
+Pathfinding may use a non-normative conversational sequence map to clarify an ambiguity; `spec-design` alone decides whether the durable specification needs a journey view and owns its normative rendering.
 
 Teach the relationship through examples:
 
@@ -75,7 +90,7 @@ A high priority alone does not make a need sequence-shaped. Keep stakeholder nee
 
 ## Confirm The Goal Boundary
 
-Before specification handoff, build a compact goal-boundary model (boundary check 1) from the stabilized rows:
+Before specification handoff, build a compact goal boundary from the stabilized rows:
 
 ```text
 primary customer, developer, contract, or library goal
@@ -84,15 +99,25 @@ existing behavior or foundation that should be reused
 actual missing capabilities or observable differences
 allowed and protected system or capability surface at the clearest authoritative altitude
 explicit non-goals
-complexity budget: expected change shape and machinery that requires renewed approval
+acceptable complexity: expected change shape and machinery that requires renewed approval
+acceptable outcome-level evidence
 unresolved owner choices or evidence gaps
 ```
 
-Existing foundation means observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here. Missing pieces name the outcome gap, not every feature a complete platform might have. Establish allowed and no-touch systems or capability areas; require repositories, packages, forks, or modules only when they are already known or materially constrained. Otherwise preserve the higher-level boundary for `program-design` to realize. The agent may propose a provisional boundary for the owner to correct, but it remains provisional until confirmed. A useful complexity budget names the expected change shape and the additions that reopen scope. “Production-ready and complete” is not a budget because it cannot reject expansion.
+Apply these rules while building the boundary:
+
+- Name observable current behavior or capabilities the owner expects to reuse; do not design internal architecture here.
+- Name the outcome gap, not every feature a complete platform might have.
+- Ask which repositories, packages, forks, or modules may change when the owner already has a limit or leaving it open could materially expand the work.
+- Record allowed and protected packages as an implementation boundary, not as product behavior or permission to invent internal structure. Otherwise preserve the higher-level system or capability boundary for `program-design` to realize.
+- Treat an agent-proposed boundary as provisional until the owner confirms it.
+- Describe the expected change shape and which additions require renewed approval. “Production-ready and complete” is too vague to reject expansion.
 
 Challenge an addition by asking which U row it serves and what user-visible or contract outcome fails without it. Keep an unconfirmed expansion as an owner decision.
 
 Show this same current model to the authorized owner for explicit confirmation or correction. Silence, generic assent, and the agent's own restatement do not confirm it. Return an unconfirmed record with the exact decision needed; do not call it ready for specification design.
+
+Keep missing observable behavior, permitted and protected systems, non-goals, acceptable complexity, and acceptable outcome-level evidence visible as separate boundary items even when their answers remain unknown. Do not hide several unknowns inside one general scope question. An unresolved item stays in the record as an exact owner question.
 
 ## Scale the Record
 
@@ -100,6 +125,8 @@ Show this same current model to the authorized owner for explicit confirmation o
 - standard, deep, or substantial handoff: write `docs/specs/<slug>/user-requirements.md` when files are allowed; otherwise return the complete record in chat;
 - record classes and rows as they crystallize rather than reconstructing them at the end.
 
-A durable record uses its path as its inspectable identity. An in-chat record returns its complete text and uses a session or message anchor only when the host exposes one. Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record; keep confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
+A durable record uses its path as its inspectable identity. An in-chat record returns its complete text and uses a session or message anchor only when the host exposes one.
 
-Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the goal boundary and complexity budget are explicit, and the result carries owner confirmation of that same boundary or the exact decision still needed.
+Assign U identifiers once within that record: reordering or correcting preserves the identifier; splitting creates new identifiers and marks the old row superseded. Carry out-of-scope classes, unresolved questions, and the subject-matter goal boundary in the record, while keeping confirmation state in the returned result. `decisions-and-docs.md` owns the general record-home discipline and reader test.
+
+Complete when every in-scope class has row-level needs or an exact unknown, evidence and authority are separate, priorities name an assigner or gap, useful sequence inputs are captured without forcing a view, the record has a stable identity at a permitted destination, the goal boundary includes acceptable complexity and acceptable outcome-level evidence, and the result carries owner confirmation of that same boundary or the exact decision still needed.

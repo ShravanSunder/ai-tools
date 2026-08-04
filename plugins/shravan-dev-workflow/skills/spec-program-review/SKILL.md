@@ -10,9 +10,9 @@ Review is independent reconstruction of the smallest system that satisfies the c
 The reviewer rebuilds and challenges:
 
 ```text
-confirmed goal and accepted requirements
+confirmed goal boundary and accepted requirements
   -> authoritative Why/What and observable contracts
-  -> existing foundation and structural How
+  -> existing foundation and structural realization
   -> current/proposed calls, state, failure, and proof
   -> reader understanding and planning readiness
 ```
@@ -65,8 +65,8 @@ For operation `review`, require:
 target classification and skills-creation parent identity when applicable
 mode and complete target artifact paths
 governing sources, authority states, and coverage basis
-boundary check 1 and accepted requirements set, or the exact authority gap
-boundary check 2 for program-only or pair, or the exact owner decision still needed
+confirmed goal boundary and accepted requirements set, or the exact authority gap
+structural-realization confirmation for program-only or pair, or the exact owner decision still needed
 constraints and non-goals
 risk predicates
 claimed proof evidence or gaps
@@ -74,9 +74,9 @@ review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
 ```
 
-Use the owner-confirmed requirements record and boundary-check-1 result when available. Otherwise use the last inspectable owner-accepted governing baseline. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
+Use the owner-confirmed requirements record and confirmed goal boundary when available. Otherwise use the last inspectable owner-accepted governing source. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
 
-`program-only` also requires the governing specification. `pair` requires the current specification and program design. Missing boundary confirmation may produce `decision-needed`; review does not infer acceptance from silence or a status label.
+`program-only` also requires the governing specification. `pair` requires the current specification and program design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `pair`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
 Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous.
 
@@ -147,7 +147,7 @@ After the first focused receipt, return the coverage-bound result with remaining
 
 After a later semantic edit, rerun a focused lane only when the changed meaning affects that lane's selection predicate or prior finding coverage. Do not fan out unaffected lanes.
 
-Stop focused review when the risk is resolved, unsupported, outside the confirmed boundary, or needs an owner decision.
+Stop focused review when the risk is resolved, unsupported, outside the confirmed goal boundary, or needs an owner decision.
 
 Completion: the selected risk, non-selected residual risks, terminal receipt, and any explicit authority for an additional lane are recorded.
 
@@ -161,13 +161,32 @@ Completion: each used receipt supplies semantically current coverage for the cur
 
 MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result.
 
-Re-anchor before accepting a finding: identify the confirmed requirement or boundary it serves, whether the existing foundation already satisfies it or can supply the correction, the concrete failure if unresolved, the smallest correction, whether deleting the questioned mechanism removes the failure, and whether the correction stays inside the confirmed boundary. Then return the existing `accepted | rejected | contested | unverified` disposition; do not create a second checkpoint status. When evidence is missing, follow that reference's evidence-lookup branch before accepting. A missing contract on an unnecessary mechanism is a deletion candidate, not an invitation to finish the mechanism.
+Re-anchor before accepting a finding: identify the confirmed requirement or goal-boundary field it serves, whether the existing foundation already satisfies it or can supply the correction, the concrete failure if unresolved, the smallest correction, whether removing the questioned mechanism removes the failure, and whether the correction stays inside the confirmed goal boundary. Then return the existing `accepted | rejected | contested | unverified` disposition; do not create a second checkpoint status. When evidence is missing, follow that reference's evidence-lookup branch before accepting. Question whether a proposed mechanism is needed before accepting findings that merely complete its missing contracts.
+
+Every finding uses the complete Finding shape from the loaded schema. For the caller-facing explanation, write every returned finding in ordinary language, whether it is an unreduced reviewer candidate or has the parent disposition `accepted | rejected | contested | unverified`. Each explanation includes:
+
+- a title naming the concrete problem rather than a review method;
+- what is wrong and where the evidence appears;
+- the affected confirmed requirement or design relationship and concrete consequence;
+- the smallest correction, followed by a separate `Route:` line naming `spec-design`, `program-design`, `caller`, or ordered `spec-design -> program-design`;
+- the evidence or affected review coverage that would confirm the correction.
+
+Do not leave the route implicit from the artifact or section named. Record parent disposition separately after reduction; unreduced candidate status does not waive the useful finding fields. A review label may summarize the explanation but may not replace any field.
+
+For each material proof claim, compare the claimed outcome with the supplied evidence's actual observation boundary. State what the evidence proves, what it cannot observe, and the smallest missing proof modality or structural observation seam. Do not collapse distinct unsupported claims into generic “runtime proof”; pair each claim with the smallest observation that could confirm or falsify it. For each applicable diagram, name the reader question it should answer and compare its visible owners, direction, state or effect, normal and error behavior, and changed edges with the written requirements and design. Rendering or repeated labels alone do not establish usefulness or agreement.
 
 Classify each requested correction as `requirements/Why/What`, `structural How`, or `both`. A How-only correction preserves the accepted requirements set unless the owner explicitly changes it.
 
-Reject prose taste without reader or design effect. Missing evidence is `unverified`. Preserve real disagreement as contested. New persistence, history, identity, governance, certification, control planes, external services, or other material scope outside the confirmed boundary returns `decision-needed` rather than accepted remediation.
+Route accepted corrections by semantic owner:
 
-Completion: every candidate has a source-backed disposition and no accepted finding silently changes the confirmed goal or accepted requirements.
+- `requirements/Why/What` returns to `spec-design`, using `discuss-pathfinding` when owner meaning is missing;
+- `structural How` returns to `program-design`;
+- `both` returns to `spec-design` first, then `program-design` after the observable contract is settled.
+- `caller` returns the exact owner/caller decision; review does not resume until that decision is resolved.
+
+Reject prose taste without reader or design effect. Missing evidence is `unverified`. Preserve real disagreement as contested. New persistence, history, identity, governance, certification, control planes, external services, or other material scope outside the confirmed goal boundary returns `decision-needed` rather than accepted remediation.
+
+Completion: every candidate has a source-backed disposition; every finding uses the complete loaded Finding shape and contains each caller-facing field above regardless of disposition or final verdict; and no accepted finding silently changes the confirmed goal or accepted requirements.
 
 ## 10. Return the Coverage-Bound Result
 
@@ -184,13 +203,14 @@ Do not return `ready` while any of these hold:
 - target classification or required runtime-skill-package parent identity is missing;
 - the current target identity or semantic scope is missing or ambiguous;
 - the complete target or governing-source set was not read;
-- boundary check 1, accepted requirements, or applicable boundary check 2 is missing or conflicting without an explicit returned authority gap;
+- the confirmed goal boundary, accepted requirements, or applicable structural-realization confirmation is missing or conflicting without an explicit returned authority gap;
 - no complete semantically current mode-complete receipt exists;
 - a selected lane is silent without explicit follow-up;
 - partial, blocked, or `no-receipt` coverage affects a required dimension;
-- a finding lacks an accepted requirement identity or confirmed boundary, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, or disposition;
+- a finding lacks an accepted requirement identity or confirmed goal-boundary field, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, semantic correction route, or disposition;
 - specification, program, or pair mode boundaries are conflated;
 - `program-only` or `pair` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
+- a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - pair mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
 - the downstream consumer must invent meaning owned by the reviewed artifact;

@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-03 Four-Skill Boundary And Readable Structure](2026-08-03-four-skill-boundary-and-readable-structure.md)
 - [2026-08-02 GH watch cadence defaults](2026-08-02-gh-watch-cadence-defaults.md)
 - [2026-08-02 Four-Skill Semantic Pressure Evaluators](2026-08-02-four-skill-semantic-pressure-evaluators.md)
 - [2026-08-02 Design Workflow Boundaries And Organized Pressure Tests](2026-08-02-design-workflow-boundaries-and-organized-pressure-tests.md)

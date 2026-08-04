@@ -30,7 +30,17 @@ These are not mandatory headings. Organize by journey, capability, protocol, dom
 
 Use linked slice specifications only when a vertical capability, protocol, domain boundary, or independently governed contract has its own consumers and reason to change. Do not create appendix-style mini-doc sprawl or duplicate normative claims.
 
-Keep target classification, source/review coverage, self-check state, readiness, acceptance narration, process history, advisor names, PR lifecycle, and research ledgers out of the design artifact. A compact source pointer may remain when readers or tooling use it for authoritative lookup. Rationale must stand on technical or product constraints.
+Keep these workflow and process details out of the design artifact:
+
+- target classification;
+- source or review coverage;
+- self-check and readiness state;
+- acceptance narration;
+- process history and advisor names;
+- PR lifecycle;
+- research ledgers.
+
+A compact source pointer may remain when readers or tooling use it for authoritative lookup. Rationale must stand on technical or product constraints.
 
 ## Navigation and Traceability
 
@@ -49,7 +59,7 @@ Diagrams may explain relationships but may not be the only home of normative mea
 
 ## Apply Required Why/What Views
 
-Consume the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Consume the shared rendering results and reject any view with a missing semantic field, failed visual check, or unresolved fallback.
+Consume each selected view's reader question plus the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Consume the shared rendering results and reject any view with a missing semantic field, failed visual check, unresolved fallback, or content that does not answer its stated reader question.
 
 - Journey maps cite the stable U rows they re-render; the source record remains normative. Good steps express the user's job and observable pain. A screen tour or component name is not a journey.
 - Context diagrams keep the system opaque and place external consumers, stakeholders, surfaces, contracts, and relevant non-consumers around the boundary. Internal components, owners, stores, or enforcement points are structural How and route to `program-design`.
@@ -61,7 +71,14 @@ Prune a view that adds no decision clarity. View application is complete when ev
 
 For every heading, paragraph, list, table, and diagram, ask what first confirmation, correction, decision, trace, failure simulation, proof path, or later authoritative lookup becomes underdetermined if it disappears. Delete or merge the element when the answer is none.
 
-Preserve authority and negative space; problems, outcomes, requirements, observable contracts, failure obligations, constraints, and proof; and the rationale, example, or relationship a human needs to challenge them. Flag process/review/PR narration, sibling-role recitals, summaries that repeat the preceding model, and decorative views. Across companion documents, give shared authority or boundary meaning one smallest useful home and link to it elsewhere.
+Preserve:
+
+- authority and negative space;
+- problems, outcomes, requirements, and observable contracts;
+- failure obligations, constraints, and proof;
+- rationale, examples, and relationships a human needs to challenge the meaning.
+
+Flag process, review, or PR narration; sibling-role recitals; summaries that repeat the preceding model; and decorative views. Across companion documents, give shared authority or boundary meaning one smallest useful home and link to it elsewhere.
 
 Use plain, specific headings that tell the reader what they will learn or decide. A specialized domain term is fine when it carries stable meaning; formal-sounding prose that adds no decision, relationship, rationale, boundary, example, or correction point is not.
 
@@ -80,11 +97,13 @@ Re-read the complete artifact and record:
 - missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
 - journey maps that fail to cite their U rows or context diagrams that cross into internal How;
 - accepted requirements lost or superseded without owner authority;
-- changes from boundary check 1 hidden as specification completeness;
+- changes from the confirmed goal boundary hidden as specification completeness;
 - process state, obscure headings, repeated companion narration, or reader-facing elements that fail the human deletion test;
 - whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
 
-For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion — one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor, reusing the existing coverage view. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a report. A shorter artifact that loses users, variants, defaults, scenarios, contracts, or proof obligations is scope loss, not pruning.
+For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion. Reuse the existing coverage view and return one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor.
+
+Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor. A bare "coverage intact" assertion is not a report. A shorter artifact that loses users, variants, defaults, scenarios, contracts, or proof obligations is scope loss, not pruning.
 
 Run the result against the current artifact state. Record exact failures, not “needs more detail.”
 

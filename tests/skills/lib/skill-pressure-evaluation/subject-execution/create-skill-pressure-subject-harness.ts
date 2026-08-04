@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createHarness, type JsonValue } from "vitest-evals";
-import { parseAgentJsonResponse } from "../agent-execution/parse-agent-json-response.js";
+import { parseExactAgentJsonResponse } from "../agent-execution/parse-agent-json-response.js";
 import type { AcpxAgentRunner } from "../agent-execution/acpx-codex-agent-runner.js";
 import type { AcpxCodexAgentSetup } from "../runtime-configuration/skill-pressure-runtime-configuration.js";
 import type {
@@ -80,7 +80,7 @@ export function createSkillPressureHarness(
         ...(signal === undefined ? {} : { signal }),
         setup: props.subjectSetup,
       });
-      const finalJson = parseAgentJsonResponse(acpxRun.finalText);
+      const finalJson = parseExactAgentJsonResponse(acpxRun.finalText);
       const validation = validateSkillPressureResult(finalJson);
       if (!validation.ok) {
         throw new Error(

@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.7.9",
+  "version": "1.7.10",
   "description": "Shravan's development workflow plugin with goal orchestration, research, authoritative spec design, structural program design, independent spec/program review, user-requirements pathfinding, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
