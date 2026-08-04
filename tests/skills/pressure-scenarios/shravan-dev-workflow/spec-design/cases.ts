@@ -6,6 +6,50 @@ const requiredSourceReads = [
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "spec-design-create-separate-specification-after-requirements",
+    requiredSourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "preserves-three-separate-concepts",
+        requirement: "Explains Requirements as authorized Why, for whom, and boundary; Specification as normative observable What; and Program Design as internal How, without treating the shorthand alone as their complete meaning.",
+        failureExample: "Calls Requirements and Specification one concept or says two design artifacts are sufficient.",
+      },
+      {
+        name: "requires-a-separate-specification-identity",
+        requirement: "Reuses the existing Requirements source and requires a different Specification identity before locally-ready or Program Design, explicitly rejecting a combined Requirements/spec artifact.",
+        failureExample: "Renames the Requirements source, treats its examples as the Specification, or routes to Program Design without a separate Specification.",
+      },
+      {
+        name: "keeps-artifact-roles-distinct",
+        requirement: "Assigns authorized needs, priorities, and boundaries to Requirements and normative observable obligations traced to them to Specification.",
+        failureExample: "Copies the Requirements content into a nominally separate file without defining the observable contract.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-design-reuse-existing-requirements-source",
+    requiredSourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "reuses-admitted-requirements",
+        requirement: "Admits and reuses the complete existing Requirements source instead of copying, rewriting, or normalizing it into a second Requirements artifact for folder consistency.",
+        failureExample: "Creates docs/specs/session-search/requirements.md despite the qualifying existing identity.",
+      },
+      {
+        name: "authors-only-the-missing-specification",
+        requirement: "Proposes a distinct Specification identity whose normative observable obligations trace to the existing Requirements source without replacing or altering it.",
+        failureExample: "Combines the artifacts or lets the new Specification become the Requirements authority.",
+      },
+      {
+        name: "avoids-ceremonial-pathfinding",
+        requirement: "Does not invoke pathfinding because the prompt establishes complete, settled owner meaning; pathfinding is reserved for genuinely unwritten or undecided meaning.",
+        failureExample: "Interviews the user again or calls pathfinding merely to produce a Requirements file.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-design-return-one-program-design-handoff",
     requiredSourceReads,
     maximumToolCalls: 35,

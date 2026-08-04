@@ -56,15 +56,34 @@ hypotheses that remain unproven
 
 Separate symptom, cause, and requested mechanism. The specification may state an observable problem without proving implementation root cause. It may not use an unproven root cause to authorize product behavior.
 
-## Accept User-Requirements Sources
+## Admit Or Materialize Requirements
 
 Use the minimum accepted user-requirements source contract owned by `spec-design/SKILL.md`; do not require an equivalent source to reproduce the pathfinding document shape. Inspect row-level evidence and producer-owned authority independently, then classify the source itself in the governing-source inventory using Classify Sources above.
 
 Only rows whose producer-owned authority state is `authorized` are normative-eligible. Observational evidence can prove a current pain without authorizing desired product meaning. Advisory and unresolved rows remain visible inputs or gaps.
 
+Choose exactly one Requirements identity:
+
+```text
+one qualifying authoritative Requirements source exists
+  -> admit and reuse that identity
+
+settled authoritative meaning exists but has no qualifying Requirements home
+  -> materialize one normalized Requirements artifact from that meaning
+
+owner meaning is unwritten or undecided
+  -> use discuss-pathfinding and consume its returned record
+```
+
+Qualification requires the minimum source contract, an inspectable location when a human must verify it, current applicability, and authority sufficient for every normative-eligible row. A governing source titled “requirements” does not qualify when it actually serves as the observable Specification contract or collapses both roles.
+
+Normalization organizes already-settled authoritative meaning into the minimum contract. It may preserve explicit gaps, but it may not ask, answer, infer, or confirm missing owner meaning. Route such meaning through `discuss-pathfinding`, then consume the returned clarification in the Requirements or Specification home that owns it.
+
+For substantial file-backed work, the admitted or materialized Requirements identity must be present, resolvable, and different from the Specification artifact. Never create a duplicate Requirements artifact when a qualifying identity already exists.
+
 Good: a mixed record retains observational and hypothesis rows while requirements cite only authorized U rows.
 
-Bad: assigning one aggregate authority label to a mixed record, silently promoting evidence to authority, or discarding stakeholder rows because no journey applies.
+Bad: assigning one aggregate authority label to a mixed record, silently promoting evidence to authority, discarding stakeholder rows because no journey applies, duplicating an admitted Requirements source, or using one `Requirements/spec` artifact for both identities.
 
 ## Confirm the Goal Boundary
 
@@ -138,6 +157,8 @@ Complete when:
 - every product decision has inspectable authority or an exact gap;
 - user and stakeholder classes remain distinct;
 - normative-eligible rows are identifiable by stable U identifier;
+- one qualifying Requirements identity is admitted or materialized without duplication or invented owner meaning;
+- substantial file-backed work has a planned Specification identity different from the Requirements identity;
 - the goal boundary is established by `discuss-pathfinding` or an equivalent authoritative governing source and explicitly confirmed or corrected by the authorized owner;
 - the accepted requirements set is recoverable and compared;
 - the current/desired problem is observable without assuming the solution.

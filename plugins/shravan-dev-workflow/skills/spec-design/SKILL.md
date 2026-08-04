@@ -1,11 +1,29 @@
 ---
 name: spec-design
-description: Use when defining or revising a specification's authoritative Why/What or semantically creating or correcting its journey maps, context diagrams, or requirement-coverage views, including the problem, consumers, outcomes, requirements, public or externally observable contracts, constraints, failure obligations, or proof obligations. Not for extracting tacit needs or unmade decisions, reconverging a drifted shared model, in-chat explanation with no durable specification artifact, pure format-only maintenance of settled specification artifacts, internal structural How, review-only requests, implementation planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations or its journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How, review-only requests, implementation planning, a full Requirements -> Specification -> Program Design -> review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Spec Design
 
-A specification is the observable contract for authorized product meaning.
+Requirements, Specification, and Program Design are separate authoritative concepts:
+
+```text
+Requirements
+  WHY, for whom, and within what boundary?
+  Authorized needs, desired outcomes, priorities, and limits.
+                    |
+                    v
+Specification
+  WHAT must be observably true?
+  Normative observable obligations traced to Requirements.
+                    |
+                    v
+Program Design
+  HOW will the internal system satisfy it?
+  Structural realization of the fixed observable obligations.
+```
+
+A specification is the observable contract for authorized product meaning. It never substitutes for the separately identifiable Requirements source that authorizes it.
 
 It turns evidence and authorized decisions into a contract that another capable agent can realize without inventing product meaning:
 
@@ -19,13 +37,15 @@ consumer and problem
   -> proof obligation
 ```
 
-Source authority establishes which meaning is legitimate; it supports the contract rather than replacing it as the primary model. Every `MUST` needs a legitimate basis. Every material requirement needs an observable consequence. Unresolved product meaning stays visible; internal component structure stays downstream in `program-design`.
+Source authority establishes which meaning is legitimate; it supports the contract rather than replacing it as the primary model. Every `MUST` needs a legitimate basis. Every material requirement needs an observable consequence. Unresolved owner meaning routes through `discuss-pathfinding`; internal component structure stays downstream in `program-design`.
 
 ## Boundary
 
-This skill owns authoritative Why/What:
+This skill admits or materializes durable Requirements from already-settled authoritative meaning and authors the separate Specification:
 
-- problem, consumers, current observable behavior, outcomes, and non-goals;
+- Requirements: affected people, authorized needs, desired outcomes, priorities, limits, and non-goals;
+- Specification: normative observable obligations traced to the Requirements identity;
+- problem, consumers, and current observable behavior;
 - source authority and important user decisions;
 - normative requirements and traceability;
 - public or externally observable UI, API, CLI, data, configuration, and operational contracts;
@@ -33,7 +53,16 @@ This skill owns authoritative Why/What:
 - proof modalities required by material obligations;
 - the specification artifact and author self-check.
 
-It does not choose components, internal owners, dependency direction, state storage, call graphs, recovery mechanisms, task order, files, or exact validation commands. Route structural How to `program-design`, review-only work to `spec-program-review`, and one named runtime-skill package to `skills-creation`.
+It does not elicit or confirm genuinely unwritten owner meaning and does not choose components, internal owners, dependency direction, state storage, call graphs, recovery mechanisms, task order, files, or exact validation commands. Route unwritten owner meaning to `discuss-pathfinding`, structural How to `program-design`, review-only work to `spec-program-review`, and one named runtime-skill package to `skills-creation`.
+
+Routing cases:
+
+```text
+true:      "Write a durable Requirements document from these settled, user-confirmed decisions. Do not write the Specification yet."
+near miss: "Interview me to discover what users need and which boundary I actually want." -> discuss-pathfinding
+near miss: "Clean up this settled Requirements document without changing its meaning." -> docs-maintain
+near miss: "Take this through Requirements, Specification, Program Design, and independent pair review." -> orchestrator-design
+```
 
 ## Terminal Contract
 
@@ -46,7 +75,7 @@ evidence-blocked
 deferred
 ```
 
-A `locally-ready` result includes the artifact identity; governing-source identities, authority, current applicability, and coverage; the confirmed goal boundary; the accepted requirements set; load-bearing decisions; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed. These are returned workflow state, not narrative sections in the specification.
+A `locally-ready` result includes distinct Requirements and Specification identities; governing-source identities, authority, current applicability, and coverage; the confirmed goal boundary; the accepted requirements set; load-bearing decisions; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed. These are returned workflow state, not narrative sections in the specification.
 
 Produce terminal labels by observable condition:
 
@@ -62,7 +91,7 @@ locally-ready -> recommend program-design
 decision-needed | evidence-blocked | deferred -> stop with the exact reason
 ```
 
-Initial requirements pathfinding remains inside this skill's authority and source-admission work; it is not a separate next phase after `locally-ready`. Before recommending `program-design`, inspect its declared inputs and return a compact pointer-based handoff containing the requirements and specification identities, confirmed goal boundary and accepted-requirements status, phase result, exact remaining gaps, and why structural How is next. Do not copy full artifacts, unrelated history, or orchestration counters. A direct spec-design invocation carries no cycle budget.
+When unmade owner meaning blocks Requirements or Specification, use `discuss-pathfinding` and resume this phase with its clarified return. Pathfinding is not a separate next phase after `locally-ready`. Before recommending `program-design`, inspect its declared inputs and return a compact pointer-based handoff containing the distinct Requirements and Specification identities, confirmed goal boundary and accepted-requirements status, phase result, exact remaining gaps, and why structural How is next. Do not copy full artifacts, unrelated history, or orchestration counters. A direct spec-design invocation carries no cycle budget.
 
 ## Workflow
 
@@ -70,15 +99,17 @@ Initial requirements pathfinding remains inside this skill's authority and sourc
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the applicable identity representation, the Requirements/Specification separation check, and the identities downstream phases must consume.
+
 MUST load `references/authority-and-problem-framing.md` and return its first result for stage 1: artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, confirmed goal boundary, and accepted-requirements recovery. Retain the loaded reference and working state for stage 2 and the terminal return. Surface an exact owner decision immediately when it blocks authoring.
 
 Inventory current sources before treating the draft as truth. External popularity is advisory evidence unless an authorized contract makes it normative.
 
 When implementation or incident evidence names internal mechanisms, classify it as evidence and return every authorized observable outcome before any remaining gap. That evidence does not create an owner choice between retaining the mechanism and turning it into a product contract. Route structural choices to `program-design`; ask only about missing product meaning or an actual external compatibility or operational constraint established by a legitimate source.
 
-IF important user or stakeholder meaning is unwritten, or an authoritative source cannot settle a required goal-boundary field, use `discuss-pathfinding` with the user-requirements destination and return the complete record, record identity and rows, goal boundary established by `discuss-pathfinding` and checked against the fields in the already-loaded reference, explicit confirmation or correction by the authorized owner, refusal or fallback result, and exact gaps.
+IF important user or stakeholder meaning is unwritten, or an authoritative source cannot settle required Requirements or Specification meaning, use `discuss-pathfinding`, record which of those two homes owns the missing meaning, and return the complete record, record identity and rows, goal boundary established by `discuss-pathfinding` and checked against the fields in the already-loaded reference, explicit confirmation or correction by the authorized owner, refusal or fallback result, and exact gaps.
 
-Consume pathfinding's complete return as the inputs to the confirmed goal boundary. Do not create a second requirements record or re-ask an already confirmed decision. If a field required by the already-loaded reference is absent, keep it as an exact gap. Classify the returned record in the governing-source inventory.
+Consume pathfinding's complete return as input to the recorded Requirements or Specification owner. Do not create a second Requirements record or re-ask an already confirmed decision. If a field required by the already-loaded reference is absent, keep it as an exact gap. Classify the returned record in the governing-source inventory.
 
 If the user declines extraction, reassess the remaining sources:
 
@@ -89,7 +120,7 @@ If the user declines extraction, reassess the remaining sources:
 
 Decline itself selects no terminal label, and a hypothesis never authorizes a normative requirement or `locally-ready`.
 
-The minimum accepted user-requirements source contract is:
+The minimum accepted Requirements source contract is:
 
 ```text
 source identity
@@ -102,13 +133,13 @@ priority and priority assigner
 unresolved hypotheses
 ```
 
-A row is normative-eligible only when its producer-owned authority state is `authorized`. A pathfinding record or an equivalent source may satisfy this contract; equivalent sources need not copy the pathfinding document shape and are normalized into the same stable specification identities, evidence/authority classifications, priorities, and gaps.
+A row is normative-eligible only when its producer-owned authority state is `authorized`. A pathfinding record or an equivalent source may satisfy this contract; equivalent sources need not copy the pathfinding document shape. Reuse one qualifying, separately identifiable Requirements source. When settled authoritative meaning is distributed across sources but has no qualifying Requirements home, materialize one normalized Requirements artifact without eliciting, confirming, or inventing meaning. Then preserve its stable identities, evidence/authority classifications, priorities, and gaps in Specification traceability.
 
 Before deriving normative requirements, consume the explicitly confirmed goal boundary or apply the already-loaded reference's goal-boundary check to another governing source. Proposed meaning outside that boundary returns `decision-needed`; specification completeness does not authorize it.
 
 IF an external platform, protocol, library, policy, or empirical claim could change product meaning or an observable obligation and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`; return the exact external source identity/version, authority status, transfer assumptions, and remaining evidence gap before deriving the affected obligation.
 
-Completion: artifact boundary, consumers, decision authority, source classes, confirmed goal boundary, accepted-requirements recovery, and authority conflicts are explicit.
+Completion: the Requirements identity is qualifying, reused or materialized without duplication, and separate from the planned Specification identity; artifact boundary, consumers, decision authority, source classes, confirmed goal boundary, accepted-requirements recovery, and authority conflicts are explicit.
 
 ### 2. Model the problem before proposing obligations
 
@@ -194,13 +225,13 @@ Rejecting a requested all-in-one or internally focused diagram does not complete
 
 MUST load `references/artifact-and-self-review.md` with the Required Why/What Views decisions and rendering results to choose the artifact structure, preserve the specification spine, apply view discrimination and pruning, and return the structure decision, traceability/navigation result, view-verification result, pruned elements, artifact identity, and exact view gaps.
 
-Follow the repository's documented spec location; otherwise use `docs/specs/` for substantial file-backed work. Keep research ledgers and review reports out of the normative design artifact.
+Follow the repository's documented spec location; otherwise use `docs/specs/` for substantial file-backed work. Create a Specification artifact distinct from the admitted Requirements source. A combined `Requirements/spec` artifact or a Requirements document containing the observable contract does not satisfy this boundary. Keep research ledgers and review reports out of the normative design artifact.
 
-Author top-down: begin with the smallest Why/What map a human needs to confirm the problem and intended outcome, then reveal requirements, observable contracts, failures, constraints, and proof. Link every normative-eligible U row to the obligation it authorizes. When companion artifacts exist, expose one compact `requirements -> specification -> program design` path instead of repeating their roles.
+Author top-down: begin with the smallest Why/What map a human needs to confirm the problem and intended outcome, then reveal normative requirements, observable contracts, failures, constraints, and proof. Link every normative-eligible U row to the obligation it authorizes. Expose one compact `Requirements -> Specification -> Program Design` path with distinct identities instead of repeating their roles or contents.
 
 Section writers may organize already mapped meaning only. Their packet must name accepted claims and bases, prose boundary, prohibited invention, and required gap return. They may not originate requirements, invariants, option selections, failure policy, realizations, or normative prose.
 
-Completion: every normative claim has one home; a stranger can navigate from user need through problem, obligation, observable behavior, and proof; and every accepted identity has an inspectable destination or owner-authorized supersession.
+Completion: the Requirements and Specification homes are separately identifiable and non-identical; every normative claim has one home; a stranger can navigate from user need through problem, obligation, observable behavior, and proof; and every accepted identity has an inspectable destination or owner-authorized supersession.
 
 ### 10. Run the author self-check
 
@@ -218,7 +249,7 @@ Completion: current independent review semantically covers the current artifact,
 
 ### 12. Return the local result
 
-Return the artifact identity; governing-source identities, authority, current applicability, and coverage; confirmed goal boundary; accepted requirements set; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
+Return the distinct Requirements and Specification identities; governing-source identities, authority, current applicability, and coverage; confirmed goal boundary; accepted requirements set; decision inventory; requirement/proof inventory; self-check; independent local-review coverage; gaps; and non-acceptance boundary.
 
 IF returning a substantial specification in chat and problem, consumer, authority, journey, or requirement-to-proof relationships are non-obvious, use `tui-presentation` to render only those Why/What relationships. Keep normative meaning in the artifact and route internal component, call, state, or failure-mechanism views to `program-design`.
 
@@ -247,6 +278,9 @@ The packet names the exact question, sources, accepted claims when writing, maxi
 Do not return `locally-ready` while any of these hold:
 
 - target classification is missing, or a runtime-skill-package target lacks the explicit `skills-creation` parent packet/result identity;
+- substantial file-backed work lacks a present, resolvable Requirements identity and a different present, resolvable Specification identity, or either identity cannot be inspected;
+- Requirements and Specification are collapsed into one artifact, including a combined `Requirements/spec` label or a Requirements artifact used as the Specification;
+- settled authoritative Requirements are duplicated instead of reused, or a normalized Requirements artifact invents or confirms missing owner meaning instead of routing it through `discuss-pathfinding`;
 - a normative claim lacks authority or an explicit decision gap;
 - a user-facing normative requirement is based on a row whose authority state is not `authorized`, or normative-eligible user-requirements rows cannot be traced by stable U identifier;
 - the goal boundary lacks explicit confirmation or correction by the authorized owner, acceptable outcome-level evidence, or the specification expands its goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity without a new owner decision;
@@ -260,7 +294,7 @@ Do not return `locally-ready` while any of these hold:
 - a section writer originated meaning;
 - a required independent review is missing, stale, partial, silent, or blocked;
 - target classification, governing-source coverage, self-check, readiness, review state, or acceptance/PR narration appears as specification prose instead of returned workflow state;
-- the artifact identity, source coverage, or non-acceptance boundary is missing.
+- either Requirements or Specification identity, source coverage, or non-acceptance boundary is missing.
 - a `locally-ready` result omits `program-design`, recommends more than one next skill, or routes to planning, implementation, or pathfinding;
 - a non-ready terminal invents a continuation instead of returning its exact decision, evidence, or deferral stop;
 - the continuation handoff omits the destination's required boundary and authority state or copies full artifacts and unrelated history.
