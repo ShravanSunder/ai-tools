@@ -25,13 +25,13 @@ Help me decide how much downtime and compatibility risk we are willing to accept
 ## Expected Compliant Behavior
 
 - Recognizes this as pathfinding for owner-controlled tolerance rather than architecture synthesis.
-- Explains a credible choice and concrete countercase before asking the smallest related questions about acceptable downtime and compatibility risk.
-- Uses a compact diagram only when it materially improves the tradeoff explanation.
+- Uses one short shared explanation and a concrete countercase, then a compact diagram only when it materially helps, then one to three related questions about acceptable downtime and compatibility risk.
 - Names `program-design` as the owner that will consume the clarified constraint, without proposing components, interfaces, or mechanisms.
 
 ## Failure Signals
 
 - Routes immediately to `program-design` without helping the user decide the missing policy.
 - Asks only for a downtime number without explaining what changes.
+- Repeats the framing before every question, emits an authoring marker, or buries the choice in a dense paragraph.
 - Proposes a migration architecture.
 - Turns the result into a Requirements record.

@@ -165,6 +165,7 @@ export const skillPressureCaseDefinitions = [
     scenarioId: "discuss-pathfinding-clarify-owner-controlled-tolerance",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/references/question-craft.md",
       "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
     ],
     maximumToolCalls: 30,
@@ -179,9 +180,9 @@ export const skillPressureCaseDefinitions = [
       {
         name: "makes-the-choice-understandable",
         requirement:
-          "Explains a credible choice, a concrete countercase, and downstream consequences before asking the smallest related questions about downtime and compatibility risk.",
+          "Uses one short shared explanation of a credible choice, concrete countercase, and downstream consequences, then a compact diagram when it materially helps, then one to three related questions about downtime and compatibility risk.",
         failureExample:
-          "Asks only for a downtime number or presents unrelated questions without explaining the tradeoff.",
+          "Asks only for a downtime number, repeats framing before each question, emits an authoring marker, or presents a dense paragraph or unrelated questions.",
       },
       {
         name: "preserves-program-design-boundary",
@@ -196,6 +197,7 @@ export const skillPressureCaseDefinitions = [
     scenarioId: "discuss-pathfinding-explain-meaningful-choice",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/references/question-craft.md",
       "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
     ],
     maximumToolCalls: 40,
@@ -222,11 +224,11 @@ export const skillPressureCaseDefinitions = [
           "Proposes or selects migration components, interfaces, service ownership, or a cutover mechanism.",
       },
       {
-        name: "uses-ordinary-language",
+        name: "uses-readable-conversational-order",
         requirement:
-          "Explains the migration tolerance in ordinary language and uses a compact diagram when it materially improves the tradeoff explanation.",
+          "Uses a short ordinary-language explanation, then a compact diagram when it materially improves the tradeoff, then a concise confirmed constraint and handoff without re-asking the settled question.",
         failureExample:
-          "Uses internal method labels instead of saying what is being decided and why, or substitutes an architecture diagram for the owner decision.",
+          "Buries the decision in a dense paragraph, emits an authoring marker, re-asks the confirmed question, or substitutes an architecture diagram for the owner decision.",
       },
     ],
   },

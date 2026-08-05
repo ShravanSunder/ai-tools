@@ -19,6 +19,8 @@ my read: <recommended answer, confidence, and the reason for it>
 why it matters: <what changes downstream if the answer differs>
 ```
 
+When two or three related questions clarify one decision, carry these parts once for the group. Do not repeat the explanation before every question.
+
 Attach concrete options when the answer space is knowable — reacting to options is faster and surfaces the real preference; leave it open only when enumerating would bias the answer.
 
 ## Material Ambiguity
@@ -35,9 +37,17 @@ Before asking about a material ambiguity:
 
 End any material-ambiguity explanation or map with the smallest useful set of related questions. Use the user's terms. Do not make a user-facing question depend on an internal name merely because a repository search found it. Mention that name only when its role changes the decision, and explain what it does before asking the user to reason about it.
 
-Use a compact conversational map when the relationships are materially clearer visually. Keep a simple preference concise.
+Use a compact conversational map when the relationships are materially clearer visually. Keep a simple preference concise. Present one short shared explanation, then the optional map, then the smallest related question group:
 
-Good: “The current obligation permits up to five minutes of migration downtime. The credible alternative is zero downtime, but that may require parallel infrastructure and a longer cutover. If an urgent security migration cannot preserve both availability and speed, which matters more? Your answer sets the tolerance that Program Design must satisfy; it does not select the migration mechanism. Which downtime and compatibility boundary do you want?”
+```text
+The current obligation permits up to five minutes of downtime. Zero downtime may require parallel infrastructure and delay an urgent migration. Your answer sets the tolerance Program Design must satisfy; it does not select the migration mechanism.
+
+<show diagram>
+
+If an urgent security migration cannot preserve both availability and speed, which matters more? What downtime and compatibility boundary do you want?
+```
+
+`<show diagram>` is authoring notation. Replace it with a useful diagram when it materially helps, or omit it; never show the marker to the user. When the owner meaning is already confirmed, do not ask again: use the same short explanation and optional-diagram placement, then state the confirmed result and handoff concisely.
 
 Bad: “Should the runner own scheduling?” That asks the user to perform structural synthesis. Return settled obligations to `program-design`; pathfinding asks only for missing owner meaning such as acceptable cost, risk, downtime, compatibility, or policy.
 

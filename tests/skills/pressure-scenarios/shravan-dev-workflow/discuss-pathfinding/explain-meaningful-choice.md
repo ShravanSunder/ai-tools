@@ -28,7 +28,7 @@ Help me decide our downtime tolerance, then return that clarified constraint to 
 - Explains how the confirmed two-minute, backward-compatible boundary differs from both the current five-minute allowance and zero-downtime expansion.
 - Uses a concrete urgent-migration or compatibility countercase that exposes the cost, speed, and availability tradeoff.
 - Records the owner's complete constraint without asking the user to choose components or repeat the confirmed decision.
-- Uses a compact conversational diagram when it materially makes the tradeoff easier to understand.
+- Uses a short plain-language explanation, then a compact conversational diagram when it materially helps, then a concise confirmed constraint and handoff.
 - Returns the confirmed tolerance to `program-design` as owner meaning and does not author migration components, interfaces, or cutover mechanisms.
 
 ## Failure Signals
@@ -37,3 +37,4 @@ Help me decide our downtime tolerance, then return that clarified constraint to 
 - Chooses a migration architecture or names required components and interfaces.
 - Treats the five-minute allowance or zero-downtime alternative as owner approval.
 - Returns a Requirements record instead of the clarified constraint to `program-design`.
+- Buries the decision in a dense paragraph or re-asks the already-confirmed question.
