@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "1.7.12",
-  "description": "Development workflow skills for bounded design orchestration, goal orchestration, research swarms, authoritative spec design, structural program design, independent spec/program review, user-requirements pathfinding, handoffs, planning, implementation, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
+  "version": "2.0.0",
+  "description": "Development workflow skills for bounded design orchestration, research, authoritative Requirements and Specification design, structural program design, independent spec/program review, user-requirements pathfinding, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -23,9 +23,7 @@
     "spec-design",
     "program-design",
     "spec-program-review",
-    "goal",
     "orchestrator-design",
-    "orchestrator-goal",
     "discuss-clarify-mental-models",
     "discuss-pathfinding",
     "pathfinding",
@@ -46,13 +44,8 @@
     "observability",
     "opentelemetry",
     "victoria",
-    "plan-creation-swarm",
-    "plan-review-swarm",
-    "implementation-execute-plan",
     "handoff",
-    "execution",
     "implementation-handoff",
-    "implementation-review-swarm",
     "implementation-pr-wrapup",
     "debugging",
     "bug-hunt",

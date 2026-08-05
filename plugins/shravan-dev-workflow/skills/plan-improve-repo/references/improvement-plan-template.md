@@ -73,7 +73,7 @@ Read-only context:
 ## Handoff Prompt
 
 ```text
-Use implementation-execute-plan on this plan.
+Use the active implementation handoff or PR-lifecycle route for this plan. If execution or implementation review is not shipped, report the blocked gate instead of invoking a retired workflow.
 
 Repo: <absolute path> Plan: <absolute path> Start by validating the plan against current git state before editing files. Use bounded subagents only for independent slices. Parent owns integration and final proof.
 ```

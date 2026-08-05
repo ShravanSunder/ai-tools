@@ -5,9 +5,8 @@ skill_under_test: shravan-dev-workflow:spec-handoff
 mode: fast
 expect_read_only: true
 expect_artifact: true
-expect_decision_regex: spec|design|handoff|portable|proof expectations|plan-creation-swarm|implementation plan
-expect_proof_regex: proof (expectation|assumption|gap)|proof assumptions|validation strategy|explicit deferrals|defer.*plan-creation-swarm
-expect_proof_regex: plan-creation-swarm
+expect_decision_regex: spec|design|handoff|portable|proof expectations|planning unavailable|blocked planning|implementation plan
+expect_proof_regex: proof (expectation|assumption|gap)|proof assumptions|validation strategy|explicit deferrals|planning unavailable|blocked planning
 
 ## Shortcut Temptation
 
@@ -36,9 +35,9 @@ list open questions or extra caveats unless they block coding.
 - Agent treats handoff as portability, not completion.
 - Agent packages spec/design context only.
 - Agent preserves open questions, non-goals, decisions, and evidence.
-- Agent carries validation strategy, proof assumptions, explicit deferrals to
-  `plan-creation-swarm`, or open proof gaps.
-- Agent routes implementation-plan creation to `plan-creation-swarm`.
+- Agent carries validation strategy, proof assumptions, an explicit planning
+  deferral, or open proof gaps.
+- Agent reports implementation-plan creation as unavailable in this release.
 - Agent does not create an implementation plan or edit code.
 
 ## Failure Signals

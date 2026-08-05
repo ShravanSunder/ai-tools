@@ -30,7 +30,7 @@ docs request
    - specs, plans, debug notes, research packets, and handoffs are stage artifacts until this skill classifies them as durable, archived, or disposable.
 - Keep `AGENTS.md` short. Move runbook detail to docs and link it.
 - Do not let old plans/specs/debug notes displace current source-of-truth docs by inertia.
-- Do not replace phase skills for active artifact work: `spec-design`, `program-design`, `spec-program-review`, `spec-handoff`, `plan-creation-swarm`, `plan-review-swarm`, `plan-handoff`, `implementation-execute-plan`, `implementation-handoff`, and `debug-investigation` own their lanes. Retired skill trees are provenance, not runtime routes.
+- Do not replace phase skills for active artifact work: `spec-design`, `program-design`, `spec-program-review`, `spec-handoff`, `plan-handoff`, `implementation-handoff`, `implementation-pr-wrapup`, and `debug-investigation` own their lanes. Retired skill trees are provenance, not runtime routes, and this release provides no planning, plan-review, plan-execution, goal-orchestration, or implementation-review replacement.
 - Before purging or rewriting docs, propose the change and say what will be preserved.
 - When code and docs disagree, identify the driver and ask the user if it is not obvious.
 - Use subagents for bounded inventory or stale-doc research in large repos, but the parent owns final edits.

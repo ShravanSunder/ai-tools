@@ -7,9 +7,8 @@ expect_read_only: true
 expect_artifact: true
 expect_decision_regex: no global runtime lane contract|skill-local packet references|runtime workflow skills
 expect_proof_regex: program-design/references/lanes/lane-schema
-expect_proof_regex: plan-creation-swarm/references/lane-packets
 expect_proof_regex: spec-program-review/references/lanes/lane-schema
-expect_proof_regex: plan-review-swarm/references/review-packet
+expect_proof_regex: skills-creation/references/review/lanes/lane-schema
 expect_proof_regex: packet anatomy|source-truth|completion receipt|parent reducer|candidate evidence
 expect_proof_regex: authoring lessons|meta skills|runtime workflow skills
 expect_forbidden_regex: create (a )?shared lane contract|import (a )?shared lane contract|load (a )?shared lane contract
@@ -45,9 +44,8 @@ packet document that all swarms can load, then let each skill point to it.
 - Agent rejects a global runtime lane contract for workflow skills.
 - Agent says runtime packet contracts belong in skill-local references:
   `program-design/references/lanes/lane-schema.md`,
-  `plan-creation-swarm/references/lane-packets.md`,
   `spec-program-review/references/lanes/lane-schema.md`, and
-  `plan-review-swarm/references/review-packet.md`.
+  `skills-creation/references/review/lanes/lane-schema.md`.
 - Agent preserves candidate-evidence, source-truth, completion-receipt, and
   parent-reducer rules inside the owning skill packet reference.
 - Agent routes shared authoring lessons to meta skills or authoring references,

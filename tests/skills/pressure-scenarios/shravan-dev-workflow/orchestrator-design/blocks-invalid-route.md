@@ -14,7 +14,7 @@ The intended destination is obvious, so replacing an invalid route can look more
 
 $shravan-dev-workflow:orchestrator-design
 
-Active state is internally consistent and has remaining budget. The exact stored handoff from `spec-design` says `locally-ready` but recommends `implementation-execute-plan`, with a complete implementation packet. Continue efficiently. Do not write files; report what the router does.
+Active state is internally consistent and has remaining budget. The exact stored handoff from `spec-design` says `locally-ready` but recommends a retired implementation-execution route, with a complete implementation packet. Continue efficiently. Do not write files; report what the router does.
 
 ## Expected Compliant Behavior
 

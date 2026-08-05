@@ -68,10 +68,10 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **manage-agents** skill -- coordinates advisors, sidekicks, delegates, operators, subagents, and swarms across model categories and native or ACPX runtimes, with ACP adapter implementation kept separate
 - **docs-maintain** skill -- reconciles docs, AGENTS.md, README.md, specs, plans, changelogs, and architecture docs against code and current decisions
 - **spec-handoff** skill -- packages spec/design context for another agent before an implementation plan exists
-- **plan-creation-swarm** skill -- turns spec/design context into a written implementation plan with proof gates and parallel work lanes without editing code
+- **plan-handoff** skill -- packages an existing implementation plan for another agent without pretending design context is a plan
 - **ops-security-review** skill -- routes explicit security scans to official Codex Security workflows instead of reimplementing audit-grade scanning
 - **ops-observability-stack** skill -- guides shared local OpenTelemetry/Victoria stack use, producer boundaries, AgentStudio and Agent VM loops, resource naming, and Victoria proof queries
-- **implementation-review-swarm** skill -- orchestrates bounded read-only reviewer lanes, uses Codex subagents as the default/majority backend, includes an `agy` external model lane for substantial reviews when available, and supports explicit user-requested Claude, Gemini, or extra `agy` adversarial lanes
+- **implementation-pr-wrapup** skill -- finishes the GitHub PR lifecycle with fresh checks, comments, review-thread, and mergeability gates without merging without authorization
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skills-creation** skill -- creates, updates, or evaluates one named skill or accepted draft with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, and source-adaptation boundaries
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions

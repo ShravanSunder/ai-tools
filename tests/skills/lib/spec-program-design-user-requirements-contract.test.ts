@@ -416,14 +416,11 @@ describe("user requirements and design-view contracts", () => {
 
   test("keeps the current-pair review contract aligned across direct consumers", () => {
     const currentPairConsumers = [
-      readPluginFile("skills/plan-creation-swarm/SKILL.md"),
-      readPluginFile("skills/plan-creation-swarm/agents/openai.yaml"),
       readPluginFile("skills/spec-handoff/SKILL.md"),
       readPluginFile("skills/plan-improve-repo/SKILL.md"),
       readPluginFile(
         "skills/plan-improve-repo/references/improvement-plan-template.md",
       ),
-      readPluginFile("skills/orchestrator-goal/SKILL.md"),
       readPluginFile("skills/discuss-clarify-mental-models/SKILL.md"),
       readPluginFile("skills/research-swarm/SKILL.md"),
     ];

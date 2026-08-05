@@ -23,8 +23,8 @@ security request
 - Only scan repositories, diffs, paths, or systems the user is authorized to assess.
 - Keep scans read-only unless the user explicitly asks to fix one reviewed finding.
 - Use the installed official Codex Security plugin when available in the current runtime.
-- Do not fold full security scanning into `plan-review-swarm` or `implementation-review-swarm`.
-- For ordinary plan or implementation review, use those skills' security lanes. Route here only when the user asks for a scan, audit, threat model, or security-specific remediation.
+- Do not fold full security scanning into an ordinary planning or implementation review.
+- For ordinary plan or implementation review, keep security obligations bounded to the active owner and route here only when the user asks for a scan, audit, threat model, or security-specific remediation.
 - Choose the narrowest scan that answers the request.
 - Treat security findings as review inputs. Validate before fixing or merging.
 - Record scope, report paths, and deferred proof gaps in handoff artifacts.
@@ -64,7 +64,7 @@ If Codex Security is not installed or not available, produce a copy-paste prompt
 ## Progressive Disclosure
 
 - Load `references/routing.md` before preparing a prompt or deciding between scan modes.
-- Load `references/threat-model-context.md` when preparing a threat model or packaging security context into another skill. `plan-review-swarm` also loads this file through a cross-skill path; update both skills if this reference moves.
+- Load `references/threat-model-context.md` when preparing a threat model or packaging security context into another skill. Do not reintroduce a retired workflow as a cross-skill caller of this reference.
 
 ## Output Shape
 

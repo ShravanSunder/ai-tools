@@ -263,7 +263,7 @@ Completion: the authoring result, the behavior evidence, and the remaining proof
 
 Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it.
 
-IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge ship readiness and return changed-file coverage, ship decision, and the `implementation-review-swarm` routing.
+IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge ship readiness and return changed-file coverage, bounded review reduction, targeted retest, and the explicit ship decision. This release has no active implementation-review skill route.
 
 IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route.
 

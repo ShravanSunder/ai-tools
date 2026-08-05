@@ -21,35 +21,31 @@ evidence already obtained.
 6. Ask generic `Grill me on requirements I have not decided.` Confirm it routes to `discuss-pathfinding`. Ask `Our previously agreed model drifted after this constraint changed; reconverge it.` Confirm only the explicit drift case routes to `discuss-clarify-mental-models`.
 7. Ask: `Threat-model this service as a standalone security exercise.` Confirm it routes to `ops-security-review`, while security obligations inside broader specification/program-design work remain with the owning design/review skill.
 8. Ask to create or evaluate each new skill as a runtime skill package. Confirm all three named-package requests route through `skills-creation`.
-9. Confirm generic and explicitly named legacy spec-swarm requests route by intent to `spec-design`, `program-design`, or `spec-program-review`, and never discover a retired runtime skill.
-10. Ask `spec-handoff` to package a design whose How is missing, then one with complete but stale pair review, then one with a current pair-mode `ready` result covering both current artifacts. Confirm next routes are `program-design`, `spec-program-review`, and `plan-creation-swarm`, respectively.
-11. Ask plan creation from a specification alone, from a complete pair with stale review, and from a current pair-mode `ready` review covering the current specification and program design. Confirm the first two route upstream and only the third admits design-bearing planning.
-12. Ask plan creation for a claimed implementation-mechanics-only change. Confirm the planner inspects current sources and admits the bypass only after positively excluding every design-bearing category.
-13. Ask for a plan review against a written implementation plan and then against a `plan-handoff` packet. Confirm both route to `plan-review-swarm`; a `spec-handoff` packet routes to `spec-program-review`.
-14. Ask for a small implementation review. Confirm Codex builds a shared packet and dispatches read-only reviewer lanes; external model lanes run only when explicitly requested.
-15. Ask `orchestrator-goal` for an already-clear goal, never-articulated intent, and a drifted existing goal. Confirm they route to goal compilation, `discuss-pathfinding`, and `discuss-clarify-mental-models`.
-16. Exercise `docs-maintain`, `debug-investigation`, `skill-audit`, `implementation-execute-plan`, `implementation-pr-wrapup`, and both handoff skills with their normal true prompts.
+9. Confirm generic and explicitly named retired workflow requests never discover a runtime skill; the active design/spec workflows remain the only routes for design work.
+10. Ask `spec-handoff` to package a design whose How is missing, then one with complete but stale pair review, then one with a current pair-mode `ready` result covering both current artifacts. Confirm the first two route to `program-design` and `spec-program-review`, while the pair-ready case reports a blocked planning handoff because no planning route is shipped.
+11. Ask for plan creation, plan review, goal orchestration, implementation execution, and fresh implementation review. Confirm each reports an unavailable retired runtime route rather than inventing a replacement or silently using another skill.
+12. Ask for a plan handoff with no existing plan. Confirm it preserves the design handoff boundary and reports planning unavailable.
+13. Ask for a bounded implementation review using the preserved review packet contract, then use `implementation-pr-wrapup` for PR state. Confirm review evidence is parent-verified and PR lifecycle remains separate.
+14. Exercise `docs-maintain`, `debug-investigation`, `skill-audit`, `implementation-pr-wrapup`, and both handoff skills with their normal true prompts.
 17. Confirm final reports include coverage, terminal receipts or explicit gaps, artifact links where expected, and only parent-verified findings.
-18. Give `implementation-review-swarm` one accepted implementation finding, then give `implementation-pr-wrapup` one existing pull-request review comment. Confirm both load `shared-references/code-review-feedback-handling.md`, verify the feedback before accepting it, and preserve their distinct remediation versus PR-lifecycle ownership.
+18. Give `implementation-pr-wrapup` one existing pull-request review comment. Confirm it loads `shared-references/code-review-feedback-handling.md`, verifies the feedback before accepting it, and preserves PR-lifecycle ownership without claiming fresh implementation review.
 
 ## Behavioral Pass Criteria
 
 - Codex treats subagent, `agy`, Claude, and other reviewer-lane outputs as candidate findings, not final truth.
 - Accepted reviewer findings are validated against repo reality before routing
   or tiny explicitly scoped same-session fixes.
-- Current-session implementation reviews route accepted blocker/important
-  findings back to `implementation-execute-plan` unless a tiny same-session
-  review-fix is explicitly scoped.
+- Bounded implementation review findings remain candidate evidence until the
+  parent verifies them; this release has no runtime execution or review route
+  to invoke automatically.
 - PR review threads are resolved only after they are proven stale or the real issue is fixed and verified.
 - Claude is not invoked unless explicitly requested, and when invoked it uses `claude --print`, not Anthropic API calls.
 - Gemini/agy is not invoked unless explicitly requested.
 - Oracle is not mentioned or invoked.
 - Failed or skipped external model lanes are reported without failing the whole review.
 - Plan review uses bounded read-only subagents by default for substantial plans, and skips them only with a stated reason.
-- Plan review writes a temp report for substantial reviews unless chat-only/no-files was requested.
-- Plan review routes accepted blocker/important plan findings back to
-  `plan-creation-swarm`; only tiny same-session plan copy edits are made when
-  explicitly scoped, and it does not implement code.
+- Plan and execution requests report an unavailable retired route and preserve
+  handoff context instead of inventing replacement lifecycle machinery.
 - `spec-design` owns authoritative Why/What; `program-design` owns structural
   How; `spec-program-review` owns reviewer-free classification and fresh
   independent review. None is a fourth orchestration skill.
@@ -68,7 +64,8 @@ evidence already obtained.
   the current specification and program design, and admits the
   implementation-mechanics-only bypass only after positive classification.
 - Plan-handoff packages existing implementation plans only; spec/design context
-  routes to `spec-handoff` or `plan-creation-swarm`.
+  routes to `spec-handoff`, and planning remains an explicit blocked gate in
+  this release.
 - Implementation-handoff requires implementation state and does not package no-diff planned work.
 - Generic `grill me` and unmade decisions route to `discuss-pathfinding`;
   `discuss-clarify-mental-models` requires explicit drift or break in an
