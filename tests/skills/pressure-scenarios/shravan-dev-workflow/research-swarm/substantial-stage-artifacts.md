@@ -10,7 +10,7 @@ expect_proof_regex: tmp/research-workflows|research-ledger|lanes/|per-lane artif
 expect_proof_regex: bounded question|bounded research questions|researchable questions|source-of-truth inputs|inspect list|non-goals|output schema|bounded read-only lane packets|bounded helper lanes|bounded lane packets|bounded lanes
 expect_proof_regex: candidate evidence|parent synthesis|parent verification|confidence
 expect_proof_regex: completion receipt|source anchors|proposed artifact path|ledger columns|source-anchor receipts
-expect_proof_regex: spec-design|program-design|plan-creation-swarm|spec-program-review|plan-review-swarm|implementation-review-swarm|recommended next workflow
+expect_proof_regex: spec-design|program-design|spec-program-review|recommended next workflow|planning unavailable|implementation review unavailable
 expect_forbidden_regex: chat-only research|accepted truth without parent|single summary only
 
 ## Shortcut Temptation
@@ -50,10 +50,9 @@ helpers agree, treat it as settled and recommend whichever workflow seems next.
 - Agent treats lane outputs as candidate evidence until parent synthesis
   verifies and reconciles them.
 - Agent distinguishes whether gathered evidence feeds Why/What, structural How,
-  or implementation planning, recommending `spec-design`, `program-design`, or
-  `plan-creation-swarm` without creating those artifacts itself, and uses
-  `spec-program-review`, `plan-review-swarm`, or `implementation-review-swarm`
-  when evidence feeds review.
+  or an unavailable planning/implementation route, recommending `spec-design`,
+  `program-design`, or `spec-program-review` without creating those artifacts
+  itself, and records an explicit blocked handoff for unavailable phases.
 
 ## Failure Signals
 

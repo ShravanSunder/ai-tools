@@ -31,18 +31,13 @@ discuss-*            shared understanding          discuss-clarify-mental-models
 research-*           evidence gathering            research-swarm
 manage-*             subordinate agents            manage-agents
 orchestrator-*       bounded workflow routing      orchestrator-design
-                                                  orchestrator-goal
 spec-*               design/spec boundary          spec-design
                                                   program-design
                                                   spec-program-review
                                                   spec-handoff
-plan-*               implementation-plan boundary  plan-creation-swarm
+plan-*               existing-plan portability    plan-handoff
                                                   plan-improve-repo
-                                                  plan-review-swarm
-                                                  plan-handoff
-implementation-*     code/change boundary          implementation-execute-plan
-                                                  implementation-review-swarm
-                                                  implementation-pr-wrapup
+implementation-*     code/change boundary          implementation-pr-wrapup
                                                   implementation-handoff
 ops-*                external operational systems  ops-security-review
                                                   ops-linear-tracking
@@ -59,7 +54,6 @@ tui-*                structured chat presentation  tui-presentation
 flowchart LR
     pathfinding["discuss-pathfinding<br/>extract tacit or unmade understanding"]
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
-    goal["orchestrator-goal<br/>coordination contract"]
     designCycle["orchestrator-design<br/>bounded routing only"]
 
     specDesign["spec-design<br/>authoritative Why/What"]
@@ -67,12 +61,8 @@ flowchart LR
     specReview["spec-program-review<br/>independent review"]
     specHandoff["spec-handoff<br/>portable spec context"]
 
-    planCreate["plan-creation-swarm<br/>implementation plan creation"]
-    planReview["plan-review-swarm<br/>adversarial review"]
     planHandoff["plan-handoff<br/>portable plan context"]
 
-    implExecute["implementation-execute-plan<br/>execute written plan"]
-    implReview["implementation-review-swarm<br/>review code/diff/PR"]
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
@@ -82,9 +72,6 @@ flowchart LR
     designCycle -.->|"follows phase-selected routes"| programDesign
     designCycle -.->|"one pair review"| specReview
     designCycle -.->|"only for unmade owner meaning"| pathfinding
-    goal --> specDesign
-    goal -->|"after planning admission gate"| planCreate
-    goal --> implExecute
 
     specDesign --> programDesign
     programDesign --> specReview
@@ -93,22 +80,6 @@ flowchart LR
     specReview --> specHandoff
     specReview --> specDesign
     specReview --> programDesign
-    specReview -->|"pair ready for current artifacts with current semantic coverage"| planCreate
-    specHandoff -->|"packet proves the same gate"| planCreate
-
-    planCreate --> planReview
-    planCreate --> planHandoff
-    planReview --> planCreate
-    planReview --> planHandoff
-    planReview --> implExecute
-    planHandoff --> implExecute
-
-    implExecute --> implReview
-    implExecute --> implWrap
-    implReview --> implExecute
-    implReview --> implWrap
-    implExecute --> implHandoff
-    implReview --> implHandoff
     implWrap --> implHandoff
 ```
 
@@ -126,8 +97,6 @@ Use `research-swarm` when the next step is to gather evidence: local code/docs, 
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
-Use `orchestrator-goal` when the objective is long-running and already clear enough to become a verifiable Codex or Claude `/goal` contract. Never-articulated intent or unmade decisions route to `discuss-pathfinding`; an existing shared model that has drifted routes to `discuss-clarify-mental-models`. For substantial goals, the contract carries a requirements/proof matrix and parent-owned completion gate; child agents, reviewers, UI drivers, and observability queries produce evidence, not completion by themselves. At closeout, `orchestrator-goal` accounts for lifecycle gates with the simple statuses `done`, `not-applicable`, `open`, and `blocked`; `done` requires an evidence pointer and does not imply rerunning already-completed review cycles.
-
 Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one pair review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
 
 ### Spec boundary
@@ -138,27 +107,19 @@ Use `program-design` to define structural How against the settled specification:
 
 Use `spec-program-review` to independently classify and proportionally review a specification, a program design, or their pair. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the pair. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
-The superseded `spec-creation-swarm` and `spec-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills; creation and review route through the three skills above.
+The retired `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills and this release provides no replacements.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the pair-review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and design-bearing work to `plan-creation-swarm` only when the packet proves semantically current pair readiness.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the pair-review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and records a blocked planning handoff when the packet is ready for a planning route that is retired in this release.
 
 ### Plan boundary
 
-Use `plan-creation-swarm` to turn an admitted source into a written implementation plan. Design-bearing work requires a current pair-mode `spec-program-review` result that is `ready` with semantically current coverage of the specification and program design; missing How routes to `program-design`, and a complete but unreviewed or semantically stale pair routes to `spec-program-review`. A direct bypass is allowed only when source inspection positively proves that no new product obligation, owner/boundary, interface, state semantic, failure/recovery policy, concurrency/consistency decision, compatibility realization, trust control, or proof seam is required. The skill stays read-only against product code and captures task sequence, dependency graph, parallel work lanes, write surfaces, validation gates, rollback or recovery notes, risks, and open questions. Non-trivial plans include a requirements/proof matrix with source requirements, owning tasks, proof modalities, evidence sources, freshness guards, and proof layers; if proof cannot pass at the planned scope, the plan should split or replan before execution.
+Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog, but planning admission and any executable-plan follow-through are blocked when they require a retired planning or execution route. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
 
-Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog before planning admission, but writes or marks an executable plan `ready` only from a semantically current pair-ready review covering the current specification and program design, or a positively proven implementation-mechanics-only classification. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
-
-Use `plan-review-swarm` to review a written implementation plan before code changes. It checks the whole artifact and verifies claims against the repo. Accepted blocker/important findings route back to `plan-creation-swarm`; missing Why/What routes to `spec-design`, and missing structural How routes to `program-design`.
-
-Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. If no plan exists yet, use `spec-handoff` or `plan-creation-swarm` instead.
+Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. If no plan exists yet, use `spec-handoff`; do not present design context as a plan or invoke a retired planning route.
 
 ### Implementation boundary
 
-Use `implementation-execute-plan` to validate and execute a written plan. It may coordinate bounded subagent slices and uses them whenever work is parallelizable into disjoint lanes, but the parent owns integration, verification, implementation proof, and completion claims. Worker packets cite exact plan tasks, requirement/proof rows, allowed write scopes, proof obligations, and completion receipts so subagent output can be reduced against the plan.
-
-Use `implementation-review-swarm` to review code, diffs, commits, PRs, or named files. Codex reviewer lanes are the default; Claude or Gemini/`agy` lanes are explicit opt-in external counsel. Reviewer outputs are candidates, not truth, and accepted findings are verified before edits. Implementation review verifies that proof maps back to requirements/spec/plan before a ready verdict. Reviewer packets include source-of-truth inputs, proof inventory, lane focus, and completion receipts so lanes produce different evidence instead of generic summaries. Accepted blocker/important findings normally route back to `implementation-execute-plan`.
-
-Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation work exists: push/open/update the PR, monitor checks and comments, process existing review threads, prove merge readiness with fresh state, and merge only when user authorization exists. This is a low-thinking workflow by default because state reads and gates carry the rigor. Fresh code-review discovery still belongs to `implementation-review-swarm`.
+Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation work exists: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery is outside the active runtime surface in this release; stop and report that gate rather than treating PR wrap-up as a substitute.
 
 Use `implementation-handoff` when real implementation state exists: branch, diff, changed files, commits, validation output, failed commands, blockers, or risk. It is for continuation, audit, or manual review of work already in motion.
 
@@ -178,9 +139,8 @@ This workflow does not use broad multi-model counsel by default.
 
 ```text
 normal review path
-  implementation-review-swarm / plan-review-swarm / spec-program-review
-      -> Codex reviewer lanes by default
-      -> Claude or Gemini/agy only when explicitly requested
+  spec-program-review
+      -> bounded independent specification/program review
 ```
 
 Oracle is excluded from `shravan-dev-workflow` review swarms.
@@ -197,11 +157,7 @@ Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review this specification/program-design pair.
 Use spec-handoff to package this design for another agent without creating a plan.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
-Use plan-creation-swarm to turn this semantically current pair-ready review of the current specification and program design into an implementation plan.
 Use plan-improve-repo to audit this repo and write executable improvement plans.
-Use plan-review-swarm to validate this plan against the repo before coding.
-Use implementation-execute-plan to validate and execute this written plan.
-Use implementation-review-swarm to review this diff and include Claude counsel.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.

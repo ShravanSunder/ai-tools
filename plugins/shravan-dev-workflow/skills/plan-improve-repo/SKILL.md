@@ -49,7 +49,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Use bounded read-only subagents for broad audits when available; the parent owns synthesis and must verify cited findings against source files.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
-- If asked to implement, route to `implementation-execute-plan` after a plan exists. If asked to review an existing plan, use `plan-review-swarm`.
+- If asked to implement or review an existing plan, report that the corresponding execution/review routes are unavailable in this release; do not invoke a retired skill or claim the plan is ready for a missing route.
 - If asked to validate a generated plan, do a read-only plan validation pass before recommending execution.
 - Do not call a plan executable until it has current-state evidence, explicit write surfaces, proof gates, stop conditions, and a handoff prompt.
 
@@ -103,9 +103,8 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - confirm task size is small enough for proof to pass inside scope
    - confirm stop conditions cover stale repo state, unrelated validation failures, and security-sensitive surprises
 8. Route next:
-   - `plan-review-swarm` to attack the plan
    - `plan-handoff` to package the plan for another agent
-   - `implementation-execute-plan` to validate and execute it
+   - an explicit blocked handoff when plan review or execution would require a retired route
 
 ## Plan Validation Flow
 

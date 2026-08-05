@@ -4,7 +4,7 @@ Review the implemented skill change before proof is generated and before ship st
 
 Return a verdict, changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
-For final repo skill-work readiness, `implementation-review-swarm` owns review orchestration and this reference supplies the skill-specific rubric, changed file coverage, and targeted retest expectations.
+For final repo skill-work readiness, this reference supplies the bounded implementation-review packet, changed-file coverage, reduction, and targeted retest expectations. It is usable without invoking a runtime review skill.
 
 ## Lanes
 
@@ -37,7 +37,7 @@ IF the changed surface adds or changes a lane or shared shape, load `../referenc
 
 Receipts are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
 
-If the user explicitly requests outside counsel and Codex authored the change, prefer a non-Codex provider for at least one lane. When using `implementation-review-swarm`, use this reference as the skill-specific review input rather than a competing orchestration path.
+If the user explicitly requests outside counsel and Codex authored the change, prefer a non-Codex provider for at least one lane. Otherwise keep review bounded to this reference and the current diff; do not invent a competing runtime route.
 
 ## Verdicts
 

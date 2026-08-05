@@ -76,7 +76,7 @@ When doing skill work in this repo:
 5. Keep `SKILL.md` compact and progressive. Put depth in `references/` and deterministic mechanics in `scripts/`.
 6. For `shravan-dev-workflow` behavior changes, add or update pressure scenarios under `tests/skills/pressure-scenarios/` and run `pnpm --dir tests/skills run test:evals`.
 7. For user-visible plugin behavior changes, update `docs/changelog/`, bump plugin version metadata, and record refresh / reinstall status.
-8. Before calling skill-work changes complete, route the changed surface through `shravan-dev-workflow:implementation-review-swarm`, then `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks / review-thread / merge-readiness proof. Refresh installed Codex/Claude caches only as an explicit post-push or release proof step; it is a home-level mutation and not a substitute for PR readiness.
+8. Before calling skill-work changes complete, perform a bounded fresh-context implementation review using the preserved review packet/reduction contract, then use `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks / review-thread / merge-readiness proof. Refresh installed Codex/Claude caches only as an explicit post-push or release proof step; it is a home-level mutation and not a substitute for PR readiness.
 
 Detailed mechanics stay in the owning skills and references:
 
@@ -86,7 +86,7 @@ Detailed mechanics stay in the owning skills and references:
 - `skill-creator` owns Codex skill anatomy and generated metadata as platform support loaded through `skills-creation/references/platform-mechanics.md`.
 - `tests/skills/README.md` owns the local pressure-test runner contract.
 - `docs-maintain` owns cleanup, archival, promotion, and durable docs reconciliation after artifacts exist.
-- `implementation-review-swarm` and `implementation-pr-wrapup` own the final review and merge-ready PR proof for implemented skill-work changes.
+- The bounded implementation review contract and `implementation-pr-wrapup` own the final review and merge-ready PR proof for implemented skill-work changes.
 
 ## Admired-source provenance (ai-dev-skills)
 
@@ -129,18 +129,13 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
 | manage-agents | `plugins/shravan-dev-workflow/skills/manage-agents/` | Choose and manage advisors, sidekicks, delegates, operators, subagents, and their allowed swarms across Frontier/Balanced/Mini models, native runtimes, ACPX usage, and ACP adapter boundaries |
 | orchestrator-design | `plugins/shravan-dev-workflow/skills/orchestrator-design/` | Guarded routing and temporary record keeping for one bounded specification, program-design, and critically validated pair-review cycle; no semantic design decisions or planning/implementation |
-| orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Compile clear long-horizon work into Codex/Claude `/goal` contracts, or route unclear goals: never-articulated intent to discuss-pathfinding, drifted models to discuss-clarify-mental-models |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
-| plan-creation-swarm | `plugins/shravan-dev-workflow/skills/plan-creation-swarm/` | Create written implementation plans from an admitted semantically current pair-ready review or proven implementation-mechanics-only input, with proof gates and parallel work lanes, without editing code |
 | plan-improve-repo | `plugins/shravan-dev-workflow/skills/plan-improve-repo/` | Audit a repository for high-leverage improvements; write or validate executable plans only after planning admission |
 | ops-security-review | `plugins/shravan-dev-workflow/skills/ops-security-review/` | Routes authorized security scans to the official Codex Security workflows |
-| implementation-review-swarm | `plugins/shravan-dev-workflow/skills/implementation-review-swarm/` | Codex-first implementation review swarm using bounded read-only reviewer lanes, Codex subagents as the default/majority backend, and explicit opt-in Claude/Gemini/agy adversarial lanes |
 | implementation-pr-wrapup | `plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/` | Finish GitHub PR lifecycle work after implementation: push/open/update, monitor checks/comments, handle existing review threads, prove merge readiness, and merge only when authorized |
 | plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable existing implementation-plan packets for other agents, CLIs, machines, or future sessions |
 | implementation-handoff | `plugins/shravan-dev-workflow/skills/implementation-handoff/` | Implementation-state packets for manual reviewers or continuation agents |
-| plan-review-swarm | `plugins/shravan-dev-workflow/skills/plan-review-swarm/` | Read-only adversarial plan review with whole-artifact loading, live repo validation, bounded reviewer lanes, and temp review artifacts for substantial reviews |
-| implementation-execute-plan | `plugins/shravan-dev-workflow/skills/implementation-execute-plan/` | Validate a written plan against the current repo, then execute with parent-owned subagent coordination and verification |
 | ops-observability-stack | `plugins/shravan-dev-workflow/skills/ops-observability-stack/` | Shared local OTel and Victoria stack operations, producer boundaries, resource naming, and debug/beta query loops |
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
 | skills-creation | `plugins/shravan-dev-workflow/skills/skills-creation/` | Create, update, or evaluate one named skill or accepted draft, or execute one run or slice of an accepted multi-run skill-change spec, with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
@@ -150,7 +145,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
-Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The retired `spec-creation-swarm` and `spec-review-swarm` trees remain there as provenance for the active `spec-design`, `program-design`, and `spec-program-review` workflows.
+Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The retired `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance; this release provides no replacements for them. The active design, spec, handoff, and PR-lifecycle skills remain the supported runtime surface.
 
 Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
 

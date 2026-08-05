@@ -34,7 +34,7 @@ Run one scenario:
 ```bash
 pnpm --dir tests/skills exec vitest run evals \
   --config vitest.config.ts \
-  -t orchestrator-goal-closeout-audit
+  -t discuss-pathfinding-explain-meaningful-choice
 ```
 
 The Vitest runner lives in this directory as a standalone test package. Run its
@@ -52,7 +52,7 @@ live agent:
 SKILL_PRESSURE_BACKEND=fake \
   pnpm --dir tests/skills exec vitest run evals \
   --config vitest.config.ts \
-  -t orchestrator-goal-closeout-audit
+  -t discuss-pathfinding-explain-meaningful-choice
 ```
 
 Vitest owns selection and execution for the four-skill evaluator path; use

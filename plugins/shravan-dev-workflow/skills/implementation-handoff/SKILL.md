@@ -18,7 +18,7 @@ Package actual implementation state so another agent can review, continue, or au
 - Include implementation proof: requirements/tasks claimed complete, commands and exit codes, red/green evidence or exception, skipped layers, blockers, and split/replan status.
 - Preserve security state when the implementation touches sensitive surfaces: changed trust boundaries, fixed findings, unvalidated risks, security proofs, report paths, and accepted risks.
 - Separate proven facts from claims, guesses, and unfinished work.
-- Do not run reviewers automatically. This skill prepares the packet; `implementation-review-swarm` or a manual Claude/Gemini/Codex paste can consume it.
+- Do not run reviewers automatically. This skill prepares the packet for a bounded manual implementation review or continuation; it does not invoke a retired review workflow.
 - If the handoff asks another agent to review only, the prompt must say "do not edit files".
 
 ## Workflow

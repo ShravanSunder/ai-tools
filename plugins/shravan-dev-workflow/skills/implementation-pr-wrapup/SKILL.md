@@ -18,7 +18,7 @@ Use this for:
 - handling existing PR feedback and getting a PR merge-ready;
 - "merge when ready" or similar conditional merge requests.
 
-Do not use this for fresh code-review discovery. Route "review this PR/diff for bugs" to `implementation-review-swarm`.
+Do not use this for fresh code-review discovery. If the user asks to review a PR/diff for bugs, report that fresh implementation review is not an active runtime route in this release; do not substitute PR wrap-up for it.
 
 ## Core Flow
 

@@ -20,7 +20,7 @@ Use this before calling an improvement plan ready for review, handoff, or execut
 
 ## Verdicts
 
-- `ready`: executable after optional `plan-review-swarm`.
+- `ready`: portable for handoff; execution/review readiness remains blocked when those runtime routes are not shipped.
 - `needs-refresh`: update plan before review or execution.
 - `blocked`: cannot proceed until a named dependency changes.
 - `rejected`: obsolete, duplicate, already solved, or not worth doing.
@@ -47,5 +47,5 @@ Issues:
 - <missing proof, stale path, oversized task, blocker, or none>
 
 Next:
-- spec-design | program-design | spec-program-review | plan-review-swarm | plan-handoff | implementation-execute-plan | refresh plan
+- spec-design | program-design | spec-program-review | plan-handoff | blocked execution/review gate | refresh plan
 ```

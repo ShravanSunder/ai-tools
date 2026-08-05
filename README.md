@@ -43,20 +43,13 @@ The main workflow plugin is organized by namespace and phase boundary:
 flowchart LR
     pathfinding["Discuss: Pathfinding<br/>unwritten requirements and decisions"]
     clarify["Discuss: Clarify Mental Models<br/>shared-model reconvergence"]
-    goal["orchestrator-goal<br/>long-horizon coordination"]
-
     spec["spec-*<br/>design, review, handoff"]
-    plan["plan-*<br/>create, review, handoff"]
-    impl["implementation-*<br/>execute, review, PR wrap-up, handoff"]
+    plan["plan-handoff<br/>existing plan portability"]
+    impl["implementation-*<br/>PR wrap-up, handoff"]
 
     pathfinding --> spec
     clarify --> spec
     clarify --> plan
-    goal --> spec
-    goal --> plan
-    goal --> impl
-    spec --> plan
-    plan --> impl
 ```
 
 Operations skills such as `ops-security-review` and `ops-linear-tracking` sit

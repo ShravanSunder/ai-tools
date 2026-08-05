@@ -67,7 +67,7 @@ Stay read-only.
   test("extracts prompt, expected behavior, and failure signal sections", () => {
     const scenario = parseScenarioMarkdown({
       filePath:
-        "/repo/tests/skills/pressure-scenarios/orchestrator-goal-closeout-audit.md",
+        "/repo/tests/skills/pressure-scenarios/discuss-pathfinding-example.md",
       markdown: repeatedMetadataScenario,
     });
 
