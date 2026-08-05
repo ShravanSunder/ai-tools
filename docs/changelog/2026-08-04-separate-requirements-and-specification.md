@@ -25,7 +25,7 @@ Plugin: `shravan-dev-workflow` 1.7.12
 - `claude plugin validate .`: passed.
 - `git diff --check origin/master`: passed.
 - Focused Luna-high/Terra-medium runs passed eight affected scenarios and all 24 semantic criteria, including the Spec Design review-handoff case. The chat-only review-navigation case was attempted twice. The second attempt reached Luna but returned no subject artifact after 377 seconds; it was interrupted. This remains an open behavior-proof gap, not a passing result.
-- A focused Pathfinding readability rerun passed both affected scenarios and all seven semantic criteria. The unresolved-policy case used one shared explanation followed by three related questions; the confirmed-policy case returned a concise handoff without re-asking. Neither response exposed the `<show diagram>` authoring marker.
+- A focused Pathfinding readability rerun passed both affected scenarios and all seven semantic criteria. The unresolved-policy case used one shared explanation followed by three related questions; the confirmed-policy case returned a concise handoff without re-asking. Neither response exposed the `<show diagram/>` authoring marker.
 - The unfiltered 143-scenario `pnpm --dir tests/skills run test:evals` suite was not run. Historical RED/GREEN was not reproduced.
 
 ## Refresh / reinstall
