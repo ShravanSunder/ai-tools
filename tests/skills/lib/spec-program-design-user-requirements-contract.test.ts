@@ -153,7 +153,11 @@ describe("user requirements and design-view contracts", () => {
       expect(authority).toContain(boundaryField);
     }
     expect(authority).toContain("Mutually narrowed current requirements");
-    expect(specDesign).toContain("requirements/Why/What, structural How, or both");
+    expect(specDesign).toContain(
+      "Requirements, Specification, Program Design, or a named combination",
+    );
+    expect(specDesign).not.toContain("requirements/Why/What");
+    expect(specDesign).not.toContain("governing Why/What");
     expect(specDesign).toContain("inspectable per-item coverage");
     expect(specDesign).toContain(
       "accepted identity, authoritative meaning, and specification destination",
@@ -296,10 +300,10 @@ describe("user requirements and design-view contracts", () => {
       "pre-dispatch external-caller packet already named that residual risk",
     );
     expect(reviewSkill).toContain(
-      "requirements/Why/What`, `structural How`, or `both",
+      "`Requirements`, `Specification`, `Program Design`, or a named combination",
     );
     expect(reviewSkill).toContain(
-      "`both` returns to `spec-design` first, then `program-design` after the observable contract is settled",
+      "any correction spanning Requirements or Specification plus Program Design returns to `spec-design` first, then `program-design` after the observable contract is settled",
     );
     expect(programDesign).toContain(
       "`both` returns to `spec-design` first and resumes here only after the observable contract is settled",
@@ -374,6 +378,40 @@ describe("user requirements and design-view contracts", () => {
     expect(programReview).not.toContain("digest");
     expect(pairReview).not.toContain("digest");
     expect(classification).not.toContain("digest");
+  });
+
+  test("keeps pair review responsible for its complete specification and program judgments", () => {
+    const pairReview = readPluginFile(
+      "skills/spec-program-review/references/reviewing-pair.md",
+    );
+
+    expect(pairReview).toContain("MUST load `reviewing-specification.md`");
+    expect(pairReview).toContain("MUST load `reviewing-program-design.md`");
+    expect(pairReview).toContain(
+      "Requirements, Specification, and Program Design identity status",
+    );
+  });
+
+  test("preserves both design identities across spec-design review calls", () => {
+    const specDesign = readPluginFile("skills/spec-design/SKILL.md");
+
+    expect(specDesign).toContain(
+      "requested future mode `specification-only`; the distinct Requirements and Specification identities; scope and claimed semantic effect",
+    );
+    expect(specDesign).toContain(
+      "carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps",
+    );
+  });
+
+  test("supports file-backed and chat-only artifact navigation review", () => {
+    const artifactNavigation = readPluginFile(
+      "skills/spec-program-review/references/lanes/artifact-navigation.md",
+    );
+
+    expect(artifactNavigation).toContain("one complete navigation medium");
+    expect(artifactNavigation).toContain("File-backed work has enumerable artifact files");
+    expect(artifactNavigation).toContain("Chat-only work has complete separately labeled records");
+    expect(artifactNavigation).toContain("entry artifact or labeled record");
   });
 
   test("keeps the current-pair review contract aligned across direct consumers", () => {

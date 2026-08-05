@@ -8,6 +8,8 @@ Return in workflow order: first the artifact structure decision, artifact identi
 
 ## Choose Structure for the Reader
 
+Apply the identity representation returned from the shared Requirements/Specification/Program Design reference before choosing sections. For substantial file-backed work, create a Specification artifact whose pointer differs from the admitted Requirements pointer. For chat-only work, keep separately labeled Requirements and Specification records. A combined `Requirements/spec` artifact is never a valid structure.
+
 A substantial specification normally needs semantic homes for:
 
 ```text
@@ -41,6 +43,8 @@ Keep these workflow and process details out of the design artifact:
 - research ledgers.
 
 A compact source pointer may remain when readers or tooling use it for authoritative lookup. Rationale must stand on technical or product constraints.
+
+Link to the admitted Requirements identity. Do not copy its user needs, priorities, or boundary narrative merely to make the Specification look self-contained. The Specification owns normative observable obligations and traces them to Requirements; it does not take over the Requirements home.
 
 ## Navigation and Traceability
 
@@ -94,6 +98,7 @@ Re-read the complete artifact and record:
 - contradictory goals and non-goals;
 - unresolved questions disguised as assumptions;
 - duplicated normative homes;
+- missing, duplicated, non-resolvable, identical, or collapsed Requirements and Specification identities;
 - missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
 - journey maps that fail to cite their U rows or context diagrams that cross into internal How;
 - accepted requirements lost or superseded without owner authority;
@@ -109,4 +114,4 @@ Run the result against the current artifact state. Record exact failures, not â€
 
 Self-check is author evidence only. It never substitutes for fresh independent review.
 
-Complete when: the artifact has one normative home per meaning, the reader can navigate need to proof, every reader-facing element earns its attention cost, boundary and accepted-requirements coverage are intact, and the self-check names every known gap.
+Complete when: Requirements and Specification have separate valid identities, the artifact has one normative home per meaning, the reader can navigate need to proof, every reader-facing element earns its attention cost, boundary and accepted-requirements coverage are intact, and the self-check names every known gap.

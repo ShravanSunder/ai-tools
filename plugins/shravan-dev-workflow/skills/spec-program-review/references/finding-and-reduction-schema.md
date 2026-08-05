@@ -12,6 +12,7 @@ artifact and source anchor
 claim or rule
 failure and downstream ambiguity: contradiction or failure path, observable consequence, and what the next author/planner would otherwise have to guess
 smallest semantic correction target
+affected concept: Requirements | Specification | Program Design | named combination
 semantic correction route: spec-design | program-design | caller | spec-design -> program-design
 validation note
 semantic coverage to rerun
@@ -91,11 +92,11 @@ Before returning `continue`, inspect the destination skill's declared inputs and
 
 Select one route from the reduced result:
 
-- accepted Why/What only -> `spec-design`;
-- accepted structural How only -> `program-design`;
-- accepted Why/What and structural How -> `spec-design` first, carrying the complete accepted set;
+- accepted Requirements or Specification correction only -> `spec-design`;
+- accepted Program Design correction only -> `program-design`;
+- accepted Requirements or Specification correction plus Program Design correction -> `spec-design` first, carrying the complete accepted set;
 - accepted caller-owned correction -> stop with `needs-revision` and the exact caller action;
-- complete review evidence proves the current model fails and replacement owner meaning is unmade -> `discuss-pathfinding`, with return owner `spec-design` for Why/What, `program-design` for structural How, or `spec-design` first for both;
+- complete review evidence proves the current model fails and replacement owner meaning is unmade -> `discuss-pathfinding`, with return owner `spec-design` for Requirements or Specification meaning, `program-design` for an owner-controlled tolerance that blocks structural How, or `spec-design` first when the gap spans observable meaning and Program Design;
 - unresolved owner choice that is not the unmade-replacement case -> stop `decision-needed`;
 - invalid input or missing evidence -> stop `blocked`;
 - no required correction -> stop `ready`.

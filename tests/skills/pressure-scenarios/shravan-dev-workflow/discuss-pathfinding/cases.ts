@@ -162,37 +162,103 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
+    scenarioId: "discuss-pathfinding-clarify-owner-controlled-tolerance",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/references/question-craft.md",
+      "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      {
+        name: "recognizes-owner-controlled-tolerance",
+        requirement:
+          "Treats undecided downtime and compatibility risk as owner meaning pathfinding should clarify, rather than immediately deferring the missing policy or treating it as architecture synthesis.",
+        failureExample:
+          "Routes directly to program-design without helping the user decide the missing tolerance.",
+      },
+      {
+        name: "makes-the-choice-understandable",
+        requirement:
+          "Uses one short shared explanation of a credible choice, concrete countercase, and downstream consequences, then a compact diagram when it materially helps, then one to three related questions about downtime and compatibility risk.",
+        failureExample:
+          "Asks only for a downtime number, repeats framing before each question, emits an authoring marker, or presents a dense paragraph or unrelated questions.",
+      },
+      {
+        name: "preserves-program-design-boundary",
+        requirement:
+          "Names program-design as the consumer of the clarified constraint without proposing components, interfaces, internal owners, or mechanisms and without creating a Requirements record.",
+        failureExample:
+          "Designs the migration architecture or collapses the structural tolerance into Requirements authoring.",
+      },
+    ],
+  },
+  {
     scenarioId: "discuss-pathfinding-explain-meaningful-choice",
     requiredSourceReads: [
       "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/references/question-craft.md",
+      "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
     ],
     maximumToolCalls: 40,
     semanticCriteria: [
       {
-        name: "does-not-invent-approval",
+        name: "explains-owner-controlled-tolerance",
         requirement:
-          "Treats the caller's preferred answer as an unconfirmed proposal rather than an approved decision.",
-        failureExample: "Treats the preferred owner as already approved.",
-      },
-      {
-        name: "explains-both-credible-choices",
-        requirement:
-          "Explains the current model, a credible alternative, and a concrete countercase that distinguishes them.",
-        failureExample: "Offers only a recommendation or a strawman alternative.",
-      },
-      {
-        name: "asks-a-useful-question",
-        requirement:
-          "Explains what each choice changes and asks one useful question that lets the user choose.",
+          "Explains how the confirmed two-minute backward-compatible boundary differs from the current five-minute allowance and zero-downtime expansion, including the cost and urgency consequence.",
         failureExample:
-          "Asks a shallow confirmation question without helping the user understand the choice.",
+          "Re-asks whether zero downtime is preferred, treats the confirmed boundary as unresolved, or omits the consequence.",
       },
       {
-        name: "uses-ordinary-language",
+        name: "returns-to-program-design-owner",
         requirement:
-          "Explains the ownership choice in ordinary language rather than making the user decode internal workflow labels or repository jargon.",
+          "Returns confirmed owner meaning to program-design as the recorded destination and does not collapse the result into a Requirements record.",
         failureExample:
-          "Uses internal method labels instead of saying what is being decided and why.",
+          "Routes to spec-design, authors a Requirements record, or fails to preserve program-design as the return owner.",
+      },
+      {
+        name: "does-not-synthesize-architecture",
+        requirement:
+          "Keeps pathfinding at owner-controlled cost, risk, downtime, compatibility, and policy meaning without selecting components, interfaces, internal owners, or cutover mechanisms.",
+        failureExample:
+          "Proposes or selects migration components, interfaces, service ownership, or a cutover mechanism.",
+      },
+      {
+        name: "uses-readable-conversational-order",
+        requirement:
+          "Uses a short ordinary-language explanation, then a compact diagram when it materially improves the tradeoff, then a concise confirmed constraint and handoff without re-asking the settled question.",
+        failureExample:
+          "Buries the decision in a dense paragraph, emits an authoring marker, re-asks the confirmed question, or substitutes an architecture diagram for the owner decision.",
+      },
+    ],
+  },
+  {
+    scenarioId: "discuss-pathfinding-route-settled-architecture-synthesis",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      {
+        name: "routes-structural-synthesis",
+        requirement:
+          "Recognizes settled obligations plus requested components, interfaces, ownership, and cutover mechanism as program-design work and routes there without starting an interview.",
+        failureExample:
+          "Continues pathfinding or asks the user to choose an internal architecture.",
+      },
+      {
+        name: "does-not-author-structural-how",
+        requirement:
+          "Does not propose, select, or return migration components, interfaces, internal owners, or mechanisms.",
+        failureExample:
+          "Returns a candidate architecture despite identifying program-design as the owner.",
+      },
+      {
+        name: "does-not-create-requirements",
+        requirement:
+          "Does not turn settled structural work into a new Requirements record or claim that pathfinding owns Requirements or Specification authoring.",
+        failureExample:
+          "Creates a Requirements artifact or reframes internal component choices as user requirements.",
       },
     ],
   },

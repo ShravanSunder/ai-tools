@@ -8,7 +8,7 @@ Return: coverage, reconstructed claims/model slice, authority/traceability evide
 
 ## Establish Authority and Read Completely
 
-Verify the complete target set, governing specification, and source authority. Read every target artifact completely before substantive findings. Open load-bearing sources cited by claims.
+Verify the complete target set, governing specification, and source authority. Read every target file or separately labeled in-chat record completely before substantive findings. Open load-bearing sources cited by claims.
 
 Verify the accepted requirements set against the current owner-confirmed requirements record and confirmed goal boundary. Otherwise use the last inspectable owner-accepted governing source. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority. For simplification, recovery of the accepted starting point, or requirement subtraction, return one compact disposition row per stable identity (`covered | owner-authorized supersession | gap` plus anchor). Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a result in those cases.
 
@@ -29,7 +29,7 @@ proof modalities and seams
 decisions, non-goals, debt, assumptions, gaps
 ```
 
-Mode-complete review reconstructs the full selected mode. Focused review reconstructs only the necessary slice after still reading the complete target artifact set.
+Mode-complete review reconstructs the full selected mode. Focused review reconstructs only the necessary slice after still reading the complete target file or in-chat record set.
 
 Judge in dependency order: authority/problem, then outcomes/requirements, then contracts, then structural realization/proof. An upstream fatal defect bounds downstream review.
 
@@ -70,7 +70,7 @@ failure simulation, proof path, or authoritative lookup would become
 underdetermined?
 ```
 
-For `specification-only`, reconstruct requirements -> authoritative Why/What -> observable contract -> proof obligation. For `program-only`, reconstruct governing obligation -> scenario/contract -> current/proposed call-path delta -> owner/state/failure behavior -> proof seam. For `pair`, reconstruct requirements -> specification -> scenario/contract -> program-design call path and other How -> proof.
+For `specification-only`, reconstruct Requirements -> Specification observable contract -> proof obligation. For `program-only`, reconstruct governing obligation -> scenario/contract -> current/proposed call-path delta -> owner/state/failure behavior -> proof seam. For `pair`, reconstruct Requirements -> Specification -> scenario/contract -> Program Design call path and other internal How -> proof.
 
 Flag a concrete comprehension failure, process narration, obscure heading, decorative view, or deletion candidate only when its reader consequence is named. Inability to restate the model is evidence of incoherence, not automatically a prose finding. A material unresolved comprehension risk may route to `reader-understanding` after parent reduction.
 

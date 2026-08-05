@@ -1,6 +1,6 @@
 ---
 name: discuss-pathfinding
-description: Use when user or stakeholder requirements, user needs, behavioral personas, tacit process knowledge, domain terms, or design decisions are unwritten and must be extracted from someone's head or an unmade decision through interview or grilling, especially "grill me", "interview me", "think through with me", or "help me figure out what I actually want". Not for maintaining settled content in an existing artifact, repairing a drifted shared model, gathering evidence from artifacts, authoring authoritative Why/What from settled sources, defining internal structural How, in-chat visuals with no extraction request, or independent review of a drafted specification, program design, or plan.
+description: Use when user or stakeholder requirements, user needs, behavioral personas, tacit process knowledge, domain terms, or owner-controlled cost, risk, compatibility, policy, or other design tolerances are unwritten and must be extracted from someone's head or decided collaboratively through interview or grilling, especially "grill me", "interview me", "think through with me", or "help me figure out what I actually want". Not for maintaining settled content, repairing a drifted shared model, gathering evidence from artifacts, authoring Requirements or Specification from settled sources, synthesizing components, interfaces, mechanisms, or other internal structural How from settled obligations, in-chat visuals with no extraction request, or independent review.
 ---
 
 # Discuss Pathfinding
@@ -10,6 +10,16 @@ The knowledge exists — in the user's head, unwritten — and the session is th
 Asking is expensive: a turn spent on an observable fact is stolen from a judgment call only the user can make. Ask one to three related questions together when they share context and clarify one decision. Ask a determining question first when its answer decides whether another question applies. Separate unrelated questions. Raw understanding remains provisional until it has been checked and challenged.
 
 Pathfinding is self-contained judgment, not isolated execution. A caller may supply artifacts, conversation context, hypotheses, or constraints; treat them as useful leads rather than authority. Inspect what can be inspected, distinguish what the owner confirmed from what an agent inferred, expose the credible branches, and return the clearest proportional understanding the next skill can use.
+
+Pathfinding can clarify owner meaning that blocks Requirements, Specification, or a Program Design choice. It helps find a good WHY, WHAT, or owner-controlled constraint on HOW; it does not author the destination's design work. For structural work, clarify only the owner's tolerance or constraint—such as acceptable cost, risk, downtime, compatibility, or policy—and return it to `program-design`. Components, interfaces, ownership allocation, and mechanisms are structural synthesis for `program-design`, not questions pathfinding asks the user to design.
+
+Routing cases:
+
+```text
+true:      "Help me decide how much downtime and compatibility risk we are willing to accept; that owner policy is not decided."
+near miss: "Design the zero-downtime migration components, interfaces, and cutover mechanism from these settled obligations." -> program-design
+mixed:     "Help me decide our downtime tolerance, then return that clarified constraint to program-design; do not design components or mechanisms."
+```
 
 The session keeps three layers separate:
 
@@ -41,7 +51,11 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
 1. **Name the destination.** State what the session must extract—decision, process, terms, or user requirements—the depth, and what is out of scope.
 
+   IF the missing meaning blocks Requirements, Specification, or a Program Design choice, load `../../shared-references/requirements-specification-program-design.md` and return the three-concept boundary, the pathfinding boundary that applies to this destination, and the exact owner that must receive the clarified meaning.
+
    IF a calling phase supplies a return destination, record that exact destination before questioning. It is a boundary, not a suggestion: this session may return confirmed meaning only to that destination and may not replace it with another plausible phase.
+
+   Name whether the missing owner meaning blocks Requirements, Specification, or a Program Design choice. Do not turn every destination into a user-requirements record. For a Program Design destination, name the owner-controlled tolerance or constraint to clarify and explicitly exclude components, interfaces, ownership allocation, and mechanisms. If the request contains only structural synthesis from settled obligations, return the `program-design` route without starting an interview.
 
    For a proposed change headed to specification work, establish the goal boundary before handoff:
 
@@ -59,7 +73,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    IF the destination includes user requirements for future specification or product work, load `references/user-requirements-extraction.md` and return its questions, classified rows, sequence inputs, record, confirmed goal boundary, refusal or fallback result, and exact gaps through steps 4-7.
 
-   Completion: the destination, depth, and negative space are correctable by the user, with every explicit exclusion still visible. A product-change handoff carries a confirmed goal boundary or the exact owner decisions still needed. An orchestrated continuation also carries its exact caller-supplied return destination. Other destinations remain extraction-led.
+   Completion: the destination, its owner when applicable, depth, and negative space are correctable by the user, with every explicit exclusion still visible. A product-change handoff carries a confirmed goal boundary or the exact owner decisions still needed. A Program Design destination carries only the exact owner-controlled tolerance or constraint being clarified. An orchestrated continuation also carries its exact caller-supplied return destination. Other destinations remain extraction-led.
 
 2. **Classify before asking.** Sort each unknown in working state:
 
@@ -85,6 +99,8 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    For a material ambiguity, make the choice understandable before asking: show the current model, strongest credible alternative, one discriminating countercase, and what changes downstream. IF a compact diagram materially clarifies boundaries, ownership, sequence, or competing interpretations, use `tui-presentation` to show the map. The diagram explains; it does not decide or replace downstream specification views.
 
+   When the destination is Program Design, compare the consequences of owner-controlled tolerance choices without proposing competing architectures. Ask what cost, risk, downtime, compatibility, or policy the owner accepts; leave the component or mechanism that satisfies it to `program-design`.
+
    Completion: the user can understand and answer the current decision without reconstructing the method; dependent questions wait until they apply; a material ambiguity shows the current model, credible alternative, discriminating countercase, and downstream difference before asking; user-requirements answers map to the loaded row contract or an exact gap.
 
 5. **Challenge as you go.** Challenge vague terms, glossary conflicts, claimed behavior, and fuzzy boundaries as natural follow-ups. Propose the canonical term, show the source conflict, or pose the edge case; keep the challenge label private.
@@ -92,6 +108,8 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
    Completion: every challengeable answer receives the applicable natural follow-up and is tracked as resolved or open.
 
 6. **Write the moment it crystallizes.** Use one home per kind of meaning: decisions use the decision record, processes use the process record, terms use glossary entries, and user requirements use classified rows plus the goal boundary.
+
+   The record shape follows the meaning, not a default Requirements destination. A clarified Specification decision remains a decision returned to `spec-design`. A clarified structural tolerance remains a decision returned to `program-design`; it does not become a pathfinding-authored component, interface, ownership allocation, or mechanism.
 
    For a user-requirements destination where extraction proceeds, return the classified inventory, draft rows, useful user-job sequence inputs, record identity and permitted home, confirmed goal boundary or exact owner decision still needed, and unresolved authority or evidence gaps. If extraction is declined, return the loaded reference's refusal or fallback result and exact gaps instead.
 
@@ -133,6 +151,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 - `discuss-clarify-mental-models` — IF mid-session the two of you disagree about a model you both already hold, use it to repair the drift and return the rebuilt shared model before extraction continues.
 - `tui-presentation` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use it for the conversational map; it does not select or own durable specification views.
 - `spec-design` — a confirmed goal boundary from a user-requirements destination or proposed-change handoff routes here; otherwise return the exact owner decision rather than claiming readiness.
+- `program-design` — settled obligations that require components, interfaces, ownership allocation, or mechanisms route here without pathfinding; owner-controlled structural tolerance clarified for this recorded destination returns here without a pathfinding-authored architecture.
 - caller-supplied return destination — for an orchestrated continuation, this exact phase is the only permitted return; a mismatch stops instead of rerouting.
 - `docs-maintain` — maintaining or reformatting settled content in an existing artifact; do not restart extraction when meaning is already accepted.
 - `manage-agents` — the reader-test dispatch contract in `references/decisions-and-docs.md` owns this call.
@@ -151,6 +170,8 @@ The session is not done while any of these hold:
 - the run proceeded without a live user instead of returning `decision-needed` for an orchestrated continuation or a blocker otherwise;
 - a crystallized decision, process, settled term, or user requirement has no record — chat-only changes where records live, never whether they exist;
 - a destination closes without distinguishing confirmed meaning and negative space from provisional assumptions and exact open choices;
+- a Specification or Program Design destination was collapsed into a user-requirements record instead of returning the clarified meaning to its owner;
+- a Program Design destination produced or selected components, interfaces, ownership allocation, or mechanisms instead of returning only the clarified owner-controlled tolerance or constraint;
 - a user-requirements record lacks stable U identities, separate evidence and authority, priority ownership, or the goal-boundary model;
 - a user-requirements result is presented as ready for specification design without explicit owner confirmation of the same current boundary model;
 - a required reader test is missing, `partial`, or `blocked`;

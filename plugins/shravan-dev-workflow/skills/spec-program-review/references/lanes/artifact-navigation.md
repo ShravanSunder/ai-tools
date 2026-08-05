@@ -4,19 +4,19 @@ Mission: verify that a reader can find the authoritative specification/program-d
 
 Predicate: normative claims are distributed or the artifact/pair is hard to navigate.
 
-Expected inputs: lane-schema packet plus the complete artifact tree, links, and authority homes.
+Expected inputs: lane-schema packet plus one complete navigation medium: the enumerable artifact tree and links for file-backed work, or the separately labeled records with their entry order and authority homes for chat-only work.
 
-Prerequisites: complete target/source set exists and all artifact files are enumerable.
+Prerequisites: the complete target/source set exists, and its navigation medium is inspectable. File-backed work has enumerable artifact files. Chat-only work has complete separately labeled records, explicit entry order or the exact entry-order ambiguity, and identifiable authority homes.
 
 Maximum authority: fresh-context, read-only, candidate-only.
 
 ## Inspection
 
-Read from the entry artifact as a fresh program designer or planner:
+Read from the entry artifact or labeled record as a fresh program designer or planner:
 
 - identify the one authoritative entry point;
 - reconstruct the spine without opening review/process evidence;
-- follow every normative link and confirm its target exists;
+- follow every normative link or chat-record reference and confirm its target exists;
 - identify one authoritative home for each repeated claim;
 - verify deeper files correspond to real ownership, protocol, domain, or consumer/change boundaries;
 - trace requirements to realization and proof without path guessing.

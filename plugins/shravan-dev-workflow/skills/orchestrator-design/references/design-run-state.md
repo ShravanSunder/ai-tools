@@ -21,6 +21,8 @@ complete when:
 
 This procedure records routing evidence in plain temporary files; it does not decide semantic content or require executable infrastructure.
 
+Consume the identity representation and two structural slots returned by the shared Requirements, Specification, and Program Design reference loaded from `SKILL.md`.
+
 ## Temporary Homes
 
 Use:
@@ -87,12 +89,45 @@ Return `blocked`, the exact contradiction, and no invocation. Do not repair stat
 After one phase completes:
 
 1. increment only that completed invocation's applicable stage counter;
-2. when pair review recommends `spec-design` or `program-design`, set the stage to `post-review` before invoking that correction; a terminal pair-review result records its stop without a stage transition;
-3. if it stops directly, store one terminal payload and no accepted continuation identity;
-4. if it recommends continuation, allocate one fresh local handoff identity, store the exact compact handoff unchanged, and record the same identity in the event;
-5. verify `details.md` and `events.jsonl` agree before another invocation.
+2. when the continuation consumes Requirements and Specification, apply the representation-aware continuation guard below before accepting the handoff;
+3. when pair review recommends `spec-design` or `program-design`, set the stage to `post-review` before invoking that correction; a terminal pair-review result records its stop without a stage transition;
+4. if it stops directly, store one terminal payload and no accepted continuation identity;
+5. if it recommends continuation, allocate one fresh local handoff identity, store the exact compact handoff unchanged, and record the same identity in the event;
+6. verify `details.md` and `events.jsonl` agree before another invocation.
 
 Missing or contradictory post-call state stops `blocked`. Counters record completed calls; there is no reserved future edge.
+
+## Guard Requirements And Specification Identities
+
+Apply this guard to every continuation whose destination consumes Requirements and Specification, including `program-design` and pair review. Classify only the representation supplied by the phase handoff.
+
+Accept exactly one of these shapes:
+
+```text
+file-backed
+  Requirements: present pointer that resolves to one existing file
+  Specification: present pointer that resolves to another existing file
+
+chat-only
+  Requirements: one separately labeled in-chat record
+  Specification: another separately labeled in-chat record
+```
+
+For file-backed work, check that both pointer strings are present, differ, and resolve. Do not open either file to judge its title, completeness, authority, or meaning. For chat-only work, check that both labels and records are present and distinct; host-exposed message anchors or opaque record IDs are not required. Do not accept a mixed file/chat pair, one combined `Requirements/spec` slot, a Requirements label plus an accepted-requirements-set value, or two labels pointing to the same file or chat record.
+
+When the shape is valid, preserve both slots unchanged and continue with the phase-selected route. Semantic doubt is not orchestration authority to block a structurally valid handoff.
+
+When the shape is invalid, return:
+
+```text
+terminal: blocked
+invocation: none
+reason: Requirements and Specification identities are structurally invalid: <missing, identical, unresolved, mixed, or collapsed condition>
+phase result: <unchanged producing-phase result>
+record: <terminal payload and stop event written, or what read-only mode would write>
+```
+
+Do not create, repair, copy, normalize, or semantically inspect either identity. The phase that produced the handoff owns the content; this guard owns only representation integrity.
 
 ## Preserve A Pathfinding Return Association
 
@@ -131,6 +166,7 @@ After state integrity passes, apply guards in this order:
 ```text
 allowed target
 required compact handoff
+Requirements/Specification representation when the destination consumes both
 design-only boundary
 producing-phase terminal mapping
 pathfinding return-owner match when applicable

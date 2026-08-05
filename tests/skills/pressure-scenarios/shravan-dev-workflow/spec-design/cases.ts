@@ -4,7 +4,101 @@ const requiredSourceReads = [
   "plugins/shravan-dev-workflow/skills/spec-design/SKILL.md",
 ] as const;
 
+const requirementsSpecificationBoundarySourceReads = [
+  ...requiredSourceReads,
+  "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
+  "plugins/shravan-dev-workflow/skills/spec-design/references/authority-and-problem-framing.md",
+] satisfies readonly string[];
+
 export const skillPressureCaseDefinitions = [
+  {
+    scenarioId: "spec-design-create-separate-specification-after-requirements",
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "preserves-three-separate-concepts",
+        requirement: "Explains Requirements as authorized Why, for whom, and boundary; Specification as normative observable What; and Program Design as internal How, without treating the shorthand alone as their complete meaning.",
+        failureExample: "Calls Requirements and Specification one concept or says two design artifacts are sufficient.",
+      },
+      {
+        name: "requires-a-separate-specification-identity",
+        requirement: "Reuses the existing Requirements source and requires a different Specification identity before locally-ready or Program Design, explicitly rejecting a combined Requirements/spec artifact.",
+        failureExample: "Renames the Requirements source, treats its examples as the Specification, or routes to Program Design without a separate Specification.",
+      },
+      {
+        name: "keeps-artifact-roles-distinct",
+        requirement: "Assigns authorized needs, priorities, and boundaries to Requirements and normative observable obligations traced to them to Specification.",
+        failureExample: "Copies the Requirements content into a nominally separate file without defining the observable contract.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-design-reuse-existing-requirements-source",
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "reuses-admitted-requirements",
+        requirement: "Admits and reuses the complete existing Requirements source instead of copying, rewriting, or normalizing it into a second Requirements artifact for folder consistency.",
+        failureExample: "Creates docs/specs/session-search/requirements.md despite the qualifying existing identity.",
+      },
+      {
+        name: "authors-only-the-missing-specification",
+        requirement: "Proposes a distinct Specification identity whose normative observable obligations trace to the existing Requirements source without replacing or altering it.",
+        failureExample: "Combines the artifacts or lets the new Specification become the Requirements authority.",
+      },
+      {
+        name: "avoids-ceremonial-pathfinding",
+        requirement: "Does not invoke pathfinding because the prompt establishes complete, settled owner meaning; pathfinding is reserved for genuinely unwritten or undecided meaning.",
+        failureExample: "Interviews the user again or calls pathfinding merely to produce a Requirements file.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-design-complete-requirements-only-request",
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "completes-only-requirements",
+        requirement: "Completes or describes the durable Requirements identity from the settled owner-confirmed meaning without creating or drafting a Specification.",
+        failureExample: "Authors observable Specification obligations despite the caller explicitly limiting the work to Requirements.",
+      },
+      {
+        name: "returns-a-clean-scoped-stop",
+        requirement: "Returns deferred for Specification as a successful scoped stop, records the caller's authority, consequence, and re-entry condition, and does not call the full design locally ready.",
+        failureExample: "Uses locally-ready, returns no terminal result, or treats the Requirements-only request as an error.",
+      },
+      {
+        name: "does-not-route-to-program-design",
+        requirement: "Stops after Requirements and does not recommend Program Design until a separate Specification exists.",
+        failureExample: "Routes directly from Requirements to Program Design or planning.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-design-preserves-identities-in-review-handoff",
+    requiredSourceReads: requirementsSpecificationBoundarySourceReads,
+    maximumToolCalls: 45,
+    semanticCriteria: [
+      {
+        name: "carries-both-identities-through-classification",
+        requirement: "Shows the local-review classification input with the distinct Requirements and Specification identities rather than a singular current artifact identity or a combined Requirements/spec identity.",
+        failureExample: "Classifies review using only the Specification path or a generic current artifact identity.",
+      },
+      {
+        name: "carries-the-complete-review-context",
+        requirement: "When review is required, preserves both identities together with governing sources, confirmed goal boundary, accepted requirements, constraints, non-goals, and proof claims or gaps in the specification-only review handoff.",
+        failureExample: "Invokes review with only target classification and parent identity, leaving the reviewer without the Requirements source or governing state.",
+      },
+      {
+        name: "does-not-collapse-or-bypass-review",
+        requirement: "Keeps Requirements and Specification separate, does not copy them into one review artifact, and does not route to Program Design until the required independent review returns current coverage.",
+        failureExample: "Combines the records, skips review, or declares the work ready for Program Design from author self-check alone.",
+      },
+    ],
+  },
   {
     scenarioId: "spec-design-return-one-program-design-handoff",
     requiredSourceReads,
