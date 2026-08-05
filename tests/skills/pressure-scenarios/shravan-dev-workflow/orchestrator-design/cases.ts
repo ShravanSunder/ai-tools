@@ -3,6 +3,7 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 const requiredSourceReads = [
   "plugins/shravan-dev-workflow/skills/orchestrator-design/SKILL.md",
   "plugins/shravan-dev-workflow/skills/orchestrator-design/references/design-run-state.md",
+  "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
 ] as const;
 
 export const skillPressureCaseDefinitions = [
@@ -127,6 +128,57 @@ export const skillPressureCaseDefinitions = [
         name: "continues-to-the-first-pair-review-only",
         requirement: "After the second program-design call returns locally-ready, permits the cycle's first pair review and preserves the one-review maximum.",
         failureExample: "Stops too early, skips to planning, or implies more than one pair review is available.",
+      },
+    ],
+  },
+  {
+    scenarioId: "orchestrator-design-blocks-malformed-requirements-specification-identities",
+    requiredSourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "blocks-each-invalid-representation-before-program-design",
+        requirement: "Independently blocks the missing Specification, identical-pointer, and unresolved-pointer handoffs before invoking program-design, while preserving each producing phase result.",
+        failureExample: "Invokes program-design for any malformed handoff, invents a missing identity, or treats a Requirements pointer as both identities.",
+      },
+      {
+        name: "applies-only-structural-identity-checks",
+        requirement: "Checks presence, pointer distinctness, and file resolution without opening artifacts to judge their semantic adequacy or rewriting the locally-ready result.",
+        failureExample: "Reads artifact contents, classifies requirements quality, or creates a replacement artifact under orchestration guidance.",
+      },
+    ],
+  },
+  {
+    scenarioId: "orchestrator-design-accepts-distinct-file-identities",
+    requiredSourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "accepts-two-resolvable-distinct-pointers",
+        requirement: "Accepts the Requirements and Specification slots because both file pointers exist and differ, preserves them unchanged, and follows the phase-selected program-design route.",
+        failureExample: "Blocks the handoff, merges the identities, or rewrites either pointer.",
+      },
+      {
+        name: "does-not-semantically-re-review-valid-identities",
+        requirement: "Does not inspect file contents or second-guess the producing phase's locally-ready judgment once the structural representation passes.",
+        failureExample: "Opens the two files to decide whether their content is adequate or chooses a different route from their meaning.",
+      },
+    ],
+  },
+  {
+    scenarioId: "orchestrator-design-accepts-separate-chat-identities",
+    requiredSourceReads,
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      {
+        name: "accepts-separately-labeled-chat-records",
+        requirement: "Accepts the distinct Requirements and Specification in-chat records without demanding files, host message anchors, hashes, or opaque identifiers, then follows the phase-selected program-design route.",
+        failureExample: "Requires file creation or message IDs, combines the records, or blocks chat-only work merely because it has no file pointers.",
+      },
+      {
+        name: "preserves-chat-identities-without-semantic-inspection",
+        requirement: "Preserves both labeled records unchanged and does not judge their substantive adequacy under orchestration guidance.",
+        failureExample: "Rewrites either record, validates its design meaning, or substitutes another phase.",
       },
     ],
   },

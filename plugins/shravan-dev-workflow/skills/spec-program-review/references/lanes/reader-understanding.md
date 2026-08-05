@@ -18,7 +18,7 @@ Follow the selected mode:
 
 ```text
 specification-only
-  accepted requirements -> authoritative Why/What -> observable contract
+  Requirements -> Specification observable contract
     -> proof obligation
 
 program-only
@@ -26,7 +26,7 @@ program-only
     -> owner/state/failure behavior -> proof seam
 
 pair
-  accepted requirements -> specification Why/What -> scenario/contract
+  Requirements -> Specification observable contract -> scenario/contract
     -> program-design call-path delta and other How -> proof
 ```
 

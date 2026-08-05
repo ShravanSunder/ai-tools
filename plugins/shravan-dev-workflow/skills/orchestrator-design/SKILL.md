@@ -1,6 +1,6 @@
 ---
 name: orchestrator-design
-description: Use when a user asks to take a change through, run, resume, or finish the full design cycle—specification, program design, and independent pair review—as one bounded workflow before planning. Not for a direct requirements discussion, specification, program-design, or review-only request; long-horizon delivery goals; planning; implementation; or PR work.
+description: Use when a user asks to take a change through, run, resume, or finish the full design cycle—Requirements, Specification, Program Design, and independent pair review—as one bounded workflow before planning. Not for a direct requirements discussion, Requirements authoring, Specification, Program Design, or review-only request; long-horizon delivery goals; planning; implementation; or PR work.
 ---
 
 # Design Orchestration
@@ -10,11 +10,13 @@ The agent is the actor. This skill is guarded-router guidance between design pha
 Phase skills decide meaning:
 
 ```text
-spec-design          requirements boundary and observable Why/What
-program-design       structural How
+spec-design          separate Requirements and observable Specification
+program-design       structural realization of the fixed Specification
 spec-program-review  independent challenge and validated findings
-discuss-pathfinding  genuinely unwritten owner meaning
+discuss-pathfinding  collaboration on genuinely unwritten owner meaning
 ```
+
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the canonical Requirements, Specification, and Program Design boundaries plus the applicable identity representation. Requirements asks WHY, for whom, and within what boundary. Specification states WHAT must be observably true. Program Design defines HOW the internal system will satisfy it. Pathfinding helps the user and agent understand and decide unclear owner meaning in any of those phases, then returns that meaning to its recorded owner; it does not replace or merge the phases.
 
 This skill explains the workflow position, preserves the phase-selected handoff, checks route shape, records temporary state, and enforces cycle limits. It never decides whether requirements are complete, whether a reviewer is right, which correction owner applies, whether a model failed, or what replacement meaning should be.
 
@@ -59,7 +61,19 @@ Completion: state is fresh, active, terminal, or invalid; only fresh and valid a
 
 ### 2. Explain the cycle and current transition
 
-At cycle start, name what each of the four participating skills owns and state the design-only boundary in ordinary language; mentioning only the first phase and pathfinding is incomplete. At each transition, report only:
+At cycle start, name what each of the four participating skills owns and state the design-only boundary in ordinary language; mentioning only the first phase and pathfinding is incomplete.
+
+The cycle-start explanation must keep the three authoritative concepts separate:
+
+```text
+Requirements   WHY, for whom, and within what boundary?
+Specification  WHAT must be observably true?
+Program Design HOW will the internal system satisfy it?
+```
+
+Do not call one artifact `Requirements/spec` or imply that a Requirements record replaces the Specification.
+
+At each transition, report only:
 
 ```text
 completed skill -> recommended next skill or stop
@@ -95,10 +109,13 @@ Validate in this order:
 
 1. the target is one of the four allowed skills;
 2. the compact handoff exists and has the producing phase's required pointers, result, boundary status, exact gap or correction, next skill, and reason;
-3. the route does not enter planning or implementation;
-4. the next skill matches the producing phase's declared terminal mapping;
-5. an orchestrator-routed pathfinding call names the exact return owner declared by its producing phase;
-6. a completed pathfinding return matches that exact stored return owner.
+3. when the continuation consumes Requirements and Specification, their identities use one valid structural representation: two present, resolvable, non-identical file-backed pointers, or two different separately labeled in-chat records;
+4. the route does not enter planning or implementation;
+5. the next skill matches the producing phase's declared terminal mapping;
+6. an orchestrator-routed pathfinding call names the exact return owner declared by its producing phase;
+7. a completed pathfinding return matches that exact stored return owner.
+
+The representation guard checks presence, distinctness, and file resolution or separate chat labels only. It does not read either identity to judge adequacy, create a missing artifact, turn the accepted requirements set into a Requirements identity, or reinterpret the phase's `locally-ready` result. A mixed file/chat pair is invalid. Preserve both identities unchanged in every later handoff that consumes them.
 
 Any mismatch stops `blocked` with the exact contradiction. Do not guess, repair, or substitute a route.
 
@@ -205,6 +222,8 @@ Do not continue or claim completion while any of these hold:
 - the cycle-start explanation omits any participating skill's ownership or the design-only stop boundary;
 - active or terminal state is missing required identity, transition, handoff, counter, or terminal-payload evidence, or the temporary files disagree;
 - a route target, handoff, producing-phase mapping, or pathfinding return owner is missing or contradictory;
+- a continuation that consumes Requirements and Specification omits either identity, uses one identity for both, contains an unresolved file pointer, mixes file and chat representations, or collapses them into `Requirements/spec`;
+- orchestration reads artifact or record content to decide whether either identity is semantically adequate;
 - semantic routing meaning was copied into orchestration-owned state or reconstructed from chat;
 - an unreduced reviewer candidate affects the route;
 - structural guards were applied after stale-review or budget handling;

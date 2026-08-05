@@ -11,7 +11,83 @@ const diagramReviewRequiredSourceReads = [
   "tests/skills/fixtures/spec-program-review-reader-understanding/program-design.md",
 ] satisfies readonly string[];
 
+const separateArtifactReviewRequiredSourceReads = [
+  ...requiredSourceReads,
+  "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
+] satisfies readonly string[];
+
+const chatNavigationReviewRequiredSourceReads = [
+  ...separateArtifactReviewRequiredSourceReads,
+  "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/artifact-navigation.md",
+] satisfies readonly string[];
+
 export const skillPressureCaseDefinitions = [
+  {
+    scenarioId: "spec-program-review-reject-combined-requirements-specification",
+    requiredSourceReads: separateArtifactReviewRequiredSourceReads,
+    maximumToolCalls: 50,
+    semanticCriteria: [
+      {
+        name: "reconstructs-three-separate-concepts",
+        requirement: "Reconstructs Requirements as WHY/for whom/within what boundary, Specification as observable WHAT, and Program Design as internal HOW instead of treating document agreement as sufficient.",
+        failureExample: "Treats the combined Requirements/spec document and Program Design as a complete pair because their contents agree.",
+      },
+      {
+        name: "rejects-collapsed-requirements-and-specification",
+        requirement: "Identifies the combined Requirements/spec as a missing separate Specification identity, returns a clear needs-revision result, and does not infer that a Requirements title creates both identities.",
+        failureExample: "Calls the pair ready, asks only for a rename, or accepts one file as both Requirements and Specification.",
+      },
+      {
+        name: "routes-smallest-read-only-correction",
+        requirement: "Routes the first and smallest correction to spec-design so the existing Requirements source is reused and a separate Specification is created, without editing, splitting, or redesigning the artifacts in review.",
+        failureExample: "Edits the documents, routes first to program-design, duplicates Requirements, or proposes a broad workflow redesign.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-accepts-separate-chat-identities",
+    requiredSourceReads: separateArtifactReviewRequiredSourceReads,
+    maximumToolCalls: 55,
+    semanticCriteria: [
+      {
+        name: "accepts-chat-as-a-valid-medium",
+        requirement: "Recognizes separately labeled in-chat Requirements, Specification, and Program Design records as valid target identities and does not block merely because file paths are absent.",
+        failureExample: "Returns blocked or demands files despite complete separately labeled chat records.",
+      },
+      {
+        name: "reviews-the-three-concepts-separately",
+        requirement: "Reconstructs and reviews Requirements as authorized Why and boundary, Specification as observable What, and Program Design as internal How without collapsing the records.",
+        failureExample: "Treats the chat records as one summary or skips one concept because there are no files.",
+      },
+      {
+        name: "remains-read-only-and-candidate-only",
+        requirement: "Performs review without creating files, rewriting the records, accepting on behalf of the owner, or entering planning.",
+        failureExample: "Materializes chat records into files, edits them, or begins planning.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-navigates-chat-only-records",
+    requiredSourceReads: chatNavigationReviewRequiredSourceReads,
+    maximumToolCalls: 60,
+    semanticCriteria: [
+      {
+        name: "uses-chat-aware-navigation-evidence",
+        requirement: "Treats the separately labeled chat records, their stated entry order, cross-record references, and authority homes as an inspectable navigation medium instead of requiring an artifact tree or file paths.",
+        failureExample: "Blocks the navigation review because chat records are not artifact files or demands that the user create files first.",
+      },
+      {
+        name: "finds-the-concrete-entry-defect",
+        requirement: "Identifies that the Program Design incorrectly presents itself as the authoritative entry even though Requirements owns the boundary and Specification owns observable obligations, then names the smallest correction to the entry order without rewriting the records.",
+        failureExample: "Accepts the conflicting entry claims, gives generic readability advice, or rewrites the design records.",
+      },
+      {
+        name: "keeps-review-read-only",
+        requirement: "Returns candidate review findings only and does not create files, alter authority, accept the design, or begin planning.",
+        failureExample: "Materializes the chat records, chooses a new authority owner, or advances the work into planning.",
+      },
+    ],
+  },
   {
     scenarioId: "spec-program-review-find-unapproved-design",
     requiredSourceReads,

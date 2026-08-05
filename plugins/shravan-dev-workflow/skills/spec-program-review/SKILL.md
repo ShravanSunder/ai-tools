@@ -10,12 +10,15 @@ Review is independent reconstruction of the smallest system that satisfies the c
 The reviewer rebuilds and challenges:
 
 ```text
-confirmed goal boundary and accepted requirements
-  -> authoritative Why/What and observable contracts
+Requirements: WHY, for whom, and within what boundary?
+  -> Specification: WHAT must be observably true?
+  -> Program Design: HOW will the internal system satisfy it?
   -> existing foundation and structural realization
   -> current/proposed calls, state, failure, and proof
   -> reader understanding and planning readiness
 ```
+
+Requirements, Specification, and Program Design are separate authoritative concepts. Review reconstructs each one independently before judging their agreement; agreement inside a combined `Requirements/spec` document cannot substitute for a separately identifiable Requirements source and Specification.
 
 Fresh context, read-only access, and candidate-only authority create independence. The parent verifies findings, tests deletion before addition, and owns the coverage-bound result. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
 
@@ -63,7 +66,7 @@ For operation `review`, require:
 
 ```text
 target classification and skills-creation parent identity when applicable
-mode and complete target artifact paths
+mode and complete target identities: file paths or separately labeled in-chat records
 governing sources, authority states, and coverage basis
 confirmed goal boundary and accepted requirements set, or the exact authority gap
 structural-realization confirmation for program-only or pair, or the exact owner decision still needed
@@ -74,7 +77,11 @@ review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
 ```
 
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `pair` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
+
 Use the owner-confirmed requirements record and confirmed goal boundary when available. Otherwise use the last inspectable owner-accepted governing source. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
+
+A combined `Requirements/spec`, a Requirements-titled artifact that also stands in for the Specification, or an absent separate Requirements or Specification identity is a concrete blocker-level design finding, not permission for review to infer the missing identity. Record `needs-revision`, route the smallest correction to `spec-design`, and do not repair or create either artifact during review. Continue only with bounded findings that the available sources can support; never return `ready`.
 
 `program-only` also requires the governing specification. `pair` requires the current specification and program design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `pair`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
@@ -90,7 +97,7 @@ program-only       -> references/reviewing-program-design.md
 pair               -> references/reviewing-pair.md
 ```
 
-Specification review judges authoritative Why/What. Program review judges structural How and realization of the governing specification. Pair review independently repeats both and judges traceability, integration, and planning readiness.
+Specification review judges the governing Requirements authority and the Specification's observable What. Program review judges structural How and realization of the governing Specification. Pair review independently repeats both and judges traceability, integration, and planning readiness.
 
 Completion: exactly one mode and its complete required artifact set are selected.
 
@@ -175,13 +182,14 @@ Do not leave the route implicit from the artifact or section named. Record paren
 
 For each material proof claim, compare the claimed outcome with the supplied evidence's actual observation boundary. State what the evidence proves, what it cannot observe, and the smallest missing proof modality or structural observation seam. Do not collapse distinct unsupported claims into generic “runtime proof”; pair each claim with the smallest observation that could confirm or falsify it. For each applicable diagram, name the reader question it should answer and compare its visible owners, direction, state or effect, normal and error behavior, and changed edges with the written requirements and design. Rendering or repeated labels alone do not establish usefulness or agreement.
 
-Classify each requested correction as `requirements/Why/What`, `structural How`, or `both`. A How-only correction preserves the accepted requirements set unless the owner explicitly changes it.
+Classify each requested correction by the concept it affects: `Requirements`, `Specification`, `Program Design`, or a named combination. A Program Design-only correction preserves Requirements and the observable Specification unless the owner explicitly changes them.
 
 Route accepted corrections by semantic owner:
 
-- `requirements/Why/What` returns to `spec-design`, using `discuss-pathfinding` when owner meaning is missing;
-- `structural How` returns to `program-design`;
-- `both` returns to `spec-design` first, then `program-design` after the observable contract is settled.
+- `Requirements` returns to `spec-design`, using `discuss-pathfinding` when owner meaning is missing;
+- `Specification` returns to `spec-design`;
+- `Program Design` returns to `program-design`;
+- any correction spanning Requirements or Specification plus Program Design returns to `spec-design` first, then `program-design` after the observable contract is settled.
 - `caller` returns the exact owner/caller decision; review does not resume until that decision is resolved.
 
 Reject prose taste without reader or design effect. Missing evidence is `unverified`. Preserve real disagreement as contested. New persistence, history, identity, governance, certification, control planes, external services, or other material scope outside the confirmed goal boundary returns `decision-needed` rather than accepted remediation.
@@ -194,7 +202,7 @@ Return every field in the `Coverage-Bound Result` owned by `references/finding-a
 
 `ready` means the current artifact meaning is covered and satisfies the invoked mode. The returned result is the sole home of review state; durable artifacts remain about their subject matter and do not acquire review lifecycle or acceptance status.
 
-After parent reduction, return either a stop or exactly one recommended next skill using the route and compact-handoff procedure in the loaded reference. Reviewer candidates never select this route. When validated findings span Why/What and structural How, recommend `spec-design` first and carry the complete accepted set; the later specification result decides whether `program-design` follows. Recommend `discuss-pathfinding` only when complete review evidence establishes that the current model fails and replacement owner meaning is genuinely unmade, and include the review-selected return owner. A current authoritative correction routes directly to its semantic owner; missing evidence stops.
+After parent reduction, return either a stop or exactly one recommended next skill using the route and compact-handoff procedure in the loaded reference. Reviewer candidates never select this route. When validated findings span Requirements or Specification plus Program Design, recommend `spec-design` first and carry the complete accepted set; the later Specification result decides whether `program-design` follows. Recommend `discuss-pathfinding` only when complete review evidence establishes that the current model fails and replacement owner meaning is genuinely unmade, and include the review-selected return owner. A current authoritative correction routes directly to its semantic owner; missing evidence stops.
 
 Completion: the result names the first required revision, coverage gaps, any owner decision, what a downstream program designer or planner would still have to invent, and one parent-selected compact continuation handoff or an exact stop reason.
 
@@ -204,6 +212,7 @@ Do not return `ready` while any of these hold:
 
 - target classification or required runtime-skill-package parent identity is missing;
 - the current target identity or semantic scope is missing or ambiguous;
+- Requirements and Specification are not separately identifiable in any review mode, or a combined `Requirements/spec` is being used as both;
 - the complete target or governing-source set was not read;
 - the confirmed goal boundary, accepted requirements, or applicable structural-realization confirmation is missing or conflicting without an explicit returned authority gap;
 - no complete semantically current mode-complete receipt exists;

@@ -19,6 +19,8 @@ my read: <recommended answer, confidence, and the reason for it>
 why it matters: <what changes downstream if the answer differs>
 ```
 
+When two or three related questions clarify one decision, carry these parts once for the group. Do not repeat the explanation before every question.
+
 Attach concrete options when the answer space is knowable — reacting to options is faster and surfaces the real preference; leave it open only when enumerating would bias the answer.
 
 ## Material Ambiguity
@@ -35,11 +37,19 @@ Before asking about a material ambiguity:
 
 End any material-ambiguity explanation or map with the smallest useful set of related questions. Use the user's terms. Do not make a user-facing question depend on an internal name merely because a repository search found it. Mention that name only when its role changes the decision, and explain what it does before asking the user to reason about it.
 
-Use a compact conversational map when the relationships are materially clearer visually. Keep a simple preference concise.
+Use a compact conversational map when the relationships are materially clearer visually. Keep a simple preference concise. Present one short shared explanation, then the optional map, then the smallest related question group:
 
-Good: “The current runner appears to execute work but not own scheduling. The credible alternative is that it becomes the scheduler because the new retries need one owner. If two callers enqueue simultaneously, who decides order? Choosing the runner changes its lifecycle and the packages program design may allocate; keeping the host as scheduler limits the runner to execution. Which ownership model do you want?”
+```text
+The current obligation permits up to five minutes of downtime. Zero downtime may require parallel infrastructure and delay an urgent migration. Your answer sets the tolerance Program Design must satisfy; it does not select the migration mechanism.
 
-Bad: “Should the runner own scheduling? My read is yes because ownership matters.” The slots are filled, but the user cannot see the competing model or consequence.
+<show diagram/>
+
+If an urgent security migration cannot preserve both availability and speed, which matters more? What downtime and compatibility boundary do you want?
+```
+
+`<show diagram/>` is authoring notation. Replace it with a useful diagram when it materially helps, or omit it; never show the marker to the user. When the owner meaning is already confirmed, do not ask again: use the same short explanation and optional-diagram placement, then state the confirmed result and handoff concisely.
+
+Bad: “Should the runner own scheduling?” That asks the user to perform structural synthesis. Return settled obligations to `program-design`; pathfinding asks only for missing owner meaning such as acceptable cost, risk, downtime, compatibility, or policy.
 
 ## Probes
 

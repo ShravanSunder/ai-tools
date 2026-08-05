@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
   "version": "2.0.0",
-  "description": "Shravan's development workflow plugin with bounded design orchestration, research, authoritative spec design, structural program design, independent spec/program review, user-requirements pathfinding, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
+  "description": "Shravan's development workflow plugin with bounded design orchestration, research, authoritative Requirements and Specification design, structural program design, independent spec/program review, user-requirements pathfinding, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -63,7 +63,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Spec/program design, review, planning, implementation, operations, agents, and TUI workflows",
-    "longDescription": "Use Shravan Dev Workflow to coordinate one bounded design cycle with orchestrator-design, define authoritative Why/What with spec-design, extract unwritten requirements and decisions with discuss-pathfinding, turn settled obligations into structural How with program-design, and independently review either artifact or their pair with spec-program-review. The plugin also gathers source-grounded evidence, packages handoffs, finishes PRs, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
+    "longDescription": "Use Shravan Dev Workflow to coordinate one bounded design cycle with orchestrator-design, keep Requirements and Specification separate with spec-design, extract unwritten owner meaning with discuss-pathfinding, turn settled observable obligations into structural How with program-design, and independently review Requirements, Specification, Program Design, or their pair. The plugin also gathers source-grounded evidence, packages handoffs, finishes PRs, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -73,13 +73,13 @@
     "defaultPrompt": [
       "Prepare a plan handoff.",
       "Prepare an implementation handoff.",
-      "Use spec-design to define the authoritative Why and What.",
+      "Use spec-design to preserve separate Requirements and Specification identities: authorized Why and observable What.",
       "Use program-design to define structural How against this specification.",
       "Use discuss-clarify-mental-models to rebuild the shared map before artifact work.",
       "Use discuss-pathfinding to extract unwritten requirements or decisions before artifact work.",
       "Use research-swarm to gather source-grounded evidence into a tmp ledger.",
       "Use manage-agents to spawn, resume, monitor, or reduce subordinate agent work.",
-      "Use orchestrator-design to run this through one bounded specification, program-design, and pair-review cycle before planning.",
+      "Use orchestrator-design to run this through one bounded Requirements, Specification, Program Design, and pair-review cycle before planning.",
       "Use docs-maintain to reconcile these docs with current code and plans.",
       "Use spec-program-review to independently review this specification and program design.",
       "Use spec-handoff to package this design for another agent.",

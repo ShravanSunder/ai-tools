@@ -9,7 +9,7 @@ The plugin is built around one idea: each workflow phase should have a clear own
 ```text
 shared understanding
   -> orchestrator-design: bounded routing only
-       -> spec-design: authoritative Why/What
+       -> spec-design: separate Requirements and Specification
        -> program-design: structural How
        -> spec-program-review: proportional independent pair review
        -> stop at reviewed pair or explicit gap; never enter planning automatically
@@ -56,7 +56,7 @@ flowchart LR
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
     designCycle["orchestrator-design<br/>bounded routing only"]
 
-    specDesign["spec-design<br/>authoritative Why/What"]
+    specDesign["spec-design<br/>separate Requirements and Specification"]
     programDesign["program-design<br/>structural How"]
     specReview["spec-program-review<br/>independent review"]
     specHandoff["spec-handoff<br/>portable spec context"]
@@ -97,11 +97,11 @@ Use `research-swarm` when the next step is to gather evidence: local code/docs, 
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
-Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one pair review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
+Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one pair review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
 
 ### Spec boundary
 
-Use `spec-design` to define authoritative Why/What before program design or planning: consumer and problem, current observable reality, outcomes, non-goals, requirements, public or externally observable contracts, constraints, failure obligations, and proof modalities. It traces authorized user/stakeholder roots through U→P→O→R→C→V and adds journey, context, and coverage views when their predicates fire. It keeps unresolved product meaning visible and leaves internal component structure downstream.
+Use `spec-design` to preserve two separate upstream concepts before program design or planning. Requirements owns WHY, for whom, and within what authorized boundary. Specification owns WHAT must be observably true and traces its normative obligations to Requirements. For substantial file-backed work, the skill reuses or creates a separately identifiable Requirements home and creates a different Specification home; it never substitutes one combined `Requirements/spec` artifact. It keeps unresolved owner meaning visible and leaves internal component structure downstream.
 
 Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, source-anchored call paths and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It turns stack/trace evidence into implementable entrypoint-to-effect views and produces an executable mental model, not a task list.
 
@@ -152,7 +152,7 @@ Examples:
 ```text
 Use discuss-clarify-mental-models to reconverge before writing a spec or plan.
 Use discuss-pathfinding to grill me on tacit requirements or unmade decisions.
-Use spec-design to define the authoritative Why and What.
+Use spec-design to preserve separate Requirements and Specification identities: authorized Why and observable What.
 Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review this specification/program-design pair.
 Use spec-handoff to package this design for another agent without creating a plan.

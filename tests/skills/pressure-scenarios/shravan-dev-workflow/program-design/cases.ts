@@ -2,9 +2,32 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 const requiredSourceReads = [
   "plugins/shravan-dev-workflow/skills/program-design/SKILL.md",
+  "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
 ] as const;
 
 export const skillPressureCaseDefinitions = [
+  {
+    scenarioId: "program-design-reject-combined-requirements-specification",
+    requiredSourceReads,
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      {
+        name: "requires-separate-upstream-identities",
+        requirement: "Recognizes that one combined Requirements/spec artifact cannot serve as both the Requirements source and the Specification, even when it contains detailed observable obligations.",
+        failureExample: "Accepts headings or rich contents inside the combined artifact as proof that separate Requirements and Specification identities exist.",
+      },
+      {
+        name: "returns-specification-gap-before-structural-design",
+        requirement: "Returns specification-gap to spec-design before selecting components or mechanisms and identifies that distinct Requirements and Specification identities are missing, including the missing separate Specification home.",
+        failureExample: "Continues into structural How, creates the missing Specification itself, or returns a vague documentation concern instead of the exact gap.",
+      },
+      {
+        name: "preserves-upstream-meaning",
+        requirement: "Preserves the supplied authorized boundary and observable obligations as upstream meaning while asking spec-design to separate and admit their authoritative homes; it does not reinterpret, duplicate, or rewrite them.",
+        failureExample: "Changes the observable contract, copies it into a new artifact, or treats the identity correction as authority to redesign product behavior.",
+      },
+    ],
+  },
   {
     scenarioId: "program-design-route-specification-gap",
     requiredSourceReads,
