@@ -90,7 +90,7 @@ After one phase completes:
 
 1. increment only that completed invocation's applicable stage counter;
 2. when the continuation consumes Requirements and Specification, apply the representation-aware continuation guard below before accepting the handoff;
-3. when pair review recommends `spec-design` or `program-design`, set the stage to `post-review` before invoking that correction; a terminal pair-review result records its stop without a stage transition;
+3. when three-artifact design review recommends `spec-design` or `program-design`, set the stage to `post-review` before invoking that correction; a terminal three-artifact design review result records its stop without a stage transition;
 4. if it stops directly, store one terminal payload and no accepted continuation identity;
 5. if it recommends continuation, allocate one fresh local handoff identity, store the exact compact handoff unchanged, and record the same identity in the event;
 6. verify `details.md` and `events.jsonl` agree before another invocation.
@@ -99,7 +99,7 @@ Missing or contradictory post-call state stops `blocked`. Counters record comple
 
 ## Guard Requirements And Specification Identities
 
-Apply this guard to every continuation whose destination consumes Requirements and Specification, including `program-design` and pair review. Classify only the representation supplied by the phase handoff.
+Apply this guard to every continuation whose destination consumes Requirements and Specification, including `program-design` and three-artifact design review. Classify only the representation supplied by the phase handoff.
 
 Accept exactly one of these shapes:
 
@@ -113,7 +113,7 @@ chat-only
   Specification: another separately labeled in-chat record
 ```
 
-For file-backed work, check that both pointer strings are present, differ, and resolve. Do not open either file to judge its title, completeness, authority, or meaning. For chat-only work, check that both labels and records are present and distinct; host-exposed message anchors or opaque record IDs are not required. Do not accept a mixed file/chat pair, one combined `Requirements/spec` slot, a Requirements label plus an accepted-requirements-set value, or two labels pointing to the same file or chat record.
+For file-backed work, check that both pointer strings are present, differ, and resolve. Do not open either file to judge its title, completeness, authority, or meaning. For chat-only work, check that both labels and records are present and distinct; host-exposed message anchors or opaque record IDs are not required. Do not accept a mixed file/chat representation, one combined `Requirements/spec` slot, a Requirements label plus an accepted-requirements-set value, or two labels pointing to the same file or chat record.
 
 When the shape is valid, preserve both slots unchanged and continue with the phase-selected route. Semantic doubt is not orchestration authority to block a structurally valid handoff.
 
@@ -170,7 +170,7 @@ Requirements/Specification representation when the destination consumes both
 design-only boundary
 producing-phase terminal mapping
 pathfinding return-owner match when applicable
-  -> corrected phase recommends second pair review
+  -> corrected phase recommends second three-artifact design review
        stop correction-complete-review-stale
   -> applicable stage counter is at its limit
        stop cycle-limit-reached
@@ -189,7 +189,7 @@ Every terminal payload carries the design identity, terminal condition, phase re
 - `deferred`: authority, consequence, and re-entry condition;
 - `cycle-limit-reached` or `correction-complete-review-stale`: identity of the unchanged valid continuation handoff, its exact artifact pointers and recommendation, presented as non-executable explanation;
 - `blocked`: exact missing input, contradiction, invalid route, or rejected pathfinding target;
-- `ready`: current pair-review target identities and its exact ready result.
+- `ready`: current three-artifact design review target identities and its exact ready result.
 
 Complete recording only after the final event and terminal payload agree.
 

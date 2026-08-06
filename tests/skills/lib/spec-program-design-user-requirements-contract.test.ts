@@ -357,8 +357,8 @@ describe("user requirements and design-view contracts", () => {
     const programReview = readPluginFile(
       "skills/spec-program-review/references/reviewing-program-design.md",
     );
-    const pairReview = readPluginFile(
-      "skills/spec-program-review/references/reviewing-pair.md",
+    const threeArtifactDesignReview = readPluginFile(
+      "skills/spec-program-review/references/reviewing-three-artifact-design.md",
     );
     const classification = readPluginFile(
       "skills/spec-program-review/references/classifying-review-requirement.md",
@@ -366,30 +366,79 @@ describe("user requirements and design-view contracts", () => {
 
     for (const marker of ["added", "removed", "changed"]) {
       expect(programReview).toContain(marker);
-      expect(pairReview).toContain(marker);
+      expect(threeArtifactDesignReview).toContain(marker);
     }
     expect(programReview).toContain("preservation-critical or contested unchanged");
-    expect(pairReview).toContain("preservation-critical or contested unchanged");
+    expect(threeArtifactDesignReview).toContain(
+      "preservation-critical or contested unchanged",
+    );
     expect(reviewSkill).toContain("last inspectable owner-accepted governing source");
     expect(reviewSkill).toContain("Mutually narrowed current files");
     expect(programReview).toContain("explicit no-predecessor case");
-    expect(pairReview).toContain("accepted requirements remain covered");
+    expect(threeArtifactDesignReview).toContain(
+      "accepted requirements remain covered",
+    );
     expect(reviewSkill).not.toContain("digest");
     expect(programReview).not.toContain("digest");
-    expect(pairReview).not.toContain("digest");
+    expect(threeArtifactDesignReview).not.toContain("digest");
     expect(classification).not.toContain("digest");
   });
 
-  test("keeps pair review responsible for its complete specification and program judgments", () => {
-    const pairReview = readPluginFile(
-      "skills/spec-program-review/references/reviewing-pair.md",
+  test("keeps three-artifact design review responsible for complete local judgments", () => {
+    const reviewSkill = readPluginFile("skills/spec-program-review/SKILL.md");
+    const threeArtifactDesignReview = readPluginFile(
+      "skills/spec-program-review/references/reviewing-three-artifact-design.md",
+    );
+    const reduction = readPluginFile(
+      "skills/spec-program-review/references/finding-and-reduction-schema.md",
     );
 
-    expect(pairReview).toContain("MUST load `reviewing-specification.md`");
-    expect(pairReview).toContain("MUST load `reviewing-program-design.md`");
-    expect(pairReview).toContain(
+    expect(threeArtifactDesignReview).toContain(
+      "MUST load `reviewing-specification.md`",
+    );
+    expect(threeArtifactDesignReview).toContain(
+      "MUST load `reviewing-program-design.md`",
+    );
+    expect(threeArtifactDesignReview).toContain(
       "Requirements, Specification, and Program Design identity status",
     );
+    expect(threeArtifactDesignReview).toContain(
+      "This reference owns `three-artifact-design` mode judgment.",
+    );
+    expect(reviewSkill).toContain(
+      "mode: specification-only | program-only | three-artifact-design",
+    );
+    for (const identity of [
+      "Requirements identity",
+      "Specification identity",
+      "Program Design identity",
+    ]) {
+      expect(reviewSkill).toContain(identity);
+    }
+    expect(reviewSkill).toContain(
+      "result: ready | needs-revision | blocked | decision-needed",
+    );
+    expect(reviewSkill).toContain(
+      "result identity:\n    exact review invocation identity\n    exact review result identity",
+    );
+    expect(reviewSkill).not.toContain("exact review invocation/result identity");
+    expect(reduction).toContain(
+      "exact review invocation identity and review result identity",
+    );
+    expect(reduction).toContain(
+      "result: ready | needs-revision | blocked | decision-needed",
+    );
+    expect(reduction).not.toContain(
+      "verdict: ready | needs-revision | blocked | decision-needed",
+    );
+    expect(
+      existsSync(
+        path.join(
+          pluginRoot,
+          "skills/spec-program-review/references/reviewing-pair.md",
+        ),
+      ),
+    ).toBe(false);
   });
 
   test("preserves both design identities across spec-design review calls", () => {
@@ -414,21 +463,33 @@ describe("user requirements and design-view contracts", () => {
     expect(artifactNavigation).toContain("entry artifact or labeled record");
   });
 
-  test("keeps the current-pair review contract aligned across direct consumers", () => {
-    const currentPairConsumers = [
+  test("keeps the current three-artifact design-review contract aligned across direct consumers", () => {
+    const currentDesignReviewConsumers = [
       readPluginFile("skills/spec-handoff/SKILL.md"),
       readPluginFile("skills/plan-improve-repo/SKILL.md"),
       readPluginFile(
         "skills/plan-improve-repo/references/improvement-plan-template.md",
       ),
+      readPluginFile("shared-references/requirements-specification-program-design.md"),
+      readPluginFile("README.md"),
       readPluginFile("skills/discuss-clarify-mental-models/SKILL.md"),
       readPluginFile("skills/research-swarm/SKILL.md"),
     ];
 
-    for (const consumer of currentPairConsumers) {
+    for (const consumer of currentDesignReviewConsumers) {
       expect(consumer).toContain("current");
       expect(consumer.toLowerCase()).not.toContain("digest");
+      expect(consumer).not.toMatch(/\bpairs?(?:-mode|-review| review)?\b/i);
     }
+
+    for (const consumer of currentDesignReviewConsumers.slice(0, 3)) {
+      expect(consumer).toContain("exact three-artifact design review invocation identity");
+      expect(consumer).toContain("review result identity");
+    }
+    expect(currentDesignReviewConsumers[4]).toContain(
+      "exact three-artifact design review invocation identity",
+    );
+    expect(currentDesignReviewConsumers[4]).toContain("review result identity");
   });
 
   test("indexes every view owner and rendering consumer", () => {

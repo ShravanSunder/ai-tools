@@ -12,7 +12,7 @@ Verify the complete target set, governing specification, and source authority. R
 
 Verify the accepted requirements set against the current owner-confirmed requirements record and confirmed goal boundary. Otherwise use the last inspectable owner-accepted governing source. If neither source exists or they conflict, return the authority gap. Never recover accepted meaning from mutually narrowed current files alone. Any removed or superseded requirement needs explicit owner authority. For simplification, recovery of the accepted starting point, or requirement subtraction, return one compact disposition row per stable identity (`covered | owner-authorized supersession | gap` plus anchor). Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor; a bare "coverage intact" assertion is not a result in those cases.
 
-For `program-only` and `pair`, inspect the complete structural-realization confirmation or return its exact missing owner decision. Treat design dimensions as `required | satisfied by the existing system | not applicable | unresolved`; a general review category is not a reason to invent a subsystem.
+For `program-only` and `three-artifact-design`, inspect the complete structural-realization confirmation or return its exact missing owner decision. Treat design dimensions as `required | satisfied by the existing system | not applicable | unresolved`; a general review category is not a reason to invent a subsystem.
 
 Partial coverage cannot return a clean recommendation.
 
@@ -58,7 +58,7 @@ Use applicable probes:
 - proof break;
 - pretend planner.
 
-Use the downstream consumer for the selected mode: a pretend program designer for `specification-only`, and a pretend planner for `program-only` or `pair`. The consumer may decide only its downstream-owned work; a required invention of meaning owned by the reviewed artifact is a readiness failure.
+Use the downstream consumer for the selected mode: a pretend program designer for `specification-only`, and a pretend planner for `program-only` or `three-artifact-design`. The consumer may decide only its downstream-owned work; a required invention of meaning owned by the reviewed artifact is a readiness failure.
 
 ## Reconstruct for the Human Reader
 
@@ -70,7 +70,7 @@ failure simulation, proof path, or authoritative lookup would become
 underdetermined?
 ```
 
-For `specification-only`, reconstruct Requirements -> Specification observable contract -> proof obligation. For `program-only`, reconstruct governing obligation -> scenario/contract -> current/proposed call-path delta -> owner/state/failure behavior -> proof seam. For `pair`, reconstruct Requirements -> Specification -> scenario/contract -> Program Design call path and other internal How -> proof.
+For `specification-only`, reconstruct Requirements -> Specification observable contract -> proof obligation. For `program-only`, reconstruct governing obligation -> scenario/contract -> current/proposed call-path delta -> owner/state/failure behavior -> proof seam. For `three-artifact-design`, reconstruct Requirements -> Specification -> scenario/contract -> Program Design call path and other internal How -> proof.
 
 Flag a concrete comprehension failure, process narration, obscure heading, decorative view, or deletion candidate only when its reader consequence is named. Inability to restate the model is evidence of incoherence, not automatically a prose finding. A material unresolved comprehension risk may route to `reader-understanding` after parent reduction.
 

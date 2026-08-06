@@ -1,6 +1,6 @@
 ---
 name: spec-program-review
-description: Use when classifying whether a specification-only or program-only change semantically requires independent review, or when independently reviewing a specification, program design, or their pair for authority, requirements, reader understanding or readability, architecture, failure, traceability, scope fidelity, crux, call-path, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan or implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan, audit, or threat model.
+description: Use when classifying whether a specification-only or program-only change semantically requires independent review, or when independently reviewing a Specification, Program Design, or complete Requirements, Specification, and Program Design set for authority, requirements, reader understanding or readability, architecture, failure, traceability, scope fidelity, crux, call-path, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan or implementation review, creating/updating/evaluating one named runtime skill package, or a standalone security scan, audit, or threat model.
 ---
 
 # Specification and Program Design Review
@@ -31,8 +31,17 @@ classify-review-requirement
   dispatches: no reviewer
 
 review
-  mode: specification-only | program-only | pair
-  returns: ready | needs-revision | blocked | decision-needed
+  mode: specification-only | program-only | three-artifact-design
+  three-artifact-design targets:
+    Requirements identity
+    Specification identity
+    Program Design identity
+  result identity:
+    exact review invocation identity
+    exact review result identity
+  result: ready | needs-revision | blocked | decision-needed
+  semantic coverage: exact current identity and meaning coverage for every target
+  freshness: current coverage for every consumed target; uncertain semantic effect is stale
   dispatches: exactly one mode-complete reviewer first, then at most one focused reviewer by default
 ```
 
@@ -69,7 +78,7 @@ target classification and skills-creation parent identity when applicable
 mode and complete target identities: file paths or separately labeled in-chat records
 governing sources, authority states, and coverage basis
 confirmed goal boundary and accepted requirements set, or the exact authority gap
-structural-realization confirmation for program-only or pair, or the exact owner decision still needed
+structural-realization confirmation for program-only or three-artifact-design, or the exact owner decision still needed
 constraints and non-goals
 risk predicates
 claimed proof evidence or gaps
@@ -77,13 +86,13 @@ review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
 ```
 
-MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `pair` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `three-artifact-design` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
 
 Use the owner-confirmed requirements record and confirmed goal boundary when available. Otherwise use the last inspectable owner-accepted governing source. If neither exists, or they conflict, return the authority gap. Mutually narrowed current files never establish the accepted requirements set by themselves.
 
 A combined `Requirements/spec`, a Requirements-titled artifact that also stands in for the Specification, or an absent separate Requirements or Specification identity is a concrete blocker-level design finding, not permission for review to infer the missing identity. Record `needs-revision`, route the smallest correction to `spec-design`, and do not repair or create either artifact during review. Continue only with bounded findings that the available sources can support; never return `ready`.
 
-`program-only` also requires the governing specification. `pair` requires the current specification and program design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `pair`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
+`program-only` also requires the governing Specification. `three-artifact-design` requires the current Requirements, Specification, and Program Design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `three-artifact-design`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
 Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous.
 
@@ -94,10 +103,10 @@ The selected mode reference owns its review judgment:
 ```text
 specification-only -> references/reviewing-specification.md
 program-only       -> references/reviewing-program-design.md
-pair               -> references/reviewing-pair.md
+three-artifact-design -> references/reviewing-three-artifact-design.md
 ```
 
-Specification review judges the governing Requirements authority and the Specification's observable What. Program review judges structural How and realization of the governing Specification. Pair review independently repeats both and judges traceability, integration, and planning readiness.
+Specification review judges the governing Requirements authority and the Specification's observable What. Program review judges structural How and realization of the governing Specification. Three-artifact design review independently repeats both and judges traceability, integration, and planning readiness.
 
 Completion: exactly one mode and its complete required artifact set are selected.
 
@@ -180,7 +189,7 @@ Every finding uses the complete Finding shape from the loaded schema. For the ca
 
 Do not leave the route implicit from the artifact or section named. Record parent disposition separately after reduction; unreduced candidate status does not waive the useful finding fields. A review label may summarize the explanation but may not replace any field.
 
-For each material proof claim, compare the claimed outcome with the supplied evidence's actual observation boundary. State what the evidence proves, what it cannot observe, and the smallest missing proof modality or structural observation seam. Do not collapse distinct unsupported claims into generic “runtime proof”; pair each claim with the smallest observation that could confirm or falsify it. For each applicable diagram, name the reader question it should answer and compare its visible owners, direction, state or effect, normal and error behavior, and changed edges with the written requirements and design. Rendering or repeated labels alone do not establish usefulness or agreement.
+For each material proof claim, compare the claimed outcome with the supplied evidence's actual observation boundary. State what the evidence proves, what it cannot observe, and the smallest missing proof modality or structural observation seam. Do not collapse distinct unsupported claims into generic “runtime proof”; match each claim with the smallest observation that could confirm or falsify it. For each applicable diagram, name the reader question it should answer and compare its visible owners, direction, state or effect, normal and error behavior, and changed edges with the written requirements and design. Rendering or repeated labels alone do not establish usefulness or agreement.
 
 Classify each requested correction by the concept it affects: `Requirements`, `Specification`, `Program Design`, or a named combination. A Program Design-only correction preserves Requirements and the observable Specification unless the owner explicitly changes them.
 
@@ -219,10 +228,10 @@ Do not return `ready` while any of these hold:
 - a selected lane is silent without explicit follow-up;
 - partial, blocked, or `no-receipt` coverage affects a required dimension;
 - a finding lacks an accepted requirement identity or confirmed goal-boundary field, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, semantic correction route, or disposition;
-- specification, program, or pair mode boundaries are conflated;
-- `program-only` or `pair` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
+- specification, program, or three-artifact-design mode boundaries are conflated;
+- `program-only` or `three-artifact-design` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
-- pair mode trusts author or local checks without independent reinspection;
+- three-artifact-design mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
 - the result recommends no next skill, more than one next skill, or a route selected from an unreduced reviewer candidate when a validated continuation exists;

@@ -30,12 +30,12 @@ export const skillPressureCaseDefinitions = [
       {
         name: "reconstructs-three-separate-concepts",
         requirement: "Reconstructs Requirements as WHY/for whom/within what boundary, Specification as observable WHAT, and Program Design as internal HOW instead of treating document agreement as sufficient.",
-        failureExample: "Treats the combined Requirements/spec document and Program Design as a complete pair because their contents agree.",
+        failureExample: "Treats the combined Requirements/spec document and Program Design as a complete three-artifact design set because their contents agree.",
       },
       {
         name: "rejects-collapsed-requirements-and-specification",
         requirement: "Identifies the combined Requirements/spec as a missing separate Specification identity, returns a clear needs-revision result, and does not infer that a Requirements title creates both identities.",
-        failureExample: "Calls the pair ready, asks only for a rename, or accepts one file as both Requirements and Specification.",
+        failureExample: "Calls the three-artifact design set ready, asks only for a rename, or accepts one file as both Requirements and Specification.",
       },
       {
         name: "routes-smallest-read-only-correction",
@@ -95,7 +95,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "checks-against-confirmed-goal-boundary",
-        requirement: "Reviews the pair against the owner-confirmed goal boundary, accepted requirements, and protected systems rather than trusting agreement between the current documents or existing code.",
+        requirement: "Reviews the three-artifact design set against the owner-confirmed goal boundary, accepted requirements, and protected systems rather than trusting agreement between the current documents or existing code.",
         failureExample: "Accepts new observer, supervisor, roster, or recovery machinery because the specification and program design agree about it.",
       },
       {
@@ -106,7 +106,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "returns-a-clear-review-result",
         requirement: "Returns a read-only non-ready result with the smallest correction route and does not edit, accept, or redesign the artifacts.",
-        failureExample: "Rewrites the pair or calls it ready after merely listing concerns.",
+        failureExample: "Rewrites the three-artifact design set or calls it ready after merely listing concerns.",
       },
     ],
   },
@@ -117,8 +117,8 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "finds-lost-requirements",
-        requirement: "Compares the pair with the owner-confirmed requirements and identifies accepted users, outcomes, variants, or boundaries that the current documents lost.",
-        failureExample: "Calls the pair complete because its documents agree while five accepted skills disappeared.",
+        requirement: "Compares the three-artifact design set with the owner-confirmed requirements and identifies accepted users, outcomes, variants, or boundaries that the current documents lost.",
+        failureExample: "Calls the three-artifact design set complete because its documents agree while five accepted skills disappeared.",
       },
       {
         name: "finds-missing-executable-design",
@@ -198,7 +198,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "direct-call-has-no-orchestration-budget",
-        requirement: "Treats this direct pair-review invocation as phase work with no design-orchestration counters, state, or cycle budget.",
+        requirement: "Treats this direct three-artifact design review invocation as phase work with no design-orchestration counters, state, or cycle budget.",
         failureExample: "Invents orchestration state or reports remaining design-cycle calls for a direct phase request.",
       },
     ],

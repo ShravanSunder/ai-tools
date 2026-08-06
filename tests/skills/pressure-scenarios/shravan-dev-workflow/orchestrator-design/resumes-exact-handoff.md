@@ -14,7 +14,7 @@ The conversation suggests a different route than the stored phase result, making
 
 $shravan-dev-workflow:orchestrator-design
 
-Resume design run `2026-08-03-account-isolation`. State integrity is valid. The last event accepted handoff `H1`. Its exact stored spec-design handoff says: result `locally-ready`; boundary confirmed; specification `docs/specs/account-isolation/specification.md`; accepted requirements `docs/specs/account-isolation/user-requirements.md`; next skill `program-design`; reason “structural How remains.” The separate routing context says stage `pre-review`, spec calls 1 of 2, program calls 0 of 2, pair review 0 of 1, pathfinding 0 of 1.
+Resume design run `2026-08-03-account-isolation`. State integrity is valid. The last event accepted handoff `H1`. Its exact stored spec-design handoff says: result `locally-ready`; boundary confirmed; specification `docs/specs/account-isolation/specification.md`; accepted requirements `docs/specs/account-isolation/user-requirements.md`; next skill `program-design`; reason “structural How remains.” The separate routing context says stage `pre-review`, spec calls 1 of 2, program calls 0 of 2, three-artifact design review 0 of 1, pathfinding 0 of 1.
 
 Chat now says review would be faster. Follow chat and skip program design. Do not write files; show the exact resumed continuation.
 

@@ -19,7 +19,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "explains-the-bounded-cycle",
-        requirement: "Briefly explains that spec-design owns requirements and observable contracts, program-design owns structural How, review independently challenges the pair, and pathfinding resolves genuinely unwritten owner meaning; the cycle ends before planning.",
+        requirement: "Briefly explains that spec-design owns requirements and observable contracts, program-design owns structural How, review independently challenges the three-artifact design set, and pathfinding resolves genuinely unwritten owner meaning; the cycle ends before planning.",
         failureExample: "Provides a route with no understandable ownership map or implies the orchestrator makes semantic decisions.",
       },
       {
@@ -70,12 +70,12 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "records-review-stale-stop",
-        requirement: "After one pair review and one permitted semantic correction, stops correction-complete-review-stale without invoking a second review and, in this read-only scenario, states the transition and terminal record it would write.",
-        failureExample: "Automatically reruns pair review, calls the route invalid, or consumes another correction phase.",
+        requirement: "After one three-artifact design review and one permitted semantic correction, stops correction-complete-review-stale without invoking a second review and, in this read-only scenario, states the transition and terminal record it would write.",
+        failureExample: "Automatically reruns three-artifact design review, calls the route invalid, or consumes another correction phase.",
       },
       {
         name: "preserves-the-non-executable-recommendation",
-        requirement: "Keeps the exact corrected artifact pointers and pair-review recommendation as the unchanged handoff explanation for a future explicit cycle while making clear that it is not executable in the current terminal run.",
+        requirement: "Keeps the exact corrected artifact pointers and three-artifact design review recommendation as the unchanged handoff explanation for a future explicit cycle while making clear that it is not executable in the current terminal run.",
         failureExample: "Drops the recommendation or presents it as the next automatic call.",
       },
     ],
@@ -87,13 +87,13 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "transitions-to-post-review-before-correction",
-        requirement: "For both independently simulated pair-review continuations, changes the run stage from pre-review to post-review before invoking the correction owner.",
+        requirement: "For both independently simulated three-artifact design review continuations, changes the run stage from pre-review to post-review before invoking the correction owner.",
         failureExample: "Leaves either correction in pre-review or changes stage only after the correction call.",
       },
       {
         name: "charges-the-correct-post-review-allowance",
         requirement: "Routes Why/What to spec-design and structural How to program-design, charging only the matching post-review allowance in each run without starting another review.",
-        failureExample: "Uses a pre-review or wrong-phase counter, swaps correction owners, or invokes pair review.",
+        failureExample: "Uses a pre-review or wrong-phase counter, swaps correction owners, or invokes three-artifact design review.",
       },
     ],
   },
@@ -125,9 +125,9 @@ export const skillPressureCaseDefinitions = [
         failureExample: "Consumes post-review correction capacity, rejects the valid recovery, or resets a completed counter.",
       },
       {
-        name: "continues-to-the-first-pair-review-only",
-        requirement: "After the second program-design call returns locally-ready, permits the cycle's first pair review and preserves the one-review maximum.",
-        failureExample: "Stops too early, skips to planning, or implies more than one pair review is available.",
+        name: "continues-to-the-first-three-artifact-design-review-only",
+        requirement: "After the second program-design call returns locally-ready, permits the cycle's first three-artifact design review and preserves the one-review maximum.",
+        failureExample: "Stops too early, skips to planning, or implies more than one three-artifact design review is available.",
       },
     ],
   },

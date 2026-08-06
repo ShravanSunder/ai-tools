@@ -65,7 +65,7 @@ Produce terminal labels by observable condition:
 After producing the terminal result, return exactly one phase-guided route:
 
 ```text
-locally-ready      -> recommend spec-program-review in pair mode
+locally-ready      -> recommend spec-program-review in three-artifact-design mode
 specification-gap  -> recommend spec-design
 decision-needed    -> recommend discuss-pathfinding only when this skill's
                       method identifies an unmade owner-controlled structural
@@ -74,7 +74,7 @@ decision-needed    -> recommend discuss-pathfinding only when this skill's
 evidence-blocked | deferred -> stop with the exact reason
 ```
 
-Before recommending a skill, inspect that destination's declared inputs and return a compact pointer-based handoff containing relevant artifact and governing-source pointers, the phase result and current boundary status, the exact gap or decision, and why that destination owns the next work. A pair-review handoff includes the distinct Requirements, Specification, and Program Design identities, confirmed goal boundary and accepted requirements set, structural-realization confirmation, constraints/non-goals, claimed proof and gaps, and review question. Exclude copied artifacts, unrelated implementation history, and orchestration counters. A direct program-design invocation carries no cycle budget.
+Before recommending a skill, inspect that destination's declared inputs and return a compact pointer-based handoff containing relevant artifact and governing-source pointers, the phase result and current boundary status, the exact gap or decision, and why that destination owns the next work. A three-artifact design review handoff includes the distinct Requirements, Specification, and Program Design identities, confirmed goal boundary and accepted requirements set, structural-realization confirmation, constraints/non-goals, claimed proof and gaps, and review question. Exclude copied artifacts, unrelated implementation history, and orchestration counters. A direct program-design invocation carries no cycle budget.
 
 ## Workflow
 
@@ -259,7 +259,7 @@ Return the distinct Requirements, Specification, and Program Design identities; 
 
 IF returning a substantial program design in chat, use `tui-presentation` to render the selected component, call, state, or failure views before the compact result summary. The durable artifact remains the source of truth.
 
-Completion: the caller can request pair review through `spec-program-review` or supply the exact missing specification decision/evidence.
+Completion: the caller can request three-artifact design review through `spec-program-review` or supply the exact missing specification decision/evidence.
 
 ## Required Views
 
@@ -303,7 +303,7 @@ IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-
 
 The subagent loads `references/lanes/lane-schema.md` and the exact selected lane path named above.
 
-Parallel-safe only after the lane prerequisites exist and its result is not an input to another selected lane; scheduling may serialize. Instance authority is equal to or narrower than the lane maximum and never includes final design selection, normative integration, pair review, or acceptance. Return a `complete | partial | blocked` receipt; after one explicit follow-up, silence is `no-receipt`. The parent opens load-bearing sources, verifies candidate evidence/models/advice/prose, resolves conflicts, and alone integrates.
+Parallel-safe only after the lane prerequisites exist and its result is not an input to another selected lane; scheduling may serialize. Instance authority is equal to or narrower than the lane maximum and never includes final design selection, normative integration, three-artifact design review, or acceptance. Return a `complete | partial | blocked` receipt; after one explicit follow-up, silence is `no-receipt`. The parent opens load-bearing sources, verifies candidate evidence/models/advice/prose, resolves conflicts, and alone integrates.
 
 ## Planning Boundary
 

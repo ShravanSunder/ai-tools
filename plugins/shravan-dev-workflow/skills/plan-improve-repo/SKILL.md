@@ -18,12 +18,14 @@ IF the request directly creates, updates, evaluates, or plans changes to one nam
 Vetted findings and prioritized backlogs may be returned without planning admission. Before writing a new executable plan or returning `ready` for an existing plan, classify its planning basis:
 
 ```text
-current-pair-ready
-  complete current specification and program design
+current-three-artifact-design-ready
+  complete current Requirements, Specification, and Program Design
   required local review coverage is semantically current
-  current pair-mode spec-program-review result: ready and covers both current artifacts
+  current review mode: three-artifact-design
+  exact three-artifact design review invocation identity and review result identity
+  review result: ready and covers all three current identities
   accepted findings corrected under refreshed review
-  review coverage matches both artifacts' current meaning
+  review coverage matches all three artifacts' current meaning
   no blocking decision or evidence gap
 
 implementation-mechanics-only
@@ -36,9 +38,9 @@ design-required
   either admissible basis is missing or contradicted
 ```
 
-`design-required` returns the vetted finding and exact missing semantic owner: Why/What to `spec-design`, structural How to `program-design`, or a complete but unreviewed/stale pair to `spec-program-review`. Do not write a new executable plan. For an existing plan, return `blocked` for execution readiness without rewriting it.
+`design-required` returns the vetted finding and exact missing semantic owner: Why/What to `spec-design`, structural How to `program-design`, or a complete but unreviewed/stale three-artifact design to `spec-program-review`. Do not write a new executable plan. For an existing plan, return `blocked` for execution readiness without rewriting it.
 
-Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written or `ready` plan carries one current admissible planning basis and its evidence identity plus semantic-freshness record.
+Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written or `ready` plan carries one current admissible planning basis, the exact review invocation identity and review result identity when design-bearing, and its semantic-freshness record.
 
 ## Core Rules
 
@@ -90,7 +92,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - proof clarity
    - dependency order
 5. Classify each selected improvement under **Entry And Planning Admission**:
-   - write plans only for `current-pair-ready` or `implementation-mechanics-only`
+   - write plans only for `current-three-artifact-design-ready` or `implementation-mechanics-only`
    - preserve and route `design-required` findings without turning them into execution tasks
 6. Write one plan per admitted improvement:
    - default to the top 3-5 in non-interactive runs
@@ -111,7 +113,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 Use this for `validate-plan`, `next`, and pre-execution checks.
 
 1. Read the full plan artifact; for file-backed plans, record line count and chunk coverage.
-2. Verify the plan's `current-pair-ready` or `implementation-mechanics-only` basis against current evidence. A missing, stale, or contradicted basis is `blocked` and routes to the exact semantic owner.
+2. Verify the plan's `current-three-artifact-design-ready` or `implementation-mechanics-only` basis against current evidence. A missing, stale, or contradicted basis is `blocked` and routes to the exact semantic owner.
 3. Verify the planned-at SHA, current branch, and changed target files.
 4. Re-open all cited source files and commands from the plan.
 5. Classify each task:

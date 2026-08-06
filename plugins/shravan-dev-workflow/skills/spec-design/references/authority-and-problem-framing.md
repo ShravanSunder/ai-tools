@@ -129,7 +129,7 @@ Mutually narrowed current requirements, specification, or program-design files n
 
 Good: a simplification removes five mechanisms while every accepted user, variant, default, scenario, contract, and proof obligation remains covered.
 
-Bad: a coherent Upload-only pair is treated as the baseline after the current requirements and specification both silently lost the other five accepted skills.
+Bad: a coherent Upload-only Requirements and Specification set is treated as the baseline after both artifacts silently lost the other five accepted skills.
 
 Stop when the current confirmed source or the last accepted baseline establishes the complete set and all conflicts are resolved. Return the recovered set and coverage gaps; never guess through missing authority.
 

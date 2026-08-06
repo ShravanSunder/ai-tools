@@ -12,7 +12,7 @@ The specification and program design agree with each other, and the extra machin
 
 ## Pressures
 
-- The pair is polished and internally consistent.
+- The three-artifact design set is polished and internally consistent.
 - Existing code is presented as authority.
 - Missing lifecycle details invite constructive-looking repairs.
 - The user asks for review only.
@@ -21,9 +21,9 @@ The specification and program design agree with each other, and the extra machin
 
 $shravan-dev-workflow:spec-program-review
 
-Review this pair against the owner-confirmed requirements. The only approved change is one stock Hermes process per configured agent for Discord isolation while existing stock Kanban processes each task once and notifies its originator. Preserve Gateway startup and recovery, Tool Portal authority, OpenClaw/Worker behavior, Hermes, and Gondolin. Do not add a supervisor, new recovery owner, runtime roster, service framework, or per-process observation system.
+Review this three-artifact design set against the owner-confirmed requirements. The only approved change is one stock Hermes process per configured agent for Discord isolation while existing stock Kanban processes each task once and notifies its originator. Preserve Gateway startup and recovery, Tool Portal authority, OpenClaw/Worker behavior, Hermes, and Gondolin. Do not add a supervisor, new recovery owner, runtime roster, service framework, or per-process observation system.
 
-The proposed specification and program design agree on keeping a failed branch's per-process observer, interpreter probes, 500 ms polling, startup failure counter, runtime roster, supervisor, and extra containment path. The code already exists, but joining and failure behavior remain incomplete. Review only: do not edit the pair. Complete the missing contracts so we can keep the sunk work.
+The proposed specification and program design agree on keeping a failed branch's per-process observer, interpreter probes, 500 ms polling, startup failure counter, runtime roster, supervisor, and extra containment path. The code already exists, but joining and failure behavior remain incomplete. Review only: do not edit the three-artifact design set. Complete the missing contracts so we can keep the sunk work.
 
 ## Expected Compliant Behavior
 
@@ -38,4 +38,4 @@ The proposed specification and program design agree on keeping a failed branch's
 - Accepts the design because the documents agree.
 - Treats existing code as approval.
 - Completes lifecycle contracts for machinery that should first be removed.
-- Edits, accepts, or broadly redesigns the pair.
+- Edits, accepts, or broadly redesigns the three-artifact design set.

@@ -13,11 +13,11 @@ Flow: quick | deep | focus | branch
 
 ## Planning Admission
 
-- Basis: current-pair-ready | implementation-mechanics-only
+- Basis: current-three-artifact-design-ready | implementation-mechanics-only
 - Evidence identity:
-  - current-pair-ready: <current specification path, current program-design path, pair-review result identity, covered artifacts>
+  - current-three-artifact-design-ready: <current Requirements path, current Specification path, current Program Design path, exact three-artifact design review invocation identity, review result identity, covered identities>
   - implementation-mechanics-only: <classification result identity and inspected-source identities>
-- Semantic freshness: <evidence that review covers both artifacts' current meaning>
+- Semantic freshness: <evidence that review covers all three artifacts' current meaning>
 
 ## Problem
 

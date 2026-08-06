@@ -75,4 +75,4 @@ Pathfinding returns clarified meaning to the recorded return owner. It does not 
 
 ## Downstream Handoffs
 
-`program-design` consumes distinct Requirements and Specification identities plus their current phase state. Pair review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records, not copied companion artifacts.
+`program-design` consumes distinct Requirements and Specification identities plus their current phase state. Three-artifact design review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records, not copied companion artifacts.

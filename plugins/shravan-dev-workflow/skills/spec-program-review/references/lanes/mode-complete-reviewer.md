@@ -6,7 +6,7 @@ Predicate: mandatory for every `review` invocation.
 
 Expected inputs: the complete lane-schema packet, complete current target set, complete governing-source set, and one selected mode reference.
 
-Prerequisites: the complete target set, governing-source coverage, confirmed goal boundary and accepted requirements set, plus structural-realization confirmation for `program-only` or `pair`, are complete and unambiguous.
+Prerequisites: the complete target set, governing-source coverage, confirmed goal boundary and accepted requirements set, plus structural-realization confirmation for `program-only` or `three-artifact-design`, are complete and unambiguous.
 
 Maximum authority: fresh-context, read-only, candidate-only. This lane may recommend `ready | needs-revision | blocked | decision-needed`; it may not issue the parent verdict, edit, remediate, plan, mutate lifecycle, or accept.
 
@@ -19,12 +19,12 @@ MUST load exactly one selected mode reference and apply its mode-specific judgme
 ```text
 specification-only -> ../reviewing-specification.md
 program-only       -> ../reviewing-program-design.md
-pair               -> ../reviewing-pair.md
+three-artifact-design -> ../reviewing-three-artifact-design.md
 ```
 
 After both references are loaded, read the complete target set before substantive findings. Reconstruct the artifact model without preserving author section order. Apply the common method and every material dimension in the selected mode as one combined inspection, including its compact human-reader reconstruction and section/view-level deletion pass. Then attack the highest-risk crux and run the divergent-implementer and pretend-planner probes.
 
-For pair mode, independently repeat load-bearing specification and program-design checks. Prior local review or author self-check is evidence to inspect, never a substitute.
+For three-artifact-design mode, independently repeat load-bearing specification and program-design checks. Prior local review or author self-check is evidence to inspect, never a substitute.
 
 Good: every mode dimension is `required`, `satisfied by the existing system`, `not applicable`, or `unresolved`; the recommendation follows the evidence; and a human can restate, challenge, and navigate the model without workflow narration.
 

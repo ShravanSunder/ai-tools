@@ -50,6 +50,6 @@ Apply after blocking incomplete inputs:
 
 An absent `caller requirement` is `none`. `caller requirement` only escalates. It never suppresses user request, risk match, or semantic fallback.
 
-Pair mode is never classified here: any initial pair-readiness verdict requires pair review. After that review, the parent may carry coverage across a non-semantic edit only by recording the semantic-change evidence above. This deterministic classification dispatches no model reviewer.
+Three-artifact-design mode is never classified here: any initial three-artifact-design-readiness verdict requires three-artifact design review. After that review, the parent may carry coverage across a non-semantic edit only by recording the semantic-change evidence above. This deterministic classification dispatches no model reviewer.
 
 Complete when: one total semantic-effect decision exists, reused coverage is named when applicable, or the exact missing input blocks without fabricating a third classification value.
