@@ -1,12 +1,12 @@
 # Validation Checklist
 
-Use this before calling an improvement plan ready for review, handoff, or execution.
+Use this before returning a current-state validation receipt for an improvement plan.
 
 ## Required Checks
 
 - Plan was read end to end after writing or loading.
 - Planning admission is `current-three-artifact-design-ready` or `implementation-mechanics-only`, its evidence identity is recorded, and its semantic coverage is current. Missing or semantically stale admission is `blocked`, not `needs-refresh`.
-- Planned-at SHA and current SHA are recorded.
+- Planned-at branch and HEAD are recorded; current validation branch/HEAD belongs to this receipt, not the plan artifact.
 - Target branch/base branch are recorded when branch-specific.
 - Every cited file exists, or the plan says the file is intentionally new.
 - Every write surface has a reason to change.
@@ -16,12 +16,11 @@ Use this before calling an improvement plan ready for review, handoff, or execut
 - Red/green proof is required for behavior changes unless the user explicitly approved an exception.
 - Security-sensitive surfaces are named when touched.
 - Stop conditions cover stale repo state, unrelated validation failures, unexpected secrets, and changed public contracts.
-- Handoff prompt names repo, plan path, first validation step, and parent ownership.
 
 ## Verdicts
 
-- `ready`: portable for handoff; execution/review readiness remains blocked when those runtime routes are not shipped.
-- `needs-refresh`: update plan before review or execution.
+- `ready`: current plan claims and paths remain valid; this receipt is not approval or execution authority.
+- `needs-refresh`: route the exact correction to the originating planner for a corrected completed plan at a new path before review or execution.
 - `blocked`: cannot proceed until a named dependency changes.
 - `rejected`: obsolete, duplicate, already solved, or not worth doing.
 
@@ -47,5 +46,10 @@ Issues:
 - <missing proof, stale path, oversized task, blocker, or none>
 
 Next:
-- spec-design | program-design | spec-program-review | plan-handoff | blocked execution/review gate | refresh plan
+- spec-design | program-design | spec-program-review | plan-handoff | implement-plan for an exact approved draft | review-implementation for general-repo work | skills-creation for a runtime skill package | originating planner correction
+
 ```
+
+## Receipt Boundary
+
+Return validation as a separate current-state receipt with the inspected branch/HEAD, paths, commands, findings, and `ready | needs-refresh | blocked | rejected`. Preserve the canonical tuple, planning result, result payload, and approval evidence unchanged.

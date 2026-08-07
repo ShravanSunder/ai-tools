@@ -5,10 +5,9 @@ Write one file per accepted improvement.
 ```markdown
 # <Improvement Title>
 
-Planned at: <git sha>
-Current SHA at validation: <git sha or not yet validated>
+Planning result: draft | revision-requested | blocked
+Planned at branch/HEAD: <branch> / <git sha>
 Repo: <absolute path>
-Status: proposed
 Flow: quick | deep | focus | branch
 
 ## Planning Admission
@@ -42,9 +41,21 @@ Read-only context:
 
 ## Task Sequence
 
-1. <small executable step>
-2. <small executable step>
-3. <small executable step>
+1. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
+2. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
+3. <integration gate where separately changed parts first meet>
+
+## Dependencies And Collisions
+
+- `requires`: <only when one slice cannot start or prove before another>
+- `serial`: <overlapping write/state/fixture collision>
+- `parallel`: <advisory only, after named prerequisites>
+
+## Obligation And Proof Mapping
+
+| Obligation | Slice | Evidence source | Focused proof | Integration/manual proof | Freshness/stop guard |
+| --- | --- | --- | --- | --- | --- |
+| <identity> | <slice> | <source> | <command/check> | <if required> | <guard> |
 
 ## Proof Gates
 
@@ -52,14 +63,6 @@ Read-only context:
 - Focused validation: `<command>`
 - Full validation: `<command>`
 - Manual/artifact check: <if needed>
-
-## Validation Readiness
-
-- Write surfaces checked: yes/no
-- Proof gates runnable: yes/no
-- Task size fits proof scope: yes/no
-- Security-sensitive surfaces named: yes/no/not applicable
-- Verdict: ready | needs-refresh | blocked | rejected
 
 ## Stop Conditions
 
@@ -70,13 +73,11 @@ Read-only context:
 
 - <risk and mitigation>
 
-## Handoff Prompt
+## Result Payload
 
-```text
-Use the active implementation handoff or PR-lifecycle route for this plan. If execution or implementation review is not shipped, report the blocked gate instead of invoking a retired workflow.
-
-Repo: <absolute path> Plan: <absolute path> Start by validating the plan against current git state before editing files. Use bounded subagents only for independent slices. Parent owns integration and final proof.
-```
+- `draft`: later explicit owner approval must name the exact completed plan path and current meaning.
+- `revision-requested`: <exact correction and owner>.
+- `blocked`: <blocker identity, evidence, and unblock owner>.
 ```
 
 Also maintain a `plans/README.md` or local index when writing multiple plans:
@@ -84,7 +85,9 @@ Also maintain a `plans/README.md` or local index when writing multiple plans:
 ```markdown
 # Improvement Plans
 
-| Status | Plan | Why now | Proof |
-| --- | --- | --- | --- |
-| proposed | <path> | <reason> | <primary gate> |
+| Planning result | Plan identity |
+| --- | --- |
+| draft \| revision-requested \| blocked | <immutable plan path> |
 ```
+
+The index projects the canonical result and plan path. It never owns or mutates the plan tuple, approval evidence, validation state, or execution progress.

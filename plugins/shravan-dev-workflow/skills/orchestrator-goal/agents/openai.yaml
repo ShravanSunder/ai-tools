@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrator: Goal"
+  short_description: "Route long-horizon delivery through proven gates"
+  default_prompt: "Use $orchestrator-goal to route this long-horizon delivery goal from its first unproven gate to the authorized terminal without duplicating phase judgment or merging."

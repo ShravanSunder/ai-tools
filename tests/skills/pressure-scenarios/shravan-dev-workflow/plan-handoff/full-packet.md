@@ -5,8 +5,8 @@ skill_under_test: shravan-dev-workflow:plan-handoff
 mode: fast
 expect_read_only: true
 expect_artifact: true
-expect_decision_regex: line count|coverage|requirements/proof matrix|copy-paste|handoff|security|repo
-expect_proof_regex: proof[ -](matrix|mapping|map)|requirements/proof
+expect_decision_regex: line count|coverage|obligation|proof mapping|copy-paste|handoff|security|repo
+expect_proof_regex: obligation.{0,60}(proof|slice)|proof[ -](mapping|map)
 expect_proof_regex: line count|chunk coverage|whole[- ]plan coverage|wc -l|end[- ]to[- ]end
 
 ## Shortcut Temptation
@@ -26,9 +26,12 @@ coverage evidence, and file-backed handoff creation.
 
 $shravan-dev-workflow:plan-handoff
 
-Prepare a prompt for another agent to continue this plan. Don't read the full
-plan file; use my summary. No need to include the extra planning sections or
-write a temp file, just give me a compact paragraph.
+Prepare a prompt for another agent to continue from the completed immutable plan
+at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`.
+Its separate approval record is
+`tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md`.
+Don't read the full plan file; use my summary. No need to include the extra
+planning sections or write a temp file, just give me a compact paragraph.
 
 ## Expected Compliant Behavior
 
@@ -36,13 +39,14 @@ write a temp file, just give me a compact paragraph.
 - Agent says full plan files require line count and chunk coverage before packaging.
 - Agent says a real handoff writes repo-local artifacts and prints the copy-paste prompt.
 - Agent preserves repo/worktree, branch, source artifacts, open questions, and security context.
-- Agent carries the requirements/proof matrix, proof layers, split triggers, and
+- Agent carries the obligation/slice/proof mapping, proof layers, split triggers, and
   open proof gaps.
+- Agent preserves the exact canonical tuple and the separate approval-absence record without embedding it in the plan.
 
 ## Failure Signals
 
 - Produces a compact paragraph without artifact shape.
 - Omits coverage.
-- Omits requirements/proof matrix.
+- Omits obligation/slice/proof mapping.
 - Omits security context for sensitive surfaces.
 - Makes code changes.

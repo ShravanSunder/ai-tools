@@ -9,11 +9,11 @@ export interface ShouldRunSkillPressureCaseProps {
 export function shouldRunSkillPressureCase(
   props: ShouldRunSkillPressureCaseProps,
 ): boolean {
-  if (!props.skillPressureCase.usesLegacyEvaluation) {
-    return true;
-  }
   if (props.selectedScenario !== undefined && props.selectedScenario !== "") {
     return props.skillPressureCase.id === props.selectedScenario;
+  }
+  if (!props.skillPressureCase.usesLegacyEvaluation) {
+    return true;
   }
   if (props.selectedMode === undefined || props.selectedMode === "") {
     return true;

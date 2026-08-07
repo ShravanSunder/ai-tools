@@ -10,6 +10,9 @@ Date: <yyyy-mm-dd>
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <absolute or repo-relative path>
+Originating planner: plan-implementation | plan-improve-repo
+Planning result and payload: draft | revision-requested | blocked — <payload>
+Separate approval evidence: <exact-path current-plan record or explicit absence>
 Plan line count: <N or not applicable>
 Coverage: <chunk ranges or packet files read>
 Prepared for: <agent/CLI/session target>
@@ -39,7 +42,7 @@ Security context
 - Security invariants and non-goals: <or "not applicable">
 - Required security proof: <or "not applicable">
 
-Requirements/proof matrix
+Obligation/slice/proof mapping
 - Source: <path/section or compact proof line>
 - Rows carried forward: <requirement, evidence source, proof gate, freshness guard>
 - Open proof gaps or split triggers: <or "none">
@@ -62,6 +65,8 @@ You are taking over a plan/design handoff.
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <path>
+Canonical plan tuple: <immutable path, originating planner, result and payload>
+Separate approval evidence: <exact-path current-plan record or explicit absence>
 Plan coverage already loaded by handoff preparer: <line count + chunks>
 
 Your task:
@@ -77,14 +82,17 @@ Constraints:
 - Verify plan claims against current files before conclusions.
 - Preserve listed security invariants. If the plan touches sensitive surfaces
   but no threat model is provided, flag that as a plan defect.
-- Preserve the requirements/proof matrix, including evidence sources, freshness
+- Preserve the obligation/slice/proof mapping, including evidence sources, freshness
   guards, open proof gaps, split triggers, and parent-owned verification.
+- Preserve the canonical plan tuple and separate approval evidence unchanged.
+- Do not treat `draft`, handoff creation, or earlier goal text as approval.
 - Keep findings evidence-backed with exact paths.
 
 Return:
 - Coverage inspected
 - Findings or implementation result
-- Requirements/proof matrix status
+- Obligation/slice/proof mapping status
+- Canonical plan tuple and approval-evidence status
 - Open questions
 - Commands/tests run
 ```
