@@ -2,7 +2,7 @@
 
 Mission: verify that a reader can find the authoritative specification/program-design model and trace distributed normative claims without reading process debris.
 
-Predicate: normative claims are distributed or the artifact/pair is hard to navigate.
+Predicate: normative claims are distributed or the artifact/design set is hard to navigate.
 
 Expected inputs: lane-schema packet plus one complete navigation medium: the enumerable artifact tree and links for file-backed work, or the separately labeled records with their entry order and authority homes for chat-only work.
 

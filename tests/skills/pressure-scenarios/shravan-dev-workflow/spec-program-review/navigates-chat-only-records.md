@@ -21,7 +21,7 @@ The focused navigation lane describes an artifact tree, so asking for files can 
 
 $shravan-dev-workflow:spec-program-review
 
-Review this chat-only pair in pair mode. The complete current target consists of these separately labeled records in Requirements, Specification, Program Design order:
+Review this chat-only three-artifact design set in three-artifact-design mode. The complete current target consists of these separately labeled records in Requirements, Specification, Program Design order:
 
 Requirements — authoritative home for goal and scope: Maintainers need failed skill runs to identify the failed scenario. Only the skill-test package may change. Production plugins are protected.
 

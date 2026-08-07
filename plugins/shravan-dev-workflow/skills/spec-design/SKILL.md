@@ -61,7 +61,7 @@ Routing cases:
 true:      "Write a durable Requirements document from these settled, user-confirmed decisions. Do not write the Specification yet."
 near miss: "Interview me to discover what users need and which boundary I actually want." -> discuss-pathfinding
 near miss: "Clean up this settled Requirements document without changing its meaning." -> docs-maintain
-near miss: "Take this through Requirements, Specification, Program Design, and independent pair review." -> orchestrator-design
+near miss: "Take this through Requirements, Specification, Program Design, and independent three-artifact design review." -> orchestrator-design
 ```
 
 ## Terminal Contract
@@ -75,7 +75,7 @@ evidence-blocked
 deferred
 ```
 
-A `locally-ready` result includes distinct Requirements and Specification identities; governing-source identities, authority, current applicability, and coverage; the confirmed goal boundary; the accepted requirements set; load-bearing decisions; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that pair acceptance is not claimed. These are returned workflow state, not narrative sections in the specification.
+A `locally-ready` result includes distinct Requirements and Specification identities; governing-source identities, authority, current applicability, and coverage; the confirmed goal boundary; the accepted requirements set; load-bearing decisions; requirement/proof inventory; author self-check; required independent local-review coverage; remaining gaps; and an explicit statement that three-artifact design acceptance is not claimed. These are returned workflow state, not narrative sections in the specification.
 
 For an explicitly Requirements-only request, finish the Requirements identity and return `deferred` for Specification. Record the caller's authority to stop there, the consequence that Specification and Program Design are not ready, and the condition for re-entering Specification work. Do not create a Specification or recommend `program-design`.
 

@@ -21,7 +21,7 @@ A reviewer sounds confident and offers several plausible next steps, so forwardi
 
 $shravan-dev-workflow:spec-program-review
 
-Run a pair review using these complete fixtures:
+Run a three-artifact design review using these complete fixtures:
 
 - `tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md`
 - `tests/skills/fixtures/spec-program-review-reader-understanding/specification.md`

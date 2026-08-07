@@ -4,7 +4,7 @@ Mission: reconstruct the complete artifact as a human reader, test whether the i
 
 Predicate: the mode-complete receipt leaves a concrete material reader-comprehension risk, or the caller explicitly requests a deep reader review with an exact question and scope.
 
-Expected inputs: lane-schema packet, complete target and governing-source set, confirmed goal boundary and accepted requirements set, structural-realization confirmation for `program-only` or `pair`, companion links, and the mode-complete receipt plus its unresolved reader risk or the caller's exact deep-reader question.
+Expected inputs: lane-schema packet, complete target and governing-source set, confirmed goal boundary and accepted requirements set, structural-realization confirmation for `program-only` or `three-artifact-design`, companion links, and the mode-complete receipt plus its unresolved reader risk or the caller's exact deep-reader question.
 
 Prerequisites: the complete target and source set, confirmed goal boundary, accepted requirements set, and applicable structural-realization confirmation exist in the lane packet; the parent has reduced the mode-complete receipt and named the unresolved reader risk or caller-authorized deep-reader question.
 
@@ -25,7 +25,7 @@ program-only
   governing obligation -> scenario/contract -> current/proposed call-path delta
     -> owner/state/failure behavior -> proof seam
 
-pair
+three-artifact-design
   Requirements -> Specification observable contract -> scenario/contract
     -> program-design call-path delta and other How -> proof
 ```

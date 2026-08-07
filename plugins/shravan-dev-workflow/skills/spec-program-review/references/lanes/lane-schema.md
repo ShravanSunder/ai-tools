@@ -11,12 +11,12 @@ lane: mode-complete-reviewer | specification-authority | contract |
       platform-harness | implementation-difference | proof |
       artifact-navigation | reader-understanding
 selected lane reference
-review mode: specification-only | program-only | pair
+review mode: specification-only | program-only | three-artifact-design
 complete target paths/identities and current workspace state
 governing-source identities/versions, authority statuses, and freshness/applicability
 governing-source coverage completeness basis
 confirmed goal boundary and accepted requirements set, or exact authority gap
-structural-realization confirmation for program-only or pair, or exact owner decision needed
+structural-realization confirmation for program-only or three-artifact-design, or exact owner decision needed
 prior review coverage and semantic-change record when coverage is reused
 observable selection predicate
 bounded review question

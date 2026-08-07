@@ -1,4 +1,4 @@
 interface:
   display_name: "Spec & Program: Review"
   short_description: "Classify or review Why, What, and structural How"
-  default_prompt: "Use spec-program-review to classify whether a specification-only or program-only change semantically requires independent review, or to independently review a specification, program design, or pair for correctness, scope fidelity, reader understanding, current/proposed call paths, and planning readiness without editing or accepting them. Route one named skill package to skills-creation and standalone security audits or threat models to ops-security-review."
+  default_prompt: "Use spec-program-review to classify whether a specification-only or program-only change semantically requires independent review, or to independently review a Specification, Program Design, or complete Requirements, Specification, and Program Design set for correctness, scope fidelity, reader understanding, current/proposed call paths, and planning readiness without editing or accepting them. Route one named skill package to skills-creation and standalone security audits or threat models to ops-security-review."

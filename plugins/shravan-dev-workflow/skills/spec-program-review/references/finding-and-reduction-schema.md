@@ -49,6 +49,7 @@ Missing evidence is `unverified`, not rejection. Style preference without reader
 ## Coverage-Bound Result
 
 ```text
+exact review invocation identity and review result identity
 mode and covered targets
 semantic coverage statement and any later semantic-change records
 governing-source coverage
@@ -57,7 +58,7 @@ lane terminal states
 coverage gaps
 accepted/rejected/contested/unverified findings
 what held
-verdict: ready | needs-revision | blocked | decision-needed
+result: ready | needs-revision | blocked | decision-needed
 first required revision
 correction verification and affected-coverage rerun
 planning-readiness boundary
@@ -71,7 +72,7 @@ Only the parent-reduced result may select what happens next. Return exactly one 
 
 ```text
 stop
-  verdict and exact reason
+  result and exact reason
   exact caller action, missing evidence, unanswered owner choice,
   or deferral condition when applicable
 
@@ -80,7 +81,7 @@ continue
   phase-owned reason
   compact handoff:
     relevant governing-source and artifact pointers
-    review mode, verdict, and current boundary status
+    review mode, result, and current boundary status
     one exact accepted correction or one unmade owner decision
     accepted findings needed by the destination
     rejected, contested, and unverified findings only when needed to prevent
@@ -105,7 +106,7 @@ An authoritative correction is not pathfinding work. A reviewer suggestion is no
 
 `ready` requires complete semantically current mode coverage, no required coverage gap, no open blocker/important accepted finding, no unapproved scope expansion or requirement subtraction, and no remaining planner-owned semantic invention.
 
-Produce exactly one verdict:
+Produce exactly one result:
 
 - `blocked`: a required artifact/source/access input is missing or stale, or required mode/lane coverage is partial, blocked, or `no-receipt`, so the review cannot truthfully judge the mode.
 - `decision-needed`: required coverage is complete enough to isolate an unresolved user/authority-owned choice, including a proposed scope expansion or requirement subtraction, and that choice—not missing evidence or author correction—is the first action needed.
@@ -116,4 +117,4 @@ When states mix, apply precedence `blocked -> needs-revision -> decision-needed 
 
 After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
 
-Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the verdict cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.
+Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the result cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.

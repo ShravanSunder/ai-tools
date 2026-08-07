@@ -21,7 +21,7 @@ The diagrams render successfully and repeat familiar headings, so they can appea
 
 $shravan-dev-workflow:spec-program-review
 
-Review these complete fixtures in pair mode:
+Review these complete fixtures in three-artifact-design mode:
 
 - `tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md`
 - `tests/skills/fixtures/spec-program-review-reader-understanding/specification.md`

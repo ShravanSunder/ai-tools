@@ -1,12 +1,12 @@
-# Reviewing the Specification and Program-Design Pair
+# Reviewing the Three-Artifact Design
 
-This reference owns `pair` mode judgment.
+This reference owns `three-artifact-design` mode judgment.
 
-Pair review independently repeats load-bearing local checks; it does not trust author self-checks or prior local review as the only evidence.
+Three-artifact design review independently repeats load-bearing local checks; it does not trust author self-checks or prior local review as the only evidence.
 
-Before pair-specific integration checks, MUST load `../../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status. Then MUST load `reviewing-specification.md` and return its complete specification-mode judgment for the current Requirements and Specification. Then MUST load `reviewing-program-design.md` and return its complete program-mode judgment for the current Program Design and governing Specification. Pair judgment consumes all three separately reconstructed identities and both local results; it may not replace them with a combined `Requirements/spec`, author summary, or prior-review summary.
+Before three-artifact-design-specific integration checks, MUST load `../../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status. Then MUST load `reviewing-specification.md` and return its complete specification-mode judgment for the current Requirements and Specification. Then MUST load `reviewing-program-design.md` and return its complete program-mode judgment for the current Program Design and governing Specification. Three-artifact design judgment consumes all three separately reconstructed identities and both local results; it may not replace them with a combined `Requirements/spec`, author summary, or prior-review summary.
 
-If Requirements and Specification are missing or collapsed into one identity, record a blocker-level finding and return `needs-revision`. Route the smallest correction to `spec-design` before any Program Design repair. Do not split, create, or edit artifacts during review. Program Design findings may still be reported when supported by the available sources, but they do not remove the first required Specification correction and the pair cannot be `ready`.
+If Requirements and Specification are missing or collapsed into one identity, record a blocker-level finding and return `needs-revision`. Route the smallest correction to `spec-design` before any Program Design repair. Do not split, create, or edit artifacts during review. Program Design findings may still be reported when supported by the available sources, but they do not remove the first required Specification correction and the three-artifact design review cannot be `ready`.
 
 Inspect:
 
@@ -23,7 +23,7 @@ Inspect:
 - all coverage is semantically current for the current artifacts, with any post-review non-semantic changes recorded by the parent;
 - a planner can choose tasks/order/commands without inventing meaning or How.
 
-If local results are missing, pair `ready` requires independently repeating and recording the missing local checks. Missing prerequisites may still yield bounded findings, never false readiness.
+If local results are missing, a `three-artifact-design` result of `ready` requires independently repeating and recording the missing local checks. Missing prerequisites may still yield bounded findings, never false readiness.
 
 Use the pretend planner:
 

@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "2.0.0",
-  "description": "Development workflow skills for bounded design orchestration, research, authoritative Requirements and Specification design, structural program design, independent spec/program review, user-requirements pathfinding, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
+  "version": "2.0.1",
+  "description": "Development workflow skills for bounded design orchestration, research, authoritative Requirements and Specification design, structural program design, independent three-artifact design review, user-requirements pathfinding, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
   },

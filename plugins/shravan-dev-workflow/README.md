@@ -11,15 +11,15 @@ shared understanding
   -> orchestrator-design: bounded routing only
        -> spec-design: separate Requirements and Specification
        -> program-design: structural How
-       -> spec-program-review: proportional independent pair review
-       -> stop at reviewed pair or explicit gap; never enter planning automatically
+       -> spec-program-review: proportional independent three-artifact design review
+       -> stop at reviewed three-artifact design or explicit gap; never enter planning automatically
   -> plan + proof matrix
   -> implementation proof
 ```
 
 `handoff` means portability. It does not mean the phase is approved, complete, or ready for the next phase. A handoff packet makes context transferable so a future agent, another CLI, or another machine can continue without guessing.
 
-Design-bearing planning is admitted only from a pair-mode `spec-program-review` result that is `ready` and semantically current for the specification and program design. A handoff preserves that evidence; it does not create it. The only direct planning bypass is work positively classified as implementation-mechanics-only with no new design-bearing decision.
+Design-bearing planning is admitted only from a `three-artifact-design` mode `spec-program-review` result that is `ready` and semantically current for the Requirements, Specification, and Program Design. A handoff preserves that evidence; it does not create it. The only direct planning bypass is work positively classified as implementation-mechanics-only with no new design-bearing decision.
 
 ## Namespace Map
 
@@ -70,7 +70,7 @@ flowchart LR
     mentalModels --> specDesign
     designCycle -.->|"first phase"| specDesign
     designCycle -.->|"follows phase-selected routes"| programDesign
-    designCycle -.->|"one pair review"| specReview
+    designCycle -.->|"one three-artifact design review"| specReview
     designCycle -.->|"only for unmade owner meaning"| pathfinding
 
     specDesign --> programDesign
@@ -97,7 +97,7 @@ Use `research-swarm` when the next step is to gather evidence: local code/docs, 
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
-Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one pair review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
+Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one three-artifact design review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
 
 ### Spec boundary
 
@@ -105,11 +105,11 @@ Use `spec-design` to preserve two separate upstream concepts before program desi
 
 Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, source-anchored call paths and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It turns stack/trace evidence into implementable entrypoint-to-effect views and produces an executable mental model, not a task list.
 
-Use `spec-program-review` to independently classify and proportionally review a specification, a program design, or their pair. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the pair. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
+Use `spec-program-review` to independently classify and proportionally review a Specification, a Program Design, or the complete Requirements, Specification, and Program Design set. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the three-artifact design. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
 The retired `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills and this release provides no replacements.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the pair-review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale pairs to `spec-program-review`, and records a blocked planning handoff when the packet is ready for a planning route that is retired in this release.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the exact three-artifact design review invocation identity, review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale three-artifact designs to `spec-program-review`, and records a blocked planning handoff when the packet is ready for a planning route that is retired in this release.
 
 ### Plan boundary
 
@@ -154,7 +154,7 @@ Use discuss-clarify-mental-models to reconverge before writing a spec or plan.
 Use discuss-pathfinding to grill me on tacit requirements or unmade decisions.
 Use spec-design to preserve separate Requirements and Specification identities: authorized Why and observable What.
 Use program-design to turn this specification into structural How.
-Use spec-program-review to independently review this specification/program-design pair.
+Use spec-program-review to independently review these Requirements, Specification, and Program Design artifacts.
 Use spec-handoff to package this design for another agent without creating a plan.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
 Use plan-improve-repo to audit this repo and write executable improvement plans.

@@ -1,6 +1,6 @@
 ---
 name: orchestrator-design
-description: Use when a user asks to take a change through, run, resume, or finish the full design cycle—Requirements, Specification, Program Design, and independent pair review—as one bounded workflow before planning. Not for a direct requirements discussion, Requirements authoring, Specification, Program Design, or review-only request; long-horizon delivery goals; planning; implementation; or PR work.
+description: Use when a user asks to take a change through, run, resume, or finish the full design cycle—Requirements, Specification, Program Design, and independent three-artifact design review—as one bounded workflow before planning. Not for a direct requirements discussion, Requirements authoring, Specification, Program Design, or review-only request; long-horizon delivery goals; planning; implementation; or PR work.
 ---
 
 # Design Orchestration
@@ -32,7 +32,7 @@ agent applies orchestrator-design
 agent applies exactly the selected next skill
 ```
 
-The cycle begins with `spec-design`, ends with a current pair-review result or an explicit stop, and never enters planning or implementation.
+The cycle begins with `spec-design`, ends with a current three-artifact design review result or an explicit stop, and never enters planning or implementation.
 
 ## Boundary
 
@@ -115,7 +115,7 @@ Validate in this order:
 6. an orchestrator-routed pathfinding call names the exact return owner declared by its producing phase;
 7. a completed pathfinding return matches that exact stored return owner.
 
-The representation guard checks presence, distinctness, and file resolution or separate chat labels only. It does not read either identity to judge adequacy, create a missing artifact, turn the accepted requirements set into a Requirements identity, or reinterpret the phase's `locally-ready` result. A mixed file/chat pair is invalid. Preserve both identities unchanged in every later handoff that consumes them.
+The representation guard checks presence, distinctness, and file resolution or separate chat labels only. It does not read either identity to judge adequacy, create a missing artifact, turn the accepted requirements set into a Requirements identity, or reinterpret the phase's `locally-ready` result. A mixed file/chat representation is invalid. Preserve both identities unchanged in every later handoff that consumes them.
 
 Any mismatch stops `blocked` with the exact contradiction. Do not guess, repair, or substitute a route.
 
@@ -127,7 +127,7 @@ spec-design
   other terminal     -> stop
 
 program-design
-  locally-ready      -> spec-program-review, pair mode
+  locally-ready      -> spec-program-review, three-artifact-design mode
   specification-gap  -> spec-design
   unmade owner-controlled structural choice
                      -> discuss-pathfinding, return program-design
@@ -159,7 +159,7 @@ Completion: the route is structurally valid or the run is blocked before stale-r
 
 After structural validation:
 
-- if one pair review already ran and a permitted semantic correction recommends pair review again, record the unchanged recommendation and its exact artifact pointers but stop `correction-complete-review-stale`; do not invoke a second review;
+- if one three-artifact design review already ran and a permitted semantic correction recommends three-artifact design review again, record the unchanged recommendation and its exact artifact pointers but stop `correction-complete-review-stale`; do not invoke a second review;
 - otherwise, if the applicable stage limit is exhausted, stop `cycle-limit-reached` while preserving the valid phase handoff as non-executable explanation;
 - otherwise, record the transition and invoke the selected skill.
 
@@ -194,7 +194,7 @@ stopped
 
 Preserve the phase result and its artifact pointers. Include the exact caller action, unanswered questions, deferral consequence and re-entry condition, or valid but non-executable continuation when that terminal requires it. A recorded terminal resume replays the stored payload and invokes nothing.
 
-Never claim planning readiness unless the current pair review itself returned `ready` for the current specification and program design.
+Never claim planning readiness unless the current three-artifact design review itself returned `ready` for the current Requirements, Specification, and Program Design.
 
 Completion: the user receives the exact stop reason and can either act on it or explicitly start a new bounded cycle without orchestration inventing another step.
 
@@ -205,7 +205,7 @@ One cycle permits:
 ```text
 pre-review spec-design:          at most 2 calls
 pre-review program-design:       at most 2 calls
-pair review:                     at most 1 call
+three-artifact design review:  at most 1 call
 post-review spec-design:         at most 1 call
 post-review program-design:      at most 1 call
 orchestrator-routed pathfinding: at most 1 call
@@ -227,8 +227,8 @@ Do not continue or claim completion while any of these hold:
 - semantic routing meaning was copied into orchestration-owned state or reconstructed from chat;
 - an unreduced reviewer candidate affects the route;
 - structural guards were applied after stale-review or budget handling;
-- another pair review would run automatically after reviewed meaning changed;
+- another three-artifact design review would run automatically after reviewed meaning changed;
 - a stale-review stop omits the unchanged phase recommendation, exact artifact pointers, or its non-executable status;
 - a valid route exceeds its stage limit but another phase is invoked;
 - planning, implementation, PR, merge, or release work is invoked;
-- the terminal result rewrites the phase's reason or claims a reviewed pair when current pair-review coverage does not exist.
+- the terminal result rewrites the phase's reason or claims a reviewed three-artifact design when current three-artifact-design review coverage does not exist.

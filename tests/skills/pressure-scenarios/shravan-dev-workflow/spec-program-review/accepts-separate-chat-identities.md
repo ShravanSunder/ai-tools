@@ -20,7 +20,7 @@ The review workflow can demand file paths even though the design contract explic
 
 $shravan-dev-workflow:spec-program-review
 
-Review this chat-only pair in pair mode. These are three separate current records:
+Review this chat-only three-artifact design set in three-artifact-design mode. These are three separate current records:
 
 Requirements: Repository maintainers need a failed skill run to name the exact failed scenario. Existing successful output must remain unchanged. Only the skill-test package may change; production plugins are protected. No new persistence or reporting system is allowed.
 
