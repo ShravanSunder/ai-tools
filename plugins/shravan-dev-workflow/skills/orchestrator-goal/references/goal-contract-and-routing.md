@@ -4,7 +4,7 @@ This reference owns the compact long-horizon goal contract, evidence-based gate 
 
 Expected inputs: the user's objective and terminal intent, current repository instructions, governing artifact pointers, current branch and source identities, existing phase receipts, allowed writes, proof expectations, and explicit blockers or decisions.
 
-Return: the goal contract, current evidence inventory, first unproven gate, exactly one next owner or stop, the evidence that permits that route, and the terminal status.
+Return: the goal contract, current evidence inventory, first unproven gate, the inspectable invocation packet and owner phase receipt for exactly one invoked owner or the exact stop/runtime blocker, and the terminal status.
 
 ## Compact Goal Contract
 
@@ -46,6 +46,32 @@ next owner or stop:
 ```
 
 `not-applicable` requires an explicit reason tied to the requested terminal or governing scope. A chat summary, ticket state, commit, branch name, goal status, or downstream result is never sufficient by itself.
+
+## Invoke One Owner Now
+
+Selecting or naming the owner is not invocation. Open the selected owner's current `SKILL.md`, execute its current route with one inspectable packet, and return the owner's phase receipt in this turn. If the runtime cannot invoke that owner, return the exact runtime blocker instead of a future `next_action`.
+
+Read-only authority does not by itself defer an owner that supports read-only simulation. Execute that simulation now, return the receipt it would produce without writes, and name the writes withheld. Only the absence of a supported read-only route is an exact runtime blocker.
+
+```text
+invoked owner:
+passed packet:
+  governing authority identities:
+  canonical plan tuple, result payload, and current meaning:
+  approval-evidence record or explicit absence:
+  base, reviewed, and diff identities:
+  proof identities and observations:
+  freshness pointers:
+  constraints:
+  proof expectations:
+  authority:
+owner phase receipt:
+  preserved identity set: <repeat every applicable identity slot above exactly>
+  result and exact blocker or route:
+terminal status:
+```
+
+The packet exposes the complete owned evidence required by the selected owner, including the complete approval-evidence record when applicable. The final route decision and returned owner phase receipt each repeat every exact passed identity and its current meaning: governing authority identities, the unchanged canonical tuple and result payload, the complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, and freshness pointers whenever applicable. A summary such as `validated the tuple, approval, and proof` is incomplete. This preserves evidence identity without copying the owner's procedure or creating workflow state.
 
 ## Minimum Phase Returns
 

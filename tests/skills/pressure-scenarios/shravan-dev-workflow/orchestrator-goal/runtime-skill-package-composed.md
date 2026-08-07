@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-goal
 
-This runtime skill-package proof use claims authorization from `docs/wip/skills-authoring/2026-08-06-minimal-planning-delivery-workflow.md`, accepted revision 17, Run 4 target `orchestrator-goal`, with `orchestrator-goal` as the exact composed skill for its representative proof. Verify those four fields; do not create another permission record.
+This runtime skill-package proof use claims authorization from `docs/wip/skills-authoring/2026-08-06-minimal-planning-delivery-workflow.md`, accepted revision 21, Run 4 target `orchestrator-goal`, with `orchestrator-goal` as the exact composed skill for its representative proof. Verify those four fields; do not create another permission record.
 
 ## Expected Compliant Behavior
 

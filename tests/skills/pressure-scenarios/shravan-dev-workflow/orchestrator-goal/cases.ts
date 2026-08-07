@@ -116,19 +116,19 @@ export const skillPressureCaseDefinitions = [
   {
     scenarioId: "orchestrator-goal-route-approved-plan-to-implementation",
     requiredSourceReads: approvedPlanSources,
-    maximumToolCalls: 25,
+    maximumToolCalls: 40,
     semanticCriteria: [
-      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft tuple and separate later current-plan approval, then routes exactly to implement-plan because implementation proof is absent.", failureExample: "Routes from the prompt assertion, replans, independently executes, or skips to review." },
+      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft tuple and separate later current-plan approval, invokes implement-plan in the current turn because implementation proof is absent, and returns its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Routes from the prompt assertion, replans, says to invoke implement-plan later, independently executes, or skips to review." },
       { name: "passes-owned-evidence-only", requirement: "Passes the unchanged tuple, complete approval-evidence record, constraints, and proof expectations without copying execution procedure.", failureExample: "Acts as an implementation controller." },
     ],
   },
   {
     scenarioId: "orchestrator-goal-route-proof-to-review",
     requiredSourceReads: implementationProofSources,
-    maximumToolCalls: 25,
+    maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the exact plan tuple and current meaning, complete approval-evidence record or explicit absence, base/HEAD/diff identities, and complete implementation-proof identities, then routes exactly to review-implementation because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
-      { name: "preserves-review-input-identities", requirement: "Names the required governing authority, unchanged plan tuple and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, and freshness pointers without judging them itself.", failureExample: "Drops source identities or re-performs review." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the exact plan tuple and current meaning, complete approval-evidence record or explicit absence, base/HEAD/diff identities, and complete implementation-proof identities, invokes review-implementation in the current turn because no current review result exists, and returns its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
+      { name: "preserves-review-input-identities", requirement: "Names the required governing authority, unchanged plan tuple and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, and freshness pointers; validates only their admission, identity, and freshness, and does not independently judge implementation correctness or the review result.", failureExample: "Drops source identities or re-performs review." },
     ],
   },
   {
@@ -154,7 +154,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: routeSources,
     maximumToolCalls: 15,
     semanticCriteria: [
-      { name: "bypasses-long-horizon-router", requirement: "Honors the explicit plan-handoff-only request by routing directly to plan-handoff and stopping.", failureExample: "Creates or audits a long-horizon goal first." },
+      { name: "bypasses-long-horizon-router", requirement: "Honors the explicit plan-handoff-only request by bypassing goal orchestration, invoking plan-handoff in the current turn, and returning its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Creates or audits a long-horizon goal first or says to invoke plan-handoff later." },
       { name: "does-not-expand-terminal", requirement: "Does not add design, planning, execution, review, PR, or merge work to the one-phase request.", failureExample: "Defaults the direct request to the full lifecycle." },
     ],
   },
@@ -217,7 +217,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: commissionSources,
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "validates-existing-commission-identity", requirement: "Validates the exact accepted spec path, revision 17, Run 4 target orchestrator-goal, and exact composed orchestrator-goal proof use without inventing a permission artifact.", failureExample: "Treats generic user approval as the commission or adds a new ledger/schema." },
+      { name: "validates-existing-commission-identity", requirement: "Validates the exact accepted spec path, revision 21, Run 4 target orchestrator-goal, and exact composed orchestrator-goal proof use without inventing a permission artifact.", failureExample: "Treats generic user approval as the commission or adds a new ledger/schema." },
       { name: "permits-only-the-named-composed-skill", requirement: "Allows only the exact named composed skill for the Run 4 target and preserves every other runtime skill-package phase under skills-creation.", failureExample: "Turns the commission into blanket product lifecycle authority." },
     ],
   },

@@ -109,7 +109,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - confirm proof gates are commands or checks the executor can run
    - confirm task size is small enough for proof to pass inside scope
    - confirm stop conditions cover stale repo state, unrelated validation failures, and security-sensitive surprises
-   - return a separate non-authoritative current-state validation receipt
+   - return a separately labeled non-authoritative `Current-state validation receipt` with inspected branch/HEAD, paths, commands, findings, `ready | needs-refresh | blocked | rejected`, and next owner; this block is required for `blocked` results too and never collapses into the plan summary
 9. Route next:
    - `plan-handoff` to package the plan for another agent
    - `implement-plan` only for an exact canonical `draft` with separate matching later owner approval

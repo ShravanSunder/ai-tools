@@ -100,6 +100,12 @@ describe("minimal planning and delivery contracts", () => {
     expect(template).not.toContain("| Why now | Proof |");
     expect(validation).toContain("Return validation as a separate current-state receipt");
     expect(validation).toContain("Preserve the canonical tuple");
+    expect(improvementPlanner).toContain(
+      "separately labeled non-authoritative `Current-state validation receipt`",
+    );
+    expect(improvementPlanner).toContain(
+      "this block is required for `blocked` results too",
+    );
     expect(validation).not.toContain("Handoff prompt names");
     expect(improvementPlanner).toContain("Plan completion, validation, handoff");
     expect(improvementPlanner).toContain(
@@ -518,6 +524,12 @@ describe("minimal planning and delivery contracts", () => {
       "IF a canonical plan exists or a planning result is being evaluated",
     );
     expect(orchestrator).toContain("Invoke exactly one owning skill");
+    expect(orchestrator).toContain(
+      "Name every passed identity and current meaning in both the route decision and returned owner receipt",
+    );
+    expect(orchestrator).toContain(
+      "A direct one-phase request bypasses this skill and invokes the requested owning skill in the current turn",
+    );
     expect(orchestrator).toContain("default terminal is PR-ready and unmerged");
     expect(orchestrator).toContain("merge always requires separate authorization");
     expect(orchestrator).toContain("tickets never replace the canonical plan");
@@ -527,6 +539,32 @@ describe("minimal planning and delivery contracts", () => {
     expect(orchestrator).not.toContain("transition writer");
     expect(orchestrator).not.toContain("worker receipt");
     expect(routing).toContain("Compact Goal Contract");
+    expect(routing).toContain("Invoke One Owner Now");
+    expect(routing).toContain("passed packet:");
+    expect(routing).toContain("governing authority identities:");
+    expect(routing).toContain(
+      "canonical plan tuple, result payload, and current meaning:",
+    );
+    expect(routing).toContain(
+      "approval-evidence record or explicit absence:",
+    );
+    expect(routing).toContain("proof identities and observations:");
+    expect(routing).toContain(
+      "preserved identity set: <repeat every applicable identity slot above exactly>",
+    );
+    expect(routing).toContain("owner phase receipt:");
+    expect(routing).toContain(
+      "return the exact runtime blocker instead of a future `next_action`",
+    );
+    expect(routing).toContain(
+      "Read-only authority does not by itself defer an owner that supports read-only simulation",
+    );
+    expect(routing).toContain(
+      "The final route decision and returned owner phase receipt each repeat every exact passed identity and its current meaning",
+    );
+    expect(routing).toContain(
+      "A summary such as `validated the tuple, approval, and proof` is incomplete",
+    );
     expect(routing).toContain("Minimum Phase Returns");
     expect(routing).toContain("Resume And Closeout");
     expect(routing).toContain("The host goal is a carrier");
