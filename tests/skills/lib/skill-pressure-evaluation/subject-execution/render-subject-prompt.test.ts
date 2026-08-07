@@ -76,6 +76,17 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).not.toContain("repo-local skill source is authoritative");
     expect(prompt).toContain("Required source evidence:");
   });
+
+  test("forbids test-machinery inspection without required source reads", () => {
+    const prompt = renderCodexPressurePrompt({
+      input: { ...input, requiredSourceReads: [] },
+    });
+
+    expect(prompt).toContain(
+      "Do not inspect pressure-scenario fixtures, case registries, evaluator code, grader artifacts, or the current diff",
+    );
+    expect(prompt).not.toContain("Required source evidence:");
+  });
 });
 
 describe("findPromptRegexLeaks", () => {

@@ -127,6 +127,46 @@ describe("deterministic evaluators", () => {
     expect(result.score).toBe(1);
   });
 
+  test("source-read evaluator rejects output attributed to an extra source", async () => {
+    const evaluator = createSourceReadEvaluator(["a.md"]);
+    const result = await evaluator.assess(
+      createContext({
+        ...baseOutput,
+        normalizedToolCalls: [
+          {
+            sequence: 0,
+            capability: "source-read",
+            command: "sed -n '1,200p' a.md extra.md",
+            output: "# Extra",
+            exitCode: 0,
+          },
+        ],
+      }),
+    );
+
+    expect(result.score).toBe(0);
+  });
+
+  test("source-read evaluator requires a line-anchored output delimiter", async () => {
+    const evaluator = createSourceReadEvaluator(["a.md", "b.md"]);
+    const result = await evaluator.assess(
+      createContext({
+        ...baseOutput,
+        normalizedToolCalls: [
+          {
+            sequence: 0,
+            capability: "source-read",
+            command: "sed -n '1,200p' a.md b.md",
+            output: "prefix --- a.md\n# A\n--- b.md\n# B\n",
+            exitCode: 0,
+          },
+        ],
+      }),
+    );
+
+    expect(result.score).toBe(0);
+  });
+
   test.each([
     {
       name: "listing",

@@ -2,6 +2,8 @@
 
 Use these when writing `copy-paste-prompt.md` and printing the prompt in chat.
 
+For meaningful general-domain review, `plan identity: none` intentionally returns `blocked-input`; the handoff must route to caller authority or plan creation before asking `review-implementation` to proceed.
+
 ## Reviewer Prompt
 
 ```text

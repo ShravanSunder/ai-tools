@@ -21,7 +21,11 @@ export function createSourceReadEvaluator(
           const commandPathCount = requiredPaths.filter((path) =>
             call.command.includes(path),
           ).length;
-          if (commandPathCount === 1 && call.command.includes(requiredPath)) {
+          if (
+            commandPathCount === 1 &&
+            call.command.includes(requiredPath) &&
+            readUniqueSourcePaths(call.command).length === 1
+          ) {
             return true;
           }
           return hasDelimitedOutputSection({
@@ -66,13 +70,25 @@ function hasDelimitedOutputSection(props: {
   readonly output: string;
   readonly requiredPath: string;
 }): boolean {
-  const delimiter = `--- ${props.requiredPath}\n`;
-  const sectionStart = props.output.indexOf(delimiter);
-  if (sectionStart < 0) {
+  const delimiterPattern = new RegExp(
+    `^--- ${escapeRegularExpression(props.requiredPath)}\\n`,
+    "m",
+  );
+  const delimiterMatch = delimiterPattern.exec(props.output);
+  if (delimiterMatch === null) {
     return false;
   }
-  const contentStart = sectionStart + delimiter.length;
+  const contentStart = delimiterMatch.index + delimiterMatch[0].length;
   const nextDelimiter = props.output.indexOf("\n--- ", contentStart);
   const sectionEnd = nextDelimiter < 0 ? props.output.length : nextDelimiter;
   return props.output.slice(contentStart, sectionEnd).trim().length > 0;
+}
+
+function readUniqueSourcePaths(command: string): readonly string[] {
+  const sourcePathPattern = /[^\s"'=:\[\]{}(),;]+\.[A-Za-z0-9]+(?=$|[\s"'\[\]{}(),;])/g;
+  return [...new Set(command.match(sourcePathPattern) ?? [])];
+}
+
+function escapeRegularExpression(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

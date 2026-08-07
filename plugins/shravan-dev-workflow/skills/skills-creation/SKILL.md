@@ -139,6 +139,8 @@ Collect every receipt explicitly and ask a lane that goes quiet; silence is neve
 
 Emit the run note whenever the run dispatches review lanes, returns an evaluate verdict, cites or verifies an accepted spec, edits skill files, or runs a proof route. A run that does none of these is chat-only discussion and skips the ceremony.
 
+When triggered, return the entire block below as one contiguous run note. Mentioning selected rows elsewhere in the response is an omitted run note, not a compact substitute.
+
 ```text
 classification: create | update | evaluate
 target skill / owner plugin:
@@ -160,7 +162,7 @@ shipping status: source-only | PR-ready | released
 
 An `evaluate` run walks a shorter spine: complete step 1, follow the review branch it selects, and end at the parent-reduced verdict with that stage's required returns plus the run note. Steps 2-10 begin only as a new `update` run whose own step 1 records a user-supplied success definition and an authoring basis; an invitation like "just quickly fix it" that names neither is not a commission.
 
-A run implementing one slice — one run of an accepted multi-run skill-change spec's sequenced runs — reads the accepted spec doc and takes its step-1 and step-2 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing; the doc is the commission for that slice, and each slice still names exactly one skill target.
+A run implementing one slice — one run of an accepted multi-run skill-change spec's sequenced runs — reads the accepted spec doc and takes its step-1 and step-2 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing; the doc is the commission for that slice, and each slice still names exactly one skill target. Accepted-spec citation, verification, or expiry cannot complete or return a blocker without the full Scaled Run Note; when no lanes ran, preserve the exact cited revision/result identity in `review lanes dispatched:` and return `lane receipts: n/a (no lanes dispatched this run)`. A missing artifact makes that claimed identity unverified; it never erases or generalizes the identity supplied by the caller.
 
 ### 1. Name the promise and success
 
@@ -282,6 +284,7 @@ The run is not done while any of these hold:
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
 - implementation completed without stating `spec-boundary none` or a named deviation list against the accepted spec boundary;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
+- accepted-spec citation, verification, or expiry returned without every Scaled Run Note field, including truthful `review lanes dispatched:` and `lane receipts:` rows;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
 - a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;

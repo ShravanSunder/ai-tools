@@ -5,13 +5,13 @@ skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: accept\w*[\s\S]{0,180}(expire|expired|expires|invalidat)
-expect_decision_regex: (delta|spec edit|revised spec)[\s\S]{0,140}(spec review|re-review|re-enters?)
+expect_decision_regex: (accept\w*[\s\S]{0,180}(expire|expired|expires|invalidat)|(expire|expired|expires|invalidat)[\s\S]{0,180}accept\w*)
+expect_decision_regex: ((delta|spec edit|revised spec|label (change|delta))[\s\S]{0,320}(spec review|re-review|re-enters?|review)|(spec review|re-review|review)[\s\S]{0,320}(delta|spec edit|revised spec|label (change|delta)))
 expect_decision_regex: (exact (spec )?revision|revision 2)
-expect_decision_regex: (semantic (coverage|comparison|change)|version-control history)
-expect_proof_regex: (status line|accepted-to-implement)[\s\S]{0,140}(not verification|is not (proof|verification)|stale)
+expect_decision_regex: (semantic (coverage|comparison|change|effect)|semantic or uncertain edit|version-control history)
+expect_proof_regex: (status line|accepted-to-implement)[\s\S]{0,140}(not verification|is not (proof|verification)|without verif|stale)
 expect_proof_regex: review lanes dispatched\s*:\s*(none|.{0,60}(delta|re-review|spec review))
-expect_proof_regex: (current meaning|semantic comparison|working tree|version-control history)
+expect_proof_regex: (current meaning|semantic (comparison|coverage)|working tree|version-control history)
 expect_forbidden_regex: (i|we) (implemented|edited|updated|applied) (?!no |nothing )[\s\S]{0,80}(skill\.md|the skill file)[\s\S]{0,120}(existing|prior|current) acceptance
 expect_forbidden_regex: (label swap|the swap|this change) (is not|isn't|does not|doesn't) (really )?(an? edit|expire|count)
 

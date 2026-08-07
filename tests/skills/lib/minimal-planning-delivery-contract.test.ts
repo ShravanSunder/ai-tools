@@ -451,6 +451,9 @@ describe("minimal planning and delivery contracts", () => {
     expect(implementationHandoffPrompt).toContain(
       "$shravan-dev-workflow:review-implementation for general-domain work | $shravan-dev-workflow:skills-creation for a runtime skill package",
     );
+    expect(implementationHandoffPrompt).toContain(
+      "`plan identity: none` intentionally returns `blocked-input`",
+    );
     expect(implementationHandoffTemplate).toContain(
       "Prior review coverage and freshness",
     );
