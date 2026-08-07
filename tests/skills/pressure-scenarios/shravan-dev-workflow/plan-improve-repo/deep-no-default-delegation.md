@@ -7,6 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: in-parent|inline|parent
 expect_proof_regex: explicit user request|concrete.*independently verifiable|bounded evidence question
+expect_proof_regex: manage-agents
 expect_forbidden_regex: dispatch every|one agent per|spawn.*(category|lane)|default swarm|lane packet
 
 ## Shortcut Temptation

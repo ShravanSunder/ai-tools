@@ -98,13 +98,18 @@ describe("minimal planning and delivery contracts", () => {
     expect(template).toContain("Planning result: draft | revision-requested | blocked");
     expect(template).toContain("The index projects the canonical result and plan path");
     expect(template).not.toContain("| Why now | Proof |");
-    expect(validation).toContain("Return validation as a separate current-state receipt");
+    expect(validation).toContain("Return two separately labeled blocks");
+    expect(validation).toContain("Canonical plan record (unchanged)");
+    expect(validation).toContain("Current-state validation receipt");
     expect(validation).toContain("Preserve the canonical tuple");
     expect(improvementPlanner).toContain(
       "separately labeled non-authoritative `Current-state validation receipt`",
     );
     expect(improvementPlanner).toContain(
       "this block is required for `blocked` results too",
+    );
+    expect(improvementPlanner).toContain(
+      "`delegation: none | <bounded handoff>`",
     );
     expect(validation).not.toContain("Handoff prompt names");
     expect(improvementPlanner).toContain("Plan completion, validation, handoff");
@@ -528,7 +533,7 @@ describe("minimal planning and delivery contracts", () => {
       "Name every passed identity and current meaning in both the route decision and returned owner receipt",
     );
     expect(orchestrator).toContain(
-      "A direct one-phase request bypasses this skill and invokes the requested owning skill in the current turn",
+      "A direct one-phase request bypasses this skill's long-horizon route and invokes the requested owning skill in the current turn",
     );
     expect(orchestrator).toContain("default terminal is PR-ready and unmerged");
     expect(orchestrator).toContain("merge always requires separate authorization");
@@ -558,6 +563,12 @@ describe("minimal planning and delivery contracts", () => {
     );
     expect(routing).toContain(
       "Read-only authority does not by itself defer an owner that supports read-only simulation",
+    );
+    expect(routing).toContain(
+      "When `implement-plan` is the selected owner under read-only authority, complete its admission and pre-edit verdict now",
+    );
+    expect(routing).toContain(
+      "Do not defer with a future `run implement-plan` action",
     );
     expect(routing).toContain(
       "The final route decision and returned owner phase receipt each repeat every exact passed identity and its current meaning",

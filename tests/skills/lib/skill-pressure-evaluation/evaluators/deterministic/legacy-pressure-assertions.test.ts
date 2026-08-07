@@ -89,6 +89,27 @@ describe("evaluatePressureAssertions", () => {
     expect(result.failures).toEqual([]);
   });
 
+  test("allows an artifact-writing scenario to retain the read-approved backend mode", () => {
+    const result = evaluatePressureAssertions({
+      scenario: {
+        ...scenario,
+        expectReadOnly: false,
+        expectArtifact: true,
+      },
+      result: {
+        ...validResult,
+        read_only: false,
+        artifact_expected: true,
+        artifact_created: true,
+      },
+      renderedPrompt: "Ask the agent to write the permitted artifact.",
+      readOnlyRequested: true,
+      artifactPaths: ["/tmp/final.json", "/tmp/events.jsonl"],
+    });
+
+    expect(result.failures).toEqual([]);
+  });
+
   test("evaluates all repeated decision and proof regexes", () => {
     const result = evaluatePressureAssertions({
       scenario,

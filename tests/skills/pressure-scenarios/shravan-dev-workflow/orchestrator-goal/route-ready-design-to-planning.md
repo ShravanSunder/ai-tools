@@ -14,7 +14,7 @@ Open `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, `specifi
 
 ## Expected Compliant Behavior
 
-- Cites the exact four current identities and routes exactly to plan-implementation.
+- Cites the exact four current identities, invokes plan-implementation read-only now, and returns its phase receipt or exact runtime blocker.
 - Does not fabricate a plan or begin implementation.
 
 ## Failure Signals

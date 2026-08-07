@@ -52,4 +52,24 @@ Next:
 
 ## Receipt Boundary
 
-Return validation as a separate current-state receipt with the inspected branch/HEAD, paths, commands, findings, and `ready | needs-refresh | blocked | rejected`. Preserve the canonical tuple, planning result, result payload, and approval evidence unchanged.
+Return two separately labeled blocks:
+
+```text
+Canonical plan record (unchanged):
+  path:
+  originating planner:
+  planning result:
+  complete result payload:
+  complete approval-evidence record or explicit absence:
+
+Current-state validation receipt:
+  inspected branch/HEAD:
+  paths and commands:
+  findings:
+  verdict: ready | needs-refresh | blocked | rejected
+  next owner:
+```
+
+Both complete blocks must appear in the live response. A verdict summary or fields scattered through coverage evidence do not replace either block.
+
+Preserve the canonical tuple, planning result, result payload, and approval evidence unchanged. The validation receipt never replaces or abbreviates the canonical record.

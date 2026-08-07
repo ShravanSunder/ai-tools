@@ -22,7 +22,7 @@ A long-horizon goal is a guarded route through phase-owned evidence, not a secon
 - Unclear never-articulated intent -> `discuss-pathfinding`; drifted shared model -> `discuss-clarify-mental-models`.
 - An explicit complete bounded design-cycle request, or a fresh long-horizon delivery goal with neither admitted design artifacts nor a valid stored design-run continuation -> `orchestrator-design`.
 - Without a complete-cycle request, partial design artifacts route to the first missing phase: Requirements or observable Why/What -> `spec-design`; structural How -> `program-design`; complete unreviewed three-artifact set -> `spec-program-review` operation `review`, mode `three-artifact-design`.
-- A direct one-phase request bypasses this skill and invokes the requested owning skill in the current turn, returning its phase receipt or exact runtime blocker. A phase-owned correction goes directly to the owner returned by review rather than restarting the full cycle.
+- A direct one-phase request bypasses this skill's long-horizon route and invokes the requested owning skill in the current turn, returning its phase receipt or exact runtime blocker. Applying this routing contract still counts as invoking `orchestrator-goal`; only the long-horizon continuation is bypassed. A phase-owned correction goes directly to the owner returned by review rather than restarting the full cycle.
 - An audit or plan directly authorized by admitted repository-improvement findings -> `plan-improve-repo`; supporting reviewed design does not change that origin.
 - Current ready reviewed design without a plan -> `plan-implementation`.
 - Plan result `revision-requested` -> recorded originating planner; `blocked` -> recorded unblock owner; only `draft` can advance.

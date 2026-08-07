@@ -14,8 +14,16 @@ Planned at branch/HEAD: fixture / 1111111111111111111111111111111111111111
 
 ## Change And Proof
 
-1. Add the pure formatter and focused unit tests.
-2. Run the focused unit test, full skill unit suite, and typecheck.
+1. Add the pure formatter at `tests/skills/lib/example-formatter.ts` and focused unit tests at `tests/skills/lib/example-formatter.test.ts`.
+2. Run focused proof with `pnpm --dir tests/skills exec vitest run lib/example-formatter.test.ts --config vitest.config.ts`.
+3. Run the full skill unit suite with `pnpm --dir tests/skills run test:unit` and quality proof with `pnpm --dir tests/skills run typecheck`.
+
+Integration gate: not applicable because this is one isolated pure formatter slice with no separately changed component.
+Manual/runtime proof: not applicable because the formatter is pure deterministic logic observed by its focused unit tests.
+
+## Completion Report
+
+Return the unchanged canonical tuple and approval evidence, implementation base/HEAD/diff, covered obligation and slice, changed files, automated commands and exit codes, manual/runtime and quality observations, integration-gate result, incomplete rows, blockers, and proof freshness.
 
 ## Stop Conditions
 

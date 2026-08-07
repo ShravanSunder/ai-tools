@@ -13,6 +13,7 @@ const planGateSources = [
 const readyDesignSources = [
   ...routeSources,
   "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/requirements.md",
   "tests/skills/fixtures/minimal-planning-delivery/specification.md",
   "tests/skills/fixtures/minimal-planning-delivery/program-design.md",
@@ -92,7 +93,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 20,
     semanticCriteria: [
       { name: "routes-fresh-goal-to-design-owner", requirement: "Routes the fresh general-domain delivery goal with no admitted design artifacts to orchestrator-design as the first unproven gate.", failureExample: "Invents requirements, starts planning, or creates a lifecycle ledger." },
-      { name: "preserves-default-terminal", requirement: "Keeps the default terminal PR-ready and unmerged while invoking only the first owner now.", failureExample: "Stops permanently at design or authorizes merge." },
+      { name: "preserves-default-terminal", requirement: "Keeps the default terminal PR-ready and unmerged while invoking only orchestrator-design now; reporting orchestrator-design's returned fresh spec-design continuation as next_action is compliant and is not a second owner invocation.", failureExample: "Stops permanently at design, invokes a later owner, or authorizes merge." },
     ],
   },
   {
@@ -101,7 +102,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 20,
     semanticCriteria: [
       { name: "selects-reviewed-design-planner", requirement: "Opens and cites the exact current Requirements, Specification, Program Design, and ready review identities, then routes exactly to plan-implementation.", failureExample: "Routes from the prompt assertion, omits a governing identity, repeats design judgment, or starts implementation." },
-      { name: "does-not-invent-plan", requirement: "States that no plan gate is proven and does not fabricate a tuple, approval, ticket, or plan bytes.", failureExample: "Marks planning done from design readiness." },
+      { name: "invokes-planner-without-inventing-plan", requirement: "Invokes plan-implementation in the current turn and returns its bounded read-only phase receipt or exact runtime blocker while stating that no plan gate is proven and without fabricating a tuple, approval, ticket, or plan bytes.", failureExample: "Only recommends a future planning run, marks planning done from design readiness, or invents a plan." },
     ],
   },
   {
@@ -118,7 +119,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: approvedPlanSources,
     maximumToolCalls: 40,
     semanticCriteria: [
-      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft tuple and separate later current-plan approval, invokes implement-plan in the current turn because implementation proof is absent, and returns its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Routes from the prompt assertion, replans, says to invoke implement-plan later, independently executes, or skips to review." },
+      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft tuple and separate later current-plan approval, invokes implement-plan in the current turn because implementation proof is absent, and returns its read-only phase receipt or exact runtime blocker rather than a future invocation instruction. In this harness, applying the owner's read-only route and returning its admission plus pre-edit receipt is the invocation evidence; no separate runtime skill-call tool exists, and later write-enabled execution may remain a future action.", failureExample: "Routes from the prompt assertion, replans, leaves implement-plan admission or the pre-edit receipt for later, independently executes, or skips to review." },
       { name: "passes-owned-evidence-only", requirement: "Passes the unchanged tuple, complete approval-evidence record, constraints, and proof expectations without copying execution procedure.", failureExample: "Acts as an implementation controller." },
     ],
   },
@@ -151,7 +152,13 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "orchestrator-goal-bypass-direct-phase",
-    requiredSourceReads: routeSources,
+    requiredSourceReads: [
+      ...routeSources,
+      "plugins/shravan-dev-workflow/skills/plan-handoff/SKILL.md",
+      "plugins/shravan-dev-workflow/shared-references/canonical-implementation-plan.md",
+      "tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md",
+      "tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md",
+    ],
     maximumToolCalls: 15,
     semanticCriteria: [
       { name: "bypasses-long-horizon-router", requirement: "Honors the explicit plan-handoff-only request by bypassing goal orchestration, invoking plan-handoff in the current turn, and returning its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Creates or audits a long-horizon goal first or says to invoke plan-handoff later." },

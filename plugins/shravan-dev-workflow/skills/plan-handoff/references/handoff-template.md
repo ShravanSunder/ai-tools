@@ -45,7 +45,8 @@ Security context
 Obligation/slice/proof mapping
 - Source: <path/section or compact proof line>
 - Rows carried forward: <requirement, evidence source, proof gate, freshness guard>
-- Open proof gaps or split triggers: <or "none">
+- Open proof gaps: <or "none">
+- Split triggers: <or "none">
 - Parent verification rule: downstream subagent, reviewer, UI-driver, telemetry,
   or other delegated evidence must be inspected or cross-checked before
   completion is claimed.

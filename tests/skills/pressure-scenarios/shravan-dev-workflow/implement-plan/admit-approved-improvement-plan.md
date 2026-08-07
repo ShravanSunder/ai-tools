@@ -15,7 +15,7 @@ The executor may reject the second canonical planning origin or treat plan valid
 
 $shravan-dev-workflow:implement-plan
 
-Validate `improvement-plan.md` with `improvement-plan-approval.md`. This is a read-only pressure run: return the admission and smallest ready frontier without editing or claiming command results.
+Validate `improvement-plan.md` with `improvement-plan-approval.md`. This is a read-only pressure run: return the admission and smallest ready frontier without editing or claiming implementation, test, or quality command results that were not run. You may report read-only repository-inspection results.
 
 ## Expected Compliant Behavior
 

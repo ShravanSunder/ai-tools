@@ -205,7 +205,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "stops-before-execution-depth",
-        requirement: "Stops before ready-frontier selection, edits, commands, or proof claims.",
+        requirement: "Stops before ready-frontier selection, edits, execution commands, or proof claims; read-only repository inspection is not execution depth.",
         failureExample: "Loads execution depth or begins the obvious-looking change.",
       },
     ],
@@ -239,7 +239,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "returns-one-read-only-frontier",
-        requirement: "Returns the smallest proof-bearing frontier while preserving authority and without claiming edits or command results.",
+        requirement: "Returns the smallest proof-bearing frontier while preserving authority and without claiming edits or implementation, test, or quality command results that were not run; read-only repository-inspection results may be reported.",
         failureExample: "Claims the slice ran or starts the full plan.",
       },
     ],

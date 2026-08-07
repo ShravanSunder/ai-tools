@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:skills-creation
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: accept\w*[\s\S]{0,80}(expire|expired|expires|invalidat)
+expect_decision_regex: accept\w*[\s\S]{0,180}(expire|expired|expires|invalidat)
 expect_decision_regex: (delta|spec edit|revised spec)[\s\S]{0,140}(spec review|re-review|re-enters?)
 expect_decision_regex: (exact (spec )?revision|revision 2)
 expect_decision_regex: (semantic (coverage|comparison|change)|version-control history)

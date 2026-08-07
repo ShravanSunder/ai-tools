@@ -49,11 +49,16 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).toContain("- scenario_id: render");
     expect(prompt).toContain("- skill_under_test: shravan-dev-workflow:test-skill");
     expect(prompt).toContain(
+      "from the compliant behavior required in this run",
+    );
+    expect(prompt).toContain(
       "plugins/shravan-dev-workflow/skills/test-skill/SKILL.md",
     );
     expect(prompt).toContain("repo-local skill source is authoritative");
     expect(prompt).toContain("Required source evidence:");
     expect(prompt).toContain("Read every path below before answering");
+    expect(prompt).toContain("without a separate line-count preflight");
+    expect(prompt).toContain("case registries");
     expect(prompt).toContain("exact `--- <required path>` line");
     expect(prompt).toContain("tests/skills/fixtures/example.md");
     expect(prompt).toContain("Operator prompt:");

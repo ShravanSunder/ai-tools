@@ -32,7 +32,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: [
       ...completedPlanSources,
       "plugins/shravan-dev-workflow/skills/plan-improve-repo/references/validation-checklist.md",
-      "tests/skills/fixtures/minimal-planning-delivery/improvement-plan.md",
+      "tests/skills/fixtures/minimal-planning-delivery/unapproved-improvement-plan.md",
     ],
     maximumToolCalls: 40,
     semanticCriteria: [
@@ -43,7 +43,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-exact-plan-authority",
-        requirement: "Preserves the immutable improvement-plan.md path, originating planner plan-improve-repo, draft result and payload, and approval evidence absent unchanged without computing a document digest.",
+        requirement: "Returns the complete unchanged tuple and result payload for the immutable unapproved-improvement-plan.md path, originating planner plan-improve-repo, draft result, and approval evidence absent without computing a document digest.",
         failureExample: "Changes the tuple, result, or approval evidence.",
       },
       {
@@ -102,7 +102,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "returns-an-immutable-blocked-plan-record",
-        requirement: "Produces one immutable path-addressed canonical plan record with originating planner plan-improve-repo, planning result blocked, exact blocker identity and evidence, unblock owner, and approval evidence absent without a document digest.",
+        requirement: "Produces one new immutable path-addressed canonical plan record for this run and returns its complete tuple and result payload: originating planner plan-improve-repo, planning result blocked, exact blocker identity and evidence, unblock owner, and approval evidence absent without a document digest.",
         failureExample: "Returns mutable lifecycle status, a partial tuple, or an executable draft despite the unresolved external contract.",
       },
       {

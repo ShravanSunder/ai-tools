@@ -53,6 +53,12 @@ Selecting or naming the owner is not invocation. Open the selected owner's curre
 
 Read-only authority does not by itself defer an owner that supports read-only simulation. Execute that simulation now, return the receipt it would produce without writes, and name the writes withheld. Only the absence of a supported read-only route is an exact runtime blocker.
 
+When `implement-plan` is the selected owner under read-only authority, complete its admission and pre-edit verdict now. Return the unchanged canonical tuple, complete approval-evidence record, `admit | blocked`, and the ready frontier plus proof contract or exact blocker. Do not defer with a future `run implement-plan` action, and do not copy its execution procedure into the goal receipt.
+
+When `orchestrator-design` is selected for a fresh design under read-only authority, execute its supported read-only simulation now. Return the fresh `spec-design` continuation, remaining limits, and PR-ready-unmerged terminal while naming the `details.md` and `events.jsonl` writes withheld. Do not create those files and do not defer the owner. Separately authorized owner-managed temporary design state is not an `orchestrator-goal` lifecycle ledger.
+
+When a direct `plan-handoff` phase is selected under read-only authority, return its filled handoff packet and copy-paste prompt inline now, with the unchanged canonical tuple and approval record or absence, and name the two files withheld. Do not call handoff preparation blocked merely because its normal files cannot be written, and do not replace the receipt with a future write-enabled run.
+
 ```text
 invoked owner:
 passed packet:
@@ -83,6 +89,7 @@ Verify these fields without repeating the producing skill's judgment:
 - `plan-implementation`: governing design/review identities or a `route | blocked` phase receipt; for an extant plan, the complete unchanged canonical tuple and result payload plus separate approval record or explicit absence; otherwise `plan identity: none`.
 - `implement-plan`: unchanged canonical tuple, complete separate current-plan approval-evidence record or explicit absence, implementation base/HEAD/diff, obligation and slice coverage, proof observations, and blockers.
 - `review-implementation`: unchanged canonical tuple, complete separate current-plan approval-evidence record or explicit absence, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings and routes, and correction freshness.
+- An accepted `review-implementation` finding is carried whole: exact review-result identity, source anchor, cause, affected obligation, consequence, smallest correction, semantic owner, invalidated coverage, and correction freshness. A category summary is not its identity.
 - `ops-*`: external identities and a link to the canonical plan. Tracking does not prove planning or delivery.
 - `implementation-pr-wrapup`: open both its current `SKILL.md` and required merge-gate procedure before accepting a return. Require current owner-produced gate evidence including PR URL/number, base/head/SHA, checks, comments and reviews, mergeability, draft/readiness, freshness, and the explicit merge-authorization boundary. Consume that evidence under the owner's current contract; do not invent a separate goal receipt schema.
 

@@ -136,7 +136,7 @@ Use this for `validate-plan`, `next`, and pre-execution checks.
 
 ## Progressive Disclosure
 
-- IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected in-parent categories, each category's inspected anchors, candidate or null result, and coverage limit; IF the Core Rules delegation predicate is met, also return the one bounded evidence handoff selected there.
+- IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected in-parent categories, each category's inspected anchors, candidate or null result, coverage limit, and `delegation: none | <bounded handoff>`. The delegation return names both valid predicates—explicit user request or one source-revealed concrete independently verifiable evidence question—and `manage-agents` as owner of any later handoff; IF a predicate is met, include the one bounded evidence handoff selected there.
 - IF writing a plan artifact, load `references/improvement-plan-template.md` and return the proportional filled plan form selected under the shared canonical contract.
 - IF reconciling existing improvement plans or checking whether they remain current, load `references/reconcile-backlog.md` and return the separate reconciliation receipt, unchanged canonical tuple and approval evidence for each extant plan, and exact originating-planner correction route when applicable.
 - IF validating a plan, selecting `next`, or judging current execution readiness, load `references/validation-checklist.md` and return its separate current-state receipt without mutating the canonical tuple or approval evidence.
@@ -155,6 +155,7 @@ Return:
 - plan artifact paths with full clickable links
 - recommended next skill for each plan
 - commands run and validation limits
+- `delegation: none | <bounded handoff>`; `none` repeats that only explicit user request or one source-revealed concrete independently verifiable evidence question permits delegation, and that `manage-agents` owns any later handoff
 
 ## Common Mistakes
 

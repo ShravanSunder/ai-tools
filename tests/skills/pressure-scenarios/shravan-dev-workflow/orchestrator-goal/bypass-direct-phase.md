@@ -4,13 +4,13 @@ scenario_id: orchestrator-goal-bypass-direct-phase
 skill_under_test: shravan-dev-workflow:orchestrator-goal
 mode: fast
 expect_read_only: true
-expect_artifact: true
+expect_artifact: false
 
 ## Prompt
 
 $shravan-dev-workflow:orchestrator-goal
 
-Only prepare a plan handoff for the existing canonical plan. Do not start, resume, or audit the rest of delivery.
+Only prepare a plan handoff for the existing canonical plan at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`; its separate approval record is `handoff-approval.md`. Do not start, resume, or audit the rest of delivery.
 
 ## Expected Compliant Behavior
 
