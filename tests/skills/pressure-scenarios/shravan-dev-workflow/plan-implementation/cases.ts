@@ -105,7 +105,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "uses-compact-canonical-form",
-        requirement: "Chooses a compact plan that still carries authority, current evidence, the change/proof sequence, immutable plan path, approval absence, and stop conditions without document-version bookkeeping.",
+        requirement: "Chooses a compact plan candidate that still carries authority, current evidence, the change/proof sequence, intended repository home, approval absence, and stop conditions without document-version bookkeeping; explicitly states that no completed immutable path exists in this read-only run.",
         failureExample: "Drops plan authority because the change is small or expands it into a multi-phase controller.",
       },
       {
@@ -161,7 +161,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "returns-an-immutable-revision-requested-record",
-        requirement: "Produces one completed immutable path-addressed canonical plan with originating planner plan-implementation, planning result revision-requested, the exact requested correction and owner, and approval evidence absent without a document digest.",
+        requirement: "In this read-only characterization, returns the intended repository home and one non-extant canonical plan candidate with originating planner plan-implementation, planning result revision-requested, the exact requested correction and owner, and approval evidence absent without fabricating an immutable path or document digest.",
         failureExample: "Mutates a draft in place, returns only a validation receipt, omits the correction owner, or fabricates approval.",
       },
       {

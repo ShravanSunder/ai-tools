@@ -38,6 +38,7 @@ export function renderCodexPressurePrompt(
     "- Put only the full text of your live user-facing response in the decision field. Do not append a method report or skill-rule recital.",
     "- Put compact execution evidence in coverage_evidence and rationalizations_rejected instead of narrating it to the user.",
     ...localSourceHints,
+    ...buildRequiredSourceEvidence(props.input.requiredSourceReads ?? []),
     ...(props.outputSchema
       ? [
           "",
@@ -51,6 +52,23 @@ export function renderCodexPressurePrompt(
     props.input.prompt,
     "",
   ].join("\n");
+}
+
+function buildRequiredSourceEvidence(
+  requiredSourceReads: readonly string[],
+): readonly string[] {
+  if (requiredSourceReads.length === 0) {
+    return [];
+  }
+
+  return [
+    "",
+    "Required source evidence:",
+    "- Read every path below before answering; these are source obligations, not evaluation criteria or an expected answer.",
+    "- A directory listing or bare path mention is not a read.",
+    "- Prefer one exact path per read call. If one call reads multiple required paths, print an exact `--- <required path>` line immediately before each path's non-empty output so the harness can attribute the evidence.",
+    ...requiredSourceReads.map((requiredPath) => `- ${requiredPath}`),
+  ];
 }
 
 function buildLocalSourceHints(skillUnderTest: string): readonly string[] {

@@ -11,7 +11,7 @@ A long-horizon goal is a guarded route through phase-owned evidence, not a secon
 
 1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` commission identity authorizing this target and composed skill; otherwise route there and stop. MUST load `references/goal-contract-and-routing.md` to establish the objective, scope and non-goals, governing sources, allowed writes, proof expectations, terminal condition, gate-reconstruction method, route contract, and closeout checks, and return the goal contract plus initial verified gate or exact blocker. Every completed plan still requires later explicit owner approval naming its immutable path and current meaning before implementation.
 2. Inspect current artifacts and evidence to identify the first unproven gate; a goal label, chat assertion, commit, ticket, or status is not proof. IF a canonical plan exists or a planning result is being evaluated, load `../../shared-references/canonical-implementation-plan.md` to validate the tuple, result-specific payload, and separate approval-evidence or explicit-absence record and return the exact plan gate and route.
-3. Invoke exactly one owning skill and pass only its required pointers, evidence, constraints, and authority. Name every passed identity in the route decision; labels such as `governing design`, `current proof`, or `the approved plan` never replace exact pointers and identities.
+3. Invoke exactly one owning skill in the current turn and pass only its required pointers, evidence, constraints, and authority. Apply that owner's current route and return its phase receipt now; opening the owner source, describing what it would do, or putting `invoke <owner>` in `next_action` is still deferral, not invocation. If the current runtime cannot invoke the selected owner, return that exact runtime blocker. Name every passed identity in the route decision; labels such as `governing design`, `current proof`, or `the approved plan` never replace exact pointers and identities.
 4. Open the selected producer's current return contract, verify the returned artifact or evidence against its exact identity, labels, required fields, proof and freshness anchors, and stop status, then classify its transition without re-performing the phase's judgment.
 5. Continue through the allowed route or stop for owner approval, decision, blocker, or requested terminal.
 6. For accepted implementation findings, route to the named semantic owner and require fresh affected review coverage before advancing.
@@ -30,7 +30,7 @@ A long-horizon goal is a guarded route through phase-owned evidence, not a secon
 - Implementation proof without current review -> `review-implementation`.
 - Review findings -> the exact semantic owner selected by `review-implementation`.
 - Ready implementation without current PR readiness -> `implementation-pr-wrapup`.
-- User-selected tracking projection -> the named available `ops-*` skill; tickets never replace the canonical plan or prove a delivery gate.
+- User-selected tracking projection -> the named available `ops-*` skill; tickets never replace the canonical plan, and tracker identifiers prove none of planning, approval, implementation, review, or PR readiness.
 
 ## Boundaries
 

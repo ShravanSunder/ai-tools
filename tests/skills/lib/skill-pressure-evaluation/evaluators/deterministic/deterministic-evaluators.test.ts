@@ -104,6 +104,74 @@ describe("deterministic evaluators", () => {
     expect(failingResult.score).toBe(0);
   });
 
+  test("source-read evaluator recognizes exact delimited loop sections", async () => {
+    const requiredPaths = ["a.md", "b.md"];
+    const evaluator = createSourceReadEvaluator(requiredPaths);
+    const result = await evaluator.assess(
+      createContext({
+        ...baseOutput,
+        normalizedToolCalls: [
+          {
+            sequence: 0,
+            capability: "source-read",
+            command: "for source in fixtures/*.md; do sed -n '1,200p' $source; done",
+            output: JSON.stringify({
+              formatted_output: "--- a.md\n# A\n--- b.md\n# B\n",
+            }),
+            exitCode: 0,
+          },
+        ],
+      }),
+    );
+
+    expect(result.score).toBe(1);
+  });
+
+  test.each([
+    {
+      name: "listing",
+      command: "rg --files fixtures",
+      output: "a.md\nb.md\n",
+      exitCode: 0,
+    },
+    {
+      name: "bare path mention",
+      command: "rg --files fixtures",
+      output: "found a.md and b.md",
+      exitCode: 0,
+    },
+    {
+      name: "failed command",
+      command: "sed -n '1,200p' a.md b.md",
+      output: "--- a.md\n# A\n--- b.md\n# B\n",
+      exitCode: 1,
+    },
+    {
+      name: "empty section",
+      command: "sed -n '1,200p' a.md b.md",
+      output: "--- a.md\n# A\n--- b.md\n",
+      exitCode: 0,
+    },
+  ])("source-read evaluator rejects $name", async ({ command, output, exitCode }) => {
+    const evaluator = createSourceReadEvaluator(["a.md", "b.md"]);
+    const result = await evaluator.assess(
+      createContext({
+        ...baseOutput,
+        normalizedToolCalls: [
+          {
+            sequence: 0,
+            capability: "source-read",
+            command,
+            output,
+            exitCode,
+          },
+        ],
+      }),
+    );
+
+    expect(result.score).toBe(0);
+  });
+
   test("tool-budget evaluator applies only the broad runaway ceiling", async () => {
     const evaluator = createToolBudgetEvaluator(0);
     const result = await evaluator.assess(

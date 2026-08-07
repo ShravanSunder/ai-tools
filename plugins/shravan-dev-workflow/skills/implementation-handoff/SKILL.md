@@ -36,7 +36,7 @@ Package actual implementation state so another agent can review, continue, or au
    - commits since base when relevant
    - plan/ticket/request source
 3. Inspect enough code/tests/docs to make the handoff accurate.
-4. Preserve the returned canonical tuple and approval evidence when present, then bind implementation proof to that exact identity.
+4. Preserve the returned canonical tuple and complete approval-evidence record or explicit absence, then bind implementation proof to that exact plan path and current meaning.
 5. Create the temp artifact directory.
 6. Write:
    - `implementation-handoff.md`

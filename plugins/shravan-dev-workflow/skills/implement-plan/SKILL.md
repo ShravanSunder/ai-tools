@@ -26,7 +26,7 @@ A `route` or `blocked` admission ends this run before `references/execution-and-
 4. Re-anchor against the current repository and prove the slice before advancing. Integrate only at the plan's named gate and only after its prerequisites are proven.
 5. Classify each surprise as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside the approved boundary and report it. Route every other class to the owner named by the loaded reference and stop before building on it.
 6. For an accepted implementation-owned review correction, return the smallest correction and fresh affected proof, mark the prior review coverage stale, and require later fresh independent review without launching it here.
-7. Return the canonical plan tuple unchanged, the separate current-plan approval-evidence identity, and implementation proof keyed to that tuple: covered obligations and slices, changed files, fresh commands and exit codes, manual observations, quality results, incomplete rows, and blockers.
+7. Return the canonical plan tuple unchanged, the complete separate current-plan approval-evidence record or explicit absence, and implementation proof keyed to that tuple: covered obligations and slices, changed files, fresh commands and exit codes, manual observations, quality results, incomplete rows, and blockers.
 
 Completion: every claimed slice has fresh fitting proof, integration occurred only at named gates, incomplete obligations and blockers are explicit, and the canonical plan and approval evidence remain unchanged.
 

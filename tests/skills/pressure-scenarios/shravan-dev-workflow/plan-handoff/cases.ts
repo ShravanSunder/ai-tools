@@ -69,8 +69,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "produces-portable-artifacts",
-        requirement: "Requires repo-local plan-handoff and copy-paste-prompt artifacts with repo/worktree, branch, source identity, open questions, and security context.",
-        failureExample: "Returns only a chat paragraph or omits portability fields.",
+        requirement: "In this fast read-only characterization, returns the complete copy-paste prompt and states that the normal write-enabled route requires repo-local plan-handoff and copy-paste-prompt artifacts with repo/worktree, branch, source identity, open questions, and security context, without claiming those files were created now.",
+        failureExample: "Returns a thin chat paragraph, omits portability fields, or falsely claims read-only artifact creation.",
       },
       {
         name: "preserves-plan-and-proof-authority",

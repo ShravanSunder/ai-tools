@@ -82,6 +82,7 @@ export async function loadSkillPressureCase(
     skillUnderTest: scenario.skillUnderTest,
     mode: scenario.mode,
     prompt: scenario.prompt,
+    requiredSourceReads: [],
   };
   const caseRegistryPath = join(dirname(scenario.filePath), "cases.ts");
   if (!existsSync(caseRegistryPath)) {
@@ -115,7 +116,10 @@ export async function loadSkillPressureCase(
     name: scenario.scenarioId,
     tags: [scenario.skillUnderTest],
     scenario,
-    input,
+    input: {
+      ...input,
+      requiredSourceReads: caseDefinition.requiredSourceReads ?? [],
+    },
     deterministicEvaluators: createDeterministicEvaluators({
       definition: caseDefinition,
       scenario,

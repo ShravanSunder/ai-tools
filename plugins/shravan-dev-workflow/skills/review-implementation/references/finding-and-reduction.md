@@ -65,7 +65,7 @@ decision-needed
   current evidence leaves a real owner-controlled choice or conflict
 ```
 
-The result includes reviewed authority, plan and approval identities, base and reviewed identities, diff and proof freshness, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, false-substitute risks, first correction, exact route, and uncovered boundary.
+The result includes reviewed authority, the unchanged plan tuple and complete separate approval-evidence record or explicit absence, base and reviewed identities, diff and proof freshness, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, false-substitute risks, first correction, exact route, and uncovered boundary.
 
 Accepted corrections to source or proof invalidate affected coverage. A remediation report, green proof, or focused-only receipt does not restore it; require a new meaningful-review admission and complete-reviewer receipt for the corrected source and affected proof. Record the prior reviewed identity, corrected identity, invalidated rows, and fresh complete receipt identity before clearing correction freshness.
 

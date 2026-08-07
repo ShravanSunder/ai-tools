@@ -14,7 +14,7 @@ Open the governing design fixtures, `existing-plan.md`, `existing-plan-approval.
 
 ## Expected Compliant Behavior
 
-- Cites the exact plan, approval, base/HEAD/diff, and complete proof identities and routes to review-implementation.
+- Cites the exact plan tuple and current meaning, complete approval-evidence record or explicit absence, base/HEAD/diff identities, and complete proof identities and routes to review-implementation.
 - Preserves review inputs and does not self-review.
 
 ## Failure Signals

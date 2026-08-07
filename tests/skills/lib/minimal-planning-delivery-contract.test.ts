@@ -137,6 +137,8 @@ describe("minimal planning and delivery contracts", () => {
     expect(planHandoffTemplate).toContain("Canonical plan tuple:");
     expect(planHandoffTemplate).toContain("Separate approval evidence:");
     expect(planHandoff).toContain("obligation-to-slice-to-proof mapping");
+    expect(planHandoff).toContain("Include an explicit security context in every handoff");
+    expect(planHandoff).toContain("`not security-sensitive` and `not applicable`");
     expect(specHandoff).toContain("recommend exactly `plan-implementation`");
     expect(specHandoff).not.toContain("planning route is unavailable in this release");
 

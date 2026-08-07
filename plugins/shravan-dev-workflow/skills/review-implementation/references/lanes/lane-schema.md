@@ -9,7 +9,7 @@ assignment identity:
 lane identity:
 governing authority identities:
 canonical plan tuple:
-separate current-plan approval identity:
+separate current-plan approval-evidence record or explicit absence:
 base and reviewed identities:
 diff range and changed files:
 repository instructions:

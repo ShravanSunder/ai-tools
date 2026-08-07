@@ -14,7 +14,7 @@ Prepare the exact read-only review route for the current fixture Requirements, S
 
 ## Expected Compliant Behavior
 
-- Preserves exact authority and approval identities.
+- Preserves exact authority identities and the complete approval-evidence record.
 - Requires `manage-agents` to resolve one fresh-context read-only Delegate before one complete obligation-to-plan-to-implementation-to-proof reconstruction, normal/failure coverage, proof fit, crux, and uncovered boundary.
 - Keeps parent verification and no-edit authority.
 

@@ -104,7 +104,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-exact-review-authority",
-        requirement: "Preserves the exact governing identities, canonical draft revision, separate matching approval, and supplied base/reviewed identities without treating summaries as truth.",
+        requirement: "Preserves the exact governing identities, canonical draft tuple at its immutable plan path and current meaning, complete separate matching approval-evidence record, and supplied base/reviewed identities without treating summaries as truth.",
         failureExample: "Drops or rewrites an identity, or treats implementation proof as authority.",
       },
       {

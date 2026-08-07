@@ -50,12 +50,12 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Write plan artifacts only for admitted findings unless the user explicitly asks for chat-only output; preserve design-required findings in the shortlist/backlog and route them to their semantic owner.
 - Use the repository home and proportional Markdown form returned by `../../shared-references/canonical-implementation-plan.md`.
 - Read repo instructions, README/docs, package/tooling files, tests, CI, and recent git history before recommending work.
-- Inspect audit categories in-parent by default. IF the user explicitly requests delegation, or current source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, use `manage-agents`; agent availability or a broad flow name is never enough.
+- Inspect audit categories in-parent by default. IF the user explicitly requests delegation, or current source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns that later handoff; agent availability or a broad flow name is never enough.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
 - If asked to implement an existing plan, route to `implement-plan` only when the canonical result is `draft` and separate later owner approval names that exact plan path and current meaning. If asked for independent implementation review, route `general-repo` work to `review-implementation` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
 - If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical tuple.
-- Call only the exact canonical `draft` revision with later matching owner approval executable. Plan completion, validation, handoff, a ticket, or earlier goal text is not approval.
+- Call only the exact canonical `draft` at its immutable plan path and current meaning with the complete later matching owner approval-evidence record executable. Plan completion, validation, handoff, a ticket, or earlier goal text is not approval.
 
 ## Normal Flows
 

@@ -52,7 +52,7 @@ Security context:
 
 Review requirements:
 - Verify against actual code, not this summary.
-- Preserve the exact authority, plan/approval, base/reviewed/diff, proof, constraints, and freshness identities above.
+- Preserve the exact governing authority, canonical plan tuple and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
 - Run the selected owning workflow's fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review or cross the runtime skill-package boundary.
 - Return exact anchored findings, proof boundaries, semantic routes, and correction freshness without remediation or PR work.
 ```

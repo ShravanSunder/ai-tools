@@ -119,7 +119,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 25,
     semanticCriteria: [
       { name: "routes-approved-draft", requirement: "Opens and cites the exact draft tuple and separate later current-plan approval, then routes exactly to implement-plan because implementation proof is absent.", failureExample: "Routes from the prompt assertion, replans, independently executes, or skips to review." },
-      { name: "passes-owned-evidence-only", requirement: "Passes the unchanged tuple, approval identity, constraints, and proof expectations without copying execution procedure.", failureExample: "Acts as an implementation controller." },
+      { name: "passes-owned-evidence-only", requirement: "Passes the unchanged tuple, complete approval-evidence record, constraints, and proof expectations without copying execution procedure.", failureExample: "Acts as an implementation controller." },
     ],
   },
   {
@@ -127,8 +127,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the exact plan, approval, base/HEAD/diff, and complete implementation-proof identities, then routes exactly to review-implementation because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
-      { name: "preserves-review-input-identities", requirement: "Names the required governing authority, unchanged plan and approval, base/reviewed/diff, proof, and freshness pointers without judging them itself.", failureExample: "Drops source identities or re-performs review." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the exact plan tuple and current meaning, complete approval-evidence record or explicit absence, base/HEAD/diff identities, and complete implementation-proof identities, then routes exactly to review-implementation because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
+      { name: "preserves-review-input-identities", requirement: "Names the required governing authority, unchanged plan tuple and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, and freshness pointers without judging them itself.", failureExample: "Drops source identities or re-performs review." },
     ],
   },
   {

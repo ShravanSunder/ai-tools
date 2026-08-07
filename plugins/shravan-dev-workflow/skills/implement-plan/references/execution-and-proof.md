@@ -14,7 +14,7 @@ Return one verdict:
 
 ```text
 ready
-  the exact approved revision still matches current source, the first slice's
+  the exact approved plan path and current meaning still match current source, the first slice's
   writes and commands are real, and its required proof can run inside scope
 
 route
@@ -90,7 +90,7 @@ Do not call a change reversible when it moves ownership, changes a public contra
 
 ## Completion Report
 
-Return implementation evidence keyed to the unchanged canonical tuple and separate approval identity:
+Return implementation evidence keyed to the unchanged canonical tuple and complete separate approval-evidence record or explicit absence:
 
 ```text
 implementation base/HEAD/diff:

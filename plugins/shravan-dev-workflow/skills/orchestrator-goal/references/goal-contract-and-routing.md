@@ -23,7 +23,7 @@ known blockers:
 
 The host goal is a carrier for objective and terminal intent. It is not evidence that a design, plan, implementation, review, PR, or release gate passed. Do not create a parallel details file, event log, transition schema, or mutable progress ledger.
 
-For an explicitly composed runtime skill-package phase, the exact `skills-creation` commission identity is the existing accepted multi-run commission: accepted spec path, accepted revision or result identity, the named run or slice target, and the exact composed skill that run permits. Validate all four against the current commission. A missing, stale, wrong-target, wrong-skill, or wrong-revision commission routes to `skills-creation`; do not invent a permission record or lifecycle state.
+For an explicitly composed runtime skill-package phase, open the current `skills-creation` source contract, then validate the exact commission identity from the existing accepted multi-run commission: accepted spec path, accepted revision or result identity, the named run or slice target, and the exact composed skill that run permits. Validate all four against both sources. A missing, stale, wrong-target, wrong-skill, or wrong-revision commission routes to `skills-creation`; do not invent a permission record or lifecycle state.
 
 ## Reconstruct The First Unproven Gate
 
@@ -55,10 +55,10 @@ Verify these fields without repeating the producing skill's judgment:
 - `orchestrator-design`: current design-run identity when resuming, terminal result or exact continuation, and current Requirements, Specification, Program Design, and review pointers.
 - `plan-improve-repo`: admitted-finding authority or a `route | blocked` phase receipt; for an extant plan, the complete unchanged canonical tuple and result payload plus separate approval record or explicit absence; otherwise `plan identity: none`.
 - `plan-implementation`: governing design/review identities or a `route | blocked` phase receipt; for an extant plan, the complete unchanged canonical tuple and result payload plus separate approval record or explicit absence; otherwise `plan identity: none`.
-- `implement-plan`: unchanged canonical tuple, separate current-plan approval identity, implementation base/HEAD/diff, obligation and slice coverage, proof observations, and blockers.
-- `review-implementation`: unchanged canonical tuple, separate approval identity, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings and routes, and correction freshness.
+- `implement-plan`: unchanged canonical tuple, complete separate current-plan approval-evidence record or explicit absence, implementation base/HEAD/diff, obligation and slice coverage, proof observations, and blockers.
+- `review-implementation`: unchanged canonical tuple, complete separate current-plan approval-evidence record or explicit absence, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings and routes, and correction freshness.
 - `ops-*`: external identities and a link to the canonical plan. Tracking does not prove planning or delivery.
-- `implementation-pr-wrapup`: current owner-produced gate evidence from its review-state and merge-gate procedures, including PR URL/number, base/head/SHA, checks, comments and reviews, mergeability, draft/readiness, freshness, and the explicit merge-authorization boundary. Consume that evidence under the owner's current contract; do not invent a separate goal receipt schema.
+- `implementation-pr-wrapup`: open both its current `SKILL.md` and required merge-gate procedure before accepting a return. Require current owner-produced gate evidence including PR URL/number, base/head/SHA, checks, comments and reviews, mergeability, draft/readiness, freshness, and the explicit merge-authorization boundary. Consume that evidence under the owner's current contract; do not invent a separate goal receipt schema.
 
 ## Route Examples
 
@@ -83,7 +83,7 @@ user asks only for plan-handoff
   -> bypass orchestrator-goal and invoke plan-handoff directly
 ```
 
-Optional tracker publication is an owned side route. Invoke an available `ops-*` skill only when user intent authorizes that provider mutation. Resume gate reconstruction from the canonical plan and phase receipts afterward; never wait on or read tracker state as plan authority.
+Optional tracker publication is an owned side route. Before projecting an extant plan, open its originating planner's current return contract and validate the unchanged canonical tuple and separate approval record or absence. Invoke an available `ops-*` skill only when user intent authorizes that provider mutation. Resume gate reconstruction from the canonical plan and phase receipts afterward; tracker identifiers prove none of planning, approval, implementation, review, or PR readiness, so never wait on or read tracker state as phase authority.
 
 ## Resume And Closeout
 

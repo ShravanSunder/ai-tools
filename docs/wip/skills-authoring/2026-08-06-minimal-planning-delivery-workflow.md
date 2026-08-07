@@ -1,6 +1,6 @@
 # Minimal Planning and Delivery Workflow Skill-Change Spec
 
-Status: revision 18 correction complete; affected review stale
+Status: revision 21 accepted-to-implement
 
 ## Targets and run sequence
 
@@ -49,6 +49,15 @@ Direct repository evidence:
 - Supplemental research in the predecessor worktree compared local retired workflows with multiple admired skill repositories and current workflow evidence. That tmp evidence may disappear and is not an acceptance anchor; its conclusion is stated and supported by the durable retired/current sources above: planning should be a dependency-aware proof route, not an execution controller or planning swarm.
 
 Authoring basis: user-directed intent, informed by observed bloat and failure patterns. The historical failures are source evidence, but this spec does not claim a faithfully reproduced RED for every failure. Each run therefore starts from the approved success definition and uses representative pressure scenarios plus current retired-skill controls where available.
+
+The first integrated 62-scenario pressure pass at revision 20 produced 47 passes and 15 failures. Twelve failures stopped at deterministic source-read evaluation, two reached Terra and failed semantically, and one ACPX run returned no assistant response. Revision 21 addresses only the source-backed contract gaps exposed by that pass:
+
+- a selected goal owner must be invoked in the current turn rather than merely recommended as a future next action;
+- fast read-only planning characterizations name the intended repository home and explicit non-extant plan status instead of fabricating a completed immutable path;
+- scenario source obligations must be visible in the prompt or taught by the owning skill, and remain limited to sources needed for the decision;
+- the deterministic source-read evaluator may recognize observable successful source output from a loop only when its output contains an exact `--- <required path>` delimiter followed by a non-empty section; a listing, path mention, failed command, or empty section remains insufficient. This gate does not prove complete-file coverage. During parent pressure-proof reduction, the parent inspects each transcript and records path-by-path complete-file coverage or an explicit coverage gap before making a completeness claim.
+
+These corrections do not add a workflow phase, reviewer, document identity, approval field, controller, or lifecycle record. The ACPX no-response case remains an environment result until rerun and is not converted into skill wording.
 
 ## System success definition
 
@@ -147,7 +156,7 @@ description: Use when auditing a repository for improvement opportunities, backl
 4. MUST load `references/slice-and-proof-design.md` to decompose the admitted obligations into proportional proof-bearing slices and return the slice graph, proof mapping, collision/dependency edges, integration gates, false-green risks, and any split/replan stop. Contract-only and prefactoring slices require a named downstream consumer.
 5. Record only necessary `requires`, `serial`, and advisory `parallel` edges; place integration gates where slices first meet.
 6. Check obligation coverage, proof fit, command/path reality, write-scope fit, false-green risks, and hidden design invention in-parent.
-7. MUST load `../../shared-references/canonical-implementation-plan.md` to select the proportional artifact form and repository home, produce and verify the canonical tuple and result-specific payload, and return the tuple plus explicit approval absence. Write the completed plan at one immutable path and stop. The originating planner is `plan-implementation`; approval and execution progress never live in the plan. Only `draft` may later execute, and only with separate explicit owner approval naming that path and its current meaning. A semantic change creates a new plan path.
+7. MUST load `../../shared-references/canonical-implementation-plan.md` to select the proportional artifact form and repository home, produce and verify the canonical tuple and result-specific payload, and return the tuple plus explicit approval absence. In a write-enabled run, write the completed plan at one immutable path and stop. In a fast read-only characterization, return the intended repository home, candidate result and payload, explicit approval absence, and `completed plan: not created in this read-only run`; never fabricate an immutable path or use `plan identity: none` after successful admission. The originating planner is `plan-implementation`; approval and execution progress never live in the plan. Only an extant `draft` may later execute, and only with separate explicit owner approval naming that path and its current meaning. A semantic change creates a new plan path.
 
 ### Surface allocation
 
@@ -183,7 +192,7 @@ description: Use when executing or continuing an implementation plan, including 
 4. Execute one slice inside its write scope, using red/green when required and preserving proof gates.
 5. Re-anchor and prove that slice before advancing; integrate only at the plan's named gate.
 6. Classify surprises as reversible drift, design break, plan defect, out-of-scope infrastructure failure, or evidence gap and route without inventing a new seam.
-7. Return the complete canonical plan tuple unchanged, its separate approval-evidence identity, and implementation/proof evidence keyed to that tuple: covered obligations/slices, fresh commands and exit codes, manual observations, quality results, changed files, incomplete rows, and blockers. Do not rewrite the canonical plan as execution state or compute a document digest. Stop before independent review, tickets, PR work, or merge.
+7. Return the complete canonical plan tuple unchanged, its complete separate approval-evidence record or explicit absence, and implementation/proof evidence keyed to that tuple: covered obligations/slices, fresh commands and exit codes, manual observations, quality results, changed files, incomplete rows, and blockers. Do not rewrite the canonical plan as execution state or compute a document digest. Stop before independent review, tickets, PR work, or merge.
 
 ### Surface allocation
 
@@ -200,7 +209,7 @@ Proof posture: user-directed intent with representative hypothesis scenarios and
 
 This skill helps agents independently determine whether an implementation and its proof satisfy the governing reviewed design and approved plan, then route source-backed corrections to the smallest semantic owner.
 
-Success: given an exact governing reviewed-design or admitted-improvement authority, the complete path-addressed canonical plan tuple with separate matching approval-evidence identity, base and reviewed HEAD, diff range, repository instructions, and proof evidence, the workflow classifies review need, performs one complete fresh-context read-only independent reconstruction for meaningful changes, verifies and reduces every candidate finding, optionally deepens one concrete residual risk, returns a coverage-bound result, and never edits or accepts its own remediation.
+Success: given an exact governing reviewed-design or admitted-improvement authority, the complete path-addressed canonical plan tuple with complete separate matching approval-evidence record, base and reviewed HEAD, diff range, repository instructions, and proof evidence, the workflow classifies review need, performs one complete fresh-context read-only independent reconstruction for meaningful changes, verifies and reduces every candidate finding, optionally deepens one concrete residual risk, returns a coverage-bound result, and never edits or accepts its own remediation.
 
 Invocation: both model-invocable and user-invocable.
 
@@ -261,7 +270,7 @@ description: Use when starting, resuming, auditing, or completing a general-doma
 
 1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` parent identity authorizing composition; otherwise route there and stop. MUST load `references/goal-contract-and-routing.md` to establish objective, scope/non-goals, governing sources, allowed writes, proof expectations, terminal condition, gate-reconstruction method, route contract, and closeout checks and return the goal contract plus initial verified gate or exact blocker. Every completed plan still requires later explicit owner approval naming its immutable path and current meaning before implementation.
 2. Inspect current artifacts and evidence to identify the first unproven gate; a label or chat assertion is not proof. IF a canonical plan exists or a planning result is being evaluated, load `../../shared-references/canonical-implementation-plan.md` to validate the tuple, result-specific payload, and separate approval-evidence or explicit-absence record and return the exact plan gate and route.
-3. Invoke exactly one owning skill and pass only its required pointers, evidence, constraints, and authority.
+3. Invoke exactly one owning skill in the current turn and pass only its required pointers, evidence, constraints, and authority. Naming or recommending that owner as a future `next_action` is not invocation and does not complete this step. If the current runtime cannot invoke the selected owner, return that exact runtime blocker rather than representing the route as performed.
 4. Verify the returned artifact/evidence and classify its transition without re-performing phase judgment.
 5. Continue through the allowed route or stop for owner approval, decision, blocker, or requested terminal.
 6. For accepted implementation findings, route to the named semantic owner and require fresh affected review coverage before advancing.
@@ -298,10 +307,10 @@ The goal router verifies only these phase-owned returns and freshness anchors; i
 
 - Design phases: exact target identities, phase result, current artifact pointers, semantic freshness, and one recommended next owner or stop.
 - `orchestrator-design`: current design-run identity when resuming, terminal result or exact continuation, and current Requirements/Specification/Program Design/review pointers.
-- `plan-improve-repo`: a `route | blocked` phase receipt with governing-input identities, reason/evidence, and semantic or unblock owner, plus either `plan identity: none` when no completed plan exists or the unchanged extant tuple and approval record/absence; or, after admission, admitted-finding authority, complete canonical tuple with result-specific payload, and separate approval-evidence identity or explicit absence.
-- `plan-implementation`: a `route | blocked` phase receipt with governing design/review input identities, reason/evidence, and semantic or unblock owner, plus either `plan identity: none` when no completed plan exists or the unchanged extant tuple and approval record/absence; or, after admission, governing design/review identities, complete canonical tuple with result-specific payload, and separate approval-evidence identity or explicit absence.
-- `implement-plan`: unchanged canonical plan tuple, separate current-plan approval-evidence identity, implementation base/HEAD/diff, obligation/slice coverage, proof observations, and blockers.
-- `review-implementation`: unchanged canonical plan tuple, separate current-plan approval-evidence identity, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings/routes, and freshness condition.
+- `plan-improve-repo`: a `route | blocked` phase receipt with governing-input identities, reason/evidence, and semantic or unblock owner, plus either `plan identity: none` when no completed plan exists or the unchanged extant tuple and approval record/absence; or, after admission, admitted-finding authority, complete canonical tuple with result-specific payload, and complete separate approval-evidence record or explicit absence.
+- `plan-implementation`: a `route | blocked` phase receipt with governing design/review input identities, reason/evidence, and semantic or unblock owner, plus either `plan identity: none` when no completed plan exists or the unchanged extant tuple and approval record/absence; or, after admission, governing design/review identities, complete canonical tuple with result-specific payload, and complete separate approval-evidence record or explicit absence.
+- `implement-plan`: unchanged canonical plan tuple, complete separate current-plan approval-evidence record or explicit absence, implementation base/HEAD/diff, obligation/slice coverage, proof observations, and blockers.
+- `review-implementation`: unchanged canonical plan tuple, complete separate current-plan approval-evidence record or explicit absence, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings/routes, and freshness condition.
 - `ops-*`: external identifiers and links back to the canonical plan; this projection does not prove a delivery gate.
 - `implementation-pr-wrapup`: PR URL/number, base/head/SHA, checks, comments/reviews, mergeability, draft/readiness, and explicit no-merge boundary.
 
@@ -311,8 +320,8 @@ A missing, conflicting, status-only, or stale return stops at its owner. The rou
 
 - `orchestrator-design` continues to end at ready three-artifact design review and never enters planning.
 - `plan-implementation` is the sole direct reviewed-design-to-plan author.
-- `plan-handoff` packages an existing plan, preserves the complete canonical tuple and separate approval-evidence identity or explicit absence, and never authors or approves either.
-- `implementation-handoff` packages implementation continuation or review state and preserves the unchanged canonical tuple, separate approval-evidence identity or explicit absence, and implementation proof without re-authoring any of them.
+- `plan-handoff` packages an existing plan, preserves the complete canonical tuple and complete separate approval-evidence record or explicit absence, and never authors or approves either.
+- `implementation-handoff` packages implementation continuation or review state and preserves the unchanged canonical tuple, complete separate approval-evidence record or explicit absence, and implementation proof without re-authoring any of them.
 - `plan-improve-repo` continues to own admitted repository-improvement planning; direct reviewed-design translation routes elsewhere.
 - `plan-improve-repo` preserves its current admitted-improvement and implementation-mechanics-only planning authority; this is a distinct direct-authority route, not a bypass around `plan-implementation` admission.
 - Direct planning authority resolves mixed inputs: a reviewed three-artifact design set as authority routes to `plan-implementation`; admitted audit findings as authority route to `plan-improve-repo`. The `plan-implementation` run must add the reciprocal near-miss boundary to `plan-improve-repo`.
@@ -353,15 +362,15 @@ Each behavior-changing run receives:
 8. diff and public-safety checks;
 9. plugin version, changelog, and cache-refresh status reported honestly.
 
-The pressure-eval suite is attempted after targeted static/unit proof. Authentication, ACPX, provider, grader, or runtime failure is reported as an environment blocker and is never claimed green. Cache refresh is a separate explicit post-push or release proof step.
+The pressure-eval suite is attempted after targeted static/unit proof. Authentication, ACPX, provider, grader, or runtime failure is reported as an environment blocker and is never claimed green. A read-only characterization may prove route choice, proportional candidate shape, and source grounding, but it cannot prove that a plan file was created; its criteria must require an intended repository home and explicit non-extant status instead of an invented immutable path. Required-source evaluation proves only observable successful output for each required path, from a direct exact-path read or an exact-path-delimited non-empty section; a listing, bare path mention, failed command, or empty section is not a read. The parent owns complete-file coverage during pressure-proof reduction: inspect every transcript and record path-by-path coverage or an explicit gap, never infer completeness from the deterministic gate. Cache refresh is a separate explicit post-push or release proof step.
 
 ## Coordination
 
 - Proposal base: `origin/master` at `9f947c23f36e41e5740aa9879ab582a10353f6b9` on 2026-08-06.
-- Current proposal worktree: branch `fix/three-artifact-design-review`.
-- Pending predecessor: the separately commissioned `spec-program-review`-targeted PR0 three-artifact design-review terminology hard cutover from a fresh `origin/master` branch; its proposal review/implementation review and proof are separate from this spec's four runs.
-- Use two stacked PRs and two worktrees. PR0 is based on `master`. After PR0 has a reviewed, verified commit, the suite branch/worktree is created from that exact PR0 HEAD and its GitHub base remains the PR0 branch until PR0 lands; it is then retargeted to `master` and reverified.
-- PR1 review scope excludes the PR0 diff by using the PR0 branch as its base. The four runtime skill runs may begin on that stack after PR0 source review/proof; PR1 cannot become independently merge-ready against `master` before PR0 lands.
+- Current proposal worktree: branch `feat/minimal-planning-delivery`.
+- Landed predecessor: PR0 #45 merged to `master` at merge commit `296393037c89fdca0c1cd137baa6e0912fa84390`, preserving reviewed PR0 head `6f61bf62965ebf97d45d2e26bc3d7c5e507b22ee` as its second parent. Its proposal review, implementation review, and proof remain separate from this spec's four runs.
+- The suite branch/worktree was created from exact PR0 head `6f61bf62965ebf97d45d2e26bc3d7c5e507b22ee`. Because that head is now an ancestor of `origin/master`, PR1 targets `master`; no rebase or merge is required merely to obtain the correct review diff.
+- PR1 review scope excludes the PR0 diff through Git ancestry: its merge base with current `origin/master` is the landed PR0 head. Reverify the base, merge base, and exact PR1 head before publication.
 - The four named skill runs land as one coordinated plugin version and changelog release so no runtime route points to a missing skill.
 - Generated metadata changes only when the owning runtime skill surface requires them.
 - Existing user work in other worktrees is out of scope and must remain untouched.
@@ -383,35 +392,35 @@ The pressure-eval suite is attempted after targeted static/unit proof. Authentic
 
 Prior accepted revision: 17
 
-Current revision: 18
+Current revision: 21
 
-Current acceptance: stale for the document-identity and approval-binding delta; no document digest is computed or maintained
+Current acceptance: accepted-to-implement at revision 21 by semantic coverage; no document digest is computed or maintained
 
 Review lanes:
 
-- `mental-model-fit`: complete; no findings after revision-16 delta review; revision 17 does not change the mental model.
-- `trigger-routing`: complete; no findings at revision 15; revisions 16 and 17 do not change a trigger or adjacent boundary.
-- `rule-agreement`: complete; revision-17 delta re-reviewed in fresh context with no finding after the proposal adopted the verified PR0 owner's two separately nested result identities.
-- `depth-coverage`: complete; no findings at revision 15; revisions 16 and 17 do not change a stage, reference, caller contract, or consumer.
+- `mental-model-fit`: complete; fresh revision-21 receipt found that invoke-now, honest read-only characterization, and bounded source proof reinforce the existing owner-to-owner proof-route lens with no new authority or lifecycle state.
+- `trigger-routing`: complete; fresh revision-21 receipt found no trigger delta or adjacent-skill collision.
+- `rule-agreement`: complete; fresh revision-21 receipt found one overclaim of complete-file coverage, corrected it to observable required-path output, and the refreshed receipt found no remaining contradiction.
+- `depth-coverage`: complete; revision-21 review first required a named owner for transcript completeness; the correction binds it to parent pressure-proof reduction with a path-by-path coverage-or-gap return, and the refreshed receipt found no remaining gap.
 
-Advisor checkpoint: persistent Claude Fable Advisor returned `great` with no remaining finding at revision 17. ACPX exposed Bash despite the declared `--no-terminal` boundary; the advisor abstained from Bash and all mutations, no writes occurred, and the parent independently verified the revision-bound receipt. A separate fresh-context Sol-high rule-agreement receipt also returned complete with no finding. The final depth receipt for revision 16 reused the same fresh-reviewer relationship after a native thread-limit failure; the parent reverified its source-bound claim against the exact caller contracts. Revision 18 requires refreshed affected review before PR readiness.
+Advisor checkpoint: persistent Claude Fable Advisor returned `great` with no remaining finding at revision 17. ACPX exposed Bash despite the declared `--no-terminal` boundary; the advisor abstained from Bash and all mutations, no writes occurred, and the parent independently verified the revision-bound receipt. A separate fresh-context Sol-high rule-agreement receipt also returned complete with no finding. The final depth receipt for revision 16 reused the same fresh-reviewer relationship after a native thread-limit failure; the parent reverified its source-bound claim against the exact caller contracts. The revision-18 Fable checkpoint found no issue, but the fresh rule-agreement lane then found two active terminology/record-shape contradictions corrected in revision 19. Revision-19 depth coverage was clean; rule agreement found two remaining shorthand contradictions plus a stale coordination branch, all corrected in revision 20. All touched review receipts must refresh.
 
-Verdict: `review-stale` for the revision-18 delta
+Verdict: `great`
 
-Blocker overrides: affected spec-review coverage must be refreshed before PR readiness.
+Blocker overrides: none.
 
 Rubric evidence: the four target runs each name one skill; triggers divide reviewed-design, admitted-improvement, execution, review, and long-horizon routing by observable authority; every promised stage has one teaching owner; literal reference callers and ceremony consumers are separated; active hard-cutover callers are assigned; proof, platform, security, versioning, cache, stacking, and no-merge boundaries are explicit.
 
 Highest risk: cross-skill authority drift between the two planning origins and the shared canonical-plan consumers; revision 16 makes both origins visible and revision 15 binds every producer/carrier call without duplicate template routing. Revision 17 changes only the predecessor review-result identity shape.
 
-Accepted findings: the prior rule-agreement finding about the composite predecessor review invocation/result identity was corrected in revision 17; all earlier proposal findings were corrected before this binding, and none remain open.
+Accepted findings: the prior rule-agreement finding about the composite predecessor review invocation/result identity was corrected in revision 17. Revision 19 corrected undefined plan-revision and approval-identity narrowing in the principal callers; revision 20 removed the remaining shorthand from active scenarios and handoff/review descriptions and corrected the current PR1 branch in Coordination.
 
 Rejected findings: none at revision 17.
 
-First required revision: none known; affected review is pending.
+First required revision: none.
 
-Proof or retest implication: each affected one-skill run must read revision 18 completely, verify the post-PR0 three-artifact contract is semantically identical, run its assigned pressure and static/unit proof, and refresh review coverage affected by the immutable-plan-path and no-document-digest delta.
+Proof or retest implication: refresh proposal review for the revision-21 delta, implement only accepted corrections, rerun the failed scenarios first, then rerun all 62 affected scenarios. Each affected one-skill run must read revision 21 completely, verify the post-PR0 three-artifact contract is semantically identical, and refresh review coverage affected by the immutable-plan-path, complete approval-record, no-document-digest, read-only characterization, and invoke-now deltas.
 
 Semantic coverage: complete proposal promise, mental model, all four triggers and main paths, reference/lane allocation, canonical-plan ownership, approval and correction routing, active caller cutovers, proof plan, stacking, version/changelog landing, cache boundary, and no-merge terminal.
 
-Implementation decision: implementation correction is user-directed; PR readiness remains blocked on refreshed affected spec review.
+Implementation decision: accepted-to-implement.

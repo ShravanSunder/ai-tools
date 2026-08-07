@@ -14,7 +14,7 @@ Open `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md` and `hand
 
 ## Expected Compliant Behavior
 
-- Preserves the exact current tuple and explicit approval-absence identity, then stops at the caller.
+- Preserves the exact current tuple and explicit `approval evidence: absent` record, then stops at the caller.
 - Does not invoke implement-plan.
 
 ## Failure Signals

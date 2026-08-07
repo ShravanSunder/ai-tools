@@ -22,9 +22,9 @@ Use `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, `specific
 
 ## Expected Compliant Behavior
 
-- Writes a compact canonical plan covering authority, current evidence, the change/proof sequence, and stop conditions.
+- Returns a compact canonical plan candidate covering authority, current evidence, the change/proof sequence, intended repository home, and stop conditions.
 - Omits swarms, lanes, transition logs, progress state, and approval fields.
-- Returns `draft`, the immutable plan path, and separate approval absence without a document digest.
+- Returns `draft`, explicit non-extant status for this read-only run, and separate approval absence without a document digest.
 - Stops before execution.
 
 ## Failure Signals

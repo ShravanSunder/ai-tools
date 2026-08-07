@@ -31,6 +31,10 @@ const input = {
   skillUnderTest: scenario.skillUnderTest,
   mode: scenario.mode,
   prompt: scenario.prompt,
+  requiredSourceReads: [
+    "plugins/shravan-dev-workflow/skills/test-skill/SKILL.md",
+    "tests/skills/fixtures/example.md",
+  ],
 };
 
 describe("renderCodexPressurePrompt", () => {
@@ -48,6 +52,10 @@ describe("renderCodexPressurePrompt", () => {
       "plugins/shravan-dev-workflow/skills/test-skill/SKILL.md",
     );
     expect(prompt).toContain("repo-local skill source is authoritative");
+    expect(prompt).toContain("Required source evidence:");
+    expect(prompt).toContain("Read every path below before answering");
+    expect(prompt).toContain("exact `--- <required path>` line");
+    expect(prompt).toContain("tests/skills/fixtures/example.md");
     expect(prompt).toContain("Operator prompt:");
     expect(prompt).toContain("Use the skill without seeing the rubric.");
   });
@@ -61,6 +69,7 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).not.toContain("failure phrase");
     expect(prompt).not.toContain("expect_proof_regex");
     expect(prompt).not.toContain("repo-local skill source is authoritative");
+    expect(prompt).toContain("Required source evidence:");
   });
 });
 

@@ -15,7 +15,7 @@ Package an existing implementation plan so another agent can review, execute, or
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, line count, coverage, referenced code/docs, open questions, and exact requested task.
 - Include the plan's obligation-to-slice-to-proof mapping (path or excerpt) or its compact proof line, plus evidence sources, freshness guards, proof layers, split triggers, open proof gaps, and the parent-verification rule for any downstream subagent/reviewer/driver evidence.
-- Include security context when the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services.
+- Include an explicit security context in every handoff. When no sensitive surface applies, record `not security-sensitive` and `not applicable` instead of omitting the field. When the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services, carry the applicable entry points, trust boundaries, invariants, non-goals, and proof.
 - If a plan file is available, read it end to end before packaging. Show `wc -l` and chunk coverage.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
 - Show the copy-paste prompt in the final response and write the same prompt to a file.
@@ -25,7 +25,7 @@ Package an existing implementation plan so another agent can review, execute, or
 
 1. Resolve the repo root with `git rev-parse --show-toplevel` when possible.
 2. Resolve the source plan artifact or plan packet. If none exists, apply the core routing rule and stop.
-3. If a source file exists, count lines and read the whole file in chunks before summarizing.
+3. If a source file exists, count lines and read the whole file in chunks before summarizing. A line count, heading search, path listing, or user summary without returned plan contents is not coverage and blocks packaging.
 4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring or approval, and return the unchanged complete tuple, result-specific payload, separate approval-evidence record or explicit absence, and any blocking discrepancy for the handoff packet.
 5. Inspect only the secondary code/docs needed to make the handoff grounded.
 6. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.

@@ -28,6 +28,11 @@ describe("loadSkillPressureCase", () => {
       skillUnderTest: scenario.skillUnderTest,
       mode: scenario.mode,
       prompt: scenario.prompt,
+      requiredSourceReads: [
+        "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+        "plugins/shravan-dev-workflow/skills/discuss-pathfinding/references/question-craft.md",
+        "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
+      ],
     });
     expect(pressureCase.deterministicEvaluators.length).toBeGreaterThan(0);
     expect(pressureCase.semanticEvaluator).toBeDefined();
