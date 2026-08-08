@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review: Implementation"
+  short_description: "Independently trace implementation and proof"
+  default_prompt: "Use $review-implementation to independently review this implementation and its proof against the exact governing authority and approved plan, then return parent-verified findings and semantic routes without editing or starting PR work."

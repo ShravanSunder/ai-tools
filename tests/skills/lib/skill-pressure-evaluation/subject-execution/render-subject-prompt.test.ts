@@ -31,6 +31,10 @@ const input = {
   skillUnderTest: scenario.skillUnderTest,
   mode: scenario.mode,
   prompt: scenario.prompt,
+  requiredSourceReads: [
+    "plugins/shravan-dev-workflow/skills/test-skill/SKILL.md",
+    "tests/skills/fixtures/example.md",
+  ],
 };
 
 describe("renderCodexPressurePrompt", () => {
@@ -45,9 +49,18 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).toContain("- scenario_id: render");
     expect(prompt).toContain("- skill_under_test: shravan-dev-workflow:test-skill");
     expect(prompt).toContain(
+      "from the compliant behavior required in this run",
+    );
+    expect(prompt).toContain(
       "plugins/shravan-dev-workflow/skills/test-skill/SKILL.md",
     );
     expect(prompt).toContain("repo-local skill source is authoritative");
+    expect(prompt).toContain("Required source evidence:");
+    expect(prompt).toContain("Read every path below before answering");
+    expect(prompt).toContain("without a separate line-count preflight");
+    expect(prompt).toContain("case registries");
+    expect(prompt).toContain("exact `--- <required path>` line");
+    expect(prompt).toContain("tests/skills/fixtures/example.md");
     expect(prompt).toContain("Operator prompt:");
     expect(prompt).toContain("Use the skill without seeing the rubric.");
   });
@@ -61,6 +74,18 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).not.toContain("failure phrase");
     expect(prompt).not.toContain("expect_proof_regex");
     expect(prompt).not.toContain("repo-local skill source is authoritative");
+    expect(prompt).toContain("Required source evidence:");
+  });
+
+  test("forbids test-machinery inspection without required source reads", () => {
+    const prompt = renderCodexPressurePrompt({
+      input: { ...input, requiredSourceReads: [] },
+    });
+
+    expect(prompt).toContain(
+      "Do not inspect pressure-scenario fixtures, case registries, evaluator code, grader artifacts, or the current diff",
+    );
+    expect(prompt).not.toContain("Required source evidence:");
   });
 });
 

@@ -36,7 +36,7 @@ privileged actions:
 third-party source:
 license / permission state:
 copy-vs-adapt decision:
-decision: allowed | disallowed | blocked | deferred — sets the run note `security route` field when one is used
+decision: allowed | disallowed | blocked | deferred — include in the run summary because this branch ran
 required proof:
 public-safe constraints:
 review route:

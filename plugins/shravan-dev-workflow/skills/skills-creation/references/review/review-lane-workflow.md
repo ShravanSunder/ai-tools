@@ -18,7 +18,7 @@ Instance authority follows the reviewer contract in `manage-agents` and stays eq
 Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
 ```
 
-MUST load the `manage-agents` skill to resolve the reviewer runtime and return the exact model and dispatch route before dispatch. Reviewers run as one-shot Delegates in fresh context; per the reviewer contract in `manage-agents`, parent conversation history is `none` and workspace access is `read-only`. Any model outside the Delegate table — caller-directed or parent-chosen — is recorded as a reviewer-runtime deviation on the run note's `deviations:` line, not treated as a new pattern.
+MUST load the `manage-agents` skill to resolve the reviewer runtime and return the exact model and dispatch route before dispatch. Reviewers run as one-shot Delegates in fresh context; per the reviewer contract in `manage-agents`, parent conversation history is `none` and workspace access is `read-only`. Any model outside the Delegate table — caller-directed or parent-chosen — is reported as a reviewer-runtime deviation in the run summary, not treated as a new pattern.
 
 Each lane reads only its packet and named sources, so ready lanes may run in parallel.
 

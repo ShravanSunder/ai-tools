@@ -46,9 +46,9 @@ export function evaluatePressureAssertions(
       `read_only mismatch: expected ${props.scenario.expectReadOnly}, received ${props.result.read_only}`,
     );
   }
-  if (props.readOnlyRequested !== props.scenario.expectReadOnly) {
+  if (props.scenario.expectReadOnly && !props.readOnlyRequested) {
     failures.push(
-      `read-only backend request mismatch: expected ${props.scenario.expectReadOnly}, received ${props.readOnlyRequested}`,
+      "read-only scenario did not use the read-approved backend mode",
     );
   }
   if (

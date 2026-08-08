@@ -19,7 +19,7 @@ const retiredScenarioRoot = path.join(
   repoRoot,
   "tests/skills/retired-pressure-scenarios/shravan-dev-workflow",
 );
-const retiredSkills = [
+const provenanceSkillNames = [
   "orchestrator-goal",
   "plan-creation-swarm",
   "plan-review-swarm",
@@ -27,21 +27,40 @@ const retiredSkills = [
   "implementation-review-swarm",
 ] as const;
 
+const fullyRetiredSkillNames = [
+  "plan-creation-swarm",
+  "plan-review-swarm",
+  "implementation-execute-plan",
+  "implementation-review-swarm",
+] as const;
+
+const activeReplacementSkillNames = [
+  "orchestrator-goal",
+  "plan-implementation",
+  "implement-plan",
+  "review-implementation",
+] as const;
+
 describe("retired skill runtime discoverability", () => {
   test("keeps complete provenance outside active skill and scenario roots", () => {
-    for (const skillName of retiredSkills) {
+    for (const skillName of provenanceSkillNames) {
       const activeSkillPath = path.join(activeSkillRoot, skillName);
       const retiredSkillPath = path.join(retiredSkillRoot, skillName);
       const activeScenarioPath = path.join(activeScenarioRoot, skillName);
       const retiredScenarioPath = path.join(retiredScenarioRoot, skillName);
 
-      expect(existsSync(activeSkillPath)).toBe(false);
-      expect(existsSync(path.join(activeSkillPath, "SKILL.md"))).toBe(false);
       expect(existsSync(path.join(retiredSkillPath, "SKILL.retired.md"))).toBe(
         true,
       );
-      expect(existsSync(activeScenarioPath)).toBe(false);
       expect(existsSync(retiredScenarioPath)).toBe(true);
+
+      if (skillName === "orchestrator-goal") {
+        expect(existsSync(path.join(activeSkillPath, "SKILL.md"))).toBe(true);
+        expect(existsSync(activeScenarioPath)).toBe(true);
+      } else {
+        expect(existsSync(activeSkillPath)).toBe(false);
+        expect(existsSync(activeScenarioPath)).toBe(false);
+      }
     }
   });
 
@@ -53,7 +72,7 @@ describe("retired skill runtime discoverability", () => {
 
     for (const manifestPath of manifests) {
       const manifestText = readFileSync(manifestPath, "utf8");
-      for (const skillName of retiredSkills) {
+      for (const skillName of fullyRetiredSkillNames) {
         expect(manifestText).not.toContain(`"${skillName}"`);
       }
     }
@@ -70,9 +89,17 @@ describe("retired skill runtime discoverability", () => {
       .map((entry) => path.join(entry.parentPath, entry.name));
 
     for (const entrypoint of activeEntrypoints) {
-      for (const skillName of retiredSkills) {
+      for (const skillName of fullyRetiredSkillNames) {
         expect(entrypoint).not.toContain(`${path.sep}${skillName}${path.sep}`);
       }
+    }
+  });
+
+  test("discovers new minimal owners while preserving retired provenance", () => {
+    for (const skillName of activeReplacementSkillNames) {
+      expect(existsSync(path.join(activeSkillRoot, skillName, "SKILL.md"))).toBe(
+        true,
+      );
     }
   });
 });

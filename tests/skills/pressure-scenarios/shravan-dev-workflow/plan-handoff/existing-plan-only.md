@@ -4,8 +4,8 @@ scenario_id: plan-handoff-existing-plan-only
 skill_under_test: shravan-dev-workflow:plan-handoff
 mode: fast
 expect_read_only: true
-expect_artifact: true
-expect_decision_regex: existing plan|spec-handoff|planning unavailable|implementation plan|handoff
+expect_artifact: false
+expect_decision_regex: existing plan|spec-handoff|implementation plan|handoff
 
 ## Shortcut Temptation
 
@@ -33,7 +33,7 @@ task breakdown.
 - Agent says `plan-handoff` requires an existing implementation plan or plan
   artifact.
 - Agent routes design/spec portability to `spec-handoff`.
-- Agent reports implementation-plan creation as unavailable in this release.
+- Agent does not recommend a planning owner because the prompt supplies no exact current ready three-artifact authority.
 - Agent does not pretend a plan exists.
 
 ## Failure Signals

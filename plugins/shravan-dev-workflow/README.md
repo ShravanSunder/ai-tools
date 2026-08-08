@@ -8,13 +8,16 @@ The plugin is built around one idea: each workflow phase should have a clear own
 
 ```text
 shared understanding
-  -> orchestrator-design: bounded routing only
+  -> orchestrator-goal: long-horizon route selection and terminal verification only
+       -> orchestrator-design: bounded routing only
        -> spec-design: separate Requirements and Specification
        -> program-design: structural How
        -> spec-program-review: proportional independent three-artifact design review
        -> stop at reviewed three-artifact design or explicit gap; never enter planning automatically
-  -> plan + proof matrix
-  -> implementation proof
+  -> plan-implementation: one canonical plan + proof mapping
+  -> implement-plan: approved immutable plan + implementation proof
+  -> review-implementation: one complete independent reconstruction + parent reduction
+       -> stop before corrections and PR work
 ```
 
 `handoff` means portability. It does not mean the phase is approved, complete, or ready for the next phase. A handoff packet makes context transferable so a future agent, another CLI, or another machine can continue without guessing.
@@ -30,13 +33,17 @@ discuss-*            shared understanding          discuss-clarify-mental-models
                                                   discuss-pathfinding
 research-*           evidence gathering            research-swarm
 manage-*             subordinate agents            manage-agents
-orchestrator-*       bounded workflow routing      orchestrator-design
+orchestrator-*       bounded workflow routing      orchestrator-goal
+                                                  orchestrator-design
 spec-*               design/spec boundary          spec-design
                                                   program-design
                                                   spec-program-review
                                                   spec-handoff
-plan-*               existing-plan portability    plan-handoff
+plan-*               planning and portability     plan-implementation
+                                                  plan-handoff
                                                   plan-improve-repo
+implement-*          approved-plan execution      implement-plan
+review-*             implementation judgment      review-implementation
 implementation-*     code/change boundary          implementation-pr-wrapup
                                                   implementation-handoff
 ops-*                external operational systems  ops-security-review
@@ -54,6 +61,7 @@ tui-*                structured chat presentation  tui-presentation
 flowchart LR
     pathfinding["discuss-pathfinding<br/>extract tacit or unmade understanding"]
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
+    deliveryGoal["orchestrator-goal<br/>first unproven delivery gate"]
     designCycle["orchestrator-design<br/>bounded routing only"]
 
     specDesign["spec-design<br/>separate Requirements and Specification"]
@@ -61,13 +69,21 @@ flowchart LR
     specReview["spec-program-review<br/>independent review"]
     specHandoff["spec-handoff<br/>portable spec context"]
 
+    planImplementation["plan-implementation<br/>reviewed design to canonical plan"]
     planHandoff["plan-handoff<br/>portable plan context"]
 
+    implementPlan["implement-plan<br/>exact approved plan execution"]
+    reviewImplementation["review-implementation<br/>independent implementation and proof review"]
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
     pathfinding --> specDesign
     mentalModels --> specDesign
+    deliveryGoal -.->|"first unproven gate"| designCycle
+    deliveryGoal -.-> planImplementation
+    deliveryGoal -.-> implementPlan
+    deliveryGoal -.-> reviewImplementation
+    deliveryGoal -.-> implWrap
     designCycle -.->|"first phase"| specDesign
     designCycle -.->|"follows phase-selected routes"| programDesign
     designCycle -.->|"one three-artifact design review"| specReview
@@ -80,6 +96,15 @@ flowchart LR
     specReview --> specHandoff
     specReview --> specDesign
     specReview --> programDesign
+    specReview --> planImplementation
+    planImplementation --> planHandoff
+    planImplementation -.->|"after current-plan approval"| implementPlan
+    planHandoff -.->|"when exact approval is preserved"| implementPlan
+    implementPlan --> reviewImplementation
+    reviewImplementation -.->|"accepted implementation correction"| implementPlan
+    reviewImplementation --> implWrap
+    implementPlan --> implHandoff
+    reviewImplementation --> implHandoff
     implWrap --> implHandoff
 ```
 
@@ -99,6 +124,8 @@ Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, 
 
 Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one three-artifact design review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
 
+Use `orchestrator-goal` for a general-domain long-horizon delivery goal spanning multiple phases. It reconstructs the first unproven gate from current artifacts and phase-owned evidence, invokes exactly one owner at a time, verifies returned identities and freshness without repeating phase judgment, and stops only at the requested terminal, decision, or blocker. Its default terminal is PR-ready and unmerged. It never adds a controller, transition log, lifecycle ledger, or merge authority; direct one-phase requests bypass it.
+
 ### Spec boundary
 
 Use `spec-design` to preserve two separate upstream concepts before program design or planning. Requirements owns WHY, for whom, and within what authorized boundary. Specification owns WHAT must be observably true and traces its normative obligations to Requirements. For substantial file-backed work, the skill reuses or creates a separately identifiable Requirements home and creates a different Specification home; it never substitutes one combined `Requirements/spec` artifact. It keeps unresolved owner meaning visible and leaves internal component structure downstream.
@@ -107,19 +134,25 @@ Use `program-design` to define structural How against the settled specification:
 
 Use `spec-program-review` to independently classify and proportionally review a Specification, a Program Design, or the complete Requirements, Specification, and Program Design set. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the three-artifact design. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
-The retired `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance. They are not runtime skills and this release provides no replacements.
+The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance and are not runtime entrypoints. The active `orchestrator-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of those retired trees; they do not restore swarms, controller briefs, worker protocols, transition ledgers, or a separate plan-review layer.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the exact three-artifact design review invocation identity, review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale three-artifact designs to `spec-program-review`, and records a blocked planning handoff when the packet is ready for a planning route that is retired in this release.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the exact three-artifact design review invocation identity, review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale three-artifact designs to `spec-program-review`, and current ready three-artifact designs to `plan-implementation`.
 
 ### Plan boundary
 
-Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It may vet findings and maintain a backlog, but planning admission and any executable-plan follow-through are blocked when they require a retired planning or execution route. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
+Use `plan-implementation` to translate one semantically current ready Requirements, Specification, and Program Design set into one repo-grounded canonical Markdown plan. It reads the governing artifacts and current repository completely enough to map every obligation to a proof-bearing slice, records only necessary dependency/collision edges, and stops before approval, tickets, implementation, review, Git, or PR work.
 
-Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. If no plan exists yet, use `spec-handoff`; do not present design context as a plan or invoke a retired planning route.
+Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It retains direct authority over admitted repository-improvement findings, including source-proven implementation-mechanics-only work, and emits the same canonical plan contract without taking reviewed-design planning away from `plan-implementation`. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
+
+Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. It preserves the exact canonical tuple and separate approval evidence or explicit absence without re-authoring or approving the plan. If no plan exists yet, use `spec-handoff` for portability or `plan-implementation` to create one from current ready design; never present design context as an existing plan.
 
 ### Implementation boundary
 
-Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation work exists: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery is outside the active runtime surface in this release; stop and report that gate rather than treating PR wrap-up as a substitute.
+Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
+
+Use `review-implementation` for independent product implementation and proof review after execution. It admits exact governing authority, plan path and current meaning, complete approval-evidence record or explicit absence, source, diff, and proof identities; dispatches one complete fresh-context read-only reviewer; parent-verifies every candidate; optionally deepens one concrete unresolved material risk; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
+
+Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation and applicable independent review exist: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery routes to `review-implementation`; PR wrap-up does not substitute for it.
 
 Use `implementation-handoff` when real implementation state exists: branch, diff, changed files, commits, validation output, failed commands, blockers, or risk. It is for continuation, audit, or manual review of work already in motion.
 
@@ -135,15 +168,15 @@ Use `implementation-handoff` when real implementation state exists: branch, diff
 
 ## External Counsel
 
-This workflow does not use broad multi-model counsel by default.
+Review workflows do not use broad multi-model counsel by default. The one-shot Delegate pattern, model, runtime, history isolation, and read-only authority are resolved through `manage-agents`.
 
 ```text
 normal review path
   spec-program-review
       -> bounded independent specification/program review
+  review-implementation
+      -> one complete independent implementation/proof review
 ```
-
-Oracle is excluded from `shravan-dev-workflow` review swarms.
 
 ## How To Use
 
@@ -156,8 +189,12 @@ Use spec-design to preserve separate Requirements and Specification identities: 
 Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review these Requirements, Specification, and Program Design artifacts.
 Use spec-handoff to package this design for another agent without creating a plan.
+Use orchestrator-goal to route this long-horizon delivery goal from its first unproven gate to PR readiness without duplicating phase judgment or merging.
+Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
+Use implement-plan to execute this approved canonical plan at its immutable path and current meaning, then return fresh implementation proof without starting review or PR work.
+Use review-implementation to independently review this implementation and proof without editing or starting PR lifecycle work.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
-Use plan-improve-repo to audit this repo and write executable improvement plans.
+Use plan-improve-repo to audit this repo and write immutable canonical improvement plans that still require later current-plan approval.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.

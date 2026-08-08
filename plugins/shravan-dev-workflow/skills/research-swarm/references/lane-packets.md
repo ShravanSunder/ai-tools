@@ -48,7 +48,7 @@ Return:
 - inferences
 - contradictions or stale assumptions
 - open questions
-- recommended route, if any: spec-design | program-design | spec-program-review | no route yet | blocked next phase
+- recommended route, if any: discuss-clarify-mental-models | spec-design | program-design | spec-program-review | plan-implementation | implement-plan | review-implementation for general-domain work | skills-creation for a runtime skill package | docs-maintain | no route yet | blocked next phase
 - proposed artifact path and candidate lane-file content, when artifacts are expected
 - completion receipt: answered | blocked, with source anchors and proposed
   artifact paths; parent writes lane files for read-only lanes
