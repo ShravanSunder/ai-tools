@@ -19,7 +19,7 @@ plan slice and approved write/proof boundary:
 implementation anchor and real caller:
 proof layer, evidence, and freshness:
 coverage: covered | missing | contradicted | ambiguous | deferred-unreachable
-false-substitute risk:
+weaker-substitute risk:
 candidate semantic owner:
 ```
 
@@ -72,4 +72,4 @@ Identify the single assumption whose failure would most change the review result
 
 A candidate finding needs an exact source and implementation anchor, governing obligation or invariant, concrete failure or consequence, smallest correction, candidate owner, fitting confirmation evidence, and remaining uncertainty. If no well-supported candidate survives, return `No findings`; do not pad.
 
-For `complete-reviewer`, complete when every required coverage or anchored-exclusion row exists; normal and applicable failure paths were inspected; proof layers and source currency were checked; applicable runtime claims have reachability status; weaker substitutes and the riskiest assumption were tested; candidate findings meet the standard; and the result names its uncovered boundary. Focused completion is instead governed by `lanes/focused-reviewer.md` after only the method stages needed for its one named risk.
+For `complete-reviewer`, complete when every required coverage or anchored-exclusion row exists; normal and applicable failure paths were inspected; proof layers and source freshness were checked; applicable runtime claims have reachability status; weaker substitutes and the riskiest assumption were tested; candidate findings meet the standard; and the result names its uncovered boundary. Focused completion is instead governed by `lanes/focused-reviewer.md` after only the method stages needed for its one named risk.

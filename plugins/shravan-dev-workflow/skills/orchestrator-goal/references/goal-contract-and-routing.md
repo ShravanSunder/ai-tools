@@ -32,7 +32,7 @@ For an explicitly composed runtime skill-package phase, open the current `skills
 3. Order only the gates implied by the terminal. A narrower terminal removes later gates; it never weakens an earlier gate it still depends on.
 4. Starting from governing meaning, find the first gate without current phase-owned evidence. A later green artifact never backfills an earlier missing gate.
 5. Select exactly one owner from the route map in `SKILL.md`. Pass pointers and evidence, not a copied phase procedure.
-6. Before accepting either an existing or newly returned phase result, open that producer's current return contract and compare the exact identity, labels, required fields, proof anchors, source currency, and stop status.
+6. Before accepting either an existing or newly returned phase result, open that producer's current return contract and compare the exact identity, labels, required fields, proof anchors, source freshness, and stop status.
 
 Use this reconstruction row when ambiguity exists:
 
@@ -78,7 +78,7 @@ The packet contains exactly the inputs required by the selected owner's current 
 complete current three-artifact design review = ready; no plan
   -> plan-implementation
 
-canonical draft exists; exact later owner approval absent
+canonical draft exists; exact owner approval recorded after reading the plan is absent
   -> stop at caller for approval; do not invoke implement-plan
 
 implementation proof exists; current review receipt absent
@@ -101,7 +101,7 @@ Optional tracker publication is an owned side route. Before projecting an extant
 
 On resume, distrust stored labels and reopen the artifact or receipt identities needed by the requested terminal. Open each selected producer's current return contract before accepting its evidence. Start from the earliest possibly stale dependency, not from the most recent optimistic status.
 
-Use the gate row above for resume. Do not create a second resume record. Before continuing, ensure it names the verified current gate, evidence currency, exact next owner or stop, and supplied authority.
+Use the gate row above for resume. Do not create a second resume record. Before continuing, ensure it names the verified current gate, evidence freshness, exact next owner or stop, and supplied authority.
 
 Before closeout, verify every material gate implied by the terminal, every explicit proof expectation, unresolved decisions and blockers, affected review coverage, and the terminal owner's current evidence under its current contract. For the default terminal, use the current `implementation-pr-wrapup` result; do not restate its PR schema here. Merge remains separately authorized.
 

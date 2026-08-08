@@ -8,7 +8,7 @@ Prerequisites: governing sources, exact plan and approval, base and reviewed ide
 
 Maximum authority: fresh-context, read-only, candidate-only review. Open/search current source and existing proof with read-only discovery commands only. Do not run build, test, lint, format, migration, or other proof-generation/remediation commands; do not edit, stage, commit, reply to review threads, accept findings, or decide workflow transitions.
 
-Procedure: MUST load `../reviewing-implementation.md` to perform its full obligation trace, normal and failure-path inspection, proof-fit checks, applicable reachability and false-substitute checks, and riskiest-assumption test.
+Procedure: MUST load `../reviewing-implementation.md` to perform its full obligation trace, normal and failure-path inspection, proof-fit checks, applicable reachability and weaker-substitute checks, and riskiest-assumption test.
 
 Return the shared `complete | partial | blocked` envelope plus:
 
@@ -17,7 +17,7 @@ obligation coverage:
 normal and failure-path coverage:
 proof fit:
 runtime reachability:
-false-substitute risks:
+weaker-substitute risks:
 riskiest assumption:
 candidate findings:
 uncovered boundary:

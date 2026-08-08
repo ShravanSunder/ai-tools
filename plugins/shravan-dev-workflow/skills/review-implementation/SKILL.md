@@ -23,22 +23,16 @@ Completion: `non-substantial` returns the evidence above for every changed file.
 
 1. Build the shared review packet defined by `references/lanes/lane-schema.md` from the admitted inputs. Do not repeat the packet fields in another local schema.
 2. MUST use `manage-agents` to resolve a one-shot Delegate with parent conversation history `none`, read-only workspace access, exact model/runtime/permissions, packet, and receipt mechanics; return that dispatch contract before any reviewer runs. MUST dispatch `complete-reviewer` to a subagent using that contract and the shared review packet. Subagent loads `references/lanes/lane-schema.md`, `references/lanes/complete-reviewer.md`, and `references/reviewing-implementation.md`. Parallel-safe after every packet input exists; actual scheduling is serial. Instance authority is fresh-context, read-only, candidate-only, complete-review authority equal to or narrower than the lane maximum. Return the lane's `complete | partial | blocked` result; the parent verifies and reduces it.
-3. Verify the result's assignment, lane, and source identities, read-only authority, target currency, obligation trace, normal and failure paths, proof fit, runtime reachability when applicable, false-substitute checks, riskiest assumption, and uncovered boundary. Do not repeat the reviewer's mission merely to create a second opinion.
+3. Verify the result's assignment, lane, and source identities, read-only authority, target freshness, obligation trace, normal and failure paths, proof fit, runtime reachability when applicable, weaker-substitute checks, riskiest assumption, and uncovered boundary. Do not repeat the reviewer's mission merely to create a second opinion.
 4. MUST load `references/finding-and-reduction.md` to verify and reduce every candidate against current sources and return dispositions, merged duplicates and conflicts, evidence boundaries, routes, affected coverage, and the review result.
 5. If parent reduction leaves one concrete material risk, IF that exact risk remains unresolved, dispatch `focused-reviewer` using the resolved `manage-agents` contract, shared review packet, complete receipt, parent dispositions, and named falsifiable risk question. Subagent loads `references/lanes/lane-schema.md`, `references/lanes/focused-reviewer.md`, and `references/reviewing-implementation.md`. Parallel-safe only after parent reduction of the complete receipt; actual scheduling is serial. Instance authority is fresh-context, read-only, focused-question-only, candidate-only, and equal to or narrower than the lane maximum. Return `complete | partial | blocked`; the parent verifies and reduces it. Additional focused review requires prior caller or current human authority.
 6. Return `ready | needs-revision | blocked | decision-needed` using the result contract in `references/finding-and-reduction.md`.
 
 Completion: the complete-reviewer receipt has status `complete`; `partial` or `blocked` prevents `ready` and preserves the exact gap or blocker. Every candidate has a parent disposition, any focused pass answered exactly one unresolved material risk, uncovered boundaries remain explicit, and the result is bound to the reviewed source and proof identities.
 
-## Send Each Problem to Its Owner
+## Route Each Problem by Cause
 
-- Requirements or observable-contract defect -> `spec-design`.
-- Structural ownership, interface, state, failure, concurrency, trust, compatibility, or proof-seam defect -> `program-design`.
-- Slice, sequence, dependency, collision, write-scope, or plan-proof defect -> the recorded originating planner: `plan-implementation` or `plan-improve-repo`.
-- Code, test, fixture, or implementation-proof defect -> `implement-plan`.
-- Missing authority or unresolved owner decision -> caller.
-
-Return accepted findings using the authoritative shape in `references/finding-and-reduction.md`; do not maintain a second copy of that shape here.
+Route accepted findings to the owner named by the cause table in `references/finding-and-reduction.md`, and return them using that reference's authoritative shape.
 
 ## Boundaries
 

@@ -2,7 +2,7 @@
 
 This reference owns pre-edit repository validation, ready-frontier selection, slice-local proof, integration gates, surprise classification, and implementation completion reporting for an already admitted plan.
 
-Expected inputs: the unchanged complete canonical plan record and result payload, matching later approval evidence for the exact plan path and current meaning, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
+Expected inputs: the unchanged complete canonical plan record and result payload, matching approval evidence recorded after the plan was read for the exact plan path and current meaning, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
 
 Return: the pre-edit verdict, ready frontier, proof and integration contract, classified surprise routes, and completion report.
 

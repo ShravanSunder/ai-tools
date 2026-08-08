@@ -63,13 +63,12 @@ Every lane opens its return with this block:
 
 ```text
 receipt: complete | partial | blocked
-items opened:
-- <each `Where to look` item, with the anchor that proves it was opened>
+coverage: <mission stages completed and exact uncovered boundary>
 stop condition: met | not met, with what remains
 unresolved questions:
 ```
 
-List opened sources by name and useful anchor only. Do not return file-content digests, hashes, line counts, chunk ranges, or a second reading receipt; findings carry the evidence that matters.
+Do not return a source inventory, separate reading receipt, file-content digest, hash, line count, or chunk range. Findings carry the source anchors needed to support them; `coverage` names the work completed and any gap without proving reading mechanics.
 
 ## Lane Finding
 

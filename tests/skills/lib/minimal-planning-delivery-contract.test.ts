@@ -450,9 +450,11 @@ describe("minimal planning and delivery contracts", () => {
     expect(laneSchema).toContain("governing authority identities");
     expect(laneSchema).toContain("complete | partial | blocked");
     expect(laneSchema).toContain("does not return a separate reading receipt, file-content digest");
+    expect(skillReviewLaneSchema).toContain("coverage: <mission stages completed and exact uncovered boundary>");
     expect(skillReviewLaneSchema).toContain(
-      "Do not return file-content digests, hashes, line counts, chunk ranges",
+      "Do not return a source inventory, separate reading receipt, file-content digest",
     );
+    expect(skillReviewLaneSchema).not.toContain("items opened:");
     expect(completeReviewer).toContain("complete independent reconstruction");
     expect(focusedReviewer).toContain("one named residual risk");
     expect(prWrapup).toContain("route to `review-implementation | skills-creation` respectively");

@@ -26,7 +26,7 @@ A long-horizon goal is a guarded route through phase-owned evidence, not a secon
 - An audit or plan directly authorized by admitted repository-improvement findings -> `plan-improve-repo`; supporting reviewed design does not change that origin.
 - Current ready reviewed design without a plan -> `plan-implementation`.
 - Plan result `revision-requested` -> recorded originating planner; `blocked` -> recorded unblock owner; only `draft` can advance.
-- `draft` without matching later explicit owner approval -> caller stop. Approved `draft` without implementation proof -> `implement-plan`.
+- `draft` without matching owner approval recorded after reading the plan -> caller stop. Approved `draft` without implementation proof -> `implement-plan`.
 - Implementation proof without current review -> `review-implementation`.
 - Review findings -> the exact semantic owner selected by `review-implementation`.
 - Ready implementation without current PR readiness -> `implementation-pr-wrapup`.
@@ -40,4 +40,4 @@ A long-horizon goal is a guarded route through phase-owned evidence, not a secon
 
 ## Completion Blockers
 
-Do not claim the goal terminal while a required phase receipt is absent, stale, conflicting, or blocked; a completed plan lacks matching later current-plan approval; implementation proof lacks current independent review; accepted corrections lack fresh affected review coverage; PR checks, comments, reviews, mergeability, or exact head state required by the terminal are unknown; or merge is implied without separate authority.
+Do not claim the goal terminal while a required phase receipt is absent, stale, conflicting, or blocked; a completed plan lacks matching owner approval recorded after the plan was read; implementation proof lacks current independent review; accepted corrections lack fresh affected review coverage; PR checks, comments, reviews, mergeability, or exact head state required by the terminal are unknown; or merge is implied without separate authority.

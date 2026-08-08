@@ -1,6 +1,6 @@
 # Divide the Work and Attach Proof
 
-Use this reference to turn admitted obligations into a proportional implementation sequence. Return the slice graph, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
+Use this reference to turn obligations allowed by the planning start check into a proportional implementation sequence. Return the slice graph, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
 
 ## Start From Obligations
 

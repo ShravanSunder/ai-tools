@@ -22,7 +22,7 @@ plan path: <repo-relative or absolute path; the sole document identity>
 originating planner: plan-implementation | plan-improve-repo
 planning result: draft | revision-requested | blocked
 result payload:
-  draft: later explicit owner approval must name this exact path and current meaning
+  draft: owner approval recorded after reading the plan must name this exact path and current meaning
   revision-requested: exact correction requested and its semantic or planning owner
   blocked: blocker identity, evidence, and unblock owner
 ```
@@ -100,6 +100,6 @@ An executor receives the complete plan record, separate approval record or expli
 
 The check is complete when every plan and approval field was inspected, both records remain unchanged, and the result names either executable current-plan authority or one checkable stop. Validation, handoff, ticket state, or earlier goal text never substitutes for approval recorded after the completed plan was read.
 
-Good signals: one immutable plan path, proof attached to obligations, only meaningful edges, explicit design-gap routes, and separate later approval evidence.
+Good signals: one immutable plan path, proof attached to obligations, only meaningful edges, explicit design-gap routes, and separate approval evidence recorded after the plan was read.
 
 Bad signals: tickets as an alternate plan, `Status: approved` inside the plan, mutable progress checklists, validation changing the planning result, any document hash or digest ledger, blanket goal approval, or a handoff silently repairing the plan.

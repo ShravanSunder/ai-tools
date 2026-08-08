@@ -21,8 +21,8 @@ Plugin: `shravan-dev-workflow` 2.1.0
 - Gives the shared plan contract one numbered sequence of action-led headings
   instead of two different "admission" sections and compressed noun stacks.
 - Keeps review evidence useful without document bookkeeping: reviewers read the
-  controlling sources but do not return separate reading receipts, file-content
-  digests, hashes, line counts, or chunk reports.
+  controlling sources but do not return source inventories, separate reading
+  receipts, file-content digests, hashes, line counts, or chunk reports.
 - Keeps plan handoffs portable without reporting reading mechanics. Read-only
   handoffs return the full prompt inline, preserve the separate approval-record
   path, and name the two repo-local files withheld.
