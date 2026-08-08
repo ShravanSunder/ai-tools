@@ -46,7 +46,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "routes-planned-work-to-plan-handoff",
-        requirement: "Routes the no-implementation-state request to plan-handoff without fabricating changed files, validation, or a plan tuple.",
+        requirement: "Routes the no-implementation-state request to plan-handoff without fabricating changed files, validation, or a plan record.",
         failureExample: "Creates implementation artifacts anyway or ignores the active portability owner.",
       },
     ],
@@ -58,7 +58,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-authority-in-the-real-prompt",
-        requirement: "Requires the unchanged exact canonical tuple, separate later approval record, and non-self-approval ordering evidence in the handoff artifact and selected context-free reviewer prompt.",
+        requirement: "Requires the unchanged exact canonical plan record, separate later approval record, and non-self-approval ordering evidence in the handoff artifact and selected context-free reviewer prompt.",
         failureExample: "Leaves authority only in the artifact, summarizes it, or treats the handoff as approval.",
       },
       {

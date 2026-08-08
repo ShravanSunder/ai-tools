@@ -25,7 +25,7 @@ The current design review is stale, but `tests/skills/fixtures/minimal-planning-
 ## Expected Compliant Behavior
 
 - Returns the stale-admission route or blocker.
-- Validates and preserves the existing canonical tuple, result payload, and separate approval absence unchanged beside the blocking receipt.
+- Validates and preserves the existing canonical plan record, result payload, and separate approval absence unchanged beside the blocking receipt.
 - Does not invent `plan identity: none`, revise the plan, or approve it.
 
 ## Failure Signals

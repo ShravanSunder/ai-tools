@@ -19,8 +19,7 @@ describe("minimal planning and delivery contracts", () => {
     expect(planner).toContain("name: plan-implementation");
     expect(planner).toContain("Requirements, Specification, and Program Design set");
     expect(planner).toContain("mode `three-artifact-design`");
-    expect(planner).toContain("exact review invocation identity");
-    expect(planner).toContain("exact review result identity");
+    expect(planner).toContain("exact review invocation and result identities");
     expect(planner).toContain("result `ready`");
     expect(planner).toContain("plan identity: none");
     expect(planner).toContain("MUST load `references/slice-and-proof-design.md`");
@@ -28,14 +27,14 @@ describe("minimal planning and delivery contracts", () => {
       "MUST load `../../shared-references/canonical-implementation-plan.md`",
     );
     expect(planner).toContain("Do not create tickets");
-    expect(planner).toContain("Only separate later owner approval");
+    expect(planner).toContain("approval recorded after reading the completed plan");
     expect(planner).toContain("canonical `draft | revision-requested | blocked` planning result");
     expect(planner).toContain("A runtime skill package requires the exact `skills-creation` parent identity");
     expect(planner).not.toContain("plan and its validation receipt");
     expect(planner).not.toContain("Delegate only bounded evidence gathering");
   });
 
-  test("keeps one canonical plan tuple separate from approval and execution state", () => {
+  test("keeps one canonical plan record separate from approval and execution state", () => {
     const contract = readPluginFile(
       "shared-references/canonical-implementation-plan.md",
     );
@@ -53,13 +52,13 @@ describe("minimal planning and delivery contracts", () => {
     expect(contract).toContain("A later meaning change creates a new plan path");
     expect(contract).toContain("Do not compute or maintain a content hash");
     expect(contract).toContain("Never add approval, assignees, percent complete");
-    expect(contract).toContain("cannot mutate the tuple or approval record");
+    expect(contract).toContain("cannot mutate the plan record or approval record");
     expect(contract).toContain("immutable blocked plan record is complete");
     expect(contract).toContain("An implementation handoff whose governing authority is a non-plan request or ticket");
     expect(contract).toContain(
       "## 7. Start: Check Whether Implementation May Begin",
     );
-    expect(contract).toContain("Return exactly one admission result");
+    expect(contract).toContain("Return exactly one result");
     expect(contract).not.toContain(
       "current repository inspection has not contradicted authority",
     );
@@ -103,16 +102,15 @@ describe("minimal planning and delivery contracts", () => {
     expect(validation).toContain("Return two separately labeled blocks");
     expect(validation).toContain("Canonical plan record (unchanged)");
     expect(validation).toContain("Current-state validation receipt");
-    expect(validation).toContain("Preserve the canonical tuple");
+    expect(validation).toContain("Preserve the canonical plan record");
     expect(improvementPlanner).toContain(
       "separately labeled non-authoritative `Current-state validation receipt`",
     );
     expect(improvementPlanner).toContain(
       "this block is required for `blocked` results too",
     );
-    expect(improvementPlanner).toContain(
-      "`delegation: none | <bounded handoff>`",
-    );
+    expect(improvementPlanner).toContain("Delegate only under the Core Rules predicate");
+    expect(improvementPlanner).not.toContain("literal `delegation:");
     expect(validation).not.toContain("Handoff prompt names");
     expect(improvementPlanner).toContain("Plan completion, validation, handoff");
     expect(improvementPlanner).toContain(
@@ -122,7 +120,7 @@ describe("minimal planning and delivery contracts", () => {
       "plan review or execution would require a retired route",
     );
     expect(improvementPlanner).toContain("Inspect audit categories in-parent by default");
-    expect(improvementPlanner).toContain("Delegation still requires the Core Rules predicate");
+    expect(improvementPlanner).toContain("Delegate only under the Core Rules predicate");
     expect(improvementPlanner).toContain("Audit improvement categories");
     expect(improvementPlanner).not.toContain("Audit improvement lanes");
     expect(improvementPlanner).not.toContain("lanes run and skipped");
@@ -135,7 +133,7 @@ describe("minimal planning and delivery contracts", () => {
     expect(reconciliation).not.toContain("Update the plan status");
   });
 
-  test("makes handoffs preserve the tuple and routes ready design to the planner", () => {
+  test("makes handoffs preserve the plan record and routes ready design to the planner", () => {
     const planHandoff = readPluginFile("skills/plan-handoff/SKILL.md");
     const planHandoffTemplate = readPluginFile(
       "skills/plan-handoff/references/handoff-template.md",
@@ -145,13 +143,13 @@ describe("minimal planning and delivery contracts", () => {
     expect(planHandoff).toContain(
       "MUST load `../../shared-references/canonical-implementation-plan.md`",
     );
-    expect(planHandoff).toContain("return the unchanged complete tuple");
+    expect(planHandoff).toContain("return the unchanged plan record");
     expect(planHandoff).toContain("separate approval-evidence record or explicit absence");
-    expect(planHandoffTemplate).toContain("Canonical plan tuple:");
+    expect(planHandoffTemplate).toContain("Canonical plan record:");
     expect(planHandoffTemplate).toContain("Separate approval evidence:");
     expect(planHandoff).toContain("obligation-to-slice-to-proof mapping");
-    expect(planHandoff).toContain("Include an explicit security context in every handoff");
-    expect(planHandoff).toContain("`not security-sensitive` and `not applicable`");
+    expect(planHandoff).toContain("Otherwise record only `Security: not applicable`");
+    expect(planHandoff).not.toContain("Show `wc -l` and chunk coverage");
     expect(specHandoff).toContain("recommend exactly `plan-implementation`");
     expect(specHandoff).not.toContain("planning route is unavailable in this release");
 
@@ -312,9 +310,9 @@ describe("minimal planning and delivery contracts", () => {
     expect(executor).toContain(
       "MUST load `references/execution-and-proof.md`",
     );
-    expect(executor).toContain("Admit only `draft`");
-    expect(executor).toContain("later authorized-owner approval");
-    expect(executor).toContain("smallest ready frontier");
+    expect(executor).toContain("Proceed only with `draft`");
+    expect(executor).toContain("approval was recorded after a complete read");
+    expect(executor).toContain("smallest safe slice that can be proven");
     expect(executor).toContain("inline by default");
     expect(executor).toContain("reversible drift");
     expect(executor).toContain("design break");
@@ -325,23 +323,23 @@ describe("minimal planning and delivery contracts", () => {
     expect(executor).not.toContain("controller brief");
     expect(executor).not.toContain("worker receipt");
     expect(executor).not.toContain("implementation-review-swarm");
-    expect(executionProof).toContain("Pre-edit Verdict");
-    expect(executionProof).toContain("Ready Frontier");
-    expect(executionProof).toContain("Proof And Integration Contract");
-    expect(executionProof).toContain("Completion Report");
-    expect(executionProof).toContain("Accepted Review Remediation");
+    expect(executionProof).toContain("Check the Repository Before Editing");
+    expect(executionProof).toContain("Choose the Next Safe Slice");
+    expect(executionProof).toContain("Match Each Obligation to Proof");
+    expect(executionProof).toContain("Report What Changed and What Was Proven");
+    expect(executionProof).toContain("Fix an Accepted Review Finding");
     expect(executionProof).toContain("prior review coverage is stale");
     expect(executionProof).toContain("Never weaken a proof gate");
     expect(implementationHandoff).toContain(
       "IF the implementation or review state derives from an extant completed canonical plan, load `../../shared-references/canonical-implementation-plan.md`",
     );
     expect(implementationHandoff).toContain("recommend `implement-plan`");
-    expect(implementationHandoffTemplate).toContain("Canonical plan tuple:");
+    expect(implementationHandoffTemplate).toContain("Canonical plan record:");
     expect(implementationHandoffTemplate).toContain(
       "Separate current-plan approval evidence:",
     );
     expect(implementationHandoffTemplate).toContain("Implementation proof:");
-    expect(implementationHandoffPrompts).toContain("Canonical plan tuple:");
+    expect(implementationHandoffPrompts).toContain("Canonical plan record:");
     expect(implementationHandoffPrompts).toContain(
       "Separate current-plan approval evidence:",
     );
@@ -415,7 +413,7 @@ describe("minimal planning and delivery contracts", () => {
       "MUST load `../../shared-references/canonical-implementation-plan.md`",
     );
     expect(reviewer).toContain(
-      "return the validated unchanged tuple, exact approval record, and any blocking discrepancy",
+      "return the validated records and any blocking discrepancy",
     );
     expect(reviewer).toContain("MUST dispatch `complete-reviewer`");
     expect(reviewer).toContain("MUST use `manage-agents`");
@@ -429,14 +427,14 @@ describe("minimal planning and delivery contracts", () => {
     expect(reviewer).not.toContain("review swarm");
     expect(reviewer).not.toContain("parallel reviewers");
     expect(reviewMethod).toContain("obligation -> plan -> implementation -> proof");
-    expect(reviewMethod).toContain("Normal And Failure Paths");
-    expect(reviewMethod).toContain("Runtime Reachability");
-    expect(reviewMethod).toContain("False Substitutes");
-    expect(reviewMethod).toContain("Highest-Risk Crux");
+    expect(reviewMethod).toContain("Trace Normal and Failure Paths");
+    expect(reviewMethod).toContain("Verify the Runtime Path");
+    expect(reviewMethod).toContain("Catch Weaker Substitutes");
+    expect(reviewMethod).toContain("Test the Riskiest Assumption");
     expect(reduction).toContain("ready | needs-revision | blocked | decision-needed");
     expect(reduction).toContain("governing obligation or invariant");
-    expect(reduction).toContain("semantic owner");
-    expect(reduction).toContain("correction freshness");
+    expect(reduction).toContain("owner:");
+    expect(reduction).toContain("coverage invalidated");
     expect(reduction).toContain(
       "precedence `blocked -> needs-revision -> decision-needed -> ready`",
     );
@@ -457,7 +455,7 @@ describe("minimal planning and delivery contracts", () => {
       "`plan identity: none` intentionally returns `blocked-input`",
     );
     expect(implementationHandoffTemplate).toContain(
-      "Prior review coverage and freshness",
+      "Prior review coverage:",
     );
     expect(improvementPlanner).toContain("route `general-repo` work to `review-implementation`");
     expect(research).toContain("recommend `review-implementation`");
@@ -534,9 +532,7 @@ describe("minimal planning and delivery contracts", () => {
       "IF a canonical plan exists or a planning result is being evaluated",
     );
     expect(orchestrator).toContain("Invoke exactly one owning skill");
-    expect(orchestrator).toContain(
-      "Name every passed identity and current meaning in both the route decision and returned owner receipt",
-    );
+    expect(orchestrator).toContain("Return that owner's result unchanged");
     expect(orchestrator).toContain(
       "A direct one-phase request bypasses this skill's long-horizon route and invokes the requested owning skill in the current turn",
     );
@@ -551,38 +547,25 @@ describe("minimal planning and delivery contracts", () => {
     expect(routing).toContain("Compact Goal Contract");
     expect(routing).toContain("Invoke One Owner Now");
     expect(routing).toContain("passed packet:");
-    expect(routing).toContain("governing authority identities:");
-    expect(routing).toContain(
-      "canonical plan tuple, result payload, and current meaning:",
-    );
-    expect(routing).toContain(
-      "approval-evidence record or explicit absence:",
-    );
-    expect(routing).toContain("proof identities and observations:");
-    expect(routing).toContain(
-      "preserved identity set: <repeat every applicable identity slot above exactly>",
-    );
-    expect(routing).toContain("owner phase receipt:");
+    expect(routing).toContain("source binding:");
+    expect(routing).toContain("owner result: <producer's unchanged supported return>");
+    expect(routing).toContain("verification:");
     expect(routing).toContain(
       "return the exact runtime blocker instead of a future `next_action`",
     );
     expect(routing).toContain(
-      "Read-only authority does not by itself defer an owner that supports read-only simulation",
+      "Read-only authority does not by itself defer an owner that supports a read-only route",
     );
     expect(routing).toContain(
-      "When `implement-plan` is the selected owner under read-only authority, complete its admission and pre-edit verdict now",
+      "When `implement-plan` is the selected owner under read-only authority, complete its start check and pre-edit verdict now",
     );
     expect(routing).toContain(
       "Do not defer with a future `run implement-plan` action",
     );
-    expect(routing).toContain(
-      "The final route decision and returned owner phase receipt each repeat every exact passed identity and its current meaning",
-    );
-    expect(routing).toContain(
-      "A summary such as `validated the tuple, approval, and proof` is incomplete",
-    );
-    expect(routing).toContain("Minimum Phase Returns");
-    expect(routing).toContain("Resume And Closeout");
+    expect(routing).toContain("The owner result is returned once, unchanged");
+    expect(routing).not.toContain("preserved identity set");
+    expect(routing).not.toContain("Minimum Phase Returns");
+    expect(routing).toContain("Resume or Finish the Goal");
     expect(routing).toContain("The host goal is a carrier");
     expect(metadata).toContain('display_name: "Orchestrator: Goal"');
     expect(readme).toContain("orchestrator-goal");

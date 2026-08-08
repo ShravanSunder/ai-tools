@@ -13,8 +13,6 @@ Source plan: <absolute or repo-relative path>
 Originating planner: plan-implementation | plan-improve-repo
 Planning result and payload: draft | revision-requested | blocked — <payload>
 Separate approval evidence: <exact-path current-plan record or explicit absence>
-Plan line count: <N or not applicable>
-Coverage: <chunk ranges or packet files read>
 Prepared for: <agent/CLI/session target>
 ```
 
@@ -35,12 +33,9 @@ Do first
 Context
 <short domain model, current branch state, prior decisions>
 
-Security context
-- Entry points / untrusted inputs: <or "not security-sensitive">
-- Trust boundaries / auth assumptions: <or "not applicable">
-- Sensitive data / privileged actions: <or "not applicable">
-- Security invariants and non-goals: <or "not applicable">
-- Required security proof: <or "not applicable">
+Security
+<`not applicable`, or the entry points, trust boundaries, sensitive actions,
+invariants, non-goals, and required proof when a sensitive surface exists>
 
 Obligation/slice/proof mapping
 - Source: <path/section or compact proof line>
@@ -66,9 +61,8 @@ You are taking over a plan/design handoff.
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <path>
-Canonical plan tuple: <immutable path, originating planner, result and payload>
+Canonical plan record: <immutable path, originating planner, result and payload>
 Separate approval evidence: <exact-path current-plan record or explicit absence>
-Plan coverage already loaded by handoff preparer: <line count + chunks>
 
 Your task:
 <task>
@@ -85,15 +79,14 @@ Constraints:
   but no threat model is provided, flag that as a plan defect.
 - Preserve the obligation/slice/proof mapping, including evidence sources, freshness
   guards, open proof gaps, split triggers, and parent-owned verification.
-- Preserve the canonical plan tuple and separate approval evidence unchanged.
+- Preserve the canonical plan record and separate approval evidence unchanged.
 - Do not treat `draft`, handoff creation, or earlier goal text as approval.
 - Keep findings evidence-backed with exact paths.
 
 Return:
-- Coverage inspected
 - Findings or implementation result
 - Obligation/slice/proof mapping status
-- Canonical plan tuple and approval-evidence status
+- Canonical plan record and approval-evidence status
 - Open questions
 - Commands/tests run
 ```

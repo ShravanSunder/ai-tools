@@ -1,4 +1,4 @@
-# Slice And Proof Design
+# Divide the Work and Attach Proof
 
 Use this reference to turn admitted obligations into a proportional implementation sequence. Return the slice graph, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
 
@@ -13,7 +13,7 @@ observable proof | risk or unknown
 
 Every normative requirement, specified behavior, program-design boundary, migration/cutover obligation, and required proof seam appears exactly once. A row that cannot name its owner, change, or observation is a design gap, not a planning task.
 
-## Choose Proof-Bearing Slices
+## Choose Small Changes That Can Be Proven
 
 A slice is the smallest coherent change that can earn evidence without leaving the repository in an invalid intermediate state.
 
@@ -26,7 +26,7 @@ A slice is the smallest coherent change that can earn evidence without leaving t
 
 Use a compact plan for one low-risk owner and one or two proof gates. Use a full plan when the change crosses owners, trust boundaries, state, concurrency, compatibility, migrations, or multiple proof layers. Proportional means fewer fields, never weaker obligations.
 
-## Edges
+## Order Only Real Dependencies
 
 Record an edge only when it changes safe execution:
 
@@ -40,7 +40,7 @@ Do not add `parallel` merely to advertise concurrency. The executor may serializ
 
 Place an integration gate at the earliest slice where separately changed components first interact. Do not postpone all wiring proof to final validation.
 
-## Proof Fit
+## Match Proof to Each Change
 
 For each slice, name:
 
@@ -57,7 +57,7 @@ stop/replan condition
 
 Use the cheapest proof that can actually observe the obligation, then add broader proof only for wiring or regression reach. A mocked unit cannot prove a real process, filesystem, network, UI, or distribution boundary. A full suite cannot make an unobserved behavior green.
 
-## False-Green Checks
+## Catch Proof That Can Pass for the Wrong Reason
 
 Split or replan when:
 

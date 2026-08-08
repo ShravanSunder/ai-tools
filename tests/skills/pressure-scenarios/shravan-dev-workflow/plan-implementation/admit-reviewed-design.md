@@ -28,7 +28,7 @@ The governing artifacts are `tests/skills/fixtures/minimal-planning-delivery/req
 - Loads and preserves all three distinct design identities and the exact ready review identities.
 - Re-anchors paths, owners, interfaces, commands, tests, and proof seams against current source.
 - In this fast read-only characterization, returns one proportional artifact-ready plan candidate with proof-bearing slices, obligation/proof mapping, meaningful edges, integration gates, and stop conditions.
-- States that the completed immutable plan path, canonical tuple, and separate approval absence must be produced in a write-enabled run; does not fabricate a path, digest, or approval or use `plan identity: none` after successful admission.
+- States that the completed immutable plan path, canonical plan record, and separate approval absence must be produced in a write-enabled run; does not fabricate a path, digest, or approval or use `plan identity: none` after successful admission.
 - Stops before tickets, implementation, handoff, Git, or PR work.
 
 ## Failure Signals

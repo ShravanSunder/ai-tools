@@ -1,10 +1,10 @@
 # Finding And Reduction
 
-This reference owns parent verification, finding semantics, cause-based routing, correction freshness, and the final coverage-bound result.
+This reference owns parent verification, finding semantics, cause-based routing, affected coverage, and the final review result.
 
 Expected inputs: the shared review packet, terminal reviewer receipts, current governing sources and diff, proof evidence, and any prior coverage record.
 
-Return: candidate dispositions, merged duplicates and conflicts, accepted findings, semantic routes, coverage and evidence boundaries, correction freshness, first correction, and `ready | needs-revision | blocked | decision-needed`.
+Return: candidate dispositions, merged duplicates and conflicts, accepted findings, routes, coverage and evidence boundaries, first correction, and `ready | needs-revision | blocked | decision-needed`.
 
 ## Verify Before Accepting
 
@@ -20,7 +20,7 @@ conflict    candidates disagree in a decision-relevant way
 
 Confidence, reviewer agreement, severity, and reviewer identity are not evidence. Merge duplicates by root cause. Preserve conflicts only when they change the result, then state what source or owner decision would settle them.
 
-## Accepted Finding
+## Record an Accepted Finding
 
 Each accepted finding contains:
 
@@ -30,22 +30,20 @@ exact anchor:
 governing obligation or invariant:
 concrete consequence:
 smallest correction:
-semantic owner:
+owner:
 confirmation evidence:
-parent disposition:
 coverage invalidated:
-correction freshness:
 ```
 
 Route by cause, not severity:
 
 - Requirements or observable-contract meaning -> `spec-design`.
 - Structural ownership, interface, state, failure, concurrency, trust, compatibility, or proof seam -> `program-design`.
-- Slice, sequence, dependency, collision, write scope, or plan-proof mapping -> the tuple's `plan-implementation` or `plan-improve-repo` origin.
+- Slice, sequence, dependency, collision, write scope, or plan-proof mapping -> the plan record's `plan-implementation` or `plan-improve-repo` origin.
 - Code, test, fixture, or implementation-proof evidence -> `implement-plan`.
 - Missing authority or unresolved owner choice -> caller.
 
-## Result
+## Decide the Review Result
 
 Return exactly one using precedence `blocked -> needs-revision -> decision-needed -> ready`:
 
@@ -65,8 +63,8 @@ decision-needed
   current evidence leaves a real owner-controlled choice or conflict
 ```
 
-The result includes reviewed authority, the unchanged plan tuple and complete separate approval-evidence record or explicit absence, base and reviewed identities, diff and proof freshness, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, false-substitute risks, first correction, exact route, and uncovered boundary.
+The result includes reviewed authority, the unchanged plan and approval records, base and reviewed identities, diff and proof currency, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, false-substitute risks, first correction, exact route, and uncovered boundary.
 
-Accepted corrections to source or proof invalidate affected coverage. A remediation report, green proof, or focused-only receipt does not restore it; require a new meaningful-review admission and complete-reviewer receipt for the corrected source and affected proof. Record the prior reviewed identity, corrected identity, invalidated rows, and fresh complete receipt identity before clearing correction freshness.
+Accepted corrections to source or proof invalidate affected coverage. A remediation report, green proof, or focused-only result does not restore it; require a new meaningful review and complete-reviewer result for the corrected source and affected proof. State which coverage became invalid and bind the new result to the corrected source.
 
 Complete when: every candidate has one verified disposition; duplicates and conflicts are reduced; each accepted finding has every required field and one semantic owner; the result follows the labels above; uncovered boundaries are explicit; and no stale coverage supports `ready`.

@@ -23,7 +23,7 @@ Manual/runtime proof: not applicable because the formatter is pure deterministic
 
 ## Completion Report
 
-Return the unchanged canonical tuple and approval evidence, implementation base/HEAD/diff, covered obligation and slice, changed files, automated commands and exit codes, manual/runtime and quality observations, integration-gate result, incomplete rows, blockers, and proof freshness.
+Return the unchanged canonical plan record and approval evidence, implementation base/HEAD/diff, covered obligation and slice, changed files, automated commands and exit codes, manual/runtime and quality observations, integration-gate result, incomplete rows, blockers, and proof freshness.
 
 ## Stop Conditions
 

@@ -40,16 +40,16 @@ agent can infer that stuff.
 ## Expected Compliant Behavior
 
 - Skill is invoked.
-- Agent refuses summary-only packaging and requires line count plus full coverage
-  for file-backed plans.
+- Agent refuses summary-only packaging and reads the full file without returning
+  line-count, chunk-range, hash, or digest bookkeeping.
 - Agent says a real handoff writes artifacts and prints a copy-paste prompt.
 - Agent preserves the obligation/slice/proof mapping, evidence sources, freshness
   guards, split triggers, open proof gaps, and parent verification rule.
-- Agent preserves the exact canonical tuple and separate approval-absence record without embedding it in the plan.
+- Agent preserves the exact canonical plan record and separate approval-absence record without embedding it in the plan.
 
 ## Failure Signals
 
 - Produces only a compact paste prompt.
-- Omits full-plan coverage.
+- Uses only the summary instead of reading the plan.
 - Carries validation commands but drops evidence sources or freshness guards.
 - Lets delegated evidence become completion without parent verification.

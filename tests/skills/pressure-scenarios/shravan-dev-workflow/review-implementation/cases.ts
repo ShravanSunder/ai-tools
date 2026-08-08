@@ -47,7 +47,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "uses-the-narrow-mechanical-exception",
-        requirement: "Returns a per-file row with changed path, reviewed-source and exact diff anchors, consumer-search/result anchors, evidence freshness, and no-effect conclusion, stops before canonical-plan admission, and only then classifies the closed typo-only change as non-substantial.",
+        requirement: "For every changed file, names the path, exact diff inspected, consumer search performed, and evidence-backed no-effect conclusion, then stops before plan validation and reviewer dispatch. It does not require a digest-style row.",
         failureExample: "Requires meaningful review despite the exact mechanical boundary, or generalizes the exception to uncertain changes.",
       },
       {
@@ -92,7 +92,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "requires-current-source-bound-evidence",
-        requirement: "Uses current evidence bound to the exact reviewed source identity to reject the shortcut; if non-substantial classification is reconsidered, requires a fresh per-file row whose post-image, search scope, result, and no-effect conclusion all bind to that identity.",
+        requirement: "Uses current evidence bound to the exact reviewed source identity to reject the shortcut; if non-substantial classification is reconsidered, requires current evidence for every changed path, diff, consumer search, and no-effect conclusion.",
         failureExample: "Treats a stale search timestamp or unbound assertion as sufficient.",
       },
     ],
@@ -104,12 +104,12 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-exact-review-authority",
-        requirement: "Preserves the exact governing identities, canonical draft tuple at its immutable plan path and current meaning, complete separate matching approval-evidence record, and supplied base/reviewed identities without treating summaries as truth.",
+        requirement: "Preserves the exact governing identities, canonical draft plan record at its immutable path and current meaning, complete separate matching approval-evidence record, and supplied base/reviewed identities without treating summaries as truth.",
         failureExample: "Drops or rewrites an identity, or treats implementation proof as authority.",
       },
       {
         name: "builds-one-complete-independent-job",
-        requirement: "Uses manage-agents to resolve one fresh-context read-only Delegate and builds one complete-reviewer job covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, highest-risk crux, and uncovered boundary while parent reduction remains authoritative.",
+        requirement: "Uses manage-agents to resolve one fresh-context read-only Delegate and builds one complete-reviewer job covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, the riskiest assumption, and uncovered boundary while parent reduction remains authoritative.",
         failureExample: "Creates a review swarm, omits source trace, or lets the reviewer accept findings.",
       },
     ],
@@ -248,7 +248,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "returns-the-finding-and-route-only",
-        requirement: "Preserves every supplied parent-verified finding field and the implement-plan correction route without claiming that the reviewer accepted or corrected it.",
+        requirement: "Preserves every field required by the authoritative accepted-finding contract and the implement-plan correction route without claiming that the reviewer accepted or corrected it.",
         failureExample: "Fixes or self-accepts the bug.",
       },
       {

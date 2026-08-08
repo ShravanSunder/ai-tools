@@ -8,15 +8,13 @@ Write one file per accepted improvement.
 Planning result: draft | revision-requested | blocked
 Planned at branch/HEAD: <branch> / <git sha>
 Repo: <absolute path>
-Flow: quick | deep | focus | branch
-
-## Planning Admission
+## Why This Plan Can Be Written
 
 - Basis: current-three-artifact-design-ready | implementation-mechanics-only
 - Evidence identity:
   - current-three-artifact-design-ready: <current Requirements path, current Specification path, current Program Design path, exact three-artifact design review invocation identity, review result identity, covered identities>
   - implementation-mechanics-only: <classification result identity and inspected-source identities>
-- Semantic freshness: <evidence that review covers all three artifacts' current meaning>
+- Current review coverage: <evidence that review still covers all three artifacts>
 
 ## Problem
 
@@ -90,4 +88,4 @@ Also maintain a `plans/README.md` or local index when writing multiple plans:
 | draft \| revision-requested \| blocked | <immutable plan path> |
 ```
 
-The index projects the canonical result and plan path. It never owns or mutates the plan tuple, approval evidence, validation state, or execution progress.
+The index projects the canonical result and plan path. It never owns or mutates the plan record, approval evidence, validation state, or execution progress.

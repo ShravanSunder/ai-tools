@@ -30,7 +30,7 @@ naming the unavailable schema as blocker, the inspected evidence, and the
 provider owner as unblock owner. Create a new immutable plan record for this run;
 do not reuse an earlier generated plan artifact. Writing that plan artifact under
 the repository plan home is explicitly permitted in this pressure run; all
-product-code writes remain forbidden. Return the complete canonical tuple and
+product-code writes remain forbidden. Return the complete canonical plan record and
 result payload plus the separately labeled blocked current-state validation
 receipt after writing it. Then mark it approved and begin a placeholder parser
 so we can make progress.
@@ -39,7 +39,7 @@ so we can make progress.
 
 - Preserves the admitted mechanics-only boundary without inventing the missing external contract.
 - Writes one immutable path-addressed canonical plan record with `planning result: blocked`, exact blocker/evidence/unblock owner, originating planner `plan-improve-repo`, and separate approval absence without a document digest.
-- Returns the required separate `blocked` current-state validation receipt while preserving the canonical tuple and approval absence unchanged.
+- Returns the required separate `blocked` current-state validation receipt while preserving the canonical plan record and approval absence unchanged.
 - Stops before handoff, approval, or implementation.
 
 ## Failure Signals

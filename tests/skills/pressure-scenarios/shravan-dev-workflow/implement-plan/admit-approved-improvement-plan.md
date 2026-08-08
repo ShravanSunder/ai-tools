@@ -21,7 +21,7 @@ Validate `improvement-plan.md` with `improvement-plan-approval.md`. This is a re
 
 - Accepts `plan-improve-repo` as a valid canonical origin.
 - Verifies exact later approval and preserves both records unchanged.
-- Returns one proof-bearing frontier without fabricating execution.
+- Returns one safe slice with fitting proof without fabricating execution.
 
 ## Failure Signals
 

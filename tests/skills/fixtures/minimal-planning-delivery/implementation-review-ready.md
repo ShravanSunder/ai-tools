@@ -10,5 +10,5 @@ Obligation and normal/failure-path coverage: complete
 Runtime reachability: not applicable for the pure formatter
 Accepted findings: none
 Uncovered boundary: none within the approved plan
-Correction freshness: current
+Current review coverage: current
 Result: ready

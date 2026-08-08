@@ -14,8 +14,8 @@ Accepted finding:
 - governing obligation or invariant: Program Design assigns grouping ownership to the formatter
 - concrete consequence: grouping ownership is split across the caller and formatter
 - smallest correction: move grouping into the formatter owner
-- semantic owner: program-design
+- owner: program-design
 - confirmation evidence: corrected Program Design plus fresh affected three-artifact review
 - parent disposition: accepted
 - coverage invalidated: structural ownership and affected implementation rows
-- correction freshness: stale until corrected design and affected review are current
+- current review coverage: stale until corrected design and affected review are current

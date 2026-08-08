@@ -14,10 +14,10 @@ Branch/worktree: <branch>
 Base: <base sha/branch>
 Head: <head sha or working tree>
 Diff command: <git diff command>
-Canonical plan tuple: <complete unchanged tuple or plan identity: none plus non-plan governing request/ticket identity>
+Canonical plan record: <complete unchanged plan record or plan identity: none plus non-plan governing request/ticket identity>
 Separate current-plan approval evidence: <complete unchanged record or explicit absence>
 Governing authority identities: <current reviewed design or admitted improvement authority>
-Prior review coverage and freshness: <identity and status or explicit absence>
+Prior review coverage: <reviewed source identity and status or explicit absence>
 
 User request:
 <original request>
@@ -31,9 +31,6 @@ Implementation summary:
 Files changed:
 - <path>: <why>
 
-Validation already run:
-- <command>: <result / exit code>
-
 Implementation proof bound to the governing identity:
 - Covered obligations/slices: <rows or explicit none>
 - Commands and exit codes: <fresh evidence>
@@ -46,17 +43,15 @@ Implementation proof bound to the governing identity:
 Known risks / focus:
 - <risk>
 
-Security context:
-- Changed trust boundaries: <or "none known">
-- Sensitive data / privileged actions: <or "not applicable">
-- Security validation already run: <or "none">
-- Proof gaps: <or "none known">
+Security:
+<`not applicable`, or changed trust boundaries, sensitive actions, security
+validation, and proof gaps when a sensitive surface exists>
 
 Review requirements:
 - Verify against actual code, not this summary.
-- Preserve the exact governing authority, canonical plan tuple and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
+- Preserve the exact governing authority, canonical plan record and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
 - Run the selected owning workflow's fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review or cross the runtime skill-package boundary.
-- Return exact anchored findings, proof boundaries, semantic routes, and correction freshness without remediation or PR work.
+- Return exact anchored findings, proof boundaries, owner routes, and affected review coverage without remediation or PR work.
 ```
 
 ## Continuation Prompt
@@ -67,7 +62,7 @@ You are continuing an implementation handoff.
 Repo: <absolute repo path>
 Branch/worktree: <branch>
 Stage: <in-progress | blocked | post-review>
-Canonical plan tuple: <complete unchanged tuple or plan identity: none plus non-plan governing request/ticket identity>
+Canonical plan record: <complete unchanged plan record or plan identity: none plus non-plan governing request/ticket identity>
 Separate current-plan approval evidence: <complete unchanged record or explicit absence>
 
 Objective:

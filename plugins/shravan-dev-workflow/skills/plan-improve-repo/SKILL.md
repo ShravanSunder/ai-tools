@@ -54,13 +54,13 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
 - If asked to implement an existing plan, route to `implement-plan` only when the canonical result is `draft` and separate later owner approval names that exact plan path and current meaning. If asked for independent implementation review, route `general-repo` work to `review-implementation` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
-- If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical tuple.
+- If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical plan record.
 - Call only the exact canonical `draft` at its immutable plan path and current meaning with the complete later matching owner approval-evidence record executable. Plan completion, validation, handoff, a ticket, or earlier goal text is not approval.
 
 ## Normal Flows
 
 - `quick`: inspect instructions, README, manifests, tests, and churn; produce a short vetted shortlist and at most one admitted plan.
-- `deep`: inspect all relevant audit categories in-parent, verify candidates, and write admitted plans for the top 3-5 improvements unless the user picks different ones; route design-required findings without plan writing. Every deep-flow response, including a structure-only explanation before inspection begins, returns the literal `delegation: none | <bounded handoff>` row with both predicates and `manage-agents` ownership. Delegation still requires the Core Rules predicate.
+- `deep`: inspect all relevant audit categories in-parent, verify candidates, and write admitted plans for the top 3-5 improvements unless the user picks different ones; route design-required findings without plan writing. Delegate only under the Core Rules predicate.
 - `focus <area>`: audit only the named area, such as security, tests, DX, performance, docs, architecture, or one package/module; apply the same admission gate.
 - `branch`: compare the current branch against its base and plan only admitted improvements for the branch's changed surface, not the whole repo.
 - `next`: choose the highest-leverage existing completed canonical plan and validate its planning basis and current-state readiness without mutating it.
@@ -96,14 +96,14 @@ Completion: target classification and, when applicable, the exact `skills-creati
 5. Classify each selected improvement under **Entry And Planning Admission**:
    - write plans only for `current-three-artifact-design-ready` or `implementation-mechanics-only`
    - preserve and route `design-required` findings without turning them into execution tasks
-6. IF producing or revising a completed plan result, or validating or preserving an extant completed plan, load `../../shared-references/canonical-implementation-plan.md` to keep this skill's admitted-improvement and implementation-mechanics-only admission inline while applying the shared producer/validator contract, and return the complete canonical tuple, result-specific payload, separate approval-evidence record or explicit absence, and any blocking discrepancy. Audit-only runs and pre-artifact admission failures do not load it.
+6. IF producing or revising a completed plan result, or validating or preserving an extant completed plan, load `../../shared-references/canonical-implementation-plan.md` to keep this skill's admitted-improvement and implementation-mechanics-only admission inline while applying the shared producer/validator contract, and return the complete canonical plan record, result-specific payload, separate approval-evidence record or explicit absence, and any blocking discrepancy. Audit-only runs and pre-artifact admission failures do not load it.
 7. Write one plan per admitted improvement:
    - default to the top 3-5 in non-interactive runs
    - one focused plan per finding, not a mega-plan
-   - instantiate the canonical tuple with originating planner `plan-improve-repo`
+   - instantiate the canonical plan record with originating planner `plan-improve-repo`
    - return `draft | revision-requested | blocked` with the matching result payload and explicit approval absence
    - include planning-basis identity, exact files, current-state evidence, proof-bearing slices, proof gates, and stop conditions
-8. Validate each generated plan without changing its tuple or planning result:
+8. Validate each generated plan without changing its plan record or planning result:
    - read the plan back after writing it
    - confirm every write surface exists or is intentionally new
    - confirm proof gates are commands or checks the executor can run
@@ -119,7 +119,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 
 Use this for `validate-plan`, `next`, and pre-execution checks.
 
-1. Read the full plan artifact; for file-backed plans, record line count and chunk coverage. Apply the conditional canonical-plan load call in the main workflow and return the unchanged tuple, approval record or absence, and any discrepancy.
+1. Read the full plan artifact. Do not require a separate reading receipt. Apply the conditional canonical-plan load call in the main workflow and return the unchanged plan record, approval record or absence, and any discrepancy.
 2. Verify the plan's `current-three-artifact-design-ready` or `implementation-mechanics-only` basis against current evidence. A missing, stale, or contradicted basis is `blocked` and routes to the exact semantic owner.
 3. Verify the planned-at SHA, current branch, and changed target files.
 4. Re-open all cited source files and commands from the plan.
@@ -132,14 +132,14 @@ Use this for `validate-plan`, `next`, and pre-execution checks.
    - red/green proof required or explicit user-approved exception
    - focused validation and full validation listed separately
    - proof maps back to the problem, not just to changed files
-7. Return a separate readiness receipt. Do not edit source code, the canonical tuple, planning result, or approval evidence.
+7. Return a separate readiness receipt. Do not edit source code, the canonical plan record, planning result, or approval evidence.
 
 ## Progressive Disclosure
 
-- IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected in-parent categories, each category's inspected anchors, candidate or null result, coverage limit, and `delegation: none | <bounded handoff>`. Broad-audit completion is blocked until that literal `delegation:` row names both valid predicates—explicit user request or one source-revealed concrete independently verifiable evidence question—and `manage-agents` as owner of any later handoff; IF a predicate is met, include the one bounded evidence handoff selected there.
+- IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected in-parent categories, each category's inspected anchors, candidate or null result, and coverage limit. IF delegation qualifies under the Core Rules predicate, include the one bounded evidence handoff selected there and use `manage-agents`.
 - IF writing a plan artifact, load `references/improvement-plan-template.md` and return the proportional filled plan form selected under the shared canonical contract.
-- IF reconciling existing improvement plans or checking whether they remain current, load `references/reconcile-backlog.md` and return the separate reconciliation receipt, unchanged canonical tuple and approval evidence for each extant plan, and exact originating-planner correction route when applicable.
-- IF validating a plan, selecting `next`, or judging current execution readiness, load `references/validation-checklist.md` and return its separate current-state receipt without mutating the canonical tuple or approval evidence.
+- IF reconciling existing improvement plans or checking whether they remain current, load `references/reconcile-backlog.md` and return the separate reconciliation receipt, unchanged canonical plan record and approval evidence for each extant plan, and exact originating-planner correction route when applicable.
+- IF validating a plan, selecting `next`, or judging current execution readiness, load `references/validation-checklist.md` and return its separate current-state receipt without mutating the canonical plan record or approval evidence.
 
 ## Output Shape
 
@@ -151,11 +151,10 @@ Return:
 - accepted findings, rejected candidates, and unknowns
 - prioritized improvement shortlist
 - validation verdict for generated or existing plans
-- unchanged canonical tuple and separate approval-evidence record or explicit absence for every extant completed plan
+- unchanged canonical plan record and separate approval-evidence record or explicit absence for every extant completed plan
 - plan artifact paths with full clickable links
 - recommended next skill for each plan
 - commands run and validation limits
-- `delegation: none | <bounded handoff>`; `none` repeats that only explicit user request or one source-revealed concrete independently verifiable evidence question permits delegation, and that `manage-agents` owns any later handoff
 
 ## Common Mistakes
 

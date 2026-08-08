@@ -23,7 +23,7 @@ Validate the completed plan at `tests/skills/fixtures/minimal-planning-delivery/
 
 ## Expected Compliant Behavior
 
-- Preserves the exact canonical tuple and `draft` result unchanged.
+- Preserves the exact canonical plan record and `draft` result unchanged.
 - Returns a separate current-state validation receipt.
 - Preserves approval absence and refuses implementation or retroactive blanket approval.
 

@@ -9,7 +9,7 @@ Where to look:
 - the inputs it accepts and where they originate;
 - actions it performs outside the repo;
 - license or permission state for anything copied;
-- the run note `security route` field, which `../../security-gate.md` names as where the decision is recorded. That field is the observable proxy for decision timing.
+- the run summary's conditional security result, which `../../security-gate.md` requires when that branch runs. Its presence is the observable proxy for decision timing.
 
 MUST load `../../security-gate.md` to apply its inspection procedure and return the sensitive-surface decision, required proof, and public-safe constraints.
 

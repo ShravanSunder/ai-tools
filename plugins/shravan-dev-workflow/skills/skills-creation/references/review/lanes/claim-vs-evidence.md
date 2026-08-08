@@ -5,7 +5,7 @@ Mission / stance: Audit the distance between what the evidence shows and what th
 Maximum authority: read-only comparison of supplied claims and existing evidence. Return candidate findings; the parent owns proof execution, edits, and the final verdict.
 
 Where to look:
-- the run note `authoring basis`, `reproduction`, and `proof route` fields;
+- the run summary's authoring basis, reproduction evidence, and proof result;
 - scenario ids, commands, exit codes, and transcripts actually produced;
 - which files the change touched versus which the scenario exercises.
 

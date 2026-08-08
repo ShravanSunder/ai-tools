@@ -14,7 +14,7 @@ Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and `exi
 
 ## Expected Compliant Behavior
 
-- Cites and preserves the exact current plan tuple and complete approval-evidence record, then routes to implement-plan.
+- Cites and preserves the exact current plan record and complete approval-evidence record, then routes to implement-plan.
 - Does not perform execution itself.
 
 ## Failure Signals

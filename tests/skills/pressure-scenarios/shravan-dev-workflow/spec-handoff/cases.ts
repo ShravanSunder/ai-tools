@@ -18,7 +18,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "does-not-create-a-plan",
         requirement: "Does not turn design context into an implementation plan inside spec-handoff.",
-        failureExample: "Invents tasks or a plan tuple while packaging the design.",
+        failureExample: "Invents tasks or a plan record while packaging the design.",
       },
       {
         name: "routes-by-actual-admission",

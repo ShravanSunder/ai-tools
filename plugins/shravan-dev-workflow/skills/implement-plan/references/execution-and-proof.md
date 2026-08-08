@@ -1,12 +1,12 @@
-# Execution And Proof
+# Execute the Plan and Prove the Result
 
 This reference owns pre-edit repository validation, ready-frontier selection, slice-local proof, integration gates, surprise classification, and implementation completion reporting for an already admitted plan.
 
-Expected inputs: the unchanged complete canonical plan tuple and result payload, matching later approval evidence for the exact plan path and current meaning, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
+Expected inputs: the unchanged complete canonical plan record and result payload, matching later approval evidence for the exact plan path and current meaning, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
 
 Return: the pre-edit verdict, ready frontier, proof and integration contract, classified surprise routes, and completion report.
 
-## Pre-edit Verdict
+## Check the Repository Before Editing
 
 Read the plan completely, then inspect the current branch/HEAD, worktree status and diff, applicable repository instructions, every named owner/path/interface, dependency or collision edge, validation command, security assumption, and proof seam needed by the first candidate slice.
 
@@ -27,7 +27,7 @@ blocked
 
 Record the inspected branch/HEAD, pre-existing changes, instruction sources, validated paths and commands, applicable trust boundaries, and any contradiction. Never silently absorb unrelated dirty work or rewrite the plan to match current source.
 
-## Ready Frontier
+## Choose the Next Safe Slice
 
 The ready frontier is the smallest plan slice whose prerequisites are proven and whose write scope does not collide with in-flight work. Prefer one vertical slice that changes behavior and proves it at the cheapest fitting observation seam.
 
@@ -38,7 +38,7 @@ The ready frontier is the smallest plan slice whose prerequisites are proven and
 
 Return the selected slice, prerequisites, allowed writes, non-goals, collision decision, and first integration gate. For one isolated slice with no separately changed parts, return `integration gate: not applicable` with that reason instead of inventing a gate.
 
-## Proof And Integration Contract
+## Match Each Obligation to Proof
 
 For the selected slice, map each obligation to the smallest observation that can confirm it:
 
@@ -53,7 +53,7 @@ Never weaken a proof gate. A failing required gate triggers diagnosis, a smaller
 
 Integrate only when every named prerequisite and the slice-local proof are green. At the first interaction between separately changed parts, run the plan's integration gate before dependent work proceeds.
 
-## Accepted Review Remediation
+## Fix an Accepted Review Finding
 
 Inspect the accepted finding, its source anchors, parent disposition, exact route, governing plan obligation, and prior proof before treating remediation as executable work. An implementation-owned correction changes code, tests, fixtures, or implementation-proof evidence inside approved meaning and write scope. A finding that changes an obligation, observable contract, owner, interface, state/failure policy, sequence, dependency, collision, proof seam, or authority routes to the applicable design or originating-plan owner instead.
 
@@ -61,7 +61,7 @@ For an implementation-owned finding, select one bounded corrective slice, name i
 
 Remediation admission is complete when the accepted finding and parent route are source-backed, the correction stays inside approved meaning, the affected-proof set is explicit, and the next action is either the bounded correction or one exact semantic/planning route.
 
-## Surprise Classification
+## Stop or Correct When Reality Differs
 
 ```text
 reversible drift
@@ -88,9 +88,9 @@ evidence gap
 
 Do not call a change reversible when it moves ownership, changes a public contract or data format, writes migration state, weakens proof, or becomes a prerequisite for other work before correction.
 
-## Completion Report
+## Report What Changed and What Was Proven
 
-Return implementation evidence keyed to the unchanged canonical tuple and complete separate approval-evidence record or explicit absence:
+Return implementation evidence keyed to the unchanged canonical plan record and complete separate approval-evidence record or explicit absence:
 
 ```text
 implementation base/HEAD/diff:
@@ -106,4 +106,4 @@ blockers and exact routes:
 proof freshness:
 ```
 
-Complete when: the pre-edit verdict was `ready`; each claimed row has fresh fitting evidence; integration gates ran at the first interaction; every surprise has one classification and owner; incomplete rows remain explicit; and neither the plan tuple nor approval evidence was mutated.
+Complete when: the pre-edit verdict was `ready`; each claimed row has fresh fitting evidence; integration gates ran at the first interaction; every surprise has one classification and owner; incomplete rows remain explicit; and neither the plan record nor approval evidence was mutated.

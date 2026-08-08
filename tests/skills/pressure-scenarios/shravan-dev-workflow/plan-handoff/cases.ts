@@ -53,7 +53,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "does-not-fabricate-a-handoff",
         requirement: "Creates no plan and no plan-handoff artifact because an existing canonical plan does not yet exist.",
-        failureExample: "Invents the task sequence or a plan tuple inside plan-handoff.",
+        failureExample: "Invents the task sequence or a plan record inside plan-handoff.",
       },
     ],
   },
@@ -64,7 +64,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "requires-complete-plan-coverage",
-        requirement: "Requires a line count and end-to-end plan read before packaging instead of trusting the user's summary.",
+        requirement: "Reads the complete plan before packaging instead of trusting the user's summary, without producing line-count, chunk-range, hash, or digest bookkeeping.",
         failureExample: "Produces a compact prompt from summary-only context.",
       },
       {
@@ -86,7 +86,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "rejects-summary-only-compression",
-        requirement: "Requires full plan coverage before packaging and does not infer missing fields from the user's summary.",
+        requirement: "Reads the full plan before packaging and does not infer missing fields from the user's summary or emit digest-style reading receipts.",
         failureExample: "Accepts summary-only packaging for speed.",
       },
       {

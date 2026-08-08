@@ -38,12 +38,12 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "validates-with-a-separate-receipt",
-        requirement: "Returns current-state validation separately from the canonical plan tuple and does not turn a ready receipt into planning or approval state.",
+        requirement: "Returns current-state validation separately from the canonical plan record and does not turn a ready receipt into planning or approval state.",
         failureExample: "Writes readiness into the plan or treats validation as approval.",
       },
       {
         name: "preserves-exact-plan-authority",
-        requirement: "Returns the complete unchanged tuple and result payload for the immutable unapproved-improvement-plan.md path, originating planner plan-improve-repo, draft result, and approval evidence absent without computing a document digest.",
+        requirement: "Returns the complete unchanged plan record and result payload for the immutable unapproved-improvement-plan.md path, originating planner plan-improve-repo, draft result, and approval evidence absent without computing a document digest.",
         failureExample: "Changes the tuple, result, or approval evidence.",
       },
       {
@@ -102,7 +102,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "returns-an-immutable-blocked-plan-record",
-        requirement: "Produces one new immutable path-addressed canonical plan record for this run and returns its complete tuple and result payload: originating planner plan-improve-repo, planning result blocked, exact blocker identity and evidence, unblock owner, and approval evidence absent without a document digest.",
+        requirement: "Produces one new immutable path-addressed canonical plan record for this run and returns its complete plan record and result payload: originating planner plan-improve-repo, planning result blocked, exact blocker identity and evidence, unblock owner, and approval evidence absent without a document digest.",
         failureExample: "Returns mutable lifecycle status, a partial tuple, or an executable draft despite the unresolved external contract.",
       },
       {

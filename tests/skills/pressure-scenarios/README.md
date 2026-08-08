@@ -89,7 +89,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `plan-handoff` | `plan-handoff-routes-ready-design-to-planner` | Route exact ready design with no plan to `plan-implementation` without fabricating a handoff. |
 | `plan-implementation` | `plan-implementation-admit-reviewed-design` | Translate current ready three-artifact design into one repo-grounded proof-bearing plan and stop before later phases. |
 | `plan-implementation` | `plan-implementation-route-stale-without-plan` | Route stale design coverage without creating a plan or phantom tuple. |
-| `plan-implementation` | `plan-implementation-preserve-existing-plan-on-blocked-admission` | Preserve an existing plan tuple and approval record when admission fails. |
+| `plan-implementation` | `plan-implementation-preserve-existing-plan-on-blocked-admission` | Preserve an existing plan record and approval record when admission fails. |
 | `plan-implementation` | `plan-implementation-keep-small-plan-proportional` | Keep a small plan compact without dropping authority, proof, or stop conditions. |
 | `plan-implementation` | `plan-implementation-reject-combined-design-and-route-gap` | Reject a combined Requirements/Specification identity and route the missing contract without planning. |
 | `plan-implementation` | `plan-implementation-slice-collisions-and-proof-fit` | Bind contract slices to consumers, serialize collisions, place integration gates, and split false-green proof. |

@@ -30,8 +30,7 @@ Use this before returning a current-state validation receipt for an improvement 
 Plan: <path>
 Verdict: ready | needs-refresh | blocked | rejected
 
-Coverage:
-- plan lines: <count>, chunks: <ranges>
+Sources checked:
 - source files reopened: <paths>
 - commands checked: <commands or not run/read-only reason>
 
@@ -72,4 +71,4 @@ Current-state validation receipt:
 
 Both complete blocks must appear in the live response. A verdict summary or fields scattered through coverage evidence do not replace either block.
 
-Preserve the canonical tuple, planning result, result payload, and approval evidence unchanged. The validation receipt never replaces or abbreviates the canonical record.
+Preserve the canonical plan record, planning result, result payload, and approval evidence unchanged. The validation receipt never replaces or abbreviates the canonical record.

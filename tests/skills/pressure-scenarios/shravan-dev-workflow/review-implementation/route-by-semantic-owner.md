@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:review-implementation
 
-Reduce four source-backed findings: a missing observable requirement, an undefined component owner/interface, an invalid plan slice dependency, and a code defect inside approved meaning. Return each exact semantic owner; do not route everything to the executor.
+Reduce four source-backed findings: a missing observable requirement, an undefined component owner/interface, an invalid plan slice dependency, and a code defect inside approved meaning. Return each exact owner; do not route everything to the executor.
 
 ## Expected Compliant Behavior
 

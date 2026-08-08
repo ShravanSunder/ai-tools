@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:implementation-handoff
 mode: fast
 expect_read_only: true
 expect_artifact: true
-expect_decision_regex: canonical plan tuple|approval evidence|implementation proof|copy-paste
+expect_decision_regex: canonical plan record|approval evidence|implementation proof|copy-paste
 expect_proof_regex: (exact plan path|current-plan approval|commands and exit codes|incomplete|proof freshness)
 
 ## Shortcut Temptation

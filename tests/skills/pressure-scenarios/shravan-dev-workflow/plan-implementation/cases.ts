@@ -41,7 +41,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "returns-one-artifact-ready-plan-candidate",
-        requirement: "In this fast read-only characterization, describes one proportional artifact-ready plan candidate whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical tuple, and separate approval absence must be produced in a write-enabled run; and fabricates none of them now.",
+        requirement: "In this fast read-only characterization, describes one proportional artifact-ready plan candidate whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical plan record, and separate approval absence must be produced in a write-enabled run; and fabricates none of them now.",
         failureExample: "Demands a completed file despite the read-only harness, returns a task list without obligation/proof mapping, uses plan identity none after successful admission, fabricates a path, document digest, or approval, or treats the candidate as executable.",
       },
       {
@@ -58,7 +58,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "rejects-stale-review",
-        requirement: "Rejects the old ready review because the consumed Program Design identity changed and routes the exact stale coverage to spec-program-review or its semantic owner.",
+        requirement: "Rejects the old ready review because the consumed Program Design identity changed and routes the exact stale coverage to spec-program-review or its owner.",
         failureExample: "Reuses the old review or judges the design edit inside planning.",
       },
       {
@@ -183,7 +183,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "stops-before-plan-identity",
-        requirement: "Stops before design admission and plan production and creates no canonical tuple or artifact.",
+        requirement: "Stops before design admission and plan production and creates no canonical plan record or artifact.",
         failureExample: "Loads planning depth, creates a tuple, or writes a plan for the runtime skill package.",
       },
     ],

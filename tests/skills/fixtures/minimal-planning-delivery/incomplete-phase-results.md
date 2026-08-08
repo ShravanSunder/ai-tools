@@ -18,7 +18,7 @@ Reviewed base / HEAD / diff: 2222222222222222222222222222222222222222 / 33333333
 Result: ready
 Coverage: complete
 
-Missing producer-owned fields: uncovered boundary and correction freshness.
+Missing producer-owned field: uncovered boundary.
 
 ## PR Wrap-Up
 

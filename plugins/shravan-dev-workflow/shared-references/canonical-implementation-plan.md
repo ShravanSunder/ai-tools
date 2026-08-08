@@ -1,6 +1,6 @@
 # One Implementation Plan
 
-This reference owns the one active implementation-plan contract shared by plan producers and carriers. A completed plan is an immutable path-addressed artifact of intended work, not a lifecycle ledger. Return its tuple unchanged to every consumer.
+This reference owns the one active implementation-plan contract shared by plan producers and carriers. A completed plan is an immutable path-addressed artifact of intended work, not a lifecycle ledger. Return its plan record unchanged to every consumer.
 
 ## 1. Inspect: Read the Current Sources
 
@@ -15,7 +15,7 @@ Before producing or validating a completed plan, inspect:
 
 ## 2. Identify: Return One Plan Path and Result
 
-Return this tuple for every extant completed plan:
+Return this record for every extant completed plan:
 
 ```text
 plan path: <repo-relative or absolute path; the sole document identity>
@@ -29,11 +29,11 @@ result payload:
 
 Do not compute or maintain a content hash, digest, blob identity, or parallel document-version ledger. Complete the plan at one path and treat that completed artifact as immutable. A later meaning change creates a new plan path and requires new approval. Existing Git commit, branch, HEAD, and diff identities may describe repository state; they never become a document digest.
 
-When a planning phase has no completed plan, return `plan identity: none` only inside that phase's `route | blocked` receipt. An implementation handoff whose governing authority is a non-plan request or ticket also records `plan identity: none` beside that authority so a context-free consumer does not invent a plan. Never fabricate a partial tuple.
+When a planning phase has no completed plan, return `plan identity: none` only inside that phase's `route | blocked` result. An implementation handoff whose governing authority is a non-plan request or ticket also records `plan identity: none` beside that authority so a context-free consumer does not invent a plan. Never fabricate a partial plan record.
 
 ## 3. Approve: Keep Owner Approval Separate
 
-Approval is not a plan field. Preserve one of these records beside the tuple:
+Approval is not a plan field. Preserve one of these records beside the plan record:
 
 ```text
 approval evidence: absent
@@ -44,13 +44,13 @@ or:
 ```text
 approval evidence:
   authorized approver identity: <owner>
-  exact plan path: <must equal tuple>
+  exact plan path: <must equal the plan record>
   decision: approved | rejected
   source evidence: <inspectable instruction or record showing the owner read the completed plan>
   ordering evidence: <proof the decision followed completion of the plan at this path>
 ```
 
-Only `planning result: draft` plus later `decision: approved` for the exact path and current plan meaning is executable. A goal, earlier blanket instruction, ticket state, handoff, validation receipt, or the planner itself cannot approve unseen future plan meaning. If the plan changed after approval or freshness is uncertain, approval is stale and the owner must read and approve the current plan again.
+Only `planning result: draft` plus `decision: approved` recorded after the owner read the completed plan at the exact path is executable. Current plan meaning means the plan still says what that approval covered; a meaning change requires a new path and approval, while formatting-only edits do not create a new plan. A goal, earlier blanket instruction, ticket state, handoff, validation receipt, or the planner itself cannot approve unseen future plan meaning. If the plan changed after approval or freshness is uncertain, approval is stale and the owner must read and approve the current plan again.
 
 ## 4. Write: Put Intended Work in Markdown
 
@@ -82,23 +82,23 @@ The artifact records only intended work. Never add approval, assignees, percent 
 - `revision-requested`: a known correction prevents a new executable draft; name the exact correction and owner.
 - `blocked`: the immutable blocked plan record is complete, but external state or missing authority prevents completion of an executable draft or the planning objective; name evidence and unblock owner. If no completed plan record exists, return `plan identity: none` instead.
 
-A `plans/README.md`, dashboard, or tracker may project only the canonical result and identity. It cannot mutate the tuple or approval record.
+A `plans/README.md`, dashboard, or tracker may project only the canonical result and identity. It cannot mutate the plan record or approval record.
 
 ## 6. Preserve: Keep the Plan Unchanged Between Owners
 
-Producers verify every source identity, path, command, obligation mapping, proof fit, edge, integration gate, and stop condition before returning the tuple.
+Producers verify every source identity, path, command, obligation mapping, proof fit, edge, integration gate, and stop condition before returning the plan record.
 
-Carriers read the plan completely, verify the originating planner and result payload, inspect approval ordering and semantic freshness, and preserve the tuple and approval evidence unchanged in meaning. They never compute a document hash. A path mismatch, later semantic edit, stale authority, or missing required field is a blocking discrepancy; report it without repairing or re-authoring the plan.
+Carriers read the plan completely, verify the originating planner and result payload, check that approval was recorded after the completed plan was read and still covers its current meaning, and preserve the plan record and approval evidence unchanged. They never compute a document hash. A path mismatch, later meaning change, stale authority, or missing required field is a blocking discrepancy; report it without repairing or re-authoring the plan.
 
 ## 7. Start: Check Whether Implementation May Begin
 
-An executor receives the complete tuple, result payload, separate approval record or explicit absence, and the execution request. Return exactly one admission result:
+An executor receives the complete plan record, separate approval record or explicit absence, and the execution request. Return exactly one result:
 
-- `admit`: planning result is `draft`; later authorized-owner approval names the exact plan path and current meaning; and ordering evidence proves approval followed completion.
+- `admit`: planning result is `draft`; authorized-owner approval names the exact plan path and current meaning; and ordering evidence proves approval followed completion.
 - `route`: planning result is `revision-requested`; return its exact correction and originating planner without entering execution depth.
-- `blocked`: planning result is `blocked`, approval is absent/rejected/mismatched/too early, or the tuple or payload is malformed; return the exact discrepancy and unblock owner.
+- `blocked`: planning result is `blocked`, approval is absent/rejected/mismatched/too early, or the plan record is malformed; return the exact discrepancy and unblock owner.
 
-Admission is complete when every tuple and approval field was checked, the tuple and approval evidence remain unchanged, and the result names either executable current-plan authority or one checkable stop. Approval, validation, handoff, ticket state, or earlier goal text never substitutes for the exact later approval record.
+The check is complete when every plan and approval field was inspected, both records remain unchanged, and the result names either executable current-plan authority or one checkable stop. Validation, handoff, ticket state, or earlier goal text never substitutes for approval recorded after the completed plan was read.
 
 Good signals: one immutable plan path, proof attached to obligations, only meaningful edges, explicit design-gap routes, and separate later approval evidence.
 

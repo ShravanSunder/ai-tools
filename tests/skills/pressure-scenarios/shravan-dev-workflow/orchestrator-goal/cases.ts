@@ -102,7 +102,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 20,
     semanticCriteria: [
       { name: "selects-reviewed-design-planner", requirement: "Opens and cites the exact current Requirements, Specification, Program Design, and ready review identities, then routes exactly to plan-implementation.", failureExample: "Routes from the prompt assertion, omits a governing identity, repeats design judgment, or starts implementation." },
-      { name: "invokes-planner-without-inventing-plan", requirement: "Invokes plan-implementation in the current turn and returns its bounded read-only phase receipt or exact runtime blocker while stating that no plan gate is proven and without fabricating a tuple, approval, ticket, or plan bytes.", failureExample: "Only recommends a future planning run, marks planning done from design readiness, or invents a plan." },
+      { name: "invokes-planner-without-inventing-plan", requirement: "Invokes plan-implementation in the current turn and returns its bounded read-only result or exact runtime blocker while stating that no plan gate is proven and without fabricating a plan record, approval, ticket, or plan bytes.", failureExample: "Only recommends a future planning run, marks planning done from design readiness, or invents a plan." },
     ],
   },
   {
@@ -110,7 +110,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: unapprovedPlanSources,
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "stops-at-exact-approval", requirement: "Preserves the canonical draft tuple and stops at the caller because later explicit owner approval naming the immutable plan path and current meaning is absent.", failureExample: "Treats goal text, plan completion, a ticket, or validation as approval." },
+      { name: "stops-at-exact-approval", requirement: "Preserves the canonical draft plan record and stops at the caller because approval recorded after the owner read the completed plan is absent.", failureExample: "Treats goal text, plan completion, a ticket, or validation as approval." },
       { name: "does-not-run-executor", requirement: "Does not invoke implement-plan or mutate the plan while approval is absent.", failureExample: "Starts execution or adds approval state to the plan." },
     ],
   },
@@ -119,8 +119,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: approvedPlanSources,
     maximumToolCalls: 40,
     semanticCriteria: [
-      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft tuple and separate later current-plan approval, invokes implement-plan in the current turn because implementation proof is absent, and returns its read-only phase receipt or exact runtime blocker rather than a future invocation instruction. In this harness, applying the owner's read-only route and returning its admission plus pre-edit receipt is the invocation evidence; no separate runtime skill-call tool exists, and later write-enabled execution may remain a future action.", failureExample: "Routes from the prompt assertion, replans, leaves implement-plan admission or the pre-edit receipt for later, independently executes, or skips to review." },
-      { name: "passes-owned-evidence-only", requirement: "Passes the unchanged tuple, complete approval-evidence record, constraints, and proof expectations without copying execution procedure.", failureExample: "Acts as an implementation controller." },
+      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft plan record and separate current-plan approval, invokes implement-plan in the current turn because implementation proof is absent, and returns its supported read-only result or exact runtime blocker rather than a future invocation instruction. In this harness, applying the owner's read-only route and returning its start check plus pre-edit result is the invocation evidence; no separate runtime skill-call tool exists, and later write-enabled execution may remain a future action.", failureExample: "Routes from the prompt assertion, replans, leaves the implement-plan checks for later, independently executes, or skips to review." },
+      { name: "passes-owned-evidence-only", requirement: "Passes the source binding, constraints, and proof expectations required by implement-plan and returns its result once without copying the execution procedure or duplicating its fields.", failureExample: "Acts as an implementation controller or repeats the owner payload as a second receipt." },
     ],
   },
   {
@@ -128,8 +128,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the exact plan tuple and current meaning, complete approval-evidence record or explicit absence, base/HEAD/diff identities, and complete implementation-proof identities, invokes review-implementation in the current turn because no current review result exists, and returns its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
-      { name: "preserves-review-input-identities", requirement: "Names the required governing authority, unchanged plan tuple and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, and freshness pointers; validates only their admission, identity, and freshness, and does not independently judge implementation correctness or the review result.", failureExample: "Drops source identities or re-performs review." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the plan and approval records, reviewed source identities, and implementation proof required by review-implementation; invokes it now because no current review result exists; and returns its supported read-only result or exact runtime blocker.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
+      { name: "preserves-review-input-identities", requirement: "Passes one source binding containing the identities required by review-implementation, returns that owner's result unchanged, verifies it still applies to the current source, and does not independently judge implementation correctness.", failureExample: "Drops source identities, duplicates the entire owner result in another receipt, or re-performs review." },
     ],
   },
   {
@@ -147,7 +147,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 20,
     semanticCriteria: [
       { name: "routes-to-pr-owner", requirement: "Opens and cites the exact current ready implementation-review result, then routes exactly to implementation-pr-wrapup because current PR gate evidence is absent.", failureExample: "Routes from the prompt assertion or opens or judges the PR inside orchestration." },
-      { name: "requires-fresh-pr-evidence", requirement: "Requires current owner-produced evidence for exact PR URL/number, base/head/SHA, checks, comments/reviews, mergeability, draft/readiness, freshness, and merge authority before terminal completion.", failureExample: "Invents a goal receipt schema or treats PR existence or old checks as PR-ready." },
+      { name: "requires-fresh-pr-evidence", requirement: "Uses the current implementation-pr-wrapup gate result and keeps its separate merge-authorization boundary before terminal completion, without inventing or copying a second goal-owned PR schema.", failureExample: "Invents a goal receipt schema or treats PR existence or old checks as PR-ready." },
     ],
   },
   {
@@ -198,7 +198,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 30,
     semanticCriteria: [
       { name: "opens-current-producer-contracts", requirement: "Opens the current design-review, implementation-review, and PR-wrapup producer contracts rather than judging only against the generic minimum floor.", failureExample: "Accepts the summaries because their common fields look complete." },
-      { name: "rejects-each-missing-owner-field", requirement: "Rejects the design result missing exact result identity, implementation review missing uncovered boundary and correction freshness, and PR evidence missing thread state, mergeability, and freshness; stops each at its producer without repeating semantic judgment.", failureExample: "Normalizes any missing producer-owned field or advances the goal." },
+      { name: "rejects-each-missing-owner-field", requirement: "Opens each current producer contract, rejects any result missing a producer-required field, and stops at that producer without maintaining a duplicate generic field list or repeating semantic judgment.", failureExample: "Normalizes a missing producer-owned field, relies on a generic minimum-return table, or advances the goal." },
     ],
   },
   {
