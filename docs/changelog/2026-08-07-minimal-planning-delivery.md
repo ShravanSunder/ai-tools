@@ -20,6 +20,15 @@ Plugin: `shravan-dev-workflow` 2.1.0
   a projection only; tickets do not become a second plan.
 - Gives the shared plan contract one numbered sequence of action-led headings
   instead of two different "admission" sections and compressed noun stacks.
+- Keeps review evidence useful without document bookkeeping: reviewers read the
+  controlling sources but do not return separate reading receipts, file-content
+  digests, hashes, line counts, or chunk reports.
+- Keeps plan handoffs portable without reporting reading mechanics. Read-only
+  handoffs return the full prompt inline, preserve the separate approval-record
+  path, and name the two repo-local files withheld.
+- Makes the thin goal router show the invoked owner, passed packet, owner result,
+  verification, and terminal status in one compact block instead of restating a
+  phase judgment as its own.
 - Does not restore the retired planning or implementation swarms.
 
 ## Changed surfaces
@@ -49,9 +58,13 @@ Plugin: `shravan-dev-workflow` 2.1.0
   acceptance expires, the semantic spec change returns to review, and no skill
   implementation occurs. Five uncontaminated transcripts satisfy the revised
   assertions; a fresh Luna xhigh / Terra medium targeted run passed 1/1 (exit
-  0). The original 62-case batch was not rerun and is not claimed green.
+  0). A final two-case confirmation passed `plan-handoff-full-packet`; the
+  `orchestrator-goal-route-proof-to-review` contract and source-read gates
+  passed, but its semantic judge was inconclusive because the response omitted
+  the compact source-binding and unchanged-owner-result evidence (overall exit
+  1). The original 62-case batch was not rerun and is not claimed green.
 - `git diff --check` passed (exit 0).
-- Six changed or directly affected skill packages passed the Codex skill quick
+- Eight changed or directly affected skill packages passed the Codex skill quick
   validator.
 - Manifest JSON and source-version sync passed at `2.1.0`; `claude plugin
   validate .` and the Codex marketplace listing passed.

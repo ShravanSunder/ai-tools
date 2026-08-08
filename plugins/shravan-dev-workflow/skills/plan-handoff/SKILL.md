@@ -16,9 +16,10 @@ Package an existing implementation plan so another agent can review, execute, or
 - Include the repo/worktree, branch, source plan path, referenced code/docs, open questions, and exact requested task.
 - Include the plan's obligation-to-slice-to-proof mapping (path or excerpt) or its compact proof line, plus evidence sources, freshness guards, proof layers, split triggers, open proof gaps, and the parent-verification rule for any downstream subagent/reviewer/driver evidence.
 - When the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services, include the applicable entry points, trust boundaries, invariants, non-goals, and proof. Otherwise record only `Security: not applicable`.
-- If a plan file is available, read it end to end before packaging. Do not require a separate reading receipt.
+- If a plan file is available, read it end to end before packaging. Carry the plan path and useful repository identities, but do not return a separate reading receipt, line count, chunk range, or file-content hash or digest.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
 - Show the copy-paste prompt in the final response and write the same prompt to a file.
+- Under read-only authority, return the complete copy-paste prompt inline with the source plan and separate approval-record paths, and state that the normal write-enabled route creates repo-local `plan-handoff.md` and `copy-paste-prompt.md`; do not claim those files were created.
 - Do not make code changes unless the user separately asks to implement.
 
 ## Workflow

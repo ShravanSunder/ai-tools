@@ -149,6 +149,12 @@ describe("minimal planning and delivery contracts", () => {
     expect(planHandoffTemplate).toContain("Separate approval evidence:");
     expect(planHandoff).toContain("obligation-to-slice-to-proof mapping");
     expect(planHandoff).toContain("Otherwise record only `Security: not applicable`");
+    expect(planHandoff).toContain(
+      "do not return a separate reading receipt, line count, chunk range, or file-content hash or digest",
+    );
+    expect(planHandoff).toContain(
+      "the normal write-enabled route creates repo-local `plan-handoff.md` and `copy-paste-prompt.md`",
+    );
     expect(planHandoff).not.toContain("Show `wc -l` and chunk coverage");
     expect(specHandoff).toContain("recommend exactly `plan-implementation`");
     expect(specHandoff).not.toContain("planning route is unavailable in this release");
@@ -404,6 +410,9 @@ describe("minimal planning and delivery contracts", () => {
       "skills/plan-improve-repo/references/validation-checklist.md",
     );
     const skillsCreation = readPluginFile("skills/skills-creation/SKILL.md");
+    const skillReviewLaneSchema = readPluginFile(
+      "skills/skills-creation/references/review/lanes/lane-schema.md",
+    );
     const docs = readPluginFile("skills/docs-maintain/SKILL.md");
 
     expect(reviewer).toContain("name: review-implementation");
@@ -440,6 +449,10 @@ describe("minimal planning and delivery contracts", () => {
     );
     expect(laneSchema).toContain("governing authority identities");
     expect(laneSchema).toContain("complete | partial | blocked");
+    expect(laneSchema).toContain("does not return a separate reading receipt, file-content digest");
+    expect(skillReviewLaneSchema).toContain(
+      "Do not return file-content digests, hashes, line counts, chunk ranges",
+    );
     expect(completeReviewer).toContain("complete independent reconstruction");
     expect(focusedReviewer).toContain("one named residual risk");
     expect(prWrapup).toContain("route to `review-implementation | skills-creation` respectively");
@@ -533,6 +546,9 @@ describe("minimal planning and delivery contracts", () => {
     );
     expect(orchestrator).toContain("Invoke exactly one owning skill");
     expect(orchestrator).toContain("Return that owner's result unchanged");
+    expect(orchestrator).toContain(
+      "The live response uses the compact `invoked owner`, `passed packet`, `owner result`, `verification`, and `terminal status` fields",
+    );
     expect(orchestrator).toContain(
       "A direct one-phase request bypasses this skill's long-horizon route and invokes the requested owning skill in the current turn",
     );

@@ -64,7 +64,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "requires-complete-plan-coverage",
-        requirement: "Reads the complete plan before packaging instead of trusting the user's summary, without producing line-count, chunk-range, hash, or digest bookkeeping.",
+        requirement: "Reads the complete plan before packaging instead of trusting the user's summary, without producing file-content digests, line-count or chunk-range reading bookkeeping. Repository branch and HEAD identities are allowed because they make the handoff portable; they are not document digests.",
         failureExample: "Produces a compact prompt from summary-only context.",
       },
       {

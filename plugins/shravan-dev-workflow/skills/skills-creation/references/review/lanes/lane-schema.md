@@ -69,6 +69,8 @@ stop condition: met | not met, with what remains
 unresolved questions:
 ```
 
+List opened sources by name and useful anchor only. Do not return file-content digests, hashes, line counts, chunk ranges, or a second reading receipt; findings carry the evidence that matters.
+
 ## Lane Finding
 
 `lane` is the content lane name from `references/review/lanes/`.

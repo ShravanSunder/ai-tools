@@ -33,4 +33,4 @@ authority used: read-only, candidate-only
 result: <the result shape required by complete-reviewer.md or focused-reviewer.md>
 ```
 
-`complete` means the lane mission and every applicable method stage finished. `partial` names completed coverage and what remains. `blocked` names the missing input or access that prevented the mission from starting. The reviewer must read the controlling source and proof, but does not return a separate reading receipt. The parent verifies every result before using it.
+`complete` means the lane mission and every applicable method stage finished. `partial` names completed coverage and what remains. `blocked` names the missing input or access that prevented the mission from starting. The reviewer must read the controlling source and proof, but does not return a separate reading receipt, file-content digest, hash, line count, or chunk report. Findings cite only the source evidence needed to support them. The parent verifies every result before using it.
