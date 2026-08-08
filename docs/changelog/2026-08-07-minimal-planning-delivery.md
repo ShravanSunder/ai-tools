@@ -18,6 +18,8 @@ Plugin: `shravan-dev-workflow` 2.1.0
   judgment or maintain a second lifecycle ledger.
 - Keeps the canonical Markdown plan authoritative. Optional `ops-*` tracking is
   a projection only; tickets do not become a second plan.
+- Gives the shared plan contract one numbered sequence of action-led headings
+  instead of two different "admission" sections and compressed noun stacks.
 - Does not restore the retired planning or implementation swarms.
 
 ## Changed surfaces
@@ -32,24 +34,22 @@ Plugin: `shravan-dev-workflow` 2.1.0
 
 ## Validation
 
-- Focused Vitest: 4 files, 39 tests passed (exit 0).
+- Focused Vitest: 4 files, 37 tests passed (exit 0).
 - Full unit Vitest: 17 files, 109 tests passed (exit 0).
 - TypeScript typecheck: `pnpm --dir tests/skills run typecheck` passed (exit 0).
 - The exact 62-case integrated pressure selection was attempted with Luna xhigh
   and Terra medium: 52 passed and 10 failed (108 unrelated cases skipped; exit
   1). Two deterministic fixture/criterion defects were corrected and their
-  targeted rerun passed 2/2. An eight-case follow-up passed 5/8; a final bounded
-  three-case confirmation passed 1/3. The remaining two failures preserved the
-  correct safety decision but omitted already-required response fields, so the
-  pressure route is not claimed green and no extra runtime prose was added to
-  chase output variance. Independent Fable and Sol reviews reproduced those two
-  omissions. One bounded remediation made the exact delegation row and complete
-  accepted-spec run note non-optional. Its initial two-case rerun reported 2/2,
-  but review found the accepted-spec subject had inspected test machinery. The
-  harness now forbids that inspection unconditionally; the delegation case has a
-  clean pass, while three uncontaminated accepted-spec retries kept the safe stop
-  and review route but varied on required receipt fields. That case and the
-  original 62-case batch are not claimed green.
+  targeted rerun passed 2/2. An eight-case follow-up passed 5/8; a bounded
+  three-case confirmation passed 1/3. The two remaining responses both made the
+  required safe stop but omitted nested run-note wording. Owner review rejected
+  that receipt formatting as irrelevant to the safety claim. Read-only
+  accepted-spec verification or expiry therefore no longer requires the full
+  Scaled Run Note, and the scenario now grades the behavior that matters: stale
+  acceptance expires, the semantic spec change returns to review, and no skill
+  implementation occurs. Five uncontaminated transcripts satisfy the revised
+  assertions; a fresh Luna xhigh / Terra medium targeted run passed 1/1 (exit
+  0). The original 62-case batch was not rerun and is not claimed green.
 - `git diff --check` passed (exit 0).
 - Six changed or directly affected skill packages passed the Codex skill quick
   validator.

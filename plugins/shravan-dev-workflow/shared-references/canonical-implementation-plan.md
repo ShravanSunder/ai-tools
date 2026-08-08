@@ -1,8 +1,8 @@
-# Canonical Implementation Plan
+# One Implementation Plan
 
 This reference owns the one active implementation-plan contract shared by plan producers and carriers. A completed plan is an immutable path-addressed artifact of intended work, not a lifecycle ledger. Return its tuple unchanged to every consumer.
 
-## Admission And Inspection
+## 1. Inspect: Read the Current Sources
 
 Before producing or validating a completed plan, inspect:
 
@@ -13,7 +13,7 @@ Before producing or validating a completed plan, inspect:
 
 `plan-implementation` admits only current ready three-artifact design. `plan-improve-repo` separately admits a vetted finding through current ready three-artifact design or source-proven implementation-mechanics-only authority. Do not collapse those entry rules into this shared contract.
 
-## Canonical Tuple
+## 2. Identify: Return One Plan Path and Result
 
 Return this tuple for every extant completed plan:
 
@@ -31,7 +31,7 @@ Do not compute or maintain a content hash, digest, blob identity, or parallel do
 
 When a planning phase has no completed plan, return `plan identity: none` only inside that phase's `route | blocked` receipt. An implementation handoff whose governing authority is a non-plan request or ticket also records `plan identity: none` beside that authority so a context-free consumer does not invent a plan. Never fabricate a partial tuple.
 
-## Separate Approval Evidence
+## 3. Approve: Keep Owner Approval Separate
 
 Approval is not a plan field. Preserve one of these records beside the tuple:
 
@@ -52,7 +52,7 @@ approval evidence:
 
 Only `planning result: draft` plus later `decision: approved` for the exact path and current plan meaning is executable. A goal, earlier blanket instruction, ticket state, handoff, validation receipt, or the planner itself cannot approve unseen future plan meaning. If the plan changed after approval or freshness is uncertain, approval is stale and the owner must read and approve the current plan again.
 
-## Markdown Artifact
+## 4. Write: Put Intended Work in Markdown
 
 Choose the repository's established plan home. Otherwise use `docs/specs/<spec>/plans/` for a plan governed by a durable spec, or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work. Do not create a second plan authority in a ticket or handoff.
 
@@ -76,7 +76,7 @@ A compact plan may combine these into a goal, authority, current evidence, chang
 
 The artifact records only intended work. Never add approval, assignees, percent complete, execution status, test results, reviewer verdicts, PR state, or ticket state.
 
-## Result Rules
+## 5. Result: Say Draft, Needs Revision, or Blocked
 
 - `draft`: the plan is complete and validated as a plan; approval is still absent unless separate evidence proves otherwise.
 - `revision-requested`: a known correction prevents a new executable draft; name the exact correction and owner.
@@ -84,13 +84,13 @@ The artifact records only intended work. Never add approval, assignees, percent 
 
 A `plans/README.md`, dashboard, or tracker may project only the canonical result and identity. It cannot mutate the tuple or approval record.
 
-## Producer And Carrier Checks
+## 6. Preserve: Keep the Plan Unchanged Between Owners
 
 Producers verify every source identity, path, command, obligation mapping, proof fit, edge, integration gate, and stop condition before returning the tuple.
 
 Carriers read the plan completely, verify the originating planner and result payload, inspect approval ordering and semantic freshness, and preserve the tuple and approval evidence unchanged in meaning. They never compute a document hash. A path mismatch, later semantic edit, stale authority, or missing required field is a blocking discrepancy; report it without repairing or re-authoring the plan.
 
-## Executor Admission
+## 7. Start: Check Whether Implementation May Begin
 
 An executor receives the complete tuple, result payload, separate approval record or explicit absence, and the execution request. Return exactly one admission result:
 

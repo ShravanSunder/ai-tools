@@ -56,7 +56,9 @@ describe("minimal planning and delivery contracts", () => {
     expect(contract).toContain("cannot mutate the tuple or approval record");
     expect(contract).toContain("immutable blocked plan record is complete");
     expect(contract).toContain("An implementation handoff whose governing authority is a non-plan request or ticket");
-    expect(contract).toContain("## Executor Admission");
+    expect(contract).toContain(
+      "## 7. Start: Check Whether Implementation May Begin",
+    );
     expect(contract).toContain("Return exactly one admission result");
     expect(contract).not.toContain(
       "current repository inspection has not contradicted authority",
