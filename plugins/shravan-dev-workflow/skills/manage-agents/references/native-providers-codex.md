@@ -4,13 +4,13 @@ Owns Codex native v2 `spawn_agent` model, effort, and conversation-history value
 
 ## Models
 
-| Model id             |
-| -------------------- |
-| `gpt-5.6-sol`        |
-| `gpt-5.6-luna`       |
-| `gpt-5.6-terra`      |
+| Model id             | Note              |
+| -------------------- | ----------------- |
+| `gpt-5.6-sol`        |                   |
+| `gpt-5.6-luna`       |                   |
+| `gpt-5.6-terra`      | user request only |
 
-Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host requires `openai.`.
+Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host requires `openai.`. Terra has no pattern-table category; dispatch it only when the user names it.
 
 ## Effort
 
@@ -25,8 +25,8 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
 
 ## Workspace Access
 
-- `read-only`: set `workspace access: read-only` and `write scope: none` in the packet; verify the worktree is unchanged after the receipt.
-- `write`: record the parent-approved paths in `write scope`.
+- `read-only`: set the packet's `access:` line to `workspace read-only`; verify the worktree is unchanged after the receipt.
+- `write`: record the parent-approved paths on the `access:` line (`workspace write <paths>`).
 
 ## Examples
 

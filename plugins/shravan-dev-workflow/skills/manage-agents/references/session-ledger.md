@@ -13,7 +13,7 @@ working scope / relationship name:
 runtime ids / provider-native id when exposed:
 permission boundary:
 status / queued work / last prompt / last checked:
-receipt expected / receipt level / receipt scope:
+return expected / receipt level / return binding: <session, assignment id, decision target, source/head version>
 parent verification / next follow-up / notes:
 ```
 
