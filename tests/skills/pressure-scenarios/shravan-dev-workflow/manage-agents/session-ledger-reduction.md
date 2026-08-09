@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: session-ledger|ledger|parent
 expect_proof_regex: candidate|unverified|parent verifies|parent-owned
-expect_proof_regex: minimal row|ledger row|reduction receipt|return binding|session (name|identity)
+expect_proof_regex: minimal row|ledger row|reduction receipt|return binding|session (name|identity)|session ledger|assignment-bound
 expect_proof_regex: candidate.{0,80}(evidence|until)|until.{0,80}verif|verif.{0,80}(accept|before|against)
 expect_forbidden_regex: no need.{0,80}(ledger|session|track)
 

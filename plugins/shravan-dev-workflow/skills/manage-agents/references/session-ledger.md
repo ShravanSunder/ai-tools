@@ -7,21 +7,21 @@ Persistent Advisors and Sidekicks need one current ledger row before prompts tha
 ```text
 agent name / pattern / assignment / assignment id:
 continuity reason:
-host / runtime / provider / model lineage / exact model / reasoning effort / budget:
+route (the job packet's route line) / budget:
 resolved launcher / provider command:
 working scope / relationship name:
 runtime ids / provider-native id when exposed:
 permission boundary:
 status / queued work / last prompt / last checked:
 return expected / receipt level / return binding: <session, assignment id, decision target, source/head version>
-parent verification / next follow-up / notes:
+parent verification / next follow-up:
 ```
 
 Keep runtime-local ids with their originating runtime. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
 
 ## Create Or Resume
 
-Reuse a relationship when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship with an explicit continuity-reset reason. Repair reconnect, authentication, model, permission, or provider-limit failures within the current relationship when possible.
+Reuse a relationship when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship with an explicit continuity-reset reason.
 
 ## Readiness Lifecycle
 

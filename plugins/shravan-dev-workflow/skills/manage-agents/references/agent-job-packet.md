@@ -2,7 +2,7 @@
 
 ## Dispatch
 
-Build one bounded packet per non-trivial call. Keep the value column aligned so a human can scan it. A returned receipt alone does not close the job; the job closes only at the `verify:` line's parent verification point.
+Build one bounded packet per non-trivial call. Keep the value column aligned so a human can scan it.
 
 ```text
 job packet
@@ -14,7 +14,7 @@ job packet
   sources:    <anchors the agent must read>
   non-goals:  <what this job must not touch>
   return:     <receipt shape>, bound to assignment id + decision target
-              + source/head version (+ session identity for advisor/sidekick)
+              + source/head version (+ session identity when persistent)
   stop when:  <condition that ends the agent's work and produces the receipt>
   verify:     <parent checks at the named verification point that close the job
               before accepting any claim>
@@ -41,8 +41,7 @@ decision packet
 agent result
   job:        <assignment id> / <pattern> / <lane when swarm>
   status:     complete | partial | blocked | no-receipt
-  receipt:    <level>, matched to assignment id + decision target + source/head
-              version (+ session identity when persistent)
+  receipt:    <level>, matched to the packet's return-line binding
   accepted:   <claims accepted after parent checks>
   rejected:   <claims rejected or unverified>
   checks:     <parent checks run>
