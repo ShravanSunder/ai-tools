@@ -135,30 +135,25 @@ Each stage owns its own lane selection: `references/review/spec-review.md` for a
 
 Collect every receipt explicitly and ask a lane that goes quiet; silence is never a clean review. Prefer native dispatch in the parent host's own lineage, and when the runtime can reach another lineage give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
 
-## Scaled Run Note
+## Report the Run Without Empty Bookkeeping
 
-Emit the run note whenever the run dispatches review lanes, returns an evaluate verdict, cites or verifies an accepted spec, edits skill files, or runs a proof route. A run that does none of these is chat-only discussion and skips the ceremony.
+Return a run summary whenever the run evaluates or edits a skill, dispatches review, or runs proof. Omit branches that did not run instead of filling them with `n/a`. Chat-only discussion and a read-only accepted-spec verification or expiry stop need no summary unless they also evaluate, edit, review, or prove something.
 
 ```text
+target: <owner plugin / skill>
 classification: create | update | evaluate
-target skill / owner plugin:
-reusable behavior:
-success definition: <text> | n/a (evaluate)
-authoring basis: observed failure | user-directed intent | n/a (evaluate)
-reproduction: reproduced | not reproduced | insufficient evidence | inconclusive | n/a
-invocation: model-invocable | user-invocable | both
-branches loaded:
-review lanes dispatched: <lanes> | none (no review this run) | none — cited accepted spec <revision/result identity>
-lane receipts: complete | partial | blocked | no-receipt, per lane | n/a (no lanes dispatched this run)
-deviations: spec-boundary none | <named list>; reviewer-runtime none | <named list>
-security route: allowed | disallowed | blocked | deferred | n/a
-proof route: RED/GREEN | characterization | representative hypothesis | static-only | deferred | proof gap
-shipping status: source-only | PR-ready | released
+outcome: <what changed, verdict, or blocker>
+success and basis: <success definition; observed failure | user-directed intent>  # create/update only
+review: <lanes and complete | partial | blocked results>                     # only if review ran
+proof: <route, evidence, and remaining gap>                                  # only if proof ran
+security: <allowed | disallowed | blocked | deferred>                        # only if a sensitive surface was routed
+deviations: <accepted-spec boundary or reviewer-runtime deviation>           # only if one occurred
+shipping: source-only | PR-ready | released                                  # only when shipping status changed or is claimed
 ```
 
 ## Workflow
 
-An `evaluate` run walks a shorter spine: complete step 1, follow the review branch it selects, and end at the parent-reduced verdict with that stage's required returns plus the run note. Steps 2-10 begin only as a new `update` run whose own step 1 records a user-supplied success definition and an authoring basis; an invitation like "just quickly fix it" that names neither is not a commission.
+An `evaluate` run walks a shorter spine: complete step 1, follow the review branch it selects, and end at the parent-reduced verdict plus the run summary. Steps 2-10 begin only as a new `update` run whose own step 1 records a user-supplied success definition and an authoring basis; an invitation like "just quickly fix it" that names neither is not a commission.
 
 A run implementing one slice — one run of an accepted multi-run skill-change spec's sequenced runs — reads the accepted spec doc and takes its step-1 and step-2 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing; the doc is the commission for that slice, and each slice still names exactly one skill target.
 
@@ -239,7 +234,7 @@ IF the change is behavior-changing, before any skill file is edited and unless t
 
 ### 7. Implement
 
-IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: the implemented diff is compared against the accepted spec boundary and the result is stated on the run note's deviations line as `spec-boundary none` or a named list.
+IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: compare the implemented diff against the accepted spec boundary; include a deviation in the run summary only when one exists.
 
 ### 8. Review the implementation
 
@@ -263,7 +258,7 @@ Completion: the authoring result, the behavior evidence, and the remaining proof
 
 Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it.
 
-IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge ship readiness and return changed-file coverage, bounded review reduction, targeted retest, and the explicit ship decision. This release has no active implementation-review skill route.
+IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge runtime skill-package readiness and return changed-file coverage, bounded review reduction, targeted retest, and the explicit ship decision. General product implementation review routes to `review-implementation`; runtime skill-package authoring remains under this `skills-creation` review contract.
 
 IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route.
 
@@ -280,7 +275,7 @@ The run is not done while any of these hold:
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
 - review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
-- implementation completed without stating `spec-boundary none` or a named deviation list against the accepted spec boundary;
+- implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
 - a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;

@@ -86,7 +86,7 @@ Detailed mechanics stay in the owning skills and references:
 - `skill-creator` owns Codex skill anatomy and generated metadata as platform support loaded through `skills-creation/references/platform-mechanics.md`.
 - `tests/skills/README.md` owns the local pressure-test runner contract.
 - `docs-maintain` owns cleanup, archival, promotion, and durable docs reconciliation after artifacts exist.
-- The bounded implementation review contract and `implementation-pr-wrapup` own the final review and merge-ready PR proof for implemented skill-work changes.
+- The bounded `skills-creation` implementation-review contract and `implementation-pr-wrapup` own final review and merge-ready PR proof for runtime skill-work changes; product implementation review routes to `review-implementation`.
 
 ## Admired-source provenance (ai-dev-skills)
 
@@ -128,10 +128,14 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | discuss-pathfinding | `plugins/shravan-dev-workflow/skills/discuss-pathfinding/` | Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/glossary records as they crystallize |
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
 | manage-agents | `plugins/shravan-dev-workflow/skills/manage-agents/` | Choose and manage advisors, sidekicks, delegates, operators, subagents, and their allowed swarms across Frontier/Balanced/Mini models, native runtimes, ACPX usage, and ACP adapter boundaries |
+| orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Thin general-domain long-horizon router: reconstruct the first unproven gate, invoke one phase owner, verify its receipt, and stop at PR-ready unmerged by default without phase judgment or lifecycle ledgers |
 | orchestrator-design | `plugins/shravan-dev-workflow/skills/orchestrator-design/` | Guarded routing and temporary record keeping for one bounded specification, program-design, and critically validated three-artifact design review cycle; no semantic design decisions or planning/implementation |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
-| plan-improve-repo | `plugins/shravan-dev-workflow/skills/plan-improve-repo/` | Audit a repository for high-leverage improvements; write or validate executable plans only after planning admission |
+| plan-implementation | `plugins/shravan-dev-workflow/skills/plan-implementation/` | Translate one current ready Requirements/Specification/Program Design set into one repo-grounded proof-bearing plan |
+| plan-improve-repo | `plugins/shravan-dev-workflow/skills/plan-improve-repo/` | Audit a repository for high-leverage improvements; write or validate canonical plans only after planning admission |
+| implement-plan | `plugins/shravan-dev-workflow/skills/implement-plan/` | Validate and execute one immutable-path approved canonical plan with slice-local proof and explicit replan stops |
+| review-implementation | `plugins/shravan-dev-workflow/skills/review-implementation/` | Independently reconstruct governing obligation through plan, implementation, and proof; parent-verify findings and route corrections without editing |
 | ops-security-review | `plugins/shravan-dev-workflow/skills/ops-security-review/` | Routes authorized security scans to the official Codex Security workflows |
 | implementation-pr-wrapup | `plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/` | Finish GitHub PR lifecycle work after implementation: push/open/update, monitor checks/comments, handle existing review threads, prove merge readiness, and merge only when authorized |
 | plan-handoff | `plugins/shravan-dev-workflow/skills/plan-handoff/` | Copy-pasteable existing implementation-plan packets for other agents, CLIs, machines, or future sessions |
@@ -145,7 +149,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
-Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The retired `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance; this release provides no replacements for them. The active design, spec, handoff, and PR-lifecycle skills remain the supported runtime surface.
+Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance and never become runtime entrypoints. The active `orchestrator-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of the retired goal controller, planning swarm, execution controller, or review swarm. The current runtime surface is exactly the active skills enumerated above.
 
 Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
 
@@ -188,7 +192,7 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 - Name skills with active, searchable verbs in hyphen-case.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
-- Do not add README files inside skill folders unless a consuming tool requires them.
+- Human-facing workflow README files may live inside skill folders when the user explicitly requests them. Keep them concise and non-authoritative: link to `SKILL.md` and its references instead of duplicating the runtime contract.
 - Cross-reference other skills by skill name, not fragile installed-cache paths.
 - Treat skill writing like TDD for process documentation: first identify or create a pressure scenario where the agent fails without the skill, then write the smallest wording that prevents that failure, then retest and close loopholes.
 - Capture the rationalizations the agent used to go wrong, especially "I already know this", "this is obvious", "I'll verify later", and "the user probably meant..."; turn those into explicit red flags or gates in the skill.

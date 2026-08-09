@@ -74,7 +74,7 @@ The parent reduces candidate findings into the spec-review result. Accepted find
 
 ### Acceptance Binding
 
-The parent closes a review by writing the spec-review record into the doc with the accepted revision label and semantic coverage. A later run implementing one slice compares changes since that accepted revision by meaning. Parent-verified formatting, typo, link, or process-only changes preserve acceptance without reviewer dispatch. A semantic change expires only the affected coverage; uncertain semantic effect is treated as semantic. Expired coverage sends the affected delta back through spec review under this reference's lane selection, and acceptance re-binds to the revised meaning. A status line that still reads accepted-to-implement is not verification, and an instruction to keep going under the existing acceptance is not an explicit review skip.
+The parent closes a review by writing the spec-review record into the doc with the accepted revision label and semantic coverage. A later run implementing one slice compares changes since that accepted revision by meaning. Never compute or maintain a document hash or digest for acceptance. Parent-verified formatting, typo, link, or process-only changes preserve acceptance without reviewer dispatch. A semantic change expires only the affected coverage; uncertain semantic effect is treated as semantic. Expired coverage sends the affected delta back through spec review under this reference's lane selection, and acceptance re-binds to the revised meaning. A status line that still reads accepted-to-implement is not verification, and an instruction to keep going under the existing acceptance is not an explicit review skip.
 
 Report with these exact labels:
 

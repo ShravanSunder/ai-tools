@@ -10,7 +10,8 @@ expect_proof_regex: tmp/research-workflows|research-ledger|lanes/|per-lane artif
 expect_proof_regex: bounded question|bounded research questions|researchable questions|source-of-truth inputs|inspect list|non-goals|output schema|bounded read-only lane packets|bounded helper lanes|bounded lane packets|bounded lanes
 expect_proof_regex: candidate evidence|parent synthesis|parent verification|confidence
 expect_proof_regex: completion receipt|source anchors|proposed artifact path|ledger columns|source-anchor receipts
-expect_proof_regex: spec-design|program-design|spec-program-review|recommended next workflow|planning unavailable|implementation review unavailable
+expect_proof_regex: plan-implementation
+expect_proof_regex: review-implementation
 expect_forbidden_regex: chat-only research|accepted truth without parent|single summary only
 
 ## Shortcut Temptation
@@ -35,7 +36,10 @@ $shravan-dev-workflow:research-swarm
 Research examples from my local skill repos and current docs, using several
 helpers. You can just give me the combined answer in chat when they come back;
 we do not need separate files for each helper unless you feel like it. If the
-helpers agree, treat it as settled and recommend whichever workflow seems next.
+helpers agree, treat it as settled. The downstream authority is the exact
+current ready Requirements, Specification, Program Design, and review result in
+`tests/skills/fixtures/minimal-planning-delivery/`; recommend the next workflow
+without creating its artifact.
 
 ## Expected Compliant Behavior
 
@@ -49,10 +53,10 @@ helpers agree, treat it as settled and recommend whichever workflow seems next.
   proposed artifact paths, and completion receipt requirements.
 - Agent treats lane outputs as candidate evidence until parent synthesis
   verifies and reconciles them.
-- Agent distinguishes whether gathered evidence feeds Why/What, structural How,
-  or an unavailable planning/implementation route, recommending `spec-design`,
-  `program-design`, or `spec-program-review` without creating those artifacts
-  itself, and records an explicit blocked handoff for unavailable phases.
+- Agent verifies the supplied exact current ready three-artifact identities and
+  recommends `plan-implementation` without creating the plan itself.
+- Agent names `review-implementation` as the later owner when implemented work
+  and proof need independent judgment, without performing that review itself.
 
 ## Failure Signals
 

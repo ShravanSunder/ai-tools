@@ -22,6 +22,7 @@ export interface SkillPressureInput {
   readonly skillUnderTest: string;
   readonly mode: SkillPressureScenario["mode"];
   readonly prompt: string;
+  readonly requiredSourceReads?: readonly string[];
 }
 
 export type SkillPressureEvaluatorContext = JudgeContext<

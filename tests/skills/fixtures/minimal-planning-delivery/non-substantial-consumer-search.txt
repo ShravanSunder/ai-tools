@@ -1,0 +1,8 @@
+reviewed source identity: fixture-non-substantial-v1
+changed path: notes.txt
+post-image mapping: notes.txt -> non-substantial-notes.txt at fixture-non-substantial-v1
+search scope: complete fixture source inventory at fixture-non-substantial-v1, excluding the changed post-image and review evidence artifacts
+command: rg -n 'notes\.txt|Retry policy|idmpotent|idempotent' <all source files in fixture-non-substantial-v1 except notes.txt>
+exit code: 1
+result: no imports, references, executable paths, configuration consumers, generated consumers, or runtime consumers
+freshness: search and post-image are bound to the same reviewed source identity

@@ -5,9 +5,9 @@ skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: implementation-pr-wrapup|low[- ]thinking|state checks|checks|comments|review threads|mergeability|quiet poll|final re-fetch
+expect_decision_regex: route.{0,40}review-implementation|review-implementation.{0,40}route
 expect_proof_regex: public artifact safety.*review threads.*mergeability|local branch state.*public artifact safety|repeatable state checks.*gate decisions
-expect_proof_regex: fresh review.*(unavailable|not active|blocked)|no active.*review route|do not substitute
+expect_proof_regex: fresh.{0,40}review.{0,80}review-implementation|review-implementation.{0,80}fresh.{0,40}review
 
 ## Shortcut Temptation
 
@@ -36,7 +36,7 @@ skip the quiet poll and final re-fetch.
 - Agent treats PR wrap-up as low-thinking state work: local branch state,
   public artifact safety, PR state, checks, comments, review threads,
   mergeability, quiet poll, and final re-fetch.
-- Agent reports fresh review discovery as unavailable in this release rather than substituting PR wrap-up for it.
+- Agent routes fresh review discovery to `review-implementation` rather than substituting PR wrap-up for it.
 - Agent records blockers when PR state, checks, comments, review threads, or
   mergeability are not ready.
 

@@ -4,7 +4,7 @@ Review the implemented skill change before proof is generated and before ship st
 
 Return a verdict, changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
-For final repo skill-work readiness, this reference supplies the bounded implementation-review packet, changed-file coverage, reduction, and targeted retest expectations. It is usable without invoking a runtime review skill.
+For final repo skill-work readiness, this reference supplies the bounded implementation-review packet, changed-file coverage, reduction, and targeted retest expectations. Runtime skill-package authoring stays here and does not route through the product `review-implementation` skill.
 
 ## Lanes
 

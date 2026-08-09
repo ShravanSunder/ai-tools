@@ -10,8 +10,9 @@ Date: <yyyy-mm-dd>
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <absolute or repo-relative path>
-Plan line count: <N or not applicable>
-Coverage: <chunk ranges or packet files read>
+Originating planner: plan-implementation | plan-improve-repo
+Planning result and payload: draft | revision-requested | blocked — <payload>
+Separate approval evidence: <exact-path current-plan record or explicit absence>
 Prepared for: <agent/CLI/session target>
 ```
 
@@ -32,17 +33,15 @@ Do first
 Context
 <short domain model, current branch state, prior decisions>
 
-Security context
-- Entry points / untrusted inputs: <or "not security-sensitive">
-- Trust boundaries / auth assumptions: <or "not applicable">
-- Sensitive data / privileged actions: <or "not applicable">
-- Security invariants and non-goals: <or "not applicable">
-- Required security proof: <or "not applicable">
+Security
+<`not applicable`, or the entry points, trust boundaries, sensitive actions,
+invariants, non-goals, and required proof when a sensitive surface exists>
 
-Requirements/proof matrix
+Obligation/slice/proof mapping
 - Source: <path/section or compact proof line>
 - Rows carried forward: <requirement, evidence source, proof gate, freshness guard>
-- Open proof gaps or split triggers: <or "none">
+- Open proof gaps: <or "none">
+- Split triggers: <or "none">
 - Parent verification rule: downstream subagent, reviewer, UI-driver, telemetry,
   or other delegated evidence must be inspected or cross-checked before
   completion is claimed.
@@ -62,7 +61,8 @@ You are taking over a plan/design handoff.
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <path>
-Plan coverage already loaded by handoff preparer: <line count + chunks>
+Canonical plan record: <immutable path, originating planner, result and payload>
+Separate approval evidence: <exact-path current-plan record or explicit absence>
 
 Your task:
 <task>
@@ -77,14 +77,16 @@ Constraints:
 - Verify plan claims against current files before conclusions.
 - Preserve listed security invariants. If the plan touches sensitive surfaces
   but no threat model is provided, flag that as a plan defect.
-- Preserve the requirements/proof matrix, including evidence sources, freshness
+- Preserve the obligation/slice/proof mapping, including evidence sources, freshness
   guards, open proof gaps, split triggers, and parent-owned verification.
+- Preserve the canonical plan record and separate approval evidence unchanged.
+- Do not treat `draft`, handoff creation, or earlier goal text as approval.
 - Keep findings evidence-backed with exact paths.
 
 Return:
-- Coverage inspected
 - Findings or implementation result
-- Requirements/proof matrix status
+- Obligation/slice/proof mapping status
+- Canonical plan record and approval-evidence status
 - Open questions
 - Commands/tests run
 ```

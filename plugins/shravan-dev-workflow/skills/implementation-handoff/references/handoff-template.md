@@ -13,6 +13,10 @@ Branch/worktree: <branch or detached/head state>
 Base: <base branch/sha or not established>
 Head: <head sha or working tree>
 Source request/plan/ticket: <path/id/summary>
+Canonical plan record: <complete unchanged plan record or plan identity: none>
+Separate current-plan approval evidence: <complete unchanged record or explicit absence>
+Governing authority identities: <current reviewed design or admitted improvement authority>
+Prior review coverage: <reviewed source identity and status or explicit absence>
 ```
 
 ## Body
@@ -28,8 +32,13 @@ Current state
 Changed files
 - <path>: <what changed>
 
-What is proven
-- <command/evidence>: <result>
+Implementation proof:
+- Covered obligations/slices: <rows or explicit none>
+- Commands and exit codes: <fresh evidence>
+- Manual/runtime observations: <fresh evidence or not applicable with reason>
+- Quality results: <format/lint/typecheck or gaps>
+- Integration gates: <results or not reached>
+- Incomplete rows and blockers: <exact routes>
 
 What is not proven
 - <gap and why it matters>
@@ -37,18 +46,15 @@ What is not proven
 Known risks
 - <risk>: <review focus or mitigation>
 
-Security state
-- Changed trust boundaries: <or "none known">
-- Security findings fixed: <or "none">
-- Unvalidated security risks: <or "none known">
-- Security commands/proofs/reports: <or "none run">
-- Accepted risks / non-goals: <or "none">
+Security
+<`not applicable`, or changed trust boundaries, findings fixed, unvalidated
+risks, security proof, and accepted risks when a sensitive surface exists>
 
 Do not change
 - <path/scope boundary>
 
 Recommended next action
-<review | continue implementation | resolve blocker | rerun validation>
+<review-implementation for general-domain work | skills-creation for a runtime skill package | continue through an explicitly authorized executor | resolve governing blocker | rerun validation>
 ```
 
 ## Stage Additions

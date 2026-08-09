@@ -11,7 +11,7 @@ Turn fuzzy research into sharp questions, gather evidence through bounded source
 
 - Stay read-only against product code unless the user explicitly switches to implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
-- When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when it would feed a retired planning or implementation route, preserve the evidence and report the unavailable next phase instead of invoking it. Research preserves evidence; it does not synthesize those artifacts.
+- When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when a current ready three-artifact design needs planning, recommend `plan-implementation`; when an exact approved canonical draft needs execution, recommend `implement-plan`; when implemented work and proof need independent judgment, recommend `review-implementation` for general-domain work or `skills-creation` for a runtime skill package. Research preserves evidence; it does not synthesize those artifacts or perform their review.
 - Start with the local system when the research affects a local repo: current code, docs, specs, plans, runbooks, and live file tree beat memory and older notes.
 - Convert the ask into 1-5 researchable questions before spawning lanes. Name what would support, refute, or complicate each question.
 - Use subagents for independent, bounded lanes when the evidence can be gathered in parallel. Do not ask a lane to "research everything".
@@ -73,4 +73,4 @@ Return:
 - artifact path, or why no artifact was written
 - the verified evidence ledger summary (claim classes and finding states live in the ledger shape)
 - caveats, competing hypotheses where evidence split, and unresolved gaps
-   - recommended next workflow: usually `discuss-clarify-mental-models`, `spec-design`, `program-design`, `spec-program-review`, or `docs-maintain`; report an explicit blocked handoff when the next planning or implementation phase is not shipped
+   - recommended next workflow: usually `discuss-clarify-mental-models`, `spec-design`, `program-design`, `spec-program-review`, `plan-implementation`, `implement-plan`, `review-implementation`, or `docs-maintain`

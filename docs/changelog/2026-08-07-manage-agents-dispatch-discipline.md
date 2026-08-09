@@ -1,8 +1,8 @@
-# 2026-08-07 — manage-agents dispatch discipline (shravan-dev-workflow 2.1.0)
+# 2026-08-07 — manage-agents dispatch discipline (shravan-dev-workflow 2.2.0)
 
 ## What changed
 
-`shravan-dev-workflow` `2.0.1 → 2.1.0`. One skill changed: `manage-agents`. Four sequenced runs from the accepted multi-run spec (`docs/wip/skills-authoring/2026-08-07-manage-agents-dispatch-discipline.md`, accepted-to-implement r6 for Runs 1–3 and r8 for Run 4) landed together.
+`shravan-dev-workflow` `2.1.0 → 2.2.0` (2.1.0 was taken by the minimal-planning-delivery release on master). One skill changed: `manage-agents`. Four sequenced runs from the accepted multi-run spec (`docs/wip/skills-authoring/2026-08-07-manage-agents-dispatch-discipline.md`, accepted-to-implement r6 for Runs 1–3 and r8 for Run 4) landed together.
 
 **Run 1 — pattern selection and Operator discipline (`SKILL.md`)**
 

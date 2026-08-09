@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan: Implementation"
+  short_description: "Translate reviewed design into a proof-bearing plan"
+  default_prompt: "Use $plan-implementation to translate this reviewed Requirements, Specification, and Program Design set into one repo-grounded implementation plan without starting implementation."

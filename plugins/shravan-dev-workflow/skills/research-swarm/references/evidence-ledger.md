@@ -49,7 +49,7 @@ Synthesis:
 - unresolved:
 
 Recommended Next Workflow:
-<discuss-clarify-mental-models | spec-design | program-design | spec-program-review | docs-maintain | blocked next phase>
+<discuss-clarify-mental-models | spec-design | program-design | spec-program-review | plan-implementation | implement-plan | review-implementation for general-domain work | skills-creation for a runtime skill package | docs-maintain | blocked next phase>
 ```
 
 Always keep raw lane notes or copy-paste prompts in the same tmp folder when they are useful for another agent.

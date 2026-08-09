@@ -72,12 +72,29 @@ describe("shouldRunSkillPressureCase", () => {
     ).toBe(true);
   });
 
-  test("leaves evaluator cases to native Vitest selection", () => {
+  test("keeps evaluator cases when no exact scenario is selected", () => {
     expect(
       shouldRunSkillPressureCase({
         skillPressureCase: createCase("integration", false),
         selectedMode: "fast",
         selectedScenario: undefined,
+      }),
+    ).toBe(true);
+  });
+
+  test("filters evaluator cases by exact scenario identity", () => {
+    expect(
+      shouldRunSkillPressureCase({
+        skillPressureCase: createCase("integration", false),
+        selectedMode: "fast",
+        selectedScenario: "fast",
+      }),
+    ).toBe(false);
+    expect(
+      shouldRunSkillPressureCase({
+        skillPressureCase: createCase("integration", false),
+        selectedMode: "fast",
+        selectedScenario: "integration",
       }),
     ).toBe(true);
   });
