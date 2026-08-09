@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-07 Manage-Agents Dispatch Discipline](2026-08-07-manage-agents-dispatch-discipline.md)
 - [2026-08-07 Minimal Planning And Delivery](2026-08-07-minimal-planning-delivery.md)
 - [2026-08-06 Three-Artifact Design Review](2026-08-06-three-artifact-design-review.md)
 - [2026-08-05 Retire Five Runtime Skills](2026-08-05-retire-five-runtime-skills.md)
