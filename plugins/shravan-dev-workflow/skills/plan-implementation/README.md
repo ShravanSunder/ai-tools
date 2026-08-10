@@ -14,15 +14,18 @@ flowchart TD
     D --> E[Map each obligation to a small change and fitting proof]
     E --> F[Order only real dependencies and collisions]
     F --> G[Write one Markdown implementation plan]
-    G --> H[Return draft, needs revision, or blocked]
-    H --> I[Stop before approval or implementation]
+    G --> H[Return ready, revision requested, or blocked]
+    H --> I{Delivery terminal}
+    I -- plan-only --> J[Stop at the ready plan]
+    I -- pr-ready-unmerged --> K[Continue to implementation]
 ```
 
 ## Important Branches
 
 - A runtime-skill package returns to `skills-creation` unless an accepted composition explicitly selected this planner.
 - Missing or stale design returns to the design owner; planning does not repair design.
-- A complete plan is still only a draft. A human owner approves it separately afterward.
+- Direct planning establishes `plan-only` versus `pr-ready-unmerged` at entry when intent is ambiguous. Goal orchestration supplies `pr-ready-unmerged` by default.
+- A ready delivery plan continues to implementation without a generic post-plan approval stop; a `plan-only` plan stops at planning.
 - Optional tickets may point to the plan, but they never become another plan.
 
 ## Output

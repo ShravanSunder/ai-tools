@@ -1,11 +1,11 @@
 # Improvement Plan Template
 
-Write one file per accepted improvement.
+Write one file per accepted improvement only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
 
 ```markdown
 # <Improvement Title>
 
-Planning result: draft | revision-requested | blocked
+Planning result: ready
 Planned at branch/HEAD: <branch> / <git sha>
 Repo: <absolute path>
 ## Why This Plan Can Be Written
@@ -71,11 +71,11 @@ Read-only context:
 
 - <risk and mitigation>
 
-## Result Payload
+## Delivery Context
 
-- `draft`: later explicit owner approval must name the exact completed plan path and current meaning.
-- `revision-requested`: <exact correction and owner>.
-- `blocked`: <blocker identity, evidence, and unblock owner>.
+- Requested terminal: plan-only
+- Delivery grouping: single:<name>
+- PR topology: not-applicable
 ```
 
 Also maintain a `plans/README.md` or local index when writing multiple plans:
@@ -85,7 +85,7 @@ Also maintain a `plans/README.md` or local index when writing multiple plans:
 
 | Planning result | Plan identity |
 | --- | --- |
-| draft \| revision-requested \| blocked | <immutable plan path> |
+| ready | <immutable plan path> |
 ```
 
-The index projects the canonical result and plan path. It never owns or mutates the plan record, approval evidence, validation state, or execution progress.
+The index projects ready canonical plan paths only. It never owns or mutates the plan record, governing basis, delivery context, validation state, or execution progress. Non-ready results have no plan path and do not enter this index.

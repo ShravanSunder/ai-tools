@@ -11,8 +11,9 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <absolute or repo-relative path>
 Originating planner: plan-implementation | plan-improve-repo
-Planning result and payload: draft | revision-requested | blocked — <payload>
-Separate approval evidence: <exact-path current-plan record or explicit absence>
+Planning result and payload: ready | revision-requested | blocked — <payload>
+Governing planning basis: <complete unchanged basis>
+Delivery context: <complete unchanged context>
 Prepared for: <agent/CLI/session target>
 ```
 
@@ -62,7 +63,7 @@ Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <path>
 Canonical plan record: <immutable path, originating planner, result and payload>
-Separate approval evidence: <exact-path current-plan record or explicit absence>
+Governing planning basis and delivery context: <complete unchanged values>
 
 Your task:
 <task>
@@ -79,14 +80,14 @@ Constraints:
   but no threat model is provided, flag that as a plan defect.
 - Preserve the obligation/slice/proof mapping, including evidence sources, freshness
   guards, open proof gaps, split triggers, and parent-owned verification.
-- Preserve the canonical plan record and separate approval evidence unchanged.
-- Do not treat `draft`, handoff creation, or earlier goal text as approval.
+- Preserve the canonical plan record, governing basis, and delivery context unchanged.
+- Do not upgrade `plan-only` from handoff creation, validation, or ticket state.
 - Keep findings evidence-backed with exact paths.
 
 Return:
 - Findings or implementation result
 - Obligation/slice/proof mapping status
-- Canonical plan record and approval-evidence status
+- Canonical plan record, governing-basis status, and delivery context
 - Open questions
 - Commands/tests run
 ```

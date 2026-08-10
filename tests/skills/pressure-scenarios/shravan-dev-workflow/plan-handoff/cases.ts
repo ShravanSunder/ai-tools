@@ -13,7 +13,6 @@ const portablePlanSources = [
   ...completedPlanSources,
   "plugins/shravan-dev-workflow/skills/plan-handoff/references/handoff-template.md",
   "tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md",
 ] satisfies readonly string[];
 
 export const skillPressureCaseDefinitions = [
@@ -74,8 +73,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-plan-and-proof-authority",
-        requirement: "Preserves the immutable handoff-plan.md path, originating planner plan-implementation, draft payload, separate approval absence from handoff-approval.md, obligation/proof mapping, freshness guards, split triggers, gaps, and parent verification rule without embedding approval or a document digest in the plan.",
-        failureExample: "Reauthors the plan, drops proof metadata, or treats handoff as approval.",
+        requirement: "Preserves the immutable handoff-plan.md ready record, originating planner plan-implementation, governing basis, plan-only delivery context, obligation/proof mapping, freshness guards, split triggers, gaps, and parent verification rule without a document digest.",
+        failureExample: "Reauthors the plan, drops proof metadata, or upgrades delivery intent during handoff.",
       },
     ],
   },
@@ -91,7 +90,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-obligation-proof-context",
-        requirement: "Preserves the immutable handoff-plan.md path, separate approval absence from handoff-approval.md, evidence sources, freshness guards, split triggers, open proof gaps, and parent-owned verification with the obligation-to-slice-to-proof mapping without embedding approval or a document digest in the plan.",
+        requirement: "Preserves the immutable handoff-plan.md ready record, governing basis, plan-only delivery context, evidence sources, freshness guards, split triggers, open proof gaps, and parent-owned verification with the obligation-to-slice-to-proof mapping without a document digest.",
         failureExample: "Carries commands but drops ownership, freshness, or delegated-evidence verification.",
       },
     ],

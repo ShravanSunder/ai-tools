@@ -1,16 +1,24 @@
 # Scenario Label Summary Implementation Plan
 
-Planning result: draft
+Planning result: ready
 Originating planner: plan-implementation
 Planned at branch/HEAD: fixture / 1111111111111111111111111111111111111111
 
-## Authority
+## Governing Planning Basis
 
+- Kind: reviewed-three-artifact-design
 - Requirements: requirements-scenario-label-summary-v1
 - Specification: specification-scenario-label-summary-v1
 - Program Design: program-design-scenario-label-summary-v1
 - Review invocation: review-scenario-label-summary-invocation-v1
 - Review result: review-scenario-label-summary-result-v1
+- Applicability: current fixture source and scenario-case loader.
+
+## Delivery Context
+
+- Requested terminal: pr-ready-unmerged
+- Delivery grouping: single:scenario-label-summary
+- PR topology: one-pr
 
 ## Change And Proof
 
@@ -23,13 +31,9 @@ Manual/runtime proof: not applicable because the formatter is pure deterministic
 
 ## Completion Report
 
-Return the unchanged canonical plan record and approval evidence, implementation base/HEAD/diff, covered obligation and slice, changed files, automated commands and exit codes, manual/runtime and quality observations, integration-gate result, incomplete rows, blockers, and proof freshness.
+Return the unchanged canonical plan record, governing planning basis, delivery context, implementation base/HEAD/diff, covered obligation and slice, changed files, automated commands and exit codes, manual/runtime and quality observations, integration-gate result, incomplete rows, blockers, and proof freshness.
 
 ## Stop Conditions
 
 - Stop if scenario identities are not available without filesystem access.
 - Stop if the change requires a CLI or evaluator contract change.
-
-## Result Payload
-
-Later explicit owner approval must name this exact plan path and current meaning.

@@ -1,16 +1,24 @@
 # Scenario Label Summary Handoff Plan
 
-Planning result: draft
+Planning result: ready
 Originating planner: plan-implementation
 Planned at branch/HEAD: fixture / 3333333333333333333333333333333333333333
 
-## Authority
+## Governing Planning Basis
 
+- Kind: reviewed-three-artifact-design
 - Requirements: requirements-scenario-label-summary-v1
 - Specification: specification-scenario-label-summary-v1
 - Program Design: program-design-scenario-label-summary-v1
 - Review invocation: review-scenario-label-summary-invocation-v1
 - Review result: review-scenario-label-summary-result-v1
+- Applicability: current fixture source and scenario-case loader.
+
+## Delivery Context
+
+- Requested terminal: plan-only
+- Delivery grouping: single:scenario-label-summary
+- PR topology: not-applicable
 
 ## Obligation And Proof Mapping
 
@@ -26,7 +34,3 @@ Any helper output is candidate evidence. The parent reopens cited sources and ve
 ## Open Proof Gaps
 
 - The new formatter file does not exist yet; the executor must establish RED before implementation.
-
-## Result Payload
-
-Later explicit owner approval must name this exact plan path and current meaning.

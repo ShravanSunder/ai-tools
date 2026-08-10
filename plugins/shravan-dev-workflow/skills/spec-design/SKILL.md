@@ -101,6 +101,8 @@ When unmade owner meaning blocks Requirements or Specification, use `discuss-pat
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
+Accept an optional call-scoped `new artifact home` policy. When `orchestrator-design` supplies `<project-root>/docs/specs/`, create any new file-backed Requirements and Specification as distinct resolvable paths beneath that home and return both exact paths. Preserve authoritative pre-existing artifacts elsewhere; do not relocate or reject them because of the policy. The artifact-home policy applies only to new outputs in the current call and is not persisted as workflow state.
+
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the applicable identity representation, the Requirements/Specification separation check, and the identities downstream phases must consume.
 
 MUST load `references/authority-and-problem-framing.md` and return its first result for stage 1: artifact boundary, consumers, decision authority, governing-source identities/classes and current applicability, confirmed goal boundary, and accepted-requirements recovery. Retain the loaded reference and working state for stage 2 and the terminal return. Surface an exact owner decision immediately when it blocks authoring.
@@ -227,7 +229,7 @@ Rejecting a requested all-in-one or internally focused diagram does not complete
 
 MUST load `references/artifact-and-self-review.md` with the Required Why/What Views decisions and rendering results to choose the artifact structure, preserve the specification spine, apply view discrimination and pruning, and return the structure decision, traceability/navigation result, view-verification result, pruned elements, artifact identity, and exact view gaps.
 
-Follow the repository's documented spec location; otherwise use `docs/specs/` for substantial file-backed work. Create a Specification artifact distinct from the admitted Requirements source. A combined `Requirements/spec` artifact or a Requirements document containing the observable contract does not satisfy this boundary. Keep research ledgers and review reports out of the normative design artifact.
+Apply any caller-supplied artifact-home policy first. Otherwise follow the repository's documented spec location, or use `docs/specs/` for substantial file-backed work. Create a Specification artifact distinct from the admitted Requirements source. A combined `Requirements/spec` artifact or a Requirements document containing the observable contract does not satisfy this boundary. Keep research ledgers and review reports out of the normative design artifact.
 
 Author top-down: begin with the smallest Why/What map a human needs to confirm the problem and intended outcome, then reveal normative requirements, observable contracts, failures, constraints, and proof. Link every normative-eligible U row to the obligation it authorizes. Expose one compact `Requirements -> Specification -> Program Design` path with distinct identities instead of repeating their roles or contents.
 
@@ -245,9 +247,9 @@ Completion: the current artifact has a self-check result with exact passes and g
 
 Call `spec-program-review` using its `classify-review-requirement` operation with: target classification and the exact `skills-creation` parent packet/result identity when the target is a runtime skill package; requested future mode `specification-only`; the distinct Requirements and Specification identities; scope and claimed semantic effect; governing-source coverage; matched material-risk predicates; and `caller requirement: required | none` (default `none`). Consume the `review-required | non-substantial` result, decision branch, basis, source coverage, caller requirement, and preserved target/parent identities.
 
-When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps, and the exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here. After a later edit, use `spec-program-review` to refresh coverage when meaning changed; parent-verified non-semantic edits may retain coverage.
+When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps, and the exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here for at most one remediation pass. After remediation, the parent verifies corrected anchors against the original findings and closes the design review without redispatch; parent-verified non-semantic edits may retain coverage. Any second review requires explicit user permission.
 
-Completion: current independent review semantically covers the current artifact, or the exact `non-substantial` basis or blocking input is recorded.
+Completion: one independent review is ready, or its accepted findings have one complete parent-verified remediation, or the exact `non-substantial` basis/block/permission requirement is recorded.
 
 ### 12. Return the local result
 

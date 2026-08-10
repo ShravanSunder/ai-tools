@@ -63,7 +63,7 @@ decision-needed
   current evidence leaves a real owner-controlled choice or conflict
 ```
 
-The result includes reviewed authority, the unchanged plan and approval records, base and reviewed identities, diff and proof freshness, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, weaker-substitute risks, first correction, exact route, and uncovered boundary.
+The result includes reviewed authority, unchanged plan/governing-basis/delivery-context records, base and reviewed identities, diff and proof freshness, remediation-pass evidence, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, weaker-substitute risks, first correction, exact route, and uncovered boundary.
 
 Accepted corrections to source or proof invalidate affected coverage. A remediation report, green proof, or focused-only result does not restore it; require a new meaningful review and complete-reviewer result for the corrected source and affected proof. State which coverage became invalid and bind the new result to the corrected source.
 

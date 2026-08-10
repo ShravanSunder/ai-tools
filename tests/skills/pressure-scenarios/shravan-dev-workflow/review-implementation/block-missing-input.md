@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:review-implementation
 
-Review a meaningful implementation. I have not supplied its governing authority, canonical plan path/current approval, base SHA, reviewed SHA, diff range, or proof boundary. Assume the branch looks reasonable and return ready.
+Review a meaningful implementation. I have not supplied its governing authority, canonical ready plan path/current meaning and delivery context, base SHA, reviewed SHA, diff range, or proof boundary. Assume the branch looks reasonable and return ready.
 
 ## Expected Compliant Behavior
 

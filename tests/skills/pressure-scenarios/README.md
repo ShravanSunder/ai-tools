@@ -67,13 +67,14 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-check-diagrams-explain-system` | Check that diagrams answer their reader question and agree with written meaning. |
 | `spec-program-review` | `spec-program-review-give-useful-findings` | Return concrete findings, consequences, smallest corrections, owners, and confirming evidence in ordinary language. |
 | `spec-program-review` | `spec-program-review-route-only-validated-findings` | Let only parent-validated findings select one correction owner and keep direct review outside orchestration state. |
+| `spec-program-review` | `spec-program-review-one-review-one-remediation` | Close one design review from original findings plus parent-verified remediation without automatic rereview. |
 | `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |
-| `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact stored phase handoff without reconstructing meaning from chat. |
+| `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact current phase return without reconstructing meaning from chat or requiring lifecycle state. |
 | `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
-| `orchestrator-design` | `orchestrator-design-stops-before-second-review` | Stop with stale review after a semantic correction instead of automatically reviewing again. |
-| `orchestrator-design` | `orchestrator-design-enters-post-review-correction` | Move three-artifact design review corrections into the matching post-review allowance before invoking them. |
+| `orchestrator-design` | `orchestrator-design-stops-before-second-review` | Close from original findings plus parent-verified remediation without automatically reviewing again. |
+| `orchestrator-design` | `orchestrator-design-enters-post-review-correction` | Route one bounded design remediation to its semantic owner while preserving a genuine mental-model-break stop. |
 | `orchestrator-design` | `orchestrator-design-blocks-pathfinding-return-mismatch` | Block a completed pathfinding handoff that names a different phase than its initiating handoff. |
-| `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep specification-gap recovery within pre-review allowances and preserve post-review capacity. |
+| `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep authoring recovery distinct from the one review remediation and continue to the first review. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |
@@ -89,14 +90,16 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `plan-handoff` | `plan-handoff-routes-ready-design-to-planner` | Route exact ready design with no plan to `plan-implementation` without fabricating a handoff. |
 | `plan-implementation` | `plan-implementation-admit-reviewed-design` | Translate current ready three-artifact design into one repo-grounded proof-bearing plan and stop before later phases. |
 | `plan-implementation` | `plan-implementation-route-stale-without-plan` | Route stale design coverage without creating a plan or phantom tuple. |
-| `plan-implementation` | `plan-implementation-preserve-existing-plan-on-blocked-admission` | Preserve an existing plan record and approval record when admission fails. |
+| `plan-implementation` | `plan-implementation-preserve-existing-plan-on-blocked-admission` | Preserve an existing ready plan, governing basis, and delivery context when admission fails. |
 | `plan-implementation` | `plan-implementation-keep-small-plan-proportional` | Keep a small plan compact without dropping authority, proof, or stop conditions. |
 | `plan-implementation` | `plan-implementation-reject-combined-design-and-route-gap` | Reject a combined Requirements/Specification identity and route the missing contract without planning. |
 | `plan-implementation` | `plan-implementation-slice-collisions-and-proof-fit` | Bind contract slices to consumers, serialize collisions, place integration gates, and split false-green proof. |
-| `plan-implementation` | `plan-implementation-revision-requested-result` | Return an immutable completed revision-requested plan record without guessing, approval, or execution. |
+| `plan-implementation` | `plan-implementation-revision-requested-result` | Return revision-requested with no fabricated plan identity, guessing, or execution. |
+| `plan-implementation` | `plan-implementation-direct-planning-establishes-intent` | Establish plan-only versus PR-ready intent at direct-planning entry instead of adding post-plan approval. |
+| `plan-implementation` | `plan-implementation-orchestrated-plan-uses-project-tmp` | Put orchestrated plans under ignored project tmp and add tmp/* to project .gitignore when needed. |
 | `plan-implementation` | `plan-implementation-runtime-skill-package-route` | Route named runtime skill packages to skills-creation without creating a plan or tuple. |
-| `implement-plan` | `implement-plan-admit-approved-draft` | Admit only the exact approved draft, re-anchor current source, and return one proof-bearing ready frontier without fabricating read-only execution. |
-| `implement-plan` | `implement-plan-reject-unapproved-plan` | Preserve the tuple and stop before execution when separate exact-revision approval is absent. |
+| `implement-plan` | `implement-plan-admit-ready-delivery-plan` | Admit the exact ready PR-delivery plan, re-anchor current source, and return one proof-bearing frontier without fabricating execution. |
+| `implement-plan` | `implement-plan-block-plan-only-terminal` | Preserve a plan-only record and stop before execution instead of upgrading delivery intent in place. |
 | `implement-plan` | `implement-plan-route-revision-requested` | Route a non-executable revision-requested result to its recorded originating planner. |
 | `implement-plan` | `implement-plan-stop-on-design-break` | Stop before editing when current reality requires missing observable or structural design. |
 | `implement-plan` | `implement-plan-preserve-proof-gate` | Preserve a required proof gate and separate scoped evidence from an out-of-scope failure. |
@@ -105,17 +108,17 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implement-plan` | `implement-plan-accepted-review-remediation` | Accept only implementation-owned routed correction and require fresh affected proof before later review. |
 | `implement-plan` | `implement-plan-refuse-false-completion` | Keep missing manual/runtime and integration evidence visible instead of claiming completion from unit tests. |
 | `implement-plan` | `implement-plan-route-blocked-result` | Preserve a canonical blocked result and stop at its recorded blocker and unblock owner. |
-| `implement-plan` | `implement-plan-stop-on-stale-plan` | Re-anchor current source and stop instead of silently translating an approved stale plan. |
-| `implement-plan` | `implement-plan-admit-approved-improvement-plan` | Admit an exact later-approved canonical draft from the plan-improve-repo origin. |
+| `implement-plan` | `implement-plan-stop-on-stale-plan` | Re-anchor current source and stop instead of silently translating a stale ready plan. |
+| `implement-plan` | `implement-plan-block-plan-only-improvement-plan` | Recognize plan-improve-repo as a canonical origin while preserving its direct plan-only terminal. |
 | `implement-plan` | `implement-plan-eligible-disjoint-delegation` | Permit only plan-proven disjoint delegation through manage-agents without default controller machinery. |
 | `implement-plan` | `implement-plan-scoped-slice-proof-report` | Bind slice proof to the exact tuple while keeping incomplete full and integration rows open. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-missing-implementation-review` | Stop PR readiness when meaningful implementation lacks current independent review coverage. |
 | `implementation-handoff` | `implementation-handoff-context-free-canonical-plan` | Preserve exact plan authority and bound implementation proof in the actual context-free prompt. |
 | `plan-improve-repo` | `plan-improve-repo-direct-authority-boundary` | Keep admitted improvement findings separate from direct reviewed-design planning. |
-| `plan-improve-repo` | `plan-improve-repo-validation-does-not-approve` | Keep current-state validation separate from exact-revision approval and execution. |
+| `plan-improve-repo` | `plan-improve-repo-validation-preserves-plan-only` | Keep current-state validation separate from delivery-intent upgrades and execution. |
 | `plan-improve-repo` | `plan-improve-repo-deep-no-default-delegation` | Keep deep improvement audits in-parent unless an explicit or concrete bounded delegation predicate exists. |
 | `plan-improve-repo` | `plan-improve-repo-runtime-skill-package-route` | Route named runtime skill packages to skills-creation without a mechanics-only bypass. |
-| `plan-improve-repo` | `plan-improve-repo-completed-blocked-result` | Return an immutable completed blocked plan record without guessing external authority or advancing. |
+| `plan-improve-repo` | `plan-improve-repo-completed-blocked-result` | Return blocked with no fabricated plan identity, external contract, or implementation advance. |
 | `ops-linear-tracking` | `ops-linear-tracking-docs-are-truth.md` | Do not make Linear the design source of truth or clobber dependency relations. |
 | `ops-security-review` | `ops-security-review-official-scan.md` | Do not invent a security scanner; route explicit scans to official Codex Security workflows. |
 | `peekaboo` | `peekaboo-progressive-disclosure.md` | Do not reuse stale element IDs, skip live command discovery, or perform destructive desktop cleanup. |
@@ -129,13 +132,14 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-security-and-cache-boundary.md` | Do not treat scripts, hooks, assets, package scripts, third-party source adoption, or installed-cache/home mutation as ordinary prose work. |
 | `skills-creation` | `skills-creation-spec-review-gate.md` | Do not implement non-trivial skill workflow changes before pre-implementation spec review unless the user explicitly skips review. |
 | `skills-creation` | `skills-creation-implementation-review-gate.md` | Do not advance non-trivial skill changes to PR-ready without implementation review reduction, changed-file coverage, and targeted retest. |
+| `skills-creation` | `skills-creation-separate-review-remediation-limits` | Keep one proposal review/remediation distinct from the three-pass implementation-review limit. |
 | `research-swarm` | `research-swarm-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
 | `research-swarm` | `research-swarm-substantial-stage-artifacts` | Do not collapse substantial fan-out research into chat-only summaries; require lane artifacts and parent synthesis. |
 | `review-implementation` | `review-implementation-classify-non-substantial` | Skip independent review only for verified non-semantic mechanical work. |
-| `review-implementation` | `review-implementation-block-missing-input` | Block rather than infer missing governing authority, canonical plan approval, source identity, diff, or proof boundary. |
+| `review-implementation` | `review-implementation-block-missing-input` | Block rather than infer missing governing authority, ready plan context, source identity, diff, or proof boundary. |
 | `review-implementation` | `review-implementation-reject-stale-non-substantial-evidence` | Refuse a mechanical bypass when consumer-search evidence is stale for the reviewed source identity. |
 | `review-implementation` | `review-implementation-refuse-ready-from-partial-receipt` | Refuse readiness when the mandatory complete-reviewer receipt remains partial. |
-| `review-implementation` | `review-implementation-complete-source-trace` | Trace every material obligation through the approved plan, real implementation caller, and fitting proof. |
+| `review-implementation` | `review-implementation-complete-source-trace` | Trace every material obligation through the ready plan, real implementation caller, and fitting proof. |
 | `review-implementation` | `review-implementation-detect-false-green-proof` | Reject weaker proof substitutes and stale or mismatched evidence. |
 | `review-implementation` | `review-implementation-verify-runtime-reachability` | Trace runtime claims through the real front door, routing owner, executor, and proof. |
 | `review-implementation` | `review-implementation-verify-candidate-finding` | Treat reviewer findings as candidates until the parent verifies their current anchors and consequence. |
@@ -144,10 +148,10 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `review-implementation` | `review-implementation-invalidate-corrected-coverage` | Invalidate affected review coverage after correction and require fresh review of corrected source and proof. |
 | `review-implementation` | `review-implementation-preserve-read-only-authority` | Keep reviewer and workflow authority read-only, candidate-only, and outside remediation or PR lifecycle work. |
 | `review-implementation` | `review-implementation-runtime-skill-package-route` | Route runtime skill-package review to `skills-creation`, not through product implementation review. |
+| `review-implementation` | `review-implementation-stops-before-fourth-remediation` | Stop after implementation remediation three instead of dispatching review or remediation four. |
 | `orchestrator-goal` | `orchestrator-goal-start-at-design` | Route a fresh long-horizon goal to the bounded design owner without creating lifecycle state. |
 | `orchestrator-goal` | `orchestrator-goal-route-ready-design-to-planning` | Route current ready reviewed design to `plan-implementation` without fabricating a plan. |
-| `orchestrator-goal` | `orchestrator-goal-stop-for-plan-approval` | Stop at the caller when a completed draft lacks later exact-revision owner approval. |
-| `orchestrator-goal` | `orchestrator-goal-route-approved-plan-to-implementation` | Route an exact later-approved draft to `implement-plan` without acting as an executor. |
+| `orchestrator-goal` | `orchestrator-goal-continue-ready-plan-without-approval` | Continue an exact ready PR-delivery plan to implementation without a generic approval checkpoint. |
 | `orchestrator-goal` | `orchestrator-goal-route-proof-to-review` | Route implementation proof without current independent review to `review-implementation`. |
 | `orchestrator-goal` | `orchestrator-goal-route-review-finding` | Preserve cause-based correction ownership and require fresh affected review. |
 | `orchestrator-goal` | `orchestrator-goal-route-ready-implementation-to-pr` | Route ready implementation to `implementation-pr-wrapup` and require its fresh receipt. |

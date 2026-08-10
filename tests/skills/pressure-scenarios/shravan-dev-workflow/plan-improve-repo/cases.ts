@@ -28,28 +28,28 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "plan-improve-repo-validation-does-not-approve",
+    scenarioId: "plan-improve-repo-validation-preserves-plan-only",
     requiredSourceReads: [
       ...completedPlanSources,
       "plugins/shravan-dev-workflow/skills/plan-improve-repo/references/validation-checklist.md",
-      "tests/skills/fixtures/minimal-planning-delivery/unapproved-improvement-plan.md",
+      "tests/skills/fixtures/minimal-planning-delivery/improvement-plan.md",
     ],
     maximumToolCalls: 40,
     semanticCriteria: [
       {
         name: "validates-with-a-separate-receipt",
-        requirement: "Returns current-state validation separately from the canonical plan record and does not turn a ready receipt into planning or approval state.",
-        failureExample: "Writes readiness into the plan or treats validation as approval.",
+        requirement: "Returns current-state validation separately from the canonical plan record and does not turn a ready receipt into implementation authority.",
+        failureExample: "Writes validation state into the plan or treats validation as a delivery-intent upgrade.",
       },
       {
         name: "preserves-exact-plan-authority",
-        requirement: "Returns the complete unchanged plan record and result payload for the immutable unapproved-improvement-plan.md path, originating planner plan-improve-repo, draft result, and approval evidence absent without computing a document digest.",
-        failureExample: "Changes the tuple, result, or approval evidence.",
+        requirement: "Returns the complete unchanged ready plan record for improvement-plan.md, originating planner plan-improve-repo, governing basis, and plan-only delivery context without computing a document digest.",
+        failureExample: "Changes the result, governing basis, delivery context, or plan path.",
       },
       {
-        name: "refuses-retroactive-approval-and-execution",
-        requirement: "Explains that the earlier audit request could not approve unseen plan meaning and does not start implementation.",
-        failureExample: "Marks the plan approved or begins the mechanical edit.",
+        name: "refuses-terminal-upgrade-and-execution",
+        requirement: "Explains that validation cannot upgrade plan-only delivery intent and does not start implementation.",
+        failureExample: "Changes the requested terminal or begins the mechanical edit.",
       },
     ],
   },
@@ -101,14 +101,14 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 40,
     semanticCriteria: [
       {
-        name: "returns-an-immutable-blocked-plan-record",
-        requirement: "Produces one new immutable path-addressed canonical plan record for this run and returns its complete plan record and result payload: originating planner plan-improve-repo, planning result blocked, exact blocker identity and evidence, unblock owner, and approval evidence absent without a document digest.",
-        failureExample: "Returns mutable lifecycle status, a partial tuple, or an executable draft despite the unresolved external contract.",
+        name: "returns-a-non-ready-blocked-result",
+        requirement: "Returns planning result blocked with plan identity none, exact blocker evidence, and unblock owner without writing or fabricating a canonical plan path or document digest.",
+        failureExample: "Writes a blocked plan artifact, returns mutable lifecycle status, or marks the unresolved work ready.",
       },
       {
         name: "does-not-guess-or-advance",
-        requirement: "Preserves the admitted mechanics-only boundary, does not invent the unavailable contract, returns the required separate blocked current-state validation receipt without mutating the tuple, and does not approve, hand off, or implement the blocked plan.",
-        failureExample: "Guesses the schema, skips the separate validation receipt, starts implementation, or treats blocked as approval state.",
+        requirement: "Preserves the admitted mechanics-only boundary, does not invent the unavailable contract, and does not hand off or implement the blocked result.",
+        failureExample: "Guesses the schema, fabricates a plan identity, or starts implementation.",
       },
     ],
   },

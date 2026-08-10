@@ -1,42 +1,35 @@
 ---
 name: implement-plan
-description: Use when executing or continuing an approved implementation plan, checking that its path and approval still match its current meaning, or correcting an implementation-owned finding from review-implementation. Not for plan or design defects, changes to one named runtime skill package or an accepted multi-run skill-change slice without explicit skills-creation composition, independent implementation review, tracker publication, or PR lifecycle work.
+description: Use when executing or continuing one current ready canonical implementation plan whose delivery context authorizes implementation, or correcting one implementation-owned finding within the bounded implementation-review remediation route. Not for plan/design defects, independent review, tracker publication, or PR lifecycle work.
 ---
 
 # Implement Plan
 
-Implementation executes one approved immutable plan against the current repository. Check authority and reality before editing, then complete the smallest safe slice that can be proven. A surprise that changes meaning returns to its owner; execution never invents a seam merely to keep moving.
+Implementation executes one immutable ready plan against current authority and repository reality. Delivery intent—not post-plan approval chronology—controls admission. A surprise that changes meaning returns to its owner.
 
-## Check Whether Implementation Can Start
+## Validate Before Editing
 
-1. Classify the target as `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` parent identity authorizing composition; otherwise return that route and stop.
-2. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the complete plan record, result-specific payload, and separate approval-evidence record or explicit absence, and return `admit | route | blocked` with the exact reason.
+1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` composition identity.
+2. MUST load `../../shared-references/canonical-implementation-plan.md` and return `admit | route | blocked` after validating the complete plan record, governing planning basis, and delivery context.
+3. Proceed only when result is `ready`, terminal is `pr-ready-unmerged`, the path resolves, opened plan agrees with the record, governing basis remains current, and no design, planning, proof, authority, or environment blocker is open.
+4. Route `revision-requested` to its originating planner. Stop `blocked`, `plan-only`, missing plan identity, malformed context, or stale/mismatched basis at the exact recorded owner. Never mutate a prior plan to upgrade its terminal.
 
-Proceed only with `draft` and authorized-owner approval naming the exact plan path and current meaning. Route `revision-requested` to the recorded originating planner. Stop `blocked` at its recorded blocker and unblock owner. Approval evidence must prove that approval was recorded after a complete read of the completed plan; this skill cannot approve a plan, and earlier goal text cannot pre-authorize unseen plan meaning.
+Completion: the unchanged ready plan record, governing basis, delivery context, and admission result or exact route are explicit.
 
-Completion: the target classification, unchanged complete plan record, separate current-plan approval-evidence record or explicit absence, and admission result or exact route are explicit.
+## Execute and Prove
 
-A `route` or `blocked` admission ends this run before `references/execution-and-proof.md` is loaded. Only `admit` enters execution depth.
-
-## Execute the Plan and Prove Each Claim
-
-1. MUST load `references/execution-and-proof.md` to validate the current branch/HEAD, instructions, diff, named paths, dependencies, write scopes, commands, security assumptions, and proof feasibility before edits, and return the pre-edit verdict, smallest ready frontier, proof and integration contract, surprise routes, and completion-report contract.
-2. Select the smallest ready frontier. Work inline by default. Use `manage-agents` only when the approved plan identifies genuinely independent disjoint slices or the user explicitly requests delegation; agent availability is not a reason to parallelize.
-3. Execute one slice inside its allowed write scope. Use red/green when the plan or repository requires it, and preserve every proof gate.
-4. Re-anchor against the current repository and prove the slice before advancing. Integrate only at the plan's named gate and only after its prerequisites are proven.
-5. Classify each surprise as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside the approved boundary and report it. Route every other class to the owner named by the loaded reference and stop before building on it.
-6. For an accepted implementation-owned review correction, return the smallest correction and fresh affected proof, mark the prior review coverage stale, and require later fresh independent review without launching it here.
-7. Return the canonical plan record and approval evidence unchanged, plus the completion report owned by `references/execution-and-proof.md`.
-
-Completion: every claimed slice has fresh fitting proof, integration occurred only at named gates, incomplete obligations and blockers are explicit, and the canonical plan and approval evidence remain unchanged.
+1. MUST load `references/execution-and-proof.md` to validate current branch/HEAD, instructions, diff, named paths, dependencies, write scopes, commands, security assumptions, proof feasibility, and completion-report shape.
+2. Select the smallest ready frontier. Work inline unless the plan identifies genuinely independent disjoint slices or the user explicitly requests delegation.
+3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate.
+4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
+5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.
+6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
+7. Return the canonical plan record, governing basis, and delivery context unchanged with the completion report.
 
 ## Boundaries
 
-- Never rewrite the canonical plan as execution state. Progress, commands, observations, and blockers belong in implementation proof.
-- Never weaken, remove, disable, or relabel a proof gate to make execution pass. Split or replan when required proof cannot pass inside approved scope.
-- A reversible correction cannot move ownership, change a public contract or data format, write migration state, weaken proof, or become a dependency for another slice before it is reviewed; those are design or plan routes, not drift repair.
-- Stop before independent review, tickets, PR work, merge, or release. This skill returns implementation and proof; later skills own later phases.
+- Never alter plan meaning, governing basis, delivery context, required proof, design, tracker state, review verdict, PR state, or merge authority.
+- A completed slice is not independent review. General-domain work routes to `review-implementation`; runtime-skill work remains under `skills-creation`.
+- Missing current review/remediation receipts do not reset the three-remediation limit; they stop further remediation for explicit user permission.
 
-## Completion Blockers
-
-Do not claim implementation complete while the plan or approval admission is invalid; current source contradicts a load-bearing plan assumption; write scope is broader than approved; a proof gate is missing, stale, weakened, or unable to observe its obligation; an integration prerequisite is unproven; a surprise lacks its exact classification and owner; or any plan obligation remains without a fresh implementation/proof row.
+Completion: every claimed slice has fresh fitting proof, every incomplete obligation/blocker is explicit, the plan record remains unchanged, and no fourth remediation occurred.

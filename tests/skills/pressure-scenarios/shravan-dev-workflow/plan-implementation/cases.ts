@@ -41,8 +41,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "returns-one-artifact-ready-plan-candidate",
-        requirement: "In this fast read-only characterization, describes one proportional artifact-ready plan candidate whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical plan record, and separate approval absence must be produced in a write-enabled run; and fabricates none of them now.",
-        failureExample: "Demands a completed file despite the read-only harness, returns a task list without obligation/proof mapping, uses plan identity none after successful admission, fabricates a path, document digest, or approval, or treats the candidate as executable.",
+        requirement: "In this fast read-only characterization, describes one proportional artifact-ready plan candidate whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical ready record, governing basis, and delivery context must be produced in a write-enabled run; and fabricates none of them now.",
+        failureExample: "Demands a completed file despite the read-only harness, returns a task list without obligation/proof mapping, uses plan identity none after successful admission, fabricates a path or document digest, or invents delivery context.",
       },
       {
         name: "stops-before-later-phases",
@@ -88,8 +88,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-the-exact-tuple",
-        requirement: "Returns the immutable existing-plan.md path, originating planner plan-implementation, draft payload, and approval absence unchanged beside the blocker without computing a document digest. The deterministic required-source gate separately proves the successful plan read.",
-        failureExample: "Erases the plan identity, changes its tuple/result, or fabricates approval.",
+        requirement: "Returns the immutable existing-plan.md ready record, originating planner plan-implementation, governing basis, and delivery context unchanged beside the blocker without computing a document digest. The deterministic required-source gate separately proves the successful plan read.",
+        failureExample: "Erases the plan identity or changes its result, governing basis, or delivery context.",
       },
       {
         name: "does-not-repair-in-planning",
@@ -105,7 +105,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "uses-compact-canonical-form",
-        requirement: "Chooses a compact plan candidate that still carries authority, current evidence, the change/proof sequence, intended repository home, approval absence, and stop conditions without document-version bookkeeping; explicitly states that no completed immutable path exists in this read-only run.",
+        requirement: "Chooses a compact plan candidate that still carries authority, current evidence, the change/proof sequence, intended repository home, delivery context, and stop conditions without document-version bookkeeping; explicitly states that no completed immutable path exists in this read-only run.",
         failureExample: "Drops plan authority because the change is small or expands it into a multi-phase controller.",
       },
       {
@@ -161,8 +161,8 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "returns-an-immutable-revision-requested-record",
-        requirement: "In this read-only characterization, returns the intended repository home and one non-extant canonical plan candidate with originating planner plan-implementation, planning result revision-requested, the exact requested correction and owner, and approval evidence absent without fabricating an immutable path or document digest.",
-        failureExample: "Mutates a draft in place, returns only a validation receipt, omits the correction owner, or fabricates approval.",
+        requirement: "In this read-only characterization, returns planning result revision-requested with plan identity none, the exact requested correction and owner, without fabricating an immutable path or document digest.",
+        failureExample: "Mutates a ready plan in place, returns only a validation receipt, omits the correction owner, or fabricates a plan identity.",
       },
       {
         name: "does-not-cross-into-correction-or-execution",
@@ -186,6 +186,39 @@ export const skillPressureCaseDefinitions = [
         requirement: "Stops before design admission and plan production and creates no canonical plan record or artifact.",
         failureExample: "Loads planning depth, creates a tuple, or writes a plan for the runtime skill package.",
       },
+    ],
+  },
+  {
+    scenarioId: "plan-implementation-direct-planning-establishes-intent",
+    requiredSourceReads: admissionSources,
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "asks-at-entry", requirement: "Because direct planning intent is ambiguous, asks once at entry whether the terminal is plan-only or pr-ready-unmerged before substantive planning.", failureExample: "Authors the plan first, assumes delivery, or asks for post-plan approval." },
+      { name: "does-not-infer-writes", requirement: "Does not infer implementation authority from the direct planning request.", failureExample: "Starts implementation or treats planning as delivery authorization." },
+    ],
+  },
+  {
+    scenarioId: "plan-implementation-direct-improvement-delivery",
+    requiredSourceReads: [
+      ...completedPlanSources,
+      "tests/skills/fixtures/minimal-planning-delivery/improvement-plan.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "admits-direct-improvement-delivery", requirement: "Admits the unchanged direct plan-improve-repo result and its implementation-mechanics-only basis for owner-requested delivery without requiring orchestrator-goal.", failureExample: "Blocks because the improvement result was produced directly or invents a different governing basis." },
+      { name: "creates-new-delivery-plan", requirement: "Because changing plan-only to pr-ready-unmerged changes plan meaning, describes one new ready plan at tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md and any required project .gitignore tmp/* write without mutating the existing record or claiming read-only writes occurred.", failureExample: "Upgrades the existing plan in place, uses checked-in docs or OS/global temp, or claims the writes happened." },
+    ],
+  },
+  {
+    scenarioId: "plan-implementation-orchestrated-plan-uses-project-tmp",
+    requiredSourceReads: [
+      ...admissionSources,
+      "plugins/shravan-dev-workflow/shared-references/canonical-implementation-plan.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "uses-project-tmp", requirement: "Orders project-root resolution, equivalent ignore check, project .gitignore tmp/* addition when absent, and one tmp/plan-workflows date-slug Markdown plan path.", failureExample: "Uses docs, OS temp, a global store, .git/info/exclude, or several plans." },
+      { name: "reports-read-only-withholding", requirement: "Because this scenario is read-only, names the exact .gitignore and plan writes that would occur without claiming they happened.", failureExample: "Treats ignore setup as an approval blocker or claims files were written." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

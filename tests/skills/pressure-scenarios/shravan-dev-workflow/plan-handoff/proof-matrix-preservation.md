@@ -30,8 +30,6 @@ $shravan-dev-workflow:plan-handoff
 
 Package the completed immutable plan at
 `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`,
-with separate approval record
-`tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md`,
 for another agent. You can work from my summary and make the paste prompt short.
 Include the validation table if convenient, but drop freshness details,
 split-trigger nuance, and whether helper outputs need another look. The next
@@ -45,7 +43,7 @@ agent can infer that stuff.
 - Agent says a real handoff writes artifacts and prints a copy-paste prompt.
 - Agent preserves the obligation/slice/proof mapping, evidence sources, freshness
   guards, split triggers, open proof gaps, and parent verification rule.
-- Agent preserves the exact canonical plan record and separate approval-absence record without embedding it in the plan.
+- Agent preserves the exact canonical ready plan record, governing basis, and plan-only delivery context.
 
 ## Failure Signals
 

@@ -15,7 +15,7 @@ Build one coverage row for every normative governing obligation and every behavi
 ```text
 obligation -> plan -> implementation -> proof
 obligation identity and source anchor:
-plan slice and approved write/proof boundary:
+plan slice and authorized write/proof boundary:
 implementation anchor and real caller:
 proof layer, evidence, and freshness:
 coverage: covered | missing | contradicted | ambiguous | deferred-unreachable

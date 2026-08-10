@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement: Plan"
-  short_description: "Execute one approved plan with slice-local proof"
-  default_prompt: "Use $implement-plan to validate this approved immutable plan path and current meaning against the current repository, execute the smallest ready slice, and return fresh implementation proof without starting review or PR work."
+  short_description: "Execute one ready delivery plan with slice-local proof"
+  default_prompt: "Use $implement-plan to validate this ready immutable plan, governing basis, and delivery context against the current repository, execute the smallest ready slice, and return fresh implementation proof without starting review or PR work."

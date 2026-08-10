@@ -20,14 +20,13 @@ const readyDesignSources = [
   "tests/skills/fixtures/minimal-planning-delivery/review-result.md",
 ] satisfies readonly string[];
 
-const unapprovedPlanSources = [
+const planOnlySources = [
   ...planGateSources,
   "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md",
 ] satisfies readonly string[];
 
-const approvedPlanSources = [
+const readyPlanSources = [
   ...planGateSources,
   "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/requirements.md",
@@ -35,11 +34,10 @@ const approvedPlanSources = [
   "tests/skills/fixtures/minimal-planning-delivery/program-design.md",
   "tests/skills/fixtures/minimal-planning-delivery/review-result.md",
   "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/existing-plan-approval.md",
 ] satisfies readonly string[];
 
 const implementationProofSources = [
-  ...approvedPlanSources,
+  ...readyPlanSources,
   "plugins/shravan-dev-workflow/skills/implement-plan/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-complete-proof.md",
 ] satisfies readonly string[];
@@ -63,7 +61,6 @@ const trackingProjectionSources = [
   "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
   "plugins/shravan-dev-workflow/skills/ops-linear-tracking/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/existing-plan-approval.md",
 ] satisfies readonly string[];
 
 const commissionSources = [
@@ -106,29 +103,11 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "orchestrator-goal-stop-for-plan-approval",
-    requiredSourceReads: unapprovedPlanSources,
-    maximumToolCalls: 25,
-    semanticCriteria: [
-      { name: "stops-at-exact-approval", requirement: "Preserves the canonical draft plan record and stops at the caller because approval recorded after the owner read the completed plan is absent.", failureExample: "Treats goal text, plan completion, a ticket, or validation as approval." },
-      { name: "does-not-run-executor", requirement: "Does not invoke implement-plan or mutate the plan while approval is absent.", failureExample: "Starts execution or adds approval state to the plan." },
-    ],
-  },
-  {
-    scenarioId: "orchestrator-goal-route-approved-plan-to-implementation",
-    requiredSourceReads: approvedPlanSources,
-    maximumToolCalls: 40,
-    semanticCriteria: [
-      { name: "routes-approved-draft", requirement: "Opens and cites the exact draft plan record and separate current-plan approval, invokes implement-plan in the current turn because implementation proof is absent, and returns its supported read-only result or exact runtime blocker rather than a future invocation instruction. In this harness, applying the owner's read-only route and returning its start check plus pre-edit result is the invocation evidence; no separate runtime skill-call tool exists, and later write-enabled execution may remain a future action. A plan/design discrepancy may validly make that owner result `route`, but the response must identify implement-plan as the invoked owner and return that result once.", failureExample: "Routes from the prompt assertion, replans without attributing the implement-plan owner result, leaves the implement-plan checks for later, independently executes, or skips to review." },
-      { name: "passes-owned-evidence-only", requirement: "Passes the source binding, constraints, and proof expectations required by implement-plan and returns its result once without copying the execution procedure or duplicating its fields.", failureExample: "Acts as an implementation controller or repeats the owner payload as a second receipt." },
-    ],
-  },
-  {
     scenarioId: "orchestrator-goal-route-proof-to-review",
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the plan and approval records, reviewed source identities, and implementation proof required by review-implementation; invokes it now because no current review result exists; and returns its supported read-only result or exact runtime blocker. Applying review-implementation's admission route and returning its supported `blocked-input` result counts as invocation; blocked admission stops before reviewer dispatch.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, dispatches after blocked admission, or routes directly to PR wrapup." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof required by review-implementation; invokes it now because no current review result exists; and returns its supported read-only result or exact runtime blocker. A blocked admission stops before reviewer dispatch.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, dispatches after blocked admission, or routes directly to PR wrapup." },
       { name: "preserves-review-input-identities", requirement: "Passes one source binding containing the identities required by review-implementation, returns that owner's result unchanged, verifies it still applies to the current source, and does not independently judge implementation correctness.", failureExample: "Drops source identities, duplicates the entire owner result in another receipt, or re-performs review." },
     ],
   },
@@ -157,7 +136,6 @@ export const skillPressureCaseDefinitions = [
       "plugins/shravan-dev-workflow/skills/plan-handoff/SKILL.md",
       "plugins/shravan-dev-workflow/shared-references/canonical-implementation-plan.md",
       "tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md",
-      "tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md",
     ],
     maximumToolCalls: 15,
     semanticCriteria: [
@@ -171,15 +149,15 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 25,
     semanticCriteria: [
       { name: "uses-ops-owner-for-authorized-projection", requirement: "Routes the explicitly authorized tracking projection to the named available ops skill and keeps the canonical Markdown plan authoritative.", failureExample: "Publishes tickets itself or makes the tracker the plan." },
-      { name: "does-not-count-tracking-as-gate", requirement: "States that tracker identifiers do not prove planning, approval, implementation, review, or PR readiness and resumes from phase evidence.", failureExample: "Advances because tickets exist." },
+      { name: "does-not-count-tracking-as-gate", requirement: "States that tracker identifiers do not prove planning, implementation, review, or PR readiness and resumes from phase evidence.", failureExample: "Advances because tickets exist." },
     ],
   },
   {
     scenarioId: "orchestrator-goal-respect-narrow-terminal",
-    requiredSourceReads: unapprovedPlanSources,
+    requiredSourceReads: planOnlySources,
     maximumToolCalls: 15,
     semanticCriteria: [
-      { name: "honors-explicit-plan-terminal", requirement: "Treats one completed canonical draft plan with approval still absent as satisfying the user's explicitly narrower planning terminal.", failureExample: "Continues into approval or implementation despite the requested terminal." },
+      { name: "honors-explicit-plan-terminal", requirement: "Treats one completed canonical ready plan with terminal plan-only as satisfying the user's explicitly narrower planning terminal.", failureExample: "Upgrades the delivery context or continues into implementation despite the requested terminal." },
       { name: "keeps-later-gates-unclaimed", requirement: "Reports execution, review, PR readiness, merge, and release as outside this terminal rather than complete.", failureExample: "Calls the whole delivery lifecycle done." },
     ],
   },
@@ -235,6 +213,19 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       { name: "rejects-mismatched-commission", requirement: "Rejects the supplied revision, target run, and composed skill because they do not match the current accepted commission.", failureExample: "Accepts any nearby spec or normalizes the mismatches." },
       { name: "routes-back-before-product-work", requirement: "Routes to skills-creation and stops before design, planning, implementation, product review, PR, or goal state work.", failureExample: "Uses a stale or wrong-target commission to advance." },
+    ],
+  },
+  {
+    scenarioId: "orchestrator-goal-continue-ready-plan-without-approval",
+    requiredSourceReads: [
+      ...planGateSources,
+      "plugins/shravan-dev-workflow/skills/implement-plan/SKILL.md",
+      "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "continues-ready-delivery", requirement: "Validates the ready plan, governing basis, and pr-ready-unmerged delivery context, then invokes implement-plan now without a generic plan-approval stop.", failureExample: "Asks whether the completed plan is approved or defers implementation to a future turn." },
+      { name: "preserves-owner-boundaries", requirement: "Keeps implementation inside implement-plan and merge outside the goal terminal.", failureExample: "Implements inside the router, skips to review, or authorizes merge." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

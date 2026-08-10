@@ -15,7 +15,7 @@ Base: <base sha/branch>
 Head: <head sha or working tree>
 Diff command: <git diff command>
 Canonical plan record: <complete unchanged plan record or plan identity: none plus non-plan governing request/ticket identity>
-Separate current-plan approval evidence: <complete unchanged record or explicit absence>
+Current governing planning basis and delivery context: <complete unchanged values>
 Governing authority identities: <current reviewed design or admitted improvement authority>
 Prior review coverage: <reviewed source identity and status or explicit absence>
 
@@ -49,7 +49,7 @@ validation, and proof gaps when a sensitive surface exists>
 
 Review requirements:
 - Verify against actual code, not this summary.
-- Preserve the exact governing authority, canonical plan record and current meaning, complete approval-evidence record or explicit absence, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
+- Preserve the exact governing authority, canonical plan record and current meaning, governing planning basis, delivery context, base/reviewed/diff identities, proof identities, constraints, and freshness evidence above.
 - Run the selected owning workflow's fresh-context changed-implementation review route and parent reduction; do not substitute ad hoc review or cross the runtime skill-package boundary.
 - Return exact anchored findings, proof boundaries, owner routes, and affected review coverage without remediation or PR work.
 ```
@@ -63,7 +63,7 @@ Repo: <absolute repo path>
 Branch/worktree: <branch>
 Stage: <in-progress | blocked | post-review>
 Canonical plan record: <complete unchanged plan record or plan identity: none plus non-plan governing request/ticket identity>
-Separate current-plan approval evidence: <complete unchanged record or explicit absence>
+Current governing planning basis and delivery context: <complete unchanged values>
 
 Objective:
 <what the work is trying to complete>
@@ -90,7 +90,7 @@ Next action:
 <specific next task>
 
 Exact route:
-<implement-plan for an exact approved draft | review-implementation for general-domain work | skills-creation for a runtime skill package | governing owner/blocker>
+<implement-plan for a ready delivery plan | review-implementation for general-domain work | skills-creation for a runtime skill package | governing owner/blocker>
 
 Constraints:
 - Stay within the listed write scope.

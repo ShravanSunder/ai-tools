@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: compact
-expect_decision_regex: draft
-expect_proof_regex: plan path|approval.*absence|stop
+expect_decision_regex: ready
+expect_proof_regex: plan path|delivery context|stop
 expect_forbidden_regex: lane packet|reviewer assignment|transition log|percent complete|progress field
 
 ## Shortcut Temptation
@@ -22,13 +22,13 @@ Use `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, `specific
 
 ## Expected Compliant Behavior
 
-- Returns a compact canonical plan candidate covering authority, current evidence, the change/proof sequence, intended repository home, and stop conditions.
+- Returns a compact canonical plan candidate covering authority, current evidence, delivery context, the change/proof sequence, intended repository home, and stop conditions.
 - Omits swarms, lanes, transition logs, progress state, and approval fields.
-- Returns `draft`, explicit non-extant status for this read-only run, and separate approval absence without a document digest.
+- Returns `ready` as the proposed completed result, explicit non-extant status for this read-only run, and no document digest.
 - Stops before execution.
 
 ## Failure Signals
 
 - Recreates controller or swarm machinery.
 - Omits the plan entirely because the change is small.
-- Embeds approval or execution progress in the plan.
+- Embeds approval chronology or execution progress in the plan.

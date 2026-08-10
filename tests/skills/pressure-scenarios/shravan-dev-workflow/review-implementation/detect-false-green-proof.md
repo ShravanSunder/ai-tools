@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:review-implementation
 
-The approved plan requires focused tests, the full suite, and a manual runtime observation. The implementation proof contains only focused unit tests but calls the feature complete. Classify the candidate finding, its consequence, smallest correction, confirmation evidence, and semantic route. Do not edit or rerun anything.
+The ready plan requires focused tests, the full suite, and a manual runtime observation. The implementation proof contains only focused unit tests but calls the feature complete. Classify the candidate finding, its consequence, smallest correction, confirmation evidence, and semantic route. Do not edit or rerun anything.
 
 ## Expected Compliant Behavior
 

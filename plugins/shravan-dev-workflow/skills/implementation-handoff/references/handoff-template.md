@@ -14,7 +14,7 @@ Base: <base branch/sha or not established>
 Head: <head sha or working tree>
 Source request/plan/ticket: <path/id/summary>
 Canonical plan record: <complete unchanged plan record or plan identity: none>
-Separate current-plan approval evidence: <complete unchanged record or explicit absence>
+Current governing planning basis and delivery context: <complete unchanged values>
 Governing authority identities: <current reviewed design or admitted improvement authority>
 Prior review coverage: <reviewed source identity and status or explicit absence>
 ```

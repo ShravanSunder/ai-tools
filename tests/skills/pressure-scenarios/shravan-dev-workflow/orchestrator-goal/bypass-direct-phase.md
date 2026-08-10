@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-goal
 
-Only prepare a plan handoff for the existing canonical plan at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`; its separate approval record is `handoff-approval.md`. Do not start, resume, or audit the rest of delivery.
+Only prepare a plan handoff for the existing canonical plan-only record at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`. Do not start, resume, or audit the rest of delivery.
 
 ## Expected Compliant Behavior
 
