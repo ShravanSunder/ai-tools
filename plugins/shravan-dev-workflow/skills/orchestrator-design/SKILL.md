@@ -30,7 +30,7 @@ MUST load `../../shared-references/requirements-specification-program-design.md`
 3. Missing Requirements or Specification -> `spec-design`; missing Program Design -> `program-design`; three current artifacts without a review -> `spec-program-review` in `three-artifact-design` mode.
 4. Preserve each producer's returned next owner and exact compact handoff. Validate only that the route is among `discuss-pathfinding | spec-design | program-design | spec-program-review | stop`; do not redo semantic judgment.
 5. `specification-gap` -> `spec-design`; owner-controlled structural choice -> `discuss-pathfinding` with return owner `program-design`; How correction -> `program-design`; blocker/decision -> exact stop.
-6. If a phase return is unavailable, rerun the smallest authoring phase whose result is unproven. An unavailable consumed review/remediation result is permission-gated rather than automatically rerun.
+6. If a phase return is unavailable, rerun the smallest authoring phase whose result is unproven. Pre-review authoring recovery—including `specification-gap -> spec-design -> program-design`—never consumes review remediation; when it produces three distinct current artifacts, route them to the one independent review. An unavailable consumed review/remediation result is permission-gated rather than automatically rerun.
 
 ## One Review, One Remediation
 

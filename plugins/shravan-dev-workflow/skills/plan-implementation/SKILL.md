@@ -26,7 +26,7 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 3. Choose the smallest coherent vertical grouping. If only one exists, use it without alternatives. If materially different groupings or PR topologies exist, present concrete choices with recommendation/tradeoffs and obtain the owner selection before finalizing.
 4. Ensure every contract-only or prefactoring slice names its downstream vertical consumer; every obligation has fitting proof; and no step invents Why, What, structural How, or external authority.
 5. MUST load `../../shared-references/canonical-implementation-plan.md` and apply its complete governing-basis, result, delivery-context, home, and validation contract.
-6. For every `pr-ready-unmerged` plan, ensure project ignore coverage for `tmp/*`, adding that line to project `.gitignore` only when equivalent coverage is absent, then write exactly one `tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan and return its exact path. This includes orchestrated goals and direct continued-delivery planning.
+6. For every `pr-ready-unmerged` plan, first resolve the project root, then inspect that project's ignore coverage for `tmp/*`, add that line to the project-root `.gitignore` only when equivalent coverage is absent, and finally write exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan and return its exact path. This includes orchestrated goals and direct continued-delivery planning.
 7. Return exactly `ready | revision-requested | blocked`. `ready` includes the complete canonical record and any separate tracking side-route selection; non-ready results create no new plan or preserve an existing ready record unchanged.
 
 ## Route the Result

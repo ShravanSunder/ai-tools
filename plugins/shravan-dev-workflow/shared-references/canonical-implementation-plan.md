@@ -56,7 +56,7 @@ Optional tracking remains outside this record. At planning entry, preserve an ex
 
 ## Plan Home
 
-For every `pr-ready-unmerged` plan, including orchestrated goals and direct continued-delivery planning, `plan-implementation` writes exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan. Before writing, it verifies that project ignore policy covers `tmp/*` equivalently and adds `tmp/*` to project `.gitignore` only when coverage is absent. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
+For every `pr-ready-unmerged` plan, including orchestrated goals and direct continued-delivery planning, `plan-implementation` first resolves the project root, then verifies that the resolved project's ignore policy covers `tmp/*` equivalently, adds `tmp/*` to that project-root `.gitignore` only when coverage is absent, and finally writes exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
 
 Direct plan-only work may use an established repository plan home. Otherwise use `docs/specs/<spec>/plans/` for durable direct planning or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work.
 

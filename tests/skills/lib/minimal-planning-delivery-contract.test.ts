@@ -36,8 +36,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(planner).toContain("Choose the smallest coherent vertical grouping");
     expect(planner).toContain("materially different groupings or PR topologies");
     expect(planner).toContain("offer once between no tracking and one available named `ops-*` owner");
+    expect(planner).toContain("first resolve the project root");
     expect(planner).toContain(
-      "write exactly one `tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan",
+      "write exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan",
     );
     expect(planner).toContain("invokes `implement-plan` without another generic approval question");
   });
@@ -148,9 +149,9 @@ describe("goal delivery intent hard cutover", () => {
     const specDesign = readPluginFile("skills/spec-design/SKILL.md");
     const programDesign = readPluginFile("skills/program-design/SKILL.md");
 
-    expect(planner).toContain("adding that line to project `.gitignore`");
+    expect(planner).toContain("project-root `.gitignore`");
     expect(planner).toContain(
-      "`tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md`",
+      "`<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md`",
     );
     expect(designOrchestrator).toContain("<project-root>/docs/specs/");
     expect(designOrchestrator).toContain("<os-temp>/shravan-dev-workflow/orchestrator-design/");
