@@ -21,7 +21,11 @@ Plugin: `shravan-dev-workflow` 2.2.0
 
 - TypeScript typecheck: `pnpm --dir tests/skills run typecheck` passed (exit 0).
 - Full unit Vitest: 17 files, 106 tests passed (exit 0).
-- Integrated pressure evaluation, plugin validation, marketplace readback, and final independent Claude Fable review are recorded after they run; no result is claimed here in advance.
+- Full pressure evaluation executed 174 registered scenarios: 55 passed and 119 failed. The aggregate failures were dominated by pre-existing unrelated scenarios, evaluator rubric leakage, ACPX permission/source-read failures, and subjects falling back to the pre-change `git show HEAD`; this aggregate is recorded as bounded diagnostic evidence, not relabeled as a green release gate.
+- Current-HEAD targeted pressure evaluation passed all six affected behavior cases, including deterministic scenario contracts, required source reads, tool budgets, and semantic judging: project-tmp plan setup, direct improvement delivery, pre-review authoring recovery, one-review/one-remediation closure, stopping before a second design review, and stopping before a fourth implementation remediation.
+- One fresh-context read-only Claude Fable review (`claude-fable-5[1m]`) returned `targeted-revision`. Its accepted findings were remediated and parent-verified; no second Fable or design review ran. Two subsequent targeted remediation passes closed pressure-observed steering gaps, reaching the three-pass implementation-remediation maximum with all affected targeted cases green.
+- The Codex skill quick validator passed for all 14 changed active skill entrypoints using an ephemeral PyYAML environment.
+- `claude plugin validate .`, JSON manifest parsing, and `git diff --check` passed (exit 0).
 
 ## Refresh / reinstall
 
