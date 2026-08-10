@@ -54,7 +54,7 @@ Disposition precedes remediation. Do not spend the remediation allowance on pros
 
 Do not dispatch a second design reviewer after remediation. Switching review mode, reviewer lane, target label, caller skill, or resuming after scratch loss does not reset the boundary. Another design review requires explicit user permission given after the first review/remediation result is visible.
 
-Parent verification is not mislabeled independent review. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` when another review would be needed.
+Parent verification is not mislabeled independent review. When it resolves every original finding and no unrelated or uncertain meaning remains, return the design terminal or planning handoff; never return `review-permission-required` merely to restate that a hypothetical second review would need permission. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` only when another review is explicitly requested or actually needed because meaning expanded or remains uncertain.
 
 ## Terminal Results
 
