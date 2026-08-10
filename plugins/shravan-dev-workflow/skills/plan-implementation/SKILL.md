@@ -1,47 +1,39 @@
 ---
 name: plan-implementation
-description: Use when writing or revising a repository-grounded implementation plan from a reviewed Requirements, Specification, and Program Design set, including when an input or its review is missing, conflicting, or stale and must be routed first. Not for plans whose direct authority is an admitted repository-improvement finding, including source-proven implementation-mechanics-only work; changes to one named runtime skill package or an accepted multi-run skill-change slice without explicit skills-creation composition; an existing plan handoff; tracker publication; implementation; or PR work.
+description: Use when writing or revising a repository-grounded implementation plan from current reviewed Requirements, Specification, and Program Design, an admitted repository-improvement handoff from an orchestrated goal or owner-requested direct delivery, or a direct planning request that must establish plan-only versus continued-delivery intent. Not for audit-only discovery, an existing plan handoff, tracker publication, implementation, or PR work.
 ---
 
 # Plan Implementation
 
-An implementation plan is a proof route through the current repository. It translates reviewed design obligations into the smallest dependency-aware sequence that can change and prove the system. It does not redesign the product, authorize its own execution, or track execution progress.
+An implementation plan is a proof route through current authority and repository reality. Planning owns technical strategy; the caller owns materially different delivery grouping and PR choices. A ready delivery plan is executable input, not a request for generic post-plan approval.
 
-## Check Whether Planning Can Start
+## Admit Planning
 
-1. Classify the target as `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` parent identity authorizing composition; otherwise return that route and stop.
-2. Check the exact current design set under the current `spec-program-review` contract:
-   - mode `three-artifact-design`;
-   - distinct current Requirements, Specification, and Program Design identities;
-   - exact review invocation and result identities;
-   - result `ready`; and
-   - review coverage that still applies to the current meaning of every consumed artifact.
-   `spec-program-review` remains the sole owner of those labels and their meaning.
+1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` parent identity authorizing this composition.
+2. Admit either:
+   - current distinct Requirements, Specification, and Program Design with one completed design review plus any one parent-verified remediation permitted by `spec-program-review`; or
+   - for an orchestrated improvement goal or owner-requested delivery of a direct improvement result, the unchanged `plan-improve-repo` return containing an admitted finding pointer, `current-three-artifact-design-ready | implementation-mechanics-only` classification, required evidence pointers, and current applicability anchors.
+3. Reject missing, combined, conflicting, stale, `design-required`, or malformed authority with `revision-requested | blocked`, exact evidence, and semantic owner. Do not upgrade an improvement basis.
+4. Establish `requested terminal: plan-only | pr-ready-unmerged` before substantive planning. Use explicit user or orchestrator intent. If a direct request is ambiguous, ask once at entry.
+5. At the same entry boundary, preserve an existing tracking selection or offer once between no tracking and one available named `ops-*` owner. Return a named selection separately for the caller to invoke; no tracking continues immediately.
 
-A missing, combined, conflicting, stale, non-ready, or design-gap input returns `route | blocked` with the governing-input identities, reason and evidence, and semantic or unblock owner. If no completed plan exists, include `plan identity: none` and stop without creating an artifact. IF a completed plan exists, load `../../shared-references/canonical-implementation-plan.md` to validate and return its unchanged plan record plus its separate approval-evidence record or explicit absence beside the blocking receipt; do not mutate the plan.
+Completion: the target, governing basis, requested terminal, tracking disposition, and permission to plan or exact non-ready result are explicit.
 
-Completion: the target classification, exact design/review identities, whether review coverage still applies, and either permission to plan or the complete blocking result are explicit.
+## Plan the Change
 
-## Plan The Change
+1. Read the governing authority completely and re-anchor against current branch/HEAD, instructions, owners, interfaces, tests, commands, and proof seams.
+2. MUST load `references/slice-and-proof-design.md` and return its vertical slice graph, obligation/proof map, necessary dependency edges, integration gates, false-green risks, and stop conditions.
+3. Choose the smallest coherent vertical grouping. If only one exists, use it without alternatives. If materially different groupings or PR topologies exist, present concrete choices with recommendation/tradeoffs and obtain the owner selection before finalizing.
+4. Ensure every contract-only or prefactoring slice names its downstream vertical consumer; every obligation has fitting proof; and no step invents Why, What, structural How, or external authority.
+5. MUST load `../../shared-references/canonical-implementation-plan.md` and apply its complete governing-basis, result, delivery-context, home, and validation contract.
+6. For every `pr-ready-unmerged` plan, ensure project ignore coverage for `tmp/*`, adding that line to project `.gitignore` only when equivalent coverage is absent, then write exactly one `tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan and return its exact path. This includes orchestrated goals and direct continued-delivery planning.
+7. Return exactly `ready | revision-requested | blocked`. `ready` includes the complete canonical record and any separate tracking side-route selection; non-ready results create no new plan or preserve an existing ready record unchanged.
 
-1. Read the Requirements, Specification, and Program Design completely. Preserve their distinct authority: Requirements owns Why and boundaries, Specification owns observable What and proof obligations, and Program Design owns structural How and proof seams.
-2. Re-anchor against the current branch, HEAD, repository instructions, owner modules, interfaces, tests, commands, and proof seams. Record the inspected snapshot.
-3. Trace scope, non-goals, constraints, artifact pointers, success evidence, and stop conditions to their governing source. A conflict, stale meaning, or missing decision returns to its semantic owner; planning cannot fill it.
-4. MUST load `references/slice-and-proof-design.md` to decompose the obligations allowed by the start check and return the slice graph, obligation/proof mapping, dependency and collision edges, integration gates, false-green risks, and any split or replan stop.
-5. Keep only edges that change execution: `requires`, `serial`, or advisory `parallel`. Put an integration gate at the first slice where independently changed parts meet.
-6. Check every obligation has a slice and fitting proof; every write path and command is real or explicitly new; scope fits its proof; contract-only and prefactoring slices name their downstream consumer; and no step invents design.
-7. MUST load `../../shared-references/canonical-implementation-plan.md` to choose the proportional Markdown form and repository home. In a write-enabled run, write the completed plan with originating planner `plan-implementation`, validate the canonical plan record, and return it with explicit approval absence. In a read-only dry run, return the intended repository home, candidate result and payload, explicit approval absence, and `completed plan: not created in this read-only run`; never fabricate an immutable path or use `plan identity: none` after planning was allowed to start. Then stop.
+## Route the Result
 
-Completion: a write-enabled run leaves one immutable path-addressed canonical Markdown plan with `draft | revision-requested | blocked`. A read-only dry run leaves no plan artifact and returns its intended home, candidate result/payload, separate approval absence, and explicit non-extant status. In either case every obligation maps to a slice and proof gate, necessary edges and integration gates are explicit, and no document digest is computed.
+- A direct caller stops with a `plan-only` ready plan.
+- A direct caller or `orchestrator-goal` validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question.
+- `revision-requested` returns to the named semantic or planning owner; `blocked` returns to the named unblock owner.
+- Planning never edits product code, invokes tracking providers, reviews implementation, manages PR state, or infers merge authority.
 
-## Boundaries
-
-- Planning stops after the plan and canonical plan record return. Do not create tickets, edit product code, dispatch implementation, review implementation, prepare a handoff, mutate Git, or start PR work.
-- A successful plan result is `draft`, not approval. Only separate owner approval recorded after reading the completed plan and naming its exact path and current meaning can authorize execution.
-- Approval evidence and execution progress never live in the canonical plan.
-- Optional `ops-*` tracking may later project only the exact plan identity and canonical `draft | revision-requested | blocked` planning result; it never adds lifecycle state or becomes plan authority.
-- Plan inline without planning lanes. If required source evidence cannot be grounded in the current run, return the exact research gap and stop instead of dispatching ad hoc helpers.
-
-## Completion Blockers
-
-Do not claim planning complete while the start check has not passed or its inputs are stale; an obligation lacks a proof-bearing slice; a path or command was guessed; an edge hides a collision; a contract-only slice has no consumer; a proof gate cannot observe its obligation; the plan invents Why, What, or How; or the exact plan record and approval absence were not returned.
+Completion: one ready immutable plan exists at the required path with complete current meaning, or one exact non-ready result exists. No approval record, document digest, lifecycle state, placeholder delivery choice, or second plan authority exists.

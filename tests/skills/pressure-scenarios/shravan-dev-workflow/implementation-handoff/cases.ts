@@ -6,7 +6,6 @@ const canonicalHandoffSources = [
   "plugins/shravan-dev-workflow/skills/implementation-handoff/references/handoff-template.md",
   "plugins/shravan-dev-workflow/skills/implementation-handoff/references/copy-paste-prompts.md",
   "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/existing-plan-approval.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-proof.md",
 ] satisfies readonly string[];
 
@@ -58,8 +57,8 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-authority-in-the-real-prompt",
-        requirement: "Requires the unchanged exact canonical plan record, separate later approval record, and non-self-approval ordering evidence in the handoff artifact and selected context-free reviewer prompt.",
-        failureExample: "Leaves authority only in the artifact, summarizes it, or treats the handoff as approval.",
+        requirement: "Requires the unchanged exact canonical ready plan record, governing planning basis, and delivery context in the handoff artifact and selected context-free reviewer prompt.",
+        failureExample: "Leaves authority only in the artifact, summarizes it, or mutates delivery intent during handoff.",
       },
       {
         name: "preserves-bound-implementation-proof",

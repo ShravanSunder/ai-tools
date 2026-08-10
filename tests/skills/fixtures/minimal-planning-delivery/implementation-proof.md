@@ -1,6 +1,6 @@
 # Implementation Proof Fixture
 
-Governing tuple: tests/skills/fixtures/minimal-planning-delivery/existing-plan.md, originating planner plan-implementation, result draft
+Governing plan: tests/skills/fixtures/minimal-planning-delivery/existing-plan.md, originating planner plan-implementation, result ready
 Implementation HEAD: 3333333333333333333333333333333333333333
 
 - Covered obligation: pure formatter rejects duplicate identities before formatting.

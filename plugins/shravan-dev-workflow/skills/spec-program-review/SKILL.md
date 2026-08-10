@@ -22,6 +22,10 @@ Requirements, Specification, and Program Design are separate authoritative conce
 
 Fresh context, read-only access, and candidate-only authority create independence. The parent verifies findings, tests deletion before addition, and owns the coverage-bound result. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
 
+One bounded design run permits one independent review invocation and at most one bounded remediation round. That round may span both semantic owners when the accepted finding set requires the existing ordered `spec-design -> program-design` route; each artifact is corrected at most once, then the parent verifies all corrected anchors against the original findings and closes without dispatching another reviewer. A second design review requires explicit user permission given after that result is visible.
+
+Disposition comes before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Route one valid correction inside the settled mental model to its semantic owner. If a finding disproves a load-bearing assumption or exposes unmade owner meaning, return the failed assumption, evidence, consequence, and exact owner as `decision-needed` or `blocked`; do not spend the remediation allowance to push through a mental-model break.
+
 ## Operations
 
 ```text
@@ -45,13 +49,13 @@ review
   dispatches: exactly one mode-complete reviewer first, then at most one focused reviewer by default
 ```
 
-Review freshness follows meaning, not changed bytes. After an artifact changes, the parent performs and records a semantic-change check before dispatching anyone:
+Review coverage follows meaning, not changed bytes. After the one permitted remediation, the parent performs and records a semantic-change check without dispatching another reviewer:
 
-- if meaning changed, invalidate the affected mode coverage and only the focused lanes whose selection predicates the change affects;
+- if meaning changed inside the accepted correction, preserve the original review as the independent finding source and add parent-verified remediation anchors for every accepted finding;
 - if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward and dispatch no model reviewer;
-- if semantic effect is uncertain, classify it as semantic and rerun the affected coverage.
+- if the change exceeds the accepted correction or its effect is uncertain, stop `review-permission-required`; do not start another review automatically.
 
-Freshness is established by comparing the current artifact's meaning with the meaning covered by the review result. Keep review-process state in the returned result rather than the durable design artifacts.
+Closure is established by the original review result plus parent-verified remediation evidence for the current artifacts. Keep this call-scoped record out of durable design artifacts and do not add persistent review bookkeeping.
 
 ## 1. Guard the Skill-Authoring Boundary
 
@@ -84,6 +88,7 @@ risk predicates
 claimed proof evidence or gaps
 review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
+bounded design-review status: no prior review | explicit user permission for another review
 ```
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `three-artifact-design` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
@@ -95,6 +100,8 @@ A combined `Requirements/spec`, a Requirements-titled artifact that also stands 
 `program-only` also requires the governing Specification. `three-artifact-design` requires the current Requirements, Specification, and Program Design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `three-artifact-design`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
 Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous.
+
+If the packet shows that one design review already ran in this bounded design run and contains no explicit user permission granted afterward, return `blocked` with `review-permission-required` before dispatch. Switching modes, lanes, target labels, or caller skills does not reset this boundary.
 
 ## 4. Select the Mode
 
@@ -116,7 +123,7 @@ MUST use `manage-agents` before each reviewer dispatch and return the one-shot `
 
 Every reviewer gets the complete targets and governing sources but no parent conversation history, author conclusion, expected verdict, prior praise, or hidden context. Reviewer findings remain candidate-only. Silence is `no-receipt`, never a clean review.
 
-Coverage from a receipt expires when a later semantic change affects the mode dimensions, focused-lane predicate, or finding coverage it supplied. A parent-verified non-semantic edit does not expire that coverage.
+Coverage from a receipt expires when a later semantic change outside the accepted remediation affects the mode dimensions, focused-lane predicate, or finding coverage it supplied. The exact one permitted remediation is closed by parent verification and does not expire coverage or authorize redispatch. A parent-verified non-semantic edit also preserves coverage. Expanded or uncertain meaning stops `review-permission-required`.
 
 Completion: fresh-context, read-only, candidate-only dispatch mechanics are recorded before the reviewer runs.
 
@@ -161,7 +168,7 @@ IF one focused risk qualifies, dispatch the single best-matched lane using the s
 
 After the first focused receipt, return the coverage-bound result with remaining gaps. Dispatch another focused lane only when (a) the human user authorizes that named residual risk after seeing current coverage and review cost, or (b) the pre-dispatch external-caller packet already named that residual risk and authorized a second lane before the mode-complete dispatch. The reviewing parent may not grant this authority to itself before or during review, and reviewer output never creates it. Carry that authority in the existing packet constraints and bounded-review-question fields.
 
-After a later semantic edit, rerun a focused lane only when the changed meaning affects that lane's selection predicate or prior finding coverage. Do not fan out unaffected lanes.
+After remediation, do not rerun a focused lane. The parent verifies affected finding anchors; any unresolved or expanded risk stops for explicit permission to begin another review invocation.
 
 Stop focused review when the risk is resolved, unsupported, outside the confirmed goal boundary, or needs an owner decision.
 
@@ -169,7 +176,7 @@ Completion: the selected risk, non-selected residual risks, terminal receipt, an
 
 ## 8. Verify Reviewer Independence
 
-Confirm each receipt matches its assignment, reviewer history was empty, access remained read-only, authority stayed candidate-only, and the reviewer did not mutate the reviewed targets. Compare the covered target text to the current target text. If a later edit changed meaning, invalidate and rerun only the affected coverage; if the parent verifies that it did not change meaning, carry coverage forward; if uncertain, treat it as semantic.
+Confirm each receipt matches its assignment, reviewer history was empty, access remained read-only, authority stayed candidate-only, and the reviewer did not mutate the reviewed targets. Compare the covered target text to the reviewed target text. A later permitted remediation is closed by parent verification against accepted findings; it never causes automatic redispatch.
 
 Completion: each used receipt supplies semantically current coverage for the current target text, and reviewer execution did not widen authority or mutate the worktree.
 
@@ -209,7 +216,7 @@ Completion: every candidate has a source-backed disposition; every finding uses 
 
 Return every field in the `Coverage-Bound Result` owned by `references/finding-and-reduction-schema.md` for the current mode and targets.
 
-`ready` means the current artifact meaning is covered and satisfies the invoked mode. The returned result is the sole home of review state; durable artifacts remain about their subject matter and do not acquire review lifecycle or acceptance status.
+`ready` means the reviewed artifact meaning satisfies the invoked mode. When accepted bounded findings are remediated, downstream callers may continue only with the original result plus complete parent-verified remediation evidence. Rejected non-semantic findings need no remediation. A mental-model break remains a stop until its owner supplies settled meaning. Durable artifacts remain about their subject matter and do not acquire review lifecycle or acceptance status.
 
 After parent reduction, return either a stop or exactly one recommended next skill using the route and compact-handoff procedure in the loaded reference. Reviewer candidates never select this route. When validated findings span Requirements or Specification plus Program Design, recommend `spec-design` first and carry the complete accepted set; the later Specification result decides whether `program-design` follows. Recommend `discuss-pathfinding` only when complete review evidence establishes that the current model fails and replacement owner meaning is genuinely unmade, and include the review-selected return owner. A current authoritative correction routes directly to its semantic owner; missing evidence stops.
 
@@ -233,6 +240,7 @@ Do not return `ready` while any of these hold:
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - three-artifact-design mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
+- a second design review invocation began without explicit user permission granted after the first review/remediation result;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
 - the result recommends no next skill, more than one next skill, or a route selected from an unreduced reviewer candidate when a validated continuation exists;
 - a continuation omits the current boundary status or makes the destination choose among correction alternatives instead of carrying one smallest verified correction;

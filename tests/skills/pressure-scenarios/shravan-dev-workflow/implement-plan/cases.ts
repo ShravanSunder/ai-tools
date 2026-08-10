@@ -10,23 +10,21 @@ const executionSources = [
   "plugins/shravan-dev-workflow/skills/implement-plan/references/execution-and-proof.md",
 ] satisfies readonly string[];
 
-const approvedPlanSources = [
+const readyPlanSources = [
   ...executionSources,
   "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/existing-plan-approval.md",
 ] satisfies readonly string[];
 
-const approvedImprovementPlanSources = [
+const readyImprovementPlanSources = [
   ...executionSources,
   "tests/skills/fixtures/minimal-planning-delivery/improvement-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/improvement-plan-approval.md",
 ] satisfies readonly string[];
 
 export const skillPressureCaseDefinitions = [
   {
-    scenarioId: "implement-plan-admit-approved-draft",
+    scenarioId: "implement-plan-admit-ready-delivery-plan",
     requiredSourceReads: [
-      ...approvedPlanSources,
+      ...readyPlanSources,
       "AGENTS.md",
       "tests/skills/package.json",
       "tests/skills/lib/skill-pressure-evaluation/scenario-cases/scenario-case-types.ts",
@@ -34,9 +32,9 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 35,
     semanticCriteria: [
       {
-        name: "admits-only-the-exact-approved-draft",
-        requirement: "Returns admission for the exact unchanged draft tuple and complete matching later owner approval-evidence record and does not treat the plan or earlier request as self-approval. Judge the response's authority meaning; the deterministic required-source gate exclusively proves successful plan, approval, and repository reads.",
-        failureExample: "Ignores the exact plan path, current meaning, or approval ordering evidence; rewrites the tuple; or claims blanket authorization.",
+        name: "admits-only-the-exact-ready-delivery-plan",
+        requirement: "Returns admission for the exact unchanged ready plan, governing basis, and pr-ready-unmerged delivery context. Judge the response's authority meaning; the deterministic required-source gate exclusively proves successful plan and repository reads.",
+        failureExample: "Ignores the exact plan path, current meaning, governing basis, or delivery context; rewrites the record; or adds a post-plan approval gate.",
       },
       {
         name: "returns-a-proof-bearing-ready-frontier",
@@ -51,23 +49,22 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "implement-plan-reject-unapproved-plan",
+    scenarioId: "implement-plan-block-plan-only-terminal",
     requiredSourceReads: [
       ...admissionSources,
-      "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
-      "tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md",
+      "tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md",
     ],
     maximumToolCalls: 25,
     semanticCriteria: [
       {
-        name: "rejects-approval-absence",
-        requirement: "Blocks execution because approval evidence is absent while preserving the exact draft tuple unchanged.",
-        failureExample: "Treats planning completion, handoff, goal text, or the request as approval.",
+        name: "blocks-plan-only-terminal",
+        requirement: "Blocks execution because the unchanged ready plan carries requested terminal plan-only.",
+        failureExample: "Treats planning completion, handoff, goal text, or the request as authority to upgrade delivery intent.",
       },
       {
         name: "stops-before-execution-depth",
-        requirement: "Returns the caller authority stop before selecting a ready frontier, editing, or claiming proof.",
-        failureExample: "Loads execution work, starts the slice, or fabricates approval.",
+        requirement: "Returns the delivery-intent owner stop before selecting a ready frontier, editing, or claiming proof.",
+        failureExample: "Loads execution work, starts the slice, or mutates the plan terminal.",
       },
     ],
   },
@@ -83,14 +80,14 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-plan-authority",
-        requirement: "Preserves the supplied tuple and approval absence without loading execution depth or adding progress state.",
-        failureExample: "Mutates plan fields, fabricates approval, or creates execution status.",
+        requirement: "Preserves the supplied non-ready result without loading execution depth or adding progress state.",
+        failureExample: "Mutates plan fields, converts the result to ready, or creates execution status.",
       },
     ],
   },
   {
     scenarioId: "implement-plan-stop-on-design-break",
-    requiredSourceReads: approvedPlanSources,
+    requiredSourceReads: readyPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
@@ -100,14 +97,14 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "routes-before-editing",
-        requirement: "Stops at the applicable spec-design or program-design owner with the exact conflict and preserves the plan record and approval evidence unchanged.",
+        requirement: "Stops at the applicable spec-design or program-design owner with the exact conflict and preserves the plan record, governing basis, and delivery context unchanged.",
         failureExample: "Edits source, rewrites the plan, or silently broadens scope.",
       },
     ],
   },
   {
     scenarioId: "implement-plan-preserve-proof-gate",
-    requiredSourceReads: approvedPlanSources,
+    requiredSourceReads: readyPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
@@ -130,18 +127,18 @@ export const skillPressureCaseDefinitions = [
       {
         name: "requires-skills-creation-composition",
         requirement: "Classifies the target as runtime-skill-package and routes to skills-creation because no exact parent identity authorizes executor composition.",
-        failureExample: "Executes the runtime skill change directly from an approved plan.",
+        failureExample: "Executes the runtime skill change directly from a ready plan.",
       },
       {
         name: "stops-before-plan-admission",
         requirement: "Stops before canonical-plan admission, execution depth, edits, or proof claims.",
-        failureExample: "Treats plan approval as a bypass around skills-creation.",
+        failureExample: "Treats plan readiness as a bypass around skills-creation.",
       },
     ],
   },
   {
     scenarioId: "implement-plan-inline-default-colliding-slices",
-    requiredSourceReads: approvedPlanSources,
+    requiredSourceReads: readyPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
@@ -158,12 +155,12 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "implement-plan-accepted-review-remediation",
-    requiredSourceReads: approvedPlanSources,
+    requiredSourceReads: readyPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
         name: "accepts-only-implementation-owned-correction",
-        requirement: "Accepts the explicitly routed code/test/proof correction as implementation work while preserving the approved plan authority.",
+        requirement: "Accepts the explicitly routed code/test/proof correction as implementation work while preserving the ready plan authority.",
         failureExample: "Reopens design, edits the review finding, or treats reviewer output as self-approving authority.",
       },
       {
@@ -175,7 +172,7 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "implement-plan-refuse-false-completion",
-    requiredSourceReads: approvedPlanSources,
+    requiredSourceReads: readyPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
@@ -200,8 +197,8 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-the-blocked-result",
-        requirement: "Returns the unchanged blocked tuple for the immutable blocked-plan.md path, blocker evidence, approval absence, and unblock owner without converting the result or computing a document digest.",
-        failureExample: "Treats blocked as draft, approval, or an executable warning.",
+        requirement: "Returns the unchanged blocked result, blocker evidence, and unblock owner without converting the result or computing a document digest.",
+        failureExample: "Treats blocked as ready or an executable warning.",
       },
       {
         name: "stops-before-execution-depth",
@@ -212,35 +209,35 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "implement-plan-stop-on-stale-plan",
-    requiredSourceReads: approvedPlanSources,
+    requiredSourceReads: readyPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
         name: "detects-current-source-contradiction",
         requirement: "Treats the missing owner and command as a plan defect or design break discovered during current repository validation.",
-        failureExample: "Translates the approved plan to a guessed new module or command.",
+        failureExample: "Translates the ready plan to a guessed new module or command.",
       },
       {
         name: "routes-without-mutating-authority",
-        requirement: "Preserves the exact tuple and approval record and stops at the applicable originating plan or design owner before edits.",
+        requirement: "Preserves the exact plan record, governing basis, and delivery context and stops at the applicable originating plan or design owner before edits.",
         failureExample: "Silently refreshes the plan or begins implementation.",
       },
     ],
   },
   {
-    scenarioId: "implement-plan-admit-approved-improvement-plan",
-    requiredSourceReads: approvedImprovementPlanSources,
+    scenarioId: "implement-plan-block-plan-only-improvement-plan",
+    requiredSourceReads: readyImprovementPlanSources,
     maximumToolCalls: 30,
     semanticCriteria: [
       {
-        name: "accepts-the-second-canonical-origin",
-        requirement: "Returns admission with plan-improve-repo as the valid origin and the exact matching later approval, without treating validation or the prompt as approval. The deterministic required-source gate separately proves the successful plan and approval reads.",
-        failureExample: "Rejects the origin or bypasses exact plan-path, current-meaning, and approval-ordering checks.",
+        name: "recognizes-the-second-canonical-origin",
+        requirement: "Recognizes plan-improve-repo as a valid canonical origin while blocking execution because the unchanged delivery terminal is plan-only. The deterministic required-source gate separately proves the successful plan read.",
+        failureExample: "Rejects the origin, upgrades the terminal, or bypasses exact plan-path and current-meaning checks.",
       },
       {
-        name: "returns-one-read-only-frontier",
-        requirement: "Returns the smallest safe slice with fitting proof while preserving authority and without claiming edits or implementation, test, or quality command results that were not run; read-only repository-inspection results may be reported.",
-        failureExample: "Claims the slice ran or starts the full plan.",
+        name: "stops-before-a-frontier",
+        requirement: "Preserves the plan-only record and stops before selecting a frontier or claiming edits, tests, or quality commands that were not run; read-only repository-inspection results may be reported.",
+        failureExample: "Selects or runs a slice despite the plan-only terminal.",
       },
     ],
   },
@@ -264,7 +261,7 @@ export const skillPressureCaseDefinitions = [
   {
     scenarioId: "implement-plan-scoped-slice-proof-report",
     requiredSourceReads: [
-      ...approvedPlanSources,
+      ...readyPlanSources,
       "tests/skills/fixtures/minimal-planning-delivery/implementation-proof.md",
     ],
     maximumToolCalls: 30,
@@ -272,7 +269,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "binds-proof-to-the-exact-tuple",
         requirement: "Reports the covered slice, supplied command exit codes, quality evidence, freshness anchors, and unchanged plan authority without claiming it reran the evidence.",
-        failureExample: "Invents command execution or detaches proof from the approved immutable plan path and current meaning.",
+        failureExample: "Invents command execution or detaches proof from the ready immutable plan path and current meaning.",
       },
       {
         name: "keeps-plan-completion-open",

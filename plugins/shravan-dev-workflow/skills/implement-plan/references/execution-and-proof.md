@@ -2,7 +2,7 @@
 
 This reference owns pre-edit repository validation, ready-frontier selection, slice-local proof, integration gates, surprise classification, and implementation completion reporting for an already admitted plan.
 
-Expected inputs: the unchanged complete canonical plan record and result payload, matching approval evidence recorded after the plan was read for the exact plan path and current meaning, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
+Expected inputs: the unchanged complete canonical plan record, governing planning basis, delivery context, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
 
 Return: the pre-edit verdict, ready frontier, proof and integration contract, classified surprise routes, and completion report.
 
@@ -14,7 +14,7 @@ Return one verdict:
 
 ```text
 ready
-  the exact approved plan path and current meaning still match current source, the first slice's
+  the exact ready plan path, governing basis, and delivery context still match current source, the first slice's
   writes and commands are real, and its required proof can run inside scope
 
 route
@@ -22,7 +22,7 @@ route
 
 blocked
   authority, environment, write scope, dependency, or proof is unavailable
-  without changing the approved plan or user boundary
+  without changing the ready canonical plan or delivery boundary
 ```
 
 Record the inspected branch/HEAD, pre-existing changes, instruction sources, validated paths and commands, applicable trust boundaries, and any contradiction. Never silently absorb unrelated dirty work or rewrite the plan to match current source.
@@ -32,7 +32,7 @@ Record the inspected branch/HEAD, pre-existing changes, instruction sources, val
 The ready frontier is the smallest plan slice whose prerequisites are proven and whose write scope does not collide with in-flight work. Prefer one vertical slice that changes behavior and proves it at the cheapest fitting observation seam.
 
 - Execute inline by default.
-- Parallel work is advisory and only eligible when the approved plan identifies independent slices with disjoint writes after proven prerequisites. `manage-agents` owns dispatch mechanics.
+- Parallel work is advisory and only eligible when the ready canonical plan identifies independent slices with disjoint writes after proven prerequisites. `manage-agents` owns dispatch mechanics.
 - Contract-only or prefactoring work must name the downstream consumer it unlocks and integrate at that consumer's first interaction.
 - A slice too large to prove inside scope returns a split or plan-defect route before edits.
 
@@ -90,7 +90,7 @@ Do not call a change reversible when it moves ownership, changes a public contra
 
 ## Report What Changed and What Was Proven
 
-Return implementation evidence keyed to the unchanged canonical plan record and complete separate approval-evidence record or explicit absence:
+Return implementation evidence keyed to the unchanged canonical plan record, governing basis, and delivery context:
 
 ```text
 implementation base/HEAD/diff:
@@ -106,4 +106,4 @@ blockers and exact routes:
 proof freshness:
 ```
 
-Complete when: the pre-edit verdict was `ready`; each claimed row has fresh fitting evidence; integration gates ran at the first interaction; every surprise has one classification and owner; incomplete rows remain explicit; and neither the plan record nor approval evidence was mutated.
+Complete when: the pre-edit verdict was `ready`; each claimed row has fresh fitting evidence; integration gates ran at the first interaction; every surprise has one classification and owner; incomplete rows remain explicit; and the plan record, governing basis, and delivery context remain unchanged.

@@ -37,6 +37,6 @@ Apply the status semantics from `lanes/lane-schema.md`; record silence as `no-re
 
 The parent collects every receipt, verifies candidate findings against source, merges duplicates, resolves conflicts, derives changed-file coverage, and fills the Parent Reduction shape from `lanes/lane-schema.md`.
 
-A receipt expires when the reviewed text changes. Re-dispatch every lane whose reviewed text a fix touched before closing the review.
+For proposal/design review, one permitted remediation is closed by parent verification against the original findings; this stage-specific rule overrides generic changed-text receipt invalidation, so do not redispatch lanes automatically. Text outside the accepted correction or with uncertain semantic effect stops for permission. For implementation review, changed text makes affected receipts stale and may select the next bounded review only while fewer than three remediation passes have completed. After remediation three, stop before another dispatch unless the user explicitly authorizes continuation.
 
 Complete when: every selected lane has a terminal state, every receipt has been parent-verified, and the Parent Reduction shape is complete.

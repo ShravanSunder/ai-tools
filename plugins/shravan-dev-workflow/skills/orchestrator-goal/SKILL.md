@@ -1,43 +1,40 @@
 ---
 name: orchestrator-goal
-description: Use when starting, resuming, auditing, or completing a general-domain long-horizon delivery goal that may span design, implementation planning, optional operations tracking, plan execution, independent implementation review, and PR readiness. Not for one named runtime skill package or an accepted multi-run skill-change slice without explicit skills-creation composition, a request for only one phase, the bounded design cycle alone, or unclear intent that still needs pathfinding or mental-model repair.
+description: Use when starting, resuming, auditing, or completing a general-domain long-horizon delivery goal through design, planning, optional tracking, implementation, bounded independent implementation review, and PR readiness. Not for one named runtime skill package without explicit skills-creation composition, one direct phase, or unclear intent needing pathfinding.
 ---
 
 # Orchestrator Goal
 
-A long-horizon goal is a guarded route through phase-owned evidence, not a second workflow implementation. Reconstruct the first unproven gate, invoke its one owner, verify the returned receipt, and continue only along a route that owner permits.
+A goal invocation establishes delivery intent. The orchestrator reconstructs the first unproven phase from current authority, invokes one owner at a time, verifies each returned result, and keeps reconstructing and routing until the requested terminal or a real stop is reached. It does not invent phase judgment or ask for generic plan approval.
 
-## Find and Run the Next Owner
+## Route the Goal
 
-1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact `skills-creation` commission identity authorizing this target and composed skill; otherwise route there and stop. MUST load `references/goal-contract-and-routing.md` and return the goal contract plus the first verified gate or exact blocker. Every completed plan still requires owner approval recorded after reading that plan before implementation.
-2. Inspect current artifacts and evidence to identify the first unproven gate; a goal label, chat assertion, commit, ticket, or status is not proof. IF a canonical plan exists or a planning result is being evaluated, load `../../shared-references/canonical-implementation-plan.md` and return the exact plan gate and route.
-3. Invoke exactly one owning skill in the current turn using the packet defined in the routing reference. Return that owner's result unchanged with the thin source binding defined there. The live response uses the compact `invoked owner`, `passed packet`, `owner result`, `verification`, and `terminal status` fields; without them, invocation is not complete. Opening the owner source, describing what it would do, or putting `invoke <owner>` in `next_action` is still deferral. If the current runtime cannot invoke the selected owner, return that exact runtime blocker.
-4. Open the selected producer's current return contract, verify its result against the passed source binding and required fields, then classify the transition without re-performing the phase's judgment.
-5. Continue through the allowed route or stop for owner approval, decision, blocker, or requested terminal.
-6. For accepted implementation findings, route to the named semantic owner and require fresh affected review coverage before advancing.
-7. Complete only when every material gate implied by the terminal is done or explicitly not applicable. The default terminal is PR-ready and unmerged; merge always requires separate authorization.
+1. Classify `general-domain | runtime-skill-package`. Runtime skill delivery requires the exact `skills-creation` commission identity.
+2. Establish `requested terminal: plan-only | pr-ready-unmerged`; default to `pr-ready-unmerged` unless the user named a narrower terminal.
+3. MUST load `references/goal-contract-and-routing.md` and return the goal contract plus the first verified gate or exact blocker.
+4. Inspect current durable artifacts, the current canonical plan when present, phase returns, proof, and review receipts. Optional scratch lives only under host OS temp and never proves a phase.
+5. Invoke exactly one current phase owner at a time, preserve its result unchanged with the thin source binding from the routing reference, verify its required fields, then reconstruct the next gate and continue immediately. A phase boundary or successful owner result is not a user-approval checkpoint.
+6. A `ready` plan with terminal `pr-ready-unmerged`, current governing basis, complete delivery context, and no real blocker routes directly to `implement-plan`. Do not request approval of planner-owned detail.
+7. Invoke a selected named `ops-*` tracking skill only as a separate authorized side route. No tracking continues immediately; tickets prove no delivery gate.
+8. After implementation proof, route general-domain work to `review-implementation` and runtime-skill work to the implementation-review stage of `skills-creation`.
+9. Preserve the ordered implementation review/remediation receipts in current goal context. End early when review is ready. Apply at most three accepted remediation passes; after remediation three, stop `remediation-limit-reached` before review or remediation four unless the user explicitly authorizes continuation.
+10. Route ready implementation to `implementation-pr-wrapup`. Default terminal is PR-ready and unmerged; merge remains separate authority.
 
 ## Route Map
 
-- Unclear never-articulated intent -> `discuss-pathfinding`; drifted shared model -> `discuss-clarify-mental-models`.
-- An explicit complete bounded design-cycle request, or a fresh long-horizon delivery goal with neither admitted design artifacts nor a valid stored design-run continuation -> `orchestrator-design`.
-- Without a complete-cycle request, partial design artifacts route to the first missing phase: Requirements or observable Why/What -> `spec-design`; structural How -> `program-design`; complete unreviewed three-artifact set -> `spec-program-review` operation `review`, mode `three-artifact-design`.
-- A direct one-phase request bypasses this skill's long-horizon route and invokes the requested owning skill in the current turn, returning its phase receipt or exact runtime blocker. Applying this routing contract still counts as invoking `orchestrator-goal`; only the long-horizon continuation is bypassed. A phase-owned correction goes directly to the owner returned by review rather than restarting the full cycle.
-- An audit or plan directly authorized by admitted repository-improvement findings -> `plan-improve-repo`; supporting reviewed design does not change that origin.
-- Current ready reviewed design without a plan -> `plan-implementation`.
-- Plan result `revision-requested` -> recorded originating planner; `blocked` -> recorded unblock owner; only `draft` can advance.
-- `draft` without matching owner approval recorded after reading the plan -> caller stop. Approved `draft` without implementation proof -> `implement-plan`.
-- Implementation proof without current review -> `review-implementation`.
-- Review findings -> the exact semantic owner selected by `review-implementation`.
-- Ready implementation without current PR readiness -> `implementation-pr-wrapup`.
-- User-selected tracking projection -> the named available `ops-*` skill; tickets never replace the canonical plan, and tracker identifiers prove none of planning, approval, implementation, review, or PR readiness.
+- Unclear intent -> `discuss-pathfinding`; drifted shared model -> `discuss-clarify-mental-models`.
+- Fresh complete design-cycle need -> `orchestrator-design`; partial design -> its first missing owner; complete unreviewed design -> one `spec-program-review` three-artifact review.
+- Reviewed design or an orchestrated admitted improvement without a delivery plan -> `plan-implementation`.
+- Planning `revision-requested | blocked` -> exact recorded owner. Ready `plan-only` -> terminal. Ready delivery -> `implement-plan`.
+- Implementation finding -> exact semantic owner. Implementation-owned finding -> remediation only while fewer than three remediation passes exist.
+- Implementation proof without current bounded review -> `review-implementation | skills-creation` by target classification.
+- Ready review -> `implementation-pr-wrapup`.
 
 ## Boundaries
 
-- This skill selects routes, verifies phase-result identities and freshness, and evaluates the terminal. It never authors Requirements, Specification, Program Design, plans, code, findings, proof, tickets, or PR judgments on behalf of their owners.
-- Host goal state may carry the objective and terminal, but current source artifacts and evidence prove gates. Never add `details.md`, `events.jsonl`, transition-writer precedence, a controller brief, worker protocol, or another lifecycle ledger.
-- A missing, conflicting, status-only, or stale phase return stops at that phase's owner. Never fill a missing result by inspecting phase internals and deciding the phase again.
+- Route and verify; never author Requirements, Specification, Program Design, plans, code, findings, proof, tickets, review verdicts, or PR judgments for their owners.
+- Never persist `details.md`, `events.jsonl`, counters, approval chronology, remediation ledgers, digests, or replay state. The current ordered receipts are call context, not a new store.
+- Missing scratch, review receipts, or remediation evidence cannot reset a limit. Stop for explicit user permission when the bounded sequence cannot be proven.
+- Stop for missing meaning, invalid/stale authority or plan, design break, failed required proof, out-of-scope infrastructure, unauthorized external/destructive action, remediation limit, or merge.
 
-## Completion Blockers
-
-Do not claim the goal terminal while a required phase receipt is absent, stale, conflicting, or blocked; a completed plan lacks matching owner approval recorded after the plan was read; implementation proof lacks current independent review; accepted corrections lack fresh affected review coverage; PR checks, comments, reviews, mergeability, or exact head state required by the terminal are unknown; or merge is implied without separate authority.
+Completion: every gate through the requested terminal is proven or explicitly inapplicable; no redundant approval, fourth remediation, or implied merge occurred.

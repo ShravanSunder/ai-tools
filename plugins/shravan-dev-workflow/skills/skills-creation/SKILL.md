@@ -131,6 +131,13 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 Behavior-changing work is reviewed twice: the proposal before any skill file is edited, and the changed files before ship. Lanes return candidate findings; the parent verifies, reduces, and owns the verdict. Mechanical changes are not reviewed.
 
+These stages have separate bounded-remediation rules:
+
+- **Proposal/design review:** one independent review and at most one remediation. Reject pedantic or non-semantic findings with source evidence and continue. A correction inside the settled model may use the remediation; a mental-model break stops at its owner. The parent verifies corrected anchors against the original findings and closes without redispatch. Another proposal/design review requires explicit user permission.
+- **Implementation review:** repeat review only while fewer than three remediation passes have completed. End early on `great`; after remediation three, stop before review or remediation four unless the user explicitly authorizes continuation.
+
+Reviewer lanes inside one invocation do not count as additional loops. Missing receipts do not reset either boundary. Keep receipts in current run context; never add persistent counters, ledgers, hashes, or lifecycle fields.
+
 Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. A scoped change keeps both stages but narrows them; each stage reference owns its scoped form. Both dispatch under `references/review/review-lane-workflow.md` and use the shared shapes in `references/review/lanes/lane-schema.md`.
 
 Collect every receipt explicitly and ask a lane that goes quiet; silence is never a clean review. Prefer native dispatch in the parent host's own lineage, and when the runtime can reach another lineage give at least one lane a different-lineage reviewer, because a second model family fails differently than the one that wrote the text.
@@ -230,7 +237,7 @@ Keep all-run obligations, decisions, invariants, required returns, and completio
 
 ### 6. Review the spec
 
-IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, load `references/review/spec-review.md` to select and dispatch the spec-review lanes and judge the proposed design, and return the dispatched lane set, every receipt, the verdict, blocker overrides, and the implementation decision. Accepted findings return to the design step that owns them before implementation starts. IF the run implements one slice of a multi-run spec a prior spec review already accepted, load `references/review/spec-review.md` to verify the acceptance under its Acceptance Binding and return the acceptance-verification evidence and the revision cited, instead of re-dispatching; the Acceptance Binding owns when acceptance expires, and expired semantic coverage sends only the affected delta back through spec review before any skill file is edited. Completion: spec review is parent-reduced to accepted-to-implement, cited from an accepted spec whose semantic coverage remains current, explicitly skipped by the user, or not applicable because the change is mechanical.
+IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, load `references/review/spec-review.md` to select and dispatch the one permitted proposal review and return every receipt, verdict, blocker override, and implementation decision. Reject pedantic/non-semantic findings with evidence and continue; accepted bounded findings return for at most one remediation; a mental-model break stops at its owner. The parent verifies corrected anchors and closes without redispatch. A prior accepted proposal is reused only when its original review plus permitted remediation still covers current meaning. Expanded or uncertain semantic change stops `review-permission-required` instead of automatically dispatching another proposal review. Completion: proposal review is ready, its accepted bounded findings have one complete parent-verified remediation, or review was explicitly skipped/not applicable; a second review requires explicit user permission.
 
 ### 7. Implement
 
@@ -240,13 +247,13 @@ IF any surface on the sensitive-surface list in `references/security-gate.md` is
 
 Review before proving. Proof run first is spent on text the review is about to change.
 
-IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, and the parent reduction.
+IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, parent reduction, and current remediation-pass evidence.
 
-Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate finding against the actual files before accepting it. And receipts expire when reviewed text changes: re-dispatch every touched lane with a refreshed packet, per the Receipt Lifecycle and Dispatch Contract in `references/review/review-lane-workflow.md`.
+Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate against actual files before accepting it. Accepted findings receive one remediation pass at a time, followed by another implementation review only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not dispatch review or remediation four without explicit user permission.
 
 Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Proof of quality, proof of work`, ship surface to `Prune and ship`.
 
-Completion: every dispatched lane has a terminal receipt, and the Parent Reduction block from `references/review/lanes/lane-schema.md` is emitted with every field filled.
+Completion: every dispatched lane has a terminal receipt, the Parent Reduction is complete, the result is `great` or names the exact accepted correction, and no fourth remediation occurred.
 
 ### 9. Proof of quality, proof of work
 
@@ -274,11 +281,13 @@ The run is not done while any of these hold:
 - the workflow has branches without observable predicates or return shapes;
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
-- review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, or a receipt was reused for text edited after that receipt was written;
+- review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, an implementation-review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted parent-verified remediation;
 - implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
 - a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;
+- a second proposal/design review ran without explicit user permission after the first review/remediation result;
+- a fourth implementation remediation or its following review ran without explicit user permission;
 - a behavior-changing skill change reached `PR-ready` or `released` without parent reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded parent closure;
 - static validation is claimed as behavior proof;

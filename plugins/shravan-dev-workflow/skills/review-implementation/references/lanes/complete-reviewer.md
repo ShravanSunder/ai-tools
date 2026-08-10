@@ -1,10 +1,10 @@
 # Complete Reviewer
 
-Mission: perform one complete independent reconstruction of the implementation and proof against its governing authority and approved plan.
+Mission: perform one complete independent reconstruction of the implementation and proof against its governing authority, ready plan, and delivery context.
 
 Expected inputs: every shared packet field from `lane-schema.md`; no expected verdict, candidate list, or parent conclusion.
 
-Prerequisites: governing sources, exact plan and approval, base and reviewed identities, diff, proof evidence, constraints, risk predicates, and prior review coverage are complete and inspectable.
+Prerequisites: governing sources, exact plan/governing-basis/delivery-context records, base and reviewed identities, diff, proof evidence, constraints, risk predicates, prior review coverage, and remediation-pass evidence are complete and inspectable.
 
 Maximum authority: fresh-context, read-only, candidate-only review. Open/search current source and existing proof with read-only discovery commands only. Do not run build, test, lint, format, migration, or other proof-generation/remediation commands; do not edit, stage, commit, reply to review threads, accept findings, or decide workflow transitions.
 

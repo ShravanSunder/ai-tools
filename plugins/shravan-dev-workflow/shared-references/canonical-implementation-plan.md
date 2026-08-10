@@ -1,105 +1,79 @@
 # One Implementation Plan
 
-This reference owns the one active implementation-plan contract shared by plan producers and carriers. A completed plan is an immutable path-addressed artifact of intended work, not a lifecycle ledger. Return its plan record unchanged to every consumer.
+This reference owns the one active implementation-plan contract shared by plan producers, carriers, executors, and reviewers. A completed plan is immutable path-addressed intended work, not a lifecycle ledger. Return its record unchanged to every consumer.
 
-## 1. Inspect: Read the Current Sources
+## Inspect the Current Sources
 
-Before producing or validating a completed plan, inspect:
+Before producing or validating a completed plan, inspect governing authority, current branch/HEAD, repository instructions, owners, paths, interfaces, tests, commands, proof obligations, security boundaries, and any existing completed plan.
 
-- governing authority and exact source identities;
-- current repository branch, HEAD, instructions, owners, paths, interfaces, tests, and commands;
-- scope, non-goals, proof obligations, security/trust boundaries, and stop conditions;
-- any existing completed plan and its separate approval evidence or explicit absence.
+`plan-implementation` admits current reviewed three-artifact design and, for an orchestrated repository-improvement goal or owner-requested delivery of a direct improvement result, the complete current admitted-finding return from `plan-improve-repo`. Direct `plan-improve-repo` use separately admits its current design-ready or implementation-mechanics-only basis and defaults to `plan-only`.
 
-`plan-implementation` admits only current ready three-artifact design. `plan-improve-repo` separately admits a vetted finding through current ready three-artifact design or source-proven implementation-mechanics-only authority. Do not collapse those entry rules into this shared contract.
+## Canonical Result
 
-## 2. Identify: Return One Plan Path and Result
-
-Return this record for every extant completed plan:
+A ready plan returns:
 
 ```text
-plan path: <repo-relative or absolute path; the sole document identity>
+plan path: <sole Markdown document identity>
 originating planner: plan-implementation | plan-improve-repo
-planning result: draft | revision-requested | blocked
-result payload:
-  draft: owner approval recorded after reading the plan must name this exact path and current meaning
-  revision-requested: exact correction requested and its semantic or planning owner
-  blocked: blocker identity, evidence, and unblock owner
-```
-
-Do not compute or maintain a content hash, digest, blob identity, or parallel document-version ledger. Complete the plan at one path and treat that completed artifact as immutable. A later meaning change creates a new plan path and requires new approval. Existing Git commit, branch, HEAD, and diff identities may describe repository state; they never become a document digest.
-
-When a planning phase has no completed plan, return `plan identity: none` only inside that phase's `route | blocked` result. An implementation handoff whose governing authority is a non-plan request or ticket also records `plan identity: none` beside that authority so a context-free consumer does not invent a plan. Never fabricate a partial plan record.
-
-## 3. Approve: Keep Owner Approval Separate
-
-Approval is not a plan field. Preserve one of these records beside the plan record:
-
-```text
-approval evidence: absent
-```
-
+planning result: ready
+governing planning basis:
+  kind: reviewed-three-artifact-design
+  Requirements, Specification, Program Design paths
+  current three-artifact review/remediation result identities
+  current applicability anchors
 or:
-
-```text
-approval evidence:
-  authorized approver identity: <owner>
-  exact plan path: <must equal the plan record>
-  decision: approved | rejected
-  source evidence: <inspectable instruction or record showing the owner read the completed plan>
-  ordering evidence: <proof the decision followed completion of the plan at this path>
+  kind: admitted-repository-improvement
+  admitted finding pointer
+  basis classification: current-three-artifact-design-ready |
+                        implementation-mechanics-only
+  basis evidence pointers
+  current applicability anchors
+delivery context:
+  requested terminal: plan-only | pr-ready-unmerged
+  delivery grouping: single:<name> | selected:<option-name>
+  PR topology: not-applicable | one-pr | separate-prs
 ```
 
-Only `planning result: draft` plus `decision: approved` recorded after the owner read the completed plan at the exact path is executable. Current plan meaning means the plan still says what that approval covered; a meaning change requires a new path and approval, while formatting-only edits do not create a new plan. A goal, earlier blanket instruction, ticket state, handoff, validation receipt, or the planner itself cannot approve unseen future plan meaning. If the plan changed after approval or freshness is uncertain, approval is stale and the owner must read and approve the current plan again.
+The plan file records the same governing basis and delivery context. These values are immutable plan meaning, not progress. A meaning change creates a new plan path. Never compute a plan hash or digest or add approval chronology, progress, reviewer status, PR state, or tracker state.
 
-## 4. Write: Put Intended Work in Markdown
-
-Choose the repository's established plan home. Otherwise use `docs/specs/<spec>/plans/` for a plan governed by a durable spec, or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work. Do not create a second plan authority in a ticket or handoff.
-
-Every plan includes:
+Unsettled planning returns no fabricated ready record:
 
 ```text
-title and planning result
-governing authority and exact source identities
-planned-at branch and HEAD
-goal, scope, and non-goals
-current repository evidence
-write surfaces
-ordered proof-bearing slices with requires/serial/advisory-parallel edges
-obligation-to-slice-to-proof mapping
-integration gates
-risks, assumptions, and stop/replan conditions
-focused, full, manual/runtime, and quality proof commands as applicable
+planning result: revision-requested | blocked
+plan identity: none | <already-existing canonical ready record, unchanged>
+result payload:
+  revision-requested: exact correction and semantic or planning owner
+  blocked: exact blocker evidence and unblock owner
 ```
 
-A compact plan may combine these into a goal, authority, current evidence, change/proof sequence, and stops. A full plan separates them when multiple owners, boundaries, risks, or proof layers make the relationships hard to inspect. Both forms satisfy the same contract.
+## Delivery Intent and Grouping
 
-The artifact records only intended work. Never add approval, assignees, percent complete, execution status, test results, reviewer verdicts, PR state, or ticket state.
+`orchestrator-goal` defaults the requested terminal to `pr-ready-unmerged` unless the user supplied a narrower terminal. Direct planning uses an explicit terminal or asks once at entry when ambiguous. `plan-improve-repo` defaults direct use to `plan-only`.
 
-## 5. Result: Say Draft, Needs Revision, or Blocked
+Planning chooses technical strategy and the one coherent vertical grouping when only one exists. When materially different grouping or PR-topology options exist, it presents concrete choices, a recommendation, and tradeoffs, then waits for the owner selection before returning `ready`. One indivisible deliverable defaults to one PR. Do not ask about ordinary file, sequence, code, or proof mechanics.
 
-- `draft`: the plan is complete and validated as a plan; approval is still absent unless separate evidence proves otherwise.
-- `revision-requested`: a known correction prevents a new executable draft; name the exact correction and owner.
-- `blocked`: the immutable blocked plan record is complete, but external state or missing authority prevents completion of an executable draft or the planning objective; name evidence and unblock owner. If no completed plan record exists, return `plan identity: none` instead.
+Optional tracking remains outside this record. At planning entry, preserve an existing tracking selection or offer once between no tracking and one available named `ops-*` owner. No tracking continues immediately. A named selection is returned as separate current call context for the goal or direct-planning caller to invoke; tracker state never gates delivery.
 
-A `plans/README.md`, dashboard, or tracker may project only the canonical result and identity. It cannot mutate the plan record or approval record.
+## Plan Home
 
-## 6. Preserve: Keep the Plan Unchanged Between Owners
+For every `pr-ready-unmerged` plan, including orchestrated goals and direct continued-delivery planning, `plan-implementation` writes exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan. Before writing, it verifies that project ignore policy covers `tmp/*` equivalently and adds `tmp/*` to project `.gitignore` only when coverage is absent. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
 
-Producers verify every source identity, path, command, obligation mapping, proof fit, edge, integration gate, and stop condition before returning the plan record.
+Direct plan-only work may use an established repository plan home. Otherwise use `docs/specs/<spec>/plans/` for durable direct planning or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work.
 
-Carriers read the plan completely, verify the originating planner and result payload, check that approval was recorded after the completed plan was read and still covers its current meaning, and preserve the plan record and approval evidence unchanged. They never compute a document hash. A path mismatch, later meaning change, stale authority, or missing required field is a blocking discrepancy; report it without repairing or re-authoring the plan.
+Every plan includes its result, governing basis, delivery context, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
 
-## 7. Start: Check Whether Implementation May Begin
+## Preserve and Admit
 
-An executor receives the complete plan record, separate approval record or explicit absence, and the execution request. Return exactly one result:
+Producers verify every field before returning. Carriers preserve the record unchanged and never repair a mismatch. A missing path, later meaning change, stale governing basis, incomplete delivery context, or missing required field is a blocking discrepancy returned to the originating planner or exact semantic owner.
 
-- `admit`: planning result is `draft`; authorized-owner approval names the exact plan path and current meaning; and ordering evidence proves approval followed completion.
-- `route`: planning result is `revision-requested`; return its exact correction and originating planner without entering execution depth.
-- `blocked`: planning result is `blocked`, approval is absent/rejected/mismatched/too early, or the plan record is malformed; return the exact discrepancy and unblock owner.
+An executor returns exactly one:
 
-The check is complete when every plan and approval field was inspected, both records remain unchanged, and the result names either executable current-plan authority or one checkable stop. Validation, handoff, ticket state, or earlier goal text never substitutes for approval recorded after the completed plan was read.
+- `admit`: result is `ready`; terminal is `pr-ready-unmerged`; the plan resolves; opened plan, governing basis, and delivery context agree; authority and repository source remain current; and no real design, proof, authority, or environment blocker is open.
+- `route`: result is `revision-requested`; return its exact correction and originating planner without execution depth.
+- `blocked`: result is `blocked`, terminal is `plan-only`, plan identity is absent, or any record/basis/context/current-source check fails; return the exact discrepancy and owner.
 
-Good signals: one immutable plan path, proof attached to obligations, only meaningful edges, explicit design-gap routes, and separate approval evidence recorded after the plan was read.
+Validation, handoff, tickets, tracker state, or plan completion never upgrade the requested terminal or repair the canonical record.
 
-Bad signals: tickets as an alternate plan, `Status: approved` inside the plan, mutable progress checklists, validation changing the planning result, any document hash or digest ledger, blanket goal approval, or a handoff silently repairing the plan.
+Good signals: one immutable plan path, current governing authority, complete delivery context, proof attached to obligations, only meaningful edges, explicit design-gap routes, and no redundant approval stop.
+
+Bad signals: tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, placeholder grouping/topology, inferred implementation authority, or a carrier silently repairing the plan.

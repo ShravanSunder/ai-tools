@@ -19,7 +19,7 @@ Use this before returning a current-state validation receipt for an improvement 
 
 ## Verdicts
 
-- `ready`: current plan claims and paths remain valid; this receipt is not approval or execution authority.
+- `ready`: current plan claims and paths remain valid; this receipt does not upgrade `plan-only` or create execution authority.
 - `needs-refresh`: route the exact correction to the originating planner for a corrected completed plan at a new path before review or execution.
 - `blocked`: cannot proceed until a named dependency changes.
 - `rejected`: obsolete, duplicate, already solved, or not worth doing.
@@ -45,7 +45,7 @@ Issues:
 - <missing proof, stale path, oversized task, blocker, or none>
 
 Next:
-- spec-design | program-design | spec-program-review | plan-handoff | implement-plan for an exact approved draft | review-implementation for general-repo work | skills-creation for a runtime skill package | originating planner correction
+- spec-design | program-design | spec-program-review | plan-handoff | plan-implementation to establish delivery intent | review-implementation for general-repo work | skills-creation for a runtime skill package | originating planner correction
 
 ```
 
@@ -59,7 +59,7 @@ Canonical plan record (unchanged):
   originating planner:
   planning result:
   complete result payload:
-  complete approval-evidence record or explicit absence:
+  complete governing basis and delivery context:
 
 Current-state validation receipt:
   inspected branch/HEAD:
@@ -71,4 +71,4 @@ Current-state validation receipt:
 
 Both complete blocks must appear in the live response. A verdict summary or fields scattered through coverage evidence do not replace either block.
 
-Preserve the canonical plan record, planning result, result payload, and approval evidence unchanged. The validation receipt never replaces or abbreviates the canonical record.
+Preserve the canonical plan record, planning result, result payload, governing basis, and delivery context unchanged. The validation receipt never replaces or abbreviates the canonical record.

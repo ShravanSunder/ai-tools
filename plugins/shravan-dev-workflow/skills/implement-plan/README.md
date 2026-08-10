@@ -1,6 +1,6 @@
 # Implement Plan
 
-`implement-plan` executes one separately approved implementation plan. It verifies the plan and approval against the current repository, completes the smallest safe slice, and returns fresh proof. It does not review its own work or manage the PR.
+`implement-plan` executes one ready implementation plan whose delivery context authorizes implementation. It verifies the plan, governing basis, and delivery context against the current repository, completes the smallest safe slice, and returns fresh proof. It does not review its own work or manage the PR.
 
 The runtime contract remains in [SKILL.md](./SKILL.md). Detailed execution and proof guidance lives in [execution-and-proof.md](./references/execution-and-proof.md).
 
@@ -8,7 +8,7 @@ The runtime contract remains in [SKILL.md](./SKILL.md). Detailed execution and p
 
 ```mermaid
 flowchart TD
-    A[Plan plus separate owner approval] --> B{May implementation start?}
+    A[Ready plan plus delivery context] --> B{May implementation start?}
     B -- Needs revision --> C[Return to the plan's author]
     B -- Blocked or stale --> D[Stop with the exact blocker]
     B -- Yes --> E[Check branch, files, commands, scope, and proof]
@@ -26,7 +26,7 @@ flowchart TD
 ## Important Branches
 
 - A plan needing revision returns to its planner; a blocked plan stops at its named owner.
-- Missing or stale approval stops implementation.
+- Plan-only, missing, malformed, or stale governing basis/delivery context stops implementation.
 - A design surprise is not patched around. It returns to design.
 - A required proof gate is never weakened to make the run pass.
 - Independent implementation review happens afterward in `review-implementation`.

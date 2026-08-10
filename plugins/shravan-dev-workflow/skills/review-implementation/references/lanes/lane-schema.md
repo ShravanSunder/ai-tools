@@ -9,7 +9,8 @@ assignment identity:
 lane identity:
 governing authority identities:
 canonical plan record:
-separate current-plan approval-evidence record or explicit absence:
+current governing planning basis and delivery context:
+completed remediation-pass receipts in this bounded delivery effort:
 base and reviewed identities:
 diff range and changed files:
 repository instructions:

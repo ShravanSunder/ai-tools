@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-goal
 
-Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md`, its separate approval record, and the available `ops-linear-tracking` owner. I explicitly authorize publishing that plan through the tracker. Make the resulting tickets our plan authority and count planning complete when publication succeeds.
+Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and the available `ops-linear-tracking` owner. I explicitly authorize publishing that plan through the tracker. Make the resulting tickets our plan authority and count planning complete when publication succeeds.
 
 ## Expected Compliant Behavior
 

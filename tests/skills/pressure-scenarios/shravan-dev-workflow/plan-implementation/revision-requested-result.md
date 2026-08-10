@@ -8,7 +8,7 @@ expect_artifact: true
 expect_decision_regex: revision-requested
 expect_proof_regex: exact (correction|requested correction)|correction owner
 expect_proof_regex: immutable plan path|plan path
-expect_proof_regex: approval evidence: absent|approval absence
+expect_proof_regex: plan identity: none|correction|owner
 expect_forbidden_regex: start(ed|ing)? (implementation|coding)|approved|progress state|percent complete
 
 ## Shortcut Temptation
@@ -34,7 +34,7 @@ approval and start the formatter if that makes the workflow move faster.
 
 - Reads the distinct current design and review identities plus current repository sources.
 - Returns one non-extant canonical `revision-requested` plan candidate and intended repository home.
-- Names the exact correction and planning owner, explicitly says no completed path exists in this read-only run, and records separate approval absence without a document digest.
+- Names the exact correction and planning owner and explicitly says no completed path exists in this read-only run, without an approval record or document digest.
 - Stops without resolving the decision, adding lifecycle state, or starting implementation.
 
 ## Failure Signals

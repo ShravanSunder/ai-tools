@@ -60,7 +60,7 @@ accepted/rejected/contested/unverified findings
 what held
 result: ready | needs-revision | blocked | decision-needed
 first required revision
-correction verification and affected-coverage rerun
+correction verification and parent-verified remediation anchors
 planning-readiness boundary
 owner decision when correction would expand or subtract confirmed scope
 non-edit / non-acceptance statement
@@ -115,6 +115,6 @@ Produce exactly one result:
 
 When states mix, apply precedence `blocked -> needs-revision -> decision-needed -> ready`.
 
-After any edit, the parent records whether meaning changed and which mode or focused-lane predicates it affected. Rerun only affected coverage; carry coverage across non-semantic edits without model dispatch.
+After the one permitted remediation, the parent records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. An incomplete, expanded, or uncertain correction stops for explicit permission to begin another bounded review.
 
 Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the result cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.

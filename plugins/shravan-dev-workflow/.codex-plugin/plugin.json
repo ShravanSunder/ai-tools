@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Shravan's development workflow plugin with long-horizon delivery routing, bounded design orchestration, canonical planning, implementation and independent review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
@@ -67,7 +67,7 @@
   "interface": {
     "displayName": "Shravan Dev Workflow",
     "shortDescription": "Spec/program design, review, planning, implementation, operations, agents, and TUI workflows",
-    "longDescription": "Use Shravan Dev Workflow to route a long-horizon delivery goal through proven phase gates, run one bounded design cycle, translate reviewed design into one canonical plan, execute an exact approved revision, independently review implementation and proof, and finish PR readiness without merging. The plugin also gathers source-grounded evidence, packages handoffs, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
+    "longDescription": "Use Shravan Dev Workflow to route a long-horizon delivery goal through proven phase gates, run one bounded design cycle, translate reviewed design into one canonical ready plan with delivery intent, execute it without a generic post-plan approval gate, independently review implementation and proof, and finish PR readiness without merging. The plugin also gathers source-grounded evidence, packages handoffs, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -86,7 +86,7 @@
       "Use orchestrator-design to run this through one bounded Requirements, Specification, Program Design, and three-artifact design review cycle before planning.",
       "Use orchestrator-goal to route this long-horizon delivery goal from its first unproven gate to PR readiness without duplicating phase judgment or merging.",
       "Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.",
-      "Use implement-plan to execute this approved canonical plan at its immutable path and current meaning.",
+      "Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and pr-ready-unmerged delivery context.",
       "Use review-implementation to independently review this implementation and proof without editing.",
       "Use docs-maintain to reconcile these docs with current code and plans.",
       "Use spec-program-review to independently review this Specification, this Program Design, or this complete Requirements, Specification, and Program Design set.",

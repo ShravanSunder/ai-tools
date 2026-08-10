@@ -80,7 +80,7 @@ Branch references:
 - `research-swarm`: evidence gathering, prior art, current docs, memory/session mining, or source ledgers.
 - `spec-design`: durable authoritative Why/What contract.
 - `program-design`: durable structural How once observable obligations are settled.
-- Planning from current ready three-artifact design: `plan-implementation`; execution of an exact approved canonical draft: `implement-plan`; independent implementation review: `review-implementation` for general-domain work or `skills-creation` for a runtime skill package. Do not invoke a retired workflow.
+- Planning from current ready three-artifact design: `plan-implementation`; execution of an exact ready canonical plan whose delivery context is `pr-ready-unmerged`: `implement-plan`; independent implementation review: `review-implementation` for general-domain work or `skills-creation` for a runtime skill package. Do not invoke a retired workflow.
 - open in this skill: blocked work, broken model, conflicting artifacts, repeated loop, or missing authority when no shipped owner exists yet.
 
 ## Red Flags

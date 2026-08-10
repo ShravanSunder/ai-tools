@@ -30,7 +30,6 @@ const governingFixtureSources = [
   "tests/skills/fixtures/minimal-planning-delivery/program-design.md",
   "tests/skills/fixtures/minimal-planning-delivery/review-result.md",
   "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
-  "tests/skills/fixtures/minimal-planning-delivery/existing-plan-approval.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-proof.md",
 ] satisfies readonly string[];
 
@@ -66,7 +65,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "blocks-instead-of-inferring",
-        requirement: "Returns blocked-input and names the missing governing authority, plan/approval, source identities, diff, and proof boundary.",
+        requirement: "Returns blocked-input and names the missing governing authority, canonical ready plan with governing basis and delivery context, source identities, diff, and proof boundary.",
         failureExample: "Infers authority from the branch or request.",
       },
       {
@@ -104,7 +103,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "preserves-exact-review-authority",
-        requirement: "Preserves the exact governing identities, canonical draft plan record at its immutable path and current meaning, complete separate matching approval-evidence record, and supplied base/reviewed identities without treating summaries as truth.",
+        requirement: "Preserves the exact governing identities, canonical ready plan record at its immutable path and current meaning, governing basis, delivery context, and supplied base/reviewed identities without treating summaries as truth.",
         failureExample: "Drops or rewrites an identity, or treats implementation proof as authority.",
       },
       {
@@ -172,7 +171,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "routes-each-cause-to-its-owner",
-        requirement: "Routes observable meaning to spec-design, structural ownership/interface to program-design, plan dependency to the recorded originating planner, and code inside approved meaning to implement-plan.",
+        requirement: "Routes observable meaning to spec-design, structural ownership/interface to program-design, plan dependency to the recorded originating planner, and code inside settled meaning to implement-plan.",
         failureExample: "Routes every blocker to implementation or routes by severity.",
       },
       {
@@ -275,6 +274,15 @@ export const skillPressureCaseDefinitions = [
         requirement: "Stops before canonical-plan admission, reviewer dispatch, or a product review verdict.",
         failureExample: "Treats this skill as authority to review itself.",
       },
+    ],
+  },
+  {
+    scenarioId: "review-implementation-stops-before-fourth-remediation",
+    requiredSourceReads: reviewAdmissionSources,
+    maximumToolCalls: 15,
+    semanticCriteria: [
+      { name: "stops-before-dispatch", requirement: "Returns remediation-limit-reached before reviewer dispatch because three remediation receipts already exist and no later explicit permission was supplied.", failureExample: "Dispatches review four or resets the count for a new invocation." },
+      { name: "preserves-gap", requirement: "Returns the unresolved or stale coverage boundary and requires explicit user permission before another review or remediation.", failureExample: "Calls the implementation ready or reconstructs a zero count from missing persistent state." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

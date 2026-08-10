@@ -13,7 +13,7 @@ Missing producer-owned field: exact review result identity.
 ## Implementation Review
 
 Governing authority: current
-Plan and approval: current
+Plan and delivery context: current
 Reviewed base / HEAD / diff: 2222222222222222222222222222222222222222 / 3333333333333333333333333333333333333333 / fixture-implementation-diff-v1
 Result: ready
 Coverage: complete
