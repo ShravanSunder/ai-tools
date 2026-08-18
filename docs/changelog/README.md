@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-18 Codex Stop-review lives in ai-tools](2026-08-18-codex-stop-review-home.md)
 - [2026-08-09 Goal Delivery Intent And Bounded Review Loops](2026-08-09-goal-delivery-intent-and-bounded-review-loops.md)
 - [2026-08-07 Minimal Planning And Delivery](2026-08-07-minimal-planning-delivery.md)
 - [2026-08-06 Three-Artifact Design Review](2026-08-06-three-artifact-design-review.md)

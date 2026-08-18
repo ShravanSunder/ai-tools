@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cot", "decision", "reason"],
+  "properties": {
+    "cot": {
+      "type": "string",
+      "description": "1-2 sentences: remaining job or none, and what [last] did"
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["continue_work", "stop_ok"]
+    },
+    "reason": {
+      "type": "string",
+      "description": "One sentence. continue_work: order to resume the job. stop_ok: short justification."
+    }
+  }
+}

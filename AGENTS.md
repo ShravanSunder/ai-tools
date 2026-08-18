@@ -42,6 +42,8 @@ ai-tools/
 │   ├── dev-workflow-tools/           # Common tool skills, including Peekaboo UI testing
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
+├── agent-scripts/                    # Host agent scripts (not plugin skills)
+│   └── stop-review/                  # Luna Stop-review gate; chezmoi wrapper execs this
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
