@@ -9,10 +9,21 @@ set -uo pipefail
 
 HOOK_INPUT_JSON="$(cat || true)"
 HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./config.sh
+source "${HOOK_DIR}/config.sh"
 WINDOW_SCRIPT="${HOOK_DIR}/extract_stop_review_window.py"
 CLASSIFIER_PROMPT_FILE="${HOOK_DIR}/classifier-prompt.md"
 OUTPUT_SCHEMA_FILE="${HOOK_DIR}/output-schema.json"
-LUNA_TIMEOUT_SECONDS="${CODEX_STOP_REVIEW_LUNA_TIMEOUT:-40}"
+LUNA_TIMEOUT_SECONDS="${CODEX_STOP_REVIEW_LUNA_TIMEOUT:-${STOP_REVIEW_LUNA_TIMEOUT_DEFAULT}}"
+STOP_REVIEW_MODEL="${CODEX_STOP_REVIEW_MODEL:-${STOP_REVIEW_MODEL_DEFAULT}}"
+STOP_REVIEW_REASONING_EFFORT="${CODEX_STOP_REVIEW_REASONING_EFFORT:-${STOP_REVIEW_REASONING_EFFORT_DEFAULT}}"
+STOP_REVIEW_REASONING_SUMMARY="${CODEX_STOP_REVIEW_REASONING_SUMMARY:-${STOP_REVIEW_REASONING_SUMMARY_DEFAULT}}"
+STOP_REVIEW_SERVICE_TIER="${CODEX_STOP_REVIEW_SERVICE_TIER:-${STOP_REVIEW_SERVICE_TIER_DEFAULT}}"
+case "${STOP_REVIEW_SERVICE_TIER}" in
+  default | off | "")
+    STOP_REVIEW_SERVICE_TIER=""
+    ;;
+esac
 
 extract_json_field() {
   local jq_expression="$1"
@@ -229,19 +240,24 @@ OUT_FILE="${WORK_DIR}/luna-last.txt"
   printf '%s\n' "${WINDOW_TEXT}"
 } >"${PROMPT_FILE}"
 
+LUNA_EXEC_ARGS=(
+  --ephemeral
+  --ignore-user-config
+  --ignore-rules
+  --skip-git-repo-check
+  --sandbox read-only
+  -m "${STOP_REVIEW_MODEL}"
+  -c "model_reasoning_effort=${STOP_REVIEW_REASONING_EFFORT}"
+  -c "model_reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY}"
+)
+if [[ -n "${STOP_REVIEW_SERVICE_TIER}" ]]; then
+  LUNA_EXEC_ARGS+=(--enable fast_mode -c "service_tier=${STOP_REVIEW_SERVICE_TIER}")
+fi
+LUNA_EXEC_ARGS+=(--output-schema "${OUTPUT_SCHEMA_FILE}" -o "${OUT_FILE}" -)
+
 set +e
-run_with_timeout codex exec \
-  --ephemeral \
-  --ignore-user-config \
-  --ignore-rules \
-  --skip-git-repo-check \
-  --sandbox read-only \
-  -m gpt-5.6-luna \
-  -c model_reasoning_effort='low' \
-  -c model_reasoning_summary='none' \
-  --output-schema "${OUTPUT_SCHEMA_FILE}" \
-  -o "${OUT_FILE}" \
-  - <"${PROMPT_FILE}" >/dev/null 2>>"${PROJECT_LOG}"
+log_message "turn_id=${turn_id} session_id=${session_id} luna_start model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS}"
+run_with_timeout codex exec "${LUNA_EXEC_ARGS[@]}" <"${PROMPT_FILE}" >/dev/null 2>>"${PROJECT_LOG}"
 LUNA_EXIT=$?
 set +e
 
@@ -280,7 +296,7 @@ esac
 
 if [[ "${CONTINUE_WORK}" != "true" ]]; then
   save_state "${BLOCK_COUNT}" "luna_stop_ok" "${message_hash}"
-  log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_stop_ok decision=${DECISION} block_count=${BLOCK_COUNT} outcome=allow cot=${COT}"
+  log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_stop_ok decision=${DECISION} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${BLOCK_COUNT} outcome=allow cot=${COT}"
   emit_allow
 fi
 
@@ -297,7 +313,7 @@ if [[ "${next_block_count}" -ge 3 ]]; then
   emit_allow "${warning_message}"
 fi
 
-log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_continue_work decision=${DECISION} block_count=${next_block_count} outcome=block previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH} cot=${COT}"
+log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_continue_work decision=${DECISION} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${next_block_count} outcome=block previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH} cot=${COT}"
 emit_block \
   "${REASON}" \
   "Stop review hook continued the conversation because the job is still unfinished."
