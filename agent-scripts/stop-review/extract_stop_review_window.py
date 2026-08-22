@@ -10,8 +10,8 @@ import sys
 import typing as t
 from dataclasses import dataclass, field
 
-DEFAULT_MAX_USER_TURNS: int = 3
-DEFAULT_MAX_USER_TOKENS: int = 1200
+DEFAULT_MAX_USER_TURNS: int = 5
+DEFAULT_MAX_USER_TOKENS_PER_TURN: int = 400
 DEFAULT_MAX_ASSISTANT_LAST_TOKENS: int = 1600
 EARLIER_ASSISTANT_CHAR_CAP: int = 200
 
@@ -175,18 +175,8 @@ def _user_body(turn: ConversationTurn) -> str:
     return "\n\n".join(text.strip() for text in turn.user_texts if text.strip()) or "(no user text)"
 
 
-def _allocate_newest_first(texts: list[str], max_tokens: int) -> list[str]:
-    if max_tokens <= 0:
-        return ["" for _ in texts]
-    allocated: list[str] = ["" for _ in texts]
-    remaining = max_tokens
-    for index in range(len(texts) - 1, -1, -1):
-        fitted = _fit_to_token_budget(texts[index], remaining)
-        allocated[index] = fitted
-        remaining = max(0, remaining - estimated_token_count(fitted))
-        if remaining <= 0:
-            break
-    return allocated
+def _cap_each_user_body(texts: list[str], max_tokens_per_turn: int) -> list[str]:
+    return [_fit_to_token_budget(text, max_tokens_per_turn) for text in texts]
 
 
 def format_turn(
@@ -223,7 +213,7 @@ def render_window(
     turns: list[ConversationTurn],
     *,
     max_user_turns: int = DEFAULT_MAX_USER_TURNS,
-    max_user_tokens: int = DEFAULT_MAX_USER_TOKENS,
+    max_user_tokens_per_turn: int = DEFAULT_MAX_USER_TOKENS_PER_TURN,
     max_assistant_last_tokens: int = DEFAULT_MAX_ASSISTANT_LAST_TOKENS,
 ) -> str:
     selected_turns = turns[-max_user_turns:] if max_user_turns > 0 else []
@@ -231,7 +221,10 @@ def render_window(
         return "(empty conversation window)"
 
     start_index = len(turns) - len(selected_turns) + 1
-    user_bodies = _allocate_newest_first([_user_body(turn) for turn in selected_turns], max_user_tokens)
+    user_bodies = _cap_each_user_body(
+        [_user_body(turn) for turn in selected_turns],
+        max_user_tokens_per_turn,
+    )
 
     newest_last = ""
     if selected_turns[-1].assistant_messages:
@@ -260,7 +253,7 @@ def build_stop_review_window(
     transcript_path: str | None,
     last_assistant_message: str,
     max_user_turns: int = DEFAULT_MAX_USER_TURNS,
-    max_user_tokens: int = DEFAULT_MAX_USER_TOKENS,
+    max_user_tokens_per_turn: int = DEFAULT_MAX_USER_TOKENS_PER_TURN,
     max_assistant_last_tokens: int = DEFAULT_MAX_ASSISTANT_LAST_TOKENS,
 ) -> str:
     messages: list[ChatMessage] = []
@@ -270,7 +263,7 @@ def build_stop_review_window(
     return render_window(
         turns,
         max_user_turns=max_user_turns,
-        max_user_tokens=max_user_tokens,
+        max_user_tokens_per_turn=max_user_tokens_per_turn,
         max_assistant_last_tokens=max_assistant_last_tokens,
     )
 
@@ -284,7 +277,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Stop payload last_assistant_message; stitched as newest assistant line",
     )
     parser.add_argument("--max-user-turns", type=int, default=DEFAULT_MAX_USER_TURNS)
-    parser.add_argument("--max-user-tokens", type=int, default=DEFAULT_MAX_USER_TOKENS)
+    parser.add_argument(
+        "--max-user-tokens-per-turn",
+        type=int,
+        default=DEFAULT_MAX_USER_TOKENS_PER_TURN,
+    )
     parser.add_argument("--max-assistant-last-tokens", type=int, default=DEFAULT_MAX_ASSISTANT_LAST_TOKENS)
     return parser.parse_args(argv)
 
@@ -297,7 +294,7 @@ def main(argv: list[str] | None = None) -> int:
         transcript_path=transcript,
         last_assistant_message=last_assistant,
         max_user_turns=args.max_user_turns,
-        max_user_tokens=args.max_user_tokens,
+        max_user_tokens_per_turn=args.max_user_tokens_per_turn,
         max_assistant_last_tokens=args.max_assistant_last_tokens,
     )
     sys.stdout.write(window)

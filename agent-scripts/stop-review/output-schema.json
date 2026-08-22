@@ -13,7 +13,7 @@
     },
     "reason": {
       "type": "string",
-      "description": "One sentence. continue_work: order to resume the job. stop_ok: short justification."
+      "description": "One sentence. continue_work design: resume design/discussion, do not implement. continue_work implementation: resume implement/fix/prove. stop_ok: short justification."
     }
   }
 }

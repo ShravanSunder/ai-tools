@@ -301,7 +301,7 @@ if [[ "${CONTINUE_WORK}" != "true" ]]; then
 fi
 
 if [[ -z "${REASON}" ]]; then
-  REASON="The side question is answered. Continue the outstanding job now, or name the exact blocker that needs the user."
+  REASON="Continue the outstanding job in its current mode. If that job is design/discussion, keep designing; do not start implementation."
 fi
 
 next_block_count=$((BLOCK_COUNT + 1))

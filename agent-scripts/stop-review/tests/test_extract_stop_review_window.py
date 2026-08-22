@@ -113,16 +113,26 @@ class WindowRenderTests(unittest.TestCase):
         self.assertIn("[earlier] progress note one", window)
         self.assertIn("[earlier] progress note two", window)
 
-    def test_keeps_last_three_user_turns(self) -> None:
+    def test_keeps_last_five_user_turns(self) -> None:
         turns = [
             ConversationTurn(user_texts=[f"user {index}"], assistant_messages=[f"asst {index}"])
-            for index in range(1, 6)
+            for index in range(1, 8)
         ]
-        window = render_window(turns, max_user_turns=3)
+        window = render_window(turns, max_user_turns=5)
         self.assertNotIn("USER TURN 1", window)
         self.assertNotIn("USER TURN 2", window)
         self.assertIn("USER TURN 3", window)
-        self.assertIn("USER TURN 5", window)
+        self.assertIn("USER TURN 7", window)
+
+    def test_per_turn_user_cap_keeps_older_user_text(self) -> None:
+        turns = [
+            ConversationTurn(user_texts=["implement the tokens"], assistant_messages=["started"]),
+            ConversationTurn(user_texts=["A" * 8000], assistant_messages=["still going"]),
+        ]
+        window = render_window(turns, max_user_turns=5, max_user_tokens_per_turn=40)
+        self.assertIn("implement the tokens", window)
+        self.assertIn("USER TURN 1", window)
+        self.assertIn("...[truncated]...", window)
 
     def test_user_cap_does_not_drop_last_assistant(self) -> None:
         huge_user = "A" * 8000
@@ -130,7 +140,7 @@ class WindowRenderTests(unittest.TestCase):
         turns = [
             ConversationTurn(user_texts=[huge_user], assistant_messages=["old progress", last_line]),
         ]
-        window = render_window(turns, max_user_turns=3, max_user_tokens=40, max_assistant_last_tokens=200)
+        window = render_window(turns, max_user_turns=3, max_user_tokens_per_turn=40, max_assistant_last_tokens=200)
         self.assertIn("USER TURN 1", window)
         self.assertIn(last_line, window)
         self.assertIn("...[truncated]...", window)
@@ -141,7 +151,7 @@ class WindowRenderTests(unittest.TestCase):
         turns = [
             ConversationTurn(user_texts=["keep this user ask"], assistant_messages=["old progress", last_line]),
         ]
-        window = render_window(turns, max_user_turns=3, max_user_tokens=200, max_assistant_last_tokens=40)
+        window = render_window(turns, max_user_turns=3, max_user_tokens_per_turn=200, max_assistant_last_tokens=40)
         self.assertIn("USER TURN 1", window)
         self.assertIn("keep this user ask", window)
         self.assertIn("[last]", window)
