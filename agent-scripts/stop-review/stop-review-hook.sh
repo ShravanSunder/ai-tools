@@ -59,6 +59,14 @@ emit_allow() {
   exit 0
 }
 
+wrap_continue_reason() {
+  local luna_reason="$1"
+
+  printf '%s\n%s' \
+    "From Stop-review classifier agent:" \
+    "${luna_reason}"
+}
+
 emit_block() {
   local reason="$1"
   local system_message="${2:-}"
@@ -315,5 +323,5 @@ fi
 
 log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_continue_work decision=${DECISION} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${next_block_count} outcome=block previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH} cot=${COT}"
 emit_block \
-  "${REASON}" \
-  "Stop review hook continued the conversation because the job is still unfinished."
+  "$(wrap_continue_reason "${REASON}")" \
+  "Stop-review classifier continued the conversation because the job is still unfinished."

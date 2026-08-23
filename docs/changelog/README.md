@@ -12,6 +12,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-08-23 Stop-review classifier prefix](2026-08-23-stop-review-classifier-prefix.md)
 - [2026-08-21 Stop-review five-turn window and design continue](2026-08-21-stop-review-five-turn-design-continue.md)
 - [2026-08-19 Stop-review Luna low Fast](2026-08-19-stop-review-luna-low-fast.md)
 - [2026-08-19 Stop-review current-job vs sidebar](2026-08-19-stop-review-current-job-sidebar.md)

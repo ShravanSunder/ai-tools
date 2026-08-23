@@ -18,6 +18,8 @@ EARLIER_ASSISTANT_CHAR_CAP: int = 200
 HOOK_INJECTED_USER_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"(?is)^\s*do not stop\b"),
     re.compile(r"(?is)stop review hook"),
+    re.compile(r"(?is)stop-review classifier"),
+    re.compile(r"(?is)^\s*from stop-review\b"),
     re.compile(r"(?is)^\s*outstanding job is still\b"),
     re.compile(r"(?is)continue the (original )?task now\b"),
     re.compile(r"(?is)<hook_prompt\b"),

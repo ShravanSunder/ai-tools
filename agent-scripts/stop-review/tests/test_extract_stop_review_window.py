@@ -51,7 +51,13 @@ class HookInjectedUserTests(unittest.TestCase):
     def test_leaves_normal_user_text(self) -> None:
         self.assertFalse(is_hook_injected_user_text("are you parallelizing work with subagents?"))
 
-    def test_detects_wrapped_hook_prompt(self) -> None:
+    def test_detects_stop_review_classifier_envelope(self) -> None:
+        self.assertTrue(
+            is_hook_injected_user_text(
+                "From Stop-review classifier agent:\n"
+                "Continue the named design work; do not implement product code."
+            )
+        )
         self.assertTrue(
             is_hook_injected_user_text(
                 '<hook_prompt hook_run_id="stop:1:/Users/shravansunder/.codex/hooks.json">'
