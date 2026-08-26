@@ -1,7 +1,7 @@
 # Complete Implementation Proof Fixture
 
-Governing tuple: tests/skills/fixtures/minimal-planning-delivery/existing-plan.md, originating planner plan-implementation, result draft
-Approval-evidence record: tests/skills/fixtures/minimal-planning-delivery/existing-plan-approval.md, complete and current
+Governing plan: tests/skills/fixtures/minimal-planning-delivery/existing-plan.md, originating planner plan-implementation, result ready
+Governing planning basis and delivery context: read unchanged from tests/skills/fixtures/minimal-planning-delivery/existing-plan.md
 Implementation base: 2222222222222222222222222222222222222222
 Implementation HEAD: 3333333333333333333333333333333333333333
 Diff identity: fixture-implementation-diff-v1

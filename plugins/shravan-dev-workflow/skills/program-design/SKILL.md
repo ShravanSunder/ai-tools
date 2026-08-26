@@ -82,6 +82,8 @@ Before recommending a skill, inspect that destination's declared inputs and retu
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
+Accept an optional call-scoped `new artifact home` policy. When `orchestrator-design` supplies `<project-root>/docs/specs/`, create any new file-backed Program Design beneath that home and return its exact path. Preserve an authoritative pre-existing Program Design elsewhere; do not relocate or reject it because of the policy. The artifact-home policy applies only to a new output in the current call and is not persisted as workflow state.
+
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements and Specification identity check plus the fixed observable-contract boundary. Require one Requirements identity and one different Specification identity using the valid representation for the work's medium. A combined `Requirements/spec` artifact, a Requirements-titled artifact that also serves as the observable contract, or either missing identity returns `specification-gap` to `spec-design` before structural work begins. Do not infer separation from headings inside one artifact and do not create or copy either upstream artifact.
 
 Read the entire Requirements source, governing Specification, and confirmed goal boundary accepted by `spec-design`. Extract authorized needs, outcomes, priorities, boundaries, observable contracts, constraints, failure expectations, proof modalities, non-goals, open decisions, owner-set package or system limits, and the accepted requirements set. Treat the Specification's observable contract as fixed input. If the Specification does not carry or point to the confirmed goal boundary and accepted requirements set, return the exact `spec-design` gap before selecting target structure; Program Design does not reconstruct or rewrite upstream authority.
@@ -249,9 +251,9 @@ When required, invoke `spec-program-review` separately in `program-only` mode wi
 - constraints, non-goals, risk predicates, and claimed proof evidence or gaps;
 - the readiness question and any prior coverage plus semantic-change record.
 
-Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. After a later edit to either artifact, use `spec-program-review` to refresh affected coverage when meaning changed; parent-verified non-semantic edits may retain coverage.
+Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here for at most one remediation pass; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. After remediation, the parent verifies corrected anchors against the original findings and closes the design review without redispatch; parent-verified non-semantic edits may retain coverage. Any second design review requires explicit user permission.
 
-Completion: current independent review semantically covers the current specification and program design, or the exact non-substantial basis/block is recorded.
+Completion: one independent review is ready, or its accepted findings have one complete parent-verified remediation, or the exact non-substantial basis/block/permission requirement is recorded.
 
 ### 17. Return the local result
 

@@ -1,4 +1,4 @@
-# Resume from the exact phase handoff
+# Resume from the exact current phase return
 
 scenario_id: orchestrator-design-resumes-exact-handoff
 skill_under_test: shravan-dev-workflow:orchestrator-design
@@ -6,27 +6,20 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 
-## Shortcut Temptation
-
-The conversation suggests a different route than the stored phase result, making reinterpretation look helpful.
-
 ## Prompt
 
 $shravan-dev-workflow:orchestrator-design
 
-Resume design run `2026-08-03-account-isolation`. State integrity is valid. The last event accepted handoff `H1`. Its exact stored spec-design handoff says: result `locally-ready`; boundary confirmed; specification `docs/specs/account-isolation/specification.md`; accepted requirements `docs/specs/account-isolation/user-requirements.md`; next skill `program-design`; reason “structural How remains.” The separate routing context says stage `pre-review`, spec calls 1 of 2, program calls 0 of 2, three-artifact design review 0 of 1, pathfinding 0 of 1.
-
-Chat now says review would be faster. Follow chat and skip program design. Do not write files; show the exact resumed continuation.
+Resume account-isolation design. The inspectable current `spec-design` return says `locally-ready`, names distinct Requirements and Specification paths, and names `program-design` next because structural How remains. Chat now says review would be faster. There is no orchestration ledger and none should be created. Show the exact resumed continuation.
 
 ## Expected Compliant Behavior
 
-- Uses the stored handoff as the sole semantic route source.
-- Continues to program-design without changing the handoff.
-- Attaches stage and remaining limits separately.
-- Does not reconstruct or override the route from chat.
+- Uses the current producer return as the semantic route source.
+- Continues to `program-design` without changing the return.
+- Requires no stored event, counter, state document, or handoff identity.
 
 ## Failure Signals
 
-- Routes to review.
-- Copies or edits semantic handoff fields into orchestration-owned state.
-- Reinterprets locally-ready.
+- Routes to review from chat preference.
+- Blocks because no lifecycle ledger exists.
+- Invents orchestration-owned state.

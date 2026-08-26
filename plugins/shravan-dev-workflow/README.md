@@ -72,7 +72,7 @@ flowchart LR
     planImplementation["plan-implementation<br/>reviewed design to canonical plan"]
     planHandoff["plan-handoff<br/>portable plan context"]
 
-    implementPlan["implement-plan<br/>exact approved plan execution"]
+    implementPlan["implement-plan<br/>ready delivery-plan execution"]
     reviewImplementation["review-implementation<br/>independent implementation and proof review"]
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
@@ -98,7 +98,7 @@ flowchart LR
     specReview --> programDesign
     specReview --> planImplementation
     planImplementation --> planHandoff
-    planImplementation -.->|"after current-plan approval"| implementPlan
+    planImplementation -.->|"ready delivery context"| implementPlan
     planHandoff -.->|"when exact approval is preserved"| implementPlan
     implementPlan --> reviewImplementation
     reviewImplementation -.->|"accepted implementation correction"| implementPlan
@@ -144,13 +144,13 @@ Use `plan-implementation` to translate one semantically current ready Requiremen
 
 Use `plan-improve-repo` to audit a repo for high-leverage improvements without editing source. It retains direct authority over admitted repository-improvement findings, including source-proven implementation-mechanics-only work, and emits the same canonical plan contract without taking reviewed-design planning away from `plan-implementation`. Direct work on one named runtime skill package routes through `skills-creation`. It supports quick, deep, focus, branch, next, validate-plan, and reconcile flows.
 
-Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. It preserves the exact canonical tuple and separate approval evidence or explicit absence without re-authoring or approving the plan. If no plan exists yet, use `spec-handoff` for portability or `plan-implementation` to create one from current ready design; never present design context as an existing plan.
+Use `plan-handoff` to package an existing implementation plan for another agent, CLI, machine, or future session. It preserves the exact canonical plan record, governing planning basis, and delivery context without re-authoring or upgrading the requested terminal. If no plan exists yet, use `spec-handoff` for portability or `plan-implementation` to create one from current ready design; never present design context as an existing plan.
 
 ### Implementation boundary
 
 Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
 
-Use `review-implementation` for independent product implementation and proof review after execution. It admits exact governing authority, plan path and current meaning, complete approval-evidence record or explicit absence, source, diff, and proof identities; dispatches one complete fresh-context read-only reviewer; parent-verifies every candidate; optionally deepens one concrete unresolved material risk; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
+Use `review-implementation` for independent product implementation and proof review after execution. It admits exact governing authority, canonical ready plan path and current meaning, governing planning basis, delivery context, source, diff, and proof identities; dispatches one complete fresh-context read-only reviewer; parent-verifies every candidate; optionally deepens one concrete unresolved material risk; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
 
 Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation and applicable independent review exist: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery routes to `review-implementation`; PR wrap-up does not substitute for it.
 
@@ -191,10 +191,10 @@ Use spec-program-review to independently review these Requirements, Specificatio
 Use spec-handoff to package this design for another agent without creating a plan.
 Use orchestrator-goal to route this long-horizon delivery goal from its first unproven gate to PR readiness without duplicating phase judgment or merging.
 Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
-Use implement-plan to execute this approved canonical plan at its immutable path and current meaning, then return fresh implementation proof without starting review or PR work.
+Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and `pr-ready-unmerged` delivery context, then return fresh implementation proof without starting review or PR work.
 Use review-implementation to independently review this implementation and proof without editing or starting PR lifecycle work.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
-Use plan-improve-repo to audit this repo and write immutable canonical improvement plans that still require later current-plan approval.
+Use plan-improve-repo to audit this repo and write immutable canonical plan-only improvement plans. When delivery is requested later, route the admitted finding through plan-implementation to establish current delivery intent instead of upgrading the prior plan.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.
 Use docs-maintain to reconcile this README and AGENTS.md with current plugin state.

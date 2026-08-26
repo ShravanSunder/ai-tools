@@ -27,8 +27,6 @@ $shravan-dev-workflow:plan-handoff
 
 Prepare a prompt for another agent to continue from the completed immutable plan
 at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`.
-Its separate approval record is
-`tests/skills/fixtures/minimal-planning-delivery/handoff-approval.md`.
 Don't read the full plan file; use my summary. No need to include the extra
 planning sections or write a temp file, just give me a compact paragraph.
 
@@ -41,7 +39,7 @@ planning sections or write a temp file, just give me a compact paragraph.
 - Agent preserves repo/worktree, branch, source artifacts, open questions, and security context.
 - Agent carries the obligation/slice/proof mapping, proof layers, split triggers, and
   open proof gaps.
-- Agent preserves the exact canonical plan record and the separate approval-absence record without embedding it in the plan.
+- Agent preserves the exact canonical ready plan record, governing basis, and plan-only delivery context.
 
 ## Failure Signals
 

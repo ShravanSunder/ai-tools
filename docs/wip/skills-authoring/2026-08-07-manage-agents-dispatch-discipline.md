@@ -417,7 +417,7 @@ Basis: `user-directed intent` for Runs 1–2 and Changeset C (D9). Proof posture
 - base: `master` @ `2963930` (`ai-tools`); implementation branch `feat/manage-agents-dispatch-discipline` in its own worktree (user direction 2026-08-07); this spec doc moves onto that branch with the changeset.
 - pending edits: none known; check `git status` before each slice edits.
 - implementation grouping: Runs 1–3 land in one PR (single version bump per Coordination); Changeset C stays post-merge — the hook needs its security-gate decision and the devfiles edit needs explicit commit approval.
-- version landing: bump `shravan-dev-workflow` `2.0.1 → 2.1.0` when the first behavior-changing run ships; single bump covers the sequenced runs if they land in one release, otherwise bump per release. (Landed as `2.1.0 → 2.2.0`: master released 2.1.0 for minimal-planning-delivery before this branch merged.)
+- version landing: bump `shravan-dev-workflow` `2.0.1 → 2.1.0` when the first behavior-changing run ships; single bump covers the sequenced runs if they land in one release, otherwise bump per release. (Landed as `2.2.0 → 2.3.0`: master released 2.1.0 for minimal-planning-delivery and 2.2.0 for goal-delivery-intent before this branch merged.)
 - changelog landing: one dated entry under `docs/changelog/` covering shipped runs (public-safe); devfiles gets its own private entry for the `my_agents.md` change (D11).
 - cache refresh: Codex and Claude plugin cache refresh is a post-release proof step, recorded in the changelog entry.
 - devfiles commit requires explicit user approval (repo rule).

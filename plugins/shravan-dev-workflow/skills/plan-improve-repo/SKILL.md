@@ -5,9 +5,9 @@ description: Use when auditing a repository for improvement opportunities, backl
 
 # Plan Improve Repo
 
-Audit a repo like a senior advisor and turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner; after admission, the product is a completed plan at one path that still requires separate later owner approval before execution. This skill does not edit product code.
+Audit a repo like a senior advisor and turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an `orchestrator-goal` delivery, this skill returns the admitted finding and basis to `plan-implementation`, which owns the one delivery plan. This skill does not edit product code.
 
-Its direct authority is the admitted repository-improvement finding. `plan-implementation` separately owns direct translation of a reviewed Requirements, Specification, and Program Design set. Both produce the same canonical plan contract without sharing entry authority.
+Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the single plan for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
 
 Inspired by the MIT-licensed `shadcn-improve` plugin mechanics: scout broadly, verify claims yourself, then produce plans a cheaper/faster executor can run.
 
@@ -53,9 +53,9 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Inspect audit categories in-parent by default. IF the user explicitly requests delegation, or current source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns that later handoff; agent availability or a broad flow name is never enough.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
-- If asked to implement an existing plan, route to `implement-plan` only when the canonical result is `draft` and separate later owner approval names that exact plan path and current meaning. If asked for independent implementation review, route `general-repo` work to `review-implementation` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
+- If asked to implement a direct plan-only result, establish new delivery intent through `plan-implementation`; do not upgrade the existing plan. If asked for independent implementation review, route `general-repo` work to `review-implementation` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
 - If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical plan record.
-- Call only the exact canonical `draft` at its immutable plan path and current meaning with the complete later matching owner approval-evidence record executable. Plan completion, validation, handoff, a ticket, or earlier goal text is not approval.
+- A ready direct plan defaults to `plan-only` and is not executable. An orchestrated goal returns the admitted finding pointer, basis classification, evidence pointers, and applicability anchors to `plan-implementation`; plan completion, validation, handoff, or ticket state never upgrades delivery intent.
 
 ## Normal Flows
 
@@ -96,30 +96,30 @@ Completion: target classification and, when applicable, the exact `skills-creati
 5. Classify each selected improvement under **Entry And Planning Admission**:
    - write plans only for `current-three-artifact-design-ready` or `implementation-mechanics-only`
    - preserve and route `design-required` findings without turning them into execution tasks
-6. IF producing or revising a completed plan result, or validating or preserving an extant completed plan, load `../../shared-references/canonical-implementation-plan.md` to keep this skill's admitted-improvement and implementation-mechanics-only admission inline while applying the shared producer/validator contract, and return the complete canonical plan record, result-specific payload, separate approval-evidence record or explicit absence, and any blocking discrepancy. Audit-only runs and pre-artifact admission failures do not load it.
-7. Write one plan per admitted improvement:
+6. IF producing or revising a completed direct plan result, or validating or preserving an extant completed plan, load `../../shared-references/canonical-implementation-plan.md` to keep this skill's admitted-improvement and implementation-mechanics-only admission inline while applying the shared producer/validator contract, and return the complete canonical plan record or non-ready result plus any blocking discrepancy. For an orchestrated goal, return the admitted-finding handoff instead of writing the delivery plan. Audit-only runs and pre-artifact admission failures do not load it.
+7. Write one plan per admitted improvement that can return `ready`:
    - default to the top 3-5 in non-interactive runs
    - one focused plan per finding, not a mega-plan
    - instantiate the canonical plan record with originating planner `plan-improve-repo`
-   - return `draft | revision-requested | blocked` with the matching result payload and explicit approval absence
+   - return `ready` with `requested terminal: plan-only`, or return `revision-requested | blocked` with `plan identity: none` and no artifact write
    - include planning-basis identity, exact files, current-state evidence, proof-bearing slices, proof gates, and stop conditions
-8. Validate each generated plan without changing its plan record or planning result:
+8. Validate each generated ready plan without changing its plan record or planning result. A new `revision-requested` or `blocked` result has `plan identity: none` and skips artifact validation:
    - read the plan back after writing it
    - confirm every write surface exists or is intentionally new
    - confirm proof gates are commands or checks the executor can run
    - confirm task size is small enough for proof to pass inside scope
    - confirm stop conditions cover stale repo state, unrelated validation failures, and security-sensitive surprises
-   - return a separately labeled non-authoritative `Current-state validation receipt` with inspected branch/HEAD, paths, commands, findings, `ready | needs-refresh | blocked | rejected`, and next owner; this block is required for `blocked` results too and never collapses into the plan summary
+   - return a separately labeled non-authoritative `Current-state validation receipt` with inspected branch/HEAD, paths, commands, findings, `ready | needs-refresh | blocked | rejected`, and next owner; this never collapses into the plan summary
 9. Route next:
    - `plan-handoff` to package the plan for another agent
-   - `implement-plan` only for an exact canonical `draft` with separate matching later owner approval
+   - `plan-implementation` when an owner explicitly requests delivery of a direct plan-only result
    - `review-implementation` for `general-repo` independent implementation review, or `skills-creation` for an explicitly composed `runtime-skill-package`
 
 ## Plan Validation Flow
 
 Use this for `validate-plan`, `next`, and pre-execution checks.
 
-1. Read the full plan artifact. Do not require a separate reading receipt. Apply the conditional canonical-plan load call in the main workflow and return the unchanged plan record, approval record or absence, and any discrepancy.
+1. Read the full plan artifact. Do not require a separate reading receipt. Apply the conditional canonical-plan load call in the main workflow and return the unchanged plan record, governing basis, delivery context, and any discrepancy.
 2. Verify the plan's `current-three-artifact-design-ready` or `implementation-mechanics-only` basis against current evidence. A missing, stale, or contradicted basis is `blocked` and routes to the exact semantic owner.
 3. Verify the planned-at SHA, current branch, and changed target files.
 4. Re-open all cited source files and commands from the plan.
@@ -132,14 +132,14 @@ Use this for `validate-plan`, `next`, and pre-execution checks.
    - red/green proof required or explicit user-approved exception
    - focused validation and full validation listed separately
    - proof maps back to the problem, not just to changed files
-7. Return a separate readiness receipt. Do not edit source code, the canonical plan record, planning result, or approval evidence.
+7. Return a separate readiness receipt. Do not edit source code, the canonical plan record, planning result, governing basis, or delivery context.
 
 ## Progressive Disclosure
 
 - IF performing a broad repo audit, load `references/audit-lanes.md` and return the selected in-parent categories, each category's inspected anchors, candidate or null result, and coverage limit. IF delegation qualifies under the Core Rules predicate, include the one bounded evidence handoff selected there and use `manage-agents`.
 - IF writing a plan artifact, load `references/improvement-plan-template.md` and return the proportional filled plan form selected under the shared canonical contract.
-- IF reconciling existing improvement plans or checking whether they remain current, load `references/reconcile-backlog.md` and return the separate reconciliation receipt, unchanged canonical plan record and approval evidence for each extant plan, and exact originating-planner correction route when applicable.
-- IF validating a plan, selecting `next`, or judging current execution readiness, load `references/validation-checklist.md` and return its separate current-state receipt without mutating the canonical plan record or approval evidence.
+- IF reconciling existing improvement plans or checking whether they remain current, load `references/reconcile-backlog.md` and return the separate reconciliation receipt, unchanged canonical plan record for each extant plan, and exact originating-planner correction route when applicable.
+- IF validating a plan, selecting `next`, or judging current execution readiness, load `references/validation-checklist.md` and return its separate current-state receipt without mutating the canonical plan record, governing basis, or delivery context.
 
 ## Output Shape
 
@@ -151,7 +151,7 @@ Return:
 - accepted findings, rejected candidates, and unknowns
 - prioritized improvement shortlist
 - validation verdict for generated or existing plans
-- unchanged canonical plan record and separate approval-evidence record or explicit absence for every extant completed plan
+- unchanged canonical plan record for every extant completed plan
 - plan artifact paths with full clickable links
 - recommended next skill for each plan
 - commands run and validation limits
@@ -167,4 +167,4 @@ Return:
 - Turning a design-required finding into tasks instead of routing it to the missing semantic owner.
 - Marking a plan ready when it has stale paths, missing commands, oversized tasks, or vague validation.
 - Treating stale plans as still valid without reconciling them against the current repo.
-- Mutating the canonical planning result or approval evidence during current-state validation.
+- Mutating the canonical planning result, governing basis, or delivery context during current-state validation.

@@ -225,4 +225,16 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "spec-program-review-one-review-one-remediation",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/finding-and-reduction-schema.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "dispositions-before-remediation", requirement: "Rejects the non-semantic prose preference with evidence, routes the accepted cross-artifact correction through one bounded spec-design then program-design remediation round with each artifact corrected at most once and one parent verification, and stops the mental-model break with assumption, evidence, consequence, and owner.", failureExample: "Treats the second semantic owner as another remediation loop, treats all findings as mandatory remediation, or dismisses the mental-model break." },
+      { name: "does-not-rereview", requirement: "Uses original independent findings plus parent verification as current closure and dispatches no second review.", failureExample: "Applies generic semantic-freshness language to automatically rereview the accepted remediation." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

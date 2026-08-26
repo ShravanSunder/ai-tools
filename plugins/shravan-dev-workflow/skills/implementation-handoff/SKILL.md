@@ -20,7 +20,7 @@ Package actual implementation state so another agent can review, continue, or au
 - Separate proven facts from claims, guesses, and unfinished work.
 - Do not run reviewers automatically. For `pre-review` or post-remediation review, classify `general-domain | runtime-skill-package`, prepare the complete admission packet, and recommend exactly `review-implementation` for general-domain work or `skills-creation` for runtime skill-package work; never perform or launch review here.
 - If the handoff asks another agent to review only, the prompt must say "do not edit files".
-- IF the implementation or review state derives from an extant completed canonical plan, load `../../shared-references/canonical-implementation-plan.md` to validate and preserve that plan without re-authoring or approval, and return the unchanged complete plan record, result-specific payload, separate approval-evidence record or explicit absence, and any blocking discrepancy for the handoff packet. Otherwise record `plan identity: none` plus the non-plan governing request or ticket identity and do not fabricate a plan record.
+- IF the implementation or review state derives from an extant completed canonical plan, load `../../shared-references/canonical-implementation-plan.md` to validate and preserve that plan without re-authoring, and return the unchanged complete plan record, result-specific payload, governing basis, delivery context, and any blocking discrepancy for the handoff packet. Otherwise record `plan identity: none` plus the non-plan governing request or ticket identity and do not fabricate a plan record.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ Package actual implementation state so another agent can review, continue, or au
    - commits since base when relevant
    - plan/ticket/request source
 3. Inspect enough code/tests/docs to make the handoff accurate.
-4. Preserve the returned canonical plan record and complete approval-evidence record or explicit absence, then bind implementation proof to that exact plan path and current meaning.
+4. Preserve the returned canonical plan record, governing basis, and delivery context, then bind implementation proof to that exact plan path and current meaning.
 5. Create the temp artifact directory.
 6. Write:
    - `implementation-handoff.md`
@@ -52,7 +52,7 @@ Package actual implementation state so another agent can review, continue, or au
 ## Stage Guidance
 
 - `in-progress`: include what changed, what is incomplete, what not to redo, and how to continue safely.
-- For an approved canonical `draft` with incomplete implementation, recommend `implement-plan`; for `revision-requested`, `blocked`, absent approval, or a plan-record discrepancy, preserve the exact route and do not recommend execution.
+- For a ready canonical record with terminal `pr-ready-unmerged` and incomplete implementation, recommend `implement-plan`; for `plan-only`, `revision-requested`, `blocked`, or a plan-record discrepancy, preserve the exact route and do not recommend execution.
 - `pre-review`: include diff range, changed files, tests run, review focus, and known risks.
 - `post-review`: include reviewer feedback addressed, remaining disputed items, and what needs re-checking.
 - `blocked`: include blocker evidence, failed commands, attempted fixes, and exact decision needed.

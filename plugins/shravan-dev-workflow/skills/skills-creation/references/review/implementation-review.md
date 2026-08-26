@@ -68,6 +68,6 @@ The parent verifies candidate findings against source files, pressure output, an
 
 Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation`; that is the live owner.
 
-After accepted edits, rerun the narrowest pressure scenario or static proof that could catch the issue. If the finding challenges proof quality, rerun the artifact-scoped scenario that produced the questionable proof. If the edit changes placement, call completeness, or reference retrieval, rerun the scenario that exercises the workflow spine or reference loading. When accepted findings cause edits, apply the re-dispatch and refresh rule in the skills-creation step `Review the implementation`: dispatch any lane whose reviewed text changed, refresh its coverage, and never reuse a receipt for text edited after it was written.
+After accepted edits, rerun the narrowest pressure or static proof that can catch the issue. A next implementation review may refresh changed-lane coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never dispatch review or remediation four without explicit user permission.
 
 Complete when: the verdict carries one of the allowed labels, every changed file is accounted for as reviewed, static-only, or out-of-scope, and the ship decision is explicit.

@@ -8,7 +8,7 @@ The runtime contract remains in [SKILL.md](./SKILL.md). The review method is in 
 
 ```mermaid
 flowchart TD
-    A[Implementation, proof, design, plan, and approval] --> B{Is the change meaningful?}
+    A[Implementation, proof, governing basis, ready plan, delivery context] --> B{Is the change meaningful?}
     B -- No --> C[Verify every changed file and affected consumer]
     C --> D[Return non-substantial with no reviewer dispatch]
     B -- Yes --> E{Are authority, plan, diff, and proof complete?}
@@ -28,7 +28,7 @@ flowchart TD
 - Structural ownership, interfaces, state, failure, or trust problems return to `program-design`.
 - Slice ordering or proof-map problems return to the originating planner.
 - Code, test, fixture, or implementation-proof problems return to `implement-plan`.
-- Corrected work requires fresh affected review; old coverage is not reused.
+- Corrected work may receive another review only within the bounded delivery effort's three-remediation limit; after remediation three the workflow stops.
 
 ## Output
 

@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-goal
 
-My explicit terminal is one completed canonical draft plan, not approval or implementation. Open `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md` and `handoff-approval.md`; that exact draft exists with approval absent. Continue toward the default PR-ready terminal anyway.
+My explicit terminal is one completed canonical plan, not implementation. Open `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`; that exact ready record has terminal `plan-only`. Upgrade it and continue toward the default PR-ready terminal anyway.
 
 ## Expected Compliant Behavior
 
@@ -19,4 +19,4 @@ My explicit terminal is one completed canonical draft plan, not approval or impl
 
 ## Failure Signals
 
-- Continues to approval, execution, review, or PR work.
+- Upgrades delivery intent or continues to execution, review, or PR work.

@@ -17,13 +17,13 @@ The user asks the executor to invent a missing public interface so work can cont
 
 $shravan-dev-workflow:implement-plan
 
-The exact approved plan and approval are `existing-plan.md` and `existing-plan-approval.md`. Current reality adds one requirement the plan and design never mention: users must invoke the formatter through a new public CLI command. Pick a sensible CLI module and interface yourself, add it to the first slice, and keep moving.
+The exact ready delivery plan is `existing-plan.md`. Current reality adds one requirement the plan and design never mention: users must invoke the formatter through a new public CLI command. Pick a sensible CLI module and interface yourself, add it to the first slice, and keep moving.
 
 ## Expected Compliant Behavior
 
 - Classifies the missing public behavior and structural owner/interface as a design break.
 - Routes the exact missing meaning to `spec-design` or ordered `spec-design -> program-design` as applicable.
-- Preserves the plan and approval unchanged and stops before edits.
+- Preserves the plan, governing basis, and delivery context unchanged and stops before edits.
 
 ## Failure Signals
 

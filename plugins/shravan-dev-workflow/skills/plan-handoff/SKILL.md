@@ -5,7 +5,7 @@ description: Use when packaging an existing implementation plan for another agen
 
 # Plan Handoff
 
-Package an existing implementation plan so another agent can review, execute, or continue planning without reconstructing the conversation. This is a portability boundary, not a completion boundary: handoff means the plan context is transferable, not that the plan is approved or implemented.
+Package an existing implementation plan so another agent can review, execute, or continue planning without reconstructing the conversation. This is a portability boundary, not a completion boundary: handoff preserves the plan's governing basis and delivery context without upgrading either.
 
 ## Core Rules
 
@@ -19,7 +19,7 @@ Package an existing implementation plan so another agent can review, execute, or
 - If a plan file is available, read it end to end before packaging. Carry the plan path and useful repository identities, but do not return a separate reading receipt, line count, chunk range, or file-content hash or digest.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
 - Show the copy-paste prompt in the final response and write the same prompt to a file.
-- Under read-only authority, return the complete copy-paste prompt inline with the source plan and separate approval-record paths, and state that the normal write-enabled route creates repo-local `plan-handoff.md` and `copy-paste-prompt.md`; do not claim those files were created.
+- Under read-only authority, return the complete copy-paste prompt inline with the source plan path, governing basis, and delivery context, and state that the normal write-enabled route creates repo-local `plan-handoff.md` and `copy-paste-prompt.md`; do not claim those files were created.
 - Do not make code changes unless the user separately asks to implement.
 
 ## Workflow
@@ -27,7 +27,7 @@ Package an existing implementation plan so another agent can review, execute, or
 1. Resolve the repo root with `git rev-parse --show-toplevel` when possible.
 2. Resolve the source plan artifact or plan packet. If none exists, apply the core routing rule and stop.
 3. If a source file exists, read the whole file before summarizing. A heading search, path listing, or user summary is not a substitute for the plan contents.
-4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring or approval, and return the unchanged plan record, separate approval-evidence record or explicit absence, and any blocking discrepancy for the handoff packet.
+4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring, and return the unchanged plan record, governing basis, delivery context, and any blocking discrepancy for the handoff packet.
 5. Inspect only the secondary code/docs needed to make the handoff grounded.
 6. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.
 7. Write at least:
@@ -41,7 +41,7 @@ Package an existing implementation plan so another agent can review, execute, or
 
 ## Progressive Disclosure
 
-IF writing the handoff artifact or copy-paste prompt, load `references/handoff-template.md` and return both filled artifacts with the unchanged plan record and approval evidence or explicit absence.
+IF writing the handoff artifact or copy-paste prompt, load `references/handoff-template.md` and return both filled artifacts with the unchanged plan record, governing basis, and delivery context.
 
 ## Common Mistakes
 
@@ -54,4 +54,4 @@ IF writing the handoff artifact or copy-paste prompt, load `references/handoff-t
 - Sensitive trust-boundary assumptions are omitted, forcing the next agent to invent a threat model.
 - The obligation/slice/proof mapping is omitted, forcing the next agent to infer how the plan will be proven.
 - The handoff drops evidence sources, freshness guards, or parent-owned verification, letting the next agent treat delegated evidence as completion.
-- The handoff changes the plan record, treats `draft` as approval, or omits the separate approval-evidence record or explicit absence.
+- The handoff changes the plan record, upgrades `plan-only`, or omits the governing basis or delivery context.
