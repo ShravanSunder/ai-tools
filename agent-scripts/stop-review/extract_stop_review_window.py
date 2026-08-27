@@ -11,9 +11,10 @@ import typing as t
 from dataclasses import dataclass, field
 
 DEFAULT_MAX_USER_TURNS: int = 5
-DEFAULT_MAX_USER_TOKENS_PER_TURN: int = 400
-DEFAULT_MAX_ASSISTANT_LAST_TOKENS: int = 1600
-EARLIER_ASSISTANT_CHAR_CAP: int = 200
+DEFAULT_MAX_USER_CHARS_PER_TURN: int = 2000
+DEFAULT_MAX_LAST_USER_CHARS: int = 4000
+DEFAULT_MAX_ASSISTANT_LAST_CHARS: int = 4000
+DEFAULT_EARLIER_ASSISTANT_CHAR_CAP: int = 1000
 
 HOOK_INJECTED_USER_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"(?is)^\s*do not stop\b"),
@@ -37,12 +38,6 @@ class ChatMessage:
 class ConversationTurn:
     user_texts: list[str] = field(default_factory=list)
     assistant_messages: list[str] = field(default_factory=list)
-
-
-def estimated_token_count(text: str) -> int:
-    if not text:
-        return 0
-    return max(1, len(text) // 4)
 
 
 def is_hook_injected_user_text(text: str) -> bool:
@@ -158,27 +153,40 @@ def _truncate_tail(text: str, max_chars: int) -> str:
     return f"...[truncated]...\n{text[-keep:]}"
 
 
-def _fit_to_token_budget(text: str, max_tokens: int) -> str:
-    if max_tokens <= 0:
+def _fit_to_char_budget(text: str, max_chars: int) -> str:
+    if max_chars <= 0:
         return ""
-    if estimated_token_count(text) <= max_tokens:
+    if len(text) <= max_chars:
         return text
-    return _truncate_tail(text, max_tokens * 4)
+    return _truncate_tail(text, max_chars)
 
 
-def _compress_earlier_assistant(text: str) -> str:
+def _compress_earlier_assistant(text: str, max_chars: int = DEFAULT_EARLIER_ASSISTANT_CHAR_CAP) -> str:
     compact = " ".join(text.split())
-    if len(compact) <= EARLIER_ASSISTANT_CHAR_CAP:
+    if len(compact) <= max_chars:
         return compact
-    return f"{compact[: EARLIER_ASSISTANT_CHAR_CAP - 3]}..."
+    keep = max(0, max_chars - 3)
+    return f"{compact[:keep]}..."
 
 
 def _user_body(turn: ConversationTurn) -> str:
     return "\n\n".join(text.strip() for text in turn.user_texts if text.strip()) or "(no user text)"
 
 
-def _cap_each_user_body(texts: list[str], max_tokens_per_turn: int) -> list[str]:
-    return [_fit_to_token_budget(text, max_tokens_per_turn) for text in texts]
+def _cap_user_bodies(
+    texts: list[str],
+    *,
+    max_user_chars_per_turn: int,
+    max_last_user_chars: int,
+) -> list[str]:
+    if not texts:
+        return []
+    last_index = len(texts) - 1
+    capped: list[str] = []
+    for index, text in enumerate(texts):
+        cap = max_last_user_chars if index == last_index else max_user_chars_per_turn
+        capped.append(_fit_to_char_budget(text, cap))
+    return capped
 
 
 def format_turn(
@@ -188,6 +196,7 @@ def format_turn(
     user_body: str,
     last_assistant_text: str | None,
     is_newest_turn: bool,
+    earlier_assistant_char_cap: int,
 ) -> str:
     lines: list[str] = [
         f"USER TURN {turn_index}",
@@ -201,13 +210,13 @@ def format_turn(
 
     earlier_messages = turn.assistant_messages[:-1]
     for earlier in earlier_messages:
-        lines.append(f"[earlier] {_compress_earlier_assistant(earlier)}")
+        lines.append(f"[earlier] {_compress_earlier_assistant(earlier, earlier_assistant_char_cap)}")
 
     last_source = turn.assistant_messages[-1].strip()
     if is_newest_turn:
         lines.append(f"[last] {(last_assistant_text or last_source).strip()}")
     else:
-        lines.append(f"[earlier] {_compress_earlier_assistant(last_source)}")
+        lines.append(f"[earlier] {_compress_earlier_assistant(last_source, earlier_assistant_char_cap)}")
     return "\n".join(lines)
 
 
@@ -215,24 +224,27 @@ def render_window(
     turns: list[ConversationTurn],
     *,
     max_user_turns: int = DEFAULT_MAX_USER_TURNS,
-    max_user_tokens_per_turn: int = DEFAULT_MAX_USER_TOKENS_PER_TURN,
-    max_assistant_last_tokens: int = DEFAULT_MAX_ASSISTANT_LAST_TOKENS,
+    max_user_chars_per_turn: int = DEFAULT_MAX_USER_CHARS_PER_TURN,
+    max_last_user_chars: int = DEFAULT_MAX_LAST_USER_CHARS,
+    max_assistant_last_chars: int = DEFAULT_MAX_ASSISTANT_LAST_CHARS,
+    earlier_assistant_char_cap: int = DEFAULT_EARLIER_ASSISTANT_CHAR_CAP,
 ) -> str:
     selected_turns = turns[-max_user_turns:] if max_user_turns > 0 else []
     if not selected_turns:
         return "(empty conversation window)"
 
     start_index = len(turns) - len(selected_turns) + 1
-    user_bodies = _cap_each_user_body(
+    user_bodies = _cap_user_bodies(
         [_user_body(turn) for turn in selected_turns],
-        max_user_tokens_per_turn,
+        max_user_chars_per_turn=max_user_chars_per_turn,
+        max_last_user_chars=max_last_user_chars,
     )
 
     newest_last = ""
     if selected_turns[-1].assistant_messages:
-        newest_last = _fit_to_token_budget(
+        newest_last = _fit_to_char_budget(
             selected_turns[-1].assistant_messages[-1].strip(),
-            max_assistant_last_tokens,
+            max_assistant_last_chars,
         )
 
     formatted_turns: list[str] = []
@@ -245,6 +257,7 @@ def render_window(
                 user_body=user_bodies[offset],
                 last_assistant_text=newest_last if offset == last_offset else None,
                 is_newest_turn=offset == last_offset,
+                earlier_assistant_char_cap=earlier_assistant_char_cap,
             )
         )
     return "\n\n".join(formatted_turns)
@@ -255,8 +268,10 @@ def build_stop_review_window(
     transcript_path: str | None,
     last_assistant_message: str,
     max_user_turns: int = DEFAULT_MAX_USER_TURNS,
-    max_user_tokens_per_turn: int = DEFAULT_MAX_USER_TOKENS_PER_TURN,
-    max_assistant_last_tokens: int = DEFAULT_MAX_ASSISTANT_LAST_TOKENS,
+    max_user_chars_per_turn: int = DEFAULT_MAX_USER_CHARS_PER_TURN,
+    max_last_user_chars: int = DEFAULT_MAX_LAST_USER_CHARS,
+    max_assistant_last_chars: int = DEFAULT_MAX_ASSISTANT_LAST_CHARS,
+    earlier_assistant_char_cap: int = DEFAULT_EARLIER_ASSISTANT_CHAR_CAP,
 ) -> str:
     messages: list[ChatMessage] = []
     if transcript_path:
@@ -265,8 +280,10 @@ def build_stop_review_window(
     return render_window(
         turns,
         max_user_turns=max_user_turns,
-        max_user_tokens_per_turn=max_user_tokens_per_turn,
-        max_assistant_last_tokens=max_assistant_last_tokens,
+        max_user_chars_per_turn=max_user_chars_per_turn,
+        max_last_user_chars=max_last_user_chars,
+        max_assistant_last_chars=max_assistant_last_chars,
+        earlier_assistant_char_cap=earlier_assistant_char_cap,
     )
 
 
@@ -280,11 +297,21 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--max-user-turns", type=int, default=DEFAULT_MAX_USER_TURNS)
     parser.add_argument(
-        "--max-user-tokens-per-turn",
+        "--max-user-chars-per-turn",
         type=int,
-        default=DEFAULT_MAX_USER_TOKENS_PER_TURN,
+        default=DEFAULT_MAX_USER_CHARS_PER_TURN,
     )
-    parser.add_argument("--max-assistant-last-tokens", type=int, default=DEFAULT_MAX_ASSISTANT_LAST_TOKENS)
+    parser.add_argument("--max-last-user-chars", type=int, default=DEFAULT_MAX_LAST_USER_CHARS)
+    parser.add_argument(
+        "--max-assistant-last-chars",
+        type=int,
+        default=DEFAULT_MAX_ASSISTANT_LAST_CHARS,
+    )
+    parser.add_argument(
+        "--earlier-assistant-char-cap",
+        type=int,
+        default=DEFAULT_EARLIER_ASSISTANT_CHAR_CAP,
+    )
     return parser.parse_args(argv)
 
 
@@ -296,8 +323,10 @@ def main(argv: list[str] | None = None) -> int:
         transcript_path=transcript,
         last_assistant_message=last_assistant,
         max_user_turns=args.max_user_turns,
-        max_user_tokens_per_turn=args.max_user_tokens_per_turn,
-        max_assistant_last_tokens=args.max_assistant_last_tokens,
+        max_user_chars_per_turn=args.max_user_chars_per_turn,
+        max_last_user_chars=args.max_last_user_chars,
+        max_assistant_last_chars=args.max_assistant_last_chars,
+        earlier_assistant_char_cap=args.earlier_assistant_char_cap,
     )
     sys.stdout.write(window)
     if not window.endswith("\n"):

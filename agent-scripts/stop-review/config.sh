@@ -12,3 +12,5 @@ STOP_REVIEW_REASONING_SUMMARY_DEFAULT="none"
 # default | off | empty = no service_tier override.
 STOP_REVIEW_SERVICE_TIER_DEFAULT="fast"
 STOP_REVIEW_LUNA_TIMEOUT_DEFAULT="40"
+# Nested classify talks to $CODEX_HOME/app-server-control/app-server-control.sock
+# so it uses the already-running app-server (user config/auth already loaded).

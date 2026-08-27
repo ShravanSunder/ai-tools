@@ -13,7 +13,6 @@ from extract_stop_review_window import (
     ConversationTurn,
     build_stop_review_window,
     build_turns,
-    estimated_token_count,
     is_hook_injected_user_text,
     render_window,
     stitch_last_assistant_message,
@@ -130,15 +129,52 @@ class WindowRenderTests(unittest.TestCase):
         self.assertIn("USER TURN 3", window)
         self.assertIn("USER TURN 7", window)
 
+    def test_last_user_turn_uses_larger_char_cap(self) -> None:
+        older = "O" * 2500
+        newest = "N" * 5000
+        turns = [
+            ConversationTurn(user_texts=[older], assistant_messages=["old asst"]),
+            ConversationTurn(user_texts=[newest], assistant_messages=["new asst"]),
+        ]
+        window = render_window(
+            turns,
+            max_user_turns=5,
+            max_user_chars_per_turn=2000,
+            max_last_user_chars=4000,
+            max_assistant_last_chars=4000,
+        )
+        self.assertIn("...[truncated]...", window)
+        self.assertLess(window.count("O"), 2100)
+        self.assertGreater(window.count("N"), 3900)
+        self.assertLess(window.count("N"), 4100)
+
     def test_per_turn_user_cap_keeps_older_user_text(self) -> None:
         turns = [
             ConversationTurn(user_texts=["implement the tokens"], assistant_messages=["started"]),
             ConversationTurn(user_texts=["A" * 8000], assistant_messages=["still going"]),
         ]
-        window = render_window(turns, max_user_turns=5, max_user_tokens_per_turn=40)
+        window = render_window(
+            turns,
+            max_user_turns=5,
+            max_user_chars_per_turn=40,
+            max_last_user_chars=40,
+        )
         self.assertIn("implement the tokens", window)
         self.assertIn("USER TURN 1", window)
         self.assertIn("...[truncated]...", window)
+
+    def test_earlier_assistant_uses_one_thousand_char_cap(self) -> None:
+        earlier = "E" * 1500
+        turns = [
+            ConversationTurn(user_texts=["job"], assistant_messages=[earlier, "last line"]),
+        ]
+        window = render_window(
+            turns,
+            earlier_assistant_char_cap=1000,
+            max_assistant_last_chars=4000,
+        )
+        earlier_line = next(line for line in window.splitlines() if line.startswith("[earlier]"))
+        self.assertLessEqual(len(earlier_line.removeprefix("[earlier] ").strip()), 1000)
 
     def test_user_cap_does_not_drop_last_assistant(self) -> None:
         huge_user = "A" * 8000
@@ -146,7 +182,13 @@ class WindowRenderTests(unittest.TestCase):
         turns = [
             ConversationTurn(user_texts=[huge_user], assistant_messages=["old progress", last_line]),
         ]
-        window = render_window(turns, max_user_turns=3, max_user_tokens_per_turn=40, max_assistant_last_tokens=200)
+        window = render_window(
+            turns,
+            max_user_turns=3,
+            max_user_chars_per_turn=40,
+            max_last_user_chars=40,
+            max_assistant_last_chars=200,
+        )
         self.assertIn("USER TURN 1", window)
         self.assertIn(last_line, window)
         self.assertIn("...[truncated]...", window)
@@ -157,7 +199,13 @@ class WindowRenderTests(unittest.TestCase):
         turns = [
             ConversationTurn(user_texts=["keep this user ask"], assistant_messages=["old progress", last_line]),
         ]
-        window = render_window(turns, max_user_turns=3, max_user_tokens_per_turn=200, max_assistant_last_tokens=40)
+        window = render_window(
+            turns,
+            max_user_turns=3,
+            max_user_chars_per_turn=200,
+            max_last_user_chars=200,
+            max_assistant_last_chars=40,
+        )
         self.assertIn("USER TURN 1", window)
         self.assertIn("keep this user ask", window)
         self.assertIn("[last]", window)

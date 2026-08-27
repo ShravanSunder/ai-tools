@@ -2,8 +2,8 @@
 
 set -uo pipefail
 
-# - Builds a bounded window of the last 3 user turns (assistant streams bundled).
-# - Asks gpt-5.6-luna whether Stop is premature.
+# - Builds a bounded window of the last 5 user turns (assistant streams bundled).
+# - Asks gpt-5.6-luna on the existing app-server (user config already loaded).
 # - Tracks per-turn block attempts so we can avoid infinite continuation loops.
 # - Fails open on timeout, crash, or unreadable classifier output.
 
@@ -12,6 +12,7 @@ HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=./config.sh
 source "${HOOK_DIR}/config.sh"
 WINDOW_SCRIPT="${HOOK_DIR}/extract_stop_review_window.py"
+APP_SERVER_SCRIPT="${HOOK_DIR}/run_stop_review_on_app_server.py"
 CLASSIFIER_PROMPT_FILE="${HOOK_DIR}/classifier-prompt.md"
 OUTPUT_SCHEMA_FILE="${HOOK_DIR}/output-schema.json"
 LUNA_TIMEOUT_SECONDS="${CODEX_STOP_REVIEW_LUNA_TIMEOUT:-${STOP_REVIEW_LUNA_TIMEOUT_DEFAULT}}"
@@ -214,13 +215,13 @@ if [[ "${BLOCK_COUNT}" -ge 3 ]]; then
   emit_allow "${warning_message}"
 fi
 
-if ! command -v python3 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1 || ! command -v codex >/dev/null 2>&1; then
+if ! command -v python3 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
   save_state "${BLOCK_COUNT}" "missing_tools" "${message_hash}"
   log_message "turn_id=${turn_id} session_id=${session_id} classification=missing_tools block_count=${BLOCK_COUNT} outcome=allow"
   emit_allow
 fi
 
-if [[ ! -f "${WINDOW_SCRIPT}" || ! -f "${CLASSIFIER_PROMPT_FILE}" || ! -f "${OUTPUT_SCHEMA_FILE}" ]]; then
+if [[ ! -f "${WINDOW_SCRIPT}" || ! -f "${APP_SERVER_SCRIPT}" || ! -f "${CLASSIFIER_PROMPT_FILE}" || ! -f "${OUTPUT_SCHEMA_FILE}" ]]; then
   save_state "${BLOCK_COUNT}" "missing_assets" "${message_hash}"
   log_message "turn_id=${turn_id} session_id=${session_id} classification=missing_assets block_count=${BLOCK_COUNT} outcome=allow"
   emit_allow
@@ -248,24 +249,24 @@ OUT_FILE="${WORK_DIR}/luna-last.txt"
   printf '%s\n' "${WINDOW_TEXT}"
 } >"${PROMPT_FILE}"
 
-LUNA_EXEC_ARGS=(
-  --ephemeral
-  --ignore-user-config
-  --ignore-rules
-  --skip-git-repo-check
-  --sandbox read-only
-  -m "${STOP_REVIEW_MODEL}"
-  -c "model_reasoning_effort=${STOP_REVIEW_REASONING_EFFORT}"
-  -c "model_reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY}"
+APP_SERVER_SOCKET="${CODEX_HOME:-${HOME}/.codex}/app-server-control/app-server-control.sock"
+APP_SERVER_ARGS=(
+  --socket "${APP_SERVER_SOCKET}"
+  --prompt-file "${PROMPT_FILE}"
+  --output-schema "${OUTPUT_SCHEMA_FILE}"
+  --output "${OUT_FILE}"
+  --model "${STOP_REVIEW_MODEL}"
+  --effort "${STOP_REVIEW_REASONING_EFFORT}"
+  --summary "${STOP_REVIEW_REASONING_SUMMARY}"
+  --cwd "${PROJECT_ROOT}"
 )
 if [[ -n "${STOP_REVIEW_SERVICE_TIER}" ]]; then
-  LUNA_EXEC_ARGS+=(--enable fast_mode -c "service_tier=${STOP_REVIEW_SERVICE_TIER}")
+  APP_SERVER_ARGS+=(--service-tier "${STOP_REVIEW_SERVICE_TIER}")
 fi
-LUNA_EXEC_ARGS+=(--output-schema "${OUTPUT_SCHEMA_FILE}" -o "${OUT_FILE}" -)
 
 set +e
-log_message "turn_id=${turn_id} session_id=${session_id} luna_start model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS}"
-run_with_timeout codex exec "${LUNA_EXEC_ARGS[@]}" <"${PROMPT_FILE}" >/dev/null 2>>"${PROJECT_LOG}"
+log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=app-server socket=${APP_SERVER_SOCKET} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS}"
+run_with_timeout python3 "${APP_SERVER_SCRIPT}" "${APP_SERVER_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
 LUNA_EXIT=$?
 set +e
 
