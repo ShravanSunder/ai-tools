@@ -8,16 +8,19 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - Name the marketplace-facing plugin and version when plugin behavior changes.
 - Record user-visible behavior, affected skills/commands/hooks, manifests touched, validation, and refresh/reinstall status.
 - Keep private machine config, credentials, work-fork details, and local cache hashes out.
+- Keep each dated changelog entry to 20 lines or less.
 - Put evidence snippets and longer validation notes under `references/` and link them from the entry.
 
 ## Entries
 
+- [2026-08-28 manage-agents decision tree, keep-alive, and access enforcement](2026-08-28-manage-agents-decision-tree.md)
 - [2026-08-23 Stop-review classifier prefix](2026-08-23-stop-review-classifier-prefix.md)
 - [2026-08-21 Stop-review five-turn window and design continue](2026-08-21-stop-review-five-turn-design-continue.md)
 - [2026-08-19 Stop-review Luna low Fast](2026-08-19-stop-review-luna-low-fast.md)
 - [2026-08-19 Stop-review current-job vs sidebar](2026-08-19-stop-review-current-job-sidebar.md)
 - [2026-08-18 Codex Stop-review lives in ai-tools](2026-08-18-codex-stop-review-home.md)
 - [2026-08-09 Goal Delivery Intent And Bounded Review Loops](2026-08-09-goal-delivery-intent-and-bounded-review-loops.md)
+- [2026-08-07 Manage-Agents Dispatch Discipline](2026-08-07-manage-agents-dispatch-discipline.md)
 - [2026-08-07 Minimal Planning And Delivery](2026-08-07-minimal-planning-delivery.md)
 - [2026-08-06 Three-Artifact Design Review](2026-08-06-three-artifact-design-review.md)
 - [2026-08-05 Retire Five Runtime Skills](2026-08-05-retire-five-runtime-skills.md)

@@ -171,7 +171,7 @@ For plugin changes, record:
 - validation commands and results
 - refresh/reinstall status for Codex and Claude when applicable
 
-Keep entries public-safe: `~/dev/ai-tools` is public; do not include credentials, private machine config, work-fork details, or local cache hashes. Put evidence snippets and longer validation notes under `docs/changelog/references/`.
+Keep each dated changelog entry to 20 lines or less. Keep entries public-safe: `~/dev/ai-tools` is public; do not include credentials, private machine config, work-fork details, or local cache hashes. Put evidence snippets and longer validation notes under `docs/changelog/references/`.
 
 Use the changelog system as the durable release memory:
 

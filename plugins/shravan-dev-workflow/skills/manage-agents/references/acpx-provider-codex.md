@@ -8,13 +8,12 @@ Agent token: `codex`. Use this provider when the host is not Codex native, or wh
 | -------------------- |
 | `gpt-5.6-sol`        |
 | `gpt-5.6-luna`       |
-| `gpt-5.6-terra`      |
 
 Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix.
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh → Frontier; Luna/Terra → Mini).
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh/max → Frontier; Luna → Mini).
 
 ## Sessions And Identity
 
