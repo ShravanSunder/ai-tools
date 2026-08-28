@@ -119,7 +119,7 @@ Completion: exactly one mode and its complete required artifact set are selected
 
 ## 5. Resolve Reviewer Runtime and Authority
 
-MUST use `manage-agents` before each reviewer dispatch and return the one-shot `Delegate` pattern, model and reasoning, reviewer history `none`, read-only workspace access, runtime, permissions, packet, and receipt mechanics.
+MUST use `manage-agents` before each reviewer dispatch and return the single-assignment `Delegate` pattern, model and reasoning, reviewer history `none`, read-only workspace access, runtime, permissions, packet, and receipt mechanics.
 
 Every reviewer gets the complete targets and governing sources but no parent conversation history, author conclusion, expected verdict, prior praise, or hidden context. Reviewer findings remain candidate-only. Silence is `no-receipt`, never a clean review.
 

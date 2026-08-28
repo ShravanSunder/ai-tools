@@ -25,8 +25,8 @@ Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host re
 
 ## Workspace Access
 
-- `read-only`: set the packet's `access:` line to `workspace read-only`; verify the worktree is unchanged after the receipt.
-- `write`: record the parent-approved paths on the `access:` line (`workspace write <paths>`).
+- `read-only`: enforce with `--sandbox read-only` (OS-enforced) and set the packet's `access:` line to `workspace read-only (enforced)`; verify the worktree is unchanged after the receipt. Codex cannot scope writes to specific paths while the repo is cwd — a write scope on Codex is `(declared)` in the packet.
+- `write`: record the parent-approved paths on the `access:` line (`workspace write <paths> (declared)`).
 
 ## Examples
 

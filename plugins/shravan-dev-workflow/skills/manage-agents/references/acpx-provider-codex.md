@@ -13,7 +13,7 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh → Frontier; Luna → Mini).
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh/max → Frontier; Luna → Mini).
 
 ## Sessions And Identity
 

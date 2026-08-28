@@ -12,7 +12,7 @@ resolved launcher / provider command:
 working scope / relationship name:
 runtime ids / provider-native id when exposed:
 permission boundary:
-status / queued work / last prompt / last checked:
+status / queued work / last prompt / last ping / last checked:
 return expected / receipt level / return binding: <session, assignment id, decision target, source/head version>
 parent verification / next follow-up:
 ```
@@ -22,6 +22,10 @@ Keep runtime-local ids with their originating runtime. Transfer identity through
 ## Create Or Resume
 
 Reuse a relationship when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship with an explicit continuity-reset reason.
+
+## Keep-Alive
+
+Ping every persistent session within the provider's cache TTL — 29 minutes as the default ceiling — and record the time in the row's `last ping` slot. The ping is runtime continuity maintenance, not a work assignment: no packet, no job. Before resuming, check `last ping` against the ceiling; a stale session resumes cold — expect the resume turn to repay the full context cost.
 
 ## Readiness Lifecycle
 

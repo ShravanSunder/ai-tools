@@ -25,17 +25,17 @@ Build the call with the selected provider token, exact model id, and advertised 
 - Delegate or Operator: use `exec` for one bounded assignment and receipt.
 - Advisor or Sidekick: use a named session for ledgered continuity.
 
-Start without prior agent-session history by using a one-shot call or a new named session. Reuse a named session when the parent selects continuity.
+Start without prior agent-session history by using a single call or a new named session. Reuse a named session when the parent selects continuity.
 
-Set the narrowest permission boundary that performs the assignment:
+Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
-- `read-only`: `--approve-reads --no-terminal`.
-- `write`: `--approve-all`.
+- `read-only (enforced)`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; not a read-only mount.
+- `write <paths> (declared)`: `--approve-all` plus the packet's bright-line instruction — "edit only under <paths>; an edit outside them is a stop condition, return blocked." The parent verifies the receipt's diff stayed inside the declared scope.
 - Unattended call: `--non-interactive-permissions fail`.
 
 Resolve one stable `<provider-agent-command>` from the provider contract. It includes the launcher, required environment, absolute cwd, permission boundary, provider token, and exact model selection. Use it for every lifecycle call in the relationship.
 
-One-shot call:
+Single call:
 
 ```bash
 <provider-agent-command> exec \

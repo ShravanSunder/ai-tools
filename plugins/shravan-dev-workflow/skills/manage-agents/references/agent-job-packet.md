@@ -10,7 +10,7 @@ job packet
   pattern:    advisor | sidekick | delegate | operator
   lane:       <swarm name / lane — only for swarm dispatches>
   route:      <category> / <lineage> — native | acpx <provider> — <exact model id> @ <reasoning effort>
-  access:     history none | all (native only; ACPX always none); workspace read-only | write <paths when write>
+  access:     history none | all (native only; ACPX always none); workspace read-only (enforced) | write <paths> (enforced native Claude Code only | declared elsewhere)
   sources:    <anchors the agent must read>
   non-goals:  <what this job must not touch>
   return:     <receipt shape>, bound to assignment id + decision target

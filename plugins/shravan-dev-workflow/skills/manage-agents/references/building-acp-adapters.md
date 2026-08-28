@@ -25,7 +25,7 @@ session/resume or session/load
 session/close
 ```
 
-Advertise capabilities honestly, including model controls. Filesystem and terminal requests flow through ACPX cwd boundaries and permission policy.
+Advertise capabilities honestly, including model controls. Filesystem and terminal requests flow through ACPX cwd boundaries and permission policy — a permission layer, not an OS sandbox; adapter-native tools run with the current user's privileges.
 
 Completion: supported methods, capabilities, model controls, and filesystem/terminal behavior are explicit.
 

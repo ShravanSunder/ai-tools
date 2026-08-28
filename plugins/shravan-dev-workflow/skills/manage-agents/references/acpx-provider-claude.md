@@ -25,6 +25,6 @@ The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Use
 
 ## Settings And Permissions
 
-`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` also loads user plugins, commands, hooks, and external resources. Keep `--approve-reads --no-terminal --non-interactive-permissions fail` for source-grounded advice and review, and record `workspace read-only` on the review packet's `access:` line. The parent authorizes write access for non-review assignments.
+`ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1` also loads user plugins, commands, hooks, and external resources. Keep `--approve-reads --no-terminal --non-interactive-permissions fail` for source-grounded advice and review — fail-closed on writes, the strongest ACPX offers — and record `workspace read-only (enforced)` on the review packet's `access:` line. The parent authorizes write access for non-review assignments; via ACPX a write scope is always `(declared)`. When path-scoped write enforcement matters, dispatch native Claude Code with `dontAsk` and `Edit(<paths>/**)` allow rules instead.
 
 A friendly alias or exit code 0 does not prove Fable launched; verify capability evidence and record the accepted id in the ledger.

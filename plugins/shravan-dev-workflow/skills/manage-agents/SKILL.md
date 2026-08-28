@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Always use when using or dispatching an advisor, sidekick, delegate, operator, or any subagent; when handing off to a subagent mechanical work such as running tests or builds, watching CI or PR checks, monitoring, scraping, or grouping logs into a report; for second opinions from another model, subagent-driven development, planning agent jobs, or parallel subagents; deciding how to call or coordinate subagents; choosing model capability. Use for native subagents and ACPX subagents. Not for owning the research or evidence workflow itself (research-swarm), the GitHub PR lifecycle itself (implementation-pr-wrapup), or bare inline commands with no subagent — load this skill whenever those workflows dispatch subagents.
+description: Always use when using or dispatching an advisor, sidekick, delegate, operator, or any subagent; when handing off to a subagent mechanical work such as running tests or builds, watching CI or PR checks, monitoring, scraping, or grouping logs into a report; for second opinions from another model, subagent-driven development, planning agent jobs, or parallel subagents; deciding how to call or coordinate subagents; choosing between a single-assignment delegate or operator and a persistent sidekick or advisor; choosing model capability. Use for native subagents and ACPX subagents. Not for owning the research or evidence workflow itself (research-swarm), the GitHub PR lifecycle itself (implementation-pr-wrapup), or bare inline commands with no subagent — load this skill whenever those workflows dispatch subagents.
 ---
 
 # Manage Agents
@@ -20,14 +20,18 @@ When the request names more than one outcome or action, any work could run in pa
 
 ## When To Call What
 
-Choose the pattern from the job type, before any thought about model or runtime. Inspect three things: does the job need judgment or is it a procedure; will you resume this relationship or discard it after one receipt; who owns the final claim. If the job matches a row, use that row's pattern — no judgment call is left at the row boundary.
+Invariant above every branch: the parent validates every receipt and is the sole voice that reports to the user. No subagent owns a final claim.
+
+Choose the pattern from the job type, before any thought about model or runtime. First cut: does the relationship persist beyond this assignment (persistent), or end when its receipt is accepted (single-assignment)? An assignment may contain a whole conversation — corrections, questions, steering; duration never decides the cut, and a two-hour CI watch is still single-assignment. Second cut differs per side. Single-assignment splits on whether the packet can enumerate the steps, selection criteria, and report shape up front (scriptable) or the agent must interpret, synthesize, or choose (needs thinking). Persistent splits on whether the agent executes the work or returns guidance only.
+
+Two routes outside the table: the parent decides with no dispatch when the options and the evidence needed to choose are already in front of it ("merge despite this flaky test?", a wording pick); dispatch a Delegate only when the packet names sources the agent must read or synthesize that the parent has not. Persistent scriptable work is not a Sidekick — dispatch a fresh Operator per assignment.
 
 | if the job is | then use | good-selection signal | mis-selection trap |
 |---------------|----------|-----------------------|--------------------|
-| a strategic, ambiguous, or high-stakes decision where you stay the executor | Advisor | you keep driving; the Advisor returns candidate guidance you validate | asking the Advisor to execute or edit — that is Delegate or Sidekick work |
-| multi-turn delegated work you will resume and steer | Sidekick | a named relationship with a ledger outlives this assignment | a Sidekick for a one-shot bounded assignment — that is a Delegate |
-| one bounded reasoning assignment: research, review, an implementation slice | Delegate | you can write the packet's stop condition in one sentence and discard the agent after the receipt | handing a Delegate a mechanical procedure — that is Operator work at Mini cost |
-| a bounded mechanical procedure: running tests or builds, watching CI or PR checks (`gh` watch), monitoring, scraping, or grouping logs into a report | Operator | the procedure needs no judgment; anything requiring judgment routes back to you | "this needs judgment, so no Operator" — split it: procedure to the Operator, judgment back to you |
+| single-assignment and scriptable: running tests or builds, watching CI or PR checks (`gh` watch), monitoring, scraping, grouping logs by a stated key, collecting references by a written criterion | Operator (default Mini) | the receipt is a faithful report of what ran or was found; unexpected states come back undecided; no source edits | asking the Operator to decide relevance, cause, readiness, or next action — split it: procedure to the Operator, judgment back to you |
+| single-assignment and needs thinking: a diff review, research with synthesis, an implementation slice, a second opinion | Delegate (default Balanced) | you can write the stop condition in one sentence and discard the agent after the receipt | calling planned implementation scriptable because its steps are listed — implementation choices are thinking |
+| persistent work the agent executes: a named co-worker you resume and steer, which also thinks with you — validating, helping, pushing back at the level of the work at hand | Sidekick (default Balanced) — the default for persistent work | a named relationship with a ledger outlives this assignment and stays cache-warm | a Sidekick for a single-assignment job — that is a Delegate; a Sidekick for a scriptable loop — that is repeated Operators |
+| persistent guidance across components, systems, or architecture, where you stay the executor | Advisor (Frontier) | the Advisor returns candidate guidance and never edits; the named relationship is expected to survive this assignment | routing a decision the parent can already make to the Advisor; a one-time guidance question is a Delegate |
 
 Selection is done when every job names its pattern and no model has been named yet.
 
@@ -37,18 +41,20 @@ The pattern picks the shape of the work and its table owns the allowed category 
 
 Mini (OpenAI Luna) is super cheap. Default grunt work to Mini whenever the pattern's floor allows it: mechanical procedures, bounded scans and summaries, format conversions, test-and-report loops, watches. A Mini agent can be a Sidekick, a Delegate, or an Operator.
 
-Escalate the category only when the job's judgment demands it: ambiguous tradeoffs, cross-module design, or high-stakes decisions go Frontier; bounded reasoning with clear anchors goes Balanced. "The task feels important" is not a reason to escalate — importance routes verification to the parent, not cost to the model.
+The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced; a single-assignment judgment whose packet spans components, systems, or architecture may name Frontier for that assignment (Delegate table). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model.
+
+A session not worth keeping warm is not persistent — close it and dispatch Delegates or Operators instead (see Session Keep-Alive for the cache economics).
 
 ## Patterns
 
 Manage every subagent through one of the following patterns. The runtime supplies the launch mechanism.
 
 ### Advisor
-Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opinions; get help from a Frontier model. You drive the loop.
+Use an Advisor for a persistent guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Choose an Advisor only when the named relationship is expected to survive the current assignment; a one-time guidance question is a single-assignment Delegate.
 
-- **Work:** Strategic advice, reflection, course correction, or completion checks while the parent remains executor.
-- **Continuity and cardinality:** Exactly one persistent named advisor.
-- **Authority:** The Advisor returns candidate guidance; the parent validates it.
+- **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment, while the parent remains executor.
+- **Continuity and cardinality:** One persistent named cross-lineage advisor by default, with ledger, kept cache-warm (see Session Keep-Alive). When a bounded consult needs cross-lineage disagreement — advice the parent cannot verify — dispatch single-assignment Delegates to the second lineage; a standing advisor pair requires a named reason.
+- **Authority:** The Advisor returns candidate guidance; the parent validates it and decides.
 - **Model category:** Frontier
 
 | Model category | Model lineage       | Thinking         |
@@ -58,10 +64,10 @@ Use an Advisor for strategic, high-stakes, or ambiguous decisions or second opin
 | Frontier       | Claude Opus         | high, xhigh      |
 
 ### Sidekick
-Use a Sidekick for multi-turn delegated work you will resume and steer; a named ongoing co-worker with a ledger. You coordinate and validate the work.
+Use a Sidekick for persistent work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work.
 
-- **Work:** Delegated execution across assignments and follow-ups.
-- **Continuity and cardinality:** One or many persistent named relationships with ledger.
+- **Work:** Delegated execution across assignments and follow-ups, including in-the-work reasoning and pushback.
+- **Continuity and cardinality:** One or many persistent named relationships with ledger, kept cache-warm (see Session Keep-Alive).
 - **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work.
 - **Model category:** Frontier, Balanced, or Mini
 
@@ -76,8 +82,8 @@ Use a Sidekick for multi-turn delegated work you will resume and steer; a named 
 ### Delegate
 Use for one clear bounded assignment then discard. You manage and validate the work.
 
-- **Work:** One bounded research, review, implementation, or reasoning assignment.
-- **Continuity and cardinality:** Single or Delegate swarm; one-shot.
+- **Work:** One bounded research, review, implementation, reasoning, or second-opinion assignment.
+- **Continuity and cardinality:** Single or Delegate swarm; single-assignment — the relationship ends when the receipt is accepted, and the assignment may contain a conversation.
 - **Authority:** Packet-bounded work; parent verifies the work.
 - **Model category:** Frontier, Balanced, or Mini
 
@@ -97,7 +103,7 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 - **Authority:** Execute, observe, and report the bounded procedure. Route judgment, code changes, replies, readiness verdicts, and merge decisions to the parent.
 - **Model category:** Mini
 
-Bright line: any job handed to a subagent that is a bounded mechanical procedure MUST be an Operator. The parent may run trivial one-shot commands inline; long-running watches and monitors MUST go to an Operator rather than be babysat.
+Bright line: any job handed to a subagent that is a bounded mechanical procedure producing no source edits MUST be an Operator. The parent may run trivial single commands inline; long-running watches and monitors MUST go to an Operator rather than be babysat.
 
 | rationalization | reality |
 |-----------------|---------|
@@ -124,8 +130,14 @@ Select the pattern, model category, model lineage, and reasoning requirement fir
 
 ### Workspace Access
 
-- Reviewers: `read-only`.
-- Non-reviewers: the parent chooses `read-only` or `write`.  Only use `write` when you need to modify the workspace.
+Every packet's `access:` line states the scope and its enforcement level: `workspace read-only (enforced)` or `write <paths> (enforced | declared)`.
+
+- Reviewers, Advisors, and any guidance-only agent: read-only, enforced — these agents see everything and edit nothing. Native Codex: `--sandbox read-only`. Claude Code: `--permission-mode plan`, or `dontAsk` with read-only allows. Cursor CLI: `workspace_readonly` sandbox or plan mode. ACPX (any provider): `--approve-reads --no-terminal --non-interactive-permissions fail` — fail-closed on writes and exec, which is the strongest ACPX offers; it is not a read-only mount.
+- Writers (Sidekicks, Delegates, Operators that produce files): the parent names the write paths. Path-scoped enforcement exists only on native Claude Code (`Edit(<paths>/**)` allow rules under `dontAsk`); prefer it when enforcement matters. On every other route the scope is declared, not enforced: the packet states "edit only under <paths>; an edit outside them is a stop condition — return blocked instead of editing," and the parent verifies the receipt's diff stayed inside the declared scope.
+
+### Session Keep-Alive
+
+Persistent sessions ride provider prompt caches: a warm session makes each resumed turn cheap; a cold resume repays the whole context. Ping every persistent session within the provider's cache TTL — 29 minutes as the default ceiling. The ping is runtime continuity maintenance, not a work assignment: no packet, no job, no Operator. Record the ping on the session's ledger row (see `references/session-ledger.md`).
 
 ### Native Dispatch
 
@@ -172,8 +184,8 @@ ACPX agents start with zero parent context: parent conversation history never cr
 
 4. Manage persistent relationships.
    - Create the ledger before the first Advisor or Sidekick prompt that assumes continuity.
-   - Load `references/session-ledger.md` for creation, resume, reconnect, progress, history, freshness, or reduction.
+   - Load `references/session-ledger.md` for creation, resume, reconnect, progress, history, freshness, keep-alive, or reduction.
    - Use status as liveness evidence. Accept completion from a current assignment-bound receipt that matches the source or head version.
-   - Completion: the persistent identity is stable and the current receipt matches the assignment and source or head version.
+   - Completion: the persistent identity is stable, the current receipt matches the assignment and source or head version, and the keep-alive ping is recorded within the ceiling.
 
 Extra: If you need to build, modify, or wrap an ACP-compatible adapter, read `references/building-acp-adapters.md`.

@@ -8,10 +8,12 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - Name the marketplace-facing plugin and version when plugin behavior changes.
 - Record user-visible behavior, affected skills/commands/hooks, manifests touched, validation, and refresh/reinstall status.
 - Keep private machine config, credentials, work-fork details, and local cache hashes out.
+- Keep each dated changelog entry to 20 lines or less.
 - Put evidence snippets and longer validation notes under `references/` and link them from the entry.
 
 ## Entries
 
+- [2026-08-28 manage-agents decision tree, keep-alive, and access enforcement](2026-08-28-manage-agents-decision-tree.md)
 - [2026-08-23 Stop-review classifier prefix](2026-08-23-stop-review-classifier-prefix.md)
 - [2026-08-21 Stop-review five-turn window and design continue](2026-08-21-stop-review-five-turn-design-continue.md)
 - [2026-08-19 Stop-review Luna low Fast](2026-08-19-stop-review-luna-low-fast.md)
