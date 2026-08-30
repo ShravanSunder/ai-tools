@@ -3,7 +3,7 @@
 set -uo pipefail
 
 # - Builds a bounded window of the last 5 user turns (assistant streams bundled).
-# - Asks gpt-5.6-luna on the existing app-server (user config already loaded).
+# - Asks gpt-5.6-luna via review-runner.sh in ~/.codex-reviewer (hooks off, router 8787).
 # - Tracks per-turn block attempts so we can avoid infinite continuation loops.
 # - Fails open on timeout, crash, or unreadable classifier output.
 
@@ -12,7 +12,7 @@ HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=./config.sh
 source "${HOOK_DIR}/config.sh"
 WINDOW_SCRIPT="${HOOK_DIR}/extract_stop_review_window.py"
-APP_SERVER_SCRIPT="${HOOK_DIR}/run_stop_review_on_app_server.py"
+REVIEW_RUNNER="${CODEX_STOP_REVIEW_RUNNER:-${HOOK_DIR}/review-runner.sh}"
 CLASSIFIER_PROMPT_FILE="${HOOK_DIR}/classifier-prompt.md"
 OUTPUT_SCHEMA_FILE="${HOOK_DIR}/output-schema.json"
 LUNA_TIMEOUT_SECONDS="${CODEX_STOP_REVIEW_LUNA_TIMEOUT:-${STOP_REVIEW_LUNA_TIMEOUT_DEFAULT}}"
@@ -141,18 +141,6 @@ save_state() {
 EOF
 }
 
-run_with_timeout() {
-  if command -v timeout >/dev/null 2>&1; then
-    timeout "${LUNA_TIMEOUT_SECONDS}" "$@"
-    return $?
-  fi
-  if command -v gtimeout >/dev/null 2>&1; then
-    gtimeout "${LUNA_TIMEOUT_SECONDS}" "$@"
-    return $?
-  fi
-  perl -e 'alarm shift; exec @ARGV' "${LUNA_TIMEOUT_SECONDS}" "$@"
-}
-
 extract_decision_json() {
   local raw_text="$1"
 
@@ -178,7 +166,7 @@ extract_decision_json() {
 PROJECT_ROOT="$(resolve_project_root)"
 PROJECT_NAME="$(basename "${PROJECT_ROOT}")"
 PROJECT_LOG="/tmp/${PROJECT_NAME}-codex-stop-review.log"
-STATE_ROOT="/tmp/codex-stop-review"
+STATE_ROOT="${CODEX_STOP_REVIEW_STATE_ROOT:-/tmp/codex-stop-review}"
 
 session_id="$(extract_json_field '.session_id' || true)"
 turn_id="$(extract_json_field '.turn_id' || true)"
@@ -202,6 +190,12 @@ STATE_FILE="${STATE_ROOT}/${session_id}/${turn_id}.json"
 message_hash="$(hash_message "${last_assistant_message}")"
 load_state
 
+if [[ "${CODEX_REVIEWER:-}" == "1" ]]; then
+  save_state "${BLOCK_COUNT}" "codex_reviewer_env" "${message_hash}"
+  log_message "turn_id=${turn_id} session_id=${session_id} classification=codex_reviewer_env block_count=${BLOCK_COUNT} outcome=allow"
+  emit_allow
+fi
+
 if [[ "${stop_hook_active}" == "true" ]]; then
   save_state "${BLOCK_COUNT}" "stop_hook_active" "${message_hash}"
   log_message "turn_id=${turn_id} session_id=${session_id} stop_hook_active=true classification=stop_hook_active block_count=${BLOCK_COUNT} outcome=allow"
@@ -221,7 +215,7 @@ if ! command -v python3 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
   emit_allow
 fi
 
-if [[ ! -f "${WINDOW_SCRIPT}" || ! -f "${APP_SERVER_SCRIPT}" || ! -f "${CLASSIFIER_PROMPT_FILE}" || ! -f "${OUTPUT_SCHEMA_FILE}" ]]; then
+if [[ ! -f "${WINDOW_SCRIPT}" || ! -f "${REVIEW_RUNNER}" || ! -f "${CLASSIFIER_PROMPT_FILE}" || ! -f "${OUTPUT_SCHEMA_FILE}" ]]; then
   save_state "${BLOCK_COUNT}" "missing_assets" "${message_hash}"
   log_message "turn_id=${turn_id} session_id=${session_id} classification=missing_assets block_count=${BLOCK_COUNT} outcome=allow"
   emit_allow
@@ -249,24 +243,13 @@ OUT_FILE="${WORK_DIR}/luna-last.txt"
   printf '%s\n' "${WINDOW_TEXT}"
 } >"${PROMPT_FILE}"
 
-APP_SERVER_SOCKET="${CODEX_HOME:-${HOME}/.codex}/app-server-control/app-server-control.sock"
-APP_SERVER_ARGS=(
-  --socket "${APP_SERVER_SOCKET}"
-  --prompt-file "${PROMPT_FILE}"
-  --output-schema "${OUTPUT_SCHEMA_FILE}"
-  --output "${OUT_FILE}"
-  --model "${STOP_REVIEW_MODEL}"
-  --effort "${STOP_REVIEW_REASONING_EFFORT}"
-  --summary "${STOP_REVIEW_REASONING_SUMMARY}"
-  --cwd "${PROJECT_ROOT}"
-)
-if [[ -n "${STOP_REVIEW_SERVICE_TIER}" ]]; then
-  APP_SERVER_ARGS+=(--service-tier "${STOP_REVIEW_SERVICE_TIER}")
-fi
-
 set +e
-log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=app-server socket=${APP_SERVER_SOCKET} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS}"
-run_with_timeout python3 "${APP_SERVER_SCRIPT}" "${APP_SERVER_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
+log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS}"
+bash "${REVIEW_RUNNER}" \
+  --prompt-file "${PROMPT_FILE}" \
+  --output "${OUT_FILE}" \
+  --cd "${PROJECT_ROOT}" \
+  >/dev/null 2>>"${PROJECT_LOG}"
 LUNA_EXIT=$?
 set +e
 
