@@ -11,7 +11,6 @@ This repository contains personal Codex and Claude Code plugins plus the Agent S
 This repo has two variants maintained separately:
 
 - `~/dev/ai-tools` -- Personal projects (this repo, public)
-- `~/dev/relay-ai-tools` -- Work projects (private fork)
 
 Work repos should use `relay-ai-tools`. Personal repos should use `ai-tools`.
 
