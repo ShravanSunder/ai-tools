@@ -1,6 +1,6 @@
 # 2026-08-30 Mental Models Goes Diagram-First
 
-Plugin: `shravan-dev-workflow` 2.2.0 → 2.3.0
+Plugin: `shravan-dev-workflow` 2.4.0 → 2.5.0 (rebased over the 2.4.0 manage-agents release; originally authored as 2.2.0 → 2.3.0)
 
 ## User-Visible Behavior
 
@@ -19,7 +19,7 @@ Plugin: `shravan-dev-workflow` 2.2.0 → 2.3.0
 - `references/provenance-decomposition.md` — untouched; still called when origin annotations collapse.
 - `shared-references/diagram-rendering-and-fallbacks.md` — untouched; now a MUST-load per fired view, with its return kept as private working state.
 - Pressure scenarios: `drift-interrupt`, `map-building`, `reconverge` rewritten for the new surface; new `diagram-first-surface` scenario; new `cases.ts` semantic-criteria registry (the folder moves off legacy regex evaluation, which scanned the whole JSON report rather than the user-facing surface).
-- Manifests: `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` bumped to 2.3.0.
+- Manifests: `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` bumped to 2.5.0.
 
 ## Design Provenance
 

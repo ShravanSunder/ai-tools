@@ -12,7 +12,7 @@ expect_decision_regex: xhigh.{0,60}frontier|frontier.{0,60}xhigh
 expect_decision_regex: max.{0,60}frontier|frontier.{0,60}max
 expect_decision_regex: composer.{0,40}mini
 expect_decision_regex: composer.{0,80}(none|no thinking|without.{0,20}thinking)
-expect_proof_regex: model-plus-thinking|thinking-to-category|model.{0,20}thinking.{0,20}combination
+expect_proof_regex: model-plus-thinking|thinking-to-category|model.{0,20}thinking.{0,20}combination|(thinking|effort).{0,60}categor|categor.{0,60}(thinking|effort)
 expect_forbidden_regex: (thinking|effort)( setting)?.{0,10}(:|=|is|to pass).{0,10}(low|medium|high|xhigh|max)
 
 ## Shortcut Temptation

@@ -11,7 +11,6 @@ This repository contains personal Codex and Claude Code plugins plus the Agent S
 This repo has two variants maintained separately:
 
 - `~/dev/ai-tools` -- Personal projects (this repo, public)
-- `~/dev/relay-ai-tools` -- Work projects (private fork)
 
 Work repos should use `relay-ai-tools`. Personal repos should use `ai-tools`.
 
@@ -43,7 +42,7 @@ ai-tools/
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent-scripts/                    # Host agent scripts (not plugin skills)
-│   └── stop-review/                  # Luna Stop-review gate; chezmoi wrapper execs this
+│   └── stop-review/                  # Luna Stop-review; isolated ~/.codex-reviewer exec
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
@@ -171,7 +170,7 @@ For plugin changes, record:
 - validation commands and results
 - refresh/reinstall status for Codex and Claude when applicable
 
-Keep entries public-safe: `~/dev/ai-tools` is public; do not include credentials, private machine config, work-fork details, or local cache hashes. Put evidence snippets and longer validation notes under `docs/changelog/references/`.
+Keep each dated changelog entry to 20 lines or less. Keep entries public-safe: `~/dev/ai-tools` is public; do not include credentials, private machine config, work-fork details, or local cache hashes. Put evidence snippets and longer validation notes under `docs/changelog/references/`.
 
 Use the changelog system as the durable release memory:
 

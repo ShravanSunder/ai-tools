@@ -168,7 +168,7 @@ Use `implementation-handoff` when real implementation state exists: branch, diff
 
 ## External Counsel
 
-Review workflows do not use broad multi-model counsel by default. The one-shot Delegate pattern, model, runtime, history isolation, and read-only authority are resolved through `manage-agents`.
+Review workflows do not use broad multi-model counsel by default. The single-assignment Delegate pattern, model, runtime, history isolation, and read-only authority are resolved through `manage-agents`.
 
 ```text
 normal review path

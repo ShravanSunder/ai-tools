@@ -26,6 +26,7 @@ This reference owns platform scaffolding, manifests, marketplace metadata, valid
 ## Cross-Platform Rules
 
 - If a skill is shared by Codex and Claude, check both surfaces before shipping: source skill files, Codex metadata/validation, Claude manifest/marketplace metadata/validation, and changelog/version expectations.
+- Dated changelog entries stay 20 lines or less. Put longer proof under `docs/changelog/references/` and link it from the entry. `docs-maintain/references/changelog-runbooks.md` owns the entry shape.
 - If a change is Codex-only or Claude-only, say why and avoid mirrored churn.
 - Static validation on either platform is structural proof only.
 - Cache/home-mutation deferral rule (owned here): never use installed-cache or home-level refresh as proof, on either platform. Refresh only when release or readback is explicitly scoped, and report it as its own shipping-status value, not as routine validation.

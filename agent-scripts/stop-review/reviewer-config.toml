@@ -1,0 +1,23 @@
+# Isolated Stop-reviewer Codex home. Not a named --profile.
+# Same production router as `codex --profile codex-router` (127.0.0.1:8787).
+# Copied to $CODEX_STOP_REVIEW_HOME/config.toml on first bootstrap.
+
+model = "gpt-5.6-luna"
+model_provider = "codex-router"
+model_reasoning_effort = "low"
+model_reasoning_summary = "none"
+service_tier = "fast"
+approval_policy = "never"
+sandbox_mode = "read-only"
+
+[model_providers.codex-router]
+name = "codex-router"
+base_url = "http://127.0.0.1:8787/v1"
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = true
+stream_max_retries = 100
+
+[features]
+hooks = false
+plugin_hooks = false

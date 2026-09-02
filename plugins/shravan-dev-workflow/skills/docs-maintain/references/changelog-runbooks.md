@@ -25,7 +25,7 @@ The main changelog entry should capture:
 - validation performed
 - follow-ups
 
-Keep it readable. It is a runbook, not a raw transcript.
+Keep it readable. It is a runbook, not a raw transcript. Keep each dated changelog entry to 20 lines or less; put evidence snippets and longer validation notes under `docs/changelog/references/` and link them from the entry.
 
 ## References Entry
 
