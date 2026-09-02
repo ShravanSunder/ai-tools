@@ -11,7 +11,7 @@ expect_proof_regex: bounded question|bounded research questions|researchable que
 expect_proof_regex: candidate evidence|parent synthesis|parent verification|confidence
 expect_proof_regex: completion receipt|source anchors|proposed artifact path|ledger columns|source-anchor receipts
 expect_proof_regex: plan-implementation
-expect_proof_regex: review-implementation
+expect_proof_regex: implementation-review
 expect_forbidden_regex: chat-only research|accepted truth without parent|single summary only
 
 ## Shortcut Temptation
@@ -55,7 +55,7 @@ without creating its artifact.
   verifies and reconciles them.
 - Agent verifies the supplied exact current ready three-artifact identities and
   recommends `plan-implementation` without creating the plan itself.
-- Agent names `review-implementation` as the later owner when implemented work
+- Agent names `implementation-review` as the later owner when implemented work
   and proof need independent judgment, without performing that review itself.
 
 ## Failure Signals

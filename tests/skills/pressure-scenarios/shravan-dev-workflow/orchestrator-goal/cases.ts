@@ -44,13 +44,13 @@ const implementationProofSources = [
 
 const reviewFindingSources = [
   ...routeSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md",
 ] satisfies readonly string[];
 
 const reviewReadySources = [
   ...routeSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/references/merge-gates.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md",
@@ -77,7 +77,7 @@ const prReadySources = [
 const producerContractSources = [
   ...routeSources,
   "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/references/merge-gates.md",
   "tests/skills/fixtures/minimal-planning-delivery/incomplete-phase-results.md",
@@ -107,8 +107,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof required by review-implementation; invokes it now because no current review result exists; and returns its supported read-only result or exact runtime blocker. A blocked admission stops before reviewer dispatch.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, dispatches after blocked admission, or routes directly to PR wrapup." },
-      { name: "preserves-review-input-identities", requirement: "Passes one source binding containing the identities required by review-implementation, returns that owner's result unchanged, verifies it still applies to the current source, and does not independently judge implementation correctness.", failureExample: "Drops source identities, duplicates the entire owner result in another receipt, or re-performs review." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof required by implementation-review; invokes it now because no current review result exists; and returns its supported read-only result or exact runtime blocker. A blocked admission stops before reviewer dispatch.", failureExample: "Routes from the prompt assertion, says to invoke implementation-review later, calls the goal ready, self-reviews, dispatches after blocked admission, or routes directly to PR wrapup." },
+      { name: "preserves-review-input-identities", requirement: "Passes one source binding containing the identities required by implementation-review, returns that owner's result unchanged, verifies it still applies to the current source, and does not independently judge implementation correctness.", failureExample: "Drops source identities, duplicates the entire owner result in another receipt, or re-performs review." },
     ],
   },
   {
@@ -116,7 +116,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: reviewFindingSources,
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "routes-by-returned-semantic-owner", requirement: "Opens and cites the exact current review result and its complete accepted structural finding, then routes directly to program-design as named by review-implementation.", failureExample: "Routes from the prompt assertion, sends every finding to implement-plan, or restarts orchestrator-design." },
+      { name: "routes-by-returned-semantic-owner", requirement: "Opens and cites the exact current review result and its complete accepted structural finding, then routes directly to program-design as named by implementation-review.", failureExample: "Routes from the prompt assertion, sends every finding to implement-plan, or restarts orchestrator-design." },
       { name: "requires-fresh-affected-review", requirement: "Keeps affected review coverage stale after correction until the owning review gate runs fresh.", failureExample: "Lets remediation or green tests self-accept the correction." },
     ],
   },

@@ -1,14 +1,14 @@
-# review-implementation classifies verified mechanical work
+# implementation-review classifies verified mechanical work
 
-scenario_id: review-implementation-classify-non-substantial
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-classify-non-substantial
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 Inspect `tests/skills/fixtures/minimal-planning-delivery/non-substantial-diff.patch`, `non-substantial-notes.txt`, and `non-substantial-consumer-search.txt`, then classify whether independent implementation review is required. Do not invent source, plan, or proof identities for a verified non-semantic change.
 

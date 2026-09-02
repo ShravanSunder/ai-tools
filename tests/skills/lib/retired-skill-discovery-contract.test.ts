@@ -38,7 +38,7 @@ const activeReplacementSkillNames = [
   "orchestrator-goal",
   "plan-implementation",
   "implement-plan",
-  "review-implementation",
+  "implementation-review",
 ] as const;
 
 describe("retired skill runtime discoverability", () => {

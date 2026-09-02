@@ -86,7 +86,7 @@ canonical ready plan exists; requested terminal is plan-only
   -> stop at the requested terminal
 
 implementation proof exists; current review receipt absent
-  -> review-implementation
+  -> implementation-review
 
 accepted structural ownership finding
   -> program-design once; parent verifies the accepted correction against

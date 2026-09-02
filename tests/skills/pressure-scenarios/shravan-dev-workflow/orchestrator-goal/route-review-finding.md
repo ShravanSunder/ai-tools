@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-goal
 
-Open the phase-owned receipt at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md` under the current `review-implementation` return contract. Send its finding to the executor because code changes are faster, then reuse this receipt after correction.
+Open the phase-owned receipt at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md` under the current `implementation-review` return contract. Send its finding to the executor because code changes are faster, then reuse this receipt after correction.
 
 ## Expected Compliant Behavior
 

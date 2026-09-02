@@ -53,7 +53,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Inspect audit categories in-parent by default. IF the user explicitly requests delegation, or current source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns that later handoff; agent availability or a broad flow name is never enough.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
-- If asked to implement a direct plan-only result, establish new delivery intent through `plan-implementation`; do not upgrade the existing plan. If asked for independent implementation review, route `general-repo` work to `review-implementation` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
+- If asked to implement a direct plan-only result, establish new delivery intent through `plan-implementation`; do not upgrade the existing plan. If asked for independent implementation review, route `general-repo` work to `implementation-review` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
 - If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical plan record.
 - A ready direct plan defaults to `plan-only` and is not executable. An orchestrated goal returns the admitted finding pointer, basis classification, evidence pointers, and applicability anchors to `plan-implementation`; plan completion, validation, handoff, or ticket state never upgrades delivery intent.
 
@@ -113,7 +113,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 9. Route next:
    - `plan-handoff` to package the plan for another agent
    - `plan-implementation` when an owner explicitly requests delivery of a direct plan-only result
-   - `review-implementation` for `general-repo` independent implementation review, or `skills-creation` for an explicitly composed `runtime-skill-package`
+   - `implementation-review` for `general-repo` independent implementation review, or `skills-creation` for an explicitly composed `runtime-skill-package`
 
 ## Plan Validation Flow
 

@@ -1,14 +1,14 @@
-# review-implementation preserves read-only authority
+# implementation-review preserves read-only authority
 
-scenario_id: review-implementation-preserve-read-only-authority
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-preserve-read-only-authority
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 Admission and complete-review coverage are current. Parent reduction already
 verified and accepted this finding against the reviewed source:

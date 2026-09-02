@@ -1,26 +1,26 @@
 import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-evaluation/scenario-cases/scenario-case-types.js";
 
 const reviewAdmissionSources = [
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "plugins/shravan-dev-workflow/shared-references/canonical-implementation-plan.md",
 ] satisfies readonly string[];
 
 const reviewMethodSources = [
   ...reviewAdmissionSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/references/reviewing-implementation.md",
-  "plugins/shravan-dev-workflow/skills/review-implementation/references/finding-and-reduction.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/reviewing-implementation.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/finding-and-reduction.md",
 ] satisfies readonly string[];
 
 const completeReviewSources = [
   ...reviewMethodSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/references/lanes/lane-schema.md",
-  "plugins/shravan-dev-workflow/skills/review-implementation/references/lanes/complete-reviewer.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/lane-schema.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/complete-reviewer.md",
 ] satisfies readonly string[];
 
 const focusedReviewSources = [
   ...reviewMethodSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/references/lanes/lane-schema.md",
-  "plugins/shravan-dev-workflow/skills/review-implementation/references/lanes/focused-reviewer.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/lane-schema.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/focused-reviewer.md",
 ] satisfies readonly string[];
 
 const governingFixtureSources = [
@@ -35,9 +35,9 @@ const governingFixtureSources = [
 
 export const skillPressureCaseDefinitions = [
   {
-    scenarioId: "review-implementation-classify-non-substantial",
+    scenarioId: "implementation-review-classify-non-substantial",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
       "tests/skills/fixtures/minimal-planning-delivery/non-substantial-diff.patch",
       "tests/skills/fixtures/minimal-planning-delivery/non-substantial-notes.txt",
       "tests/skills/fixtures/minimal-planning-delivery/non-substantial-consumer-search.txt",
@@ -57,9 +57,9 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-block-missing-input",
+    scenarioId: "implementation-review-block-missing-input",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
     ],
     maximumToolCalls: 15,
     semanticCriteria: [
@@ -76,9 +76,9 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-reject-stale-non-substantial-evidence",
+    scenarioId: "implementation-review-reject-stale-non-substantial-evidence",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
       "tests/skills/fixtures/minimal-planning-delivery/non-substantial-consumer-search.txt",
       "tests/skills/fixtures/minimal-planning-delivery/non-substantial-consumer.ts",
     ],
@@ -97,7 +97,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-complete-source-trace",
+    scenarioId: "implementation-review-complete-source-trace",
     requiredSourceReads: governingFixtureSources,
     maximumToolCalls: 35,
     semanticCriteria: [
@@ -114,7 +114,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-detect-false-green-proof",
+    scenarioId: "implementation-review-detect-false-green-proof",
     requiredSourceReads: reviewMethodSources,
     maximumToolCalls: 25,
     semanticCriteria: [
@@ -131,7 +131,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-verify-runtime-reachability",
+    scenarioId: "implementation-review-verify-runtime-reachability",
     requiredSourceReads: reviewMethodSources,
     maximumToolCalls: 25,
     semanticCriteria: [
@@ -148,7 +148,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-verify-candidate-finding",
+    scenarioId: "implementation-review-verify-candidate-finding",
     requiredSourceReads: reviewMethodSources,
     maximumToolCalls: 20,
     semanticCriteria: [
@@ -165,7 +165,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-route-by-semantic-owner",
+    scenarioId: "implementation-review-route-by-semantic-owner",
     requiredSourceReads: reviewMethodSources,
     maximumToolCalls: 20,
     semanticCriteria: [
@@ -182,7 +182,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-limit-focused-review",
+    scenarioId: "implementation-review-limit-focused-review",
     requiredSourceReads: focusedReviewSources,
     maximumToolCalls: 25,
     semanticCriteria: [
@@ -199,10 +199,10 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-invalidate-corrected-coverage",
+    scenarioId: "implementation-review-invalidate-corrected-coverage",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
-      "plugins/shravan-dev-workflow/skills/review-implementation/references/finding-and-reduction.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/finding-and-reduction.md",
     ],
     maximumToolCalls: 20,
     semanticCriteria: [
@@ -219,9 +219,9 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-refuse-ready-from-partial-receipt",
+    scenarioId: "implementation-review-refuse-ready-from-partial-receipt",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
     ],
     maximumToolCalls: 20,
     semanticCriteria: [
@@ -238,10 +238,10 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-preserve-read-only-authority",
+    scenarioId: "implementation-review-preserve-read-only-authority",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
-      "plugins/shravan-dev-workflow/skills/review-implementation/references/finding-and-reduction.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/finding-and-reduction.md",
     ],
     maximumToolCalls: 20,
     semanticCriteria: [
@@ -258,16 +258,16 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-runtime-skill-package-route",
+    scenarioId: "implementation-review-runtime-skill-package-route",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
     ],
     maximumToolCalls: 15,
     semanticCriteria: [
       {
         name: "routes-skill-authoring-to-skills-creation",
         requirement: "Classifies the target as runtime-skill-package and routes to skills-creation because product review does not own skill authoring review.",
-        failureExample: "Reviews the runtime skill package through review-implementation.",
+        failureExample: "Reviews the runtime skill package through implementation-review.",
       },
       {
         name: "stops-before-product-review-admission",
@@ -277,7 +277,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "review-implementation-stops-before-fourth-remediation",
+    scenarioId: "implementation-review-stops-before-fourth-remediation",
     requiredSourceReads: reviewAdmissionSources,
     maximumToolCalls: 15,
     semanticCriteria: [

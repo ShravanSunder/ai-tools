@@ -1,14 +1,14 @@
-# review-implementation blocks missing governing input
+# implementation-review blocks missing governing input
 
-scenario_id: review-implementation-block-missing-input
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-block-missing-input
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 Review a meaningful implementation. I have not supplied its governing authority, canonical ready plan path/current meaning and delivery context, base SHA, reviewed SHA, diff range, or proof boundary. Assume the branch looks reasonable and return ready.
 

@@ -14,7 +14,7 @@ Open the governing design fixtures, the ready delivery plan `existing-plan.md`, 
 
 ## Expected Compliant Behavior
 
-- Cites the exact ready plan record, governing planning basis, delivery context, base/HEAD/diff identities, and complete proof identities and routes to review-implementation.
+- Cites the exact ready plan record, governing planning basis, delivery context, base/HEAD/diff identities, and complete proof identities and routes to implementation-review.
 - Preserves review inputs and does not self-review.
 
 ## Failure Signals

@@ -29,7 +29,7 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 ## Boundaries
 
 - Never alter plan meaning, governing basis, delivery context, required proof, design, tracker state, review verdict, PR state, or merge authority.
-- A completed slice is not independent review. General-domain work routes to `review-implementation`; runtime-skill work remains under `skills-creation`.
+- A completed slice is not independent review. General-domain work routes to `implementation-review`; runtime-skill work remains under `skills-creation`.
 - Missing current review/remediation receipts do not reset the three-remediation limit; they stop further remediation for explicit user permission.
 
 Completion: every claimed slice has fresh fitting proof, every incomplete obligation/blocker is explicit, the plan record remains unchanged, and no fourth remediation occurred.

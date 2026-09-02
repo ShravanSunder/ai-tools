@@ -2,12 +2,12 @@
 
 Use these when writing `copy-paste-prompt.md` and printing the prompt in chat.
 
-For meaningful general-domain review, `plan identity: none` intentionally returns `blocked-input`; the handoff must route to caller authority or plan creation before asking `review-implementation` to proceed.
+For meaningful general-domain review, `plan identity: none` intentionally returns `blocked-input`; the handoff must route to caller authority or plan creation before asking `implementation-review` to proceed.
 
 ## Reviewer Prompt
 
 ```text
-Use <$shravan-dev-workflow:review-implementation for general-domain work | $shravan-dev-workflow:skills-creation for a runtime skill package> to independently review this completed or partial implementation. Review only; do not edit files.
+Use <$shravan-dev-workflow:implementation-review for general-domain work | $shravan-dev-workflow:skills-creation for a runtime skill package> to independently review this completed or partial implementation. Review only; do not edit files.
 
 Repo: <absolute repo path>
 Branch/worktree: <branch>
@@ -90,7 +90,7 @@ Next action:
 <specific next task>
 
 Exact route:
-<implement-plan for a ready delivery plan | review-implementation for general-domain work | skills-creation for a runtime skill package | governing owner/blocker>
+<implement-plan for a ready delivery plan | implementation-review for general-domain work | skills-creation for a runtime skill package | governing owner/blocker>
 
 Constraints:
 - Stay within the listed write scope.

@@ -1,14 +1,14 @@
-# review-implementation detects false-green proof
+# implementation-review detects false-green proof
 
-scenario_id: review-implementation-detect-false-green-proof
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-detect-false-green-proof
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 The ready plan requires focused tests, the full suite, and a manual runtime observation. The implementation proof contains only focused unit tests but calls the feature complete. Classify the candidate finding, its consequence, smallest correction, confirmation evidence, and semantic route. Do not edit or rerun anything.
 

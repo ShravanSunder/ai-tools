@@ -1,5 +1,5 @@
 ---
-name: review-implementation
+name: implementation-review
 description: Use when independently reviewing implemented code, proof, a branch diff, commit, PR head, or one bounded remediation before PR readiness, including when governing authority, ready plan, source, diff, proof, or remediation-limit evidence is missing or conflicting. Not for design review, runtime-skill authoring review, editing findings, security scans, remediation, or PR monitoring.
 ---
 

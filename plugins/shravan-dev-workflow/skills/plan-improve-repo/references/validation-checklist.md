@@ -45,7 +45,7 @@ Issues:
 - <missing proof, stale path, oversized task, blocker, or none>
 
 Next:
-- spec-design | program-design | spec-program-review | plan-handoff | plan-implementation to establish delivery intent | review-implementation for general-repo work | skills-creation for a runtime skill package | originating planner correction
+- spec-design | program-design | spec-program-review | plan-handoff | plan-implementation to establish delivery intent | implementation-review for general-repo work | skills-creation for a runtime skill package | originating planner correction
 
 ```
 

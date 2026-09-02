@@ -1,14 +1,14 @@
-# review-implementation routes by semantic cause
+# implementation-review routes by semantic cause
 
-scenario_id: review-implementation-route-by-semantic-owner
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-route-by-semantic-owner
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 Reduce four source-backed findings: a missing observable requirement, an undefined component owner/interface, an invalid plan slice dependency, and a code defect inside approved meaning. Return each exact owner; do not route everything to the executor.
 

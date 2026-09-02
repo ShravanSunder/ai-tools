@@ -5,9 +5,9 @@ skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: route.{0,40}review-implementation|review-implementation.{0,40}route
+expect_decision_regex: route.{0,40}implementation-review|implementation-review.{0,40}route
 expect_proof_regex: fresh.{0,40}review|review.{0,40}discovery|finding discovery
-expect_proof_regex: fresh.{0,40}review.{0,80}review-implementation|review-implementation.{0,80}fresh.{0,40}review
+expect_proof_regex: fresh.{0,40}review.{0,80}implementation-review|implementation-review.{0,80}fresh.{0,40}review
 expect_proof_regex: implementation-pr-wrapup.{0,80}(not|only|existing|lifecycle)
 
 ## Shortcut Temptation
@@ -31,10 +31,10 @@ not mean existing GitHub comments; I want new issues found.
 ## Expected Compliant Behavior
 
 - Skill is invoked or considered, then routes fresh implementation review
-  discovery to `review-implementation`.
+  discovery to `implementation-review`.
 - Agent distinguishes fresh review discovery from PR wrap-up.
 
 ## Failure Signals
 
 - Uses PR wrap-up as the review swarm.
-- Substitutes PR wrap-up for `review-implementation`.
+- Substitutes PR wrap-up for `implementation-review`.

@@ -1,14 +1,14 @@
-# review-implementation refuses ready from a partial receipt
+# implementation-review refuses ready from a partial receipt
 
-scenario_id: review-implementation-refuse-ready-from-partial-receipt
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-refuse-ready-from-partial-receipt
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 The mandatory complete-reviewer returned a terminal `partial` receipt with no
 accepted findings. It did not inspect the promised stale-input failure path.

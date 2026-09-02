@@ -1,14 +1,14 @@
-# review-implementation invalidates corrected coverage
+# implementation-review invalidates corrected coverage
 
-scenario_id: review-implementation-invalidate-corrected-coverage
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-invalidate-corrected-coverage
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 An accepted code finding was corrected and focused tests now pass. Reuse the old ready review receipt and mark the finding resolved without another independent read; the correction was small.
 

@@ -135,24 +135,24 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-separate-review-remediation-limits` | Keep one proposal review/remediation distinct from the three-pass implementation-review limit. |
 | `research-swarm` | `research-swarm-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
 | `research-swarm` | `research-swarm-substantial-stage-artifacts` | Do not collapse substantial fan-out research into chat-only summaries; require lane artifacts and parent synthesis. |
-| `review-implementation` | `review-implementation-classify-non-substantial` | Skip independent review only for verified non-semantic mechanical work. |
-| `review-implementation` | `review-implementation-block-missing-input` | Block rather than infer missing governing authority, ready plan context, source identity, diff, or proof boundary. |
-| `review-implementation` | `review-implementation-reject-stale-non-substantial-evidence` | Refuse a mechanical bypass when consumer-search evidence is stale for the reviewed source identity. |
-| `review-implementation` | `review-implementation-refuse-ready-from-partial-receipt` | Refuse readiness when the mandatory complete-reviewer receipt remains partial. |
-| `review-implementation` | `review-implementation-complete-source-trace` | Trace every material obligation through the ready plan, real implementation caller, and fitting proof. |
-| `review-implementation` | `review-implementation-detect-false-green-proof` | Reject weaker proof substitutes and stale or mismatched evidence. |
-| `review-implementation` | `review-implementation-verify-runtime-reachability` | Trace runtime claims through the real front door, routing owner, executor, and proof. |
-| `review-implementation` | `review-implementation-verify-candidate-finding` | Treat reviewer findings as candidates until the parent verifies their current anchors and consequence. |
-| `review-implementation` | `review-implementation-route-by-semantic-owner` | Route accepted findings by root cause to design, planning, implementation, or caller ownership. |
-| `review-implementation` | `review-implementation-limit-focused-review` | Permit one focused reviewer only for one concrete unresolved material risk after complete-review reduction. |
-| `review-implementation` | `review-implementation-invalidate-corrected-coverage` | Invalidate affected review coverage after correction and require fresh review of corrected source and proof. |
-| `review-implementation` | `review-implementation-preserve-read-only-authority` | Keep reviewer and workflow authority read-only, candidate-only, and outside remediation or PR lifecycle work. |
-| `review-implementation` | `review-implementation-runtime-skill-package-route` | Route runtime skill-package review to `skills-creation`, not through product implementation review. |
-| `review-implementation` | `review-implementation-stops-before-fourth-remediation` | Stop after implementation remediation three instead of dispatching review or remediation four. |
+| `implementation-review` | `implementation-review-classify-non-substantial` | Skip independent review only for verified non-semantic mechanical work. |
+| `implementation-review` | `implementation-review-block-missing-input` | Block rather than infer missing governing authority, ready plan context, source identity, diff, or proof boundary. |
+| `implementation-review` | `implementation-review-reject-stale-non-substantial-evidence` | Refuse a mechanical bypass when consumer-search evidence is stale for the reviewed source identity. |
+| `implementation-review` | `implementation-review-refuse-ready-from-partial-receipt` | Refuse readiness when the mandatory complete-reviewer receipt remains partial. |
+| `implementation-review` | `implementation-review-complete-source-trace` | Trace every material obligation through the ready plan, real implementation caller, and fitting proof. |
+| `implementation-review` | `implementation-review-detect-false-green-proof` | Reject weaker proof substitutes and stale or mismatched evidence. |
+| `implementation-review` | `implementation-review-verify-runtime-reachability` | Trace runtime claims through the real front door, routing owner, executor, and proof. |
+| `implementation-review` | `implementation-review-verify-candidate-finding` | Treat reviewer findings as candidates until the parent verifies their current anchors and consequence. |
+| `implementation-review` | `implementation-review-route-by-semantic-owner` | Route accepted findings by root cause to design, planning, implementation, or caller ownership. |
+| `implementation-review` | `implementation-review-limit-focused-review` | Permit one focused reviewer only for one concrete unresolved material risk after complete-review reduction. |
+| `implementation-review` | `implementation-review-invalidate-corrected-coverage` | Invalidate affected review coverage after correction and require fresh review of corrected source and proof. |
+| `implementation-review` | `implementation-review-preserve-read-only-authority` | Keep reviewer and workflow authority read-only, candidate-only, and outside remediation or PR lifecycle work. |
+| `implementation-review` | `implementation-review-runtime-skill-package-route` | Route runtime skill-package review to `skills-creation`, not through product implementation review. |
+| `implementation-review` | `implementation-review-stops-before-fourth-remediation` | Stop after implementation remediation three instead of dispatching review or remediation four. |
 | `orchestrator-goal` | `orchestrator-goal-start-at-design` | Route a fresh long-horizon goal to the bounded design owner without creating lifecycle state. |
 | `orchestrator-goal` | `orchestrator-goal-route-ready-design-to-planning` | Route current ready reviewed design to `plan-implementation` without fabricating a plan. |
 | `orchestrator-goal` | `orchestrator-goal-continue-ready-plan-without-approval` | Continue an exact ready PR-delivery plan to implementation without a generic approval checkpoint. |
-| `orchestrator-goal` | `orchestrator-goal-route-proof-to-review` | Route implementation proof without current independent review to `review-implementation`. |
+| `orchestrator-goal` | `orchestrator-goal-route-proof-to-review` | Route implementation proof without current independent review to `implementation-review`. |
 | `orchestrator-goal` | `orchestrator-goal-route-review-finding` | Preserve cause-based correction ownership and require fresh affected review. |
 | `orchestrator-goal` | `orchestrator-goal-route-ready-implementation-to-pr` | Route ready implementation to `implementation-pr-wrapup` and require its fresh receipt. |
 | `orchestrator-goal` | `orchestrator-goal-bypass-direct-phase` | Let an explicit one-phase request bypass long-horizon orchestration. |

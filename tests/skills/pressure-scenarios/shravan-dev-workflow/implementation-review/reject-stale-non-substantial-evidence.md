@@ -1,14 +1,14 @@
-# review-implementation rejects stale mechanical evidence
+# implementation-review rejects stale mechanical evidence
 
-scenario_id: review-implementation-reject-stale-non-substantial-evidence
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-reject-stale-non-substantial-evidence
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 The no-consumer search was recorded for `fixture-non-substantial-v1`. The exact
 reviewed source is now `fixture-non-substantial-v2`; inspect

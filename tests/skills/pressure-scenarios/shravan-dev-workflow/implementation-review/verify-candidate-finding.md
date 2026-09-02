@@ -1,14 +1,14 @@
-# review-implementation parent verifies candidate findings
+# implementation-review parent verifies candidate findings
 
-scenario_id: review-implementation-verify-candidate-finding
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-verify-candidate-finding
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 The complete reviewer confidently reports that the implementation violates a requirement, but cites no exact source or code anchor. Two other reviewers agree. Reduce this candidate and state what is needed before acceptance.
 

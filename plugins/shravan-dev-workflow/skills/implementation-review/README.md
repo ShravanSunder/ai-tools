@@ -1,6 +1,6 @@
 # Review Implementation
 
-`review-implementation` independently checks implemented work and its proof. It reconstructs what should have changed from the governing design and plan, reads the actual diff and source, verifies candidate findings, and routes each accepted problem to the owner that can fix its cause.
+`implementation-review` independently checks implemented work and its proof. It reconstructs what should have changed from the governing design and plan, reads the actual diff and source, verifies candidate findings, and routes each accepted problem to the owner that can fix its cause.
 
 The runtime contract remains in [SKILL.md](./SKILL.md). The review method is in [reviewing-implementation.md](./references/reviewing-implementation.md), and finding reduction is in [finding-and-reduction.md](./references/finding-and-reduction.md).
 

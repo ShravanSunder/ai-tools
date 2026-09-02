@@ -48,7 +48,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "routes-exact-ready-design-to-planning",
-        requirement: "Recognizes the supplied exact current ready Requirements, Specification, Program Design, and review identities, recommends plan-implementation as the next owner without creating the plan, and names review-implementation as the later owner for implemented work and proof without performing that review.",
+        requirement: "Recognizes the supplied exact current ready Requirements, Specification, Program Design, and review identities, recommends plan-implementation as the next owner without creating the plan, and names implementation-review as the later owner for implemented work and proof without performing that review.",
         failureExample: "Reports all planning unavailable, chooses a generic review route, or creates the plan inside research.",
       },
     ],

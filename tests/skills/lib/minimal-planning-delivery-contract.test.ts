@@ -80,7 +80,7 @@ describe("goal delivery intent hard cutover", () => {
     const implementationHandoff = readPluginFile(
       "skills/implementation-handoff/SKILL.md",
     );
-    const reviewer = readPluginFile("skills/review-implementation/SKILL.md");
+    const reviewer = readPluginFile("skills/implementation-review/SKILL.md");
 
     expect(executor).toContain("Proceed only when result is `ready`");
     expect(executor).toContain("terminal is `pr-ready-unmerged`");
@@ -116,7 +116,7 @@ describe("goal delivery intent hard cutover", () => {
     const designReview = readPluginFile("skills/spec-program-review/SKILL.md");
     const designOrchestrator = readPluginFile("skills/orchestrator-design/SKILL.md");
     const implementationReview = readPluginFile(
-      "skills/review-implementation/SKILL.md",
+      "skills/implementation-review/SKILL.md",
     );
     const skillsCreation = readPluginFile("skills/skills-creation/SKILL.md");
 
@@ -176,7 +176,7 @@ describe("goal delivery intent hard cutover", () => {
       "plan-implementation/orchestrated-plan-uses-project-tmp.md",
       "orchestrator-design/stops-before-second-review.md",
       "spec-program-review/one-review-one-remediation.md",
-      "review-implementation/stops-before-fourth-remediation.md",
+      "implementation-review/stops-before-fourth-remediation.md",
       "skills-creation/separate-review-remediation-limits.md",
     ];
 

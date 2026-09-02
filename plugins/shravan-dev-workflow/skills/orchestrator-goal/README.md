@@ -15,7 +15,7 @@ flowchart TD
     C -- Reviewed design has no plan --> F[plan-implementation]
     C -- Plan-only terminal reached --> G[Stop with plan]
     C -- Ready delivery plan has no proof --> H[implement-plan]
-    C -- Implementation lacks review --> I[review-implementation]
+    C -- Implementation lacks review --> I[implementation-review]
     C -- Review found a problem --> J[Route to the finding's owner]
     C -- Implementation is ready --> K[implementation-pr-wrapup]
     D --> B

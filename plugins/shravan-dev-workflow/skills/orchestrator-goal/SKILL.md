@@ -16,7 +16,7 @@ A goal invocation establishes delivery intent. The orchestrator reconstructs the
 5. Invoke exactly one current phase owner at a time, preserve its result unchanged with the thin source binding from the routing reference, verify its required fields, then reconstruct the next gate and continue immediately. A phase boundary or successful owner result is not a user-approval checkpoint.
 6. A `ready` plan with terminal `pr-ready-unmerged`, current governing basis, complete delivery context, and no real blocker routes directly to `implement-plan`. Do not request approval of planner-owned detail.
 7. Invoke a selected named `ops-*` tracking skill only as a separate authorized side route. No tracking continues immediately; tickets prove no delivery gate.
-8. After implementation proof, route general-domain work to `review-implementation` and runtime-skill work to the implementation-review stage of `skills-creation`.
+8. After implementation proof, route general-domain work to `implementation-review` and runtime-skill work to the implementation-review stage of `skills-creation`.
 9. Preserve the ordered implementation review/remediation receipts in current goal context. End early when review is ready. Apply at most three accepted remediation passes; after remediation three, stop `remediation-limit-reached` before review or remediation four unless the user explicitly authorizes continuation.
 10. Route ready implementation to `implementation-pr-wrapup`. Default terminal is PR-ready and unmerged; merge remains separate authority.
 
@@ -27,7 +27,7 @@ A goal invocation establishes delivery intent. The orchestrator reconstructs the
 - Reviewed design or an orchestrated admitted improvement without a delivery plan -> `plan-implementation`.
 - Planning `revision-requested | blocked` -> exact recorded owner. Ready `plan-only` -> terminal. Ready delivery -> `implement-plan`.
 - Implementation finding -> exact semantic owner. Implementation-owned finding -> remediation only while fewer than three remediation passes exist.
-- Implementation proof without current bounded review -> `review-implementation | skills-creation` by target classification.
+- Implementation proof without current bounded review -> `implementation-review | skills-creation` by target classification.
 - Ready review -> `implementation-pr-wrapup`.
 
 ## Boundaries

@@ -1,14 +1,14 @@
-# review-implementation complete source trace
+# implementation-review complete source trace
 
-scenario_id: review-implementation-complete-source-trace
-skill_under_test: shravan-dev-workflow:review-implementation
+scenario_id: implementation-review-complete-source-trace
+skill_under_test: shravan-dev-workflow:implementation-review
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:review-implementation
+$shravan-dev-workflow:implementation-review
 
 Prepare the exact read-only review route for the current fixture Requirements, Specification, Program Design, ready review result, immutable ready plan path `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` at its current meaning and delivery context, and `implementation-proof.md`. Base is `1111111111111111111111111111111111111111`; reviewed identity is `3333333333333333333333333333333333333333`. Explain the one complete reviewer packet and coverage expected. Do not dispatch in this pressure run.
 

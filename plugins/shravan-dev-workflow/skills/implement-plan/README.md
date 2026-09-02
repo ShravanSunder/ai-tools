@@ -29,7 +29,7 @@ flowchart TD
 - Plan-only, missing, malformed, or stale governing basis/delivery context stops implementation.
 - A design surprise is not patched around. It returns to design.
 - A required proof gate is never weakened to make the run pass.
-- Independent implementation review happens afterward in `review-implementation`.
+- Independent implementation review happens afterward in `implementation-review`.
 
 ## Output
 
