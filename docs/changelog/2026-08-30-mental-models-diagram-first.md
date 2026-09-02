@@ -28,7 +28,9 @@ Spec at `docs/wip/skills-authoring/2026-08-28-mental-models-diagram-first.md` (r
 ## Validation
 
 - `claude plugin validate .` (see entry-time results in the PR)
-- `pnpm --dir tests/skills exec tsc --noEmit` and eval-suite run (see PR)
+- `tsc --noEmit` clean and the tests/skills unit suite green (106 tests) at entry time.
+- Live eval runs: all four scenarios pass with every evaluator at 1.00 (source-read gate, tool budget, deterministic contract, semantic criteria) — `drift-interrupt`, `reconverge`, `diagram-first-surface`, and `map-building` (the last after a criterion fix: the skill routes swarm work to the work-vs-goal layout, which has no user-belief column, so the criterion no longer demands a divergence-map confirmation marker there).
+- Harness interaction note: live subject runs use the Codex adapter, so the machine-global stop-review gate can force a continuation turn that concatenates two JSON reports and fails strict transport parsing. Runs were executed with `CODEX_STOP_REVIEW_LUNA_TIMEOUT=1` so the gate fails open; this is an environment interaction, not a scenario defect.
 - Named proof gaps: multi-turn material-change/close behavior is not expressible in the single-turn harness — this covers the close-map falsifier quality, the single-live-branch reason, and the renamed-term-with-old-meaning note; recorded as proof gaps rather than claimed. Challenge-disposition behavior is covered by the reconverge scenario's criteria. A deterministic fixture pair proving the live judge ignores private evidence is also a named gap: the judge is a model, so that safeguard rests on the criteria's explicit scoping sentence plus live-run evidence.
 
 ## Refresh Status

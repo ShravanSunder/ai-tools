@@ -48,10 +48,11 @@ skill.
   only being assumed.
 - Agent says in plain words what the report alone cannot prove ("started
   tests" is a claim that tests began, not that they passed).
-- Agent marks the user's column or picture as its current read and invites
-  correction, since nothing was confirmed yet.
-- Agent states what everything leans on and what would settle the biggest
-  open question.
+- Agent presents neither the report nor its guess of the user's picture as
+  confirmed, and names what would settle the biggest open question. A
+  user-belief column, when drawn, is marked as the agent's current read
+  inviting correction; the work-vs-goal layout the skill assigns to swarm
+  work has no belief column.
 - The surface stays in everyday words: no `inherited_frame:`,
   `first_principles:`, `assumptions:`, or other bookkeeping labels, and no
   rendering bookkeeping.
@@ -63,4 +64,4 @@ skill.
 - Blurs report claims, missing evidence, and guesses into one caveat.
 - Treats the sidekick's summary as verified proof without reading artifacts.
 - Implies evidence was checked when nothing could be read this turn.
-- Presents the agent's guess of the user's picture as confirmed.
+- Presents the report's claims or the agent's guess as confirmed.

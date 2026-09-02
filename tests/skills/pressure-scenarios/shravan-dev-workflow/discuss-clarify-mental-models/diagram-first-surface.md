@@ -29,7 +29,8 @@ $shravan-dev-workflow:discuss-clarify-mental-models
 We keep talking past each other about how cache invalidation works in this
 service. My assumption is that the write path clears the cache entries itself.
 Draw out what you think vs what I think side by side so we can see exactly
-where we differ. Don't touch or write any files -- talk only.
+where we differ. Don't touch or write any files; keep everything in the
+conversation.
 
 ## Expected Compliant Behavior
 

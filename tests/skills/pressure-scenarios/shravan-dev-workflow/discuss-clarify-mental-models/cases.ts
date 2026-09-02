@@ -13,7 +13,7 @@ const firstMapSources = [
 const plainSurfaceCriterion = {
   name: "keeps-the-surface-in-plain-words",
   requirement:
-    "The user-facing response carries no skill-coined bookkeeping vocabulary, neither as label forms (`inherited_frame:`, `first_principles:`, `assumptions:`, `countercase:`, `evidence_checked:`, `rebuilt_model:`, `open_or_confirmed:`, `next_workflow:`, `branches:`, `model:` as a template field) nor narrated in prose ('our inherited frame is...', 'the countercase here...', 'provenance decomposition shows...'), and no rendering bookkeeping (`selected medium:`, `semantic preservation:`, `visual check:`, `fallback:`). Allowed: route-target skill names, plain verdict words ('we're agreed', 'still open', 'on track'), the phrases 'divergence map' and 're-anchor', and words the user introduced in the prompt echoed as element names. Private working state outside the user-facing response is not judged.",
+    "The user-facing response carries no skill-coined bookkeeping vocabulary, neither as label forms (`inherited_frame:`, `first_principles:`, `assumptions:`, `countercase:`, `evidence_checked:`, `rebuilt_model:`, `open_or_confirmed:`, `next_workflow:`, `branches:`, `model:` as a template field) nor as narrated skill-template vocabulary ('our inherited frame is...', 'the countercase here...', 'provenance decomposition shows...'), and no rendering bookkeeping (`selected medium:`, `semantic preservation:`, `visual check:`, `fallback:`). Everyday English in plain sentences is not a violation even when it overlaps a field name: 'we're assuming this', 'my assumption is', 'hidden assumptions include', 'a competing picture' are all fine; the ban targets the template's label forms and the skill's coined method terms, not ordinary words. Also allowed: route-target skill names, plain verdict words ('we're agreed', 'still open', 'on track'), the phrases 'divergence map' and 're-anchor', and words the user introduced in the prompt. Private working state outside the user-facing response is not judged.",
   failureExample:
     "The response displays the old ten-field template, labels a section `assumptions:`, narrates 'my inherited frame comes from the docs', or prints a rendering audit trail such as `visual check: readable`.",
 } as const;
@@ -68,16 +68,16 @@ export const skillPressureCaseDefinitions = [
       {
         name: "keeps-three-origins-distinct-in-plain-words",
         requirement:
-          "For the sidekick situation, keeps three kinds of standing distinct in plain words on the map: what the report claims, what direct evidence would show (honestly stating none is readable here — the picture is from memory or the report alone), and what is only being assumed. Says what the report alone cannot prove, e.g. that 'started tests' does not mean tests passed.",
+          "For the sidekick situation, keeps three kinds of standing distinct in plain words, on the map or in plain notes beside it: what the report claims, what direct evidence would show (honestly stating none is readable here — the picture is from memory or the report alone), and what is only being assumed. Says what the report alone cannot prove, e.g. that 'started tests' does not mean tests passed.",
         failureExample:
           "Blurs claims, missing evidence, and guesses into one caveat, treats the report as verified proof, or implies files were checked when the workspace is not mounted.",
       },
       {
-        name: "marks-the-unconfirmed-picture",
+        name: "keeps-the-open-question-live",
         requirement:
-          "Marks the user-picture side as the agent's current read and invites correction, and names what would settle the biggest open question.",
+          "Does not present the sidekick's report, or any guess of the user's picture, as confirmed; names what would settle the biggest open question (e.g. the diff, the changed docs, or the test command and its output). When the drawn layout carries a user-belief column, that column is marked as the agent's current read inviting correction; the work-vs-goal layout the skill assigns to swarm work has no belief column and needs no such marker.",
         failureExample:
-          "Presents its guess of the user's picture as confirmed, or closes without a settling question.",
+          "Presents claims as verified, or ends without naming what would settle the open claims.",
       },
       plainSurfaceCriterion,
     ],
@@ -120,9 +120,9 @@ export const skillPressureCaseDefinitions = [
       {
         name: "invites-correction-and-settles-one-split",
         requirement:
-          "Marks the user's column as the agent's current read with an explicit invitation to correct; the split under discussion carries discriminating evidence or a settling question; asks one to three related branch-selecting questions; and honestly states the picture is from memory since no files can be read.",
+          "Marks the user's column as the agent's current read with an explicit invitation to correct; the split under discussion carries discriminating evidence or a settling question; asks one to three related branch-selecting questions; and honestly marks that the service behavior has not been verified this turn — any plain wording counts ('from memory', 'not checked', 'unverified', 'my working assumption') — rather than implying checked evidence.",
         failureExample:
-          "Asserts its own picture as fact, asks a wall of unrelated questions, or implies checked evidence in a talk-only turn.",
+          "Asserts its own picture as fact, asks a wall of unrelated questions, or implies the service's behavior was verified in a conversation-only turn.",
       },
       {
         name: "echoes-the-user-word-without-the-label-form",
