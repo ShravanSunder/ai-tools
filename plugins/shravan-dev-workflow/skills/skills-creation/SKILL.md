@@ -247,7 +247,7 @@ IF any surface on the sensitive-surface list in `references/security-gate.md` is
 
 Review before proving. Proof run first is spent on text the review is about to change.
 
-IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, parent reduction, and current remediation-pass evidence.
+IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch its lanes and return the dispatched lane set, every receipt, parent reduction, and current remediation-pass evidence.
 
 Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate against actual files before accepting it. Accepted findings receive one remediation pass at a time, followed by another implementation review only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not dispatch review or remediation four without explicit user permission.
 
@@ -281,7 +281,7 @@ The run is not done while any of these hold:
 - the workflow has branches without observable predicates or return shapes;
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
-- review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, an implementation-review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted parent-verified remediation;
+- review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, an implementation-stage review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted parent-verified remediation;
 - implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;

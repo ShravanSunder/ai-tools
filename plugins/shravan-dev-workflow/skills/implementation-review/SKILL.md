@@ -3,13 +3,13 @@ name: implementation-review
 description: Use when independently reviewing implemented code, proof, a branch diff, commit, PR head, or one bounded remediation before PR readiness, including when governing authority, ready plan, source, diff, proof, or remediation-limit evidence is missing or conflicting. Not for design review, runtime-skill authoring review, editing findings, security scans, remediation, or PR monitoring.
 ---
 
-# Review Implementation
+# Implementation Review
 
 Implementation review independently reconstructs governing obligation through plan, source, diff, and proof. One complete fresh-context reviewer covers the implementation; the parent verifies candidates and owns the result. The bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times.
 
 ## Admit Review
 
-1. Classify `general-domain | runtime-skill-package`; runtime skill packages route to the implementation-review stage of `skills-creation`.
+1. Classify `general-domain | runtime-skill-package`; runtime skill packages route to the skill-package review stage of `skills-creation`.
 2. Classify `meaningful-review-required | non-substantial | blocked-input`. Non-substantial is limited to fully inspected formatting, typo, link, or generated-metadata changes with no semantic consumer.
 3. For meaningful review, MUST load `../../shared-references/canonical-implementation-plan.md` and validate the unchanged ready plan record, governing planning basis, delivery context, base/reviewed identities, diff range, instructions, proof claims/evidence, constraints, known gaps, and the inspectable remediation receipts already consumed by this bounded delivery effort.
 4. Admit reviewed-design and admitted-repository-improvement governing-basis variants through their canonical fields. Reject missing, stale, malformed, plan-only, mismatched, wrong-origin, or unproven authority without inference.

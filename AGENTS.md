@@ -91,7 +91,7 @@ Detailed mechanics stay in the owning skills and references:
 - `skill-creator` owns Codex skill anatomy and generated metadata as platform support loaded through `skills-creation/references/platform-mechanics.md`.
 - `tests/skills/README.md` owns the local pressure-test runner contract.
 - `docs-maintain` owns cleanup, archival, promotion, and durable docs reconciliation after artifacts exist.
-- The bounded `skills-creation` implementation-review contract and `implementation-pr-wrapup` own final review and merge-ready PR proof for runtime skill-work changes; product implementation review routes to `implementation-review`.
+- The bounded `skills-creation` skill-package review contract and `implementation-pr-wrapup` own final review and merge-ready PR proof for runtime skill-work changes; product implementation review routes to `implementation-review`.
 
 ## Admired-source provenance (ai-dev-skills)
 
@@ -194,7 +194,7 @@ Skills encode judgment, house style, and repeatable failure prevention. Prefer i
 
 - Treat this section as repo-local guardrails. Use `Skill Work SOP` above and `skills-creation` for named create/update/evaluate or accepted multi-run slice work before relying on these bullets.
 - When creating, editing, evaluating, executing an accepted multi-run slice, or pressure-testing one named skill, load `skills-creation`. Its references adapt Matt-style great-skill vocabulary, pressure-proof lessons from `superpowers:writing-skills`, and platform mechanics from `skill-creator`. For broad portfolio questions, use `skill-audit` instead.
-- Name skills namespace-first in hyphen-case: lead with the domain family (`implementation-*`, `spec-*`, `plan-*`, `ops-*`, `docs-*`), then the searchable action or role (`implementation-review`, `spec-design`, `plan-handoff`).
+- Name skills namespace-first in hyphen-case: lead with the domain family, then the searchable action or role (`implementation-review`, `spec-design`, `plan-handoff`). The namespace table in `plugins/shravan-dev-workflow/README.md` owns the family list.
 - Write the frontmatter `description` as a trigger: start with `Use when...`, name concrete situations and symptoms, and do not summarize the workflow.
 - Keep `SKILL.md` concise and progressive. Move heavy examples, rubrics, templates, and long prompt packets into `references/`; use `scripts/` for deterministic mechanics.
 - Human-facing workflow README files may live inside skill folders when the user explicitly requests them. Keep them concise and non-authoritative: link to `SKILL.md` and its references instead of duplicating the runtime contract.

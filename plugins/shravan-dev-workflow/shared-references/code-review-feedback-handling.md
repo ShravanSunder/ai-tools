@@ -1,6 +1,6 @@
 # Code Review Feedback Handling
 
-Use this shared runtime reference before acting on implementation-review findings, existing pull-request feedback, review comments, or review threads.
+Use this shared runtime reference before acting on implementation review findings, existing pull-request feedback, review comments, or review threads.
 
 ## Core Rule
 

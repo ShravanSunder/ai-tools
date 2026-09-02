@@ -6,13 +6,13 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: classification:\s*update|treat\w* this as.{0,60}update
-expect_decision_regex: implementation review|implementation-review
-expect_decision_regex: references/review/implementation-review\.md|implementation-review\.md|implementation-review|implementation review
+expect_decision_regex: references/review/implementation-review\.md|skill-package review
+expect_decision_regex: references/review/implementation-review\.md|implementation-review\.md
 expect_decision_regex: parent.{0,80}reduction|implementation review reduction|targeted.{0,40}retest
 expect_decision_regex: changed-file coverage|changed file coverage|every changed file
 expect_proof_regex: proof (status|route):\s*red|failing (pressure )?(scenario|micro-test)|(pressure scenario|micro-test|micro test).{0,180}(fail(s|ing)?|red)\b
-expect_proof_regex: references/review/implementation-review\.md|implementation-review\.md|implementation-review|implementation review reference|parent-reduced.{0,80}(lane|receipt)
-expect_proof_regex: (references/)?implementation-review(\.md)?|implementation[- ]review reduction|loading/reducing implementation review|targeted.{0,40}retest
+expect_proof_regex: references/review/implementation-review\.md|implementation-review\.md|skill-package review reference|parent-reduced.{0,80}(lane|receipt)
+expect_proof_regex: references/review/implementation-review(\.md)?|skill-package review reduction|loading/reducing the skill-package review|targeted.{0,40}retest
 expect_proof_regex: changed-file coverage|changed file coverage|every changed file
 expect_proof_regex: parent.{0,80}(reduce|reduction|verify)|implementation[- ]review reduction|accepted.{0,80}rejected.{0,80}unverified|candidate evidence
 expect_proof_regex: (rerun|retest).{0,80}(pressure|scenario|micro-test|targeted)|targeted.{0,40}retest

@@ -43,7 +43,7 @@ plan-*               planning and portability     plan-implementation
                                                   plan-handoff
                                                   plan-improve-repo
 implement-*          approved-plan execution      implement-plan
-implementation-*     code/change boundary          implementation-review
+implementation-*     implementation judgment and lifecycle  implementation-review
                                                   implementation-pr-wrapup
                                                   implementation-handoff
 ops-*                external operational systems  ops-security-review
@@ -73,7 +73,7 @@ flowchart LR
     planHandoff["plan-handoff<br/>portable plan context"]
 
     implementPlan["implement-plan<br/>ready delivery-plan execution"]
-    reviewImplementation["implementation-review<br/>independent implementation and proof review"]
+    implementationReview["implementation-review<br/>independent implementation and proof review"]
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
@@ -82,7 +82,7 @@ flowchart LR
     deliveryGoal -.->|"first unproven gate"| designCycle
     deliveryGoal -.-> planImplementation
     deliveryGoal -.-> implementPlan
-    deliveryGoal -.-> reviewImplementation
+    deliveryGoal -.-> implementationReview
     deliveryGoal -.-> implWrap
     designCycle -.->|"first phase"| specDesign
     designCycle -.->|"follows phase-selected routes"| programDesign
@@ -100,11 +100,11 @@ flowchart LR
     planImplementation --> planHandoff
     planImplementation -.->|"ready delivery context"| implementPlan
     planHandoff -.->|"when exact approval is preserved"| implementPlan
-    implementPlan --> reviewImplementation
-    reviewImplementation -.->|"accepted implementation correction"| implementPlan
-    reviewImplementation --> implWrap
+    implementPlan --> implementationReview
+    implementationReview -.->|"accepted implementation correction"| implementPlan
+    implementationReview --> implWrap
     implementPlan --> implHandoff
-    reviewImplementation --> implHandoff
+    implementationReview --> implHandoff
     implWrap --> implHandoff
 ```
 
