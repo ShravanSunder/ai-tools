@@ -13,8 +13,8 @@ from dataclasses import dataclass, field
 DEFAULT_MAX_USER_TURNS: int = 5
 DEFAULT_MAX_USER_CHARS_PER_TURN: int = 2000
 DEFAULT_MAX_LAST_USER_CHARS: int = 4000
-DEFAULT_MAX_ASSISTANT_LAST_CHARS: int = 4000
-DEFAULT_EARLIER_ASSISTANT_CHAR_CAP: int = 1000
+DEFAULT_MAX_ASSISTANT_LAST_CHARS: int = 6000
+DEFAULT_EARLIER_ASSISTANT_CHAR_CAP: int = 1500
 
 HOOK_INJECTED_USER_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"(?is)^\s*do not stop\b"),
@@ -260,7 +260,20 @@ def render_window(
                 earlier_assistant_char_cap=earlier_assistant_char_cap,
             )
         )
-    return "\n\n".join(formatted_turns)
+    read_first = "\n".join(
+        [
+            "Read first:",
+            "",
+            "LATEST USER TURN",
+            user_bodies[-1] or "(truncated)",
+            "",
+            f"[last] {newest_last}".rstrip() if newest_last else "[last] (none)",
+            "",
+            "Earlier turns follow for context.",
+            "",
+        ]
+    )
+    return read_first + "\n\n".join(formatted_turns)
 
 
 def build_stop_review_window(

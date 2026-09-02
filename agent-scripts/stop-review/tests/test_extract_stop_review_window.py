@@ -118,6 +118,20 @@ class WindowRenderTests(unittest.TestCase):
         self.assertIn("[earlier] progress note one", window)
         self.assertIn("[earlier] progress note two", window)
 
+    def test_leads_with_latest_user_and_last(self) -> None:
+        turns = [
+            ConversationTurn(user_texts=["older job"], assistant_messages=["working"]),
+            ConversationTurn(user_texts=["draw the options"], assistant_messages=["A or B, which do you want?"]),
+        ]
+        window = render_window(turns, max_user_turns=5)
+        lead = window.split("Earlier turns follow for context.", 1)[0]
+        self.assertTrue(window.startswith("Read first:"))
+        self.assertIn("LATEST USER TURN", lead)
+        self.assertIn("draw the options", lead)
+        self.assertIn("[last] A or B, which do you want?", lead)
+        self.assertNotIn("older job", lead)
+        self.assertIn("older job", window)
+
     def test_keeps_last_five_user_turns(self) -> None:
         turns = [
             ConversationTurn(user_texts=[f"user {index}"], assistant_messages=[f"asst {index}"])
@@ -145,8 +159,8 @@ class WindowRenderTests(unittest.TestCase):
         )
         self.assertIn("...[truncated]...", window)
         self.assertLess(window.count("O"), 2100)
-        self.assertGreater(window.count("N"), 3900)
-        self.assertLess(window.count("N"), 4100)
+        self.assertGreater(window.count("N"), 7900)
+        self.assertLess(window.count("N"), 8200)
 
     def test_per_turn_user_cap_keeps_older_user_text(self) -> None:
         turns = [
@@ -173,7 +187,11 @@ class WindowRenderTests(unittest.TestCase):
             earlier_assistant_char_cap=1000,
             max_assistant_last_chars=4000,
         )
-        earlier_line = next(line for line in window.splitlines() if line.startswith("[earlier]"))
+        earlier_line = next(
+            line
+            for line in window.splitlines()
+            if line.startswith("[earlier]")
+        )
         self.assertLessEqual(len(earlier_line.removeprefix("[earlier] ").strip()), 1000)
 
     def test_user_cap_does_not_drop_last_assistant(self) -> None:

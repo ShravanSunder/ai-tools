@@ -33,10 +33,21 @@ def extract_window_from_log(log_path: str, turn_id: str) -> str | None:
         return None
     text = path.read_text(encoding="utf-8")
     marker = f"turn_id={turn_id} "
-    hit = text.find(marker)
-    if hit < 0:
+    chosen: int | None = None
+    search_from = 0
+    while True:
+        hit = text.find(marker, search_from)
+        if hit < 0:
+            break
+        line_end = text.find("\n", hit)
+        line = text[hit : line_end if line_end >= 0 else hit + 400]
+        chosen = hit
+        if "classification=luna_continue_work" in line or "classification=luna_stop_ok" in line:
+            break
+        search_from = hit + 1
+    if chosen is None:
         return None
-    chunk = text[:hit]
+    chunk = text[:chosen]
     start = chunk.rfind("Conversation window:\n")
     if start < 0:
         return None
@@ -65,9 +76,9 @@ def reconstruct_window_from_session(case: dict[str, object]) -> str | None:
     ).strip()
 
 
-def resolve_window(case: dict[str, object]) -> tuple[str | None, str]:
+def resolve_window(case: dict[str, object], *, refresh_windows: bool = False) -> tuple[str | None, str]:
     window_file = case.get("window_file")
-    if isinstance(window_file, str) and window_file.strip():
+    if not refresh_windows and isinstance(window_file, str) and window_file.strip():
         path = Path(window_file)
         if not path.is_absolute():
             path = TESTS / path
@@ -112,9 +123,10 @@ def extract_decision_json(raw_text: str) -> dict[str, object] | None:
     return None
 
 
-def run_luna(window_text: str) -> dict[str, object]:
+def run_luna(window_text: str, *, classifier_prompt: Path | None = None) -> dict[str, object]:
+    prompt_path = classifier_prompt or CLASSIFIER_PROMPT
     prompt = (
-        CLASSIFIER_PROMPT.read_text(encoding="utf-8").rstrip()
+        prompt_path.read_text(encoding="utf-8").rstrip()
         + "\n\nConversation window:\n\n"
         + window_text.strip()
         + "\n"
@@ -193,10 +205,22 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run Stop-review Luna eval cases")
     parser.add_argument("--ids", default="", help="Comma-separated case ids")
     parser.add_argument("--dump-windows", action="store_true")
+    parser.add_argument(
+        "--refresh-windows",
+        action="store_true",
+        help="Ignore existing fixtures and re-extract windows from logs",
+    )
+    parser.add_argument(
+        "--classifier-prompt",
+        default="",
+        help="Override classifier-prompt.md (for old-vs-new comparison)",
+    )
     args = parser.parse_args(argv)
 
     wanted = {item.strip() for item in args.ids.split(",") if item.strip()}
+    classifier_prompt = Path(args.classifier_prompt) if args.classifier_prompt.strip() else CLASSIFIER_PROMPT
     print_runner_identity()
+    print(f"classifier_prompt={classifier_prompt}")
     print("---")
 
     passed = 0
@@ -214,7 +238,7 @@ def main(argv: list[str] | None = None) -> int:
             rows.append(f"SKIP  {case_id}  ({classification})")
             continue
         expected = str(case.get("expected_decision", ""))
-        window, source = resolve_window(case)
+        window, source = resolve_window(case, refresh_windows=args.refresh_windows or args.dump_windows)
         if window is None:
             skipped += 1
             rows.append(f"SKIP  {case_id}  (no window from {source})")
@@ -225,7 +249,7 @@ def main(argv: list[str] | None = None) -> int:
             fixture_path.write_text(window + "\n", encoding="utf-8")
             rows.append(f"DUMP  {case_id}  {fixture_path}")
             continue
-        result = run_luna(window)
+        result = run_luna(window, classifier_prompt=classifier_prompt)
         if not result.get("ok"):
             failed += 1
             rows.append(f"FAIL  {case_id}  runner={result.get('error')} source={source}")
