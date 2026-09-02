@@ -46,6 +46,7 @@ describe("runAcpxPressureCase", () => {
         requests.push(request);
         return {
           finalText: '{"scenario_id":"backend"}',
+          turnTexts: ['{"scenario_id":"backend"}'],
           rawEvents: '{"method":"session/update"}\n',
           stderr: "",
         };
@@ -68,5 +69,60 @@ describe("runAcpxPressureCase", () => {
       "session/update",
     );
     expect(result.readOnlyRequested).toBe(true);
+  });
+
+  test("sends follow-up turns to the same run and keeps per-turn artifacts", async () => {
+    const repoRoot = mkdtempSync(join(tmpdir(), "skill-pressure-repo-"));
+    const requests: AcpxAgentRunRequest[] = [];
+
+    const result = await runAcpxPressureCase({
+      input,
+      renderedPrompt: "rendered prompt",
+      renderedFollowUpPrompts: ["rendered follow-up"],
+      repoRoot,
+      setup: subjectSetup,
+      runner: async (request) => {
+        requests.push(request);
+        return {
+          finalText: '{"scenario_id":"backend","turn":2}',
+          turnTexts: [
+            '{"scenario_id":"backend","turn":1}',
+            '{"scenario_id":"backend","turn":2}',
+          ],
+          rawEvents: '{"method":"session/update"}\n',
+          stderr: "",
+        };
+      },
+    });
+
+    expect(requests).toEqual([
+      {
+        namePrefix: "pressure-subject-backend",
+        prompt: "rendered prompt",
+        followUpPrompts: ["rendered follow-up"],
+        setup: subjectSetup,
+      },
+    ]);
+    expect(result.turnTexts).toEqual([
+      '{"scenario_id":"backend","turn":1}',
+      '{"scenario_id":"backend","turn":2}',
+    ]);
+    expect(readFileSync(result.finalJsonPath, "utf8")).toBe(
+      '{"scenario_id":"backend","turn":2}',
+    );
+    const followUpPromptPath = result.artifactPaths.find((artifactPath) =>
+      artifactPath.endsWith("follow-up-1.md"),
+    );
+    const firstTurnPath = result.artifactPaths.find((artifactPath) =>
+      artifactPath.endsWith("turn-1.json"),
+    );
+    expect(followUpPromptPath).toBeDefined();
+    expect(firstTurnPath).toBeDefined();
+    expect(readFileSync(followUpPromptPath ?? "", "utf8")).toBe(
+      "rendered follow-up",
+    );
+    expect(readFileSync(firstTurnPath ?? "", "utf8")).toBe(
+      '{"scenario_id":"backend","turn":1}',
+    );
   });
 });

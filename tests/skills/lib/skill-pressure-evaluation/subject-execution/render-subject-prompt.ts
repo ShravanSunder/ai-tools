@@ -55,6 +55,17 @@ export function renderCodexPressurePrompt(
   ].join("\n");
 }
 
+export function renderFollowUpUserTurn(operatorMessage: string): string {
+  return [
+    "Operator follow-up message:",
+    "",
+    operatorMessage,
+    "",
+    "Transport reminder: the final JSON rules from the first message still apply to this turn. Return only JSON matching the supplied schema, with the full text of your live user-facing response for this turn in the decision field.",
+    "",
+  ].join("\n");
+}
+
 function buildRequiredSourceEvidence(
   requiredSourceReads: readonly string[],
 ): readonly string[] {

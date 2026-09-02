@@ -62,6 +62,7 @@ describe("Terra judge defaults", () => {
         requests.push(request);
         return {
           finalText: '{"scenario_id":"semantic-case","criteria":[]}',
+          turnTexts: ['{"scenario_id":"semantic-case","criteria":[]}'],
           rawEvents: "",
           stderr: "",
         };
@@ -305,6 +306,7 @@ describe("createSemanticCriteriaEvaluator", () => {
     const output = {
       backend: "codex",
       renderedPrompt: "subject prompt",
+      earlierConversationTurns: [],
       finalResult: {
         scenario_id: definition.scenarioId,
         skill_under_test: input.skillUnderTest,

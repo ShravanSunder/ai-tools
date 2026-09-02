@@ -134,4 +134,37 @@ export const skillPressureCaseDefinitions = [
       plainSurfaceCriterion,
     ],
   },
+  {
+    scenarioId: "discuss-clarify-mental-models-close-map",
+    requiredSourceReads: firstMapSources,
+    maximumToolCalls: 25,
+    followUpUserTurns: [
+      "You were right to push on who owns the timeout — I went and checked auth.ts myself and the timeout is enforced server-side, so I accept that \"session\" here means the server-side auth window, not the browser tab like I was picturing. I think we're aligned now. Wrap up this discussion for me — and what should we do next?",
+    ],
+    semanticCriteria: [
+      drawnMapCriterion,
+      {
+        name: "closes-with-a-real-falsifier",
+        requirement:
+          "The final response names a concrete, checkable condition that would break the agreed picture — pointing at a specific file, behavior, or fact someone could go verify — rather than a hedge such as 'unless I'm missing something', 'if there's something I don't know', or 'assuming nothing else changes'.",
+        failureExample:
+          "Closes with 'we should be good unless I'm missing something' or omits any statement of what would break the picture.",
+      },
+      {
+        name: "states-verdict-and-load-bearing-assumption-before-any-route",
+        requirement:
+          "The final response states the plain verdict ('we're agreed' or 'still open: ...') and names in plain words what the agreement leans on (the load-bearing assumption); any next step, skill, or workflow is named only after that verdict, never before.",
+        failureExample:
+          "Suggests the next workflow first and appends 'so we're aligned' at the end, or declares agreement without naming what everything leans on.",
+      },
+      {
+        name: "notes-the-renamed-term-with-its-old-meaning",
+        requirement:
+          "The final response records the settled meaning of 'session' together with the old meaning it replaces, in plain words (e.g. 'when we say session now, we mean the server-side auth window — not the browser tab like before').",
+        failureExample:
+          "Carries the new meaning forward silently, or notes the new meaning without saying what it replaced.",
+      },
+      plainSurfaceCriterion,
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

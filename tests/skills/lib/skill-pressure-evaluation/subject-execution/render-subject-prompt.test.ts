@@ -3,6 +3,7 @@ import { parseScenarioMarkdown } from "../scenario-cases/parse-scenario-fixture.
 import {
   findPromptRegexLeaks,
   renderCodexPressurePrompt,
+  renderFollowUpUserTurn,
 } from "./render-subject-prompt.js";
 
 const scenario = parseScenarioMarkdown({
@@ -86,6 +87,16 @@ describe("renderCodexPressurePrompt", () => {
       "Do not inspect pressure-scenario fixtures, case registries, evaluator code, grader artifacts, or the current diff",
     );
     expect(prompt).not.toContain("Required source evidence:");
+  });
+});
+
+describe("renderFollowUpUserTurn", () => {
+  test("wraps the operator message with the transport reminder", () => {
+    const rendered = renderFollowUpUserTurn("You were right; wrap this up.");
+
+    expect(rendered).toContain("Operator follow-up message:");
+    expect(rendered).toContain("You were right; wrap this up.");
+    expect(rendered).toContain("Return only JSON matching the supplied schema");
   });
 });
 

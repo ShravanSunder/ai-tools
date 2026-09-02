@@ -119,6 +119,7 @@ export async function loadSkillPressureCase(
     input: {
       ...input,
       requiredSourceReads: caseDefinition.requiredSourceReads ?? [],
+      followUpUserTurns: caseDefinition.followUpUserTurns ?? [],
     },
     deterministicEvaluators: createDeterministicEvaluators({
       definition: caseDefinition,
@@ -180,7 +181,12 @@ function isSkillPressureCaseDefinition(
     (!("maximumToolCalls" in value) ||
       (typeof value.maximumToolCalls === "number" &&
         Number.isInteger(value.maximumToolCalls) &&
-        value.maximumToolCalls > 0))
+        value.maximumToolCalls > 0)) &&
+    (!("followUpUserTurns" in value) ||
+      (Array.isArray(value.followUpUserTurns) &&
+        value.followUpUserTurns.every(
+          (turn) => typeof turn === "string" && turn.trim().length > 0,
+        )))
   );
 }
 

@@ -33,6 +33,7 @@ describe("loadSkillPressureCase", () => {
         "plugins/shravan-dev-workflow/skills/discuss-pathfinding/references/question-craft.md",
         "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
       ],
+      followUpUserTurns: [],
     });
     expect(pressureCase.deterministicEvaluators.length).toBeGreaterThan(0);
     expect(pressureCase.semanticEvaluator).toBeDefined();
