@@ -5,7 +5,7 @@
   "properties": {
     "cot": {
       "type": "string",
-      "description": "1-2 sentences: remaining job or none, and what [last] did"
+      "description": "1-2 sentences: current job and mode, what [last] did, and whether a user answer still gates the next work"
     },
     "decision": {
       "type": "string",
@@ -13,7 +13,7 @@
     },
     "reason": {
       "type": "string",
-      "description": "One sentence. continue_work design: resume design/discussion, do not implement. continue_work implementation: resume implement/fix/prove. stop_ok: short justification."
+      "description": "One sentence. continue_work design: resume design/discussion, do not implement. continue_work implementation: resume implement/fix/prove. stop_ok: short justification. Continue reasons must not choose among a pending user decision."
     }
   }
 }
