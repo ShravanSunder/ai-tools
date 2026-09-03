@@ -28,7 +28,7 @@ The repos are maintained separately. When making changes to shared sidecar funct
 
 - Copy updated files manually, or set up git remotes
 - The `agent_sidecar/` directory is the primary sync target
-- Plugin-related files (`plugins/`, `.claude-plugin/`) are NOT synced (personal-only)
+- Plugin-related files (`plugins/`, `.claude-plugin/`, `.cursor-plugin/`) are NOT synced (personal-only)
 
 ## Repository Structure
 
@@ -36,13 +36,15 @@ The repos are maintained separately. When making changes to shared sidecar funct
 ai-tools/
 ├── .agents/plugins/marketplace.json  # Codex plugin marketplace manifest
 ├── .claude-plugin/marketplace.json   # Claude Code plugin marketplace manifest
+├── .cursor-plugin/marketplace.json   # Cursor plugin marketplace manifest
 ├── plugins/                          # Plugin sources
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
 │   ├── dev-workflow-tools/           # Common tool skills, including Peekaboo UI testing
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent-scripts/                    # Host agent scripts (not plugin skills)
-│   └── stop-review/                  # Luna Stop-review; isolated ~/.codex-reviewer exec
+│   ├── stop-review/                  # Luna Stop-review; isolated ~/.codex-reviewer exec
+│   └── lint-changed/                 # Changed-file lint/format Stop hook; nested Stop fails open
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
@@ -186,7 +188,7 @@ Use the changelog system as the durable release memory:
 3. Add references, scripts, or README files inside that skill directory as needed.
 4. Bump the owning plugin version.
 5. Update `.agents/plugins/marketplace.json` for Codex availability when adding a new plugin.
-6. Update `.claude-plugin/marketplace.json` and add `.claude-plugin/plugin.json` only if Claude Code should load the same plugin.
+6. Update `.claude-plugin/marketplace.json` and add `.claude-plugin/plugin.json` only if Claude Code should load the same plugin. Add `.cursor-plugin/` manifests if Cursor should load it.
 
 ### Skill Authoring Discipline
 
@@ -217,6 +219,7 @@ Plugins are distributed through both marketplace manifests when they support bot
 
 - Codex: `.agents/plugins/marketplace.json`
 - Claude Code: `.claude-plugin/marketplace.json`
+- Cursor: `.cursor-plugin/marketplace.json`
 
 ```bash
 # Validate Claude marketplace manifest
@@ -234,6 +237,7 @@ Each plugin lives under `plugins/` and follows the standard Claude Code plugin l
 plugins/<plugin-name>/
 ├── .codex-plugin/plugin.json     # Codex plugin manifest (when supported)
 ├── .claude-plugin/plugin.json    # Plugin manifest (name, version, description)
+├── .cursor-plugin/plugin.json    # Cursor plugin manifest (when supported)
 ├── commands/                     # Slash commands (*.md files)
 ├── agents/                       # Agent definitions (*.md with YAML frontmatter)
 ├── skills/                       # Skills (subdirs with SKILL.md)
@@ -262,7 +266,7 @@ plugins/<plugin-name>/
 
 ### Adding a New Plugin
 
-1. Create `plugins/<name>/` with `.codex-plugin/plugin.json` for Codex and `.claude-plugin/plugin.json` for Claude Code if needed
+1. Create `plugins/<name>/` with `.codex-plugin/plugin.json` for Codex, `.claude-plugin/plugin.json` for Claude Code, and `.cursor-plugin/plugin.json` for Cursor if needed
 2. Add commands, agents, skills, or hooks as needed
 3. Add an entry to the matching marketplace manifest
 4. Add a `README.md` in the plugin directory
