@@ -6,30 +6,6 @@ This repository contains personal Codex and Claude Code plugins plus the Agent S
 
 **Purpose**: AI development tools distributed through local plugin marketplaces, plus isolated Docker environments for AI agents.
 
-## Repository Variants
-
-This repo has two variants maintained separately:
-
-- `~/dev/ai-tools` -- Personal projects (this repo, public)
-
-Work repos should use `relay-ai-tools`. Personal repos should use `ai-tools`.
-
-### Differences Between Variants
-
-| Feature | ai-tools (personal) | relay-ai-tools (work) |
-|---------|---------------------|----------------------|
-| Firewall presets | github-write, notion, linear | github-write, notion, jira, slack |
-| OpenCode support | Yes (`--run-opencode`) | No (removed) |
-| Agent CLIs | Claude, Codex, Gemini, OpenCode, Cursor | Claude, Codex, Gemini, Cursor |
-
-### Keeping Variants in Sync
-
-The repos are maintained separately. When making changes to shared sidecar functionality (scripts, dockerfiles, firewall logic), sync the changes to the other variant:
-
-- Copy updated files manually, or set up git remotes
-- The `agent_sidecar/` directory is the primary sync target
-- Plugin-related files (`plugins/`, `.claude-plugin/`, `.cursor-plugin/`) are NOT synced (personal-only)
-
 ## Repository Structure
 
 ```
