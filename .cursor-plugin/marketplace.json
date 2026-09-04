@@ -1,0 +1,30 @@
+{
+  "name": "ai-tools",
+  "owner": {
+    "name": "Shravan Sunder"
+  },
+  "metadata": {
+    "description": "AI development tools - scaffolding, sidecar containers, and more",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "scaffold-project",
+      "source": "ai-scaffold",
+      "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
+      "version": "0.2.1"
+    },
+    {
+      "name": "dev-workflow-tools",
+      "source": "dev-workflow-tools",
+      "description": "Common development tool skills, including progressive native macOS UI automation with Peekaboo CLI",
+      "version": "0.1.0"
+    },
+    {
+      "name": "shravan-dev-workflow",
+      "source": "shravan-dev-workflow",
+      "description": "Development workflow skills for long-horizon delivery routing, canonical planning, plan execution, independent implementation review, bounded design orchestration, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation",
+      "version": "2.5.0"
+    }
+  ]
+}

@@ -20,7 +20,7 @@ Plugin: `shravan-dev-workflow` 2.4.0 → 2.5.0 (rebased over the 2.4.0 manage-ag
 - `shared-references/diagram-rendering-and-fallbacks.md` — untouched; now a MUST-load per fired view, with its return kept as private working state.
 - Pressure scenarios: `drift-interrupt`, `map-building`, `reconverge` rewritten for the new surface; new `diagram-first-surface` scenario; new multi-turn `close-map` scenario; new `cases.ts` semantic-criteria registry (the folder moves off legacy regex evaluation, which scanned the whole JSON report rather than the user-facing surface).
 - Eval harness (`tests/skills/lib/skill-pressure-evaluation/`): scenarios may now declare `followUpUserTurns` — scripted operator messages sent to the same live subject session after the first response. Every turn must return the JSON report; evaluators grade the final turn, earlier turns feed the semantic judge as conversation evidence, and per-turn prompts/responses are kept as run artifacts. This makes close-turn behavior testable.
-- Manifests: `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` bumped to 2.5.0.
+- Manifests: `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, and `.cursor-plugin/plugin.json` bumped to 2.5.0.
 
 ## Design Provenance
 
