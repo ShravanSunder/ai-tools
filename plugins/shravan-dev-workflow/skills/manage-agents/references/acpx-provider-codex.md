@@ -6,6 +6,7 @@ Agent token: `codex`. Use this provider when the host is not Codex native, or wh
 
 | Model id             |
 | -------------------- |
+| `gpt-6-astra`        |
 | `gpt-5.6-sol`        |
 | `gpt-5.6-luna`       |
 
@@ -13,7 +14,7 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh/max → Frontier; Luna → Mini).
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Astra → Frontier; Sol low/medium → Balanced; Luna → Mini).
 
 ## Sessions And Identity
 

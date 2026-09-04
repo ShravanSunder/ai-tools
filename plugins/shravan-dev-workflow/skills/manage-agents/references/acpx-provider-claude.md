@@ -4,18 +4,18 @@
 
 | Model id             |
 | -------------------- |
-| `claude-fable-5[1m]` |
+| `claude-fable-5-1`   |
 | `claude-opus-5`      |
 
-The locally verified custom Fable id is `claude-fable-5[1m]`, not bare `fable`. User settings must expose that custom catalog. Opus uses the provider-advertised API id (`claude-opus-5`); verify locally if the adapter exposes a bracketed variant. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
+The locally verified custom Fable id is `claude-fable-5-1`, not bare `fable`. User settings must expose that custom catalog. Opus uses the provider-advertised API id (`claude-opus-5`); verify locally if the adapter exposes a bracketed variant. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
 
 ```bash
 REPO=/absolute/repo
 
 fable_acpx() {
   ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-  ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5[1m]' \
-  ANTHROPIC_MODEL='claude-fable-5[1m]' \
+  ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5-1' \
+  ANTHROPIC_MODEL='claude-fable-5-1' \
   acpx --cwd "$REPO" --approve-reads --no-terminal \
     --non-interactive-permissions fail claude "$@"
 }

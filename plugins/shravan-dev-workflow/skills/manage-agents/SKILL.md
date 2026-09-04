@@ -31,7 +31,7 @@ Two routes outside the table: the parent decides with no dispatch when the optio
 | single-assignment and scriptable: running tests or builds, watching CI or PR checks (`gh` watch), monitoring, scraping, grouping logs by a stated key, collecting references by a written criterion | Operator (default Mini) | the receipt is a faithful report of what ran or was found; unexpected states come back undecided; no source edits | asking the Operator to decide relevance, cause, readiness, or next action — split it: procedure to the Operator, judgment back to you |
 | single-assignment and needs thinking: a diff review, research with synthesis, an implementation slice, a second opinion | Delegate (default Balanced) | you can write the stop condition in one sentence and discard the agent after the receipt | calling planned implementation scriptable because its steps are listed — implementation choices are thinking |
 | persistent work the agent executes: a named co-worker you resume and steer, which also thinks with you — validating, helping, pushing back at the level of the work at hand | Sidekick (default Balanced) — the default for persistent work | a named relationship with a ledger outlives this assignment and stays cache-warm | a Sidekick for a single-assignment job — that is a Delegate; a Sidekick for a scriptable loop — that is repeated Operators |
-| persistent guidance across components, systems, or architecture, where you stay the executor | Advisor (Frontier) | the Advisor returns candidate guidance and never edits; the named relationship is expected to survive this assignment | routing a decision the parent can already make to the Advisor; a one-time guidance question is a Delegate |
+| persistent guidance across multiple components, systems, or architecture, where you stay the executor | Advisor (Frontier) | the Advisor returns candidate guidance and never edits; the named relationship is expected to survive this assignment | routing a decision the parent can already make to the Advisor; a one-time guidance question is a Delegate |
 
 Selection is done when every job names its pattern and no model has been named yet.
 
@@ -41,7 +41,7 @@ The pattern picks the shape of the work and its table owns the allowed category 
 
 Mini (OpenAI Luna) is super cheap. Default grunt work to Mini whenever the pattern's floor allows it: mechanical procedures, bounded scans and summaries, format conversions, test-and-report loops, watches. A Mini agent can be a Sidekick, a Delegate, or an Operator.
 
-The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced; a single-assignment judgment whose packet spans components, systems, or architecture may name Frontier for that assignment (Delegate table). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model.
+The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only, Advisor's is Frontier-only, and Delegate's is Balanced or Mini, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. A judgment that spans multiple components, systems, or architecture and needs Frontier is an Advisor or a Sidekick, not a Delegate. "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model.
 
 A session not worth keeping warm is not persistent — close it and dispatch Delegates or Operators instead (see Session Keep-Alive for the cache economics).
 
@@ -50,7 +50,7 @@ A session not worth keeping warm is not persistent — close it and dispatch Del
 Manage every subagent through one of the following patterns. The runtime supplies the launch mechanism.
 
 ### Advisor
-Use an Advisor for a persistent guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Choose an Advisor only when the named relationship is expected to survive the current assignment; a one-time guidance question is a single-assignment Delegate.
+Use an Advisor for a persistent guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Choose an Advisor only on user request.
 
 - **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment, while the parent remains executor.
 - **Continuity and cardinality:** One persistent named cross-lineage advisor by default, with ledger, kept cache-warm (see Session Keep-Alive). When a bounded consult needs cross-lineage disagreement — advice the parent cannot verify — dispatch single-assignment Delegates to the second lineage; a standing advisor pair requires a named reason.
@@ -59,25 +59,29 @@ Use an Advisor for a persistent guidance relationship on a problem that spans mu
 
 | Model category | Model lineage       | Thinking         |
 | -------------- | ------------------- | ---------------- |
-| Frontier       | OpenAI Sol          | high, xhigh, max |
-| Frontier       | Claude Fable        | high             |
-| Frontier       | Claude Opus         | high, xhigh      |
+| Frontier       | OpenAI Astra        | medium or high   |
+| Frontier       | Claude Fable        | medium or high   |
+
+Prefer `medium`; `high` for challenging tasks. On request only: thinking `xhigh`.
 
 ### Sidekick
 Use a Sidekick for persistent work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work.
 
-- **Work:** Delegated execution across assignments and follow-ups, including in-the-work reasoning and pushback.
+- **Work:** Delegated execution across assignments and follow-ups, including in-the-work reasoning, pushback, reviews and validation of your logic.
 - **Continuity and cardinality:** One or many persistent named relationships with ledger, kept cache-warm (see Session Keep-Alive).
 - **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work.
 - **Model category:** Frontier, Balanced, or Mini
 
 | Model category | Model lineage       | Thinking         |
 | -------------- | ------------------- | ---------------- |
-| Frontier       | OpenAI Sol          | high, xhigh      |
-| Frontier       | Claude Opus         | high             |
+| Frontier       | OpenAI Astra        | medium           |
+| Frontier       | Claude Fable        | medium           |
 | Balanced       | OpenAI Sol          | low or medium    |
-| Balanced       | Claude Opus         | medium           |
-| Mini           | OpenAI Luna         | high, xhigh, or max |
+| Balanced       | Claude Opus         | high             |
+| Balanced       | Cursor Grok         | medium or high   |
+| Mini           | OpenAI Luna         | xhigh or max     |
+
+On request only: Frontier thinking `high`; Sol thinking `high`.
 
 ### Delegate
 Use for one clear bounded assignment then discard. You manage and validate the work.
@@ -85,15 +89,13 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 - **Work:** One bounded research, review, implementation, reasoning, or second-opinion assignment.
 - **Continuity and cardinality:** Single or Delegate swarm; single-assignment — the relationship ends when the receipt is accepted, and the assignment may contain a conversation.
 - **Authority:** Packet-bounded work; parent verifies the work.
-- **Model category:** Frontier, Balanced, or Mini
+- **Model category:** Balanced or Mini
 
 | Model category | Model lineage       | Thinking         |
 | -------------- | ------------------- | ---------------- |
-| Frontier       | OpenAI Sol          | high or xhigh    |
 | Balanced       | OpenAI Sol          | low or medium    |
-| Balanced       | Claude Opus         | medium           |
-| Balanced       | Cursor Grok 4.5     | medium or high   |
-| Mini           | OpenAI Luna         | max              |
+| Balanced       | Cursor Grok         | medium or high   |
+| Mini           | OpenAI Luna         | xhigh            |
 
 ### Operator
 Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results). Give the Operator a procedure and reserve reasoning for the parent.
@@ -111,10 +113,9 @@ Bright line: any job handed to a subagent that is a bounded mechanical procedure
 | "this needs judgment" | split it: the procedure goes to the Operator; the judgment routes back to you, and you decide or dispatch a separate Delegate reasoning assignment |
 | "a Delegate can handle it" | Delegates are for bounded reasoning work; procedures are Operator work at Mini cost |
 
-| Model category | Model lineage       | Thinking    | Preference                     |
-| -------------- | ------------------- | ----------- | ------------------------------ |
-| Mini           | OpenAI Luna         | high, xhigh | preferred                      |
-| Mini           | Cursor Composer 2.5 | no thinking | fallback when Luna unavailable |
+| Model category | Model lineage       | Thinking    |
+| -------------- | ------------------- | ----------- |
+| Mini           | OpenAI Luna         | high, xhigh |
 
 ## Choose the Runtime
 
