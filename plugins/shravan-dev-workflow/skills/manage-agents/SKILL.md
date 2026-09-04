@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Always use when using or dispatching an advisor, sidekick, delegate, operator, or any subagent; when handing off to a subagent mechanical work such as running tests or builds, watching CI or PR checks, monitoring, scraping, or grouping logs into a report; for second opinions from another model, subagent-driven development, planning agent jobs, or parallel subagents; deciding how to call or coordinate subagents; choosing between a single-assignment delegate or operator and a persistent sidekick or advisor; choosing model capability. Use for native subagents and ACPX subagents. Not for owning the research or evidence workflow itself (research-swarm), the GitHub PR lifecycle itself (implementation-pr-wrapup), or bare inline commands with no subagent — load this skill whenever those workflows dispatch subagents.
+description: Always load to manage subagents. Always use when using or dispatching an advisor, sidekick, delegate, operator, or any subagent; when handing off to a subagent mechanical work such as running tests or builds, watching CI or PR checks, monitoring, scraping, or grouping logs into a report; for second opinions from another model, subagent-driven development, planning agent jobs, or parallel subagents; deciding how to call or coordinate subagents. Use for native subagents and ACPX subagents.
 ---
 
 # Manage Agents
@@ -31,7 +31,7 @@ Two routes outside the table: the parent decides with no dispatch when the optio
 | single-assignment and scriptable: running tests or builds, watching CI or PR checks (`gh` watch), monitoring, scraping, grouping logs by a stated key, collecting references by a written criterion | Operator (default Mini) | the receipt is a faithful report of what ran or was found; unexpected states come back undecided; no source edits | asking the Operator to decide relevance, cause, readiness, or next action — split it: procedure to the Operator, judgment back to you |
 | single-assignment and needs thinking: a diff review, research with synthesis, an implementation slice, a second opinion | Delegate (default Balanced) | you can write the stop condition in one sentence and discard the agent after the receipt | calling planned implementation scriptable because its steps are listed — implementation choices are thinking |
 | persistent work the agent executes: a named co-worker you resume and steer, which also thinks with you — validating, helping, pushing back at the level of the work at hand | Sidekick (default Balanced) — the default for persistent work | a named relationship with a ledger outlives this assignment and stays cache-warm | a Sidekick for a single-assignment job — that is a Delegate; a Sidekick for a scriptable loop — that is repeated Operators |
-| persistent guidance across multiple components, systems, or architecture, where you stay the executor | Advisor (Frontier) | the Advisor returns candidate guidance and never edits; the named relationship is expected to survive this assignment | routing a decision the parent can already make to the Advisor; a one-time guidance question is a Delegate |
+| persistent guidance across multiple components, systems, or architecture, where you stay the executor | Advisor (Frontier) if the user permits; if they decline or are unavailable, Sidekick | the user permitted the Advisor; it returns candidate guidance and never edits; the named relationship is expected to survive this assignment | dispatching an Advisor without asking; a one-time guidance question is a Delegate |
 
 Selection is done when every job names its pattern and no model has been named yet.
 
@@ -50,7 +50,7 @@ A session not worth keeping warm is not persistent — close it and dispatch Del
 Manage every subagent through one of the following patterns. The runtime supplies the launch mechanism.
 
 ### Advisor
-Use an Advisor for a persistent guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Choose an Advisor only on user request.
+Use an Advisor for a persistent guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Ask the user for permission to use an Advisor; if they decline or are unavailable, use a Sidekick.
 
 - **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment, while the parent remains executor.
 - **Continuity and cardinality:** One persistent named cross-lineage advisor by default, with ledger, kept cache-warm (see Session Keep-Alive). When a bounded consult needs cross-lineage disagreement — advice the parent cannot verify — dispatch single-assignment Delegates to the second lineage; a standing advisor pair requires a named reason.
@@ -65,7 +65,7 @@ Use an Advisor for a persistent guidance relationship on a problem that spans mu
 Prefer `medium`; `high` for challenging tasks. On request only: thinking `xhigh`.
 
 ### Sidekick
-Use a Sidekick for persistent work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work.
+Use a Sidekick for persistent work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work. Also use a Sidekick when the user declines an Advisor for persistent guidance or is unavailable to ask.
 
 - **Work:** Delegated execution across assignments and follow-ups, including in-the-work reasoning, pushback, reviews and validation of your logic.
 - **Continuity and cardinality:** One or many persistent named relationships with ledger, kept cache-warm (see Session Keep-Alive).

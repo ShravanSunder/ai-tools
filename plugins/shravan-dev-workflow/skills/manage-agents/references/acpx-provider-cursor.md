@@ -8,6 +8,8 @@ Agent token: `cursor`. Default adapter command: `cursor-agent acp`. If your inst
 
 Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single model lineage. Use it for Grok 4.6 or any other id the adapter advertises. Model lineage is chosen separately; only claim a lineage when this provider advertises an exact id.
 
+> OpenAI Astra is not available yet. Do not dispatch it.
+
 ## Models
 
 Pass the exact advertised ACP id from `session/new` / `configOptions.model` with `--model` at session creation or `acpx cursor set model <id> -s <name>` afterward.
