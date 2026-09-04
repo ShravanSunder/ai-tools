@@ -13,6 +13,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-04 manage-agents Astra is live](2026-09-04-manage-agents-astra-live.md)
 - [2026-09-04 manage-agents model catalog and Advisor permission](2026-09-04-manage-agents-model-catalog.md)
 - [2026-09-03 Cursor marketplace and lint-changed hook](2026-09-03-cursor-marketplace-lint-changed.md)
 - [2026-08-30 Mental Models Goes Diagram-First](2026-08-30-mental-models-diagram-first.md)

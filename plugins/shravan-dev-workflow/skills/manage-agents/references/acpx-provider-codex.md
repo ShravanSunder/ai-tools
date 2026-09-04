@@ -2,8 +2,6 @@
 
 Agent token: `codex`. Use this provider when the host is not Codex native, or when you need an ACPX-persistent Codex session across a non-Codex host. Prefer native Codex subagents when you are already on Codex and only need GPT-native models; see `references/native-providers-codex.md`.
 
-> OpenAI Astra is not available yet. Do not dispatch it.
-
 ## Models
 
 | Model id             |
