@@ -8,12 +8,17 @@ import type {
 export interface AcpxAgentRunRequest {
   readonly namePrefix: string;
   readonly prompt: string;
+  /** Scripted operator turns sent to the same session after the first response. */
+  readonly followUpPrompts?: readonly string[];
   readonly signal?: AbortSignal;
   readonly setup: AcpxCodexAgentSetup;
 }
 
 export interface AcpxAgentRunResult {
+  /** The last turn's assistant text; identical to the only turn in single-turn runs. */
   readonly finalText: string;
+  /** Assistant text per turn, in conversation order. */
+  readonly turnTexts: readonly string[];
   readonly rawEvents: string;
   readonly stderr: string;
 }
@@ -90,28 +95,42 @@ export function createAcpxCodexAgentRunner(
         environment,
         ...(request.signal === undefined ? {} : { signal: request.signal }),
       });
-      const promptResult = await processRunner({
-        args: [
-          ...baseArguments,
-          "--format",
-          "json",
-          "--json-strict",
-          "codex",
-          "-s",
-          sessionName,
-          "--file",
-          "-",
-        ],
-        cwd: props.repoRoot,
-        stdin: request.prompt,
-        environment,
-        ...(request.signal === undefined ? {} : { signal: request.signal }),
-      });
+      const turnPrompts = [request.prompt, ...(request.followUpPrompts ?? [])];
+      const turnTexts: string[] = [];
+      const rawEventChunks: string[] = [];
+      const stderrChunks: string[] = [];
+      for (const turnPrompt of turnPrompts) {
+        const promptResult = await processRunner({
+          args: [
+            ...baseArguments,
+            "--format",
+            "json",
+            "--json-strict",
+            "codex",
+            "-s",
+            sessionName,
+            "--file",
+            "-",
+          ],
+          cwd: props.repoRoot,
+          stdin: turnPrompt,
+          environment,
+          ...(request.signal === undefined ? {} : { signal: request.signal }),
+        });
+        turnTexts.push(extractAcpxAssistantText(promptResult.stdout));
+        rawEventChunks.push(promptResult.stdout);
+        stderrChunks.push(promptResult.stderr);
+      }
 
+      const finalText = turnTexts.at(-1);
+      if (finalText === undefined) {
+        throw new Error("ACPX Codex run produced no turns.");
+      }
       return {
-        finalText: extractAcpxAssistantText(promptResult.stdout),
-        rawEvents: promptResult.stdout,
-        stderr: promptResult.stderr,
+        finalText,
+        turnTexts,
+        rawEvents: rawEventChunks.join("\n"),
+        stderr: stderrChunks.join("\n"),
       };
     } finally {
       await processRunner({

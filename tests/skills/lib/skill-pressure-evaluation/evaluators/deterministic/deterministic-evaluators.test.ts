@@ -20,6 +20,7 @@ const input: SkillPressureInput = {
 const baseOutput: SkillPressureHarnessOutput = {
   backend: "codex",
   renderedPrompt: "prompt",
+  earlierConversationTurns: [],
   finalResult: {
     scenario_id: "test",
     skill_under_test: "shravan-dev-workflow:test-skill",

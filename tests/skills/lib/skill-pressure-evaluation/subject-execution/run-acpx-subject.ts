@@ -9,6 +9,7 @@ import type { SkillPressureInput } from "../scenario-cases/scenario-case-types.j
 export interface RunAcpxPressureCaseProps {
   readonly input: SkillPressureInput;
   readonly renderedPrompt: string;
+  readonly renderedFollowUpPrompts?: readonly string[];
   readonly repoRoot: string;
   readonly runner: AcpxAgentRunner;
   readonly signal?: AbortSignal;
@@ -25,6 +26,8 @@ export interface AcpxPressureRun {
   readonly readOnlyRequested: boolean;
   readonly durationMs: number;
   readonly finalText: string;
+  /** Assistant text per turn, in conversation order; last entry equals finalText. */
+  readonly turnTexts: readonly string[];
 }
 
 export async function runAcpxPressureCase(
@@ -39,11 +42,23 @@ export async function runAcpxPressureCase(
   const finalJsonPath = join(artifactDirectory, "final.json");
   const stderrPath = join(artifactDirectory, "stderr.txt");
   writeFileSync(promptPath, props.renderedPrompt);
+  const followUpPrompts = props.renderedFollowUpPrompts ?? [];
+  const followUpPromptPaths = followUpPrompts.map((followUpPrompt, index) => {
+    const followUpPromptPath = join(
+      artifactDirectory,
+      `follow-up-${index + 1}.md`,
+    );
+    writeFileSync(followUpPromptPath, followUpPrompt);
+    return followUpPromptPath;
+  });
 
   const startTime = Date.now();
   const agentResult = await props.runner({
     namePrefix: `pressure-subject-${props.input.scenarioId}`,
     prompt: props.renderedPrompt,
+    ...(followUpPrompts.length === 0
+      ? {}
+      : { followUpPrompts }),
     ...(props.signal === undefined ? {} : { signal: props.signal }),
     setup: props.setup,
   });
@@ -51,6 +66,13 @@ export async function runAcpxPressureCase(
   writeFileSync(eventsPath, agentResult.rawEvents);
   writeFileSync(finalJsonPath, agentResult.finalText);
   writeFileSync(stderrPath, agentResult.stderr);
+  const turnTextPaths = agentResult.turnTexts.slice(0, -1).map(
+    (turnText, index) => {
+      const turnTextPath = join(artifactDirectory, `turn-${index + 1}.json`);
+      writeFileSync(turnTextPath, turnText);
+      return turnTextPath;
+    },
+  );
 
   return {
     artifactDirectory,
@@ -58,10 +80,18 @@ export async function runAcpxPressureCase(
     eventsPath,
     finalJsonPath,
     stderrPath,
-    artifactPaths: [promptPath, finalJsonPath, eventsPath, stderrPath],
+    artifactPaths: [
+      promptPath,
+      ...followUpPromptPaths,
+      ...turnTextPaths,
+      finalJsonPath,
+      eventsPath,
+      stderrPath,
+    ],
     readOnlyRequested: props.setup.permissionMode === "approve-reads",
     durationMs,
     finalText: agentResult.finalText,
+    turnTexts: agentResult.turnTexts,
   };
 }
 

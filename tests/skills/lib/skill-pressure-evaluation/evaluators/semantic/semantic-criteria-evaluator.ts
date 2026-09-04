@@ -14,6 +14,7 @@ import type {
   SkillPressureCaseDefinition,
   SkillPressureEvaluator,
   SkillPressureEvaluatorContext,
+  SubjectConversationTurn,
 } from "../../scenario-cases/scenario-case-types.js";
 import type { SkillPressureResult } from "../../subject-execution/validate-subject-result.js";
 
@@ -34,6 +35,7 @@ interface SemanticJudgeReport {
   readonly validation_errors: string[];
   readonly subject_evidence: {
     readonly scenario_prompt: string;
+    readonly earlier_conversation_turns: SubjectConversationTurn[];
     readonly response: string;
     readonly tool_calls: NormalizedToolCall[];
   };
@@ -65,6 +67,7 @@ export function createSemanticCriteriaEvaluator(
           definition,
           scenarioPrompt: context.input.prompt,
           response: subjectResponse,
+          earlierConversationTurns: context.output.earlierConversationTurns,
           toolCalls: context.output.normalizedToolCalls,
         }),
         responseFormat: { type: "json" },
@@ -82,6 +85,9 @@ export function createSemanticCriteriaEvaluator(
       validation_errors: [...result.validationErrors],
       subject_evidence: {
         scenario_prompt: context.input.prompt,
+        earlier_conversation_turns: [
+          ...context.output.earlierConversationTurns,
+        ],
         response: subjectResponse,
         tool_calls: [...context.output.normalizedToolCalls],
       },
@@ -181,6 +187,7 @@ export function buildSemanticJudgePrompt(props: {
   readonly definition: SkillPressureCaseDefinition;
   readonly scenarioPrompt: string;
   readonly response: string;
+  readonly earlierConversationTurns?: readonly SubjectConversationTurn[];
   readonly toolCalls: readonly NormalizedToolCall[];
 }): string {
   const projectedToolEvidence = props.toolCalls.map((toolCall) => ({
@@ -190,6 +197,28 @@ export function buildSemanticJudgePrompt(props: {
     output_observed: toolCall.output.trim().length > 0,
     exit_code: toolCall.exitCode,
   }));
+  const earlierTurns = props.earlierConversationTurns ?? [];
+  const conversationEvidence =
+    earlierTurns.length === 0
+      ? []
+      : [
+          "",
+          "Earlier conversation evidence (context only; the criteria judge the final subject response below):",
+          JSON.stringify(
+            earlierTurns.map((conversationTurn) => ({
+              operator_message: truncateSemanticEvidence(
+                conversationTurn.operatorMessage,
+                4_000,
+              ),
+              subject_response: truncateSemanticEvidence(
+                conversationTurn.subjectDecision,
+                8_000,
+              ),
+            })),
+            null,
+            2,
+          ),
+        ];
   return [
     `Scenario: ${props.definition.scenarioId}`,
     "Return exactly one result for every criterion. Evaluate only the stated requirement and failure example against the complete evidence packet. The scenario prompt establishes the user's requirements, authority, and boundaries. Do not invent additional requirements, proof gates, or completion conditions. Use inconclusive only when the supplied scenario, response, and tool evidence cannot distinguish pass from fail for that exact criterion.",
@@ -199,8 +228,9 @@ export function buildSemanticJudgePrompt(props: {
     "",
     "Scenario prompt evidence:",
     props.scenarioPrompt.slice(0, 20_000),
+    ...conversationEvidence,
     "",
-    "Subject response evidence:",
+    "Final subject response evidence:",
     props.response.slice(0, 30_000),
     "",
     "Normalized tool evidence:",

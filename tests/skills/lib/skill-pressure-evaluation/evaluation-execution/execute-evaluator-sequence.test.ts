@@ -14,6 +14,7 @@ const context = createEvaluatorTestContext({
   output: {
     backend: "fake",
     renderedPrompt: "rendered prompt",
+    earlierConversationTurns: [],
     finalResult: {
       scenario_id: "sequence-case",
       skill_under_test: "shravan-dev-workflow:program-design",
