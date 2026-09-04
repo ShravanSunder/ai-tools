@@ -2,10 +2,13 @@
 
 Agent token: `codex`. Use this provider when the host is not Codex native, or when you need an ACPX-persistent Codex session across a non-Codex host. Prefer native Codex subagents when you are already on Codex and only need GPT-native models; see `references/native-providers-codex.md`.
 
+> OpenAI Astra is not available yet. Do not dispatch it.
+
 ## Models
 
 | Model id             |
 | -------------------- |
+| `gpt-6-astra`        |
 | `gpt-5.6-sol`        |
 | `gpt-5.6-luna`       |
 
@@ -13,7 +16,7 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Sol low/medium → Balanced; Sol high/xhigh/max → Frontier; Luna → Mini).
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Astra → Frontier; Sol low/medium → Balanced; Luna → Mini).
 
 ## Sessions And Identity
 

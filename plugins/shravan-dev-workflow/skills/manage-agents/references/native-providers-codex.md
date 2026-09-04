@@ -8,9 +8,8 @@ Owns Codex native v2 `spawn_agent` model, effort, and conversation-history value
 | -------------------- | ----------------- |
 | `gpt-5.6-sol`        |                   |
 | `gpt-5.6-luna`       |                   |
-| `gpt-5.6-terra`      | user request only |
 
-Lib ids: `openai.gpt-5.6-{sol,luna,terra}`. Prefer short form unless the host requires `openai.`. Terra has no pattern-table category; dispatch it only when the user names it.
+Lib ids: `openai.gpt-5.6-{sol,luna}`. Prefer short form unless the host requires `openai.`.
 
 ## Effort
 

@@ -6,7 +6,9 @@ Agent token: `cursor`. Default adapter command: `cursor-agent acp`. If your inst
 { "agents": { "cursor": { "command": "agent acp" } } }
 ```
 
-Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single model lineage. Use it for Grok 4.5, Composer 2.5, or any other id the adapter advertises. Model lineage is chosen separately; only claim a lineage when this provider advertises an exact id.
+Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single model lineage. Use it for Grok 4.6 or any other id the adapter advertises. Model lineage is chosen separately; only claim a lineage when this provider advertises an exact id.
+
+> OpenAI Astra is not available yet. Do not dispatch it.
 
 ## Models
 
@@ -14,17 +16,19 @@ Pass the exact advertised ACP id from `session/new` / `configOptions.model` with
 
 Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
 
-| Model id                          | Note              |
-| --------------------------------- | ----------------- |
-| `grok-4.5[effort=high,fast=true]` |                   |
-| `composer-2.5[fast=true]`         |                   |
-| `claude-fable-5[1m]`              | user request only |
-| `claude-opus-5`                   | user request only |
-| `gpt-5.6-sol`                     | user request only |
-| `gpt-5.6-luna`                    | user request only |
-| `gpt-5.6-terra`                   | user request only |
+| Model id                           |
+| ---------------------------------- |
+| `grok-4.6[effort=high,fast=false]` |
+| `grok-4.6[effort=high,fast=true]`  |
+| `gpt-5.6-luna`                     |
+| `claude-fable-5-1`                 |
+| `claude-opus-5`                    |
+| `gpt-5.6-sol`                      |
 
-Treat the short names from `agent --list-models` (`composer-2.5`, `composer-2.5-fast`, `cursor-grok-4.5-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
+- Prefer `grok-4.6[effort=high,fast=false]` and `gpt-5.6-luna`.
+- Fable only on request.
+
+Treat the short names from `agent --list-models` (`cursor-grok-4.6-high`, `cursor-grok-4.6-medium`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
 When usage limits remove a model, use an equivalent declared fallback or report degraded/blocked. Record config-defined command overrides because the resolved command participates in session identity.
 
@@ -41,13 +45,7 @@ Cursor ACP advertises session modes. Use `acpx cursor set-mode <mode> -s <name>`
 ## Sessions And Identity
 
 ```bash
-acpx --cwd /absolute/repo --model 'composer-2.5[fast=true]' --approve-reads --no-terminal \
-  --non-interactive-permissions fail cursor sessions ensure --name operator
-acpx --cwd /absolute/repo --approve-reads --no-terminal \
-  --non-interactive-permissions fail cursor -s operator \
-  --file tmp/operator-packet.md
-
-acpx --cwd /absolute/repo --model 'grok-4.5[effort=high,fast=true]' --approve-reads --no-terminal \
+acpx --cwd /absolute/repo --model 'grok-4.6[effort=high,fast=false]' --approve-reads --no-terminal \
   --non-interactive-permissions fail cursor sessions ensure --name sidekick
 acpx cursor set-mode plan -s sidekick
 ```
