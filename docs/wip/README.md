@@ -8,6 +8,7 @@ Agent guidance for working in this folder lives in `AGENTS.md`.
 
 ## Skill Improvement Trackers
 
+- [skill-log/README.md](skill-log/README.md): brief recurring-failure intake and index.
 - `skills-investigation/session-failure-intake.md`: sessions that went wrong or
   exposed skill failures.
 - `skills-authoring/inspiration-review.md`: skill-authoring references and
