@@ -20,11 +20,15 @@ STOP_REVIEW_MODEL="${CODEX_STOP_REVIEW_MODEL:-${STOP_REVIEW_MODEL_DEFAULT}}"
 STOP_REVIEW_REASONING_EFFORT="${CODEX_STOP_REVIEW_REASONING_EFFORT:-${STOP_REVIEW_REASONING_EFFORT_DEFAULT}}"
 STOP_REVIEW_REASONING_SUMMARY="${CODEX_STOP_REVIEW_REASONING_SUMMARY:-${STOP_REVIEW_REASONING_SUMMARY_DEFAULT}}"
 STOP_REVIEW_SERVICE_TIER="${CODEX_STOP_REVIEW_SERVICE_TIER:-${STOP_REVIEW_SERVICE_TIER_DEFAULT}}"
+MAX_CONTINUES="${CODEX_STOP_REVIEW_MAX_CONTINUES:-${STOP_REVIEW_MAX_CONTINUES_DEFAULT}}"
 case "${STOP_REVIEW_SERVICE_TIER}" in
   default | off | "")
     STOP_REVIEW_SERVICE_TIER=""
     ;;
 esac
+if ! [[ "${MAX_CONTINUES}" =~ ^[1-9][0-9]*$ ]]; then
+  MAX_CONTINUES="${STOP_REVIEW_MAX_CONTINUES_DEFAULT}"
+fi
 
 extract_json_field() {
   local jq_expression="$1"
@@ -64,7 +68,7 @@ wrap_continue_reason() {
   local luna_reason="$1"
 
   printf '%s\n%s' \
-    "From Stop-review classifier agent:" \
+    "Stop-review classifier:" \
     "${luna_reason}"
 }
 
@@ -196,13 +200,7 @@ if [[ "${CODEX_REVIEWER:-}" == "1" ]]; then
   emit_allow
 fi
 
-if [[ "${stop_hook_active}" == "true" ]]; then
-  save_state "${BLOCK_COUNT}" "stop_hook_active" "${message_hash}"
-  log_message "turn_id=${turn_id} session_id=${session_id} stop_hook_active=true classification=stop_hook_active block_count=${BLOCK_COUNT} outcome=allow"
-  emit_allow
-fi
-
-if [[ "${BLOCK_COUNT}" -ge 3 ]]; then
+if [[ "${BLOCK_COUNT}" -ge "${MAX_CONTINUES}" ]]; then
   warning_message="Stop review hook hit the per-turn safety cap; allowing stop to avoid a continuation loop."
   save_state "${BLOCK_COUNT}" "safety_cap" "${message_hash}"
   log_message "turn_id=${turn_id} session_id=${session_id} stop_hook_active=${stop_hook_active} classification=safety_cap block_count=${BLOCK_COUNT} outcome=allow_safety_cap previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH}"
@@ -239,12 +237,17 @@ PROMPT_FILE="${WORK_DIR}/prompt.txt"
 OUT_FILE="${WORK_DIR}/luna-last.txt"
 {
   cat "${CLASSIFIER_PROMPT_FILE}"
+  if [[ "${stop_hook_active}" == "true" ]]; then
+    printf '\n\nNested stop: true\n'
+    printf 'Previous continues this turn: %s\n' "${BLOCK_COUNT}"
+    printf 'Max continues this turn: %s\n' "${MAX_CONTINUES}"
+  fi
   printf '\n\nConversation window:\n\n'
   printf '%s\n' "${WINDOW_TEXT}"
 } >"${PROMPT_FILE}"
 
 set +e
-log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS}"
+log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
 bash "${REVIEW_RUNNER}" \
   --prompt-file "${PROMPT_FILE}" \
   --output "${OUT_FILE}" \
@@ -299,7 +302,7 @@ fi
 next_block_count=$((BLOCK_COUNT + 1))
 save_state "${next_block_count}" "luna_continue_work" "${message_hash}"
 
-if [[ "${next_block_count}" -ge 3 ]]; then
+if [[ "${next_block_count}" -ge "${MAX_CONTINUES}" ]]; then
   warning_message="Stop review hook hit the per-turn safety cap after continue_work; allowing stop to avoid a continuation loop."
   log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_continue_work block_count=${next_block_count} outcome=allow_safety_cap previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH} cot=${COT}"
   emit_allow "${warning_message}"

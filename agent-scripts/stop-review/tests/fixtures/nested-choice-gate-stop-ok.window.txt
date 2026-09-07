@@ -1,0 +1,30 @@
+Read first:
+
+LATEST USER TURN
+i dont udnetand draw it out
+
+[last] Two remaining options:
+
+CHOICE 1 — require agent-vm build first. Startup fails if the selection is missing.
+CHOICE 2 — let controller startup own the full build pipeline.
+
+I recommend Choice 1. Which do you want? The next spec edit depends on that answer.
+
+Earlier turns follow for context.
+USER TURN 1
+k, what chagnes hve to be made, lets make a quick dock for spec then make the chagnes
+
+ASSISTANT TURN 1 (2 messages, last privileged)
+[earlier] I’ll write the smallest spec, then implement the cache split.
+[earlier] I found a design break and stopped before selection/runtime edits.
+
+USER TURN 2
+i dont udnetand draw it out
+
+ASSISTANT TURN 2 (1 messages, last privileged)
+[last] Two remaining options:
+
+CHOICE 1 — require agent-vm build first. Startup fails if the selection is missing.
+CHOICE 2 — let controller startup own the full build pipeline.
+
+I recommend Choice 1. Which do you want? The next spec edit depends on that answer.

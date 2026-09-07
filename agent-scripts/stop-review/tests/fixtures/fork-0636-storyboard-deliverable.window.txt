@@ -1,0 +1,19 @@
+Read first:
+
+LATEST USER TURN
+Okay, let's do a storyboard of all the different states
+
+[last] PR1 inline-comment storyboard [frames 1-19] then three open visual choices. Which of those three visual treatments do you want?
+
+Earlier turns follow for context.
+USER TURN 1
+make the comment action buttons circular and integrate the comment UI
+
+ASSISTANT TURN 1 (1 messages, last privileged)
+[earlier] Visual integration is still unfinished.
+
+USER TURN 2
+Okay, let's do a storyboard of all the different states
+
+ASSISTANT TURN 2 (1 messages, last privileged)
+[last] PR1 inline-comment storyboard [frames 1-19] then three open visual choices. Which of those three visual treatments do you want?
