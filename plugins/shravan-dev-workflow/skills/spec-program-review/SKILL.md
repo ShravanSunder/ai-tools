@@ -88,8 +88,10 @@ risk predicates
 claimed proof evidence or gaps
 review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
-bounded design-review status: no prior review | explicit user permission for another review
+bounded design-review status: no prior review | explicit user permission for another review | one orchestrator-authorized recovery request
 ```
+
+An orchestrator-authorized recovery request is admissible only when the orchestrator inspected the current target and governing sources, recorded which prior review evidence is unavailable and why a repeat is necessary, and established that no recovery review was already consumed. Preserve unknown review history as unknown; do not report it as `no prior review` or a zero allowance. The original review having run does not block this one read-only recovery review. Recovery does not restore or infer a correction round, replace explicit user permission when the prior result is available, or authorize another recovery. A known previous recovery, stale or wrong current-source evidence, or missing recorded reason returns `review-permission-required`. If recovery finds issues and the normal correction round is already used or cannot be established as available, report the findings and ask before corrections. Any material design change or newly exposed owner decision still returns to its owner.
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `three-artifact-design` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
 
@@ -99,9 +101,9 @@ A combined `Requirements/spec`, a Requirements-titled artifact that also stands 
 
 `program-only` also requires the governing Specification. `three-artifact-design` requires the current Requirements, Specification, and Program Design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `three-artifact-design`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
 
-Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous.
+Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous; any recovery request is explicitly admitted or rejected with its reason.
 
-If the packet shows that one design review already ran in this bounded design run and contains no explicit user permission granted afterward, return `blocked` with `review-permission-required` before dispatch. Switching modes, lanes, target labels, or caller skills does not reset this boundary.
+If the packet shows that one design review already ran in this bounded design run and contains neither explicit user permission granted afterward nor an admissible orchestrator-authorized recovery request, return `blocked` with `review-permission-required` before dispatch. Switching modes, lanes, target labels, caller skills, or an unknown history does not reset this boundary.
 
 ## 4. Select the Mode
 
@@ -240,7 +242,8 @@ Do not return `ready` while any of these hold:
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - three-artifact-design mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
-- a second design review invocation began without explicit user permission granted after the first review/remediation result;
+- a second design review invocation began without explicit user permission granted after the first review/remediation result or the one admissible orchestrator-authorized recovery request for unavailable prior evidence;
+- a recovery review began after a previous recovery, from stale or wrong-source inspection, without the missing-evidence reason, or by fabricating unknown review history as zero; or recovery findings were corrected without a known available correction round or explicit user authority;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
 - the result recommends no next skill, more than one next skill, or a route selected from an unreduced reviewer candidate when a validated continuation exists;
 - a continuation omits the current boundary status or makes the destination choose among correction alternatives instead of carrying one smallest verified correction;

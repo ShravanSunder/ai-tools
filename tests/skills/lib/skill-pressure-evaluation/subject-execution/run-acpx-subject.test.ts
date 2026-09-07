@@ -6,6 +6,7 @@ import type { AcpxAgentRunRequest } from "../agent-execution/acpx-codex-agent-ru
 import type { AcpxCodexAgentSetup } from "../runtime-configuration/skill-pressure-runtime-configuration.js";
 import { parseScenarioMarkdown } from "../scenario-cases/parse-scenario-fixture.js";
 import { runAcpxPressureCase } from "./run-acpx-subject.js";
+import { validateAcpxTurnResults } from "./create-skill-pressure-subject-harness.js";
 
 const scenario = parseScenarioMarkdown({
   filePath: "/repo/tests/skills/pressure-scenarios/backend.md",
@@ -31,6 +32,31 @@ const subjectSetup = {
 } satisfies AcpxCodexAgentSetup;
 
 describe("runAcpxPressureCase", () => {
+  test("strictly rejects an invalid earlier final message from the same request", () => {
+    const validLastResponse = JSON.stringify({
+      scenario_id: "backend",
+      skill_under_test: "shravan-dev-workflow:test-skill",
+      skill_invoked: true,
+      mode: "fast",
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      decision: "Valid latest response.",
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    });
+
+    expect(() =>
+      validateAcpxTurnResults({
+        turnTexts: [validLastResponse],
+        turnMessageTexts: [['{"scenario_id":"backend"', validLastResponse]],
+      }),
+    ).toThrow("request 1 response 1");
+  });
+
   test("executes the scenario once through the injected ACPX runner", async () => {
     const repoRoot = mkdtempSync(join(tmpdir(), "skill-pressure-repo-"));
     const requests: AcpxAgentRunRequest[] = [];
@@ -89,6 +115,13 @@ describe("runAcpxPressureCase", () => {
             '{"scenario_id":"backend","turn":1}',
             '{"scenario_id":"backend","turn":2}',
           ],
+          turnMessageTexts: [
+            [
+              '{"scenario_id":"backend","turn":1,"part":1}',
+              '{"scenario_id":"backend","turn":1}',
+            ],
+            ['{"scenario_id":"backend","turn":2}'],
+          ],
           rawEvents: '{"method":"session/update"}\n',
           stderr: "",
         };
@@ -106,6 +139,13 @@ describe("runAcpxPressureCase", () => {
     expect(result.turnTexts).toEqual([
       '{"scenario_id":"backend","turn":1}',
       '{"scenario_id":"backend","turn":2}',
+    ]);
+    expect(result.turnMessageTexts).toEqual([
+      [
+        '{"scenario_id":"backend","turn":1,"part":1}',
+        '{"scenario_id":"backend","turn":1}',
+      ],
+      ['{"scenario_id":"backend","turn":2}'],
     ]);
     expect(readFileSync(result.finalJsonPath, "utf8")).toBe(
       '{"scenario_id":"backend","turn":2}',

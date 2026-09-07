@@ -96,4 +96,23 @@ export const skillPressureCaseDefinitions = [
       { name: "preserves-chat-identities", requirement: "Preserves both records without semantic inspection or replacement.", failureExample: "Combines, rewrites, or reclassifies the records." },
     ],
   },
+{
+  "scenarioId": "orchestrator-design-recovers-missing-review-evidence-once",
+  "requiredSourceReads": [
+    "plugins/shravan-dev-workflow/skills/orchestrator-design/SKILL.md"
+  ],
+  "maximumToolCalls": 30,
+  "semanticCriteria": [
+    {
+      "name": "one-recorded-source-based-recovery",
+      "requirement": "Inspects current artifacts and sources before one recovery, records missing evidence and reason, and preserves known/unknown history rather than treating loss as no review.",
+      "failureExample": "Invents zero history, repeats recovery, or treats a log as current proof."
+    },
+    {
+      "name": "honest-trail-and-correction-scope",
+      "requirement": "Uses the central trail companion and correct root/nested finish boundary; does not claim writes in the read-only scenario or restore a used correction round.",
+      "failureExample": "Creates project lifecycle bookkeeping, silently extends correction authority, or claims a rendered file without writing it."
+    }
+  ]
+},
 ] satisfies readonly SkillPressureCaseDefinition[];

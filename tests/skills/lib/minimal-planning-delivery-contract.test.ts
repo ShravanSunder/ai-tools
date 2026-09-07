@@ -94,21 +94,21 @@ describe("goal delivery intent hard cutover", () => {
   });
 
   test("goal orchestration continues one owner at a time to PR-ready without merge", () => {
-    const orchestrator = readPluginFile("skills/orchestrator-goal/SKILL.md");
+    const orchestrator = readPluginFile("skills/orchestrator-implementation-goal/SKILL.md");
     const routing = readPluginFile(
-      "skills/orchestrator-goal/references/goal-contract-and-routing.md",
+      "skills/orchestrator-implementation-goal/references/goal-contract-and-routing.md",
     );
-    const readme = readPluginFile("skills/orchestrator-goal/README.md");
+    const readme = readPluginFile("skills/orchestrator-implementation-goal/README.md");
 
     expect(orchestrator).toContain("default to `pr-ready-unmerged`");
-    expect(orchestrator).toContain("invokes one owner at a time");
-    expect(orchestrator).toContain("continue immediately");
-    expect(orchestrator).toContain("Do not request approval of planner-owned detail");
-    expect(orchestrator).toContain("Default terminal is PR-ready and unmerged");
-    expect(orchestrator).toContain("merge remains separate authority");
-    expect(routing).toContain("## Invoke One Owner At A Time");
-    expect(routing).toContain("repeat until the requested terminal or a real stop");
-    expect(readme).toContain("ready delivery plan continues without a generic approval stop");
+    expect(orchestrator).toContain("owned delivery loop");
+    expect(orchestrator).toContain("continues immediately");
+    expect(orchestrator).toContain("ready delivery plan continues immediately");
+    expect(orchestrator).toContain("Stop at PR-ready and unmerged by default");
+    expect(orchestrator).toContain("Merge is a separately authorized extension");
+    expect(routing).toContain("## Select the Current Owner");
+    expect(routing).toContain("then verify its result and continue the same goal");
+    expect(orchestrator).toContain("A milestone, completed slice, or phase return is a checkpoint");
     expect(readme).not.toContain("Plan awaits approval");
   });
 
@@ -130,7 +130,8 @@ describe("goal delivery intent hard cutover", () => {
       "closes without dispatching another reviewer",
     );
     expect(designReview).toContain("A second design review requires explicit user permission");
-    expect(designOrchestrator).toContain("Do not dispatch a second design reviewer after remediation");
+    expect(designOrchestrator).toContain("normal bounded cycle permits one independent design review");
+    expect(designOrchestrator).toContain("it is not another independent review and does not dispatch one");
     expect(implementationReview).toContain(
       "bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times",
     );
@@ -145,7 +146,7 @@ describe("goal delivery intent hard cutover", () => {
   test("uses distinct durable, project-temporary, and OS-temporary artifact homes", () => {
     const planner = readPluginFile("skills/plan-implementation/SKILL.md");
     const designOrchestrator = readPluginFile("skills/orchestrator-design/SKILL.md");
-    const goalOrchestrator = readPluginFile("skills/orchestrator-goal/SKILL.md");
+    const goalOrchestrator = readPluginFile("skills/orchestrator-implementation-goal/SKILL.md");
     const specDesign = readPluginFile("skills/spec-design/SKILL.md");
     const programDesign = readPluginFile("skills/program-design/SKILL.md");
 
@@ -154,8 +155,8 @@ describe("goal delivery intent hard cutover", () => {
       "`<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md`",
     );
     expect(designOrchestrator).toContain("<project-root>/docs/specs/");
-    expect(designOrchestrator).toContain("<os-temp>/shravan-dev-workflow/orchestrator-design/");
-    expect(goalOrchestrator).toContain("Optional scratch lives only under host OS temp");
+    expect(designOrchestrator).toContain("central trail");
+    expect(goalOrchestrator).toContain("track-show-me-your-work");
     expect(specDesign).toContain("artifact-home policy");
     expect(programDesign).toContain("artifact-home policy");
     expect(
@@ -170,8 +171,8 @@ describe("goal delivery intent hard cutover", () => {
 
   test("ships pressure scenarios for the new boundaries", () => {
     const scenarioPaths = [
-      "orchestrator-goal/continue-ready-plan-without-approval.md",
-      "orchestrator-goal/respect-narrow-terminal.md",
+      "orchestrator-implementation-goal/continue-ready-plan-without-approval.md",
+      "orchestrator-implementation-goal/respect-narrow-terminal.md",
       "plan-implementation/direct-planning-establishes-intent.md",
       "plan-implementation/orchestrated-plan-uses-project-tmp.md",
       "orchestrator-design/stops-before-second-review.md",

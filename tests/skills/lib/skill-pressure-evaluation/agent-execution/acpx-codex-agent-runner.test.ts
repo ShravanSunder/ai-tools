@@ -2,10 +2,12 @@ import { describe, expect, test } from "vitest";
 import {
   buildAcpxBaseArguments,
   createAcpxCodexAgentRunner,
+  extractAcpxAssistantMessages,
   extractAcpxAssistantText,
   type AcpxProcessRequest,
 } from "./acpx-codex-agent-runner.js";
 import type { AcpxCodexAgentSetup } from "../runtime-configuration/skill-pressure-runtime-configuration.js";
+import { parseExactAgentJsonResponse } from "./parse-agent-json-response.js";
 
 const subjectSetup = {
   model: "gpt-5.6-luna",
@@ -70,9 +72,100 @@ describe("extractAcpxAssistantText", () => {
 
     expect(extractAcpxAssistantText(rawEvents)).toBe('{"ok":true}');
   });
+
+  test("joins chunks from the last observed message id only", () => {
+    const rawEvents = [
+      createAgentMessageChunkEvent("first", '{"ok":false}'),
+      createAgentMessageChunkEvent("last", '{"ok":true}'),
+    ].join("\n");
+
+    expect(extractAcpxAssistantText(rawEvents)).toBe('{"ok":true}');
+    expect(extractAcpxAssistantMessages(rawEvents)).toEqual([
+      '{"ok":false}',
+      '{"ok":true}',
+    ]);
+  });
+
+  test("selects the message id that started last when chunks interleave", () => {
+    const rawEvents = [
+      createAgentMessageChunkEvent("first", "first-"),
+      createAgentMessageChunkEvent("last", "last-"),
+      createAgentMessageChunkEvent("first", "message"),
+      createAgentMessageChunkEvent("last", "message"),
+    ].join("\n");
+
+    expect(extractAcpxAssistantText(rawEvents)).toBe("last-message");
+  });
+
+  test("leaves malformed last message content for strict JSON rejection", () => {
+    const rawEvents = [
+      createAgentMessageChunkEvent("first", '{"ok":true}'),
+      createAgentMessageChunkEvent("last", '{"ok":false'),
+    ].join("\n");
+
+    expect(() =>
+      parseExactAgentJsonResponse(extractAcpxAssistantText(rawEvents)),
+    ).toThrow("Agent response must contain only JSON.");
+  });
 });
 
+function createAgentMessageChunkEvent(
+  messageId: string,
+  text: string,
+): string {
+  return JSON.stringify({
+    method: "session/update",
+    params: {
+      update: {
+        sessionUpdate: "agent_message_chunk",
+        messageId,
+        content: { type: "text", text },
+        _meta: { codex: { phase: "final_answer" } },
+      },
+    },
+  });
+}
+
 describe("createAcpxCodexAgentRunner", () => {
+  test("associates all final messages with their explicit request", async () => {
+    const runner = createAcpxCodexAgentRunner({
+      repoRoot: "/repo",
+      adapterConfiguration: {},
+      processRunner: async (request) => {
+        if (request.stdin === "initial prompt") {
+          return {
+            stdout: [
+              createAgentMessageChunkEvent("initial-first", '{"part":1}'),
+              createAgentMessageChunkEvent("initial-last", '{"part":2}'),
+            ].join("\n"),
+            stderr: "",
+          };
+        }
+        if (request.stdin === "explicit follow-up") {
+          return {
+            stdout: createAgentMessageChunkEvent("follow-up", '{"part":3}'),
+            stderr: "",
+          };
+        }
+        return { stdout: "", stderr: "" };
+      },
+    });
+
+    const result = await runner({
+      namePrefix: "subject",
+      prompt: "initial prompt",
+      followUpPrompts: ["explicit follow-up"],
+      setup: subjectSetup,
+    });
+
+    expect(result.turnMessageTexts).toEqual([
+      ['{"part":1}', '{"part":2}'],
+      ['{"part":3}'],
+    ]);
+    expect(result.turnTexts).toEqual(['{"part":2}', '{"part":3}']);
+    expect(result.finalText).toBe('{"part":3}');
+  });
+
   test("creates a fresh configured ACPX session and closes it", async () => {
     const requests: AcpxProcessRequest[] = [];
     const controller = new AbortController();

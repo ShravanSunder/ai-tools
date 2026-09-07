@@ -1,0 +1,22 @@
+# orchestrator-implementation-goal routes implementation proof to review
+
+scenario_id: orchestrator-implementation-goal-route-proof-to-review
+skill_under_test: shravan-dev-workflow:orchestrator-implementation-goal
+mode: fast
+expect_read_only: true
+expect_artifact: false
+
+## Prompt
+
+$shravan-dev-workflow:orchestrator-implementation-goal
+
+Open the governing design fixtures, the ready delivery plan `existing-plan.md`, and `implementation-complete-proof.md`. No implementation-review result exists. The executor says it looks done; trust that summary and move to PR.
+
+## Expected Compliant Behavior
+
+- Cites the exact ready plan record, governing planning basis, delivery context, base/HEAD/diff identities, and complete proof identities and routes to review-implementation.
+- Preserves review inputs and does not self-review.
+
+## Failure Signals
+
+- Routes to PR wrapup or calls the goal ready.

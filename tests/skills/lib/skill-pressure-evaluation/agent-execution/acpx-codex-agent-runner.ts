@@ -19,6 +19,8 @@ export interface AcpxAgentRunResult {
   readonly finalText: string;
   /** Assistant text per turn, in conversation order. */
   readonly turnTexts: readonly string[];
+  /** Logical final messages grouped by explicit request, when available. */
+  readonly turnMessageTexts?: readonly (readonly string[])[];
   readonly rawEvents: string;
   readonly stderr: string;
 }
@@ -97,6 +99,7 @@ export function createAcpxCodexAgentRunner(
       });
       const turnPrompts = [request.prompt, ...(request.followUpPrompts ?? [])];
       const turnTexts: string[] = [];
+      const turnMessageTexts: Array<readonly string[]> = [];
       const rawEventChunks: string[] = [];
       const stderrChunks: string[] = [];
       for (const turnPrompt of turnPrompts) {
@@ -117,7 +120,15 @@ export function createAcpxCodexAgentRunner(
           environment,
           ...(request.signal === undefined ? {} : { signal: request.signal }),
         });
-        turnTexts.push(extractAcpxAssistantText(promptResult.stdout));
+        const responseMessages = extractAcpxAssistantMessages(
+          promptResult.stdout,
+        );
+        const turnText = responseMessages.at(-1);
+        if (turnText === undefined || !turnText) {
+          throw new Error("ACPX Codex run returned no assistant response.");
+        }
+        turnTexts.push(turnText);
+        turnMessageTexts.push(responseMessages);
         rawEventChunks.push(promptResult.stdout);
         stderrChunks.push(promptResult.stderr);
       }
@@ -129,6 +140,7 @@ export function createAcpxCodexAgentRunner(
       return {
         finalText,
         turnTexts,
+        turnMessageTexts,
         rawEvents: rawEventChunks.join("\n"),
         stderr: stderrChunks.join("\n"),
       };
@@ -199,7 +211,18 @@ export function buildAcpxBaseArguments(props: {
 }
 
 export function extractAcpxAssistantText(rawEvents: string): string {
-  const textChunks: string[] = [];
+  const finalText = extractAcpxAssistantMessages(rawEvents).at(-1);
+  if (finalText === undefined || !finalText) {
+    throw new Error("ACPX Codex run returned no assistant response.");
+  }
+  return finalText;
+}
+
+export function extractAcpxAssistantMessages(
+  rawEvents: string,
+): readonly string[] {
+  const legacyTextChunks: string[] = [];
+  const textChunksByMessageId = new Map<string, string[]>();
   for (const line of rawEvents.split(/\r?\n/)) {
     const event = parseJsonRecord(line);
     const params = readRecord(event?.["params"]);
@@ -214,15 +237,30 @@ export function extractAcpxAssistantText(rawEvents: string): string {
       content?.["type"] === "text" &&
       typeof content["text"] === "string"
     ) {
-      textChunks.push(content["text"]);
+      const messageId = update["messageId"];
+      if (typeof messageId === "string" && messageId.length > 0) {
+        const messageChunks = textChunksByMessageId.get(messageId);
+        if (messageChunks === undefined) {
+          textChunksByMessageId.set(messageId, [content["text"]]);
+        } else {
+          messageChunks.push(content["text"]);
+        }
+      } else {
+        legacyTextChunks.push(content["text"]);
+      }
     }
   }
 
-  const finalText = textChunks.join("").trim();
-  if (!finalText) {
+  const finalMessages =
+    textChunksByMessageId.size === 0
+      ? [legacyTextChunks.join("").trim()]
+      : [...textChunksByMessageId.values()].map((chunks) =>
+          chunks.join("").trim(),
+        );
+  if (finalMessages.length === 0 || !finalMessages.at(-1)) {
     throw new Error("ACPX Codex run returned no assistant response.");
   }
-  return finalText;
+  return finalMessages;
 }
 
 async function runAcpxProcess(

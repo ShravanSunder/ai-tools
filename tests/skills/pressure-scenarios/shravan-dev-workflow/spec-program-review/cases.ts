@@ -237,4 +237,23 @@ export const skillPressureCaseDefinitions = [
       { name: "does-not-rereview", requirement: "Uses original independent findings plus parent verification as current closure and dispatches no second review.", failureExample: "Applies generic semantic-freshness language to automatically rereview the accepted remediation." },
     ],
   },
+{
+  "scenarioId": "spec-program-review-admit-one-recorded-recovery-review",
+  "requiredSourceReads": [
+    "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md"
+  ],
+  "maximumToolCalls": 30,
+  "semanticCriteria": [
+    {
+      "name": "admit-recovery-without-reset",
+      "requirement": "Admits one explicit orchestrator-authorized read-only recovery when prior review result is unavailable and current sources/reason were inspected; known original review use does not by itself block recovery. Unknown remains unknown.",
+      "failureExample": "Rejects solely because the original review ran, or fabricates zero history."
+    },
+    {
+      "name": "preserve-correction-and-recovery-limits",
+      "requirement": "Rejects repeated recovery, stale/wrong source or missing reason; recovery grants no extra correction round, and used or unknown correction capacity requires user permission before fixes.",
+      "failureExample": "Resets the normal allowance, permits repeated recovery, or silently authorizes corrections."
+    }
+  ]
+},
 ] satisfies readonly SkillPressureCaseDefinition[];

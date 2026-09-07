@@ -21,6 +21,7 @@ import {
 import {
   buildSemanticJudgePrompt,
   buildSemanticSubjectResponse,
+  buildSemanticSubjectResponseParts,
   createSemanticCriteriaEvaluator,
   evaluateSemanticJudgeResponse,
 } from "./semantic-criteria-evaluator.js";
@@ -89,6 +90,28 @@ describe("Terra judge defaults", () => {
 });
 
 describe("buildSemanticJudgePrompt", () => {
+  test("grades all responses to the final request with the latest response controlling contradictions", () => {
+    const prompt = buildSemanticJudgePrompt({
+      definition,
+      scenarioPrompt: "Review the supplied implementation.",
+      response: '[{"decision":"covered required cases"},{"decision":"I retract required-case coverage"}]',
+      earlierConversationTurns: [
+        {
+          operatorMessage: "Initial request",
+          subjectDecision: "Earlier explicit-request response",
+        },
+      ],
+      toolCalls: [],
+    });
+
+    expect(prompt).toContain("Earlier explicit-request response");
+    expect(prompt).toContain("all logical final responses to the final explicit user request");
+    expect(prompt).toContain("latest response controls when parts contradict");
+    expect(prompt.indexOf("Earlier explicit-request response")).toBeLessThan(
+      prompt.indexOf("covered required cases"),
+    );
+  });
+
   test("presents hidden criteria and bounded evidence", () => {
     const prompt = buildSemanticJudgePrompt({
       definition,
@@ -134,6 +157,134 @@ describe("buildSemanticJudgePrompt", () => {
 });
 
 describe("buildSemanticSubjectResponse", () => {
+  test("keeps same-request response parts ordered and marks the latest", () => {
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    };
+
+    const response = buildSemanticSubjectResponseParts([
+      { ...baseResult, decision: "Covered all required cases." },
+      { ...baseResult, decision: "Correction: one case is still missing." },
+    ]);
+
+    expect(JSON.parse(response)).toEqual([
+      expect.objectContaining({
+        response_part: 1,
+        latest: false,
+        decision: "Covered all required cases.",
+      }),
+      expect.objectContaining({
+        response_part: 2,
+        latest: true,
+        decision: "Correction: one case is still missing.",
+      }),
+    ]);
+  });
+
+  test("preserves ordinary earlier response evidence without premature truncation", () => {
+    const earlierDecision = "named countercase ".repeat(220);
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    };
+
+    const response = buildSemanticSubjectResponseParts([
+      { ...baseResult, decision: earlierDecision },
+      { ...baseResult, decision: "Latest response." },
+    ]);
+
+    expect(JSON.parse(response)[0].decision).toBe(earlierDecision);
+  });
+
+  test("keeps oversized response-part evidence valid and retains the latest correction", () => {
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      coverage_evidence: ["coverage ".repeat(10_000)],
+      shortcut_resisted: true,
+      rationalizations_rejected: ["rationalization ".repeat(10_000)],
+      open_questions: ["question ".repeat(10_000)],
+      next_action: "next action ".repeat(10_000),
+    };
+    const response = buildSemanticSubjectResponseParts([
+      { ...baseResult, decision: "earlier claim ".repeat(10_000) },
+      {
+        ...baseResult,
+        decision: `LATEST CORRECTION: required case remains missing ${'\\"\n'.repeat(10_000)}`,
+      },
+    ]);
+
+    expect(response.length).toBeLessThanOrEqual(30_000);
+    expect(JSON.parse(response)).toEqual([
+      expect.objectContaining({ response_part: 1, latest: false }),
+      expect.objectContaining({
+        response_part: 2,
+        latest: true,
+        decision: expect.stringContaining(
+          "LATEST CORRECTION: required case remains missing",
+        ),
+      }),
+    ]);
+    expect(response).toContain("truncated");
+  });
+
+  test("collapses an extreme older-part count with explicit omission evidence", () => {
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      decision: "response",
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    };
+    const response = buildSemanticSubjectResponseParts(
+      Array.from({ length: 500 }, (_, index) => ({
+        ...baseResult,
+        decision: index === 499 ? "latest retained" : `earlier ${index}`,
+      })),
+    );
+    const parsedResponse: unknown = JSON.parse(response);
+
+    expect(response.length).toBeLessThanOrEqual(30_000);
+    expect(parsedResponse).toEqual([
+      expect.objectContaining({ response_parts_omitted: 499 }),
+      expect.objectContaining({ latest: true, decision: "latest retained" }),
+    ]);
+  });
+
   test("projects every behavior-bearing subject field into bounded judge evidence", () => {
     const response = buildSemanticSubjectResponse({
       scenario_id: "semantic-case",

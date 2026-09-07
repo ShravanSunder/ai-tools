@@ -1,0 +1,1 @@
+Fixture artifact representing an available desktop installer. Not an executable installer.

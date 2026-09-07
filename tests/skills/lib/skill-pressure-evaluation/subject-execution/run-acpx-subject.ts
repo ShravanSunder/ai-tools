@@ -28,6 +28,8 @@ export interface AcpxPressureRun {
   readonly finalText: string;
   /** Assistant text per turn, in conversation order; last entry equals finalText. */
   readonly turnTexts: readonly string[];
+  /** Logical final messages grouped by explicit request, when available. */
+  readonly turnMessageTexts?: readonly (readonly string[])[];
 }
 
 export async function runAcpxPressureCase(
@@ -92,6 +94,9 @@ export async function runAcpxPressureCase(
     durationMs,
     finalText: agentResult.finalText,
     turnTexts: agentResult.turnTexts,
+    ...(agentResult.turnMessageTexts === undefined
+      ? {}
+      : { turnMessageTexts: agentResult.turnMessageTexts }),
   };
 }
 

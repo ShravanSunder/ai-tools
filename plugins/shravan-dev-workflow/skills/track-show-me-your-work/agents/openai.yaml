@@ -1,0 +1,4 @@
+interface:
+  display_name: "Track Show Me Your Work"
+  short_description: "Record decisions and evidence; read the work trail."
+  default_prompt: "Use track-show-me-your-work to keep a concise work trail."

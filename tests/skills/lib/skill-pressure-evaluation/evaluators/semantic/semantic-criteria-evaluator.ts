@@ -42,6 +42,15 @@ interface SemanticJudgeReport {
   readonly suggested_follow_up: string;
 }
 
+interface SemanticSubjectResponseProjection {
+  readonly decision: string;
+  readonly coverage_evidence: string[];
+  readonly shortcut_resisted: boolean;
+  readonly rationalizations_rejected: string[];
+  readonly open_questions: string[];
+  readonly next_action: string;
+}
+
 export function createSemanticCriteriaEvaluator(
   definition: SkillPressureCaseDefinition,
 ): SkillPressureEvaluator {
@@ -52,8 +61,8 @@ export function createSemanticCriteriaEvaluator(
       context.output.artifactDirectory,
       "semantic-judge.json",
     );
-    const subjectResponse = buildSemanticSubjectResponse(
-      context.output.finalResult,
+    const subjectResponse = buildSemanticSubjectResponseParts(
+      context.output.finalResponseParts ?? [context.output.finalResult],
     );
     let result: EvaluatedSemanticResponse;
     try {
@@ -117,30 +126,112 @@ export function createSemanticCriteriaEvaluator(
 export function buildSemanticSubjectResponse(
   result: SkillPressureResult,
 ): string {
-  return JSON.stringify(
-    {
-      decision: truncateSemanticEvidence(result.decision, 8_000),
-      coverage_evidence: projectSemanticEvidenceList(
-        result.coverage_evidence,
-        6,
-        800,
-      ),
-      shortcut_resisted: result.shortcut_resisted,
-      rationalizations_rejected: projectSemanticEvidenceList(
-        result.rationalizations_rejected,
-        6,
-        800,
-      ),
-      open_questions: projectSemanticEvidenceList(
-        result.open_questions,
-        4,
-        800,
-      ),
-      next_action: truncateSemanticEvidence(result.next_action, 4_000),
-    },
+  return JSON.stringify(projectSemanticSubjectResponse(result), null, 2);
+}
+
+export function buildSemanticSubjectResponseParts(
+  results: readonly SkillPressureResult[],
+): string {
+  const fullResponseEvidence = JSON.stringify(
+    results.map((result, responseIndex) => ({
+      response_part: responseIndex + 1,
+      latest: responseIndex === results.length - 1,
+      ...projectSemanticSubjectResponse(result),
+    })),
     null,
     2,
   );
+  if (fullResponseEvidence.length <= 30_000) {
+    return fullResponseEvidence;
+  }
+
+  const earlierResponseCount = Math.max(results.length - 1, 1);
+  const earlierFieldBudget = Math.max(
+    32,
+    Math.floor(2_400 / (earlierResponseCount * 8)),
+  );
+  const projectedResponses = results.map((result, responseIndex) => ({
+    response_part: responseIndex + 1,
+    latest: responseIndex === results.length - 1,
+    ...(responseIndex === results.length - 1
+      ? projectSemanticSubjectResponse(result)
+      : projectSemanticSubjectResponse(result, earlierFieldBudget)),
+  }));
+  const encodedResponses = JSON.stringify(projectedResponses, null, 2);
+  if (encodedResponses.length <= 30_000) {
+    return encodedResponses;
+  }
+
+  const latestResult = results.at(-1);
+  if (latestResult === undefined) {
+    return "[]";
+  }
+  const omissionEvidence = {
+    response_parts_omitted: results.length - 1,
+    latest: false,
+    evidence_omitted:
+      "Earlier response parts omitted to retain the latest response within the semantic evidence budget.",
+  };
+  const collapsedResponseParts = [
+    ...(results.length === 1 ? [] : [omissionEvidence]),
+    {
+      response_part: results.length,
+      latest: true,
+      ...projectSemanticSubjectResponse(latestResult),
+    },
+  ];
+  const collapsedResponseEvidence = JSON.stringify(
+    collapsedResponseParts,
+    null,
+    2,
+  );
+  if (collapsedResponseEvidence.length <= 30_000) {
+    return collapsedResponseEvidence;
+  }
+
+  return JSON.stringify(
+    [
+      ...(results.length === 1 ? [] : [omissionEvidence]),
+      {
+        response_part: results.length,
+        latest: true,
+        ...projectSemanticSubjectResponse(latestResult, 1_500),
+      },
+    ],
+    null,
+    2,
+  );
+}
+
+function projectSemanticSubjectResponse(
+  result: SkillPressureResult,
+  earlierFieldBudget?: number,
+): SemanticSubjectResponseProjection {
+  const decisionBudget = earlierFieldBudget ?? 8_000;
+  const listEntryLimit = earlierFieldBudget === undefined ? 6 : 2;
+  const listEntryBudget = earlierFieldBudget ?? 800;
+  const openQuestionLimit = earlierFieldBudget === undefined ? 4 : 2;
+  const nextActionBudget = earlierFieldBudget ?? 4_000;
+  return {
+    decision: truncateSemanticEvidence(result.decision, decisionBudget),
+    coverage_evidence: projectSemanticEvidenceList(
+      result.coverage_evidence,
+      listEntryLimit,
+      listEntryBudget,
+    ),
+    shortcut_resisted: result.shortcut_resisted,
+    rationalizations_rejected: projectSemanticEvidenceList(
+      result.rationalizations_rejected,
+      listEntryLimit,
+      listEntryBudget,
+    ),
+    open_questions: projectSemanticEvidenceList(
+      result.open_questions,
+      openQuestionLimit,
+      listEntryBudget,
+    ),
+    next_action: truncateSemanticEvidence(result.next_action, nextActionBudget),
+  };
 }
 
 function projectSemanticEvidenceList(
@@ -230,8 +321,8 @@ export function buildSemanticJudgePrompt(props: {
     props.scenarioPrompt.slice(0, 20_000),
     ...conversationEvidence,
     "",
-    "Final subject response evidence:",
-    props.response.slice(0, 30_000),
+    "Final subject response evidence (all logical final responses to the final explicit user request, in chronological order; the latest response controls when parts contradict or explicitly retract an earlier claim):",
+    props.response,
     "",
     "Normalized tool evidence:",
     JSON.stringify(projectedToolEvidence, null, 2),
