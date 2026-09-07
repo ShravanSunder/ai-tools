@@ -53,6 +53,12 @@ class HookInjectedUserTests(unittest.TestCase):
     def test_detects_stop_review_classifier_envelope(self) -> None:
         self.assertTrue(
             is_hook_injected_user_text(
+                "Stop-review classifier:\n"
+                "Continue the named design work; do not implement product code."
+            )
+        )
+        self.assertTrue(
+            is_hook_injected_user_text(
                 "From Stop-review classifier agent:\n"
                 "Continue the named design work; do not implement product code."
             )

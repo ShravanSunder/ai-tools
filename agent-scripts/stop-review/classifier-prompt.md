@@ -35,12 +35,12 @@ EX stop — user: I don't understand, draw the options
 → stop_ok (assistant is asking; next edits depend on the answer)
 
 Output JSON only, in this field order:
-{"cot":"<1-2 sentences>","decision":"continue_work"|"stop_ok","reason":"<one sentence>"}
+{"cot":"<2 sentences>","decision":"continue_work"|"stop_ok","reason":"<1-2 sentences>"}
 
-cot: name the current job and mode; what [last] did; whether a user answer still gates the next work.
-reason:
+cot: exactly 2 sentences. Name the current job and mode; what [last] did; whether a user answer still gates the next work.
+reason: 1-2 sentences.
 - continue_work + design: resume the named design/discussion; do not implement.
 - continue_work + implementation: resume the named implement/fix/prove work.
-- stop_ok: one short justification.
+- stop_ok: one short justification, 1-2 sentences.
 A continue reason must not choose among a pending user decision or order work that depends on one.
 Never order implementation when the current job is design.
