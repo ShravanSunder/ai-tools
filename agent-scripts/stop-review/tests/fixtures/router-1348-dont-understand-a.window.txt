@@ -1,0 +1,114 @@
+Read first:
+
+LATEST USER TURN
+i understand c, seems simple.  do not udnetand a
+
+[last] A is C with the service responsible for sending the final notification.
+
+Imagine you tell an assistant: “Run this check. Let me know when it finishes.” The assistant starts the check and arranges for the service to report its outcome.
+
+```text
+Agent A              Our service              Agent B
+   │                      │                       │
+   │ “Have B check X.     │                       │
+   │  Tell me afterward.” │                       │
+   ├─────────────────────►│                       │
+   │                      │ “Check X.”            │
+   │                      ├──────────────────────►│
+   │                      │                       │
+   │                 Remembers:              B checks X
+   │                 this task → notify A         │
+   │                      │                       │
+   │                      │ B's turn finishes     │
+   │                      │◄──────────────────────┤
+   │                      │                       │
+   │ “B's turn finished.  │                       │
+   │  Here is its result.”│                       │
+   │◄─────────────────────┤                       │
+```
+
+B does not call `message send`. The service observes B’s execution through Codex and sends the notification.
+
+With C, B must explicitly say “I’m done” by sending A a message. With A, the service reports that B’s tracked execution ended—even if it failed.
+
+One limitation: a turn ending does not prove the objective succeeded. The notification must distinguish “execution ended” from “task successfully completed.”
+
+A adds automatic reporting. If explicit replies are all you want initially, C is simpler.
+
+Earlier turns follow for context.
+USER TURN 4
+why do you  keep stopping?
+
+ASSISTANT TURN 4 (1 messages, last privileged)
+[earlier] I kept treating unanswered preferences as a reason to stop all work. They only block the affected contracts. I’m continuing the RPC, error, and persistence details now, with those three choices explicitly marked pending.
+
+USER TURN 5
+for wake ups discard pendign messages, diffrent from schedule can we not assume   ▸ Five-field cron: minute, hour, day, month, weekday.
+  ▸ Require an explicit timezone for cron.
+
+ASSISTANT TURN 5 (1 messages, last privileged)
+[earlier] For wake-ups, pause will discard pending, undispatched messages. Schedule disable still preserves already-created runs. I’ll use five-field cron with an explicit timezone as the design baseline; that doesn’t settle daylight-saving edge cases by itself.
+
+USER TURN 6
+─── 3. Which work can generate completion wake-ups? ───
+
+  Option A — Our tracked runs                        Recommended
+    Start a one-off or scheduled workflow
+         → receive run ID
+         → observe that exact run
+         → send success/failure/timeout to the target
+
+  Option B — Also arbitrary native threads/subagents
+    Attach to existing work outside our workflow system
+         → determine which task/turn is being watched
+         → distinguish task completion from temporary idleness
+         → route the result
+
+  A supports “run an operator and wake me when it finishes” with an exact work identity. B
+  adds broader monitoring and requires more native-protocol evidence and task-correlation
+  rules. i didnt udnetand this
+
+ASSISTANT TURN 6 (1 messages, last privileged)
+[earlier] I mixed two different ways of knowing that work finished. ```text A. Our service starts and tracks the work You → “Run this check and tell thread A when finished.” │ ▼ Service creates run R Starts work on thread B │ ▼ Tracks that specific execution │ ▼ Sends its outcome to thread A ``` Here, the service knows which execution belongs to your request because it started and recorded it. ```text B. Work is already running elsewhere Someone previously started work on thread B. │ You → “Tell thread A when that work finishes.” │ ▼ Service must identify the exact work Then begin tracking it ``` A thread ID alone doesn’t identify the task: that thread may handle several turns or unrelated messages. For B, we need an exact turn/task reference or another reliable completion signal. There’s also a simpler path that works with either: ```text Agent B finishes its task │ └── message send → agent A ``` That relies on B remembering to send the message. Automatic completion notification makes the service responsible even if B fails before replying. My recommendation for this PR: automatic completion wake-ups for work our service starts and tracks. Agents doing other work can still send messages explicitly. Later, we can add “watch this already-running task.”
+
+USER TURN 7
+i need mroe diagrams seqeunce digarsm ukse a seqkukence diagram
+
+ASSISTANT TURN 7 (1 messages, last privileged)
+[earlier] The difference is who starts the work and who takes responsibility for notifying A. ─── A. Our service starts the work and reports its outcome ─── ```text Agent A Our service Codex / thread B │ │ │ │ Start this task. │ │ │ Notify me after. │ │ ├───────────────────►│ │ │ │ Record run R │ │ │ │ │ │ Start task │ │ ├───────────────────────►│ │ │◄───────────────────────┤ │ │ Native turn ID │ │◄───────────────────┤ │ │ Run R created │ │ │ │ │ │ Continue other │ B performs task │ work or go idle │ │ │ │◄───────────────────────┤ │ │ Turn completes/fails │ │ │ │ │ │ Record outcome │ │ │ Save message for A │ │ │ │ │◄───────────────────┤ │ │ “Run R finished. │ │ │ Here’s the result.” │ ``` The last arrow represents delivery through A’s harness. If A is idle, the message starts a turn; if busy, the default is steer. Run R ties together the task, thread B, native execution and notification target. B does not have to remember to notify A. ─── B. Work started elsewhere; we attach a watcher afterward ─── ```text Human / other client Codex / thread B Our service Agent A │ │ │ │ │ Start task │ │ │ ├────────────────────►│ │ │ │ │ │ │ │ B is working │ │ │ │ │◄──────────────┤ │ │ │ Notify me when│ │ │ │ B's task ends │ │ │ │ │ │ │◄───────────────────┤ │ │ │ Identify exact turn│ │ │ ├───────────────────►│ │ │ │ Turn T │ │ │ │ │ │ │ │ │ Record watcher│ │ │ │ for turn T │ │ │ │ │ │ ├───────────────────►│ │ │ │ Turn T finishes │ │ │ │ ├──────────────►│ │ │ │ Result for T │ ``` This needs extra han...
+
+USER TURN 8
+i understand c, seems simple.  do not udnetand a
+
+ASSISTANT TURN 8 (1 messages, last privileged)
+[last] A is C with the service responsible for sending the final notification.
+
+Imagine you tell an assistant: “Run this check. Let me know when it finishes.” The assistant starts the check and arranges for the service to report its outcome.
+
+```text
+Agent A              Our service              Agent B
+   │                      │                       │
+   │ “Have B check X.     │                       │
+   │  Tell me afterward.” │                       │
+   ├─────────────────────►│                       │
+   │                      │ “Check X.”            │
+   │                      ├──────────────────────►│
+   │                      │                       │
+   │                 Remembers:              B checks X
+   │                 this task → notify A         │
+   │                      │                       │
+   │                      │ B's turn finishes     │
+   │                      │◄──────────────────────┤
+   │                      │                       │
+   │ “B's turn finished.  │                       │
+   │  Here is its result.”│                       │
+   │◄─────────────────────┤                       │
+```
+
+B does not call `message send`. The service observes B’s execution through Codex and sends the notification.
+
+With C, B must explicitly say “I’m done” by sending A a message. With A, the service reports that B’s tracked execution ended—even if it failed.
+
+One limitation: a turn ending does not prove the objective succeeded. The notification must distinguish “execution ended” from “task successfully completed.”
+
+A adds automatic reporting. If explicit replies are all you want initially, C is simpler.

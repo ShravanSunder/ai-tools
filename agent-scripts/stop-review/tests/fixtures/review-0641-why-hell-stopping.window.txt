@@ -1,0 +1,57 @@
+Read first:
+
+LATEST USER TURN
+it still doesnt work,s o why the helll are you stoppign? w aht sthe prlbem?  explaint to me?
+
+aaah that amke sense only one tab can open at once?
+
+[last] Yes—for this dev-server instance. Every tab connects to the same fixed pane, which allows one active worker session. Opening another tab invalidates the previous one; that tab can still show old content while requests fail.
+
+Native app panes have separate sessions, so this isn’t a one-tab restriction for the whole app.
+
+Use one tab on port 5173 for now. The stale tab should explain what happened instead of silently looking broken.
+
+Earlier turns follow for context.
+USER TURN 124
+use @Chrome
+
+ASSISTANT TURN 124 (2 messages, last privileged)
+[earlier] Chrome is connected now. After the fresh restart, I can see Review diffs and the changed-file tree. But the comparison menu has no visible branch picker—it shows an unlabeled button. I’m checking that specific failure next; the restart hasn’t fixed everything.
+[earlier] I found a possible source of interference: my inspection tab duplicated your Review tab, and the dev server uses one fixed pane session. I’ve closed my duplicate and switched to your original tab. Review content is visible there now; I’m checking the branch picker in that tab.
+
+USER TURN 125
+ok yo i refreshed no review content is showign so what happened?
+
+check logs
+
+ASSISTANT TURN 125 (2 messages, last privileged)
+[earlier] I’m checking the logs and your current tab now. I won’t refresh or restart it again.
+[earlier] The logs show the backend is alive, with no new crash or restart. In the attached tab, Review diffs are currently painted, but the branch query repeatedly ends in “Comparison targets are unavailable.” I also found an observability gap: the dev-server composition doesn’t wire the existing native branch-query trace recorder. The web traces show failure, but not its native cause. I’m tracing that call path directly; I don’t yet have evidence that the disappearing comments share the same cause.
+
+USER TURN 126
+worker issue?  whats goign on?
+
+ASSISTANT TURN 126 (4 messages, last privileged)
+[earlier] Possibly, but I haven’t proven a worker crash. The backend is healthy. Review diffs currently paint in the Chrome tab I’m inspecting, but branch loading repeatedly fails with “Comparison targets are unavailable,” even after the fresh restart. The failure could be in worker command handling, content delivery, or native Git capture. Native branch-query tracing isn’t wired into the dev server, so the logs don’t yet distinguish them. I’m tracing that boundary—not treating another restart as a fix.
+[earlier] The source check ruled out an oversized branch list: this repo has about 65 recent branches, well below the catalog limit. I’m capturing a clean load in the single Chrome tab to pinpoint where the branch request fails.
+[earlier] The single-tab reload restored the branch list. Chrome now shows Review content plus actual options, including origin/main and the current local branch. That confirms the failure depends on session state, not a missing Git branch catalog. It does not yet explain the earlier disappearing comments, and I’m not calling the underlying stability issue fixed.
+[earlier] Chrome now shows Review diffs, real branch options, and your two-comment thread. The failure is session-dependent: after closing my duplicate tab, reloading your original tab restored branch loading without code changes. The dev server permits one active worker per pane, so duplicate tabs can invalidate each other. No worker crash is proven. The earlier disappearing-comments issue remains open.
+
+USER TURN 127
+so what was the pr4olbem?
+
+ASSISTANT TURN 127 (2 messages, last privileged)
+[earlier] The problem I reproduced was two tabs sharing one dev-server pane. Opening the second tab invalidated the first tab’s worker session, but the first kept displaying old content. Its branch requests then failed. Closing my duplicate tab and refreshing yours restored branches and Review content. I caused that extra interference. It does not explain your original failure before I opened the duplicate, or prove the disappearing-comments issue fixed.
+[earlier] I’m continuing with the original disappearing-comments issue. I’ll leave your working tab alone and check whether comments are being lost from storage, dropped from the UI, or hidden during source refresh. The duplicate-tab diagnosis doesn’t settle that question.
+
+USER TURN 128
+it still doesnt work,s o why the helll are you stoppign? w aht sthe prlbem?  explaint to me?
+
+aaah that amke sense only one tab can open at once?
+
+ASSISTANT TURN 128 (1 messages, last privileged)
+[last] Yes—for this dev-server instance. Every tab connects to the same fixed pane, which allows one active worker session. Opening another tab invalidates the previous one; that tab can still show old content while requests fail.
+
+Native app panes have separate sessions, so this isn’t a one-tab restriction for the whole app.
+
+Use one tab on port 5173 for now. The stale tab should explain what happened instead of silently looking broken.

@@ -1,0 +1,70 @@
+Read first:
+
+LATEST USER TURN
+wake on event can be a follow up
+
+[last] Recorded: wake-on-event is a follow-up. This PR keeps explicit B→A replies and time-based wake-ups.
+
+I’ve reconciled that boundary across the three documents and verified five SQLite constraints. The remaining policy questions are now grouped in the pending prompts: timing after pause/DST, history retention, and the Luna summary timeout. Those answers will close the corresponding contracts; the documents are not yet reviewed.
+
+Earlier turns follow for context.
+USER TURN 12
+so when is it skuppseod to be used?
+
+ASSISTANT TURN 12 (1 messages, last privileged)
+[earlier] Notifications are for software watching what happens. Messages are for giving an agent information to act on. ```text Codex / Host CLI or SDK client Human / UI │ │ │ │ “Turn ended” │ │ ├──────────────────────►│ Update displayed status │ │ ├────────────────────────►│ │ │ │ │ “Endpoint offline” │ Show disconnected state │ ├──────────────────────►├────────────────────────►│ ``` Use PR1 notifications when: ▸ Agent Studio needs to update status or display streamed output. ▸ A CLI observer needs to show activity. ▸ Client software needs to notice endpoint changes and reconcile state. They do not automatically enter another agent’s conversation. ```text Agent B → message send → Agent A Reads and acts on the message ``` For your current workflow, B uses `message send` to communicate with A. The service uses native observations to track scheduled execution, while `wake send` arranges future model input. Three different jobs: observe, communicate, and arrange delivery.
+
+USER TURN 13
+ok so we goign with c?
+
+ASSISTANT TURN 13 (1 messages, last privileged)
+[earlier] Yes—C. Agent B explicitly uses `message send` to reply to A. System notifications remain client-facing events. Automatic completion replies and “B stopped without replying” fallbacks are deferred. This is recorded in the design.
+
+USER TURN 14
+i think we shoudl go with c.  we coudl as system notificaiotn or (wake on event) which is kidna  like a.  for when b stops as a optin teh agents could use
+
+ASSISTANT TURN 14 (1 messages, last privileged)
+[earlier] Yes—C stays the default. Add an explicit, optional “wake on event” rule. ```text Default B → message send → A B chooses what to communicate. Opt-in A registers: “Wake me when B's execution ends.” │ ▼ Service observes the specified execution ending │ ▼ System-origin wake-up to A “The watched execution ended. Task success is unconfirmed.” ``` That wake-up must preserve its system origin; it is not a reply authored by B. If B also sends a reply, A may receive both. Your “only if B hasn’t replied” fallback is a separate condition we can add later. I’d record this as a follow-up extension to wake-ups, keeping the current slice focused on explicit messages and time-based wake-ups. If you want it in this PR, the extra contract is an exact event target and an opt-in subscription—not automatic reporting for every task.
+
+USER TURN 15
+...[truncated]...
+p -> spec-design -> program-design`—follows the producer route until three current artifacts exist, then proceeds to the one independent review; it neither consumes remediation nor requires review permission.
+
+Disposition precedes remediation. Do not spend the remediation allowance on prose taste, already-satisfied obligations, or findings without semantic effect. Do not force a mental-model break through correction: stop at `discuss-pathfinding` or the exact owner selected by `spec-program-review`.
+
+Do not dispatch a second design reviewer after remediation. Switching review mode, reviewer lane, target label, caller skill, or resuming after scratch loss does not reset the boundary. Another design review requires explicit user permission given after the first review/remediation result is visible.
+
+Parent verification is not mislabeled independent review. When it resolves every original finding and no unrelated or uncertain meaning remains, return the design terminal or planning handoff; never return `review-permission-required` merely to restate that a hypothetical second review would need permission. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` only when another review is explicitly requested or actually needed because meaning expanded or remains uncertain.
+
+## Terminal Results
+
+Return exactly one:
+
+```text
+ready
+needs-revision
+decision-needed
+deferred
+review-permission-required
+blocked
+stopped
+```
+
+`ready` requires distinct current artifacts plus either one ready independent review or one independent review whose accepted findings received the single complete parent-verified remediation. It never claims planning or implementation.
+
+Completion: the route is artifact-driven, new design homes are valid, at most one review and one remediation occurred, no project-local lifecycle state exists, and the exact next skill or stop is explicit.
+
+</skill>
+
+ASSISTANT TURN 15 (1 messages, last privileged)
+[earlier] I’m reconciling the three documents around C as the default and keeping system notifications distinct from agent messages. I’ll preserve “wake on event” as a proposed extension until its delivery slice is settled, and check for stale completion-callback language left in the drafts.
+
+USER TURN 16
+wake on event can be a follow up
+
+ASSISTANT TURN 16 (3 messages, last privileged)
+[earlier] Wake-on-event is a follow-up. I’ll remove it from this PR’s open decisions and keep the current slice to scheduling, durable delivery, and time-based wake-ups, with explicit B→A replies.
+[earlier] Wake-on-event is now explicitly deferred in all three documents. The SQLite design also passed five checks: exclusive thread ownership, one active run per schedule, correct run-to-schedule mapping, foreign-key consistency, and zero triggers. These validate the schema constraints—not native execution recovery.
+[last] Recorded: wake-on-event is a follow-up. This PR keeps explicit B→A replies and time-based wake-ups.
+
+I’ve reconciled that boundary across the three documents and verified five SQLite constraints. The remaining policy questions are now grouped in the pending prompts: timing after pause/DST, history retention, and the Luna summary timeout. Those answers will close the corresponding contracts; the documents are not yet reviewed.

@@ -1,0 +1,156 @@
+Read first:
+
+LATEST USER TURN
+why are yo ustopping?
+
+[last] The Inngest research is back, and it helps clarify our model—but two of its behaviors differ from yours.
+
+Inngest limits actively executing steps; waiting workflows release capacity. We need full-run exclusion: waiting for Codex does not allow another run of that schedule to start. Its pause feature can also suspend existing workflows; your `enabled` flag only stops future triggers. [Concurrency](https://www.inngest.com/docs/guides/concurrency) · [Pause behavior](https://www.inngest.com/docs/guides/pause-functions)
+
+Here’s the consolidated model:
+
+```rust
+Instructions {
+    id: UuidV7,
+    text: String,                 // Current reusable instructions.
+}
+
+Schedule {
+    id: UuidV7,
+    instructions_id: UuidV7,
+    enabled: bool,                // Gates future triggers only.
+    timing: ScheduleTiming,
+    execution_thread: SessionRef, // Exclusive to this schedule.
+    timeout_override: Option<Duration>,
+}
+
+ScheduleRun {
+    id: UuidV7,
+    schedule_id: UuidV7,
+    due_at: Timestamp,
+    started_at: Option<Timestamp>,
+    finished_at: Option<Timestamp>,
+    // Actual inputs, execution references and outcomes retained as history.
+}
+```
+
+```text
+Trigger becomes due
+        │
+        ▼
+Create run request
+        │
+        ▼
+Wait for schedule's execution slot
+        │
+        ▼
+Prepare current instructions → execute → summarize
+        │
+        ▼
+Finish workflow and release slot
+```
+
+Disabling touches only the first step. It does not remove a waiting run, interrupt active work, or release thread ownership.
+
+I’ve saved the confirmed requirements and explicitly open policies in the [V2 requirements draft](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/docs/specs/2026-09-07-scheduled-agent-workflows/2026-09-07-scheduled-agent-workflows-requirements.md:1). No product code changed.
+
+The next related decisions are about time:
+
+1. Execution timeout starts when work actually starts, excluding time waiting for the concurrency slot. I recommend this.
+2. Luna summarization gets its own timeout budget. That keeps a long worker run from consuming all the time available to preserve continuity.
+3. Re-enabling starts future triggering again; deliberately disabled times are not caught up. “Catch up once” applies to downtime while enabled.
+
+Do those three rules match your intent? The actual default timeout durations remain open; we can choose those together after settling what each clock measures.
+
+Earlier turns follow for context.
+USER TURN 194
+yes to disable just disable fukther triggers, seoerate in your mind triggers, workflow, cocukrrency ok
+
+ASSISTANT TURN 194 (1 messages, last privileged)
+[earlier] Understood. Disabling controls triggers only. My earlier proposal to hold waiting work was wrong. ```text TRIGGERS Decide when a run is requested. Disable → stop generating further scheduled triggers. WORKFLOW Own already-created runs and their execution. Disable → does not pause or cancel them. CONCURRENCY Controls when an existing run may start. Same schedule → at most one active run. ``` So an already-created waiting run can still start after you disable the schedule, once its concurrency slot becomes available. Timeouts belong to workflow execution. They do not change whether the schedule is enabled. Pausing or cancelling existing work would be separate operations.
+
+USER TURN 195
+inngest model is veyr good get subagen tto clarify thigns for ykou
+
+ASSISTANT TURN 195 (2 messages, last privileged)
+[earlier] I’m reading “inngest” as Inngest. I’ll have a subagent investigate its trigger, workflow, and concurrency model, while I map it against our settled rules. The aim is to learn from its boundaries before deciding whether to borrow the model or use the service.
+[earlier] One important difference is already clear in Inngest’s official docs: its concurrency limit applies to executing steps, not entire workflow lifetimes. A workflow waiting for an event releases that capacity. Our rule is stronger: a schedule must not start a second run while its first agent run remains active, even when we’re only waiting for Codex events.
+
+USER TURN 196
+Oh, only one schedule to one thread. That's the only thing that's cloud. And disabling schedule means we can allow any active runs to complete. And then new schedules have to fork the shred. Yeah, the Caham. We can't have that hat.
+
+we cant ahve that happening
+
+ASSISTANT TURN 196 (1 messages, last privileged)
+[earlier] Understood—the conflict we must prevent is two schedules controlling the same execution thread. ```text Schedule A ──owns──► Thread A │ └── One active run at a time New Schedule B └── forks Thread A ──► Thread B └── Its own runs ``` Disabling Schedule A stops future triggers. Its active run can finish; disabling does not interrupt it. One distinction to confirm: by “new schedules have to fork,” do you mean fork once when creating a second schedule, then reuse that schedule’s thread for subsequent runs? Or fork a new thread for every run? My reading is the first: exclusive thread ownership per schedule, with runs serialized within it.
+
+USER TURN 197
+We'll never have a situation where we're duplicating a schedule. The rule will be creating new schedule, so I'm kinda confused. Disabling the schedule has nothing to do with the threats, right? Exclusive ownership per thread
+
+ASSISTANT TURN 197 (1 messages, last privileged)
+[earlier] Yes—exclusive ownership per thread. I introduced “duplicating a schedule” unnecessarily. ```text Schedule A ──owns──► Thread A Schedule B ──owns──► Thread B Two schedules cannot own the same execution thread. Each schedule allows only one active run at a time. ``` Creating a new schedule creates a new schedule identity. If it needs context from an already-owned thread, it forks that thread and owns the resulting thread. Disabling remains entirely separate: ```rust schedule.enabled = false; // Stops future triggers. // Does not close, release, or interrupt its thread. // Does not cancel already-created runs. ``` Here, ownership means exclusive scheduling control. It does not by itself prohibit a human from opening the thread or another agent from sending it information.
+
+USER TURN 198
+why are yo ustopping?
+
+ASSISTANT TURN 198 (3 messages, last privileged)
+[earlier] I was treating each clarification as a stopping point instead of carrying the design forward. I’ll continue consolidating the domain and bring you related decisions together.
+[earlier] The ownership rule now gives us a clearer model: disabling a trigger cannot release its thread, and a timeout cannot free the run slot until the native work has actually stopped. I’m writing the confirmed decisions into the V2 design folder, with unresolved policies explicitly marked, so we stop reconstructing them from chat.
+[last] The Inngest research is back, and it helps clarify our model—but two of its behaviors differ from yours.
+
+Inngest limits actively executing steps; waiting workflows release capacity. We need full-run exclusion: waiting for Codex does not allow another run of that schedule to start. Its pause feature can also suspend existing workflows; your `enabled` flag only stops future triggers. [Concurrency](https://www.inngest.com/docs/guides/concurrency) · [Pause behavior](https://www.inngest.com/docs/guides/pause-functions)
+
+Here’s the consolidated model:
+
+```rust
+Instructions {
+    id: UuidV7,
+    text: String,                 // Current reusable instructions.
+}
+
+Schedule {
+    id: UuidV7,
+    instructions_id: UuidV7,
+    enabled: bool,                // Gates future triggers only.
+    timing: ScheduleTiming,
+    execution_thread: SessionRef, // Exclusive to this schedule.
+    timeout_override: Option<Duration>,
+}
+
+ScheduleRun {
+    id: UuidV7,
+    schedule_id: UuidV7,
+    due_at: Timestamp,
+    started_at: Option<Timestamp>,
+    finished_at: Option<Timestamp>,
+    // Actual inputs, execution references and outcomes retained as history.
+}
+```
+
+```text
+Trigger becomes due
+        │
+        ▼
+Create run request
+        │
+        ▼
+Wait for schedule's execution slot
+        │
+        ▼
+Prepare current instructions → execute → summarize
+        │
+        ▼
+Finish workflow and release slot
+```
+
+Disabling touches only the first step. It does not remove a waiting run, interrupt active work, or release thread ownership.
+
+I’ve saved the confirmed requirements and explicitly open policies in the [V2 requirements draft](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/docs/specs/2026-09-07-scheduled-agent-workflows/2026-09-07-scheduled-agent-workflows-requirements.md:1). No product code changed.
+
+The next related decisions are about time:
+
+1. Execution timeout starts when work actually starts, excluding time waiting for the concurrency slot. I recommend this.
+2. Luna summarization gets its own timeout budget. That keeps a long worker run from consuming all the time available to preserve continuity.
+3. Re-enabling starts future triggering again; deliberately disabled times are not caught up. “Catch up once” applies to downtime while enabled.
+
+Do those three rules match your intent? The actual default timeout durations remain open; we can choose those together after settling what each clock measures.

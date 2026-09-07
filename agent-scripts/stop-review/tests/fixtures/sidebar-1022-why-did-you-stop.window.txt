@@ -1,0 +1,85 @@
+Read first:
+
+LATEST USER TURN
+did you ahve a queitson?  whyd id you stop?
+
+[last] Yes—I stopped prematurely after answering the sort question. Sort field and direction are settled; neither changes grouping.
+
+The pending question is **what qualifies as Active**:
+
+A build prints output, then runs silently for two minutes. Should its terminal:
+
+- remain **Active** while reliable running/progress evidence exists, or
+- move to **<10 min** once output stops?
+
+I recommend the first **when we have reliable evidence**, falling back to the last terminal-activity time otherwise. That avoids treating silence as completion or inventing agent status.
+
+Earlier turns follow for context.
+USER TURN 18
+...[truncated]...
+p -> spec-design -> program-design`—follows the producer route until three current artifacts exist, then proceeds to the one independent review; it neither consumes remediation nor requires review permission.
+
+Disposition precedes remediation. Do not spend the remediation allowance on prose taste, already-satisfied obligations, or findings without semantic effect. Do not force a mental-model break through correction: stop at `discuss-pathfinding` or the exact owner selected by `spec-program-review`.
+
+Do not dispatch a second design reviewer after remediation. Switching review mode, reviewer lane, target label, caller skill, or resuming after scratch loss does not reset the boundary. Another design review requires explicit user permission given after the first review/remediation result is visible.
+
+Parent verification is not mislabeled independent review. When it resolves every original finding and no unrelated or uncertain meaning remains, return the design terminal or planning handoff; never return `review-permission-required` merely to restate that a hypothetical second review would need permission. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` only when another review is explicitly requested or actually needed because meaning expanded or remains uncertain.
+
+## Terminal Results
+
+Return exactly one:
+
+```text
+ready
+needs-revision
+decision-needed
+deferred
+review-permission-required
+blocked
+stopped
+```
+
+`ready` requires distinct current artifacts plus either one ready independent review or one independent review whose accepted findings received the single complete parent-verified remediation. It never claims planning or implementation.
+
+Completion: the route is artifact-driven, new design homes are valid, at most one review and one remediation occurred, no project-local lifecycle state exists, and the exact next skill or stop is explicit.
+
+</skill>
+
+ASSISTANT TURN 18 (2 messages, last privileged)
+[earlier] I’ll update the requirements with the separate pin ownership, migration decision, and persisted activity timestamps, then continue the design cycle using the existing off-MainActor systems.
+[earlier] Updated [Requirements](/Users/shravansunder/Documents/dev/project-dev/agent-studio.sidebar-useful/docs/specs/2026-09-07-sidebar-organization/2026-09-07-sidebar-organization-requirements.md) with independent pins, the SQLite migration decision, and activity timestamps surviving restart. One visibility choice remains **decision-needed**: ```text “Show Pinned” OFF A — Remove the section B — Hide those items Pinned items return to Pinned items disappear ordinary groups. until enabled again. ``` I recommend **A**: the control changes organization without making repositories or panes disappear. Each screen handles its own pins. **Is A what you intend?**
+
+USER TURN 19
+A
+
+ASSISTANT TURN 19 (2 messages, last privileged)
+[earlier] Confirmed: turning off Show Pinned merges those items back into the ordinary groups on that screen. Pin state is preserved, and nothing disappears. I’ll record that and continue with the remaining ordering behavior.
+[earlier] Recorded. Pins remain independent, and hiding their section preserves all items. Next is **Sort**, which we haven’t selected yet. My proposed small set is: ```text Repos └── Sort: Name / Terminal activity Panes └── Sort: Name / Terminal activity / Layout order ↑ tab/pane position ``` Sorting applies **within the selected sections, groups, and subgroups**. It doesn’t override Pinned/Open sections or activity-bucket order. I recommend keeping **Name** as the Repos default and **Layout order** for Panes grouped by Tab. Terminal-activity sorting would be an explicit choice, because changing activity can move rows while you navigate. **Does this option set fit, or do you want terminal activity to be the default ordering?**
+
+USER TURN 20
+sure lets do it. but layout order hcanges by arrangement lets not pkut that in
+
+ASSISTANT TURN 20 (2 messages, last privileged)
+[earlier] Confirmed—**no Layout order**, since arrangements change it. ```text Repos Sort: Name / Terminal activity Panes Sort: Name / Terminal activity ``` Name is the default; terminal-activity sorting is optional. Sorting stays within the selected sections, groups, and subgroups. I’ll carry this into the design.
+[earlier] I’ll record the two sort choices and remove layout ordering. The next distinction to settle is what “Active” means when a terminal has a running command but isn’t producing output.
+
+USER TURN 21
+how we gonan show sort for name vs terminal and asc desc /  it shodulnt chagne hte goruping
+
+ASSISTANT TURN 21 (1 messages, last privileged)
+[earlier] Use **two adjacent controls**: one selects the sort field, the other selects direction. ```text Row 1 [ Repos | Panes ] │ Filter… Row 2 Group │ Subgroup │ [ Name | Activity ] [ ↑↓ ] ``` The direction button changes meaning with the selected field: ```text Name Ascending → A–Z Descending → Z–A Activity Ascending → Oldest first Descending → Newest first ``` Both field choices stay visible. The direction uses the existing sort icon/control, with its current meaning available through the tooltip and accessibility label. **Sorting never changes grouping or section membership.** It only orders leaf rows inside their existing group/subgroup: ```text Pinned Panes Section stays └── agent-studio Repository group stays ├── Active Activity subgroup stays │ └── Sort these panes └── Last hour └── Sort these panes ``` Pinned/Open sections, repository/tab groups, and activity buckets retain their positions when you change the sort field or direction. The same controls get surface-context keyboard actions.
+
+USER TURN 22
+did you ahve a queitson?  whyd id you stop?
+
+ASSISTANT TURN 22 (1 messages, last privileged)
+[last] Yes—I stopped prematurely after answering the sort question. Sort field and direction are settled; neither changes grouping.
+
+The pending question is **what qualifies as Active**:
+
+A build prints output, then runs silently for two minutes. Should its terminal:
+
+- remain **Active** while reliable running/progress evidence exists, or
+- move to **<10 min** once output stops?
+
+I recommend the first **when we have reliable evidence**, falling back to the last terminal-activity time otherwise. That avoids treating silence as completion or inventing agent status.
