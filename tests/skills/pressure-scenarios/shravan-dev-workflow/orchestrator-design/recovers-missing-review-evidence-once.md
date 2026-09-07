@@ -25,5 +25,5 @@ Resume this bounded design run. The current Requirements, Specification, and Pro
 
 - Claims no review occurred because its result is missing.
 - Runs a repeated recovery review or treats recovery as a fresh normal allowance.
-- Creates project-local lifecycle state or reproduces helper commands instead of using the tracker.
+- Creates project-local lifecycle state or creates a second logging mechanism instead of using the tracker.
 - Finalizes a borrowed trail or omits the owned blocked-end rendering.

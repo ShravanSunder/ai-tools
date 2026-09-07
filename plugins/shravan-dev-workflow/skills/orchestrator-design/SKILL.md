@@ -16,9 +16,9 @@ discuss-pathfinding  genuinely unwritten owner meaning
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the separate concept and identity boundaries used to validate every downstream handoff.
 
-MUST invoke `track-show-me-your-work` once at the start and return the selected trail path plus whether this workflow owns its finalization. Reuse a supplied caller trail as borrowed. Otherwise use its constrained discovery route, ask if candidates are ambiguous, or initialize an owned trail. That skill owns all helper commands, payload mechanics, corrections, and rendering. If tracking cannot initialize, record the gap in the response and continue permitted design/review work; tracking availability is not a review-admission prerequisite unless the user explicitly made it one.
+MUST invoke `track-show-me-your-work` once at the start and return the selected trail path plus whether this workflow owns its finalization. Reuse a supplied caller trail as borrowed. Otherwise select or create the session trail as that skill directs. That skill owns recording and the operator-produced readable view. If tracking cannot initialize, record the gap in the response and continue permitted design/review work; tracking availability is not a review-admission prerequisite unless the user explicitly made it one.
 
-Record only consequential design decisions, owner confirmations, accepted or rejected review findings, corrections, results with evidence, and unresolved meaning. A historical event helps orientation but never proves the current artifact or review state. User corrections append a superseding event through the tracker; do not rewrite history.
+Record only consequential design decisions, owner confirmations, accepted or rejected review findings, corrections, results with evidence, and unresolved meaning. A historical event helps orientation but never proves the current artifact or review state. User corrections append a record referencing the earlier line; do not rewrite history.
 
 ## Orient And Route
 

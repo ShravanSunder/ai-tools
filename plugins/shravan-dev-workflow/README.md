@@ -126,7 +126,7 @@ Use `orchestrator-design` when the user asks to run or resume the full design cy
 
 Use `orchestrator-implementation-goal` to carry implementation goals through planning, execution and proof, independent review, accepted corrections, and the requested delivery boundary. Design stays with its own workflow when missing or contradicted. The default terminal is PR-ready and unmerged; merge requires explicit authority. Both orchestrators use `track-show-me-your-work` for meaningful decision and evidence history, while checking current sources rather than replaying stored status. Direct one-phase requests bypass orchestration.
 
-Use `track-show-me-your-work` when a work trail is requested, during either orchestration workflow, or for substantial implementation. It keeps append-only JSONL under `~/dev/memory-logs/work-trails/`, with optional Markdown detail and a generated readable view at task end or on request. Routine small edits stay quiet unless logging is requested. The helper is run with uv on Python 3.12+ on macOS/Linux; no always-on service is required.
+Use `track-show-me-your-work` when a work trail is requested, during either orchestration workflow, or for substantial implementation. It keeps append-only JSONL under `~/dev/memory-logs/work-trails/`, with optional Markdown detail and a generated readable view at task end or on request. Routine small edits stay quiet unless logging is requested. The main agent writes the session JSONL directly; a Luna operator produces the readable Markdown view. No runtime helper or database is required.
 
 ### Spec boundary
 

@@ -5,39 +5,30 @@ description: Use when the user requests a work trail, asks to inspect or render 
 
 # Track Show Me Your Work
 
-Keep a decision trail a teammate can understand: what happened, why, evidence, and result. Record meaningful checkpoints as the work happens. A short, truthful account is more useful than a diary of commands or a polished story written afterward.
+Keep a short, truthful decision trail: what happened, why, evidence, and result. The main agent writes it directly with existing file tools. No custom helper, database, dependency, or logging sidekick is needed.
 
-## Start or reuse the trail
+## Keep one session trail
 
-MUST load `references/usage.md` and return the selected trail path and whether this workflow owns its finalization. Use the helper there for every record and readable view; keep paths in current task context rather than repeating setup at each checkpoint.
+Use `~/dev/memory-logs/work-trails/<repo>/<yyyy-mm-dd-worktree-branch-session>/events.jsonl`. Use readable names, replace path separators in labels, and reuse the actual session/tab name when available; otherwise choose a short descriptive session label. Check for an existing folder before creating one so distinct tasks do not overwrite each other. Keep the selected path in task context.
 
-Reuse a trail supplied by the coordinating caller. Otherwise use the current repo/session to find an existing matching trail before starting one; if several could belong to the task, ask rather than guess. A genuinely new task gets a new trail. If history is missing, start honestly from what is observable now, without inventing earlier events.
+The main agent is the sole writer. Delegates return checkpoint facts to it rather than concurrently editing the log. Nested orchestration reuses the caller's trail; the outer task owns its end summary. Resume the supplied trail, or inspect candidate names/context and ask when the intended trail is ambiguous. Do not reconstruct missing history as fact.
 
-The centralized root is `~/dev/memory-logs/work-trails/`. The helper records repo, worktree, branch, and session identity and handles safe appends. Routine read/edit/test mechanics alone do not make a small edit substantial. Explicit requests to inspect a trail may render it without starting a new run.
+## Append meaningful checkpoints
 
-## Record what matters
+Append one complete JSON object per line, using proper JSON escaping and a trailing newline. Use existing JSON tools such as `jq` to encode or validate when needed; never interpolate arbitrary recorded text into shell commands.
 
-Send the helper a short phase, decision or event, why, evidence pointers, and result. Log consequential choices, verified checkpoints, pivots/reverts, blockers, material user corrections, and useful improvements explicitly deferred outside scope. Skip mundane actions and per-command narration.
+Each record contains `timestamp`, `phase`, `decision`, `why`, `evidence` (a list of pointers), and `result`. Include repo/worktree/branch/session context in the first record, and note material context changes later. Optional `detail` links to a Markdown explanation; optional `corrects_line` references an earlier line in this file.
 
-- Describe what actually happened; separate planned, attempted, failed, blocked, and verified outcomes in plain words.
-- Give the stated reason or say it is unknown. Do not infer blame or manufacture a cause.
-- Link evidence that supports the claim. Recording a path does not verify its contents, and a past success does not establish current readiness.
-- Sanitize before writing: no credentials, secret-bearing commands, raw private transcripts, or unnecessary identifying details. The helper validates structure, not whether text contains secrets.
-- Keep the short record understandable alone. Add Markdown detail only for context that would otherwise be lost; link an existing artifact when it already explains the decision.
-- Correct a record by appending a new one that supersedes it. Never rewrite event history or an existing detail file. If a concurrent correction made the target stale, inspect it before deciding whether another correction is needed.
+Record consequential decisions, verified checkpoints, pivots/reverts, blockers, material user corrections, and explicitly deferred improvements. Skip routine commands and narration. State observed outcomes and unknown reasons honestly. Sanitize secrets and private content before writing. A recorded evidence pointer is not proof that it was checked.
 
-The main agent records checkpoints directly. Do not launch a logging sidekick or reread the full trail for every entry. If substantial explanatory work is delegated, use `manage-agents` with the specific source evidence, owned detail task, permitted output, and parent verification; the main agent remains accountable for its claims.
+Keep each record understandable alone. Write longer explanations in a sibling Markdown file only when needed; prefer linking an existing artifact. Correct mistakes by appending a new record with `corrects_line`, never by rewriting prior events. If a line is malformed, preserve it and report the gap rather than silently discarding history.
 
-## Make it readable
+## Produce the readable view
 
-Generate the readable Markdown view whenever requested. At the end of the task/run, the workflow that owns the trail calls finish with the actual outcome and unresolved work, then opens the generated view to verify it and links it in the response. Do this for completed, partial, blocked, and stopped outcomes.
+At task end—including partial, blocked, or stopped outcomes—append the actual outcome. When the task ends or a readable view is requested, MUST dispatch the Markdown-view lane through `manage-agents` to a Luna Operator. The operator loads `references/markdown-view.md`.
 
-Nested phase skills append checkpoints and return the trail path to their caller; they do not finalize the outer goal. The view is generated from JSONL and linked detail, not a second independently maintained history. It can be regenerated. If work resumes after finish, keep logging and finish again when that continuation ends.
+Pass the exact JSONL path, its current last line, allowed linked-detail paths, and sole `summary.md` output path. Dispatch only after that prefix is written; keep the prefix/details unchanged and allow only one active writer to that output. The operator may run alongside later main-agent work because it reads only the fixed prefix. Its authority is no broader than the reference: source read-only, one view writable. Return `complete | partial | blocked`, output path, covered last line, and source gaps; the parent checks corrections, outcomes, cutoff and reported gaps against the source, then links the view. Nested phases return their checkpoint to the outer trail owner instead of ending that trail.
 
-## Keep tracking in its place
+IF delegation is unavailable, report it, load `references/markdown-view.md` to produce the same bounded view directly, and return its status, output path, covered last line, and source gaps for the same parent verification.
 
-Use the trail to orient a resumed task, then inspect the current artifacts and evidence that matter to the next step. The trail records decisions; it does not grant scope, substitute for proof, or operate a replay/controller state machine.
-
-If setup, writing, or rendering fails, report the concrete logging gap briefly and continue independent work unless the user made the trail a delivery gate. Never silently truncate damaged records, claim a complete trail after lost writes, or stop unrelated work merely because logging failed.
-
-Completion: meaningful checkpoints and corrections are recorded, the owning workflow has produced and checked the end view, and any missing evidence or logging failures are visible.
+The view is a replaceable reading aid, not another source of truth. On resume, use the trail for orientation and check current source before relying on past success. Logging failures do not block unrelated work unless the user explicitly made the trail a delivery requirement; report incomplete records or views honestly.

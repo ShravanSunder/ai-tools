@@ -4,8 +4,7 @@ export const skillPressureCaseDefinitions = [
   {
     "scenarioId": "track-show-me-your-work-honest-checkpoint-and-end-view",
     "requiredSourceReads": [
-      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md",
-      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/references/usage.md"
+      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"
     ],
     "maximumToolCalls": 20,
     "semanticCriteria": [
@@ -24,8 +23,7 @@ export const skillPressureCaseDefinitions = [
   {
     "scenarioId": "track-show-me-your-work-routine-edit-and-existing-trail",
     "requiredSourceReads": [
-      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md",
-      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/references/usage.md"
+      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"
     ],
     "maximumToolCalls": 20,
     "semanticCriteria": [
