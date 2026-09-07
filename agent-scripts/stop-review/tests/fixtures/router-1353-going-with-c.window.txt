@@ -1,0 +1,44 @@
+Read first:
+
+LATEST USER TURN
+ok so we goign with c?
+
+[last] Yes—C. Agent B explicitly uses `message send` to reply to A.
+
+System notifications remain client-facing events. Automatic completion replies and “B stopped without replying” fallbacks are deferred. This is recorded in the design.
+
+Earlier turns follow for context.
+USER TURN 9
+but agent b can stop at any reason.  thi sis diffrent.  send is diffretne form notifciaiotn remember we3 talekd aout messages vs system notficaiotns?
+
+ASSISTANT TURN 9 (1 messages, last privileged)
+[earlier] You’re right. I conflated execution notifications with agent replies. ```text Agent-authored message B decides what to communicate B → message send → A “I checked X. Here are my findings.” System notification Service observes an execution event Service → notification → subscribed CLI / SDK “Turn T ended.” “Run R timed out; stopping is unconfirmed.” ``` B stopping does not mean it finished the task, produced a reply, or wants A awakened. ```text Agent B Codex Our service CLI / SDK │ │ │ │ │ Turn ends │ │ │ ├───────────────►│ │ │ │ │ Execution event │ │ │ ├───────────────────►│ │ │ │ │ System notification│ │ │ ├───────────────────►│ │ │ │ │ │ │ No automatic message to A ``` A timed wake-up is different again: it delivers message content that someone explicitly arranged earlier. I need to correct the design: observing B’s execution ending must not automatically become an agent-authored message or a claim of task completion. Any “wake A when this event happens” behavior needs an explicit subscription or rule, with the event’s system origin preserved.
+
+USER TURN 10
+we might get double messages so heres an idea.  if b stops, and there was no message from b, we could send system ntoficaiont to original?
+
+ASSISTANT TURN 10 (1 messages, last privileged)
+[earlier] Yes—a fallback system notification could avoid the usual duplicate. ```text Agent A Service Agent B │ │ │ │ Request work │ │ ├──────────────────►├───────────────────►│ │ │ │ │ │ B sends an explicit reply │◄──────────────────┼────────────────────┤ │ │ Records reply │ │ │ │ │ │ B stops │ │ │◄───────────────────┤ │ │ Reply exists │ │ │ → no fallback │ ``` If B stops without replying: ```text Agent A Service Agent B │ │ │ │ │ B stops │ │ │◄───────────────────┤ │ │ No related reply │ │◄──────────────────┤ │ │ System notification: │ │ “B's execution ended without a reply. │ │ Task completion is unconfirmed.” │ ``` The important detail is “related reply.” An unrelated message from B shouldn’t suppress this notification. We need a request ID carried by B’s reply. For a reply racing with B stopping, the service should check its durable reply record before creating the fallback. A reply that arrives after the fallback was already delivered can still produce two communications; we shouldn’t promise to eliminate that case entirely. One distinction remains: should this fallback appear only in A’s subscribed CLI/SDK events, or also be delivered into A’s model context as an explicitly system-origin notification? The latter lets A notice and respond while idle.
+
+USER TURN 11
+so i think this is great, but we can do c for now to keep this simple.
+
+did we ahve a concept of ntoficiats since you burred the lines img onan gkues skyou enver did it in pr 1
+
+ASSISTANT TURN 11 (2 messages, last privileged)
+[earlier] I’ll check PR1’s actual notification contracts and client code. I’ll also record your scope decision: explicit B→A messages for now; automatic completion callbacks and fallback notifications are deferred.
+[earlier] PR1 did include notifications. I checked the code, including the merged commit. My explanation blurred their meaning. ```text PR1 notifications → client software ├── endpoint/changed │ Service/endpoint changes, with ordering and scope checks ├── Native Codex observation │ App-server events through an attached observation connection └── ACP session updates Conversation updates through the ACP client PR1 agent messages → recipient model input └── Explicit message send from B to A ``` Evidence: [endpoint notification contract](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/crates/communication-protocol/src/endpoint_inventory.rs:17), [SDK notification receiver](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/crates/communication-client/src/control_connection.rs:367), and [native observation client](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/crates/communication-client/src/observation_session.rs:88). PR1 does not provide a system-notification inbox that automatically wakes another model, or the “B stopped without replying” fallback. I’ve updated the design to use C now: B explicitly sends its reply. Automatic completion callbacks and fallback notifications are deferred. Scheduling still tracks execution state, but that tracking does not manufacture an agent reply.
+
+USER TURN 12
+so when is it skuppseod to be used?
+
+ASSISTANT TURN 12 (1 messages, last privileged)
+[earlier] Notifications are for software watching what happens. Messages are for giving an agent information to act on. ```text Codex / Host CLI or SDK client Human / UI │ │ │ │ “Turn ended” │ │ ├──────────────────────►│ Update displayed status │ │ ├────────────────────────►│ │ │ │ │ “Endpoint offline” │ Show disconnected state │ ├──────────────────────►├────────────────────────►│ ``` Use PR1 notifications when: ▸ Agent Studio needs to update status or display streamed output. ▸ A CLI observer needs to show activity. ▸ Client software needs to notice endpoint changes and reconcile state. They do not automatically enter another agent’s conversation. ```text Agent B → message send → Agent A Reads and acts on the message ``` For your current workflow, B uses `message send` to communicate with A. The service uses native observations to track scheduled execution, while `wake send` arranges future model input. Three different jobs: observe, communicate, and arrange delivery.
+
+USER TURN 13
+ok so we goign with c?
+
+ASSISTANT TURN 13 (1 messages, last privileged)
+[last] Yes—C. Agent B explicitly uses `message send` to reply to A.
+
+System notifications remain client-facing events. Automatic completion replies and “B stopped without replying” fallbacks are deferred. This is recorded in the design.
