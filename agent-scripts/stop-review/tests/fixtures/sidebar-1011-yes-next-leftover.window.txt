@@ -1,0 +1,71 @@
+Read first:
+
+LATEST USER TURN
+yes
+
+[last] Confirmed: **terminal activity timestamps survive app restart**. **Active** is determined from fresh runtime evidence, never restored as a stale flag.
+
+Next: **when a repository is pinned, should all its panes appear in Pinned Panes?** Your earlier wording suggests yes, alongside individually pinned panes, with each pane shown once.
+
+Earlier turns follow for context.
+USER TURN 10
+no serach or sortin happesin in amin actor
+
+ASSISTANT TURN 10 (1 messages, last privileged)
+[earlier] Correct—**search/filtering and sorting both run off MainActor**, along with grouping, subgrouping, activity classification, and row-index derivation. MainActor only captures the required keyed inputs, updates UI-owned state, and publishes the current changed projection. Views render prepared results. I omitted search/filtering from my earlier list; it is explicitly part of the constraint.
+
+USER TURN 11
+work is done off main actor we ahve sytems for htis
+
+ASSISTANT TURN 11 (2 messages, last privileged)
+[earlier] Yes. **Use the existing systems that perform work off MainActor.** This sidebar change must fit that established path—not introduce another worker, scheduler, cache, or view-owned computation. I’ll ground Program Design in those existing owners and call paths. MainActor remains the thin UI-state/capture/publication boundary.
+[earlier] For Program Design, the starting point is the **existing Repo Explorer projection path** identified earlier: ```text Existing state and preference owners ↓ RepoExplorerProjectionInputCapture Thin keyed capture ↓ Existing EagerDerivedAtomFamily / RepoExplorerProjectionWorker Search, filter, partition, group, subgroup, sort, row indexes ↓ Existing current-generation publication and materialization ↓ Sidebar renders prepared rows ``` The design work is to identify **which existing inputs and projection rules need extending**, including terminal activity and pane pins. It is not to create new scheduling or observation machinery. Exact ownership will be checked against current source before authoring the structural design. One product choice still blocks that design: **does pinning a repository also place all its panes in “Pinned Panes,” or does that section contain only individually pinned panes?** Your performance corrections remain settled either way.
+
+USER TURN 12
+ok whats teh domain changes or sqlite changes for panes?
+
+ASSISTANT TURN 12 (2 messages, last privileged)
+[earlier] I’ll inspect the current pane model and SQLite ownership to identify exactly what pane pinning would change, including whether terminal activity needs any new persisted data.
+[earlier] **Pane pinning needs a durable field. Activity grouping needs activity facts, but the groups themselves should never be stored.** The exact schema is still a proposal. ```text Pane ├── Existing identity, content, association, metadata ├── Individually pinned New durable choice └── Terminal activity ├── Active now Runtime fact └── Last terminal activity time Separate from focus recency Sidebar projection — calculated off MainActor ├── Effective pinned membership ├── Activity bucket ├── Group / subgroup └── Sorted rows ``` **1. Individual pane pinning** There is currently no pin field in [PaneMetadata](/Users/shravansunder/Documents/dev/project-dev/agent-studio.sidebar-useful/Sources/AgentStudio/Core/RuntimeEventSystem/Contracts/PaneMetadata.swift:5). Pane metadata belongs to the existing pane graph; SQLite already stores fields such as title and note. A small proposed change is: - Add `isPinned` to the existing pane-owned state. - Add `pane.is_pinned`, defaulting existing panes to false. - Extend the existing load/save and mutation paths. - Preserve the pin when that same pane moves between tabs or changes repository association. **No separate pin atom or store is implied.** We should use the existing owner. Whether this belongs in durable pane metadata or local UX memory needs explicit classification before fixing the schema. **2. Repository pins versus pane pins** Repository favorites already persist as `repo.is_favorite`. Your terminology change means cutting the relevan...
+
+USER TURN 13
+...[truncated]...
+p -> spec-design -> program-design`—follows the producer route until three current artifacts exist, then proceeds to the one independent review; it neither consumes remediation nor requires review permission.
+
+Disposition precedes remediation. Do not spend the remediation allowance on prose taste, already-satisfied obligations, or findings without semantic effect. Do not force a mental-model break through correction: stop at `discuss-pathfinding` or the exact owner selected by `spec-program-review`.
+
+Do not dispatch a second design reviewer after remediation. Switching review mode, reviewer lane, target label, caller skill, or resuming after scratch loss does not reset the boundary. Another design review requires explicit user permission given after the first review/remediation result is visible.
+
+Parent verification is not mislabeled independent review. When it resolves every original finding and no unrelated or uncertain meaning remains, return the design terminal or planning handoff; never return `review-permission-required` merely to restate that a hypothetical second review would need permission. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` only when another review is explicitly requested or actually needed because meaning expanded or remains uncertain.
+
+## Terminal Results
+
+Return exactly one:
+
+```text
+ready
+needs-revision
+decision-needed
+deferred
+review-permission-required
+blocked
+stopped
+```
+
+`ready` requires distinct current artifacts plus either one ready independent review or one independent review whose accepted findings received the single complete parent-verified remediation. It never claims planning or implementation.
+
+Completion: the route is artifact-driven, new design homes are valid, at most one review and one remediation occurred, no project-local lifecycle state exists, and the exact next skill or stop is explicit.
+
+</skill>
+
+ASSISTANT TURN 13 (2 messages, last privileged)
+[earlier] I’m resuming the design cycle. I’ll capture the confirmed requirements separately from the observable specification and internal design, and keep unresolved behavior explicit. The existing off-MainActor systems are a fixed constraint.
+[earlier] I’ve captured the confirmed scope in [Requirements](/Users/shravansunder/Documents/dev/project-dev/agent-studio.sidebar-useful/docs/specs/2026-09-07-sidebar-organization/2026-09-07-sidebar-organization-requirements.md), keeping my proposals explicitly separate. The design cycle is **decision-needed** before completing the Specification and Program Design. First, the persistence decision from your domain/SQLite question: **should terminal activity ages survive quitting and reopening Agent Studio?** I recommend **yes**: retain the last terminal-activity timestamp, but establish **Active** from fresh runtime evidence. Otherwise, “Last hour” and “Last 7 days” lose their usefulness after every restart. No implementation changes.
+
+USER TURN 14
+yes
+
+ASSISTANT TURN 14 (1 messages, last privileged)
+[last] Confirmed: **terminal activity timestamps survive app restart**. **Active** is determined from fresh runtime evidence, never restored as a stale flag.
+
+Next: **when a repository is pinned, should all its panes appear in Pinned Panes?** Your earlier wording suggests yes, alongside individually pinned panes, with each pane shown once.

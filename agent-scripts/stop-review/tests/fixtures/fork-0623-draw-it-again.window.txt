@@ -1,0 +1,23 @@
+Read first:
+
+LATEST USER TURN
+draw it again
+
+[last] [ASCII compact comment / expanded thread diagram]
+
+The visual integration is still not built. This is another picture of the already-agreed UI.
+
+Earlier turns follow for context.
+USER TURN 1
+make the comment action buttons circular and integrate the comment UI
+
+ASSISTANT TURN 1 (1 messages, last privileged)
+[earlier] The current buttons are still wrong. Visual integration remains unfinished.
+
+USER TURN 2
+draw it again
+
+ASSISTANT TURN 2 (1 messages, last privileged)
+[last] [ASCII compact comment / expanded thread diagram]
+
+The visual integration is still not built. This is another picture of the already-agreed UI.

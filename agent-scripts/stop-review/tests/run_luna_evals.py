@@ -4,6 +4,10 @@
 
 Uses the isolated ~/.codex-reviewer home (codex-router on 127.0.0.1:8787).
 Never --profile. That flag would load the worker Codex config.
+
+Scoring reads only in-repo fixtures. ~/.codex sessions and /tmp logs are
+not durable sources. --dump-windows may still extract from a live log to
+create a fixture; it does not score that extract.
 """
 
 from __future__ import annotations
@@ -23,9 +27,6 @@ CASES_PATH = TESTS / "eval_cases.jsonl"
 FIXTURES = TESTS / "fixtures"
 CLASSIFIER_PROMPT = ROOT / "classifier-prompt.md"
 REVIEW_RUNNER = ROOT / "review-runner.sh"
-
-SKIP_CLASSIFICATIONS = {"stop_hook_active"}
-
 
 def extract_window_from_log(log_path: str, turn_id: str) -> str | None:
     path = Path(log_path)
@@ -76,26 +77,28 @@ def reconstruct_window_from_session(case: dict[str, object]) -> str | None:
     ).strip()
 
 
-def resolve_window(case: dict[str, object], *, refresh_windows: bool = False) -> tuple[str | None, str]:
+def resolve_window(case: dict[str, object], *, dump_from_live: bool = False) -> tuple[str | None, str]:
+    if dump_from_live:
+        log_path = case.get("log")
+        turn_id = case.get("turn_id")
+        if isinstance(log_path, str) and isinstance(turn_id, str):
+            extracted = extract_window_from_log(log_path, turn_id)
+            if extracted:
+                return extracted, "log"
+        reconstructed = reconstruct_window_from_session(case)
+        if reconstructed:
+            return reconstructed, "session"
+        return None, "missing"
+
     window_file = case.get("window_file")
-    if not refresh_windows and isinstance(window_file, str) and window_file.strip():
-        path = Path(window_file)
-        if not path.is_absolute():
-            path = TESTS / path
-        if path.is_file():
-            return path.read_text(encoding="utf-8").strip(), f"fixture:{path.name}"
-
-    log_path = case.get("log")
-    turn_id = case.get("turn_id")
-    if isinstance(log_path, str) and isinstance(turn_id, str):
-        extracted = extract_window_from_log(log_path, turn_id)
-        if extracted:
-            return extracted, "log"
-
-    reconstructed = reconstruct_window_from_session(case)
-    if reconstructed:
-        return reconstructed, "session"
-    return None, "missing"
+    if not isinstance(window_file, str) or not window_file.strip():
+        return None, "missing_fixture"
+    path = Path(window_file)
+    if not path.is_absolute():
+        path = TESTS / path
+    if path.is_file():
+        return path.read_text(encoding="utf-8").strip(), f"fixture:{path.name}"
+    return None, "missing_fixture"
 
 
 def extract_decision_json(raw_text: str) -> dict[str, object] | None:
@@ -123,10 +126,28 @@ def extract_decision_json(raw_text: str) -> dict[str, object] | None:
     return None
 
 
-def run_luna(window_text: str, *, classifier_prompt: Path | None = None) -> dict[str, object]:
+def nested_sidecar(case: dict[str, object]) -> str:
+    if case.get("nested") is not True:
+        return ""
+    previous = case.get("previous_continues", 1)
+    maximum = case.get("max_continues", 3)
+    return (
+        "\n\nNested stop: true\n"
+        f"Previous continues this turn: {previous}\n"
+        f"Max continues this turn: {maximum}\n"
+    )
+
+
+def run_luna(
+    window_text: str,
+    *,
+    classifier_prompt: Path | None = None,
+    case: dict[str, object] | None = None,
+) -> dict[str, object]:
     prompt_path = classifier_prompt or CLASSIFIER_PROMPT
     prompt = (
         prompt_path.read_text(encoding="utf-8").rstrip()
+        + nested_sidecar(case or {})
         + "\n\nConversation window:\n\n"
         + window_text.strip()
         + "\n"
@@ -208,7 +229,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--refresh-windows",
         action="store_true",
-        help="Ignore existing fixtures and re-extract windows from logs",
+        help="Extract a live log/session window only to write a fixture. Scoring still requires that fixture.",
     )
     parser.add_argument(
         "--classifier-prompt",
@@ -232,16 +253,14 @@ def main(argv: list[str] | None = None) -> int:
         case_id = str(case.get("id", ""))
         if wanted and case_id not in wanted:
             continue
-        classification = str(case.get("old_classification", ""))
-        if classification in SKIP_CLASSIFICATIONS:
-            skipped += 1
-            rows.append(f"SKIP  {case_id}  ({classification})")
-            continue
         expected = str(case.get("expected_decision", ""))
-        window, source = resolve_window(case, refresh_windows=args.refresh_windows or args.dump_windows)
+        window, source = resolve_window(
+            case,
+            dump_from_live=args.refresh_windows or args.dump_windows,
+        )
         if window is None:
-            skipped += 1
-            rows.append(f"SKIP  {case_id}  (no window from {source})")
+            failed += 1
+            rows.append(f"FAIL  {case_id}  missing in-repo fixture ({source})")
             continue
         if args.dump_windows:
             fixture_path = FIXTURES / f"{case_id}.window.txt"
@@ -249,7 +268,7 @@ def main(argv: list[str] | None = None) -> int:
             fixture_path.write_text(window + "\n", encoding="utf-8")
             rows.append(f"DUMP  {case_id}  {fixture_path}")
             continue
-        result = run_luna(window, classifier_prompt=classifier_prompt)
+        result = run_luna(window, classifier_prompt=classifier_prompt, case=case)
         if not result.get("ok"):
             failed += 1
             rows.append(f"FAIL  {case_id}  runner={result.get('error')} source={source}")

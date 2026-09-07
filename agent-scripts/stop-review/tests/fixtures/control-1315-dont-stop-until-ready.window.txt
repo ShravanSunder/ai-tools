@@ -1,0 +1,84 @@
+Read first:
+
+LATEST USER TURN
+› ok $shravan-dev-workflow:orchestrator-design tell me when docs are ready and are reviwed
+
+pr1 is merged fyi
+
+[last] Confirmed: PR1 (#38) is merged.
+
+All three draft documents now exist. The [Program Design](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/docs/specs/2026-09-07-scheduled-agent-workflows/2026-09-07-scheduled-agent-workflows-program-design.md:1) includes package ownership, table responsibilities, recovery boundaries, strong types, naming standards and proof seams.
+
+They are not yet ready or independently reviewed. The pending pause/resume, cron/DST and operator-scope selections still affect the contracts. I haven’t treated “continue” as selecting those policies.
+
+No product code, production processes or branch history was changed.
+
+Earlier turns follow for context.
+USER TURN 242
+do you know my rust and develop0ment standars that shodul be encoide din the designs
+
+ASSISTANT TURN 242 (2 messages, last privileged)
+[earlier] Yes. Your standards are in the supplied AGENTS.md and our confirmed decisions. I should encode them as concrete constraints in the Program Design and proof gates. ```text Rust and package boundaries ├── Reusable domain crates with explicit responsibilities ├── Separate domain logic, persistence, service, SDK and CLI ├── Typed requests, outcomes and actionable errors ├── Shared message types across immediate and timed delivery └── Rust SDK + CLI now; language-independent contracts for later SDKs Naming and modularity ├── Descriptive two-to-three-word names for important files/modules ├── Follow established repository conventions ├── Over 600 lines: design smell └── Over 900 lines: split by responsibility; no 1,000-line files Persistence ├── SQLx + separate automation.sqlite ├── UUIDv7 for new automation identities ├── Current state + revision history + append-only events ├── Explicit transactions; no application-authored triggers ├── No SQL enum-like status constraints ├── Ordinary FKs and composite unique indexes are welcome └── Easy additive migrations; no promise of zero migrations Contracts and feedback ├── Explicit states, ownership, partial effects and uncertainty ├── Stable machine-readable errors plus useful explanations ├── CLI/SDK semantic parity ├── No silent retries of uncertain native submissions └── Hard cutover; no compatibility shims or parallel legacy paths Development and proof ├── Read source before asserting behavior ├── Requirements → Specification → Pr...
+[earlier] I’ll write the Program Design with explicit ownership, table responsibilities, transaction boundaries, and proof seams. I’ll separate settled contracts from the remaining pause/resume and timing choices, so the design doesn’t quietly invent behavior.
+
+USER TURN 243
+and file nameign descripmitnatl kunion good types?
+
+ASSISTANT TURN 243 (1 messages, last privileged)
+[earlier] Yes—those belong explicitly in the design too. ```text Naming Descriptive two-to-three-word names by responsibility: wakeup_commands.rs delivery_outcomes.rs schedule_repository.rs Avoid important modules named utils.rs, types.rs or manager.rs. Keep conventional Rust entrypoints such as lib.rs. Types Newtypes distinguish ScheduleId, WakeupId, RunId and DeliveryId. No interchangeable string IDs inside domain logic. Rust enums with associated data represent valid alternatives. Avoid bags of optional fields that permit impossible combinations. ``` For example: ```rust enum FirstFireOutcome { Fired { occurrence: WakeupOccurrence }, Cancelled { wakeup_id: WakeupId }, Paused { wakeup_id: WakeupId }, } ``` CLI maps cancelled/paused outcomes to explicit errors; SDK callers match typed variants. Your “no enums” rule applies to SQLite status constraints—not Rust enums. Rust owns exhaustive domain validation; SQLite stores extensible values without `CHECK(status IN (...))`. The design must also distinguish domain types, wire contracts and database rows, with explicit conversions where their responsibilities differ. No unnecessary duplicate type layers.
+
+USER TURN 244
+...[truncated]...
+p -> spec-design -> program-design`—follows the producer route until three current artifacts exist, then proceeds to the one independent review; it neither consumes remediation nor requires review permission.
+
+Disposition precedes remediation. Do not spend the remediation allowance on prose taste, already-satisfied obligations, or findings without semantic effect. Do not force a mental-model break through correction: stop at `discuss-pathfinding` or the exact owner selected by `spec-program-review`.
+
+Do not dispatch a second design reviewer after remediation. Switching review mode, reviewer lane, target label, caller skill, or resuming after scratch loss does not reset the boundary. Another design review requires explicit user permission given after the first review/remediation result is visible.
+
+Parent verification is not mislabeled independent review. When it resolves every original finding and no unrelated or uncertain meaning remains, return the design terminal or planning handoff; never return `review-permission-required` merely to restate that a hypothetical second review would need permission. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` only when another review is explicitly requested or actually needed because meaning expanded or remains uncertain.
+
+## Terminal Results
+
+Return exactly one:
+
+```text
+ready
+needs-revision
+decision-needed
+deferred
+review-permission-required
+blocked
+stopped
+```
+
+`ready` requires distinct current artifacts plus either one ready independent review or one independent review whose accepted findings received the single complete parent-verified remediation. It never claims planning or implementation.
+
+Completion: the route is artifact-driven, new design homes are valid, at most one review and one remediation occurred, no project-local lifecycle state exists, and the exact next skill or stop is explicit.
+
+</skill>
+
+ASSISTANT TURN 244 (1 messages, last privileged)
+[earlier] I’m resuming the three-artifact design cycle. I’ll check the current contracts, record your naming and type rules, and resolve the remaining behavior gaps before treating the Program Design as ready for review.
+
+USER TURN 245
+dont stop until done and ready
+
+ASSISTANT TURN 245 (2 messages, last privileged)
+[earlier] The current code confirms two important boundaries: Host composes the services, while the communication service owns native submission; and its effect tracking is request-local, so it cannot recover a delivery obligation after a restart. The automation design must add persistence without treating a recorded intent as proof that Codex accepted it.
+[earlier] The design now records 35 requirements and 13 observable contracts, including your Rust/type standards, agent-readable errors, and `--wait-until-first-fire`. Three pending choices affect the remaining design: ▸ Pause: hold pending messages, skip paused ticks on resume? ▸ Cron: five fields with explicit timezone and defined DST handling? ▸ Operator completion: track our workflow runs, including one-off runs, or also arbitrary native threads/subagents? My recommendations are in the pending questions. The Program Design and independent review are not complete yet. Updated [Requirements](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/docs/specs/2026-09-07-scheduled-agent-workflows/2026-09-07-scheduled-agent-workflows-requirements.md:1) and [Specification](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/docs/specs/2026-09-07-scheduled-agent-workflows/2026-09-07-scheduled-agent-workflows-specification.md:1). The invoked [Program Design skill](/Users/shravansunder/.codex/plugins/cache/ai-tools/shravan-dev-workflow/2.8.0/skills/program-design/SKILL.md:1) requires: “Missing or conflicting meaning returns `specification-gap`; do not patch it locally.” These choices change behavior, so I need your selections rather than silently declaring my recommendations settled.
+
+USER TURN 246
+› ok $shravan-dev-workflow:orchestrator-design tell me when docs are ready and are reviwed
+
+pr1 is merged fyi
+
+ASSISTANT TURN 246 (3 messages, last privileged)
+[earlier] Noted—PR1 is merged. I’ll verify the new base read-only and keep this work focused on the next design. I’ll report “ready and reviewed” only after the contracts, Program Design, and independent review are complete.
+[earlier] PR #38 is confirmed merged at `de3a149`. The V2 worktree still has its earlier base, and the current checkout has an unrelated proxy edit; I’m leaving both untouched. I’m documenting the existing integration boundaries without rebasing or changing product code.
+[last] Confirmed: PR1 (#38) is merged.
+
+All three draft documents now exist. The [Program Design](/Users/shravansunder/Documents/dev/project-dev/codex-router.feat-agent-messaging-v2/docs/specs/2026-09-07-scheduled-agent-workflows/2026-09-07-scheduled-agent-workflows-program-design.md:1) includes package ownership, table responsibilities, recovery boundaries, strong types, naming standards and proof seams.
+
+They are not yet ready or independently reviewed. The pending pause/resume, cron/DST and operator-scope selections still affect the contracts. I haven’t treated “continue” as selecting those policies.
+
+No product code, production processes or branch history was changed.

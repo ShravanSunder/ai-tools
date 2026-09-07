@@ -1,0 +1,19 @@
+Read first:
+
+LATEST USER TURN
+Explain to me where we're deviating
+
+[last] delete WorktreeAnnotationProjectionAtom from the PR1 architecture; connect Store directly to pane-scoped Bridge annotation source. That is where PR1 deviated.
+
+Earlier turns follow for context.
+USER TURN 1
+why does File View and Review View share that projection atom?
+
+ASSISTANT TURN 1 (1 messages, last privileged)
+[earlier] They share it because the first design treated annotations as a worktree-global projection. I’m checking whether that still matches the current File/Review ownership.
+
+USER TURN 2
+Explain to me where we're deviating
+
+ASSISTANT TURN 2 (1 messages, last privileged)
+[last] delete WorktreeAnnotationProjectionAtom from the PR1 architecture; connect Store directly to pane-scoped Bridge annotation source. That is where PR1 deviated.

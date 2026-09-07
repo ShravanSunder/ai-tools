@@ -41,7 +41,7 @@ The pattern picks the shape of the work and its table owns the allowed category 
 
 Mini (OpenAI Luna) is super cheap. Default grunt work to Mini whenever the pattern's floor allows it: mechanical procedures, bounded scans and summaries, format conversions, test-and-report loops, watches. A Mini agent can be a Sidekick, a Delegate, or an Operator.
 
-The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only, Advisor's is Frontier-only, and Delegate's is Balanced or Mini, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. A judgment that spans multiple components, systems, or architecture and needs Frontier is an Advisor or a Sidekick, not a Delegate. "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model.
+The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. Delegate Frontier is reviewer-only. Persistent architecture guidance stays Advisor (or Sidekick if declined). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model.
 
 A session not worth keeping warm is not persistent — close it and dispatch Delegates or Operators instead (see Session Keep-Alive for the cache economics).
 
@@ -67,7 +67,7 @@ Prefer `medium`; `high` for challenging tasks. On request only: thinking `xhigh`
 ### Sidekick
 Use a Sidekick for persistent work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work. Also use a Sidekick when the user declines an Advisor for persistent guidance or is unavailable to ask.
 
-- **Work:** Delegated execution across assignments and follow-ups, including in-the-work reasoning, pushback, reviews and validation of your logic.
+- **Work:** Execution across assignments and follow-ups, including in-the-work reasoning, pushback, reviews and validation of your logic.
 - **Continuity and cardinality:** One or many persistent named relationships with ledger, kept cache-warm (see Session Keep-Alive).
 - **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work.
 - **Model category:** Frontier, Balanced, or Mini
@@ -79,7 +79,7 @@ Use a Sidekick for persistent work you will resume and steer; a named co-worker 
 | Balanced       | OpenAI Sol          | low or medium    |
 | Balanced       | Claude Opus         | high             |
 | Balanced       | Cursor Grok         | medium or high   |
-| Mini           | OpenAI Luna         | xhigh or max     |
+| Mini           | OpenAI Luna         | xhigh            |
 
 On request only: Frontier thinking `high`; Sol thinking `high`.
 
@@ -89,13 +89,15 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 - **Work:** One bounded research, review, implementation, reasoning, or second-opinion assignment.
 - **Continuity and cardinality:** Single or Delegate swarm; single-assignment — the relationship ends when the receipt is accepted, and the assignment may contain a conversation.
 - **Authority:** Packet-bounded work; parent verifies the work.
-- **Model category:** Balanced or Mini
+- **Model category:** Frontier, Balanced, or Mini
 
-| Model category | Model lineage       | Thinking         |
-| -------------- | ------------------- | ---------------- |
-| Balanced       | OpenAI Sol          | low or medium    |
-| Balanced       | Cursor Grok         | medium or high   |
-| Mini           | OpenAI Luna         | xhigh            |
+| Model category | Model lineage       | Thinking         | Why              |
+| -------------- | ------------------- | ---------------- | ---------------- |
+| Frontier       | OpenAI Astra        | medium or high   | as reviewer only |
+| Frontier       | Claude Fable        | medium or high   | as reviewer only |
+| Balanced       | OpenAI Sol          | medium           |                  |
+| Balanced       | Cursor Grok         | medium or high   |                  |
+| Mini           | OpenAI Luna         | xhigh            |                  |
 
 ### Operator
 Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results). Give the Operator a procedure and reserve reasoning for the parent.
