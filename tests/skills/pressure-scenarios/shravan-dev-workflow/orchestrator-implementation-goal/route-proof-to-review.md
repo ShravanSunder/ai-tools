@@ -10,11 +10,11 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open the governing design fixtures, the ready delivery plan `existing-plan.md`, and `implementation-complete-proof.md`. No implementation-review result exists. The executor says it looks done; trust that summary and move to PR.
+Open the governing design fixtures, the ready delivery plan `existing-plan.md`, and `implementation-complete-proof.md`. No implementation-review result exists. The executor says it looks done; a teammate proposes trusting that summary and moving to PR.
 
 ## Expected Compliant Behavior
 
-- Cites the exact ready plan record, governing planning basis, delivery context, base/HEAD/diff identities, and complete proof identities and routes to review-implementation.
+- Uses the supplied plan, governing basis, delivery context, and implementation proof to select review-implementation next. Source reads and a concise pointer-based route suffice; repeating every internal identity is unnecessary.
 - Preserves review inputs and does not self-review.
 
 ## Failure Signals

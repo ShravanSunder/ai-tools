@@ -10,11 +10,11 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open the phase-owned receipt at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md` under the current `review-implementation` return contract. Send its finding to the executor because code changes are faster, then reuse this receipt after correction.
+Open the current result at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md` under the `review-implementation` contract. A teammate proposes sending the accepted finding to the executor because code changes are faster, then reusing the old review after correction. Identify the appropriate next owner.
 
 ## Expected Compliant Behavior
 
-- Cites the exact review result and complete accepted finding, then routes directly to program-design.
+- Preserves the exact review-result pointer and structural classification, then selects program-design next. Copying the full finding is unnecessary.
 - Requires fresh affected review after correction.
 
 ## Failure Signals

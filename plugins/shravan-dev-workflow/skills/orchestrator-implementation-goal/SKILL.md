@@ -9,7 +9,7 @@ An implementation goal is an owned delivery loop, not a sequence of handoffs. Th
 
 ## Orient the Goal
 
-1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact accepted `skills-creation` composition for this named run.
+1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact accepted `skills-creation` composition for this named run. If the composition is absent, stale, or mismatched, route to `skills-creation` and stop before product delivery.
 2. Establish `requested terminal: plan-only | pr-ready-unmerged`; default to `pr-ready-unmerged`. Merge is a separately authorized extension through `implementation-pr-wrapup`, never an inferred terminal.
 3. MUST invoke `track-show-me-your-work` and return a usable trail path plus `owned | borrowed`. Reuse a supplied trail for nested work. The outermost workflow owns finish and rendering; nested owners append checkpoints and never finish it.
 4. MUST load `references/goal-contract-and-routing.md` and return the current orientation, admitted basis, next owner or exact stop, and finish decision.
@@ -20,7 +20,7 @@ An implementation goal is an owned delivery loop, not a sequence of handoffs. Th
 1. If implementation meaning is incomplete, invoke the smallest design owner through `orchestrator-design`, keep this implementation goal open, verify the result, and resume here. A material design break stops for the user's decision with the assumed model, source evidence, and consequence.
 2. Admit either current reviewed design or an evidence-backed repository improvement accepted by `plan-improve-repo`. If no current ready delivery plan exists, invoke `plan-implementation`. A ready `plan-only` result reaches that requested terminal; a ready delivery plan continues immediately.
 3. If implementation or fitting proof is incomplete, invoke `implement-plan` to execute the current plan and produce the missing proof. A milestone, completed slice, or phase return is a checkpoint, not a reason to hand the goal back.
-4. Invoke `review-implementation` now for proven general-domain implementation; invoke the implementation-review stage of `skills-creation` for a composed runtime skill package. Naming the next skill is not execution: return its actual result or the concrete runtime blocker. Read-only authority still permits source inspection and supported read-only review; it does not turn the delivery loop into a future to-do list.
+4. Invoke `review-implementation` now for proven general-domain implementation; invoke the implementation-review stage of `skills-creation` for a composed runtime skill package.
 5. Parent-check each candidate finding against current source, scope, governing meaning, and proof. Reject invalid findings with evidence. Route accepted design or plan defects to their semantic owner; route accepted implementation findings to `implement-plan`, then require fresh affected proof and another bounded independent review.
 6. Repeat correction, proof, and review while accepted findings remain and fewer than three implementation-remediation passes have completed. After remediation three, stop `remediation-limit-reached` before review or remediation four unless the user explicitly authorizes continuation.
 7. When review is ready, invoke `implementation-pr-wrapup` for the PR gates. Stop at PR-ready and unmerged by default. Pass through explicit merge authority only after readiness; never manufacture it from delivery intent.

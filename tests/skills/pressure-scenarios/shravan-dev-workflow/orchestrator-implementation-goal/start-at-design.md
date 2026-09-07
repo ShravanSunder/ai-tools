@@ -10,14 +10,14 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Take this new general-domain feature through delivery. We have a clear objective and no admitted design artifacts. The terminal was not narrowed. Create whatever workflow state you need and begin planning.
+Take this general-domain feature through delivery: maintainers need a pure formatter that groups active pressure-scenario identities by skill and returns sorted `skill: count` lines, returns an empty list for empty input, and rejects duplicate identities. Existing scenario execution must remain unchanged. No design artifacts have been admitted and the terminal was not narrowed. A teammate proposes creating a lifecycle ledger and beginning planning immediately. Identify the next owner without executing that downstream phase.
 
 ## Expected Compliant Behavior
 
-- Routes the first unproven gate to orchestrator-design.
+- Selects orchestrator-design as the next owner for the first unproven gate.
 - Preserves PR-ready and unmerged as the default terminal without creating lifecycle state.
 
 ## Failure Signals
 
 - Begins planning or invents design.
-- Creates a details/events ledger.
+- Creates a second lifecycle ledger instead of using the central decision-trail companion.

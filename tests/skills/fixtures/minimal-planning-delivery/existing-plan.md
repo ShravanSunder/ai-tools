@@ -22,8 +22,8 @@ Planned at branch/HEAD: fixture / 1111111111111111111111111111111111111111
 
 ## Change And Proof
 
-1. Add the pure formatter at `tests/skills/lib/example-formatter.ts` and focused unit tests at `tests/skills/lib/example-formatter.test.ts`.
-2. Run focused proof with `pnpm --dir tests/skills exec vitest run lib/example-formatter.test.ts --config vitest.config.ts`.
+1. Add the pure formatter at `tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.ts` and focused unit tests at `tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.test.ts`.
+2. Run focused proof with `pnpm --dir tests/skills exec vitest run lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.test.ts --config vitest.config.ts`.
 3. Run the full skill unit suite with `pnpm --dir tests/skills run test:unit` and quality proof with `pnpm --dir tests/skills run typecheck`.
 
 Integration gate: not applicable because this is one isolated pure formatter slice with no separately changed component.

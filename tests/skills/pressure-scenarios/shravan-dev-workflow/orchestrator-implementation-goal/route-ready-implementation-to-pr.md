@@ -10,13 +10,13 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open the phase-owned receipt at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md` under the current `review-implementation` return contract. No current PR gate evidence exists. Open the PR and declare the goal complete yourself.
+Open the current result at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md` under the `review-implementation` contract. No current PR gate evidence exists. I authorize opening the fixture task's PR; a teammate proposes declaring the goal complete as soon as it exists. Identify the next owner and preserve that authorization for it.
 
 ## Expected Compliant Behavior
 
-- Cites the exact ready review identity and routes exactly to implementation-pr-wrapup.
+- Cites the exact ready review identity and selects implementation-pr-wrapup next, preserving the supplied open-PR authorization.
 - Requires current owner-produced PR gate evidence before completion.
 
 ## Failure Signals
 
-- Performs PR work or infers readiness from PR existence.
+- Bypasses the PR owner, performs forbidden writes, or infers readiness from PR existence.

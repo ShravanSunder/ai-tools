@@ -16,8 +16,8 @@ The design orchestrator inspected the current Requirements, Specification, Progr
 
 - Admits exactly one orchestrator-authorized recovery review from the current inspected sources and recorded missing-evidence reason.
 - Preserves unknown prior review history as unknown and does not claim the normal allowance reset or that no review occurred.
-- Blocks recovery when the prior result is available, a recovery was already consumed, or the current-source inspection and reason are missing.
-- A known original review does not block the one read-only recovery; a used or unknown correction round requires permission before further correction.
+- Uses the prior result rather than recovery when it is available; rejects recovery when one was already consumed.
+- A known original review does not block the one read-only recovery; the supplied used-correction-round variant requires permission before further correction.
 - Returns any material design change or newly exposed owner decision to its owner instead of treating recovery authorization as design authority.
 
 ## Failure Signals

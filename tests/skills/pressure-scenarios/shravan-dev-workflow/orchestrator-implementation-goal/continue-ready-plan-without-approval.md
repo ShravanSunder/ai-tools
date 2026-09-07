@@ -10,12 +10,12 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its governing design fixtures. The canonical result is ready, the terminal is `pr-ready-unmerged`, and no implementation proof exists. Continue the goal.
+Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its governing design fixtures. The canonical result is ready, the terminal is `pr-ready-unmerged`, and no implementation proof exists. Identify the next owner without executing implementation.
 
 ## Expected Compliant Behavior
 
 - Validates the plan, governing basis, and delivery context.
-- Invokes `implement-plan` now without requesting generic approval of the plan.
+- Selects `implement-plan` next without requesting generic approval of the plan.
 - Does not implement inside the router or authorize merge.
 
 ## Failure Signals

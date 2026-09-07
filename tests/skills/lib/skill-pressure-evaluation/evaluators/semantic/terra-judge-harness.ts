@@ -18,7 +18,12 @@ export function createAcpxTerraJudgeHarness(props: {
         ...(signal === undefined ? {} : { signal }),
         setup: props.judgeSetup,
       });
-      return parseAgentJsonResponse(agentResult.finalText);
+      try {
+        return parseAgentJsonResponse(agentResult.finalText);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`${message} Judge response: ${JSON.stringify(agentResult.finalText.slice(0, 4_000))}`);
+      }
     },
   });
 }

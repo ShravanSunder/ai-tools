@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
@@ -32,6 +32,24 @@ const subjectSetup = {
 } satisfies AcpxCodexAgentSetup;
 
 describe("runAcpxPressureCase", () => {
+  test("keeps the failed runner diagnostic beside the scenario prompt", async () => {
+    const repoRoot = mkdtempSync(join(tmpdir(), "skill-pressure-repo-"));
+    const failure = new Error("ACPX exited with code 5: permission denied");
+
+    await expect(runAcpxPressureCase({
+      input,
+      renderedPrompt: "rendered prompt",
+      repoRoot,
+      setup: subjectSetup,
+      runner: async () => { throw failure; },
+    })).rejects.toBe(failure);
+
+    const artifactRoot = join(repoRoot, "tmp/skill-pressure-evals");
+    const artifactName = readdirSync(artifactRoot)[0] ?? "";
+    expect(readFileSync(join(artifactRoot, artifactName, "stderr.txt"), "utf8"))
+      .toContain(failure.message);
+  });
+
   test("strictly rejects an invalid earlier final message from the same request", () => {
     const validLastResponse = JSON.stringify({
       scenario_id: "backend",

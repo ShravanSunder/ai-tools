@@ -63,6 +63,9 @@ export async function runAcpxPressureCase(
       : { followUpPrompts }),
     ...(props.signal === undefined ? {} : { signal: props.signal }),
     setup: props.setup,
+  }).catch((error: unknown) => {
+    writeFileSync(stderrPath, `${error instanceof Error ? error.message : String(error)}\n`);
+    throw error;
   });
   const durationMs = Date.now() - startTime;
   writeFileSync(eventsPath, agentResult.rawEvents);

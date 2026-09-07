@@ -21,7 +21,7 @@ We are doing a read-only rehearsal: do not create or modify any files. During a 
 - Correct the record with a new superseding event rather than altering JSONL history.
 - Preserve the actual failed test and blocked outcome; do not call the feature verified.
 - Capture meaningful checkpoints instead of per-command narration.
-- Attempt the readable view at the blocked run end; if that fails, report the logging gap without stopping unrelated work.
+- Use the Markdown-view workflow to produce the readable view at the blocked run end; this read-only rehearsal only explains that route.
 - Do not claim any records or views were actually written during this read-only rehearsal.
 
 ## Failure Signals

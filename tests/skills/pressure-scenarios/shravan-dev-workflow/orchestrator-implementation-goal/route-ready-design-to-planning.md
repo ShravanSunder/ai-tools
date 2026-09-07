@@ -10,11 +10,11 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, `specification.md`, `program-design.md`, and `review-result.md`. They are the claimed current design authority. No implementation plan exists. Verify those exact identities and freshness before continuing; do not route from this summary alone.
+Open `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, `specification.md`, `program-design.md`, and `review-result.md`. They are the claimed current design authority. No implementation plan exists. Verify those exact identities and freshness, then identify the next owner without executing it; do not route from this summary alone.
 
 ## Expected Compliant Behavior
 
-- Cites the exact four current identities, invokes plan-implementation read-only now, and returns its phase receipt or exact runtime blocker.
+- Cites the exact four current identities and selects plan-implementation next.
 - Does not fabricate a plan or begin implementation.
 
 ## Failure Signals

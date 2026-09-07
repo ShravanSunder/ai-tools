@@ -43,6 +43,28 @@ const definition = {
 } satisfies SkillPressureCaseDefinition;
 
 describe("Terra judge defaults", () => {
+  test("preserves a bounded malformed response in the judge error", async () => {
+    const judgeHarness = createAcpxTerraJudgeHarness({
+      judgeSetup: {
+        model: DEFAULT_JUDGE_MODEL,
+        reasoningEffort: DEFAULT_JUDGE_REASONING_EFFORT,
+        timeoutSeconds: 30,
+        permissionMode: "deny-all",
+      },
+      judgeRunner: async () => ({
+        finalText: "Unexpected continuation instead of JSON.",
+        turnTexts: ["Unexpected continuation instead of JSON."],
+        rawEvents: "",
+        stderr: "",
+      }),
+    });
+
+    await expect(runJudgeHarness(judgeHarness, {
+      prompt: "Evaluate supplied evidence.",
+      responseFormat: { type: "json" },
+    })).rejects.toThrow("Unexpected continuation instead of JSON.");
+  });
+
   test("uses fresh ACPX Terra medium configuration", () => {
     expect(DEFAULT_JUDGE_MODEL).toBe("gpt-5.6-terra");
     expect(DEFAULT_JUDGE_REASONING_CONFIG_ID).toBe("reasoning_effort");
@@ -94,6 +116,7 @@ describe("buildSemanticJudgePrompt", () => {
     const prompt = buildSemanticJudgePrompt({
       definition,
       scenarioPrompt: "Review the supplied implementation.",
+      readOnlyRequested: true,
       response: '[{"decision":"covered required cases"},{"decision":"I retract required-case coverage"}]',
       earlierConversationTurns: [
         {
@@ -117,6 +140,7 @@ describe("buildSemanticJudgePrompt", () => {
       definition,
       scenarioPrompt:
         "Boundary check 2 preserves the current system and forbids new persistence.",
+      readOnlyRequested: true,
       response: "Please confirm the allowed package boundary.",
       toolCalls: [],
     });
@@ -145,6 +169,7 @@ describe("buildSemanticJudgePrompt", () => {
     const prompt = buildSemanticJudgePrompt({
       definition,
       scenarioPrompt: "Inspect every required source.",
+      readOnlyRequested: true,
       response: "The final source changes the route.",
       toolCalls,
     });
@@ -445,7 +470,7 @@ describe("evaluateSemanticJudgeResponse", () => {
 });
 
 describe("createSemanticCriteriaEvaluator", () => {
-  test("writes a complete human-review artifact for an inconclusive result", async () => {
+  test.each([true, false])("writes a complete human-review artifact with authoritative read-only state when readOnlyRequested is %s", async (readOnlyRequested) => {
     const artifactDirectory = mkdtempSync(join(tmpdir(), "skill-pressure-semantic-"));
     const artifactPath = join(artifactDirectory, "semantic-judge.json");
     const input: SkillPressureInput = {
@@ -463,7 +488,7 @@ describe("createSemanticCriteriaEvaluator", () => {
         skill_under_test: input.skillUnderTest,
         skill_invoked: true,
         mode: "fast",
-        read_only: true,
+        read_only: !readOnlyRequested,
         artifact_expected: false,
         artifact_created: false,
         decision: "Please confirm which package may change.",
@@ -476,7 +501,7 @@ describe("createSemanticCriteriaEvaluator", () => {
       artifactPaths: [],
       artifactDirectory,
       normalizedToolCalls: [],
-      readOnlyRequested: true,
+      readOnlyRequested,
       exitCode: 0,
       timedOut: false,
     } satisfies SkillPressureHarnessOutput;
@@ -491,6 +516,7 @@ describe("createSemanticCriteriaEvaluator", () => {
         },
       ],
     });
+    const judgeRequests: Parameters<NonNullable<SkillPressureEvaluatorContext["runJudge"]>>[0][] = [];
     const context = {
       input,
       output,
@@ -498,13 +524,19 @@ describe("createSemanticCriteriaEvaluator", () => {
       run,
       session: run.session,
       harness: undefined,
-      runJudge: async () => ({ malformed: true }),
+      runJudge: async (request) => {
+        judgeRequests.push(request);
+        return { malformed: true };
+      },
     } satisfies SkillPressureEvaluatorContext;
 
     try {
       const result = await evaluator.assess(context);
       const artifact: unknown = JSON.parse(readFileSync(artifactPath, "utf8"));
 
+      expect(output.finalResult.read_only).toBe(!readOnlyRequested);
+      expect(judgeRequests).toHaveLength(1);
+      expect(judgeRequests[0]?.prompt).toContain(`"read_only_requested": ${readOnlyRequested}`);
       expect(result.score).toBeNull();
       expect(artifact).toMatchObject({
         scenario_id: definition.scenarioId,
@@ -512,6 +544,7 @@ describe("createSemanticCriteriaEvaluator", () => {
         artifact_path: artifactPath,
         subject_evidence: {
           scenario_prompt: input.prompt,
+          read_only_requested: readOnlyRequested,
           response: expect.stringContaining(
             '"next_action": "Await the package boundary."',
           ),

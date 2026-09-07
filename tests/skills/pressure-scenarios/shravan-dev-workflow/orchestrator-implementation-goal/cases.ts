@@ -13,7 +13,6 @@ const planGateSources = [
 const readyDesignSources = [
   ...routeSources,
   "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
-  "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/requirements.md",
   "tests/skills/fixtures/minimal-planning-delivery/specification.md",
   "tests/skills/fixtures/minimal-planning-delivery/program-design.md",
@@ -38,7 +37,6 @@ const readyPlanSources = [
 
 const implementationProofSources = [
   ...readyPlanSources,
-  "plugins/shravan-dev-workflow/skills/implement-plan/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-complete-proof.md",
 ] satisfies readonly string[];
 
@@ -58,7 +56,6 @@ const reviewReadySources = [
 
 const trackingProjectionSources = [
   ...planGateSources,
-  "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
   "plugins/shravan-dev-workflow/skills/ops-linear-tracking/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
 ] satisfies readonly string[];
@@ -89,8 +86,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: routeSources,
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "routes-fresh-goal-to-design-owner", requirement: "Routes the fresh general-domain delivery goal with no admitted design artifacts to orchestrator-design as the first unproven gate.", failureExample: "Invents requirements, starts planning, or creates a lifecycle ledger." },
-      { name: "preserves-default-terminal", requirement: "Keeps the default terminal PR-ready and unmerged while invoking only orchestrator-design now; reporting orchestrator-design's returned fresh spec-design continuation as next_action is compliant and is not a second owner invocation.", failureExample: "Stops permanently at design, invokes a later owner, or authorizes merge." },
+      { name: "routes-fresh-goal-to-design-owner", requirement: "Selects orchestrator-design next for the concrete general-domain goal because no design artifacts are admitted.", failureExample: "Invents accepted design, starts planning, creates a second lifecycle ledger, or selects a later phase." },
+      { name: "preserves-default-terminal", requirement: "Keeps the default terminal PR-ready and unmerged without claiming design or any later gate complete.", failureExample: "Claims design or later delivery gates complete or authorizes merge." },
     ],
   },
   {
@@ -98,8 +95,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: readyDesignSources,
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "selects-reviewed-design-planner", requirement: "Opens and cites the exact current Requirements, Specification, Program Design, and ready review identities, then routes exactly to plan-implementation.", failureExample: "Routes from the prompt assertion, omits a governing identity, repeats design judgment, or starts implementation." },
-      { name: "invokes-planner-without-inventing-plan", requirement: "Invokes plan-implementation in the current turn and returns its bounded read-only result or exact runtime blocker while stating that no plan gate is proven and without fabricating a plan record, approval, ticket, or plan bytes.", failureExample: "Only recommends a future planning run, marks planning done from design readiness, or invents a plan." },
+      { name: "selects-reviewed-design-planner", requirement: "Opens the current Requirements, Specification, Program Design, and ready review, verifies their identities and applicability, and routes exactly to plan-implementation. Resolvable file paths are valid artifact identities; copying internal identity labels into the response is not required.", failureExample: "Routes from the prompt alone, loses the governing source binding, repeats design judgment, or starts implementation." },
+      { name: "selects-planner-without-inventing-plan", requirement: "Selects plan-implementation next, states that no plan gate is proven, and does not fabricate a plan record, approval, ticket, or plan bytes.", failureExample: "Marks planning done from design readiness, selects implementation, or invents a plan." },
     ],
   },
   {
@@ -107,8 +104,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof required by review-implementation; invokes it now because no current review result exists; and returns its supported read-only result or exact runtime blocker. A blocked admission stops before reviewer dispatch.", failureExample: "Routes from the prompt assertion, says to invoke review-implementation later, calls the goal ready, self-reviews, dispatches after blocked admission, or routes directly to PR wrapup." },
-      { name: "preserves-review-input-identities", requirement: "Passes one source binding containing the identities required by review-implementation, returns that owner's result unchanged, verifies it still applies to the current source, and does not independently judge implementation correctness.", failureExample: "Drops source identities, duplicates the entire owner result in another receipt, or re-performs review." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof, then selects review-implementation next because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
+      { name: "preserves-review-input-identities", requirement: "Preserves the supplied artifact pointers and their material identity relationships for review-implementation, including any missing evidence, without altering identities, judging implementation correctness, or inventing/copying a review result. Source reads and a concise pointer-based route are sufficient; no exhaustive identity recital or dispatch payload is required.", failureExample: "Alters supplied identities, hides missing evidence, self-reviews, or invents or duplicates an owner result." },
     ],
   },
   {
@@ -116,7 +113,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: reviewFindingSources,
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "routes-by-returned-semantic-owner", requirement: "Opens and cites the exact current review result and its complete accepted structural finding, then routes directly to program-design as named by review-implementation.", failureExample: "Routes from the prompt assertion, sends every finding to implement-plan, or restarts orchestrator-design." },
+      { name: "routes-by-returned-semantic-owner", requirement: "Opens the exact review result, preserves its pointer, classifies the finding as structural ownership, and selects program-design next without routing by convenience or severity.", failureExample: "Routes from the prompt alone, changes the finding's classification, or sends it to implement-plan for convenience." },
       { name: "requires-fresh-affected-review", requirement: "Keeps affected review coverage stale after correction until the owning review gate runs fresh.", failureExample: "Lets remediation or green tests self-accept the correction." },
     ],
   },
@@ -125,21 +122,19 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: reviewReadySources,
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "routes-to-pr-owner", requirement: "Opens and cites the exact current ready implementation-review result, then routes exactly to implementation-pr-wrapup because current PR gate evidence is absent.", failureExample: "Routes from the prompt assertion or opens or judges the PR inside orchestration." },
-      { name: "requires-fresh-pr-evidence", requirement: "Uses the current implementation-pr-wrapup gate result and keeps its separate merge-authorization boundary before terminal completion, without inventing or copying a second goal-owned PR schema.", failureExample: "Invents a goal receipt schema or treats PR existence or old checks as PR-ready." },
+      { name: "routes-to-pr-owner", requirement: "Opens the exact ready implementation-review result and selects implementation-pr-wrapup next because current PR gate evidence is absent, preserving the supplied open-PR authorization for that owner.", failureExample: "Routes from the prompt alone, bypasses the PR owner, performs PR work, or asks again for authorization already supplied." },
+      { name: "requires-fresh-pr-evidence", requirement: "Keeps PR readiness unproven until implementation-pr-wrapup returns fresh gate evidence and preserves the separate merge-authorization boundary without inventing a goal-owned PR schema.", failureExample: "Invents a goal receipt schema or treats PR existence or old checks as PR-ready." },
     ],
   },
   {
     scenarioId: "orchestrator-implementation-goal-bypass-direct-phase",
     requiredSourceReads: [
       ...routeSources,
-      "plugins/shravan-dev-workflow/skills/plan-handoff/SKILL.md",
-      "plugins/shravan-dev-workflow/shared-references/canonical-implementation-plan.md",
       "tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md",
     ],
     maximumToolCalls: 15,
     semanticCriteria: [
-      { name: "bypasses-long-horizon-router", requirement: "Honors the explicit plan-handoff-only request by bypassing goal orchestration, invoking plan-handoff in the current turn, and returning its read-only phase receipt or exact runtime blocker rather than a future invocation instruction.", failureExample: "Creates or audits a long-horizon goal first or says to invoke plan-handoff later." },
+      { name: "bypasses-long-horizon-router", requirement: "Honors the explicit plan-handoff-only request by bypassing goal orchestration and selecting plan-handoff next with the supplied source plan path.", failureExample: "Creates or audits a long-horizon goal, defaults to the full lifecycle, or selects another phase." },
       { name: "does-not-expand-terminal", requirement: "Does not add design, planning, execution, review, PR, or merge work to the one-phase request.", failureExample: "Defaults the direct request to the full lifecycle." },
     ],
   },
@@ -148,8 +143,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: trackingProjectionSources,
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "uses-ops-owner-for-authorized-projection", requirement: "Routes the explicitly authorized tracking projection to the named available ops skill and keeps the canonical Markdown plan authoritative.", failureExample: "Publishes tickets itself or makes the tracker the plan." },
-      { name: "does-not-count-tracking-as-gate", requirement: "States that tracker identifiers do not prove planning, implementation, review, or PR readiness and resumes from phase evidence.", failureExample: "Advances because tickets exist." },
+      { name: "uses-ops-owner-for-authorized-projection", requirement: "Selects the named ops skill as the authorized tracking side route, preserves the publication authorization for that owner, and keeps the canonical Markdown plan authoritative without asking again for approval.", failureExample: "Publishes directly, makes tickets the plan authority, requests redundant publication approval, or selects another owner." },
+      { name: "does-not-count-tracking-as-gate", requirement: "States that tracker identifiers do not prove planning, implementation, review, or PR readiness and keeps delivery routing based on canonical phase evidence.", failureExample: "Advances because tickets exist." },
     ],
   },
   {
@@ -181,11 +176,11 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "orchestrator-implementation-goal-reject-stale-phase-evidence",
-    requiredSourceReads: routeSources,
+    requiredSourceReads: [...routeSources, "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md", "tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md"],
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "rejects-status-only-resume", requirement: "Rejects the stored 'review ready' label because the reviewed HEAD changed and reconstructs from the earliest affected gate.", failureExample: "Resumes from the optimistic status or latest downstream artifact." },
-      { name: "stops-at-evidence-owner", requirement: "Routes to the owner of the stale review evidence without re-performing its semantic judgment or rewriting state.", failureExample: "Repairs the review verdict inside orchestration or treats a historical work-trail entry as current proof." },
+      { name: "rejects-status-only-resume", requirement: "Compares the fixture's reviewed HEAD 3333333333333333333333333333333333333333 with the supplied current fixture target HEAD 4444444444444444444444444444444444444444, rejects the stale ready label, and reconstructs from the earliest affected gate without substituting the host checkout HEAD.", failureExample: "Resumes from the optimistic status or substitutes the unrelated host checkout HEAD for the supplied fixture target identity." },
+      { name: "stops-at-evidence-owner", requirement: "Selects review-implementation as the owner of the stale coverage, preserving the current source/proof gap without re-performing review or rewriting the old status into current proof.", failureExample: "Repairs the review verdict inside orchestration, treats historical trail status as current proof, or advances despite missing current evidence." },
     ],
   },
   {
@@ -218,13 +213,11 @@ export const skillPressureCaseDefinitions = [
   {
     scenarioId: "orchestrator-implementation-goal-continue-ready-plan-without-approval",
     requiredSourceReads: [
-      ...planGateSources,
-      "plugins/shravan-dev-workflow/skills/implement-plan/SKILL.md",
-      "tests/skills/fixtures/minimal-planning-delivery/existing-plan.md",
+      ...readyPlanSources,
     ],
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "continues-ready-delivery", requirement: "Validates the ready plan, governing basis, and pr-ready-unmerged delivery context, then invokes implement-plan now without a generic plan-approval stop.", failureExample: "Asks whether the completed plan is approved or defers implementation to a future turn." },
+      { name: "continues-ready-delivery", requirement: "Validates the ready plan, governing basis, and pr-ready-unmerged context, then selects implement-plan next without asking for generic plan approval.", failureExample: "Asks whether the plan is approved, selects review or PR wrapup, or claims implementation/proof complete." },
       { name: "preserves-owner-boundaries", requirement: "Keeps implementation inside implement-plan and merge outside the goal terminal.", failureExample: "Implements inside the router, skips to review, or authorizes merge." },
     ],
   },

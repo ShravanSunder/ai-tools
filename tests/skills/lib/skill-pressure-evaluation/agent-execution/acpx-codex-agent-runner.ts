@@ -71,7 +71,6 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
           "sessions",
           "new",
           "--name",
@@ -85,10 +84,9 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
+          "set",
           "-s",
           sessionName,
-          "set",
           "reasoning_effort",
           request.setup.reasoningEffort,
         ],
@@ -109,7 +107,7 @@ export function createAcpxCodexAgentRunner(
             "--format",
             "json",
             "--json-strict",
-            "codex",
+            "prompt",
             "-s",
             sessionName,
             "--file",
@@ -148,7 +146,6 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
           "sessions",
           "close",
           sessionName,
@@ -173,9 +170,16 @@ function createAcpxProcessEnvironment(
   delete environment["MODEL_PROVIDER"];
   delete environment["CODEX_PATH"];
 
-  if (adapterConfiguration.config !== undefined) {
-    environment["CODEX_CONFIG"] = JSON.stringify(adapterConfiguration.config);
-  }
+  environment["INITIAL_AGENT_MODE"] = "read-only";
+  environment["CODEX_CONFIG"] = JSON.stringify({
+    ...adapterConfiguration.config,
+    // Personal lifecycle prompts are not part of the scenario or judge input.
+    features: {
+      ...readRecord(adapterConfiguration.config?.["features"]),
+      hooks: false,
+    },
+    approvals_reviewer: "user",
+  });
   if (adapterConfiguration.modelProvider !== undefined) {
     environment["MODEL_PROVIDER"] = adapterConfiguration.modelProvider;
   }
@@ -196,6 +200,9 @@ export function buildAcpxBaseArguments(props: {
       : ["--allowed-tools", props.setup.allowedTools];
 
   return [
+    // 1.10.0 maps its read-only preset to workspaceWrite; pin the verified sandbox.
+    "--agent",
+    "npx -y @agentclientprotocol/codex-acp@1.6.2",
     "--cwd",
     props.repoRoot,
     "--model",
@@ -289,7 +296,7 @@ async function runAcpxProcess(
       }
       reject(
         new Error(
-          `ACPX exited with code ${exitCode ?? "unknown"}: ${stderr.trim()}`,
+          `ACPX exited with code ${exitCode ?? "unknown"}: stderr=${JSON.stringify(stderr.slice(-4_000))}; stdout=${JSON.stringify(stdout.slice(-4_000))}`,
         ),
       );
     });

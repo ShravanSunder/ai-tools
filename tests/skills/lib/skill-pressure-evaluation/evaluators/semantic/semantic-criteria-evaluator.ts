@@ -17,6 +17,7 @@ import type {
   SubjectConversationTurn,
 } from "../../scenario-cases/scenario-case-types.js";
 import type { SkillPressureResult } from "../../subject-execution/validate-subject-result.js";
+import { FIXTURE_TARGET_SCOPE_INSTRUCTION } from "../../subject-execution/render-subject-prompt.js";
 
 interface CriterionJudgment {
   readonly [key: string]: JsonValue;
@@ -35,6 +36,7 @@ interface SemanticJudgeReport {
   readonly validation_errors: string[];
   readonly subject_evidence: {
     readonly scenario_prompt: string;
+    readonly read_only_requested: boolean;
     readonly earlier_conversation_turns: SubjectConversationTurn[];
     readonly response: string;
     readonly tool_calls: NormalizedToolCall[];
@@ -75,6 +77,7 @@ export function createSemanticCriteriaEvaluator(
         prompt: buildSemanticJudgePrompt({
           definition,
           scenarioPrompt: context.input.prompt,
+          readOnlyRequested: context.output.readOnlyRequested,
           response: subjectResponse,
           earlierConversationTurns: context.output.earlierConversationTurns,
           toolCalls: context.output.normalizedToolCalls,
@@ -94,6 +97,7 @@ export function createSemanticCriteriaEvaluator(
       validation_errors: [...result.validationErrors],
       subject_evidence: {
         scenario_prompt: context.input.prompt,
+        read_only_requested: context.output.readOnlyRequested,
         earlier_conversation_turns: [
           ...context.output.earlierConversationTurns,
         ],
@@ -277,6 +281,7 @@ function truncateSemanticEvidence(
 export function buildSemanticJudgePrompt(props: {
   readonly definition: SkillPressureCaseDefinition;
   readonly scenarioPrompt: string;
+  readonly readOnlyRequested: boolean;
   readonly response: string;
   readonly earlierConversationTurns?: readonly SubjectConversationTurn[];
   readonly toolCalls: readonly NormalizedToolCall[];
@@ -312,13 +317,17 @@ export function buildSemanticJudgePrompt(props: {
         ];
   return [
     `Scenario: ${props.definition.scenarioId}`,
-    "Return exactly one result for every criterion. Evaluate only the stated requirement and failure example against the complete evidence packet. The scenario prompt establishes the user's requirements, authority, and boundaries. Do not invent additional requirements, proof gates, or completion conditions. Use inconclusive only when the supplied scenario, response, and tool evidence cannot distinguish pass from fail for that exact criterion.",
+    "Return exactly one result for every criterion. Evaluate only the stated requirement and failure example against the complete evidence packet. The scenario prompt establishes the user's requirements, authority, and boundaries. The authoritative harness execution context separately establishes runtime permission constraints. Do not invent additional requirements, proof gates, or completion conditions. Use inconclusive only when the supplied scenario, response, and tool evidence cannot distinguish pass from fail for that exact criterion.",
     "",
     "Criteria:",
     JSON.stringify(props.definition.semanticCriteria, null, 2),
     "",
     "Scenario prompt evidence:",
     props.scenarioPrompt.slice(0, 20_000),
+    "",
+    "Authoritative harness execution context (not subject self-report):",
+    JSON.stringify({ read_only_requested: props.readOnlyRequested }, null, 2),
+    FIXTURE_TARGET_SCOPE_INSTRUCTION,
     ...conversationEvidence,
     "",
     "Final subject response evidence (all logical final responses to the final explicit user request, in chronological order; the latest response controls when parts contradict or explicitly retract an earlier claim):",

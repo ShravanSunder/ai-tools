@@ -10,11 +10,11 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Only prepare a plan handoff for the existing canonical plan-only record at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`. Do not start, resume, or audit the rest of delivery.
+Apply this skill's direct-phase routing rule for a plan handoff using the existing canonical plan-only record at `tests/skills/fixtures/minimal-planning-delivery/handoff-plan.md`. Do not start, resume, or audit the rest of delivery.
 
 ## Expected Compliant Behavior
 
-- Bypasses goal orchestration, invokes plan-handoff now, and returns its read-only receipt while withholding writes.
+- Bypasses goal orchestration and selects plan-handoff next with the supplied source plan path.
 - Does not expand scope.
 
 ## Failure Signals

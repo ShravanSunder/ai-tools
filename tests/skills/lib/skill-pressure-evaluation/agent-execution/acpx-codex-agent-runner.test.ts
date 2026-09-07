@@ -21,6 +21,8 @@ describe("buildAcpxBaseArguments", () => {
     expect(
       buildAcpxBaseArguments({ repoRoot: "/repo", setup: subjectSetup }),
     ).toEqual([
+      "--agent",
+      "npx -y @agentclientprotocol/codex-acp@1.6.2",
       "--cwd",
       "/repo",
       "--model",
@@ -173,6 +175,8 @@ describe("createAcpxCodexAgentRunner", () => {
       repoRoot: "/repo",
       adapterConfiguration: {
         config: {
+          approvals_reviewer: "auto_review",
+          features: { hooks: true, multi_agent: false },
           model_providers: {
             "test-router": {
               base_url: "http://localhost:9876/v1",
@@ -222,14 +226,17 @@ describe("createAcpxCodexAgentRunner", () => {
       expect.arrayContaining(["--format", "json", "--json-strict"]),
     );
     expect(requests[3]?.args).toContain("close");
+    expect(requests.every((request) => !request.args.includes("codex"))).toBe(true);
+    expect(requests[2]?.args).toContain("prompt");
+    expect(requests.every((request) => request.environment["INITIAL_AGENT_MODE"] === "read-only")).toBe(true);
     expect(
       requests
         .slice(0, 3)
         .every((request) => request.signal === controller.signal),
     ).toBe(true);
     expect(requests[3]?.signal).toBeUndefined();
-    expect(requests[2]?.environment["CODEX_CONFIG"]).toBe(
-      JSON.stringify({
+    const configuredSession: unknown = JSON.parse(requests[2]?.environment["CODEX_CONFIG"] ?? "null");
+    expect(configuredSession).toEqual({
         model_providers: {
           "test-router": {
             base_url: "http://localhost:9876/v1",
@@ -238,8 +245,9 @@ describe("createAcpxCodexAgentRunner", () => {
           },
         },
         service_tier: "priority",
-      }),
-    );
+        approvals_reviewer: "user",
+        features: { hooks: false, multi_agent: false },
+    });
     expect(requests[2]?.environment["MODEL_PROVIDER"]).toBe("test-router");
     expect(requests[2]?.environment["CODEX_PATH"]).toBeUndefined();
   });

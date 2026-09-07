@@ -251,7 +251,7 @@ export const skillPressureCaseDefinitions = [
     },
     {
       "name": "preserve-correction-and-recovery-limits",
-      "requirement": "Rejects repeated recovery, stale/wrong source or missing reason; recovery grants no extra correction round, and used or unknown correction capacity requires user permission before fixes.",
+      "requirement": "If the prior result is available, uses it instead of recovery; if the original correction round is used, requires permission before fixes; rejects a repeated recovery; and returns a material design decision to its owner without treating recovery as design or correction authority.",
       "failureExample": "Resets the normal allowance, permits repeated recovery, or silently authorizes corrections."
     }
   ]
