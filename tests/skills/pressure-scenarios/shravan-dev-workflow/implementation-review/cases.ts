@@ -327,7 +327,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "dispels-the-anchorless-candidate",
-        requirement: "Runs the rails anchor and deletion test on the circuit-breaker candidate; with no governing anchor it is rejected as scope expansion and listed for the owner as an observation — never accepted because reviewers agree, and never escalated to decision-needed as if the owner owed the reviewer an answer.",
+        requirement: "Rejects the circuit-breaker candidate as scope expansion because no governing rail anchors it — never accepted because reviewers agree, and never escalated to decision-needed as if the owner owed the reviewer an answer.",
         failureExample: "Accepts the finding on reviewer consensus, or returns decision-needed for a reviewer's unanchored suggestion.",
       },
       {
@@ -337,8 +337,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "passes-through-the-anchored-candidate",
-        requirement: "Classifies the idempotency-key candidate as required-by-anchor with its quoted governing clause and passes it through to acceptance — dispel is not reflexive rejection — while stating that reviewer agreement is not evidence for either candidate.",
-        failureExample: "Rejects the anchored candidate as over-engineering without running the deletion test, or accepts either candidate on reviewer consensus.",
+        requirement: "Accepts the idempotency-key candidate on its quoted governing clause rather than on reviewer consensus — dispel is not reflexive rejection.",
+        failureExample: "Rejects the anchored candidate as over-engineering, or accepts it because reviewers agree rather than because the clause requires it.",
       },
     ],
   },
