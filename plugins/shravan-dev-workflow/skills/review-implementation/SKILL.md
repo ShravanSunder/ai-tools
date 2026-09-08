@@ -32,6 +32,6 @@ Completion: classification, governing identities, unchanged plan/context, diff/p
 - After remediation three, stop. Do not invoke review four or another correction without explicit user permission.
 - A missing receipt never resets the limit. Do not persist counters, ledgers, hashes, or review state in the plan.
 - If a bounded recovery review returns accepted implementation-owned findings and the remaining remediation budget cannot be established safely, report the findings and ask for explicit user permission before routing any correction.
-- Design/spec/plan defects return to their semantic owner and follow the one-review/one-remediation design boundary; they do not consume implementation remediation authority.
+- Design/spec/plan defects return to their semantic owner and follow that owner's bounded review policy; they do not consume implementation remediation authority.
 
 Completion: coverage is complete for the admitted diff, every candidate is parent-dispositioned, proof claims match observable evidence, and the result neither edits nor exceeds the three-remediation boundary.

@@ -234,7 +234,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 25,
     semanticCriteria: [
       { name: "dispositions-before-remediation", requirement: "Rejects the non-semantic prose preference with evidence, routes the accepted cross-artifact correction through one bounded spec-design then program-design remediation round with each artifact corrected at most once and one parent verification, and stops the mental-model break with assumption, evidence, consequence, and owner.", failureExample: "Treats the second semantic owner as another remediation loop, treats all findings as mandatory remediation, or dismisses the mental-model break." },
-      { name: "does-not-rereview", requirement: "Uses original independent findings plus parent verification as current closure and dispatches no second review.", failureExample: "Applies generic semantic-freshness language to automatically rereview the accepted remediation." },
+      { name: "bounds-review-rounds", requirement: "Uses parent verification to close resolved findings after the preferred first round. Allows a second round only for the supplied concrete substantive residual and requires explicit user approval for a third. This classification does not execute reviewers.", failureExample: "Automatically rereviews resolved findings, rejects the substantive second round solely for missing approval, or permits an unapproved third." },
     ],
   },
 {
@@ -251,7 +251,7 @@ export const skillPressureCaseDefinitions = [
     },
     {
       "name": "preserve-correction-and-recovery-limits",
-      "requirement": "If the prior result is available, uses it instead of recovery; if the original correction round is used, requires permission before fixes; rejects a repeated recovery; and returns a material design decision to its owner without treating recovery as design or correction authority.",
+      "requirement": "If the prior result is available, uses it instead of recovery; if both normal correction rounds are used, requires permission before fixes; rejects a repeated recovery; and returns a material design decision to its owner without treating recovery as design or correction authority.",
       "failureExample": "Resets the normal allowance, permits repeated recovery, or silently authorizes corrections."
     }
   ]

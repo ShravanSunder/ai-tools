@@ -22,9 +22,9 @@ Requirements, Specification, and Program Design are separate authoritative conce
 
 Fresh context, read-only access, and candidate-only authority create independence. The parent verifies findings, tests deletion before addition, and owns the coverage-bound result. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
 
-One bounded design run permits one independent review invocation and at most one bounded remediation round. That round may span both semantic owners when the accepted finding set requires the existing ordered `spec-design -> program-design` route; each artifact is corrected at most once, then the parent verifies all corrected anchors against the original findings and closes without dispatching another reviewer. A second design review requires explicit user permission given after that result is visible.
+Prefer one independent review-and-correction round. After parent verification, allow one second normal round only when a concrete source-backed substantive issue remains or was introduced within the agreed design; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. Each round may span both semantic owners through the ordered `spec-design -> program-design` route, with each affected artifact corrected at most once in that round and every corrected anchor parent-verified. A third normal review requires explicit user permission given after the second result is visible.
 
-Disposition comes before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Route one valid correction inside the settled mental model to its semantic owner. If a finding disproves a load-bearing assumption or exposes unmade owner meaning, return the failed assumption, evidence, consequence, and exact owner as `decision-needed` or `blocked`; do not spend the remediation allowance to push through a mental-model break. When the same result also contains an accepted bounded correction, preserve it explicitly as one `spec-design -> program-design` remediation round after the owner decision, with each affected artifact corrected at most once and one parent verification against the original findings; the break still stops current continuation and no second reviewer is dispatched.
+Disposition comes before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Route each valid correction set inside the settled mental model to its semantic owner. If a finding disproves a load-bearing assumption or exposes unmade owner meaning, return the failed assumption, evidence, consequence, and exact owner as `decision-needed` or `blocked`; do not spend the remediation allowance to push through a mental-model break. When the same result also contains an accepted bounded correction, preserve it explicitly as one `spec-design -> program-design` remediation round after the owner decision, with each affected artifact corrected at most once and one parent verification against the original findings; the break still stops current continuation and no second reviewer is dispatched.
 
 ## Operations
 
@@ -49,13 +49,14 @@ review
   dispatches: exactly one mode-complete reviewer first, then at most one focused reviewer by default
 ```
 
-Review coverage follows meaning, not changed bytes. After the one permitted remediation, the parent performs and records a semantic-change check without dispatching another reviewer:
+Review coverage follows meaning, not changed bytes. After each permitted correction round, the parent performs and records a semantic-change check before deciding whether review is complete:
 
-- if meaning changed inside the accepted correction, preserve the original review as the independent finding source and add parent-verified remediation anchors for every accepted finding;
+- if meaning changed inside the accepted correction and every accepted finding is resolved, preserve the review as the independent finding source and add parent-verified correction anchors for every accepted finding;
 - if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward and dispatch no model reviewer;
-- if the change exceeds the accepted correction or its effect is uncertain, stop `review-permission-required`; do not start another review automatically.
+- after the first round, if a concrete source-backed substantive issue remains or was introduced within the agreed design, admit the one permitted second normal round; reject a rerun based only on pedantry, style, an already-satisfied finding, confidence, or generic freshness;
+- after the second normal round, any third normal review stops `review-permission-required` until the user explicitly approves it.
 
-Closure is established by the original review result plus parent-verified remediation evidence for the current artifacts. Keep this call-scoped record out of durable design artifacts and do not add persistent review bookkeeping.
+Closure is established by the latest permitted review result plus parent-verified correction evidence for the current artifacts. Keep this call-scoped record out of durable design artifacts and do not add persistent review bookkeeping.
 
 ## 1. Guard the Skill-Authoring Boundary
 
@@ -88,10 +89,10 @@ risk predicates
 claimed proof evidence or gaps
 review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
-bounded design-review status: no prior review | explicit user permission for another review | one orchestrator-authorized recovery request
+bounded design-review status: no prior review | one prior round with a concrete source-backed substantive residual | explicit user permission for a third review | one orchestrator-authorized recovery request
 ```
 
-An orchestrator-authorized recovery request is admissible only when the orchestrator inspected the current target and governing sources, recorded which prior review evidence is unavailable and why a repeat is necessary, and established that no recovery review was already consumed. Preserve unknown review history as unknown; do not report it as `no prior review` or a zero allowance. The original review having run does not block this one read-only recovery review. Recovery does not restore or infer a correction round, replace explicit user permission when the prior result is available, or authorize another recovery. A known previous recovery, stale or wrong current-source evidence, or missing recorded reason returns `review-permission-required`. If recovery finds issues and the normal correction round is already used or cannot be established as available, report the findings and ask before corrections. Any material design change or newly exposed owner decision still returns to its owner.
+One orchestrator-authorized recovery is admissible when the prior result is unavailable, the current target and governing sources were inspected, the missing evidence and reason were recorded, and no prior recovery is known. Preserve existing limits and unknown history; recovery does not reset them, add a correction round, replace an available result, or authorize another recovery. Reject repeated recovery and stale, wrong-source, or unverified inputs. If the remaining correction allowance is exhausted or unknown, report the findings and ask before correction. Route any material design break or newly exposed owner decision to its owner.
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `three-artifact-design` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers or the separately labeled in-chat records supplied by the caller; do not copy them into a combined review artifact.
 
@@ -103,7 +104,7 @@ A combined `Requirements/spec`, a Requirements-titled artifact that also stands 
 
 Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous; any recovery request is explicitly admitted or rejected with its reason.
 
-If the packet shows that one design review already ran in this bounded design run and contains neither explicit user permission granted afterward nor an admissible orchestrator-authorized recovery request, return `blocked` with `review-permission-required` before dispatch. Switching modes, lanes, target labels, caller skills, or an unknown history does not reset this boundary.
+If one normal review-and-correction round already ran, admit a second normal round only for the recorded concrete source-backed substantive residual above. If two normal rounds already ran, require explicit user permission granted after the second result before a third normal review. An admissible orchestrator-authorized recovery request follows the one-time exception above and never resets or adds normal review or correction allowance. Switching modes, lanes, target labels, caller skills, or unknown history does not reset either boundary.
 
 ## 4. Select the Mode
 
@@ -125,7 +126,7 @@ MUST use `manage-agents` before each reviewer dispatch and return the single-ass
 
 Every reviewer gets the complete targets and governing sources but no parent conversation history, author conclusion, expected verdict, prior praise, or hidden context. Reviewer findings remain candidate-only. Silence is `no-receipt`, never a clean review.
 
-Coverage from a receipt expires when a later semantic change outside the accepted remediation affects the mode dimensions, focused-lane predicate, or finding coverage it supplied. The exact one permitted remediation is closed by parent verification and does not expire coverage or authorize redispatch. A parent-verified non-semantic edit also preserves coverage. Expanded or uncertain meaning stops `review-permission-required`.
+Coverage from a receipt expires when a later semantic change outside the accepted correction affects the mode dimensions, focused-lane predicate, or finding coverage it supplied. Parent-verified correction inside a permitted round and parent-verified non-semantic edits preserve coverage. After normal round one, only a concrete source-backed substantive residual admits normal round two; after normal round two, expanded or uncertain meaning stops `review-permission-required` until the user explicitly approves a third normal review.
 
 Completion: fresh-context, read-only, candidate-only dispatch mechanics are recorded before the reviewer runs.
 
@@ -170,7 +171,7 @@ IF one focused risk qualifies, dispatch the single best-matched lane using the s
 
 After the first focused receipt, return the coverage-bound result with remaining gaps. Dispatch another focused lane only when (a) the human user authorizes that named residual risk after seeing current coverage and review cost, or (b) the pre-dispatch external-caller packet already named that residual risk and authorized a second lane before the mode-complete dispatch. The reviewing parent may not grant this authority to itself before or during review, and reviewer output never creates it. Carry that authority in the existing packet constraints and bounded-review-question fields.
 
-After remediation, do not rerun a focused lane. The parent verifies affected finding anchors; any unresolved or expanded risk stops for explicit permission to begin another review invocation.
+After correction, do not rerun a focused lane inside the same invocation. The parent verifies affected finding anchors; any concrete source-backed substantive residual returns to the bounded normal-round admission policy, while a third normal review still requires explicit user permission.
 
 Stop focused review when the risk is resolved, unsupported, outside the confirmed goal boundary, or needs an owner decision.
 
@@ -242,8 +243,8 @@ Do not return `ready` while any of these hold:
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - three-artifact-design mode trusts author or local checks without independent reinspection;
 - focused review began before parent reduction of the mode-complete receipt, more than one focused lane ran without human-user or pre-dispatch external-caller authority, or a broad predicate was treated as sufficient selection;
-- a second design review invocation began without explicit user permission granted after the first review/remediation result or the one admissible orchestrator-authorized recovery request for unavailable prior evidence;
-- a recovery review began after a previous recovery, from stale or wrong-source inspection, without the missing-evidence reason, or by fabricating unknown review history as zero; or recovery findings were corrected without a known available correction round or explicit user authority;
+- a second normal design review began without a concrete source-backed substantive residual from parent verification, or a third normal review began without explicit user permission granted after the second result;
+- a recovery review began after a previous recovery, from stale or wrong-source inspection, without the missing-evidence reason, or by fabricating unknown review history as zero; or recovery findings were corrected without known available correction allowance or explicit user authority;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
 - the result recommends no next skill, more than one next skill, or a route selected from an unreduced reviewer candidate when a validated continuation exists;
 - a continuation omits the current boundary status or makes the destination choose among correction alternatives instead of carrying one smallest verified correction;

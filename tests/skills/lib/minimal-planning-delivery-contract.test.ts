@@ -121,17 +121,17 @@ describe("goal delivery intent hard cutover", () => {
     const skillsCreation = readPluginFile("skills/skills-creation/SKILL.md");
 
     expect(designReview).toContain(
-      "one independent review invocation and at most one bounded remediation round",
+      "Prefer one independent review-and-correction round",
     );
     expect(designReview).toContain(
-      "each artifact is corrected at most once",
+      "each affected artifact corrected at most once in that round",
     );
     expect(designReview).toContain(
-      "closes without dispatching another reviewer",
+      "After each permitted correction round",
     );
-    expect(designReview).toContain("A second design review requires explicit user permission");
-    expect(designOrchestrator).toContain("normal bounded cycle permits one independent design review");
-    expect(designOrchestrator).toContain("it is not another independent review and does not dispatch one");
+    expect(designReview).toContain("A third normal review requires explicit user permission");
+    expect(designOrchestrator).toContain("Prefer one review-and-correction round");
+    expect(designOrchestrator).toContain("another review is not automatic");
     expect(implementationReview).toContain(
       "bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times",
     );

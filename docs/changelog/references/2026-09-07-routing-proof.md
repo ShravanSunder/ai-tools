@@ -18,3 +18,7 @@ Run the main matrix with `pnpm --dir tests/skills exec vitest run evals --config
 Independent proposal, skill-source, harness, full-package, and scenario-scope reviews found no remaining source blocker. The parent verified the bounded findings and kept phase readiness distinct from routing readiness. Earlier execution-oriented scores remain historical evidence of an incorrectly expanded test contract, not failures of the agreed routing contract.
 
 The unchanged instruction-only tracker also has actual Luna clean and partial Markdown-conversion examples covering corrected claims, malformed records, missing detail, and cutoff handling. No Python storage helpers remain. Raw transcripts and process notes stay outside the published package. Installed-plugin refresh and merge are separate actions.
+
+## September 8 policy amendment
+
+The owner approved one preferred spec/design review-and-correction round, a substantive second round, and explicit approval before a third, plus shorter recovery/terminal wording. All five affected decision/classification scenarios pass on Luna/high with Sol/medium judging (exit 0); 121 unit tests, typecheck, skill validators, plugin validation, and independent source review also pass. This is targeted validation of the final policy change, not a rerun of the earlier full matrix.

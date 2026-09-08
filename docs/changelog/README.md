@@ -13,6 +13,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-08 Design review rounds](2026-09-08-design-review-rounds.md)
 - [2026-09-07 Orchestrator pressure corrections](2026-09-07-orchestrator-pressure-corrections.md)
 - [2026-09-07 Simplify work-trail v1](2026-09-07-simplify-work-trail-v1.md)
 - [2026-09-07 ACPX final-message collection](2026-09-07-acpx-final-message-collection.md)

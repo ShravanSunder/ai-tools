@@ -38,8 +38,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads,
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "closes-by-parent-verification", requirement: "Uses the original review findings plus parent verification of the exact accepted remediation as current design closure and dispatches no second reviewer.", failureExample: "Applies generic freshness language to rerun design review." },
-      { name: "permission-gates-another-review", requirement: "Does not treat a teammate's proposal as user authorization. Closes the parent-verified original review and reserves any additional independent review for explicit user authorization.", failureExample: "Automatically reviews again, demands another approval to close an already verified correction, or labels the design stale merely because meaning changed." },
+      { name: "closes-by-parent-verification", requirement: "For the fully resolved original scenario, uses the review findings plus parent verification as current design closure; generic freshness alone does not justify review two.", failureExample: "Applies generic freshness language to rerun design review." },
+      { name: "permission-gates-another-review", requirement: "Allows a second review-and-correction round for the supplied concrete substantive ordering hazard after round one; requires explicit user approval for a third. Does not treat teammate preference as authority.", failureExample: "Allows a second round merely for reassurance, blocks the substantive second round for lack of extra approval, or permits an unapproved third round." },
     ],
   },
   {
@@ -72,7 +72,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 25,
     semanticCriteria: [
       { name: "routes-current-specification-gap", requirement: "Routes the current program-design specification-gap return to spec-design, then follows its current return to program-design without treating that authoring recovery as design-review remediation.", failureExample: "Stops on a fabricated counter or consumes the review remediation allowance before review." },
-      { name: "permits-only-one-review", requirement: "After current distinct artifacts exist, routes to the one independent three-artifact review and does not imply an automatic second review.", failureExample: "Skips review, enters planning, or offers repeat review." },
+      { name: "prefers-one-review", requirement: "After current distinct artifacts exist, routes to the first independent three-artifact review without implying an automatic second round.", failureExample: "Skips review, enters planning, or offers automatic repeat review." },
     ],
   },
   {
