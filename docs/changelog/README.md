@@ -13,7 +13,12 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-08 Design review rounds](2026-09-08-design-review-rounds.md)
+- [2026-09-07 Orchestrator pressure corrections](2026-09-07-orchestrator-pressure-corrections.md)
+- [2026-09-07 Simplify work-trail v1](2026-09-07-simplify-work-trail-v1.md)
+- [2026-09-07 ACPX final-message collection](2026-09-07-acpx-final-message-collection.md)
 - [2026-09-07 manage-agents Delegate Frontier is reviewer-only](2026-09-07-manage-agents-delegate-frontier-reviewer.md)
+- [2026-09-06 Work trails and orchestration](2026-09-06-work-trails-and-orchestration.md)
 - [2026-09-04 manage-agents Astra is live](2026-09-04-manage-agents-astra-live.md)
 - [2026-09-04 manage-agents model catalog and Advisor permission](2026-09-04-manage-agents-model-catalog.md)
 - [2026-09-03 Cursor marketplace and lint-changed hook](2026-09-03-cursor-marketplace-lint-changed.md)

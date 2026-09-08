@@ -32,7 +32,7 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 ## Route the Result
 
 - A direct caller stops with a `plan-only` ready plan.
-- A direct caller or `orchestrator-goal` validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question.
+- A direct caller or `orchestrator-implementation-goal` validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question.
 - `revision-requested` returns to the named semantic or planning owner; `blocked` returns to the named unblock owner.
 - Planning never edits product code, invokes tracking providers, reviews implementation, manages PR state, or infers merge authority.
 

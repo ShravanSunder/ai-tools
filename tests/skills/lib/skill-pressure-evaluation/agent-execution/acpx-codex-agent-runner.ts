@@ -19,6 +19,8 @@ export interface AcpxAgentRunResult {
   readonly finalText: string;
   /** Assistant text per turn, in conversation order. */
   readonly turnTexts: readonly string[];
+  /** Logical final messages grouped by explicit request, when available. */
+  readonly turnMessageTexts?: readonly (readonly string[])[];
   readonly rawEvents: string;
   readonly stderr: string;
 }
@@ -69,7 +71,6 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
           "sessions",
           "new",
           "--name",
@@ -83,10 +84,9 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
+          "set",
           "-s",
           sessionName,
-          "set",
           "reasoning_effort",
           request.setup.reasoningEffort,
         ],
@@ -97,6 +97,7 @@ export function createAcpxCodexAgentRunner(
       });
       const turnPrompts = [request.prompt, ...(request.followUpPrompts ?? [])];
       const turnTexts: string[] = [];
+      const turnMessageTexts: Array<readonly string[]> = [];
       const rawEventChunks: string[] = [];
       const stderrChunks: string[] = [];
       for (const turnPrompt of turnPrompts) {
@@ -106,7 +107,7 @@ export function createAcpxCodexAgentRunner(
             "--format",
             "json",
             "--json-strict",
-            "codex",
+            "prompt",
             "-s",
             sessionName,
             "--file",
@@ -117,7 +118,15 @@ export function createAcpxCodexAgentRunner(
           environment,
           ...(request.signal === undefined ? {} : { signal: request.signal }),
         });
-        turnTexts.push(extractAcpxAssistantText(promptResult.stdout));
+        const responseMessages = extractAcpxAssistantMessages(
+          promptResult.stdout,
+        );
+        const turnText = responseMessages.at(-1);
+        if (turnText === undefined || !turnText) {
+          throw new Error("ACPX Codex run returned no assistant response.");
+        }
+        turnTexts.push(turnText);
+        turnMessageTexts.push(responseMessages);
         rawEventChunks.push(promptResult.stdout);
         stderrChunks.push(promptResult.stderr);
       }
@@ -129,6 +138,7 @@ export function createAcpxCodexAgentRunner(
       return {
         finalText,
         turnTexts,
+        turnMessageTexts,
         rawEvents: rawEventChunks.join("\n"),
         stderr: stderrChunks.join("\n"),
       };
@@ -136,7 +146,6 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
           "sessions",
           "close",
           sessionName,
@@ -161,9 +170,16 @@ function createAcpxProcessEnvironment(
   delete environment["MODEL_PROVIDER"];
   delete environment["CODEX_PATH"];
 
-  if (adapterConfiguration.config !== undefined) {
-    environment["CODEX_CONFIG"] = JSON.stringify(adapterConfiguration.config);
-  }
+  environment["INITIAL_AGENT_MODE"] = "read-only";
+  environment["CODEX_CONFIG"] = JSON.stringify({
+    ...adapterConfiguration.config,
+    // Personal lifecycle prompts are not part of the scenario or judge input.
+    features: {
+      ...readRecord(adapterConfiguration.config?.["features"]),
+      hooks: false,
+    },
+    approvals_reviewer: "user",
+  });
   if (adapterConfiguration.modelProvider !== undefined) {
     environment["MODEL_PROVIDER"] = adapterConfiguration.modelProvider;
   }
@@ -184,6 +200,9 @@ export function buildAcpxBaseArguments(props: {
       : ["--allowed-tools", props.setup.allowedTools];
 
   return [
+    // 1.10.0 maps its read-only preset to workspaceWrite; pin the verified sandbox.
+    "--agent",
+    "npx -y @agentclientprotocol/codex-acp@1.6.2",
     "--cwd",
     props.repoRoot,
     "--model",
@@ -199,7 +218,18 @@ export function buildAcpxBaseArguments(props: {
 }
 
 export function extractAcpxAssistantText(rawEvents: string): string {
-  const textChunks: string[] = [];
+  const finalText = extractAcpxAssistantMessages(rawEvents).at(-1);
+  if (finalText === undefined || !finalText) {
+    throw new Error("ACPX Codex run returned no assistant response.");
+  }
+  return finalText;
+}
+
+export function extractAcpxAssistantMessages(
+  rawEvents: string,
+): readonly string[] {
+  const legacyTextChunks: string[] = [];
+  const textChunksByMessageId = new Map<string, string[]>();
   for (const line of rawEvents.split(/\r?\n/)) {
     const event = parseJsonRecord(line);
     const params = readRecord(event?.["params"]);
@@ -214,15 +244,30 @@ export function extractAcpxAssistantText(rawEvents: string): string {
       content?.["type"] === "text" &&
       typeof content["text"] === "string"
     ) {
-      textChunks.push(content["text"]);
+      const messageId = update["messageId"];
+      if (typeof messageId === "string" && messageId.length > 0) {
+        const messageChunks = textChunksByMessageId.get(messageId);
+        if (messageChunks === undefined) {
+          textChunksByMessageId.set(messageId, [content["text"]]);
+        } else {
+          messageChunks.push(content["text"]);
+        }
+      } else {
+        legacyTextChunks.push(content["text"]);
+      }
     }
   }
 
-  const finalText = textChunks.join("").trim();
-  if (!finalText) {
+  const finalMessages =
+    textChunksByMessageId.size === 0
+      ? [legacyTextChunks.join("").trim()]
+      : [...textChunksByMessageId.values()].map((chunks) =>
+          chunks.join("").trim(),
+        );
+  if (finalMessages.length === 0 || !finalMessages.at(-1)) {
     throw new Error("ACPX Codex run returned no assistant response.");
   }
-  return finalText;
+  return finalMessages;
 }
 
 async function runAcpxProcess(
@@ -251,7 +296,7 @@ async function runAcpxProcess(
       }
       reject(
         new Error(
-          `ACPX exited with code ${exitCode ?? "unknown"}: ${stderr.trim()}`,
+          `ACPX exited with code ${exitCode ?? "unknown"}: stderr=${JSON.stringify(stderr.slice(-4_000))}; stdout=${JSON.stringify(stdout.slice(-4_000))}`,
         ),
       );
     });

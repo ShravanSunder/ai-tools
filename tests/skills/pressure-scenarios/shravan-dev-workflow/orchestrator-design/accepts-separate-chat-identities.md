@@ -22,13 +22,13 @@ Requirements
 Specification
   Accepted work must expose completed or failed status, and timeout must be observable as failure rather than silence.
 
-No host message anchors or record IDs are available. State integrity is valid and budget remains. Do not create files, hashes, identifiers, or replacement records. Apply only the orchestrator's structural guards and show the continuation you would record.
+No host message anchors or record IDs are available. State integrity is valid and budget remains. Do not create files, hashes, identifiers, or replacement records. Apply only the orchestrator's structural guards and name the next owner.
 
 ## Expected Compliant Behavior
 
 - Accepts two distinct, separately labeled in-chat records.
 - Does not require file pointers, message anchors, hashes, or opaque IDs.
-- Preserves both records unchanged and continues to program-design.
+- Preserves both records unchanged and selects program-design next.
 - Does not reassess their semantic adequacy.
 
 ## Failure Signals

@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "Shravan's development workflow plugin with long-horizon delivery routing, bounded design orchestration, canonical planning, implementation and independent review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"
@@ -24,7 +24,7 @@
     "program-design",
     "spec-program-review",
     "orchestrator-design",
-    "orchestrator-goal",
+    "orchestrator-implementation-goal",
     "plan-implementation",
     "implement-plan",
     "review-implementation",
@@ -61,7 +61,8 @@
     "presentation",
     "progressive-disclosure",
     "visual-family",
-    "semantic-markdown"
+    "semantic-markdown",
+    "track-show-me-your-work"
   ],
   "skills": "./skills/",
   "interface": {
@@ -84,7 +85,7 @@
       "Use research-swarm to gather source-grounded evidence into a tmp ledger.",
       "Use manage-agents to spawn, resume, monitor, or reduce subordinate agent work.",
       "Use orchestrator-design to run this through one bounded Requirements, Specification, Program Design, and three-artifact design review cycle before planning.",
-      "Use orchestrator-goal to route this long-horizon delivery goal from its first unproven gate to PR readiness without duplicating phase judgment or merging.",
+      "Use orchestrator-implementation-goal to carry this implementation goal through planning, implementation, proof, review, and PR readiness.",
       "Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.",
       "Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and pr-ready-unmerged delivery context.",
       "Use review-implementation to independently review this implementation and proof without editing.",

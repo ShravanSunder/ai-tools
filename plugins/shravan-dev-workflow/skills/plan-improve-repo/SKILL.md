@@ -5,7 +5,7 @@ description: Use when auditing a repository for improvement opportunities, backl
 
 # Plan Improve Repo
 
-Audit a repo like a senior advisor and turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an `orchestrator-goal` delivery, this skill returns the admitted finding and basis to `plan-implementation`, which owns the one delivery plan. This skill does not edit product code.
+Audit a repo like a senior advisor and turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an `orchestrator-implementation-goal` delivery, this skill returns the admitted finding and basis to `plan-implementation`, which owns the one delivery plan. This skill does not edit product code.
 
 Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the single plan for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
 

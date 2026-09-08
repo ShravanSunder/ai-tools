@@ -23,6 +23,8 @@ export interface SkillPressureHarnessOutput {
   readonly backend: string;
   readonly renderedPrompt: string;
   readonly finalResult: SkillPressureResult;
+  /** All logical final responses to the final explicit user request. */
+  readonly finalResponseParts?: SkillPressureResult[];
   /**
    * Turns before the final one, in conversation order. Empty for single-turn
    * scenarios; the final turn lives in finalResult.
@@ -96,19 +98,30 @@ export function createSkillPressureHarness(
         ...(signal === undefined ? {} : { signal }),
         setup: props.subjectSetup,
       });
-      const turnResults = acpxRun.turnTexts.map((turnText, turnIndex) => {
-        const turnJson = parseExactAgentJsonResponse(turnText);
-        const turnValidation = validateSkillPressureResult(turnJson);
-        if (!turnValidation.ok) {
-          throw new Error(
-            `ACPX pressure result failed schema validation on turn ${turnIndex + 1}:\n${turnValidation.errors.join("\n")}`,
-          );
-        }
-        return turnValidation.value;
+      const turnResultGroups = validateAcpxTurnResults({
+        turnTexts: acpxRun.turnTexts,
+        ...(acpxRun.turnMessageTexts === undefined
+          ? {}
+          : { turnMessageTexts: acpxRun.turnMessageTexts }),
       });
+      const turnResults = turnResultGroups.map(
+        (turnResultGroup, requestIndex) => {
+          const turnResult = turnResultGroup.at(-1);
+          if (turnResult === undefined) {
+            throw new Error(
+              `ACPX pressure run produced no result for request ${requestIndex + 1}.`,
+            );
+          }
+          return turnResult;
+        },
+      );
       const finalResult = turnResults.at(-1);
       if (finalResult === undefined) {
         throw new Error("ACPX pressure run produced no turns.");
+      }
+      const finalResponseParts = turnResultGroups.at(-1);
+      if (finalResponseParts === undefined) {
+        throw new Error("ACPX pressure run produced no final response group.");
       }
       const operatorMessages = [input.prompt, ...followUpUserTurns];
       const earlierConversationTurns: SubjectConversationTurn[] = turnResults
@@ -122,6 +135,7 @@ export function createSkillPressureHarness(
         backend: props.backend,
         renderedPrompt,
         finalResult,
+        finalResponseParts: [...finalResponseParts],
         earlierConversationTurns,
         artifactDirectory: acpxRun.artifactDirectory,
         artifactPaths: [...acpxRun.artifactPaths],
@@ -201,10 +215,56 @@ function createFakeHarnessOutput(props: {
     backend: "fake",
     renderedPrompt: props.renderedPrompt,
     finalResult,
+    finalResponseParts: [finalResult],
     earlierConversationTurns: [],
     artifactDirectory: "/tmp",
     artifactPaths: ["/tmp/fake-prompt.md", "/tmp/fake-final.json"],
     normalizedToolCalls: [],
     readOnlyRequested: true,
   };
+}
+
+export function validateAcpxTurnResults(props: {
+  readonly turnTexts: readonly string[];
+  readonly turnMessageTexts?: readonly (readonly string[])[];
+}): readonly (readonly SkillPressureResult[])[] {
+  const responseGroups =
+    props.turnMessageTexts ?? props.turnTexts.map((turnText) => [turnText]);
+  if (responseGroups.length !== props.turnTexts.length) {
+    throw new Error(
+      `ACPX pressure run returned ${responseGroups.length} response groups for ${props.turnTexts.length} explicit requests.`,
+    );
+  }
+
+  return responseGroups.map((responseGroup, requestIndex) => {
+    if (responseGroup.length === 0) {
+      throw new Error(
+        `ACPX pressure run returned no responses for request ${requestIndex + 1}.`,
+      );
+    }
+    if (responseGroup.at(-1) !== props.turnTexts[requestIndex]) {
+      throw new Error(
+        `ACPX pressure run response association mismatch on request ${requestIndex + 1}.`,
+      );
+    }
+
+    return responseGroup.map((responseText, responseIndex) => {
+      let responseJson: unknown;
+      try {
+        responseJson = parseExactAgentJsonResponse(responseText);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(
+          `ACPX pressure result failed strict JSON parsing on request ${requestIndex + 1} response ${responseIndex + 1}: ${message}`,
+        );
+      }
+      const responseValidation = validateSkillPressureResult(responseJson);
+      if (!responseValidation.ok) {
+        throw new Error(
+          `ACPX pressure result failed schema validation on request ${requestIndex + 1} response ${responseIndex + 1}:\n${responseValidation.errors.join("\n")}`,
+        );
+      }
+      return responseValidation.value;
+    });
+  });
 }

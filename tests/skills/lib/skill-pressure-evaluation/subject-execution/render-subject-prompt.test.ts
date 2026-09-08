@@ -60,7 +60,7 @@ describe("renderCodexPressurePrompt", () => {
     expect(prompt).toContain("Read every path below before answering");
     expect(prompt).toContain("without a separate line-count preflight");
     expect(prompt).toContain("case registries");
-    expect(prompt).toContain("exact `--- <required path>` line");
+    expect(prompt).toContain("Read one exact required path per call");
     expect(prompt).toContain("tests/skills/fixtures/example.md");
     expect(prompt).toContain("Operator prompt:");
     expect(prompt).toContain("Use the skill without seeing the rubric.");

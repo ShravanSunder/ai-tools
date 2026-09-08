@@ -19,13 +19,13 @@ An otherwise valid file-backed spec-design handoff reports `locally-ready` and r
 - Requirements: `tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md`
 - Specification: `tests/skills/fixtures/spec-program-review-reader-understanding/specification.md`
 
-Both paths resolve, state integrity is valid, and budget remains. Do not open either artifact or write files. Apply only the orchestrator's structural guards and show the continuation you would record.
+Both paths resolve, state integrity is valid, and budget remains. Do not open either artifact or write files. Apply only the orchestrator's structural guards and name the next owner.
 
 ## Expected Compliant Behavior
 
 - Confirms that both pointers are present, resolvable, and non-identical without opening their contents.
 - Preserves both pointers unchanged.
-- Accepts the producing phase's route and continues to program-design.
+- Accepts the producing phase's route and selects program-design next.
 - Does not reassess requirements or specification meaning.
 
 ## Failure Signals

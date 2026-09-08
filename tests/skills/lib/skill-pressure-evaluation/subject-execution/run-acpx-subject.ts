@@ -28,6 +28,8 @@ export interface AcpxPressureRun {
   readonly finalText: string;
   /** Assistant text per turn, in conversation order; last entry equals finalText. */
   readonly turnTexts: readonly string[];
+  /** Logical final messages grouped by explicit request, when available. */
+  readonly turnMessageTexts?: readonly (readonly string[])[];
 }
 
 export async function runAcpxPressureCase(
@@ -61,6 +63,9 @@ export async function runAcpxPressureCase(
       : { followUpPrompts }),
     ...(props.signal === undefined ? {} : { signal: props.signal }),
     setup: props.setup,
+  }).catch((error: unknown) => {
+    writeFileSync(stderrPath, `${error instanceof Error ? error.message : String(error)}\n`);
+    throw error;
   });
   const durationMs = Date.now() - startTime;
   writeFileSync(eventsPath, agentResult.rawEvents);
@@ -92,6 +97,9 @@ export async function runAcpxPressureCase(
     durationMs,
     finalText: agentResult.finalText,
     turnTexts: agentResult.turnTexts,
+    ...(agentResult.turnMessageTexts === undefined
+      ? {}
+      : { turnMessageTexts: agentResult.turnMessageTexts }),
   };
 }
 

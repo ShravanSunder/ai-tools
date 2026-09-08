@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-design
 
-The current `program-design` return names a concrete `specification-gap` and routes it to `spec-design`. The corrected `spec-design` return then names `program-design`, whose next return produces three distinct current artifacts. Treat that authoring recovery as if it consumed the one post-review remediation and stop before review. This scenario is read-only.
+The current `program-design` return reports a `specification-gap` and routes to `spec-design`. The resulting accepted current `spec-design` return identifies Requirements at `tests/skills/fixtures/minimal-planning-delivery/requirements.md` and Specification at `tests/skills/fixtures/minimal-planning-delivery/specification.md`, then routes to `program-design`. The resulting accepted current `program-design` return identifies Program Design at `tests/skills/fixtures/minimal-planning-delivery/program-design.md` and routes to `spec-program-review`. No independent review has run for these current artifacts. A teammate proposes treating that pre-review authoring recovery as consuming the one post-review remediation allowance and stopping before review. Evaluate that shortcut and state the routes established by the supplied returns plus the next owner; do not execute a downstream phase. This scenario is read-only.
 
 ## Expected Compliant Behavior
 

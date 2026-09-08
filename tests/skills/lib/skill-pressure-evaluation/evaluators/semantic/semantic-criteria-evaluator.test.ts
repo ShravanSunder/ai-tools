@@ -21,6 +21,7 @@ import {
 import {
   buildSemanticJudgePrompt,
   buildSemanticSubjectResponse,
+  buildSemanticSubjectResponseParts,
   createSemanticCriteriaEvaluator,
   evaluateSemanticJudgeResponse,
 } from "./semantic-criteria-evaluator.js";
@@ -42,6 +43,28 @@ const definition = {
 } satisfies SkillPressureCaseDefinition;
 
 describe("Terra judge defaults", () => {
+  test("preserves a bounded malformed response in the judge error", async () => {
+    const judgeHarness = createAcpxTerraJudgeHarness({
+      judgeSetup: {
+        model: DEFAULT_JUDGE_MODEL,
+        reasoningEffort: DEFAULT_JUDGE_REASONING_EFFORT,
+        timeoutSeconds: 30,
+        permissionMode: "deny-all",
+      },
+      judgeRunner: async () => ({
+        finalText: "Unexpected continuation instead of JSON.",
+        turnTexts: ["Unexpected continuation instead of JSON."],
+        rawEvents: "",
+        stderr: "",
+      }),
+    });
+
+    await expect(runJudgeHarness(judgeHarness, {
+      prompt: "Evaluate supplied evidence.",
+      responseFormat: { type: "json" },
+    })).rejects.toThrow("Unexpected continuation instead of JSON.");
+  });
+
   test("uses fresh ACPX Terra medium configuration", () => {
     expect(DEFAULT_JUDGE_MODEL).toBe("gpt-5.6-terra");
     expect(DEFAULT_JUDGE_REASONING_CONFIG_ID).toBe("reasoning_effort");
@@ -89,11 +112,35 @@ describe("Terra judge defaults", () => {
 });
 
 describe("buildSemanticJudgePrompt", () => {
+  test("grades all responses to the final request with the latest response controlling contradictions", () => {
+    const prompt = buildSemanticJudgePrompt({
+      definition,
+      scenarioPrompt: "Review the supplied implementation.",
+      readOnlyRequested: true,
+      response: '[{"decision":"covered required cases"},{"decision":"I retract required-case coverage"}]',
+      earlierConversationTurns: [
+        {
+          operatorMessage: "Initial request",
+          subjectDecision: "Earlier explicit-request response",
+        },
+      ],
+      toolCalls: [],
+    });
+
+    expect(prompt).toContain("Earlier explicit-request response");
+    expect(prompt).toContain("all logical final responses to the final explicit user request");
+    expect(prompt).toContain("latest response controls when parts contradict");
+    expect(prompt.indexOf("Earlier explicit-request response")).toBeLessThan(
+      prompt.indexOf("covered required cases"),
+    );
+  });
+
   test("presents hidden criteria and bounded evidence", () => {
     const prompt = buildSemanticJudgePrompt({
       definition,
       scenarioPrompt:
         "Boundary check 2 preserves the current system and forbids new persistence.",
+      readOnlyRequested: true,
       response: "Please confirm the allowed package boundary.",
       toolCalls: [],
     });
@@ -122,6 +169,7 @@ describe("buildSemanticJudgePrompt", () => {
     const prompt = buildSemanticJudgePrompt({
       definition,
       scenarioPrompt: "Inspect every required source.",
+      readOnlyRequested: true,
       response: "The final source changes the route.",
       toolCalls,
     });
@@ -134,6 +182,134 @@ describe("buildSemanticJudgePrompt", () => {
 });
 
 describe("buildSemanticSubjectResponse", () => {
+  test("keeps same-request response parts ordered and marks the latest", () => {
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    };
+
+    const response = buildSemanticSubjectResponseParts([
+      { ...baseResult, decision: "Covered all required cases." },
+      { ...baseResult, decision: "Correction: one case is still missing." },
+    ]);
+
+    expect(JSON.parse(response)).toEqual([
+      expect.objectContaining({
+        response_part: 1,
+        latest: false,
+        decision: "Covered all required cases.",
+      }),
+      expect.objectContaining({
+        response_part: 2,
+        latest: true,
+        decision: "Correction: one case is still missing.",
+      }),
+    ]);
+  });
+
+  test("preserves ordinary earlier response evidence without premature truncation", () => {
+    const earlierDecision = "named countercase ".repeat(220);
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    };
+
+    const response = buildSemanticSubjectResponseParts([
+      { ...baseResult, decision: earlierDecision },
+      { ...baseResult, decision: "Latest response." },
+    ]);
+
+    expect(JSON.parse(response)[0].decision).toBe(earlierDecision);
+  });
+
+  test("keeps oversized response-part evidence valid and retains the latest correction", () => {
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      coverage_evidence: ["coverage ".repeat(10_000)],
+      shortcut_resisted: true,
+      rationalizations_rejected: ["rationalization ".repeat(10_000)],
+      open_questions: ["question ".repeat(10_000)],
+      next_action: "next action ".repeat(10_000),
+    };
+    const response = buildSemanticSubjectResponseParts([
+      { ...baseResult, decision: "earlier claim ".repeat(10_000) },
+      {
+        ...baseResult,
+        decision: `LATEST CORRECTION: required case remains missing ${'\\"\n'.repeat(10_000)}`,
+      },
+    ]);
+
+    expect(response.length).toBeLessThanOrEqual(30_000);
+    expect(JSON.parse(response)).toEqual([
+      expect.objectContaining({ response_part: 1, latest: false }),
+      expect.objectContaining({
+        response_part: 2,
+        latest: true,
+        decision: expect.stringContaining(
+          "LATEST CORRECTION: required case remains missing",
+        ),
+      }),
+    ]);
+    expect(response).toContain("truncated");
+  });
+
+  test("collapses an extreme older-part count with explicit omission evidence", () => {
+    const baseResult = {
+      scenario_id: "semantic-case",
+      skill_under_test: "shravan-dev-workflow:implement-plan",
+      skill_invoked: true,
+      mode: "fast" as const,
+      read_only: true,
+      artifact_expected: false,
+      artifact_created: false,
+      decision: "response",
+      coverage_evidence: [],
+      shortcut_resisted: true,
+      rationalizations_rejected: [],
+      open_questions: [],
+      next_action: "none",
+    };
+    const response = buildSemanticSubjectResponseParts(
+      Array.from({ length: 500 }, (_, index) => ({
+        ...baseResult,
+        decision: index === 499 ? "latest retained" : `earlier ${index}`,
+      })),
+    );
+    const parsedResponse: unknown = JSON.parse(response);
+
+    expect(response.length).toBeLessThanOrEqual(30_000);
+    expect(parsedResponse).toEqual([
+      expect.objectContaining({ response_parts_omitted: 499 }),
+      expect.objectContaining({ latest: true, decision: "latest retained" }),
+    ]);
+  });
+
   test("projects every behavior-bearing subject field into bounded judge evidence", () => {
     const response = buildSemanticSubjectResponse({
       scenario_id: "semantic-case",
@@ -294,7 +470,7 @@ describe("evaluateSemanticJudgeResponse", () => {
 });
 
 describe("createSemanticCriteriaEvaluator", () => {
-  test("writes a complete human-review artifact for an inconclusive result", async () => {
+  test.each([true, false])("writes a complete human-review artifact with authoritative read-only state when readOnlyRequested is %s", async (readOnlyRequested) => {
     const artifactDirectory = mkdtempSync(join(tmpdir(), "skill-pressure-semantic-"));
     const artifactPath = join(artifactDirectory, "semantic-judge.json");
     const input: SkillPressureInput = {
@@ -312,7 +488,7 @@ describe("createSemanticCriteriaEvaluator", () => {
         skill_under_test: input.skillUnderTest,
         skill_invoked: true,
         mode: "fast",
-        read_only: true,
+        read_only: !readOnlyRequested,
         artifact_expected: false,
         artifact_created: false,
         decision: "Please confirm which package may change.",
@@ -325,7 +501,7 @@ describe("createSemanticCriteriaEvaluator", () => {
       artifactPaths: [],
       artifactDirectory,
       normalizedToolCalls: [],
-      readOnlyRequested: true,
+      readOnlyRequested,
       exitCode: 0,
       timedOut: false,
     } satisfies SkillPressureHarnessOutput;
@@ -340,6 +516,7 @@ describe("createSemanticCriteriaEvaluator", () => {
         },
       ],
     });
+    const judgeRequests: Parameters<NonNullable<SkillPressureEvaluatorContext["runJudge"]>>[0][] = [];
     const context = {
       input,
       output,
@@ -347,13 +524,19 @@ describe("createSemanticCriteriaEvaluator", () => {
       run,
       session: run.session,
       harness: undefined,
-      runJudge: async () => ({ malformed: true }),
+      runJudge: async (request) => {
+        judgeRequests.push(request);
+        return { malformed: true };
+      },
     } satisfies SkillPressureEvaluatorContext;
 
     try {
       const result = await evaluator.assess(context);
       const artifact: unknown = JSON.parse(readFileSync(artifactPath, "utf8"));
 
+      expect(output.finalResult.read_only).toBe(!readOnlyRequested);
+      expect(judgeRequests).toHaveLength(1);
+      expect(judgeRequests[0]?.prompt).toContain(`"read_only_requested": ${readOnlyRequested}`);
       expect(result.score).toBeNull();
       expect(artifact).toMatchObject({
         scenario_id: definition.scenarioId,
@@ -361,6 +544,7 @@ describe("createSemanticCriteriaEvaluator", () => {
         artifact_path: artifactPath,
         subject_evidence: {
           scenario_prompt: input.prompt,
+          read_only_requested: readOnlyRequested,
           response: expect.stringContaining(
             '"next_action": "Await the package boundary."',
           ),

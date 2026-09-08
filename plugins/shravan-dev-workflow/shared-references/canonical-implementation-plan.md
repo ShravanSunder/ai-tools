@@ -48,7 +48,7 @@ result payload:
 
 ## Delivery Intent and Grouping
 
-`orchestrator-goal` defaults the requested terminal to `pr-ready-unmerged` unless the user supplied a narrower terminal. Direct planning uses an explicit terminal or asks once at entry when ambiguous. `plan-improve-repo` defaults direct use to `plan-only`.
+`orchestrator-implementation-goal` defaults the requested terminal to `pr-ready-unmerged` unless the user supplied a narrower terminal. Direct planning uses an explicit terminal or asks once at entry when ambiguous. `plan-improve-repo` defaults direct use to `plan-only`.
 
 Planning chooses technical strategy and the one coherent vertical grouping when only one exists. When materially different grouping or PR-topology options exist, it presents concrete choices, a recommendation, and tradeoffs, then waits for the owner selection before returning `ready`. One indivisible deliverable defaults to one PR. Do not ask about ordinary file, sequence, code, or proof mechanics.
 

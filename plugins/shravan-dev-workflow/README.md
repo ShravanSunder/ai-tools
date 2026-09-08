@@ -8,8 +8,8 @@ The plugin is built around one idea: each workflow phase should have a clear own
 
 ```text
 shared understanding
-  -> orchestrator-goal: long-horizon route selection and terminal verification only
-       -> orchestrator-design: bounded routing only
+  -> orchestrator-implementation-goal: implementation planning, execution/proof, review, and delivery
+       -> orchestrator-design: coordinate and verify the design cycle
        -> spec-design: separate Requirements and Specification
        -> program-design: structural How
        -> spec-program-review: proportional independent three-artifact design review
@@ -33,7 +33,7 @@ discuss-*            shared understanding          discuss-clarify-mental-models
                                                   discuss-pathfinding
 research-*           evidence gathering            research-swarm
 manage-*             subordinate agents            manage-agents
-orchestrator-*       bounded workflow routing      orchestrator-goal
+orchestrator-*       bounded workflow routing      orchestrator-implementation-goal
                                                   orchestrator-design
 spec-*               design/spec boundary          spec-design
                                                   program-design
@@ -61,8 +61,8 @@ tui-*                structured chat presentation  tui-presentation
 flowchart LR
     pathfinding["discuss-pathfinding<br/>extract tacit or unmade understanding"]
     mentalModels["discuss-clarify-mental-models<br/>mental model reconvergence"]
-    deliveryGoal["orchestrator-goal<br/>first unproven delivery gate"]
-    designCycle["orchestrator-design<br/>bounded routing only"]
+    deliveryGoal["orchestrator-implementation-goal<br/>plan, implement, prove, review, deliver"]
+    designCycle["orchestrator-design<br/>reviewed design coordination"]
 
     specDesign["spec-design<br/>separate Requirements and Specification"]
     programDesign["program-design<br/>structural How"]
@@ -122,9 +122,11 @@ Use `research-swarm` when the next step is to gather evidence: local code/docs, 
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
-Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one three-artifact design review, then stops before planning. The orchestrator explains position, preserves temporary routing state, checks allowed routes, and enforces cycle limits; phase skills retain all requirements, architecture, and review judgment.
+Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one three-artifact design review, then stops before planning. The orchestrator keeps the cycle moving, verifies meaningful results, and records decisions through track-show-me-your-work; phase skills retain requirements, architecture, and independent review expertise. It permits one recorded recovery review when prior evidence is unavailable, without restoring a used correction round.
 
-Use `orchestrator-goal` for a general-domain long-horizon delivery goal spanning multiple phases. It reconstructs the first unproven gate from current artifacts and phase-owned evidence, invokes exactly one owner at a time, verifies returned identities and freshness without repeating phase judgment, and stops only at the requested terminal, decision, or blocker. Its default terminal is PR-ready and unmerged. It never adds a controller, transition log, lifecycle ledger, or merge authority; direct one-phase requests bypass it.
+Use `orchestrator-implementation-goal` to carry implementation goals through planning, execution and proof, independent review, accepted corrections, and the requested delivery boundary. Design stays with its own workflow when missing or contradicted. The default terminal is PR-ready and unmerged; merge requires explicit authority. Both orchestrators use `track-show-me-your-work` for meaningful decision and evidence history, while checking current sources rather than replaying stored status. Direct one-phase requests bypass orchestration.
+
+Use `track-show-me-your-work` when a work trail is requested, during either orchestration workflow, or for substantial implementation. It keeps append-only JSONL under `~/dev/memory-logs/work-trails/`, with optional Markdown detail and a generated readable view at task end or on request. Routine small edits stay quiet unless logging is requested. The main agent writes the session JSONL directly; a Luna operator produces the readable Markdown view. No runtime helper or database is required.
 
 ### Spec boundary
 
@@ -134,7 +136,7 @@ Use `program-design` to define structural How against the settled specification:
 
 Use `spec-program-review` to independently classify and proportionally review a Specification, a Program Design, or the complete Requirements, Specification, and Program Design set. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the three-artifact design. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
-The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance and are not runtime entrypoints. The active `orchestrator-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of those retired trees; they do not restore swarms, controller briefs, worker protocols, transition ledgers, or a separate plan-review layer.
+The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance and are not runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of those retired trees; they do not restore swarms, controller briefs, worker protocols, transition ledgers, or a separate plan-review layer.
 
 Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the exact three-artifact design review invocation identity, review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale three-artifact designs to `spec-program-review`, and current ready three-artifact designs to `plan-implementation`.
 
@@ -189,7 +191,7 @@ Use spec-design to preserve separate Requirements and Specification identities: 
 Use program-design to turn this specification into structural How.
 Use spec-program-review to independently review these Requirements, Specification, and Program Design artifacts.
 Use spec-handoff to package this design for another agent without creating a plan.
-Use orchestrator-goal to route this long-horizon delivery goal from its first unproven gate to PR readiness without duplicating phase judgment or merging.
+Use orchestrator-implementation-goal to carry this goal through planning, implementation, proof, review, and PR readiness.
 Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
 Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and `pr-ready-unmerged` delivery context, then return fresh implementation proof without starting review or PR work.
 Use review-implementation to independently review this implementation and proof without editing or starting PR lifecycle work.

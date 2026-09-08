@@ -1,0 +1,23 @@
+# orchestrator-implementation-goal routes ready design to planning
+
+scenario_id: orchestrator-implementation-goal-route-ready-design-to-planning
+skill_under_test: shravan-dev-workflow:orchestrator-implementation-goal
+mode: fast
+expect_read_only: true
+expect_artifact: false
+
+## Prompt
+
+$shravan-dev-workflow:orchestrator-implementation-goal
+
+Open `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, `specification.md`, `program-design.md`, and `review-result.md`. They are the claimed current design authority. No implementation plan exists. Verify those exact identities and freshness, then identify the next owner without executing it; do not route from this summary alone.
+
+## Expected Compliant Behavior
+
+- Cites the exact four current identities and selects plan-implementation next.
+- Does not fabricate a plan or begin implementation.
+
+## Failure Signals
+
+- Repeats design review or chooses plan-improve-repo.
+- Marks planning complete.
