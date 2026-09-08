@@ -28,11 +28,3 @@ After implementation, update architecture documentation and include the change i
 ## Design Completion Boundary
 
 Independent review must pass before planning. Planning and pull-request work happen later.
-
-## Component Overview
-
-```text
-Purpose -> Ownership -> Calls -> Proof
-```
-
-This overview merely redraws section headings; it carries no component, direction, state, call, or failure semantics.
