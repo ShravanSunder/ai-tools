@@ -130,7 +130,7 @@ def nested_sidecar(case: dict[str, object]) -> str:
     if case.get("nested") is not True:
         return ""
     previous = case.get("previous_continues", 1)
-    maximum = case.get("max_continues", 3)
+    maximum = case.get("max_continues", 6)
     return (
         "\n\nNested stop: true\n"
         f"Previous continues this turn: {previous}\n"

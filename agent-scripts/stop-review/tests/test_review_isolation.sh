@@ -202,14 +202,18 @@ assert_file_not_contains "${FAKE_PROMPT_RECORD}" "Nested stop: true"
 assert_eq "$(jq -r '.block_count' "${HOOK_STATE}/${RUN_ID}-s3/t3.json")" "1" "first continue count"
 
 NESTED_STATUS='No new decision is needed from you. The next step is implement-plan. Finished file delivery is not yet done; input staging is still blocked.'
-printf '%s\n' '{"session_id":"'"${RUN_ID}"'-s3","turn_id":"t3","stop_hook_active":true,"last_assistant_message":"'"${NESTED_STATUS}"'","cwd":"'"${WORKDIR}"'","transcript_path":"'"${TRANSCRIPT}"'"}' \
-  | CODEX_STOP_REVIEW_RUNNER="${FAKE_RUNNER}" \
-    bash "${HOOK}" >"${HOOK_OUT}"
-assert_file_contains "${HOOK_OUT}" '"decision": "block"'
-assert_file_contains "${FAKE_PROMPT_RECORD}" "Nested stop: true"
-assert_file_contains "${FAKE_PROMPT_RECORD}" "Previous continues this turn: 1"
-assert_file_contains "${FAKE_PROMPT_RECORD}" "Max continues this turn: 3"
-assert_eq "$(jq -r '.block_count' "${HOOK_STATE}/${RUN_ID}-s3/t3.json")" "2" "nested continue count"
+nested_continue=1
+while [[ "${nested_continue}" -lt 5 ]]; do
+  printf '%s\n' '{"session_id":"'"${RUN_ID}"'-s3","turn_id":"t3","stop_hook_active":true,"last_assistant_message":"'"${NESTED_STATUS}"'","cwd":"'"${WORKDIR}"'","transcript_path":"'"${TRANSCRIPT}"'"}' \
+    | CODEX_STOP_REVIEW_RUNNER="${FAKE_RUNNER}" \
+      bash "${HOOK}" >"${HOOK_OUT}"
+  assert_file_contains "${HOOK_OUT}" '"decision": "block"'
+  assert_file_contains "${FAKE_PROMPT_RECORD}" "Nested stop: true"
+  assert_file_contains "${FAKE_PROMPT_RECORD}" "Previous continues this turn: ${nested_continue}"
+  assert_file_contains "${FAKE_PROMPT_RECORD}" "Max continues this turn: 6"
+  nested_continue=$((nested_continue + 1))
+  assert_eq "$(jq -r '.block_count' "${HOOK_STATE}/${RUN_ID}-s3/t3.json")" "${nested_continue}" "nested continue count ${nested_continue}"
+done
 
 printf '%s\n' '{"session_id":"'"${RUN_ID}"'-s3","turn_id":"t3","stop_hook_active":true,"last_assistant_message":"'"${NESTED_STATUS}"'","cwd":"'"${WORKDIR}"'","transcript_path":"'"${TRANSCRIPT}"'"}' \
   | CODEX_STOP_REVIEW_RUNNER="${FAKE_RUNNER}" \
@@ -217,7 +221,7 @@ printf '%s\n' '{"session_id":"'"${RUN_ID}"'-s3","turn_id":"t3","stop_hook_active
 assert_file_contains "${HOOK_OUT}" "safety cap"
 assert_file_not_contains "${HOOK_OUT}" '"decision": "block"'
 assert_eq "$(jq -r '.last_classification' "${HOOK_STATE}/${RUN_ID}-s3/t3.json")" "luna_continue_work" "cap classification"
-assert_eq "$(jq -r '.block_count' "${HOOK_STATE}/${RUN_ID}-s3/t3.json")" "3" "capped continue count"
+assert_eq "$(jq -r '.block_count' "${HOOK_STATE}/${RUN_ID}-s3/t3.json")" "6" "capped continue count"
 
 printf '%s\n' '{"session_id":"'"${RUN_ID}"'-s4","turn_id":"t4","stop_hook_active":true,"last_assistant_message":"The requested work is complete.","cwd":"'"${WORKDIR}"'","transcript_path":"'"${TRANSCRIPT}"'"}' \
   | CODEX_STOP_REVIEW_RUNNER="${FAKE_STOP_OK_RUNNER}" \

@@ -16,4 +16,4 @@ STOP_REVIEW_LUNA_TIMEOUT_DEFAULT="40"
 # Isolated reviewer Codex home. Not ~/.codex and not a named --profile.
 STOP_REVIEW_HOME_DEFAULT="${HOME}/.codex-reviewer"
 # Max continue_work blocks per turn, including nested Stops. Then allow.
-STOP_REVIEW_MAX_CONTINUES_DEFAULT="3"
+STOP_REVIEW_MAX_CONTINUES_DEFAULT="6"
