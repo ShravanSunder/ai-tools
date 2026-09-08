@@ -166,9 +166,14 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-reject-invalid-composition-commission` | Reject stale, wrong-target, wrong-phase, or wrong-revision commission identities. |
 | `spec-handoff` | `spec-handoff-portable-design-context` | Do not turn spec/design portability into plan creation or phase completion. |
 | `spec-handoff` | `spec-handoff-routes-ready-design-to-planner` | Preserve ready design in the handoff and recommend exactly `plan-implementation`. |
-| `tui-presentation` | `tui-presentation-monospace-structure.md` | Do not use markdown headings/pipe tables for TUI structure; use Unicode shape discipline. |
-| `tui-presentation` | `tui-presentation-progressive-disclosure.md` | Do not dump one giant diagram; use disclosure sequence with one map, selected slice, small ledger, and detail. |
-| `tui-presentation` | `tui-presentation-research-lane-board.md` | Do not claim TUI runs research; render handed-over lanes with parent synthesis boundaries. |
-| `tui-presentation` | `tui-presentation-visual-family-selection.md` | Do not default to Mermaid or treat zoom as a diagram family; choose a visual family first. |
-| `tui-presentation` | `tui-presentation-semantic-markdown-boundary.md` | Do not redraw code, paths, URLs, or tokens as box text; preserve semantic markdown. |
-| `tui-presentation` | `tui-presentation-no-mermaid-catalog.md` | Do not create a broad Mermaid catalog; keep visual guidance understanding-first and small. |
+| `presentation-tui` | `presentation-tui-monospace-structure.md` | Keep the TUI skeleton as default layout while mixing markdown deliberately; GFM tables are the comparison default; no pipe tables inside frames. |
+| `presentation-tui` | `presentation-tui-progressive-disclosure.md` | Do not dump one giant diagram; use disclosure sequence with one map, selected slice, small ledger, and detail. |
+| `presentation-tui` | `presentation-tui-research-lane-board.md` | Do not claim presentation runs research; render handed-over lanes with parent synthesis boundaries. |
+| `presentation-tui` | `presentation-tui-visual-family-selection.md` | Do not default to Mermaid or treat zoom as a diagram family; choose a visual family first. |
+| `presentation-tui` | `presentation-tui-semantic-markdown-boundary.md` | Every technical atom is inline code, fenced, or relocated out of fixed-width rows; never raw plain text. |
+| `presentation-tui` | `presentation-tui-table-medium-choice.md` | GFM is the comparison default; the box-table fallback fires only for a named annotation GFM cannot carry. |
+| `presentation-webui` | `presentation-webui-markdown-first-structure.md` | Markdown skeleton is deliberate; technical atoms are fenced or inline code even under a "write it plain" push. |
+| `presentation-webui` | `presentation-webui-rendered-surface-layout.md` | On a rendered surface markdown is the skeleton; box-drawing survives only inside fences. |
+| `presentation-webui` | `presentation-webui-smallest-view.md` | Pick the smallest sufficient medium; no Mermaid for relationships below the topology bar. |
+| `presentation-webui` | `presentation-webui-exact-format-precedence.md` | A user-requested exact format wins over presentation styling. |
+| `presentation-tui` | `presentation-tui-no-mermaid-catalog.md` | Do not create a broad Mermaid catalog; keep visual guidance understanding-first and small. |

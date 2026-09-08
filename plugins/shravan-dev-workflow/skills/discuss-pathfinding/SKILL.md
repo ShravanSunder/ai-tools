@@ -97,7 +97,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    MUST load `references/question-craft.md` and return its question form, material-ambiguity explanation, probes, and counters applied. Return the useful explanation and smallest answerable question group, not narration of the method.
 
-   For a material ambiguity, make the choice understandable before asking: show the current model, strongest credible alternative, one discriminating countercase, and what changes downstream. IF a compact diagram materially clarifies boundaries, ownership, sequence, or competing interpretations, use `tui-presentation` to show the map. The diagram explains; it does not decide or replace downstream specification views.
+   For a material ambiguity, make the choice understandable before asking: show the current model, strongest credible alternative, one discriminating countercase, and what changes downstream. IF a compact diagram materially clarifies boundaries, ownership, sequence, or competing interpretations, use the `presentation-*` skill matching the current surface to show the map; honor an exact user-requested format instead. The diagram explains; it does not decide or replace downstream specification views.
 
    When the destination is Program Design, compare the consequences of owner-controlled tolerance choices without proposing competing architectures. Ask what cost, risk, downtime, compatibility, or policy the owner accepts; leave the component or mechanism that satisfies it to `program-design`.
 
@@ -149,7 +149,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
 - `research-swarm` — the broad-evidence bin in step 2 owns this call; never single facts a bounded read answers.
 - `discuss-clarify-mental-models` — IF mid-session the two of you disagree about a model you both already hold, use it to repair the drift and return the rebuilt shared model before extraction continues.
-- `tui-presentation` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use it for the conversational map; it does not select or own durable specification views.
+- `presentation-tui` / `presentation-webui` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use the `presentation-*` skill matching the current surface for the conversational map; honor an exact user-requested format instead. It does not select or own durable specification views.
 - `spec-design` — a confirmed goal boundary from a user-requirements destination or proposed-change handoff routes here; otherwise return the exact owner decision rather than claiming readiness.
 - `program-design` — settled obligations that require components, interfaces, ownership allocation, or mechanisms route here without pathfinding; owner-controlled structural tolerance clarified for this recorded destination returns here without a pathfinding-authored architecture.
 - caller-supplied return destination — for an orchestrated continuation, this exact phase is the only permitted return; a mismatch stops instead of rerouting.

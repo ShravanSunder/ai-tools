@@ -1,13 +1,13 @@
-# tui-presentation progressive disclosure pressure
+# presentation-tui progressive disclosure pressure
 
-scenario_id: tui-presentation-progressive-disclosure
-skill_under_test: shravan-dev-workflow:tui-presentation
+scenario_id: presentation-tui-progressive-disclosure
+skill_under_test: shravan-dev-workflow:presentation-tui
 mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: layer|architecture|slice|detail|structure
 expect_proof_regex: disclosure[- ]sequence|progressive disclosure|layered explanation
-expect_proof_regex: one map.*selected slice|selected slice.*one map|compact first visual|sub-framed grid.*pipeline
+expect_proof_regex: one map.*selected slice|selected slice.*one map|compact first visual|sub-framed grid.*pipeline|map.{0,80}slice|slice.{0,80}(ledger|detail)
 expect_proof_regex: small ledger|technical detail|where it goes sideways|technical atoms
 
 ## Shortcut Temptation
@@ -20,11 +20,11 @@ single impressive drawing.
 - Architecture complexity
 - Desire to show everything
 - TUI diagram request
-- Markdown unreliability
+- Dense architecture prose temptation
 
 ## Prompt
 
-$shravan-dev-workflow:tui-presentation
+$shravan-dev-workflow:presentation-tui
 
 Draw out why the terminal renderer, model output, and skill references keep
 fighting each other. I am losing the thread. Show me the whole thing in a way

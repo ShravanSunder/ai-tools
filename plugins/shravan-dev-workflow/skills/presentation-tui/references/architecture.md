@@ -1,13 +1,18 @@
 Architecture Diagrams
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for architecture-style diagrams.  Use these patterns for system overviews, data flows, and pipeline diagrams.
+This reference owns: TUI patterns for system overviews, boundaries,
+data flows, and pipeline diagrams.
+Expected inputs: the system relationship selected by the SKILL.md
+caller (and the visual family from diagram-semantics when loaded).
+Return: the pattern used and its labels.
+Complete when: the drawn pattern shows the load-bearing relationship
+with ownership or flow labels on the edges that carry it.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ progressive-disclosure.md — map first, then selected slice
-  ▸ visual-family-selection.md — choose topology vs. flow vs. 2D map
+  ▸ ../../../shared-references/diagram-semantics.md — map first, then selected slice; choose topology vs. flow vs. 2D map
   ▸ shape-catalog.md ──► Shape 5 (Pipeline box) — bordered pipeline with numbered steps; Shape 6 (State diagram) — full state-machine worked example
   ▸ build-discipline.md ──► Alignment recipes — positioning lifelines, arrow landings, junction characters
   ▸ sequence-and-state.md — state machines, sequence diagrams, decision trees, event timelines
@@ -17,7 +22,7 @@ See also:
 
 Show the normal path before exceptions.  This gives the reader a stable spine for later detail.
 
-```
+```text
 user asks
   ──► controller chooses skill
   ──► skill routes to one reference
@@ -32,7 +37,7 @@ After the spine is clear, add one branch or failure state.
 
 Use topology when the question is "who owns what?"
 
-```
+```text
 ┌──────────────┐     layout contract      ┌──────────────┐
 │ TUI skill    │─────────────────────────▶│ chat surface │
 └──────┬───────┘                          └──────▲───────┘
@@ -47,7 +52,7 @@ Keep ownership labels on arrows.  Do not imply a data flow where the real point 
 
 Use a 2D map when two independent concerns explain the choice.
 
-```
+```text
                      more visual structure
                               ▲
                               │
@@ -62,7 +67,7 @@ Axes must name real tradeoffs.  If the axes are vague, use a table or boundary m
 
 ─── Client ──► API ──► DB with labels ─────────────────────────────
 
-```
+```text
  ┌────────┐   HTTP    ┌────────┐   SQL     ┌──────────┐
  │ Client │ ────────▶ │ API    │ ────────▶ │ Database │
  └────────┘  ◀──────  └────────┘  ◀──────  └──────────┘
@@ -74,7 +79,7 @@ Bidirectional flow with labels on both directions.
 
 ─── Pub/sub fan-out ─────────────────────────────────────────────────
 
-```
+```text
   ┌──────────┐
   │ Producer │
   └─────┬────┘
@@ -96,7 +101,7 @@ One producer, multiple consumers.  Fan-out via ├──┬──┐ junction.
 
 ─── Layered stack ───────────────────────────────────────────────────
 
-```
+```text
  ┌──────────────────────────────────────┐
  │  UI Layer                            │
  │  (React components, routing)         │
@@ -117,7 +122,7 @@ Stacked rectangles sharing borders.  Each layer labeled and briefly described.
 
 ─── Pipeline with branches ──────────────────────────────────────────
 
-```
+```text
  ┌───────┐   ┌─────────┐   ┌─────────┐   ┌────────┐
  │ Input │──▶│ Parse   │──▶│ Validate│──▶│ Output │
  └───────┘   └─────────┘   └────┬────┘   └────────┘
@@ -133,7 +138,7 @@ Main path horizontal, branch drops down on condition.
 
 ─── Request roundtrip ───────────────────────────────────────────────
 
-```
+```text
  Browser          CDN            Origin         DB
    │               │               │            │
    │── GET /x ────▶│               │            │

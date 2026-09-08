@@ -1,12 +1,25 @@
 UI Layouts
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for UI mockup layouts.  Use these patterns when describing interface composition, panel arrangements, and modal overlays.
+This reference owns: TUI mockup patterns for interface composition,
+panel arrangements, modal overlays, and dashboards.
+Expected inputs: the interface being described and its focal target,
+selected by the SKILL.md caller.
+Return: the layout pattern and focus treatment.
+Complete when: the layout relationship is unambiguous and any real
+focal target is marked exactly once.
+
+Focus treatment — inspect before drawing: what should the reader's
+eye land on first?  One focal target gets one emphasis device (double
+border, FAILED row, or an arrow — never several at once).  Bad focus:
+every panel equally loud, an invented focal target the content does
+not name, or emphasis devices mixed in one mockup.  If no element is
+genuinely focal, use plain single borders everywhere and stop.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ progressive-disclosure.md — preview/detail and staged explanation
+  ▸ ../../../shared-references/diagram-semantics.md — preview/detail and staged explanation
   ▸ shape-catalog.md ──► Shape 1 (Framed card) and Shape 2 (Sub-framed grid) — worked examples and geometry for nested frames
   ▸ build-discipline.md ──► Alignment recipes — mechanics for multi- cell frames and sub-frame sizing
   ▸ annotations-and-specs.md — callouts on mockups, visual specs with measurements
@@ -16,7 +29,7 @@ See also:
 
 Use preview/detail when the user needs a quick orientation plus one focused inspection area.
 
-```
+```text
 ┌─ Preview ───────────────────────────┐
 │ controller ──► plugin ──► renderer  │
 └─────────────────────────────────────┘
@@ -33,7 +46,7 @@ Do not put the detailed code/config inside the preview frame.
 
 Use quiet success when most rows are normal and one failure needs the eye.
 
-```
+```text
 ok       reference loaded
 ok       shape selected
 FAILED   code was redrawn as table text
@@ -45,7 +58,7 @@ Avoid styling every row as equally urgent.
 
 ─── Sidebar + main content ──────────────────────────────────────────
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │  ┌──────────┐   ┌────────────────────┐  │
 │  │ Sidebar  │   │ Main Content       │  │
@@ -62,7 +75,7 @@ Classic two-pane.  Arrow shows focus relationship between nav and content.
 
 ─── Tiled panes (split view) ────────────────────────────────────────
 
-```
+```text
 ┌─────────────────────┬─────────────────────┐
 │ Editor              │ Preview             │
 │                     │                     │
@@ -79,7 +92,7 @@ Four-pane quadrant.  Use ├─┼─┤ for the interior junction.
 
 ─── Modal overlay (double border for modal) ─────────────────────────
 
-```
+```text
 ┌──────────────────────────────────────────┐
 │ Base view (dimmed)                       │
 │                                          │
@@ -99,7 +112,7 @@ Double border elevates the modal above the single-border base. Emphasis through 
 
 ─── Nested cards with focus ─────────────────────────────────────────
 
-```
+```text
 ┌─ Workspace ─────────────────────────────┐
 │                                         │
 │  ┌─ Projects ──────────────────────┐    │
@@ -120,7 +133,7 @@ Titles inline on the border (`─ Title ─`).  Focus shown with double border o
 
 ─── Tab bar / chip variants ─────────────────────────────────────────
 
-```
+```text
 Default:        ┌──────┐
                 │  ◫   │
                 └──────┘
