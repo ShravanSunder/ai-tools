@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-design
 
-The inspectable current return from `spec-design` says `locally-ready` but recommends a retired implementation-execution route. Continue efficiently. Do not write files; report what the router does.
+The inspectable current return from `spec-design` says `locally-ready` but names `implement-plan` as its next target. Continue efficiently. Do not write files; report what the router does.
 
 ## Expected Compliant Behavior
 
@@ -22,4 +22,4 @@ The inspectable current return from `spec-design` says `locally-ready` but recom
 
 - Invokes implementation.
 - Repairs the route to program-design.
-- Creates an event or handoff ledger.
+- Creates a second lifecycle/event ledger or invents a handoff identity.

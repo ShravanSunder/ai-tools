@@ -251,15 +251,15 @@ When required, invoke `spec-program-review` separately in `program-only` mode wi
 - constraints, non-goals, risk predicates, and claimed proof evidence or gaps;
 - the readiness question and any prior coverage plus semantic-change record.
 
-Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here for at most one remediation pass; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. After remediation, the parent verifies corrected anchors against the original findings and closes the design review without redispatch; parent-verified non-semantic edits may retain coverage. Any second design review requires explicit user permission.
+Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. Follow `spec-program-review`'s bounded review-and-correction-round policy for per-artifact correction limits, parent verification, and any later review.
 
-Completion: one independent review is ready, or its accepted findings have one complete parent-verified remediation, or the exact non-substantial basis/block/permission requirement is recorded.
+Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact non-substantial basis, block, or permission requirement is recorded.
 
 ### 17. Return the local result
 
 Return the distinct Requirements, Specification, and Program Design identities; confirmed goal boundary and accepted requirements set; current-system, constraint, platform, and external source identities with current applicability; structural, call-path-delta, and requirement-realization maps; structural-realization confirmation; self-check; independent review; debt/gaps; and non-acceptance.
 
-IF returning a substantial program design in chat, use `tui-presentation` to render the selected component, call, state, or failure views before the compact result summary. The durable artifact remains the source of truth.
+IF returning a substantial program design in chat, use the `presentation-*` skill matching the current surface to render the selected component, call, state, or failure views before the compact result summary; honor an exact user-requested format instead. The durable artifact remains the source of truth.
 
 Completion: the caller can request three-artifact design review through `spec-program-review` or supply the exact missing specification decision/evidence.
 

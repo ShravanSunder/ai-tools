@@ -93,6 +93,16 @@ Proof posture per run: as recorded in the Proof column above. Named proof gaps a
 - No `manage-agents` edits in these runs (follow-ups recorded in Coordination).
 - No sync obligations to the work variant (`relay-ai-tools`): these are personal plugin skills, out of the sync surface.
 
+## Amendments (2026-09-08, after merging `origin/master` at `127aa72`)
+
+| # | Amendment | Effect |
+|---|-----------|--------|
+| A1 | **D12 superseded.** Master (`f35b07a`, "Allow a substantive second design review round") replaced `spec-program-review`'s one-review/one-remediation rule with: prefer one review-and-correction round; admit one second normal round only for a concrete source-backed substantive residual; a third normal review requires explicit user permission after the second result; plus one orchestrator-authorized recovery exception that never resets or adds allowance. Run 3 preserves *this* policy, not the one-round rule D12 named. | D12's semantic coverage for Run 3 has expired under the Acceptance Binding; the Run 3 delta (bounded-review rules + recovery exception inside the DAG) re-enters spec review before any Run 3 skill file is edited. Runs 1–2 are unaffected. |
+| A2 | **D11 extended.** The rename surface also includes `.cursor-plugin/plugin.json`, `.cursor-plugin/marketplace.json`, and master's new consumers (`orchestrator-implementation-goal`, `track-show-me-your-work`, fixtures). `orchestrator-goal` was retired on master; our name-swapped copies of it and its scenarios were dropped in favor of the deletion. | Applied in the merge; post-merge grep check re-run. |
+| A3 | **Run 2 absorbs master's bounded-recovery admission.** Master added an orchestrator-authorized one-time recovery review to `review-implementation` (unknown remediation count stays unknown, never zero; recovery findings with unknown budget stop and ask before correction) plus scenario `admit-bounded-recovery-review`. Ported verbatim in meaning into `implementation-review`'s Admit Review and Remediation Boundary; scenario moved and renamed. | Behavior-changing compatibility port inside Run 2's boundary; proven by the ported scenario's targeted eval before ship. |
+| A4 | **Coordination updated.** Base is now the merge commit of `origin/master` `127aa72`; combined release is `shravan-dev-workflow` 2.10.0 (master had reached 2.9.0); the 09-02 and 09-03 changelog entries record 2.10.0. | Slice runs read this row, not the original Coordination base. |
+| A5 | **D7/D8 follow-up destination moved.** `manage-agents` now carries the Astra / Fable 5.1 / Grok 4.6 catalog with Delegate Frontier reviewer-only; the D8 security-model-class entry and the D7 bounded-execution Delegate clarification target that catalog. | Follow-ups unchanged in status (out of spec), destination updated. |
+
 ## Spec-Review Record
 
 - Accepted revision: v2 (this document), produced as the one permitted remediation of draft v1.

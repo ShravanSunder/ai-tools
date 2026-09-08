@@ -1,0 +1,25 @@
+{
+  "name": "scaffold-project",
+  "version": "0.2.1",
+  "description": "Scaffold new projects or retrofit existing ones with standard dev configs (linters, rules, hooks, testing)",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "keywords": [
+    "scaffolding",
+    "project-setup",
+    "linting",
+    "oxlint",
+    "oxfmt",
+    "oxc",
+    "ruff",
+    "swiftlint",
+    "swiftformat",
+    "typescript",
+    "python",
+    "swift",
+    "swiftui"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}

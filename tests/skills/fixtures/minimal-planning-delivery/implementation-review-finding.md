@@ -10,7 +10,7 @@ Result: needs-revision
 
 Accepted finding:
 - severity: important
-- exact anchor: tests/skills/lib/example-formatter.ts:12
+- exact anchor: tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.ts:12
 - governing obligation or invariant: Program Design assigns grouping ownership to the formatter
 - concrete consequence: grouping ownership is split across the caller and formatter
 - smallest correction: move grouping into the formatter owner

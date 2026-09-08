@@ -57,7 +57,7 @@ outside the main phase path.
 
 ### Shared Observability
 
-`observability/` owns the shared local OpenTelemetry collector plus
+`observability/` owns the shared local OpenTelemetry collector plus the
 VictoriaMetrics, VictoriaLogs, and VictoriaTraces stack. Use
 `shravan-dev-workflow:ops-observability-stack` for producer boundaries,
 AgentStudio and Agent VM loops, resource naming, and Victoria query recipes.

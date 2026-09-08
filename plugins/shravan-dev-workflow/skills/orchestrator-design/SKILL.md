@@ -5,71 +5,54 @@ description: Use when a user asks to run, resume, or finish one bounded Requirem
 
 # Design Orchestration
 
-The agent is the actor; this skill is a stateless guarded router among design owners. Durable artifacts and current phase returns prove progress. Optional scratch may accelerate packet reconstruction but never owns authority.
+Coordinate the smallest design owner that can advance the work, verify its material result against current evidence, and keep going until the three artifacts form one coherent reviewed design or a real owner decision or blocker stops the run. This skill owns coordination and the final claim. `spec-design`, `program-design`, and `spec-program-review` own their phase judgment and artifacts.
 
 ```text
 spec-design          Requirements and observable Specification
 program-design       structural realization
-spec-program-review  one independent design review
+spec-program-review  independent three-artifact review
 discuss-pathfinding  genuinely unwritten owner meaning
 ```
 
-MUST load `../../shared-references/requirements-specification-program-design.md` and return the separate concept/identity boundaries.
+MUST load `../../shared-references/requirements-specification-program-design.md` and return the separate concept and identity boundaries used to validate every downstream handoff.
 
-## Artifact Homes
+MUST invoke `track-show-me-your-work` once at the start and return the selected trail path plus whether this workflow owns its finalization. Reuse a supplied caller trail as borrowed. Otherwise select or create the session trail as that skill directs. That skill owns recording and the operator-produced readable view. If tracking cannot initialize, record the gap in the response and continue permitted design/review work; tracking availability is not a review-admission prerequisite unless the user explicitly made it one.
 
-- For newly created file-backed artifacts in this orchestrated cycle, pass `new artifact home: <project-root>/docs/specs/` to `spec-design` and `program-design` and validate their returned distinct paths beneath that home.
-- Preserve authoritative pre-existing artifacts elsewhere; do not move, copy, reject, or relabel them merely because of location.
-- Optional private packets, working summaries, and agent-transfer material live only beneath `<os-temp>/shravan-dev-workflow/orchestrator-design/` and may disappear at any time.
-- Never create project-local `details.md`, `events.jsonl`, counters, handoff identities, stale-review budgets, transition history, terminal replay, or recovery state.
+Record only consequential design decisions, owner confirmations, accepted or rejected review findings, corrections, results with evidence, and unresolved meaning. A historical event helps orientation but never proves the current artifact or review state. User corrections append a record referencing the earlier line; do not rewrite history.
 
-## Route From Current Evidence
+## Orient And Route
 
-1. Open current Requirements, Specification, Program Design, and any inspectable current phase/review return.
-2. Fresh full-design request -> `spec-design`.
-3. Missing Requirements or Specification -> `spec-design`; missing Program Design -> `program-design`; three current artifacts without a review -> `spec-program-review` in `three-artifact-design` mode.
-4. Preserve each producer's returned next owner and exact compact handoff. Validate only that the route is among `discuss-pathfinding | spec-design | program-design | spec-program-review | stop`; do not redo semantic judgment.
-5. `specification-gap` -> `spec-design`; owner-controlled structural choice -> `discuss-pathfinding` with return owner `program-design`; How correction -> `program-design`; blocker/decision -> exact stop.
-6. If a phase return is unavailable, rerun the smallest authoring phase whose result is unproven. Pre-review authoring recovery—including `specification-gap -> spec-design -> program-design`—never consumes review remediation; when it produces three distinct current artifacts, route them to the one independent review. An unavailable consumed review/remediation result is permission-gated rather than automatically rerun.
+1. Reopen the current user intent, governing sources, Requirements, Specification, Program Design, and any inspectable current phase or review result. Use the trail to find relevant context, then verify load-bearing claims in current sources.
+2. Invoke the smallest owner that can advance the current evidence:
+   - fresh full-design request, or missing Requirements or Specification -> `spec-design`;
+   - current Requirements and Specification but missing Program Design -> `program-design`;
+   - three current artifacts without completed review coverage -> `spec-program-review` in `three-artifact-design` mode;
+   - genuinely unmade owner meaning -> `discuss-pathfinding`, returning to the phase that owns it.
+3. Preserve each producer's current route and compact handoff. Accept only `discuss-pathfinding | spec-design | program-design | spec-program-review | stop`; a contradictory destination blocks without the coordinator inventing a plausible route.
+4. Verify what materially changed before continuing. Check artifact identity and resolution, returned owner, current evidence, and the finding or decision that justifies the next route. Require exact source identity where correctness depends on it, such as a reviewed commit or PR head; ordinary decisions need no opaque identity.
+5. Route a `specification-gap` to `spec-design`, an owner-controlled structural choice through `discuss-pathfinding` back to `program-design`, a bounded How correction to `program-design`, and a blocker or owner decision to the exact stop. Continue across phase boundaries instead of returning a progress checkpoint as completion.
 
-## One Review, One Remediation
+For newly created file-backed artifacts, pass `new artifact home: <project-root>/docs/specs/` to `spec-design` and `program-design` and validate their distinct returned paths beneath that home. Preserve authoritative pre-existing artifacts wherever they already live. Decision records and linked detail may live in the central trail; do not create a second lifecycle ledger, replay store, digest, generic approval record, or per-turn report in the project.
 
-One bounded design run permits:
+## Review And Correction Rounds
 
-```text
-one independent design review
-  ├─ ready ──► design terminal
-  ├─ pedantic/non-semantic finding ──► parent rejects with evidence ──► design terminal
-  ├─ mental-model break ──► stop with assumption, evidence, consequence, and owner
-  └─ accepted bounded findings
-       ──► one bounded remediation round follows the exact semantic owner route
-            (`spec-design -> program-design` when findings span both; each artifact once)
-       ──► parent verifies corrected anchors against original findings
-       ──► design terminal or planning handoff
-```
+Prefer one review-and-correction round. Allow a second only for a concrete, substantive issue that remains or was introduced by the correction, within the agreed design. Pedantic, stylistic, or already-satisfied findings do not justify another round. Ask before a third.
 
-The remediation allowance begins only when the one independent review returns accepted bounded findings. It is one correction round, not one owner call: accepted findings spanning Why/What and structural How use the ordered `spec-design -> program-design` route, correct each artifact at most once, and close with one parent verification. Pre-review authoring recovery—including `specification-gap -> spec-design -> program-design`—follows the producer route until three current artifacts exist, then proceeds to the one independent review; it neither consumes remediation nor requires review permission.
+Reduce findings against the sources:
 
-Disposition precedes remediation. Do not spend the remediation allowance on prose taste, already-satisfied obligations, or findings without semantic effect. Do not force a mental-model break through correction: stop at `discuss-pathfinding` or the exact owner selected by `spec-program-review`.
+- `ready` -> design terminal;
+- non-semantic or unsupported finding -> reject with evidence;
+- mental-model break or unmade owner meaning -> stop with assumption, evidence, consequence, and owner;
+- accepted bounded findings -> correct through the semantic owners, then parent-verify the findings.
 
-Do not dispatch a second design reviewer after remediation. Switching review mode, reviewer lane, target label, caller skill, or resuming after scratch loss does not reset the boundary. Another design review requires explicit user permission given after the first review/remediation result is visible.
+Each round may call `spec-design` then `program-design`, correcting each affected artifact once. Close when verification resolves the findings; another review is not automatic. Pre-review authoring does not consume a review round. `spec-program-review` owns review admission and coverage.
 
-Parent verification is not mislabeled independent review. When it resolves every original finding and no unrelated or uncertain meaning remains, return the design terminal or planning handoff; never return `review-permission-required` merely to restate that a hypothetical second review would need permission. Return the original review identity, accepted findings, correction anchors, verification evidence, unresolved boundary, and `review-permission-required` only when another review is explicitly requested or actually needed because meaning expanded or remains uncertain.
+## Missing Review Evidence
 
-## Terminal Results
+Pass `spec-program-review` one explicit orchestrator-authorized recovery request for unavailable prior results, using verified current artifacts and governing sources and a recorded reason. Preserve existing limits and unknown history; recovery grants no extra correction rounds. Reject repeated recovery or unverified inputs. Ask before corrections if the remaining allowance is exhausted or unknown. Route design breaks to their owner.
 
-Return exactly one:
+## Trail And Completion
 
-```text
-ready
-needs-revision
-decision-needed
-deferred
-review-permission-required
-blocked
-stopped
-```
+At each owner return, append a checkpoint with the decision, reason, evidence, and result. Render through the tracker whenever requested. A nested orchestrator using a borrowed trail appends checkpoints but never finalizes the outer workflow. The outermost owner of this design trail MUST finish and render it before every terminal response, including `ready`, `needs-revision`, `decision-needed`, `review-permission-required`, `blocked`, `deferred`, or `stopped`. If trail writing fails, report the incomplete trail and preserve the real design result. Continue independent design work unless the user made the trail a delivery gate; then the incomplete trail blocks completion.
 
-`ready` requires distinct current artifacts plus either one ready independent review or one independent review whose accepted findings received the single complete parent-verified remediation. It never claims planning or implementation.
-
-Completion: the route is artifact-driven, new design homes are valid, at most one review and one remediation occurred, no project-local lifecycle state exists, and the exact next skill or stop is explicit.
+Return one status and the next skill or stop. `ready` requires distinct, current Requirements, Specification, and Program Design artifacts, independent review, and parent-verified resolution of findings within the allowed rounds. It means design-ready, not implemented.

@@ -20,18 +20,18 @@ Evaluate these three file-backed spec-design handoffs independently. Each report
 2. Requirements and Specification both point to `tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md`.
 3. Requirements points to `tests/skills/fixtures/spec-program-review-reader-understanding/requirements.md`; Specification points to `tests/skills/fixtures/spec-program-review-reader-understanding/does-not-exist.md`.
 
-Do not write files. Do not inspect artifact contents or repair a handoff. For each independent run, state whether program-design is invoked and the exact terminal result and record you would produce.
+Do not write files. Do not inspect artifact contents or repair a handoff. For each independent run, state whether program-design is eligible as the next owner and name the exact stop.
 
 ## Expected Compliant Behavior
 
-- Blocks all three runs before invoking program-design.
+- Blocks all three runs before selecting program-design.
 - Names the missing, identical, or unresolved structural contradiction for the matching run.
 - Preserves each locally-ready phase result without semantically re-reviewing it.
 - Creates or repairs no Requirements or Specification artifact.
 
 ## Failure Signals
 
-- Invokes program-design for any run.
+- Selects program-design for any run.
 - Accepts one pointer as both identities.
 - Reads artifact contents to judge quality.
 - Creates a missing Specification or replaces a pointer.

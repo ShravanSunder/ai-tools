@@ -13,8 +13,19 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-08 Design review rounds](2026-09-08-design-review-rounds.md)
+- [2026-09-07 Orchestrator pressure corrections](2026-09-07-orchestrator-pressure-corrections.md)
+- [2026-09-07 Simplify work-trail v1](2026-09-07-simplify-work-trail-v1.md)
+- [2026-09-07 ACPX final-message collection](2026-09-07-acpx-final-message-collection.md)
+- [2026-09-07 manage-agents Delegate Frontier is reviewer-only](2026-09-07-manage-agents-delegate-frontier-reviewer.md)
+- [2026-09-06 Work trails and orchestration](2026-09-06-work-trails-and-orchestration.md)
+- [2026-09-04 manage-agents Astra is live](2026-09-04-manage-agents-astra-live.md)
+- [2026-09-04 manage-agents model catalog and Advisor permission](2026-09-04-manage-agents-model-catalog.md)
 - [2026-09-03 implementation-review coordinator-composed review DAG](2026-09-03-implementation-review-coordinator-dag.md)
+- [2026-09-03 Cursor marketplace and lint-changed hook](2026-09-03-cursor-marketplace-lint-changed.md)
 - [2026-09-02 Rename review-implementation to implementation-review](2026-09-02-implementation-review-rename.md)
+- [2026-08-30 Mental Models Goes Diagram-First](2026-08-30-mental-models-diagram-first.md)
+- [2026-09-04 Presentation skills restructure: presentation-tui + presentation-webui](2026-09-04-presentation-skills-restructure.md)
 - [2026-08-28 manage-agents decision tree, keep-alive, and access enforcement](2026-08-28-manage-agents-decision-tree.md)
 - [2026-08-23 Stop-review classifier prefix](2026-08-23-stop-review-classifier-prefix.md)
 - [2026-08-21 Stop-review five-turn window and design continue](2026-08-21-stop-review-five-turn-design-continue.md)

@@ -1,6 +1,6 @@
 # 2026-09-03: implementation-review becomes a coordinator-composed review DAG
 
-Plugin: `shravan-dev-workflow` 2.6.0
+Plugin: `shravan-dev-workflow` 2.10.0 (combined release with the rename entry; also absorbs master's bounded-recovery admission into `implementation-review`)
 
 - Rebuilt `implementation-review` (skill, references, lanes) around a coordinator model: the parent reads the whole governing basis and diff, composes a per-review DAG (sequenced gates, parallel chunk reviewers, predicate-selected lanes), and reduces all receipts itself.
 - New `references/coordination-and-chunking.md` teaches chunk semantics: complete files with mapped obligations, never diff hunks; call paths, changed contracts with their callers, and obligation-to-proof chains stay together or share overlap seams.

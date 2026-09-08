@@ -4,6 +4,7 @@ AI tools distributed through the local marketplaces in this repository.
 
 - Codex plugins: [`.agents/plugins/marketplace.json`](../.agents/plugins/marketplace.json)
 - Claude Code plugins: [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)
+- Cursor plugins: [`.cursor-plugin/marketplace.json`](../.cursor-plugin/marketplace.json)
 - Release notes: [`../docs/changelog/`](../docs/changelog/)
 
 ## Installation
@@ -21,12 +22,11 @@ Client install IDs:
 ```text
 Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
 Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
-Cursor      agent --plugin-dir <plugin-directory>
+Cursor      local plugins via `.cursor-plugin/` manifests
 ```
 
-Cursor loads these Claude-format plugin directories through its explicit
-`--plugin-dir` path; it does not install them from this repository's Codex or
-Claude marketplace manifests.
+Cursor can load these plugins from `.cursor-plugin/marketplace.json` plus each
+plugin's `.cursor-plugin/plugin.json`, or via an explicit `--plugin-dir` path.
 
 ### Managing Plugins
 
@@ -75,7 +75,8 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **debug-investigation** skill -- investigates bugs, failing tests, flaky behavior, crashes, regressions, and unexpected behavior before fixes
 - **skills-creation** skill -- creates, updates, or evaluates one named skill or accepted draft with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, and source-adaptation boundaries
 - **skill-audit** skill -- audits current skills, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions
-- **tui-presentation** skill -- presents design, architecture, comparison, flow, and multi-section chat output with progressive Unicode TUI structure while preserving semantic markdown for code, links, paths, URLs, and technical tokens
+- **presentation-tui** skill -- presents design, architecture, comparison, flow, and multi-section output on monospace terminal surfaces with a hybrid Unicode TUI + markdown style: box-drawing skeleton, inline code and fences for every technical atom, GFM tables as the default comparison medium
+- **presentation-webui** skill -- presents the same content on rendered proportional-font chat surfaces with a markdown-first style: headings and GFM tables as the skeleton, smallest-view media selection, and Mermaid only where the relationship earns it
 - **ops-linear-tracking** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle

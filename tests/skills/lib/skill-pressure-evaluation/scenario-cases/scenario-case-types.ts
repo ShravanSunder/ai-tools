@@ -14,6 +14,13 @@ export interface SkillPressureCaseDefinition {
   readonly scenarioId: string;
   readonly requiredSourceReads?: readonly string[];
   readonly maximumToolCalls?: number;
+  /**
+   * Scripted operator messages sent to the same subject session after the
+   * first response, in order. Every turn must return the JSON report; the
+   * evaluators grade the final turn, with earlier turns supplied to the
+   * semantic judge as conversation evidence.
+   */
+  readonly followUpUserTurns?: readonly string[];
   readonly semanticCriteria: readonly SemanticCriterion[];
 }
 
@@ -23,6 +30,13 @@ export interface SkillPressureInput {
   readonly mode: SkillPressureScenario["mode"];
   readonly prompt: string;
   readonly requiredSourceReads?: readonly string[];
+  readonly followUpUserTurns?: readonly string[];
+}
+
+export interface SubjectConversationTurn {
+  readonly [key: string]: JsonValue;
+  readonly operatorMessage: string;
+  readonly subjectDecision: string;
 }
 
 export type SkillPressureEvaluatorContext = JudgeContext<

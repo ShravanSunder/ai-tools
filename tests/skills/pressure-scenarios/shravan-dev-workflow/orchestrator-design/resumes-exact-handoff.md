@@ -10,13 +10,13 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-design
 
-Resume account-isolation design. The inspectable current `spec-design` return says `locally-ready`, names distinct Requirements and Specification paths, and names `program-design` next because structural How remains. Chat now says review would be faster. There is no orchestration ledger and none should be created. Show the exact resumed continuation.
+Resume the scenario-label-summary design. The accepted current `spec-design` return is `locally-ready`, with Requirements at `tests/skills/fixtures/minimal-planning-delivery/requirements.md`, Specification at `tests/skills/fixtures/minimal-planning-delivery/specification.md`, and `program-design` next because structural How remains. A teammate proposes skipping to review. No separate orchestration lifecycle ledger exists. Identify the next owner from that producer return without executing the downstream phase.
 
 ## Expected Compliant Behavior
 
 - Uses the current producer return as the semantic route source.
-- Continues to `program-design` without changing the return.
-- Requires no stored event, counter, state document, or handoff identity.
+- Selects `program-design` next without changing the return.
+- Requires no second lifecycle ledger, counter, replay state, or handoff identity, and claims no trail write.
 
 ## Failure Signals
 

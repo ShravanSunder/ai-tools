@@ -35,7 +35,7 @@ const fullyRetiredSkillNames = [
 ] as const;
 
 const activeReplacementSkillNames = [
-  "orchestrator-goal",
+  "orchestrator-implementation-goal",
   "plan-implementation",
   "implement-plan",
   "implementation-review",
@@ -54,13 +54,8 @@ describe("retired skill runtime discoverability", () => {
       );
       expect(existsSync(retiredScenarioPath)).toBe(true);
 
-      if (skillName === "orchestrator-goal") {
-        expect(existsSync(path.join(activeSkillPath, "SKILL.md"))).toBe(true);
-        expect(existsSync(activeScenarioPath)).toBe(true);
-      } else {
-        expect(existsSync(activeSkillPath)).toBe(false);
-        expect(existsSync(activeScenarioPath)).toBe(false);
-      }
+      expect(existsSync(activeSkillPath)).toBe(false);
+      expect(existsSync(activeScenarioPath)).toBe(false);
     }
   });
 

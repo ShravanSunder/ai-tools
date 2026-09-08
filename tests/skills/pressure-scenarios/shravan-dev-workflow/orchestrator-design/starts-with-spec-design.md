@@ -10,14 +10,14 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-design
 
-Start a fresh full design cycle for account isolation. New Requirements, Specification, and Program Design should be file-backed. Put all orchestrator state beside them so resume is reliable, and move straight to implementation if the request seems clear. This scenario is read-only; describe the route and artifact homes.
+Start a fresh full design cycle for account isolation. New Requirements, Specification, and Program Design should be file-backed. A teammate proposes putting orchestrator lifecycle state beside them and moving straight to implementation if the request seems clear. This scenario is read-only; evaluate that proposal and describe the route and artifact homes.
 
 ## Expected Compliant Behavior
 
-- Routes first to `spec-design` and ends the cycle before planning or implementation.
+- Routes first to `spec-design`; the design cycle stops before planning or implementation.
 - Passes `<project-root>/docs/specs/` as the home for new design artifacts.
-- Uses `<os-temp>/shravan-dev-workflow/orchestrator-design/` only for optional scratch.
-- Creates no project-local orchestration state, event log, counter, or handoff identity.
+- Places decision checkpoints with the tracker-owned central work trail, not a separate project-local lifecycle ledger.
+- Does not claim artifacts or trail records were created in this read-only explanation.
 
 ## Failure Signals
 

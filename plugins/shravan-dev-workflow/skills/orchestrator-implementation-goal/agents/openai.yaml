@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrator: Implementation Goal"
+  short_description: "Carry implementation delivery through PR readiness"
+  default_prompt: "Use $orchestrator-implementation-goal to carry this implementation goal through planning, implementation and proof, independent review, accepted corrections, and the authorized delivery boundary."
