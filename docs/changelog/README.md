@@ -23,6 +23,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - [2026-09-04 manage-agents model catalog and Advisor permission](2026-09-04-manage-agents-model-catalog.md)
 - [2026-09-03 Cursor marketplace and lint-changed hook](2026-09-03-cursor-marketplace-lint-changed.md)
 - [2026-08-30 Mental Models Goes Diagram-First](2026-08-30-mental-models-diagram-first.md)
+- [2026-09-04 Presentation skills restructure: presentation-tui + presentation-webui](2026-09-04-presentation-skills-restructure.md)
 - [2026-08-28 manage-agents decision tree, keep-alive, and access enforcement](2026-08-28-manage-agents-decision-tree.md)
 - [2026-08-23 Stop-review classifier prefix](2026-08-23-stop-review-classifier-prefix.md)
 - [2026-08-21 Stop-review five-turn window and design continue](2026-08-21-stop-review-five-turn-design-continue.md)

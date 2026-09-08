@@ -10,9 +10,9 @@ Return per view: selected medium, fallback decision, semantic-preservation resul
 
 Honor an exact user-requested format when it can preserve the required semantics. Otherwise choose by the relationship and destination:
 
-- use Mermaid in durable Markdown when the repository renders it and topology, flow, sequence, or state is load-bearing;
-- use a Markdown table for dense ownership, matrix, state, transition, or coverage data where comparison matters more than topology or time;
-- use `tui-presentation` for chat or terminal explanation only when visual structure materially helps and no exact user-requested format overrides it;
+- IF Mermaid is a candidate medium, load `mermaid-usage.md` to decide from the already-selected relationship and destination and return the use-or-fallback decision with its trigger and the readability/semantics check result;
+- use a Markdown table for dense ownership, matrix, state, transition, or coverage data where comparison matters more than topology or time (`markdown-presentation-baseline.md` owns the table default);
+- for chat or terminal explanation, and only when visual structure materially helps, use the `presentation-*` skill matching the current surface; honor an exact user-requested format instead;
 - use readable fenced plain text when no renderer exists or Mermaid/table structure would hide the relationship.
 
 The medium serves the relationship. Do not select syntax first and force the meaning into it.
@@ -39,10 +39,12 @@ Fallback when the first medium is unavailable, malformed, unreadable, decorative
 
 ## Return Shape
 
+Each medium label names an output medium, not a skill: `presentation-tui` denotes a box-drawn/glyph TUI layout block (built with `presentation-tui` craft). There is no `presentation-webui` medium — webui output is composed of the other media (`mermaid`, `markdown-table`, fences), so a webui view is labeled by its actual medium. Surface routing is the presentation skills' job, not this label set's.
+
 ```text
 view and fired predicate
 required semantic fields
-selected medium: mermaid | markdown-table | tui-presentation | fenced-plain-text
+selected medium: mermaid | markdown-table | presentation-tui | fenced-plain-text
 format override: honored | not requested | unsupported, with reason
 semantic preservation: preserved fields | missing fields
 visual check: readable | unreadable | unverified, with observation

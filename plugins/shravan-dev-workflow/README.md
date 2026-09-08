@@ -52,7 +52,8 @@ debug-*              root-cause investigation      debug-investigation
 docs-*               durable documentation         docs-maintain
 skill-*              skill authoring/maintenance   skills-creation
                                                   skill-audit
-tui-*                structured chat presentation  tui-presentation
+presentation-*       surface-matched presentation  presentation-tui
+                                                  presentation-webui
 ```
 
 ## Workflow Flow
@@ -166,7 +167,8 @@ Use `implementation-handoff` when real implementation state exists: branch, diff
 - `ops-linear-tracking`: manages Linear projects, milestones, issues, and dependencies while keeping docs as the design source of truth.
 - `skills-creation`: creates, updates, or evaluates one named skill or accepted draft, or executes one run or slice of an accepted multi-run skill-change spec, with YAML trigger design, a `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source-adaptation checks, and sensitive-resource routing. Evaluate runs stop at a parent-reduced verdict and run note; post-verdict edits start a new update run.
 - `skill-audit`: audits current skill portfolios, session evidence, and upstream inspirations before recommending create/update/merge/skip decisions.
-- `tui-presentation`: gives agents a shared structure for readable chat/TUI explanations, diagrams, comparisons, and multi-section responses. It teaches disclosure sequence and visual-family selection while preserving semantic markdown for code, paths, URLs, and technical tokens.
+- `presentation-tui`: hybrid TUI + markdown presentation for monospace terminal/CLI surfaces — box-drawing skeleton with markdown atoms (inline code, fences, GFM tables by default for comparisons). Shares markdown baseline, diagram semantics, and Mermaid judgment with `presentation-webui` via `shared-references/`.
+- `presentation-webui`: markdown-first presentation for rendered proportional-font chat surfaces — headings/lists/GFM tables as the skeleton, smallest-view media selection (pseudocode, call trees, file trees, diffs, Mermaid, fenced box layouts), and the same shared baseline and diagram judgment.
 
 ## External Counsel
 

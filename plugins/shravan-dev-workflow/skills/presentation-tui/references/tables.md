@@ -1,21 +1,29 @@
 Tables
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for table patterns.  All tables use Unicode box-drawing; no markdown pipe-tables.
+This reference owns: box-table and ledger craft applied after the
+baseline's fallback threshold is already met.
+Expected inputs: the comparison or status content, and the specific
+annotation or alignment the GFM rendering would destroy.
+Return: the box-table or ledger layout with the annotation it carries.
+Complete when: the layout renders the named annotation and passes the
+build-discipline verification checklist.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ progressive-disclosure.md — use ledgers after the first map/slice
-  ▸ shape-catalog.md ──► Shape 4 (Column-ruled) — when to use a table with borders vs. column-ruled (no-border) style
+  ▸ ../../../shared-references/diagram-semantics.md — ledger placement in the disclosure sequence
+  ▸ shape-catalog.md ──► column-ruled — bordered table vs. column-ruled (no-border) style
   ▸ build-discipline.md ──► Alignment recipes — cell-width arithmetic, junction characters, padding, before/after drift repair
 
 
 ─── Named-target ledger ─────────────────────────────────────────────
 
-Use a ledger when the reader needs state, not a full table.
+Use a ledger when the reader needs state, not a full table.  The
+alignment IS the annotation: label column and reading column stay
+fixed so the eye scans vertically.
 
-```
+```text
 target      current read
 skill       router stays small
 reference   examples move out of SKILL.md
@@ -24,13 +32,17 @@ open        installed-cache refresh status
 ```
 
 Keep rows short.  If cells need paragraphs, switch to a ruled list.
+Copyable atoms never sit in ledger rows — keep a short label and put
+the formatted atom outside, per the baseline's labels-versus-atoms
+boundary.
 
 
 ─── Research lane board ────────────────────────────────────────────
 
-Render research lanes you are handed; do not claim TUI runs the research or decides acceptance.
+Render research lanes you are handed; do not claim presentation runs
+the research or decides acceptance.
 
-```
+```text
 lane          evidence          parent status
 code          current files      accepted
 logs          prior sessions     needs freshness check
@@ -40,23 +52,12 @@ outside view  taste concern      open
 Use this after orchestration skills have produced lane outputs.
 
 
-─── Basic pros/cons (2-column) ───────────────────────────────────────
+─── Multi-line cells with row separators ────────────────────────────
 
-```
-┌──────────────────┬──────────────────────────────────────┐
-│ Pro              │ Con                                  │
-├──────────────────┼──────────────────────────────────────┤
-│ Compact          │ Loses context without a layout map   │
-│ Fast to scan     │ Meaningless to new users             │
-└──────────────────┴──────────────────────────────────────┘
-```
+The annotation here: wrapped multi-line cells stay visually paired
+row by row, which GFM renderers break by reflowing:
 
-Shortest form when only one option is being evaluated.
-
-
-─── Three-column with multi-line cells ──────────────────────────────
-
-```
+```text
 ┌─────────────┬─────────────────────────┬────────────────────────────────┐
 │ Option      │ Pro                     │ Con                            │
 ├─────────────┼─────────────────────────┼────────────────────────────────┤
@@ -71,25 +72,33 @@ Shortest form when only one option is being evaluated.
 Row separators (├─┼─┤) between entries when cells wrap.  Pad shorter cells with spaces to match the row's line count.
 
 
-─── Drift / diff table ──────────────────────────────────────────────
+─── Drift / diff table with cell callouts ───────────────────────────
 
-```
+The annotation here: an embedded callout arrow riding the exact cell
+that caused the problem — destroyed by GFM reflow:
+
+```text
 ┌────────────────────────────┬──────────────┬──────────────┐
 │ Field                      │ Current      │ Target       │
 ├────────────────────────────┼──────────────┼──────────────┤
-│ review_model               │ gpt-5.3      │ gpt-5.4      │
-│ status_line                │ 4 items      │ 4 items ✓    │
-│ notify hook                │ set          │ (missing)    │
-│ approvals_reviewer         │ guardian     │ (missing)    │
+│ review model               │ 5.3          │ 5.4          │
+│ status line                │ 4 items      │ 4 items ✓    │
+│ notify hook                │ set          │ (missing)    │ ◄── outage cause
+│ approvals reviewer         │ guardian     │ (missing)    │
 └────────────────────────────┴──────────────┴──────────────┘
 ```
 
-Use (missing), (added), or ✓ to show state clearly.  Avoid raw empty cells.
+Use (missing), (added), or ✓ to show state clearly.  Avoid raw empty
+cells.  Rows carry plain labels; the exact config keys and values the
+reader would copy belong outside the table as inline code.
 
 
 ─── Highlighted "sweet spot" row ────────────────────────────────────
 
-```
+The annotation is the ★ marker anchoring the recommended row at a
+fixed column — alignment that is part of the meaning:
+
+```text
 ┌────────┬──────────────────────────┬───────────────────────────┐
 │ Cap    │ Examples                 │ Result                    │
 ├────────┼──────────────────────────┼───────────────────────────┤
@@ -99,12 +108,13 @@ Use (missing), (added), or ✓ to show state clearly.  Avoid raw empty cells.
 └────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Use ★ or similar marker to anchor the reader's eye on the recommendation.
-
 
 ─── Feature matrix ──────────────────────────────────────────────────
 
-```
+The annotation here: marker columns stay character-aligned for
+vertical scanning across many rows:
+
+```text
 ┌────────────────┬──────────┬──────────┬──────────┐
 │ Feature        │ Claude   │ Codex    │ Cursor   │
 ├────────────────┼──────────┼──────────┼──────────┤

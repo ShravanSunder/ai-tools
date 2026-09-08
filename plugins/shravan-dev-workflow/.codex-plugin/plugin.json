@@ -1,7 +1,7 @@
 {
   "name": "shravan-dev-workflow",
   "version": "2.9.0",
-  "description": "Shravan's development workflow plugin with long-horizon delivery routing, bounded design orchestration, canonical planning, implementation and independent review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
+  "description": "Shravan's development workflow plugin with long-horizon delivery routing, bounded design orchestration, canonical planning, implementation and independent review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and surface-matched presentation (TUI and rendered web/chat).",
   "author": {
     "name": "Shravan Sunder"
   },
@@ -62,13 +62,17 @@
     "progressive-disclosure",
     "visual-family",
     "semantic-markdown",
+    "presentation-tui",
+    "presentation-webui",
+    "markdown",
+    "gfm",
     "track-show-me-your-work"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Shravan Dev Workflow",
-    "shortDescription": "Spec/program design, review, planning, implementation, operations, agents, and TUI workflows",
-    "longDescription": "Use Shravan Dev Workflow to route a long-horizon delivery goal through proven phase gates, run one bounded design cycle, translate reviewed design into one canonical ready plan with delivery intent, execute it without a generic post-plan approval gate, independently review implementation and proof, and finish PR readiness without merging. The plugin also gathers source-grounded evidence, packages handoffs, investigates bugs, routes operations work, authors skills, maintains docs, and structures TUI explanations.",
+    "shortDescription": "Spec/program design, review, planning, implementation, operations, agents, and presentation workflows",
+    "longDescription": "Use Shravan Dev Workflow to route a long-horizon delivery goal through proven phase gates, run one bounded design cycle, translate reviewed design into one canonical ready plan with delivery intent, execute it without a generic post-plan approval gate, independently review implementation and proof, and finish PR readiness without merging. The plugin also gathers source-grounded evidence, packages handoffs, investigates bugs, routes operations work, authors skills, maintains docs, and structures presentation-surface-matched explanations (TUI and rendered chat).",
     "developerName": "Shravan Sunder",
     "category": "Developer Tools",
     "capabilities": [
@@ -98,7 +102,9 @@
       "Use implementation-pr-wrapup to finish this PR.",
       "Investigate this bug before fixing it.",
       "Use skills-creation to create, update, or evaluate one named skill.",
-      "Audit these skills against session evidence."
+      "Audit these skills against session evidence.",
+      "Use presentation-tui to structure this explanation for a monospace terminal surface.",
+      "Use presentation-webui to structure this explanation for a rendered chat surface."
     ]
   }
 }

@@ -1,12 +1,20 @@
 Sequence and State Diagrams
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for time-ordered flows and state machines.  Use sequence diagrams when the STORY is "who talks to whom in what order."  Use state diagrams when the STORY is "what states exist and how do we transition between them."
+This reference owns: TUI patterns for time-ordered flows and state
+machines — sequence when the story is "who talks to whom in what
+order," state when it is "what states exist and how do we transition."
+Expected inputs: the lifecycle or interaction selected by the SKILL.md
+caller.
+Return: the diagram's entry state, labeled transitions, and terminal
+states — or its actors and messages.
+Complete when: every required transition or message is drawn and
+labeled, including the recovery or failure path when one exists.
 
 See also:
 
   ▸ SKILL.md — core rules, canvas-width discipline, shape vocabulary
-  ▸ visual-family-selection.md — choose sequence vs. state before drawing
+  ▸ ../../../shared-references/diagram-semantics.md — choose sequence vs. state before drawing
   ▸ shape-catalog.md ──► Shape 6 (State diagram) — full state-machine worked example with re-entry arm
   ▸ build-discipline.md ──► Alignment recipes — positioning lifelines, arrow landings, junction selection
   ▸ architecture.md — pipeline with branches, pub/sub fan-out, request roundtrip
@@ -14,7 +22,7 @@ See also:
 
 ─── Sequence (actors + lifelines + messages) ────────────────────────
 
-```
+```text
 Client          API           Auth          DB
   │              │             │             │
   │── POST ────▶ │             │             │
@@ -39,7 +47,7 @@ If a retry changes ownership, draw the retry as a real message, not a footnote.
 
 ─── State machine ───────────────────────────────────────────────────
 
-```
+```text
    ┌──────┐   start    ┌─────────┐   success   ┌────────┐
    │ idle │──────────▶ │ loading │────────────▶│ done   │
    └──────┘            └────┬────┘             └────────┘
@@ -64,7 +72,7 @@ Do not use a state diagram for a simple call order; use sequence.
 
 ─── Decision tree ───────────────────────────────────────────────────
 
-```
+```text
          ┌────────────────┐
          │ Request in?    │
          └──────┬─────────┘
@@ -89,7 +97,7 @@ Diamond-like split via labeled branches.  Use ┬ ┴ for fork/merge.
 
 ─── Event timeline ──────────────────────────────────────────────────
 
-```
+```text
  t=0              t=1s            t=3s              t=5s
   │                │               │                 │
   ●────────────────●───────────────●─────────────────●
@@ -101,7 +109,7 @@ Horizontal line of events (●) with timestamps above and labels below.
 
 ─── State variants table ────────────────────────────────────────────
 
-```
+```text
 ┌──────────┬──────────────────────────────────────┐
 │ State    │ Visual                               │
 ├──────────┼──────────────────────────────────────┤

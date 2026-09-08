@@ -1,7 +1,10 @@
 Shape Catalog — TUI Presentation Reference
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for the seven TUI shapes plus six compositional applications.  Load when you need worked examples, shape selection guidance, or anti-pattern recognition.
+This reference owns: worked examples, geometry choices, and anti-patterns for the framed TUI shapes and six compositional applications.
+Expected inputs: the shape selected by the SKILL.md picker and the content it must carry.
+Return: the shape's geometry choices and its don't-use conditions, applied to the current block.
+Complete when: the composed block matches the worked geometry, none of the shape's don't-use conditions hold, and every copyable atom follows the baseline's labels-versus-atoms boundary — where an example shows a full identifier or path inside a row, your real response keeps a short label in the row and the formatted atom outside it.
 
 See also:
 
@@ -28,7 +31,7 @@ Each shape with a realistic worked example, commentary on geometry choices, and 
 
 ─── Shape 1 — Framed card (titled) ──────────────────────────────────
 
-```
+```text
 ┌─ Scope — what this ticket actually changes ─────────────────────────┐
 │                                                                     │
 │  ✓ Drawer concept                                                   │
@@ -36,7 +39,7 @@ Each shape with a realistic worked example, commentary on geometry choices, and 
 │    drawer popover. Behavior: purely additive. No model change.      │
 │                                                                     │
 │  ✓ Pane focus tracker                                               │
-│    Observe active-pane transitions via PaneFocusTracker. Read-      │
+│    Observe active-pane transitions via the focus tracker. Read-     │
 │    only — doesn't mutate the model.                                 │
 │                                                                     │
 │  ✗ Drawer-pane lifecycle (orphan pool vs. backgrounded)             │
@@ -78,14 +81,14 @@ Don't use when:
 
 ─── Shape 2 — Sub-framed grid ───────────────────────────────────────
 
-```
+```text
 ┌─ Three kinds of keyboard modality ──────────────────────────────────┐
 │                                                                     │
 │   Kind 1: LAYER               Kind 2: KEY WINDOW                    │
 │   ┌──────────────────┐        ┌──────────────────┐                  │
 │   │ Rare, explicit,  │        │ AppKit owns it.  │                  │
 │   │ modal.           │        │ Panel becomes    │                  │
-│   │                  │        │ key: CommandBar, │                  │
+│   │                  │        │ key: command bar,│                  │
 │   │ Strong chrome    │        │ sheets, alerts.  │                  │
 │   │ change.          │        │                  │                  │
 │   └──────────────────┘        └──────────────────┘                  │
@@ -94,8 +97,8 @@ Don't use when:
 │   ┌──────────────────────────────────────────────────┐              │
 │   │ Custom keys that fire when a surface has focus.  │              │
 │   │ No stored mode — derived from visibility+focus.  │              │
-│   │ This ticket. Uses .keyboardShortcut() + AppKit   │              │
-│   │ responder chain.                                 │              │
+│   │ This ticket. Uses shortcut modifiers + the       │              │
+│   │ responder chain (calls relocated below).         │              │
 │   └──────────────────────────────────────────────────┘              │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
@@ -128,7 +131,7 @@ Don't use when:
 
 ─── Shape 3 — Ruled card ────────────────────────────────────────────
 
-```
+```text
 #: 1
 Concern: Everything on @MainActor
 Where: ViewRegistry, PaneCloseTransitionCoordinator, atoms
@@ -180,7 +183,7 @@ Don't use when:
 
 ─── Shape 4 — Column-ruled ──────────────────────────────────────────
 
-```
+```text
 frame N         frame N+1 (transition)        frame N+2
 ───────────     ──────────────────────        ──────────────
 
@@ -224,7 +227,7 @@ Don't use when:
 
 ─── Shape 5 — Pipeline box ──────────────────────────────────────────
 
-```
+```text
 execute(.closePane(tabId, paneId))
   │
   ▼
@@ -234,13 +237,13 @@ execute(.closePane(tabId, paneId))
 │ 2. teardown view                                                    │
 ├─────────────────────────────────────────────────────────────────────┤
 │ 3. removal                                                          │
-│      drawer child?  ──► store.removeDrawerPane                      │
-│      main pane?     ──► tabLayoutAtom.removePaneFromLayout          │
+│      drawer child?  ──► drawer-removal store call (below)           │
+│      main pane?     ──► layout-removal atom call (below)            │
 ├─────────────────────────────────────────────────────────────────────┤
 │ 4. retire slot (not delete)                                         │
 ├─────────────────────────────────────────────────────────────────────┤
 │ 5. container aftermath                                              │
-│      tab empty?     ──► removeTab                                   │
+│      tab empty?     ──► remove the tab                              │
 │      drawer empty?  ──► keep expanded, show empty-drawer screen     │
 ├─────────────────────────────────────────────────────────────────────┤
 │ 6. undo GC                                                          │
@@ -275,24 +278,24 @@ Don't use when:
 
 ─── Shape 6 — State diagram ─────────────────────────────────────────
 
-```
+```text
 ┌──────────────┐   register   ┌──────────────┐
 │   no slot    │ ───────────► │    LIVE      │
-└──────────────┘              │  slot.host=… │
+└──────────────┘              │  host set    │
        ▲                      └──────┬───────┘
        │                             │
        │ finalize                    │  unregister
        │                             ▼
        │                      ┌──────────────┐
        │                      │   ORPHANED   │
-       │                      │ slot.host=nil│
+       │                      │ host cleared │
        │                      └──────┬───────┘
        │                             │
-       │                             │  removeSlot
+       │                             │  retire slot
        │                             ▼
        │                      ┌──────────────┐
        └──────────────────────│   RETIRED    │
-                              │ slot.host=nil│
+                              │ host cleared │
                               │ (tombstone)  │
                               └──────────────┘
 ```
@@ -324,7 +327,7 @@ Don't use when:
 
 ─── Shape 7 — No-frame list ─────────────────────────────────────────
 
-```
+```text
 2440564  docs(spec): hoist sidebarHasFocus contract; full matrix
 7c11794  docs(spec): sidebarHasFocus explicit; KeyboardOwner scope
 23d9ea1  docs: review — coherence + arch docs catch-up
@@ -362,7 +365,7 @@ The #1 TUI failure mode: cramming multiple concerns into one giant frame.  One s
 
 WRONG — everything crammed into one ╔═╗ box:
 
-```
+```text
 ╔══════════════════════════════════════════════════════════════════╗
 ║ Feature comparison and decision flow                             ║
 ╠══════════════════════════════════════════════════════════════════╣
@@ -381,21 +384,22 @@ WRONG — everything crammed into one ╔═╗ box:
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-Problems: double borders misused for non-focal content; markdown pipe-table inside the frame; comparison + flow + synthesis crammed together; reader can't parse what's what.
+Problems: double borders misused for non-focal content; a pipe table crammed *inside* a fixed-width frame (markup inside fixed-width rows drifts borders — a standalone GFM table outside the frame is the correct default for this comparison); comparison + flow + synthesis crammed together; reader can't parse what's what.
 
-RIGHT — split into sections, each with an appropriate shape:
+RIGHT — split into sections, each with an appropriate shape.  The
+comparison is a standalone GFM table (the default comparison medium
+per the shared baseline); the flow keeps its pipeline box:
 
-```
 ─── Option comparison ────────────────────────────────────────────────
 
-option A              option B                option C
-──────────────        ────────────────        ──────────────────
-
-fast                  flexible                simple
-rigid                 complex                 coupled
+| | option A | option B | option C |
+|---|---|---|---|
+| strength | fast | flexible | simple |
+| cost | rigid | complex | coupled |
 
 ─── Decision flow ────────────────────────────────────────────────────
 
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │ 1. check option A                                                   │
 ├─────────────────────────────────────────────────────────────────────┤
@@ -403,14 +407,17 @@ rigid                 complex                 coupled
 ├─────────────────────────────────────────────────────────────────────┤
 │ 3. if not B, default to C                                           │
 └─────────────────────────────────────────────────────────────────────┘
+```
 
 ─── My read ──────────────────────────────────────────────────────────
 
 Option B — flexibility matters more than implementation cost here.
-```
 
 Three concerns ──► three sections ──► three shapes.  Comparison uses
-column-ruled (parallel data).  Flow uses pipeline box (sequential steps).  Synthesis uses prose (single-paragraph conclusion).  One shape per block.  One heading per section.
+a GFM table (default; column-ruled only past the annotation
+threshold in the shared baseline).  Flow uses pipeline box
+(sequential steps).  Synthesis uses prose (single-paragraph
+conclusion).  One shape per block.  One heading per section.
 
 
 ─── Shape variants and applications ─────────────────────────────────
@@ -422,7 +429,7 @@ Three worked examples of shapes applied to specific real-world layouts.  These a
 
 A sub-framed grid tuned for phased/sequential work: horizontal sub- frames labeled above each, connector prose below showing dependencies.
 
-```
+```text
          PHASE 1                    PHASE 2                    PHASE 3
 ┌────────────────────────┐  ┌────────────────────────┐  ┌────────────────────────┐
 │                        │  │                        │  │                        │
@@ -432,18 +439,18 @@ A sub-framed grid tuned for phased/sequential work: horizontal sub- frames label
 │ UIStateAtom; ⌘I/⌘S    │  │ to current owner.       │  │ tests.                 │
 │ commands work.         │  │                        │  │                        │
 │                        │  │                        │  │                        │
-│ Visible: ⌘I shows an   │  │ Visible: ⌘P from       │  │ Visible: Inbox has     │
-│ empty inbox            │  │ focused inbox surface  │  │ notifications, full    │
-│ placeholder; ⌘S        │  │ defaults to .inbox.    │  │ keymap, full tests.    │
-│ shows repos as today.  │  │                        │  │                        │
+│ Visible: inbox key     │  │ Visible: palette from  │  │ Visible: Inbox has     │
+│ shows an empty         │  │ focused inbox surface  │  │ notifications, full    │
+│ placeholder; repos     │  │ defaults to the inbox  │  │ keymap, full tests.    │
+│ key shows repos.       │  │ scope.                 │  │                        │
 │                        │  │                        │  │                        │
 │ Files: ~5              │  │ Files: ~10             │  │ Files: ~15 NEW + ~7    │
-│ (App, Core, Features/  │  │ (Core/Models, Core/    │  │  MOD                   │
-│  Sidebar→RepoExplorer  │  │  State, Features/      │  │ (Features/Notif-       │
-│  rename, MainSplit-    │  │  CommandBar)           │  │  icationInbox/, plus   │
-│  ViewController        │  │                        │  │  Drawer, RPC, App-     │
-│  migration)            │  │                        │  │  Delegate, App-        │
-│                        │  │                        │  │  Command/Shortcut)     │
+│ (app shell, core       │  │ (core models, core     │  │  MOD                   │
+│  models, explorer      │  │  state, command-bar    │  │ (inbox feature, plus   │
+│  rename, split-view    │  │  feature)              │  │  drawer, transport,    │
+│  controller            │  │                        │  │  app delegate, app     │
+│  migration)            │  │                        │  │  commands and          │
+│                        │  │                        │  │  shortcuts)            │
 │                        │  │                        │  │                        │
 └───────────┬────────────┘  └───────────┬────────────┘  └────────────────────────┘
             │                           │
@@ -484,15 +491,15 @@ Don't use when:
 
 A series of framed cards where each card answers one "why this / why not that" question.  Scales to multiple alternatives without nesting and without forcing a comparison table.
 
-```
+```text
 ┌─ Why not 2 phases (combine A+B) ────────────────────────────────────┐
 │                                                                     │
-│  KeyboardOwner is a separable architecture primitive that           │
-│  outlasts the inbox feature.  Future repo navigation needs it.      │
+│  The keyboard-owner reader is a separable architecture piece        │
+│  outliving the inbox.  Future repo navigation needs it.             │
 │  Shipping it on its own gives it a clean review and PR.             │
 │                                                                     │
 │  Combining would make Phase 1 do too much — composition state       │
-│  migration AND a new derived reader AND CommandBar changes.         │
+│  migration AND a new derived reader AND command-bar changes.        │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
@@ -510,9 +517,9 @@ A series of framed cards where each card answers one "why this / why not that" q
 
 ┌─ Why include the RepoExplorer rename in Phase 1 ────────────────────┐
 │                                                                     │
-│  Phase 1 introduces SidebarSurfaceHost which imports both           │
-│  Features/RepoExplorer/ and (eventually) Features/Notification      │
-│  Inbox/.  The clean naming should land at the same moment as        │
+│  Phase 1 introduces the sidebar surface host, which imports         │
+│  the repo-explorer feature and (eventually) the notification        │
+│  inbox.  The clean naming should land at the same moment as         │
 │  the new shell.                                                     │
 │                                                                     │
 │  Alternative: Phase 0 — pure rename PR with no behavior change,     │
@@ -551,13 +558,13 @@ Don't use when:
 
 Review findings (HIGH / MEDIUM / LOW severity) are a specific application of framed cards.  Each finding is a framed card with the severity tag in the frame title.  Reader scans severity badges down the left margin to triage at a glance.
 
-```
+````markdown
 ┌─ [HIGH] Surface handoff race during mode switch ────────────────────┐
 │                                                                     │
-│  Location: FlatTabStripContainer.swift:58-109                       │
+│  Location: strip container, mode-switch branches (path below)       │
 │                                                                     │
-│  Mode switch uses if/else if/else branches.  SwiftUI's              │
-│  .onAppear / .onDisappear at branch boundaries are NOT              │
+│  Mode switch uses exclusive branches.  The framework's              │
+│  appear / disappear hooks at branch boundaries are NOT              │
 │  transactional.                                                     │
 │                                                                     │
 │  Race sequence:                                                     │
@@ -565,57 +572,63 @@ Review findings (HIGH / MEDIUM / LOW severity) are a specific application of fra
 │    mode switch                                                      │
 │                                                                     │
 │      old branch .onDisappear                                        │
-│        ──► unregisterSurface(oldId)                                 │
+│        ──► unregister the old surface                               │
 │        ──► union is empty                                           │
 │        ──► all retired slots deleted                                │
 │                                                                     │
 │      new branch .onAppear                                           │
-│        ──► surfaceRenderedIds(newId, ids)                           │
+│        ──► register the new surface ids                             │
 │        ──► but tombstones already gone                              │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
+Location atom, relocated per the baseline: `FlatTabStripContainer.swift:58-109`.
+
 Proposed fix — move registration UP to FlatTabStripContainer:
 
-    let surfaceId = "tab:\(tabId)"
-    content
-      .onAppear     { viewRegistry.surfaceRenderedIds(...) }
-      .onChange(of: renderedIds) { _, new in ... }
-      .onDisappear  { viewRegistry.unregisterSurface(surfaceId) }
+```swift
+let surfaceId = "tab:\(tabId)"
+content
+  .onAppear     { viewRegistry.surfaceRenderedIds(...) }
+  .onChange(of: renderedIds) { _, new in ... }
+  .onDisappear  { viewRegistry.unregisterSurface(surfaceId) }
+```
 
 ┌─ [MEDIUM] Task 3 tests revive the tombstone ────────────────────────┐
 │                                                                     │
 │  Location: Task 3, Steps 4 and 5                                    │
 │                                                                     │
-│  Tests use ensureSlot(for: paneId) which promotes tombstones in     │
+│  Tests use the ensure-slot helper, which promotes tombstones in     │
 │  place.  First assertion un-retires the pane; subsequent            │
-│  finalization runs over empty retiredPaneIds.  Tests can pass       │
+│  finalization runs over an empty retired set.  Tests can pass       │
 │  while the production path is broken.                               │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
 Proposed fix — add a DEBUG-only non-promoting probe:
 
-    #if DEBUG
-      /// Non-promoting, non-creating test probe.
-      func peekSlotForTesting(_ paneId: UUID) -> PaneViewSlot? {
-          slots[paneId]
-      }
+```swift
+#if DEBUG
+  /// Non-promoting, non-creating test probe.
+  func peekSlotForTesting(_ paneId: UUID) -> PaneViewSlot? {
+      slots[paneId]
+  }
 
-      func isRetiredForTesting(_ paneId: UUID) -> Bool {
-          retiredPaneIds.contains(paneId)
-      }
-    #endif
+  func isRetiredForTesting(_ paneId: UUID) -> Bool {
+      retiredPaneIds.contains(paneId)
+  }
+#endif
+```
 
 Rewrite Task 3 tests to use these probes so the tombstone state is
 observed without being mutated.
-```
+````
 
 Geometry choices:
 
   ▸ Severity bracketed tag is the FIRST element of the frame title: `┌─ [HIGH] Title ─...─┐`.  Reader sees badge immediately when scanning from the left margin.
 
-  ▸ Each finding's body starts with a "Location:" field pointing at the affected file/function.  Then prose explanation.  Then an embedded flow diagram if useful (indented under a label line, per the cordoning rule).
+  ▸ Each finding's body starts with a "Location:" field carrying a short plain label; the exact copyable path and line range sit immediately below the frame as inline code (labels-versus-atoms).  Then prose explanation.  Then an embedded flow diagram if useful (indented under a label line, per the cordoning rule).
 
   ▸ Proposed fixes live OUTSIDE the finding frame — below it, shown as fenced code blocks with a prose lead-in.  Fixes are NOT part of the finding itself.
 
@@ -638,45 +651,45 @@ Don't use when:
 
 ─── Shape 1 application — dual-tag title band ───────────────────────
 
-A framed card whose title band carries TWO tags: identifier on the LEFT and status on the RIGHT, with description in the middle.  `─` characters fill the space between.  Used for triage dashboards, resolution summaries, task trackers — anywhere items need both stable identity and current state, both visible at a glance.
+A framed card whose title band carries TWO tags: a short ID tag on the LEFT (F1, T3 — a label, never a copyable identifier) and status on the RIGHT, with description in the middle.  `─` characters fill the space between.  Used for triage dashboards, resolution summaries, task trackers — anywhere items need both stable identity and current state, both visible at a glance.
 
-```
-┌─ F1: sidebarCollapsed dual-write ──────────────────────── RESOLVED ─┐
+```text
+┌─ F1: collapse-state dual-write ────────────────────────── RESOLVED ─┐
 │                                                                     │
-│  spec §8.1 annotation: stripped "dual-write to UserDefaults"        │
-│  workspace_data_architecture.md Tier C struct comment: rewritten    │
+│  spec annotation: stripped the user-defaults dual-write note        │
+│  data-architecture doc, tier-C struct comment: rewritten            │
 │  Spec + arch + Phase 1 plan now tell a single greenfield story      │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
 ┌─ F2: Notification name collision ──────────────────────── DEFERRED ─┐
 │                                                                     │
-│  To be discussed.  Spec + plans still use `struct Notification`.    │
-│  Options: (a) rename to InboxNotification, (b) nest under Inbox     │
-│  namespace.  Decision pending input from design-review.             │
+│  To be discussed.  Spec + plans still use the bare notification     │
+│  struct name.  Options: (a) rename it inbox-specific, (b) nest      │
+│  it.  Decision pending input from design-review.                    │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
 ┌─ F3: Cross-feature imports ────────────────────────────── RESOLVED ─┐
 │                                                                     │
 │  Spec §8.5 added two seam subsections:                              │
-│    §8.5.1  RepoExplorerWorktreeRow — Int unreadCount prop           │
-│    §8.5.2  CommandBarDataSource — NotificationInboxCommands bundle  │
+│    seam 1  explorer worktree row — unread-count property            │
+│    seam 2  command-bar data source — inbox commands bundle          │
 │                                                                     │
-│  Task 13 — CommandBarDataSource consumes NotificationInboxCommands; │
-│            test uses InboxCommandsSink (no atom access)             │
-│  Task 15 — AppDelegate constructs the commands bundle with weak     │
+│  Task 13 — the command-bar data source consumes that bundle;        │
+│            its test uses a commands sink (no atom access)           │
+│  Task 15 — the app delegate constructs the bundle with weak         │
 │            captures                                                 │
 │                                                                     │
-│  Each task has grep guards to confirm Features/X does not import    │
-│  Features/Y.                                                        │
+│  Each task has grep guards to confirm one feature does not          │
+│  import the other.                                                  │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 
-┌─ F4: PaneFocusTracker polling ─────────────────────────── RESOLVED ─┐
+┌─ F4: focus-tracker polling ────────────────────────────── RESOLVED ─┐
 │                                                                     │
 │  Task 5 code block rewritten: test harness now uses bounded         │
-│  Task.yield() helper instead of wall-clock Task.sleep, per the      │
+│  yield-based waiting instead of wall-clock sleeps, per the          │
 │  "No Wall-Clock Tests" rule.                                        │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
@@ -717,44 +730,26 @@ Don't use when:
 
 A framed card whose body contains multiple NAMED subsections, each labeled in UPPERCASE with a `─` underline matching label width.  Used for phase plans, ticket scopes, component specs, API contracts — any concept with multiple distinct facets that all belong together under one named scope.
 
-File-tree inventory (documented below) is the most common content type for the IN SCOPE / NOT IN SCOPE subsections.
+File-tree inventory (documented below) is the most common content type for the IN SCOPE / NOT IN SCOPE subsections — per the baseline's labels-versus-atoms boundary, the frame carries a short summary label per area and the full copyable tree sits in a fenced block right after the frame:
 
-```
+```text
 ┌─ PHASE 1 — Sidebar Composition Foundation ─────────────────────────┐
 │                                                                    │
-│  IN SCOPE                                                          │
+│  IN SCOPE (full file tree below the frame)                         │
 │  ─────────                                                         │
 │                                                                    │
-│  Core/Models/                                                      │
-│    + SidebarSurface.swift (.repos | .inbox enum)                   │
-│                                                                    │
-│  Core/State/MainActor/Atoms/                                       │
-│    UIStateAtom.swift  [MOD]                                        │
-│      + sidebarCollapsed: Bool                                      │
-│      + sidebarSurface: SidebarSurface                              │
-│      + sidebarHasFocus: Bool  (runtime-only, not persisted)        │
-│      + 3 setters                                                   │
-│                                                                    │
-│  App/Windows/                                                      │
-│    SidebarSurfaceHost.swift  [NEW]                                 │
-│      switches between RepoExplorerView and placeholder             │
-│    MainSplitViewController.swift  [MOD]                            │
-│      drop UserDefaults read at line 91 + write at line 98          │
-│      read uiState.sidebarCollapsed; observe changes                │
-│                                                                    │
-│  Features/Sidebar/  →  Features/RepoExplorer/                      │
-│    Pure file-move rename + type/file renames:                      │
-│      RepoSidebarContentView  →  RepoExplorerView                   │
-│      SidebarFilter           →  RepoExplorerFilter                 │
-│      SidebarWorktreeRow      →  RepoExplorerWorktreeRow            │
+│  core models       new sidebar-surface enum                        │
+│  composition atoms one modified atom, three new fields + setters   │
+│  app windows       new surface host; split-view controller reads   │
+│                    composition state instead of user defaults      │
+│  feature rename    sidebar feature folder → repo-explorer names    │
 │                                                                    │
 │  EXPLICITLY NOT IN SCOPE                                           │
 │  ────────────────────────                                          │
 │                                                                    │
-│  ✗ KeyboardOwner enum / KeyboardOwnerDerived                       │
-│  ✗ Notification model, atoms, store, router                        │
-│  ✗ CommandBar .inbox scope                                         │
-│  ✗ Inbox-specific shortcuts (⌥F / ⌥G / ⌥S)                         │
+│  ✗ keyboard-owner derivation                                       │
+│  ✗ notification model, atoms, store, router                        │
+│  ✗ command-bar inbox scope and inbox shortcuts                     │
 │                                                                    │
 │  DEPENDS ON                                                        │
 │  ───────────                                                       │
@@ -764,20 +759,39 @@ File-tree inventory (documented below) is the most common content type for the I
 │  EXPOSES (consumed by later phases)                                │
 │  ───────────────────────────────────                               │
 │                                                                    │
-│  → Phase 2:  UIStateAtom composition reads, SidebarSurface enum    │
-│  → Phase 3:  SidebarSurfaceHost (plug InboxSidebarView into it)    │
+│  → Phase 2:  composition reads and the surface enum                │
+│  → Phase 3:  the surface host (inbox view plugs into it)           │
 │                                                                    │
 │  DEFINITION OF DONE                                                │
 │  ──────────────────                                                │
 │                                                                    │
-│  ▸ ⌘I switches sidebar to InboxPlaceholderView                     │
-│  ▸ ⌘S switches sidebar to repos (RepoExplorerView)                 │
-│  ▸ Sidebar collapse state survives relaunch via UIStateStore       │
-│  ▸ UserDefaults "sidebarCollapsed" key no longer read or written   │
+│  ▸ inbox shortcut switches the sidebar to the placeholder view     │
+│  ▸ repos shortcut switches it back                                 │
+│  ▸ collapse state survives relaunch via the ui-state store         │
+│  ▸ the legacy user-defaults key is no longer read or written       │
 │    (grep: 0 hits)                                                  │
-│  ▸ All existing sidebar tests pass after rename                    │
+│  ▸ all existing sidebar tests pass after rename                    │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
+```
+
+Immediately after the frame, the copyable inventory:
+
+```text
+Core/Models/
+  + SidebarSurface.swift (.repos | .inbox enum)
+
+Core/State/MainActor/Atoms/
+  UIStateAtom.swift  [MOD]
+    + sidebarCollapsed: Bool
+    + sidebarSurface: SidebarSurface
+    + sidebarHasFocus: Bool  (runtime-only, not persisted)
+
+App/Windows/
+  SidebarSurfaceHost.swift  [NEW]
+  MainSplitViewController.swift  [MOD]
+
+Features/Sidebar/  →  Features/RepoExplorer/
 ```
 
 Layout and spacing notes:
@@ -821,9 +835,9 @@ Don't use when:
 
 ─── Content pattern — file-tree inventory ───────────────────────────
 
-A structured way to list file and member changes — not a shape, a content pattern that lives inside a framed card (typically a scope-inventory's IN SCOPE subsection) or standalone in a PR summary.
+A structured way to list file and member changes — not a shape, a content pattern. Because its content is copyable paths and members, emit it as a fenced `text` block (standalone, or referenced from a frame with a short label), never as raw rows inside a frame — the baseline's bright line applies to every path and member in it.
 
-```
+```text
 Core/Models/
   + SidebarSurface.swift (.repos | .inbox enum)
 
