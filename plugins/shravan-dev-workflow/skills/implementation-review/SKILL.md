@@ -23,7 +23,15 @@ Completion: classification, governing identities, unchanged plan/context, diff/p
 2. Read the complete governing basis and the complete base-to-reviewed diff yourself before composing anything. Every target file the coordinator or any reviewer loads is read completely before substantive judgment — never "enough to establish scope."
 3. Collect the shared conceptual context every reviewer will receive: the governing basis recorded by the canonical plan (the Requirements/Specification/Program Design set, or the admitted-finding basis evidence), the confirmed goal boundary, constraints, non-goals, proof claims, and steering anchors.
 
-Completion: the review class is named, the whole-map read is done, and the shared context is explicit; the coordinator can name every changed file, obligation, and proof claim from its own reading. When a governing source cannot be read, return `blocked-input` naming the review class, each unreadable identity, the restoring owner, and why `diff-only-limited` does not apply — never a readiness verdict from code and tests alone.
+Completion: the review class is named, the whole-map read is done, and the shared context is explicit; the coordinator can name every changed file, obligation, and proof claim from its own reading. When a governing source cannot be read, return `blocked-input` in this exact shape — never a readiness verdict from code and tests alone:
+
+```text
+blocked-input
+  review class: <source-backed | plan-backed | risk-triggered>
+  unreadable or missing identities: <each exact artifact path or identity>
+  restoring owner: <who can restore or re-admit each one>
+  why diff-only-limited does not apply: <the accepted source artifact or risk trigger present>
+```
 
 ## Compose the Review DAG
 
@@ -39,7 +47,7 @@ focused lanes run only after reduction names a concrete unresolved risk
 
 Each composed lane must satisfy a named selection predicate; composition stops when no named unresolved risk selects another lane. A small change may compose one chunk spanning the whole diff — the map, rails, and reduction still run. Parallel-safety checking follows `manage-agents` job planning; do not restate it here.
 
-Completion: the Composition Record from that reference is written out in full — review class, units, chunks, overlap seams, every node with its one-sentence predicate and ordering edges, the not-composed lanes with the predicate that failed, and the per-predicate stop record — plus the bad signals the coordinator will treat as chunking defects. A route described in prose without that record is not composed.
+Completion: the Composition Record from that reference is written out in full — review class, units, chunks, overlap seams, every node with its one-sentence predicate and ordering edges, the runtime line (`manage-agents` fresh-context read-only Delegate per lane, plus any recorded execution grant), the not-composed lanes with the predicate that failed, and the per-predicate stop record — plus the bad signals the coordinator will treat as chunking defects. A route described in prose without that record is not composed.
 
 ## Dispatch
 
@@ -48,7 +56,11 @@ MUST load `references/lanes/lane-schema.md` and return the filled shared packet 
 - MUST dispatch `spec-compliance` to a subagent using the shared packet, predicate `mandatory for meaningful review`. Subagent loads `references/lanes/lane-schema.md` and `references/lanes/spec-compliance.md`. Parallel-safe after the shared context exists; it sequences before quality lanes. Return `complete | partial | blocked`; the coordinator verifies and reduces it.
 - MUST dispatch one `chunk-reviewer` per chunk using the shared packet plus that chunk's assignment and overlap seams. Subagent loads `references/lanes/lane-schema.md` and `references/lanes/chunk-reviewer.md`; that lane loads `references/reviewing-implementation.md` for the full method. Parallel-safe across chunks after spec-compliance returns. Return `complete | partial | blocked`; the coordinator verifies and reduces each.
 - MUST dispatch `dispel` once every chunk receipt is terminal, using the shared packet with `chunk assignment: whole-diff` plus the candidate set, which may be empty. Subagent loads `references/lanes/lane-schema.md` and `references/lanes/dispel.md`. Not parallel-safe with candidate producers; dispatch only after their receipts exist. Return its per-candidate `correction class` plus over-delivery findings; the coordinator verifies and reduces it.
-- IF the review carries proof claims, dispatch `proof-challenge` using the shared packet plus the claim inventory. Subagent loads `references/lanes/lane-schema.md` and `references/lanes/proof-challenge.md`. Parallel-safe with chunk reviewers once the claim inventory is collected. Instance authority adds one named grant recorded in the packet — executing exactly the proof commands listed there, output confined to its tmp scratchpad — and stays otherwise read-only and candidate-only; that lane reference owns the execution boundary, including its pre-run write-set check, and may never widen into edits. Return the per-claim verification result — preflight write-set class, command run or challenge, observed versus claimed, the false-green check, exit status, and for any failure the single-rerun comparison — including every command run; the coordinator verifies each ran inside the grant and reduces it.
+- IF the review carries proof claims, dispatch `proof-challenge` using the shared packet plus the claim inventory. Subagent loads `references/lanes/lane-schema.md` and `references/lanes/proof-challenge.md`. Parallel-safe with chunk reviewers once the claim inventory is collected. Instance authority adds one named grant recorded in the packet — executing exactly the proof commands listed there, output confined to its tmp scratchpad — and stays otherwise read-only and candidate-only; that lane reference owns the execution boundary, including its pre-run write-set check, and may never widen into edits. Return one row per claim in this exact shape, plus every command run verbatim; the coordinator accepts the receipt only when no row has an empty field, verifies each command ran inside the grant, and reduces it:
+
+  ```text
+  claim | preflight write-set: scratchpad-only|worktree|unknown | command run or challenge | observed vs claimed | false-green check: <how this could pass with the behavior absent> | exit status | rerun comparison: <both outcomes> or no failure
+  ```
 - IF a chunk or lane touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, route that lane's model selection to a security-specialized model class through `manage-agents` when the current catalog offers one, and write the packet's `model routing` field as exactly `security-specialized:<class from the manage-agents catalog>` or `fallback:<reason the catalog offers none>` — a bare "use a security model" is not a record.
 - IF reduction names a concrete unresolved material risk, dispatch one `focused-reviewer` per named risk using the shared packet plus the falsifiable question; total count is governed by the composition stop condition, never by lane appetite. Subagent loads `references/lanes/lane-schema.md` and `references/lanes/focused-reviewer.md`. Not parallel-safe with reduction; dispatch only after reduction names the question. Return the answer receipt; the coordinator verifies and reduces it.
 

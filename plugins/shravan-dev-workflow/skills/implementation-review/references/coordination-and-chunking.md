@@ -65,6 +65,7 @@ units: <indivisible review units and the chunk each lives in>
 chunks: <id -> files and obligations, complete>
 overlap seams: <chunk pair -> seam files and anchors>
 nodes: <lane -> predicate, ordering edges, model routing note when security predicate fired>
+runtime: <manage-agents fresh-context read-only Delegate per lane; execution grant for proof-challenge when composed>
 not composed: <candidate lane -> why no predicate selects it>
 stop record: <per optional predicate: fires | does not fire | not yet eligible, with evidence>
 ```

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrator: Design"
+  short_description: "Run one bounded design cycle through independent review"
+  default_prompt: "Use $orchestrator-design to run, resume, or finish one bounded Requirements, Specification, Program Design, and independent three-artifact design review cycle before planning."
