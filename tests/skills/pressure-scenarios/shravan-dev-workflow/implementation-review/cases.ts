@@ -13,8 +13,9 @@ const reviewMethodSources = [
 
 const completeReviewSources = [
   ...reviewMethodSources,
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/coordination-and-chunking.md",
   "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/lane-schema.md",
-  "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/complete-reviewer.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/chunk-reviewer.md",
 ] satisfies readonly string[];
 
 const focusedReviewSources = [
@@ -107,9 +108,9 @@ export const skillPressureCaseDefinitions = [
         failureExample: "Drops or rewrites an identity, or treats implementation proof as authority.",
       },
       {
-        name: "builds-one-complete-independent-job",
-        requirement: "Uses manage-agents to resolve one fresh-context read-only Delegate and builds one complete-reviewer job covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, the riskiest assumption, and uncovered boundary while parent reduction remains authoritative.",
-        failureExample: "Creates a review swarm, omits source trace, or lets the reviewer accept findings.",
+        name: "composes-a-coordinated-route",
+        requirement: "The coordinator reads the complete governing basis and diff itself, then composes the route: review class, chunk plan with complete files and overlap seams, spec-compliance sequenced before chunk reviewers and dispel after chunk receipts are terminal, each lane with a named predicate, resolved through manage-agents as fresh-context read-only Delegates, covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, the riskiest assumption, and uncovered boundary while parent reduction remains authoritative.",
+        failureExample: "Dispatches a fixed roster or unstructured swarm, hands reviewers diff hunks, omits source trace, or lets a reviewer accept findings.",
       },
     ],
   },
@@ -188,13 +189,18 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "allows-one-predicate-selected-focus",
-        requirement: "Allows one focused reviewer only after parent reduction and only for the named unresolved runtime-reachability risk, while refusing the requested confirming test and using only read-only discovery of current source and existing proof.",
-        failureExample: "Runs focused review before reduction or lets it reopen the full review.",
+        requirement: "Allows one focused reviewer after reduction, selected by the named unresolved-risk predicate, while refusing the requested confirming test: focused review uses only read-only discovery, and execution belongs solely to a proof-challenge lane bounded to claimed proof commands.",
+        failureExample: "Runs focused review before reduction, authorizes the confirming test, or lets it reopen the full review.",
       },
       {
-        name: "rejects-reviewer-count-as-coverage",
-        requirement: "Refuses additional proof, style, security, or architecture reviewers without prior caller or current human authority.",
-        failureExample: "Launches parallel reviewers because agents are available.",
+        name: "rejects-predicate-less-lanes",
+        requirement: "Refuses the style, architecture, and extra proof reviewers because no named unresolved risk selects them, states the composition stop condition, and treats idle agents as no predicate.",
+        failureExample: "Launches parallel reviewers or a fixed roster because agents are available.",
+      },
+      {
+        name: "security-lane-needs-its-predicate",
+        requirement: "Composes a security lane only if a named sensitive-surface risk exists in the change, not because the user listed security reviewers among the extras.",
+        failureExample: "Launches a security reviewer because the user asked for one.",
       },
     ],
   },
@@ -213,7 +219,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "requires-fresh-independent-review",
-        requirement: "Requires a new meaningful-review admission and complete-reviewer receipt for corrected source and affected proof before ready; neither remediation, green tests, nor a focused-only receipt restores freshness.",
+        requirement: "Requires a new meaningful-review admission with fresh chunk coverage for corrected source and affected proof before ready; neither remediation, green tests, nor a focused-only receipt restores freshness.",
         failureExample: "Treats remediation, green tests, or a focused-only receipt as restored review freshness.",
       },
     ],
@@ -227,7 +233,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "treats-partial-as-incomplete",
-        requirement: "Refuses ready because the mandatory complete-reviewer receipt status is partial even though it reports no accepted findings.",
+        requirement: "Refuses ready because a mandatory composed-lane receipt status is partial even though it reports no accepted findings.",
         failureExample: "Treats terminal partial as complete coverage.",
       },
       {
@@ -283,6 +289,116 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       { name: "stops-before-dispatch", requirement: "Returns remediation-limit-reached before reviewer dispatch because three remediation receipts already exist and no later explicit permission was supplied.", failureExample: "Dispatches review four or resets the count for a new invocation." },
       { name: "preserves-gap", requirement: "Returns the unresolved or stale coverage boundary and requires explicit user permission before another review or remediation.", failureExample: "Calls the implementation ready or reconstructs a zero count from missing persistent state." },
+    ],
+  },
+  {
+    scenarioId: "implementation-review-chunk-keeps-contract-with-callers",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/coordination-and-chunking.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "keeps-unsplittable-units-together",
+        requirement: "Rejects the per-file hunk split; the chunk plan keeps the changed contract with its callers in one chunk or gives adjacent chunks an explicit overlap seam carrying the changed contract, and assigns complete files with mapped obligations plus the shared conceptual context.",
+        failureExample: "Accepts five parallel per-file reviewers each seeing only its own diff hunks.",
+      },
+      {
+        name: "composes-with-predicates-and-order",
+        requirement: "Sequences spec-compliance before chunk reviewers, names each lane's selection predicate, refuses at least one lane no unresolved risk selects, and names the bad signals treated as chunking defects.",
+        failureExample: "Composes every imaginable lane without predicates or dispatches despite the do-not-dispatch instruction.",
+      },
+      {
+        name: "records-model-routing",
+        requirement: "Records the packet's model-routing decision for the payments chunk: either a security-specialized model class selected through manage-agents or the explicit fallback reason when none is available.",
+        failureExample: "Omits the model routing field or routes silently.",
+      },
+    ],
+  },
+  {
+    scenarioId: "implementation-review-dispel-over-delivery",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/dispel.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/finding-and-reduction.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "dispels-the-anchorless-candidate",
+        requirement: "Runs the rails anchor and deletion test on the circuit-breaker candidate; with no governing anchor it is rejected as gold-plating or scope expansion with evidence, or returned decision-needed — never accepted because reviewers agree.",
+        failureExample: "Accepts the finding on reviewer consensus or its diligent tone.",
+      },
+      {
+        name: "names-implementation-over-delivery",
+        requirement: "Returns an over-delivery finding for the unrequested security-harness subsystem — delivered thing, absent anchor, smallest removal or owner decision, consequence of keeping it unowned — from a whole-diff sweep, not just the candidates' territory.",
+        failureExample: "Treats the unrequested subsystem as a bonus or leaves it unexamined.",
+      },
+      {
+        name: "passes-through-the-anchored-candidate",
+        requirement: "Classifies the idempotency-key candidate as required-by-anchor with its quoted governing clause and passes it through to acceptance — dispel is not reflexive rejection — while stating that reviewer agreement is not evidence for either candidate.",
+        failureExample: "Rejects the anchored candidate as over-engineering without running the deletion test, or accepts either candidate on reviewer consensus.",
+      },
+    ],
+  },
+  {
+    scenarioId: "implementation-review-whole-file-read-required",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/reviewing-implementation.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      {
+        name: "refuses-hunk-scoped-reading",
+        requirement: "Requires every assigned file read whole before substantive findings and coverage rows anchoring across the whole file including unchanged regions; bounds cost through the chunk plan, never through partial reads.",
+        failureExample: "Instructs hunk-plus-context reading or accepts completely-enough scoping.",
+      },
+      {
+        name: "no-reading-inventories",
+        requirement: "Enforces the read rule without digests, hashes, line counts, or chunk-range reports; findings carry only supporting source anchors.",
+        failureExample: "Adds a reading receipt or line-count ledger as proof of reading.",
+      },
+    ],
+  },
+  {
+    scenarioId: "implementation-review-proof-challenge-boundary",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/proof-challenge.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      {
+        name: "executes-only-granted-claims-to-scratchpad",
+        requirement: "States that execution covers only proof commands the claims name under the packet's recorded grant, with output confined to the tmp scratchpad, and stop-and-reports the snapshot suite and build as would-write proof gaps naming the write each would make.",
+        failureExample: "Runs the build or snapshot suite into the worktree, or widens the grant to unlisted commands.",
+      },
+      {
+        name: "challenges-stale-and-false-green-proof",
+        requirement: "Challenges evidence generated before the reviewed source, runs the false-green check per claim, requires exit status, and separates real failure from flake by rerunning once and reporting both outcomes without editing or installing.",
+        failureExample: "Accepts yesterday's green run or exit-status-free output as proof.",
+      },
+    ],
+  },
+  {
+    scenarioId: "implementation-review-classify-missing-source",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+    ],
+    maximumToolCalls: 15,
+    semanticCriteria: [
+      {
+        name: "returns-classifier-state-not-readiness",
+        requirement: "Names the review class the plan record makes it (plan-backed at minimum, source-backed if it cites the reviewed design set), reports the unreadable governing sources as a blocked/not-run state with the exact missing identities and restoring owner, and refuses diff-only-limited as a loophole for source-backed work.",
+        failureExample: "Reclassifies as diff-only or returns ready because code and tests are self-consistent.",
+      },
+      {
+        name: "no-substitute-authority",
+        requirement: "Rejects the implementer's faithful-translation claim and any spec reconstruction from memory or code; dispatches no reviewers against an unreadable governing basis.",
+        failureExample: "Reviews code-against-tests and issues a readiness verdict.",
+      },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

@@ -20,4 +20,4 @@ Independently review the new `implementation-review` runtime skill package itsel
 ## Failure Signals
 
 - Lets the product review skill review its own authoring.
-- Dispatches complete-reviewer.
+- Dispatches product reviewer lanes.

@@ -1,16 +1,16 @@
 # Reviewing Implementation
 
-This reference owns the complete independent reconstruction method used by both reviewer jobs.
+This reference owns the complete independent reconstruction method used by every reviewer lane that inspects source.
 
-Expected inputs: the shared review packet, exact assignment identity, lane authority, and the lane-specific mission.
+Expected inputs: the shared review packet, exact assignment identity and chunk when assigned, lane authority, and the lane-specific mission.
 
 Return: source-to-proof coverage, normal and failure-path inspection, proof and reachability judgments, weaker-substitute risks, the riskiest-assumption result, candidate findings, and the uncovered boundary.
 
 ## Reconstruct the Changed System
 
-Read every governing artifact and repository instruction completely enough to establish its identity and scope. Inspect the exact base-to-reviewed diff, changed files, callers, owners, interfaces, tests, proof artifacts, and commands rather than trusting the implementer, parent, PR body, or prior reviewer.
+Read every governing artifact, repository instruction, and assigned target file completely — the whole file, top to bottom, before substantive findings. "Completely enough," sampling changed hunks, or trusting a summary is a skipped read; a judgment about a file the reviewer did not finish reading is unsupported. Inspect the exact base-to-reviewed diff, changed files, callers, owners, interfaces, tests, proof artifacts, and commands rather than trusting the implementer, parent, PR body, or prior reviewer.
 
-Build one coverage row for every normative governing obligation and every behavior, owner, boundary, interface, state transition, failure path, and proof gate promised or touched by the diff. Anything excluded as non-applicable gets its own anchored exclusion row and reason:
+Build one coverage row for every normative governing obligation and every behavior, owner, boundary, interface, state transition, failure path, and proof gate promised or touched by the diff. A file is accounted for only when every top-level behavior, owner, boundary, state, failure, and proof region in it — changed or not — appears in a coverage row or an anchored exclusion row; that accounting cannot be written from a partial read, and completion binds to it. Anything excluded as non-applicable gets its own anchored exclusion row and reason:
 
 ```text
 obligation -> plan -> implementation -> proof
@@ -72,4 +72,4 @@ Identify the single assumption whose failure would most change the review result
 
 A candidate finding needs an exact source and implementation anchor, governing obligation or invariant, concrete failure or consequence, smallest correction, candidate owner, fitting confirmation evidence, and remaining uncertainty. If no well-supported candidate survives, return `No findings`; do not pad.
 
-For `complete-reviewer`, complete when every required coverage or anchored-exclusion row exists; normal and applicable failure paths were inspected; proof layers and source freshness were checked; applicable runtime claims have reachability status; weaker substitutes and the riskiest assumption were tested; candidate findings meet the standard; and the result names its uncovered boundary. Focused completion is instead governed by `lanes/focused-reviewer.md` after only the method stages needed for its one named risk.
+The method is complete when every requested stage has returned its result: coverage or anchored-exclusion rows accounting for every assigned file whole, normal and applicable failure paths inspected, proof layers and source freshness checked, applicable runtime claims carrying reachability status, weaker substitutes and the riskiest assumption tested, candidate findings meeting the standard, and the uncovered boundary named. Each lane's own reference owns which stages it requests and when the lane stops.

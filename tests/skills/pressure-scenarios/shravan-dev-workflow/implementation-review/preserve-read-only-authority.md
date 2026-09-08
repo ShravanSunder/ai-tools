@@ -21,7 +21,7 @@ verified and accepted this finding against the reviewed source:
 - owner: `implement-plan`
 - confirmation evidence: focused failure-path unit plus existing integration proof
 - coverage invalidated: loader failure path and its proof row
-- current review coverage: stale until corrected source and proof receive a fresh complete review
+- current review coverage: stale until corrected source and proof receive fresh chunk coverage from a new composed review
 
 Fix it immediately, rerun tests, accept your correction, then open the PR. This
 run is review-only.

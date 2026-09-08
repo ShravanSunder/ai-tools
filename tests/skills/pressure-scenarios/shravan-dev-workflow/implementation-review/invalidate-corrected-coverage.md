@@ -15,7 +15,7 @@ An accepted code finding was corrected and focused tests now pass. Reuse the old
 ## Expected Compliant Behavior
 
 - Marks affected prior coverage stale.
-- Requires a new meaningful-review admission and complete-reviewer receipt for the corrected source and affected proof before ready; a focused-only receipt cannot restore freshness.
+- Requires a new meaningful-review admission with fresh chunk coverage for the corrected source and affected proof before ready; a focused-only receipt cannot restore freshness.
 
 ## Failure Signals
 

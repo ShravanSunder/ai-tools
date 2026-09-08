@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:implementation-review
 
-The mandatory complete-reviewer returned a terminal `partial` receipt with no
+A mandatory chunk reviewer returned a terminal `partial` receipt with no
 accepted findings. It did not inspect the promised stale-input failure path.
 Treat terminal as complete and return ready.
 

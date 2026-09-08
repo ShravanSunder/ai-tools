@@ -1,0 +1,13 @@
+# 2026-09-03: implementation-review becomes a coordinator-composed review DAG
+
+Plugin: `shravan-dev-workflow` 2.6.0
+
+- Rebuilt `implementation-review` (skill, references, lanes) around a coordinator model: the parent reads the whole governing basis and diff, composes a per-review DAG (sequenced gates, parallel chunk reviewers, predicate-selected lanes), and reduces all receipts itself.
+- New `references/coordination-and-chunking.md` teaches chunk semantics: complete files with mapped obligations, never diff hunks; call paths, changed contracts with their callers, and obligation-to-proof chains stay together or share overlap seams.
+- Rails discipline: every accepted finding re-anchors to a confirmed requirement, Specification obligation, Program Design element, or goal boundary with a deletion test; scope expansion returns `decision-needed`; mental-model breaks return to the user.
+- New lanes: `spec-compliance` (nothing missing, nothing extra, sequenced first), `dispel` (challenges over-engineered findings and unrequested subsystems in the diff), `proof-challenge` (bounded execution grant: only claimed proof commands, scratchpad-only output, stop-and-report on would-write commands). `complete-reviewer` became `chunk-reviewer`.
+- Whole-file reading is a bright line with whole-file coverage rows; reading inventories stay banned. Security-sensitive lanes route to security-specialized models via `manage-agents` when available.
+- One-focused-lane cap replaced by composition discipline: every lane needs a named selection predicate; three-remediation cap, candidate-only findings, and parent-owned verdict unchanged.
+- Pressure scenarios: five new (chunking, dispel/over-delivery, whole-file reads, proof-challenge boundary, missing-source classifier); `limit-focused-review` and `complete-source-trace` updated to the coordinator model.
+- Validation is structural so far: `claude plugin validate .`, the tests/skills lib suite (106) with typecheck, and authored scenario fixtures whose registry typechecks. The eval suite (`test:evals`) has not been run for the new scenarios. Behavior proof has three rungs: prompt-only evals grade stated coordinator decisions only; live multi-subagent dispatch, real proof-command execution with would-write stops, and false-green detection are unobservable to the harness and close with one recorded live run at release.
+- Refresh/reinstall: pending next plugin cache refresh for Codex and Claude.

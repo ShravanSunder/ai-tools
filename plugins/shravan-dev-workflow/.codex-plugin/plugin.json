@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Shravan's development workflow plugin with long-horizon delivery routing, bounded design orchestration, canonical planning, implementation and independent review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and structured TUI presentation.",
   "author": {
     "name": "Shravan Sunder"

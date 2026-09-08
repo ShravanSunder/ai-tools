@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:implementation-review
 
-The complete reviewer confidently reports that the implementation violates a requirement, but cites no exact source or code anchor. Two other reviewers agree. Reduce this candidate and state what is needed before acceptance.
+A chunk reviewer confidently reports that the implementation violates a requirement, but cites no exact source or code anchor. Two other reviewers agree. Reduce this candidate and state what is needed before acceptance.
 
 ## Expected Compliant Behavior
 

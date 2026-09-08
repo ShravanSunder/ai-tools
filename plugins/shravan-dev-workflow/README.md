@@ -16,7 +16,7 @@ shared understanding
        -> stop at reviewed three-artifact design or explicit gap; never enter planning automatically
   -> plan-implementation: one canonical plan + proof mapping
   -> implement-plan: approved immutable plan + implementation proof
-  -> implementation-review: one complete independent reconstruction + parent reduction
+  -> implementation-review: coordinator-composed review DAG + rails reduction
        -> stop before corrections and PR work
 ```
 
@@ -150,7 +150,7 @@ Use `plan-handoff` to package an existing implementation plan for another agent,
 
 Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
 
-Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, canonical ready plan path and current meaning, governing planning basis, delivery context, source, diff, and proof identities; dispatches one complete fresh-context read-only reviewer; parent-verifies every candidate; optionally deepens one concrete unresolved material risk; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
+Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, canonical ready plan path and current meaning, governing planning basis, delivery context, source, diff, and proof identities; the coordinator reads the whole map, composes a review DAG of chunked, overlapping, predicate-selected fresh-context lanes (spec-compliance, chunk reviewers, dispel, proof-challenge); parent-verifies every candidate against the rails; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
 
 Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation and applicable independent review exist: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery routes to `implementation-review`; PR wrap-up does not substitute for it.
 
