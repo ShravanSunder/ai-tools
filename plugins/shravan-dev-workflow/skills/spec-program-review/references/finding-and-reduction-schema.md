@@ -18,6 +18,8 @@ validation note
 semantic coverage to rerun
 contested evidence
 accepted requirement identity or confirmed goal-boundary field
+governing source identity and exact section or field
+quoted or faithful obligation text
 plain-language requirement meaning
 evidence checked or bounded evidence-lookup result
 whether deletion of the questioned mechanism removes the failure
@@ -44,7 +46,7 @@ For each candidate:
 7. merge duplicates by root cause;
 8. preserve conflicting evidence.
 
-Missing evidence is `unverified`, not rejection. Style preference without reader or behavior effect is rejected. Before accepting missing contracts on a proposed mechanism, test whether deleting the mechanism preserves every confirmed requirement. Prefer deletion when it does. Reviewers never spawn reviewers or evidence lookups. The parent may dispatch one lookup as research, not as another review lane; it opens the returned anchors and reduces the evidence before disposition. A reviewer concern that cannot be tied to an accepted requirement and observable failure is advice awaiting investigation, not implementation authority.
+Missing evidence is `unverified`, not rejection. A category name is not an anchor: "the reliability requirement" fails the anchor fields until the exact governing clause is opened and quoted; a candidate whose anchor fields cannot be filled from an inspectable source is `unverified` or routes to an owner decision, never `accepted`. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false (the design assumes an interface, ordering, ownership, or guarantee the current system does not provide); a defect the basis already forbids and can name the fix for routes to its semantic owner as usual, while a break returns `decision-needed` or `blocked` to the owner instead of consuming a correction round. Weigh the dispel lane's classifications and over-delivery map as candidate evidence like any other receipt. Style preference without reader or behavior effect is rejected. Before accepting missing contracts on a proposed mechanism, test whether deleting the mechanism preserves every confirmed requirement. Prefer deletion when it does. Reviewers never spawn reviewers or evidence lookups. The parent may dispatch one lookup as research, not as another review lane; it opens the returned anchors and reduces the evidence before disposition. A reviewer concern that cannot be tied to an accepted requirement and observable failure is advice awaiting investigation, not implementation authority.
 
 ## Coverage-Bound Result
 

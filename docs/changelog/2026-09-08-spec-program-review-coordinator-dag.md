@@ -1,0 +1,12 @@
+# 2026-09-08: spec-program-review becomes a coordinator-composed review DAG
+
+Plugin: `shravan-dev-workflow` 2.10.0 (combined release with the implementation-review rename and coordinator DAG entries)
+
+- The parent is now the review coordinator: it reads the whole artifact set itself, then composes the DAG — mode-complete reviewer always, `chunk-reviewer` lanes along artifact seams when the set is large, `dispel` always after artifact-review receipts, `proof-challenge` only when the design cites executable proof, focused lanes one per named unresolved risk under a per-predicate stop record. The one-focused-lane-by-default cap is replaced by that composition discipline.
+- New references: `coordination-and-chunking.md` (design seams, overlap of full text, when not to chunk, Composition Record), `lanes/chunk-reviewer.md` (bounded seam reconstruction, never a mode-complete claim), `lanes/dispel.md` (candidate correction class plus design over-delivery map — "architecture nouns without an anchor"), `lanes/proof-challenge.md` (bounded execution grant with preflight write-set check, scratchpad-only output, untrusted-chain rule).
+- Whole-artifact reads are enforced through coverage-row accounting in `reviewing-common-method.md`; reading inventories stay banned. Finding schema gains governing-source/section and quoted-obligation anchor fields and a mental-model-break discriminator.
+- Step 8 independence now verifies ordinary lanes stayed read-only and proof-challenge stayed inside its recorded grant; a granted command passes, an unlisted command or target mutation fails.
+- Master's two-round-plus-recovery review policy and reviewer-free classification are preserved verbatim. Description gains the `implementation-review` boundary.
+- Five new pressure scenarios (seam chunking, empty-candidate dispel, predicate composition, proof-challenge predicate, independence with grant); existing bounded-round scenarios unchanged.
+- Validation: structural (lib suite, typecheck, `claude plugin validate .`); Run 3 spec delta reviewed by one GPT-6 Astra reviewer via ACPX (user-directed single-reviewer deviation); eval results recorded in the PR.
+- Refresh/reinstall: pending next plugin cache refresh for Codex, Claude, and Cursor.

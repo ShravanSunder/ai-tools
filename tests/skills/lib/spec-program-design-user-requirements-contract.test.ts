@@ -290,17 +290,17 @@ describe("user requirements and design-view contracts", () => {
     ].join("\n");
 
     expect(reviewSkill).toContain("reader understanding or readability");
-    expect(reviewSkill).toContain("exactly one mode-complete reviewer first");
+    expect(reviewSkill).toContain("mode-complete reviewer always");
+    expect(reviewSkill).toContain("the parent verifies and reduces it");
+    expect(reviewSkill).toContain("one focused assignment per named risk");
+    expect(reviewSkill).toContain("composition stop record");
     expect(reviewSkill).toContain(
-      "The parent verifies and reduces it before selecting any focused lane",
-    );
-    expect(reviewSkill).toContain("at most one focused reviewer by default");
-    expect(reviewSkill).toContain(
-      "The reviewing parent may not grant this authority to itself before or during review",
+      "may never compose a lane without a predicate",
     );
     expect(reviewSkill).toContain(
-      "pre-dispatch external-caller packet already named that residual risk",
+      "narrow the composable set but never widen authority",
     );
+    expect(reviewSkill).not.toContain("at most one focused reviewer by default");
     expect(reviewSkill).toContain(
       "`Requirements`, `Specification`, `Program Design`, or a named combination",
     );
