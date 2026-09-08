@@ -8,7 +8,7 @@ Expected inputs: the complete lane-schema packet, the claim inventory (each cite
 
 Maximum authority: fresh-context, candidate-only, with one named expansion: this lane may execute exactly the commands listed in the packet's `execution grant` — no variants, no substitutes; a narrower unlisted command is reported as a needed-grant gap, not run. Everything else stays read-only. Bright lines:
 
-- before every execution, resolve what the command actually runs — the script it names, its pre/post hooks, and relevant tool configuration — and classify its write set as `scratchpad-only | worktree | unknown`; `worktree` and `unknown` stop before execution with the predicted writes and evidence. Running once to discover behavior is forbidden;
+- before every execution, resolve what the command actually runs — the script it names, its pre/post hooks, and relevant tool configuration — and classify its write set as `scratchpad-only | ignored-build-artifacts (listed paths) | tracked-worktree | unknown`; `tracked-worktree` and `unknown` stop before execution with the predicted writes and evidence, while gitignored build output under listed paths (coverage, cache, dist) is allowed and named in the receipt. After every run, compare `git status --porcelain` in the reviewed worktree to its pre-run state and report it — any tracked change invalidates the receipt. Running once to discover behavior is forbidden;
 - the resolved chain is untrusted code: a hook or test that reads credentials, touches the network, or reaches outside the worktree is reported as a security observation and not executed;
 - output, logs, and captured artifacts go to the tmp scratchpad outside the reviewed worktree, never into it;
 - no installs, no network fetches, no home-level writes, no new tooling;
@@ -17,7 +17,7 @@ Maximum authority: fresh-context, candidate-only, with one named expansion: this
 Procedure, one row per claim:
 
 ```text
-claim | preflight write-set: scratchpad-only|worktree|unknown | command run or challenge | observed vs claimed: match|weaker|contradicts|cannot observe at this layer | false-green check: <how this could pass with the behavior absent — stale artifacts, mocked boundary, disabled gate, evidence older than the design> | exit status | rerun comparison: <both outcomes> or no failure
+claim | preflight write-set: scratchpad-only|ignored-build-artifacts|tracked-worktree|unknown | command run or challenge | observed vs claimed: match|weaker|contradicts|cannot observe at this layer | false-green check: <how this could pass with the behavior absent — stale artifacts, mocked boundary, disabled gate, evidence older than the design> | exit status | rerun comparison: <both outcomes> or no failure
 ```
 
 When execution is blocked (missing grant, would-write command, absent harness), challenge instead: what the claim asserts, what the cited evidence can actually observe, and the smallest command or observation that would settle it.

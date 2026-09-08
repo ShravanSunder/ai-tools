@@ -16,6 +16,8 @@ For each candidate, answer one bounded question: is the proposed correction requ
 rails anchor the candidate serves: <accepted requirement identity | Specification obligation | goal-boundary field | none found>
 governing source and exact section:
 deletion test: removing the questioned mechanism — do the confirmed obligations still hold?
+mechanism necessity: smallest change that serves the quoted clause | one of
+  several ways to serve it — if several, only the obligation gap can be a finding
 correction class: required by anchor | gold-plating | scope expansion |
   requirements-weakening | cannot tell without owner decision
 evidence:

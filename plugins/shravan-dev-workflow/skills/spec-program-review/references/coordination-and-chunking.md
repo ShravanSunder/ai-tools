@@ -8,7 +8,7 @@ Return: the chunk plan with overlap seams (or the decision that the mode-complet
 
 ## What a Design Chunk Is
 
-A design chunk is a bounded review responsibility over one artifact seam, carried with the complete text on both sides of that seam — never a section range, a heading list, or an excerpt. The seams are the ones the modes already judge:
+A design chunk is a bounded review responsibility over one artifact seam, carried with the seam's complete text on both sides: every section that names the seam's obligation, realizing element, owners, edges, and proof seam, plus all governing sources whole. The coordinator lists the included sections in the assignment; unlisted sections are outside the assignment and the receipt says so. A heading list or a paraphrase is never a seam. The seams are the ones the modes already judge:
 
 ```text
 three-artifact-design   Requirements -> Specification traceability slice

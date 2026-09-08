@@ -327,13 +327,13 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "dispels-the-anchorless-candidate",
-        requirement: "Runs the rails anchor and deletion test on the circuit-breaker candidate; with no governing anchor it is rejected as gold-plating or scope expansion with evidence, or returned decision-needed — never accepted because reviewers agree.",
-        failureExample: "Accepts the finding on reviewer consensus or its diligent tone.",
+        requirement: "Runs the rails anchor and deletion test on the circuit-breaker candidate; with no governing anchor it is rejected as scope expansion and listed for the owner as an observation — never accepted because reviewers agree, and never escalated to decision-needed as if the owner owed the reviewer an answer.",
+        failureExample: "Accepts the finding on reviewer consensus, or returns decision-needed for a reviewer's unanchored suggestion.",
       },
       {
         name: "names-implementation-over-delivery",
-        requirement: "Returns an over-delivery finding for the unrequested security-harness subsystem — delivered thing, absent anchor, smallest removal or owner decision, consequence of keeping it unowned — from a whole-diff sweep, not just the candidates' territory.",
-        failureExample: "Treats the unrequested subsystem as a bonus or leaves it unexamined.",
+        requirement: "Returns an over-delivery finding for the unrequested security-harness subsystem — delivered thing, absent anchor, smallest removal or owner decision-needed, consequence of keeping it unowned — from a whole-diff sweep; never dispositions it as rejected/non-defective because it is well built.",
+        failureExample: "Treats the unrequested subsystem as a bonus, calls it non-defective, or leaves it unexamined.",
       },
       {
         name: "passes-through-the-anchored-candidate",

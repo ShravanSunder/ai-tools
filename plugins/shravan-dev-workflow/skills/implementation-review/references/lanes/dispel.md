@@ -16,6 +16,8 @@ For each candidate finding, answer one bounded question: is the proposed correct
 rails anchor the candidate serves: <anchor | none found>
 deletion test: removing the questioned mechanism — do the confirmed
   obligations still hold?
+mechanism necessity: smallest change that serves the quoted clause | one of
+  several ways to serve it — if several, only the obligation gap can be a finding
 correction class: required by anchor | gold-plating | scope expansion |
   requirements-weakening | cannot tell without owner decision
 evidence:

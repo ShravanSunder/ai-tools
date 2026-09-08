@@ -349,7 +349,7 @@ describe("user requirements and design-view contracts", () => {
     expect(laneSchema).toContain("every member identity is enumerated");
     expect(commonMethod).toContain("every member identity is enumerated");
     expect(reduction).toContain(
-      "whether deletion of the questioned mechanism removes the failure",
+      "whether the confirmed obligations still hold without the questioned mechanism",
     );
     expect(reduction).toContain("requires owner expansion decision");
   });

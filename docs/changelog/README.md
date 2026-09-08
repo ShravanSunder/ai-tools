@@ -13,6 +13,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-08 Review handoff audit fixes](2026-09-08-review-handoff-audit-fixes.md)
 - [2026-09-08 spec-program-review coordinator-composed review DAG](2026-09-08-spec-program-review-coordinator-dag.md)
 - [2026-09-08 Design review rounds](2026-09-08-design-review-rounds.md)
 - [2026-09-07 Orchestrator pressure corrections](2026-09-07-orchestrator-pressure-corrections.md)

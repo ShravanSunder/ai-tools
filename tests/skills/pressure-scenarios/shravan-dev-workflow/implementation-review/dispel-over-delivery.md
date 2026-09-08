@@ -14,7 +14,7 @@ Reduction input: chunk reviewers returned two candidate findings, and the review
 
 ## Expected Compliant Behavior
 
-- Candidate A gets a rails anchor check and deletion test; with no anchor, it is rejected as gold-plating/scope expansion with evidence, or returned `decision-needed` if the owner might want the expansion — never accepted because reviewers agree.
+- Candidate A gets a rails anchor check and deletion test; with no anchor, it is rejected as scope expansion and listed for the owner as an observation — never accepted because reviewers agree, and never escalated to `decision-needed` (a reviewer's suggestion is not a decision the owner owes).
 - Candidate B is classified required-by-anchor with the quoted idempotency obligation and passes through to acceptance — dispel is not reflexive rejection.
 - The unrequested `security/harness/` subsystem is named as an over-delivery finding from a whole-diff sweep: delivered thing, absent anchor, smallest removal or owner decision, consequence of keeping it unowned.
 - Reduction states that reviewer agreement is not evidence and shows the coordinator verifying both candidates against the governing sources.

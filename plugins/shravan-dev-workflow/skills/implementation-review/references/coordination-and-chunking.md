@@ -12,6 +12,8 @@ A chunk is a bounded review responsibility over explicitly complete target files
 
 Prefer chunk boundaries that follow the system's own seams: one component and its tests, one obligation cluster and the code that satisfies it, one public contract and its consumers. Never split these units across chunks without an overlap seam:
 
+The file universe is not the diff. For a changed public contract, the chunk's file set includes every current consumer the coordinator finds by source search, changed or not — a consumer the diff forgot to update is exactly the finding the chunk must be able to raise, not code outside its boundary.
+
 - a call path from entrypoint to effect;
 - a changed contract and its callers;
 - one obligation-to-proof chain.

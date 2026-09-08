@@ -17,11 +17,20 @@ governing source identity and exact section/field:
 quoted or faithful obligation text:
 plain-language meaning of that anchor:
 observable outcome that fails if unresolved:
-deletion test: does removing the questioned mechanism remove the failure?
+deletion test: without the questioned mechanism, do the confirmed obligations still hold?
+mechanism necessity: is the proposed mechanism the smallest change that satisfies
+  the quoted clause, or one of several ways to serve it?
 scope effect: inside confirmed boundary | requires owner expansion decision
 ```
 
-A category name is not an anchor: "the reliability requirement" fails this gate until the exact governing clause is opened and quoted. A candidate whose anchor fields cannot be filled from an inspectable source is `unverified` or `decision-needed`, never `accepted` — it is advice awaiting investigation, not implementation authority. When the deletion test says removing the mechanism preserves every confirmed obligation, prefer deletion over completing the mechanism's missing contracts. A correction that introduces an unrequested subsystem, expands the confirmed goal, or weakens a requirement returns `decision-needed` to the owner — it is never silently accepted, however well-argued. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false: the design assumes an interface, ordering, ownership, or guarantee the current system does not provide. A defect the basis already forbids and can name the fix for routes to its semantic owner as usual; a break stops reduction and returns the failed assumption, evidence, and consequence to the user instead of being pushed through remediation. The bad signal is routing a break to `program-design` and continuing.
+A category name is not an anchor: "the reliability requirement" fails this gate until the exact governing clause is opened and quoted. A candidate whose anchor fields cannot be filled from an inspectable source is `unverified`, never `accepted` — it is advice awaiting investigation, not implementation authority. When the deletion test says the obligations hold without the mechanism, prefer deletion over completing the mechanism's missing contracts.
+
+Two kinds of scope expansion get two different dispositions, and confusing them is how a gold-plating reviewer ends up steering the verdict:
+
+- A **reviewer candidate that proposes adding scope** with no rail anchor — a circuit breaker, a hardening layer, an abstraction for imagined consumers — is `rejected: scope expansion` and listed for the owner as an observation. It never produces `decision-needed`; a suggestion is not a decision the owner owes an answer to. Anchoring it one altitude up ("the spec says return a typed error on provider outage") does not rescue it when `mechanism necessity` says the mechanism is one of several ways to serve the clause — then the accepted finding, if any, names the unrealized obligation and its failure and routes to its owner; the mechanism choice is not the reviewer's to make and never rides into the handoff.
+- A **delivered item the diff already contains** that dispel mapped `absent` (or spec-compliance classified `extra`/`scope overreach`) is never `rejected` as "non-defective" — being well built is not a disposition. Its only dispositions are `accepted` (removal, owner `implement-plan`) or `decision-needed` with deletion as the default recommendation when the owner may want to adopt it as a scope expansion.
+
+When the parent's disposition contradicts dispel's correction class, record the quoted rail text that overrides it. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false: the design assumes an interface, ordering, ownership, or guarantee the current system does not provide. A defect the basis already forbids and can name the fix for routes to its semantic owner as usual; a break stops reduction and returns the failed assumption, evidence, and consequence to the user instead of being pushed through remediation. The bad signal is routing a break to `program-design` and continuing.
 
 ## Verify Before Accepting
 
@@ -91,6 +100,8 @@ remediation-limit-reached
 ```
 
 The result includes reviewed authority, unchanged plan/governing-basis/delivery-context records, base and reviewed identities, diff and proof freshness, remediation-pass evidence, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, weaker-substitute risks, first correction, exact route, and uncovered boundary.
+
+A proof claim whose proof-challenge lane returned only challenges — nothing executed because every command would write into the worktree or no grant was recorded — cannot support `ready` when that claim is the sole proof for a changed contract; it is `needs-revision` to `implement-plan` (supply runnable, scratchpad-safe proof) or `blocked-input`.
 
 Accepted corrections to source or proof invalidate affected coverage. A remediation report, green proof, or focused-only result does not restore it; require a new meaningful review with fresh chunk coverage for the corrected source and affected proof. State which coverage became invalid and bind the new result to the corrected source.
 
