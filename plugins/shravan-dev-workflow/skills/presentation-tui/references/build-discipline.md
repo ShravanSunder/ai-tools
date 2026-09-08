@@ -1,7 +1,14 @@
-Build Discipline — TUI Presentation Reference
+Build Discipline — Presentation: TUI Reference
 ══════════════════════════════════════════════════════════════════════
 
-Deep-dive reference for the MECHANICS of building clean TUI output: step-by-step build procedure, alignment arithmetic, indentation recipes, overflow handling, and verification.
+This reference owns: the mechanics of building clean TUI output —
+step-by-step build procedure, alignment arithmetic, indentation
+recipes, overflow handling, and verification.
+Expected inputs: the shape and content selected by the SKILL.md
+caller.
+Return: the alignment arithmetic applied and the verification
+checklist result.
+Complete when: every checklist item passes on the composed block.
 
 See also:
 
@@ -33,13 +40,13 @@ For a titled frame: `┌─ [title] ─...─┐`
 ▸ fill `─` up to column 68
 ▸ `┐` at column 69
 
-```
+```text
 ┌─ Example section title ─────────────────────────────────────────────┐
 ```
 
 Step 3 — Emit breathing row.
 
-```
+```text
 ┌─ Example section title ─────────────────────────────────────────────┐
 │                                                                     │
 ```
@@ -48,7 +55,7 @@ Step 3 — Emit breathing row.
 
 Step 4 — Emit content row.  Content indented 2 spaces from left │. Right-pad to col 69 with spaces, then `│`.
 
-```
+```text
 ┌─ Example section title ─────────────────────────────────────────────┐
 │                                                                     │
 │  First line of content goes here, padded right with spaces.         │
@@ -56,7 +63,7 @@ Step 4 — Emit content row.  Content indented 2 spaces from left │. Right-pad
 
 Step 5 — Emit blank row between semantic groups (when needed).
 
-```
+```text
 ┌─ Example section title ─────────────────────────────────────────────┐
 │                                                                     │
 │  First line of content goes here, padded right with spaces.         │
@@ -66,7 +73,7 @@ Step 5 — Emit blank row between semantic groups (when needed).
 
 Step 6 — Emit closing breathing row and bottom border.
 
-```
+```text
 ┌─ Example section title ─────────────────────────────────────────────┐
 │                                                                     │
 │  First line of content goes here, padded right with spaces.         │
@@ -80,7 +87,8 @@ Step 7 — Verify.
 
 ▸ Every row's right edge lands at col 69 (the │ or ┐ or ┘)
 ▸ Total line length = 70 chars
-▸ No markdown-as-layout inside
+▸ No markup inside fixed-width rows (it drifts the border — relocate
+  technical content per the baseline's fixed-width-row resolution)
 ▸ Single borders only (no ╔═╗ mixed in)
 ▸ Identifier content not truncated mid-token
 
@@ -91,7 +99,7 @@ If any row's right edge doesn't land at col 69: pad with spaces, or apply overfl
 
 Cell-width arithmetic for tables.  For a K-cell row at canvas N:
 
-```
+```text
   w1 + w2 + ... + wK + (K + 1) = N
                        ↑
                        K+1 separator chars: one │ between each cell
@@ -103,7 +111,7 @@ of cell widths = 66.  Distribute: e.g. 20 / 30 / 16, or 15 / 25 / 26.
 
 Junction character selection.  Pick by which sides connect:
 
-```
+```text
   ┌ ┐       corners: 2 sides (horizontal + vertical)
   ├ ┤       T-junction: 3 sides (vertical + horizontal to one side)
   ┬ ┴       T-junction: 3 sides (horizontal + vertical one direction)
@@ -127,12 +135,12 @@ Before/After drift example.  When content changes and row widths accidentally mi
 
 BROKEN (top/bottom border ends col 70, rows end col 68):
 
-```
+```text
 ┌─────────────────┬──────────────────────────────────────────────┐
 │ Field           │ Description                                │
 ├─────────────────┼──────────────────────────────────────────────┤
-│ review_model    │ The Codex CLI model used for reviews         │
-│ approval_mode   │ When tools require approval                │
+│ review model    │ The Codex CLI model used for reviews         │
+│ approval mode   │ When tools require approval                │
 └─────────────────┴──────────────────────────────────────────────┘
 ```
 
@@ -140,12 +148,12 @@ Scan the right edge — row 1 and row 4 end at col 68, but the borders end at co
 
 FIXED (every row ends col 70):
 
-```
+```text
 ┌─────────────────┬──────────────────────────────────────────────┐
 │ Field           │ Description                                  │
 ├─────────────────┼──────────────────────────────────────────────┤
-│ review_model    │ The Codex CLI model used for reviews         │
-│ approval_mode   │ When tools require approval                  │
+│ review model    │ The Codex CLI model used for reviews         │
+│ approval mode   │ When tools require approval                  │
 └─────────────────┴──────────────────────────────────────────────┘
 ```
 
@@ -156,7 +164,7 @@ Fix: pad each row's content with spaces until the closing │ lands exactly at c
 
 Indent depth by pattern:
 
-```
+```text
 Pattern                         Indent depth
 ──────────────────────────      ──────────────────────────────
 Label → content                 2 spaces
@@ -170,7 +178,7 @@ Worked examples.  For each common pattern, the WRONG and RIGHT side-by-side.
 
 Label ──► content:
 
-```
+```text
 WRONG                            RIGHT
 ─────                            ─────
 
@@ -183,7 +191,7 @@ drawer drag                        drawer drag
 
 Sub-items nested:
 
-```
+```text
 WRONG                            RIGHT
 ─────                            ─────
 
@@ -198,7 +206,7 @@ drag starts on drawer              drag starts on drawer
 
 Code snippet inline:
 
-```
+```text
 WRONG                            RIGHT
 ─────                            ─────
 
@@ -214,7 +222,7 @@ Actual code-like block:
 
 Use inline snippet treatment for short code-like tokens or tiny expressions inside prose.  Prefer inline code spans when the surface preserves them cleanly: variable names, property names, field names, type names, enum cases, file names, commands, config keys, and short expressions or literal values.  Switch to a fenced code block as soon as the reader would reasonably treat the content as code-like structure to copy, scan, or run: source code, typed data models, schemas, or structured definitions.  Do not redraw that content as a Unicode layout.
 
-```
+```text
 WRONG                            RIGHT
 ─────                            ─────
 
@@ -233,40 +241,16 @@ Fence the code block cleanly under its label or between section rules.
 Keep the surrounding explanation in TUI form; keep the code-like
 content itself in its native fenced form.
 
-Semantic markdown boundary:
+Markdown boundary on this surface:
 
-Use semantic markdown for technical meaning, navigation, copying, and
-syntax highlighting.  Do not use it as decoration.  TUI owns
-structure; semantic markdown owns technical atoms.
-
-Good inline-code atoms:
-
-  ▸ files and paths: `SKILL.md`, `references/build-discipline.md`
-  ▸ commands and flags: `claude plugin validate .`, `--show-passed`
-  ▸ packages, models, versions, hashes, branches, and release tags
-  ▸ type names, data model names, enum values, config keys, event
-    kinds, protocol fields, tool names, and API names
-
-Bad inline-code atoms:
-
-  ▸ emphasis words: `important`, `recommended`, `safe`, `blocked`
-  ▸ arbitrary nouns the writer wants to color
-  ▸ whole sentences or labels that are not technical identifiers
-
-Use clickable file links when navigation matters, especially when
-citing local code or docs with a useful line number.  Use markdown URL
-links when anchor text improves scanning.  Use a bare URL when the
-exact URL is itself the thing to inspect, copy, or verify.
-
-Avoid inline markdown inside fixed-width framed/table rows when the row
-depends on exact right-edge padding.  Renderers may hide backticks while
-the agent counted them, causing the visible right border to drift.  For
-code/link-heavy content, prefer no-frame lists, prose, or links placed
-immediately before or after the framed block.
+The shared baseline (`../../../shared-references/markdown-presentation-baseline.md`)
+owns the bright line, the labels-versus-atoms boundary, and the
+Fixed-Width-Row Resolution.  Every check below is an application of
+that resolution to frame geometry, not a second rule.
 
 Continuation hang-indent:
 
-```
+```text
 WRONG                            RIGHT
 ─────                            ─────
 
@@ -283,7 +267,7 @@ visually own the connector column.  If the first or widest step is
 long, the connector detaches from the phrase and reads like stray
 punctuation.
 
-```
+```text
 WRONG (long first step, detached connector):
 
 prompt asks for design / explanation / comparison / architecture
@@ -305,20 +289,20 @@ sequence.
 
 ─── Overflow recipes ────────────────────────────────────────────────
 
-Shorten with `…`.  Preferred.  No reflow.
+Shorten with `…`.  Preferred for prose labels.  No reflow.
 
+```text
+before:  │ removes the pane from the layout tree      │ after:   │ removes the pane from layout…              │
 ```
-before:  │ tabLayoutAtom.removePaneFromLayout        │ after:   │ tabLayoutAtom.removePane…                  │
-```
 
-Prefer truncating at a word or dot boundary if visible.  If the
-identifier is one word (`removePaneFromLayout`), prefer wrap or
-widen.
+Never shorten a technical atom: identifiers, commands, and paths
+follow the Identifier relocation rule below instead.
 
-Wrap to next line.  When the content can't be shortened (identifier,
-quoted string).
+Wrap to next line.  For prose that can't be shortened.  Identifiers
+and other technical atoms never wrap inside rows — they always use
+the Identifier relocation rule below.
 
-```
+```text
 before:  │ Some very long prose that doesn't fit in the available width │ ↑ drift
 
 after:   │ Some very long prose that doesn't fit in the available     │
@@ -330,60 +314,70 @@ Continuation hang-indents 2-4 spaces under the first content char.
 Widen the column.  Only when shorten loses meaning AND wrap is ugly.
 Reflows the whole block.
 
-```
+```text
 before:  │ col1 │ col2 │ col3 │     cells are 8 chars each after:   │ col1     │ col2 │ col3 │   col1 widened to 12 chars
 ```
 
 Widen the column that has the longest content.  Recompute all
 alignment columns.
 
-Identifier wrap rule.  Code identifiers never truncate mid-token.
-When an identifier won't fit in a cell, wrap the entire line so the
-identifier stays intact AND the frame border stays at canvas width:
+Identifier relocation rule.  Code identifiers never truncate
+mid-token, and per the baseline's bright line they do not sit as raw
+plain text inside rows either.  When an identifier or code atom
+belongs to a framed row, keep a short plain label in the row and
+relocate the technical content outside the frame as inline code or a
+fence:
 
 WRONG (ragged right, breaks frame contract):
 
-```
+```text
 │ 3. removal                              │
 │      drawer child?  ──► store.removeDrawerPane
 │      main pane?     ──► tabLayoutAtom.removePaneFromLayout
 ├─────────────────────────────────────────┤
 ```
 
-RIGHT (wrap the identifier onto its own line):
+RIGHT (short labels in the frame; atoms relocated below it):
 
-```
+```text
 │ 3. removal                                                        │
-│      drawer child?                                                │
-│        ──► store.removeDrawerPane                                 │
-│      main pane?                                                   │
-│        ──► tabLayoutAtom.removePaneFromLayout                     │
+│      drawer child?  ──► store call, below                         │
+│      main pane?     ──► layout call, below                        │
 ├───────────────────────────────────────────────────────────────────┤
 ```
 
-Canvas width stays intact on every line.  Identifier stays intact
-on its own row.  Both contracts honored — no tradeoff needed.  If
-the wrap makes the block too tall, widen the block's canvas width
-instead of breaking the frame.
+Immediately after the frame: drawer child removal calls
+`store.removeDrawerPane`; main panes use
+`tabLayoutAtom.removePaneFromLayout`.
+
+Canvas width stays intact, identifiers stay intact and copyable, and
+the frame carries only what fits it.  If relocation makes the block
+read poorly, prefer a no-frame list or a GFM table over the frame.
 
 
 ─── Verification checklist ──────────────────────────────────────────
 
 Run this before shipping a response.  Every item must pass.
 
-```
+```text
   [ ] Canvas width committed and consistent across the block?
   [ ] Every rule/border exactly canvas-width?
   [ ] Every content row right-padded to the right alignment column?
   [ ] Right edges line up when you scan vertically?
-  [ ] No markdown-as-layout inside (#, **bold**, | col |, - bullet)?
-  [ ] Semantic markdown preserved for code, technical atoms, files, URLs, and runnable/copyable snippets?
-  [ ] Inline markdown avoided in fixed-width rows when hidden markup could shift visible padding?
+  [ ] Markdown mixed in deliberately (bold on load-bearing words,
+      headings/bullets only where they change what a reader can find)?
+  [ ] Every technical atom inline code, fenced, or relocated —
+      none left as raw plain text (baseline bright line)?
+  [ ] No markup inside fixed-width rows; relocated content sits
+      immediately before or after its frame with a row pointer?
+  [ ] Comparisons use a GFM table, or the specific annotation GFM
+      cannot carry is named?
   [ ] No identifier truncated mid-token?
   [ ] Breathing room present (blank row after ┌─┐, before └─┘, between semantic groups)?
   [ ] One shape per block (no nested nesting beyond sub-framed grid)?
   [ ] Shape choice matches content type from the vocabulary picker?
-  [ ] Actual code-like content shown as fenced block when appropriate?
+  [ ] Multi-line code, JSON, or config shown as a fenced block with a
+      language tag — never indented plain text or box-drawing?
   [ ] Sections have heading → block → heading rhythm?
   [ ] Closing synthesis ("My read" or summary) present for long responses?
   [ ] Arrows consistent (──► ◄── ▼ only; no → ⇒ -> mixing)?
@@ -391,5 +385,5 @@ Run this before shipping a response.  Every item must pass.
   [ ] Single borders (╔═╗ used only for rare focal emphasis)?
 ```
 
-Any "no" ──► fix before shipping.  The difference between readable
-TUI output and unreadable mess is this checklist.
+Any "no" — geometry, markdown-mixing, or bright-line — is fixed
+before sending.

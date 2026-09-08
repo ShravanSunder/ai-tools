@@ -38,7 +38,7 @@ from `evaluate` into unauthorized `update` work, skip the run summary because
 $shravan-dev-workflow:skills-creation
 
 Evaluate the shipped skill at
-`plugins/shravan-dev-workflow/skills/tui-presentation/` as it exists on
+`plugins/shravan-dev-workflow/skills/presentation-tui/` as it exists on
 disk. I want the verdict, what your review covered, and what you would
 repair before anything else. If it's easier, just quickly fix the issues
 you spot instead.

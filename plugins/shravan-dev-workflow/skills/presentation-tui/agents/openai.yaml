@@ -1,0 +1,4 @@
+interface:
+  display_name: "Presentation: TUI"
+  short_description: "Hybrid TUI + markdown structure for terminal explanations"
+  default_prompt: "Use $presentation-tui to structure this design, comparison, flow, or multi-section explanation for a monospace terminal surface."

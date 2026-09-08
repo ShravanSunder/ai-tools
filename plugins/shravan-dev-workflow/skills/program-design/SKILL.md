@@ -259,7 +259,7 @@ Completion: one independent review is ready, or its accepted findings have one c
 
 Return the distinct Requirements, Specification, and Program Design identities; confirmed goal boundary and accepted requirements set; current-system, constraint, platform, and external source identities with current applicability; structural, call-path-delta, and requirement-realization maps; structural-realization confirmation; self-check; independent review; debt/gaps; and non-acceptance.
 
-IF returning a substantial program design in chat, use `tui-presentation` to render the selected component, call, state, or failure views before the compact result summary. The durable artifact remains the source of truth.
+IF returning a substantial program design in chat, use the `presentation-*` skill matching the current surface to render the selected component, call, state, or failure views before the compact result summary; honor an exact user-requested format instead. The durable artifact remains the source of truth.
 
 Completion: the caller can request three-artifact design review through `spec-program-review` or supply the exact missing specification decision/evidence.
 

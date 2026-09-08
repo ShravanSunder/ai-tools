@@ -1,0 +1,4 @@
+interface:
+  display_name: "Presentation: Web UI"
+  short_description: "Markdown-first structure for rendered chat surfaces"
+  default_prompt: "Use $presentation-webui to structure this design, comparison, flow, or multi-section explanation for a rendered proportional-font chat surface."

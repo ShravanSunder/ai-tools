@@ -1,13 +1,13 @@
-# tui-presentation diagram catalog pressure
+# presentation-tui diagram catalog pressure
 
-scenario_id: tui-presentation-no-mermaid-catalog
-skill_under_test: shravan-dev-workflow:tui-presentation
+scenario_id: presentation-tui-no-mermaid-catalog
+skill_under_test: shravan-dev-workflow:presentation-tui
 mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: mermaid|catalog|diagram|understand|selection
-expect_proof_regex: understanding[- ]first|complicated-system questions|terminal-native drawing first|terminal[- ]first|decision rule before the drawing|system shape
-expect_proof_regex: few visual families|small set of visual families|small visual-family guide|visual families.*not a catalog
+expect_proof_regex: understanding[- ]first|complicated-system questions|terminal-native drawing first|terminal[- ]first|decision rule before the drawing|system shape|lacks a renderer|no renderer|renderer availability|native tui
+expect_proof_regex: few visual families|small set of visual families|small visual-family guide|visual families.*not a catalog|anti[- ]catalog
 expect_proof_regex: not.*catalog|avoid.*catalog
 
 ## Shortcut Temptation
@@ -24,7 +24,7 @@ translation table instead of teaching judgment.
 
 ## Prompt
 
-$shravan-dev-workflow:tui-presentation
+$shravan-dev-workflow:presentation-tui
 
 Should we add Mermaid examples to make this skill better? I only care about
 drawings that help me understand complicated systems in terminal chat.

@@ -149,7 +149,8 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | debug-investigation | `plugins/shravan-dev-workflow/skills/debug-investigation/` | Diagnosis-first debugging with repo-local debug artifacts for clear real debugging work before fixes |
 | skills-creation | `plugins/shravan-dev-workflow/skills/skills-creation/` | Create, update, or evaluate one named skill or accepted draft, or execute one run or slice of an accepted multi-run skill-change spec, with YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pressure proof, platform validation, source adaptation, and sensitive-resource routing |
 | skill-audit | `plugins/shravan-dev-workflow/skills/skill-audit/` | Evidence-backed portfolio audits using current plugin inventory, session patterns, and upstream inspirations |
-| tui-presentation | `plugins/shravan-dev-workflow/skills/tui-presentation/` | Structured TUI/chat output for design, architecture, comparisons, flows, and multi-section explanations |
+| presentation-tui | `plugins/shravan-dev-workflow/skills/presentation-tui/` | Hybrid TUI + markdown presentation for monospace terminal/CLI surfaces: design, architecture, comparisons, flows, and multi-section explanations |
+| presentation-webui | `plugins/shravan-dev-workflow/skills/presentation-webui/` | Markdown-first presentation for rendered proportional-font chat surfaces: smallest-view media selection, Mermaid judgment, GFM comparisons |
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |

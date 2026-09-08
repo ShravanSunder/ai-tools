@@ -76,7 +76,7 @@ describe("user requirements and design-view contracts", () => {
       programDesign.indexOf("MUST load `references/artifact-and-self-review.md`"),
     );
     expect(sharedReference).toContain(
-      "selected medium: mermaid | markdown-table | tui-presentation | fenced-plain-text",
+      "selected medium: mermaid | markdown-table | presentation-tui | fenced-plain-text",
     );
     expect(sharedReference).toContain("format override: honored");
     expect(sharedReference).toContain("semantic preservation:");
