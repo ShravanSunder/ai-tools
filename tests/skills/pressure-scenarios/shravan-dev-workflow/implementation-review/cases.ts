@@ -109,7 +109,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composes-a-coordinated-route",
-        requirement: "The coordinator reads the complete governing basis and diff itself, then composes the route: review class, chunk plan with complete files and overlap seams, spec-compliance sequenced before chunk reviewers and dispel after chunk receipts are terminal, each lane with a named predicate, resolved through manage-agents as fresh-context read-only Delegates, covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, the riskiest assumption, and uncovered boundary while parent reduction remains authoritative.",
+        requirement: "The coordinator reads the complete governing fixture set itself and states that the base-to-reviewed diff (not supplied in this run) must be read whole before composing, then composes the route: review class, chunk plan with complete files and overlap seams, spec-compliance sequenced before chunk reviewers and dispel after chunk receipts are terminal, each lane with a named predicate, resolved through manage-agents as fresh-context read-only Delegates, covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, the riskiest assumption, and uncovered boundary while parent reduction remains authoritative.",
         failureExample: "Dispatches a fixed roster or unstructured swarm, hands reviewers diff hunks, omits source trace, or lets a reviewer accept findings.",
       },
     ],
@@ -357,8 +357,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "no-reading-inventories",
-        requirement: "Enforces the read rule without digests, hashes, line counts, or chunk-range reports; findings carry only supporting source anchors.",
-        failureExample: "Adds a reading receipt or line-count ledger as proof of reading.",
+        requirement: "Enforces the read rule through whole-file obligation coverage rows (which are the required accounting, not a reading inventory) and without digests, hashes, line counts, chunk-range reports, or per-file read attestations; findings carry only supporting source anchors.",
+        failureExample: "Adds a reading receipt, digest, or line-count ledger as proof of reading, or treats coverage rows themselves as forbidden.",
       },
     ],
   },

@@ -16,7 +16,7 @@ The reviewed diff changes 40 lines across two hunks in `core/scheduler.ts`, a 1,
 
 - Refuses hunk-plus-context reading: every assigned file is read whole before substantive findings, because the changed lines' obligations depend on unchanged regions of the same file.
 - Requires coverage rows that anchor across the whole file — including unchanged regions the obligation depends on — which cannot be written from hunk reading.
-- Does not compensate with a reading inventory: no digests, hashes, line counts, or chunk-range reports; findings carry only the source anchors that support them.
+- Does not compensate with a reading inventory: no digests, hashes, line counts, chunk-range reports, or per-file read attestations. Whole-file coverage rows are the required obligation accounting, not an inventory; findings carry only the source anchors that support them.
 - May bound cost through the chunk plan (fewer files per chunk), never through partial reads.
 
 ## Failure Signals
