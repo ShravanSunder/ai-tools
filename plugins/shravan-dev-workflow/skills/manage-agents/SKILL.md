@@ -150,8 +150,9 @@ Persistent sessions ride provider prompt caches: a warm session makes each resum
 
 Use native dispatch for the parent host's own model lineage when the selected model is available.
 
-- Codex spawning OpenAI models: load `references/native-providers-codex.md`.
-- Claude spawning Claude models: use the host-native agent contract.
+- Codex spawning OpenAI models: load `references/native-providers-codex.md`. Reviewers spawn with `fork_turns="none"`.
+- Claude spawning Claude models: use the host-native agent contract. Reviewers spawn as a fresh agent, never a resumed or forked parent turn.
+- Cursor spawning any model: reviewers spawn as a new subagent with no `resume`; `resume: "self"` is a fork of the parent and is never used for review.
 - Use the exact model id and reasoning control supported by the native runtime.
 
 When an own-lineage model is unavailable, choose a declared native fallback or report the route as degraded or blocked.
