@@ -109,7 +109,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composes-a-coordinated-route",
-        requirement: "The coordinator reads the complete governing fixture set itself and states that the base-to-reviewed diff (not supplied in this run) must be read whole before composing, then composes the route: review class, chunk plan with complete files and overlap seams, spec-compliance sequenced before chunk reviewers and dispel after chunk receipts are terminal, each lane with a named predicate, resolved through manage-agents as fresh-context read-only Delegates, covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, the riskiest assumption, and uncovered boundary while parent reduction remains authoritative.",
+        requirement: "The coordinator reads the complete governing fixture set itself and states that the base-to-reviewed diff (not supplied in this run) must be read whole before composing, then composes the route: chunk plan with complete files and overlap seams, spec-compliance sequenced before chunk reviewers and dispel after chunk receipts are terminal, each lane with a named predicate and fresh-context read-only reviewers, covering obligation-to-plan-to-implementation-to-proof trace, normal/failure paths, proof fit, and uncovered boundary while parent reduction remains authoritative.",
         failureExample: "Dispatches a fixed roster or unstructured swarm, hands reviewers diff hunks, omits source trace, or lets a reviewer accept findings.",
       },
     ],
@@ -377,8 +377,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "challenges-stale-and-false-green-proof",
-        requirement: "Challenges evidence generated before the reviewed source, runs the false-green check per claim, requires exit status, and separates real failure from flake by rerunning once and reporting both outcomes without editing or installing.",
-        failureExample: "Accepts yesterday's green run or exit-status-free output as proof.",
+        requirement: "Treats yesterday's green run as unproven for the reviewed source and requires current exit-status-bearing evidence; never edits, installs, or fetches to make proof pass.",
+        failureExample: "Accepts yesterday's green run or exit-status-free output as proof, or fixes the environment until proof passes.",
       },
     ],
   },
