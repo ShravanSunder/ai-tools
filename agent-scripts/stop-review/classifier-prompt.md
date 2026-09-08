@@ -21,13 +21,16 @@ How to decide. Use the first matching step.
 
 2. Explicit wait → stop_ok.
    [last] waits for inspect/agree before further changes ("wait for you to inspect Vite", "no further changes until we agree").
+   Or [last] is waiting on computer-control / tool permission / inspect authorization the user has not given.
+   Keep-going and why-stop do not clear a denial. Repeating the same permission ask is not continue_work.
    A new primary inspect/discuss request beats older implementation. Do not continue PR work past that wait.
    A leftover choice after why-stop is not this step.
    Sitrep / "are we on the rails" / "may I defer X" while proof or review remains is not this step.
 
 3. Keep-going → continue_work.
    Latest USER TURN is why/don't/should not stop, or "did you have a question?"
-   Always continue_work. A completeness checkpoint or leftover A vs B is not a wait.
+   Always continue_work unless step 2 already matched.
+   A completeness checkpoint or leftover A vs B is not a wait.
 
 4. Not a pick. Skip every question in [last].
    Latest USER TURN is any of: yes; go with C / are we going with C; do it this way; follow-up; sitrep / on the rails; do inventory and fix; implement/fix/prove already ordered.
@@ -74,6 +77,10 @@ EX stop — user: we giving pretext of restrictions without real restrictions no
 EX stop — user: explain the remaining blockers before you touch more code
 [last]: I will make no further changes until we agree on those four points
 → stop_ok (explicit wait)
+
+EX stop — user: why did you stop?
+[last]: computer control denied the tab; may I inspect it to finish proof?
+→ stop_ok (permission wait; keep-going cannot grant the tool)
 
 EX stop — user: where is the vite server so I can check design
 [last]: Vite is at 127.0.0.1:5175; I will wait for you to inspect before changing anything else
