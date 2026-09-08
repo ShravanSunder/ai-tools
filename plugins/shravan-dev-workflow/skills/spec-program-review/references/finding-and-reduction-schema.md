@@ -115,6 +115,6 @@ Produce exactly one result:
 
 When states mix, apply precedence `blocked -> needs-revision -> decision-needed -> ready`.
 
-After the one permitted remediation, the parent records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. An incomplete, expanded, or uncertain correction stops for explicit permission to begin another bounded review.
+After each permitted correction round, the parent records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. After normal round one, return a concrete source-backed substantive residual to the second-round admission policy in `SKILL.md`; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. A third normal review requires explicit user permission after the second result is visible. The one-time recovery exception remains separate and adds no normal correction allowance.
 
 Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the result cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.

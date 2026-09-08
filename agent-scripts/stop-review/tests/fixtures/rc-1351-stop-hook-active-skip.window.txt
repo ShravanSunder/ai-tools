@@ -1,0 +1,14 @@
+Read first:
+
+LATEST USER TURN
+other than that it seesm we good right?
+
+[last] I’m switching to execution. PR1 checkpoint: the comment UI is still unfinished. I’m checking the overlay lifecycle next and will keep implementing.
+
+Earlier turns follow for context.
+USER TURN 1
+implement PR1 comment UI and prove the overlay lifecycle
+
+ASSISTANT TURN 1 (2 messages, last privileged)
+[earlier] Yes. The presentation behavior is now coherent and decision-complete. [diagram]
+[last] I’m switching to execution. PR1 checkpoint: the comment UI is still unfinished. I’m checking the overlay lifecycle next and will keep implementing.

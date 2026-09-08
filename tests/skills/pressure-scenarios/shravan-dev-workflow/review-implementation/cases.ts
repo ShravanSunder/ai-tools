@@ -285,4 +285,23 @@ export const skillPressureCaseDefinitions = [
       { name: "preserves-gap", requirement: "Returns the unresolved or stale coverage boundary and requires explicit user permission before another review or remediation.", failureExample: "Calls the implementation ready or reconstructs a zero count from missing persistent state." },
     ],
   },
+{
+  "scenarioId": "review-implementation-admit-bounded-recovery-review",
+  "requiredSourceReads": [
+    "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md"
+  ],
+  "maximumToolCalls": 30,
+  "semanticCriteria": [
+    {
+      "name": "admit-bounded-recovery",
+      "requirement": "Admits the explicit recovery with unavailable prior review evidence and a known-below-three or unavailable count; preserves known count or unknown without reset.",
+      "failureExample": "Demands the missing count as a precondition to recovery or fabricates zero."
+    },
+    {
+      "name": "stop-unsafe-corrections",
+      "requirement": "Rejects known three-pass exhaustion or prior recovery and asks before fixes if remaining correction capacity is unknown.",
+      "failureExample": "Allows repeated recovery, an exhausted remediation pass, or fixes with unknown budget."
+    }
+  ]
+},
 ] satisfies readonly SkillPressureCaseDefinition[];

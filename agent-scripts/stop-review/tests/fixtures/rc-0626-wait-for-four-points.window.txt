@@ -1,0 +1,13 @@
+Read first:
+
+LATEST USER TURN
+explain the remaining blockers before you touch more code
+
+[last] I will make no further changes until we agree on those four points.
+
+Earlier turns follow for context.
+USER TURN 1
+explain the remaining blockers before you touch more code
+
+ASSISTANT TURN 1 (1 messages, last privileged)
+[last] I will make no further changes until we agree on those four points.

@@ -6,43 +6,21 @@ This repository contains personal Codex and Claude Code plugins plus the Agent S
 
 **Purpose**: AI development tools distributed through local plugin marketplaces, plus isolated Docker environments for AI agents.
 
-## Repository Variants
-
-This repo has two variants maintained separately:
-
-- `~/dev/ai-tools` -- Personal projects (this repo, public)
-
-Work repos should use `relay-ai-tools`. Personal repos should use `ai-tools`.
-
-### Differences Between Variants
-
-| Feature | ai-tools (personal) | relay-ai-tools (work) |
-|---------|---------------------|----------------------|
-| Firewall presets | github-write, notion, linear | github-write, notion, jira, slack |
-| OpenCode support | Yes (`--run-opencode`) | No (removed) |
-| Agent CLIs | Claude, Codex, Gemini, OpenCode, Cursor | Claude, Codex, Gemini, Cursor |
-
-### Keeping Variants in Sync
-
-The repos are maintained separately. When making changes to shared sidecar functionality (scripts, dockerfiles, firewall logic), sync the changes to the other variant:
-
-- Copy updated files manually, or set up git remotes
-- The `agent_sidecar/` directory is the primary sync target
-- Plugin-related files (`plugins/`, `.claude-plugin/`) are NOT synced (personal-only)
-
 ## Repository Structure
 
 ```
 ai-tools/
 ├── .agents/plugins/marketplace.json  # Codex plugin marketplace manifest
 ├── .claude-plugin/marketplace.json   # Claude Code plugin marketplace manifest
+├── .cursor-plugin/marketplace.json   # Cursor plugin marketplace manifest
 ├── plugins/                          # Plugin sources
 │   ├── ai-scaffold/                  # Project scaffolding (biome, ruff, vitest, pytest)
 │   ├── dev-workflow-tools/           # Common tool skills, including Peekaboo UI testing
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent-scripts/                    # Host agent scripts (not plugin skills)
-│   └── stop-review/                  # Luna Stop-review; isolated ~/.codex-reviewer exec
+│   ├── stop-review/                  # Luna Stop-review; isolated ~/.codex-reviewer exec
+│   └── lint-changed/                 # Changed-file lint/format Stop hook; nested Stop fails open
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
 │   ├── sidecar-ctl.sh                # Host-side firewall control
@@ -133,8 +111,9 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | discuss-pathfinding | `plugins/shravan-dev-workflow/skills/discuss-pathfinding/` | Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/glossary records as they crystallize |
 | research-swarm | `plugins/shravan-dev-workflow/skills/research-swarm/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with bounded lanes and tmp research ledgers |
 | manage-agents | `plugins/shravan-dev-workflow/skills/manage-agents/` | Choose and manage advisors, sidekicks, delegates, operators, subagents, and their allowed swarms across Frontier/Balanced/Mini models, native runtimes, ACPX usage, and ACP adapter boundaries |
-| orchestrator-goal | `plugins/shravan-dev-workflow/skills/orchestrator-goal/` | Thin general-domain long-horizon router: reconstruct the first unproven gate, invoke one phase owner, verify its receipt, and stop at PR-ready unmerged by default without phase judgment or lifecycle ledgers |
-| orchestrator-design | `plugins/shravan-dev-workflow/skills/orchestrator-design/` | Guarded routing and temporary record keeping for one bounded specification, program-design, and critically validated three-artifact design review cycle; no semantic design decisions or planning/implementation |
+| orchestrator-implementation-goal | `plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/` | Coordinate planning, implementation/proof, independent review, corrections, and the requested delivery boundary |
+| track-show-me-your-work | `plugins/shravan-dev-workflow/skills/track-show-me-your-work/` | Keep a centralized append-only work trail with linked detail and readable end views |
+| orchestrator-design | `plugins/shravan-dev-workflow/skills/orchestrator-design/` | Coordinate Requirements, Specification, Program Design, and independent review to a coherent reviewed design; record meaningful decisions through the work trail |
 | docs-maintain | `plugins/shravan-dev-workflow/skills/docs-maintain/` | Maintain durable docs and classify existing specs/plans/debug artifacts for cleanup, archival, or promotion after phase skills create them |
 | spec-handoff | `plugins/shravan-dev-workflow/skills/spec-handoff/` | Portable spec/design context packets before an implementation plan exists |
 | plan-implementation | `plugins/shravan-dev-workflow/skills/plan-implementation/` | Translate one current ready Requirements/Specification/Program Design set into one repo-grounded proof-bearing plan |
@@ -155,7 +134,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
 
-Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance and never become runtime entrypoints. The active `orchestrator-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of the retired goal controller, planning swarm, execution controller, or review swarm. The current runtime surface is exactly the active skills enumerated above.
+Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance and never become runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of the retired goal controller, planning swarm, execution controller, or review swarm. The current runtime surface is exactly the active skills enumerated above.
 
 Sync rule: when role behavior changes, update the Claude agent AND the matching Codex role TOML / instruction doc in the same changeset.
 
@@ -187,7 +166,7 @@ Use the changelog system as the durable release memory:
 3. Add references, scripts, or README files inside that skill directory as needed.
 4. Bump the owning plugin version.
 5. Update `.agents/plugins/marketplace.json` for Codex availability when adding a new plugin.
-6. Update `.claude-plugin/marketplace.json` and add `.claude-plugin/plugin.json` only if Claude Code should load the same plugin.
+6. Update `.claude-plugin/marketplace.json` and add `.claude-plugin/plugin.json` only if Claude Code should load the same plugin. Add `.cursor-plugin/` manifests if Cursor should load it.
 
 ### Skill Authoring Discipline
 
@@ -218,6 +197,7 @@ Plugins are distributed through both marketplace manifests when they support bot
 
 - Codex: `.agents/plugins/marketplace.json`
 - Claude Code: `.claude-plugin/marketplace.json`
+- Cursor: `.cursor-plugin/marketplace.json`
 
 ```bash
 # Validate Claude marketplace manifest
@@ -235,6 +215,7 @@ Each plugin lives under `plugins/` and follows the standard Claude Code plugin l
 plugins/<plugin-name>/
 ├── .codex-plugin/plugin.json     # Codex plugin manifest (when supported)
 ├── .claude-plugin/plugin.json    # Plugin manifest (name, version, description)
+├── .cursor-plugin/plugin.json    # Cursor plugin manifest (when supported)
 ├── commands/                     # Slash commands (*.md files)
 ├── agents/                       # Agent definitions (*.md with YAML frontmatter)
 ├── skills/                       # Skills (subdirs with SKILL.md)
@@ -263,7 +244,7 @@ plugins/<plugin-name>/
 
 ### Adding a New Plugin
 
-1. Create `plugins/<name>/` with `.codex-plugin/plugin.json` for Codex and `.claude-plugin/plugin.json` for Claude Code if needed
+1. Create `plugins/<name>/` with `.codex-plugin/plugin.json` for Codex, `.claude-plugin/plugin.json` for Claude Code, and `.cursor-plugin/plugin.json` for Cursor if needed
 2. Add commands, agents, skills, or hooks as needed
 3. Add an entry to the matching marketplace manifest
 4. Add a `README.md` in the plugin directory

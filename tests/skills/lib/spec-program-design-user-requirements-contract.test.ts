@@ -167,7 +167,8 @@ describe("user requirements and design-view contracts", () => {
     );
     expect(specDesign).toContain("tmp/design-workflows/<date>-<slug>/");
     expect(specDesign).toContain("returned workflow state");
-    expect(specDesign).toContain("parent-verified non-semantic edits may retain coverage");
+    expect(specDesign).toContain("spec-program-review`'s bounded review-and-correction-round policy");
+    expect(readPluginFile("skills/spec-program-review/SKILL.md")).toContain("parent-verified non-semantic edits preserve coverage");
     expect(specDesign).not.toContain("Any later artifact edit makes");
     expect(artifact).toContain("Human Deletion Test");
     expect(artifact).toContain("smallest Why/What model");
@@ -246,7 +247,8 @@ describe("user requirements and design-view contracts", () => {
       "accepted-requirements coverage is intact",
     );
     expect(programDesign).toContain("tmp/design-workflows/<date>-<slug>/");
-    expect(programDesign).toContain("parent-verified non-semantic edits may retain coverage");
+    expect(programDesign).toContain("spec-program-review`'s bounded review-and-correction-round policy");
+    expect(readPluginFile("skills/spec-program-review/SKILL.md")).toContain("parent-verified non-semantic edits preserve coverage");
     expect(programDesign).not.toContain("Any later edit to either artifact makes");
     expect(artifact).toContain("human deletion test");
     expect(artifact).toContain("Architecture documentation impact");

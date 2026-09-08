@@ -8,12 +8,19 @@ import type {
 export interface AcpxAgentRunRequest {
   readonly namePrefix: string;
   readonly prompt: string;
+  /** Scripted operator turns sent to the same session after the first response. */
+  readonly followUpPrompts?: readonly string[];
   readonly signal?: AbortSignal;
   readonly setup: AcpxCodexAgentSetup;
 }
 
 export interface AcpxAgentRunResult {
+  /** The last turn's assistant text; identical to the only turn in single-turn runs. */
   readonly finalText: string;
+  /** Assistant text per turn, in conversation order. */
+  readonly turnTexts: readonly string[];
+  /** Logical final messages grouped by explicit request, when available. */
+  readonly turnMessageTexts?: readonly (readonly string[])[];
   readonly rawEvents: string;
   readonly stderr: string;
 }
@@ -64,7 +71,6 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
           "sessions",
           "new",
           "--name",
@@ -78,10 +84,9 @@ export function createAcpxCodexAgentRunner(
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
+          "set",
           "-s",
           sessionName,
-          "set",
           "reasoning_effort",
           request.setup.reasoningEffort,
         ],
@@ -90,34 +95,57 @@ export function createAcpxCodexAgentRunner(
         environment,
         ...(request.signal === undefined ? {} : { signal: request.signal }),
       });
-      const promptResult = await processRunner({
-        args: [
-          ...baseArguments,
-          "--format",
-          "json",
-          "--json-strict",
-          "codex",
-          "-s",
-          sessionName,
-          "--file",
-          "-",
-        ],
-        cwd: props.repoRoot,
-        stdin: request.prompt,
-        environment,
-        ...(request.signal === undefined ? {} : { signal: request.signal }),
-      });
+      const turnPrompts = [request.prompt, ...(request.followUpPrompts ?? [])];
+      const turnTexts: string[] = [];
+      const turnMessageTexts: Array<readonly string[]> = [];
+      const rawEventChunks: string[] = [];
+      const stderrChunks: string[] = [];
+      for (const turnPrompt of turnPrompts) {
+        const promptResult = await processRunner({
+          args: [
+            ...baseArguments,
+            "--format",
+            "json",
+            "--json-strict",
+            "prompt",
+            "-s",
+            sessionName,
+            "--file",
+            "-",
+          ],
+          cwd: props.repoRoot,
+          stdin: turnPrompt,
+          environment,
+          ...(request.signal === undefined ? {} : { signal: request.signal }),
+        });
+        const responseMessages = extractAcpxAssistantMessages(
+          promptResult.stdout,
+        );
+        const turnText = responseMessages.at(-1);
+        if (turnText === undefined || !turnText) {
+          throw new Error("ACPX Codex run returned no assistant response.");
+        }
+        turnTexts.push(turnText);
+        turnMessageTexts.push(responseMessages);
+        rawEventChunks.push(promptResult.stdout);
+        stderrChunks.push(promptResult.stderr);
+      }
 
+      const finalText = turnTexts.at(-1);
+      if (finalText === undefined) {
+        throw new Error("ACPX Codex run produced no turns.");
+      }
       return {
-        finalText: extractAcpxAssistantText(promptResult.stdout),
-        rawEvents: promptResult.stdout,
-        stderr: promptResult.stderr,
+        finalText,
+        turnTexts,
+        turnMessageTexts,
+        rawEvents: rawEventChunks.join("\n"),
+        stderr: stderrChunks.join("\n"),
       };
     } finally {
       await processRunner({
         args: [
           ...baseArguments,
-          "codex",
           "sessions",
           "close",
           sessionName,
@@ -142,9 +170,16 @@ function createAcpxProcessEnvironment(
   delete environment["MODEL_PROVIDER"];
   delete environment["CODEX_PATH"];
 
-  if (adapterConfiguration.config !== undefined) {
-    environment["CODEX_CONFIG"] = JSON.stringify(adapterConfiguration.config);
-  }
+  environment["INITIAL_AGENT_MODE"] = "read-only";
+  environment["CODEX_CONFIG"] = JSON.stringify({
+    ...adapterConfiguration.config,
+    // Personal lifecycle prompts are not part of the scenario or judge input.
+    features: {
+      ...readRecord(adapterConfiguration.config?.["features"]),
+      hooks: false,
+    },
+    approvals_reviewer: "user",
+  });
   if (adapterConfiguration.modelProvider !== undefined) {
     environment["MODEL_PROVIDER"] = adapterConfiguration.modelProvider;
   }
@@ -165,6 +200,9 @@ export function buildAcpxBaseArguments(props: {
       : ["--allowed-tools", props.setup.allowedTools];
 
   return [
+    // 1.10.0 maps its read-only preset to workspaceWrite; pin the verified sandbox.
+    "--agent",
+    "npx -y @agentclientprotocol/codex-acp@1.6.2",
     "--cwd",
     props.repoRoot,
     "--model",
@@ -180,7 +218,18 @@ export function buildAcpxBaseArguments(props: {
 }
 
 export function extractAcpxAssistantText(rawEvents: string): string {
-  const textChunks: string[] = [];
+  const finalText = extractAcpxAssistantMessages(rawEvents).at(-1);
+  if (finalText === undefined || !finalText) {
+    throw new Error("ACPX Codex run returned no assistant response.");
+  }
+  return finalText;
+}
+
+export function extractAcpxAssistantMessages(
+  rawEvents: string,
+): readonly string[] {
+  const legacyTextChunks: string[] = [];
+  const textChunksByMessageId = new Map<string, string[]>();
   for (const line of rawEvents.split(/\r?\n/)) {
     const event = parseJsonRecord(line);
     const params = readRecord(event?.["params"]);
@@ -195,15 +244,30 @@ export function extractAcpxAssistantText(rawEvents: string): string {
       content?.["type"] === "text" &&
       typeof content["text"] === "string"
     ) {
-      textChunks.push(content["text"]);
+      const messageId = update["messageId"];
+      if (typeof messageId === "string" && messageId.length > 0) {
+        const messageChunks = textChunksByMessageId.get(messageId);
+        if (messageChunks === undefined) {
+          textChunksByMessageId.set(messageId, [content["text"]]);
+        } else {
+          messageChunks.push(content["text"]);
+        }
+      } else {
+        legacyTextChunks.push(content["text"]);
+      }
     }
   }
 
-  const finalText = textChunks.join("").trim();
-  if (!finalText) {
+  const finalMessages =
+    textChunksByMessageId.size === 0
+      ? [legacyTextChunks.join("").trim()]
+      : [...textChunksByMessageId.values()].map((chunks) =>
+          chunks.join("").trim(),
+        );
+  if (finalMessages.length === 0 || !finalMessages.at(-1)) {
     throw new Error("ACPX Codex run returned no assistant response.");
   }
-  return finalText;
+  return finalMessages;
 }
 
 async function runAcpxProcess(
@@ -232,7 +296,7 @@ async function runAcpxProcess(
       }
       reject(
         new Error(
-          `ACPX exited with code ${exitCode ?? "unknown"}: ${stderr.trim()}`,
+          `ACPX exited with code ${exitCode ?? "unknown"}: stderr=${JSON.stringify(stderr.slice(-4_000))}; stdout=${JSON.stringify(stdout.slice(-4_000))}`,
         ),
       );
     });

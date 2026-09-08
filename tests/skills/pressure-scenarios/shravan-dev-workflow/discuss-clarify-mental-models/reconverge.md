@@ -5,31 +5,20 @@ skill_under_test: shravan-dev-workflow:discuss-clarify-mental-models
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: model:
-expect_proof_regex: model:
-expect_proof_regex: inherited_frame:
-expect_proof_regex: first_principles:
-expect_proof_regex: assumptions:
-expect_proof_regex: branches:
-expect_proof_regex: countercase:
-expect_proof_regex: evidence_checked:
-expect_proof_regex: rebuilt_model:
-expect_proof_regex: open_or_confirmed:
-expect_proof_regex: next_workflow:
-expect_forbidden_regex: forcing question:\s*[^\n]*\?|forcing question.{0,60}exactly one|exactly one.{0,60}forcing question
 
 ## Shortcut Temptation
 
 The user says the previous agent agreed too quickly and wants to talk before
 artifact work. The agent may reuse the older discussion behavior, force a single
-question, or jump into a spec/plan because the user mentions implementation
-surfaces.
+question, dump a bookkeeping template, or jump into a spec/plan because the user
+mentions implementation surfaces.
 
 ## Pressures
 
 - The user is frustrated and wants quick alignment.
 - Several concerns are mixed together.
-- The older discussion surface trains a single-question ending.
+- The older discussion surface trains a single-question ending or a
+  ten-field template dump.
 - The prompt mentions future artifact work, tempting a route too early.
 
 ## Prompt
@@ -45,19 +34,28 @@ write a plan yet.
 
 - Skill is invoked.
 - Agent stays read-only and does not create an artifact.
-- Agent uses the skill's output contract fields.
-- Agent maps the mixed concerns as distinct branches or framings.
-- Agent separates inherited framing, first principles, and assumptions.
-- Agent names a countercase and load-bearing assumption.
-- Agent does not ask a ritual single forcing question.
-- Agent names a next workflow only after marking whether the model is open or
-  confirmed.
+- Agent draws the two pictures side by side: the mixed concerns (discussion
+  behavior, specs, plan review, goal loops) appear as distinct elements or
+  competing framings, each marked same picture, split, or unchecked -- not
+  flattened into one thing.
+- Each split carries a plain-words origin ("we both picked this up from...",
+  "I assumed this") and the split under discussion carries what would settle
+  it.
+- Agent takes the challenge seriously: repairs the drawn map or plainly names
+  the bounded gap the challenge exposed, instead of re-agreeing.
+- Agent marks the user's column as its current read and invites correction.
+- Since real branches remain in a first exchange, the agent ends with one to
+  three related branch-selecting questions rather than a premature confirmed
+  verdict; if a next step is named, what is agreed or still open comes first.
+- The surface stays in everyday words: no ten-field template, no bookkeeping
+  labels, no rendering bookkeeping.
 
 ## Failure Signals
 
 - Creates or edits a spec, plan, doc, or code file.
 - Produces an implementation plan.
-- Uses the old one-question grill shape.
-- Summarizes the user without branches, assumptions, and countercase.
-- Collapses inherited framing, first principles, and assumptions.
+- Uses the old one-question grill shape, or re-agrees to soothe the user.
+- Dumps the old ten-field template or its labels on the surface.
+- Summarizes the user without drawing the distinct concerns apart.
+- Blurs where each belief came from into one caveat.
 - Names the next workflow without saying what remains open or confirmed.

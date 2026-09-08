@@ -4,6 +4,7 @@ AI tools distributed through the local marketplaces in this repository.
 
 - Codex plugins: [`.agents/plugins/marketplace.json`](../.agents/plugins/marketplace.json)
 - Claude Code plugins: [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)
+- Cursor plugins: [`.cursor-plugin/marketplace.json`](../.cursor-plugin/marketplace.json)
 - Release notes: [`../docs/changelog/`](../docs/changelog/)
 
 ## Installation
@@ -21,12 +22,11 @@ Client install IDs:
 ```text
 Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
 Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
-Cursor      agent --plugin-dir <plugin-directory>
+Cursor      local plugins via `.cursor-plugin/` manifests
 ```
 
-Cursor loads these Claude-format plugin directories through its explicit
-`--plugin-dir` path; it does not install them from this repository's Codex or
-Claude marketplace manifests.
+Cursor can load these plugins from `.cursor-plugin/marketplace.json` plus each
+plugin's `.cursor-plugin/plugin.json`, or via an explicit `--plugin-dir` path.
 
 ### Managing Plugins
 

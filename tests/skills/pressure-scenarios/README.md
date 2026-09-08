@@ -149,21 +149,21 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `review-implementation` | `review-implementation-preserve-read-only-authority` | Keep reviewer and workflow authority read-only, candidate-only, and outside remediation or PR lifecycle work. |
 | `review-implementation` | `review-implementation-runtime-skill-package-route` | Route runtime skill-package review to `skills-creation`, not through product implementation review. |
 | `review-implementation` | `review-implementation-stops-before-fourth-remediation` | Stop after implementation remediation three instead of dispatching review or remediation four. |
-| `orchestrator-goal` | `orchestrator-goal-start-at-design` | Route a fresh long-horizon goal to the bounded design owner without creating lifecycle state. |
-| `orchestrator-goal` | `orchestrator-goal-route-ready-design-to-planning` | Route current ready reviewed design to `plan-implementation` without fabricating a plan. |
-| `orchestrator-goal` | `orchestrator-goal-continue-ready-plan-without-approval` | Continue an exact ready PR-delivery plan to implementation without a generic approval checkpoint. |
-| `orchestrator-goal` | `orchestrator-goal-route-proof-to-review` | Route implementation proof without current independent review to `review-implementation`. |
-| `orchestrator-goal` | `orchestrator-goal-route-review-finding` | Preserve cause-based correction ownership and require fresh affected review. |
-| `orchestrator-goal` | `orchestrator-goal-route-ready-implementation-to-pr` | Route ready implementation to `implementation-pr-wrapup` and require its fresh receipt. |
-| `orchestrator-goal` | `orchestrator-goal-bypass-direct-phase` | Let an explicit one-phase request bypass long-horizon orchestration. |
-| `orchestrator-goal` | `orchestrator-goal-optional-tracking-projection` | Keep optional ops tracking a projection of the canonical plan, never gate authority. |
-| `orchestrator-goal` | `orchestrator-goal-respect-narrow-terminal` | Honor an explicit narrower terminal without claiming or running later gates. |
-| `orchestrator-goal` | `orchestrator-goal-default-pr-ready-no-merge` | Default to fresh PR readiness while keeping merge separately authorized. |
-| `orchestrator-goal` | `orchestrator-goal-reject-producer-incomplete-results` | Open current producer contracts and reject generic-floor results missing owner-required fields. |
-| `orchestrator-goal` | `orchestrator-goal-reject-stale-phase-evidence` | Reject stale status and reconstruct from the earliest affected phase-owned gate. |
-| `orchestrator-goal` | `orchestrator-goal-runtime-skill-package-route` | Route runtime skill-package goals to `skills-creation` without bypassing authoring review. |
-| `orchestrator-goal` | `orchestrator-goal-runtime-skill-package-composed` | Validate the existing accepted multi-run commission before allowing one named child phase. |
-| `orchestrator-goal` | `orchestrator-goal-reject-invalid-composition-commission` | Reject stale, wrong-target, wrong-phase, or wrong-revision commission identities. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-start-at-design` | Route a fresh long-horizon goal to the bounded design owner without creating lifecycle state. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-ready-design-to-planning` | Route current ready reviewed design to `plan-implementation` without fabricating a plan. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-continue-ready-plan-without-approval` | Continue an exact ready PR-delivery plan to implementation without a generic approval checkpoint. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-proof-to-review` | Route implementation proof without current independent review to `review-implementation`. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-review-finding` | Preserve cause-based correction ownership and require fresh affected review. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-route-ready-implementation-to-pr` | Route ready implementation to `implementation-pr-wrapup` and require its fresh receipt. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-bypass-direct-phase` | Let an explicit one-phase request bypass long-horizon orchestration. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-optional-tracking-projection` | Keep optional ops tracking a projection of the canonical plan, never gate authority. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-respect-narrow-terminal` | Honor an explicit narrower terminal without claiming or running later gates. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-default-pr-ready-no-merge` | Default to fresh PR readiness while keeping merge separately authorized. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-reject-producer-incomplete-results` | Open current producer contracts and reject generic-floor results missing owner-required fields. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-reject-stale-phase-evidence` | Reject stale status and reconstruct from the earliest affected phase-owned gate. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-runtime-skill-package-route` | Route runtime skill-package goals to `skills-creation` without bypassing authoring review. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-runtime-skill-package-composed` | Validate the existing accepted multi-run commission before allowing one named child phase. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-reject-invalid-composition-commission` | Reject stale, wrong-target, wrong-phase, or wrong-revision commission identities. |
 | `spec-handoff` | `spec-handoff-portable-design-context` | Do not turn spec/design portability into plan creation or phase completion. |
 | `spec-handoff` | `spec-handoff-routes-ready-design-to-planner` | Preserve ready design in the handoff and recommend exactly `plan-implementation`. |
 | `presentation-tui` | `presentation-tui-monospace-structure.md` | Keep the TUI skeleton as default layout while mixing markdown deliberately; GFM tables are the comparison default; no pipe tables inside frames. |

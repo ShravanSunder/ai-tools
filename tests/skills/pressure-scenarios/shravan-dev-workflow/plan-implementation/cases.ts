@@ -205,7 +205,7 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "admits-direct-improvement-delivery", requirement: "Admits the unchanged direct plan-improve-repo result and its implementation-mechanics-only basis for owner-requested delivery without requiring orchestrator-goal.", failureExample: "Blocks because the improvement result was produced directly or invents a different governing basis." },
+      { name: "admits-direct-improvement-delivery", requirement: "Admits the unchanged direct plan-improve-repo result and its implementation-mechanics-only basis for owner-requested delivery without requiring orchestrator-implementation-goal.", failureExample: "Blocks because the improvement result was produced directly or invents a different governing basis." },
       { name: "creates-new-delivery-plan", requirement: "Because changing plan-only to pr-ready-unmerged changes plan meaning, describes one new ready plan at tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md and any required project .gitignore tmp/* write without mutating the existing record or claiming read-only writes occurred.", failureExample: "Upgrades the existing plan in place, uses checked-in docs or OS/global temp, or claims the writes happened." },
     ],
   },

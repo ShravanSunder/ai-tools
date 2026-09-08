@@ -15,6 +15,7 @@ const input = {
 const output = {
   backend: "fake",
   renderedPrompt: "prompt",
+  earlierConversationTurns: [],
   finalResult: {
     scenario_id: input.scenarioId,
     skill_under_test: input.skillUnderTest,

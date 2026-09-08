@@ -21,6 +21,6 @@ The owner now asks to deliver the current direct `plan-improve-repo` result at `
 
 ## Failure Signals
 
-- Blocks because no orchestrator-goal exists.
+- Blocks because no orchestrator-implementation-goal exists.
 - Upgrades the existing plan in place.
 - Uses checked-in docs, OS temp, `.git/info/exclude`, or a user-global plan home.

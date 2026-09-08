@@ -6,7 +6,7 @@ Lite maintainer map for `shravan-dev-workflow` design. **Not** a runtime skill r
 
 Detailed per-skill provenance, upstream pins, and date-pinned From/To changelog compare live in the **`ai-dev-skills`** meta-repo:
 
-`/Users/shravansunder/Documents/dev/open-source/ai-dev-skills/`
+`/Users/shravansunder/Documents/dev/open-source/agent-skills/ai-dev-skills/`
 
 | Index | Path in ai-dev-skills | Use for |
 |-------|----------------------|---------|
@@ -34,6 +34,12 @@ Detailed per-skill provenance, upstream pins, and date-pinned From/To changelog 
 Explicitly narrowed sources: `cursor-agent-skills` appears to duplicate Addy's pack for this repo's purposes, so keep Addy as the named source unless provenance matters. Broad curated skill catalogs are low value here except for review and security subsets.
 
 Upstream checkouts for the trees above are submodules under `ai-dev-skills` (for example `cursor-plugins`, `mattpocock-skills`, `obra-superpowers`).
+
+## Work-log reference (deferred)
+
+Current local reference: `/Users/shravansunder/Documents/dev/open-source/agent-skills/ai-dev-skills/cursor-plugins/pstack/skills/show-me-your-work/SKILL.md`.
+
+Inspected 2026-09-06 at local `cursor-plugins` revision `68836dd`; remote freshness has not been checked. Re-read the local reference before adapting it. A focused work-log skill is deferred: preserve concise decisions, evidence pointers, and checkpoints; evaluate transcript audits, cross-model review, and correction policy separately. No runtime skill change is adopted by this pointer.
 
 ## Current Local Mapping (lite)
 

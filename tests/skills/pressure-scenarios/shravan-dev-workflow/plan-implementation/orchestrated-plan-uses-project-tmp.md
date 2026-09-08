@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:plan-implementation
 
-An orchestrator-goal delivery supplies `requested terminal: pr-ready-unmerged`. Describe the exact plan-home setup for a project whose `.gitignore` does not cover `tmp/*`. This scenario is read-only.
+An orchestrator-implementation-goal delivery supplies `requested terminal: pr-ready-unmerged`. Describe the exact plan-home setup for a project whose `.gitignore` does not cover `tmp/*`. This scenario is read-only.
 
 ## Expected Compliant Behavior
 
