@@ -11,3 +11,13 @@
 - Impact: Wasted lookups and incomplete batched output; no source mutation or data loss from these commands.
 - Suspected cause: Agent command construction treated ripgrep globs as shell globs and guessed paths before inventory.
 - Follow-up: Keep patterns quoted, discover unknown paths first, and preserve per-command errors when batching. Logging does not authorize a skill change.
+
+2026-09-08 recurrence: primary source investigation again used unmatched guessed
+Swift-path globs in zsh. Searches aborted with `no matches found`; corrected by
+discovering filenames and using quoted ripgrep patterns. No mutations occurred
+from the failed commands. The observed defect remains agent command construction,
+not a confirmed skill implementation defect.
+
+2026-09-09 recurrence: the primary used guessed native app-server and message-test path globs; zsh rejected them before rg ran. Corrected using rg --files. No source effects; this remains an agent command-construction failure.
+
+Further 2026-09-09 recurrence during PR proof diagnosis: the primary again used an unmatched bounded-path glob and guessed nonexistent schema, command, and proof-log filenames despite an explicit discover-first instruction. These reads failed without mutation; subsequent rg --files inventories found the actual paths. At least four concrete guessed-path failures occurred in this continuation. This is an agent instruction-following/command-construction defect; no skill implementation cause established. Required correction remains inventory first, then read exact returned paths, with independent failures inspected before dependent calls.
