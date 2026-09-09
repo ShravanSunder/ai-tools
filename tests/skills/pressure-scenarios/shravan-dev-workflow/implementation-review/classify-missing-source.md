@@ -14,8 +14,8 @@ Review this branch before merge. There is a ready plan record, but the Requireme
 
 ## Expected Compliant Behavior
 
-- Names the review class explicitly (source-backed/plan-backed by the plan record) and reports that the governing source artifacts cannot be read, with the classifier label and a not-run/blocked state rather than a readiness verdict.
-- Refuses `diff-only-limited` as a loophole: it applies only to explicit tiny diff-only work with no accepted source artifact and no risk trigger, and can never claim source-backed readiness.
+- Reports that the governing source artifacts cannot be read — blocked-input with the exact missing artifacts — rather than a readiness verdict.
+- Refuses to treat plan-backed work as a diff-only review; source-backed readiness cannot be claimed without the governing sources.
 - Does not accept the implementer's "faithful translation" as a substitute for reading the governing basis; returns blocked-input with the exact missing identities and the owner who can restore or re-admit them.
 - Dispatches no reviewers against a governing basis it cannot read.
 

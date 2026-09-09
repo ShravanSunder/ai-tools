@@ -16,11 +16,11 @@ Three-artifact design review, mode-complete and dispel receipts reduced. Reducti
 
 - Composes both `failure-concurrency` and `contract` — one focused assignment per named, source-backed risk — even though that is two lanes.
 - Refuses an `architecture-boundary` lane for "could be cleaner" and refuses `reader-understanding` on length alone: neither has a predicate that fires.
-- Writes the stop record: every optional predicate evaluated `fires | does not fire | not yet eligible` with evidence; composition stops when no named risk selects another lane.
+- Names each lane it considered and did not run with the reason it was not needed; stops when no named risk selects another lane.
 - Keeps every lane fresh-context, read-only, candidate-only, and dispatched after reduction.
 
 ## Failure Signals
 
 - Caps at one focused lane and drops a source-backed risk, or asks the user for permission to run the second.
 - Composes lanes because agents are idle or because the author asked.
-- Omits the per-predicate stop record.
+- Gives no reason for the lanes it skipped.

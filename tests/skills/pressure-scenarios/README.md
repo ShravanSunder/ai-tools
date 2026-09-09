@@ -70,7 +70,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-one-review-one-remediation` | Close one design review from original findings plus parent-verified remediation without automatic rereview. |
 | `spec-program-review` | `spec-program-review-chunk-design-seams` | Keep the mode-complete reviewer mandatory and chunk a large design along artifact seams, never by file. |
 | `spec-program-review` | `spec-program-review-dispel-design-over-delivery` | Run dispel on an empty candidate set and name unrequested design elements as over-delivery. |
-| `spec-program-review` | `spec-program-review-compose-focused-lanes-by-predicate` | Compose one focused lane per named source-backed risk under a stop record, refusing predicate-less lanes. |
+| `spec-program-review` | `spec-program-review-compose-focused-lanes-by-predicate` | Compose one focused lane per named source-backed risk, with a reason beside each lane run or skipped. |
 | `spec-program-review` | `spec-program-review-proof-challenge-predicate` | Compose proof-challenge only for executable proof claims, with grant, preflight, and scratchpad boundaries. |
 | `spec-program-review` | `spec-program-review-independence-honors-execution-grant` | Pass granted execution and fail unlisted commands or target mutation at the independence check. |
 | `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |

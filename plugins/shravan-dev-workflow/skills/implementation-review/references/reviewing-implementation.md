@@ -2,7 +2,7 @@
 
 This reference owns the complete independent reconstruction method used by every reviewer lane that inspects source.
 
-Expected inputs: the shared review packet, exact assignment identity and chunk when assigned, lane authority, and the lane-specific mission.
+Expected inputs: the shared review packet, the assigned chunk when there is one, lane authority, and the lane-specific mission.
 
 Return: source-to-proof coverage, normal and failure-path inspection, proof and reachability judgments, weaker-substitute risks, the riskiest-assumption result, candidate findings, and the uncovered boundary.
 

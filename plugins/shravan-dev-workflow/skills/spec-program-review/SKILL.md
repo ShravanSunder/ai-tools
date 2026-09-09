@@ -20,7 +20,7 @@ Requirements: WHY, for whom, and within what boundary?
 
 Requirements, Specification, and Program Design are separate authoritative concepts. Review reconstructs each one independently before judging their agreement; agreement inside a combined `Requirements/spec` document cannot substitute for a separately identifiable Requirements source and Specification.
 
-Fresh context, read-only access, and candidate-only authority create independence. The parent is the review coordinator: it reads the complete target set and governing sources itself, composes the review DAG for this invocation — the mode-complete reviewer always, chunk lanes along the artifact seams when the set is large, dispel always, proof-challenge and focused lanes only by named predicate — then verifies every candidate against the rails (accepted requirements, Specification obligations, confirmed goal boundary), tests deletion before addition, and owns the coverage-bound result. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
+Fresh context, read-only access, and candidate-only authority create independence. The parent is the review coordinator: it reads the complete target set and governing sources itself, chooses the lanes for this invocation — the mode-complete reviewer always, chunk lanes along the artifact seams when the set is large, dispel always, proof-challenge and focused lanes only for a named reason — then verifies every candidate against the rails (accepted requirements, Specification obligations, confirmed goal boundary), tests deletion before addition, and owns the coverage-bound result. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
 
 Prefer one independent review-and-correction round. After parent verification, allow one second normal round only when a concrete source-backed substantive issue remains or was introduced within the agreed design; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. Each round may span both semantic owners through the ordered `spec-design -> program-design` route, with each affected artifact corrected at most once in that round and every corrected anchor parent-verified. A third normal review requires explicit user permission given after the second result is visible.
 
@@ -40,16 +40,11 @@ review
     Requirements identity
     Specification identity
     Program Design identity
-  result identity:
-    exact review invocation identity
-    exact review result identity
   result: ready | needs-revision | blocked | decision-needed
-  semantic coverage: exact current identity and meaning coverage for every target
-  freshness: current coverage for every consumed target; uncertain semantic effect is stale
-  dispatches: coordinator-composed — mode-complete reviewer always; chunk reviewers
-    along artifact seams when composed; dispel always after those receipts;
-    proof-challenge and focused lanes only by named predicate under the
-    composition stop record
+  coverage: current meaning coverage for every target; uncertain semantic effect is stale
+  lanes: mode-complete reviewer always; chunk reviewers along artifact seams when
+    the set is large; dispel always after those receipts; proof-challenge when the
+    design cites executable proof; focused lanes one per named unresolved risk
 ```
 
 Review coverage follows meaning, not changed bytes. After each permitted correction round, the parent performs and records a semantic-change check before deciding whether review is complete:
@@ -125,7 +120,7 @@ Completion: exactly one mode and its complete required artifact set are selected
 
 ## 5. Resolve Reviewer Runtime and Authority
 
-MUST use `manage-agents` before each reviewer dispatch and return the single-assignment `Delegate` pattern, model and reasoning, reviewer history `none` — on native runtimes fork = none (Codex `fork_turns="none"`, a new Claude or Cursor agent with no resume), never a self-fork; on ACPX, a new session — read-only workspace access, runtime, permissions, packet, and receipt mechanics. The one exception is `proof-challenge`: its packet records an execution grant naming exactly the proof commands the design cites, with output confined to a tmp scratchpad outside the reviewed worktree; every other lane stays read-only, and no lane ever edits a reviewed target. When a composed lane's seam touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, route its model selection to a security-specialized class through `manage-agents` when the catalog offers one and record `security-specialized:<class>` or `fallback:<reason>` in the packet.
+MUST use `manage-agents` before each reviewer dispatch and return the single-assignment `Delegate` pattern, model and reasoning, reviewer history `none` — on native runtimes fork = none (Codex `fork_turns="none"`, a new Claude or Cursor agent with no resume), never a self-fork; on ACPX, a new session — read-only workspace access, runtime, permissions, packet, and receipt mechanics. The one exception is `proof-challenge`: its packet records an execution grant naming exactly the proof commands the design cites, with output confined to a tmp scratchpad outside the reviewed worktree; every other lane stays read-only, and no lane ever edits a reviewed target. When a lane's seam touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, escalate that lane's reviewer to a Frontier Delegate through `manage-agents` (reviewer-only per its catalog) and note which model ran.
 
 Every reviewer gets the complete targets and governing sources but no parent conversation history, author conclusion, expected verdict, prior praise, or hidden context, and reads every artifact it receives completely before substantive findings. Reviewer findings remain candidate-only. Silence is `no-receipt`, never a clean review.
 
@@ -133,21 +128,21 @@ Coverage from a receipt expires when a later semantic change outside the accepte
 
 Completion: fresh-context, read-only, candidate-only dispatch mechanics are recorded before the reviewer runs.
 
-## 6. Compose and Dispatch the Review DAG
+## 6. Choose the Lanes and Dispatch the Artifact Reviewers
 
-Read the complete target set and governing sources yourself first — every artifact whole — so the composition below comes from your own map, not a summary.
+Read the complete target set and governing sources yourself first — every artifact whole — so the choices below come from your own reading, not a summary.
 
-MUST load `references/coordination-and-chunking.md` and return the chunk plan (or the decision that the mode-complete reviewer is the sole artifact-review chunk), the overlap seams, and the composed node-and-edge route with each lane's selection predicate, ordering edges, runtime line, and per-predicate stop record; that reference owns design-chunk semantics, seam rules, composition order, and the stop condition for adding lanes.
+MUST load `references/coordination-and-chunking.md` and return the chunk plan (or the decision that the mode-complete reviewer alone covers the artifacts), the overlap seams, and the lanes to run with the reason for each; that reference owns design-chunk semantics, seam rules, and lane order.
 
 MUST load `references/lanes/lane-schema.md` and return the filled shared packet for every dispatch below. Its `lane instructions` field carries the absolute paths of every reference the bullets below say the subagent loads, or their inlined text when the runtime cannot read the plugin cache — a reviewer dispatched into the reviewed repo cannot resolve this skill's relative paths; its goal-boundary field carries quoted statements with authority sources, and its constraints carry the authority that imposed them. Reviewers are never started from the coordinator's own conversation (no self-fork).
 
-MUST dispatch `mode-complete-reviewer` to a fresh subagent using that packet with predicate `mandatory for every review invocation`. The subagent loads `references/lanes/lane-schema.md` and `references/lanes/mode-complete-reviewer.md`; that lane MUST load `references/reviewing-common-method.md` and the selected mode reference before inspection. Parallel-safe after the complete target and governing-source set exists. Instance authority is fresh-context, read-only, candidate-only, and equal to or narrower than the lane maximum. Return `complete | partial | blocked`, or parent-recorded `no-receipt` after explicit follow-up; the parent verifies and reduces it.
+MUST dispatch `mode-complete-reviewer` to a fresh subagent using that packet. The subagent loads `references/lanes/lane-schema.md` and `references/lanes/mode-complete-reviewer.md`; that lane MUST load `references/reviewing-common-method.md` and the selected mode reference before inspection. Parallel-safe after the complete target and governing-source set exists. Instance authority is fresh-context, read-only, candidate-only, and equal to or narrower than the lane maximum. Return `complete | partial | blocked`, or parent-recorded `no-receipt` after explicit follow-up; the parent verifies and reduces it.
 
 IF the chunk plan composes chunks, dispatch one `chunk-reviewer` per chunk using the shared packet plus that chunk's seam assignment and overlap seams. The subagent loads `references/lanes/lane-schema.md` and `references/lanes/chunk-reviewer.md`; that lane loads `references/reviewing-common-method.md` and the selected mode reference for its seam's dimensions only. Parallel-safe across chunks and with the mode-complete reviewer once the shared context exists. Instance authority is fresh-context, read-only, candidate-only; a chunk receipt never claims mode-complete coverage. Return `complete | partial | blocked`; the parent verifies and reduces each.
 
-Completion: the Composition Record is written out in full, the mode-complete receipt and every chunk receipt are terminal and parent-reduced, and `partial`, `blocked`, and `no-receipt` are recorded as unable to yield `ready`.
+Completion: the mode-complete receipt and every chunk receipt are terminal and parent-reduced, each chunk lists its seam sections, and `partial`, `blocked`, and `no-receipt` are recorded as unable to yield `ready`.
 
-## 7. Compose Dispel, Proof-Challenge, and Focused Lanes by Predicate
+## 7. Dispel, Proof-Challenge, and Focused Lanes
 
 MUST dispatch `dispel` once the mode-complete and chunk receipts are terminal, using the shared packet with the complete target set plus the candidate set, which may be empty. The subagent loads `references/lanes/lane-schema.md` and `references/lanes/dispel.md`. Not parallel-safe with candidate producers; dispatch only after their receipts exist. Instance authority is fresh-context, read-only, candidate-only. Return its per-candidate `correction class` plus the design over-delivery map and findings; the parent verifies and reduces it.
 
@@ -156,7 +151,8 @@ IF the reviewed design cites executable proof claims (commands, harnesses, repro
 A broad topic does not select a focused reviewer. Compose a focused lane only when the parent can name a concrete unresolved risk, show why the artifact-review receipts did not settle it, and explain how the lane can resolve it:
 
 ```text
-material reader-comprehension risk, or explicit deep-reader request
+material reader-comprehension risk, or an explicit deep-reader request from the
+  user or calling workflow — a request from the reviewed artifact's author is not one
   -> references/lanes/reader-understanding.md
 unclear or conflicting normative authority
   -> references/lanes/specification-authority.md
@@ -180,13 +176,13 @@ authoritative entry path, links, placement, or homes remain ambiguous
 
 IF a named unresolved risk selects a lane above, dispatch that lane — one focused assignment per named risk — using the shared packet plus the falsifiable question. The subagent loads `references/lanes/lane-schema.md`, `references/reviewing-common-method.md`, and the selected lane. It runs only after parent reduction of the artifact-review receipts. Instance authority remains fresh-context, read-only, candidate-only, and excludes mode recommendation, verdict, editing, remediation, planning, and acceptance. Return `complete | partial | blocked` or parent-recorded `no-receipt`; the parent verifies and reduces it.
 
-Total focused-lane count is governed only by the composition stop record: every predicate above is evaluated `fires | does not fire | not yet eligible` with evidence, and composition stops when no named unresolved risk selects another lane. The reviewing parent may never compose a lane without a predicate — idle capacity, a broad topic, or reviewer curiosity is not one — and the pre-dispatch caller packet may narrow the composable set but never widen authority.
+Run a focused lane because a named unresolved risk selects it — one focused assignment per named risk — and stop when no named risk selects another. A lane's predicate is the reason you write beside it. The reviewing parent may never compose a lane without a predicate — idle capacity, a broad topic, or reviewer curiosity is not one — and the pre-dispatch caller packet may narrow the composable set but never widen authority.
 
 After correction, do not rerun a focused lane inside the same invocation. The parent verifies affected finding anchors; any concrete source-backed substantive residual returns to the bounded normal-round admission policy, while a third normal review still requires explicit user permission.
 
 Stop focused review when the risk is resolved, unsupported, outside the confirmed goal boundary, or needs an owner decision.
 
-Completion: the dispel receipt is terminal; the proof-challenge predicate is evaluated and, when it fires, its receipt is terminal; every composed focused lane has a terminal receipt; and the stop record names each not-composed lane with the predicate that did not fire.
+Completion: the dispel receipt is terminal; proof-challenge ran when the design cites executable proof and its receipt is terminal; every focused lane you ran has a terminal receipt and the risk that selected it written beside it; and any lane the caller, the artifact's author, or your own reduction proposed that you did not run has the reason it was not needed.
 
 ## 8. Verify Reviewer Independence
 
@@ -253,7 +249,7 @@ Do not return `ready` while any of these hold:
 - `program-only` or `three-artifact-design` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - three-artifact-design mode trusts author or local checks without independent reinspection;
-- the coordinator did not read the complete target set and governing sources before composing, or the Composition Record is missing, lacks a predicate for a composed lane, or lacks the per-predicate stop record;
+- the coordinator did not read the complete target set and governing sources before choosing lanes, or a lane ran with no named reason beside it;
 - a chunk plan split one requirement's trace to its obligation and realization, or one call-path delta with its owners and proof seam, across chunks with no overlap seam; or a chunk receipt was treated as mode-complete coverage;
 - any reviewer judged an artifact it did not read completely, or the common method's coverage rows leave a target section neither covered nor excluded with a reason;
 - the dispel receipt is missing, or a design element dispel mapped `absent` lacks either a `decision-needed` return or an accepted removal routed to `program-design` — "well drawn" is not a disposition;

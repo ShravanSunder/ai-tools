@@ -293,7 +293,8 @@ describe("user requirements and design-view contracts", () => {
     expect(reviewSkill).toContain("mode-complete reviewer always");
     expect(reviewSkill).toContain("the parent verifies and reduces it");
     expect(reviewSkill).toContain("one focused assignment per named risk");
-    expect(reviewSkill).toContain("composition stop record");
+    expect(reviewSkill).toContain("named unresolved risk selects it");
+    expect(reviewSkill).not.toContain("stop record");
     expect(reviewSkill).toContain(
       "may never compose a lane without a predicate",
     );
@@ -420,13 +421,9 @@ describe("user requirements and design-view contracts", () => {
     expect(reviewSkill).toContain(
       "result: ready | needs-revision | blocked | decision-needed",
     );
-    expect(reviewSkill).toContain(
-      "result identity:\n    exact review invocation identity\n    exact review result identity",
-    );
+    expect(reviewSkill).not.toContain("exact review invocation identity");
     expect(reviewSkill).not.toContain("exact review invocation/result identity");
-    expect(reduction).toContain(
-      "exact review invocation identity and review result identity",
-    );
+    expect(reduction).not.toContain("exact review invocation identity");
     expect(reduction).toContain(
       "result: ready | needs-revision | blocked | decision-needed",
     );
@@ -484,14 +481,13 @@ describe("user requirements and design-view contracts", () => {
       expect(consumer).not.toMatch(/\bpairs?(?:-mode|-review| review)?\b/i);
     }
 
-    for (const consumer of currentDesignReviewConsumers.slice(0, 3)) {
-      expect(consumer).toContain("exact three-artifact design review invocation identity");
-      expect(consumer).toContain("review result identity");
+    for (const consumer of currentDesignReviewConsumers) {
+      expect(consumer).not.toContain("review invocation identity");
+      expect(consumer).not.toContain("review result identity");
     }
-    expect(currentDesignReviewConsumers[4]).toContain(
-      "exact three-artifact design review invocation identity",
-    );
-    expect(currentDesignReviewConsumers[4]).toContain("review result identity");
+    for (const consumer of currentDesignReviewConsumers.slice(0, 3)) {
+      expect(consumer).toContain("three-artifact design review result");
+    }
   });
 
   test("indexes every view owner and rendering consumer", () => {

@@ -14,7 +14,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 ## Entries
 
 - [2026-09-08 Review handoff audit fixes](2026-09-08-review-handoff-audit-fixes.md)
-- [2026-09-08 spec-program-review coordinator-composed review DAG](2026-09-08-spec-program-review-coordinator-dag.md)
+- [2026-09-08 spec-program-review coordinator-chosen review lanes](2026-09-08-spec-program-review-coordinator-dag.md)
 - [2026-09-08 Design review rounds](2026-09-08-design-review-rounds.md)
 - [2026-09-07 Orchestrator pressure corrections](2026-09-07-orchestrator-pressure-corrections.md)
 - [2026-09-07 Simplify work-trail v1](2026-09-07-simplify-work-trail-v1.md)
@@ -23,7 +23,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 - [2026-09-06 Work trails and orchestration](2026-09-06-work-trails-and-orchestration.md)
 - [2026-09-04 manage-agents Astra is live](2026-09-04-manage-agents-astra-live.md)
 - [2026-09-04 manage-agents model catalog and Advisor permission](2026-09-04-manage-agents-model-catalog.md)
-- [2026-09-03 implementation-review coordinator-composed review DAG](2026-09-03-implementation-review-coordinator-dag.md)
+- [2026-09-03 implementation-review coordinator-chosen review lanes](2026-09-03-implementation-review-coordinator-dag.md)
 - [2026-09-03 Cursor marketplace and lint-changed hook](2026-09-03-cursor-marketplace-lint-changed.md)
 - [2026-09-02 Rename review-implementation to implementation-review](2026-09-02-implementation-review-rename.md)
 - [2026-08-30 Mental Models Goes Diagram-First](2026-08-30-mental-models-diagram-first.md)

@@ -2,7 +2,7 @@
 
 Mission: scope defense. Challenge the candidate findings and the implementation itself against the rails — the confirmed requirements, Specification obligations, Program Design elements, and goal boundary — so over-engineering dies before reduction instead of after merge. This is not a second general defect hunt.
 
-Expected inputs: every shared packet field from `lane-schema.md` with `chunk assignment: whole-diff`, the complete diff (not summaries), the candidate-finding set from prior lanes — possibly empty — and the complete governing-basis artifacts.
+Expected inputs: every shared packet field from `lane-schema.md` with `chunk: whole-diff`, the complete diff (not summaries), the candidate-finding set from prior lanes — possibly empty — and the complete governing-basis artifacts.
 
 Prerequisites: the governing basis and complete diff are inspectable; chunk receipts are terminal. An empty candidate set does not block this lane — the over-delivery sweep runs regardless.
 

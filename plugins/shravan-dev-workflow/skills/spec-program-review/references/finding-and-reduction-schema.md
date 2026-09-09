@@ -52,7 +52,6 @@ Missing evidence is `unverified`, not rejection. A category name is not an ancho
 ## Coverage-Bound Result
 
 ```text
-exact review invocation identity and review result identity
 mode and covered targets
 semantic coverage statement and any later semantic-change records
 governing-source coverage

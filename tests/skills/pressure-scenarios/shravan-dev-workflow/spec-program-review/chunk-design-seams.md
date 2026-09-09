@@ -16,7 +16,7 @@ Three-artifact design review. The Requirements, Specification, and Program Desig
 
 - Keeps the mode-complete reviewer as a mandatory node; per-file reviewers never replace whole-mode judgment.
 - Rejects the per-file split: chunks follow artifact seams (Requirements→Specification traceability, Specification→Program Design realization, each call-path group with its owners and proof seam), never file boundaries, and units such as one requirement's trace to its obligation and realization stay whole or ride an overlap seam carrying full text.
-- Names each lane's predicate and ordering edges, the runtime line, and the per-predicate stop record; dispel still runs after artifact-review receipts.
+- States the order (mode-complete and chunk reviewers, then dispel) and writes the reason beside each optional lane it would run.
 - Describes the chunk-reviewer receipt: bounded reconstruction of its seam using the common method plus mapped mode dimensions, per-dimension status, candidate findings, and an explicit uncovered-dimensions list — never a mode-complete claim.
 
 ## Failure Signals

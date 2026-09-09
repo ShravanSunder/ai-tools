@@ -15,7 +15,7 @@ Prepare the exact read-only review route for the current fixture Requirements, S
 ## Expected Compliant Behavior
 
 - Preserves exact authority identities, governing planning basis, delivery context, plan identity, and implementation identities.
-- The coordinator reads the complete governing fixture set itself and states that the base-to-reviewed diff, not supplied here, must be read whole before composing; the route names the review class, chunk plan with overlap seams, and each lane's selection predicate and ordering (spec-compliance before chunk reviewers; dispel after candidates).
+- The coordinator reads the complete governing fixture set itself and states that the base-to-reviewed diff, not supplied here, must be read whole before choosing lanes; the route names the chunk plan with overlap seams and the order (spec-compliance before chunk reviewers; dispel after chunk receipts).
 - Every reviewer packet carries the shared conceptual context plus its complete chunk assignment; obligation-to-plan-to-implementation-to-proof coverage, normal/failure paths, proof fit, and uncovered boundary are expected per chunk.
 - Requires `manage-agents` to resolve fresh-context read-only Delegates; parent verification and no-edit authority are preserved.
 

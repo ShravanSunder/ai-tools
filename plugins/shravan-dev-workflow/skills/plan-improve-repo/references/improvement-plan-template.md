@@ -12,7 +12,7 @@ Repo: <absolute path>
 
 - Basis: current-three-artifact-design-ready | implementation-mechanics-only
 - Evidence identity:
-  - current-three-artifact-design-ready: <current Requirements path, current Specification path, current Program Design path, exact three-artifact design review invocation identity, review result identity, covered identities>
+  - current-three-artifact-design-ready: <current Requirements path, current Specification path, current Program Design path, the current three-artifact design review result (mode, covered targets, result, and coverage statement) or a pointer to it, covered identities>
   - implementation-mechanics-only: <classification result identity and inspected-source identities>
 - Current review coverage: <evidence that review still covers all three artifacts>
 

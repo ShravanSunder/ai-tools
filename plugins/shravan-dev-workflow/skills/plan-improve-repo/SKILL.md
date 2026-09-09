@@ -24,7 +24,7 @@ current-three-artifact-design-ready
   complete current Requirements, Specification, and Program Design
   required local review coverage is semantically current
   current review mode: three-artifact-design
-  exact three-artifact design review invocation identity and review result identity
+  the current three-artifact design review result (mode, covered targets, result, and coverage statement) or a pointer to it
   review result: ready and covers all three current identities
   accepted findings corrected under refreshed review
   review coverage matches all three artifacts' current meaning
@@ -42,7 +42,7 @@ design-required
 
 `design-required` returns the vetted finding and exact missing semantic owner: Why/What to `spec-design`, structural How to `program-design`, or a complete but unreviewed/stale three-artifact design to `spec-program-review`. Do not write a new completed plan. For an existing plan, return `blocked` in the separate current-state validation receipt without rewriting it.
 
-Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written plan carries one current admissible planning basis, the exact review invocation identity and review result identity when design-bearing, and its semantic-freshness record. Any `ready` label belongs only to a separate current-state validation receipt.
+Completion: target classification and, when applicable, the exact `skills-creation` parent identity are recorded; every written plan carries one current admissible planning basis, the current review result or a pointer to it when design-bearing, and its semantic-freshness record. Any `ready` label belongs only to a separate current-state validation receipt.
 
 ## Core Rules
 

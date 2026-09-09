@@ -4,7 +4,7 @@ Mission: perform one complete independent reconstruction of the assigned chunk â
 
 Expected inputs: every shared packet field from `lane-schema.md`, including the chunk assignment with its complete file set, mapped obligations, and overlap seams; no expected verdict, candidate list, or parent conclusion.
 
-Prerequisites: governing sources, exact plan/governing-basis/delivery-context records, base and reviewed identities, diff, proof evidence, constraints, risk predicates, prior review coverage, and remediation-pass evidence are complete and inspectable; the spec-compliance receipt exists.
+Prerequisites: every packet field from `lane-schema.md` is filled and inspectable, and the spec-compliance receipt exists.
 
 Maximum authority: fresh-context, read-only, candidate-only review. Open/search current source and existing proof with read-only discovery commands only; a tmp scratchpad may hold working notes. Do not run build, test, lint, format, migration, or other proof-generation/remediation commands; do not edit, stage, commit, reply to review threads, accept findings, or decide workflow transitions.
 

@@ -272,7 +272,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composition-record-and-chunk-receipt",
-        requirement: "Names each lane's predicate, ordering edges, runtime line, and per-predicate stop record with dispel after artifact-review receipts, and describes the chunk-reviewer receipt as bounded seam reconstruction with per-dimension status and an explicit uncovered-dimensions list, never a mode-complete claim.",
+        requirement: "Orders mode-complete and any chunk reviewers first and dispel after their receipts, and states that a chunk-reviewer receipt covers only its seam and never claims mode-complete coverage.",
         failureExample: "Composes lanes without predicates or lets a chunk receipt stand in for mode-complete coverage.",
       },
     ],
@@ -302,6 +302,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: [
       ...requiredSourceReads,
       "plugins/shravan-dev-workflow/skills/spec-program-review/references/coordination-and-chunking.md",
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/lane-schema.md",
     ],
     maximumToolCalls: 25,
     semanticCriteria: [
@@ -312,8 +313,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "refuses-predicate-less-lanes-with-stop-record",
-        requirement: "Refuses architecture-boundary for 'could be cleaner' and reader-understanding on length alone, and writes the stop record with every optional predicate evaluated fires / does not fire / not yet eligible with evidence.",
-        failureExample: "Composes lanes because agents are idle or the author asked, or omits the stop record.",
+        requirement: "Refuses architecture-boundary for 'could be cleaner' and reader-understanding on length alone, and names each lane it considered and did not run with the reason it was not needed.",
+        failureExample: "Composes lanes because agents are idle or the author asked, or gives no reason for the lanes it skipped.",
       },
     ],
   },
@@ -339,7 +340,10 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "spec-program-review-independence-honors-execution-grant",
-    requiredSourceReads: requiredSourceReads,
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/lane-schema.md",
+    ],
     maximumToolCalls: 20,
     semanticCriteria: [
       {

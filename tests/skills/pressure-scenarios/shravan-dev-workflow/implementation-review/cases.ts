@@ -306,13 +306,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composes-with-predicates-and-order",
-        requirement: "Sequences spec-compliance before chunk reviewers, names each lane's selection predicate, refuses at least one lane no unresolved risk selects, and names the bad signals treated as chunking defects.",
+        requirement: "Sequences spec-compliance before chunk reviewers and dispel after them, writes the reason beside each optional lane it would run (proof-challenge, focused), and names at least one optional lane it would not run and why.",
         failureExample: "Composes every imaginable lane without predicates or dispatches despite the do-not-dispatch instruction.",
-      },
-      {
-        name: "records-model-routing",
-        requirement: "Records the packet's model-routing decision for the payments chunk: either a security-specialized model class selected through manage-agents or the explicit fallback reason when none is available.",
-        failureExample: "Omits the model routing field or routes silently.",
       },
     ],
   },
@@ -391,7 +386,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "returns-classifier-state-not-readiness",
-        requirement: "Names the review class the plan record makes it (plan-backed at minimum, source-backed if it cites the reviewed design set), reports the unreadable governing sources as a blocked/not-run state with the exact missing identities and restoring owner, and refuses diff-only-limited as a loophole for source-backed work.",
+        requirement: "Reports the unreadable governing sources as blocked-input with the exact missing artifacts and who can restore them, and refuses to treat plan-backed work as a diff-only review.",
         failureExample: "Reclassifies as diff-only or returns ready because code and tests are self-consistent.",
       },
       {

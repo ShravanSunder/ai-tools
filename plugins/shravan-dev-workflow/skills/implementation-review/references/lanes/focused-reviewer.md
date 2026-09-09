@@ -1,6 +1,6 @@
 # Focused Reviewer
 
-Mission: answer one named residual risk left after coordinator reduction of the composed review.
+Mission: answer one named residual risk left after coordinator reduction.
 
 Expected inputs: every shared packet field from `lane-schema.md`, the terminal reduced lane results, parent dispositions, and one lane-local concrete unresolved material risk stated as a falsifiable question.
 
