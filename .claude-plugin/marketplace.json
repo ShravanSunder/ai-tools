@@ -24,6 +24,12 @@
       "source": "./plugins/shravan-dev-workflow",
       "description": "Development workflow skills for long-horizon delivery routing, canonical planning, plan execution, independent implementation review, bounded design orchestration, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and surface-matched presentation (TUI and rendered web/chat)",
       "version": "2.10.0"
+    },
+    {
+      "name": "codex-router",
+      "source": "./plugins/codex-router",
+      "description": "Agent communication, timed wake-ups and scheduled workflows through Codex Router.",
+      "version": "0.1.0"
     }
   ]
 }

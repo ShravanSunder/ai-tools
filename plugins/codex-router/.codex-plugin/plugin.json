@@ -1,0 +1,18 @@
+{
+  "name": "codex-router",
+  "version": "0.1.0",
+  "description": "Agent communication, timed wake-ups and scheduled workflows through Codex Router.",
+  "author": {
+    "name": "Shravan Sunder"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex Router",
+    "shortDescription": "Communicate and schedule work through Router",
+    "developerName": "Shravan Sunder",
+    "category": "Productivity",
+    "longDescription": "Use the agent-sessions CLI to discover sessions, communicate with agents, schedule work and inspect delivery evidence.",
+    "defaultPrompt": "Use Router controls to coordinate agent sessions and inspect the outcome.",
+    "capabilities": []
+  }
+}

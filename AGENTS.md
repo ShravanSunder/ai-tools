@@ -34,7 +34,7 @@ ai-tools/
 
 ## Plugin Skills
 
-Codex skills are delivered by installed Codex plugins. Do not add sync scripts or symlink-based delivery back into this repo.
+Codex skills are delivered by installed Codex plugins. Do not add runtime sync scripts or symlink-based delivery into consumer projects. The explicitly maintained Router vendoring command under `agent-scripts/plugin-vendoring/` copies a pinned source commit into its plugin package only; plugin installation remains the delivery mechanism.
 
 Claude Code can load the same skill tree when a plugin also has `.claude-plugin/plugin.json`. Keep shared workflow skills under the plugin that owns them.
 
