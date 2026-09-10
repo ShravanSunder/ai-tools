@@ -14,7 +14,7 @@ job packet
   pattern:    advisor | sidekick | delegate | operator
   lane:       <swarm name / lane — only for swarm dispatches>
   route:      <category> / <lineage> — native | acpx <provider> — <exact model id> @ <reasoning effort>
-  access:     history none | all (native only; ACPX always none); workspace read-only | write <paths> (enforced native Claude Code only | declared elsewhere)
+  access:     history none | all (native only; ACPX always none); workspace read-only | write <paths>
   sources:    <anchors the agent must read>
   non-goals:  <what this job must not touch>
   return:     <receipt shape>, bound to assignment id + decision target
@@ -23,6 +23,14 @@ job packet
   verify:     <parent checks at the named verification point that close the job
               before accepting any claim>
 ```
+
+### Readers
+
+Review, advisor, research, and guidance packets use `workspace read-only`. That means no edits to any file in the repo. Project `tmp/` and system `/tmp` are allowed. Repeat "do not edit any file in the repo" on `job:`, `non-goals:`, `stop when:`, and `access:`. An attempted repo edit is a stop — return blocked. Parent `verify:` checks the repo worktree is unchanged.
+
+### Writers
+
+Writer packets name the write paths on `access:`, repeat the bound on `job:` and `non-goals:`, and treat an edit outside those paths as `stop when`. How a host enforces or only declares that bound is the native-provider or ACPX provider reference loaded for the launch.
 
 ## Operator Decision
 

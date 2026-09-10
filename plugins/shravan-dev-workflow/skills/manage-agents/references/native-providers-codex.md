@@ -1,6 +1,6 @@
 # Native Providers: Codex
 
-Owns Codex native v2 `spawn_agent` model, effort, and conversation-history values. Return the exact `model`, `reasoning_effort`, and `fork_turns` encoding.
+Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and workspace-access encoding. Return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 
 ## Models
 
@@ -25,14 +25,16 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,luna}`. Prefer short form un
 
 ## Workspace Access
 
-- `read-only`: record `workspace read-only` on the packet and launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to `codex exec --sandbox read-only` to invent one. The packet is the read-only contract; verify the worktree is unchanged after the receipt. Codex cannot scope writes to specific paths while the repo is cwd — a write scope on Codex is `(declared)` in the packet.
-- `write`: record the parent-approved paths on the `access:` line (`workspace write <paths> (declared)`).
+Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to `codex exec --sandbox read-only` to invent one. Reader and writer packet slots are owned by `agent-job-packet.md`.
+
+- Readers: packet `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
+- Writers: packet `write <paths> (declared)`. Codex cannot path-scope writes while the repo is cwd. Parent verifies the receipt's diff stayed inside the declared scope.
 
 ## Examples
 
 ```json
 {
-  "message": "Review the bounded implementation packet and return candidate findings.",
+  "message": "Review the bounded implementation packet and return candidate findings. Do not edit any file in the repo. Project tmp/ and system /tmp are allowed.",
   "task_name": "implementation_review",
   "model": "gpt-6-astra",
   "reasoning_effort": "medium",

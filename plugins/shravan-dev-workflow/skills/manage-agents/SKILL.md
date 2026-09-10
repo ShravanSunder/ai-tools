@@ -134,11 +134,12 @@ Select the pattern, model category, model lineage, and reasoning requirement fir
 
 ### Workspace Access
 
-Every packet's `access:` line states history and workspace scope: `workspace read-only` or `write <paths> (enforced native Claude Code only | declared elsewhere)`.
+Every packet's `access:` line states history and workspace scope: `workspace read-only` or `write <paths>`.
 
-- Reviewers, Advisors, and any guidance-only agent: the packet says `workspace read-only` — they see everything and edit nothing. Native launch uses the host `spawn_agent` / Task / Agent tool when the selected model is available. The parent verifies the worktree is unchanged after the receipt.
-- A missing sandbox, plan-mode, or readonly flag on the native tool is not a reason to leave native. `--sandbox read-only`, `--permission-mode plan`, `dontAsk`, and `workspace_readonly` are CLI or ACPX knobs, not native-dispatch requirements. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
-- Writers (Sidekicks, Delegates, Operators that produce files): the parent names the write paths. Path-scoped enforcement exists only on native Claude Code (`Edit(<paths>/**)` allow rules under `dontAsk`); prefer it when enforcement matters. On every other route the scope is declared, not enforced: the packet states "edit only under <paths>; an edit outside them is a stop condition — return blocked instead of editing," and the parent verifies the receipt's diff stayed inside the declared scope.
+- Readers (review, advisor, research, guidance): they may read the repo and may write under project `tmp/` or system `/tmp`. They must not edit any file in the repo. Repeat that on `job:`, `non-goals:`, `stop when:`, and `access:`. Parent verifies the repo worktree is unchanged after the receipt.
+- Writers (Sidekicks, Delegates, Operators that produce files): the parent names the write paths. The packet says edit only under those paths; an edit outside them is a stop — return blocked. Parent verifies the receipt's diff stayed inside the declared scope.
+
+Launch with the native or ACPX encoding returned by **Choose the Runtime**. Host permission flags live in that provider reference. A missing sandbox or plan-mode flag is not a reason to leave native. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
 
 ### Session Keep-Alive
 
@@ -148,9 +149,9 @@ Persistent sessions ride provider prompt caches: a warm session makes each resum
 
 Use native dispatch for the parent host's own model lineage when the selected model is available. Do not substitute `codex exec`, `claude -p`, Cursor CLI, or ACPX for an available native spawn of that lineage.
 
-- IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, and `fork_turns` encoding.
-- Claude spawning Claude models: use the host Task / Agent tool.
-- Cursor spawning advertised Cursor models: use the host Task tool.
+- IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
+- IF Claude is spawning a Claude model, load `references/native-providers-claude.md` and return the host Task / Agent encoding and workspace-access encoding.
+- IF Cursor is spawning an advertised Cursor model, load `references/native-providers-cursor.md` and return the host Task encoding and workspace-access encoding.
 - Use the exact model id and reasoning control supported by the native runtime.
 
 When an own-lineage model is unavailable, choose a declared native fallback or report the route as degraded or blocked.

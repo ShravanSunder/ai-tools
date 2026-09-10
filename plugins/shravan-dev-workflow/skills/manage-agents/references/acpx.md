@@ -29,7 +29,7 @@ Start without prior agent-session history by using a single call or a new named 
 
 Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
-- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn.
+- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. The packet still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
 - `write <paths> (declared)`: `--approve-all` plus the packet's bright-line instruction — "edit only under <paths>; an edit outside them is a stop condition, return blocked." The parent verifies the receipt's diff stayed inside the declared scope.
 - Unattended call: `--non-interactive-permissions fail`.
 

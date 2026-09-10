@@ -46,8 +46,10 @@ host subagent tool does not expose that setting, so launch through
 
 - Skill is invoked; the review is a Delegate, not an Advisor.
 - Route is native `spawn_agent` with `gpt-6-astra` and `fork_turns=none`.
-- Packet `access:` is `history none` and `workspace read-only`. The packet
-  is the read-only contract; parent verifies the worktree afterwards.
+- Packet `access:` is `history none` and `workspace read-only`. Repeat do
+  not edit any repo file on `job:`, `non-goals:`, `stop when:`, and
+  `access:`. Project `tmp/` and system `/tmp` are allowed. Parent verifies
+  the repo worktree afterwards.
 - No re-ask for Frontier permission.
 - `codex exec` with a sandbox flag is rejected as the launch path.
 
