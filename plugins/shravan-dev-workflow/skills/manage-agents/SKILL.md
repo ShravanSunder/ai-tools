@@ -10,8 +10,9 @@ The agent pattern owns work, continuity, authority, cardinality, and the minimum
 Dispatch has two nested levels. The job graph owns decomposition, sequencing, and parent verification points. Each job then runs one ordered dispatch decision:
 
 ```text
-pattern -> model category -> model lineage (both the cheapest at or above
-           the pattern's floor per Capability Economics) -> reasoning requirement
+pattern -> model category -> model lineage (cheapest at or above the
+           pattern's floor per Capability Economics, unless the user named
+           a lineage the table allows for this job) -> reasoning requirement
         -> history and workspace access -> native availability
         -> native or ACPX runtime -> exact model id -> packet -> receipt
 ```
@@ -37,11 +38,11 @@ Selection is done when every job names its pattern and no model has been named y
 
 ## Capability Economics
 
-The pattern picks the shape of the work and its table owns the allowed category floor; Capability Economics picks the cheapest category and lineage at or above that floor.
+The pattern picks the shape of the work and its table owns the allowed category floor; Capability Economics picks the cheapest category and lineage at or above that floor, unless the user named a lineage the table allows for this job.
 
 Mini (OpenAI Luna) is super cheap. Default grunt work to Mini whenever the pattern's floor allows it: mechanical procedures, bounded scans and summaries, format conversions, test-and-report loops, watches. A Mini agent can be a Sidekick, a Delegate, or an Operator.
 
-The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. Delegate Frontier is reviewer-only. Persistent architecture guidance stays Advisor (or Sidekick if declined). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model.
+The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. Delegate Frontier is reviewer-only. Persistent architecture guidance stays Advisor (or Sidekick if declined). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model. When the user names a model or lineage the pattern's table allows for this job, use that name; do not substitute a cheaper default and do not re-ask. A named Astra on a writing Delegate is not legal. Ask for Advisor permission once per relationship; a named Frontier reviewer is not an Advisor ask.
 
 A session not worth keeping warm is not persistent — close it and dispatch Delegates or Operators instead (see Session Keep-Alive for the cache economics).
 
@@ -133,9 +134,10 @@ Select the pattern, model category, model lineage, and reasoning requirement fir
 
 ### Workspace Access
 
-Every packet's `access:` line states the scope and its enforcement level: `workspace read-only (enforced)` or `write <paths> (enforced | declared)`.
+Every packet's `access:` line states history and workspace scope: `workspace read-only` or `write <paths> (enforced native Claude Code only | declared elsewhere)`.
 
-- Reviewers, Advisors, and any guidance-only agent: read-only, enforced — these agents see everything and edit nothing. Native Codex: `--sandbox read-only`. Claude Code: `--permission-mode plan`, or `dontAsk` with read-only allows. Cursor CLI: `workspace_readonly` sandbox or plan mode. ACPX (any provider): `--approve-reads --no-terminal --non-interactive-permissions fail` — fail-closed on writes and exec, which is the strongest ACPX offers; it is not a read-only mount.
+- Reviewers, Advisors, and any guidance-only agent: the packet says `workspace read-only` — they see everything and edit nothing. Native launch uses the host `spawn_agent` / Task / Agent tool when the selected model is available. The parent verifies the worktree is unchanged after the receipt.
+- A missing sandbox, plan-mode, or readonly flag on the native tool is not a reason to leave native. `--sandbox read-only`, `--permission-mode plan`, `dontAsk`, and `workspace_readonly` are CLI or ACPX knobs, not native-dispatch requirements. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
 - Writers (Sidekicks, Delegates, Operators that produce files): the parent names the write paths. Path-scoped enforcement exists only on native Claude Code (`Edit(<paths>/**)` allow rules under `dontAsk`); prefer it when enforcement matters. On every other route the scope is declared, not enforced: the packet states "edit only under <paths>; an edit outside them is a stop condition — return blocked instead of editing," and the parent verifies the receipt's diff stayed inside the declared scope.
 
 ### Session Keep-Alive
@@ -144,10 +146,11 @@ Persistent sessions ride provider prompt caches: a warm session makes each resum
 
 ### Native Dispatch
 
-Use native dispatch for the parent host's own model lineage when the selected model is available.
+Use native dispatch for the parent host's own model lineage when the selected model is available. Do not substitute `codex exec`, `claude -p`, Cursor CLI, or ACPX for an available native spawn of that lineage.
 
-- Codex spawning OpenAI models: load `references/native-providers-codex.md`.
-- Claude spawning Claude models: use the host-native agent contract.
+- IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, and `fork_turns` encoding.
+- Claude spawning Claude models: use the host Task / Agent tool.
+- Cursor spawning advertised Cursor models: use the host Task tool.
 - Use the exact model id and reasoning control supported by the native runtime.
 
 When an own-lineage model is unavailable, choose a declared native fallback or report the route as degraded or blocked.
@@ -171,12 +174,12 @@ ACPX agents start with zero parent context: parent conversation history never cr
 0. IF the request names more than one outcome or action, any work could run in parallel, or you are unsure one bounded packet covers the task, load `references/job-planning.md` and return the job graph: jobs, dependencies and parallel-safety, and parent verification points. Step 0 identifies jobs; it does not choose patterns — step 1 owns pattern choice and annotates the graph per job.
    - Completion: every dependency is named, every parallel-safe marking names the write-set or input check from `references/job-planning.md` that supports it, and each job names its expected receipt and the parent verification point that closes it. Actual receipts arrive at step 3; step 0 completes before any dispatch.
 
-1. Choose the pattern before the model, provider, or runtime. Then choose the model category, lineage, and reasoning requirement from the pattern tables above, taking the cheapest category and lineage at or above the pattern's floor per Capability Economics. When a job graph exists, choose the pattern per job and annotate the graph before any model or runtime choice.
+1. Choose the pattern before the model, provider, or runtime. Then choose the model category, lineage, and reasoning requirement from the pattern tables above, taking the cheapest category and lineage at or above the pattern's floor per Capability Economics unless the user named a lineage the table allows for this job. When a job graph exists, choose the pattern per job and annotate the graph before any model or runtime choice.
    - Completion: Advisor, Sidekick, Delegate, or Operator is explicit, with an allowed model category, reasoning requirement, and lineage.
 
 2. Choose parent conversation history and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
    - Dispatch completion: the packet records both selections.
-   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and workspace-access enforcement are explicit.
+   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and packet `access:` line are explicit. The launch used the host native tool, not a CLI sandbox stand-in.
    - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit.
    - Unsupported completion: report the missing provider contract and stop dispatch.
 

@@ -25,7 +25,7 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,luna}`. Prefer short form un
 
 ## Workspace Access
 
-- `read-only`: enforce with `--sandbox read-only` (OS-enforced) and set the packet's `access:` line to `workspace read-only (enforced)`; verify the worktree is unchanged after the receipt. Codex cannot scope writes to specific paths while the repo is cwd — a write scope on Codex is `(declared)` in the packet.
+- `read-only`: record `workspace read-only` on the packet and launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to `codex exec --sandbox read-only` to invent one. The packet is the read-only contract; verify the worktree is unchanged after the receipt. Codex cannot scope writes to specific paths while the repo is cwd — a write scope on Codex is `(declared)` in the packet.
 - `write`: record the parent-approved paths on the `access:` line (`workspace write <paths> (declared)`).
 
 ## Examples
@@ -34,8 +34,8 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,luna}`. Prefer short form un
 {
   "message": "Review the bounded implementation packet and return candidate findings.",
   "task_name": "implementation_review",
-  "model": "gpt-5.6-sol",
-  "reasoning_effort": "high",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
   "fork_turns": "none"
 }
 ```
