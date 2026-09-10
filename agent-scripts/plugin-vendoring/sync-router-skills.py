@@ -5,6 +5,7 @@ import argparse
 import json
 from pathlib import Path, PurePosixPath
 import re
+import stat
 import subprocess
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -62,8 +63,27 @@ def sync_skills(repository: Path, check_only: bool) -> None:
         for path in destination.rglob("*"):
             if path.is_symlink():
                 raise ValueError("vendored skill must not contain symlinks")
-            if path.is_file():
-                existing[str(path.relative_to(destination))] = path.read_bytes()
+            metadata = path.lstat()
+            if stat.S_ISDIR(metadata.st_mode):
+                continue
+            if not stat.S_ISREG(metadata.st_mode):
+                raise ValueError(
+                    "vendored entries must be regular files or directories"
+                )
+            if metadata.st_nlink != 1:
+                raise ValueError("vendored files must not be hard linked")
+            if metadata.st_mode & 0o111:
+                raise ValueError("vendored skill files must not be executable")
+            existing[str(path.relative_to(destination))] = path.read_bytes()
+    for name in expected:
+        target = destination / name
+        if target.exists() and not target.is_file():
+            raise ValueError("expected file conflicts with existing directory")
+        for ancestor in target.parents:
+            if ancestor == REPO_ROOT:
+                break
+            if ancestor.exists() and not ancestor.is_dir():
+                raise ValueError("expected directory conflicts with existing file")
     if check_only:
         if existing != expected:
             raise ValueError(

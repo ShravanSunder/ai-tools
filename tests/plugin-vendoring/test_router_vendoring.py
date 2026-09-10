@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -78,6 +79,26 @@ class RouterVendoringTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "symlinks"):
             module.sync_skills(self.source, False)
         self.assertEqual(list(outside.iterdir()), [])
+
+    def test_unsafe_existing_files_are_rejected_before_writing(self):
+        target = self.package / module.DESTINATION_PATH
+        target.mkdir(parents=True)
+        entry = target / "SKILL.md"
+        outside = self.root / "outside.txt"
+        outside.write_text("outside")
+        os.link(outside, entry)
+        with self.assertRaises(ValueError):
+            module.sync_skills(self.source, False)
+        self.assertEqual(outside.read_text(), "outside")
+        entry.unlink()
+        os.mkfifo(entry)
+        with self.assertRaises(ValueError):
+            module.sync_skills(self.source, True)
+        entry.unlink()
+        entry.write_text("committed skill\n")
+        entry.chmod(0o755)
+        with self.assertRaises(ValueError):
+            module.sync_skills(self.source, True)
 
     def test_invalid_pin_leaves_destination_untouched(self):
         self.manifest["codex-router"]["commit"] = "main"
