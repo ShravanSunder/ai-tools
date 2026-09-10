@@ -42,13 +42,13 @@ const implementationProofSources = [
 
 const reviewFindingSources = [
   ...routeSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md",
 ] satisfies readonly string[];
 
 const reviewReadySources = [
   ...routeSources,
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/references/merge-gates.md",
   "tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md",
@@ -74,7 +74,7 @@ const prReadySources = [
 const producerContractSources = [
   ...routeSources,
   "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
-  "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md",
+  "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/SKILL.md",
   "plugins/shravan-dev-workflow/skills/implementation-pr-wrapup/references/merge-gates.md",
   "tests/skills/fixtures/minimal-planning-delivery/incomplete-phase-results.md",
@@ -104,8 +104,8 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof, then selects review-implementation next because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
-      { name: "preserves-review-input-identities", requirement: "Preserves the supplied artifact pointers and their material identity relationships for review-implementation, including any missing evidence, without altering identities, judging implementation correctness, or inventing/copying a review result. Source reads and a concise pointer-based route are sufficient; no exhaustive identity recital or dispatch payload is required.", failureExample: "Alters supplied identities, hides missing evidence, self-reviews, or invents or duplicates an owner result." },
+      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof, then selects implementation-review next because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
+      { name: "preserves-review-input-identities", requirement: "Preserves the supplied artifact pointers and their material identity relationships for implementation-review, including any missing evidence, without altering identities, judging implementation correctness, or inventing/copying a review result. Source reads and a concise pointer-based route are sufficient; no exhaustive identity recital or dispatch payload is required.", failureExample: "Alters supplied identities, hides missing evidence, self-reviews, or invents or duplicates an owner result." },
     ],
   },
   {
@@ -176,11 +176,11 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "orchestrator-implementation-goal-reject-stale-phase-evidence",
-    requiredSourceReads: [...routeSources, "plugins/shravan-dev-workflow/skills/review-implementation/SKILL.md", "tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md"],
+    requiredSourceReads: [...routeSources, "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md", "tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md"],
     maximumToolCalls: 20,
     semanticCriteria: [
       { name: "rejects-status-only-resume", requirement: "Compares the fixture's reviewed HEAD 3333333333333333333333333333333333333333 with the supplied current fixture target HEAD 4444444444444444444444444444444444444444, rejects the stale ready label, and reconstructs from the earliest affected gate without substituting the host checkout HEAD.", failureExample: "Resumes from the optimistic status or substitutes the unrelated host checkout HEAD for the supplied fixture target identity." },
-      { name: "stops-at-evidence-owner", requirement: "Selects review-implementation as the owner of the stale coverage, preserving the current source/proof gap without re-performing review or rewriting the old status into current proof.", failureExample: "Repairs the review verdict inside orchestration, treats historical trail status as current proof, or advances despite missing current evidence." },
+      { name: "stops-at-evidence-owner", requirement: "Selects implementation-review as the owner of the stale coverage, preserving the current source/proof gap without re-performing review or rewriting the old status into current proof.", failureExample: "Repairs the review verdict inside orchestration, treats historical trail status as current proof, or advances despite missing current evidence." },
     ],
   },
   {

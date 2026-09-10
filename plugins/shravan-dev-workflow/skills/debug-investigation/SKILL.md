@@ -16,15 +16,16 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
 - Use `manage-agents` only for model-agent call/session mechanics; keep root-cause method and deterministic watcher guidance here.
 - Keep investigation read-only until the user explicitly asks to fix or a validated fix phase begins.
 - If 3+ fix attempts already failed, stop and question the design or architecture before trying another patch.
-- For real debugging work, write a repo-local debug artifact by default unless the user explicitly asked for chat-only/no-files output.
-- If the symptom, target, or reproduction surface is unclear, do not create files yet; ask one material question or build the missing bug packet first.
+- For real debugging work with a clear symptom, target, and reproduction surface, write a repo-local debug artifact by default. Stay in chat only when the user explicitly asks for chat-only/no-files output or the debugging scope is still unclear.
+- When the symptom, target, or reproduction surface is unclear, do not create a file yet: first build the missing bug packet from available evidence in chat. Ask one material question only when the missing field cannot be resolved from the provided context or read-only inspection. Once the scope is clear, write the artifact unless chat-only/no-files output was requested.
 - Debug artifacts are disposable investigation outputs. Later cleanup, preservation, or promotion belongs to `docs-maintain`.
-- For long-running shell, service, or infra monitoring, load `references/background-monitoring.md` before proposing watcher shape, background jobs, JSONL/state files, helper agents, restarts, or secret handling.
+- For long-running shell, service, or infra monitoring, when artifact creation is allowed, load `references/background-monitoring.md` before proposing watcher shape, background jobs, JSONL/state files, helper agents, restarts, or secret handling. When chat-only/no-files output was requested, do not create watcher files; provide a visible non-persistent plan or report a blocker if that cannot be done safely.
 
 ## Workflow
 
 1. Build the bug packet:
    - symptom
+   - target
    - expected behavior
    - actual behavior
    - reproduction steps or why reproduction is not yet proven
@@ -35,7 +36,7 @@ Investigate before fixing. This is systematic debugging: build evidence, rank hy
    - Use `<repo-root>/tmp/debug-workflows/<yyyy-mm-dd>-<repo>-<branch>-<bug-slug>/debug-investigation.md`.
    - Keep it updated with evidence, hypotheses, proof steps, and commands.
    - Skip file creation only for chat-only/no-files requests or unclear debugging scope.
-3. If a long-running monitor is needed, load `references/background-monitoring.md` and keep the watcher read-only, harness-visible, cancellable, stateful, and redacted.
+3. For file-backed long-running monitoring, load `references/background-monitoring.md` and keep the watcher read-only, harness-visible, cancellable, stateful, and redacted. For chat-only/no-files monitoring, provide a visible non-persistent plan or report a blocker; do not create watcher files.
 4. Reproduce or bound the failure:
    - exact command, UI path, input, or event sequence
    - deterministic, flaky, environment-specific, or not yet reproduced

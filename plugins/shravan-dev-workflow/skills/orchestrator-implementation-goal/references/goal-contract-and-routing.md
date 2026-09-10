@@ -63,7 +63,7 @@ ready delivery plan; implementation or proof incomplete
   -> implement-plan
 
 current implementation proof; independent review absent or stale
-  -> review-implementation for general-domain work
+  -> implementation-review for general-domain work
   -> skills-creation implementation review for a composed runtime skill package
 
 accepted implementation finding; remediation count below three
@@ -92,7 +92,7 @@ If current evidence establishes that no review has run, use the ordinary first-r
 1. Inspect the current source, diff, proof, and governing basis.
 2. Record which prior evidence is unavailable and why a review is necessary now.
 3. Establish that no prior recovery is known and that the normal allowance is not known exhausted.
-4. Pass an explicit one-time recovery request, the missing-evidence reason, current-source inspection, and the known or unknown remediation-count evidence to `review-implementation`.
+4. Pass an explicit one-time recovery request, the missing-evidence reason, current-source inspection, and the known or unknown remediation-count evidence to `implementation-review`.
 5. Record the recovery outcome in the work trail.
 
 Recovery does not fabricate a zero count, reset a known allowance, authorize repeated recovery, or excuse stale proof. If accepted findings return while the remaining correction budget is unknown, stop after reporting them and ask the user before correction.

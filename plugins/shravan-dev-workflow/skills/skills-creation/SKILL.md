@@ -164,6 +164,8 @@ An `evaluate` run walks a shorter spine: complete step 1, follow the review bran
 
 A run implementing one slice — one run of an accepted multi-run skill-change spec's sequenced runs — reads the accepted spec doc and takes its step-1 and step-2 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing; the doc is the commission for that slice, and each slice still names exactly one skill target.
 
+An update run follows one all-run spine: name the promise and success, choose the authoring basis and allocate the four surfaces, design the proposed change, obtain an `accepted-to-implement` proposal-review result before editing any skill file when behavior-changing unless the user explicitly skips review, edit only inside the accepted boundary, review changed files before proof unless the user explicitly skips review, then run proof and prune/ship. Mechanical changes stay static-only and skip both reviews; scoped wording changes use the narrowed review lanes.
+
 ### 1. Name the promise and success
 
 Classify the run; search the owning plugin for an existing skill or reference that already owns the named behavior and return the matching paths or `none`; name the reusable behavior in one sentence: "This skill helps agents reliably do X when Y happens." Before behavior-changing authoring, state a concise, human-readable success definition that names the observable behavior and situation that matter. Ask the user when missing meaning would materially change the intended behavior; do not derive the need from current skill wording alone. IF evaluating a draft that exists only in conversation, load `references/review/spec-review.md` to judge the proposal and return its verdict, blocker overrides, and first required revision. IF evaluating a skill already on disk, load `references/review/implementation-review.md` to judge the existing files and return its verdict, changed-file coverage, and first fix. Completion: classification, owner, reusable behavior, baseline or review target, success definition, and the surface allocation — which of the four surfaces carries each part of the change — are named; an `evaluate` run completes with classification, owner, reusable behavior, and review target.
@@ -247,7 +249,7 @@ IF any surface on the sensitive-surface list in `references/security-gate.md` is
 
 Review before proving. Proof run first is spent on text the review is about to change.
 
-IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch the implementation-review lanes and return the dispatched lane set, every receipt, parent reduction, and current remediation-pass evidence.
+IF the change is behavior-changing and the user has not said no review is needed, load `references/review/implementation-review.md` to select and dispatch its lanes and return the dispatched lane set, every receipt, parent reduction, and current remediation-pass evidence.
 
 Two obligations stay yours whatever the lanes return. Synthesis is not a lane's job: verify each candidate against actual files before accepting it. Accepted findings receive one remediation pass at a time, followed by another implementation review only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not dispatch review or remediation four without explicit user permission.
 
@@ -265,7 +267,7 @@ Completion: the authoring result, the behavior evidence, and the remaining proof
 
 Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it.
 
-IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge runtime skill-package readiness and return changed-file coverage, bounded review reduction, targeted retest, and the explicit ship decision. General product implementation review routes to `review-implementation`; runtime skill-package authoring remains under this `skills-creation` review contract.
+IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to judge runtime skill-package readiness and return changed-file coverage, bounded review reduction, targeted retest, and the explicit ship decision. General product implementation review routes to `implementation-review`; runtime skill-package authoring remains under this `skills-creation` review contract.
 
 IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route.
 
@@ -281,7 +283,7 @@ The run is not done while any of these hold:
 - the workflow has branches without observable predicates or return shapes;
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or parent reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
-- review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, an implementation-review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted parent-verified remediation;
+- review ran outside the Dispatch Contract: the dispatched lanes do not match the changed surface, a reviewer was forked from the authoring session instead of run in fresh context, an implementation-stage review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted parent-verified remediation;
 - implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;

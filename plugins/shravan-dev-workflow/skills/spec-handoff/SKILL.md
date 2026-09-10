@@ -49,7 +49,7 @@ Package spec/design context so another agent can continue without reconstructing
 - Tradeoffs and who pays their cost
 - Security context or reason it is not security-sensitive
 - Proof expectations: validation strategy, proof assumptions, explicit planning deferrals, or open proof gaps
-- Planning-admission evidence: current Requirements, Specification, and Program Design paths, exact three-artifact design review invocation identity, review result identity, evidence that it covers all three artifacts' current meaning, or the exact missing/stale prerequisite
+- Planning-admission evidence: current Requirements, Specification, and Program Design paths, the current three-artifact design review result (mode, covered targets, result, and coverage statement) or a pointer to it, evidence that it covers all three artifacts' current meaning, or the exact missing/stale prerequisite
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent

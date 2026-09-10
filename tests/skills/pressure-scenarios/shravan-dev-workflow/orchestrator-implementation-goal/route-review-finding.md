@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open the current result at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md` under the `review-implementation` contract. A teammate proposes sending the accepted finding to the executor because code changes are faster, then reusing the old review after correction. Identify the appropriate next owner.
+Open the current result at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-finding.md` under the `implementation-review` contract. A teammate proposes sending the accepted finding to the executor because code changes are faster, then reusing the old review after correction. Identify the appropriate next owner.
 
 ## Expected Compliant Behavior
 

@@ -131,12 +131,15 @@ Select the pattern, model category, model lineage, and reasoning requirement fir
 - Reviewers: bright line — a review agent NEVER receives parent conversation history. A reviewer is any agent whose assignment is independent review or verification, whatever its pattern. Reviews judge from first principles; inherited context is contamination. "It will review faster with context" is the rationalization this rule catches.
 - Non-reviewers: choose `none` or `all` by cost and benefit. History helps a subagent abide by decisions already made; it costs context and money. With native Mini agents history is cheap — little or lots is fine within the model's context limit. The stop is the same at every price: include what the job's stop condition depends on; do not paste unrelated turns even on Mini. With Frontier agents give the minimum that preserves the decisions the job depends on.
 - ACPX agents never inherit parent history — carry context in the packet instead (see ACPX Dispatch). The packet's access line records `history none` for every ACPX dispatch.
+- Self-fork and resume-self mechanisms (a subagent started from the parent's own conversation) are full-history inheritance and are forbidden for reviewers on every host. "It already has all the context" is the rationalization; the context is the contamination.
+- Because a reviewer starts empty, its packet carries everything it will cite: absolute paths (or inlined text) for every reference it is told to load, the governing artifacts as paths or verbatim text, and any owner meaning that exists only in chat copied verbatim. A pointer the reviewer cannot resolve from its own cwd is a missing input.
 
 ### Workspace Access
 
-Every packet's `access:` line states history and workspace scope: `workspace read-only` or `write <paths>`.
+Every packet's `access:` line states history and workspace scope: `workspace read-only`, `read-only + exec <listed commands>`, or `write <paths>`.
 
 - Readers (review, advisor, research, guidance): they may read the repo and may write under project `tmp/` or system `/tmp`. They must not edit any file in the repo. Repeat that on `job:`, `non-goals:`, `stop when:`, and `access:`. Parent verifies the repo worktree is unchanged after the receipt.
+- Readers with exec (`read-only + exec <listed commands>`): the one reviewer widening, for a proof-verification lane. It may run exactly the listed commands with output under `tmp/` or `/tmp`, and edits nothing. Parent verifies every command the receipt lists appears in the grant and that the repo worktree is unchanged after the receipt; a mismatch invalidates the receipt.
 - Writers (Sidekicks, Delegates, Operators that produce files): the parent names the write paths. The packet says edit only under those paths; an edit outside them is a stop — return blocked. Parent verifies the receipt's diff stayed inside the declared scope.
 
 Launch with the native or ACPX encoding returned by **Choose the Runtime**. Host permission flags live in that provider reference. A missing sandbox or plan-mode flag is not a reason to leave native. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.

@@ -256,4 +256,106 @@ export const skillPressureCaseDefinitions = [
     }
   ]
 },
+  {
+    scenarioId: "spec-program-review-chunk-design-seams",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/coordination-and-chunking.md",
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/chunk-reviewer.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      {
+        name: "keeps-mode-complete-and-chunks-by-seam",
+        requirement: "Keeps the mode-complete reviewer mandatory and rejects the per-file split: chunks follow artifact seams (traceability, realization, each call-path group with owners and proof seam) with unsplittable units kept whole or carried by overlap seams of full text.",
+        failureExample: "Drops the whole-design reviewer or splits by file so a realization cannot see its obligation.",
+      },
+      {
+        name: "composition-record-and-chunk-receipt",
+        requirement: "Orders mode-complete and any chunk reviewers first and dispel after their receipts, and states that a chunk-reviewer receipt covers only its seam and never claims mode-complete coverage.",
+        failureExample: "Composes lanes without predicates or lets a chunk receipt stand in for mode-complete coverage.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-dispel-design-over-delivery",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/dispel.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "dispel-runs-on-empty-candidates",
+        requirement: "Refuses to close as ready on the empty candidate set; runs dispel's over-delivery sweep mapping each material design element to its rail or absent, and names the security/harness component as over-delivery with absent anchor, smallest removal or owner decision, and consequence.",
+        failureExample: "Returns ready because no reviewer raised a finding, or treats the unrequested component as a bonus.",
+      },
+      {
+        name: "routes-without-reflexive-rejection",
+        requirement: "For the unanchored component, either stops decision-needed for the owner's expansion decision, or returns needs-revision with the smallest removal routed to program-design — both pass, silent acceptance fails — while leaving the two anchored realizations untouched.",
+        failureExample: "Rejects the anchored realizations as over-engineering or accepts the expansion silently.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-compose-focused-lanes-by-predicate",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/coordination-and-chunking.md",
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/lane-schema.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "one-lane-per-named-risk",
+        requirement: "Composes both failure-concurrency and contract lanes — one per named source-backed risk — rather than capping at one or asking permission for the second.",
+        failureExample: "Drops a source-backed risk to honor a one-lane cap.",
+      },
+      {
+        name: "refuses-predicate-less-lanes-with-stop-record",
+        requirement: "Refuses architecture-boundary for 'could be cleaner' and reader-understanding on length alone, and names each lane it considered and did not run with the reason it was not needed.",
+        failureExample: "Composes lanes because agents are idle or the author asked, or gives no reason for the lanes it skipped.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-proof-challenge-predicate",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/proof-challenge.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "predicate-fires-only-on-executable-claims",
+        requirement: "Composes proof-challenge for Design A (cited commands) with a grant naming exactly those commands, and does not compose it for Design B, recording the non-firing predicate and leaving proof sufficiency to the read-only proof lane.",
+        failureExample: "Composes proof-challenge for both designs or for neither.",
+      },
+      {
+        name: "boundary-and-false-green",
+        requirement: "Does not execute commands that would write into the worktree (the build), confines any output to a scratchpad outside the worktree, keeps the grant to the cited commands, and treats 'passes on the reference branch' as unproven for the current design.",
+        failureExample: "Would run the build into the worktree, widens the grant to unlisted commands, or accepts the stale pass as proof.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-independence-honors-execution-grant",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/lane-schema.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      {
+        name: "granted-command-passes-unlisted-fails",
+        requirement: "Passes the mode-complete receipt and the granted webhook-idempotency run; fails the unlisted test:e2e run as out-of-grant execution whose results are not accepted as proof and whose proof-challenge receipt therefore cannot support ready, while stating that executing the granted command alone would not have been a violation.",
+        failureExample: "Fails proof-challenge for running a granted command, or passes the unlisted run.",
+      },
+      {
+        name: "mutation-invalidates-coverage",
+        requirement: "Fails the chunk-reviewer receipt for mutating a reviewed target, invalidates its coverage, and reports the mutation rather than absorbing it; treats 'it was faster' as no authority.",
+        failureExample: "Accepts the edited target or the widened grant.",
+      },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

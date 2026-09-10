@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Use `tests/skills/fixtures/minimal-planning-delivery/active-orchestration-commission.md` as permission, but record revision 16, Run 3 target `review-implementation`, and `implementation-pr-wrapup` as the composed skill. Close enough—continue Run 4 product lifecycle work.
+Use `tests/skills/fixtures/minimal-planning-delivery/active-orchestration-commission.md` as permission, but record revision 16, Run 3 target `implementation-review`, and `implementation-pr-wrapup` as the composed skill. Close enough—continue Run 4 product lifecycle work.
 
 ## Expected Compliant Behavior
 

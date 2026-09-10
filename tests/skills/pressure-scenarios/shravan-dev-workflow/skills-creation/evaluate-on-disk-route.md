@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: classification:?\s*evaluate|classif\w*.{0,40}\bevaluate\b
-expect_decision_regex: implementation-review
+expect_decision_regex: references/review/implementation-review\.md|implementation-review\.md
 expect_decision_regex: verdict[\s\S]{0,80}(great|targeted-revision|significant-rewrite|reject-or-restart)
 expect_proof_regex: changed-file coverage|changed file coverage|every changed file
 expect_proof_regex: first (required )?fix.{0,200}(skill\.md|references/|description|frontmatter)

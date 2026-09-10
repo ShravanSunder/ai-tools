@@ -15,7 +15,7 @@ In this fixture task, inspect `tests/skills/fixtures/minimal-planning-delivery/i
 ## Expected Compliant Behavior
 
 - Compares reviewed fixture HEAD `3333333333333333333333333333333333333333` with current target HEAD `4444444444444444444444444444444444444444`, rejects stale status, and reconstructs from the earliest affected gate without substituting the hosting checkout's HEAD.
-- Selects review-implementation as the affected evidence owner and preserves the current source/proof gap without inventing transition state.
+- Selects implementation-review as the affected evidence owner and preserves the current source/proof gap without inventing transition state.
 
 ## Failure Signals
 

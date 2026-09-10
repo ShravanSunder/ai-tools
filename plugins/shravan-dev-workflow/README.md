@@ -16,7 +16,7 @@ shared understanding
        -> stop at reviewed three-artifact design or explicit gap; never enter planning automatically
   -> plan-implementation: one canonical plan + proof mapping
   -> implement-plan: approved immutable plan + implementation proof
-  -> review-implementation: one complete independent reconstruction + parent reduction
+  -> implementation-review: coordinator-chosen review lanes + rails reduction
        -> stop before corrections and PR work
 ```
 
@@ -43,8 +43,8 @@ plan-*               planning and portability     plan-implementation
                                                   plan-handoff
                                                   plan-improve-repo
 implement-*          approved-plan execution      implement-plan
-review-*             implementation judgment      review-implementation
-implementation-*     code/change boundary          implementation-pr-wrapup
+implementation-*     implementation judgment and lifecycle  implementation-review
+                                                  implementation-pr-wrapup
                                                   implementation-handoff
 ops-*                external operational systems  ops-security-review
                                                   ops-linear-tracking
@@ -74,7 +74,7 @@ flowchart LR
     planHandoff["plan-handoff<br/>portable plan context"]
 
     implementPlan["implement-plan<br/>ready delivery-plan execution"]
-    reviewImplementation["review-implementation<br/>independent implementation and proof review"]
+    implementationReview["implementation-review<br/>independent implementation and proof review"]
     implWrap["implementation-pr-wrapup<br/>finish PR lifecycle"]
     implHandoff["implementation-handoff<br/>portable code state"]
 
@@ -83,7 +83,7 @@ flowchart LR
     deliveryGoal -.->|"first unproven gate"| designCycle
     deliveryGoal -.-> planImplementation
     deliveryGoal -.-> implementPlan
-    deliveryGoal -.-> reviewImplementation
+    deliveryGoal -.-> implementationReview
     deliveryGoal -.-> implWrap
     designCycle -.->|"first phase"| specDesign
     designCycle -.->|"follows phase-selected routes"| programDesign
@@ -101,11 +101,11 @@ flowchart LR
     planImplementation --> planHandoff
     planImplementation -.->|"ready delivery context"| implementPlan
     planHandoff -.->|"when exact approval is preserved"| implementPlan
-    implementPlan --> reviewImplementation
-    reviewImplementation -.->|"accepted implementation correction"| implementPlan
-    reviewImplementation --> implWrap
+    implementPlan --> implementationReview
+    implementationReview -.->|"accepted implementation correction"| implementPlan
+    implementationReview --> implWrap
     implementPlan --> implHandoff
-    reviewImplementation --> implHandoff
+    implementationReview --> implHandoff
     implWrap --> implHandoff
 ```
 
@@ -135,11 +135,11 @@ Use `spec-design` to preserve two separate upstream concepts before program desi
 
 Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, source-anchored call paths and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. It turns stack/trace evidence into implementable entrypoint-to-effect views and produces an executable mental model, not a task list.
 
-Use `spec-program-review` to independently classify and proportionally review a Specification, a Program Design, or the complete Requirements, Specification, and Program Design set. It records the inspected snapshot, reconstructs the smallest model satisfying the confirmed goal, dispatches one fresh mode-complete reviewer first, and selects at most one concrete predicate-selected focused risk by default after parent reduction. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the three-artifact design. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
+Use `spec-program-review` to independently classify and proportionally review a Specification, a Program Design, or the complete Requirements, Specification, and Program Design set. The coordinator reads the whole artifact set, reconstructs the smallest model satisfying the confirmed goal, and chooses the lanes: the mode-complete reviewer always, chunk reviewers along artifact seams when the set is large, a dispel lane that challenges over-engineered findings and unrequested design elements, proof-challenge only when the design cites executable proof, and focused lanes one per named unresolved risk. Every review includes a compact reader-reconstruction and deletion pass; deeper reader-understanding review is conditional. It returns a coverage-bound verdict without editing artifacts or accepting the three-artifact design. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
 
-The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance and are not runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `review-implementation` are new minimal implementations, not aliases or revivals of those retired trees; they do not restore swarms, controller briefs, worker protocols, transition ledgers, or a separate plan-review layer.
+The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance and are not runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `implementation-review` are new minimal implementations, not aliases or revivals of those retired trees; they do not restore swarms, controller briefs, worker protocols, transition ledgers, or a separate plan-review layer.
 
-Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the exact three-artifact design review invocation identity, review result identity, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale three-artifact designs to `spec-program-review`, and current ready three-artifact designs to `plan-implementation`.
+Use `spec-handoff` to package spec/design context for a future session. It preserves decisions, non-goals, contracts, tradeoffs, evidence, security context, open questions, current artifact paths, the the current three-artifact design review result (mode, covered targets, result, and coverage statement) or a pointer to it, and semantic review freshness without creating an implementation plan. It routes missing How to `program-design`, complete but unreviewed or semantically stale three-artifact designs to `spec-program-review`, and current ready three-artifact designs to `plan-implementation`.
 
 ### Plan boundary
 
@@ -153,9 +153,9 @@ Use `plan-handoff` to package an existing implementation plan for another agent,
 
 Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
 
-Use `review-implementation` for independent product implementation and proof review after execution. It admits exact governing authority, canonical ready plan path and current meaning, governing planning basis, delivery context, source, diff, and proof identities; dispatches one complete fresh-context read-only reviewer; parent-verifies every candidate; optionally deepens one concrete unresolved material risk; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
+Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, canonical ready plan path and current meaning, governing planning basis, delivery context, source, diff, and proof identities; the coordinator reads the whole map, chooses chunked, overlapping fresh-context lanes, each for a named reason (spec-compliance, chunk reviewers, dispel, proof-challenge); parent-verifies every candidate against the rails; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
 
-Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation and applicable independent review exist: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery routes to `review-implementation`; PR wrap-up does not substitute for it.
+Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation and applicable independent review exist: push/open/update the PR, monitor checks and comments, process existing review threads, prove mergeability with fresh state, and merge only when user authorization exists. Fresh code-review discovery routes to `implementation-review`; PR wrap-up does not substitute for it.
 
 Use `implementation-handoff` when real implementation state exists: branch, diff, changed files, commits, validation output, failed commands, blockers, or risk. It is for continuation, audit, or manual review of work already in motion.
 
@@ -178,7 +178,7 @@ Review workflows do not use broad multi-model counsel by default. The single-ass
 normal review path
   spec-program-review
       -> bounded independent specification/program review
-  review-implementation
+  implementation-review
       -> one complete independent implementation/proof review
 ```
 
@@ -196,7 +196,7 @@ Use spec-handoff to package this design for another agent without creating a pla
 Use orchestrator-implementation-goal to carry this goal through planning, implementation, proof, review, and PR readiness.
 Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
 Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and `pr-ready-unmerged` delivery context, then return fresh implementation proof without starting review or PR work.
-Use review-implementation to independently review this implementation and proof without editing or starting PR lifecycle work.
+Use implementation-review to independently review this implementation and proof without editing or starting PR lifecycle work.
 Use research-swarm to gather source-grounded evidence into a tmp ledger.
 Use plan-improve-repo to audit this repo and write immutable canonical plan-only improvement plans. When delivery is requested later, route the admitted finding through plan-implementation to establish current delivery intent instead of upgrading the prior plan.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.

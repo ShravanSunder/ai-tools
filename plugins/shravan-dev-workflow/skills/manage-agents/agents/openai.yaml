@@ -1,4 +1,4 @@
 interface:
-  display_name: "Agents: Manage"
+  display_name: "Manage: Agents"
   short_description: "Coordinate advisors, sidekicks, delegates, and operators"
   default_prompt: "Use manage-agents to choose and coordinate an advisor, sidekick, delegate, operator, subagent, or swarm across native and ACPX runtimes."

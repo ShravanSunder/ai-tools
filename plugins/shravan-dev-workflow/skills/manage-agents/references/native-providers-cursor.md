@@ -16,5 +16,5 @@ Use the exact model id the host Task tool advertises. Pattern floors from `SKILL
 
 Reader and writer packet slots are owned by `agent-job-packet.md`.
 
-- Readers: packet `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
+- Readers: packet `workspace read-only`, spawned as a new Task with no `resume` — `resume: "self"` forks the parent's history and is never used for review. Parent verifies the repo worktree is unchanged after the receipt.
 - Writers: packet `write <paths> (declared)`. Cursor Task does not path-scope writes. Parent verifies the receipt's diff stayed inside the declared scope.

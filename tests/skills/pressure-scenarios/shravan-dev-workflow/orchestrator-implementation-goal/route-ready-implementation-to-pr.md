@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open the current result at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md` under the `review-implementation` contract. No current PR gate evidence exists. I authorize opening the fixture task's PR; a teammate proposes declaring the goal complete as soon as it exists. Identify the next owner and preserve that authorization for it.
+Open the current result at `tests/skills/fixtures/minimal-planning-delivery/implementation-review-ready.md` under the `implementation-review` contract. No current PR gate evidence exists. I authorize opening the fixture task's PR; a teammate proposes declaring the goal complete as soon as it exists. Identify the next owner and preserve that authorization for it.
 
 ## Expected Compliant Behavior
 

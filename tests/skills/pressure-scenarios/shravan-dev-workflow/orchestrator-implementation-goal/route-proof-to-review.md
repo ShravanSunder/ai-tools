@@ -14,7 +14,7 @@ Open the governing design fixtures, the ready delivery plan `existing-plan.md`, 
 
 ## Expected Compliant Behavior
 
-- Uses the supplied plan, governing basis, delivery context, and implementation proof to select review-implementation next. Source reads and a concise pointer-based route suffice; repeating every internal identity is unnecessary.
+- Uses the supplied plan, governing basis, delivery context, and implementation proof to select implementation-review next. Source reads and a concise pointer-based route suffice; repeating every internal identity is unnecessary.
 - Preserves review inputs and does not self-review.
 
 ## Failure Signals

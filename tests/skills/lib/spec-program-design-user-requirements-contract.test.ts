@@ -290,17 +290,18 @@ describe("user requirements and design-view contracts", () => {
     ].join("\n");
 
     expect(reviewSkill).toContain("reader understanding or readability");
-    expect(reviewSkill).toContain("exactly one mode-complete reviewer first");
+    expect(reviewSkill).toContain("mode-complete reviewer always");
+    expect(reviewSkill).toContain("the parent verifies and reduces it");
+    expect(reviewSkill).toContain("one focused assignment per named risk");
+    expect(reviewSkill).toContain("named unresolved risk selects it");
+    expect(reviewSkill).not.toContain("stop record");
     expect(reviewSkill).toContain(
-      "The parent verifies and reduces it before selecting any focused lane",
-    );
-    expect(reviewSkill).toContain("at most one focused reviewer by default");
-    expect(reviewSkill).toContain(
-      "The reviewing parent may not grant this authority to itself before or during review",
+      "may never compose a lane without a predicate",
     );
     expect(reviewSkill).toContain(
-      "pre-dispatch external-caller packet already named that residual risk",
+      "narrow the composable set but never widen authority",
     );
+    expect(reviewSkill).not.toContain("at most one focused reviewer by default");
     expect(reviewSkill).toContain(
       "`Requirements`, `Specification`, `Program Design`, or a named combination",
     );
@@ -349,7 +350,7 @@ describe("user requirements and design-view contracts", () => {
     expect(laneSchema).toContain("every member identity is enumerated");
     expect(commonMethod).toContain("every member identity is enumerated");
     expect(reduction).toContain(
-      "whether deletion of the questioned mechanism removes the failure",
+      "whether the confirmed obligations still hold without the questioned mechanism",
     );
     expect(reduction).toContain("requires owner expansion decision");
   });
@@ -420,13 +421,9 @@ describe("user requirements and design-view contracts", () => {
     expect(reviewSkill).toContain(
       "result: ready | needs-revision | blocked | decision-needed",
     );
-    expect(reviewSkill).toContain(
-      "result identity:\n    exact review invocation identity\n    exact review result identity",
-    );
+    expect(reviewSkill).not.toContain("exact review invocation identity");
     expect(reviewSkill).not.toContain("exact review invocation/result identity");
-    expect(reduction).toContain(
-      "exact review invocation identity and review result identity",
-    );
+    expect(reduction).not.toContain("exact review invocation identity");
     expect(reduction).toContain(
       "result: ready | needs-revision | blocked | decision-needed",
     );
@@ -484,14 +481,13 @@ describe("user requirements and design-view contracts", () => {
       expect(consumer).not.toMatch(/\bpairs?(?:-mode|-review| review)?\b/i);
     }
 
-    for (const consumer of currentDesignReviewConsumers.slice(0, 3)) {
-      expect(consumer).toContain("exact three-artifact design review invocation identity");
-      expect(consumer).toContain("review result identity");
+    for (const consumer of currentDesignReviewConsumers) {
+      expect(consumer).not.toContain("review invocation identity");
+      expect(consumer).not.toContain("review result identity");
     }
-    expect(currentDesignReviewConsumers[4]).toContain(
-      "exact three-artifact design review invocation identity",
-    );
-    expect(currentDesignReviewConsumers[4]).toContain("review result identity");
+    for (const consumer of currentDesignReviewConsumers.slice(0, 3)) {
+      expect(consumer).toContain("three-artifact design review result");
+    }
   });
 
   test("indexes every view owner and rendering consumer", () => {

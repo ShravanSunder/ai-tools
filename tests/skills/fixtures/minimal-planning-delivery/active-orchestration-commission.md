@@ -10,7 +10,7 @@ This is one multi-run skill-change spec. Each update run names exactly one skill
 
 1. `plan-implementation` — create one repo-grounded implementation plan from the reviewed three-artifact design set.
 2. `implement-plan` — validate and execute an approved plan with slice-local proof and explicit replan stops.
-3. `review-implementation` — independently judge the implementation and its proof through a regimented review workflow.
+3. `implementation-review` — independently judge the implementation and its proof through a regimented review workflow.
 4. `orchestrator-implementation-goal` — compose design, planning, optional operations tracking, implementation, review, and PR readiness without owning phase judgment.
 
 PR0 is a hard predecessor, not a run in this spec. The user's direct commission in this conversation authorizes one separate `skills-creation` update run targeting `spec-program-review` and its active callers. Its success definition is a hard cutover from the inaccurate `pair` model to the canonical contract below, with no aliases or forwarding stubs. Historical specs, WIP evidence, changelogs, retired skills, and retired pressure scenarios stay unchanged.
@@ -82,7 +82,7 @@ admitted repository-improvement finding ---> plan-improve-repo -----+
 implement-plan
     |  implementation + proof
     v
-review-implementation
+implementation-review
     |  ready -------------------------------> implementation-pr-wrapup
     |  code/proof correction
     +----------------------------------------> implement-plan
@@ -114,13 +114,13 @@ The user may strike any row before acceptance.
 | Independent plan review | No separate pre-execution plan-review phase in v1; owner approval plus `implement-plan` validation guard execution, and plan defects found later route back to planning | The retired separate review lifecycle was expensive. A new independent plan-review phase should be earned by failures these two gates do not catch. |
 | Implementation delegation | Inline by default; `manage-agents` only when the approved plan identifies genuinely independent disjoint slices or the user asks | Parallelism is an execution choice, not the implementation skill's identity. |
 | Implementation review | Every meaningful behavior, architecture, security, runtime, or code change receives one complete fresh-context independent review | Independent reconstruction catches compliance and false-green defects that executor self-checks cannot establish. |
-| Mechanical review | The orchestrator still invokes `review-implementation`; the skill may return evidence-backed `non-substantial` without model dispatch | This preserves a regimented gate without paying an independent-model cost for typo-only or generated-metadata-only changes. |
+| Mechanical review | The orchestrator still invokes `implementation-review`; the skill may return evidence-backed `non-substantial` without model dispatch | This preserves a regimented gate without paying an independent-model cost for typo-only or generated-metadata-only changes. |
 | Focused review | At most one focused reviewer by default, only for one concrete residual risk after parent reduction | Review depth follows evidenced risk; reviewer count is not quality. Additional review requires user or pre-dispatch caller authority. |
 | Review remediation | Review stays read-only; accepted findings route to their semantic owner, and affected coverage is reviewed again after correction | Review must not become an editor or accept its own remediation. |
 | Goal state | Reconstruct the first unproven gate from exact artifacts and evidence; no `details.md` or `events.jsonl` lifecycle ledger | The host goal plus inspectable artifacts are enough. Duplicate transition state was the primary old-orchestrator bloat. |
 | Default goal terminal | PR-ready and unmerged; an explicit narrower terminal wins | This preserves the existing safe delivery boundary and keeps merge separately authorized. |
 | Ticket publication | Only when user intent selects an available `ops-*` skill; publication is not planning completion | External mutations and provider details remain with operations owners. |
-| Runtime skill packages | `skills-creation` remains the sole meta-workflow owner. Planner, executor, and goal orchestration require its exact parent identity when explicitly composed and otherwise route there. `review-implementation` never reviews skill authoring because `skills-creation` owns its proposal and changed-skill reviews directly. | Planning, execution, product review, or orchestration must not bypass one-skill runs, authoring review, pressure proof, or platform validation. |
+| Runtime skill packages | `skills-creation` remains the sole meta-workflow owner. Planner, executor, and goal orchestration require its exact parent identity when explicitly composed and otherwise route there. `implementation-review` never reviews skill authoring because `skills-creation` owns its proposal and changed-skill reviews directly. | Planning, execution, product review, or orchestration must not bypass one-skill runs, authoring review, pressure proof, or platform validation. |
 | Versioning | Land the four runtime skills as one coordinated plugin release after PR0 | Cross-skill routing must appear atomically to users; partial runtime availability would create dead routes. |
 
 Sensitive-surface decision: no scripts, hooks, executable third-party source, credentials, network mutations, or writes outside the repository are proposed by these four skill definitions. The expected `skills-creation` security route is `n/a` for each run unless implementation introduces such a surface, in which case that run must load the security gate before writing it.
@@ -162,7 +162,7 @@ description: Use when auditing a repository for improvement opportunities, backl
 
 - Trigger: reviewed-design-to-plan loading condition and adjacent boundaries.
 - Main path: mental model, strict admission, seven-step spine, planning invariants, proportionality, and stop boundary.
-- Depth: `../../shared-references/canonical-implementation-plan.md` is one teaching reference, not a shape-only schema. It teaches what producers inspect; proportional compact/full form and repository-home selection; immutable plan-path identity without document digests; the canonical tuple and result-specific payloads; the external approval-evidence/explicit-absence record; good/bad signals; producer and consumer validation; preservation; routing; and stop conditions. Its producers are `plan-implementation` and `plan-improve-repo`; its carriers/consumers are `implement-plan`, `review-implementation`, `orchestrator-implementation-goal`, `plan-handoff`, and `implementation-handoff`. Inline stage 3 owns source reconciliation. `references/slice-and-proof-design.md` teaches slice types, edge types, proof fit, false-green risks, and split/replan examples.
+- Depth: `../../shared-references/canonical-implementation-plan.md` is one teaching reference, not a shape-only schema. It teaches what producers inspect; proportional compact/full form and repository-home selection; immutable plan-path identity without document digests; the canonical tuple and result-specific payloads; the external approval-evidence/explicit-absence record; good/bad signals; producer and consumer validation; preservation; routing; and stop conditions. Its producers are `plan-implementation` and `plan-improve-repo`; its carriers/consumers are `implement-plan`, `implementation-review`, `orchestrator-implementation-goal`, `plan-handoff`, and `implementation-handoff`. Inline stage 3 owns source reconciliation. `references/slice-and-proof-design.md` teaches slice types, edge types, proof fit, false-green risks, and split/replan examples.
 - Proof: representative pressure scenarios for valid admission; incomplete/stale/combined inputs with and without an extant plan; no-plan receipt without a phantom tuple; failed admission preserving the unchanged tuple and approval record/absence; design-gap routing; vertical slices; contract-only consumers; collision serialization; proof-fit splitting; small-plan proportionality; both planning origins emitting canonical tuples only for extant completed plans; `draft | revision-requested | blocked` result routing; and stop boundaries.
 
 Proof posture: user-directed intent with representative hypothesis scenarios. No historical RED claim.
@@ -181,7 +181,7 @@ Proposed trigger:
 
 ```yaml
 name: implement-plan
-description: Use when executing or continuing an implementation plan, including when its immutable path, current meaning, or matching later owner approval must be validated, or when correcting accepted code, test, or implementation-proof findings explicitly routed here by review-implementation. Not for plan or design defects, changes to one named runtime skill package or an accepted multi-run skill-change slice without explicit skills-creation composition, independent implementation review, tracker publication, or PR lifecycle work.
+description: Use when executing or continuing an implementation plan, including when its immutable path, current meaning, or matching later owner approval must be validated, or when correcting accepted code, test, or implementation-proof findings explicitly routed here by implementation-review. Not for plan or design defects, changes to one named runtime skill package or an accepted multi-run skill-change slice without explicit skills-creation composition, independent implementation review, tracker publication, or PR lifecycle work.
 ```
 
 ### Main path
@@ -203,7 +203,7 @@ description: Use when executing or continuing an implementation plan, including 
 
 Proof posture: user-directed intent with representative hypothesis scenarios and retired executor comparisons. No blanket claim that subagents are harmful; only default orchestration is removed.
 
-## Run 3: `review-implementation`
+## Run 3: `implementation-review`
 
 ### Reusable behavior and success
 
@@ -216,7 +216,7 @@ Invocation: both model-invocable and user-invocable.
 Proposed trigger:
 
 ```yaml
-name: review-implementation
+name: implementation-review
 description: Use when independently reviewing implemented code, tests, proof, a branch diff, commit, PR head, or accepted remediation against its governing reviewed-design or admitted repository-improvement authority and approved implementation plan before PR readiness. Not for design-artifact review, skill-package authoring review, editing findings, standalone security scans, audits, threat models, vulnerability reviews, security diff scans, security-finding remediation, or PR lifecycle monitoring.
 ```
 
@@ -287,8 +287,8 @@ description: Use when starting, resuming, auditing, or completing a general-doma
 - Plan result `revision-requested` -> recorded originating planner; plan result `blocked` -> its named blocker; only `draft` may continue.
 - `draft` plan without matching later explicit owner approval of its immutable path and current meaning -> caller stop.
 - `draft` plan with matching separate approval and without implementation proof -> `implement-plan`.
-- Implementation proof without current review -> `review-implementation`.
-- Review findings -> the exact semantic owner selected by `review-implementation`.
+- Implementation proof without current review -> `implementation-review`.
+- Review findings -> the exact semantic owner selected by `implementation-review`.
 - Ready implementation without PR readiness -> `implementation-pr-wrapup`.
 - User-selected tracking projection -> the named available `ops-*` skill; tickets never replace the plan.
 
@@ -310,7 +310,7 @@ The goal router verifies only these phase-owned returns and freshness anchors; i
 - `plan-improve-repo`: a `route | blocked` phase receipt with governing-input identities, reason/evidence, and semantic or unblock owner, plus either `plan identity: none` when no completed plan exists or the unchanged extant tuple and approval record/absence; or, after admission, admitted-finding authority, complete canonical tuple with result-specific payload, and complete separate approval-evidence record or explicit absence.
 - `plan-implementation`: a `route | blocked` phase receipt with governing design/review input identities, reason/evidence, and semantic or unblock owner, plus either `plan identity: none` when no completed plan exists or the unchanged extant tuple and approval record/absence; or, after admission, governing design/review identities, complete canonical tuple with result-specific payload, and complete separate approval-evidence record or explicit absence.
 - `implement-plan`: unchanged canonical plan tuple, complete separate current-plan approval-evidence record or explicit absence, implementation base/HEAD/diff, obligation/slice coverage, proof observations, and blockers.
-- `review-implementation`: unchanged canonical plan tuple, complete separate current-plan approval-evidence record or explicit absence, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings/routes, and freshness condition.
+- `implementation-review`: unchanged canonical plan tuple, complete separate current-plan approval-evidence record or explicit absence, exact reviewed base/HEAD/diff, governing authority, current coverage, result, findings/routes, and freshness condition.
 - `ops-*`: external identifiers and links back to the canonical plan; this projection does not prove a delivery gate.
 - `implementation-pr-wrapup`: PR URL/number, base/head/SHA, checks, comments/reviews, mergeability, draft/readiness, and explicit no-merge boundary.
 
@@ -327,7 +327,7 @@ A missing, conflicting, status-only, or stale return stops at its owner. The rou
 - Direct planning authority resolves mixed inputs: a reviewed three-artifact design set as authority routes to `plan-implementation`; admitted audit findings as authority route to `plan-improve-repo`. The `plan-implementation` run must add the reciprocal near-miss boundary to `plan-improve-repo`.
 - `ops-*` skills own external tracker mutations. Their artifacts reference the canonical plan.
 - `implement-plan` is the sole approved-plan executor and implementation-finding remediation owner.
-- `review-implementation` owns independent product-implementation review. It does not review runtime skill authoring; `skills-creation` retains its own proposal and changed-skill review contracts.
+- `implementation-review` owns independent product-implementation review. It does not review runtime skill authoring; `skills-creation` retains its own proposal and changed-skill review contracts.
 - `implementation-pr-wrapup` retains PR mutation, checks, comments, review-thread, and merge-readiness ownership.
 - `orchestrator-implementation-goal` owns only route selection, phase-result verification, and terminal evaluation.
 
@@ -344,7 +344,7 @@ Each run updates the mandatory active callers assigned below for that one target
 | PR0 `spec-program-review` | `spec-program-review` operation/mode/reference/result labels; `orchestrator-design` and state/counters; `spec-design`; `program-design`; `spec-handoff`; `plan-improve-repo`; shared Requirements/Specification/Program Design reference; AGENTS/README design-review descriptions; generated metadata when affected; `tests/skills/lib/spec-program-design-user-requirements-contract.test.ts`; active pressure indexes, scenarios, and cases using the old term. |
 | Run 1 `plan-implementation` | Add the skill, teaching shared `canonical-implementation-plan` contract, and pressure cases. Give `plan-implementation`, `plan-improve-repo`, and `plan-handoff` literal load calls returning their producer or carrier validation. Cut `plan-handoff` and `spec-handoff` unavailable-route text to the new planner; make `plan-handoff` preserve the tuple plus separate approval-evidence record or explicit absence. Add the reciprocal `plan-improve-repo` direct-authority boundary; make its skill/template instantiate the shared contract with originating planner `plan-improve-repo`; remove redundant `Status: proposed` and embedded validation-readiness state from the canonical artifact; make any `plans/README.md` index project only the canonical `draft | revision-requested | blocked` result without owning or mutating it; keep plan validation as a separate non-authoritative current-state receipt that never mutates planning result or approval. Update active routing docs/metadata that enumerate planning. |
 | Run 2 `implement-plan` | Add the skill and pressure cases; cut `implementation-handoff` and `plan-improve-repo` unavailable-execution text to the new executor. Give only `implementation-handoff` the literal shared-contract call; its templates consume and preserve the returned unchanged tuple, result-specific payload, separate current-plan approval-evidence record or explicit absence, and implementation proof for context-free continuation or review. Update active routing docs/metadata that enumerate implementation. |
-| Run 3 `review-implementation` | Add the skill/references/pressure cases. Hard-cut active review routing in `implementation-pr-wrapup`, `implementation-handoff`, `plan-improve-repo`, `research-swarm`, `docs-maintain`, AGENTS, and plugin README while preserving `skills-creation`'s separate skill-authoring review. Replace the `skills-creation` sentence claiming no active product implementation-review route with a boundary-safe statement; cut the review-unavailable half of `plan-improve-repo`'s combined blocker. Update active pressure indexes/cases including `implementation-pr-wrapup/low-thinking-default`, `implementation-pr-wrapup/review-routing-boundary`, and `research-swarm/substantial-stage-artifacts` so they route to `review-implementation` without making PR wrapup or research perform review. |
+| Run 3 `implementation-review` | Add the skill/references/pressure cases. Hard-cut active review routing in `implementation-pr-wrapup`, `implementation-handoff`, `plan-improve-repo`, `research-swarm`, `docs-maintain`, AGENTS, and plugin README while preserving `skills-creation`'s separate skill-authoring review. Replace the `skills-creation` sentence claiming no active product implementation-review route with a boundary-safe statement; cut the review-unavailable half of `plan-improve-repo`'s combined blocker. Update active pressure indexes/cases including `implementation-pr-wrapup/low-thinking-default`, `implementation-pr-wrapup/review-routing-boundary`, and `research-swarm/substantial-stage-artifacts` so they route to `implementation-review` without making PR wrapup or research perform review. |
 | Run 4 `orchestrator-implementation-goal` | Add the skill/reference/pressure cases; update AGENTS, plugin README, both plugin manifests/interfaces, marketplaces when required, and goal routing docs. Split the retired-discovery regression so retired provenance remains non-discoverable while the new active replacement is expected. |
 | Final coordinated integration | Remove every active “no replacement/route unavailable” claim that the new suite supersedes; inventory all active skill names and pointers; bump one plugin version; add one public-safe changelog entry and index; run stale-route, retired-provenance, metadata, marketplace, and full validation checks. |
 
