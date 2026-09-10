@@ -10,7 +10,7 @@ Maximum authority: fresh-context, candidate-only review with one named expansion
 
 - before every execution, resolve what the command actually runs — the script it names, its pre/post hooks, and the relevant tool configuration — and classify its write set as `scratchpad-only | ignored-build-artifacts (listed paths) | tracked-worktree | unknown`; `tracked-worktree` and `unknown` stop before execution with the predicted writes and evidence, while gitignored build output under listed paths (coverage, cache, dist) is allowed and named in the receipt. After every run, compare `git status --porcelain` in the reviewed worktree to its pre-run state and report it — any tracked change invalidates the receipt. Running once to discover behavior is forbidden;
 - the resolved chain is reviewed (untrusted) code: a hook or test that reads credentials, touches the network, or reaches outside the worktree is reported as a security observation and not executed;
-- output, logs, and captured artifacts go to the tmp scratchpad, never into the worktree;
+- output, logs, and captured artifacts go to the tmp scratchpad (project `tmp/` or system tmp), never into a tracked file;
 - no installs, no network fetches, no home-level writes, no new tooling;
 - never edit, stage, commit, or "fix" anything to make proof pass.
 

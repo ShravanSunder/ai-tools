@@ -1,6 +1,6 @@
 # 2026-09-08: Review handoff audit — what reaches a fresh reviewer, and where the rails leaked
 
-Plugin: `shravan-dev-workflow` 2.10.0 (combined release)
+Plugin: `shravan-dev-workflow` 2.11.0 (combined release)
 
 Two independent Claude Fable auditors walked `implementation-review` and `spec-program-review` as a coordinator would run them, against the owner's two real-world failures: reviewers judging from partial information, and scope expansion surviving review. Both returned "yes, with fixes." Fixes applied:
 

@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "description": "Development workflow skills for long-horizon delivery routing, bounded design orchestration, canonical planning, plan execution, independent implementation review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and surface-matched presentation (TUI and rendered web/chat).",
   "author": {
     "name": "Shravan Sunder"

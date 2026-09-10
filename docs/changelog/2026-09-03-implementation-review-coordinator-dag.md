@@ -1,6 +1,6 @@
 # 2026-09-03: implementation-review becomes a coordinator-chosen review lanes
 
-Plugin: `shravan-dev-workflow` 2.10.0 (combined release with the rename entry; also absorbs master's bounded-recovery admission into `implementation-review`)
+Plugin: `shravan-dev-workflow` 2.11.0 (combined release with the rename entry; also absorbs master's bounded-recovery admission into `implementation-review`)
 
 - Rebuilt `implementation-review` (skill, references, lanes) around a coordinator model: the parent reads the whole governing basis and diff, chooses the lanes per review (sequenced gates, parallel chunk reviewers, each lane for a named reason), and reduces all receipts itself.
 - New `references/coordination-and-chunking.md` teaches chunk semantics: complete files with mapped obligations, never diff hunks; call paths, changed contracts with their callers, and obligation-to-proof chains stay together or share overlap seams.

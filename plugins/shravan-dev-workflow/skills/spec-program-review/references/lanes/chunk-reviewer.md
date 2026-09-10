@@ -8,7 +8,7 @@ Expected inputs: the complete lane-schema packet with the chunk assignment (seam
 
 Prerequisites: the shared context exists and the chunk plan names this chunk's seam and units whole.
 
-Maximum authority: fresh-context, read-only, candidate-only. A tmp scratchpad outside the worktree may hold working notes. No mode recommendation, verdict, editing, remediation, planning, or acceptance.
+Maximum authority: fresh-context, read-only, candidate-only. A tmp scratchpad may hold working notes. No mode recommendation, verdict, editing, remediation, planning, or acceptance.
 
 ## Method
 

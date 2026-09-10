@@ -1,6 +1,6 @@
 # 2026-09-02: Rename review-implementation to implementation-review
 
-Plugin: `shravan-dev-workflow` 2.10.0 (released with the coordinator-lanes entry after merging master, which had reached 2.9.0)
+Plugin: `shravan-dev-workflow` 2.11.0 (released with the coordinator-lanes entry after merging main, which had reached 2.10.0)
 
 - Renamed the `review-implementation` skill to `implementation-review` as a hard cutover, joining the namespace-first `implementation-*` family (`implementation-pr-wrapup`, `implementation-handoff`).
 - Moved the skill folder, frontmatter `name`, `agents/openai.yaml` prompt, and the pressure-scenario folder; updated cross-references in all active skills, shared references, plugin README (family table row moved under `implementation-*`), both plugin manifests (keywords and Codex defaultPrompt), tests, and the AGENTS.md skills table, SOP routing sentence, and retired-swarm disambiguation.

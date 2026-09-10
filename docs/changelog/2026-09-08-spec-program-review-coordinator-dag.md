@@ -1,6 +1,6 @@
 # 2026-09-08: spec-program-review becomes a coordinator-chosen review lanes
 
-Plugin: `shravan-dev-workflow` 2.10.0 (combined release with the implementation-review rename and coordinator-lanes entries)
+Plugin: `shravan-dev-workflow` 2.11.0 (combined release with the implementation-review rename and coordinator-lanes entries)
 
 - The parent is now the review coordinator: it reads the whole artifact set itself, then chooses the lanes — mode-complete reviewer always, `chunk-reviewer` lanes along artifact seams when the set is large, `dispel` always after artifact-review receipts, `proof-challenge` only when the design cites executable proof, focused lanes one per named unresolved risk. The one-focused-lane-by-default cap is replaced by one lane per named risk.
 - New references: `coordination-and-chunking.md` (design seams, overlap of full text, when not to chunk), `lanes/chunk-reviewer.md` (bounded seam reconstruction, never a mode-complete claim), `lanes/dispel.md` (candidate correction class plus design over-delivery map — "architecture nouns without an anchor"), `lanes/proof-challenge.md` (bounded execution grant with preflight write-set check, scratchpad-only output, untrusted-chain rule).

@@ -6,7 +6,7 @@ Predicate: mandatory for every review invocation; runs after the mode-complete a
 
 Expected inputs: the complete lane-schema packet with the complete target set (not summaries), the candidate-finding set from prior lanes — possibly empty — and the complete governing-source set with the confirmed goal boundary and accepted requirements set.
 
-Maximum authority: fresh-context, read-only, candidate-only. A tmp scratchpad outside the worktree may hold working notes. Classifications are candidate evidence for the parent, never dispositions.
+Maximum authority: fresh-context, read-only, candidate-only. A tmp scratchpad may hold working notes. Classifications are candidate evidence for the parent, never dispositions.
 
 ## Challenge the Candidates
 
