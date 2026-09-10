@@ -1,6 +1,6 @@
 {
   "codex-router": {
-    "repository": "https://github.com/shravan-agent/codex-router",
+    "repository": "https://github.com/ShravanSunder/codex-router",
     "commit": "6cf38cd6ee34bf0d94694bb69b501125a2f5f318",
     "sourcePath": "agent-skills/router-controls",
     "destinationPath": "plugins/codex-router/skills/router-controls"
