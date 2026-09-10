@@ -80,3 +80,5 @@ Shravan's Codex-first development workflow plugin. Provides:
 - **ops-linear-tracking** skill -- organizes Linear projects, milestones, issues, and dependencies using docs as the source of truth and tickets as tracking artifacts
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle
+
+- [Codex Router plugin](codex-router/) — agent messaging, wake-ups and scheduled workflows; canonical skill maintained in Router.

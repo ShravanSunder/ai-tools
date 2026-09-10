@@ -1,5 +1,7 @@
 # Changelog
 
+- [2026-09-10 Router controls plugin](2026-09-10-router-controls-plugin.md)
+
 Public-safe release notes and local memory for ai-tools plugins, sidecar behavior, and workflow-system changes. Entries are newest first.
 
 ## Entry Rules
