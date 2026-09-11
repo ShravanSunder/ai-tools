@@ -1,6 +1,6 @@
 {
   "name": "codex-router",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Agent communication, timed wake-ups and scheduled workflows through Codex Router.",
   "author": {
     "name": "Shravan Sunder"

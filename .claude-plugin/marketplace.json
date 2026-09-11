@@ -29,7 +29,7 @@
       "name": "codex-router",
       "source": "./plugins/codex-router",
       "description": "Agent communication, timed wake-ups and scheduled workflows through Codex Router.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     }
   ]
 }
