@@ -19,7 +19,7 @@ ai-tools/
 │   └── shravan-dev-workflow/         # Spec, review, docs, TUI, and Linear workflow skills
 ├── observability/                    # Shared local OpenTelemetry and Victoria stack
 ├── agent-scripts/                    # Host agent scripts (not plugin skills)
-│   ├── stop-review/                  # Luna Stop-review; isolated ~/.codex-reviewer exec
+│   ├── stop-review/                  # Luna Stop-review; deploy-home-hook.sh copies runtime to ~/.agents/stop-review
 │   └── lint-changed/                 # Changed-file lint/format Stop hook; nested Stop fails open
 ├── agent_sidecar/                    # Docker sidecar system
 │   ├── run-agent-sidecar.sh          # Main launch script
