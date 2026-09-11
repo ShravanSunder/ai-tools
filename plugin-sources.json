@@ -1,8 +1,15 @@
 {
-  "codex-router": {
-    "repository": "https://github.com/ShravanSunder/codex-router",
-    "commit": "c230d4ac5687be7a944c619ac2419cce78d6a4ea",
-    "sourcePath": "agent-skills/router-controls",
-    "destinationPath": "plugins/codex-router/skills/router-controls"
+  "skills": {
+    "agent-communication": {
+      "status": "current",
+      "repository": "https://github.com/ShravanSunder/codex-router",
+      "commit": "9be51b263907a8203e8e9b509f098a67f21c12e9",
+      "sourcePath": "agent-skills/agent-communication",
+      "destinationPath": "plugins/codex-router/skills/agent-communication"
+    },
+    "router-controls": {
+      "status": "deprecated",
+      "destinationPath": "plugins/codex-router/skills/router-controls"
+    }
   }
 }
