@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-11 Stop-review scheduled-wake wait](2026-09-11-stop-review-scheduled-wake-wait.md)
 - [2026-09-11 Stop-review home deploy](2026-09-11-stop-review-home-deploy.md)
 - [2026-09-11 Codex Router agent-communication skill](2026-09-11-agent-communication-skill.md)
 
@@ -16,6 +17,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-11 Stop-review scheduled-wake wait](2026-09-11-stop-review-scheduled-wake-wait.md)
 - [2026-09-11 Stop-review home deploy](2026-09-11-stop-review-home-deploy.md)
 - [2026-09-11 Codex Router agent-communication skill](2026-09-11-agent-communication-skill.md)
 - [2026-09-10 Router controls plugin](2026-09-10-router-controls-plugin.md)

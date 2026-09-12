@@ -22,10 +22,12 @@ How to decide. Use the first matching step.
 2. Explicit wait → stop_ok.
    [last] waits for inspect/agree before further changes ("wait for you to inspect Vite", "no further changes until we agree").
    Or [last] is waiting on computer-control / tool permission / inspect authorization the user has not given.
+   Or [last] reports a timed wake the user already authorized is saved/verified/active, so the next check cannot run until that wake.
    Keep-going and why-stop do not clear a denial. Repeating the same permission ask is not continue_work.
    A new primary inspect/discuss request beats older implementation. Do not continue PR work past that wait.
    A leftover choice after why-stop is not this step.
    Sitrep / "are we on the rails" / "may I defer X" while proof or review remains is not this step.
+   A leftover defer question is not a timed wake. A saved/verified timed wake is this step even if review/proof remains.
 
 3. Keep-going → continue_work.
    Latest USER TURN is why/don't/should not stop, or "did you have a question?"
@@ -41,6 +43,7 @@ How to decide. Use the first matching step.
    [last] still shows review, implement, prove, unbuilt UI, parked lists, or only recorded a decision the user already gave.
    A how-question answered with a recommendation is not the end of an open design job.
    A bare "yes, C is recorded" restatement is not the end of an open design/review job when [last] still shows remaining review, docs, or parked work.
+   Not this step: a saved/verified scheduled wake whose next check waits for that wake.
 
 6. Else stop_ok: the current job is done in [last], or you are unsure.
 
@@ -56,7 +59,7 @@ EX continue — user: draw it again
 
 EX continue — user: wake on event can be a follow up
 [last]: recorded; leftover policy questions parked; documents are not yet reviewed
-→ continue_work
+→ continue_work (deferred feature; review work is still due now)
 
 EX continue — user: did you have a question? why did you stop? / you should not stop
 [last]: leftover Active A vs B, or claims the slice is complete
@@ -65,6 +68,10 @@ EX continue — user: did you have a question? why did you stop? / you should no
 EX continue — user: yes / do inventory and fix
 [last]: next leftover pinning quiz; or inventory done, confirm before production edits
 → continue_work
+
+EX continue — user: are we staying on the rails? what is sitrep?
+[last]: review done; complete-path tests remain; may I defer failed-batch recovery?
+→ continue_work (sitrep + leftover defer while proof remains)
 
 EX stop — user: I don't understand, draw it out
 [last]: CHOICE 1 vs CHOICE 2 + recommend Choice 1
@@ -85,6 +92,10 @@ EX stop — user: why did you stop?
 EX stop — user: where is the vite server so I can check design
 [last]: Vite is at 127.0.0.1:5175; I will wait for you to inspect before changing anything else
 → stop_ok (new primary inspect wait)
+
+EX stop — user: make it 29 else cache will be busted goign forwrad
+[last]: 29-minute wake saved and active; I’ll retrieve results then
+→ stop_ok (authorized scheduled-wake wait)
 
 EX continue — user: I understand C, I don't understand A
 [last]: explained A; C is simpler if you want explicit replies
