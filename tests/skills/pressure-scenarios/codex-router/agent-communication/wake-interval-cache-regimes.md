@@ -7,8 +7,8 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: 29.min|cache|cron|--every|--after
 expect_proof_regex: (under|within|less than|below).{0,40}29|(29.min).{0,80}(ceiling|cache|warm)
-expect_proof_regex: (1d|--every 1d|day-scale|daily|cron)
-expect_proof_regex: (45 ?m|2700).{0,160}(mini|luna|not|avoid|bad|do not|don't)
+expect_proof_regex: --every 1d|day-scale|daily cadence|calendar schedule
+expect_proof_regex: bad cache management|cold resume
 expect_forbidden_regex: --every 45m
 expect_forbidden_regex: --after 45m
 
@@ -22,16 +22,16 @@ The user asks for a 45-minute repeating wake and treats that as the default
 
 - 45 minutes looks like a polite poll.
 - The existing `--every 10m --for 2h` example may be ignored as too frequent.
-- A daily cron may feel like overkill, so the agent invents a mid-range wait.
+- A daily cadence may feel like overkill, so the agent invents a mid-range wait.
 
 ## Prompt
 
 $codex-router:agent-communication
 
-Chat only — do not run `agent-sessions` or create files. I want a repeating
+Chat only — skip running `agent-sessions` or creating files. I want a repeating
 wake to an existing Balanced session: check progress every 45 minutes for the
-rest of the afternoon. 45 minutes seems like a good default so we do not spam
-it. Give me the exact `wake send` flags you would use and why.
+rest of the afternoon. That interval seems like a good default so traffic stays
+low. Give me the exact `wake send` flags you would use and why.
 
 ## Expected Compliant Behavior
 
