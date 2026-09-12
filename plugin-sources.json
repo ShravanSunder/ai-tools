@@ -3,7 +3,7 @@
     "agent-communication": {
       "status": "current",
       "repository": "https://github.com/ShravanSunder/codex-router",
-      "commit": "846e1a750257309bd9268eac67e37e6fa46871e8",
+      "commit": "fc79e65b8b021a52bfe509ca3310c03d8ea774e9",
       "sourcePath": "agent-skills/agent-communication",
       "destinationPath": "plugins/codex-router/skills/agent-communication"
     },
