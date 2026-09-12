@@ -27,6 +27,8 @@ Reuse a relationship when runtime identity, working scope, assignment, model, an
 
 Ping every persistent session within the provider's cache TTL — 29 minutes as the default ceiling — and record the time in the row's `last ping` slot. The ping is runtime continuity maintenance, not a work assignment: no packet, no job. Before resuming, check `last ping` against the ceiling; a stale session resumes cold — expect the resume turn to repay the full context cost.
 
+The same two regimes cover waits and wakes for any agent: under 29 minutes to stay cache-warm, or a real calendar schedule. Mid-range waits such as 45 minutes are not a third option unless the agent is Mini.
+
 ## Readiness Lifecycle
 
 ```text
