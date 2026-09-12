@@ -148,6 +148,8 @@ Launch with the native or ACPX encoding returned by **Choose the Runtime**. Host
 
 Persistent sessions ride provider prompt caches: a warm session makes each resumed turn cheap; a cold resume repays the whole context. Ping every persistent session within the provider's cache TTL — 29 minutes as the default ceiling. The ping is runtime continuity maintenance, not a work assignment: no packet, no job, no Operator. Record the ping on the session's ledger row (see `references/session-ledger.md`).
 
+Waits and wakes for any agent use that same cache clock. Prefer an interval under 29 minutes, or a real calendar schedule (day-scale, overnight, cron). Mid-range waits such as 45 minutes are bad cache management unless the agent is Mini, where a cold resume is cheap. A long Luna watch uses a long lifetime and a short or calendar interval — not a 45-minute poll. Use `agent-communication` when the wait is a Router wake or schedule.
+
 ### Native Dispatch
 
 Use native dispatch for the parent host's own model lineage when the selected model is available. Do not substitute `codex exec`, `claude -p`, Cursor CLI, or ACPX for an available native spawn of that lineage.
