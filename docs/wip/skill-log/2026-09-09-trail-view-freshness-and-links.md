@@ -11,3 +11,5 @@
 - Impact: Misleads the reader about merge readiness and breaks navigation to governing evidence.
 - Suspected cause: Summary compression drops identity qualifiers and re-roots paths; hypothesis only.
 - Follow-up: Preserve exact head qualifiers and provided absolute paths; parent verification caught the issue. No skill changes authorized or made.
+
+2026-09-10 recurrence with workflow2.10.0 and a14-line prefix: the rendered view called rejected new rusqlite imports SQLx imports and attributed parent acceptance/probe dispositions to independent reviewers. Parent checked the view against the unchanged source reports and requested correction before presentation. Current-head/cutoff/blocked-CI qualifiers and absolute links were retained correctly in this run. No skill change authorized.
