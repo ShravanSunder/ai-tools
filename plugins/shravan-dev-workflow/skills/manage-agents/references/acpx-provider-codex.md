@@ -54,7 +54,7 @@ CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
   codex --file request.md
 ```
 
-`CODEX_CONFIG` is a JSON object merged into the Codex session configuration; `MODEL_PROVIDER` selects a provider defined there. Keep this bridge caller-owned and explicit: do not read, copy, or expose a local profile automatically. Record the ACPX token, model, effort, permissions, timeout, and whether explicit adapter configuration was supplied; do not record secret configuration values. Verify environment propagation deterministically and verify the live provider/model separately.
+`CODEX_CONFIG` is a JSON object merged into the Codex session configuration; `MODEL_PROVIDER` selects a provider defined there. Keep this bridge caller-owned and explicit: do not read, copy, or expose a local profile automatically. Record the ACPX token, model, effort, permissions, and whether explicit adapter configuration was supplied; do not record secret configuration values. Do not pass or record `--timeout`. Verify environment propagation deterministically and verify the live provider/model separately.
 
 ## Permissions
 

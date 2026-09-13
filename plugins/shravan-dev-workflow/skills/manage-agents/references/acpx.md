@@ -22,10 +22,12 @@ Build the call with the selected provider token, exact model id, and advertised 
 
 ## Call An Agent
 
-- Delegate or Operator: use `exec` for one bounded assignment and receipt.
+- Review (any independent review or verification): use a named session. Never `exec`.
+- Other Delegate or Operator work: `exec` is allowed.
 - Advisor or Sidekick: use a named session for ledgered continuity.
+- Never pass `--timeout` on any ACPX call. A dropped client wait is not a missing receipt — read `sessions list --local`, `sessions show`, or `sessions read` before any `blocked` claim.
 
-Start without prior agent-session history by using a single call or a new named session. Reuse a named session when the parent selects continuity.
+Start a review with a new named session. For non-review work, start without prior agent-session history by using a single call or a new named session. Reuse a named session when the parent selects continuity.
 
 Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
@@ -35,19 +37,19 @@ Set the narrowest permission boundary that performs the assignment. ACPX permiss
 
 Resolve one stable `<provider-agent-command>` from the provider contract. It includes the launcher, required environment, absolute cwd, permission boundary, provider token, and exact model selection. Use it for every lifecycle call in the relationship.
 
-Single call:
-
-```bash
-<provider-agent-command> exec \
-  --file tmp/agent-packet.md
-```
-
-New named conversation:
+Review (named session only):
 
 ```bash
 <provider-agent-command> sessions new --name <relationship-name>
 
 <provider-agent-command> -s <relationship-name> \
+  --file tmp/agent-packet.md
+```
+
+Single call (non-review only):
+
+```bash
+<provider-agent-command> exec \
   --file tmp/agent-packet.md
 ```
 

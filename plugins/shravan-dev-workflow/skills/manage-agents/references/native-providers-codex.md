@@ -18,8 +18,9 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,luna}`. Prefer short form un
 
 ## Conversation History
 
+- Reviewers: only `fork_turns="none"`. A positive integer is inherited parent history, same as `all`. Dispatch is incomplete until the packet records `history none` and `fork_turns="none"`.
 - No inherited parent history: set `fork_turns="none"`.
-- Full parent history: set `fork_turns="all"`.
+- Full parent history (non-reviewers only): set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
 - Fresh history may pass explicit model and reasoning-effort overrides.
 
