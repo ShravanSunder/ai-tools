@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-13 Codex Router agent-collaboration 0.4.0](2026-09-13-agent-collaboration-plugin.md)
 - [2026-09-13 manage-agents reviewer dispatch](2026-09-13-manage-agents-reviewer-dispatch.md)
 - [2026-09-12 wait-interval cache regimes](2026-09-12-wait-interval-cache-regimes.md)
 - [2026-09-11 Stop-review scheduled-wake wait](2026-09-11-stop-review-scheduled-wake-wait.md)
@@ -19,6 +20,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-13 Codex Router agent-collaboration 0.4.0](2026-09-13-agent-collaboration-plugin.md)
 - [2026-09-13 manage-agents reviewer dispatch](2026-09-13-manage-agents-reviewer-dispatch.md)
 - [2026-09-12 wait-interval cache regimes](2026-09-12-wait-interval-cache-regimes.md)
 - [2026-09-11 Stop-review scheduled-wake wait](2026-09-11-stop-review-scheduled-wake-wait.md)

@@ -3,7 +3,7 @@
 Use schedules for reusable instruction execution; use wakes for timed messages to an existing recipient.
 
 ```sh
-agent-sessions instruction create --text "Inspect the project and report changes." --json
+agent-collaboration instruction create --text "Inspect the project and report changes." --json
 ```
 
 Use the returned instruction ID in a definition file:
@@ -23,12 +23,12 @@ Use the returned instruction ID in a definition file:
 Interval seconds follow the same two regimes as wakes: under 1740 seconds (29 minutes) to stay cache-warm, or a real calendar cadence (86400 and up, or cron). Do not pick mid-range intervals such as 2700 seconds (45 minutes) unless the worker is Mini.
 
 ```sh
-agent-sessions schedule create --definition-file "$DEFINITION_FILE" --json
-agent-sessions schedule prepare --schedule-id "$SCHEDULE_ID" \
+agent-collaboration schedule create --definition-file "$DEFINITION_FILE" --json
+agent-collaboration schedule prepare --schedule-id "$SCHEDULE_ID" \
   --fresh --endpoint codex-local --cwd "$ABSOLUTE_WORKSPACE" --json
-agent-sessions schedule enable --schedule-id "$SCHEDULE_ID" --json
-agent-sessions run list --schedule-id "$SCHEDULE_ID" --json
-agent-sessions run show --run-id "$RUN_ID" --json
+agent-collaboration schedule enable --schedule-id "$SCHEDULE_ID" --json
+agent-collaboration run list --schedule-id "$SCHEDULE_ID" --json
+agent-collaboration run show --run-id "$RUN_ID" --json
 ```
 
 Preparation also supports explicit adoption (`--existing` exact address) or forking (`--fork-from` with `--through-turn`); consult `schedule prepare --help`. Preparation does not enable the schedule. One schedule owns a bound thread; do not adopt a thread belonging to another schedule.
