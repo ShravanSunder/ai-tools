@@ -16,10 +16,10 @@ Keep the identities returned by each operation; not every command returns every 
 Delivery disposition (pending, discarded, failed, accepted, uncertain) and native evidence are separate fields. Read both. Let the service own retries for durable deliveries; manually sending a replacement can duplicate its pending work.
 
 ```sh
-agent-sessions operation show --operation-id "$OPERATION_ID" --json
-agent-sessions delivery show --delivery-id "$DELIVERY_ID" --json
-agent-sessions delivery attempts --delivery-id "$DELIVERY_ID" --json
-agent-sessions run show --run-id "$RUN_ID" --json
+agent-collaboration operation show --operation-id "$OPERATION_ID" --json
+agent-collaboration delivery show --delivery-id "$DELIVERY_ID" --json
+agent-collaboration delivery attempts --delivery-id "$DELIVERY_ID" --json
+agent-collaboration run show --run-id "$RUN_ID" --json
 ```
 
 Operation IDs support recovery only on commands that expose them. Do not assume immediate `message send` has durable operation replay. Preserve submission/turn IDs when returned. For paginated inspection use the returned cursor.

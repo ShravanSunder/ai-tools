@@ -3,7 +3,7 @@
 A wake-up is a timed message, with the same recipient, sender, human-input, content, and delivery options as `message send`.
 
 ```sh
-agent-sessions wake send --to "$RECIPIENT_ADDRESS" --from "$SENDER_ADDRESS" \
+agent-collaboration wake send --to "$RECIPIENT_ADDRESS" --from "$SENDER_ADDRESS" \
   --text "Check progress and report blockers." --every 10m --for 2h --json
 ```
 
@@ -14,9 +14,9 @@ Wait intervals (`--after`, `--every`) have two legal regimes. Stay under the pro
 Creation returns after durable saving, not native acceptance. Add `--wait-until-first-fire` only when the caller wants to block until the first firing is recorded. It does not wait for acceptance, completion, or a reply. Pause, cancellation, or expiry before firing are not successful firing outcomes. A disconnected waiter does not imply the wake was cancelled.
 
 ```sh
-agent-sessions wake show --wakeup-id "$WAKE_ID" --json
-agent-sessions delivery list --wakeup-id "$WAKE_ID" --json
-agent-sessions delivery show --delivery-id "$DELIVERY_ID" --json
+agent-collaboration wake show --wakeup-id "$WAKE_ID" --json
+agent-collaboration delivery list --wakeup-id "$WAKE_ID" --json
+agent-collaboration delivery show --delivery-id "$DELIVERY_ID" --json
 ```
 
 Pause/cancel discard undispatched reminders; accepted native input cannot be recalled. Resume keeps the original timing and expiry, without replaying paused ticks. Missed repeating ticks coalesce rather than creating a burst.
