@@ -1,5 +1,7 @@
 # Changelog
 
+- [2026-09-13 Thread-first work trails](2026-09-13-thread-first-work-trails.md)
+
 - [2026-09-13 Codex Router agent-collaboration 0.4.0](2026-09-13-agent-collaboration-plugin.md)
 - [2026-09-13 manage-agents reviewer dispatch](2026-09-13-manage-agents-reviewer-dispatch.md)
 - [2026-09-12 wait-interval cache regimes](2026-09-12-wait-interval-cache-regimes.md)

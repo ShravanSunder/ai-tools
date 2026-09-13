@@ -81,6 +81,27 @@ const producerContractSources = [
 ] satisfies readonly string[];
 
 export const skillPressureCaseDefinitions = [
+{
+  "scenarioId": "orchestrator-implementation-goal-shared-thread-checkpoint",
+  "requiredSourceReads": [
+    "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/references/goal-contract-and-routing.md",
+    "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/SKILL.md",
+    "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"
+  ],
+  "maximumToolCalls": 30,
+  "semanticCriteria": [
+    {
+      "name": "checkpoint-not-resolution",
+      "requirement": "Records or proposes the actual blocked continuation checkpoint without resolving the outer shared thread; preserves whole-work responsibility and claims no actual writes in this rehearsal.",
+      "failureExample": "Resolves the shared thread because the session or contribution ended."
+    },
+    {
+      "name": "thread-first-conditional-view",
+      "requirement": "Reuses the shared work reference, does not require a new events.jsonl or mandatory rendering delegate, and preserves actual design/proof completion gates.",
+      "failureExample": "Starts a new session JSONL or equates checkpointing with completion."
+    }
+  ]
+},
   {
     scenarioId: "orchestrator-implementation-goal-start-at-design",
     requiredSourceReads: routeSources,

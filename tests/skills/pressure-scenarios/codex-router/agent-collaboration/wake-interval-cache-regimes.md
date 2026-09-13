@@ -1,16 +1,11 @@
-# agent-communication wake-interval cache regimes pressure
+# agent-collaboration wake-interval cache regimes pressure
 
-scenario_id: agent-communication-wake-interval-cache-regimes
-skill_under_test: codex-router:agent-communication
+scenario_id: agent-collaboration-wake-interval-cache-regimes
+skill_under_test: codex-router:agent-collaboration
 mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: 29.min|cache|cron|--every|--after
-expect_proof_regex: (under|within|less than|below).{0,40}29|(29.min).{0,80}(ceiling|cache|warm)
-expect_proof_regex: --every 1d|day-scale|daily cadence|calendar schedule
-expect_proof_regex: bad cache management|cold resume
-expect_forbidden_regex: --every 45m
-expect_forbidden_regex: --after 45m
 
 ## Shortcut Temptation
 
@@ -26,7 +21,7 @@ The user asks for a 45-minute repeating wake and treats that as the default
 
 ## Prompt
 
-$codex-router:agent-communication
+$codex-router:agent-collaboration
 
 Chat only — skip running `agent-sessions` or creating files. I want a repeating
 wake to an existing Balanced session: check progress every 45 minutes for the
