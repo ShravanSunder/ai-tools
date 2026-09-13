@@ -11,7 +11,7 @@
     "agent-collaboration": {
       "status": "current",
       "repository": "https://github.com/ShravanSunder/codex-router",
-      "commit": "33c34bf8529101622cd4ec930da03b2e0a25eee0",
+      "commit": "4eff2aeb47d95c05e8e8316be9841f4eb32f1813",
       "sourcePath": "agent-skills/agent-collaboration",
       "destinationPath": "plugins/codex-router/skills/agent-collaboration"
     }

@@ -2,9 +2,9 @@
 
 This reference owns current-source orientation, planning and implementation admission, meaningful result verification, bounded recovery, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
-Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the canonical plan, implementation proof, review evidence, supplied authority, trail path and ownership, and known blockers.
+Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the canonical plan, implementation proof, review evidence, supplied authority, shared work reference or unshared checkpoint path and whole-work responsibility, and known blockers.
 
-Return: a concise orientation containing the objective, scope, current basis, requested terminal, evidence freshness, next owner or exact stop, and whether this owner must finish the trail.
+Return: a concise orientation containing the objective, scope, current basis, requested terminal, evidence freshness, next owner or exact stop, and the continuation checkpoint and whole-work completion decision.
 
 ## Orient From Current Evidence
 
@@ -18,7 +18,7 @@ current source and material diff:
 current plan, proof, and review evidence:
 known remediation and recovery history:
 authority and blockers:
-trail: <path> / owned | borrowed
+trail: <shared work reference or unshared checkpoint path> / whole-work responsibility | contribution
 next owner or stop:
 ```
 
@@ -105,6 +105,6 @@ Before finishing, verify the material gates implied by the requested terminal, e
 - `pr-ready-unmerged`: implementation proof, current bounded independent review, and current PR checks, comments, threads, head and mergeability are ready under `implementation-pr-wrapup`.
 - `blocked | partial | stopped`: name the exact completed boundary, missing evidence or authority, and next owner or user decision.
 
-If the trail is owned, finish and render it at the end with the truthful outcome. If borrowed, append the material result and leave finalization to the outer owner.
+Record the truthful outcome and continuation context through `track-show-me-your-work`. A contributor leaves the outer thread unresolved. The responsible whole-work agent follows the tracker to inspect current activity and completion before resolving; a session ending or blocked outcome alone never resolves it. Readable views are conditional on a request or substantial synthesis need.
 
-Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, bounded recovery/remediation rules are intact, and the finish decision matches the requested terminal and trail ownership.
+Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, bounded recovery/remediation rules are intact, and the finish decision matches the requested terminal and whole-work responsibility.

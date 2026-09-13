@@ -11,7 +11,7 @@ An implementation goal is an owned delivery loop, not a sequence of handoffs. Th
 
 1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact accepted `skills-creation` composition for this named run. If the composition is absent, stale, or mismatched, route to `skills-creation` and stop before product delivery.
 2. Establish `requested terminal: plan-only | pr-ready-unmerged`; default to `pr-ready-unmerged`. Merge is a separately authorized extension through `implementation-pr-wrapup`, never an inferred terminal.
-3. MUST invoke `track-show-me-your-work` and return a usable trail path plus `owned | borrowed`. Reuse a supplied trail for nested work. The outermost workflow owns finish and rendering; nested owners append checkpoints and never finish it.
+3. MUST invoke `track-show-me-your-work` and return the shared work reference (or explicitly unshared checkpoint path) plus responsibility for the whole work or a contribution. Reuse supplied work context for nested work. The tracker owns continuity, fallback, conditional views, and deliberate thread resolution.
 4. MUST load `references/goal-contract-and-routing.md` and return the current orientation, admitted basis, next owner or exact stop, and finish decision.
 5. Read current repository instructions, relevant source and diff, governing artifacts, plan, proof, and review evidence. Use the trail to find evidence, then verify current facts at their source; a historical result is context, not current proof.
 
@@ -37,7 +37,7 @@ If the recovery review finds problems and a safe remaining correction budget can
 
 - Planning owns strategy and dependencies. Implementation owns code and fitting proof. Review owns independent findings. The parent owns source-backed disposition and routing. PR wrap-up owns PR gate inspection.
 - Verify producer results proportionally. Current scope, source, outcome, evidence, and applicable stop conditions matter; a missing label alone does not invalidate a clear result. Require exact identity when it changes correctness, including the canonical plan, reviewed diff or PR head, and source-bound proof.
-- Optional external tracking is separately authorized work and proves no delivery gate.
-- On every terminal or end response, the outermost owner finishes and renders its trail with `complete | partial | blocked | stopped`; a nested owner leaves the borrowed trail open.
+- Shared work updates follow the tracker within task authority. Other external tracking remains separately authorized work and proves no delivery gate.
+- On every terminal response, record the actual `complete | partial | blocked | stopped` outcome and continuation context through the tracker. Nested agents checkpoint without resolving the outer thread. Only the responsible whole-work agent checks current history and whole-work completion before resolution; render a view when requested or substantial synthesis is needed.
 
 Completion: every material phase required by the requested terminal is currently verified—planning for `plan-only`; planning, implementation with fitting proof, bounded independent review and accepted corrections, and PR readiness for `pr-ready-unmerged`—or the response names the exact decision or blocker. No phase boundary, missing label, logging failure, implied merge, repeated recovery, or fourth remediation silently changes that result.

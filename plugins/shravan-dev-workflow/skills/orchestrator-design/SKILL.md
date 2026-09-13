@@ -16,9 +16,9 @@ discuss-pathfinding  genuinely unwritten owner meaning
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the separate concept and identity boundaries used to validate every downstream handoff.
 
-MUST invoke `track-show-me-your-work` once at the start and return the selected trail path plus whether this workflow owns its finalization. Reuse a supplied caller trail as borrowed. Otherwise select or create the session trail as that skill directs. That skill owns recording and the operator-produced readable view. If tracking cannot initialize, record the gap in the response and continue permitted design/review work; tracking availability is not a review-admission prerequisite unless the user explicitly made it one.
+MUST invoke `track-show-me-your-work` once at the start and return the shared work reference (or explicitly unshared checkpoint path) plus whether this workflow is responsible for the whole work or contributes to it. Reuse supplied work context for nested work. The tracker owns recording, fallback, and conditional readable views. If tracking cannot initialize, report the gap and continue independent design/review work; tracking availability is not a review-admission prerequisite unless the user explicitly made it one.
 
-Record only consequential design decisions, owner confirmations, accepted or rejected review findings, corrections, results with evidence, and unresolved meaning. A historical event helps orientation but never proves the current artifact or review state. User corrections append a record referencing the earlier line; do not rewrite history.
+Record only consequential design decisions, owner confirmations, accepted or rejected review findings, corrections, results with evidence, and unresolved meaning. A historical event helps orientation but never proves the current artifact or review state. User corrections append a record referencing the earlier record; do not rewrite history.
 
 ## Orient And Route
 
@@ -53,6 +53,6 @@ Pass `spec-program-review` one explicit orchestrator-authorized recovery request
 
 ## Trail And Completion
 
-At each owner return, append a checkpoint with the decision, reason, evidence, and result. Render through the tracker whenever requested. A nested orchestrator using a borrowed trail appends checkpoints but never finalizes the outer workflow. The outermost owner of this design trail MUST finish and render it before every terminal response, including `ready`, `needs-revision`, `decision-needed`, `review-permission-required`, `blocked`, `deferred`, or `stopped`. If trail writing fails, report the incomplete trail and preserve the real design result. Continue independent design work unless the user made the trail a delivery gate; then the incomplete trail blocks completion.
+At each owner return, record a meaningful checkpoint with decision, reason, evidence, and result through the tracker. At every terminal response, leave the actual design outcome and continuation context, including blocked, deferred, or stopped work. Nested work contributes without resolving the outer thread; the responsible whole-work agent follows the tracker's current-history and completion checks before resolution. Produce a readable view when requested or substantial synthesis is needed. Report unshared fallback or view gaps honestly; preserve the real design result and continue independent work unless shared recording was made a delivery gate.
 
 Return one status and the next skill or stop. `ready` requires distinct, current Requirements, Specification, and Program Design artifacts, independent review, and parent-verified resolution of findings within the allowed rounds. It means design-ready, not implemented.
