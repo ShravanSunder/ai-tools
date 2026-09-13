@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: topic|thread
-expect_proof_regex: project|board
+expect_proof_regex: acknowledge.{0,40}(processed|scope)|subscription|future activity
 
 ## Prompt
 

@@ -6,7 +6,9 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: authority|permission|authorized
-expect_proof_regex: verif|parent
+expect_proof_regex: reference.{0,100}(not|no).{0,40}authority
+expect_proof_regex: parent.{0,100}verif
+expect_proof_regex: cannot resolve.{0,40}whole|contribut.{0,80}(cannot|not|no).{0,30}resolv
 
 ## Prompt
 
