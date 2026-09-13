@@ -128,11 +128,11 @@ Select the pattern, model category, model lineage, and reasoning requirement fir
 
 ### Parent Conversation History
 
-- Reviewers: bright line — a review agent NEVER receives parent conversation history. A reviewer is any agent whose assignment is independent review or verification, whatever its pattern. Reviews judge from first principles; inherited context is contamination. "It will review faster with context" is the rationalization this rule catches.
+- Reviewers: bright line — a review agent NEVER receives parent conversation history. A reviewer is any agent whose assignment is independent review or verification, whatever its pattern. Reviews judge from first principles; inherited context is contamination. Native encoding is only `fork_turns="none"`. A positive integer or `all` is parent-history inheritance and is forbidden. "It will review faster with context" and "give it the last N turns" are the rationalizations this rule catches.
 - Non-reviewers: choose `none` or `all` by cost and benefit. History helps a subagent abide by decisions already made; it costs context and money. With native Mini agents history is cheap — little or lots is fine within the model's context limit. The stop is the same at every price: include what the job's stop condition depends on; do not paste unrelated turns even on Mini. With Frontier agents give the minimum that preserves the decisions the job depends on.
 - ACPX agents never inherit parent history — carry context in the packet instead (see ACPX Dispatch). The packet's access line records `history none` for every ACPX dispatch.
 - Self-fork and resume-self mechanisms (a subagent started from the parent's own conversation) are full-history inheritance and are forbidden for reviewers on every host. "It already has all the context" is the rationalization; the context is the contamination.
-- Because a reviewer starts empty, its packet carries everything it will cite: absolute paths (or inlined text) for every reference it is told to load, the governing artifacts as paths or verbatim text, and any owner meaning that exists only in chat copied verbatim. A pointer the reviewer cannot resolve from its own cwd is a missing input.
+- Because a reviewer starts empty, its packet carries everything it will cite: absolute paths (or inlined text) for every reference it is told to load, the governing artifacts as paths or verbatim text, and any owner meaning that exists only in chat copied verbatim. A pointer the reviewer cannot resolve from its own cwd is a missing input. For independent review, `sources:` names the absolute paths of the lane files the parent already selected. Do not put coordinator `SKILL.md` (`spec-program-review`, `implementation-review`) or `manage-agents/SKILL.md` on the reviewer packet. The parent loads manage-agents; the reviewer does not. "The reviewer will not know how to review" is the rationalization this rule catches.
 
 ### Workspace Access
 
@@ -186,7 +186,7 @@ ACPX agents start with zero parent context: parent conversation history never cr
 2. Choose parent conversation history and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
    - Dispatch completion: the packet records both selections.
    - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and packet `access:` line are explicit. The launch used the host native tool, not a CLI sandbox stand-in.
-   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit.
+   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit. A review used a named session, not `exec`. No call passed `--timeout`. A dropped wait was not called `blocked` until `sessions list/show/read` was checked.
    - Unsupported completion: report the missing provider contract and stop dispatch.
 
 3. Build one bounded packet for every non-trivial call, dispatch it, and reduce the result.
