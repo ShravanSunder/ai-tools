@@ -84,6 +84,7 @@ export const skillPressureCaseDefinitions = [
 {
   "scenarioId": "orchestrator-implementation-goal-shared-thread-checkpoint",
   "requiredSourceReads": [
+    "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/references/goal-contract-and-routing.md",
     "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/SKILL.md",
     "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"
   ],
