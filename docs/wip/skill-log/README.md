@@ -6,6 +6,13 @@ Brief intake for recurring skill or agent failures. Follow [FORMAT.md](FORMAT.md
 
 | Date | Skill/workflow | Symptom | Status | Entry |
 | --- | --- | --- | --- | --- |
+| 2026-09-13 | manage-agents / ACPX Claude | Cold named-session resume cannot accept queue requests | captured | [Cold resume queue](2026-09-13-acpx-cold-resume-queue-unavailable.md) |
+| 2026-09-12 | manage-agents / ACPX Claude | Fable model selected but bundled executable rejected | captured | [Fable runtime version](2026-09-12-fable-bundled-runtime-version.md) |
+| 2026-09-12 | manage-agents / parent, Sidekick and Operator | Shared test Operator received conflicting commands and interruption | captured | [Exclusive Operator control](2026-09-12-shared-operator-control-conflict.md) |
+| 2026-09-12 | manage-agents / Operator and Delegate | Sandbox access failure reported as a service outage | captured | [Sandbox reachability claims](2026-09-12-sandbox-access-misclassified-as-service-outage.md) |
+| 2026-09-12 | manage-agents / Delegate and parent | Test readiness preceded declaration and source-freeze validation | captured | [Test readiness validation](2026-09-12-test-readiness-source-validation.md) |
+| 2026-09-12 | Native UI proof / Peekaboo | Folder-chooser input and exact-window receipts failed | captured | [Native input receipts](2026-09-12-native-proof-input-receipts.md) |
+| 2026-09-12 | manage-agents / Operator | Parent exec session IDs were unavailable to child monitors | captured | [Exec session scope](2026-09-12-parent-exec-session-operator-monitor.md) |
 | 2026-09-11 | manage-agents / Operator | Supplied PATH lost `/bin`, invalidating a VM reproduction | captured | [Command PATH drift](2026-09-11-operator-command-path-drift.md) |
 | 2026-09-10 | manage-agents / Operator | CI watch checkpoints were not parent-visible across head changes | captured | [Watch checkpoint visibility](2026-09-10-watch-checkpoints-not-parent-visible.md) |
 | 2026-09-10 | manage-agents / Delegate | Leaf assignments spawned extra lanes despite no-delegation constraint | captured | [Unrequested nested delegation](2026-09-10-unrequested-nested-delegation.md) |
