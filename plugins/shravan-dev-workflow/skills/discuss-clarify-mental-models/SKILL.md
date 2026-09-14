@@ -110,7 +110,7 @@ Every obligation has a carrier; a coverage-ledger obligation with no carrier at 
 
 IF the plain-words origin annotations start collapsing into one vague caveat, load `references/provenance-decomposition.md` and return the distinct origins.
 
-IF the repaired map gates a spec, plan, or a named irreversible decision, dispatch one divergent reviewer as a reviewer-pattern Delegate per `manage-agents` (history none, read-only). Packet: the close map, its evidence anchors, and non-goals — nothing else. Parallel-safe once the close map is drafted; authority never widens beyond read-only inspection. Return `complete | partial | blocked` with candidate findings answering "what does the repaired map still fail to explain?"; the parent verifies each against the artifacts and folds survivors into the map through the disposition track.
+IF the repaired map gates a spec, plan, or a named irreversible decision, dispatch one divergent reviewer as a Reviewer per `manage-agents` (history none, read-only). Packet: the close map, its evidence anchors, and non-goals — nothing else. Parallel-safe once the close map is drafted; authority never widens beyond read-only inspection. Return `complete | partial | blocked` with candidate findings answering "what does the repaired map still fail to explain?"; the parent verifies each against the artifacts and folds survivors into the map through the disposition track.
 
 ## Surface Language
 

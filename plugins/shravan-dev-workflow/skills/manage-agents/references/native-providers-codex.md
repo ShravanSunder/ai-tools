@@ -43,3 +43,9 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
   "fork_turns": "none"
 }
 ```
+
+## Continue, Wait, and Interrupt
+
+Use the lifecycle tools advertised by the current host. On the collaboration surface exposing `followup_task`, use it to send a follow-up and start an idle worker turn; `send_message` delivers information without starting an idle turn. `wait_agent` waits for activity, `list_agents` reports liveness, and `interrupt_agent` stops the current turn while preserving the worker relationship. None of those alone proves assignment completion.
+
+Other hosts may expose `send_input`, `resume_agent`, or `close_agent`; use them only when actually advertised and follow their returned contracts. Do not invent missing tools or spawn a replacement merely because the worker is idle. Reuse the returned task/session identity. Display names and Router SessionRefs are separate from native tool IDs. A native child can have its own session ID without supporting Router direct input.

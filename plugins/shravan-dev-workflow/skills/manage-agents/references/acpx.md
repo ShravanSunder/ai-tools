@@ -23,8 +23,8 @@ Build the call with the selected provider token, exact model id, and advertised 
 ## Call An Agent
 
 - Review (any independent review or verification): use a named session. Never `exec`.
-- Other Delegate or Operator work: `exec` is allowed.
-- Advisor or Sidekick: use a named session for ledgered continuity.
+- Other Worker or Operator work: `exec` is allowed.
+- Advisor, Sidekick, or continuing Reviewer: use a named session for ledgered continuity.
 - Never pass `--timeout` on any ACPX call. A dropped client wait is not a missing receipt — read `sessions list --local`, `sessions show`, or `sessions read` before any `blocked` claim.
 
 Start a review with a new named session. For non-review work, start without prior agent-session history by using a single call or a new named session. Reuse a named session when the parent selects continuity.
