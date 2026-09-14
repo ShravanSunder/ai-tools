@@ -8,9 +8,10 @@ Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and work
 | -------------------- | ----------------- |
 | `gpt-6-astra`        |                   |
 | `gpt-5.6-sol`        |                   |
+| `gpt-5.6-terra`      |                   |
 | `gpt-5.6-luna`       |                   |
 
-Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,luna}`. Prefer short form unless the host requires `openai.`.
+Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,terra,luna}`. Prefer short form unless the host requires `openai.`.
 
 ## Effort
 

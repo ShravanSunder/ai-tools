@@ -11,8 +11,6 @@ expect_proof_regex: parallel[- ]safe|write[- ]depend|sequenc|depends on|in paral
 expect_proof_regex: verification point|parent (closes|verifies|checks|accepts)|closes it by
 expect_proof_regex: operator.{0,120}test suite|test suite.{0,120}operator|(validation|test (run|suite)).{0,60}(—|-|:) ?operator
 expect_proof_regex: bounded receipt|conserv|(luna|mini|operator).{0,120}(scan|stack[- ]trace)|(scan|stack[- ]trace).{0,140}(luna|mini|operator|receipt)
-expect_forbidden_regex: terra
-
 ## Shortcut Temptation
 
 The prompt reads as one task and demands maximum parallelism. The agent may

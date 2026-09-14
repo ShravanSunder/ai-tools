@@ -14,8 +14,6 @@ expect_proof_regex: (nightly|log|every night|sweep).{0,160}operator|operator.{0,
 expect_proof_regex: (flaky|merge|payments).{0,200}(parent|inline|decide (this |it |)(myself|yourself|directly)|no (dispatch|subagent)|dispatch nobody)|(parent|inline).{0,120}(flaky|merge)
 expect_proof_regex: (watch|two.hour|deploy|canary).{0,200}(single.assignment|operator|bounded)|(single.assignment|operator).{0,160}(watch|two.hour|canary)
 expect_forbidden_regex: (flaky|merge decision).{0,80}(is|as|to) an? (advisor|delegate)
-expect_forbidden_regex: terra
-
 ## Shortcut Temptation
 
 Five jobs arrive at once with no patterns named. The agent may treat every

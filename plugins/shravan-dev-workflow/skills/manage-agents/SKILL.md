@@ -42,7 +42,7 @@ The pattern picks the shape of the work and its table owns the allowed category 
 
 Mini (OpenAI Luna) is super cheap. Default grunt work to Mini whenever the pattern's floor allows it: mechanical procedures, bounded scans and summaries, format conversions, test-and-report loops, watches. A Mini agent can be a Sidekick, a Delegate, or an Operator.
 
-The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. Delegate Frontier is reviewer-only. Persistent architecture guidance stays Advisor (or Sidekick if declined). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model. When the user names a model or lineage the pattern's table allows for this job, use that name; do not substitute a cheaper default and do not re-ask. A named Astra on a writing Delegate is not legal. Ask for Advisor permission once per relationship; a named Frontier reviewer is not an Advisor ask.
+The parent's interaction model sets the defaults: normal coding runs at Balanced — the parent or its Sidekicks and Delegates; scriptable work runs at Mini; Frontier is never a default where a pattern's table spans categories. Category moves keep the pattern and stay inside the pattern's own model table — Operator's table is Mini-only and Advisor's is Frontier-only, so those leaves do not move. Escalate with a named reason the cheaper tier cannot meet: bounded reasoning with clear anchors stays Balanced. Delegate Frontier is reviewer-only. Delegate Sol `medium` is reviewer-only. Persistent architecture guidance stays Advisor (or Sidekick if declined). "The task feels important" is not a reason — importance routes verification to the parent, not cost to the model. When the user names a model or lineage the pattern's table allows for this job, use that name; do not substitute a cheaper default and do not re-ask. A named Astra or Sol `medium` on a writing Delegate is not legal. Ask for Advisor permission once per relationship; a named Frontier reviewer is not an Advisor ask.
 
 A session not worth keeping warm is not persistent — close it and dispatch Delegates or Operators instead (see Session Keep-Alive for the cache economics).
 
@@ -75,9 +75,9 @@ Use a Sidekick for persistent work you will resume and steer; a named co-worker 
 
 | Model category | Model lineage       | Thinking         |
 | -------------- | ------------------- | ---------------- |
-| Frontier       | OpenAI Astra        | medium           |
-| Frontier       | Claude Fable        | medium           |
+| Frontier       | OpenAI Astra        | low              |
 | Balanced       | OpenAI Sol          | low or medium    |
+| Balanced       | OpenAI Terra        | medium           |
 | Balanced       | Claude Opus         | high             |
 | Balanced       | Cursor Grok         | medium or high   |
 | Mini           | OpenAI Luna         | xhigh            |
@@ -96,8 +96,9 @@ Use for one clear bounded assignment then discard. You manage and validate the w
 | -------------- | ------------------- | ---------------- | ---------------- |
 | Frontier       | OpenAI Astra        | medium or high   | as reviewer only |
 | Frontier       | Claude Fable        | medium or high   | as reviewer only |
-| Balanced       | OpenAI Sol          | medium           |                  |
-| Balanced       | Cursor Grok         | medium or high   |                  |
+| Balanced       | OpenAI Sol          | medium           | as reviewer only |
+| Balanced       | OpenAI Sol          | low              |                  |
+| Balanced       | Cursor Grok         | medium           |                  |
 | Mini           | OpenAI Luna         | xhigh            |                  |
 
 ### Operator
@@ -118,7 +119,7 @@ Bright line: any job handed to a subagent that is a bounded mechanical procedure
 
 | Model category | Model lineage       | Thinking    |
 | -------------- | ------------------- | ----------- |
-| Mini           | OpenAI Luna         | high, xhigh |
+| Mini           | OpenAI Luna         | high        |
 
 ## Choose the Runtime
 
