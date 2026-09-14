@@ -11,7 +11,7 @@ Ids are human-readable text slugs, not minted identifiers: assignment id is `<da
 ```text
 job packet
   job:        <one-sentence assignment and decision target; task category /
-              judgment / guidance / architectural span>
+              guidance / architectural span>
   pattern:    advisor | sidekick | worker | reviewer | operator
   lane:       <swarm name / lane — only for swarm dispatches>
   route:      <category> / <lineage> — native | router <verified SessionRef>

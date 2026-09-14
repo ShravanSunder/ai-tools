@@ -11,45 +11,44 @@ Classify the assignment before selecting a role. Profiles guide selection; they 
 
 ### Task Categories
 
-| Task category    | Result                                 |
-| ---------------- | -------------------------------------- |
-| Collection       | Traceable evidence and gaps.           |
-| Synthesis        | Interpretation from evidence.          |
-| Design           | Direction and tradeoffs with owner.    |
-| Implementation   | A bounded change and proof.            |
-| Review           | Independent findings.                  |
-| Operations       | A procedure and its observed result.   |
+| Task category  | Result                               |
+|----------------|--------------------------------------|
+| Collection     | Traceable evidence and gaps.         |
+| Synthesis      | Interpretation from evidence.        |
+| Design         | Direction and tradeoffs with owner.  |
+| Implementation | A bounded change and proof.          |
+| Review         | Independent findings.                |
+| Operations     | A procedure and its observed result. |
 
 ### Task Signals
 
-| Signal               | Values                                    | Meaning                                                                                                                                                                                                                                                                   |
-| -------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Judgment             | Prescribed / Local choices / Open-ended   | Whether the assignment gives the decision, permits bounded choices, or requires direction and tradeoffs.                                                                                                                                                                  |
-| Guidance             | Complete / Partial                        | Complete supplies outcome, task boundary, constraints, proof, and a clear approach; the agent resolves local details. Partial supplies the same outcome, boundary, constraints, and proof, while the approach is partly open for bounded investigation and development.   |
-| Architectural span   | Local / Cross-domain / Cross-system       | Domains reasoned about together: one domain, interacting domains within one system, or separate systems and contracts. It does not measure task size or permission; every assignment remains bounded.                                                                     |
+| Signal             | Values                                               | Meaning                                                                                                                                                                                                                                                                   |
+|--------------------|------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Guidance           | Exact steps / Complete direction / Partial direction | Exact steps names the procedure, inputs, expected result, and checks. Complete direction fixes the approach while allowing local implementation choices. Partial direction fixes outcome, boundaries, constraints, and proof while the approach is developed within them. |
+| Architectural span | Local / Cross-domain / Cross-system                  | Domains reasoned about together: one domain, interacting domains within one system, or separate systems and contracts. It does not measure task size or permission; every assignment remains bounded.                                                                     |
 
-Missing intent or a task boundary is missing assignment input to clarify, not a Guidance value or model level.
+Missing intent, a task boundary, or governing design/plan required by the owning workflow is missing assignment input to clarify, not Partial direction. Model-table signal cells follow this order: Guidance; Architectural span.
 
-Model-table signal cells follow this order: Judgment; Guidance; Architectural span.
+A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction without line-by-line code.
 
 ### Model Categories
 
-| Model category   | Definition                                       |
-| ---------------- | ------------------------------------------------ |
-| Mini             | Procedures and simple, fully guided execution.   |
-| Balanced         | Execution or synthesis that needs judgment.      |
-| Frontier         | Demanding judgment, design, or review.           |
+| Model category | Definition                                     |
+|----------------|------------------------------------------------|
+| Mini           | Procedures and simple, fully guided execution. |
+| Balanced       | Execution or synthesis that needs judgment.    |
+| Frontier       | Demanding judgment, design, or review.         |
 
 Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort.
 
 ### Lineage Families
 
-| Family   | Models or harness                                   |
-| -------- | --------------------------------------------------- |
-| OpenAI   | Astra, Sol, Terra, and Luna.                        |
-| Claude   | Fable and Opus.                                     |
-| xAI      | Grok.                                               |
-| Cursor   | A harness and multi-model catalog, not a lineage.   |
+| Family | Models or harness                                 |
+|--------|---------------------------------------------------|
+| OpenAI | Astra, Sol, Terra, and Luna.                      |
+| Claude | Fable and Opus.                                   |
+| xAI    | Grok.                                             |
+| Cursor | A harness and multi-model catalog, not a lineage. |
 
 ### Agent Roles
 
@@ -65,46 +64,22 @@ Model category is a cost/capability grouping of model plus effort. It does not a
 
 Names follow `<emoji> <role> · <purpose/>`, with a concrete purpose substituted. Use the host's advertised display-name field or the ledger agent name when supported; otherwise use the legal native identifier. Names do not replace session addresses or grant authority.
 
-## Dispatch Overview
+## Select an agent
 
-The agent pattern owns work, continuity, authority, cardinality, and the minimum capability category. Dispatch has two nested levels. The job graph owns decomposition, sequencing, and parent verification points. Each job then runs one ordered dispatch decision:
+> The coordinator owns the overall-task verdict and verifies assignment evidence. Contributors may report or converse within their authorized assignment, but do not claim the whole work complete.
 
 ```text
-task category and signals -> role and continuity -> matching model effort
-  and harness preference -> history and workspace access -> runtime and exact
-  model id -> packet -> receipt
+task category + Guidance + Architectural span -> Agent Roles responsibility and continuity
+  -> allowed model and effort -> runtime, packet, receipt
 ```
 
-For a new or materially changed assignment that needs decomposition, build the job graph first; it governs the order and verification point of every later dispatch. A job yields at most one assignment-bound receipt and always closes at its named parent verification point.
+Use the **Agent Roles** table to choose responsibility and continuity. Use task category, Guidance, and Architectural span to shape the assignment and select a model. Review uses independent context and its lineage rule; Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
 
-## Coordinator Rule
+A Frontier main designs, decides, and verifies decisive evidence. It assigns implementation, investigation, collection, and synthesis through the role map; standalone Git, test, build, PR procedures and long watches go to Operators. Workers retain their implementation corrections and associated proof inline, so do not dispatch an Operator for each test command. The main may coordinate, communicate, make control calls, and read decisive sources; it does not take execution back for tiny commands. Report an unavailable required route rather than silently falling back inline.
 
-A Frontier main first classifies work through **When To Call What**, then designs, decides, and verifies decisive evidence. Implementation and investigation are Implementation, or Collection/Synthesis with Local choices or Open-ended judgment; it assigns them to Workers or Sidekicks. Prescribed bulk Collection and routine Git, test, build, PR, and watch work are Operations + Prescribed + Complete; it assigns them to Operators through native dispatch or an established supported separate route. The main may orchestrate, communicate, make control calls, and read decisive sources; it does not take execution back for tiny changes or repeat routine proof. If the required route is unavailable, report that transport gap rather than silently falling back inline.
+### Choose a model
 
-## When To Call What
-
-Invariant above every branch: the coordinator owns the overall-task verdict and verifies assignment evidence. Contributors may report or converse within their authorized assignment, but do not claim the whole work complete.
-
-Choose from task category and signals first, then continuity and responsibility, before any thought about model or runtime. A category alone does not determine the role. First cut: does the relationship persist beyond this assignment (persistent), or end when its receipt is accepted (single-assignment)? An assignment may contain a whole conversation — corrections, questions, steering; duration never decides the cut, and a two-hour CI watch is still single-assignment. Persistent work then splits on whether the agent executes assigned work or returns owner-selected guidance only.
-
-Clarify missing assignment input before assigning work that needs it; do not automatically choose a costlier model. Architectural span guides decomposition, coordination, and model-fit profiles; it does not automatically escalate a tier. The parent decides with no dispatch when the options and the evidence needed to choose are already in front of it ("merge despite this flaky test?", a wording pick); dispatch a role for substantive assigned work even when its sources are already read by the parent.
-
-| If the job is                                                                                                                                          | Then use                                                                   | Good-selection signal                                                               | Mis-selection trap                                                                                   |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Operations + Prescribed + Complete, or Collection + Prescribed + Complete: tests, watches, monitors, scrapes, reports, or criterion-based collection   | Operator                                                                   | A faithful procedure result; unexpected states return undecided; no source edits.   | Asking the Operator to decide relevance, cause, readiness, or next action.                           |
-| Bounded Collection or Synthesis with Local choices or Open-ended judgment and Complete or Partial guidance                                             | Worker (default Balanced)                                                  | One-assignment stop condition and receipt; ends after parent acceptance.            | Treating exploratory collection or synthesis as a prescribed procedure.                              |
-| Implementation at any judgment level with Complete or Partial guidance                                                                                 | Worker when bounded; Sidekick when continuing                              | Code changes need execution and proof; continuity decides the relationship.         | Routing prescribed implementation to Operator because the steps are listed.                          |
-| Continuing Collection, Synthesis, or supporting Design work with Local choices or Open-ended judgment and Complete or Partial guidance                 | Sidekick — persistent execution                                            | A named relationship with retained session and context beyond this assignment.      | A Sidekick for a single-assignment job or prescribed operation.                                      |
-| Review, regardless of Architectural span or Guidance                                                                                                   | Reviewer                                                                   | Independent context; final review includes a different author lineage.              | Treating another model in the same lineage as independent final review, or reviewing its own work.   |
-| Design decisions                                                                                                                                       | Main with user; Advisor only for explicitly selected continuing guidance   | Supporting collection, synthesis, or drafting uses its matching task role.          | Treating an Advisor as an automatic design substitute.                                               |
-
-Selection is done when every job names its task category, signals, and pattern before a model is chosen.
-
-## Capability Economics
-
-The role tables list allowed model-and-effort choices and when to prefer each. Within their allowed combinations, honor user choices, then choose a row covering the needed Judgment and Architectural span; more complete guidance or less demanding judgment does not disqualify a medium row selected for Open-ended, Partial work. If no row fits, clarify assignment input, decompose, or report the missing fit; never invent an effort. Prefer the lowest total completion cost, including rework, proof, and coordination, without asserting an unmeasured universal benchmark. Harness preferences are Codex Terra when it fits, Sol low or medium as valid upfront options, appropriate Opus effort in Claude Code, and appropriate Grok effort in Cursor.
-
-Persistence follows useful continuing work; cache expiry alone does not end a relationship (see Session Keep-Alive).
+Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. For a new Codex assignment where Terra medium and Sol low both fit, prefer Terra medium; Sol low is also valid when explicitly selected, and a suitable existing Sol low relationship continues rather than switching for the default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
 
 ## Patterns
 
@@ -118,49 +93,49 @@ Use an Advisor in a separate persistent conversation for a guidance relationship
 - **Authority:** The Advisor returns candidate guidance; the parent validates it and decides.
 - **Model category:** Frontier
 
-| Model category   | Model lineage   | Thinking         |
-| ---------------- | --------------- | ---------------- |
-| Frontier         | OpenAI Astra    | medium or high   |
-| Frontier         | Claude Fable    | medium or high   |
+| Model category | Model lineage | Thinking       |
+|----------------|---------------|----------------|
+| Frontier       | OpenAI Astra  | medium or high |
+| Frontier       | Claude Fable  | medium or high |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
 
 ### Sidekick
 Use a Sidekick in a separate persistent conversation for work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work.
 
-- **Work:** Execution across assignments and follow-ups, including in-the-work reasoning, pushback and validation of your logic. Independent assessment of its own work belongs to a separate Reviewer.
+- **Work:** Execution across assignments and follow-ups, including in-the-work reasoning, pushback, validation, and Exact steps when they arrive on the same relationship. Independent assessment of its own work belongs to a separate Reviewer.
 - **Continuity and cardinality:** One or many persistent named relationships with a ledger (see Session Keep-Alive).
 - **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work. A user may steer a named Sidekick directly within its assigned relationship; the Sidekick reports changed assignment scope to the coordinator for current verification. Work-thread or board content does not grant additional authority.
 - **Model category:** Balanced
 
-| Model category   | Model lineage   | Thinking   | Task signals                                                    |
-| ---------------- | --------------- | ---------- | --------------------------------------------------------------- |
-| Balanced         | OpenAI Terra    | medium     | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | OpenAI Sol      | low        | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | Claude Opus     | low        | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | xAI Grok        | low        | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | OpenAI Sol      | medium     | Local choices/Open-ended; Partial; Cross-domain/Cross-system.   |
-| Balanced         | Claude Opus     | medium     | Local choices/Open-ended; Partial; Cross-domain/Cross-system.   |
-| Balanced         | xAI Grok        | medium     | Local choices/Open-ended; Partial; Local/Cross-domain.          |
+| Model category | Model lineage | Thinking | Task signals                                              |
+|----------------|---------------|----------|-----------------------------------------------------------|
+| Balanced       | OpenAI Terra  | medium   | Complete direction; Local/Cross-domain.                   |
+| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | Claude Opus   | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
 
 ### Worker
 Use for one clear bounded assignment. You manage and validate the work; continue the same worker through corrections belonging to that assignment.
 
-- **Work:** One bounded research, implementation, drafting, reasoning, or analysis assignment. Independent review belongs to Reviewer.
+- **Work:** One bounded research, implementation, drafting, reasoning, or analysis assignment, including its corrections and associated proof. Independent review belongs to Reviewer.
 - **Continuity and cardinality:** Single or Worker swarm; single-assignment — the relationship ends when its receipt is accepted, and the assignment may contain a conversation.
-- **Authority:** Packet-bounded work; parent verifies the work. Execution Workers do not automatically recurse. When an assignment explicitly includes collection and synthesis, they may fan out bounded independent collection lanes and integrate their evidence under the existing manage-agents mechanics; no other nested delegation is granted.
+- **Authority:** Packet-bounded work; parent verifies the work. Execution Workers do not automatically recurse. When an assignment explicitly includes collection and synthesis, they may fan out bounded independent collection lanes and integrate their evidence when the coordinator assigns that coordination; no other nested delegation is granted.
 - **Model category:** Balanced or Mini
 
-| Model category   | Model lineage   | Thinking   | Task signals                                                    |
-| ---------------- | --------------- | ---------- | --------------------------------------------------------------- |
-| Balanced         | OpenAI Terra    | medium     | Local choices; Complete; Local/Cross-domain.                    |
-| Mini             | OpenAI Luna     | xhigh      | Prescribed; Complete; Local/Cross-domain.                       |
-| Balanced         | OpenAI Sol      | low        | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | Claude Opus     | low        | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | xAI Grok        | low        | Local choices; Complete; Local/Cross-domain.                    |
-| Balanced         | OpenAI Sol      | medium     | Local choices/Open-ended; Partial; Cross-domain/Cross-system.   |
-| Balanced         | Claude Opus     | medium     | Local choices/Open-ended; Partial; Cross-domain/Cross-system.   |
-| Balanced         | xAI Grok        | medium     | Local choices/Open-ended; Partial; Local/Cross-domain.          |
+| Model category | Model lineage | Thinking | Task signals                                              |
+|----------------|---------------|----------|-----------------------------------------------------------|
+| Balanced       | OpenAI Terra  | medium   | Complete direction; Local/Cross-domain.                   |
+| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
+| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | Claude Opus   | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
 
 ### Reviewer
 Use for independent review or verification.
@@ -170,14 +145,14 @@ Use for independent review or verification.
 - **Authority:** Candidate findings only; parent verifies and owns the verdict. Preserve all owning-phase review gates and limits.
 - **Model category:** Balanced or Frontier
 
-| Model category   | Model lineage   | Thinking         |
-| ---------------- | --------------- | ---------------- |
-| Balanced         | OpenAI Terra    | high             |
-| Balanced         | OpenAI Sol      | medium           |
-| Balanced         | Claude Opus     | medium           |
-| Balanced         | xAI Grok        | high             |
-| Frontier         | OpenAI Astra    | medium or high   |
-| Frontier         | Claude Fable    | medium or high   |
+| Model category | Model lineage | Thinking       |
+|----------------|---------------|----------------|
+| Balanced       | OpenAI Terra  | high           |
+| Balanced       | OpenAI Sol    | medium         |
+| Balanced       | Claude Opus   | medium         |
+| Balanced       | xAI Grok      | high           |
+| Frontier       | OpenAI Astra  | medium or high |
+| Frontier       | Claude Fable  | medium or high |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one reviewer from a different author lineage; a single reviewer must be different-lineage. In a larger round, deliberately allocate up to half of reviewers to a different lineage according to cost. If the required reviewer is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing reviewer retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
@@ -187,20 +162,20 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 
 - **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
 - **Continuity and cardinality:** Single or Operator swarm; each assignment is independent.
-- **Authority:** Execute, observe, and report the bounded procedure. Route judgment, code changes, replies, readiness verdicts, and merge decisions to the parent.
+- **Authority:** Execute, observe, report, and perform user-authorized mechanical transformations. It does not make implementation or design judgments; route those, replies, readiness verdicts, and merge decisions to the parent.
 - **Model category:** Mini
 
-Bright line: bounded Git, test, build, PR, and watch procedures belong to an Operator. An unsupported Operations method routes to a Worker Synthesis assignment that defines the procedure, then returns to an Operator; Synthesis requiring interpretation remains Worker work even when the approach is detailed, while plain regrouping is Operations. An unexpected diagnosis routes to a Worker; user authorization remains with the main owner. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure unless evidence is missing or conflicts.
+Bright line: standalone assigned Git, test, build, PR, and watch procedures belong to an Operator. An unsupported Operations method routes to a Worker Synthesis assignment that defines the procedure, then returns to an Operator; Synthesis requiring interpretation remains Worker work even when the approach is detailed, while plain regrouping is Operations. An unexpected diagnosis routes to a Worker; user authorization remains with the main owner. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure unless evidence is missing or conflicts.
 
-| rationalization                 | reality                                                                                                                                            |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| "it's faster to do it myself"   | dispatch discipline buys parent attention, not speed; the watch you babysit costs every turn until it ends                                         |
-| "this needs judgment"           | split it: the procedure goes to the Operator; the judgment routes back to you, and you decide or dispatch a separate Worker reasoning assignment   |
-| "a Worker can handle it"        | Workers are for bounded reasoning work; procedures are Operator work at Mini cost                                                                  |
+| rationalization               | reality                                                                                                                                          |
+|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| "it's faster to do it myself" | dispatch discipline buys parent attention, not speed; the watch you babysit costs every turn until it ends                                       |
+| "this needs judgment"         | split it: the procedure goes to the Operator; the judgment routes back to you, and you decide or dispatch a separate Worker reasoning assignment |
+| "a Worker can handle it"      | A separately assigned procedure is Operator work; an implementation Worker's associated proof stays with that Worker.                            |
 
-| Model category   | Model lineage   | Thinking   |
-| ---------------- | --------------- | ---------- |
-| Mini             | OpenAI Luna     | high       |
+| Model category | Model lineage | Thinking |
+|----------------|---------------|----------|
+| Mini           | OpenAI Luna   | high     |
 
 ## Choose the Runtime
 
@@ -228,13 +203,19 @@ Launch with the native or ACPX encoding returned by **Choose the Runtime**. Host
 
 ### Shared Work Context
 
-When an assignment contributes to an existing work thread, carry its exact shared work reference with the relevant sources and say whether the agent may post findings or must return them to the parent. A reference alone grants no posting or sending authority. Use `agent-collaboration` for Router operations and `track-show-me-your-work` for meaningful checkpoints. Keep runtime identity, permissions, and receipt verification here; do not copy session ledgers or every agent action into the discussion. Contributors do not resolve the whole-work thread. Reviewers still receive bounded sources without inherited author conversation; a work thread is not a substitute for an independent review packet.
+When an assignment contributes to an existing work thread, carry its exact shared work reference with relevant sources and say whether the agent may post findings or must return them to the parent; a reference alone grants no posting or sending authority. `track-show-me-your-work` owns the meaningful-checkpoint threshold. Scoped board catch-up or posting an approved checkpoint is an Operator procedure through `agent-collaboration`; the main identifies consequential decisions and verifies evidence, then reuses that summary without a second narrative. Batch small lane receipts into the responsible agent's checkpoint; do not post per command, minor edit, or routine progress, and do not duplicate parent and worker reports. Keep runtime identity, permissions, and receipt verification here. Contributors do not resolve the whole-work thread. Reviewers still receive bounded sources without inherited author conversation; a work thread is not a substitute for an independent review packet.
+
+### Waiting
+
+When no independent useful work remains, park rather than repeatedly checking with short model turns: use the current host's blocking wait or completion notification for a native job, a supported reply or event notification for a separate conversation, an authorized Router wake through `agent-collaboration` for a later follow-up or deadline, or checkpoint/yield for a user decision. Assign a long CI watch to an Operator with its blocking watch, then wait for the Operator. Use the longest suitable supported wait bounded by the real deadline and host constraints; do not invent a polling interval or watch service.
+
+Before parking, decide whether a future check or wake is needed and retain the exact recipient, expiry, and saved wake id when one is created. On observed resumption, cancel or adjust an obsolete wake through `agent-collaboration`. This does not alter ordinary user reminder cadence.
 
 ### Session Keep-Alive
 
-For Codex, use **26 minutes** since the last relevant model request as the maintenance target for an idle continuing session expected to resume. Active qualifying requests reset the clock; never ping a busy worker solely for cache maintenance. Record relevant activity and actual maintenance in the persistent relationship ledger. A status read or wait call does not refresh provider model state, and cache expiry does not destroy a session.
+For Codex, use **26 minutes** since the last qualifying model request as the maintenance target for an idle continuing session expected to resume. Actual qualifying model requests reset the clock; status reads, waits, and queued acknowledgements do not establish refresh. Never ping a busy worker solely for cache maintenance. Record relevant activity and actual maintenance in the persistent relationship ledger; expiry does not end session identity.
 
-This skill owns the target. It is a working policy, not a guaranteed provider TTL or savings claim. Use verified provider behavior for other harnesses rather than copying the Codex interval. Prefer useful follow-ups, available native waits/notifications, or an authorized Router wake through `agent-collaboration`; do not run a repeated model-turn polling loop. Preserve the user's requested task schedule and existing communication authority.
+This skill owns the target. It does not guarantee provider TTL, quota, or savings. Cache matching needs the same prefix: preserve the same conversation and avoid replaying whole packets unnecessarily, but do not claim a stable id guarantees a cache hit. Use verified provider behavior for other harnesses rather than copying the Codex interval.
 
 ### Native Dispatch
 
@@ -266,8 +247,8 @@ ACPX agents start with zero parent context: parent conversation history never cr
 0. IF a new or materially changed assignment needs decomposition because it names more than one outcome or action, may run in parallel, or does not fit one bounded packet, load `references/job-planning.md` and return the job graph: jobs, dependencies and parallel-safety, and parent verification points. Same-assignment follow-ups use their concise delta and do not rebuild the graph. Step 0 identifies jobs; it does not choose patterns — step 1 owns pattern choice and annotates the graph per job.
    - Completion: every dependency is named, every parallel-safe marking names the write-set or input check from `references/job-planning.md` that supports it, and each job names its expected receipt and the parent verification point that closes it. Actual receipts arrive at step 3; step 0 completes before any dispatch.
 
-1. Classify each job's task category and signals, then choose its pattern and continuity. Select a task-fit model effort and lineage from that pattern's table, applying the harness preferences in Capability Economics, before resolving a provider or runtime. When a job graph exists, annotate it per job before any runtime choice.
-   - Completion: task category, judgment, guidance, architectural span, Advisor/Sidekick/Worker/Reviewer/Operator pattern, continuity, allowed model effort, and lineage are explicit.
+1. Classify each job's task category, Guidance, and Architectural span, then choose its pattern and continuity. Select a task-fit model effort and lineage from that pattern's table before resolving a provider or runtime. When a job graph exists, annotate it per job before any runtime choice.
+   - Completion: task category, guidance, architectural span, Advisor/Sidekick/Worker/Reviewer/Operator pattern, continuity, allowed model effort, and lineage are explicit.
 
 2. Choose parent conversation history and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
    - Dispatch completion: the packet records both selections.
