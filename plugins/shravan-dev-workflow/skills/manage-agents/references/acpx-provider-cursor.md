@@ -12,7 +12,7 @@ Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single m
 
 Pass the exact advertised ACP id from `session/new` / `configOptions.model` with `--model` at session creation or `acpx cursor set model <id> -s <name>` afterward.
 
-Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
+Illustrative advertised Cursor ACP id examples (catalogs change):
 
 | Model id                           |
 | ---------------------------------- |
@@ -23,7 +23,7 @@ Skill-matrix and optional Cursor ACP ids (verify locally; catalogs change):
 | `claude-opus-5`                    |
 | `gpt-5.6-sol`                      |
 
-- Prefer `grok-4.6[effort=high,fast=false]` and `gpt-5.6-luna`.
+- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
 - Fable only on request.
 
 Treat the short names from `agent --list-models` (`cursor-grok-4.6-high`, `cursor-grok-4.6-medium`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
@@ -42,8 +42,10 @@ Cursor ACP advertises session modes. Use `acpx cursor set-mode <mode> -s <name>`
 
 ## Sessions And Identity
 
+Set `$SELECTED_MODEL_ID` to the exact ACP id verified from the live catalog for the selected model and effort; do not fabricate a low or medium id.
+
 ```bash
-acpx --cwd /absolute/repo --model 'grok-4.6[effort=high,fast=false]' --approve-reads --no-terminal \
+acpx --cwd /absolute/repo --model "$SELECTED_MODEL_ID" --approve-reads --no-terminal \
   --non-interactive-permissions fail cursor sessions ensure --name sidekick
 acpx cursor set-mode plan -s sidekick
 ```

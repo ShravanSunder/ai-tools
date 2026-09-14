@@ -15,7 +15,7 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Astra → Frontier; Sol low/medium → Balanced; Terra medium → Balanced; Luna → Mini).
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select the model-and-effort pair from the applicable role table in `SKILL.md`, then use its advertised effort level; do not duplicate role-tier mappings here.
 
 ## Sessions And Identity
 

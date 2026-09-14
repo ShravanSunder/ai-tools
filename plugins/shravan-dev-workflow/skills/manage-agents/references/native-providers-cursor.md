@@ -12,7 +12,7 @@ Task may omit a sandbox or `workspace_readonly` flag. Do not hop to Cursor CLI t
 
 ## Models
 
-Use the exact model id the host Task tool advertises. Pattern floors from `SKILL.md` still apply. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
+Use the exact model id the host Task tool advertises. The allowed model-and-effort combinations in the `SKILL.md` role table still apply. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
 
 ## Workspace Access
 

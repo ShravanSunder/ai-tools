@@ -36,14 +36,14 @@ local record -> provider attached -> selected model active
 
 Identity is the resolved runtime, launcher, provider command, working scope, relationship name, and exposed ids. Configuration is model, reasoning effort, and permissions. Keep both stable or record a deliberate transition before the next call.
 
-| Signal | Action |
-| --- | --- |
-| reconnect requested | Resume/retry the same scope. |
+| Signal                     | Action                                                                                                 |
+| ---                        | ---                                                                                                    |
+| reconnect requested        | Resume/retry the same scope.                                                                           |
 | local relationship missing | Inspect runtime records for matching runtime and working scope, then resume or intentionally recreate. |
-| auth failure | Repair auth or report blocked; confirm provider readiness afterward. |
-| model rejected/substituted | Use an advertised equivalent or report degraded/blocked. |
-| permission failure | Correct the narrow policy or report blocked; obtain approval for broader permissions. |
-| provider session limit | Stop creating; reuse/resume, use declared fallback, defer, or report blocked. |
+| auth failure               | Repair auth or report blocked; confirm provider readiness afterward.                                   |
+| model rejected/substituted | Use an advertised equivalent or report degraded/blocked.                                               |
+| permission failure         | Correct the narrow policy or report blocked; obtain approval for broader permissions.                  |
+| provider session limit     | Stop creating; reuse/resume, use declared fallback, defer, or report blocked.                          |
 
 ## Progress And Scope
 
@@ -51,11 +51,4 @@ A runtime status proves liveness only. Recent previews and saved history must be
 
 ## Receipt Freshness
 
-| Level | Proves |
-| --- | --- |
-| `local` | record or liveness only |
-| `provider-active` | provider attached and selected model evidenced |
-| `assignment-output` | captured output matches session, assignment id, decision target, and source/head version |
-| `parent-verified` | parent checked the accepted claim against primary evidence |
-
-Only current `assignment-output` enters reduction. Mark queued output `stale` when assignment, decision target, session scope, or source/head version changed.
+`agent-job-packet.md` owns receipt levels and their proof meaning. This ledger applies persistence freshness: mark queued output `stale` when assignment, decision target, session scope, or source/head version changed.

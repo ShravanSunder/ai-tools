@@ -12,7 +12,7 @@ Task / Agent may omit plan-mode or readonly flags. Do not hop to `claude -p --pe
 
 ## Models
 
-Use the exact model id the host Task / Agent tool advertises. Pattern floors from `SKILL.md` still apply.
+Use the exact model id the host Task / Agent tool advertises. The allowed model-and-effort combinations in the `SKILL.md` role table still apply.
 
 ## Workspace Access
 

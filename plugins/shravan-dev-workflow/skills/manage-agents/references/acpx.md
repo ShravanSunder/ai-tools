@@ -14,7 +14,7 @@ Before every call, select the provider that owns the chosen model lineage and lo
 
 - OpenAI lineage: call the `codex` provider and load `acpx-provider-codex.md`.
 - Claude lineage: call the `claude` provider and load `acpx-provider-claude.md`.
-- Cursor lineage: call the `cursor` provider and load `acpx-provider-cursor.md`.
+- xAI lineage through Cursor provider: call the `cursor` provider and load `acpx-provider-cursor.md`.
 
 When the user explicitly selects Cursor as the provider for an OpenAI or Claude model, call `cursor` and load `acpx-provider-cursor.md`.
 
@@ -103,10 +103,10 @@ Inspect local relationship records:
 
 Choose output for the receipt consumer:
 
-| Consumer | Format |
-| --- | --- |
-| Human terminal | text |
-| Final agent response | `--format quiet` |
-| Structured transcript evidence | `--format json` |
+| Consumer                       | Format           |
+| ---                            | ---              |
+| Human terminal                 | text             |
+| Final agent response           | `--format quiet` |
+| Structured transcript evidence | `--format json`  |
 
 For persistent relationships, use `session-ledger.md` to verify identity and receipt freshness. The parent verifies every assignment-bound output before accepting its claims.

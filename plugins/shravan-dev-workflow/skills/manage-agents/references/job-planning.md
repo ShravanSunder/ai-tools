@@ -1,6 +1,6 @@
 # Job Planning
 
-Build the job graph before the first dispatch when the request names more than one outcome or action, any work could run in parallel, or you are unsure one bounded packet covers the task. The graph owns decomposition, sequencing, and parent verification points; each job then runs its own ordered dispatch decision. A job yields at most one assignment-bound receipt and always closes at its named parent verification point.
+For a new or materially changed assignment, build the job graph before the first dispatch when the request names more than one outcome or action, any work could run in parallel, or you are unsure one bounded packet covers the task. Same-assignment follow-ups use their concise delta and do not rebuild the graph. The graph owns decomposition, sequencing, and parent verification points; each job then runs its own ordered dispatch decision. A job yields at most one assignment-bound receipt and always closes at its named parent verification point.
 
 ## What To Inspect When Cutting Jobs
 
@@ -12,6 +12,8 @@ Build the job graph before the first dispatch when the request names more than o
 ## The Graph
 
 For each job record: the job in one sentence, its dependencies and whether it is parallel-safe, its expected receipt, and the parent verification point that closes it. Step 1 of the workflow assigns each job's pattern; the graph never chooses models or runtimes.
+
+When a collection-and-synthesis assignment explicitly fans out, compose one independent evidence question per lane. A named synthesis owner collects source-and-gap receipts and verifies them before downstream work. Do not add ceremony splits; preserve the existing parallel-safety check.
 
 ## One Good Decomposition
 

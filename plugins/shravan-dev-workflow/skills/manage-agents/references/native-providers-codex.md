@@ -17,7 +17,7 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,terra,luna}`. Prefer short f
 
 ## Effort
 
-`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. Pattern floors from `SKILL.md` still apply.
+`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `SKILL.md` role table still apply.
 
 ## Conversation History
 
