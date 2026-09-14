@@ -51,17 +51,19 @@ Model category is a cost/capability grouping of model plus effort. It does not a
 | xAI      | Grok.                                               |
 | Cursor   | A harness and multi-model catalog, not a lineage.   |
 
-### Role Names
+### Agent Roles
 
-Use the host's advertised display-name field or the ledger agent name when supported; otherwise use the legal native identifier. Replace `<purpose/>` with a few-word assignment purpose. Names do not replace session addresses or grant authority.
+> Operator owns a procedure. Worker owns an assignment. Sidekick owns continuing execution. Reviewer owns assessment. Advisor owns guidance.
 
-| Role       | Description                                   | Display name                 |
-| ---------- | --------------------------------------------- | ---------------------------- |
-| Sidekick   | Continuing execution partner.                 | `🐒 Sidekick · <purpose/>`   |
-| Advisor    | Owner-selected continuing guidance.           | `🦉 Advisor · <purpose/>`    |
-| Worker     | One bounded reasoning/execution assignment.   | `🛠️ Worker · <purpose/>`     |
-| Reviewer   | Independent assessment.                       | `🔎 Reviewer · <purpose/>`   |
-| Operator   | Bounded procedures and observation.           | `🔧 Operator · <purpose/>`   |
+| Role        | What it owns                                              | When to use it                                                                               | Continuity                                                                           |
+|-------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| 🔧 Operator | A prescribed procedure and its observed result.           | Git/PR operations, running checks, watching jobs, scraping or mechanical transformations.    | Completes the procedure and reports results or exceptions.                           |
+| 🛠️ Worker   | One bounded result, including corrections and proof.      | An implementation, investigation, collection or synthesis assignment.                        | Stays through follow-ups until that assignment is accepted.                          |
+| 🐒 Sidekick | Continuing execution responsibility across assignments.   | You want a working partner that accumulates understanding of an area and keeps advancing it. | Reuses one separate session across assignments.                                      |
+| 🔎 Reviewer | Independent assessment against requirements and evidence. | Challenge a design, implementation or claimed result.                                        | May continue the same review with its own context; remains independent of authoring. |
+| 🦉 Advisor  | Continuing guidance, recommendations and pushback.        | You explicitly choose another agent to help think through decisions.                         | Reuses one separate session; advises without implementing.                           |
+
+Names follow `<emoji> <role> · <purpose/>`, with a concrete purpose substituted. Use the host's advertised display-name field or the ledger agent name when supported; otherwise use the legal native identifier. Names do not replace session addresses or grant authority.
 
 ## Dispatch Overview
 
