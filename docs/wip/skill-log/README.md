@@ -12,7 +12,7 @@ Brief intake for recurring skill or agent failures. Follow [FORMAT.md](FORMAT.md
 | 2026-09-12 | manage-agents / ACPX Claude | Fable model selected but bundled executable rejected | captured | [Fable runtime version](2026-09-12-fable-bundled-runtime-version.md) |
 | 2026-09-12 | manage-agents / parent, Sidekick and Operator | Shared test Operator received conflicting commands and interruption | captured | [Exclusive Operator control](2026-09-12-shared-operator-control-conflict.md) |
 | 2026-09-12 | manage-agents / Operator and Delegate | Sandbox access failure reported as a service outage | captured | [Sandbox reachability claims](2026-09-12-sandbox-access-misclassified-as-service-outage.md) |
-| 2026-09-13 | manage-agents / Delegate, Sidekick and parent | Repeated declaration, consumer, conformance and inference misses before coordinated builds | captured | [Test readiness validation](2026-09-12-test-readiness-source-validation.md) |
+| 2026-09-13 | manage-agents / Delegate, Sidekick and parent | Repeated declaration, consumer, conformance, fixture admission, and inference misses before coordinated builds | captured | [Test readiness validation](2026-09-12-test-readiness-source-validation.md) |
 | 2026-09-12 | Native UI proof / Peekaboo | Folder-chooser input and exact-window receipts failed | captured | [Native input receipts](2026-09-12-native-proof-input-receipts.md) |
 | 2026-09-12 | manage-agents / Operator | Parent exec session IDs were unavailable to child monitors | captured | [Exec session scope](2026-09-12-parent-exec-session-operator-monitor.md) |
 | 2026-09-11 | manage-agents / Operator | Supplied PATH lost `/bin`, invalidating a VM reproduction | captured | [Command PATH drift](2026-09-11-operator-command-path-drift.md) |

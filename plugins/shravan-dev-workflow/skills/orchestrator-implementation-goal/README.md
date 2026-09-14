@@ -18,6 +18,6 @@ flowchart LR
 
 Design repair remains a separate owner. If an incomplete prerequisite can be completed within the settled model, the implementation goal stays open and resumes afterward. A material design break returns to the user before more implementation is built on it.
 
-The workflow uses `track-show-me-your-work` for consequential decisions and results. The outermost workflow finishes the trail; nested phase owners reuse it. The trail supports orientation but never replaces current source, proof, review, or PR evidence.
+The workflow uses `track-show-me-your-work` for consequential decisions and results. A shared thread follows the work across sessions; nested phase owners contribute checkpoints. Session endings do not automatically resolve the thread. The trail supports orientation but never replaces current source, proof, review, or PR evidence.
 
 Normal implementation correction is capped at three remediation passes. One bounded recovery review is possible when prior evidence is unavailable and current source has been inspected, but recovery cannot reset known history or be repeated. Merge always requires explicit authority.

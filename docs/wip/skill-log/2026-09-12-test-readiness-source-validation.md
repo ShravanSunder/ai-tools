@@ -28,6 +28,14 @@
 - Impact: redundant candidate launches and one-time token consumption; no CPU success was claimed from failed preparation. Parent and Delegate both missed source boundaries before dispatch. Suspected workflow defect, not an established skill implementation cause.
 - Follow-up: compare measured populations and expected wire values to actual source; resolve fresh native window IDs and enforce one bounded foreground/restore operation. No skill changes authorized.
 
+## Additional evidence: thread-first skill pressure admission (2026-09-13)
+
+- Expected: inspect fixture registration and grading before dispatching live pressure runs; preserve the requested model and existing supported runtime route.
+- Observed: new scenario Markdown omitted mandatory per-skill registry entries, causing two startup failures with zero tests. Broad proof regexes matched the prompts and caused false rubric-leak failures; one hypothetical continuation prompt was interpreted as missing real IDs. The default adapter also ignored the parent provider and hit a usage limit before evaluation.
+- Evidence: `tests/skills/lib/skill-pressure-evaluation/scenario-cases/load-scenario-cases.ts`; `tmp/router-trail-evals.log`; `tmp/router-trail-evals-router-final.log`; `tmp/debug-workflows/router-trail-evals/debug-investigation.md`.
+- Parent inspected runner source and actual responses, repaired scenario registration/grading, and used the documented invocation-local provider bridge. No fake backend or weakened sandbox was substituted. A genuine cron-cadence error was kept separate from grading failures and corrected at its existing guidance owner.
+- Impact: delayed proof and additional model calls; no passing behavior claim from startup/provider failures. This is additional source-preflight failure evidence, not a commission to change meta-skills.
+
 ## 2026-09-13 IPC contract authoring recurrence
 
 - Parent-coordinated Swift builds found missing `try` at four schema helper calls and later five throwing test-fixture calls. Scoped format/lint and frontend parse had passed; authors explicitly said no build had run, so these were not false runtime-proof claims.

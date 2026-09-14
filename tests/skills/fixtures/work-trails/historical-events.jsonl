@@ -1,0 +1,3 @@
+{"timestamp": "2026-09-13T10:00:00Z", "phase": "proof", "decision": "Tests passed", "why": "Initial output", "evidence": [], "result": "Reported pass"}
+{"timestamp": "2026-09-13T10:01:00Z", "phase": "proof", "decision": "Correct earlier pass claim", "why": "Persistence test failed", "evidence": [], "result": "Persistence failed", "corrects_line": 1}
+{"timestamp": "2026-09-13T10:02:00Z", "phase": "blocked", "decision": "Await fixture repair", "why": "Required persistence proof missing", "evidence": [], "result": "Blocked"}
