@@ -1,7 +1,8 @@
 # Persistent managed conversations
 
-- `shravan-dev-workflow` 2.14.0: Worker/Reviewer roles, harness-specific execution nuance, subordinate labels, user-controlled Advisors and 26-minute Codex idle maintenance.
+- `shravan-dev-workflow` 2.14.0: Worker/Reviewer roles, harness-specific execution nuance, subordinate labels, user-controlled Advisors and a shared 26-minute idle-continuation target without provider guarantees.
 - Added the task-first rubric: task categories, Guidance, and Architectural span before role and model selection.
+- Reorganized `manage-agents` around progressive H1-H4 definitions, selection, patterns, execution, and continuity sections.
 - Restored Sol/Opus/Grok role choices by guidance and Architectural span, with Frontier mains automatically assigning bounded execution and procedure work.
 - Sidekicks and Advisors use separate persistent conversations; reuse the same session across follow-ups and new assignments, including ACPX.
 - Workers select native or separate conversations according to the task; reviewer independence and phase gates remain intact.

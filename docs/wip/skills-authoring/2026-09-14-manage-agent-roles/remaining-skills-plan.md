@@ -23,6 +23,7 @@ Management and canonical collaboration cohesion edits are implemented; canonical
 - Conditional final three-artifact review subsuming intermediate reviews only where no intermediate consumer requires them reviewed first.
 - Main/worker drafting boundary and any direct small-task execution exception.
 - Evidence for 26-minute maintenance on each actual route; cache expiry is not session expiry.
+- Whether manage-agents Workflow and references/job-planning.md provide necessary dispatch sequencing, dependency/parallel-safety decisions and completion checks, or duplicate the new selection flow. Discuss before removing or redesigning either; no decision made.
 
 ## Preserve
 
