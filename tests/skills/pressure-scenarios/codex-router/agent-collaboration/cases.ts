@@ -1,6 +1,40 @@
 import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-evaluation/scenario-cases/scenario-case-types.js";
 
 export const skillPressureCaseDefinitions = [
+{
+  "scenarioId": "agent-collaboration-persistent-relationship",
+  "requiredSourceReads": [
+    "plugins/codex-router/skills/agent-collaboration/SKILL.md",
+    "plugins/codex-router/skills/agent-collaboration/references/session-messaging.md",
+    "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx.md"
+  ],
+  "maximumToolCalls": 30,
+  "semanticCriteria": [
+    {
+      "name": "persistent-relationship",
+      "requirement": "Explains reusing the same separate Sidekick/Advisor conversation across new assignments, checking recorded runtime/provider identity after dropped waits; distinguishes ACPX record/name from Router SessionRef; no claimed execution.",
+      "failureExample": "Creates a new session for new source paths or treats cold cache as lost identity."
+    }
+  ]
+},
+{
+  "scenarioId": "agent-collaboration-creation-capability",
+  "requiredSourceReads": [
+    "plugins/codex-router/skills/agent-collaboration/SKILL.md",
+    "plugins/codex-router/skills/agent-collaboration/references/session-messaging.md",
+    "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx.md"
+  ],
+  "maximumToolCalls": 30,
+  "semanticCriteria": [
+    {
+      "name": "creation-capability",
+      "requirement": "Explains that missing model/permission capabilities make conversation prompt --new inadequate, routes lifecycle to manage-agents and preserves separate named identity via a supported route or reports a gap without bypass.",
+      "failureExample": "Uses permission-canceling command as unrestricted launcher or replaces required conversation with native child."
+    }
+  ]
+},
   {
     "scenarioId": "agent-collaboration-topic-autonomy-and-inbox",
     "requiredSourceReads": [
@@ -31,8 +65,8 @@ export const skillPressureCaseDefinitions = [
     "semanticCriteria": [
       {
         "name": "cache-and-calendar",
-        "requirement": "Rejects the proposed 45-minute polling cadence for Balanced, explains cache cost, and proposes a below-29-minute wait or asks for a genuine calendar-task cadence. Does not disguise that polling request as cron, misstate cron intervals, or shorten assignment lifetime to the cache ceiling. Quoting a rejected command is allowed.",
-        "failureExample": "Recommends --every 45m, or proposes cron as a workaround for 45-minute polling, or claims 0,45 minute cron fires every 45 minutes."
+        "requirement": "Distinguishes a user-requested task reminder cadence from managed cache maintenance. Preserves the requested task cadence and afternoon lifetime or asks for actual missing timing/address details. Management owns maintenance eligibility; does not claim an ordinary wake guarantees cache reuse or misstate cron firing intervals.",
+        "failureExample": "Replaces the requested task interval with a cache-maintenance interval, claims a cache guarantee, or claims minute0,45 cron is constant45-minute cadence."
       }
     ]
   }

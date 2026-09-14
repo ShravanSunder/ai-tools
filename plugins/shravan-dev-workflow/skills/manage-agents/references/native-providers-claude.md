@@ -2,6 +2,8 @@
 
 Owns Claude Code native Task / Agent launch and workspace-access encoding. Return the host Task / Agent encoding and workspace-access encoding.
 
+This reference applies after `SKILL.md` selects a native subagent assignment. Sidekick/Advisor separate-conversation requirements take precedence over native model availability.
+
 ## Launch
 
 Use the host Task / Agent tool for the selected Claude model. Do not substitute `claude -p` or ACPX when that tool can spawn the selected model.

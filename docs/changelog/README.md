@@ -1,5 +1,7 @@
 # Changelog
 
+- [2026-09-14 Persistent managed conversations](2026-09-14-persistent-managed-conversations.md)
+
 - [2026-09-13 Thread-first work trails](2026-09-13-thread-first-work-trails.md)
 
 - [2026-09-13 Codex Router agent-collaboration 0.4.0](2026-09-13-agent-collaboration-plugin.md)

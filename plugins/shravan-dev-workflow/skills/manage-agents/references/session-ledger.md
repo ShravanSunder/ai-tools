@@ -17,11 +17,11 @@ return expected / receipt level / return binding: <session, assignment id, decis
 parent verification / next follow-up:
 ```
 
-Keep runtime-local ids with their originating runtime. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
+In the existing route/runtime slots, label the transport and each ID: ACPX record, provider-native session, or full Router SessionRef. An ACPX name/record ID is not a Router address. A Router mapping is usable only after discovery verifies the same provider-native conversation. Keep runtime-local ids with their originating runtime. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
 
 ## Create Or Resume
 
-Reuse a relationship when runtime identity, working scope, assignment, model, and permissions still match. Create a new relationship with an explicit continuity-reset reason.
+Reuse the same Sidekick/Advisor conversation across follow-ups and new assignments unless the relationship is explicitly replaced. Update the assignment and validate any changed scope without creating a new session. Inspect existing records/reconnect support before a reset; record an explicit continuity-reset reason only when the relationship is deliberately replaced.
 
 ## Keep-Alive
 

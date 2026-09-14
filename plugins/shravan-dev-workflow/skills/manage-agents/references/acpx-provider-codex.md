@@ -1,6 +1,6 @@
 # ACPX Provider: Codex
 
-Agent token: `codex`. Use this provider when the host is not Codex native, or when you need an ACPX-persistent Codex session across a non-Codex host. Prefer native Codex subagents when you are already on Codex and only need GPT-native models; see `references/native-providers-codex.md`.
+Agent token: `codex`. Use this provider when the host is not Codex native or when the relationship requires a separate persistent Codex conversation, including from a Codex parent. Prefer native Codex subagents for native-eligible bounded assignments; see `references/native-providers-codex.md`.
 
 ## Models
 
@@ -19,12 +19,14 @@ Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort
 
 ## Sessions And Identity
 
+Creation example for a new relationship only; for an existing Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
+
 ```bash
-acpx --cwd /absolute/repo --model gpt-5.6-sol --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex sessions ensure --name advisor
+acpx --cwd /absolute/repo --model gpt-5.6-terra --approve-reads --no-terminal \
+  --non-interactive-permissions fail codex sessions ensure --name sidekick
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex -s advisor \
-  --file tmp/advisor-packet.md
+  --non-interactive-permissions fail codex -s sidekick \
+  --file tmp/sidekick-packet.md
 ```
 
 Keep cwd, resolved `codex` command, model id, effort, and permission boundary stable for ledgered relationships. Record the accepted model id in the ledger; exit code 0 alone does not prove the intended model launched.

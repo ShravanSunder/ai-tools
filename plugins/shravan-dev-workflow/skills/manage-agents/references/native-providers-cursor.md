@@ -2,6 +2,8 @@
 
 Owns Cursor native Task launch and workspace-access encoding. Return the host Task encoding and workspace-access encoding.
 
+This reference applies after `SKILL.md` selects a native subagent assignment. Sidekick/Advisor separate-conversation requirements take precedence over native model availability.
+
 ## Launch
 
 Use the host Task tool for an advertised Cursor model. Do not substitute Cursor CLI or ACPX when Task can spawn the selected model.

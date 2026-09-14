@@ -13,8 +13,8 @@ Dispatch has two nested levels. The job graph owns decomposition, sequencing, an
 pattern -> model category -> model lineage (cheapest at or above the
            pattern's floor per Capability Economics, unless the user named
            a lineage the table allows for this job) -> reasoning requirement
-        -> history and workspace access -> native availability
-        -> native or ACPX runtime -> exact model id -> packet -> receipt
+        -> history and workspace access -> relationship continuity
+        -> eligible native or separate-session runtime -> exact model id -> packet -> receipt
 ```
 
 When the request names more than one outcome or action, any work could run in parallel, or you are unsure one bounded packet covers the task, build the job graph first; it governs the order and verification point of every later dispatch. A job yields at most one assignment-bound receipt and always closes at its named parent verification point.
@@ -55,7 +55,7 @@ Manage every subagent through one of the following patterns. The runtime supplie
 Where display names are supported, use `🐒 Sidekick · purpose`, `🦉 Advisor · purpose`, `🛠️ Worker · purpose`, `🔎 Reviewer · purpose`, and `🔧 Operator · purpose`. Keep legal native task IDs when required; names do not replace session addresses or authorize another session.
 
 ### Advisor
-Use an Advisor for a persistent guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Use an Advisor only when the user chooses the relationship, model, and effort; do not create a Sidekick as an unrequested substitute.
+Use an Advisor in a separate persistent conversation for a guidance relationship on a problem that spans multiple components, systems, or architecture. Guidance only — the Advisor never executes or edits; you drive the loop. Use an Advisor only when the user chooses the relationship, model, and effort; do not create a Sidekick as an unrequested substitute.
 
 - **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment, while the parent remains executor.
 - **Continuity and cardinality:** User-selected persistent named guidance relationship, with ledger and deliberate continuity (see Session Keep-Alive). Use Reviewer for a bounded independent assessment; do not automatically add an Advisor because the main model is Frontier.
@@ -70,7 +70,7 @@ Use an Advisor for a persistent guidance relationship on a problem that spans mu
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
 
 ### Sidekick
-Use a Sidekick for persistent work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work.
+Use a Sidekick in a separate persistent conversation for work you will resume and steer; a named co-worker with a ledger that does the work and thinks with you — validating, helping, pushing back — at the level of the work at hand. You coordinate and validate the work.
 
 - **Work:** Execution across assignments and follow-ups, including in-the-work reasoning, pushback and validation of your logic. Independent assessment of its own work belongs to a separate Reviewer.
 - **Continuity and cardinality:** One or many persistent named relationships with ledger, kept cache-warm (see Session Keep-Alive).
@@ -141,7 +141,7 @@ Bright line: any job handed to a subagent that is a bounded mechanical procedure
 
 ## Choose the Runtime
 
-Select the pattern, model category, model lineage, and reasoning requirement first. Then route from the parent host's own model lineage. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules. History-provisioning feasibility feeds this choice: when required context cannot be summarized into the packet, prefer native dispatch before locking a runtime.
+Select the pattern, model category, model lineage, and reasoning requirement first. Sidekicks and Advisors require separate persistent conversations: reuse the same named ACPX session or exact Router-addressable conversation across follow-ups and new assignments in that relationship. Do not substitute a native child merely because its model is available. Workers may use native subagents or separate conversations according to the task; Reviewer independence and phase freshness rules still apply. For a new persistent relationship, use a supported named ACPX session unless an adequate separately addressable Router conversation already exists or the caller supplies another verified separate-session creation path that exposes the required model, effort, permissions and retained session identity. Then choose the runtime from the capabilities required by that relationship and the selected model lineage. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules. History-provisioning feasibility feeds this choice, but does not override the separate-conversation requirement for Sidekick or Advisor.
 
 ## Context And Access
 
@@ -175,7 +175,7 @@ This skill owns the target. It is a working policy, not a guaranteed provider TT
 
 ### Native Dispatch
 
-Use native dispatch for the parent host's own model lineage when the selected model is available. Do not substitute `codex exec`, `claude -p`, Cursor CLI, or ACPX for an available native spawn of that lineage.
+For Workers, Operators, and eligible Reviewers, prefer native dispatch in the parent host's model lineage when it meets the assignment's capabilities. Sidekick and Advisor persistence takes precedence: use their separate conversation even for the same lineage, with ACPX when that is the supported persistent route. Do not replace an adequate native assignment with a CLI wrapper merely to invent access flags.
 
 - IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 - IF Claude is spawning a Claude model, load `references/native-providers-claude.md` and return the host Task / Agent encoding and workspace-access encoding.
@@ -186,7 +186,7 @@ When an own-lineage model is unavailable, choose a declared native fallback or r
 
 ### ACPX Dispatch
 
-Use ACPX for a model lineage owned by a different provider than the parent host.
+Use ACPX for a different-provider model or the persistent route selected by **Choose the Runtime**.
 
 1. Load `references/acpx.md` for provider-neutral configuration, command, session, permission, and output mechanics.
 2. Select exactly one provider and load its contract before constructing or executing the call:
@@ -196,7 +196,7 @@ Use ACPX for a model lineage owned by a different provider than the parent host.
 3. Use the exact model id and reasoning control specified by the provider contract. When the contract requires live catalog verification, use and record the exact id the provider advertises.
 4. When the selected provider has no provider contract, stop dispatch and report the route as unsupported.
 
-ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the packet does. (ACPX session continuity in `references/acpx.md` is the agent's own session history — a different thing.) Before dispatch, decide what the job needs to abide by its function and give each piece its packet home: the goal and decision target go on the `job:` line; settled decisions the agent must not relitigate go on `job:` or `non-goals:`; exact file paths, diffs, and prior attempts go on `sources:`; and `access:` records `history none`. When the job depends on long parent history that cannot be summarized into a packet, prefer native dispatch in the parent's own lineage; choose ACPX when lineage diversity or independence matters more than shared history.
+ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the packet does. (ACPX session continuity in `references/acpx.md` is the agent's own session history — a different thing.) Before dispatch, decide what the job needs to abide by its function and give each piece its packet home: the goal and decision target go on the `job:` line; settled decisions the agent must not relitigate go on `job:` or `non-goals:`; exact file paths, diffs, and prior attempts go on `sources:`; and `access:` records `history none`. For native-eligible jobs, history needs may favor native dispatch. For persistent relationships, preserve the identity selected by **Choose the Runtime** and supply relevant new context.
 
 ## Workflow
 
@@ -208,11 +208,12 @@ ACPX agents start with zero parent context: parent conversation history never cr
 
 2. Choose parent conversation history and workspace access, then follow **Choose the Runtime** to resolve native availability, runtime, and exact model id.
    - Dispatch completion: the packet records both selections.
-   - Native completion: the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and packet `access:` line are explicit. The launch used the host native tool, not a CLI sandbox stand-in.
-   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit. A review used a named session, not `exec`. No call passed `--timeout`. A dropped wait was not called `blocked` until `sessions list/show/read` was checked.
-   - Unsupported completion: report the missing provider contract and stop dispatch.
+   - Native completion: this is a native subagent assignment, not a Sidekick or Advisor; the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and packet `access:` line are explicit. The launch used the host native tool, not a CLI sandbox stand-in.
+   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit. A review used a named session, not `exec`. A Sidekick or Advisor used its established named session for continuation, not `exec` or `sessions new`; initial creation recorded the new relationship identity. No call passed `--timeout`. A dropped wait was not called `blocked` until `sessions list/show/read` was checked.
+   - Router completion: a supplied or discovered separate conversation satisfies the selected role/model/access and its exact SessionRef is retained; missing creation/input capability is an explicit gap.
+   - Unsupported completion: report the missing provider contract or capability and stop dispatch.
 
-3. Build one bounded packet for a new or materially changed assignment, dispatch it, and reduce the result. Same-assignment follow-ups reuse identity and scope with a concise delta; repeat selection when role, source target, authority, model/runtime, or expected result materially changes.
+3. Build one bounded packet for a new or materially changed assignment, dispatch it, and reduce the result. Same-assignment follow-ups reuse identity and scope with a concise delta; repeat selection when role, source target, authority, model/runtime, or expected result materially changes. A new assignment in the same Sidekick/Advisor relationship refreshes the packet, not the session: retain its identity unless the relationship itself is explicitly replaced.
    - For a new or materially changed assignment, MUST load `references/agent-job-packet.md` and return the filled job packet. For a same-assignment follow-up, use its existing contract and return the delta. After dispatch, return the agent-result reduction block; return the Operator decision block only when its gate fires.
    - Treat agent output as candidate evidence. The parent owns decisions and verifies assignment-bound claims before accepting them.
    - Completion: sources, non-goals, return binding, stop condition, and parent verification are explicit in the packet; the return line names its binding identifiers and the verify line names at least one concrete parent check (never "none" unless the job is read-only with no claims); every claim is accepted, rejected, or unverified after those checks.

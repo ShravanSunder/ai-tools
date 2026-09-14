@@ -2,6 +2,8 @@
 
 Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and workspace-access encoding. Return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 
+This reference applies after `SKILL.md` selects a native subagent assignment. Sidekick/Advisor separate-conversation requirements take precedence over native model availability.
+
 ## Models
 
 | Model id             | Note              |
