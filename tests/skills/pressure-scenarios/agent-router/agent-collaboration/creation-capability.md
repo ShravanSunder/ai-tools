@@ -1,7 +1,7 @@
 # Creation capability boundary
 
 scenario_id: agent-collaboration-creation-capability
-skill_under_test: codex-router:agent-collaboration
+skill_under_test: agent-router:agent-collaboration
 mode: fast
 expect_read_only: true
 expect_artifact: false

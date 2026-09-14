@@ -1,7 +1,7 @@
 # agent-collaboration wake-interval cache regimes pressure
 
 scenario_id: agent-collaboration-wake-interval-cache-regimes
-skill_under_test: codex-router:agent-collaboration
+skill_under_test: agent-router:agent-collaboration
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -21,7 +21,7 @@ The user asks for a 45-minute repeating wake and treats that as the default
 
 ## Prompt
 
-$codex-router:agent-collaboration
+$agent-router:agent-collaboration
 
 Chat only — skip running `agent-sessions` or creating files. I want a repeating
 wake to an existing Balanced session: check progress every 45 minutes for the

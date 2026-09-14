@@ -5,7 +5,7 @@
 - Restored Sol/Opus/Grok role choices by guidance and Architectural span, with Frontier mains automatically assigning bounded execution and procedure work.
 - Sidekicks and Advisors use separate persistent conversations; reuse the same session across follow-ups and new assignments, including ACPX.
 - Workers select native or separate conversations according to the task; reviewer independence and phase gates remain intact.
-- `codex-router` 0.6.0: current scoped-inbox/search reference plus management/collaboration ownership and identity boundaries.
+- `agent-router` 0.7.0: current scoped-inbox/search reference plus management/collaboration ownership and identity boundaries.
 - Updated management provider/session references, role callers and focused collaboration scenarios.
 - Source review informed the latest draft corrections; Markdown table alignment and diff whitespace checks passed. Behavioral tests remain intentionally deferred.
 - Focused pressure run: three semantic passes and one known wake-cadence failure; further pressure testing remains paused at owner request.

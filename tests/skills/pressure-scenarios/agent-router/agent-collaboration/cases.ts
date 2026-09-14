@@ -4,8 +4,8 @@ export const skillPressureCaseDefinitions = [
 {
   "scenarioId": "agent-collaboration-persistent-relationship",
   "requiredSourceReads": [
-    "plugins/codex-router/skills/agent-collaboration/SKILL.md",
-    "plugins/codex-router/skills/agent-collaboration/references/session-messaging.md",
+    "plugins/agent-router/skills/agent-collaboration/SKILL.md",
+    "plugins/agent-router/skills/agent-collaboration/references/session-messaging.md",
     "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
     "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx.md"
   ],
@@ -21,8 +21,8 @@ export const skillPressureCaseDefinitions = [
 {
   "scenarioId": "agent-collaboration-creation-capability",
   "requiredSourceReads": [
-    "plugins/codex-router/skills/agent-collaboration/SKILL.md",
-    "plugins/codex-router/skills/agent-collaboration/references/session-messaging.md",
+    "plugins/agent-router/skills/agent-collaboration/SKILL.md",
+    "plugins/agent-router/skills/agent-collaboration/references/session-messaging.md",
     "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
     "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx.md"
   ],
@@ -38,8 +38,8 @@ export const skillPressureCaseDefinitions = [
   {
     "scenarioId": "agent-collaboration-topic-autonomy-and-inbox",
     "requiredSourceReads": [
-      "plugins/codex-router/skills/agent-collaboration/SKILL.md",
-      "plugins/codex-router/skills/agent-collaboration/references/message-board.md"
+      "plugins/agent-router/skills/agent-collaboration/SKILL.md",
+      "plugins/agent-router/skills/agent-collaboration/references/message-board.md"
     ],
     "maximumToolCalls": 30,
     "semanticCriteria": [
@@ -58,8 +58,8 @@ export const skillPressureCaseDefinitions = [
   {
     "scenarioId": "agent-collaboration-wake-interval-cache-regimes",
     "requiredSourceReads": [
-      "plugins/codex-router/skills/agent-collaboration/SKILL.md",
-      "plugins/codex-router/skills/agent-collaboration/references/timed-wakeups.md"
+      "plugins/agent-router/skills/agent-collaboration/SKILL.md",
+      "plugins/agent-router/skills/agent-collaboration/references/timed-wakeups.md"
     ],
     "maximumToolCalls": 30,
     "semanticCriteria": [

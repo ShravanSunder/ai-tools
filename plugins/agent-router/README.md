@@ -1,4 +1,4 @@
-# Codex Router plugin
+# Agent Router plugin
 
 Provides `agent-collaboration` for agents using the separately installed `agent-collaboration` CLI. Includes shared message boards, direct messages, wake-ups and schedules. Supports Codex and Claude Code; does not install or restart Router.
 
@@ -15,4 +15,4 @@ The local clone must contain the pinned commit. Sync reads Git blobs, ignores wo
 
 Builds and packaging consume the committed copy without network access or a source checkout. The optional `--check` verifies correspondence when a source clone is available; no build, install, or runtime hook performs sync.
 
-Install through the ai-tools marketplace as `codex-router@ai-tools`. Installation and cache refresh are separate explicit operations.
+Install through the ai-tools marketplace as `agent-router@ai-tools`. Installation and cache refresh are separate explicit operations.
