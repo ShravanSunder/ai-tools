@@ -21,7 +21,7 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,terra,luna}`. Prefer short f
 
 ## Conversation History
 
-- Reviewers: only `fork_turns="none"`. A positive integer is inherited parent history, same as `all`. Dispatch is incomplete until the packet records `history none` and `fork_turns="none"`.
+- Reviewers: only `fork_turns="none"`. A positive integer is inherited parent history, same as `all`. Dispatch is incomplete until the assignment contract records `history none` and `fork_turns="none"`.
 - No inherited parent history: set `fork_turns="none"`.
 - Full parent history (non-reviewers only): set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
@@ -29,10 +29,10 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,terra,luna}`. Prefer short f
 
 ## Workspace Access
 
-Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to `codex exec --sandbox read-only` to invent one. Reader and writer packet slots are owned by `agent-job-packet.md`.
+Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to `codex exec --sandbox read-only` to invent one. Reader and writer authority details are owned by `agent-job-packet.md`.
 
-- Readers: packet `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
-- Writers: packet `write <paths> (declared)`. Codex cannot path-scope writes while the repo is cwd. Parent verifies the receipt's diff stayed inside the declared scope.
+- Readers: assignment contract `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
+- Writers: assignment contract `write <paths> (declared)`. Codex cannot path-scope writes while the repo is cwd. Parent verifies the receipt's diff stayed inside the declared scope.
 
 ## Examples
 

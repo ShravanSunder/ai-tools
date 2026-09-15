@@ -1,69 +1,35 @@
 # Agent Job Packet
 
-This reference owns the dispatch, operator-decision, and reduction shapes consumed by `SKILL.md` workflow step 3.
+This reference owns the execution details that complete an assignment contract; it does not replace the owning phase's assignment, governing sources, authority bounds, completion or escalation conditions, or result or proof contract.
 
 ## Dispatch
 
-Build one bounded packet for a new or materially changed assignment. Same-assignment follow-ups carry only the change and new evidence; reuse established scope and identity rather than repeating the full packet. Keep the value column aligned so a human can scan it.
+Dispatch is ready only when the assignment has a bounded outcome, resolvable source context (inline sources suffice for a self-contained task), authority, stop or escalation condition, and an acceptance check chosen by the assigning agent before dispatch; reuse the owning phase proof contract.
 
-Ids are human-readable text slugs, not minted identifiers: assignment id is `<date>-<job-slug>` (e.g. `2026-08-28-ci-watch`), source/head version is a branch plus short SHA, and session identity is the ledger's relationship name. Never invent a UUID; reuse an identifier that already exists (branch, session name, file path) whenever one fits. The return-line binding is a meaning check — does this receipt belong to this assignment, target, and source version — not a string format to validate.
+For a new agent assignment, reuse that contract and resolve executor, model and effort, history, access, runtime, continuity, and acceptance in tool arguments or session configuration where supported. A fresh recipient must be able to resolve the canonical plan or slice sources and the applicable scope and proof contract; include exact paths or inline necessary content, rather than an unusable pointer or parent history dump.
 
-```text
-job packet
-  job:        <one-sentence assignment and decision target; task category /
-              guidance / architectural span>
-  pattern:    advisor | sidekick | worker | reviewer | operator
-  lane:       <swarm name / lane — only for swarm dispatches>
-  route:      <category> / <lineage> — native | router <verified SessionRef>
-              | acpx <provider> — <exact model id> @ <reasoning effort>
-  access:     history <host encoding>; workspace read-only | read-only + exec <listed commands>
-              | write <paths> (declared when host enforcement is declarative)
-  sources:    <anchors the agent must read>
-  non-goals:  <what this job must not touch>
-  return:     <receipt shape>, bound to assignment id + decision target
-              + source/head version (+ session identity when persistent)
-  stop when:  <condition that ends the agent's work and produces the receipt>
-  verify:     <parent checks at the named verification point that close the job
-              before accepting any claim>
-```
+Missing inputs block dispatch; they do not become Partial direction. Prose supplies only missing task context.
+
+A direct task instead uses a concise brief with outcome, relevant sources, explicit authority, stop or escalation condition, and expected evidence. For example: "From the attached CI output, report each failed command, its exit code and first error, with source lines. No file edits. Stop when all failures are accounted for, or report missing evidence; I will compare the cited lines with the output before accepting the report."
+
+Do not impose a universal field layout, date slug, classification string, or new identifier. Reuse existing names, paths, session identities, and source versions where they help bind evidence to the assignment.
+
+Same-assignment follow-ups carry only the delta and new evidence; preserve established scope and identity. A new assignment refreshes the contract without replacing a continuing Sidekick or Advisor conversation.
 
 ### Readers
 
-Review, advisor, research, and guidance packets use `workspace read-only`. That means no repo edits except scratch files under project `tmp/` or system `/tmp`. Repeat that prohibition with its exception on `job:`, `non-goals:`, `stop when:`, and `access:`. An attempted repo edit outside those scratch locations is a stop — return blocked. Parent `verify:` checks the repo worktree is unchanged.
+Reader authority is stated once in the assignment contract: `workspace read-only` allows no repo edits except scratch files under project `tmp/` or system `/tmp`. An attempted repo edit outside those scratch locations stops the assignment. Parent verification checks that the worktree is unchanged.
 
-`read-only + exec <listed commands>` grants only those commands, permits their output under project `tmp/` or system `/tmp`, and still forbids repo edits. Parent `verify:` checks that every reported command was granted and that the worktree is unchanged.
+`read-only + exec <listed commands>` grants only those commands, permits their output under project `tmp/` or system `/tmp`, and still forbids repo edits. Parent verification checks that every reported command was granted and that the worktree is unchanged.
 
 ### Writers
 
-Writer packets name the write paths on `access:`, repeat the bound on `job:` and `non-goals:`, and treat an edit outside those paths as `stop when`. How a host enforces or only declares that bound is the native-provider or ACPX provider reference loaded for the launch.
+Writer authority names the allowed paths once. Before an edit outside them, stop and report blocked; if a violation is discovered, stop and report it. Parent verification still checks the actual diff scope. How a host enforces or only declares that bound is owned by the native-provider or ACPX provider reference selected for the launch.
 
-## Operator Decision
+## Operator Exception
 
-An Operator that reaches work requiring judgment or authority stops and sends this; it proceeds only after explicit parent approval.
-
-```text
-decision packet
-  from:       <assignment id>
-  observed:   <delta that triggered this>
-  anchors:    <source or API anchors>
-  gate:       <affected gate>
-  blocked:    <action the Operator will not take>
-  requested:  <decision requested>
-  waiting:    wait | continue read-only monitoring | stop
-```
+When an Operator reaches work requiring judgment or authority, return observed evidence, the needed decision, and a safe waiting state; proceed only after authorization.
 
 ## Reduction
 
-```text
-agent result
-  job:        <assignment id> / <pattern> / <lane when swarm>
-  status:     complete | partial | blocked | no-receipt
-  receipt:    local | provider-active | assignment-output | parent-verified,
-              matched to the packet's return-line binding
-  accepted:   <claims accepted after parent checks>
-  rejected:   <claims rejected or unverified>
-  checks:     <parent checks run>
-  next:       <next action>
-```
-
-`local` proves record or liveness only. `provider-active` proves provider attachment and selected model evidence. `assignment-output` proves captured output matches session, assignment id, decision target, and source/head version. `parent-verified` proves the parent checked an accepted claim against primary evidence. Only current `assignment-output` enters reduction.
+Reuse the owning phase's result or reduction contract. Where none exists, return a short result: status, assignment-bound evidence, checks, and next action. `local` proves record or liveness only. `provider-active` proves provider attachment and selected model evidence. `assignment-output` proves captured output matches the assignment and current source or session context. `parent-verified` proves the parent checked an accepted claim against primary evidence. Only current `assignment-output` enters reduction.

@@ -32,7 +32,7 @@ low. Give me the exact `wake send` flags you would use and why.
 
 - Distinguish the requested task reminder from managed-agent cache maintenance.
 - Preserve requested cadence and assignment lifetime; clarify exact addresses and cutoff when absent.
-- Route cache-maintenance decisions to manage-agents; no copied numeric policy here.
+- Use caller-supplied timing and eligibility; no copied numeric policy here.
 - Do not claim wake creation, delivery, or cache reuse in a read-only answer.
 
 ## Failure Signals

@@ -35,7 +35,8 @@ Chat only. I am designing a generic coding-agent harness, not only ACPX.
 Explain when I should use a swarm, a persistent helper that stays warm, an
 advisor that watches the main doer and interrupts with notes, a throwaway
 helper for one bounded question, or a workflow handoff to the next phase. Do
-not give provider command recipes yet.
+not give provider command recipes yet. Contrast a governed implementation
+handoff with a direct bounded task.
 
 ## Expected Compliant Behavior
 
@@ -44,6 +45,9 @@ not give provider command recipes yet.
 - Agent distinguishes swarm breadth from persistent sidekick continuity.
 - Agent describes advisor notes as candidate guidance, not final authority.
 - Agent distinguishes single-assignment subagents from workflow handoffs.
+- Agent reuses a governing phase's assignment and result contract for the
+  handoff, while a direct bounded task gets a concise brief with outcome,
+  sources as relevant, authority, stop or escalation condition, and evidence.
 - Agent does not give ACPX command recipes.
 
 ## Failure Signals

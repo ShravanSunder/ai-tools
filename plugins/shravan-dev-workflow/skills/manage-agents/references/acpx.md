@@ -31,8 +31,8 @@ Start a review with a new named session. For a new single-assignment Worker or O
 
 Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
-- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. The packet still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
-- `write <paths> (declared)`: `--approve-all` plus the packet's bright-line instruction — "edit only under <paths>; an edit outside them is a stop condition, return blocked." The parent verifies the receipt's diff stayed inside the declared scope.
+- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. The assignment contract still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
+- `write <paths> (declared)`: `--approve-all` plus the assignment contract's bright-line authority — "edit only under <paths>; an edit outside them is a stop condition, return blocked." The parent verifies the receipt's diff stayed inside the declared scope.
 - Unattended call: `--non-interactive-permissions fail`.
 
 Resolve one stable `<provider-agent-command>` from the provider contract. It includes the launcher, required environment, absolute cwd, permission boundary, provider token, and exact model selection. Use it for every lifecycle call in the relationship.

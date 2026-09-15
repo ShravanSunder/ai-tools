@@ -31,8 +31,9 @@ Record the inspected branch/HEAD, pre-existing changes, instruction sources, val
 
 The ready frontier is the smallest plan slice whose prerequisites are proven and whose write scope does not collide with in-flight work. Prefer one vertical slice that changes behavior and proves it at the cheapest fitting observation seam.
 
-- Execute inline by default.
-- Parallel work is advisory and only eligible when the ready canonical plan identifies independent slices with disjoint writes after proven prerequisites. `manage-agents` owns dispatch mechanics.
+- The ready plan, selected slice, and any scoped handoff remain the contract for this implementation phase: their inputs, authoritative artifacts, task boundary, completion or escalation, and proof/results travel with the executor. Reuse an already assigned responsible executor; otherwise the current orchestrator selects one under `manage-agents`. A Balanced orchestrator executes inline only when selected as executor. Execution does not require another coder. `SKILL.md` owns execution responsibility; `manage-agents` adds dispatch details without regenerating that contract.
+- Assignment may cover serial work. Parallel work is advisory and only eligible when the ready canonical plan identifies independent slices with disjoint writes after proven prerequisites. `manage-agents` owns dispatch mechanics.
+- Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned; never assign an Operator for each test or proof command.
 - Contract-only or prefactoring work must name the downstream consumer it unlocks and integrate at that consumer's first interaction.
 - A slice too large to prove inside scope returns a split or plan-defect route before edits.
 
@@ -87,6 +88,8 @@ evidence gap
 ```
 
 Do not call a change reversible when it moves ownership, changes a public contract or data format, writes migration state, weakens proof, or becomes a prerequisite for other work before correction.
+
+A user-selected Advisor may provide execution context, but neither that context nor partial direction supplies absent architecture or changes required plan meaning. Return those gaps to the existing semantic or originating-plan owner.
 
 ## Report What Changed and What Was Proven
 

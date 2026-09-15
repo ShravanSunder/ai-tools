@@ -50,9 +50,10 @@ want — fastest way possible.
   parent decides it; the Operator never owns it.
 - The retry-logic review dispatches as a separate bounded Delegate reasoning
   assignment (fresh context, read-only).
-- Dispatch packets use the slim job-packet shape: sources, non-goals, a
-  return line with binding identifiers, a stop condition, and a verify line
-  with at least one concrete parent check.
+- The phase contract supplies the watch outcome, authority, stop condition,
+  and verification; dispatch adds only execution details. The Operator
+  returns observed CI evidence, the needed merge decision, and a safe
+  waiting state without deciding the merge.
 
 ## Failure Signals
 

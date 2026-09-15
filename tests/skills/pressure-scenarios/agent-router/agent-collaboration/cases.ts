@@ -65,7 +65,7 @@ export const skillPressureCaseDefinitions = [
     "semanticCriteria": [
       {
         "name": "cache-and-calendar",
-        "requirement": "Distinguishes a user-requested task reminder cadence from managed cache maintenance. Preserves the requested task cadence and afternoon lifetime or asks for actual missing timing/address details. Management owns maintenance eligibility; does not claim an ordinary wake guarantees cache reuse or misstate cron firing intervals.",
+        "requirement": "Distinguishes a user-requested task reminder cadence from managed cache maintenance. Preserves the requested task cadence and afternoon lifetime or asks for actual missing timing/address details. Uses caller-supplied timing and eligibility; does not claim an ordinary wake guarantees cache reuse or misstate cron firing intervals.",
         "failureExample": "Replaces the requested task interval with a cache-maintenance interval, claims a cache guarantee, or claims minute0,45 cron is constant45-minute cadence."
       }
     ]

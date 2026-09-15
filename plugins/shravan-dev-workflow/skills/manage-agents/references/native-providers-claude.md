@@ -16,7 +16,7 @@ Use the exact model id the host Task / Agent tool advertises. The allowed model-
 
 ## Workspace Access
 
-Reader and writer packet slots are owned by `agent-job-packet.md`.
+Reader and writer authority details are owned by `agent-job-packet.md`.
 
-- Readers: packet `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
-- Writers: packet `write <paths>`. Path-scoped enforcement: `dontAsk` with `Edit(<paths>/**)` allow rules. Prefer that when enforcement matters; otherwise declared. Parent verifies the receipt's diff stayed inside the declared scope.
+- Readers: assignment contract `workspace read-only`. Parent verifies the repo worktree is unchanged after the receipt.
+- Writers: assignment contract `write <paths>`. Path-scoped enforcement: `dontAsk` with `Edit(<paths>/**)` allow rules. Prefer that when enforcement matters; otherwise declared. Parent verifies the receipt's diff stayed inside the declared scope.

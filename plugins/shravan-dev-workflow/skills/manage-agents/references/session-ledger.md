@@ -7,7 +7,7 @@ Persistent Advisors, Sidekicks, and continuing Reviewers need one current ledger
 ```text
 agent name / pattern / assignment / assignment id:
 continuity reason:
-route (the job packet's route line) / budget:
+route (the assignment contract's runtime detail) / budget:
 resolved launcher / provider command:
 working scope / relationship name:
 runtime ids / provider-native id when exposed:
