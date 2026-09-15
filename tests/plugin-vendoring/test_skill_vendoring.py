@@ -120,12 +120,21 @@ class SkillVendoringTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
 
     def test_invalid_pin_leaves_destination_untouched(self) -> None:
-        self.manifest["skills"]["demo-skill"]["commit"] = "main"
+        self.manifest["skills"]["demo-skill"]["commit"] = "--all"
         self.save_manifest()
         result = self.sync_current(check_only=False)
         self.assertNotEqual(result.returncode, 0)
-        self.assertRegex(result.stderr, "complete lowercase")
+        self.assertRegex(result.stderr, "SHA or a git ref")
         self.assertFalse((self.package / "plugins").exists())
+
+    def test_sync_accepts_a_branch_ref(self) -> None:
+        branch = self.git("rev-parse", "--abbrev-ref", "HEAD").decode().strip()
+        self.manifest["skills"]["demo-skill"]["commit"] = branch
+        self.save_manifest()
+        synced = self.sync_current(check_only=False)
+        self.assertEqual(synced.returncode, 0, synced.stderr)
+        output = self.package / DESTINATION_PATH / "SKILL.md"
+        self.assertEqual(output.read_text(), "committed skill\n")
 
     def test_unknown_skill_name_is_rejected(self) -> None:
         result = self.sync_current(check_only=False, skill_name="missing")

@@ -30,12 +30,13 @@ REPO_ROOT = (
 )
 SOURCES_FILE = "plugin-sources.json"
 COMMIT_PATTERN = re.compile(r"[0-9a-f]{40}")
+REF_PATTERN = re.compile(r"(?:HEAD|[A-Za-z][A-Za-z0-9._/-]*)$")
 
 
-def commit_sha(value: str) -> str:
-    if not COMMIT_PATTERN.fullmatch(value):
-        raise ValueError("source commit must be a complete lowercase Git SHA")
-    return value
+def source_pin(value: str) -> str:
+    if COMMIT_PATTERN.fullmatch(value) or REF_PATTERN.fullmatch(value):
+        return value
+    raise ValueError("source pin must be a complete lowercase Git SHA or a git ref")
 
 
 def plugin_destination(value: str) -> str:
@@ -54,7 +55,7 @@ def source_tree(value: str) -> str:
     return value
 
 
-CommitSha = t.Annotated[str, AfterValidator(commit_sha)]
+SourcePin = t.Annotated[str, AfterValidator(source_pin)]
 PluginDestination = t.Annotated[str, AfterValidator(plugin_destination)]
 SourceTree = t.Annotated[str, AfterValidator(source_tree)]
 
@@ -63,7 +64,7 @@ class CurrentSkill(BaseModel):
     model_config = ConfigDict(extra="forbid", populate_by_name=True)
 
     status: t.Literal["current"]
-    commit: CommitSha
+    commit: SourcePin
     source_path: SourceTree = Field(alias="sourcePath")
     destination_path: PluginDestination = Field(alias="destinationPath")
     repository: str | None = None
@@ -170,10 +171,10 @@ def read_expected_files(
         .decode()
         .strip()
     )
-    if resolved != skill.commit:
+    if COMMIT_PATTERN.fullmatch(skill.commit) and resolved != skill.commit:
         raise ValueError("source commit did not resolve exactly")
     entries = read_git(
-        repository, "ls-tree", "-r", "-z", skill.commit, "--", skill.source_path
+        repository, "ls-tree", "-r", "-z", resolved, "--", skill.source_path
     )
     expected: dict[str, bytes] = {}
     source_path = PurePosixPath(skill.source_path)
