@@ -159,7 +159,6 @@ Use a Sidekick in a separate persistent conversation for work you will resume an
 
 | Model category | Model lineage | Thinking | Task signals                                              |
 |----------------|---------------|----------|-----------------------------------------------------------|
-| Balanced       | OpenAI Terra  | medium   | Complete direction; Local/Cross-domain.                   |
 | Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
@@ -179,7 +178,6 @@ Use for independent review or verification.
 
 | Model category | Model lineage | Thinking       |
 |----------------|---------------|----------------|
-| Balanced       | OpenAI Terra  | high           |
 | Balanced       | OpenAI Sol    | medium         |
 | Balanced       | Claude Opus   | medium         |
 | Balanced       | xAI Grok      | high           |

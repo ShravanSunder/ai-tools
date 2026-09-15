@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-15 manage-agents Terra role scope](2026-09-15-manage-agents-terra-role-scope.md)
 - [2026-09-15 Collaboration: Agents display name](2026-09-15-collaboration-agents-display-name.md)
 - [2026-09-14 Agent Router plugin rename](2026-09-14-agent-router-plugin-rename.md)
 - [2026-09-14 Persistent managed conversations](2026-09-14-persistent-managed-conversations.md)
@@ -26,6 +27,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-15 manage-agents Terra role scope](2026-09-15-manage-agents-terra-role-scope.md)
 - [2026-09-15 Collaboration: Agents display name](2026-09-15-collaboration-agents-display-name.md)
 - [2026-09-14 Agent Router plugin rename](2026-09-14-agent-router-plugin-rename.md)
 - [2026-09-13 Codex Router agent-collaboration 0.4.0](2026-09-13-agent-collaboration-plugin.md)

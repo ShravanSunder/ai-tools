@@ -22,7 +22,7 @@ Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort
 Creation example for a new relationship only; for an existing Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
 
 ```bash
-acpx --cwd /absolute/repo --model gpt-5.6-terra --approve-reads --no-terminal \
+acpx --cwd /absolute/repo --model gpt-5.6-sol --approve-reads --no-terminal \
   --non-interactive-permissions fail codex sessions ensure --name sidekick
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
   --non-interactive-permissions fail codex -s sidekick \
