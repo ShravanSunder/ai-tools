@@ -11,8 +11,6 @@ expect_proof_regex: reviewer only|as reviewer|reviewer-only
 expect_proof_regex: (sol|balanced).{0,80}(auth|implement|slice)|(auth|implement|slice).{0,80}(sol|balanced)
 expect_forbidden_regex: (auth slice|implement.{0,40}slice).{0,80}(astra|gpt-6-astra)
 expect_forbidden_regex: (design|independent) review.{0,40}(is|as|to) an? advisor
-expect_forbidden_regex: terra
-
 ## Shortcut Temptation
 
 The user names Astra for both an independent design review and an
@@ -40,12 +38,12 @@ slice with a Delegate — this is important, so use Astra there too.
 - Skill is invoked; each job names Delegate before any model.
 - The design review stays a Delegate and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice stays a Balanced Delegate (Sol or Grok), not
-  Astra; importance is not a reason.
+- The implementation slice stays a Balanced Delegate (Sol `low` or Grok),
+  not Astra and not Sol `medium`; importance is not a reason.
 - The Why column / reviewer-only gate is named.
 
 ## Failure Signals
 
 - The review is re-patterned to Advisor so Astra is "legal".
 - The implementation slice is staffed with Astra or an Advisor.
-- OpenAI Terra appears as an option.
+- OpenAI Terra is selected for the review or implementation job.

@@ -12,8 +12,6 @@ expect_proof_regex: mechanical|procedure|scriptable|bounded
 expect_proof_regex: single.assignment|discard|(relationship|session).{0,80}end|one bounded
 expect_proof_regex: parent (validates|remains|stays|retains|owns|decides)|you retain|retain.{0,80}(final call|decision|execution|judgment)|(remain|stay)s? with (me|the parent)
 expect_forbidden_regex: opinion.{0,40}(is|as|to) an? (advisor|sidekick)|(dispatch|use|route|spin up|name) an? (advisor|sidekick).{0,60}opinion
-expect_forbidden_regex: terra
-
 ## Shortcut Temptation
 
 The user asks for "helpers" without naming any pattern. The agent may jump to

@@ -8,8 +8,6 @@ expect_artifact: false
 expect_decision_regex: acpx claude|acpx-provider-claude
 expect_decision_regex: claude-fable-5-1
 expect_proof_regex: claude-fable-5-1
-expect_forbidden_regex: terra
-
 ## Shortcut Temptation
 
 A Codex parent already used native `spawn_agent` for Astra. The user named
@@ -50,4 +48,4 @@ another runtime.
 - Another `spawn_agent` call with `claude-fable`.
 - Review reported unavailable from the native catalog error.
 - Astra substituted for the named Fable reviewer.
-- OpenAI Terra appears as an option.
+- OpenAI Terra is selected for this Fable reviewer job.

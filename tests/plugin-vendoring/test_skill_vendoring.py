@@ -70,10 +70,24 @@ class SkillVendoringTests(unittest.TestCase):
             check=False,
         )
 
-    def sync_current(self, *, check_only: bool, skill_name: str = "demo-skill") -> subprocess.CompletedProcess[str]:
-        arguments = ["--skill", skill_name, "--source-repo", str(self.source)]
+    def sync_current(
+        self,
+        *,
+        check_only: bool,
+        skill_name: str = "demo-skill",
+        fetch: bool = False,
+        source_repo: Path | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        arguments = [
+            "--skill",
+            skill_name,
+            "--source-repo",
+            str(source_repo or self.source),
+        ]
         if check_only:
             arguments.append("--check")
+        if fetch:
+            arguments.append("--fetch")
         return self.run_sync(arguments)
 
     def test_sync_uses_commit_and_check_detects_drift_without_writing(self) -> None:
@@ -120,12 +134,21 @@ class SkillVendoringTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
 
     def test_invalid_pin_leaves_destination_untouched(self) -> None:
-        self.manifest["skills"]["demo-skill"]["commit"] = "main"
+        self.manifest["skills"]["demo-skill"]["commit"] = "--all"
         self.save_manifest()
         result = self.sync_current(check_only=False)
         self.assertNotEqual(result.returncode, 0)
-        self.assertRegex(result.stderr, "complete lowercase")
+        self.assertRegex(result.stderr, "SHA or a git ref")
         self.assertFalse((self.package / "plugins").exists())
+
+    def test_sync_accepts_a_branch_ref(self) -> None:
+        branch = self.git("rev-parse", "--abbrev-ref", "HEAD").decode().strip()
+        self.manifest["skills"]["demo-skill"]["commit"] = branch
+        self.save_manifest()
+        synced = self.sync_current(check_only=False)
+        self.assertEqual(synced.returncode, 0, synced.stderr)
+        output = self.package / DESTINATION_PATH / "SKILL.md"
+        self.assertEqual(output.read_text(), "committed skill\n")
 
     def test_unknown_skill_name_is_rejected(self) -> None:
         result = self.sync_current(check_only=False, skill_name="missing")
@@ -196,6 +219,38 @@ class SkillVendoringTests(unittest.TestCase):
         result = self.sync_current(check_only=False)
         self.assertNotEqual(result.returncode, 0)
         self.assertRegex(result.stderr, "collides")
+
+    def test_fetch_requires_a_remote(self) -> None:
+        result = self.sync_current(check_only=False, fetch=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertRegex(result.stderr, "requires a remote")
+
+    def test_fetch_updates_stale_origin_ref(self) -> None:
+        clone = self.root / "clone"
+        subprocess.check_output(["git", "clone", "-q", str(self.source), str(clone)])
+        branch = self.git("rev-parse", "--abbrev-ref", "HEAD").decode().strip()
+        self.skill.write_text("fetched skill\n")
+        self.git("add", ".")
+        self.git(
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.invalid",
+            "-c",
+            "commit.gpgsign=false",
+            "commit",
+            "-qm",
+            "upstream",
+        )
+        self.manifest["skills"]["demo-skill"]["commit"] = f"origin/{branch}"
+        self.save_manifest()
+        stale = self.sync_current(check_only=False, source_repo=clone)
+        self.assertEqual(stale.returncode, 0, stale.stderr)
+        output = self.package / DESTINATION_PATH / "SKILL.md"
+        self.assertEqual(output.read_text(), "committed skill\n")
+        fetched = self.sync_current(check_only=False, source_repo=clone, fetch=True)
+        self.assertEqual(fetched.returncode, 0, fetched.stderr)
+        self.assertEqual(output.read_text(), "fetched skill\n")
 
 
 if __name__ == "__main__":

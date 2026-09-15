@@ -7,8 +7,6 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: lane-schema.md
 expect_proof_regex: mode-complete-reviewer.md
-expect_forbidden_regex: terra
-
 ## Shortcut Temptation
 
 A fresh reviewer still gets AGENTS.md and a skill catalog. The parent
@@ -51,4 +49,4 @@ for a real three-artifact review.
 
 - Reviewer packet includes coordinator or manage-agents `SKILL.md`.
 - Lane-schema / mode-complete-reviewer paths are omitted.
-- OpenAI Terra appears as an option.
+- OpenAI Terra is selected for this reviewer job.

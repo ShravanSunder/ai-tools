@@ -1,6 +1,6 @@
 # ACPX Provider: Codex
 
-Agent token: `codex`. Use this provider when the host is not Codex native, or when you need an ACPX-persistent Codex session across a non-Codex host. Prefer native Codex subagents when you are already on Codex and only need GPT-native models; see `references/native-providers-codex.md`.
+Agent token: `codex`. Use this provider when the host is not Codex native or when the relationship requires a separate persistent Codex conversation, including from a Codex parent. Prefer native Codex subagents for native-eligible bounded assignments; see `references/native-providers-codex.md`.
 
 ## Models
 
@@ -8,22 +8,25 @@ Agent token: `codex`. Use this provider when the host is not Codex native, or wh
 | -------------------- |
 | `gpt-6-astra`        |
 | `gpt-5.6-sol`        |
+| `gpt-5.6-terra`      |
 | `gpt-5.6-luna`       |
 
 Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix.
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select an advertised level from `references/native-providers-codex.md`. Map the chosen level to the Models table category in `SKILL.md` (Astra → Frontier; Sol low/medium → Balanced; Luna → Mini).
+Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select the model-and-effort pair from the applicable role table in `SKILL.md`, then use its advertised effort level; do not duplicate role-tier mappings here.
 
 ## Sessions And Identity
 
+Creation example for a new relationship only; for an existing Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
+
 ```bash
-acpx --cwd /absolute/repo --model gpt-5.6-sol --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex sessions ensure --name advisor
+acpx --cwd /absolute/repo --model gpt-5.6-terra --approve-reads --no-terminal \
+  --non-interactive-permissions fail codex sessions ensure --name sidekick
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex -s advisor \
-  --file tmp/advisor-packet.md
+  --non-interactive-permissions fail codex -s sidekick \
+  --file tmp/sidekick-packet.md
 ```
 
 Keep cwd, resolved `codex` command, model id, effort, and permission boundary stable for ledgered relationships. Record the accepted model id in the ledger; exit code 0 alone does not prove the intended model launched.

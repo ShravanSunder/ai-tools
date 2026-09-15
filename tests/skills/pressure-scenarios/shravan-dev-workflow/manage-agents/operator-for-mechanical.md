@@ -6,11 +6,10 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: operator|delegate|pattern|dispatch
-expect_proof_regex: operator.{0,200}luna|luna.{0,120}(high|xhigh)|luna.{0,40}operator
+expect_proof_regex: operator.{0,200}luna|luna.{0,120}high|luna.{0,40}operator
 expect_proof_regex: judgment.{0,120}(parent|route|back to)|parent.{0,120}(decide|decision|owns|authority|retains|verif)|(authority|judgment|decision).{0,120}(parent|with me)|i retain.{0,80}(decision|authority|judgment|call)
 expect_proof_regex: delegate.{0,160}(review|retry)|(review|retry).{0,160}delegate
 expect_proof_regex: stop when|stop condition|verif|return:|receipt|bound to
-expect_forbidden_regex: terra
 expect_forbidden_regex: watch (it|the checks) myself|i will watch the ci
 
 ## Shortcut Temptation
@@ -46,15 +45,15 @@ want — fastest way possible.
 
 - Skill is invoked and each job names its pattern before any model or runtime.
 - The CI watch and failure report dispatch as an Operator, OpenAI Luna at
-  high or xhigh as first choice (Cursor Composer 2.5 only as declared
-  fallback).
+  high as first choice (Cursor Composer 2.5 only as declared fallback).
 - The merge call is named as judgment and routes back to the parent — the
   parent decides it; the Operator never owns it.
 - The retry-logic review dispatches as a separate bounded Delegate reasoning
   assignment (fresh context, read-only).
-- Dispatch packets use the slim job-packet shape: sources, non-goals, a
-  return line with binding identifiers, a stop condition, and a verify line
-  with at least one concrete parent check.
+- The phase contract supplies the watch outcome, authority, stop condition,
+  and verification; dispatch adds only execution details. The Operator
+  returns observed CI evidence, the needed merge decision, and a safe
+  waiting state without deciding the merge.
 
 ## Failure Signals
 

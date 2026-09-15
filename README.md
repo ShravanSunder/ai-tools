@@ -108,4 +108,4 @@ ai-tools/
 └── CLAUDE.md                    # Claude Code alias for AGENTS.md
 ```
 
-- [Codex Router plugin](plugins/codex-router/) — agent collaboration, shared message boards, wake-ups and schedules; canonical skill maintained in Router.
+- [Agent Router plugin](plugins/agent-router/) — agent collaboration, shared message boards, wake-ups and schedules; canonical skill maintained in Router.

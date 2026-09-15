@@ -5,7 +5,7 @@
 #   "pydantic>=2",
 # ]
 # ///
-"""Explicit offline vendoring of named pinned skills; never installs skills."""
+"""Explicit vendoring of named pinned skills; never installs skills."""
 
 import argparse
 import os
@@ -30,12 +30,13 @@ REPO_ROOT = (
 )
 SOURCES_FILE = "plugin-sources.json"
 COMMIT_PATTERN = re.compile(r"[0-9a-f]{40}")
+REF_PATTERN = re.compile(r"(?:HEAD|[A-Za-z][A-Za-z0-9._/-]*)$")
 
 
-def commit_sha(value: str) -> str:
-    if not COMMIT_PATTERN.fullmatch(value):
-        raise ValueError("source commit must be a complete lowercase Git SHA")
-    return value
+def source_pin(value: str) -> str:
+    if COMMIT_PATTERN.fullmatch(value) or REF_PATTERN.fullmatch(value):
+        return value
+    raise ValueError("source pin must be a complete lowercase Git SHA or a git ref")
 
 
 def plugin_destination(value: str) -> str:
@@ -54,7 +55,7 @@ def source_tree(value: str) -> str:
     return value
 
 
-CommitSha = t.Annotated[str, AfterValidator(commit_sha)]
+SourcePin = t.Annotated[str, AfterValidator(source_pin)]
 PluginDestination = t.Annotated[str, AfterValidator(plugin_destination)]
 SourceTree = t.Annotated[str, AfterValidator(source_tree)]
 
@@ -63,7 +64,7 @@ class CurrentSkill(BaseModel):
     model_config = ConfigDict(extra="forbid", populate_by_name=True)
 
     status: t.Literal["current"]
-    commit: CommitSha
+    commit: SourcePin
     source_path: SourceTree = Field(alias="sourcePath")
     destination_path: PluginDestination = Field(alias="destinationPath")
     repository: str | None = None
@@ -106,7 +107,46 @@ class PluginSources(BaseModel):
 
 
 def read_git(repository: Path, *arguments: str) -> bytes:
-    return subprocess.check_output(["git", "-C", str(repository), *arguments])
+    env = os.environ.copy()
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    return subprocess.check_output(
+        ["git", "-C", str(repository), *arguments],
+        env=env,
+    )
+
+
+def remote_and_ref(pin: str, remotes: list[str]) -> tuple[str, str] | None:
+    matches: list[tuple[str, str]] = []
+    for remote in remotes:
+        prefix = f"{remote}/"
+        if pin.startswith(prefix):
+            rest = pin.removeprefix(prefix)
+            if rest:
+                matches.append((remote, rest))
+    if not matches:
+        return None
+    matches.sort(key=lambda item: len(item[0]), reverse=True)
+    return matches[0]
+
+
+def fetch_pin(repository: Path, pin: str) -> None:
+    remotes = [
+        line for line in read_git(repository, "remote").decode().splitlines() if line
+    ]
+    if not remotes:
+        raise ValueError("--fetch requires a remote in --source-repo")
+    tracked = remote_and_ref(pin, remotes)
+    if tracked is not None:
+        remote, ref = tracked
+        read_git(
+            repository,
+            "fetch",
+            "--quiet",
+            remote,
+            f"+refs/heads/{ref}:refs/remotes/{remote}/{ref}",
+        )
+        return
+    read_git(repository, "fetch", "--all", "--quiet")
 
 
 def load_skill_map() -> PluginSources:
@@ -170,10 +210,10 @@ def read_expected_files(
         .decode()
         .strip()
     )
-    if resolved != skill.commit:
+    if COMMIT_PATTERN.fullmatch(skill.commit) and resolved != skill.commit:
         raise ValueError("source commit did not resolve exactly")
     entries = read_git(
-        repository, "ls-tree", "-r", "-z", skill.commit, "--", skill.source_path
+        repository, "ls-tree", "-r", "-z", resolved, "--", skill.source_path
     )
     expected: dict[str, bytes] = {}
     source_path = PurePosixPath(skill.source_path)
@@ -219,7 +259,7 @@ def remove_destination(destination: Path) -> None:
 
 
 def sync_skills(
-    skill_name: str, check_only: bool, repository: Path | None
+    skill_name: str, check_only: bool, repository: Path | None, fetch: bool
 ) -> None:
     skills = load_skill_map().skills
     if skill_name not in skills:
@@ -231,6 +271,8 @@ def sync_skills(
     if isinstance(named, CurrentSkill):
         if repository is None:
             raise ValueError("--source-repo is required to sync a current skill")
+        if fetch:
+            fetch_pin(repository, named.commit)
         expected = read_expected_files(repository, skill_name, named)
         destination = REPO_ROOT / named.destination_path
         assert_destination_safe(destination)
@@ -266,7 +308,8 @@ def sync_skills(
             print(f"Deprecated skill verified absent: {skill_name}")
         return
 
-    # All source reads and path checks precede mutation. No network, hooks, or code execution.
+    # All source reads and path checks precede package mutation. No skill-script
+    # execution. Network happens only for opt-in --fetch, before those reads.
     if isinstance(named, CurrentSkill):
         write_current(destination, expected, existing)
         print(f"Vendored skill {skill_name}: {named.commit} ({len(expected)} files)")
@@ -292,12 +335,17 @@ def main() -> None:
         action="store_true",
         help="Verify only; never change the packaged copy",
     )
+    parser.add_argument(
+        "--fetch",
+        action="store_true",
+        help="Update remotes in --source-repo before resolving the pin",
+    )
     arguments = parser.parse_args()
     repository = (
         arguments.source_repo.resolve() if arguments.source_repo is not None else None
     )
     try:
-        sync_skills(arguments.skill, arguments.check, repository)
+        sync_skills(arguments.skill, arguments.check, repository, arguments.fetch)
     except (ValueError, OSError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Skill sync failed: {error}\n")
 

@@ -81,4 +81,4 @@ Shravan's Codex-first development workflow plugin. Provides:
 - Evidence-first reducer workflow -- treats all subagent and external outputs as candidate findings until verified against the repo
 - Oracle exclusion -- this workflow never invokes or suggests Oracle
 
-- [Codex Router plugin](codex-router/) — agent collaboration, shared message boards, wake-ups and schedules; canonical skill maintained in Router.
+- [Agent Router plugin](agent-router/) — agent collaboration, shared message boards, wake-ups and schedules; canonical skill maintained in Router.

@@ -41,7 +41,7 @@ For each candidate:
 1. open the target and source anchor;
 2. before accepting, cite the accepted requirement identity, restate its meaning in plain language, and name the observable outcome that fails if the concern is unresolved;
 3. reproduce the contradiction or failure path;
-4. when direct source reading cannot answer one factual question, use `manage-agents` to dispatch one fresh, read-only Delegate evidence lookup; its packet carries the exact requirement identity and meaning, the single factual question, bounded sources, and the non-goal `no redesign or review recommendation`; it returns a `complete | partial | blocked` evidence receipt with anchors and uncertainty for parent verification;
+4. when direct source reading cannot answer one factual question, use `manage-agents` to dispatch one fresh, read-only Worker evidence lookup; its packet carries the exact requirement identity and meaning, the single factual question, bounded sources, and the non-goal `no redesign or review recommendation`; it returns a `complete | partial | blocked` evidence receipt with anchors and uncertainty for parent verification;
 5. accept, reject, mark contested, or mark unverified;
 6. record one-line evidence rationale;
 7. merge duplicates by root cause;
