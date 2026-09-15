@@ -9,7 +9,7 @@
 - Clarified the Agent Roles table with ownership, use, and continuity for Operators, Workers, Sidekicks, Reviewers, and Advisors.
 - Clarified Codex Terra/Sol selection defaults, explicit user choice, relationship continuity, and evidence-based reassessment.
 - Balanced execution may remain inline when it fits; only a transfer of orchestration to another session is user-selected, while executor assignment remains within task authority.
-- `agent-router` 0.7.0: Router owns transport and delivery with no upward management, tracker, role, or 26-minute policy dependency; `plugin-sources.json` pins `agent-collaboration` to `a48871a9349a5b6044bbcf6d0f83c2877eacf347` (`Align collaboration skill with persistent agent relationships`, #57). `commit` may be a full SHA or a git ref so the pin can switch later.
+- `agent-router` 0.7.0: Router owns transport and delivery with no upward management, tracker, role, or 26-minute policy dependency; `plugin-sources.json` pins `agent-collaboration` to `origin/main` (currently `5b563c7`, `Add process-owned thread listening`, #58). `commit` may be a full SHA or a git ref so the pin can switch later.
 - Updated management provider/session references, role callers and focused collaboration scenarios.
 - Updated the Claude ACPX Opus selection example to the latest verified advertised id.
 - Clarified blocking waits, authorized wakes, and shared idle-maintenance boundaries.
