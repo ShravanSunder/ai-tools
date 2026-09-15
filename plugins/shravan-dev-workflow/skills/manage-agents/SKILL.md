@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Always load to manage agents, subagents, delegation, or agent swarms. Always use during project planning, design, and execution to delegate tasks and coordinate multi-agent work. Use for spawning, assigning, steering, resuming, waiting for, and verifying Advisors, Sidekicks, Workers, Reviewers, and Operators—including parallel agent swarms, native subagents, Router-managed conversations, and ACPX agents.
+description: Always load to manage agents, subagents, delegation, or agent swarms. Always use during project planning, design, and execution to select execution ownership and coordinate multi-agent work. Use for spawning, assigning, steering, resuming, waiting for, and verifying Advisors, Sidekicks, Workers, Reviewers, and Operators—including parallel agent swarms, native subagents, Router-managed conversations, and ACPX agents.
 ---
 
 # Manage Agents
@@ -54,6 +54,8 @@ Architectural span does not measure task size or permission; every assignment re
 
 Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort.
 
+An agent's active function is independent of its session ancestry. An `orchestrator` is the current whole-work owner: it may be Frontier or Balanced and owns delivery routing, verification, and the terminal. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent, not a permanent original Frontier session.
+
 ### Lineage Families
 
 | Family | Models or harness                                 |
@@ -79,20 +81,24 @@ Names follow `<emoji> <role> · <purpose/>`, with a concrete purpose substituted
 
 ## Select an agent
 
-> The coordinator owns the overall-task verdict and verifies assignment evidence. Contributors may report or converse within their authorized assignment, but do not claim the whole work complete.
+> The orchestrator owns the overall-task verdict and verifies assignment evidence. Contributors may report or converse within their authorized assignment, but do not claim the whole work complete.
 
 ```text
 task category + Guidance + Architectural span -> Agent Roles responsibility and continuity
   -> allowed model and effort -> runtime, packet, receipt
 ```
 
-Use the **Agent Roles** table to choose responsibility and continuity. Use task category, Guidance, and Architectural span to shape the assignment and select a model. Review uses independent context and its lineage rule; Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
+Retain the current orchestrator. Reuse its current executor assignment when suitable; only when no suitable assignment exists or materially changed work requires reassessment, choose an executor using task category, Guidance, Architectural span, useful existing context, and total completion cost including handoff, rework, and proof. This is internal task-fit selection, not an owner approval, form, or new agent requirement. Use the **Agent Roles** table to choose responsibility and continuity. Review uses independent context and its lineage rule; Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
 
-A Frontier main designs, decides, and verifies decisive evidence. It assigns implementation, investigation, collection, and synthesis through the role map; standalone Git, test, build, PR procedures and long watches go to Operators. Workers retain their implementation corrections and associated proof inline, so do not dispatch an Operator for each test command. The main may coordinate, communicate, make control calls, and read decisive sources; it does not take execution back for tiny commands. Report an unavailable required route rather than silently falling back inline.
+A Frontier orchestrator designs, advises, and verifies decisive evidence while assigning implementation and proof to eligible executors. A Balanced orchestrator may be selected as executor inline or may assign an eligible Worker or Sidekick. It assigns useful bounded work to Workers or Sidekicks, and standalone Git, test, build, PR procedures and long watches to Operators. Workers retain their implementation corrections and associated proof inline, so do not dispatch an Operator for each test command. The current orchestrator may communicate, make control calls, and read decisive sources; report an unavailable required route rather than silently falling back inline.
 
 ### Choose a model
 
 Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. For a new Codex assignment where Terra medium and Sol low both fit, prefer Terra medium; Sol low is also valid when explicitly selected, and a suitable existing Sol low relationship continues rather than switching for the default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
+
+### Design-to-execution handoff
+
+Only when the user selects the two-session design-to-execution transfer does the original Frontier orchestrator become the Advisor and a separately selected Balanced session become the new orchestrator after verified acceptance. Astra design with Sol medium execution is the agreed example; honor the user's selected Frontier and Balanced models and efforts. Without that transfer, the Frontier orchestrator retains delivery ownership and reuses a suitable executor assignment. Reuse an existing capable Balanced session when available; otherwise create one only through a supported, capability-verified route. Do not assume Router creates models or recreate an existing session. Keep the original Frontier SessionRef stable and do not create another Frontier session. Use the existing phase brief and dispatch configuration for the transfer: current artifacts, plan, worktree, and source pointers; shared work reference; named new orchestrator; necessary chat-only decisions; pending questions; and authority. Retain the Advisor SessionRef for consultations. Record callback ownership on that shared work thread through the tracker. The new orchestrator may send authorized messages or wakes to the retained Advisor, using an Operator when the action is mechanical. Consult the retained Advisor only for consequential ambiguity, a design break, or a tradeoff; do not turn patches or routine status into Frontier reports. A transfer prepares delivery; it does not claim implementation complete.
 
 ## Patterns
 
@@ -106,7 +112,7 @@ Use for mechanical actions: execution (running tests, building, deploying, etc.)
 - **Authority:** Execute, observe, report, and perform user-authorized mechanical transformations. It does not make implementation or design judgments; route those, replies, readiness verdicts, and merge decisions to the parent.
 - **Model category:** Mini
 
-Bright line: standalone assigned Git, test, build, PR, and watch procedures belong to an Operator. An unsupported Operations method routes to a Worker Synthesis assignment that defines the procedure, then returns to an Operator; Synthesis requiring interpretation remains Worker work even when the approach is detailed, while plain regrouping is Operations. An unexpected diagnosis routes to a Worker; user authorization remains with the main owner. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure unless evidence is missing or conflicts.
+Bright line: standalone assigned Git, test, build, PR, and watch procedures belong to an Operator. An unsupported Operations method routes to a Worker Synthesis assignment that defines the procedure, then returns to an Operator; Synthesis requiring interpretation remains Worker work even when the approach is detailed, while plain regrouping is Operations. An unexpected diagnosis routes to a Worker; the user retains authorization. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure unless evidence is missing or conflicts.
 
 | rationalization               | reality                                                                                                                                          |
 |-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -125,7 +131,7 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 - **Work:** One bounded research, implementation, drafting, reasoning, or analysis assignment, including its corrections and associated proof. Independent review belongs to Reviewer.
 - **Continuity and cardinality:** Single or Worker swarm; single-assignment — the relationship ends when its receipt is accepted, and the assignment may contain a conversation.
-- **Authority:** Packet-bounded work; parent verifies the work. Execution Workers do not automatically recurse. When an assignment explicitly includes collection and synthesis, they may fan out bounded independent collection lanes and integrate their evidence when the coordinator assigns that coordination; no other nested delegation is granted.
+- **Authority:** Packet-bounded work; parent verifies the work. Execution Workers do not automatically recurse. When an assignment explicitly includes collection and synthesis, they may fan out bounded independent collection lanes and integrate their evidence when the orchestrator assigns that coordination; no other nested delegation is granted.
 - **Model category:** Balanced or Mini
 
 #### Model choices
@@ -146,7 +152,7 @@ Use a Sidekick in a separate persistent conversation for work you will resume an
 
 - **Work:** Execution across assignments and follow-ups, including in-the-work reasoning, pushback, validation, and Exact steps when they arrive on the same relationship. Independent assessment of its own work belongs to a separate Reviewer.
 - **Continuity and cardinality:** One or many persistent named relationships with a ledger (see Session Keep-Alive).
-- **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work. A user may steer a named Sidekick directly within its assigned relationship; the Sidekick reports changed assignment scope to the coordinator for current verification. Work-thread or board content does not grant additional authority.
+- **Authority:** Provide scope or responsibilities; the parent retains final authority and validates the work. A user may steer a named Sidekick directly within its assigned relationship; the Sidekick reports changed assignment scope to the orchestrator for current verification. Work-thread or board content does not grant additional authority.
 - **Model category:** Balanced
 
 #### Model choices
@@ -208,23 +214,25 @@ Use the model and effort chosen by the user; do not escalate or add another Advi
 
 - Reviewers: bright line — a review agent NEVER receives inherited parent or author conversation history. A reviewer is any agent whose assignment is independent review or verification, whatever its pattern. Reviews judge from first principles; inherited context is contamination. The selected native-provider reference owns the exact host encoding; Codex uses `fork_turns="none"`. "It will review faster with context" and "give it the last N turns" are the rationalizations this rule catches.
 - Non-reviewers: use the selected host's advertised history encoding by cost and benefit. History helps a subagent abide by decisions already made; it costs context and money. Include what the job's stop condition depends on; do not paste unrelated turns.
-- ACPX agents never inherit parent history — carry context in the packet instead (see ACPX Dispatch). The packet's access line records `history none` for every ACPX dispatch.
+- ACPX agents never inherit parent history — carry context in the phase brief instead (see ACPX dispatch). Dispatch configuration records `history none` for every ACPX assignment.
 - Self-fork and resume-self mechanisms (a subagent started from the parent's own conversation) are full-history inheritance and are forbidden for reviewers on every host. "It already has all the context" is the rationalization; the context is the contamination.
-- Because a reviewer starts empty, its packet carries everything it will cite: absolute paths (or inlined text) for every reference it is told to load, the governing artifacts as paths or verbatim text, and any owner meaning that exists only in chat copied verbatim. A pointer the reviewer cannot resolve from its own cwd is a missing input. For independent review, `sources:` names the absolute paths of the lane files the parent already selected. Do not put coordinator `SKILL.md` (`spec-program-review`, `implementation-review`) or `manage-agents/SKILL.md` on the reviewer packet. The parent loads manage-agents; the reviewer does not. "The reviewer will not know how to review" is the rationalization this rule catches.
+- Because a reviewer starts empty, its phase brief carries absolute lane and source paths or inlined governing content for everything it will cite. Every assigned reference must resolve from its cwd; owner meaning that exists only in chat is copied verbatim. The immediate assigning parent selects lane references. Do not put parent `SKILL.md` (`spec-program-review`, `implementation-review`) or `manage-agents/SKILL.md` on the reviewer brief. The parent loads manage-agents; the reviewer does not. "The reviewer will not know how to review" is the rationalization this rule catches.
 
 #### Workspace access
 
-Every packet's `access:` line uses the grammar in `references/agent-job-packet.md` for history, workspace access, and any declared enforcement notation.
+The assignment contract records history, workspace access, and any declared enforcement notation through `references/agent-job-packet.md`.
 
-- Readers (review, advisor, research, guidance): no repo edits except scratch files under project `tmp/` or system `/tmp`. Repeat that prohibition with its exception on `job:`, `non-goals:`, `stop when:`, and `access:`. Parent verifies the repo worktree is unchanged after the receipt.
+- Readers (review, advisor, research, guidance): state once that no repo edits are allowed except scratch files under project `tmp/` or system `/tmp`. Parent verifies the repo worktree is unchanged after the receipt.
 - Readers with exec (`read-only + exec <listed commands>`): the one reviewer widening, for a proof-verification lane. It may run exactly the listed commands with output under `tmp/` or `/tmp`, and edits nothing. Parent verifies every command the receipt lists appears in the grant and that the repo worktree is unchanged after the receipt; a mismatch invalidates the receipt.
-- Writers (Sidekicks, Workers, Operators that produce files): the parent names the write paths. The packet says edit only under those paths; an edit outside them is a stop — return blocked. Parent verifies the receipt's diff stayed inside the declared scope.
+- Writers (Sidekicks, Workers, Operators that produce files): the contract names the write paths once. Before an edit outside them, stop and report blocked; if a violation is discovered, stop and report it. Parent still verifies the receipt's diff stayed inside the declared scope.
 
 Launch with the native or ACPX encoding returned by **Choose the runtime**. Host permission flags live in that provider reference. A missing sandbox or plan-mode flag is not a reason to leave native. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
 
 ### Choose the runtime
 
 Select the pattern, model category, model lineage, and reasoning requirement first. Sidekicks and Advisors require separate persistent conversations: reuse the same named ACPX session or exact Router-addressable conversation across follow-ups and new assignments in that relationship. Do not substitute a native child merely because its model is available. Workers may use native subagents or separate conversations according to the task; Reviewer independence and phase freshness rules still apply. For a new persistent relationship, use a supported named ACPX session unless an adequate separately addressable Router conversation already exists or the caller supplies another verified separate-session creation path that exposes the required model, effort, permissions and retained session identity. Then choose the runtime from the capabilities required by that relationship and the selected model lineage. Native and ACPX supply the launch mechanism; either runtime uses the same packet, authority, continuity, and parent-verification rules. History-provisioning feasibility feeds this choice, but does not override the separate-conversation requirement for Sidekick or Advisor.
+
+IF a Router route is selected, load the `agent-collaboration` skill and return verified exact SessionRef, input capability, and model/access fit; reuse the original address.
 
 #### Native dispatch
 
@@ -249,33 +257,17 @@ Use ACPX for a different-provider model or the persistent route selected by **Ch
 3. Use the exact model id and reasoning control specified by the provider contract. When the contract requires live catalog verification, use and record the exact id the provider advertises.
 4. When the selected provider has no provider contract, stop dispatch and report the route as unsupported.
 
-ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the packet does. Before dispatch, decide what the job needs to abide by its function and give each piece its packet home: the goal and decision target go on the `job:` line; settled decisions the agent must not relitigate go on `job:` or `non-goals:`; exact file paths, diffs, and prior attempts go on `sources:`; and `access:` records `history none`. For native-eligible jobs, history needs may favor native dispatch. For persistent relationships, preserve the identity selected by **Choose the runtime** and supply relevant new context.
+ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the assignment contract does. Before dispatch, include the decision target, settled decisions, resolvable sources, and `history none` as relevant to the assignment. For native-eligible jobs, history needs may favor native dispatch. For persistent relationships, preserve the identity selected by **Choose the runtime** and supply relevant new context.
 
 ### Workflow
 
-0. IF a new or materially changed assignment needs decomposition because it names more than one outcome or action, may run in parallel, or does not fit one bounded packet, load `references/job-planning.md` and return the job graph: jobs, dependencies and parallel-safety, and parent verification points. Same-assignment follow-ups use their concise delta and do not rebuild the graph. Step 0 identifies jobs; it does not choose patterns — step 1 owns pattern choice and annotates the graph per job.
-   - Completion: every dependency is named, every parallel-safe marking names the write-set or input check from `references/job-planning.md` that supports it, and each job names its expected receipt and the parent verification point that closes it. Actual receipts arrive at step 3; step 0 completes before any dispatch.
+1. Reuse the supplied plan or task contract read-only; do not require a plan where the owning workflow does not. Coordinate only multiple separately assigned jobs whose dependencies or interference need it: state prerequisites, actual read/write and shared-resource safety, and verification points inline. Different files are not proof; start dependent work only after prerequisite verification. Otherwise do not create a graph or coordination record. Bulk collection, log scans, and watches may still be handed off sequentially to conserve context. When one agent can own a bounded result, do not split it; a missing stop criterion calls for clarification, not automatic splitting.
 
-1. Classify each job's task category, Guidance, and Architectural span, then choose its pattern and continuity. Select a task-fit model effort and lineage from that pattern's table before resolving a provider or runtime. When a job graph exists, annotate it per job before any runtime choice.
-   - Completion: task category, guidance, architectural span, Advisor/Sidekick/Worker/Reviewer/Operator pattern, continuity, allowed model effort, and lineage are explicit.
+2. Reuse the current orchestrator and existing assigned executor. When **Select an agent** requires a new executor choice, a Balanced orchestrator follows the owning implementation skill only if selected as executor inline; otherwise it assigns an eligible Worker or Sidekick. The owning phase supplies assignment, governing sources, authority bounds, completion or escalation conditions, and result or proof contract; those sources must resolve for a fresh recipient. For a direct task, state outcome, relevant sources, explicit authority, stop or escalation condition, and expected evidence in a concise brief. For a new agent assignment, MUST load `references/agent-job-packet.md` to resolve executor, model and effort, history, access, runtime, continuity, and acceptance in tool arguments or session configuration where supported; prose supplies only missing task context. Before the first prompt, resolve runtime, exact model, access, and history; IF persistent, load `references/session-ledger.md` and return its current identity row before prompting.
 
-2. Choose parent conversation history and workspace access, then follow **Choose the runtime** to resolve native availability, runtime, and exact model id.
-   - Dispatch completion: the packet records both selections.
-   - Native completion: this is a native subagent assignment, not a Sidekick or Advisor; the selected model belongs to the parent host's own lineage, the native provider reference has been loaded when one exists, and the exact supported model id, reasoning control, history encoding, and packet `access:` line are explicit. The launch used the host native tool, not a CLI sandbox stand-in.
-   - ACPX completion: `references/acpx.md` and exactly one selected `references/acpx-provider-*.md` contract have both been loaded, and the exact provider-specified model id, reasoning control, session-history encoding, and permission flags are explicit. A review used a named session, not `exec`. A Sidekick or Advisor used its established named session for continuation, not `exec` or `sessions new`; initial creation recorded the new relationship identity. No call passed `--timeout`. A dropped wait was not called `blocked` until `sessions list/show/read` was checked.
-   - Router completion: IF a Router route is selected, load the `agent-collaboration` skill and return verified SessionRef, input capability, and selected model/access fit. A supplied or discovered separate conversation satisfies those conditions and its exact SessionRef is retained; missing creation/input capability is an explicit gap.
-   - Unsupported completion: report the missing provider contract or capability and stop dispatch.
+3. Dispatch the whole assignment. A same-assignment follow-up carries a concise delta and retains identity and scope; a new assignment refreshes its assignment contract without replacing a Sidekick or Advisor conversation. At the decision point, use the selected native or ACPX contract: preserve reviewer history isolation, never pass ACPX `--timeout`, and inspect sessions after a dropped wait before calling it blocked.
 
-3. Build one bounded packet for a new or materially changed assignment, dispatch it, and reduce the result. Same-assignment follow-ups reuse identity and scope with a concise delta; repeat selection when role, source target, authority, model/runtime, or expected result materially changes. A new assignment in the same Sidekick/Advisor relationship refreshes the packet, not the session: retain its identity unless the relationship itself is explicitly replaced.
-   - For a new or materially changed assignment, MUST load `references/agent-job-packet.md` and return the filled job packet. For a same-assignment follow-up, use its existing contract and return the delta. After dispatch, return the agent-result reduction block; return the Operator decision block only when its gate fires.
-   - Treat agent output as candidate evidence. The parent owns decisions and verifies assignment-bound claims before accepting them.
-   - Completion: sources, non-goals, return binding, stop condition, and parent verification are explicit in the packet; the return line names its binding identifiers and the verify line names at least one concrete parent check (never "none" unless the job is read-only with no claims); every claim is accepted, rejected, or unverified after those checks.
-
-4. Manage persistent relationships.
-   - Create the ledger before the first Advisor, Sidekick, or continuing Reviewer prompt that assumes continuity.
-   - IF the relationship is persistent, load `references/session-ledger.md` and return its current row for creation, resume, reconnect, progress, history, freshness, keep-alive, or reduction.
-   - Use status as liveness evidence. Accept completion from a current assignment-bound receipt that matches the source or head version.
-   - Completion: the persistent identity is stable, the current receipt matches the assignment and source or head version, and relevant activity or eligible maintenance is recorded under Session Keep-Alive.
+4. Verify evidence against the claim and request correction when needed; do not routinely redo the agent's execution. The orchestrator may read decisive sources. Every claim is accepted, rejected, or unverified against the assignment contract's verification point.
 
 Extra: IF you need to build, modify, or wrap an ACP-compatible adapter, load `references/building-acp-adapters.md` and return its build gate, security route, and smoke checklist.
 
@@ -284,7 +276,9 @@ Extra: IF you need to build, modify, or wrap an ACP-compatible adapter, load `re
 
 ### Shared work context
 
-When an assignment contributes to an existing work thread, carry its exact shared work reference with relevant sources and say whether the agent may post findings or must return them to the parent; a reference alone grants no posting or sending authority. `track-show-me-your-work` owns the meaningful-checkpoint threshold. Scoped board catch-up or posting an approved checkpoint is an Operator procedure through `agent-collaboration`; the main identifies consequential decisions and verifies evidence, then reuses that summary without a second narrative. Batch small lane receipts into the responsible agent's checkpoint; do not post per command, minor edit, or routine progress, and do not duplicate parent and worker reports. Keep runtime identity, permissions, and receipt verification here. Contributors do not resolve the whole-work thread. Reviewers still receive bounded sources without inherited author conversation; a work thread is not a substitute for an independent review packet.
+Use the existing shared message-board thread to coordinate multi-session work, decisions, and handoffs. Carry its exact work reference across participating sessions.
+
+When an assignment contributes to an existing work thread, carry its exact shared work reference with relevant sources and say whether the agent may post findings or must return them to the parent; a reference alone grants no posting or sending authority. `track-show-me-your-work` owns the meaningful-checkpoint threshold. Scoped board catch-up or posting an approved checkpoint is an Operator procedure through `agent-collaboration`; the current orchestrator identifies consequential decisions and verifies evidence, then reuses that summary without a second narrative. Batch small lane receipts into the responsible agent's checkpoint; do not post per command, minor edit, or routine progress, and do not duplicate parent and worker reports. Keep runtime identity, permissions, and receipt verification here. Contributors do not resolve the whole-work thread. Reviewers still receive bounded sources without inherited author conversation; a work thread is not a substitute for an independent review packet.
 
 ### Waiting
 
@@ -300,4 +294,4 @@ This skill owns the target. It does not guarantee provider TTL, quota, or saving
 
 ## Acceptance Checks
 
-Before closing an assignment, verify stable identity where continuity applies, declared authority and path scope, current source or head evidence for its claims, and any unresolved transport, provider, or proof gaps. The coordinator reduces those checks into the overall-task verdict.
+Before closing an assignment, verify stable identity where continuity applies, declared authority and path scope, current source or head evidence for its claims, and any unresolved transport, provider, or proof gaps. The orchestrator reduces those checks into the overall-task verdict.
