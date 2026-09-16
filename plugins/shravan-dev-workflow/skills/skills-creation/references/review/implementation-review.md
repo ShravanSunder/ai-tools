@@ -35,9 +35,9 @@ MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review
 
 IF the changed surface adds or changes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, schema ownership, and real consumers and return the applicable contract before reduction.
 
-Receipts are synthesized by the parent, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
+Receipts are synthesized by the executing review lead, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
 
-If the user explicitly requests outside counsel and Codex authored the change, prefer a non-Codex provider for at least one lane. Otherwise keep review bounded to this reference and the current diff; do not invent a competing runtime route.
+`manage-agents` selects the lead's required independent lineage. Lane Workers use the Review catalog under that lead.
 
 ## Verdicts
 
@@ -64,10 +64,12 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 
 ## Reduction
 
-The parent verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring.
+The executing review lead verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. The coordinator retains final disposition and author acceptance.
 
 Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation`; that is the live owner.
 
-After accepted edits, rerun the narrowest pressure or static proof that can catch the issue. A next implementation review may refresh changed-lane coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never dispatch review or remediation four without explicit user permission.
+After accepted edits, rerun the narrowest pressure or static proof that can catch the issue. Resume the same review lead to refresh changed-lane coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never dispatch review or remediation four without explicit user permission.
+
+At ship, reuse the semantically current review result when its changed-file coverage and proof remain current. Resume the same lead only when affected coverage needs refresh.
 
 Complete when: the verdict carries one of the allowed labels, every changed file is accounted for as reviewed, static-only, or out-of-scope, and the ship decision is explicit.

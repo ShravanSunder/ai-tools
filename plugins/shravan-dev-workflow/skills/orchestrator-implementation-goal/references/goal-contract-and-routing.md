@@ -2,7 +2,7 @@
 
 This reference owns current-source orientation, planning and implementation admission, meaningful result verification, bounded recovery, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
-Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the canonical plan, implementation proof, review evidence, supplied authority, shared work reference or unshared checkpoint path and whole-work responsibility, the current orchestrator, executor when assigned, user-selected Advisor address when applicable, and known blockers.
+Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the canonical plan, implementation proof, review evidence, supplied authority, shared work reference or unshared checkpoint path and whole-work responsibility, the coordinator, persistent implementation Sidekick, persistent review Sidekick when commissioned, executor when assigned, and known blockers.
 
 Return: a concise orientation containing the objective, scope, current basis, requested terminal, evidence freshness, next owner or exact stop, and the continuation checkpoint and whole-work completion decision.
 
@@ -19,7 +19,7 @@ current plan, proof, and review evidence:
 known remediation and recovery history:
 authority and blockers:
 trail: <shared work reference or unshared checkpoint path> / whole-work responsibility | contribution
-execution responsibility: <current orchestrator> / executor: <assigned or inline> / Advisor: <user-selected address or none>
+responsibility: coordinator and work-root / implementer: <persistent session> / review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>
 next owner or stop:
 ```
 
@@ -39,25 +39,25 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 ## Select the Current Owner
 
-The current orchestrator routes the smallest owner that can resolve the current decision, verifies its result, and continues the same goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative for the inputs, governing artifacts and plan, task boundary, completion or escalation, and proof/results. The orchestrator may be Frontier or Balanced, and independently selects implementation/proof executors under `manage-agents`; a Balanced orchestrator executes inline only when selected as executor. Only on a user-selected transfer to a separate Balanced session does verified acceptance against current source make that session the new orchestrator and the original Frontier session the selected Advisor. The selected runtime carries the same assignment; this changes task responsibility only and does not transfer the runtime goal, a session, or a work thread.
+The coordinator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The persistent implementation Sidekick carries development and may select bounded native Workers and standalone native Operators under `manage-agents`, retaining each through its assignment corrections. The coordinator keeps the work-root as `orchestrator`; the implementer and review Sidekick contribute on that thread.
 
-When the user selects transfer from a Frontier orchestrator, it remains responsible until the supported Balanced session accepts the assignment against current source. It can then become the selected Advisor; this is a handoff checkpoint, not implementation completion. Without transfer, the Frontier orchestrator remains responsible. The source-phase workflow remains owned by the current orchestrator:
+The source-phase workflow follows this order:
 
 ```text
 unclear user intent
   -> discuss-pathfinding before implementation orchestration
 
 incomplete design prerequisite
-  -> orchestrator-design; preserve the open implementation goal and return here
+  -> implementer returns evidence and a recommendation to the coordinator through orchestrator-design; preserve the open implementation goal and return here
 
 material design break discovered during planning or implementation
-  -> user decision through the named design owner; do not build on the break
+  -> coordinator and user decision; do not build on the break
 
 current reviewed design; no ready plan
-  -> plan-implementation
+  -> coordinator assigns plan-implementation to the existing implementer
 
 admitted repository improvement; no ready delivery plan
-  -> preserve the plan-improve-repo admission and invoke plan-implementation
+  -> preserve the plan-improve-repo admission and assign plan-implementation to the existing implementer
 
 ready plan; terminal is plan-only
   -> finish at plan-only
@@ -65,12 +65,15 @@ ready plan; terminal is plan-only
 ready delivery plan; implementation or proof incomplete
   -> implement-plan
 
-current implementation proof; independent review absent or stale
+development and fitting proof complete
+  -> coordinator assessment against agreed intent, scope, and observable behavior
+
+coordinator assessment complete
   -> implementation-review for general-domain work
   -> skills-creation implementation review for a composed runtime skill package
 
 accepted implementation finding; remediation count below three
-  -> implement-plan, fresh affected proof, then another bounded review
+  -> implement-plan by the same implementer, fresh affected proof, then the same review Sidekick
 
 accepted specification, design, or plan finding
   -> exact semantic owner, then resume the open implementation goal
@@ -86,7 +89,7 @@ A request for one direct phase bypasses this orchestrator. Optional `ops-*` trac
 
 ## Verify, Correct, and Recover
 
-After every owner returns, the current orchestrator inspects the source anchors that control the next decision. Parent-disposition review candidates: accept only findings supported by current source and governing meaning, record why rejected findings are invalid, and route accepted findings to their actual owner. It retains delivery ownership while the independently selected executor handles its bounded work. Do not send current work back to a user-selected Advisor for repeated whole-work verification.
+After every owner returns, the coordinator inspects the source anchors that control the next decision. The review Sidekick supplies its review result after detailed source reading and lane reduction. The coordinator checks findings against cited evidence, records why rejected findings are invalid, and routes accepted findings to their actual owner. Contextual design feedback does not replace independent review.
 
 Normal implementation review permits at most three accepted remediation passes. After each accepted implementation correction, require fresh affected proof and fresh review coverage. Design or planning corrections follow their owners' review boundaries and do not become implementation-remediation passes.
 
@@ -108,6 +111,6 @@ Before finishing, verify the material gates implied by the requested terminal, e
 - `pr-ready-unmerged`: implementation proof, current bounded independent review, and current PR checks, comments, threads, head and mergeability are ready under `implementation-pr-wrapup`.
 - `blocked | partial | stopped`: name the exact completed boundary, missing evidence or authority, and next owner or user decision.
 
-Record the truthful outcome and continuation context through `track-show-me-your-work`. A contributor leaves the outer thread unresolved. The responsible whole-work orchestrator follows the tracker to inspect current activity and completion before resolving; a session ending or blocked outcome alone never resolves it. Readable views are conditional on a request or substantial synthesis need. For pending standalone Git, PR, or watch work, wait on the Operator's completion notification or an authorized wake through `manage-agents`; never consume delivery turns polling a model.
+Record the truthful outcome and continuation context through `track-show-me-your-work`. Contributors leave the outer thread unresolved. The coordinator follows the tracker to inspect current activity and completion before resolving. Readable views are conditional on a request or substantial synthesis need. For pending standalone Git, PR, or watch work, wait on the Operator's completion notification or an authorized wake through `manage-agents`; never consume delivery turns polling a model.
 
 Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, bounded recovery/remediation rules are intact, and the finish decision matches the requested terminal and whole-work responsibility.

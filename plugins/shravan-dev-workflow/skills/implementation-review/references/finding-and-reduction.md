@@ -1,6 +1,6 @@
 # Finding And Reduction
 
-This reference owns parent verification, the rails re-anchor, finding semantics, cause-based routing, affected coverage, and the final review result.
+This reference owns parent verification, the rails re-anchor, finding semantics, cause-based routing, affected coverage, and the final review result. `parent` means the immediate review lead relative to a lane; the coordinator later owns final disposition and delivery routing.
 
 Expected inputs: the shared review packet, terminal reviewer receipts including the dispel classification, current governing sources and diff, proof evidence, and any prior coverage record.
 

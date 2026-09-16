@@ -5,7 +5,7 @@ description: Use when a user asks to run, resume, or finish one bounded Requirem
 
 # Design Orchestration
 
-Coordinate the smallest design owner that can advance the work, verify its material result against current evidence, and keep going until the three artifacts form one coherent reviewed design or a real owner decision or blocker stops the run. This skill owns coordination and the final claim. `spec-design`, `program-design`, and `spec-program-review` own their phase judgment and artifacts.
+The coordinator advances the smallest design owner that can resolve the work, verifies its material result against current evidence, and continues until the three artifacts form one coherent reviewed design or an owner decision or blocker stops the run. This skill owns coordination and the final claim. `spec-design`, `program-design`, and `spec-program-review` own their phase judgment and artifacts.
 
 ```text
 spec-design          Requirements and observable Specification
@@ -23,14 +23,15 @@ Record only consequential design decisions, owner confirmations, accepted or rej
 ## Orient And Route
 
 1. Reopen the current user intent, governing sources, Requirements, Specification, Program Design, and any inspectable current phase or review result. Use the trail to find relevant context, then verify load-bearing claims in current sources.
-2. Invoke the smallest owner that can advance the current evidence:
+2. IF assigning research or another phase owner, load `manage-agents` and return the selected responsibility, continuity, and assignment boundary. The coordinator retains material design work with the user. A bounded research question goes to a Worker; related research with follow-up questions may use a research Sidekick.
+3. Invoke the smallest owner that can advance the current evidence:
    - fresh full-design request, or missing Requirements or Specification -> `spec-design`;
    - current Requirements and Specification but missing Program Design -> `program-design`;
-   - three current artifacts without completed review coverage -> `spec-program-review` in `three-artifact-design` mode;
+   - three current artifacts without completed review coverage -> assign or resume the persistent independent design-review Sidekick through `spec-program-review` in `three-artifact-design` mode;
    - genuinely unmade owner meaning -> `discuss-pathfinding`, returning to the phase that owns it.
-3. Preserve each producer's current route and compact handoff. Accept only `discuss-pathfinding | spec-design | program-design | spec-program-review | stop`; a contradictory destination blocks without the orchestrator inventing a plausible route.
-4. Verify what materially changed before continuing. Check artifact identity and resolution, returned owner, current evidence, and the finding or decision that justifies the next route. Require exact source identity where correctness depends on it, such as a reviewed commit or PR head; ordinary decisions need no opaque identity.
-5. Route a `specification-gap` to `spec-design`, an owner-controlled structural choice through `discuss-pathfinding` back to `program-design`, a bounded How correction to `program-design`, and a blocker or owner decision to the exact stop. Continue across phase boundaries instead of returning a progress checkpoint as completion.
+4. Preserve each producer's current route and compact handoff. Accept only `discuss-pathfinding | spec-design | program-design | spec-program-review | stop`; a contradictory destination blocks without the coordinator inventing a route.
+5. Verify what materially changed before continuing. Check artifact identity and resolution, returned owner, current evidence, and the finding or decision that justifies the next route. Require exact source identity where correctness depends on it, such as a reviewed commit or PR head; ordinary decisions need no opaque identity.
+6. Route a `specification-gap` to `spec-design`, an owner-controlled structural choice through `discuss-pathfinding` back to `program-design`, a bounded How correction to `program-design`, and a blocker or owner decision to the exact stop. Continue across phase boundaries instead of returning a progress checkpoint as completion.
 
 For newly created file-backed artifacts, pass `new artifact home: <project-root>/docs/specs/` to `spec-design` and `program-design` and validate their distinct returned paths beneath that home. Preserve authoritative pre-existing artifacts wherever they already live. Decision records and linked detail may live in the central trail; do not create a second lifecycle ledger, replay store, digest, generic approval record, or per-turn report in the project.
 
@@ -43,24 +44,24 @@ Reduce findings against the sources:
 - `ready` -> design terminal;
 - non-semantic or unsupported finding -> reject with evidence;
 - mental-model break or unmade owner meaning -> stop with assumption, evidence, consequence, and owner;
-- accepted bounded findings -> correct through the semantic owners, then parent-verify the findings.
+- accepted bounded findings -> correct through the semantic owners; the retained independent design-review Sidekick checks corrected anchors and current affected evidence, then the coordinator accepts the result.
 
-Each round may call `spec-design` then `program-design`, correcting each affected artifact once. Close when verification resolves the findings; another review is not automatic. Pre-review authoring does not consume a review round. `spec-program-review` owns review admission and coverage.
+Each round may call `spec-design` then `program-design`, correcting each affected artifact once. The retained design-review Sidekick verifies those corrections within the same review relationship; this verification does not start another full review or expand the round allowance. Pre-review authoring does not consume a review round. `spec-program-review` owns review admission and coverage.
 
 ## Missing Review Evidence
 
-Pass `spec-program-review` one explicit orchestrator-authorized recovery request for unavailable prior results, using verified current artifacts and governing sources and a recorded reason. Preserve existing limits and unknown history; recovery grants no extra correction rounds. Reject repeated recovery or unverified inputs. Ask before corrections if the remaining allowance is exhausted or unknown. Route design breaks to their owner.
+Pass `spec-program-review` one explicit coordinator-authorized recovery request for unavailable prior results, using verified current artifacts and governing sources and a recorded reason. Preserve existing limits and unknown history; recovery grants no extra correction rounds. Reject repeated recovery or unverified inputs. Ask before corrections if the remaining allowance is exhausted or unknown. Route design breaks to their owner.
 
 ## Trail And Completion
 
 At each owner return, record a meaningful checkpoint with decision, reason, evidence, and result through the tracker. At every terminal response, leave the actual design outcome and continuation context, including blocked, deferred, or stopped work. Nested work contributes without resolving the outer thread; the responsible whole-work agent follows the tracker's current-history and completion checks before resolution. Produce a readable view when requested or substantial synthesis is needed. Report unshared fallback or view gaps honestly; preserve the real design result and continue independent work unless shared recording was made a delivery gate.
 
-Return one status and the next skill or stop. `ready` requires distinct, current Requirements, Specification, and Program Design artifacts, independent review, and parent-verified resolution of findings within the allowed rounds. It means design-ready, not implemented.
+Return one status and the next skill or stop. `ready` requires distinct, current Requirements, Specification, and Program Design artifacts, independent review, retained design-review-Sidekick verification of corrected anchors and current affected evidence, and coordinator acceptance within the allowed rounds. It means design-ready, not implemented.
 
 ## Design-Ready Continuation
 
-When the caller or user has requested continued delivery, preserve this design terminal and the next phase's existing input/result contract for the delivery loop; this orchestrator does not implement or claim delivery complete. The reviewed artifacts, task boundary, completion or escalation, and design proof/results remain authoritative. Use `plan-handoff` only when a current implementation plan needs portability, or `spec-handoff` only when reviewed design context needs portability before a plan exists. Do not require either handoff merely because the executor uses a separate session, and do not create a management packet schema, route, or work trail.
+When the caller or user has requested continued delivery, preserve this design terminal and the next phase's existing input/result contract for the delivery loop; the coordinator does not implement or claim delivery complete. The reviewed artifacts, task boundary, completion or escalation, and design proof/results remain authoritative. Use `plan-handoff` only when a current implementation plan needs portability, or `spec-handoff` only when reviewed design context needs portability before a plan exists. Do not require either handoff merely because the executor uses a separate session, and do not create a management packet schema, route, or work trail.
 
-For a substantive design loop that uses agent help, the current orchestrator may be Frontier or Balanced. It works with the user on material design meaning through this workflow. Cheap Workers may collect evidence, synthesize it, or draft already-settled artifacts when explicitly assigned; they do not settle material design meaning. Do not create an Advisor automatically.
+For a substantive design loop that uses agent help, the coordinator may be Frontier or Balanced. It works with the user on material design meaning through this workflow. Workers can gather bounded evidence or draft already-settled artifacts, retaining their assignment through corrections. A research Sidekick is useful when related assignments need continuing context. Only an explicitly requested Advisor assists the coordinator with design choices.
 
-After `ready`, the current orchestrator retains delivery orchestration unless the user selects transfer to a separate Balanced session. On that transfer, verify acceptance against the existing phase contract; the Balanced session becomes orchestrator and the original Frontier session becomes the selected Advisor for material design questions and decisions. Select implementation/proof executors independently under `manage-agents`; a Balanced orchestrator executes inline only when selected as executor. `plan-implementation` remains required when no ready plan exists, preserving its admission requirements.
+If continued delivery is requested, after `ready` MUST load `manage-agents` to assign or resume one persistent implementation Sidekick. The coordinator keeps the existing work-root as `orchestrator`; the implementer joins that thread and owns development, proof, bounded native Workers, and standalone native Operators. Design gaps return to the coordinator and user. `plan-implementation` remains required when no ready plan exists, preserving its admission requirements.

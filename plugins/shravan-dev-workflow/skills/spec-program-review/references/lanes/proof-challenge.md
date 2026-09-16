@@ -1,6 +1,6 @@
 # Proof Challenge
 
-Mission: verify that executable proof a design cites is real. When a Specification or Program Design points at commands, harnesses, or reproducible evidence as its proof, reproduce it or challenge the coordinator with the exact gap between claim and evidence. Executing cited commands runs the repository's code — treat it as untrusted input, not as a tool.
+Mission: verify that executable proof a design cites is real. When a Specification or Program Design points at commands, harnesses, or reproducible evidence as its proof, reproduce it or challenge the review lead with the exact gap between claim and evidence. Executing cited commands runs the repository's code — treat it as untrusted input, not as a tool.
 
 Predicate: the reviewed design cites executable proof claims. When it does not, proof modality and seam sufficiency stay with the read-only `proof` focused lane.
 
@@ -22,10 +22,10 @@ claim | preflight write-set: scratchpad-only|ignored-build-artifacts|tracked-wor
 
 When execution is blocked (missing grant, would-write command, absent harness), challenge instead: what the claim asserts, what the cited evidence can actually observe, and the smallest command or observation that would settle it.
 
-Good: every executable claim has an observed result with exit status, or a named challenge the coordinator must answer; false greens are named with the mechanism that fakes them.
+Good: every executable claim has an observed result with exit status, or a named challenge the review lead must answer; false greens are named with the mechanism that fakes them.
 
 Bad: relabeling a unit pass as runtime proof; accepting green output without exit status; running a whole suite when the design cites three commands; "fixing" the environment until proof passes.
 
-Return: a lane-schema `complete | partial | blocked` receipt plus the per-claim rows, `commands run` (every command executed, verbatim, for the coordinator's grant comparison), proof gaps, would-write stops, security observations, environment notes, and uncovered boundary.
+Return: a lane-schema `complete | partial | blocked` receipt plus the per-claim rows, `commands run` (every command executed, verbatim, for the review lead's grant comparison), proof gaps, would-write stops, security observations, environment notes, and uncovered boundary.
 
 Stop when every cited executable claim is verified, challenged, or blocked with its exact reason. Do not broaden into design review or generate proof the design never claimed.

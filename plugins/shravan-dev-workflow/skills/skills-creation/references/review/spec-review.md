@@ -4,11 +4,13 @@ Review the intended skill design before implementation. This reference judges wh
 
 Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
 
+The persistent independent review lead executes this stage and returns its result to the coordinator for acceptance.
+
 ## Spec Artifact
 
 A proposal that meets none of the doc predicates below stays conversational: it lives in the run's messages and the review packet carries it.
 
-IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, write it as a spec doc before dispatch and make the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
+IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, the author or coordinator writes it as a spec doc before commissioning the review lead and makes the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The independent lead reviews the provided artifact and reports a missing required spec as blocked; it does not author the target. The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
 
 ```text
 targets and owner plugin, with the runs in sequence
@@ -37,15 +39,15 @@ lanes/depth-coverage.md
 
 Those are the lanes whose questions are answerable about a design. `depth-coverage` runs here because a proposal carries what it judges: the promised stages and the planned reference tree. `no-op-pruning`, `placement-and-calls`, and `claim-vs-evidence` need line-level text, call sites, and real transcripts; against a proposal they would open the currently shipped file and return a clean receipt about text nobody proposed. They run at implementation review instead.
 
-MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
+IF the proposal is not scoped, MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
 
-MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review packet and parent reduction shape before the first dispatch.
+IF the proposal is not scoped, MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review packet and Parent Reduction shape before the first dispatch.
 
 IF the proposal includes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, and real shape consumers and return the applicable contract before the verdict.
 
-IF the change is scoped, the four lanes above do not dispatch: judge the proposal in-parent against the Verdicts and Rubric below and record the verdict. Rule drift a scoped edit could introduce is caught at implementation review, where `rule-agreement` dispatches against the actual diff.
+IF the change is scoped, the executing review lead judges the proposal inline against the Verdicts and Rubric below and records the verdict without lanes. Rule drift a scoped edit could introduce is caught at implementation review, where `rule-agreement` dispatches against the actual diff.
 
-This reference covers the rest of the spec verdict in-parent.
+This reference covers the rest of the spec verdict in the review lead.
 
 ## Verdicts
 
@@ -70,11 +72,11 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 
 ## Reduction
 
-The parent reduces candidate findings into the spec-review result before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Accepted findings that remain inside the settled mental model return to the design step for at most one remediation. A finding that breaks a load-bearing assumption or exposes unmade owner meaning stops with the failed assumption, evidence, consequence, and exact owner; do not force it through remediation. The parent verifies corrected anchors against the original bounded findings and may then mark the proposal accepted-to-implement without another reviewer dispatch. `significant-rewrite`, `reject-or-restart`, an expanded correction, or uncertain effect stops `review-permission-required` unless the user explicitly authorizes another review.
+The executing review lead reduces candidate findings into the spec-review result before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Accepted findings that remain inside the settled mental model return to the design step for at most one remediation. A finding that breaks a load-bearing assumption or exposes unmade owner meaning stops with the failed assumption, evidence, consequence, and exact owner; do not force it through remediation. The same lead verifies corrected anchors against the original bounded findings and returns its result to the coordinator, which accepts the proposal without another reviewer dispatch. `significant-rewrite`, `reject-or-restart`, an expanded correction, or uncertain effect stops `review-permission-required` unless the user explicitly authorizes another review.
 
 ### Acceptance Binding
 
-The parent closes a review with the original review record plus any one permitted remediation verification. Never compute or maintain a document hash or digest. Parent-verified formatting, typo, link, process-only changes, and exact accepted remediation preserve closure without reviewer dispatch. This stage-specific closure overrides generic changed-text freshness rules. A semantic change outside that remediation or uncertain effect stops `review-permission-required`; only explicit user permission may start another proposal review.
+The review lead closes a review with the original review record plus any one permitted remediation verification. Never compute or maintain a document hash or digest. Review-lead-verified formatting, typo, link, process-only changes, and exact accepted remediation preserve closure without reviewer dispatch. This stage-specific closure overrides generic changed-text freshness rules. A semantic change outside that remediation or uncertain effect stops `review-permission-required`; only explicit user permission may start another proposal review.
 
 Report with these exact labels:
 

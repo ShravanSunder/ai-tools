@@ -9,7 +9,7 @@ Implementation executes one immutable ready plan against current authority and r
 
 ## Execution Responsibility
 
-Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. Reuse the existing responsible executor when one is assigned; otherwise the current orchestrator selects one through `manage-agents`. A Balanced orchestrator executes inline only when selected as executor. Execution does not require another coder per slice or correction.
+Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation Sidekick is the implementer and may execute and prove directly or select a bounded native Worker. An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The coordinator retains design decisions and final disposition.
 
 ## Validate Before Editing
 
@@ -23,17 +23,17 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 ## Execute and Prove
 
 1. MUST load `references/execution-and-proof.md` to validate current branch/HEAD, instructions, diff, named paths, dependencies, write scopes, commands, security assumptions, proof feasibility, and completion-report shape.
-2. Under the resolved execution owner, select the smallest ready frontier. Assignment may cover serial work; parallelism is only eligible for plan-identified independent slices with disjoint writes after proven prerequisites. Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned, never once per test or proof command.
+2. Under the resolved execution owner, select the smallest ready frontier. IF the owner assigns a separate executor or procedure, MUST load `manage-agents` at that assignment point; otherwise continue with the existing assigned executor or direct implementation. Assignment may cover serial work. Parallelism is only eligible for plan-identified independent slices with disjoint writes after proven prerequisites. Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned, never once per test or proof command.
 3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate.
 4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
 5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.
-6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
-7. Return the canonical plan record, governing basis, and delivery context unchanged with the completion report.
+6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. In an orchestrated project flow, return the affected proof through coordinator disposition to the same review Sidekick. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
+7. Return each slice report to its assigning implementer. When all planned development and fitting proof are complete, return the canonical plan record, governing basis, delivery context, and completion report to the coordinator for assessment before the first independent review.
 
 ## Boundaries
 
 - Never alter plan meaning, governing basis, delivery context, required proof, design, tracker state, review verdict, PR state, or merge authority.
-- A user-selected Advisor may provide execution context, but neither that context nor partial direction supplies absent architecture or changes required plan meaning; return those gaps to the existing semantic or originating-plan owner.
+- Coordinator feedback may inform execution, but neither it nor partial direction supplies absent architecture or changes required plan meaning; return those gaps to the coordinator or originating-plan owner.
 - A completed slice is not independent review. General-domain work routes to `implementation-review`; runtime-skill work remains under `skills-creation`.
 - Missing current review/remediation receipts do not reset the three-remediation limit; they stop further remediation for explicit user permission.
 

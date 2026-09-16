@@ -14,7 +14,7 @@ A direct task instead uses a concise brief with outcome, relevant sources, expli
 
 Do not impose a universal field layout, date slug, classification string, or new identifier. Reuse existing names, paths, session identities, and source versions where they help bind evidence to the assignment.
 
-Same-assignment follow-ups carry only the delta and new evidence; preserve established scope and identity. A new assignment refreshes the contract without replacing a continuing Sidekick or Advisor conversation.
+Same-assignment follow-ups carry only the delta and new evidence; preserve established scope and identity. A correction refreshes the contract without replacing a continuing Sidekick, Advisor, or Review Sidekick conversation.
 
 ### Readers
 

@@ -5,12 +5,13 @@ description: Use when a task needs source gathering, prior-art research, current
 
 # Research Swarm
 
-Turn fuzzy research into sharp questions, gather evidence through bounded source lanes, and return a verified ledger the parent can use for discussion, spec design, planning, or review. The parent owns framing, lane packets, verification, synthesis, and the final claim; discussion skills rebuild models — this skill gathers.
+Turn fuzzy research into sharp questions, gather evidence through bounded source lanes, and return a verified ledger the parent can use for discussion, spec design, planning, or review. A Worker owns one bounded research assignment. A research Sidekick owns related research that needs continuing context and may assign disposable native collection Workers. During development, the implementation Sidekick may coordinate its own research Workers. Discussion skills rebuild models — this skill gathers.
 
 ## Core Rules
 
 - Stay read-only against product code unless the user explicitly switches to implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
+- Research that exposes a material design decision returns its evidence to the coordinator. Routine synthesis remains within the assigned Worker, research Sidekick, or implementation Sidekick's research assignment.
 - When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when a current ready three-artifact design needs planning, recommend `plan-implementation`; when an exact ready canonical plan carries `pr-ready-unmerged` delivery context, recommend `implement-plan`; when implemented work and proof need independent judgment, recommend `implementation-review` for general-domain work or `skills-creation` for a runtime skill package. Research preserves evidence; it does not synthesize those artifacts or perform their review.
 - Start with the local system when the research affects a local repo: current code, docs, specs, plans, runbooks, and live file tree beat memory and older notes.
 - Convert the ask into 1-5 researchable questions before spawning lanes. Name what would support, refute, or complicate each question.
@@ -34,23 +35,24 @@ Turn fuzzy research into sharp questions, gather evidence through bounded source
    - adjacent or sibling repos when the named repo is thin
    - current spec, plan, runbook, findings, and changelog if present
    - current memory/session summaries only as a discovery layer
-3. Build lane packets:
+3. MUST load `manage-agents` at the ownership or lane-assignment point. Assign one bounded question to a Worker and retain it through its corrections. IF related questions need continuing context, assign or resume a research Sidekick. During development, the implementation Sidekick may instead coordinate research Workers. Return the selected owner and each Worker's bounded question.
+4. Build lane packets:
    - one bounded question per lane
    - exact source classes and named targets
    - expected evidence format
    - confidence and uncertainty fields
-4. Gather evidence:
+5. Gather evidence:
    - run local reads/searches for critical-path facts
    - dispatch independent subagent lanes when useful
    - use current web/docs tools only when freshness or external sources matter
    - record each lane's verbatim queries and coverage: what was searched, and what was not
-5. Verify:
+6. Verify:
    - primary-source check for load-bearing claims
    - stale-memory check when memory conflicts with live files
    - contradiction check across spec/plan/runbook/finding artifacts
    - when evidence splits, present competing hypotheses side by side with evidence for and against each; do not force a winner
-   - IF a conclusion is load-bearing or embeds the user's own hypothesis, dispatch one bounded fresh-context countercheck to disprove it before synthesis — `references/lane-packets.md` (Countercheck Lane) owns the packet, return, and stop; the reviewer rules come from `manage-agents`
-6. Synthesize by decision, not by source. Each finding carries a state — `lead` when surfaced, `investigated` when its evidence was opened, then `accepted`, `refuted`, or `unresolved`; zero accepted findings is a valid result:
+   - IF a conclusion is load-bearing or embeds the user's own hypothesis, the assignment owner with coordination authority assigns or resumes an independent persistent review Sidekick for the countercheck before synthesis. A bounded Worker returns the claim and source anchors to that owner instead. The review Sidekick receives the countercheck packet and may use the review lanes its workflow permits. `references/lane-packets.md` owns the packet, return, and stop.
+7. Synthesize by decision, not by source. Each finding carries a state — `lead` when surfaced, `investigated` when its evidence was opened, then `accepted`, `refuted`, or `unresolved`; zero accepted findings is a valid result:
    - what the evidence supports (accepted findings only, each with its primary anchor or labeled gap)
    - what it refutes
    - what it complicates
