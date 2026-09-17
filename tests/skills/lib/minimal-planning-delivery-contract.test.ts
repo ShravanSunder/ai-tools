@@ -101,13 +101,13 @@ describe("goal delivery intent hard cutover", () => {
     const readme = readPluginFile("skills/orchestrator-implementation-goal/README.md");
 
     expect(orchestrator).toContain("default to `pr-ready-unmerged`");
-    expect(orchestrator).toContain("owned delivery loop");
+    expect(orchestrator).toContain("An implementation goal stays with the orchestrator");
     expect(orchestrator).toContain("continues immediately");
     expect(orchestrator).toContain("ready delivery plan continues immediately");
     expect(orchestrator).toContain("Stop at PR-ready and unmerged by default");
     expect(orchestrator).toContain("Merge is a separately authorized extension");
     expect(routing).toContain("## Select the Current Owner");
-    expect(routing).toContain("then verify its result and continue the same goal");
+    expect(routing).toContain("verifies decisive evidence, and continues the goal");
     expect(orchestrator).toContain("A milestone, completed slice, or phase return is a checkpoint");
     expect(readme).not.toContain("Plan awaits approval");
   });
@@ -131,7 +131,7 @@ describe("goal delivery intent hard cutover", () => {
     );
     expect(designReview).toContain("A third normal review requires explicit user permission");
     expect(designOrchestrator).toContain("Prefer one review-and-correction round");
-    expect(designOrchestrator).toContain("another review is not automatic");
+    expect(designOrchestrator).toContain("Ask before a third");
     expect(implementationReview).toContain(
       "bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times",
     );
