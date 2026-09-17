@@ -8,5 +8,5 @@
 - Discovery: adds `session rename` and scoped `sessions list` with an explicit scope and source, plus the `result.record` envelope and the Router delivery header.
 - The committed copy is the codex-router v0.1.28 (`788be52`) skill plus the ai-tools-owned `agents/openai.yaml` Codex display block ("Collaboration: Agents"), which upstream does not carry.
 - Updates Codex and Claude plugin manifests and Claude marketplace metadata to 0.7.2; the Codex marketplace entry pins no version.
-- Validation: `claude plugin validate .` passed; `diff -r` against the pinned source tree is empty at 6 files.
+- Validation: `claude plugin validate .` passed; `diff -r` against the pinned source tree differs only by the ai-tools-owned `agents/openai.yaml`.
 - Refresh/reinstall status: pending owner.
