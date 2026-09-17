@@ -309,7 +309,7 @@ On observed resumption, cancel or adjust an obsolete wake through `agent-collabo
 
 #### Persistent-resume cost
 
-Provider cache behavior is unknown unless observed. Preserve the same persistent session and avoid replaying whole packets unnecessarily, but accept a cold resume; neither cache expiry nor an idle interval replaces a Sidekick or Advisor identity. Do not create automatic maintenance heartbeats or claim a stable id guarantees a cache hit, TTL, quota, or savings. Use existing awake or wake mechanisms only when supported and authorized.
+Provider cache behavior is unknown unless observed. Preserve the same persistent session and avoid replaying whole packets unnecessarily, but accept a cold resume; neither cache expiry nor an idle interval replaces a Sidekick or Advisor identity. Do not create automatic maintenance heartbeats or claim a stable id guarantees a cache hit, TTL, quota, or savings. Choose a Sidekick's model and effort at creation and keep them for the life of the session; resume without restating them, because a changed model or effort discards the provider prompt cache for that session. Use existing awake or wake mechanisms only when supported and authorized.
 
 ## Acceptance Checks
 
