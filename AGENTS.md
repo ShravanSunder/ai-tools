@@ -1,10 +1,10 @@
 # AI Tools - Agent Instructions
 
-This repository contains personal Codex and Claude Code plugins plus the Agent Sidecar system for running AI coding assistants in sandboxed Docker containers.
+This repository contains personal Codex and Claude Code plugins.
 
 ## Repository Overview
 
-**Purpose**: AI development tools distributed through local plugin marketplaces, plus isolated Docker environments for AI agents.
+**Purpose**: AI development tools distributed through local plugin marketplaces.
 
 ## Repository Structure
 
@@ -21,13 +21,6 @@ ai-tools/
 ├── agent-scripts/                    # Host agent scripts (not plugin skills)
 │   ├── stop-review/                  # Luna Stop-review; deploy-home-hook.sh copies runtime to ~/.agents/stop-review
 │   └── lint-changed/                 # Changed-file lint/format Stop hook; nested Stop fails open
-├── agent_sidecar/                    # Docker sidecar system
-│   ├── run-agent-sidecar.sh          # Main launch script
-│   ├── sidecar-ctl.sh                # Host-side firewall control
-│   ├── sidecar.base.conf             # Base configuration
-│   ├── init_repo_sidecar.sh          # Initialize .agent_sidecar/ in repos
-│   ├── setup/                        # Firewall, init scripts, zsh config
-│   └── firewall-toggle-presets/      # Toggle preset domain lists
 ├── AGENTS.md                         # Agent instructions (this file)
 └── CLAUDE.md → AGENTS.md             # Symlink for Claude Code
 ```
@@ -45,6 +38,20 @@ The user has always granted, and continues to grant, standing authority to use A
 ## Skill Work SOP
 
 `AGENTS.md` is the repo operating map for skill work. It should tell agents how to work here, which skill owns the next decision, and where deeper instructions live. It should not duplicate the full manuals from meta-skills.
+
+Skill logs and investigations are private local memory.
+
+Home: `/Users/shravansunder/dev/memory-logs/skills/`
+
+| Need | Write here |
+| --- | --- |
+| Recurring skill/agent failure | `log/` (follow `FORMAT.md`, reuse matching entries) |
+| One session went wrong | `investigation/` |
+| Lessons mined from transcripts | `lessons/` |
+| Evidence for a named skill-change | `authoring/<yyyy-mm-dd-name>/` |
+| What to do next | `backlog/` |
+
+In this repo, only the skill-change **proposal or spec** belongs under `docs/wip/skills-authoring/<yyyy-mm-dd-name>/`. When a signal is ready to change a named skill, `skill-audit` classifies and `skills-creation` owns the proposal.
 
 When creating, editing, or evaluating one named skill or accepted draft in this repo—or executing one run or slice of an accepted multi-run skill-change spec—use `shravan-dev-workflow:skills-creation` as the owning workflow. It owns the great-skill model: YAML trigger design, `SKILL.md` mental model and main path, reference depth, steering language, pruning, pressure proof, platform mechanics, source-adaptation checks, and sensitive-resource routing.
 
@@ -250,7 +257,3 @@ plugins/<plugin-name>/
 4. Add a `README.md` in the plugin directory
 5. Update `plugins/README.md` with the new plugin listing
 6. Validate with the relevant plugin CLI
-
-## Agent Sidecar
-
-Sandboxed Docker containers for AI coding assistants with network isolation. See `agent_sidecar/README.md` for full documentation.

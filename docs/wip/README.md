@@ -6,14 +6,10 @@ changelog entries.
 
 Agent guidance for working in this folder lives in `AGENTS.md`.
 
-## Skill Improvement Trackers
+## Skill improvement
 
-- [skill-log/README.md](skill-log/README.md): brief recurring-failure intake and index.
-- `skills-investigation/session-failure-intake.md`: sessions that went wrong or
-  exposed skill failures.
-- `skills-authoring/inspiration-review.md`: skill-authoring references and
-  examples to review.
-- `skills-backlog/funnel.md`: skill-improvement backlog and intake funnel.
+See root `AGENTS.md`. Logs: `~/dev/memory-logs/skills/`.
+In this repo: `skills-authoring/<date>-<name>/proposal.md` only.
 
 ## Other WIP Files
 

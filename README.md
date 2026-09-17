@@ -1,8 +1,6 @@
 # AI Tools
 
-Local Codex and Claude Code plugins for AI-assisted development workflows. This
-repo also includes Agent Sidecar, a Docker-based sandbox for running coding
-agents with network isolation.
+Local Codex and Claude Code plugins for AI-assisted development workflows.
 
 ## Core Plugins
 
@@ -69,28 +67,7 @@ for the full workflow map, phase diagrams, and skill boundaries.
 
 ## Agent Sidecar
 
-Agent Sidecar runs coding agents inside a Docker container with a deny-by-default
-egress firewall. Use it when an agent needs to execute commands with tighter
-network and workspace boundaries than a normal host session.
-
-```bash
-# From any git repository
-run-agent-sidecar.sh --run-claude    # Start Claude Code in sidecar
-run-agent-sidecar.sh --run-codex     # Start Codex
-run-agent-sidecar.sh --run-gemini    # Start Gemini CLI
-run-agent-sidecar.sh --reload        # Recreate container (~5s)
-run-agent-sidecar.sh --full-reset    # Rebuild image + recreate (~2-5min)
-
-sidecar-ctl firewall allow notion    # Allow Notion API
-sidecar-ctl firewall toggle 15m      # Enable all presets for 15 minutes
-sidecar-ctl firewall clear           # Revoke all toggle access
-sidecar-ctl status                   # Show container + firewall state
-```
-
-See [`agent_sidecar/README.md`](agent_sidecar/README.md) for setup,
-architecture, configuration, firewall presets, lifecycle, and debugging docs.
-Use [`agent_sidecar/INSTRUCTIONS.md`](agent_sidecar/INSTRUCTIONS.md) as the
-concise file copied into repos that initialize sidecar support.
+Sandboxed Docker environments for coding agents. Docs live in [`agent_sidecar/`](agent_sidecar/).
 
 ---
 

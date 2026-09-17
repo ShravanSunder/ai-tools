@@ -17,15 +17,17 @@
 
 ## Skill Improvement Workflow
 
-This funnel governs raw-signal notes. An accepted multi-run skill-change spec under `skills-authoring/` is its own commission per `skills-creation` (slice-run spine and Acceptance Binding) — it needs no plan promotion, and it is deleted, archived, or promoted per the rules above after its last run lands.
+Raw signals, investigations, lessons, authoring evidence, and the backlog live under `~/dev/memory-logs/skills/`. See root `AGENTS.md`.
 
-Use WIP skill docs as an intake funnel:
+This folder may hold only skill-change proposals:
 
-1. Capture the raw signal in the relevant file.
-2. Gather enough evidence to classify it.
-3. Route skill-surface decisions through `skill-audit`.
-4. Promote actionable work into a plan before implementation.
-5. Delete or archive the WIP note after the durable change lands.
+`docs/wip/skills-authoring/<yyyy-mm-dd-name>/proposal.md`
 
-Prefer updating an existing skill over creating a new one unless repeated
-evidence shows a distinct workflow with stable inputs, procedure, and output.
+An accepted multi-run spec there is its own commission per `skills-creation`. Evidence for that spec stays in `~/dev/memory-logs/skills/authoring/<yyyy-mm-dd-name>/`.
+
+1. Capture the signal in `~/dev/memory-logs/skills/log/` (or investigation/lessons).
+2. Classify with `skill-audit` when the target is unnamed or the portfolio is in question.
+3. If a named skill should change, write the proposal here and run `skills-creation`.
+4. After the durable change lands, delete or archive the proposal; leave memory-logs as history.
+
+Prefer updating an existing skill over creating a new one unless repeated evidence shows a distinct workflow with stable inputs, procedure, and output.
