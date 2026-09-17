@@ -13,8 +13,9 @@ Before saying "ready", "merge-clear", "green", "fixed", or "complete", name the 
 - Comments and review threads have been inspected from fresh GitHub state.
 - Unresolved threads are fixed and resolved, rejected with evidence and replied to, or explicitly left open by user decision.
 - Mergeability is clean, not blocked or conflicting.
+- The live GitHub PR body uses `## Why the change` / `## Special things to note` / `## Change outline`, is current against HEAD/diff, is not a file-list changelog (`- path — note` bullets as the outline), has a non-empty Change outline, and is public-artifact-safe. Inspect the current GitHub body vs current HEAD/diff. Not ready on a missing required heading, an empty Change outline, a file-list changelog, a stale body, or a public-artifact-safety fail.
 - One quiet poll passed after all gates first became clear.
-- Final re-fetch confirms checks, comments, threads, mergeability, and head SHA.
+- Final re-fetch confirms checks, comments, threads, mergeability, head SHA, and reapplies the body bullet above — not merely that a body exists.
 
 If the PR base branch is wrong or uncertain, stop and ask or update the PR base before claiming readiness.
 
