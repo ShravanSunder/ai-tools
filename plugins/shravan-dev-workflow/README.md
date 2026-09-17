@@ -121,7 +121,7 @@ Codex display titles use the `Category: Action` form (for example, `Discuss: Pat
 
 Use `research-swarm` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, routes source-specific lanes, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial swarm lanes use explicit packet contracts with source anchors, security context, candidate-evidence labels, and completion receipts; parent ledgers reduce lane evidence before anything becomes accepted truth.
 
-Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, delegates, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
+Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, workers, operators, subagents, and swarms. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
 Use `orchestrator-design` when the user asks to run or resume the full design cycle as one bounded workflow. The agent starts with `spec-design`, preserves separate Requirements and Specification identities, follows only phase-selected compact handoffs through `program-design`, optional owner pathfinding, and one three-artifact design review, then stops before planning. The orchestrator keeps the cycle moving, verifies meaningful results, and records decisions through track-show-me-your-work; phase skills retain requirements, architecture, and independent review expertise. It permits one recorded recovery review when prior evidence is unavailable, without restoring a used correction round.
 
@@ -172,7 +172,7 @@ Use `implementation-handoff` when real implementation state exists: branch, diff
 
 ## External Counsel
 
-Review workflows do not use broad multi-model counsel by default. The single-assignment Delegate pattern, model, runtime, history isolation, and read-only authority are resolved through `manage-agents`.
+Review workflows do not use broad multi-model counsel by default. The persistent Review Sidekick lead, its native read-only lane Workers, and their model, runtime, history isolation, and authority are resolved through `manage-agents`.
 
 ```text
 normal review path

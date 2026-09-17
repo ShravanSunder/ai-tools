@@ -21,7 +21,7 @@ Before delivery starts, use the current goal context or applicable handoff and t
 
 ## Carry the Delivery Loop
 
-1. If implementation meaning is incomplete, the implementer returns evidence and a recommendation to the orchestrator through `orchestrator-design`, keeps the goal open, and resumes after the decision. Routine implementation choices remain with the implementer.
+1. If implementation meaning is incomplete, the implementer returns evidence and a recommendation to the orchestrator, keeps the goal open, and resumes after the decision; the orchestrator invokes `orchestrator-design` when governing design meaning must change. Routine implementation choices remain with the implementer.
 2. Admit either current reviewed design or an evidence-backed repository improvement accepted by `plan-improve-repo`. If no current ready delivery plan exists, the orchestrator assigns `plan-implementation` to the existing implementer from settled design. A ready `plan-only` result reaches that requested terminal; a ready delivery plan continues immediately.
 3. If implementation or fitting proof is incomplete, the implementer invokes `implement-plan`, executing directly or assigning a bounded native Worker under `manage-agents`. A milestone, completed slice, or phase return is a checkpoint.
 4. When development and fitting proof are complete, the orchestrator assesses decisive evidence against the agreed intent, scope, and observable behavior. It returns corrections to the same implementer with affected proof and verifies the corrected result before commissioning the persistent independent implementation-review Sidekick through `manage-agents`.

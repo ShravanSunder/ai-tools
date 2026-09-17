@@ -48,7 +48,7 @@ unclear user intent
   -> discuss-pathfinding before implementation orchestration
 
 incomplete design prerequisite
-  -> implementer returns evidence and a recommendation to the orchestrator through orchestrator-design; preserve the open implementation goal and return here
+  -> implementer returns evidence and a recommendation to the orchestrator, which invokes orchestrator-design when governing design meaning must change; preserve the open implementation goal and return here
 
 material design break discovered during planning or implementation
   -> orchestrator and user decision; do not build on the break
