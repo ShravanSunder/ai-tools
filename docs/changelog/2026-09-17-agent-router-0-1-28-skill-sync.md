@@ -6,7 +6,7 @@
 - Sessions: adds `--access write-restricted|workspace-write`, `--root-message-id` shared scratch, and `--approver` for client approval authority.
 - Sessions: model and effort are chosen at creation; resume and fork may omit them and inherit the thread's persisted values.
 - Discovery: adds `session rename` and scoped `sessions list` with an explicit scope and source, plus the `result.record` envelope and the Router delivery header.
-- Removes `agents/openai.yaml` from the vendored skill: the pinned upstream tree does not carry it, so the Codex display title added in 2026-09-15 is dropped until upstream ships that file.
+- The committed copy is the codex-router v0.1.28 (`788be52`) skill plus the ai-tools-owned `agents/openai.yaml` Codex display block ("Collaboration: Agents"), which upstream does not carry.
 - Updates Codex and Claude plugin manifests and Claude marketplace metadata to 0.7.2; the Codex marketplace entry pins no version.
 - Validation: `claude plugin validate .` passed; `diff -r` against the pinned source tree is empty at 6 files.
 - Refresh/reinstall status: pending owner.
