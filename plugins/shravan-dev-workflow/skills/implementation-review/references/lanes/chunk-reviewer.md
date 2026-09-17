@@ -10,7 +10,7 @@ Maximum authority: fresh-context, read-only, candidate-only review. Open/search 
 
 Procedure: MUST load `../reviewing-implementation.md` to perform its full obligation trace, whole-file reads, normal and failure-path inspection, proof-fit checks, applicable reachability and weaker-substitute checks, and riskiest-assumption test, scoped to the assigned chunk and its overlap seams, and return its coverage and anchored-exclusion rows, path inspection, proof/reachability/weaker-substitute/riskiest-assumption results, candidate findings, and uncovered boundary for this chunk.
 
-If judging the chunk requires code outside the assignment and its seams, stop and return that boundary as `partial` — a chunk that cannot be judged from its packet is a chunking defect the coordinator must repair, not a gap to fill with inference.
+If judging the chunk requires code outside the assignment and its seams, stop and return that boundary as `partial` — a chunk that cannot be judged from its packet is a chunking defect the review lead must repair, not a gap to fill with inference.
 
 Return the shared `complete | partial | blocked` envelope plus:
 

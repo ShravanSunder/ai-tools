@@ -1,6 +1,6 @@
 # Proof Challenge
 
-Mission: verify that claimed proof is real. Reproduce the proof the implementation claims, or challenge the coordinator with the exact gap between what is claimed and what the evidence can show. Running tests executes the reviewed code — treat the worktree's code as untrusted input, not as a tool.
+Mission: verify that claimed proof is real. Reproduce the proof the implementation claims, or challenge the review lead with the exact gap between what is claimed and what the evidence can show. Running tests executes the reviewed code — treat the worktree's code as untrusted input, not as a tool.
 
 Expected inputs: every shared packet field from `lane-schema.md`, the complete proof-claim inventory (commands, expected outcomes, evidence artifacts, claimed layers), and a populated `execution grant` naming the allowed command set and scratchpad path.
 
@@ -30,7 +30,7 @@ environment check: distinguish a real failure from flake/environment — rerun
 
 When execution is blocked (missing grant, would-write command, absent harness), challenge instead: state what the claim asserts, what the supplied evidence can actually observe, and the smallest command or observation that would settle it.
 
-Good: every material claim has an observed result with exit status, or a named challenge the coordinator must answer; false greens are named with the mechanism that fakes them.
+Good: every material claim has an observed result with exit status, or a named challenge the review lead must answer; false greens are named with the mechanism that fakes them.
 
 Bad: relabeling a unit pass as runtime proof; accepting green output without exit status; running the whole suite when the claims name three tests; "fixing" the environment until proof passes.
 
@@ -39,7 +39,7 @@ Return the shared `complete | partial | blocked` envelope plus:
 ```text
 per-claim results: <claim, preflight write-set class, command run | challenge,
   observed vs claimed, false-green check, exit status, scratchpad evidence path>
-commands run: <every command executed, verbatim, for the coordinator's
+commands run: <every command executed, verbatim, for the review lead's
   grant comparison>
 proof gaps:
 would-write stops:

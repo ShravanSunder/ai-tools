@@ -2,7 +2,7 @@
 
 Owns Cursor native Task launch and workspace-access encoding. Return the host Task encoding and workspace-access encoding.
 
-This reference applies after `SKILL.md` selects a native subagent assignment. Sidekick/Advisor separate-conversation requirements take precedence over native model availability.
+This reference applies after `SKILL.md` selects a native Worker or Operator assignment, including a read-only review lane Worker. Persistent Sidekick, Advisor, and Review Sidekick relationships use their separate top-level route.
 
 ## Launch
 

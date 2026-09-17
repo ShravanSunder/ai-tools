@@ -1,6 +1,6 @@
 # Session Ledger
 
-Persistent Advisors, Sidekicks, and continuing Reviewers need one current ledger row before prompts that assume continuity.
+Persistent Advisors, Sidekicks, and Review Sidekicks need one current ledger row before prompts that assume continuity.
 
 ## Row
 
@@ -12,20 +12,20 @@ resolved launcher / provider command:
 working scope / relationship name:
 runtime ids / provider-native id when exposed:
 permission boundary:
-status / queued work / last prompt / last ping / last checked:
+status / queued work / last prompt / last checked:
 return expected / receipt level / return binding: <session, assignment id, decision target, source/head version>
 parent verification / next follow-up:
 ```
 
-In the existing route/runtime slots, label the transport and each ID: ACPX record, provider-native session, or full Router SessionRef. An ACPX name/record ID is not a Router address. A Router mapping is usable only after discovery verifies the same provider-native conversation. Keep runtime-local ids with their originating runtime. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
+In the existing route/runtime slots, label the transport and each ID: ACPX record, provider-native session, or full Router SessionRef. An ACPX name/record ID is not a Router address. A Router mapping is usable only after discovery verifies the same provider-native conversation. Keep runtime-local ids with their originating runtime. A ledger agent name does not prove a visible session title; record verified rename/display evidence in the existing resolved-launcher or runtime-id slot when the host supports it. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
 
 ## Create Or Resume
 
-Reuse the same Sidekick/Advisor conversation across follow-ups and new assignments unless the relationship is explicitly replaced. Update the assignment and validate any changed scope without creating a new session. Inspect existing records/reconnect support before a reset; record an explicit continuity-reset reason only when the relationship is deliberately replaced.
+Reuse the same Sidekick, Advisor, or Review Sidekick conversation across follow-ups and corrections unless the relationship is explicitly replaced. Update the assignment and validate any changed scope without creating a new session. Inspect existing records/reconnect support before a reset; record an explicit continuity-reset reason only when the relationship is deliberately replaced.
 
-## Keep-Alive
+## Continuity and cost
 
-Use the Session Keep-Alive policy in `SKILL.md` for maintenance eligibility and timing. Record the last relevant model request and any actual maintenance; retain last observed runtime status separately. Busy work does not need redundant pings. Cache state is unknown unless observed; cold cache does not invalidate the session or its assignment. A useful follow-up reuses identity and scope rather than creating another relationship.
+Cache state is unknown unless observed. A cold resume does not invalidate the session or its assignment, and neither cache expiry nor idle time replaces a persistent relationship. Do not add periodic maintenance or heartbeat timers to this ledger. A useful follow-up reuses identity and scope rather than creating another relationship.
 
 ## Readiness Lifecycle
 

@@ -1,14 +1,14 @@
 # Coordination and Chunking for Design Review
 
-This reference owns how the coordinator splits a large design review into chunks and which lanes it runs.
+This reference owns how the review lead splits a large design review into chunks and which lanes it runs.
 
-Expected inputs: the coordinator's own whole-artifact read of the complete target set and governing sources, the selected mode, the confirmed goal boundary and accepted requirements set, and any proof claims the design cites.
+Expected inputs: the review lead's own whole-artifact read of the complete target set and governing sources, the selected mode, the confirmed goal boundary and accepted requirements set, and any proof claims the design cites.
 
 Return: the chunk plan — each chunk's seam, its listed sections, mapped dimensions, and overlap seams, or the decision that the mode-complete reviewer alone covers the artifacts — and the lanes to run with the reason for each.
 
 ## What a Design Chunk Is
 
-A design chunk is a bounded review responsibility over one artifact seam, carried with the seam's complete text on both sides: every section that names the seam's obligation, realizing element, owners, edges, and proof seam, plus all governing sources whole. The coordinator lists the included sections; unlisted sections are outside the assignment and the receipt says so. A heading list or a paraphrase is never a seam. The seams are the ones the modes already judge:
+A design chunk is a bounded review responsibility over one artifact seam, carried with the seam's complete text on both sides: every section that names the seam's obligation, realizing element, owners, edges, and proof seam, plus all governing sources whole. The review lead lists the included sections; unlisted sections are outside the assignment and the receipt says so. A heading list or a paraphrase is never a seam. The seams are the ones the modes already judge:
 
 ```text
 three-artifact-design   Requirements -> Specification traceability

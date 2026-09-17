@@ -2,7 +2,7 @@
 
 Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and workspace-access encoding. Return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 
-This reference applies after `SKILL.md` selects a native subagent assignment. Sidekick/Advisor separate-conversation requirements take precedence over native model availability.
+This reference applies after `SKILL.md` selects a native Worker or Operator assignment, including a read-only review lane Worker. Persistent Sidekick, Advisor, and Review Sidekick relationships use their separate top-level route.
 
 ## Models
 
@@ -21,7 +21,7 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,terra,luna}`. Prefer short f
 
 ## Conversation History
 
-- Reviewers: only `fork_turns="none"`. A positive integer is inherited parent history, same as `all`. Dispatch is incomplete until the assignment contract records `history none` and `fork_turns="none"`.
+- Review lane Workers: only `fork_turns="none"`. A positive integer is inherited parent history, same as `all`. Dispatch is incomplete until the assignment contract records `history none` and `fork_turns="none"`.
 - No inherited parent history: set `fork_turns="none"`.
 - Full parent history (non-reviewers only): set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
@@ -38,8 +38,8 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
 
 ```json
 {
-  "message": "Review the bounded implementation packet and return candidate findings. Do not edit any file in the repo. Project tmp/ and system /tmp are allowed.",
-  "task_name": "implementation_review",
+  "message": "Read the assigned review lane and return candidate findings. Do not edit any file in the repo. Project tmp/ and system /tmp are allowed.",
+  "task_name": "implementation_review_lane",
   "model": "gpt-6-astra",
   "reasoning_effort": "medium",
   "fork_turns": "none"
@@ -49,5 +49,7 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
 ## Continue, Wait, and Interrupt
 
 Use the lifecycle tools advertised by the current host. On the collaboration surface exposing `followup_task`, use it to send a follow-up and start an idle worker turn; `send_message` delivers information without starting an idle turn. `wait_agent` waits for activity, `list_agents` reports liveness, and `interrupt_agent` stops the current turn while preserving the worker relationship. None of those alone proves assignment completion.
+
+When `wait_agent` is available and no independent useful work remains, call it immediately with the explicit `timeout_ms` selected by **Waiting**, within the host's advertised cap and real deadline. Do not replace an expired bounded wait with `list_agents` merely to ask whether a reply arrived. Rearm `wait_agent` when the assignment still warrants waiting; use `list_agents` for actual liveness or dropped-wait recovery evidence.
 
 Other hosts may expose `send_input`, `resume_agent`, or `close_agent`; use them only when actually advertised and follow their returned contracts. Do not invent missing tools or spawn a replacement merely because the worker is idle. Reuse the returned task/session identity. Display names and Router SessionRefs are separate from native tool IDs. A native child can have its own session ID without supporting Router direct input.

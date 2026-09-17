@@ -1,8 +1,8 @@
 # Coordination and Chunking
 
-This reference owns how the coordinator splits a review into chunks and which lanes it runs.
+This reference owns how the review lead splits a review into chunks and which lanes it runs.
 
-Expected inputs: the coordinator's own whole-map read (complete governing basis and diff) and the proof claims.
+Expected inputs: the review lead's own whole-map read (complete governing basis and diff) and the proof claims.
 
 Return: the chunk plan — each chunk's complete file set, mapped obligations, and overlap seams, or one chunk spanning the whole diff — and the lanes to run with the reason for each.
 

@@ -57,7 +57,7 @@ Return:
 
 ## Countercheck Lane
 
-When the parent dispatches the fresh-context countercheck (SKILL.md verify step), the lane's job is attempted disproof, not confirmation. Its packet carries the claim under check, the evidence question, and the anchors the parent relied on — never the parent's conclusion or reasoning. The lane independently reopens the primary anchors and searches for what contradicts, limits, or reinterprets them. Return `survived | refuted | unresolved | blocked` with the evidence found either way. Stop when the claim's primary anchors have been independently reopened and one contradiction search has run dry or landed.
+The assignment owner with coordination authority assigns or resumes an independent persistent review Sidekick for the countercheck. A bounded Worker returns the claim and source anchors to that owner; it does not create the review relationship. The review Sidekick's job is attempted disproof. The packet carries the claim under check, the evidence question, and the anchors the parent relied on, without the parent's conclusion or reasoning. The review Sidekick independently reopens the primary anchors and searches for what contradicts, limits, or reinterprets them. It may use review lanes permitted by its review workflow. Return `survived | refuted | unresolved | blocked` with the evidence found either way. Stop when the claim's primary anchors have been independently reopened and one contradiction search has run dry or landed.
 
 ## Parent Research Ledger
 

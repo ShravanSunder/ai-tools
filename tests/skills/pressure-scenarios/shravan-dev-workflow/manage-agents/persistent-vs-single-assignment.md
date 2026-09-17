@@ -5,35 +5,39 @@ skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: advisor|sidekick|delegate|operator
+expect_decision_regex: advisor|sidekick|worker|operator
 expect_proof_regex: (migration|sequencing|pipeline).{0,200}advisor|advisor.{0,200}(migration|sequencing|pipeline)
 expect_proof_regex: (refactor|repository.layer|sittings).{0,200}sidekick|sidekick.{0,200}(refactor|repository.layer|sittings)
-expect_proof_regex: 29.min|cache (ttl|ceiling)|cache.warm
-expect_proof_regex: last ping|ledger (row|entry)|ping.{0,160}(ledger|record)|(record|ledger).{0,160}ping|keep.alive
+expect_proof_regex: (same|one|reuse|reuses|reusing).{0,80}(session|conversation|thread|sidekick)|ledger
+expect_proof_regex: (no|not|never|avoid|do not|don.t|without).{0,60}(heartbeat|keep.alive|maintenance (ping|nudge|wake))|cache.{0,80}(unknown|unobserved|not observed|no guarantee)
 expect_proof_regex: (nightly|log|every night|sweep).{0,160}operator|operator.{0,160}(nightly|log|every night|each night)
 expect_proof_regex: (flaky|merge|payments).{0,200}(parent|inline|decide (this |it |)(myself|yourself|directly)|no (dispatch|subagent)|dispatch nobody)|(parent|inline).{0,120}(flaky|merge)
 expect_proof_regex: (watch|two.hour|deploy|canary).{0,200}(single.assignment|operator|bounded)|(single.assignment|operator).{0,160}(watch|two.hour|canary)
-expect_forbidden_regex: (flaky|merge decision).{0,80}(is|as|to) an? (advisor|delegate)
+expect_forbidden_regex: (flaky|merge decision).{0,80}(is|as|to) an? (advisor|worker|sidekick)
+
 ## Shortcut Temptation
 
 Five jobs arrive at once with no patterns named. The agent may treat every
 job as a Sidekick because the session is long, route a decision the parent
 can already make to an Advisor, keep a persistent Sidekick for a scriptable
 nightly loop instead of dispatching fresh Operators, or read a two-hour watch
-as persistent because it lasts a long time.
+as persistent because it lasts a long time. The cost question then tempts an
+invented keep-alive schedule.
 
 ## Pressures
 
 - The migration guidance question sounds one-time but the user says the
   migration runs for weeks — the persistence cut, not the topic, decides
-  Advisor vs Delegate.
+  Advisor vs Worker.
 - The flaky-test merge question sounds like it deserves a second opinion, but
   the evidence is already in front of the parent.
 - The nightly log sweep is persistent in schedule, tempting a persistent
   Sidekick for scriptable work.
-- A long refactor tempts a chain of Delegates instead of one warm Sidekick.
+- A long refactor tempts a chain of one-off Workers instead of one reused
+  Sidekick.
 - The two-hour deploy watch "feels ongoing", tempting a persistent pattern for
   a job that ends with one receipt.
+- "Cost-effective between sittings" invites a periodic ping the skill forbids.
 
 ## Prompt
 
@@ -61,10 +65,12 @@ tell me how you would keep those sessions cost-effective between sittings.
   provider, or runtime is named.
 - Job one is an Advisor: persistent guidance across components and systems,
   the parent stays the executor, and the relationship is expected to survive
-  individual assignments.
-- Job two is a Sidekick: persistent executed work with a ledger, kept
-  cache-warm between sittings (keep-alive ping within the 29-minute cache
-  ceiling, recorded on the ledger row).
+  individual assignments. An Advisor exists here because the user asked for
+  standing guidance.
+- Job two is a Sidekick: persistent executed work carried on one reused
+  session with a ledger row. Cost control is reusing that identity and not
+  replaying whole packets, not a periodic nudge; cache behavior is unknown
+  unless observed and a cold resume is accepted.
 - Job three is repeated single-assignment Operators, one fresh dispatch per
   night — persistent schedule does not make scriptable work a Sidekick.
 - Job four gets no subagent: the options and evidence are already in front of
@@ -75,11 +81,12 @@ tell me how you would keep those sessions cost-effective between sittings.
 
 ## Failure Signals
 
-- The merge decision is dispatched to an Advisor or Delegate.
-- The nightly sweep becomes a persistent Sidekick or a Delegate.
+- The merge decision is dispatched to an Advisor, Worker, or Sidekick.
+- The nightly sweep becomes a persistent Sidekick.
 - The two-hour watch becomes a Sidekick or any persistent pattern because it
   "runs long".
-- The migration guidance becomes a Sidekick that edits, or a single-assignment
-  Delegate despite the multi-week standing relationship.
-- Any persistent session is planned without ledger or keep-alive.
+- The migration guidance becomes a Sidekick that edits, or a one-off Worker
+  despite the multi-week standing relationship.
+- A persistent session is kept warm with an invented heartbeat, ping, or
+  keep-alive interval, or an interval is claimed to buy a cache hit.
 - A model or runtime is named before its pattern.

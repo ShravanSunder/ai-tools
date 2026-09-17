@@ -96,7 +96,7 @@ Severity is graded by effect on behavior, not by how wrong the text reads. `rout
 
 ## Parent Reduction
 
-Every field below is filled by the parent. `changed-file coverage` is derived from the review packet's changed-file list and parent-verified lane evidence.
+Every field below is filled by the review lead. `parent` means that immediate lead relative to a lane. `changed-file coverage` is derived from the review packet's changed-file list and review-lead-verified lane evidence.
 
 ```text
 review:

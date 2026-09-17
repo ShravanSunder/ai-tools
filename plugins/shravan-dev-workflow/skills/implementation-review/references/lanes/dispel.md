@@ -6,7 +6,7 @@ Expected inputs: every shared packet field from `lane-schema.md` with `chunk: wh
 
 Prerequisites: the governing basis and complete diff are inspectable; chunk receipts are terminal. An empty candidate set does not block this lane — the over-delivery sweep runs regardless.
 
-Maximum authority: fresh-context, read-only, candidate-only review. Read-only discovery commands and a tmp scratchpad only; no proof-generation commands, edits, or workflow decisions. Classifications are candidate evidence for the coordinator, never dispositions.
+Maximum authority: fresh-context, read-only, candidate-only review. Read-only discovery commands and a tmp scratchpad only; no proof-generation commands, edits, or workflow decisions. Classifications are candidate evidence for the review lead, never dispositions.
 
 ## Challenge the Candidates
 

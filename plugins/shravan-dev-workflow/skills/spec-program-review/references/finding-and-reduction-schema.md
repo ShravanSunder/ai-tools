@@ -1,6 +1,6 @@
 # Finding and Parent Reduction
 
-This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result.
+This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate review lead relative to a lane; the orchestrator later owns final disposition and delivery routing.
 
 ## Finding
 
@@ -34,7 +34,7 @@ Severity follows consequence, not tone:
 - minor: intended model lands with avoidable ambiguity/cost;
 - observation: no proven behavior effect.
 
-## Parent Verification
+## Review-lead verification
 
 For each candidate:
 
