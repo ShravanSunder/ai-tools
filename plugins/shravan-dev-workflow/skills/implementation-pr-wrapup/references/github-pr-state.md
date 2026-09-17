@@ -48,6 +48,7 @@ Invalidate or bypass cached state on:
 - new comments, reviews, or review threads;
 - check restarts or conclusion changes;
 - mergeability becoming unknown or stale;
+- PR body heading or HEAD/diff mismatch;
 - missing cached payload for a conditional response;
 - rate-limit reset boundaries or secondary-limit responses.
 

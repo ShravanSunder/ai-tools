@@ -4,18 +4,18 @@ Use bounded, API-budget aware monitoring for asynchronous PR state. Do not babys
 
 ## Loop Shape
 
-1. Fetch checks, comments, review threads, mergeability, and PR head SHA.
+1. Fetch checks, comments, review threads, mergeability, PR head SHA, and the current PR body.
 2. Classify blockers and new events.
 3. If blocked, fix/reply/ask/route or report blockers.
 4. If all gates first appear clear, wait for one full quiet poll.
 5. Re-fetch all gate state.
-6. Only then report readiness or proceed to merge authorization checks.
+6. Return current gate state to the parent. Do not report ready or merge-clear from this loop.
 
 ## Delegated Monitoring
 
 A Mini Operator may perform the loop's observation steps: fetch and classify state, wait for the bounded quiet interval, and re-fetch. It replaces the loop's action and readiness steps with decision packets to the main agent. Use `manage-agents` for its pattern, model, packet, receipt, and decision boundary.
 
-The monitor may fetch and classify checks, comments, thread state, mergeability, rate limits, and head SHA. It must not reply to comments, change code, resolve disputes, declare readiness, or merge. When the next action needs judgment, a code change, disputed-review handling, scope change, or merge authorization, it sends the main agent a decision packet and then waits, continues read-only monitoring, or stops exactly as its packet permits.
+The monitor may fetch and classify checks, comments, thread state, mergeability, rate limits, head SHA, and the current PR body text. It must not rewrite the body, judge Why / Special things to note / Change outline, reply to comments, change code, resolve disputes, declare ready, or merge. Return raw body and HEAD to the parent for the description predicate. When the next action needs judgment, a code change, disputed-review handling, scope change, or merge authorization, it sends the main agent a decision packet and then waits, continues read-only monitoring, or stops exactly as its packet permits.
 
 Completion: delegated monitoring returns assignment-bound state evidence, and every authority-bearing action remains with the main agent.
 
@@ -46,7 +46,8 @@ GitHub references:
 - failed or restarted check;
 - merge conflict or unknown mergeability;
 - PR head SHA changes;
-- local `HEAD` no longer matches PR head.
+- local `HEAD` no longer matches PR head;
+- current PR body is missing `## Why the change` / `## Special things to note` / `## Change outline` or no longer matches HEAD.
 
 Rate-limit resets and secondary-limit boundaries are API-budget events, not PR readiness events. They can invalidate or bypass cached proof and force backoff, but they do not reset readiness unless a PR lifecycle state also changed.
 

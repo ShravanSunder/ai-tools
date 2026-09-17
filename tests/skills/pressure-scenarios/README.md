@@ -84,6 +84,10 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-gh-watch-cadence-defaults.md` | Use a 120-second watch cadence by default and 240 seconds for slow jobs or systems; do not preserve shorter polling exceptions. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-file-list-changelog` | Refuse a file-list PR body; use Why / Special things to note / Change outline via Mini Worker. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-choose-to-views-omit` | Omit unused outline categories on a types-only diff. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-parent-does-not-inline-write` | Do not draft the outline in the parent or as Operator work. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-ready-blocked-on-file-list-body` | Green CI does not make a path-list PR body merge-ready. |
 | `manage-agents` | `manage-agents-queue-vs-steer.md` | Do not call ACPX `--no-wait` queueing immediate steering or treat queue acknowledgement as completion. |
 | `manage-agents` | `manage-agents-json-flows-exit-codes.md` | Do not parse ACPX JSON as a synthetic event envelope; handle raw ACP JSON-RPC, flows, and exit codes in automation. |
 | `manage-agents` | `manage-agents-session-ledger-reduction.md` | Do not treat multi-agent consensus as truth without session ledgers and parent-owned verification. |
@@ -122,7 +126,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implement-plan` | `implement-plan-block-plan-only-improvement-plan` | Recognize plan-improve-repo as a canonical origin while preserving its direct plan-only terminal. |
 | `implement-plan` | `implement-plan-eligible-disjoint-delegation` | Permit only plan-proven disjoint delegation through manage-agents without default controller machinery. |
 | `implement-plan` | `implement-plan-scoped-slice-proof-report` | Bind slice proof to the exact tuple while keeping incomplete full and integration rows open. |
-| `implementation-pr-wrapup` | `implementation-pr-wrapup-missing-implementation-review` | Stop PR readiness when meaningful implementation lacks current independent review coverage. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-missing-implementation-review` | Do not block wrap-up ready on missing independent review; wrap-up does not claim it reviewed the diff. |
 | `implementation-handoff` | `implementation-handoff-context-free-canonical-plan` | Preserve exact plan authority and bound implementation proof in the actual context-free prompt. |
 | `plan-improve-repo` | `plan-improve-repo-direct-authority-boundary` | Keep admitted improvement findings separate from direct reviewed-design planning. |
 | `plan-improve-repo` | `plan-improve-repo-validation-preserves-plan-only` | Keep current-state validation separate from delivery-intent upgrades and execution. |
