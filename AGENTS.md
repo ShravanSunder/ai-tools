@@ -39,7 +39,7 @@ The user has always granted, and continues to grant, standing authority to use A
 
 `AGENTS.md` is the repo operating map for skill work. It should tell agents how to work here, which skill owns the next decision, and where deeper instructions live. It should not duplicate the full manuals from meta-skills.
 
-Home: `/Users/shravansunder/dev/memory-logs/skills/`
+Home: `~/dev/memory-logs/skills/` (clone of https://github.com/ShravanSunder/memory-logs)
 
 | Need | Write here |
 | --- | --- |

@@ -2,6 +2,8 @@
 
 Status: **WIP, not accepted to implement.** Research from 2026-09-15 session mining. No skill edits, plugin bump, cache refresh, or `my_agents.md` change is authorized by this document.
 
+Session IDs and host mapping: `~/dev/memory-logs/skills/authoring/2026-09-15-collaboration-listen-and-cli-dx/session-evidence.md`.
+
 Success when accepted:
 
 - Idle on a shared board thread uses `board thread listen` / `board thread wait`, not `message list` polls, sleep loops, or repeating wakes. The user does not have to type “use listen.”
