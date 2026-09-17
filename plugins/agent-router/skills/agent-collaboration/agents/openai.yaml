@@ -1,4 +1,0 @@
-interface:
-  display_name: "Collaboration: Agents"
-  short_description: "Coordinate sessions, boards, wakes, and schedules"
-  default_prompt: "Use $agent-collaboration to coordinate sessions, participate in message boards, and inspect the outcome."

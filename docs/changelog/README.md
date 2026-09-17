@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-17 Agent Router agent-collaboration 0.1.28 sync](2026-09-17-agent-router-0-1-28-skill-sync.md)
 - [2026-09-16 Persistent coordination and review](2026-09-16-persistent-coordination-and-review.md)
 - [2026-09-15 manage-agents Terra role scope](2026-09-15-manage-agents-terra-role-scope.md)
 - [2026-09-15 Collaboration: Agents display name](2026-09-15-collaboration-agents-display-name.md)
@@ -28,6 +29,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-17 Agent Router agent-collaboration 0.1.28 sync](2026-09-17-agent-router-0-1-28-skill-sync.md)
 - [2026-09-16 Persistent coordination and review](2026-09-16-persistent-coordination-and-review.md)
 - [2026-09-15 manage-agents Terra role scope](2026-09-15-manage-agents-terra-role-scope.md)
 - [2026-09-15 Collaboration: Agents display name](2026-09-15-collaboration-agents-display-name.md)
