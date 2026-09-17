@@ -4,13 +4,13 @@ Review the intended skill design before implementation. This reference judges wh
 
 Return a spec-review verdict, blocker overrides, rubric evidence, accepted and rejected findings, first required revision, and proof or retest implication.
 
-The persistent independent review lead executes this stage and returns its result to the coordinator for acceptance.
+The persistent independent review lead executes this stage and returns its result to the orchestrator for acceptance.
 
 ## Spec Artifact
 
 A proposal that meets none of the doc predicates below stays conversational: it lives in the run's messages and the review packet carries it.
 
-IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, the author or coordinator writes it as a spec doc before commissioning the review lead and makes the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The independent lead reviews the provided artifact and reports a missing required spec as blocked; it does not author the target. The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
+IF the spec spans more than one update run, carries user decisions a later run must honor, or must survive a session boundary, the author or orchestrator writes it as a spec doc before commissioning the review lead and makes the doc the reviewed artifact; the review packet's `review target` carries the doc's path and revision. Home: the repo's skill-work wip location (`docs/wip/skills-authoring/` here). The independent lead reviews the provided artifact and reports a missing required spec as blocked; it does not author the target. The doc is working memory that outlives the conversation, not durable truth: after its last run lands, the wip folder's own rules and `docs-maintain` own its disposition. The doc is one draft — acceptance covers it as a whole — and each run in its sequence names exactly one skill target; a run naming more is split before acceptance. It carries:
 
 ```text
 targets and owner plugin, with the runs in sequence
@@ -72,7 +72,7 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 
 ## Reduction
 
-The executing review lead reduces candidate findings into the spec-review result before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Accepted findings that remain inside the settled mental model return to the design step for at most one remediation. A finding that breaks a load-bearing assumption or exposes unmade owner meaning stops with the failed assumption, evidence, consequence, and exact owner; do not force it through remediation. The same lead verifies corrected anchors against the original bounded findings and returns its result to the coordinator, which accepts the proposal without another reviewer dispatch. `significant-rewrite`, `reject-or-restart`, an expanded correction, or uncertain effect stops `review-permission-required` unless the user explicitly authorizes another review.
+The executing review lead reduces candidate findings into the spec-review result before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Accepted findings that remain inside the settled mental model return to the design step for at most one remediation. A finding that breaks a load-bearing assumption or exposes unmade owner meaning stops with the failed assumption, evidence, consequence, and exact owner; do not force it through remediation. The same lead verifies corrected anchors against the original bounded findings and returns its result to the orchestrator, which accepts the proposal without another reviewer dispatch. `significant-rewrite`, `reject-or-restart`, an expanded correction, or uncertain effect stops `review-permission-required` unless the user explicitly authorizes another review.
 
 ### Acceptance Binding
 

@@ -1,6 +1,6 @@
 # Finding and Parent Reduction
 
-This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate review lead relative to a lane; the coordinator later owns final disposition and delivery routing.
+This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate review lead relative to a lane; the orchestrator later owns final disposition and delivery routing.
 
 ## Finding
 

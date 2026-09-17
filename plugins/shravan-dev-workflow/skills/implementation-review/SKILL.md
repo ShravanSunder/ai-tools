@@ -5,9 +5,9 @@ description: Use when independently reviewing implemented code, proof, a branch 
 
 # Implementation Review
 
-The first review dispatch creates a different-lineage persistent Review Sidekick with no author or coordinator history. That review lead reads every governing source and the complete diff, decides which lane Workers to run and in what order, hands them complete files, quoted rails, and deliberate overlap, then verifies their candidate findings against those rails. The coordinator disposes and routes the lead's assessment; it does not repeat the whole-target reading or detailed reduction. The bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times.
+The first review dispatch creates a different-lineage persistent Review Sidekick with no author or orchestrator history. That review lead reads every governing source and the complete diff, decides which lane Workers to run and in what order, hands them complete files, quoted rails, and deliberate overlap, then verifies their candidate findings against those rails. The orchestrator disposes and routes the lead's assessment; it does not repeat the whole-target reading or detailed reduction. The bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times.
 
-In this skill, `parent` means the immediate review lead relative to a lane. The coordinator retains final disposition; the review lead remains independent of the author and retains its own review history through corrections.
+In this skill, `parent` means the immediate review lead relative to a lane. The orchestrator retains final disposition; the review lead remains independent of the author and retains its own review history through corrections.
 
 The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
@@ -21,7 +21,7 @@ The rails are the confirmed requirements, Specification obligations, Program Des
 
 Completion: classification, governing sources, base and reviewed commits, diff and proof boundary, remediation-count evidence (or the recovery authorization and missing-evidence reason), and `admit | blocked-input | remediation-limit-reached` are stated.
 
-The caller completes admission. A non-substantial, blocked, or remediation-limit exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage Review Sidekick with no author or coordinator history. The assigned lead executes this method and never commissions another lead.
+The caller completes admission. A non-substantial, blocked, or remediation-limit exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage Review Sidekick with no author or orchestrator history. The assigned lead executes this method and never commissions another lead.
 
 ## Read the Whole Map
 
@@ -54,7 +54,7 @@ Silence is `no-receipt` after explicit follow-up, never a clean review. `partial
 
 ## Reduce on the Rails
 
-MUST load `references/finding-and-reduction.md` and return every candidate's disposition with its quoted rail anchor, merged duplicates, scope effects, and the review result. Here and in that reference, `parent` means the immediate review lead relative to a lane, never the author or coordinator.
+MUST load `references/finding-and-reduction.md` and return every candidate's disposition with its quoted rail anchor, merged duplicates, scope effects, and the review result. Here and in that reference, `parent` means the immediate review lead relative to a lane, never the author or orchestrator.
 
 Before accepting any finding, open the governing clause it claims to serve and quote it; ask whether the confirmed obligations still hold without the questioned mechanism, and whether the proposed mechanism is the smallest change that serves the clause or one of several. A reviewer proposal that adds unrequested scope is rejected as scope expansion — never escalated to the owner as if a decision were owed. An unrequested element the diff already delivers gets removal or an owner `decision-needed`, never "well built." A finding that breaks a load-bearing assumption of the governing design stops and returns to the user with the failed assumption, evidence, and consequence.
 

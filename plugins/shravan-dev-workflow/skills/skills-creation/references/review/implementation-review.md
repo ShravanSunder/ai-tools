@@ -64,7 +64,7 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 
 ## Reduction
 
-The executing review lead verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. The coordinator retains final disposition and author acceptance.
+The executing review lead verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. The orchestrator retains final disposition and author acceptance.
 
 Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation`; that is the live owner.
 

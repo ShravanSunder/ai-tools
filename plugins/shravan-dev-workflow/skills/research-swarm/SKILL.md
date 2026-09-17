@@ -11,7 +11,7 @@ Turn fuzzy research into sharp questions, gather evidence through bounded source
 
 - Stay read-only against product code unless the user explicitly switches to implementation.
 - Research does not become design, spec, plan, or implementation by momentum.
-- Research that exposes a material design decision returns its evidence to the coordinator. Routine synthesis remains within the assigned Worker, research Sidekick, or implementation Sidekick's research assignment.
+- Research that exposes a material design decision returns its evidence to the orchestrator. Routine synthesis remains within the assigned Worker, research Sidekick, or implementation Sidekick's research assignment.
 - When evidence feeds authoritative Why/What, recommend `spec-design`; when it feeds structural How against settled obligations, recommend `program-design`; when a current ready three-artifact design needs planning, recommend `plan-implementation`; when an exact ready canonical plan carries `pr-ready-unmerged` delivery context, recommend `implement-plan`; when implemented work and proof need independent judgment, recommend `implementation-review` for general-domain work or `skills-creation` for a runtime skill package. Research preserves evidence; it does not synthesize those artifacts or perform their review.
 - Start with the local system when the research affects a local repo: current code, docs, specs, plans, runbooks, and live file tree beat memory and older notes.
 - Convert the ask into 1-5 researchable questions before spawning lanes. Name what would support, refute, or complicate each question.

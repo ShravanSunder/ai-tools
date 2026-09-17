@@ -58,7 +58,7 @@ Integrate only when every named prerequisite and the slice-local proof are green
 
 Inspect the accepted finding, its source anchors, parent disposition, exact route, governing plan obligation, and prior proof before treating remediation as executable work. An implementation-owned correction changes code, tests, fixtures, or implementation-proof evidence inside approved meaning and write scope. A finding that changes an obligation, observable contract, owner, interface, state/failure policy, sequence, dependency, collision, proof seam, or authority routes to the applicable design or originating-plan owner instead.
 
-For an implementation-owned finding, select one bounded corrective slice, name its allowed writes, and map every affected obligation to fresh focused, integration/manual, and quality proof as applicable. Do not resolve the finding from reviewer prose or reuse proof produced before the correction. In an orchestrated project flow, return affected proof through coordinator disposition to the same review Sidekick, which refreshes affected coverage. Stop before launching that review.
+For an implementation-owned finding, select one bounded corrective slice, name its allowed writes, and map every affected obligation to fresh focused, integration/manual, and quality proof as applicable. Do not resolve the finding from reviewer prose or reuse proof produced before the correction. In an orchestrated project flow, return affected proof through orchestrator disposition to the same review Sidekick, which refreshes affected coverage. Stop before launching that review.
 
 Remediation admission is complete when the accepted finding and parent route are source-backed, the correction stays inside approved meaning, the affected-proof set is explicit, and the next action is either the bounded correction or one exact semantic/planning route.
 
@@ -72,7 +72,7 @@ reversible drift
 design break
   Requirements, observable contract, structural ownership/interface/state,
   failure, concurrency, trust, compatibility, or proof seam is wrong or absent
-  -> return to the coordinator, which routes to spec-design or program-design as the affected meaning requires
+  -> return to the orchestrator, which routes to spec-design or program-design as the affected meaning requires
 
 plan defect
   slice, sequence, dependency, collision, write scope, or proof mapping is wrong
@@ -89,7 +89,7 @@ evidence gap
 
 Do not call a change reversible when it moves ownership, changes a public contract or data format, writes migration state, weakens proof, or becomes a prerequisite for other work before correction.
 
-Coordinator feedback may inform execution, but neither it nor partial direction supplies absent architecture or changes required plan meaning. Return those gaps to the coordinator or originating-plan owner.
+Orchestrator feedback may inform execution, but neither it nor partial direction supplies absent architecture or changes required plan meaning. Return those gaps to the orchestrator or originating-plan owner.
 
 ## Report What Changed and What Was Proven
 
@@ -109,4 +109,4 @@ blockers and exact routes:
 proof freshness:
 ```
 
-Complete when: the pre-edit verdict was `ready`; each claimed row has fresh fitting evidence; integration gates ran at the first interaction; every surprise has one classification and owner; incomplete rows remain explicit; every slice report returned to its assigning implementer; and completed development returned its plan record, governing basis, delivery context, and completion report to the coordinator's assessment.
+Complete when: the pre-edit verdict was `ready`; each claimed row has fresh fitting evidence; integration gates ran at the first interaction; every surprise has one classification and owner; incomplete rows remain explicit; every slice report returned to its assigning implementer; and completed development returned its plan record, governing basis, delivery context, and completion report to the orchestrator's assessment.
