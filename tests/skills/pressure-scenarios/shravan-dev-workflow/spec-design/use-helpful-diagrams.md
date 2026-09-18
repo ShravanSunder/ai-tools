@@ -26,6 +26,7 @@ Write the specification from this complete inline governing source, confirmed by
 ## Expected Compliant Behavior
 
 - Chooses each view only when it answers a specific reader question.
+- Defines the entities the obligations name (submitted work, its accepted or rejected result, its completed or failed status) and, if it shows an entity map, keeps it to identity rules, relationships, and observable states with no internal store or component.
 - Keeps direct-user journeys separate when their jobs and pain differ.
 - Shows external consumers, observable surfaces, contracts, and relevant negative space around one opaque system in the context view.
 - Uses a requirements-coverage view to expose need-to-proof links and gaps.

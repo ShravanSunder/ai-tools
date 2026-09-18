@@ -199,8 +199,8 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "chooses-views-by-reader-question",
-        requirement: "Selects journey, context, and requirements-coverage views only when each answers a specific reader question and keeps different direct-user jobs distinct.",
-        failureExample: "Uses one overloaded diagram or one generic journey for every purpose.",
+        requirement: "Selects entity, journey, context, and requirements-coverage views only when each answers a specific reader question and keeps different direct-user jobs distinct; if it defines entities derivable from the source (for example submitted work with its accepted/rejected result and completed/failed status), any entity map shows only their identity rules, relationships, and observable states, or it records the identity gap the source leaves, with no internal store or component in the map.",
+        failureExample: "Uses one overloaded diagram or one generic journey for every purpose, draws the entity map with a database, queue, or worker in it, or invents identity rules the source does not settle.",
       },
       {
         name: "keeps-context-external",
@@ -211,6 +211,36 @@ export const skillPressureCaseDefinitions = [
         name: "checks-meaning-and-readability",
         requirement: "Each shown diagram actually preserves its required meaning, exposes relevant gaps or negative space, and remains readable. Judge the shown result itself; do not require a self-reported verification recital.",
         failureExample: "Shows valid-looking syntax or boxes that omit required meaning, hide gaps, or are difficult to follow.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-design-define-entities-before-obligations",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-design/references/domain-entities.md",
+    ],
+    maximumToolCalls: 45,
+    semanticCriteria: [
+      {
+        name: "states-an-identity-rule-for-each-entity",
+        requirement: "Defines at least Account, Ticket, and Reminder with stable identifiers before or alongside the normative statements, and bounds what counts as a ticket change (status or due-date change only) either as its own entity or as an explicitly scoped transition of Ticket. Where the source settles what makes two instances the same it states that rule (Account by the tenant account ID on events; Reminder by its Ticket plus the Hold-with-due-date occurrence that created it, so a re-hold is a new Reminder); where the source does not settle it, it records the exact same-instance gap instead of inventing or asking. The re-hold case must be decidable from the definitions.",
+        failureExample: "Describes each noun in a sentence (\"the pending wait for a ticket\") with no identity rule and no recorded gap, leaves the re-hold case undecidable, never bounds which ticket changes count, or returns decision-needed asking the owner to define the entities.",
+      },
+      {
+        name: "enumerates-reminder-states-relationships-and-invariants",
+        requirement: "Names the observable states a Reminder passes through, covering at least a pending state, the due-date-moved transition, the cancelled outcome, and the completed outcome under whatever names the author chooses; states the relationships with cardinality (a Reminder belongs to one Ticket, a Ticket belongs to one Account, at most one pending Reminder per Ticket); and states the invariants the source implies (a Reminder never acts across Accounts; a Reminder is pending only while its Ticket is on Hold with a due date; only status and due-date changes create, move, or cancel it).",
+        failureExample: "Expresses eligibility only as conditions inside the MUST statements, with no named states, cardinalities, or invariants attached to the entities themselves.",
+      },
+      {
+        name: "writes-obligations-over-defined-entities",
+        requirement: "Every normative statement uses the defined entities with the meaning the source settles: account is the tenant on the event, not the agent login; reminder is the pending wait tied to one Hold occurrence, not a notification; ticket change is a status or due-date change only. No obligation uses an undefined or second meaning.",
+        failureExample: "An obligation treats account as the agent login, reminder as the notification, or ticket change as any Zendesk update, or a MUST names a noun the entity section never defined.",
+      },
+      {
+        name: "keeps-definitions-implementation-free-and-holds-them",
+        requirement: "Entity definitions contain no schemas, types, tables, package names, or event payload fields; the response names binding entities to those homes as program-design's work; and it explains in ordinary language why the Specification carries the definitions even though the owner called the words obvious, without re-asking any settled meaning or routing to pathfinding.",
+        failureExample: "Defines Reminder as a Zod schema or event payload, or complies with \"the words are obvious\" and omits definitions, or re-interviews the owner about meanings the source already settles.",
       },
     ],
   },
