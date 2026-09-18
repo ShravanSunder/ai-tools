@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations or its journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How, review-only requests, implementation planning, a full Requirements through Specification, Program Design, and review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations, the domain entities those obligations are written over (canonical terms, identity, relationships, invariants, observable states), or its entity, journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How including binding entities to packages, schemas, types, or wire shapes, review-only requests, implementation planning, a full Requirements through Specification, Program Design, and review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
 ---
 
 # Spec Design
@@ -31,13 +31,14 @@ It turns evidence and authorized decisions into a contract that another capable 
 consumer and problem
   -> current observable reality
   -> desired outcome
+  -> domain entities the obligations are written over
   -> normative requirement
   -> observable contract or constraint
   -> failure expectation
   -> proof obligation
 ```
 
-Source authority establishes which meaning is legitimate; it supports the contract rather than replacing it as the primary model. Every `MUST` needs a legitimate basis. Every material requirement needs an observable consequence. Unresolved owner meaning routes through `discuss-pathfinding`; internal component structure stays downstream in `program-design`.
+Source authority establishes which meaning is legitimate; it supports the contract rather than replacing it as the primary model. Every `MUST` needs a legitimate basis. Every material requirement needs an observable consequence. An obligation is a sentence about nouns, so the Specification defines those nouns — what makes two instances the same, how they relate, which states they pass through — before it writes obligations over them. Unresolved owner meaning routes through `discuss-pathfinding`; internal component structure and the binding of entities to packages, schemas, and wire shapes stay downstream in `program-design`.
 
 ## Boundary
 
@@ -46,6 +47,7 @@ This skill admits or materializes durable Requirements from already-settled auth
 - Requirements: affected people, authorized needs, desired outcomes, priorities, limits, and non-goals;
 - Specification: normative observable obligations traced to the Requirements identity;
 - problem, consumers, and current observable behavior;
+- domain entities: canonical terms with stable `E` identifiers, identity rules, relationships, invariants, and observable states that obligations are written over;
 - source authority and important user decisions;
 - normative requirements and traceability;
 - public or externally observable UI, API, CLI, data, configuration, and operational contracts;
@@ -53,7 +55,7 @@ This skill admits or materializes durable Requirements from already-settled auth
 - proof modalities required by material obligations;
 - the specification artifact and author self-check.
 
-It does not elicit or confirm genuinely unwritten owner meaning and does not choose components, internal owners, dependency direction, state storage, call graphs, recovery mechanisms, task order, files, or exact validation commands. Route unwritten owner meaning to `discuss-pathfinding`, structural How to `program-design`, review-only work to `spec-program-review`, and one named runtime-skill package to `skills-creation`.
+It does not elicit or confirm genuinely unwritten owner meaning and does not choose components, internal owners, dependency direction, state storage, call graphs, recovery mechanisms, task order, files, or exact validation commands, and it does not bind an entity to a package, schema, type, table, or wire shape. Route unwritten owner meaning to `discuss-pathfinding`, structural How and entity binding to `program-design`, review-only work to `spec-program-review`, and one named runtime-skill package to `skills-creation`.
 
 Routing cases:
 
@@ -145,11 +147,13 @@ IF an external platform, protocol, library, policy, or empirical claim could cha
 
 Completion: the Requirements identity is qualifying, reused or materialized without duplication, and separate from the planned Specification identity; artifact boundary, consumers, decision authority, source classes, confirmed goal boundary, accepted-requirements recovery, and authority conflicts are explicit.
 
-### 2. Model the problem before proposing obligations
+### 2. Model the problem and its domain before proposing obligations
 
 Name what happens today, who bears the cost, where it is observable, what proves it, and what would remain wrong if the requested feature existed only nominally. Keep implementation root cause separate from the observable problem.
 
 Using the already-loaded `references/authority-and-problem-framing.md`, complete problem modeling and return its second result: the authority/problem model with current reality, desired gap, important decisions, conflicts, and evidence gaps. Retain it in working state for the artifact and terminal return.
+
+MUST load `references/domain-entities.md` and return the entity table — stable `E` identifier, canonical term, identity rule, relationships with cardinality, invariants, observable states, the source terms it canonicalizes, and the authorizing U rows when present or otherwise the settling source or decision record — with every slot filled from the sources or marked as an exact gap, plus undefined-noun gaps and any term routed to `discuss-pathfinding` with its exact same-instance question. Define an entity when the settled sources let two readers decide the same-instance question the same way; route a term only when they cannot. Deriving an identity rule or state from settled owner behavior statements is Specification authoring, not the Requirements inference that `references/authority-and-problem-framing.md` forbids. Three rationalizations leave nouns undefined and each is rejected here: "the words are obvious", "the data model is design's problem", and "the source did not define enough entity semantics, so I must ask" — the last is a stop only when two readers would answer differently. The test is whether a stranger reading only the Specification can decide every same-instance and state question the obligations depend on. An entity definition names no type, schema, table, package, or payload field; that binding is `program-design`'s work.
 
 When revising existing artifacts, classify the requested correction before editing: Requirements, Specification, Program Design, or a named combination. Removing unrelated concurrency, cleanup, reporter, or lifecycle machinery is a Program Design correction unless the authorized owner also changes users, outcomes, requirements, scenarios, defaults, observable obligations, or proof obligations. A Program Design-only correction routes to `program-design` and does not authorize narrowing the governing Requirements or Specification. When upstream meaning and Program Design both change, settle Requirements and Specification first.
 
@@ -159,7 +163,7 @@ Using the comparison taught by `references/authority-and-problem-framing.md`, bu
 
 Reuse the existing identities and coverage links for:
 
-- affected classes and stable U/P/O/R/C/V identities;
+- affected classes and stable U/E/P/O/R/C/V identities;
 - priorities and assigners;
 - named variants such as skills or scenarios;
 - customer defaults;
@@ -171,7 +175,7 @@ Produce inspectable per-item coverage that names each accepted identity, authori
 
 Re-anchor before deriving or revising normative requirements: compare the proposed meaning with the confirmed goal, accepted requirements, permitted and protected systems, owner-set package limits, non-goals, and existing foundation from the confirmed goal boundary. Return `aligned` or the exact mismatch. On mismatch, stop normative authoring and return the existing owner decision, or use `discuss-clarify-mental-models` when the shared model itself drifted. Keep the comparison in returned workflow state, not durable specification prose.
 
-Completion: the current/desired gap is inspectable, each causal claim is evidenced or labeled as a hypothesis, accepted-requirements coverage is inspectable when applicable, and the Re-anchor comparison is aligned or has returned the exact mismatch and owner route.
+Completion: the current/desired gap is inspectable, each causal claim is evidenced or labeled as a hypothesis, every noun the desired outcomes name is a defined entity with an `E` identifier and every slot filled or marked as an exact gap, accepted-requirements coverage is inspectable when applicable, and the Re-anchor comparison is aligned or has returned the exact mismatch and owner route.
 
 ### 3. Define outcomes, non-goals, and semantic slices
 
@@ -191,13 +195,13 @@ Completion: each load-bearing branch has durable authority evidence, is explicit
 
 ### 5. Derive normative requirements
 
-MUST load `references/requirements-and-traceability.md` to construct requirements, repair vague or task-shaped statements, and return requirement-to-problem/outcome/basis coverage.
+MUST load `references/requirements-and-traceability.md` with the stage-2 entity table and undefined-noun gaps to construct requirements over defined entities, repair vague or task-shaped statements, and return requirement-to-entity/problem/outcome/basis coverage plus any entity no requirement uses.
 
-For substantial or uncertain work, stage source notes, alternative wording, prototype views, and temporary U→P→O→R→C→V comparisons in private working state, the repository's ignored scratch convention, or `tmp/design-workflows/<date>-<slug>/`. Quick work keeps the comparison in working state. Scratch never owns normative meaning or becomes required reading.
+For substantial or uncertain work, stage source notes, alternative wording, prototype views, and temporary U→E→P→O→R→C→V comparisons in private working state, the repository's ignored scratch convention, or `tmp/design-workflows/<date>-<slug>/`. Quick work keeps the comparison in working state. Scratch never owns normative meaning or becomes required reading.
 
 For each requirement, contract, failure obligation, constraint, and proof obligation, name the confirmed need it serves and what becomes observably false or unverifiable if removed. Owner-set repository or package limits may constrain implementation without becoming normative product behavior. Delete an element that changes neither the confirmed outcome nor a necessary truth boundary; a template slot does not authorize adjacent work.
 
-Completion: every goal is covered, every requirement has a basis and observable pass/fail consequence, and two capable implementers would not need to invent different product behavior.
+Completion: every goal is covered, every requirement has a basis and observable pass/fail consequence, every normative statement names only defined entities — an obligation over an undefined noun routes back to stage 2, and an entity no requirement uses is pruned or its gap recorded — and two capable implementers would not need to invent different product behavior.
 
 ### 6. Specify observable contracts and negative space
 
@@ -223,7 +227,7 @@ Completion: every material obligation names evidence that could prove it, and no
 
 ### 9. Author the smallest coherent artifact
 
-Apply the Required Why/What Views predicates. For each selected view, state the reader question it answers: whose job and pain must be understood, who interacts with the opaque system and across which observable surfaces, or which need-to-proof link is missing. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
+Apply the Required Why/What Views predicates. For each selected view, state the reader question it answers: whose job and pain must be understood, who interacts with the opaque system and across which observable surfaces, which nouns the obligations are about and what makes two instances the same, or which need-to-proof link is missing. IF one or more predicates fire, load `../../shared-references/diagram-rendering-and-fallbacks.md` before the local artifact reference to render the selected views and return the selected medium, fallback decision, semantic-preservation result, and visual-check result for each firing.
 
 Rejecting a requested all-in-one or internally focused diagram does not complete the selected views and does not require owner approval of their presentation. Render the clearest valid replacements that preserve the required meaning. In a read-only or chat-only run, show those views in the response; describing the diagrams without producing and checking them leaves the view work incomplete.
 
@@ -267,7 +271,8 @@ Use a view only when it makes an important Why/What relationship easier for a hu
 | --- | --- | --- |
 | journey map | per normative-eligible load-bearing direct-user class when the job has a material sequence or pain relationship and the view makes that relationship easier to confirm or correct | one view for that class exposing user-worded steps, observed pain and evidence, desired observable difference, and cited U rows; reuse or link a current requirements-level sequence when it already exposes these fields, and keep the user-requirements source as the normative home |
 | context diagram | two or more external consumers or observable surfaces exist | consumers and stakeholders, observable surfaces/contracts, relevant negative space, and the system as one opaque node |
-| requirement coverage table | multiple or interacting material requirements exist, or their U/P/O/R/C/V trace is non-obvious | U when present, P, O, R, C, and V links plus gaps; keep one simple trace inline instead of creating a table |
+| entity map | the Specification defines one or more entities | entities with `E` identifiers, identity rules, domain relationships with cardinality (belongs-to, references — not component owners), and observable states; the entity table remains the normative home and the map shows no package, schema, type, or store |
+| requirement coverage table | multiple or interacting material requirements exist, or their U/E/P/O/R/C/V trace is non-obvious | U when present, E, P, O, R, C, and V links plus gaps; keep one simple trace inline instead of creating a table |
 
 The first internal component, owner, dependency edge, state store, or enforcement point inside the system crosses into `program-design`. Diagrams may explain relationships but may not be the only home of normative meaning.
 
@@ -286,10 +291,11 @@ Do not return `locally-ready` while any of these hold:
 - Requirements and Specification are collapsed into one artifact, including a combined `Requirements/spec` label or a Requirements artifact used as the Specification;
 - settled authoritative Requirements are duplicated instead of reused, or a normalized Requirements artifact invents or confirms missing owner meaning instead of routing it through `discuss-pathfinding`;
 - a normative claim lacks authority or an explicit decision gap;
+- a normative requirement names an entity the Specification does not define; an entity lacks an identity rule that decides the hardest case the source raises, or leaves a relationship, invariant, or observable-state slot neither filled nor marked as an exact gap; or an entity is defined in implementation terms such as a type, schema, table, package, or payload field;
 - a user-facing normative requirement is based on a row whose authority state is not `authorized`, or normative-eligible user-requirements rows cannot be traced by stable U identifier;
 - the goal boundary lacks explicit confirmation or correction by the authorized owner, acceptable outcome-level evidence, or the specification expands its goal, affected classes, missing outcomes, permitted/protected systems, owner-set package limits, non-goals, or acceptable complexity without a new owner decision;
 - the accepted requirements set cannot be recovered from the current owner-confirmed source or last inspectable owner-accepted baseline, conflicts with those sources, lacks inspectable per-item coverage, or loses an item without owner-authorized supersession;
-- the problem, outcome, requirement, contract/failure, and proof chain cannot be traced;
+- the problem, entity, outcome, requirement, contract/failure, and proof chain cannot be traced;
 - unresolved product meaning is disguised as an assumption;
 - a returned gap omits an authorized observable outcome, or `decision-needed` is based only on whether implementation or incident mechanisms should be retained or made normative;
 - a material non-goal is omitted, or an applicable cross-cutting quality lacks an observable obligation or constraint or a reasoned not-applicable result;

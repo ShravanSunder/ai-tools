@@ -20,6 +20,10 @@ Program Design
 
 Nothing downstream may silently change the meaning owned upstream. Program Design may expose a missing or changed observable obligation, but that gap returns to `spec-design`. Specification may expose unmade owner meaning, but that gap returns through `discuss-pathfinding` to the phase that owns it.
 
+## The Specification Owns the Nouns
+
+Obligations are sentences about entities. The Specification defines each entity its obligations name — a stable `E` identifier, canonical term, identity rule (what makes two instances the same), relationships with cardinality, invariants, and observable states — without naming any type, schema, table, package, or wire shape. Requirements surfaces the owner's words; Program Design consumes the `E` identifiers as fixed input and owns their structural realization in its own workflow. A missing or wrong entity discovered downstream is a `specification-gap` returned to `spec-design`, never patched in design. The identity chain is `U -> E -> P -> O -> R -> C -> V`.
+
 ## Keep The Identities Separate
 
 For substantial file-backed work, all three concepts have separately identifiable homes:
@@ -75,4 +79,4 @@ Pathfinding returns clarified meaning to the recorded return owner. It does not 
 
 ## Downstream Handoffs
 
-`program-design` consumes distinct Requirements and Specification identities plus their current phase state. Three-artifact design review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records, not copied companion artifacts.
+`program-design` consumes distinct Requirements and Specification identities plus their current phase state, including the Specification's `E` entity identifiers. Three-artifact design review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records and the entity identifiers, not copied companion artifacts.

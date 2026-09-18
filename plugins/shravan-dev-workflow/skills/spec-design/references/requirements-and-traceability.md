@@ -2,7 +2,7 @@
 
 This reference owns construction and repair of normative requirements plus coverage from problem and outcome to the proof-obligation slot. `proof-obligations.md` alone selects the proof modality.
 
-Expected inputs: authority/problem model, goals/non-goals, resolved decisions, candidate constraints, and current requirement text.
+Expected inputs: authority/problem model, the stage-2 entity table and undefined-noun gaps, goals/non-goals, resolved decisions, candidate constraints, and current requirement text.
 
 Return: requirement inventory and coverage map, including exact gaps or conflicts.
 
@@ -12,7 +12,7 @@ Each material requirement carries:
 
 ```text
 stable identifier
-normative statement
+normative statement, written over defined entities (E identifiers)
 basis / authority source
 consumer or affected boundary
 observable success condition
@@ -73,17 +73,19 @@ When normative-eligible user-requirements rows exist, construct the chain from t
 
 ```text
 user or stakeholder need U1
-  -> problem P1
-      -> outcome O1
-          -> requirement R1
-              -> observable contract C1
-                  -> proof-obligation slot V1
+  -> entities E1..En the obligations name
+      -> problem P1
+          -> outcome O1
+              -> requirement R1
+                  -> observable contract C1
+                      -> proof-obligation slot V1
 ```
 
-The U identifier resolves to the source row; do not restate or fork the producer's need. Preserve stakeholder U roots even when no direct-user journey exists.
+The U identifier resolves to the source row; do not restate or fork the producer's need. Preserve stakeholder U roots even when no direct-user journey exists. Each requirement cites the `E` identifiers it is written over; `domain-entities.md` owns the definitions.
 
 Flag:
 
+- a requirement that names a noun with no `E` entity, or an entity no requirement uses;
 - an outcome with no requirement;
 - a requirement with no outcome or authority basis;
 - a contract or constraint with no consumer;
@@ -96,4 +98,4 @@ Flag:
 
 Apply the stranger test: a capable reader with no session history must state the same pass/fail behavior and proof obligation.
 
-Complete when: every material requirement is authoritative, singular, observable, traceable in both directions through U when present, and separated from implementation tasks.
+Complete when: every material requirement is authoritative, singular, observable, written over defined entities, traceable in both directions through U when present, and separated from implementation tasks.

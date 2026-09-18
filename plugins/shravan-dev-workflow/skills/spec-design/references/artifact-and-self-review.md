@@ -16,6 +16,7 @@ A substantial specification normally needs semantic homes for:
 load-bearing decisions
 problem and current observable reality
 consumers and authority
+domain entities: identity, relationships, invariants, observable states
 goals, outcomes, success conditions
 non-goals and negative space
 source and decision basis
@@ -48,15 +49,16 @@ Link to the admitted Requirements identity. Do not copy its user needs, prioriti
 
 ## Navigation and Traceability
 
-Lead with the smallest Why/What model that lets a human confirm the problem and intended outcome, then reveal requirements, observable contracts, failure behavior, constraints, and proof. Add a compact map when relationships are not obvious:
+Lead with the smallest Why/What model that lets a human confirm the problem and intended outcome, then reveal the entities, requirements, observable contracts, failure behavior, constraints, and proof. Add a compact map when relationships are not obvious:
 
 ```text
 need U1 when present
-  -> problem P1
-      -> outcome O1
-          -> requirement R1
-              -> contract C1
-                  -> proof modality V1
+  -> entities E1..En
+      -> problem P1
+          -> outcome O1
+              -> requirement R1
+                  -> contract C1
+                      -> proof modality V1
 ```
 
 Diagrams may explain relationships but may not be the only home of normative meaning.
@@ -67,7 +69,8 @@ Consume each selected view's reader question plus the predicates, cardinality, a
 
 - Journey maps cite the stable U rows they re-render; the source record remains normative. Good steps express the user's job and observable pain. A screen tour or component name is not a journey.
 - Context diagrams keep the system opaque and place external consumers, stakeholders, surfaces, contracts, and relevant non-consumers around the boundary. Internal components, owners, stores, or enforcement points are structural How and route to `program-design`.
-- Requirement coverage tables expose missing U/P/O/R/C/V links rather than filling gaps with guessed meaning.
+- Entity maps show each `E` entity with its identity rule, relationships with cardinality, and observable states; the entity table stays normative. A map that shows a package, schema, type, or store has crossed into `program-design`.
+- Requirement coverage tables expose missing U/E/P/O/R/C/V links rather than filling gaps with guessed meaning.
 
 Prune a view that adds no decision clarity. View application is complete when every fired predicate has the required number of passed views, each required semantic field is visible, and adding another view would only duplicate an existing relationship.
 
@@ -91,7 +94,8 @@ Use plain, specific headings that tell the reader what they will learn or decide
 Re-read the complete artifact and record:
 
 - source authority conflicts or stale evidence;
-- missing problem/outcome/requirement/contract/proof links;
+- missing problem/entity/outcome/requirement/contract/proof links;
+- an obligation over a noun the entity table does not define, an entity with no identity rule or with implementation terms in its definition, or a defined entity no obligation uses;
 - vague, compound, or task-shaped requirements;
 - missing negative, failure, partial-success, cancellation, or compatibility behavior;
 - hidden internal How;
@@ -104,7 +108,7 @@ Re-read the complete artifact and record:
 - accepted requirements lost or superseded without owner authority;
 - changes from the confirmed goal boundary hidden as specification completeness;
 - process state, obscure headings, repeated companion narration, or reader-facing elements that fail the human deletion test;
-- whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
+- whether a human can enter from the user requirements, understand the smallest Why/What model, follow U→E→P→O→R→C→V into detail, and continue to program design without review notes or scratch.
 
 For a simplification request, report accepted-requirements coverage separately from prose or mechanism deletion. Reuse the existing coverage view and return one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor.
 
