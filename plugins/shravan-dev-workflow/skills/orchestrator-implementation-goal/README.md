@@ -1,15 +1,16 @@
 # Orchestrator: Implementation Goal
 
-`orchestrator-implementation-goal` carries a delivery goal across the owners of planning, implementation and proof, independent review, accepted correction, and PR readiness. It keeps responsibility for the whole loop while leaving each phase's judgment with that phase.
+`orchestrator-implementation-goal` carries a delivery goal across main-authored planning, planned-PR implementation and proof, main assessment, independent review, accepted correction, and PR readiness. The user-facing main owns governing design and plans; persistent implementation Sidekicks receive bounded PR assignments.
 
 The runtime contract is [SKILL.md](./SKILL.md). Current-source orientation, routing examples, recovery, and finish checks are in [goal-contract-and-routing.md](./references/goal-contract-and-routing.md).
 
 ```mermaid
 flowchart LR
-    A[Current reviewed design or admitted improvement] --> B[Plan]
+    A[Current reviewed design or admitted improvement] --> B[Main authors plan]
     B -->|plan-only| G[Requested terminal]
-    B --> C[Implement and prove]
-    C --> D[Independent review]
+    B --> C[Sidekick assignments implement and prove]
+    C --> H[Main assessment and integration check]
+    H --> D[Independent review]
     D -->|accepted finding| E[Correct and re-prove]
     E --> D
     D -->|ready| F[PR wrap-up]

@@ -147,4 +147,19 @@ export const skillPressureCaseDefinitions = [
     }
   ]
 },
+  {
+    scenarioId: "orchestrator-design-authors-not-sol-executor",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-design/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "selects-in-session-main-authorship", requirement: "For this chat-only next-actions request, reads spec-design and plan-implementation and selects the user-facing orchestrator to author Requirements, Specification, Program Design, settled sections/diagrams, and the implementation plan in-session; it does not assign those outputs to a Sidekick or executor or claim files were written.", failureExample: "Assigns Sol as design/plan author, starts a skill-legalization patch, or falsely claims artifact writes in the read-only rehearsal." },
+      { name: "executor-is-not-design-or-plan-author", requirement: "Treats 'Sol is the executor' as implementation, research, or review support. The main authors settled sections, diagrams, and the implementation plan before commissioning an implementer; independent review may still be assigned out.", failureExample: "Spawns Sol to rewrite the design artifacts, draw target views, or finish the plan because Sol is the executor." },
+      { name: "non-main-titles-use-role-emoji", requirement: "Uses the source-verified Agent Roles mapping for concrete non-main thread-title examples: implementation and research Sidekick use 🐒; Review Sidekick uses 🔎; an explicitly assigned Advisor uses 🦉; an evidence Worker uses 🛠️; and a mechanical Operator or helper uses 🔧. Every example follows `<emoji> <role> · <purpose>`. It leaves the user-facing main title unchanged and, when the host cannot confirm a supported saved title for the same identity, reports that capability gap without claiming an alias succeeded, replacing the session, or retrying an uncertain mutation.", failureExample: "Uses the Worker emoji for an implementation Sidekick, uses unprefixed names, renames the main, treats a ledger alias as a visible title, claims an unverified rename succeeded, or replaces the continuing session to obtain a title." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

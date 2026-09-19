@@ -2,7 +2,7 @@
 
 This reference owns current-source orientation, planning and implementation admission, meaningful result verification, bounded recovery, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
-Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the canonical plan, implementation proof, review evidence, supplied authority, shared work reference or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation Sidekick, persistent review Sidekick when commissioned, executor when assigned, and known blockers.
+Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the main-authored canonical plan and PR assignments, implementation proof, main-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation Sidekicks, persistent review Sidekick when commissioned, executors when assigned, and known blockers.
 
 Return: a concise orientation containing the objective, scope, current basis, requested terminal, evidence freshness, next owner or exact stop, and the continuation checkpoint and whole-work completion decision.
 
@@ -18,8 +18,8 @@ current source and material diff:
 current plan, proof, and review evidence:
 known remediation and recovery history:
 authority and blockers:
-trail: <shared work reference or unshared checkpoint path> / whole-work responsibility | contribution
-responsibility: orchestrator and work-root / implementer: <persistent session> / review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>
+trail: <coordination root plus execution roots, or unshared checkpoint path> / whole-work responsibility | contribution
+responsibility: orchestrator and coordination/integration / planned PR assignment -> persistent implementer and execution root / review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>
 next owner or stop:
 ```
 
@@ -39,7 +39,7 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 ## Select the Current Owner
 
-The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The persistent implementation Sidekick carries development and may select bounded native Workers and standalone native Operators under `manage-agents`, retaining each through its assignment corrections. The orchestrator keeps the work-root as `orchestrator`; the implementer and review Sidekick contribute on that thread.
+The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning. Persistent implementation Sidekicks carry their planned PR assignments and may select bounded native Workers and standalone native Operators under `manage-agents`, retaining each through its assignment corrections. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementer contributes on its execution root and the review Sidekick contributes where commissioned.
 
 The source-phase workflow follows this order:
 
@@ -54,19 +54,19 @@ material design break discovered during planning or implementation
   -> orchestrator and user decision; do not build on the break
 
 current reviewed design; no ready plan
-  -> orchestrator assigns plan-implementation to the existing implementer
+  -> orchestrator loads plan-implementation and authors the plan
 
 admitted repository improvement; no ready delivery plan
-  -> preserve the plan-improve-repo admission and assign plan-implementation to the existing implementer
+  -> preserve the plan-improve-repo admission; orchestrator loads plan-implementation and authors the plan
 
 ready plan; terminal is plan-only
   -> finish at plan-only
 
 ready delivery plan; implementation or proof incomplete
-  -> implement-plan
+  -> commission/resume the planned PR implementer(s), then implement-plan per assignment after real prerequisites
 
 development and fitting proof complete
-  -> orchestrator assessment against agreed intent, scope, and observable behavior
+  -> orchestrator assessment against the original need, design, plan, current diff, actual proof, complexity, PR boundaries, and integration
 
 orchestrator assessment complete
   -> implementation-review for general-domain work
@@ -84,6 +84,8 @@ review ready; PR gates not current
 PR ready and unmerged
   -> default terminal; merge only under separately supplied authority
 ```
+
+The assessment result makes its source-backed inspection and outcome clear rather than compressing them into “looks done.” Inspect the original need and accepted design, main-authored plan and PR scope, current diff, actual proof and gaps, ownership and naming, unnecessary complexity, and cross-PR prerequisites/integration when applicable. Do not reject adequate evidence merely because a label or field is absent.
 
 A request for one direct phase bypasses this orchestrator. Optional `ops-*` tracking is a separate authorized side route; resume from canonical artifacts afterward because tickets prove no delivery result. A tracker Operator logs meaningful decisions, results, and blockers through the existing trail contract, never each routine execution step.
 

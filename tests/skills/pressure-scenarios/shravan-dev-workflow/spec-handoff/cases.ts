@@ -51,4 +51,16 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "spec-handoff-successor-main-authority",
+    requiredSourceReads: [
+      ...skillSources,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "ordinary-portability-preserves-main", requirement: "Packet A preserves research-only scope and returns unresolved governing section/diagram authorship to the current main.", failureExample: "Treats pick-up wording, portability, or a Sidekick role as design-author authority." },
+      { name: "explicit-successor-transfer-is-honored", requirement: "Packet B transfers the named Requirements, Specification, Program Design, and diagram scope because recipient and explicit user direction are present.", failureExample: "Rejects the complete user-designated successor or silently narrows the transferred scope." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

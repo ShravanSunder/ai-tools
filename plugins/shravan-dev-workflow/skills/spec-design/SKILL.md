@@ -25,6 +25,8 @@ Program Design
 
 A specification is the observable contract for authorized product meaning. It never substitutes for the separately identifiable Requirements source that authorizes it.
 
+The user-facing main loads this skill and authors the Requirements and Specification itself, including their views, diagrams, organization, and settled sections. Bounded helpers may return evidence; rendering tools may operate on unchanged main-authored input without choosing prose, diagram source, layout, or meaning. Neither route transfers governing authorship.
+
 It turns evidence and authorized decisions into a contract that another capable agent can realize without inventing product meaning:
 
 ```text
@@ -237,8 +239,6 @@ Apply any caller-supplied artifact-home policy first. Otherwise follow the repos
 
 Author top-down: begin with the smallest Why/What map a human needs to confirm the problem and intended outcome, then reveal normative requirements, observable contracts, failures, constraints, and proof. Link every normative-eligible U row to the obligation it authorizes. Expose one compact `Requirements -> Specification -> Program Design` path with distinct identities instead of repeating their roles or contents.
 
-Section writers may organize already mapped meaning only. Their packet must name accepted claims and bases, prose boundary, prohibited invention, and required gap return. They may not originate requirements, invariants, option selections, failure policy, realizations, or normative prose.
-
 Completion: the Requirements and Specification homes are separately identifiable and non-identical; every normative claim has one home; a stranger can navigate from user need through problem, obligation, observable behavior, and proof; and every accepted identity has an inspectable destination or owner-authorized supersession.
 
 ### 10. Run the author self-check
@@ -276,11 +276,11 @@ Use a view only when it makes an important Why/What relationship easier for a hu
 
 The first internal component, owner, dependency edge, state store, or enforcement point inside the system crosses into `program-design`. Diagrams may explain relationships but may not be the only home of normative meaning.
 
-## Bounded Delegation
+## Bounded Evidence Help
 
-There is no default swarm. IF one bounded evidence, observable-surface, product-intent, contract, or already-mapped section-writing question benefits from independent work, use `manage-agents` to select the agent pattern and runtime.
+There is no default swarm. IF one bounded evidence, observable-surface, product-intent, or contract question benefits from independent work, use `manage-agents` to select the agent pattern and runtime.
 
-The packet names the exact question, sources, accepted claims when writing, maximum authority, non-goals, and expected evidence. Delegation is parallel-safe only after the source inventory and semantic boundary exist. Instance authority is equal to or narrower than the packet and never includes requirement meaning or final prose integration. Return a `complete | partial | blocked` assignment receipt; the parent verifies sources and reduces the result.
+The packet names the exact evidence question, sources, maximum authority, non-goals, and expected anchors. Delegation is parallel-safe only after the source inventory and semantic boundary exist. Instance authority is equal to or narrower than the packet and never includes Requirements or Specification meaning, prose, organization, views, diagrams, or integration. Return a `complete | partial | blocked` evidence receipt; the main opens the decisive sources, verifies the result, and authors the artifact itself.
 
 ## Completion Blockers
 
@@ -301,7 +301,7 @@ Do not return `locally-ready` while any of these hold:
 - a material non-goal is omitted, or an applicable cross-cutting quality lacks an observable obligation or constraint or a reasoned not-applicable result;
 - internal architecture or implementation tasks are presented as requirements without an externally authoritative constraint;
 - an applicable Required Why/What View lacks the required cardinality, semantic fields, passed rendering result, or separate normative home;
-- a section writer originated meaning;
+- delegated evidence was copied as governing prose or a helper originated, organized, rewrote, or chose the expression of Requirements, Specification, a settled section, or a required view;
 - a required independent review is missing, stale, partial, silent, or blocked;
 - target classification, governing-source coverage, self-check, readiness, review state, or acceptance/PR narration appears as specification prose instead of returned workflow state;
 - either Requirements or Specification identity, source coverage, or non-acceptance boundary is missing.

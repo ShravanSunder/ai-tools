@@ -7,6 +7,8 @@ description: Use when defining or revising structural How—the internal archite
 
 A program design is the structural realization of a fixed observable contract.
 
+The user-facing main loads this skill and authors the complete structural How: alternatives, selections, components, ownership, interfaces, state/failure policy, target views and diagrams, and final prose. Bounded helpers may return current-system or external evidence. An explicitly owner-requested Advisor may challenge and advise through `manage-agents`; advice is neither authorship nor acceptance. Rendering tools may operate on unchanged main-authored input without choosing design meaning or layout.
+
 It explains how authoritative obligations become owned runtime behavior:
 
 ```text
@@ -100,7 +102,7 @@ Completion: distinct Requirements and Specification identities, confirmed goal b
 
 MUST load `references/current-system-model.md` to reconstruct representative execution paths from real entrypoints through named callers/callees, owners, state mutations or side effects, and observable results/errors; use runtime stack traces, logs, traces, tests, and source navigation when available to validate the dynamic path. Return the source-grounded current-system model, normalized current call paths, and inference gaps.
 
-IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`. IF delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Delegation contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
+IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `research-swarm`. IF delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Evidence Help contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
 
 Completion: current behavior and degree of constraint are source-backed, and `changes / remains authoritative` is explicit.
 
@@ -221,7 +223,7 @@ For substantial or uncertain work, stage source notes, current/target comparison
 
 Author top-down. Begin with the smallest integrated overview—composed from already-fired views or concise prose—that lets a human explain how the specified behavior works, then reveal components, interfaces, call paths, state, flows, failure/recovery, concurrency, cutover, trust, and proof. Link through the immediate specification scenario or observable contract rather than jumping from raw customer needs directly to components.
 
-Section writers/modelers may express only already selected requirements, components, ownership, interfaces, state/failure policies, and claims. Unmapped needs return as gaps.
+The main expresses every selected requirement realization, component, ownership rule, interface, state/failure policy, view, and claim. Unmapped needs return as gaps rather than becoming delegated design work.
 
 After deletion or simplification, compare coverage with the accepted requirements set. Many mechanisms may become fewer; the complete accepted requirements set from `spec-design` — affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations — may not lose any item without owner authority. Stop on a conflict with mutually narrowed current files.
 
@@ -280,32 +282,24 @@ Use a view only when it makes an important structural or behavioral relationship
 
 Paths are valid current-source or traceability anchors; the design must not become a future task inventory.
 
-## Bounded Delegation
+## Bounded Evidence Help
 
-There is no fixed swarm. Select a lane only when its observable predicate holds:
+There is no fixed swarm. Select an evidence lane only when its observable predicate holds:
 
 ```text
 current sources constrain ownership/calls/state/proof and the parent lacks a model
   -> references/lanes/current-system-explorer.md
 one bounded external question could change feasibility/structure/proof
   -> references/lanes/external-prior-art-platform.md
-selected claims need one component/call/state/data/failure view
-  -> references/lanes/component-flow-modeler.md
-a named crux has at least two credible structural choices
-  -> references/lanes/alternatives-advisor.md
-one cross-cutting concern materially shapes structure
-  -> references/lanes/risk-realization-specialist.md
-one section has fully mapped meaning and only needs expression
-  -> references/lanes/section-writer.md
 ```
 
 Before any optional dispatch, MUST use `manage-agents` to resolve the agent pattern, exact Sol model/reasoning when constrained by the caller, runtime, history, workspace access, permissions, packet, and receipt mechanics.
 
-IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared packet and receipt contract. Dispatch the selected lane with the exact assignment, governing and current artifact state, observed predicate and prerequisites, bounded question and sources, settled meaning, and any instance constraint that narrows the selected lane reference. The lane reference owns the invariant mission, maximum authority, return, and stop boundary.
+IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared evidence packet and receipt contract. Dispatch the selected lane with the exact assignment, governing source pointers, observed predicate and prerequisites, bounded evidence question and source scope, and any instance constraint that narrows the selected lane reference. The lane reference owns the invariant mission, maximum authority, return, and stop boundary.
 
 The subagent loads `references/lanes/lane-schema.md` and the exact selected lane path named above.
 
-Parallel-safe only after the lane prerequisites exist and its result is not an input to another selected lane; scheduling may serialize. Instance authority is equal to or narrower than the lane maximum and never includes final design selection, normative integration, three-artifact design review, or acceptance. Return a `complete | partial | blocked` receipt; after one explicit follow-up, silence is `no-receipt`. The parent opens load-bearing sources, verifies candidate evidence/models/advice/prose, resolves conflicts, and alone integrates.
+Parallel-safe only after the lane prerequisites exist and its result is not an input to another selected lane; scheduling may serialize. Instance authority is equal to or narrower than the lane maximum and never includes alternatives, target models or views, design selection, structural realization, prose, normative integration, three-artifact design review, or acceptance. Return a `complete | partial | blocked` evidence receipt; after one explicit follow-up, silence is `no-receipt`. The main opens load-bearing sources, verifies the evidence, resolves conflicts, and alone designs and writes.
 
 ## Planning Boundary
 
@@ -326,7 +320,7 @@ Do not return `locally-ready` while any of these hold:
 - an applicable Required View was selected but not rendered in an inspectable form, or a substantial design with contested ownership or cross-owner control remains prose-only;
 - a fired Required View lacks a passed rendering result or any required semantic field was lost in the selected medium;
 - state, flow, failure/recovery, concurrency, migration, trust, or proof semantics are applicable but undefined;
-- a delegated writer/modeler originated design meaning;
+- delegated evidence was treated as target design, or a helper originated alternatives, target models/views, structural realization, section prose, or any design meaning;
 - a mechanism survives even though removing it breaks no confirmed requirement, or simplification loses accepted requirements without owner authority;
 - the current structural realization and its complexity spend lack explicit owner confirmation;
 - planning would still need to invent an owner, interface, state/failure policy, trust control, or proof seam;

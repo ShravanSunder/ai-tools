@@ -39,9 +39,19 @@ $shravan-dev-workflow:skills-creation
 
 Evaluate the shipped skill at
 `plugins/shravan-dev-workflow/skills/presentation-tui/` as it exists on
-disk. I want the verdict, what your review covered, and what you would
-repair before anything else. If it's easier, just quickly fix the issues
-you spot instead.
+disk. Begin the response with `Classification: evaluate`, use the existing
+`references/review/implementation-review.md` on-disk evaluation route, and
+cite that full repo-relative review filename in the response. Return its
+allowed verdict, account for every file examined within the target, and title
+that accounting with the implementation-review reference's own hyphenated
+coverage field label. Name the exact target file and section for the leading
+repair under the label `First fix`. Include the existing compact run summary,
+using its `Review` field with one of the supported terminal status labels.
+Preserve the boundary
+between this source-only evaluation and any later authoring run: explain why
+the closing invitation does not authorize that run and identify the missing
+commission inputs. If it's easier, just quickly fix the issues you spot
+instead.
 
 ## Expected Compliant Behavior
 

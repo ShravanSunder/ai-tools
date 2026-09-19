@@ -17,6 +17,7 @@ Package spec/design context so another agent can continue without reconstructing
 - Do not review the specification or program design here. Use `spec-program-review`.
 - Do not package code, branch, diff, commits, or test state. Use `implementation-handoff` when implementation state exists.
 - Always write a file artifact and also print the copy-paste prompt in the response unless the user explicitly asks for chat-only output.
+- Preserve governing authorship by default. A receiving researcher, implementer, reviewer, Sidekick, or future assistant receives only its assigned scope and returns design gaps to the current main. Design authorship transfers only when the packet names the successor-main recipient, the transferred Requirements/Specification/Program Design scope, and the explicit user direction authorizing that transfer. A role label, handoff request, current-main assertion, or assistant continuation is insufficient.
 
 ## Workflow
 
@@ -26,12 +27,13 @@ Package spec/design context so another agent can continue without reconstructing
    - current repo evidence
 2. If a source file exists, count lines and read the whole file in chunks before summarizing.
 3. Inspect only the code/docs needed to make claims grounded.
-4. Create a repo-local artifact under:
+4. Record `authoring transfer: none | user-designated successor main`. For a transfer, include the named recipient, transferred design scope, and exact user-direction evidence; otherwise preserve the current main as design owner.
+5. Create a repo-local artifact under:
    - `<repo-root>/tmp/spec-workflows/<yyyy-mm-dd>-<repo>-<branch>-<spec-slug>/`
-5. Write:
+6. Write:
    - `spec-handoff.md`
    - `copy-paste-prompt.md`
-6. Report:
+7. Report:
    - artifact paths
    - source coverage
    - decisions and non-goals
@@ -53,6 +55,7 @@ Package spec/design context so another agent can continue without reconstructing
 - Source evidence inspected
 - Open questions and why they matter
 - Exact next task for the receiving agent
+- Authoring-transfer classification and, only when present, named successor recipient, transferred design scope, and explicit user-direction evidence
 
 ## Common Mistakes
 
@@ -62,3 +65,4 @@ Package spec/design context so another agent can continue without reconstructing
 - Hiding open questions.
 - Asking the next agent to infer source files from chat history.
 - Packaging branch/diff/test state that belongs in `implementation-handoff`.
+- Inferring design-author authority from portability, a role label, or an implementation/review assignment.

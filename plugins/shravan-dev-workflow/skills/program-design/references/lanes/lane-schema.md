@@ -1,18 +1,16 @@
-# Program-Design Lane Schema
+# Program-Design Evidence Lane Schema
 
-This reference owns the shared packet and receipt envelope for bounded program-design lanes. It does not own lane judgment.
+This reference owns the shared packet and receipt envelope for the two bounded evidence lanes used by program design: current-system exploration and external prior-art/platform research. It does not authorize target design, advice, modeling, or artifact writing.
 
 Packet:
 
 ```text
 lane and assignment identity
 selected lane reference
-governing specification path and current text
-program-design path and current text when the selected lane's prerequisites say it
-exists; otherwise `not-yet-produced` plus the current workflow stage
+governing Requirements and Specification pointers plus the fixed bounded question
 selection predicate and prerequisites
-bounded question and source scope
-settled requirements/decisions/claims
+bounded evidence question and source scope
+current-system or transfer context needed to interpret evidence
 instance constraints that narrow the lane reference, or `none`
 ```
 
@@ -32,4 +30,4 @@ parent verification required
 
 `no-receipt` is parent-recorded after one explicit follow-up; it is never a fabricated receipt or clean result.
 
-Complete when: the lane output covers the current assigned targets, stays within authority, and gives the parent enough source evidence to verify or reject it.
+Complete when: the lane output covers the bounded evidence question, stays evidence-only, and gives the main enough source anchors to verify or reject it before authoring the target design.

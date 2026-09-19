@@ -1,6 +1,6 @@
 # Plan Implementation
 
-`plan-implementation` turns reviewed design into one practical Markdown implementation plan. It reads the Requirements, Specification, and Program Design, checks them against the current repository, and organizes the work into small slices with matching proof.
+`plan-implementation` lets the user-facing main turn reviewed design into one practical Markdown implementation plan. The main reads the Requirements, Specification, and Program Design, checks them against the current repository, and authors the small slices and matching proof. Helpers may gather bounded evidence; implementation Sidekicks receive the finished plan rather than write it.
 
 The runtime contract remains in [SKILL.md](./SKILL.md). Detailed slicing guidance lives in [slice-and-proof-design.md](./references/slice-and-proof-design.md).
 

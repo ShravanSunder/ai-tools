@@ -1,6 +1,6 @@
 # Skill Implementation Review
 
-Review the implemented skill change before proof is generated and before ship status advances. This reference audits the actual changed files, proof quality, pressure coverage, accepted spec constraints, and remaining ship risk.
+Review one of two targets. For implemented behavior-changing delivery, review after fitting proof and the user-facing main's source-backed assessment and before ship status advances; review consumes demonstrated behavior and does not substitute for missing proof. For an `evaluate` run over existing files, perform the source-only review before any new implementation commission, mark behavior `unverified/deferred`, and authorize no shipping. Mechanical changes and an explicit implementation-review skip do not enter this reference merely to fabricate coverage.
 
 Return a verdict, changed-file coverage, accepted/rejected/unverified findings, smallest edits, targeted retest, and ship decision.
 
@@ -49,6 +49,7 @@ Covers what only a whole-change ship decision can judge:
 
 - Every edited, added, or deleted source file is covered. Each file is reviewed semantically, marked source/static-only with its behavior status, or explicitly excluded by the accepted behavior-review boundary; deletions are verified through both absence and pointer inventory.
 - The implemented diff matches the accepted spec and user constraints without crossing the accepted source, behavior, or ship boundary.
+- For implemented behavior-changing delivery, fitting proof ran against the reviewed current files before this review; the main inspected the actual diff and proof against the original need, accepted spec/plan, ownership, complexity, and integration and returned `accepted-for-independent-review`. An `evaluate` run instead preserves the source-only, unverified/deferred behavior boundary above.
 - Every added or changed lane satisfies the returned lane contract: the work qualifies as a lane, its lane reference contains the complete bounded job contract, and caller authority stays equal to or narrower than the reference maximum.
 - Every added or changed lane, output, or tool schema satisfies the shared-shape and ownership contract returned by `../reference-lanes-design.md`; cite the returned contract rather than re-deriving its field or ownership rules.
 - For review lanes specifically, award a `great` verdict when `lanes/lane-schema.md` clearly and completely defines the status and verdict labels, review packet, lane receipt, lane finding, and parent reduction consumed by the review workflow.
@@ -66,9 +67,9 @@ Cover each item with source-backed evidence. When a lane receipt already covers 
 
 The executing review lead verifies candidate findings against source files, pressure output, and user constraints before accepting them. Reject findings that contradict the current scope, treat length alone as a blocker when the user scoped length out, or ask for broad `skill-audit` work during one-skill authoring. The orchestrator retains final disposition and author acceptance.
 
-Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation`; that is the live owner.
+Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation, prune, and ship`; that is the live owner.
 
-After accepted edits, rerun the narrowest pressure or static proof that can catch the issue. Resume the same review lead to refresh changed-lane coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never dispatch review or remediation four without explicit user permission.
+After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh main assessment. Resume the same review lead to refresh changed-lane coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never dispatch review or remediation four without explicit user permission.
 
 At ship, reuse the semantically current review result when its changed-file coverage and proof remain current. Resume the same lead only when affected coverage needs refresh.
 

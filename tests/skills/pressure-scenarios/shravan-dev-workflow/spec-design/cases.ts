@@ -266,4 +266,18 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "spec-design-main-authors-settled-sections",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-design/references/domain-entities.md",
+      "plugins/shravan-dev-workflow/skills/spec-design/references/artifact-and-self-review.md",
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "main-authors-governing-expression", requirement: "Keeps Requirements and Specification prose, organization, entity table, settled sections, and diagrams with the user-facing main even though all meaning is settled.", failureExample: "Dispatches Workers to word normative sections or produce the context/entity view for later integration." },
+      { name: "allows-only-evidence-or-mechanical-rendering", requirement: "Allows bounded evidence collection and mechanical rendering only from unchanged main-authored input with no prose, diagram-source, layout, or meaning choice.", failureExample: "Calls Worker-authored prose or a Worker-selected diagram mechanical help." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

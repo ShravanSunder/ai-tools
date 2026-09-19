@@ -5,7 +5,7 @@ description: Use when packaging an existing implementation plan for another agen
 
 # Plan Handoff
 
-Package an existing implementation plan so another agent can review, execute, or continue planning without reconstructing the conversation. This is a portability boundary, not a completion boundary: handoff preserves the plan's governing basis and delivery context without upgrading either.
+Package an existing implementation plan so another agent can review or execute without reconstructing the conversation. This is a portability boundary, not a completion or authorship boundary: handoff preserves the plan's governing basis and delivery context without upgrading either.
 
 ## Core Rules
 
@@ -21,6 +21,7 @@ Package an existing implementation plan so another agent can review, execute, or
 - Show the copy-paste prompt in the final response and write the same prompt to a file.
 - Under read-only authority, return the complete copy-paste prompt inline with the source plan path, governing basis, and delivery context, and state that the normal write-enabled route creates repo-local `plan-handoff.md` and `copy-paste-prompt.md`; do not claim those files were created.
 - Do not make code changes unless the user separately asks to implement.
+- Classify authoring authority explicitly. A receiving implementer or reviewer receives only that assigned scope and returns a planning gap to the current main. Plan authorship transfers only when the packet names the successor-main recipient, the transferred planning scope, and the explicit user direction authorizing that transfer. A role label, handoff request, current-main assertion, or assistant continuation is insufficient.
 
 ## Workflow
 
@@ -29,11 +30,12 @@ Package an existing implementation plan so another agent can review, execute, or
 3. If a source file exists, read the whole file before summarizing. A heading search, path listing, or user summary is not a substitute for the plan contents.
 4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring, and return the unchanged plan record, governing basis, delivery context, and any blocking discrepancy for the handoff packet.
 5. Inspect only the secondary code/docs needed to make the handoff grounded.
-6. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.
-7. Write at least:
+6. Record `authoring transfer: none | user-designated successor main`. For a transfer, include the named recipient, transferred plan scope, and exact user-direction evidence; otherwise preserve the current main as planning owner.
+7. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.
+8. Write at least:
    - `plan-handoff.md`
    - `copy-paste-prompt.md`
-8. Print a TUI-friendly response with:
+9. Print a TUI-friendly response with:
    - artifact path
    - full clickable artifact links (absolute path + line)
    - copy-paste prompt
@@ -55,3 +57,4 @@ IF writing the handoff artifact or copy-paste prompt, load `references/handoff-t
 - The obligation/slice/proof mapping is omitted, forcing the next agent to infer how the plan will be proven.
 - The handoff drops evidence sources, freshness guards, or parent-owned verification, letting the next agent treat delegated evidence as completion.
 - The handoff changes the plan record, upgrades `plan-only`, or omits the governing basis or delivery context.
+- The packet silently promotes an implementer, reviewer, Sidekick, or future session into plan author without the named successor, transferred scope, and explicit user direction.
