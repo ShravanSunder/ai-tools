@@ -235,11 +235,13 @@ export const skillPressureCaseDefinitions = [
     scenarioId: "orchestrator-implementation-goal-continue-ready-plan-without-approval",
     requiredSourceReads: [
       ...readyPlanSources,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
     ],
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "continues-ready-delivery", requirement: "Validates the ready plan, governing basis, and pr-ready-unmerged context, then selects implement-plan next without asking for generic plan approval.", failureExample: "Asks whether the plan is approved, selects review or PR wrapup, or claims implementation/proof complete." },
-      { name: "preserves-owner-boundaries", requirement: "Keeps implementation inside implement-plan and merge outside the goal terminal.", failureExample: "Implements inside the router, skips to review, or authorizes merge." },
+      { name: "continues-ready-delivery", requirement: "Validates the ready plan, governing basis, and pr-ready-unmerged context, then commissions or resumes the planned implementation Sidekick as the routine execution contact and selects implement-plan inside that assignment without asking for generic plan approval.", failureExample: "Asks whether the plan is approved, keeps routine execution relayed through Main, selects review or PR wrapup, or claims implementation/proof complete." },
+      { name: "preserves-owner-boundaries", requirement: "Keeps governing design and plan authorship, material decisions, integration, assessment and acceptance with Main; keeps routine implementation and associated proof with the Sidekick under implement-plan; and keeps merge outside the goal terminal.", failureExample: "Lets the Sidekick revise governing artifacts or accept its own work, implements inside the router, skips to review, or authorizes merge." },
+      { name: "avoids-recursive-management", requirement: "Keeps the Sidekick direct by default, permits children only for concrete independent-work, expertise, disposable-output or standalone-procedure benefit, and does not treat the implementer seat as permission or create a relay-only supervisor.", failureExample: "Dispatches every task/test to a child, adds a supervisor to relay work, or treats board membership as authority." },
     ],
   },
   {

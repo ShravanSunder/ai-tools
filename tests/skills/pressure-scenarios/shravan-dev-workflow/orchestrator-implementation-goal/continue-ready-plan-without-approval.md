@@ -15,11 +15,14 @@ Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its 
 ## Expected Compliant Behavior
 
 - Validates the plan, governing basis, and delivery context.
-- Selects `implement-plan` next without requesting generic approval of the plan.
+- Commissions or resumes the planned implementation Sidekick as the normal routine execution contact and selects `implement-plan` inside that assignment without requesting generic approval of the plan.
+- Main retains governing design/plan authorship, material decisions, integration, assessment, and acceptance; the Sidekick owns routine implementation and associated proof directly by default.
+- Child work requires concrete independent-work, expertise, disposable-output, or standalone-procedure benefit; board seats do not grant authority and no relay-only supervisor is added.
 - Does not implement inside the router or authorize merge.
 
 ## Failure Signals
 
 - Stops to ask whether the completed plan is approved.
+- Keeps Main as the relay for every routine execution turn or lets the Sidekick revise the governing plan.
 - Treats plan completion as implementation proof.
 - Skips directly to review or PR wrap-up.

@@ -56,6 +56,18 @@ Model category is a cost/capability grouping of model plus effort. It does not a
 
 An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
 
+Board seats describe participation on one discussion root; they do not grant agent authority or change conversation ancestry. This skill owns the complete role-to-seat mapping used by caller workflows:
+
+| Agent function | Board seat when joining |
+| --- | --- |
+| Main / user-facing orchestrator | `orchestrator` |
+| Implementation Sidekick | `implementer` |
+| Review Sidekick | `reviewer` |
+| Explicitly owner-requested Advisor | `advisor` |
+| Research Sidekick, Worker, Operator, or other bounded contributor | `participant` |
+
+Router owns the seat schema and enforcement. A direct conversation, native child, board thread, display name, or seat is not an assignment or permission grant; the caller workflow still supplies scope and authority.
+
 ### Lineage Families
 
 | Family | Models or harness                                 |
@@ -83,7 +95,9 @@ Every non-main agent thread title starts with the emoji for its role in the Agen
 
 The user works with one user-facing orchestrator, which may be Frontier or Balanced and retains design authority plus all governing Requirements, Specification, Program Design, diagram, and implementation-plan authorship. The orchestrator loads the owning design and planning skills and writes those artifacts in its session. Workers, Operators, search, and tools may return bounded evidence or mechanically render unchanged main-authored input; they do not choose, organize, rewrite, or express governing design or plan content. For generated visuals, the main authors the reader question, exact labels and relationships, semantic composition and invariants, then inspects and accepts or corrects the candidate. A tool or helper may realize pixels, typography, spacing and style or run a prescribed generate/copy/preview procedure on that unchanged brief; it cannot choose semantic layout, revise the brief, accept the visual, or make the image the governing design. An explicitly user-designated successor main is the only portability exception: its packet names the recipient, the transferred design or plan scope, and the user's authorizing direction. A role label, handoff, board seat, or assistant continuation does not create that authority.
 
-After a main-authored plan is ready, one persistent implementation Sidekick may own each useful planned PR assignment. Each implements, integrates, proves, and corrects its assigned scope and asks the orchestrator when a design or plan decision blocks progress. Several independent PR assignments may use several Sidekicks; dependent work waits for verified prerequisites. The orchestrator assesses completed development and cross-PR integration before an independent Review Sidekick examines the implementation. A bounded research question uses a Worker; related research with follow-up questions may use a research Sidekick. Workers and Operators are native subagents that remain through assignment corrections, then finish.
+After a main-authored plan is ready, one persistent implementation Sidekick may own each useful planned PR assignment and becomes the normal user contact for routine execution conversation inside that assignment. It implements, integrates, proves, and corrects its scope directly by default. It returns material design or plan decisions, cross-assignment integration conflicts, permission boundaries, and completion evidence to the orchestrator with the exact question or concise source-backed receipt; ordinary progress and implementation mechanics stay in the Sidekick conversation. Direct user contact does not transfer governing authorship: Main still writes Requirements, Specification, Program Design, diagrams, and the implementation plan, and retains material decisions, integration, assessment, acceptance, and the final report.
+
+Several independent PR assignments may use several Sidekicks; dependent work waits for verified prerequisites. The orchestrator assesses completed development and cross-PR integration before an independent Review Sidekick examines the implementation. A bounded research question uses a Worker; related research with follow-up questions may use a research Sidekick. Workers and Operators are native subagents that remain through assignment corrections, then finish.
 
 | rationalization | reality |
 | --- | --- |
@@ -104,7 +118,7 @@ task category + Guidance + Architectural span -> Agent Roles responsibility and 
 
 Retain the orchestrator's `orchestrator` board seat. Reuse a suitable executor assignment when work has not materially changed; otherwise choose an executor using task category, Guidance, Architectural span, useful existing context, and total completion cost including handoff, rework, and proof. This is internal task-fit selection, not an owner approval, form, or new agent requirement. Use the **Agent Roles** table to choose responsibility and continuity. Review uses independent context and its lineage rule; an Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
 
-An executor is not a design- or plan-author role. The orchestrator designs, plans, and verifies decisive evidence while assigning implementation and proof to eligible executors. An implementation Sidekick may execute directly or assign bounded implementation work to Workers and Operators. Use a research Sidekick only when related research needs continuing context. Workers retain their implementation corrections and associated proof inline, so do not dispatch an Operator for each test command. The orchestrator may communicate, make control calls, and read decisive sources; report an unavailable required route rather than silently falling back inline.
+An executor is not a design- or plan-author role. The orchestrator designs, plans, and verifies decisive evidence while assigning implementation and proof to eligible executors. An implementation Sidekick executes its assigned change and associated proof directly by default. Delegate only when a child has bounded independent work, distinct expertise the executor needs, or large disposable output worth isolating, and the expected benefit exceeds briefing, coordination, and verification cost. Keep tightly coupled change-and-proof work with its executor; do not create a supervisor whose only job is to relay another agent's work. Standalone prescribed Git, PR, build, test, or watch procedures use an Operator, while tests and checks associated with an implementation assignment stay with that executor. Use a research Sidekick only when related research needs continuing context. The orchestrator may communicate, make control calls, and read decisive sources; report an unavailable required route rather than silently falling back inline.
 
 ### Choose a model
 
@@ -168,7 +182,7 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 - **Work:** Implementation, research, or review across assignments and follow-ups. An implementation Sidekick implements, integrates, proves, and corrects one or more related main-planned assignments. A research Sidekick handles related research. A Review Sidekick independently assesses a target and verifies corrections.
 - **Continuity and cardinality:** One or many persistent named relationships with a ledger (see `references/session-ledger.md`).
-- **Authority:** The orchestrator retains design decisions and final delivery. An implementation or research Sidekick may assign bounded Workers and Operators. A Review Sidekick may assign read-only review lanes that its review skill permits. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope to the orchestrator. Board content does not grant additional authority.
+- **Authority:** The orchestrator retains governing authorship, material decisions, integration, assessment, acceptance, and final delivery. An implementation Sidekick is the normal execution contact inside its main-planned assignment and may assign bounded Workers and Operators only under the concrete-benefit test above. A research Sidekick may assign bounded Workers and Operators within its research scope. A Review Sidekick may assign read-only review lanes that its review skill permits. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope or material design/plan questions to the orchestrator. Board content does not grant additional authority.
 - **Model category:** Balanced
 
 #### Implementation and research Sidekick model choices
@@ -319,7 +333,7 @@ On observed resumption, cancel or adjust an obsolete wake through `agent-collabo
 
 #### Persistent-resume cost
 
-Provider cache behavior is unknown unless observed. Preserve the same persistent session and avoid replaying whole packets unnecessarily, but accept a cold resume; neither cache expiry nor an idle interval replaces a Sidekick or Advisor identity. Do not create automatic maintenance heartbeats or claim a stable id guarantees a cache hit, TTL, quota, or savings. Choose a Sidekick's model and effort at creation and keep them for the life of the session; resume without restating them, because a changed model or effort discards the provider prompt cache for that session. Use existing awake or wake mechanisms only when supported and authorized.
+Provider cache behavior is unknown unless observed. Preserve the same persistent session and avoid replaying whole packets unnecessarily, but accept a cold resume; neither cache expiry nor an idle interval replaces a Sidekick or Advisor identity. Do not create automatic maintenance heartbeats or claim a stable id guarantees a cache hit, TTL, quota, or savings. Choose a Sidekick's model and effort at creation and keep them for the life of the session; resume without restating them. Cache reuse is provider- and route-dependent: changing model or effort may reduce or invalidate reuse, but only actual evidence supports a hit or miss claim. Use existing awake or wake mechanisms only when supported and authorized.
 
 ## Acceptance Checks
 

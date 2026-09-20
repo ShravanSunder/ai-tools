@@ -176,4 +176,18 @@ export const skillPressureCaseDefinitions = [
       { name: "checks-each-artifact-and-honors-gaps", requirement: "Evaluates Requirements, Specification and Program Design visual coverage separately. It accepts the Specification evidence described, keeps the Requirements generated-image capability gap explicit despite its useful table, and rejects the Program Design chat-only image as a durable embed; it does not advance the design set as visually complete.", failureExample: "Uses one artifact's image for all three, calls the table equivalent to the requested generated image, or accepts an unsaved chat image." },
     ],
   },
+  {
+    scenarioId: "orchestrator-design-ready-plan-hands-execution-contact",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "main-authors-before-handoff", requirement: "Keeps Requirements, Specification, Program Design, diagrams and the implementation plan with the user-facing Main, then commissions execution only after that Main-authored plan is ready.", failureExample: "Lets the implementation Sidekick finish the plan or revise governing design as part of handoff." },
+      { name: "sidekick-is-routine-execution-contact", requirement: "Makes the commissioned implementation Sidekick the normal user contact for routine implementation, associated proof and corrections inside the assignment, while returning only material design/plan decisions, integration conflicts, permission boundaries and concise completion evidence to Main.", failureExample: "Requires Main to relay every progress turn or transfers assessment and acceptance to the Sidekick." },
+      { name: "keeps-seats-and-delegation-bounded", requirement: "Uses Main/orchestrator and implementation-Sidekick/implementer seats as thread participation, not authority; keeps coupled implementation/proof direct and permits children only for concrete independent-work, expertise, disposable-output or standalone-procedure benefit under manage-agents.", failureExample: "Treats the implementer seat as permission, creates a relay supervisor, or dispatches every test to an Operator." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

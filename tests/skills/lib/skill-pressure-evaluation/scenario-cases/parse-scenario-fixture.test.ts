@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, test } from "vitest";
 import {
   parseScenarioMarkdown,
@@ -119,6 +121,41 @@ skill_under_test: shravan-dev-workflow:test-skill
 `,
       }),
     ).toThrow(/Prompt/);
+  });
+
+  test("new delegation scenarios do not forbid compliant negations", () => {
+    const repoRoot = path.resolve(import.meta.dirname, "../../../../..");
+    const cases = [
+      {
+        relativePath:
+          "tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/execution-contact-after-ready-plan.md",
+        compliant:
+          "Main does not relay every routine turn; the Sidekick handles routine execution.",
+        violation: "Main must relay every routine status turn.",
+      },
+      {
+        relativePath:
+          "tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/no-relay-supervisor.md",
+        compliant:
+          "Do not create a supervisor whose only job is to relay Worker updates.",
+        violation: "Create a supervisor to relay every Worker update.",
+      },
+    ] as const;
+
+    for (const fixtureCase of cases) {
+      const filePath = path.join(repoRoot, fixtureCase.relativePath);
+      const scenario = parseScenarioMarkdown({
+        filePath,
+        markdown: readFileSync(filePath, "utf8"),
+      });
+      expect(scenario.expectForbiddenRegexes).toHaveLength(1);
+      const forbiddenPattern = new RegExp(
+        scenario.expectForbiddenRegexes[0] ?? "",
+        "i",
+      );
+      expect(forbiddenPattern.test(fixtureCase.compliant)).toBe(false);
+      expect(forbiddenPattern.test(fixtureCase.violation)).toBe(true);
+    }
   });
 });
 
