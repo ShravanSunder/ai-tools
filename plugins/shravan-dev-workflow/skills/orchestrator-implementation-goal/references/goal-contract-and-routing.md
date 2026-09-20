@@ -81,7 +81,7 @@ accepted specification, design, or plan finding
   -> exact semantic owner, then resume the open implementation goal
 
 review ready; PR gates not current
-  -> implementation-pr-wrapup
+  -> assigned implementation Sidekick or Operator runs implementation-pr-wrapup and returns current PR gate evidence to Main
 
 PR ready and unmerged
   -> default terminal; merge only under separately supplied authority

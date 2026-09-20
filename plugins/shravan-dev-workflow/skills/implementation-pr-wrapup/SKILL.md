@@ -21,6 +21,10 @@ Use this for:
 
 Do not use this for fresh code-review discovery. If the user asks to review a PR/diff for bugs, classify `general-domain | runtime-skill-package` and route to `implementation-review | skills-creation` respectively; do not substitute PR wrap-up, checks, comments, or thread handling for independent implementation review.
 
+## Execution Ownership
+
+The assigned implementation Sidekick may carry its delivery assignment through this workflow, or an Operator may run the authorized prescribed wrap-up procedure. Either executor returns current PR gate evidence to Main, which retains final acceptance and whole-goal disposition; merge still requires explicit user authority. Description drafting remains Mini Worker work. An Operator that lacks the required draft or encounters a semantic decision returns that need to its assigning agent instead of authoring the draft, deciding the issue, or acquiring delegation authority.
+
 ## Core Flow
 
 1. Inspect local branch/worktree state. MUST load `references/local-branch-state.md` and return push/readiness blockers.
