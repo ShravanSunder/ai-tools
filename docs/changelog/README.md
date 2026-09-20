@@ -1,5 +1,7 @@
 # Changelog
 
+- [2026-09-20 Router MCP schema-driven collaboration guidance](2026-09-20-router-mcp-guidance.md)
+- [2026-09-20 Main remains the default conversation](2026-09-20-main-conversation-default.md)
 - [2026-09-20 efficient delegation and execution conversations](2026-09-20-efficient-delegation.md)
 - [2026-09-19 visual design documents](2026-09-19-visual-design-documents.md)
 - [2026-09-19 main-agent design and planning ownership](2026-09-19-main-agent-ownership.md)
@@ -35,6 +37,8 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-20 Router MCP schema-driven collaboration guidance](2026-09-20-router-mcp-guidance.md)
+- [2026-09-20 Main remains the default conversation](2026-09-20-main-conversation-default.md)
 - [2026-09-20 efficient delegation and execution conversations](2026-09-20-efficient-delegation.md)
 - [2026-09-19 visual design documents](2026-09-19-visual-design-documents.md)
 - [2026-09-19 main-agent design and planning ownership](2026-09-19-main-agent-ownership.md)

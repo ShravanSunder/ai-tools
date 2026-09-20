@@ -177,7 +177,7 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "orchestrator-design-ready-plan-hands-execution-contact",
+    scenarioId: "orchestrator-design-ready-plan-keeps-main-default-contact",
     requiredSourceReads: [
       ...requiredSourceReads,
       "plugins/shravan-dev-workflow/skills/plan-implementation/SKILL.md",
@@ -185,8 +185,8 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 30,
     semanticCriteria: [
-      { name: "main-authors-before-handoff", requirement: "Keeps Requirements, Specification, Program Design, diagrams and the implementation plan with the user-facing Main, then commissions execution only after that Main-authored plan is ready.", failureExample: "Lets the implementation Sidekick finish the plan or revise governing design as part of handoff." },
-      { name: "sidekick-is-routine-execution-contact", requirement: "Makes the commissioned implementation Sidekick the normal user contact for routine implementation, associated proof and corrections inside the assignment, while returning only material design/plan decisions, integration conflicts, permission boundaries and concise completion evidence to Main.", failureExample: "Requires Main to relay every progress turn or transfers assessment and acceptance to the Sidekick." },
+      { name: "main-authors-before-commission", requirement: "Keeps Requirements, Specification, Program Design, diagrams and the implementation plan with the user-facing Main, then commissions execution only after that Main-authored plan is ready.", failureExample: "Lets the implementation Sidekick finish the plan or revise governing design as part of commission." },
+      { name: "main-default-sidekick-direct-execution", requirement: "Keeps Main as the default user conversation while the commissioned implementation Sidekick directly owns implementation, associated proof and corrections. Allows direct contact with that assigned Sidekick only when the user explicitly chooses it, without changing execution ownership, assessment or acceptance.", failureExample: "Automatically moves the user to the Sidekick, requires Main to relay every internal progress turn, or transfers assessment and acceptance to the Sidekick." },
       { name: "keeps-seats-and-delegation-bounded", requirement: "Uses Main/orchestrator and implementation-Sidekick/implementer seats as thread participation, not authority; keeps coupled implementation/proof direct and permits children only for concrete independent-work, expertise, disposable-output or standalone-procedure benefit under manage-agents.", failureExample: "Treats the implementer seat as permission, creates a relay supervisor, or dispatches every test to an Operator." },
     ],
   },

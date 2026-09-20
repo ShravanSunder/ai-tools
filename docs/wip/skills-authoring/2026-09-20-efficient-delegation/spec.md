@@ -2,6 +2,8 @@
 
 Revision 2. Main-authored change specification and implementation run plan.
 
+Historical completed delivery. Its default-conversation decision is superseded by [Main remains the default conversation](../2026-09-20-main-conversation-default/spec.md); the remaining accepted boundaries and this review history are preserved.
+
 ## Need and success
 
 The owner wants routine post-planning execution conversations to happen with the persistent implementation Sidekick, while Main remains the design, planning, integration and acceptance owner. Delegation must reduce unnecessary expensive-model work without creating recursive management layers. The owner also requests consistent harness instructions, clearer Router board roles, and stronger companion instruction wording.

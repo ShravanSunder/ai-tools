@@ -128,10 +128,10 @@ skill_under_test: shravan-dev-workflow:test-skill
     const cases = [
       {
         relativePath:
-          "tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/execution-contact-after-ready-plan.md",
+          "tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/main-default-after-ready-plan.md",
         compliant:
-          "Main does not relay every routine turn; the Sidekick handles routine execution.",
-        violation: "Main must relay every routine status turn.",
+          "The Sidekick does not automatically become the default user contact; Main remains the default conversation.",
+        violation: "The Sidekick automatically becomes the default user contact.",
       },
       {
         relativePath:

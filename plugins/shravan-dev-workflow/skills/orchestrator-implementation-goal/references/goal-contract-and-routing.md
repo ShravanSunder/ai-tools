@@ -39,7 +39,7 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 ## Select the Current Owner
 
-The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning. After a ready plan, persistent implementation Sidekicks become the normal user contacts for routine execution in their planned PR assignments and execute implementation, associated proof, and corrections directly by default. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator; routine progress does not.
+The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning and remains the default user conversation throughout delivery. After a ready plan, persistent implementation Sidekicks execute implementation, associated proof, and corrections directly by default in their planned PR assignments. The user may explicitly choose direct contact with an assigned Sidekick inside its scope; a ready plan alone does not choose that branch. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator. Main does not relay every internal progress turn or poll merely to keep the conversation active, and returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
 
 Under `manage-agents`, a Sidekick may select a bounded native Worker for independent work, needed expertise, or large disposable output whose expected benefit exceeds briefing, coordination, and verification cost, and may select a native Operator for a standalone prescribed procedure. Coupled implementation/proof stays with its executor and no relay-only supervisor is introduced. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
 
@@ -65,7 +65,7 @@ ready plan; terminal is plan-only
   -> finish at plan-only
 
 ready delivery plan; implementation or proof incomplete
-  -> commission/resume the planned PR implementation Sidekick(s), hand routine execution contact to them, then implement-plan per assignment after real prerequisites
+  -> commission/resume the planned PR implementation Sidekick(s) while Main remains the default user conversation; use direct Sidekick contact only when the user explicitly chooses it; then implement-plan per assignment after real prerequisites
 
 development and fitting proof complete
   -> orchestrator assessment against the original need, design, plan, current diff, actual proof, complexity, PR boundaries, and integration
