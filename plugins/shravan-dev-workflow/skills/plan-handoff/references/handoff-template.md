@@ -15,6 +15,8 @@ Planning result and payload: ready | revision-requested | blocked — <payload>
 Governing planning basis: <complete unchanged basis>
 Delivery context: <complete unchanged context>
 Prepared for: <agent/CLI/session target>
+Authoring transfer: none | user-designated successor main
+Successor-main evidence: <named recipient, transferred planning scope, explicit user direction | not applicable>
 ```
 
 ## Handoff Body
@@ -81,6 +83,7 @@ Constraints:
 - Preserve the obligation/slice/proof mapping, including evidence sources, freshness
   guards, open proof gaps, split triggers, and parent-owned verification.
 - Preserve the canonical plan record, governing basis, and delivery context unchanged.
+- Preserve the current main's planning authorship unless the header records a complete user-designated successor-main transfer. Implementation/review scope does not include filling plan gaps.
 - Do not upgrade `plan-only` from handoff creation, validation, or ticket state.
 - Keep findings evidence-backed with exact paths.
 

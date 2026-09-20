@@ -21,7 +21,7 @@ Return:
 - files inspected
 - candidate findings with exact paths
 - why this matters
-- smallest useful plan scope
+- bounded affected surface and evidence-backed impact
 - proof gate that would validate the improvement
 - validation commands or checks the parent must confirm
 ```

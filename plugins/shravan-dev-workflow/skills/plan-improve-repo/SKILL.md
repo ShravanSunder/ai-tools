@@ -5,7 +5,7 @@ description: Use when auditing a repository for improvement opportunities, backl
 
 # Plan Improve Repo
 
-Audit a repo like a senior advisor and turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an `orchestrator-implementation-goal` delivery, this skill returns the admitted finding and basis to `plan-implementation`, which owns the one delivery plan. This skill does not edit product code.
+Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an `orchestrator-implementation-goal` delivery, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to author the one delivery plan. This skill does not edit product code.
 
 Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the single plan for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
 
@@ -52,6 +52,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Read repo instructions, README/docs, package/tooling files, tests, CI, and recent git history before recommending work.
 - Inspect audit categories in-parent by default. IF the user explicitly requests delegation, or current source reveals one concrete independently verifiable evidence question whose bounded handoff materially improves coverage, `manage-agents` owns that later handoff; agent availability or a broad flow name is never enough.
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
+- Delegated audit work returns evidence and candidate findings only. Bounded mechanical validation or proof checks may also return observed results. The main performs admission, prioritization, all plan structure and prose, and the governing validation/acceptance judgment; no helper authors or accepts the plan.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
 - If asked to implement a direct plan-only result, establish new delivery intent through `plan-implementation`; do not upgrade the existing plan. If asked for independent implementation review, route `general-repo` work to `implementation-review` and explicitly composed `runtime-skill-package` work back to `skills-creation`; never invoke a retired skill or treat validation as either execution or review.
 - If asked to validate a generated plan, return a separate read-only current-state validation receipt. Validation never authorizes execution or changes the canonical plan record.
@@ -98,6 +99,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - preserve and route `design-required` findings without turning them into execution tasks
 6. IF producing or revising a completed direct plan result, or validating or preserving an extant completed plan, load `../../shared-references/canonical-implementation-plan.md` to keep this skill's admitted-improvement and implementation-mechanics-only admission inline while applying the shared producer/validator contract, and return the complete canonical plan record or non-ready result plus any blocking discrepancy. For an orchestrated goal, return the admitted-finding handoff instead of writing the delivery plan. Audit-only runs and pre-artifact admission failures do not load it.
 7. Write one plan per admitted improvement that can return `ready`:
+   - the user-facing main authors the entire plan; delegated evidence is verified input, never plan text or planning judgment
    - default to the top 3-5 in non-interactive runs
    - one focused plan per finding, not a mega-plan
    - instantiate the canonical plan record with originating planner `plan-improve-repo`

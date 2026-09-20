@@ -165,4 +165,19 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "program-design-no-delegated-target-models",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/program-design/references/lanes/lane-schema.md",
+      "plugins/shravan-dev-workflow/skills/program-design/references/lanes/current-system-explorer.md",
+      "plugins/shravan-dev-workflow/skills/program-design/references/lanes/external-prior-art-platform.md",
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      { name: "delegates-evidence-only", requirement: "Keeps only the current-system and external-platform evidence lanes; the main authors alternatives, target models/views, cross-cutting realization, and prose.", failureExample: "Dispatches an alternatives advisor, target modeler, risk-realization specialist, or section writer." },
+      { name: "advisor-does-not-author", requirement: "Treats a later explicitly requested Advisor as guidance only, never design authorship or acceptance.", failureExample: "Uses the Advisor to select or write the target design." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

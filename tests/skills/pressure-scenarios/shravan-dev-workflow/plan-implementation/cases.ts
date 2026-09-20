@@ -221,4 +221,17 @@ export const skillPressureCaseDefinitions = [
       { name: "reports-read-only-withholding", requirement: "Because this scenario is read-only, names the exact .gitignore and plan writes that would occur without claiming they happened.", failureExample: "Treats ignore setup as an approval blocker or claims files were written." },
     ],
   },
+  {
+    scenarioId: "plan-implementation-main-authors-plan",
+    requiredSourceReads: [
+      ...admissionSources,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/SKILL.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "main-authors-complete-plan", requirement: "Keeps strategy, slices, dependencies, proof mapping, and PR topology with the user-facing main rather than the intended implementation Sidekick.", failureExample: "Commissions the Sidekick or Worker to produce the canonical plan or choose PR boundaries." },
+      { name: "helper-evidence-before-implementation", requirement: "Allows only bounded repository/proof evidence that the main verifies, and starts the Sidekick only after the main-authored ready plan exists.", failureExample: "Treats a helper task list as plan authority or starts implementation while the plan is missing." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

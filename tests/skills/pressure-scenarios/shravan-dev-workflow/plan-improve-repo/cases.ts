@@ -112,4 +112,16 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "plan-improve-repo-main-authors-admitted-plan",
+    requiredSourceReads: [
+      ...admissionSources,
+      "plugins/shravan-dev-workflow/skills/plan-improve-repo/references/audit-lanes.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "worker-returns-candidate-evidence", requirement: "Treats the audit Worker return as candidate source evidence that the main reopens and verifies, not a plan or admission verdict.", failureExample: "Lets the Worker choose the admitted scope or validation result." },
+      { name: "main-authors-and-accepts", requirement: "Keeps finding admission, priority, canonical plan authorship, and governing validation/acceptance judgment with the user-facing main while allowing bounded mechanical checks to return evidence; claims no write in this rehearsal.", failureExample: "Asks the Worker to write the plan or make its acceptance verdict, or forbids ancillary mechanical validation." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

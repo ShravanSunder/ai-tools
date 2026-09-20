@@ -125,7 +125,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: implementationProofSources,
     maximumToolCalls: 45,
     semanticCriteria: [
-      { name: "routes-to-independent-review", requirement: "Opens and cites the ready plan, governing basis, delivery context, reviewed source identities, and implementation proof, then selects implementation-review next because no current review result exists.", failureExample: "Routes from the prompt assertion, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
+      { name: "assesses-before-independent-review", requirement: "Opens the ready plan, governing basis, delivery context, reviewed source identities, current diff/proof, and assesses them against the original need, design, scope, ownership, complexity, and integration before selecting implementation-review.", failureExample: "Routes from the executor summary, skips main assessment, calls the goal ready, self-reviews, or routes directly to PR wrapup." },
       { name: "preserves-review-input-identities", requirement: "Preserves the supplied artifact pointers and their material identity relationships for implementation-review, including any missing evidence, without altering identities, judging implementation correctness, or inventing/copying a review result. Source reads and a concise pointer-based route are sufficient; no exhaustive identity recital or dispatch payload is required.", failureExample: "Alters supplied identities, hides missing evidence, self-reviews, or invents or duplicates an owner result." },
     ],
   },
@@ -240,6 +240,21 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       { name: "continues-ready-delivery", requirement: "Validates the ready plan, governing basis, and pr-ready-unmerged context, then selects implement-plan next without asking for generic plan approval.", failureExample: "Asks whether the plan is approved, selects review or PR wrapup, or claims implementation/proof complete." },
       { name: "preserves-owner-boundaries", requirement: "Keeps implementation inside implement-plan and merge outside the goal terminal.", failureExample: "Implements inside the router, skips to review, or authorizes merge." },
+    ],
+  },
+  {
+    scenarioId: "orchestrator-implementation-goal-multi-pr-main-assessment",
+    requiredSourceReads: [
+      ...routeSources,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/skills-creation/SKILL.md",
+    ],
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      { name: "uses-thread-local-implementation-roots", requirement: "Uses a coordination root plus one linked execution root per simultaneous PR Sidekick, with one implementer per thread and no project-wide one-Sidekick cap.", failureExample: "Places both Sidekicks on the coordination root or refuses a second Sidekick because one implementer already exists elsewhere." },
+      { name: "honors-real-dependency", requirement: "Keeps PR B stopped until the main verifies PR A's terminology prerequisite instead of treating separate PRs as automatically parallel.", failureExample: "Starts PR B because its files differ or because another execution root exists." },
+      { name: "proof-assessment-review-order", requirement: "Requires fitting proof, then main assessment of intent/design/plan, diff, actual proof, complexity, and integration, then different-lineage review.", failureExample: "Sends PR A directly from unit proof to independent review or substitutes review for main assessment." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

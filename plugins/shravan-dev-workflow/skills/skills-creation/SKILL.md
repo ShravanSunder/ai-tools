@@ -13,6 +13,8 @@ Predictable means the same process, not the same output. A brainstorming skill s
 
 Work on exactly one named skill or accepted draft per run. Portfolio inventory, duplicate-surface archaeology, and "which skills should exist" belong to `skill-audit`.
 
+The user-facing main authors every governing skill-change proposal, specification, and implementation plan. A persistent implementation Sidekick may execute one accepted named run or slice at a time and produce its proof; that commission does not transfer design or planning authorship. Research helpers return evidence, and independent reviewers return findings. Only an explicit user-designated successor-main transfer may move governing authorship under the `manage-agents` contract.
+
 ## Great Skill Frame
 
 A skill has four surfaces:
@@ -129,7 +131,7 @@ Reference calls and lane dispatches use the Call Grammar above; placement follow
 
 ## Review
 
-Behavior-changing work is reviewed twice: the proposal before any skill file is edited, and the changed files before ship. A persistent independent review lead verifies and reduces lane findings; the orchestrator owns final disposition. Mechanical changes are not reviewed.
+Behavior-changing work is reviewed twice unless the user explicitly skips the applicable review: the proposal before any skill file is edited, and the proved, main-assessed changed files before ship. A persistent independent review lead verifies and reduces lane findings; the orchestrator owns final disposition. Mechanical changes are not reviewed.
 
 These stages have separate bounded-remediation rules:
 
@@ -164,7 +166,7 @@ An `evaluate` run walks a shorter spine: complete step 1, follow the review bran
 
 A run implementing one slice — one run of an accepted multi-run skill-change spec's sequenced runs — reads the accepted spec doc and takes its step-1 and step-2 returns from it, quoting the slice's success definition, authoring basis, surface allocation, proof posture, and the decision rows it must honor, and checks the doc's coordination slot before editing; the doc is the commission for that slice, and each slice still names exactly one skill target.
 
-An update run follows one all-run spine: name the promise and success, choose the authoring basis and allocate the four surfaces, design the proposed change, obtain an `accepted-to-implement` proposal-review result before editing any skill file when behavior-changing unless the user explicitly skips review, edit only inside the accepted boundary, review changed files before proof unless the user explicitly skips review, then run proof and prune/ship. Mechanical changes stay static-only and skip both reviews; scoped wording changes use each review stage's scoped form.
+An update run follows one all-run spine: the main names the promise and success, chooses the authoring basis and allocates the four surfaces, designs the proposed change, and obtains an `accepted-to-implement` proposal-review result before any skill file is edited when behavior-changing unless the user explicitly skips review. For implemented behavior-changing delivery, the assigned implementer edits only inside that accepted boundary, runs fitting proof, and returns the diff and proof to the main. The main assesses the current changes and evidence against the accepted need/spec/plan before commissioning independent implementation review when it was not explicitly skipped; accepted corrections then receive fresh proof and assessment before affected review coverage is refreshed. Mechanical changes stay static-only and skip both reviews; scoped wording changes use each review stage's scoped form. An `evaluate` run retains its shorter source-only route above and does not gain implementation or shipping authority.
 
 ### 1. Name the promise and success
 
@@ -245,33 +247,42 @@ IF the change is behavior-changing, before any skill file is edited and unless t
 
 IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: compare the implemented diff against the accepted spec boundary; include a deviation in the run summary only when one exists.
 
-### 8. Review the implementation
+### 8. Proof of quality, proof of work
 
-Review before proving. Proof run first is spent on text the review is about to change.
+For implemented behavior-changing delivery, run the proof route chosen in `Choose the authoring basis and proof posture` against the current files before independent implementation review. IF the change is behavior-changing, load `references/testing/pressure-testing.md` to choose and run the proof route and return the proof protocol, evidence, inspected flagged transcripts, and claim boundaries; that reference owns proof by skill type. Mechanical work retains its static-only route, and an `evaluate` run reports source-only behavior as unverified/deferred rather than entering this delivery step.
 
-IF the change is behavior-changing and the user has not said no review is needed, the orchestrator commissions a different-lineage persistent Review Sidekick with no author context. That lead loads `references/review/implementation-review.md`, selects and dispatches its fresh native lane Workers, and returns the dispatched lane set, every receipt, Parent Reduction, and current remediation-pass evidence. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction. On correction, resume the same lead with its own review history and fresh affected lane coverage.
+Completion: the authoring result, current-source behavior evidence, and remaining proof gap are reported separately. Static proof is not relabeled behavior proof, Git or PR existence is not proof maturity, and an implementation without its fitting proof does not advance to main assessment.
 
-Two obligations stay with the executing review lead whatever the lanes return. Synthesis is not a lane's job: the lead verifies each candidate against actual files before accepting it. The orchestrator retains final delivery disposition and author acceptance. Accepted findings receive one remediation pass at a time, followed by another implementation review only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not dispatch review or remediation four without explicit user permission.
+### 9. Main assessment
 
-Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, claim honesty to `Proof of quality, proof of work`, ship surface to `Prune and ship`.
+For implemented behavior-changing delivery, the implementer returns the current diff, changed-file inventory, actual proof, and gaps to the user-facing main. Before any independent implementation review, the main opens the changed files and decisive proof artifacts and checks them against the user-directed success definition, accepted proposal/spec, current implementation plan or run allocation, and repository instructions. Mechanical work retains its static-only completion route, and an `evaluate` run ends at its source-only reduced verdict without entering main assessment.
 
-Completion: every dispatched lane has a terminal receipt, the Parent Reduction is complete, the result is `great` or names the exact accepted correction, and no fourth remediation occurred.
+Assess all of these inline:
 
-### 9. Proof of quality, proof of work
+- the changed behavior covers the original need and named run without losing required controls;
+- the four surfaces still align and every changed reference/caller is current;
+- actual proof observes the claimed behavior, required flagged transcripts were inspected, and static results are labeled separately;
+- ownership, names, and boundaries match the accepted design and no delegated design/plan authorship leaked into the implementation;
+- the diff adds no unnecessary complexity, compatibility path, lane, schema, or mechanism outside the accepted boundary;
+- when several PR assignments exist, prerequisites and integrated behavior are current across their exact source identities.
 
-Run the proof route chosen in `Choose the authoring basis and proof posture`, after review rather than before it. IF the change is behavior-changing, load `references/testing/pressure-testing.md` to choose and run the proof route and return the proof protocol, evidence, and claim boundaries; that reference owns proof by skill type.
+Missing or stale proof, bounded implementation defects, and reversible drift return to the same implementer with the exact affected proof. A mental-model break, missing owner decision, public-contract change, expanded skill target, plan defect, or proposed proof weakening stops dependent work and returns to its semantic owner. Only a source-backed accepted main assessment may commission implementation review.
 
-Completion: the authoring result, the behavior evidence, and the remaining proof gap are reported separately. Static proof is not relabeled behavior proof, and Git or PR existence is not proof maturity.
+Completion: the main records `accepted-for-independent-review | correction-required | design-or-plan-stop`, the inspected diff/proof identities, reasons, and exact next owner.
 
-### 10. Prune and ship
+### 10. Review the implementation, prune, and ship
 
-Run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it.
+IF the main assessment is `accepted-for-independent-review`, the change is behavior-changing, and the user has not said no review is needed, the orchestrator commissions a different-lineage persistent Review Sidekick with no author context. That lead loads `references/review/implementation-review.md`, receives the current proof and main-assessment result, selects and dispatches its fresh native lane Workers, and returns the dispatched lane set, every receipt, Parent Reduction, and current remediation-pass evidence. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction.
 
-IF the change is behavior-changing and ship status is advancing to `PR-ready` or `released`, load `references/review/implementation-review.md` to reuse a semantically current review result when that stage permits it, or resume its persistent review lead for affected coverage. Return changed-file coverage, bounded review reduction, targeted retest, and the explicit ship decision. General product implementation review routes to `implementation-review`; runtime skill-package authoring remains under this `skills-creation` review contract.
+Two obligations stay with the executing review lead whatever the lanes return. Synthesis is not a lane's job: the lead verifies each candidate against actual files and proof before accepting it. Accepted findings receive one remediation pass at a time. The implementer makes the correction and produces fresh affected proof; the main reassesses that current result; then the same review lead refreshes affected coverage only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not dispatch review or remediation four without explicit user permission.
 
-IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route.
+Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, proof honesty to `Proof of quality, proof of work`, assessment gap to `Main assessment`, and ship surface to this step.
 
-Completion: the skill is compact, valid, public-safe, and the proof route matches the shipping status.
+After a `great` current review result, run the deletion test sentence by sentence: would agent behavior change if this disappeared? If not, delete it. Any deletion that affects reviewed meaning requires fresh fitting proof, main assessment, and affected review coverage.
+
+IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route. General product implementation review routes to `implementation-review`; runtime skill-package authoring remains under this `skills-creation` review contract.
+
+Completion: when implementation review ran, every dispatched lane has a terminal receipt, the Parent Reduction is complete, the result is `great`, and no fourth remediation occurred. Mechanical work or an explicit review skip records that applicable boundary without fabricating review coverage. In every route the skill is compact, valid, public-safe, and supported by the proof its classification and shipping claim require; a source-only evaluation never authorizes shipping.
 
 ## Completion Blockers
 
@@ -285,12 +296,15 @@ The run is not done while any of these hold:
 - a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or review-lead reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
 - review ran outside the Dispatch Contract: the review lead lacks independence from the authoring session, a lane exceeded its native Worker authority, an implementation-stage review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted review-lead-verified remediation;
 - implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
+- independent implementation review for implemented behavior-changing delivery started before fitting implementation proof and a source-backed main assessment;
+- the main assessment for implemented behavior-changing delivery omitted the current diff, actual proof, accepted need/spec/plan, complexity, ownership, or cross-assignment integration applicable to the change;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
 - a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;
 - a second proposal/design review ran without explicit user permission after the first review/remediation result;
 - a fourth implementation remediation or its following review ran without explicit user permission;
 - a behavior-changing skill change reached `PR-ready` or `released` without review-lead reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
+- an accepted correction reached refreshed review coverage without fresh affected proof and main reassessment;
 - a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded review-lead closure;
 - static validation is claimed as behavior proof;
 - a sensitive surface was written without an allowed/disallowed/blocked/deferred decision recorded before that surface was outlined or written;

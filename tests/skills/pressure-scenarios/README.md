@@ -55,12 +55,14 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-design` | `spec-design-separate-evidence-from-requirements` | Keep observations and hypotheses non-normative until an authorized source establishes product meaning. |
 | `spec-design` | `spec-design-use-helpful-diagrams` | Select specification views by the reader question and keep internal structural How out. |
 | `spec-design` | `spec-design-keep-implementation-choices-out-of-requirements` | State observable Why/What without promoting implementation mechanisms into requirements. |
+| `spec-design` | `spec-design-main-authors-settled-sections` | Keep settled governing prose, entity/view expression, and diagrams with the main while allowing bounded evidence help. |
 | `program-design` | `program-design-stay-within-specification` | Realize only accepted requirements inside permitted and protected system boundaries. |
 | `program-design` | `program-design-make-smallest-necessary-change` | Start from the working system, add only required structure, and remove unsupported machinery. |
 | `program-design` | `program-design-show-current-and-proposed-system` | Show current and proposed entrypoint-to-effect behavior and mark actual changes. |
 | `program-design` | `program-design-choose-helpful-diagrams` | Choose each structural view and medium by the relationship a reader needs to understand. |
 | `program-design` | `program-design-explain-design-choices-clearly` | Explain what changes, what remains, the tradeoff, its cost, and when to reconsider. |
 | `program-design` | `program-design-route-specification-gap` | Return missing observable product meaning to spec-design with one compact handoff and no direct-call orchestration state. |
+| `program-design` | `program-design-no-delegated-target-models` | Delegate only current-system/external evidence; keep alternatives, target models, risk realization, and prose with the main. |
 | `spec-program-review` | `spec-program-review-find-unapproved-design` | Catch machinery that document agreement or existing code did not authorize. |
 | `spec-program-review` | `spec-program-review-find-missing-requirements-or-design` | Catch lost accepted requirements and missing executable structural behavior. |
 | `spec-program-review` | `spec-program-review-check-tests-match-claims` | Compare each claimed outcome with evidence that can actually observe it. |
@@ -80,6 +82,8 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-enters-post-review-correction` | Route one bounded design remediation to its semantic owner while preserving a genuine mental-model-break stop. |
 | `orchestrator-design` | `orchestrator-design-blocks-pathfinding-return-mismatch` | Block a completed pathfinding handoff that names a different phase than its initiating handoff. |
 | `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep authoring recovery distinct from the one review remediation and continue to the first review. |
+| `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a design author. |
+| `agent-collaboration` | `agent-collaboration-multi-pr-thread-local-seats` | Use thread-local implementer seats, existing root references, exact SessionRefs, and orchestrator-only agent resolution across planned PR assignments. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |
@@ -93,6 +97,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-session-ledger-reduction.md` | Do not treat multi-agent consensus as truth without session ledgers and parent-owned verification. |
 | `manage-agents` | `manage-agents-custom-agent-boundary.md` | Do not overload custom-agent invocation with adapter building; split agent-registry from building-custom-agents and route sensitive surfaces. |
 | `manage-agents` | `manage-agents-pattern-selection.md` | Do not choose ACPX commands before selecting the right subordinate-agent pattern: swarm, persistent sidekick, advisor, ephemeral subagent, or workflow handoff. |
+| `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a Worker or Sidekick as Requirements, Specification, or Program Design author. |
 | `manage-agents` | `manage-agents-native-reviewer-uses-spawn` | Do not hop a Codex reviewer to `codex exec --sandbox read-only` when native `spawn_agent` is available; packet read-only is enough. |
 | `manage-agents` | `manage-agents-foreign-lineage-uses-acpx` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable through ACPX Claude as `claude-fable-5-1`. |
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
@@ -102,6 +107,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |
 | `plan-handoff` | `plan-handoff-proof-matrix-preservation` | Do not drop obligation/proof ownership, freshness guards, or parent verification while packaging a plan. |
 | `plan-handoff` | `plan-handoff-routes-ready-design-to-planner` | Route exact ready design with no plan to `plan-implementation` without fabricating a handoff. |
+| `plan-handoff` | `plan-handoff-successor-main-authority` | Distinguish ordinary portability from a user-designated successor-main planning transfer. |
 | `plan-implementation` | `plan-implementation-admit-reviewed-design` | Translate current ready three-artifact design into one repo-grounded proof-bearing plan and stop before later phases. |
 | `plan-implementation` | `plan-implementation-route-stale-without-plan` | Route stale design coverage without creating a plan or phantom tuple. |
 | `plan-implementation` | `plan-implementation-preserve-existing-plan-on-blocked-admission` | Preserve an existing ready plan, governing basis, and delivery context when admission fails. |
@@ -112,6 +118,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `plan-implementation` | `plan-implementation-direct-planning-establishes-intent` | Establish plan-only versus PR-ready intent at direct-planning entry instead of adding post-plan approval. |
 | `plan-implementation` | `plan-implementation-orchestrated-plan-uses-project-tmp` | Put orchestrated plans under ignored project tmp and add tmp/* to project .gitignore when needed. |
 | `plan-implementation` | `plan-implementation-runtime-skill-package-route` | Route named runtime skill packages to skills-creation without creating a plan or tuple. |
+| `plan-implementation` | `plan-implementation-main-authors-plan` | Keep strategy, proof slices, dependencies, and PR topology with the main; helpers return evidence only. |
 | `implement-plan` | `implement-plan-admit-ready-delivery-plan` | Admit the exact ready PR-delivery plan, re-anchor current source, and return one proof-bearing frontier without fabricating execution. |
 | `implement-plan` | `implement-plan-block-plan-only-terminal` | Preserve a plan-only record and stop before execution instead of upgrading delivery intent in place. |
 | `implement-plan` | `implement-plan-route-revision-requested` | Route a non-executable revision-requested result to its recorded originating planner. |
@@ -133,6 +140,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `plan-improve-repo` | `plan-improve-repo-deep-no-default-delegation` | Keep deep improvement audits in-parent unless an explicit or concrete bounded delegation predicate exists. |
 | `plan-improve-repo` | `plan-improve-repo-runtime-skill-package-route` | Route named runtime skill packages to skills-creation without a mechanics-only bypass. |
 | `plan-improve-repo` | `plan-improve-repo-completed-blocked-result` | Return blocked with no fabricated plan identity, external contract, or implementation advance. |
+| `plan-improve-repo` | `plan-improve-repo-main-authors-admitted-plan` | Keep admission, priority, plan authorship, and validation judgment with the main after delegated audit evidence. |
 | `ops-linear-tracking` | `ops-linear-tracking-docs-are-truth.md` | Do not make Linear the design source of truth or clobber dependency relations. |
 | `ops-security-review` | `ops-security-review-official-scan.md` | Do not invent a security scanner; route explicit scans to official Codex Security workflows. |
 | `peekaboo` | `peekaboo-progressive-disclosure.md` | Do not reuse stale element IDs, skip live command discovery, or perform destructive desktop cleanup. |
@@ -147,6 +155,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-spec-review-gate.md` | Do not implement non-trivial skill workflow changes before pre-implementation spec review unless the user explicitly skips review. |
 | `skills-creation` | `skills-creation-implementation-review-gate.md` | Do not advance non-trivial skill changes to PR-ready without implementation review reduction, changed-file coverage, and targeted retest. |
 | `skills-creation` | `skills-creation-separate-review-remediation-limits` | Keep one proposal review/remediation distinct from the three-pass implementation-review limit. |
+| `skills-creation` | `skills-creation-proof-main-assessment-review-order` | Require implementation proof, then source-backed main assessment, then independent review and fresh correction proof. |
 | `research-swarm` | `research-swarm-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
 | `research-swarm` | `research-swarm-substantial-stage-artifacts` | Do not collapse substantial fan-out research into chat-only summaries; require lane artifacts and parent synthesis. |
 | `implementation-review` | `implementation-review-classify-non-substantial` | Skip independent review only for verified non-semantic mechanical work. |
@@ -184,8 +193,11 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-runtime-skill-package-route` | Route runtime skill-package goals to `skills-creation` without bypassing authoring review. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-runtime-skill-package-composed` | Validate the existing accepted multi-run commission before allowing one named child phase. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-reject-invalid-composition-commission` | Reject stale, wrong-target, wrong-phase, or wrong-revision commission identities. |
+| `orchestrator-implementation-goal` | `orchestrator-implementation-goal-multi-pr-main-assessment` | Use linked thread-local execution roots, honor real PR dependencies, and run proof then main assessment before review. |
 | `spec-handoff` | `spec-handoff-portable-design-context` | Do not turn spec/design portability into plan creation or phase completion. |
 | `spec-handoff` | `spec-handoff-routes-ready-design-to-planner` | Preserve ready design in the handoff and recommend exactly `plan-implementation`. |
+| `spec-handoff` | `spec-handoff-successor-main-authority` | Preserve design authorship unless recipient, transferred scope, and explicit user direction designate a successor main. |
+| `track-show-me-your-work` | `track-show-me-your-work-coordination-execution-roots` | Keep coordination/integration separate from linked per-PR execution roots and thread-local implementer seats. |
 | `presentation-tui` | `presentation-tui-monospace-structure.md` | Keep the TUI skeleton as default layout while mixing markdown deliberately; GFM tables are the comparison default; no pipe tables inside frames. |
 | `presentation-tui` | `presentation-tui-progressive-disclosure.md` | Do not dump one giant diagram; use disclosure sequence with one map, selected slice, small ledger, and detail. |
 | `presentation-tui` | `presentation-tui-research-lane-board.md` | Do not claim presentation runs research; render handed-over lanes with parent synthesis boundaries. |

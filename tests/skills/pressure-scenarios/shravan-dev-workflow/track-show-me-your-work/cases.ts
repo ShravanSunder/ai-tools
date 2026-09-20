@@ -94,5 +94,17 @@ export const skillPressureCaseDefinitions = [
         "failureExample": "Claims a generated view or completed edit."
       }
     ]
+  },
+  {
+    scenarioId: "track-show-me-your-work-coordination-execution-roots",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "uses-linked-thread-local-roots", requirement: "Uses one coordination root and one referenced execution root per simultaneous Sidekick; each execution root has the orchestrator and one implementer, and the seat limit is thread-local.", failureExample: "Puts both implementers on one thread, invents a hierarchy/link command, or imposes one implementer across the project." },
+      { name: "separates-assignment-and-integration-history", requirement: "Keeps assignment discussion/proof on execution roots, cross-PR integration/final outcome on coordination, and whole-work resolution with the responsible orchestrator after linked outcomes are checked.", failureExample: "Resolves coordination when one PR assignment finishes." },
+    ],
   }
 ] satisfies readonly SkillPressureCaseDefinition[];

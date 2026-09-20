@@ -95,4 +95,16 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "plan-handoff-successor-main-authority",
+    requiredSourceReads: [
+      ...admissionSources,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "ordinary-handoff-preserves-main", requirement: "Packet A preserves the implementation Sidekick's execution scope and returns the missing plan decision to the current main.", failureExample: "Treats continue-from-here or the Sidekick role as plan-author authority." },
+      { name: "explicit-successor-transfer-is-honored", requirement: "Packet B transfers plan authorship because it names the successor recipient, transferred planning scope, and explicit user direction.", failureExample: "Rejects the complete user-designated successor or requires an invented fourth signal." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

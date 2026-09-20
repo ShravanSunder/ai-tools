@@ -5,7 +5,7 @@ description: Use when a user asks to run, resume, or finish one bounded Requirem
 
 # Design Orchestration
 
-The orchestrator advances the smallest design owner that can resolve the work, verifies its material result against current evidence, and continues until the three artifacts form one coherent reviewed design or an owner decision or blocker stops the run. This skill owns coordination and the final claim. `spec-design`, `program-design`, and `spec-program-review` own their phase judgment and artifacts.
+The orchestrator advances the smallest design owner that can resolve the work, verifies its material result against current evidence, and continues until the three artifacts form one coherent reviewed design or an owner decision or blocker stops the run. This skill owns coordination and the final claim. The user-facing orchestrator loads `spec-design` and `program-design` in this session and authors those artifacts with the user. Those skills own phase judgment; they are not a reason to spawn a writer. Independent review is assigned out through `spec-program-review`.
 
 ```text
 spec-design          Requirements and observable Specification
@@ -23,12 +23,23 @@ Record only consequential design decisions, owner confirmations, accepted or rej
 ## Orient And Route
 
 1. Reopen the current user intent, governing sources, Requirements, Specification, Program Design, and any inspectable current phase or review result. Use the trail to find relevant context, then verify load-bearing claims in current sources.
-2. IF assigning research or another phase owner, load `manage-agents` and return the selected responsibility, continuity, and assignment boundary. The orchestrator retains material design work with the user. A bounded research question goes to a Worker; related research with follow-up questions may use a research Sidekick.
-3. Invoke the smallest owner that can advance the current evidence:
+2. IF assigning research or independent review, load `manage-agents` and return the selected responsibility, continuity, and assignment boundary. Do not assign a Worker or Sidekick as Requirements, Specification, or Program Design author. The orchestrator retains material design work with the user and writes those artifacts in this session. A bounded research question goes to a Worker; related research with follow-up questions may use a research Sidekick.
+3. Invoke the smallest owner that can advance the current evidence. Invoke means this session loads that skill. Do not spawn an executor to be the phase owner. Only independent review is assigned out:
    - fresh full-design request, or missing Requirements or Specification -> `spec-design`;
    - current Requirements and Specification but missing Program Design -> `program-design`;
    - three current artifacts without completed review coverage -> assign or resume the persistent independent design-review Sidekick through `spec-program-review` in `three-artifact-design` mode;
    - genuinely unmade owner meaning -> `discuss-pathfinding`, returning to the phase that owns it.
+
+If the user says to write the spec, or not a subagent, write immediately. Loading `spec-design` or `program-design` in this session is required. Starting a skill-legalization patch instead of writing is the failure. Portability does not transfer authorship: only explicit user direction designating a named successor main and the transferred design or planning scope permits another session to continue that governing authorship. Record that direction in the successor packet. Without all three signals, a helper, executor, role label, handoff, or assistant continuation returns the authoring gap to the current main.
+
+| rationalization | reality |
+| --- | --- |
+| "spec-design owns artifacts, so spawn a Sidekick" | those skills own judgment; this session loads them and writes |
+| "Sol is the executor, so Sol writes the spec" | executor means implementation, research, or review support, not design authorship |
+| "the section is already settled, so delegation is only wording" | selecting structure and prose for governing content is authorship; helpers return evidence, not sections |
+| "the handoff says continue, so this session is the new main" | a successor transfer also needs the named recipient, transferred scope, and explicit user direction |
+| "I'll check the instructions first" | "you write it" is already the instruction; load the phase skill and write |
+
 4. Preserve each producer's current route and compact handoff. Accept only `discuss-pathfinding | spec-design | program-design | spec-program-review | stop`; a contradictory destination blocks without the orchestrator inventing a route.
 5. Verify what materially changed before continuing. Check artifact identity and resolution, returned owner, current evidence, and the finding or decision that justifies the next route. Require exact source identity where correctness depends on it, such as a reviewed commit or PR head; ordinary decisions need no opaque identity.
 6. Route a `specification-gap` to `spec-design`, an owner-controlled structural choice through `discuss-pathfinding` back to `program-design`, a bounded How correction to `program-design`, and a blocker or owner decision to the exact stop. Continue across phase boundaries instead of returning a progress checkpoint as completion.
@@ -62,6 +73,6 @@ Return one status and the next skill or stop. `ready` requires distinct, current
 
 When the caller or user has requested continued delivery, preserve this design terminal and the next phase's existing input/result contract for the delivery loop; the orchestrator does not implement or claim delivery complete. The reviewed artifacts, task boundary, completion or escalation, and design proof/results remain authoritative. Use `plan-handoff` only when a current implementation plan needs portability, or `spec-handoff` only when reviewed design context needs portability before a plan exists. Do not require either handoff merely because the executor uses a separate session, and do not create a management packet schema, route, or work trail.
 
-For a substantive design loop that uses agent help, the orchestrator may be Frontier or Balanced. It works with the user on material design meaning through this workflow. Workers can gather bounded evidence or draft already-settled artifacts, retaining their assignment through corrections. A research Sidekick is useful when related assignments need continuing context. Only an explicitly requested Advisor assists the orchestrator with design choices.
+For a substantive design loop that uses agent help, the orchestrator may be Frontier or Balanced. It works with the user on material design meaning and authors every governing section, diagram, and artifact through this workflow. Workers can gather bounded evidence, and tools may mechanically render unchanged orchestrator-authored input without choosing prose, diagram source, layout, or design meaning. A research Sidekick is useful when related assignments need continuing context. Only an explicitly requested Advisor assists the orchestrator with design choices; advice is neither authorship nor acceptance.
 
-If continued delivery is requested, after `ready` MUST load `manage-agents` to assign or resume one persistent implementation Sidekick. The orchestrator keeps the existing work-root as `orchestrator`; the implementer joins that thread and owns development, proof, bounded native Workers, and standalone native Operators. Design gaps return to the orchestrator and user. `plan-implementation` remains required when no ready plan exists, preserving its admission requirements.
+If continued delivery is requested and no ready plan exists, the orchestrator MUST load `plan-implementation` in this session and author the implementation plan before commissioning implementation. Once the plan is ready, MUST load `manage-agents` to assign or resume one persistent implementation Sidekick per useful planned PR assignment. The orchestrator keeps the coordination root and each execution root as `orchestrator`; each implementer joins only its execution root, owns development and proof for that main-planned scope, and may use bounded native Workers and standalone native Operators. Design or plan gaps return to the orchestrator and user. Independent PR assignments may proceed concurrently; dependent assignments wait for verified prerequisites.
