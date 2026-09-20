@@ -1,0 +1,14 @@
+Read first:
+
+LATEST USER TURN
+esc and cmd-shift-s must cancel; fix the pane regression
+
+[last] Sol is still proving the pane regression. Drawers, Pane Zoom, and both cancellation keys remain under verification. This session has no remaining local implement work until that proof lands.
+
+Earlier turns follow for context.
+USER TURN 1
+esc and cmd-shift-s must cancel; fix the pane regression
+
+ASSISTANT TURN 1 (2 messages, last privileged)
+[earlier] Queued Sol the pane-regression repair plus separate Escape and Cmd-Shift-S cancellation proof.
+[last] Sol is still proving the pane regression. Drawers, Pane Zoom, and both cancellation keys remain under verification. This session has no remaining local implement work until that proof lands.

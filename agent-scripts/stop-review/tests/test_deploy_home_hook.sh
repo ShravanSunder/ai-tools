@@ -30,8 +30,38 @@ assert_eq() {
 }
 
 WORKDIR="$(mktemp -d /tmp/stop-review-deploy.XXXXXX)"
-trap 'rm -rf "${WORKDIR}"' EXIT
+trap 'rm -rf "${WORKDIR}" 2>/dev/null || true' EXIT
 DEST="${WORKDIR}/.agents/stop-review"
+export HOME="${WORKDIR}"
+export CODEX_STOP_REVIEW_HOME="${WORKDIR}/.codex-reviewer"
+export CODEX_STOP_REVIEW_STATE_ROOT="${WORKDIR}/state"
+STUB_RUNNER="${WORKDIR}/stub-review-runner.sh"
+cat >"${STUB_RUNNER}" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+OUT=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --output)
+      OUT="${2:-}"
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+if [[ -z "${OUT}" ]]; then
+  exit 2
+fi
+printf '%s\n' '{"decision":"stop_ok","reason":"stub"}' >"${OUT}"
+EOF
+chmod +x "${STUB_RUNNER}"
+export CODEX_STOP_REVIEW_RUNNER="${STUB_RUNNER}"
+
+mkdir -p "${DEST}"
+printf '%s\n' "typesafe-sdk" >"${DEST}/requirements.txt"
+printf '%s\n' "# leftover" >"${DEST}/openrouter_key.py"
 
 deployed="$(CODEX_STOP_REVIEW_DEPLOY_ROOT="${DEST}" bash "${DEPLOY}")"
 assert_eq "${deployed}" "${DEST}" "deploy destination"
@@ -40,9 +70,25 @@ assert_file "${DEST}/stop-review-hook.sh"
 assert_file "${DEST}/review-runner.sh"
 assert_file "${DEST}/config.sh"
 assert_file "${DEST}/extract_stop_review_window.py"
+assert_file "${DEST}/jev_classifier.py"
+assert_file "${DEST}/keyring_secrets.py"
 assert_file "${DEST}/classifier-prompt.md"
 assert_file "${DEST}/output-schema.json"
 assert_file "${DEST}/reviewer-config.toml"
+
+if [[ -e "${DEST}/requirements.txt" || -e "${DEST}/openrouter_key.py" || -d "${DEST}/.venv" ]]; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: deploy must remove leftover pip files and not create a venv\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
+if grep -Eq 'pip install|uv pip|uv sync|python3 -m venv' "${DEST}/deploy-home-hook.sh"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: deploy-home-hook.sh must not install packages\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
 
 if grep -Eq 'AI_TOOLS_ROOT|HOME}/dev/ai-tools/agent-scripts' "${DEST}/deploy-home-hook.sh"; then
   FAIL=$((FAIL + 1))
@@ -73,6 +119,25 @@ assert_eq "$(cat "${HOOK_OUT}")" "{}" "run-hook still uses subfolder classifier"
 if grep -Fq -- '--run-hook' "${DEST}/stop-review-hook.sh"; then
   FAIL=$((FAIL + 1))
   printf 'FAIL: deployed classifier must not call deploy --run-hook\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
+if grep -Eq 'op read|keyring|--provision' "${DEST}/stop-review-hook.sh"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: stop-review-hook.sh must not provision or call op\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
+if awk '
+  $0 ~ /^run_local_hook\(\)/ {in_hook=1}
+  in_hook && $0 ~ /^}/ {in_hook=0}
+  in_hook && /provision_keyring|op read/ {found=1}
+  END {exit found ? 0 : 1}
+' "${DEST}/deploy-home-hook.sh"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: --run-hook path must not call provision_keyring\n' >&2
 else
   PASS=$((PASS + 1))
 fi

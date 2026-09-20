@@ -13,9 +13,11 @@ HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${HOOK_DIR}/config.sh"
 WINDOW_SCRIPT="${HOOK_DIR}/extract_stop_review_window.py"
 REVIEW_RUNNER="${CODEX_STOP_REVIEW_RUNNER:-${HOOK_DIR}/review-runner.sh}"
+JEV_CLASSIFIER="${HOOK_DIR}/jev_classifier.py"
 CLASSIFIER_PROMPT_FILE="${HOOK_DIR}/classifier-prompt.md"
 OUTPUT_SCHEMA_FILE="${HOOK_DIR}/output-schema.json"
 LUNA_TIMEOUT_SECONDS="${CODEX_STOP_REVIEW_LUNA_TIMEOUT:-${STOP_REVIEW_LUNA_TIMEOUT_DEFAULT}}"
+STOP_REVIEW_BACKEND="${CODEX_STOP_REVIEW_BACKEND:-${STOP_REVIEW_BACKEND_DEFAULT}}"
 STOP_REVIEW_MODEL="${CODEX_STOP_REVIEW_MODEL:-${STOP_REVIEW_MODEL_DEFAULT}}"
 STOP_REVIEW_REASONING_EFFORT="${CODEX_STOP_REVIEW_REASONING_EFFORT:-${STOP_REVIEW_REASONING_EFFORT_DEFAULT}}"
 STOP_REVIEW_REASONING_SUMMARY="${CODEX_STOP_REVIEW_REASONING_SUMMARY:-${STOP_REVIEW_REASONING_SUMMARY_DEFAULT}}"
@@ -213,7 +215,7 @@ if ! command -v python3 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
   emit_allow
 fi
 
-if [[ ! -f "${WINDOW_SCRIPT}" || ! -f "${REVIEW_RUNNER}" || ! -f "${CLASSIFIER_PROMPT_FILE}" || ! -f "${OUTPUT_SCHEMA_FILE}" ]]; then
+if [[ ! -f "${WINDOW_SCRIPT}" || ! -f "${REVIEW_RUNNER}" || ! -f "${JEV_CLASSIFIER}" || ! -f "${CLASSIFIER_PROMPT_FILE}" || ! -f "${OUTPUT_SCHEMA_FILE}" ]]; then
   save_state "${BLOCK_COUNT}" "missing_assets" "${message_hash}"
   log_message "turn_id=${turn_id} session_id=${session_id} classification=missing_assets block_count=${BLOCK_COUNT} outcome=allow"
   emit_allow
@@ -235,25 +237,44 @@ fi
 WORK_DIR="$(mktemp -d /tmp/codex-stop-review-luna.XXXXXX)"
 PROMPT_FILE="${WORK_DIR}/prompt.txt"
 OUT_FILE="${WORK_DIR}/luna-last.txt"
-{
-  cat "${CLASSIFIER_PROMPT_FILE}"
-  if [[ "${stop_hook_active}" == "true" ]]; then
-    printf '\n\nNested stop: true\n'
-    printf 'Previous continues this turn: %s\n' "${BLOCK_COUNT}"
-    printf 'Max continues this turn: %s\n' "${MAX_CONTINUES}"
-  fi
-  printf '\n\nConversation window:\n\n'
-  printf '%s\n' "${WINDOW_TEXT}"
-} >"${PROMPT_FILE}"
+WINDOW_FILE="${WORK_DIR}/window.txt"
+printf '%s\n' "${WINDOW_TEXT}" >"${WINDOW_FILE}"
 
 set +e
-log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
-bash "${REVIEW_RUNNER}" \
-  --prompt-file "${PROMPT_FILE}" \
-  --output "${OUT_FILE}" \
-  --cd "${PROJECT_ROOT}" \
-  >/dev/null 2>>"${PROJECT_LOG}"
-LUNA_EXIT=$?
+if [[ "${STOP_REVIEW_BACKEND}" == "jev" ]]; then
+  log_message "turn_id=${turn_id} session_id=${session_id} jev_start transport=openrouter-systemone model=${CODEX_STOP_REVIEW_JEV_MODEL:-${STOP_REVIEW_JEV_MODEL_DEFAULT}} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
+  JEV_PYTHON="${CODEX_STOP_REVIEW_PYTHON:-python3}"
+  JEV_ARGS=(
+    "${JEV_PYTHON}" "${JEV_CLASSIFIER}"
+    --window-file "${WINDOW_FILE}"
+    --output "${OUT_FILE}"
+    --previous-continues "${BLOCK_COUNT}"
+    --max-continues "${MAX_CONTINUES}"
+  )
+  if [[ "${stop_hook_active}" == "true" ]]; then
+    JEV_ARGS+=(--nested)
+  fi
+  "${JEV_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
+  LUNA_EXIT=$?
+else
+  {
+    cat "${CLASSIFIER_PROMPT_FILE}"
+    if [[ "${stop_hook_active}" == "true" ]]; then
+      printf '\n\nNested stop: true\n'
+      printf 'Previous continues this turn: %s\n' "${BLOCK_COUNT}"
+      printf 'Max continues this turn: %s\n' "${MAX_CONTINUES}"
+    fi
+    printf '\n\nConversation window:\n\n'
+    printf '%s\n' "${WINDOW_TEXT}"
+  } >"${PROMPT_FILE}"
+  log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
+  bash "${REVIEW_RUNNER}" \
+    --prompt-file "${PROMPT_FILE}" \
+    --output "${OUT_FILE}" \
+    --cd "${PROJECT_ROOT}" \
+    >/dev/null 2>>"${PROJECT_LOG}"
+  LUNA_EXIT=$?
+fi
 set +e
 
 if [[ "${LUNA_EXIT}" -ne 0 ]]; then
