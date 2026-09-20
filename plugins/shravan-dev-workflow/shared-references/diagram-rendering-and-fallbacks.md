@@ -2,7 +2,7 @@
 
 This shared runtime reference owns medium selection, rendering fallback, semantic-preservation inspection, and visual-check results for views whose predicate and required fields were selected by a consuming skill.
 
-Expected inputs: destination, repository rendering capabilities, user-requested format when present, and one or more view requests containing the fired predicate plus required semantic fields.
+Expected inputs: destination, repository rendering capabilities, user-requested format when present, and one or more view requests containing the fired predicate plus required semantic fields. A generated-image request also supplies the artifact identity and main-authored visual brief or its source pointer.
 
 Return per view: selected medium, fallback decision, semantic-preservation result, visual-check result, and exact gap when no supported medium passes.
 
@@ -11,6 +11,8 @@ Return per view: selected medium, fallback decision, semantic-preservation resul
 Honor an exact user-requested format when it can preserve the required semantics. Otherwise choose by the relationship and destination:
 
 - IF Mermaid is a candidate medium, load `mermaid-usage.md` to decide from the already-selected relationship and destination and return the use-or-fallback decision with its trigger and the readability/semantics check result;
+- for a newly authored or substantively revised substantial Requirements, Specification or Program Design document, select an available authorized Image Gen capability for a meaningful explanatory overview, journey or other reader-useful image instead of silently defaulting every document to Mermaid/table/text; an exact user format takes precedence, no filler image satisfies this rule, and an exact meaning/capability conflict returns for owner-directed deferral;
+- IF generated imagery is explicitly requested or selected by the rule above, load `generated-document-visuals.md` and return its capability/authority, durable asset/embed, semantic/readability inspection, preview and exact-gap result; a generated overview supplements rather than replaces any precise view whose required semantic fields it cannot preserve;
 - use a Markdown table for dense ownership, matrix, state, transition, or coverage data where comparison matters more than topology or time (`markdown-presentation-baseline.md` owns the table default);
 - for chat or terminal explanation, and only when visual structure materially helps, use the `presentation-*` skill matching the current surface; honor an exact user-requested format instead;
 - use readable fenced plain text when no renderer exists or Mermaid/table structure would hide the relationship.
@@ -27,7 +29,7 @@ Bad: decorative boxes, prose labeled as a diagram, unreadable Mermaid, a table t
 
 ## Inspect and Fall Back
 
-Inspect the rendered output rather than inferring success from a fenced block or valid-looking syntax. A directly visible fenced plain-text view can be inspected as shown. A table can be inspected as shown only when its rendered cells or borders are visible at the destination. When the destination renderer is not observable in-session, accept only an actual repository or browser preview of the rendered diagram, or a local Mermaid renderer when available; source-text inspection alone is never a visual pass for a rendered medium. When no rendered inspection is available, return `visual check: unverified (no renderer available)` with the reason, and either apply the required plain-text/table fallback or record the rendered result as an explicit gap — never a bare pass. Check:
+Inspect the rendered output rather than inferring success from a fenced block, valid-looking syntax, prompt or file path. A directly visible fenced plain-text view can be inspected as shown. A table can be inspected as shown only when its rendered cells or borders are visible at the destination. A generated image requires inspection of the actual project-local pixels plus its resolved Markdown embed and supported destination preview under `generated-document-visuals.md`. When the destination renderer is not observable in-session, accept only an actual repository or browser preview of the rendered diagram, or a local Mermaid renderer when available; source-text inspection alone is never a visual pass for a rendered medium. When no rendered inspection is available, return `visual check: unverified (no renderer available)` with the reason, and either apply the required plain-text/table fallback or record the rendered result as an explicit gap — never a bare pass. Check:
 
 - every required semantic field is visible;
 - labels and edges are readable at the destination;
@@ -44,10 +46,11 @@ Each medium label names an output medium, not a skill: `presentation-tui` denote
 ```text
 view and fired predicate
 required semantic fields
-selected medium: mermaid | markdown-table | presentation-tui | fenced-plain-text
+selected medium: generated-image | mermaid | markdown-table | presentation-tui | fenced-plain-text
 format override: honored | not requested | unsupported, with reason
 semantic preservation: preserved fields | missing fields
 visual check: readable | unreadable | unverified, with observation
+generated asset/embed/preview: project paths and inspection result, when selected
 fallback: none | from -> to, with trigger
 result: pass | gap
 ```

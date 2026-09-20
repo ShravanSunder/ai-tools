@@ -50,22 +50,30 @@ describe("user requirements and design-view contracts", () => {
       pluginRoot,
       "shared-references/diagram-rendering-and-fallbacks.md",
     );
+    const generatedVisualsPath = path.join(
+      pluginRoot,
+      "shared-references/generated-document-visuals.md",
+    );
     const discussPathfinding = readPluginFile(
       "skills/discuss-pathfinding/SKILL.md",
     );
     const specDesign = readPluginFile("skills/spec-design/SKILL.md");
     const programDesign = readPluginFile("skills/program-design/SKILL.md");
     const sharedReference = readFileSync(sharedPath, "utf8");
+    const generatedVisualsReference = readFileSync(generatedVisualsPath, "utf8");
 
     expect(existsSync(sharedPath)).toBe(true);
-    for (const skill of [specDesign, programDesign]) {
+    expect(existsSync(generatedVisualsPath)).toBe(true);
+    for (const skill of [discussPathfinding, specDesign, programDesign]) {
       expect(skill).toContain(
         "../../shared-references/diagram-rendering-and-fallbacks.md",
       );
     }
 
-    expect(discussPathfinding).not.toContain(
-      "../../shared-references/diagram-rendering-and-fallbacks.md",
+    expect(
+      discussPathfinding.indexOf("diagram-rendering-and-fallbacks.md"),
+    ).toBeLessThan(
+      discussPathfinding.indexOf("MUST load `references/decisions-and-docs.md`"),
     );
     expect(specDesign.indexOf("diagram-rendering-and-fallbacks.md")).toBeLessThan(
       specDesign.indexOf("MUST load `references/artifact-and-self-review.md`"),
@@ -75,9 +83,18 @@ describe("user requirements and design-view contracts", () => {
     ).toBeLessThan(
       programDesign.indexOf("MUST load `references/artifact-and-self-review.md`"),
     );
+    for (const designSkill of [specDesign, programDesign]) {
+      expect(designSkill).toContain(
+        "or the substantial per-document visual obligation applies even when no precise-view predicate fires",
+      );
+      expect(designSkill).toContain(
+        "the default available-authorized Image Gen route",
+      );
+    }
     expect(sharedReference).toContain(
-      "selected medium: mermaid | markdown-table | presentation-tui | fenced-plain-text",
+      "selected medium: generated-image | mermaid | markdown-table | presentation-tui | fenced-plain-text",
     );
+    expect(sharedReference).toContain("load `generated-document-visuals.md`");
     expect(sharedReference).toContain("format override: honored");
     expect(sharedReference).toContain("semantic preservation:");
     expect(sharedReference).toContain(
@@ -87,6 +104,11 @@ describe("user requirements and design-view contracts", () => {
       "visual check: readable | unreadable | unverified",
     );
     expect(sharedReference).toContain("result: pass | gap");
+    expect(generatedVisualsReference).toContain(
+      "listed skill from a callable generation tool",
+    );
+    expect(generatedVisualsReference).toContain("relative Markdown image link");
+    expect(generatedVisualsReference).toContain("Open the actual project asset");
   });
 
   test("keeps user-requirements row authority and U identifiers aligned", () => {

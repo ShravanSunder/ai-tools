@@ -11,7 +11,7 @@ Return in workflow order:
 
 ## Apply Required Views
 
-Consume each selected view's reader question plus the selected predicates and required semantic fields from the `SKILL.md` Required Views table without restating them. Consume the shared rendering result for every firing and reject missing fields, failed visual checks, unresolved fallbacks, or a view that does not answer its stated reader question.
+Consume each selected view's reader question plus the selected predicates and required semantic fields from the `SKILL.md` Required Views table without restating them. Consume the shared rendering result for every firing and reject missing fields, failed visual checks, unresolved fallbacks, or a view that does not answer its stated reader question. For generated images, also reject a missing project-local asset, broken relative embed, inaccurate alt/caption, absent pixel inspection, unverified required destination preview, main-unaccepted candidate, or any disagreement with the exact structural views.
 
 For call graph or sequence views, consume the current-to-proposed delta from `state-calls-and-flows.md` rather than copying a raw stack trace. Keep these fields visible:
 
@@ -92,6 +92,7 @@ Re-read the whole artifact:
 - every accepted requirement remains covered or has owner-authorized supersession;
 - every design element has a legitimate basis;
 - every reader-facing element passes the human deletion test;
+- every generated visual has a current accepted asset/embed, accurate labels and edges, readable placement, and agreement with the authoritative prose and exact views;
 - progressive disclosure leads from specification obligation through owner, call/state/failure behavior, and proof without scratch or process notes;
 - structural-realization confirmation exposes complexity spent and every deviation from the confirmed goal boundary;
 - no planner-owned sequence/command detail leaked in;

@@ -97,7 +97,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    MUST load `references/question-craft.md` and return its question form, material-ambiguity explanation, probes, and counters applied. Return the useful explanation and smallest answerable question group, not narration of the method.
 
-   For a material ambiguity, make the choice understandable before asking: show the current model, strongest credible alternative, one discriminating countercase, and what changes downstream. IF a compact diagram materially clarifies boundaries, ownership, sequence, or competing interpretations, use the `presentation-*` skill matching the current surface to show the map; honor an exact user-requested format instead. The diagram explains; it does not decide or replace downstream specification views.
+   For a material ambiguity, make the choice understandable before asking: show the current model, strongest credible alternative, one discriminating countercase, and what changes downstream. IF a compact diagram materially clarifies boundaries, ownership, sequence, or competing interpretations, use the `presentation-*` skill matching the current surface to show the map; honor an exact user-requested format instead. IF the user requests a generated comparison or the selected durable destination benefits from one, load `../../shared-references/diagram-rendering-and-fallbacks.md` with a main-authored provisional brief and return its actual visual result or exact capability gap. Label every unresolved relationship and assumption as provisional. The image explains the choice; generation failure does not answer it, and no visual decides owner meaning or replaces downstream specification views.
 
    When the destination is Program Design, compare the consequences of owner-controlled tolerance choices without proposing competing architectures. Ask what cost, risk, downtime, compatibility, or policy the owner accepts; leave the component or mechanism that satisfies it to `program-design`.
 
@@ -109,11 +109,13 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
 6. **Write the moment it crystallizes.** Use one home per kind of meaning: decisions use the decision record, processes use the process record, terms use glossary entries, and user requirements use classified rows plus the goal boundary.
 
+   When the owner has already confirmed a choice, lead with a short ordinary-language explanation of what was selected, how it differs from the rejected/current alternatives, and the concrete gain, cost, urgency or downstream consequence. A bare boundary or decision label is not that explanation. If a compact visual materially helps, place it only after the comparison and consequence and before the concise record/handoff. Do not lead the user-facing response with a method, record or authoring label; the record shape remains internal structure rather than the explanation.
+
    The record shape follows the meaning, not a default Requirements destination. A clarified Specification decision remains a decision returned to `spec-design`. A clarified structural tolerance remains a decision returned to `program-design`; it does not become a pathfinding-authored component, interface, ownership allocation, or mechanism.
 
    For a user-requirements destination where extraction proceeds, return the classified inventory, draft rows, useful user-job sequence inputs, record identity and permitted home, confirmed goal boundary or exact owner decision still needed, and unresolved authority or evidence gaps. If extraction is declined, return the loaded reference's refusal or fallback result and exact gaps instead.
 
-   MUST load `references/decisions-and-docs.md` and return the records plus the proportional confirmed/provisional/open summary. IF a durable handoff could change implementation ownership, behavior, or proof when misunderstood, also return its reader-test receipt.
+   MUST load `references/decisions-and-docs.md` and return the records plus the proportional confirmed/provisional/open summary. IF a durable handoff could change implementation ownership, behavior, or proof when misunderstood, also return its reader-test receipt. When a generated visual was selected for a durable record or handoff, consume the shared rendering result, keep provisional labels visible, embed only an accepted project-local asset with a relative link, and preserve confirmed meaning plus open choices in text. Chat-only remains chat-only and does not invent an asset destination.
 
    Completion: every crystallized item has one record in the user's language; confirmed meaning and negative space remain separate from assumptions and open choices; every required reader test is complete.
 
@@ -165,6 +167,7 @@ The session is not done while any of these hold:
 - questioning started before the current read, confidence, and reason were recorded;
 - a turn split directly related questions into needless rounds, asked a dependent question before knowing it applied, or presented a wall of unrelated questions;
 - a material ambiguity was reduced to a mechanically complete question without an evidence-plausible alternative, discriminating countercase, or downstream difference;
+- a selected pathfinding visual hides provisional meaning, settles an unresolved choice, invents downstream architecture, or treats missing generation capability as an answer;
 - a challengeable answer did not receive its applicable follow-up or lacks a resolved/open state;
 - an unresolved response — delegation, ambiguous assent, topic change, silence — was treated as resolution;
 - the run proceeded without a live user instead of returning `decision-needed` for an orchestrated continuation or a blocker otherwise;
