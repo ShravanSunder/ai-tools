@@ -320,13 +320,14 @@ After dispatch, when no independent useful work remains, identify the dependency
 | A future event, deadline, or follow-up | Create an authorized wake through `agent-collaboration`, retaining the recipient, expiry, and saved wake id. This schedules a future event; it is not a passive wait. |
 | An owner decision | Record the meaningful checkpoint and yield. |
 
-For a separate conversation without available board-listener capability, use its supported reply/event notification or an authorized wake, or report the capability gap. A Claude background command is eligible only when the host also supports a native completion notification; `&` alone does not prove a wake. When a supported board listener is available, do not substitute periodic wakes or list polls. Supported capability and permission recovery stays within `agent-collaboration`; do not use an alternate transport after access is denied.
+For a separate conversation without available board-listener capability, use its supported reply/event notification or an authorized wake, or report the capability gap. A Claude background command is eligible only when the host also supports a native completion notification; `&` alone does not prove a wake. When a supported board listener is available, do not substitute periodic wakes or list polls. When remaining implement/prove is on a separately addressed collaborator and no independent useful work remains, set one authorized `agent-collaboration` wake unless a supported listener is already armed, then state in the stop text that the wake or listener is saved/active. Stop-review cannot see the CLI or MCP call. Supported capability and permission recovery stays within `agent-collaboration`; do not use an alternate transport after access is denied.
 
 On received activity, process the relevant receipt. On an empty timeout, rearm the selected wait only when the deadline and assignment still warrant it. Discovery, failure/recovery evidence, and liveness checks after a dropped wait remain valid reasons to inspect. A blocked wait process itself generates no model tokens, but handling its call/result and a wake consumes real turns; each model-driven poll reprocesses context. Do not call waiting free or claim every tool call costs the same. Assign a long CI watch to an Operator with its blocking watch, then wait for the Operator.
 
 | Red flag | Required action |
 | --- | --- |
 | “just a quick check”; “the reply is probably in by now”; “one more list won’t hurt” | Do not list, inspect, or fetch solely for a reply. Continue the active wait; rearm only after it ends and waiting is still required. |
+| Stopping while a collaborator still owns remaining work, without a reported saved wake | Set the authorized wake (or keep the armed listener), say it is saved/active, then yield. Do not inspect the foreign session to keep this conversation alive. |
 
 On observed resumption, cancel or adjust an obsolete wake through `agent-collaboration`. This does not alter ordinary user reminder cadence.
 
