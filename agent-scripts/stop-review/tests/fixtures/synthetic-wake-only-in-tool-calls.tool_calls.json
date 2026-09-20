@@ -1,0 +1,11 @@
+[
+  {
+    "tool": "Bash",
+    "command": "agent-collaboration wake send --to sol-session --from this-session --text \"Check Sol pane-regression proof and report blockers.\" --after 25m --json",
+    "result": {
+      "wakeupId": "01synthetic-wake-cli-only",
+      "status": "saved",
+      "delay": "25m"
+    }
+  }
+]

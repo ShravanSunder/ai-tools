@@ -5,10 +5,13 @@ set -euo pipefail
 # Copy the sandbox-visible Stop-review runtime into ~/.agents/stop-review.
 # Codex Stop hooks cannot read ~/dev/ai-tools; the chezmoi wrapper must exec
 # this local copy via: bash "$HOME/.agents/stop-review/deploy-home-hook.sh" --run-hook
+# Deploy copies files only. It does not create a venv or install packages.
 
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS_ROOT="$(cd "${SOURCE_DIR}/.." && pwd)"
 DEST_DIR="${CODEX_STOP_REVIEW_DEPLOY_ROOT:-${HOME}/.agents/stop-review}"
 WRAPPER_LOG="/tmp/codex-stop-review-wrapper.log"
+KEYRING_SECRETS_SRC="${SCRIPTS_ROOT}/keyring_secrets.py"
 
 RUNTIME_FILES=(
   deploy-home-hook.sh
@@ -16,6 +19,7 @@ RUNTIME_FILES=(
   review-runner.sh
   config.sh
   extract_stop_review_window.py
+  jev_classifier.py
   classifier-prompt.md
   output-schema.json
   reviewer-config.toml
@@ -58,9 +62,42 @@ run_local_hook() {
   exec bash "${hook_script}"
 }
 
+provision_keyring() {
+  local configured_ref machine_env
+  # shellcheck source=./config.sh
+  source "${SOURCE_DIR}/config.sh"
+  configured_ref="${CODEX_STOP_REVIEW_OPENROUTER_OP_REF:-${STOP_REVIEW_OPENROUTER_OP_REF_DEFAULT:-}}"
+  machine_env="${DEST_DIR}/machine.env"
+  if [[ -z "${configured_ref}" && ! -f "${machine_env}" ]]; then
+    return 0
+  fi
+  if ! command -v op >/dev/null 2>&1; then
+    printf '%s\n' "deploy-home-hook: op not on PATH; cannot provision keyring" >&2
+    exit 1
+  fi
+  if [[ -n "${configured_ref}" ]]; then
+    python3 "${DEST_DIR}/keyring_secrets.py" --provision \
+      --service "ai-tools.stop-review" \
+      --username "openrouter" \
+      --op-ref-env "CODEX_STOP_REVIEW_OPENROUTER_OP_REF" \
+      --op-ref "${configured_ref}" \
+      --machine-env "${machine_env}"
+    return 0
+  fi
+  python3 "${DEST_DIR}/keyring_secrets.py" --provision \
+    --service "ai-tools.stop-review" \
+    --username "openrouter" \
+    --op-ref-env "CODEX_STOP_REVIEW_OPENROUTER_OP_REF" \
+    --machine-env "${machine_env}"
+}
+
 deploy_runtime() {
   local file
 
+  if [[ ! -f "${KEYRING_SECRETS_SRC}" ]]; then
+    printf '%s\n' "deploy-home-hook: missing ${KEYRING_SECRETS_SRC}" >&2
+    exit 1
+  fi
   for file in "${RUNTIME_FILES[@]}"; do
     if [[ ! -f "${SOURCE_DIR}/${file}" ]]; then
       printf '%s\n' "deploy-home-hook: missing source file: ${SOURCE_DIR}/${file}" >&2
@@ -72,10 +109,15 @@ deploy_runtime() {
   for file in "${RUNTIME_FILES[@]}"; do
     cp "${SOURCE_DIR}/${file}" "${DEST_DIR}/${file}"
   done
+  cp "${KEYRING_SECRETS_SRC}" "${DEST_DIR}/keyring_secrets.py"
+  rm -f "${DEST_DIR}/requirements.txt" "${DEST_DIR}/openrouter_key.py"
   chmod +x \
     "${DEST_DIR}/deploy-home-hook.sh" \
     "${DEST_DIR}/stop-review-hook.sh" \
-    "${DEST_DIR}/review-runner.sh"
+    "${DEST_DIR}/review-runner.sh" \
+    "${DEST_DIR}/keyring_secrets.py"
+
+  provision_keyring
 
   printf '%s\n' "${DEST_DIR}"
 }

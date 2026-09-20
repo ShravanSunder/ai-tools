@@ -2,10 +2,12 @@
 .DS_Store
 node_modules/
 tmp/
+.venv/
 __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+machine.env
 .claude/settings.local.json
 .antigravitycli/
 *.mindle.json

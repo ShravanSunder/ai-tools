@@ -10,8 +10,6 @@ not durable sources. --dump-windows may still extract from a live log to
 create a fixture; it does not score that extract.
 """
 
-from __future__ import annotations
-
 import argparse
 import json
 import os
@@ -21,12 +19,56 @@ import tempfile
 import typing as t
 from pathlib import Path
 
+from pydantic import BaseModel, ConfigDict, Field
+
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = Path(__file__).resolve().parent
 CASES_PATH = TESTS / "eval_cases.jsonl"
 FIXTURES = TESTS / "fixtures"
 CLASSIFIER_PROMPT = ROOT / "classifier-prompt.md"
 REVIEW_RUNNER = ROOT / "review-runner.sh"
+
+sys.path.insert(0, str(ROOT))
+from extract_stop_review_window import build_stop_review_window
+from jev_classifier import (
+    ClassifyResult,
+    ClassifyWindowProps,
+    JevError,
+    classify_window,
+    load_tool_calls as load_tool_calls_file,
+)
+from typesafe_sdk import JSONContent
+
+
+class EvalCase(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str
+    window_file: str | None = None
+    tool_calls_file: str | None = None
+    log: str | None = None
+    turn_id: str | None = None
+    session_jsonl: str | None = None
+    last_assistant: str | None = None
+    nested: bool = False
+    previous_continues: int = 0
+    max_continues: int = 6
+    expected_decision: str = ""
+    expected_reason_contains: list[str] = Field(default_factory=list)
+
+
+class JevFailure(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    ok: t.Literal[False] = False
+    error: str
+
+
+class LunaResult(BaseModel):
+    ok: bool
+    decision: str = ""
+    reason: str = ""
+    error: str = ""
 
 def extract_window_from_log(log_path: str, turn_id: str) -> str | None:
     path = Path(log_path)
@@ -61,15 +103,12 @@ def extract_window_from_log(log_path: str, turn_id: str) -> str | None:
     return window_and_rest[:end].strip()
 
 
-def reconstruct_window_from_session(case: dict[str, object]) -> str | None:
-    sys.path.insert(0, str(ROOT))
-    from extract_stop_review_window import build_stop_review_window
-
-    session_jsonl = case.get("session_jsonl")
-    last_assistant = case.get("last_assistant")
-    if not isinstance(session_jsonl, str) or not Path(session_jsonl).is_file():
+def reconstruct_window_from_session(case: EvalCase) -> str | None:
+    session_jsonl = case.session_jsonl
+    last_assistant = case.last_assistant
+    if session_jsonl is None or not Path(session_jsonl).is_file():
         return None
-    if not isinstance(last_assistant, str) or not last_assistant.strip():
+    if last_assistant is None or not last_assistant.strip():
         return None
     return build_stop_review_window(
         transcript_path=session_jsonl,
@@ -77,12 +116,10 @@ def reconstruct_window_from_session(case: dict[str, object]) -> str | None:
     ).strip()
 
 
-def resolve_window(case: dict[str, object], *, dump_from_live: bool = False) -> tuple[str | None, str]:
+def resolve_window(case: EvalCase, *, dump_from_live: bool = False) -> tuple[str | None, str]:
     if dump_from_live:
-        log_path = case.get("log")
-        turn_id = case.get("turn_id")
-        if isinstance(log_path, str) and isinstance(turn_id, str):
-            extracted = extract_window_from_log(log_path, turn_id)
+        if case.log is not None and case.turn_id is not None:
+            extracted = extract_window_from_log(case.log, case.turn_id)
             if extracted:
                 return extracted, "log"
         reconstructed = reconstruct_window_from_session(case)
@@ -90,10 +127,9 @@ def resolve_window(case: dict[str, object], *, dump_from_live: bool = False) -> 
             return reconstructed, "session"
         return None, "missing"
 
-    window_file = case.get("window_file")
-    if not isinstance(window_file, str) or not window_file.strip():
+    if case.window_file is None or not case.window_file.strip():
         return None, "missing_fixture"
-    path = Path(window_file)
+    path = Path(case.window_file)
     if not path.is_absolute():
         path = TESTS / path
     if path.is_file():
@@ -126,28 +162,68 @@ def extract_decision_json(raw_text: str) -> dict[str, object] | None:
     return None
 
 
-def nested_sidecar(case: dict[str, object]) -> str:
-    if case.get("nested") is not True:
+def nested_sidecar(case: EvalCase) -> str:
+    if not case.nested:
         return ""
-    previous = case.get("previous_continues", 1)
-    maximum = case.get("max_continues", 6)
     return (
         "\n\nNested stop: true\n"
-        f"Previous continues this turn: {previous}\n"
-        f"Max continues this turn: {maximum}\n"
+        f"Previous continues this turn: {case.previous_continues}\n"
+        f"Max continues this turn: {case.max_continues}\n"
     )
+
+
+def load_tool_calls(case: EvalCase) -> list[JSONContent]:
+    if case.tool_calls_file is None or not case.tool_calls_file.strip():
+        return []
+    path = Path(case.tool_calls_file)
+    if not path.is_absolute():
+        path = TESTS / path
+    if not path.is_file():
+        return []
+    return load_tool_calls_file(path)
+
+
+def reason_requirement_failures(reason: str, required: list[str]) -> list[str]:
+    text = reason.lower()
+    missing: list[str] = []
+    for item in required:
+        if item.lower() not in text:
+            missing.append(item)
+    return missing
+
+
+def run_jev(
+    window_text: str,
+    *,
+    case: EvalCase | None = None,
+) -> ClassifyResult | JevFailure:
+    nested = case.nested if case else False
+    previous = case.previous_continues if case else 0
+    maximum = case.max_continues if case else 6
+    try:
+        return classify_window(
+            ClassifyWindowProps(
+                window_text=window_text,
+                last_turn_tool_calls=load_tool_calls(case) if case else [],
+                nested=nested,
+                previous_continues=previous,
+                max_continues=maximum,
+            )
+        )
+    except JevError as error:
+        return JevFailure(error=str(error))
 
 
 def run_luna(
     window_text: str,
     *,
     classifier_prompt: Path | None = None,
-    case: dict[str, object] | None = None,
-) -> dict[str, object]:
+    case: EvalCase | None = None,
+) -> LunaResult:
     prompt_path = classifier_prompt or CLASSIFIER_PROMPT
     prompt = (
         prompt_path.read_text(encoding="utf-8").rstrip()
-        + nested_sidecar(case or {})
+        + nested_sidecar(case or EvalCase(id="anon"))
         + "\n\nConversation window:\n\n"
         + window_text.strip()
         + "\n"
@@ -173,26 +249,25 @@ def run_luna(
         )
         raw = out_file.read_text(encoding="utf-8") if out_file.is_file() else ""
         if completed.returncode != 0:
-            return {
-                "ok": False,
-                "error": f"review-runner exit {completed.returncode}",
-                "stderr": (completed.stderr or "")[-500:],
-                "raw": raw,
-            }
+            return LunaResult(ok=False, error=f"review-runner exit {completed.returncode}")
         decision = extract_decision_json(raw)
         if decision is None:
-            return {"ok": False, "error": "unreadable_output", "raw": raw[-500:]}
-        return {"ok": True, **decision}
+            return LunaResult(ok=False, error="unreadable_output")
+        return LunaResult(
+            ok=True,
+            decision=str(decision.get("decision", "")),
+            reason=str(decision.get("reason", "")),
+        )
 
 
-def load_cases() -> list[dict[str, object]]:
-    cases: list[dict[str, object]] = []
+def load_cases() -> list[EvalCase]:
+    cases: list[EvalCase] = []
     for line in CASES_PATH.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
         parsed = json.loads(line)
         if isinstance(parsed, dict):
-            cases.append(parsed)
+            cases.append(EvalCase.model_validate(parsed))
     return cases
 
 
@@ -225,6 +300,12 @@ def print_runner_identity() -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run Stop-review Luna eval cases")
     parser.add_argument("--ids", default="", help="Comma-separated case ids")
+    parser.add_argument(
+        "--backend",
+        default="luna",
+        choices=("luna", "jev"),
+        help="luna uses review-runner.sh; jev uses TypeSafe Nouls over OpenRouter",
+    )
     parser.add_argument("--dump-windows", action="store_true")
     parser.add_argument(
         "--refresh-windows",
@@ -238,10 +319,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    wanted = {item.strip() for item in args.ids.split(",") if item.strip()}
+    wanted: set[str] = {item.strip() for item in args.ids.split(",") if item.strip()}
     classifier_prompt = Path(args.classifier_prompt) if args.classifier_prompt.strip() else CLASSIFIER_PROMPT
-    print_runner_identity()
-    print(f"classifier_prompt={classifier_prompt}")
+    if args.backend == "luna":
+        print_runner_identity()
+        print(f"classifier_prompt={classifier_prompt}")
+    else:
+        print("backend=jev questions=noul")
     print("---")
 
     passed = 0
@@ -250,10 +334,10 @@ def main(argv: list[str] | None = None) -> int:
     rows: list[str] = []
 
     for case in load_cases():
-        case_id = str(case.get("id", ""))
+        case_id = case.id
         if wanted and case_id not in wanted:
             continue
-        expected = str(case.get("expected_decision", ""))
+        expected = case.expected_decision
         window, source = resolve_window(
             case,
             dump_from_live=args.refresh_windows or args.dump_windows,
@@ -268,20 +352,43 @@ def main(argv: list[str] | None = None) -> int:
             fixture_path.write_text(window + "\n", encoding="utf-8")
             rows.append(f"DUMP  {case_id}  {fixture_path}")
             continue
-        result = run_luna(window, classifier_prompt=classifier_prompt, case=case)
-        if not result.get("ok"):
-            failed += 1
-            rows.append(f"FAIL  {case_id}  runner={result.get('error')} source={source}")
-            continue
-        got = str(result.get("decision", "")).strip().lower()
-        reason = str(result.get("reason", "")).replace("\n", " ")
-        if got == expected:
+        if args.backend == "jev":
+            result = run_jev(window, case=case)
+            if not isinstance(result, ClassifyResult):
+                failed += 1
+                rows.append(f"FAIL  {case_id}  runner={result.error} source={source}")
+                continue
+            got = result.decision
+            reason = result.reason.replace("\n", " ")
+            scores = result.scores
+            extras = (
+                f"  step={result.step} "
+                f"pick={scores.invited_pick} wait={scores.explicit_wait} "
+                f"keep={scores.keep_going} ordered={scores.already_ordered} "
+                f"unfin={scores.unfinished_job} collab={scores.collaborator_owns_remaining} "
+                f"wake={scores.saved_wake_reported} named={scores.named_choice_presented} "
+                f"explain={scores.user_wants_explanation} howrec={scores.open_how_recommendation} "
+                f"rails={scores.off_rails_wrap}"
+            )
+        else:
+            result = run_luna(window, classifier_prompt=classifier_prompt, case=case)
+            if not result.ok:
+                failed += 1
+                rows.append(f"FAIL  {case_id}  runner={result.error} source={source}")
+                continue
+            got = result.decision.strip().lower()
+            reason = result.reason.replace("\n", " ")
+            extras = ""
+        reason_missing = reason_requirement_failures(reason, case.expected_reason_contains)
+        if got == expected and not reason_missing:
             passed += 1
-            rows.append(f"PASS  {case_id}  {got}  source={source}")
+            rows.append(f"PASS  {case_id}  {got}  source={source}{extras}")
         else:
             failed += 1
+            reason_note = f" missing_reason={reason_missing}" if reason_missing else ""
             rows.append(
-                f"FAIL  {case_id}  got={got} expected={expected} source={source} reason={reason}"
+                f"FAIL  {case_id}  got={got} expected={expected} source={source} "
+                f"reason={reason}{reason_note}{extras}"
             )
 
     for row in rows:
