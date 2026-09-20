@@ -23,11 +23,12 @@ How to decide. Use the first matching step.
    [last] waits for inspect/agree before further changes ("wait for you to inspect Vite", "no further changes until we agree").
    Or [last] is waiting on computer-control / tool permission / inspect authorization the user has not given.
    Or [last] reports a timed wake the user already authorized is saved/verified/active, so the next check cannot run until that wake.
+   The window has no tool calls. A CLI or MCP `agent-collaboration` wake counts only when [last] reports it saved/verified/active. Setting a wake without saying so is not this step.
    Keep-going and why-stop do not clear a denial. Repeating the same permission ask is not continue_work.
    A new primary inspect/discuss request beats older implementation. Do not continue PR work past that wait.
    A leftover choice after why-stop is not this step.
    Sitrep / "are we on the rails" / "may I defer X" while proof or review remains is not this step.
-   A leftover defer question is not a timed wake. A saved/verified timed wake is this step even if review/proof remains.
+   A leftover defer question is not a timed wake. "I'll set a wake" / "wake on event later" is not a saved wake. A saved/verified timed wake is this step even if review/proof remains.
 
 3. Keep-going → continue_work.
    Latest USER TURN is why/don't/should not stop, or "did you have a question?"
@@ -43,6 +44,7 @@ How to decide. Use the first matching step.
    [last] still shows review, implement, prove, unbuilt UI, parked lists, or only recorded a decision the user already gave.
    A how-question answered with a recommendation is not the end of an open design job.
    A bare "yes, C is recorded" restatement is not the end of an open design/review job when [last] still shows remaining review, docs, or parked work.
+   If remaining implement/prove is on a named collaborator (Sol, Fable, another session) and [last] does not report a saved/verified/active timed wake, still continue_work: the reason must tell this session to set an authorized agent-collaboration wake and report it saved/active, then stop. Do not resume implement/fix/prove here.
    Not this step: a saved/verified scheduled wake whose next check waits for that wake.
 
 6. Else stop_ok: the current job is done in [last], or you are unsure.
@@ -97,6 +99,10 @@ EX stop — user: make it 29 else cache will be busted goign forwrad
 [last]: 29-minute wake saved and active; I’ll retrieve results then
 → stop_ok (authorized scheduled-wake wait)
 
+EX continue — user: esc and cmd-shift-s must cancel; fix the pane regression
+[last]: Sol still proving; still under verification; no saved wake reported
+→ continue_work (set an authorized wake and report it saved/active; do not resume implement/prove here)
+
 EX continue — user: I understand C, I don't understand A
 [last]: explained A; C is simpler if you want explicit replies
 → continue_work (explanation, not an invited pick)
@@ -107,7 +113,7 @@ Output JSON only, in this field order:
 cot: exactly 2 sentences. Name the current job and mode; what [last] did; whether a user answer still gates the next work.
 reason: 1-2 sentences.
 - continue_work + design: resume the named design/discussion; do not implement.
-- continue_work + implementation: resume the named implement/fix/prove work.
+- continue_work + implementation: resume the named implement/fix/prove work, unless remaining work is on a named collaborator and [last] did not report a saved/verified/active wake — then order setting that wake, reporting it saved/active, and stopping; do not resume the collaborator's job.
 - stop_ok: one short justification, 1-2 sentences.
 A continue reason must not choose among a pending user decision or order work that depends on one.
 Never order implementation when the current job is design.
