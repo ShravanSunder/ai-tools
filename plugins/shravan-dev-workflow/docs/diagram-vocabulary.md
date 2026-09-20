@@ -1,6 +1,6 @@
 # Design View Vocabulary
 
-This maintainer index records current view names, artifact altitude, semantic owner, and runtime rendering consumers. It is not runtime authority. View-selection and required-field rules live in the owning `SKILL.md`; medium, fallback, semantic-preservation, and visual-check procedure lives in `shared-references/diagram-rendering-and-fallbacks.md`.
+This maintainer index records current view names, artifact altitude, semantic owner, and runtime rendering consumers. It is not runtime authority. View-selection and required-field rules live in the owning `SKILL.md`; medium, fallback, semantic-preservation, and visual-check procedure lives in `shared-references/diagram-rendering-and-fallbacks.md`; conditional Image Gen production, durable embedding and pixel/preview inspection live in `shared-references/generated-document-visuals.md`.
 
 ## Why/What Views
 
@@ -11,6 +11,8 @@ This maintainer index records current view names, artifact altitude, semantic ow
 | requirement coverage table | Why/What specification | `skills/spec-design/SKILL.md` Required Why/What Views | `skills/spec-design/SKILL.md` |
 
 `system context map` is an accepted name for a context diagram. `traceability matrix` is an accepted name for a requirement coverage table. The canonical tokens above remain the source and test vocabulary.
+
+`generated-image` is a rendering medium, not another semantic view token. The consuming Requirements, Specification or Program Design skill still owns the reader question, altitude, exact relationships and required fields. The main authors and accepts the visual meaning; the generated-visual reference owns only capability, execution, project asset/embed and inspection procedure.
 
 ## Structural How Views
 

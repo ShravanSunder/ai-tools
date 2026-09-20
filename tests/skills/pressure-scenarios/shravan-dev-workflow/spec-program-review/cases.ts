@@ -358,4 +358,21 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "spec-program-review-generated-image-integrity",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-common-method.md",
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/reader-understanding.md",
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/lanes/artifact-navigation.md",
+      "tests/skills/fixtures/visual-design-review/requirements.md",
+      "tests/skills/fixtures/visual-design-review/specification.md",
+      "tests/skills/fixtures/visual-design-review/program-design.md",
+    ],
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      { name: "finds-broken-embed-and-image-text-conflict", requirement: "Reads all three fixture artifacts, identifies the absolute `/tmp` cache embed as non-durable/broken for the project document, and identifies the visible Billing-to-Database edge in the author note as conflicting with the written Gateway-to-Billing ownership/call path and opaque consumer contract.", failureExample: "Accepts the cache path or misses the invented edge because the prose is correct." },
+      { name: "returns-partial-visual-coverage-without-redesign", requirement: "Does not accept the author's beauty/syntax claim as image proof. With no actual project image or preview to inspect it reports exact partial visual coverage and the smallest correction route, without editing, inventing a replacement design, or accepting the artifacts.", failureExample: "Returns ready from Markdown syntax, designs a new architecture, or claims image inspection occurred." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

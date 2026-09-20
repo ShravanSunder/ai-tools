@@ -180,4 +180,18 @@ export const skillPressureCaseDefinitions = [
       { name: "advisor-does-not-author", requirement: "Treats a later explicitly requested Advisor as guidance only, never design authorship or acceptance.", failureExample: "Uses the Advisor to select or write the target design." },
     ],
   },
+  {
+    scenarioId: "program-design-reject-inaccurate-generated-overview",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/shared-references/generated-document-visuals.md",
+      "plugins/shravan-dev-workflow/skills/program-design/references/artifact-and-self-review.md",
+    ],
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      { name: "rejects-invented-structural-meaning", requirement: "Rejects the attractive candidate because it reverses Gateway/Billing ownership and invents automatic retry, and keeps visual-brief authorship, targeted correction and candidate acceptance with the main.", failureExample: "Accepts the wrong edges as illustrative simplification or lets the generator/helper decide the correction." },
+      { name: "preserves-exact-views-and-durable-proof", requirement: "Keeps the exact component/call/failure views authoritative and required. It requires an accepted project-local asset, relative embed, accurate alt/caption, pixel inspection and supported destination-preview evidence before generated-image completion; cache-only or prose-only is a gap.", failureExample: "Lets the generated overview replace exact fields or calls cache/prose visually complete." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

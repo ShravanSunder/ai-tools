@@ -49,6 +49,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `discuss-pathfinding` | `discuss-pathfinding-no-live-user-return` | Stop `decision-needed` with unanswered questions when an orchestrated pathfinding call has no live owner. |
 | `discuss-pathfinding` | `discuss-pathfinding-direct-no-live-user-blocker` | Preserve the existing blocker and omit orchestration state for a direct pathfinding call with no live owner. |
 | `discuss-pathfinding` | `discuss-pathfinding-confirmed-meaning-does-not-fit-return-owner` | Expose confirmed meaning that cannot fit the recorded return owner without rerouting it. |
+| `discuss-pathfinding` | `discuss-pathfinding-provisional-generated-comparison` | Keep visual comparisons provisional, preserve unresolved owner meaning, and report unavailable generation honestly. |
 | `spec-design` | `spec-design-return-one-program-design-handoff` | Return one compact program-design handoff from a locally ready specification and no orchestration state for a direct call. |
 | `spec-design` | `spec-design-establish-goal-boundary` | Establish affected groups, outcomes, permitted changes, protected systems, non-goals, and missing decisions before normative requirements. |
 | `spec-design` | `spec-design-stay-within-confirmed-requirements` | Do not turn adjacent completeness machinery into authorized product requirements. |
@@ -56,6 +57,8 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-design` | `spec-design-use-helpful-diagrams` | Select specification views by the reader question and keep internal structural How out. |
 | `spec-design` | `spec-design-keep-implementation-choices-out-of-requirements` | State observable Why/What without promoting implementation mechanisms into requirements. |
 | `spec-design` | `spec-design-main-authors-settled-sections` | Keep settled governing prose, entity/view expression, and diagrams with the main while allowing bounded evidence help. |
+| `spec-design` | `spec-design-generated-visuals-and-provider-gap` | Keep Requirements and Specification visuals at the right altitude while rejecting invented providers and cache-only assets. |
+| `spec-design` | `spec-design-select-generated-visual-by-default` | Select a meaningful generated visual for an ordinary substantial document and report an unavailable capability without false output. |
 | `program-design` | `program-design-stay-within-specification` | Realize only accepted requirements inside permitted and protected system boundaries. |
 | `program-design` | `program-design-make-smallest-necessary-change` | Start from the working system, add only required structure, and remove unsupported machinery. |
 | `program-design` | `program-design-show-current-and-proposed-system` | Show current and proposed entrypoint-to-effect behavior and mark actual changes. |
@@ -63,6 +66,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `program-design` | `program-design-explain-design-choices-clearly` | Explain what changes, what remains, the tradeoff, its cost, and when to reconsider. |
 | `program-design` | `program-design-route-specification-gap` | Return missing observable product meaning to spec-design with one compact handoff and no direct-call orchestration state. |
 | `program-design` | `program-design-no-delegated-target-models` | Delegate only current-system/external evidence; keep alternatives, target models, risk realization, and prose with the main. |
+| `program-design` | `program-design-reject-inaccurate-generated-overview` | Reject attractive imagery that invents owners, edges, behavior, or non-durable asset proof. |
 | `spec-program-review` | `spec-program-review-find-unapproved-design` | Catch machinery that document agreement or existing code did not authorize. |
 | `spec-program-review` | `spec-program-review-find-missing-requirements-or-design` | Catch lost accepted requirements and missing executable structural behavior. |
 | `spec-program-review` | `spec-program-review-check-tests-match-claims` | Compare each claimed outcome with evidence that can actually observe it. |
@@ -75,6 +79,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-compose-focused-lanes-by-predicate` | Compose one focused lane per named source-backed risk, with a reason beside each lane run or skipped. |
 | `spec-program-review` | `spec-program-review-proof-challenge-predicate` | Compose proof-challenge only for executable proof claims, with grant, preflight, and scratchpad boundaries. |
 | `spec-program-review` | `spec-program-review-independence-honors-execution-grant` | Pass granted execution and fail unlisted commands or target mutation at the independence check. |
+| `spec-program-review` | `spec-program-review-generated-image-integrity` | Catch cache-only embeds, image/text conflict, and unavailable image/preview coverage without redesigning. |
 | `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |
 | `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact current phase return without reconstructing meaning from chat or requiring lifecycle state. |
 | `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
@@ -83,6 +88,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-blocks-pathfinding-return-mismatch` | Block a completed pathfinding handoff that names a different phase than its initiating handoff. |
 | `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep authoring recovery distinct from the one review remediation and continue to the first review. |
 | `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a design author. |
+| `orchestrator-design` | `orchestrator-design-per-artifact-visual-coverage` | Verify visual completion separately for Requirements, Specification, and Program Design while preserving main-authored meaning. |
 | `agent-collaboration` | `agent-collaboration-multi-pr-thread-local-seats` | Use thread-local implementer seats, existing root references, exact SessionRefs, and orchestrator-only agent resolution across planned PR assignments. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |

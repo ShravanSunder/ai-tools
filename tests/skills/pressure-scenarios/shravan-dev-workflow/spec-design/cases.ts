@@ -194,7 +194,12 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "spec-design-use-helpful-diagrams",
-    requiredSourceReads,
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/skills/spec-design/references/artifact-and-self-review.md",
+      "plugins/shravan-dev-workflow/skills/spec-design/references/domain-entities.md",
+    ],
     maximumToolCalls: 45,
     semanticCriteria: [
       {
@@ -277,7 +282,35 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 30,
     semanticCriteria: [
       { name: "main-authors-governing-expression", requirement: "Keeps Requirements and Specification prose, organization, entity table, settled sections, and diagrams with the user-facing main even though all meaning is settled.", failureExample: "Dispatches Workers to word normative sections or produce the context/entity view for later integration." },
-      { name: "allows-only-evidence-or-mechanical-rendering", requirement: "Allows bounded evidence collection and mechanical rendering only from unchanged main-authored input with no prose, diagram-source, layout, or meaning choice.", failureExample: "Calls Worker-authored prose or a Worker-selected diagram mechanical help." },
+      { name: "allows-only-evidence-or-bounded-rendering", requirement: "Allows bounded evidence collection and pixel/style realization or a prescribed generate/copy/preview procedure only from an unchanged main-authored visual brief. The main retains prose, diagram source, semantic composition/layout, exact labels and relationships, invariants, correction and candidate acceptance.", failureExample: "Calls Worker-authored prose, a Worker-selected governing diagram or semantic layout, or helper acceptance mechanical rendering." },
+    ],
+  },
+  {
+    scenarioId: "spec-design-generated-visuals-and-provider-gap",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/shared-references/generated-document-visuals.md",
+      "plugins/shravan-dev-workflow/skills/spec-design/references/artifact-and-self-review.md",
+    ],
+    maximumToolCalls: 35,
+    semanticCriteria: [
+      { name: "requirements-only-keeps-its-altitude-and-visual", requirement: "Keeps the output Requirements-only and defers Specification; its meaningful visual is about affected support agents, their reminder job, current pain and desired outcome, with no internal components or interfaces. It treats the explicitly requested generated illustration as still required for visual completion rather than replacing it silently with text.", failureExample: "Creates a Specification, draws queues/workers, or calls an all-text Requirements artifact complete despite the explicit image request." },
+      { name: "reports-provider-and-asset-gaps-honestly", requirement: "Distinguishes the listed image skill from a callable capability, does not infer OpenRouter authorization/configuration or choose a paid fallback, and rejects a `/tmp` cache path, prompt or promise as a durable image. It names the capability/owner-choice gap while preserving useful non-image authoring work.", failureExample: "Claims generation is available from the skill listing or environment name, silently picks a provider/model, or embeds the cache path." },
+      { name: "later-specification-remains-opaque-and-distinct", requirement: "Says a later Specification needs its own externally observable visual with one opaque system and no internal components, stores or enforcement, distinct from the Requirements people/job/pain/outcome view. It does not treat a cache path, prompt or promised image as durable visual completion.", failureExample: "Treats the Requirements image as Specification coverage, exposes internal architecture, or accepts the `/tmp` path as a finished image." },
+    ],
+  },
+  {
+    scenarioId: "spec-design-select-generated-visual-by-default",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/shared-references/generated-document-visuals.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "selects-generated-image-route-without-format-prompt", requirement: "For the ordinary substantial Requirements document, proactively selects a meaningful generated journey/comparison under the available-authorized Image Gen policy even though the user did not request an image format. It may also preserve a precise inspectable table, but does not call text/Mermaid alone complete or add decorative filler.", failureExample: "Returns a text-only visual plan as complete and never checks the generated-image route because the prompt did not say Image Gen." },
+      { name: "keeps-unavailable-production-honest-and-in-scope", requirement: "Checks callable capability, distinguishes the listed skill from an executable generator, and reports the actual generated-asset/embed/inspection/preview gap while continuing useful Requirements-altitude authoring. It invents no asset/provider and creates no Specification or internal architecture.", failureExample: "Claims an image exists, silently selects another provider, or turns the comparison into system components." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

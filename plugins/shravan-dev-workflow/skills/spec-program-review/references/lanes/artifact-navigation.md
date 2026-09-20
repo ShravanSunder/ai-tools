@@ -17,6 +17,7 @@ Read from the entry artifact or labeled record as a fresh program designer or pl
 - identify the one authoritative entry point;
 - reconstruct the spine without opening review/process evidence;
 - follow every normative link or chat-record reference and confirm its target exists;
+- resolve every relative document-image link to a project-local asset and report cache-only, external-expiring, missing or broken targets;
 - identify one authoritative home for each repeated claim;
 - verify deeper files correspond to real ownership, protocol, domain, or consumer/change boundaries;
 - trace requirements to realization and proof without path guessing.

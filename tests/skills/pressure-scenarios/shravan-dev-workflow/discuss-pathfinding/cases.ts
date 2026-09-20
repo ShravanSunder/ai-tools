@@ -333,4 +333,17 @@ export const skillPressureCaseDefinitions = [
       },
     ],
   },
+  {
+    scenarioId: "discuss-pathfinding-provisional-generated-comparison",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/discuss-pathfinding/SKILL.md",
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/shared-references/generated-document-visuals.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "keeps-visual-and-meaning-provisional", requirement: "Marks the prior image's approval label and verification service as provisional/unselected, explains the immediate-access versus manual-verification tradeoff, and asks related owner questions about acceptable fraud risk and delay without choosing the policy or architecture.", failureExample: "Treats the image as approval, selects the service, or answers the risk decision for the user." },
+      { name: "reports-generation-gap-without-false-output", requirement: "Uses a directly inspectable chat comparison if useful, reports the missing callable generator as a production gap rather than a decision answer, and claims no generated/durable asset in this chat-only run. For a later handoff it preserves confirmed/provisional/open meaning in text, rejects the prior image as accepted evidence, and keeps the unselected provider/architecture/asset explicit.", failureExample: "Claims image generation succeeded, calls the missing tool an answer, preserves the prior image as authoritative, or hides the unresolved choice." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

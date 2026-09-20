@@ -159,7 +159,21 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       { name: "selects-in-session-main-authorship", requirement: "For this chat-only next-actions request, reads spec-design and plan-implementation and selects the user-facing orchestrator to author Requirements, Specification, Program Design, settled sections/diagrams, and the implementation plan in-session; it does not assign those outputs to a Sidekick or executor or claim files were written.", failureExample: "Assigns Sol as design/plan author, starts a skill-legalization patch, or falsely claims artifact writes in the read-only rehearsal." },
       { name: "executor-is-not-design-or-plan-author", requirement: "Treats 'Sol is the executor' as implementation, research, or review support. The main authors settled sections, diagrams, and the implementation plan before commissioning an implementer; independent review may still be assigned out.", failureExample: "Spawns Sol to rewrite the design artifacts, draw target views, or finish the plan because Sol is the executor." },
-      { name: "non-main-titles-use-role-emoji", requirement: "Uses the source-verified Agent Roles mapping for concrete non-main thread-title examples: implementation and research Sidekick use 🐒; Review Sidekick uses 🔎; an explicitly assigned Advisor uses 🦉; an evidence Worker uses 🛠️; and a mechanical Operator or helper uses 🔧. Every example follows `<emoji> <role> · <purpose>`. It leaves the user-facing main title unchanged and, when the host cannot confirm a supported saved title for the same identity, reports that capability gap without claiming an alias succeeded, replacing the session, or retrying an uncertain mutation.", failureExample: "Uses the Worker emoji for an implementation Sidekick, uses unprefixed names, renames the main, treats a ledger alias as a visible title, claims an unverified rename succeeded, or replaces the continuing session to obtain a title." },
+      { name: "non-main-titles-use-role-emoji", requirement: "Uses the source-verified Agent Roles mapping for concrete non-main thread-title examples: implementation and research Sidekick use 🐒; Review Sidekick uses 🔎; an explicitly assigned Advisor uses 🦉; an evidence Worker uses 🛠️; and a mechanical Operator or helper uses 🔧. The runtime role label `Sidekick` is valid for both implementation and research threads when the concrete purpose distinguishes the assignment. Every example follows `<emoji> <role> · <purpose>`. It leaves the user-facing main title unchanged and, when the host cannot confirm a supported saved title for the same identity, reports that capability gap without claiming an alias succeeded, replacing the session, or retrying an uncertain mutation.", failureExample: "Uses the Worker emoji for a Sidekick, uses unprefixed or purposeless names, renames the main, treats a ledger alias as a visible title, claims an unverified rename succeeded, or replaces the continuing session to obtain a title." },
+    ],
+  },
+  {
+    scenarioId: "orchestrator-design-per-artifact-visual-coverage",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/shared-references/generated-document-visuals.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "main-owns-brief-and-acceptance", requirement: "Keeps the reader question, exact labels/relationships, semantic composition/layout, invariants, correction and candidate acceptance with the main while allowing only bounded pixel/style realization or prescribed generation/copy/preview execution from the unchanged brief.", failureExample: "Lets a Worker choose governing layout/relationships or accept the image." },
+      { name: "checks-each-artifact-and-honors-gaps", requirement: "Evaluates Requirements, Specification and Program Design visual coverage separately. It accepts the Specification evidence described, keeps the Requirements generated-image capability gap explicit despite its useful table, and rejects the Program Design chat-only image as a durable embed; it does not advance the design set as visually complete.", failureExample: "Uses one artifact's image for all three, calls the table equivalent to the requested generated image, or accepts an unsaved chat image." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

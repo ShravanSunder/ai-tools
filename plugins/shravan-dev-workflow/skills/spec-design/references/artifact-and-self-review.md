@@ -65,9 +65,11 @@ Diagrams may explain relationships but may not be the only home of normative mea
 
 ## Apply Required Why/What Views
 
-Consume each selected view's reader question plus the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Consume the shared rendering results and reject any view with a missing semantic field, failed visual check, unresolved fallback, or content that does not answer its stated reader question.
+Consume each selected view's reader question plus the predicates, cardinality, and must-expose fields from the `SKILL.md` Required Why/What Views table without restating them. Before returning, compare the actual shown view with that selected table row: verify the required number of views and every must-expose field in the displayed result itself. Preserve separate class journeys; when the source establishes no pain or evidence, show that exact gap rather than inventing one, and when current behavior already supplies the desired outcome, show that preservation explicitly. A coverage view exposes missing U/E/P/O/R/C/V links as gaps instead of dropping those fields.
 
-- Journey maps cite the stable U rows they re-render; the source record remains normative. Good steps express the user's job and observable pain. A screen tour or component name is not a journey.
+Consume the shared rendering result for the actual shown view and reject any missing semantic field, failed visual check, unresolved fallback, or content that does not answer its stated reader question. In chat or read-only output, uninspected Mermaid is not the readable result: consume the shared renderer's directly inspectable fallback when one can preserve the selected row, and return an exact visual gap only when no such fallback can. For generated images, also reject a missing project-local asset, non-resolving relative embed, inaccurate alt/caption, absent pixel inspection, unverified required destination preview, or a candidate the main has not accepted.
+
+- Journey maps cite the stable U rows they re-render; the source record remains normative. Good steps express the user's job and source-established observable pain, or mark that pain and its evidence unknown. A screen tour, component name, or cross-class chain is not a journey.
 - Context diagrams keep the system opaque and place external consumers, stakeholders, surfaces, contracts, and relevant non-consumers around the boundary. Internal components, owners, stores, or enforcement points are structural How and route to `program-design`.
 - Entity maps show each `E` entity with its identity rule, relationships with cardinality, and observable states; the entity table stays normative. A map that shows a package, schema, type, or store has crossed into `program-design`.
 - Requirement coverage tables expose missing U/E/P/O/R/C/V links rather than filling gaps with guessed meaning.
@@ -104,6 +106,7 @@ Re-read the complete artifact and record:
 - duplicated normative homes;
 - missing, duplicated, non-resolvable, identical, or collapsed Requirements and Specification identities;
 - missing, semantically incomplete, unreadable, or decorative Required Why/What Views;
+- missing or broken generated-image assets/embeds, image/text disagreement, unreadable labels, inaccurate alt/captions, or an uninspected destination placement;
 - journey maps that fail to cite their U rows or context diagrams that cross into internal How;
 - accepted requirements lost or superseded without owner authority;
 - changes from the confirmed goal boundary hidden as specification completeness;
