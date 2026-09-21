@@ -34,7 +34,7 @@ it. Keep the answer to the model matrix.
 
 - Sol low/medium is Balanced; Sol high/xhigh/max is Frontier.
 - Composer 2.5 is Mini and has no thinking setting.
-- The answer does not invent a Composer thinking control. Terra is Worker-only (Balanced, medium) and is not required for this Sol/Composer classification.
+- The answer does not invent a Composer thinking control. Terra is not required for this Sol/Composer classification.
 
 ## Failure Signals
 

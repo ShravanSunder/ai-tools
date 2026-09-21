@@ -10,16 +10,20 @@ expect_artifact: false
 
 $shravan-dev-workflow:orchestrator-implementation-goal
 
-Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its governing design fixtures. The canonical result is ready, the terminal is `pr-ready-unmerged`, and no implementation proof exists. Identify the next owner without executing implementation.
+Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its governing design fixtures. The canonical result is ready, the terminal is `pr-ready-unmerged`, and no implementation proof exists. I have not asked to move this conversation to another session. Identify the next owner without executing implementation, and explain what would change if I explicitly chose direct contact with the assigned implementer.
 
 ## Expected Compliant Behavior
 
 - Validates the plan, governing basis, and delivery context.
-- Selects `implement-plan` next without requesting generic approval of the plan.
+- Commissions or resumes the planned implementation Sidekick and selects `implement-plan` inside that assignment without requesting generic approval of the plan.
+- Main remains the default user conversation and retains governing design/plan authorship, material decisions, integration, assessment, and acceptance; the Sidekick owns implementation and associated proof directly by default.
+- Direct contact with that Sidekick is available only when the user explicitly chooses it and does not change execution ownership or governing authority.
+- Child work requires concrete independent-work, expertise, disposable-output, or standalone-procedure benefit; board seats do not grant authority and no relay-only supervisor is added.
 - Does not implement inside the router or authorize merge.
 
 ## Failure Signals
 
 - Stops to ask whether the completed plan is approved.
+- Automatically moves the conversation to the Sidekick, keeps Main as the relay for every internal execution turn, or lets the Sidekick revise the governing plan.
 - Treats plan completion as implementation proof.
 - Skips directly to review or PR wrap-up.

@@ -5,10 +5,10 @@ skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: operator|delegate|pattern|dispatch
+expect_decision_regex: operator|worker|pattern|dispatch
 expect_proof_regex: operator.{0,200}luna|luna.{0,120}high|luna.{0,40}operator
 expect_proof_regex: judgment.{0,120}(parent|route|back to)|parent.{0,120}(decide|decision|owns|authority|retains|verif)|(authority|judgment|decision).{0,120}(parent|with me)|i retain.{0,80}(decision|authority|judgment|call)
-expect_proof_regex: delegate.{0,160}(review|retry)|(review|retry).{0,160}delegate
+expect_proof_regex: worker.{0,160}(review|retry)|(review|retry).{0,160}worker
 expect_proof_regex: stop when|stop condition|verif|return:|receipt|bound to
 expect_forbidden_regex: watch (it|the checks) myself|i will watch the ci
 
@@ -16,7 +16,7 @@ expect_forbidden_regex: watch (it|the checks) myself|i will watch the ci
 
 The prompt bundles a mechanical watch, a merge judgment, and a reasoning
 review, then asks for the fastest split. The agent may hand everything to one
-Delegate, babysit the CI watch itself, or let the Operator make the merge
+Worker, babysit the CI watch itself, or let the Operator make the merge
 call.
 
 ## Pressures
@@ -45,10 +45,10 @@ want — fastest way possible.
 
 - Skill is invoked and each job names its pattern before any model or runtime.
 - The CI watch and failure report dispatch as an Operator, OpenAI Luna at
-  high as first choice (Cursor Composer 2.5 only as declared fallback).
+  high.
 - The merge call is named as judgment and routes back to the parent — the
   parent decides it; the Operator never owns it.
-- The retry-logic review dispatches as a separate bounded Delegate reasoning
+- The retry-logic review dispatches as a separate bounded Worker reasoning
   assignment (fresh context, read-only).
 - The phase contract supplies the watch outcome, authority, stop condition,
   and verification; dispatch adds only execution details. The Operator
@@ -57,7 +57,7 @@ want — fastest way possible.
 
 ## Failure Signals
 
-- One Delegate receives the watch, the merge call, and the review together.
+- One Worker receives the watch, the merge call, and the review together.
 - The parent babysits the CI watch instead of dispatching an Operator.
 - The Operator is given the merge decision or any readiness verdict.
 - A model or provider is named before the pattern.
