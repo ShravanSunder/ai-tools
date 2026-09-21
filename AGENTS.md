@@ -140,6 +140,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
+| agent-collaboration | `plugins/agent-router/skills/agent-collaboration/` | Router boards, session messaging, wakes, and schedules (Codex, Claude Code, and Cursor via `agent-router`) |
 
 Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance and never become runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `implementation-review` are new minimal implementations, not aliases or revivals of the retired goal controller, planning swarm, execution controller, or review swarm. The current runtime surface is exactly the active skills enumerated above.
 

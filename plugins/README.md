@@ -20,9 +20,9 @@ AI tools distributed through the local marketplaces in this repository.
 Client install IDs:
 
 ```text
-Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
-Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools
-Cursor      local plugins via `.cursor-plugin/` manifests
+Codex       scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools   agent-router@ai-tools
+Claude Code scaffold-project@ai-tools   dev-workflow-tools@ai-tools   shravan-dev-workflow@ai-tools   agent-router@ai-tools
+Cursor      local plugins via `.cursor-plugin/` manifests, including agent-router
 ```
 
 Cursor can load these plugins from `.cursor-plugin/marketplace.json` plus each

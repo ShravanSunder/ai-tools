@@ -112,6 +112,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
 | `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | Do not stop a Frontier ACPX Fable review with `--timeout 120`; retrieve the named session instead. |
+| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Do not treat Luna as Worker-only; Exact-steps local Sidekick work may use OpenAI Luna xhigh Mini. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |
 | `plan-handoff` | `plan-handoff-proof-matrix-preservation` | Do not drop obligation/proof ownership, freshness guards, or parent verification while packaging a plan. |

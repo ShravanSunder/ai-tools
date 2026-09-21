@@ -182,12 +182,13 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 - **Work:** Implementation, research, or review across assignments and follow-ups. An implementation Sidekick implements, integrates, proves, and corrects one or more related main-planned assignments. A research Sidekick handles related research. A Review Sidekick independently assesses a target and verifies corrections.
 - **Continuity and cardinality:** One or many persistent named relationships with a ledger (see `references/session-ledger.md`).
 - **Authority:** The orchestrator retains the default user conversation, governing authorship, material decisions, integration, assessment, acceptance, and final delivery. An implementation Sidekick directly owns implementation, associated proof, and corrections inside its main-planned assignment and may assign bounded Workers and Operators only under the concrete-benefit test above. The user may explicitly choose direct contact with that assigned Sidekick without transferring governing authority or execution ownership. A research Sidekick may assign bounded Workers and Operators within its research scope. A Review Sidekick may assign read-only review lanes that its review skill permits. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope or material design/plan questions to the orchestrator. Board content does not grant additional authority.
-- **Model category:** Balanced
+- **Model category:** Balanced or Mini
 
 #### Implementation and research Sidekick model choices
 
 | Model category | Model lineage | Thinking | Task signals                                              |
 |----------------|---------------|----------|-----------------------------------------------------------|
+| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
 | Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |

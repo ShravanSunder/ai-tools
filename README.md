@@ -28,6 +28,7 @@ codex plugin add <name>@ai-tools
 | [`shravan-dev-workflow`](plugins/shravan-dev-workflow/) | Codex-first spec, program design, pathfinding, plan, implementation, PR wrap-up, review, handoff, debugging, TUI presentation, and ops workflows |
 | [`dev-workflow-tools`](plugins/dev-workflow-tools/) | Common development tool skills, including native macOS UI testing with Peekaboo CLI |
 | [`scaffold-project`](plugins/ai-scaffold/) | AI Scaffold project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks) |
+| [`agent-router`](plugins/agent-router/) | Agent collaboration, shared message boards, wake-ups, and schedules; install as `agent-router@ai-tools` (Cursor Personal marketplace too) |
 
 See [`plugins/`](plugins/) for full details.
 
