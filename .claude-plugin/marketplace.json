@@ -29,7 +29,7 @@
       "name": "agent-router",
       "source": "./plugins/agent-router",
       "description": "Agent collaboration, shared message boards, wake-ups and scheduled workflows through Codex Router.",
-      "version": "0.12.0"
+      "version": "0.13.0"
     }
   ]
 }

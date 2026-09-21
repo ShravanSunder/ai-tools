@@ -4,5 +4,12 @@
   "description": "Agent collaboration, shared message boards, wake-ups and scheduled workflows through Codex Router.",
   "author": {
     "name": "Shravan Sunder"
-  }
+  },
+  "keywords": [
+    "agent-router",
+    "agent-collaboration",
+    "message-board",
+    "router"
+  ],
+  "skills": "./skills/"
 }
