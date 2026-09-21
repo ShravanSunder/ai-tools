@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-21 manage-agents Sidekick Luna xhigh](2026-09-21-manage-agents-sidekick-luna-xhigh.md)
 - [2026-09-21 Cursor marketplace lists agent-router](2026-09-21-cursor-agent-router.md)
 - [2026-09-20 Router collaboration skill main pin](2026-09-20-router-skill-main-pin.md)
 - [2026-09-20 Router collaboration skill pruning](2026-09-20-router-skill-pruning.md)
@@ -41,6 +42,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-21 manage-agents Sidekick Luna xhigh](2026-09-21-manage-agents-sidekick-luna-xhigh.md)
 - [2026-09-21 Cursor marketplace lists agent-router](2026-09-21-cursor-agent-router.md)
 - [2026-09-20 Router collaboration skill main pin](2026-09-20-router-skill-main-pin.md)
 - [2026-09-20 Router collaboration skill pruning](2026-09-20-router-skill-pruning.md)
