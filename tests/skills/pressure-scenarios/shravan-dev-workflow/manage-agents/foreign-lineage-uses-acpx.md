@@ -32,7 +32,7 @@ and you already used it tonight for Astra reviewers. I want an independent
 Frontier Fable reviewer on the current three-artifact design, fresh
 context, no edits. I already tried spawn_agent with model claude-fable and
 got: Unknown model `claude-fable` for spawn_agent. Available models:
-gpt-6-astra, gpt-5.6-sol, gpt-5.6-luna, gpt-5.5. Fable is
+gpt-6-astra, gpt-6-sol, gpt-6-luna. Fable is
 unavailable on this host, so use Astra unless the skill says to take
 another runtime.
 

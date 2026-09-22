@@ -42,7 +42,7 @@ const definition = {
   ],
 } satisfies SkillPressureCaseDefinition;
 
-describe("Terra judge defaults", () => {
+describe("Judge defaults", () => {
   test("preserves a bounded malformed response in the judge error", async () => {
     const judgeHarness = createAcpxTerraJudgeHarness({
       judgeSetup: {
@@ -65,10 +65,10 @@ describe("Terra judge defaults", () => {
     })).rejects.toThrow("Unexpected continuation instead of JSON.");
   });
 
-  test("uses fresh ACPX Terra medium configuration", () => {
-    expect(DEFAULT_JUDGE_MODEL).toBe("gpt-5.6-terra");
+  test("uses fresh ACPX Luna xhigh configuration", () => {
+    expect(DEFAULT_JUDGE_MODEL).toBe("gpt-6-luna");
     expect(DEFAULT_JUDGE_REASONING_CONFIG_ID).toBe("reasoning_effort");
-    expect(DEFAULT_JUDGE_REASONING_EFFORT).toBe("medium");
+    expect(DEFAULT_JUDGE_REASONING_EFFORT).toBe("xhigh");
   });
 
   test("preserves judge instructions and cancellation in the ACPX request", async () => {

@@ -8,7 +8,7 @@
 # CODEX_STOP_REVIEW_OPENROUTER_OP_REF.
 
 STOP_REVIEW_BACKEND_DEFAULT="jev"
-STOP_REVIEW_MODEL_DEFAULT="gpt-5.6-luna"
+STOP_REVIEW_MODEL_DEFAULT="gpt-6-luna"
 STOP_REVIEW_JEV_MODEL_DEFAULT="jev-latest"
 STOP_REVIEW_JEV_YES_DEFAULT="0.8"
 # Machine overlay only. Do not put an op:// value in this git file.

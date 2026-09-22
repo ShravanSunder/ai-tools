@@ -3,7 +3,7 @@
 set -uo pipefail
 
 # - Builds a bounded window of the last 5 user turns (assistant streams bundled).
-# - Classifies with JEV Nouls. On JEV failure, asks gpt-5.6-luna via review-runner.sh.
+# - Classifies with JEV Nouls. On JEV failure, asks gpt-6-luna via review-runner.sh.
 # - Tracks per-turn block attempts so we can avoid infinite continuation loops.
 # - Fails open on timeout, crash, or unreadable classifier output.
 

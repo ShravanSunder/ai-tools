@@ -7,9 +7,8 @@ Agent token: `codex`. Use this provider when the host is not Codex native or whe
 | Model id             |
 | -------------------- |
 | `gpt-6-astra`        |
-| `gpt-5.6-sol`        |
-| `gpt-5.6-terra`      |
-| `gpt-5.6-luna`       |
+| `gpt-6-sol`          |
+| `gpt-6-luna`         |
 
 Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix.
 
@@ -22,7 +21,7 @@ Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort
 Creation example for a new relationship only; for an existing Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
 
 ```bash
-acpx --cwd /absolute/repo --model gpt-5.6-sol --approve-reads --no-terminal \
+acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \
   --non-interactive-permissions fail codex sessions ensure --name sidekick
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
   --non-interactive-permissions fail codex -s sidekick \
@@ -52,7 +51,7 @@ Codex CLI profiles currently do not apply to `app-server`; a `CODEX_PATH` launch
 
 ```bash
 CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
-  acpx --cwd /absolute/repo --model gpt-5.6-luna \
+  acpx --cwd /absolute/repo --model gpt-6-luna \
   --approve-reads --no-terminal --non-interactive-permissions fail \
   codex --file request.md
 ```

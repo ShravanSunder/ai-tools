@@ -26,7 +26,7 @@ preserved as historical behavior records outside the active runner.
 Default command:
 
 ```bash
-CODEX_PRESSURE_MODEL=gpt-5.6-luna CODEX_PRESSURE_REASONING_EFFORT=xhigh \
+CODEX_PRESSURE_MODEL=gpt-6-luna CODEX_PRESSURE_REASONING_EFFORT=medium \
 SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
   pnpm --dir tests/skills run test:evals
 ```

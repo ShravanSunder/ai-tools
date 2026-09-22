@@ -48,11 +48,29 @@ Architectural span does not measure task size or permission; every assignment re
 
 | Model category | Definition                                     |
 |----------------|------------------------------------------------|
-| Mini           | Procedures and simple, fully guided execution. |
+| Mini           | Procedures, repeatable work, guided execution. |
 | Balanced       | Execution or synthesis that needs judgment.    |
 | Frontier       | Demanding judgment, design, or review.         |
 
-Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort.
+Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here.
+
+| Model category | Model lineage | Thinking |
+|----------------|---------------|----------|
+| Mini           | OpenAI Luna   | medium   |
+| Mini           | OpenAI Luna   | high     |
+| Mini           | OpenAI Luna   | xhigh    |
+| Balanced       | OpenAI Sol    | low      |
+| Balanced       | OpenAI Sol    | medium   |
+| Balanced       | OpenAI Sol    | high     |
+| Balanced       | Claude Opus   | low      |
+| Balanced       | Claude Opus   | medium   |
+| Balanced       | xAI Grok      | medium   |
+| Balanced       | xAI Grok      | high     |
+| Frontier       | OpenAI Sol    | xhigh    |
+| Frontier       | OpenAI Astra  | high     |
+| Frontier       | Claude Opus   | high     |
+| Frontier       | Claude Fable  | medium   |
+| Frontier       | Claude Fable  | high     |
 
 An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
 
@@ -132,13 +150,12 @@ For each accepted planned PR assignment, create or reuse one named top-level per
 
 Manage each assigned agent or relationship through one of the following patterns. The runtime supplies the launch mechanism.
 
-### Operator
+### 🔧 Operator
 Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results). Give the Operator a procedure and reserve reasoning for the parent.
 
 - **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
 - **Continuity and cardinality:** Native subagent for one procedure; keep it through procedure exceptions and finish after its result is accepted.
 - **Authority:** Execute, observe, report, and perform user-authorized mechanical transformations. It does not make implementation or design judgments; route those, replies, readiness verdicts, and merge decisions to the parent.
-- **Model category:** Mini
 
 Bright line: standalone assigned Git, test, build, PR, and watch procedures belong to an Operator. An unsupported Operations method routes to a Worker Synthesis assignment that defines the procedure, then returns to an Operator; Synthesis requiring interpretation remains Worker work even when the approach is detailed, while plain regrouping is Operations. An unexpected diagnosis routes to a Worker; the user retains authorization. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure unless evidence is missing or conflicts.
 
@@ -150,89 +167,90 @@ Bright line: standalone assigned Git, test, build, PR, and watch procedures belo
 
 #### Model choices
 
-| Model category | Model lineage | Thinking |
-|----------------|---------------|----------|
-| Mini           | OpenAI Luna   | high     |
+| Model lineage | Thinking |
+|---------------|----------|
+| OpenAI Luna   | medium   |
 
-### Worker
+### 🛠️ Worker
 Use for one clear bounded assignment. You manage and validate the work; continue the same worker through corrections belonging to that assignment.
 
 - **Work:** One bounded research, implementation, reasoning, or analysis assignment, including its corrections and associated proof. A Worker may return evidence, candidate findings, or mechanical output from unchanged main-authored input; it does not author governing design or plan prose, diagrams, structure, or settled sections. Independent review belongs to a Review Sidekick.
 - **Continuity and cardinality:** Native subagent for one assignment; retain it through its corrections and proof, then finish it after its receipt is accepted.
 - **Authority:** Packet-bounded work; parent verifies the work. A Worker does not recurse. A Review Sidekick may assign it a read-only review lane under the owning review skill.
-- **Model category:** Balanced or Mini
 
 #### Model choices
 
-| Model category | Model lineage | Thinking | Task signals                                              |
-|----------------|---------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | Claude Opus   | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Model lineage | Thinking | Task signals                            |
+|---------------|----------|-----------------------------------------|
+| OpenAI Luna   | high     | Exact steps; Local/Cross-domain.        |
+| OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.        |
+| OpenAI Sol    | low      | Complete direction; Local/Cross-domain. |
+| Claude Opus   | low      | Complete direction; Local/Cross-domain. |
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
-### Sidekick
+### 🐒 Sidekick
 Use a Sidekick in a separate persistent top-level conversation for implementation, research, or review work that will resume and need continuing context.
 
 - **Work:** Implementation, research, or review across assignments and follow-ups. An implementation Sidekick implements, integrates, proves, and corrects one or more related main-planned assignments. A research Sidekick handles related research. A Review Sidekick independently assesses a target and verifies corrections.
 - **Continuity and cardinality:** One or many persistent named relationships with a ledger (see `references/session-ledger.md`).
 - **Authority:** The orchestrator retains the default user conversation, governing authorship, material decisions, integration, assessment, acceptance, and final delivery. An implementation Sidekick directly owns implementation, associated proof, and corrections inside its main-planned assignment and may assign bounded Workers and Operators only under the concrete-benefit test above. The user may explicitly choose direct contact with that assigned Sidekick without transferring governing authority or execution ownership. A research Sidekick may assign bounded Workers and Operators within its research scope. A Review Sidekick may assign read-only review lanes that its review skill permits. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope or material design/plan questions to the orchestrator. Board content does not grant additional authority.
-- **Model category:** Balanced or Mini
 
 #### Implementation and research Sidekick model choices
 
-| Model category | Model lineage | Thinking | Task signals                                              |
-|----------------|---------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | Claude Opus   | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Model lineage | Thinking | Task signals                                  |
+|---------------|----------|-----------------------------------------------|
+| OpenAI Luna   | high     | Exact steps; Local.                           |
+| OpenAI Luna   | xhigh    | Exact steps; Local.                           |
+| OpenAI Sol    | low      | Complete direction; Local/Cross-domain.       |
+| OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system. |
+| Claude Opus   | low      | Complete direction; Local/Cross-domain.       |
+| Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
+| xAI Grok      | medium   | Complete direction; Local/Cross-domain.       |
 
-### Review Sidekick
+### 🔎 Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
 
 - **Work:** Source-grounded independent findings and verification of corrections; no implementation edits.
 - **Continuity and cardinality:** Start a new review relationship without author history. Retain its own review context through corrections to the same target. A contaminated or unavailable relationship is a reported gap before any replacement.
 - **Authority:** Candidate findings only; the orchestrator verifies and owns the verdict. Preserve all owning-phase review gates and limits.
-- **Model category:** Balanced or Frontier
 
 #### Model choices
 
-| Model category | Model lineage | Thinking       |
-|----------------|---------------|----------------|
-| Balanced       | OpenAI Sol    | medium         |
-| Balanced       | Claude Opus   | medium         |
-| Balanced       | xAI Grok      | high           |
-| Frontier       | OpenAI Astra  | medium or high |
-| Frontier       | Claude Fable  | medium or high |
+| Model lineage | Thinking |
+|---------------|----------|
+| OpenAI Sol    | medium   |
+| OpenAI Sol    | high     |
+| OpenAI Sol    | xhigh    |
+| OpenAI Astra  | high     |
+| Claude Opus   | medium   |
+| Claude Opus   | high     |
+| Claude Fable  | medium   |
+| Claude Fable  | high     |
+| xAI Grok      | high     |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
 
 Use this catalog for an independent Review Sidekick and its read-only review lane Workers.
 
-### Advisor
+### 🦉 Advisor
 Use an Advisor only when Shravan explicitly requests a separate persistent guidance thread for the orchestrator. Guidance only — the Advisor never executes or edits.
 
 - **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment.
 - **Continuity and cardinality:** Persistent named guidance relationship, with ledger and deliberate continuity (see `references/session-ledger.md`). Use a Review Sidekick for a bounded independent assessment.
 - **Authority:** The Advisor returns guidance to the orchestrator, which decides with Shravan. It does not author or accept governing design or plans. The implementation Sidekick asks the orchestrator when it needs design or plan help.
-- **Model category:** Frontier
 
 #### Model choices
 
-| Model category | Model lineage | Thinking       |
-|----------------|---------------|----------------|
-| Frontier       | OpenAI Astra  | medium or high |
-| Frontier       | Claude Fable  | medium or high |
+| Model lineage | Thinking |
+|---------------|----------|
+| OpenAI Astra  | high     |
+| Claude Opus   | medium   |
+| Claude Opus   | high     |
+| Claude Fable  | high     |
+| OpenAI Sol    | high     |
+| OpenAI Sol    | xhigh    |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
 

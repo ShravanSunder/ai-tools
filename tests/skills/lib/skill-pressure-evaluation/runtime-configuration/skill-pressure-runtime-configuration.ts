@@ -1,7 +1,7 @@
-export const DEFAULT_PRESSURE_MODEL = "gpt-5.6-luna";
-export const DEFAULT_PRESSURE_REASONING_EFFORT = "high";
-export const DEFAULT_JUDGE_MODEL = "gpt-5.6-terra";
-export const DEFAULT_JUDGE_REASONING_EFFORT = "medium";
+export const DEFAULT_PRESSURE_MODEL = "gpt-6-luna";
+export const DEFAULT_PRESSURE_REASONING_EFFORT = "medium";
+export const DEFAULT_JUDGE_MODEL = "gpt-6-luna";
+export const DEFAULT_JUDGE_REASONING_EFFORT = "xhigh";
 
 export interface AcpxCodexAgentSetup {
   readonly model: string;
