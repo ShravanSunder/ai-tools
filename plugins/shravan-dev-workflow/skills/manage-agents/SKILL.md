@@ -209,7 +209,8 @@ Use a separate persistent top-level thread for independent review or correction 
 | Balanced       | OpenAI Sol    | medium         |
 | Frontier       | OpenAI Sol    | high           |
 | Frontier       | OpenAI Astra  | high           |
-| Frontier       | Claude Opus   | medium or high |
+| Balanced       | Claude Opus   | medium         |
+| Frontier       | Claude Opus   | high           |
 | Frontier       | Claude Fable  | medium or high |
 | Frontier       | xAI Grok      | high           |
 
