@@ -164,12 +164,12 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 #### Model choices
 
-| Model category | Model lineage | Thinking | Task signals                            |
-|----------------|---------------|----------|-----------------------------------------|
-| Mini           | OpenAI Luna   | high     | Exact steps; Local/Cross-domain.        |
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.        |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain. |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain. |
+| Model category | Model lineage | Thinking      | Task signals                            |
+|----------------|---------------|---------------|-----------------------------------------|
+| Mini           | OpenAI Luna   | high          | Exact steps; Local/Cross-domain.        |
+| Mini           | OpenAI Luna   | xhigh         | Exact steps; Local/Cross-domain.        |
+| Balanced       | OpenAI Sol    | low or medium | Complete direction; Local/Cross-domain. |
+| Balanced       | Claude Opus   | low           | Complete direction; Local/Cross-domain. |
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
@@ -183,15 +183,14 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 #### Implementation and research Sidekick model choices
 
-| Model category | Model lineage | Thinking | Task signals                                              |
-|----------------|---------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna   | high     | Exact steps; Local/Cross-domain.                          |
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Model category | Model lineage | Thinking      | Task signals                                              |
+|----------------|---------------|---------------|-----------------------------------------------------------|
+| Mini           | OpenAI Luna   | high          | Exact steps; Local/Cross-domain.                          |
+| Mini           | OpenAI Luna   | xhigh         | Exact steps; Local/Cross-domain.                          |
+| Balanced       | OpenAI Sol    | low or medium | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | Claude Opus   | low           | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok      | low           | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok      | medium        | Complete or Partial direction; Local/Cross-domain.        |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
@@ -199,18 +198,16 @@ Use a separate persistent top-level thread for independent review or correction 
 - **Work:** Source-grounded independent findings and verification of corrections; no implementation edits.
 - **Continuity and cardinality:** Start a new review relationship without author history. Retain its own review context through corrections to the same target. A contaminated or unavailable relationship is a reported gap before any replacement.
 - **Authority:** Candidate findings only; the orchestrator verifies and owns the verdict. Preserve all owning-phase review gates and limits.
-- **Model category:** Balanced or Frontier
 
 #### Model choices
 
-| Model category | Model lineage | Thinking       |
-|----------------|---------------|----------------|
-| Balanced       | OpenAI Sol    | low            |
-| Frontier       | OpenAI Astra  | high           |
-| Frontier       | Claude Opus   | medium or high |
-| Frontier       | Claude Fable  | medium or high |
-| Frontier       | OpenAI Sol    | high or xhigh  |
-| Frontier       | xAI Grok      | high           |
+| Model lineage | Thinking       |
+|---------------|----------------|
+| OpenAI Sol    | medium or high |
+| OpenAI Astra  | high           |
+| Claude Opus   | medium or high |
+| Claude Fable  | medium or high |
+| xAI Grok      | high           |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
