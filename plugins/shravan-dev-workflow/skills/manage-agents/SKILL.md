@@ -212,7 +212,7 @@ Use a separate persistent top-level thread for independent review or correction 
 | Frontier       | OpenAI Astra  | high           |
 | Balanced       | Claude Opus   | medium         |
 | Frontier       | Claude Opus   | high           |
-| Balanced       | Claude Fable  | medium         |
+| Frontier       | Claude Fable  | medium         |
 | Frontier       | Claude Fable  | high           |
 | Balanced       | xAI Grok      | high           |
 
