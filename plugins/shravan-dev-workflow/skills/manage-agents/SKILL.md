@@ -207,7 +207,8 @@ Use a separate persistent top-level thread for independent review or correction 
 | Model category | Model lineage | Thinking       |
 |----------------|---------------|----------------|
 | Balanced       | OpenAI Sol    | medium         |
-| Frontier       | OpenAI Sol    | high           |
+| Balanced       | OpenAI Sol    | high           |
+| Frontier       | OpenAI Sol    | xhigh          |
 | Frontier       | OpenAI Astra  | high           |
 | Balanced       | Claude Opus   | medium         |
 | Frontier       | Claude Opus   | high           |
@@ -234,7 +235,7 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 | Frontier       | OpenAI Astra  | high           |
 | Frontier       | Claude Opus   | high           |
 | Frontier       | Claude Fable  | medium or high |
-| Frontier       | OpenAI Sol    | high or xhigh  |
+| Frontier       | OpenAI Sol    | xhigh          |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
 
