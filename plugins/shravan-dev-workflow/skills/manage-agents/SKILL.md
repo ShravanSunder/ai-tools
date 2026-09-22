@@ -48,11 +48,13 @@ Architectural span does not measure task size or permission; every assignment re
 
 | Model category | Definition                                     |
 |----------------|------------------------------------------------|
-| Mini           | Procedures and simple, fully guided execution. |
-| Balanced       | Execution or synthesis that needs judgment.    |
-| Frontier       | Demanding judgment, design, or review.         |
+| Mini           | Clear, repeatable work whose steps, inputs, result, and checks are already named. |
+| Balanced       | Execution or synthesis that needs judgment.                                        |
+| Frontier       | Demanding judgment, design, or review.                                             |
 
 Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort.
+
+Luna (`gpt-6-luna`) is the efficient model for Mini work: focused execution, not a choice about approach. Operator Luna `medium` or `high` runs one prescribed procedure and returns the observed result. Worker and Sidekick Luna `high` or `xhigh` carries exact-steps execution, local or cross-domain, including a focused change whose done-state is already named. An unnamed method, a tradeoff, or a judgment about approach is Balanced or Frontier.
 
 An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
 
