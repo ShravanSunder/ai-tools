@@ -3,7 +3,7 @@
 set -uo pipefail
 
 # - Builds a bounded window of the last 5 user turns (assistant streams bundled).
-# - Asks gpt-5.6-luna via review-runner.sh in ~/.codex-reviewer (hooks off, router 8787).
+# - Classifies with JEV Nouls. On JEV failure, asks gpt-5.6-luna via review-runner.sh.
 # - Tracks per-turn block attempts so we can avoid infinite continuation loops.
 # - Fails open on timeout, crash, or unreadable classifier output.
 
@@ -240,7 +240,29 @@ OUT_FILE="${WORK_DIR}/luna-last.txt"
 WINDOW_FILE="${WORK_DIR}/window.txt"
 printf '%s\n' "${WINDOW_TEXT}" >"${WINDOW_FILE}"
 
+run_luna_classifier() {
+  local luna_role="$1"
+
+  {
+    cat "${CLASSIFIER_PROMPT_FILE}"
+    if [[ "${stop_hook_active}" == "true" ]]; then
+      printf '\n\nNested stop: true\n'
+      printf 'Previous continues this turn: %s\n' "${BLOCK_COUNT}"
+      printf 'Max continues this turn: %s\n' "${MAX_CONTINUES}"
+    fi
+    printf '\n\nConversation window:\n\n'
+    printf '%s\n' "${WINDOW_TEXT}"
+  } >"${PROMPT_FILE}"
+  log_message "turn_id=${turn_id} session_id=${session_id} luna_start role=${luna_role} transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
+  bash "${REVIEW_RUNNER}" \
+    --prompt-file "${PROMPT_FILE}" \
+    --output "${OUT_FILE}" \
+    --cd "${PROJECT_ROOT}" \
+    >/dev/null 2>>"${PROJECT_LOG}"
+}
+
 set +e
+CLASSIFIER_BACKEND="luna"
 if [[ "${STOP_REVIEW_BACKEND}" == "jev" ]]; then
   log_message "turn_id=${turn_id} session_id=${session_id} jev_start transport=openrouter-systemone model=${CODEX_STOP_REVIEW_JEV_MODEL:-${STOP_REVIEW_JEV_MODEL_DEFAULT}} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
   JEV_PYTHON="${CODEX_STOP_REVIEW_PYTHON:-python3}"
@@ -255,24 +277,22 @@ if [[ "${STOP_REVIEW_BACKEND}" == "jev" ]]; then
     JEV_ARGS+=(--nested)
   fi
   "${JEV_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
-  LUNA_EXIT=$?
+  JEV_EXIT=$?
+  JEV_OUTPUT=""
+  if [[ -f "${OUT_FILE}" ]]; then
+    JEV_OUTPUT="$(cat "${OUT_FILE}" || true)"
+  fi
+  if [[ "${JEV_EXIT}" -eq 0 ]] && [[ -n "$(extract_decision_json "${JEV_OUTPUT}" || true)" ]]; then
+    CLASSIFIER_BACKEND="jev"
+    LUNA_EXIT=0
+  else
+    log_message "turn_id=${turn_id} session_id=${session_id} jev_fallback exit=${JEV_EXIT} outcome=luna_backup"
+    run_luna_classifier "backup"
+    LUNA_EXIT=$?
+    CLASSIFIER_BACKEND="luna"
+  fi
 else
-  {
-    cat "${CLASSIFIER_PROMPT_FILE}"
-    if [[ "${stop_hook_active}" == "true" ]]; then
-      printf '\n\nNested stop: true\n'
-      printf 'Previous continues this turn: %s\n' "${BLOCK_COUNT}"
-      printf 'Max continues this turn: %s\n' "${MAX_CONTINUES}"
-    fi
-    printf '\n\nConversation window:\n\n'
-    printf '%s\n' "${WINDOW_TEXT}"
-  } >"${PROMPT_FILE}"
-  log_message "turn_id=${turn_id} session_id=${session_id} luna_start transport=isolated-exec home=${CODEX_STOP_REVIEW_HOME:-${STOP_REVIEW_HOME_DEFAULT}} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} reasoning_summary=${STOP_REVIEW_REASONING_SUMMARY} service_tier=${STOP_REVIEW_SERVICE_TIER:-default} timeout_s=${LUNA_TIMEOUT_SECONDS} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
-  bash "${REVIEW_RUNNER}" \
-    --prompt-file "${PROMPT_FILE}" \
-    --output "${OUT_FILE}" \
-    --cd "${PROJECT_ROOT}" \
-    >/dev/null 2>>"${PROJECT_LOG}"
+  run_luna_classifier "primary"
   LUNA_EXIT=$?
 fi
 set +e
@@ -312,7 +332,7 @@ esac
 
 if [[ "${CONTINUE_WORK}" != "true" ]]; then
   save_state "${BLOCK_COUNT}" "luna_stop_ok" "${message_hash}"
-  log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_stop_ok decision=${DECISION} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${BLOCK_COUNT} outcome=allow cot=${COT}"
+  log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_stop_ok decision=${DECISION} classifier_backend=${CLASSIFIER_BACKEND} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${BLOCK_COUNT} outcome=allow cot=${COT}"
   emit_allow
 fi
 
@@ -329,7 +349,7 @@ if [[ "${next_block_count}" -ge "${MAX_CONTINUES}" ]]; then
   emit_allow "${warning_message}"
 fi
 
-log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_continue_work decision=${DECISION} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${next_block_count} outcome=block previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH} cot=${COT}"
+log_message "turn_id=${turn_id} session_id=${session_id} classification=luna_continue_work decision=${DECISION} classifier_backend=${CLASSIFIER_BACKEND} model=${STOP_REVIEW_MODEL} reasoning_effort=${STOP_REVIEW_REASONING_EFFORT} block_count=${next_block_count} outcome=block previous_classification=${PREVIOUS_CLASSIFICATION} previous_hash=${PREVIOUS_MESSAGE_HASH} cot=${COT}"
 emit_block \
   "$(wrap_continue_reason "${REASON}")" \
   "Stop-review classifier continued the conversation because the job is still unfinished."

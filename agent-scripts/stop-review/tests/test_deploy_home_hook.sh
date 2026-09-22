@@ -123,6 +123,20 @@ else
   PASS=$((PASS + 1))
 fi
 
+if ! grep -Fq 'STOP_REVIEW_BACKEND_DEFAULT="jev"' "${DEST}/config.sh"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: deployed config must default the classifier to jev\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
+if ! grep -Fq 'jev_fallback' "${DEST}/stop-review-hook.sh"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: deployed hook must fall back to Luna when JEV fails\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
 if grep -Eq 'op read|keyring|--provision' "${DEST}/stop-review-hook.sh"; then
   FAIL=$((FAIL + 1))
   printf 'FAIL: stop-review-hook.sh must not provision or call op\n' >&2
