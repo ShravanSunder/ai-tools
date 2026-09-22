@@ -8,9 +8,9 @@ Default model transport: ACPX with the `codex` adapter
 
 Default model: `gpt-6-luna`
 
-Default subject reasoning effort: `high`
+Default subject reasoning effort: `medium`
 
-Default semantic judge: `gpt-5.6-terra` at `medium`
+Default semantic judge: `gpt-6-luna` at `xhigh`
 
 Default safety: read-only sandbox
 
