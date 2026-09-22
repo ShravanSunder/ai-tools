@@ -200,18 +200,18 @@ Use a separate persistent top-level thread for independent review or correction 
 - **Work:** Source-grounded independent findings and verification of corrections; no implementation edits.
 - **Continuity and cardinality:** Start a new review relationship without author history. Retain its own review context through corrections to the same target. A contaminated or unavailable relationship is a reported gap before any replacement.
 - **Authority:** Candidate findings only; the orchestrator verifies and owns the verdict. Preserve all owning-phase review gates and limits.
+- **Model category:** Balanced or Frontier
 
 #### Model choices
 
-| Model lineage | Thinking       | When                                   |
-|---------------|----------------|----------------------------------------|
-| OpenAI Sol    | medium         | Contract check; Local or Cross-domain. |
-| Claude Opus   | medium         | Contract check; Local or Cross-domain. |
-| xAI Grok      | high           | Contract check; Local or Cross-domain. |
-| OpenAI Sol    | high           | Open challenge, or Cross-system.       |
-| OpenAI Astra  | high           | Open challenge, or Cross-system.       |
-| Claude Opus   | high           | Open challenge, or Cross-system.       |
-| Claude Fable  | medium or high | Open challenge, or Cross-system.       |
+| Model category | Model lineage | Thinking       |
+|----------------|---------------|----------------|
+| Balanced       | OpenAI Sol    | medium         |
+| Frontier       | OpenAI Sol    | high           |
+| Frontier       | OpenAI Astra  | high           |
+| Frontier       | Claude Opus   | medium or high |
+| Frontier       | Claude Fable  | medium or high |
+| Frontier       | xAI Grok      | high           |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
