@@ -183,16 +183,16 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 #### Implementation and research Sidekick model choices
 
-| Model category | Model lineage | Thinking | Task signals                                              |
-|----------------|---------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna   | high     | Exact steps; Local/Cross-domain.                          |
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system.             |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system.             |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Model category | Model lineage | Thinking | Task signals                                          |
+|----------------|---------------|----------|-------------------------------------------------------|
+| Mini           | OpenAI Luna   | high     | Exact steps; Local.                                   |
+| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local.                                   |
+| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.               |
+| Balanced       | OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system.         |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.               |
+| Balanced       | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system.         |
+| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.               |
+| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.    |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
@@ -214,7 +214,7 @@ Use a separate persistent top-level thread for independent review or correction 
 | Frontier       | Claude Opus   | high           |
 | Balanced       | Claude Fable  | medium         |
 | Frontier       | Claude Fable  | high           |
-| Frontier       | xAI Grok      | high           |
+| Balanced       | xAI Grok      | high           |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
@@ -227,15 +227,17 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 - **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment.
 - **Continuity and cardinality:** Persistent named guidance relationship, with ledger and deliberate continuity (see `references/session-ledger.md`). Use a Review Sidekick for a bounded independent assessment.
 - **Authority:** The Advisor returns guidance to the orchestrator, which decides with Shravan. It does not author or accept governing design or plans. The implementation Sidekick asks the orchestrator when it needs design or plan help.
-- **Model category:** Frontier
+- **Model category:** Balanced or Frontier
 
 #### Model choices
 
 | Model category | Model lineage | Thinking       |
 |----------------|---------------|----------------|
 | Frontier       | OpenAI Astra  | high           |
+| Balanced       | Claude Opus   | medium         |
 | Frontier       | Claude Opus   | high           |
 | Frontier       | Claude Fable  | high           |
+| Balanced       | OpenAI Sol    | high           |
 | Frontier       | OpenAI Sol    | xhigh          |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
