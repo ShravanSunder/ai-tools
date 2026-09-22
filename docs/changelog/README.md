@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 Cursor drops Sol and Fable](2026-09-22-cursor-opus-medium.md)
 - [2026-09-22 Reviewer Grok is high only](2026-09-22-reviewer-grok-high.md)
 - [2026-09-22 Sol medium is a Sidekick row](2026-09-22-sol-medium-sidekick.md)
 - [2026-09-22 Luna starts Worker and Sidekick tasks](2026-09-22-luna-default-task.md)
