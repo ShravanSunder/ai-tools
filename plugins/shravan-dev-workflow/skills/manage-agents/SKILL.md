@@ -48,7 +48,7 @@ Architectural span does not measure task size or permission; every assignment re
 
 | Model category | Definition                                     |
 |----------------|------------------------------------------------|
-| Mini           | Clear, repeatable work whose steps, inputs, result, and checks are already named. |
+| Mini           | Procedures, repeatable work, guided execution.                                     |
 | Balanced       | Execution or synthesis that needs judgment.                                        |
 | Frontier       | Demanding judgment, design, or review.                                             |
 
