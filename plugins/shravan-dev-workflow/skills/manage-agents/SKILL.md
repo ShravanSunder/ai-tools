@@ -73,7 +73,7 @@ Router owns the seat schema and enforcement. A direct conversation, native child
 | Family | Models or harness                                 |
 |--------|---------------------------------------------------|
 | OpenAI | Astra, Sol, Terra, and Luna.                      |
-| Claude | Fable 5.1 and Opus 5.5.                           |
+| Claude | Fable and Opus.                                   |
 | xAI    | Grok.                                             |
 | Cursor | A harness and multi-model catalog, not a lineage. |
 
@@ -169,7 +169,7 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 | Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.            |
 | Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.            |
 | Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.     |
-| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.     |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.     |
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
@@ -188,10 +188,10 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 | Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.                          |
 | Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.                          |
 | Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok 4.7      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok 4.7      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
@@ -207,10 +207,10 @@ Use a separate persistent top-level thread for independent review or correction 
 |----------------|-------------------|-----------------|
 | Balanced       | OpenAI Sol        | low             |
 | Frontier       | OpenAI Astra      | high            |
-| Frontier       | Claude Opus 5.5   | medium or high  |
-| Frontier       | Claude Fable 5.1  | medium or high  |
+| Frontier       | Claude Opus   | medium or high  |
+| Frontier       | Claude Fable  | medium or high  |
 | Frontier       | OpenAI Sol        | high or xhigh   |
-| Frontier       | xAI Grok 4.7      | high            |
+| Frontier       | xAI Grok      | high            |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
@@ -230,8 +230,8 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 | Model category | Model lineage     | Thinking        |
 |----------------|-------------------|-----------------|
 | Frontier       | OpenAI Astra      | high            |
-| Frontier       | Claude Opus 5.5   | medium or high  |
-| Frontier       | Claude Fable 5.1  | medium or high  |
+| Frontier       | Claude Opus   | medium or high  |
+| Frontier       | Claude Fable  | medium or high  |
 | Frontier       | OpenAI Sol        | high or xhigh   |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.

@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 Review comments on model names](2026-09-22-review-comments.md)
 - [2026-09-22 Remove added prose](2026-09-22-remove-added-prose.md)
 - [2026-09-22 Provider docs and reviewer Sol low](2026-09-22-provider-docs-and-reviewer.md)
 - [2026-09-22 Restore Choose a model](2026-09-22-restore-choose-a-model.md)

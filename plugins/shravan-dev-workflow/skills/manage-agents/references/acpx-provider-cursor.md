@@ -16,15 +16,14 @@ Illustrative advertised Cursor ACP id examples (catalogs change):
 
 | Model id                           |
 | ---------------------------------- |
-| `grok-4.7[effort=low,fast=false]`  |
-| `grok-4.7[effort=medium,fast=false]` |
 | `grok-4.7[effort=high,fast=false]` |
-| `gpt-6-luna`                       |
+| `grok-4.7[effort=high,fast=true]`  |
+| `claude-opus-5-5`                  |
 
 - Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
 - Fable only on request.
 
-Treat the short names from `agent --list-models` (`cursor-grok-4.7-low`, `cursor-grok-4.7-medium`, `cursor-grok-4.7-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
+Treat the short names from `agent --list-models` (`cursor-grok-4.7-high`, `cursor-grok-4.7-medium`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
 When usage limits remove a model, use an equivalent declared fallback or report degraded/blocked. Record config-defined command overrides because the resolved command participates in session identity.
 
