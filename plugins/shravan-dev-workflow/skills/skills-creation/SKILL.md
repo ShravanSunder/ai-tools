@@ -197,7 +197,7 @@ Completion: authoring basis, reproduction result when applicable, user decision,
 
 ### 3. Design the trigger
 
-Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. MUST load `references/frontmatter-design.md` and return the trigger and invocation decision; that reference owns description wording, the description pattern, adjacent-skill boundaries, and the shapes to avoid. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
+Choose the invocation capabilities, then write the YAML description as a trigger-only context pointer for that choice. MUST load `references/frontmatter-design.md` and return the trigger and invocation decision; that reference owns description wording, the description pattern, adjacent-skill boundaries, and the shapes to avoid. Do not load `../../shared-references/humanizer.md` for that description. IF client-specific invocation controls are requested, load `references/platform-mechanics.md` and return the platform encoding. Completion: invocation capabilities are named, and description or platform policy matches them without summarizing the workflow.
 
 ### 4. Build the main path
 
@@ -233,6 +233,8 @@ Match the guidance form to the observed failure, representative hypothesis, or u
 
 Strengthen predicates, returns, and completion criteria when the agent would guess or stop early.
 
+IF this step writes human sentences in the proposal, load `../../shared-references/humanizer.md` in file mode and return those sentences rewritten. Leave the YAML description, call-site grammar, and label sets unchanged.
+
 Completion: the mental model is stated before details or exceptions; one all-run spine is visible in one scan and handles every branch the description promises; every branch changes the work and returns something the main path can use; every call site is complete under the grammar or a named dispatch contract; and wording changes cite the failure or success gap they address without overstating its evidence source.
 
 ### 5. Place the depth
@@ -245,7 +247,7 @@ IF the change is behavior-changing, before any skill file is edited and unless t
 
 ### 7. Implement
 
-IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. Then edit the skill surface inside the accepted boundary. Completion: compare the implemented diff against the accepted spec boundary; include a deviation in the run summary only when one exists.
+IF any surface on the sensitive-surface list in `references/security-gate.md` is in scope, load `references/security-gate.md` before outlining or writing the surface and return its allowed, disallowed, blocked, or deferred decision; a `disallowed` or `blocked` decision stops the write. IF this step writes human sentences in the `SKILL.md` body or a teaching reference, load `../../shared-references/humanizer.md` in file mode and return those sentences rewritten. Leave the YAML description, schemas, call-site grammar, label sets, and packet forms unchanged. Then edit the skill surface inside the accepted boundary. Completion: compare the implemented diff against the accepted spec boundary; include a deviation in the run summary only when one exists.
 
 ### 8. Proof of quality, proof of work
 

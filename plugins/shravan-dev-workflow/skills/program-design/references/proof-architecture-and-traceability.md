@@ -44,6 +44,8 @@ health check
 operational alarm
 ```
 
-Do not choose exact files, commands, TDD order, or evidence-capture mechanics.
+For each material invalid state, decide how it is kept out: the illegal combination is unrepresentable, or the trusted entry rejects it. Name the enforcement class beside that decision. Good: a negative total cannot be constructed, or the charge entry refuses it. Bad: the design is "add a negative test."
+
+Do not choose exact files, commands, TDD order, or evidence-capture mechanics. Planning owns which test proves the decision.
 
 Complete when: every material requirement has one structural realization and plausible proof seam, every material design element traces back to a legitimate need, and unprovable claims remain explicit.

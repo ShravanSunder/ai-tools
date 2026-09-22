@@ -194,4 +194,16 @@ export const skillPressureCaseDefinitions = [
       { name: "preserves-exact-views-and-durable-proof", requirement: "Keeps the exact component/call/failure views authoritative and required. It requires an accepted project-local asset, relative embed, accurate alt/caption, pixel inspection and supported destination-preview evidence before generated-image completion; cache-only or prose-only is a gap.", failureExample: "Lets the generated overview replace exact fields or calls cache/prose visually complete." },
     ],
   },
+  {
+    scenarioId: "program-design-illegal-state-not-a-test-file",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/program-design/references/proof-architecture-and-traceability.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "keeps-illegal-state-in-the-design", requirement: "States that the invalid invoice is unrepresentable or rejected at the trusted entry, and names an enforcement class.", failureExample: "The design is only a negative test, with no structural decision." },
+      { name: "does-not-plan-the-test", requirement: "Names no test file, test command, or red/green order. Planning owns the exact test.", failureExample: "Answers with a test path or a red/green step." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

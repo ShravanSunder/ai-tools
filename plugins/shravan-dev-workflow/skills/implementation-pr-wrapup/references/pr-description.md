@@ -14,6 +14,7 @@ MUST load `pr-outline-views.md` and return the views used in Change outline.
 - Copy the template. Keep `## Why the change`, `## Special things to note`, and `## Change outline` exact. Do not use Summary, Test plan, `## Why`, `## Notes`, or `## Outline`.
 - Related links on the first line only when the packet already has URLs. Otherwise start at `## Why the change`.
 - Open the diff to write Why. Stop and rewrite if Why is a title echo, a file list, "various fixes", or more than one sentence.
+- IF drafting or rewriting Why or Special things to note, load `../../../shared-references/humanizer.md` in embedded mode and return only those two parts. Do not pass Change outline fences through that rewrite. A not-X-but-Y closer the diff did not require is a weak Why: rewrite it before `complete`.
 - Stop if Special things to note is empty, filler ("please review carefully"), or a restatement of Why.
 - Omit unused outline views. No file-list changelog (`- path — note` as the outline). No screenshots, GIFs, HTML, or `.humanlayer/` paths.
 - Stop and return `blocked` if head SHA or diff identity is missing, or public-artifact-safety forbids publish.
