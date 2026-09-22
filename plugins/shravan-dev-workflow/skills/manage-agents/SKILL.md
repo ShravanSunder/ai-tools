@@ -48,9 +48,9 @@ Architectural span does not measure task size or permission; every assignment re
 
 | Model category | Definition                                     |
 |----------------|------------------------------------------------|
-| Mini           | Procedures, repeatable work, guided execution.                                     |
-| Balanced       | Execution or synthesis that needs judgment.                                        |
-| Frontier       | Demanding judgment, design, or review.                                             |
+| Mini           | Procedures, repeatable work, guided execution. |
+| Balanced       | Execution or synthesis that needs judgment.    |
+| Frontier       | Demanding judgment, design, or review.         |
 
 Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort.
 
@@ -166,10 +166,10 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 | Model category | Model lineage     | Thinking | Task signals                                              |
 |----------------|-------------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna       | high     | Start here. Exact steps or Complete direction; Local/Cross-domain. |
-| Mini           | OpenAI Luna       | xhigh    | Same task when it is broad or Luna high struggled.                  |
-| Balanced       | OpenAI Sol        | low      | Luna unavailable, or an existing Sol low session.                   |
-| Balanced       | Claude Opus 5.5   | low      | Luna unavailable and the executor is Claude.                        |
+| Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.            |
+| Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.            |
+| Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.     |
+| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.     |
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
@@ -185,13 +185,13 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 | Model category | Model lineage     | Thinking | Task signals                                              |
 |----------------|-------------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna       | high     | Start here. Exact steps or Complete direction; Local/Cross-domain. |
-| Mini           | OpenAI Luna       | xhigh    | Same task when it is broad or Luna high struggled.                  |
-| Balanced       | OpenAI Sol        | low      | Luna unavailable, or an existing Sol low session.                   |
-| Balanced       | Claude Opus 5.5   | low      | Luna unavailable and the executor is Claude.                        |
-| Balanced       | OpenAI Sol        | medium   | Partial direction, or Cross-system.                                 |
-| Balanced       | xAI Grok 4.7      | low      | Luna unavailable and the executor is Grok.                          |
-| Balanced       | xAI Grok 4.7      | medium   | Partial direction; Local/Cross-domain.                              |
+| Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.                          |
+| Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.                          |
+| Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | xAI Grok 4.7      | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok 4.7      | medium   | Complete or Partial direction; Local/Cross-domain.        |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.

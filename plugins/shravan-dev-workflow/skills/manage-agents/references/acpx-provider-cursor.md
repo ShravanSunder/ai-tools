@@ -21,7 +21,8 @@ Illustrative advertised Cursor ACP id examples (catalogs change):
 | `grok-4.7[effort=high,fast=false]` |
 | `gpt-6-luna`                       |
 
-- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. On Cursor, do not select Sol or Fable. The only Claude selection is Opus 5.5 at `medium`. If the selected effort is unavailable, report that gap; do not silently change effort.
+- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
+- Fable only on request.
 
 Treat the short names from `agent --list-models` (`cursor-grok-4.7-low`, `cursor-grok-4.7-medium`, `cursor-grok-4.7-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
