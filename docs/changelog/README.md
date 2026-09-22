@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 Codex provider lists ids only](2026-09-22-codex-provider-ids-only.md)
 - [2026-09-22 Cursor drops Sol and Fable](2026-09-22-cursor-opus-medium.md)
 - [2026-09-22 Reviewer Grok is high only](2026-09-22-reviewer-grok-high.md)
 - [2026-09-22 Sol medium is a Sidekick row](2026-09-22-sol-medium-sidekick.md)
