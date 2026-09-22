@@ -150,9 +150,9 @@ Bright line: standalone assigned Git, test, build, PR, and watch procedures belo
 
 #### Model choices
 
-| Model category | Model lineage | Thinking       |
-|----------------|---------------|----------------|
-| Mini           | OpenAI Luna   | medium or high |
+| Model category | Model lineage | Thinking |
+|----------------|---------------|----------|
+| Mini           | OpenAI Luna   | medium   |
 
 ### Worker
 Use for one clear bounded assignment. You manage and validate the work; continue the same worker through corrections belonging to that assignment.
