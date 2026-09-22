@@ -14,13 +14,12 @@ Chat only; outline the artifact result without creating files. Author a substant
 
 ## Expected Compliant Behavior
 
-- Proactively selects a meaningful generated explanatory journey/comparison for the substantial Requirements document despite no explicit image-format request.
-- Checks actual callable capability, reports the missing generator honestly, and does not claim an image, embed, inspection or preview exists.
-- Preserves a useful precise Requirements-altitude visual/table and other authoring work while keeping the generated-image requirement open.
-- Introduces no Specification or internal architecture and does not add filler imagery or silently choose another provider.
+- Treats the handoff journey as a sequence or comparison, not as a changed screen, so Mermaid or a table can complete that view. Image Gen is not required unless a screen changes.
+- Does not call a text fence a pass for that journey when Mermaid can render.
+- Introduces no Specification or internal architecture and does not invent an image or a new visual language.
 
 ## Failure Signals
 
-- Defaults to text/Mermaid only and calls the document visually complete without considering available authorized Image Gen.
-- Invents a generated asset, provider or preview.
+- Calls a text fence the completed journey when Mermaid can render.
+- Requires a generated image for this non-screen journey, or invents a screen the user did not describe.
 - Adds internal components to the Requirements visual.

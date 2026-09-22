@@ -190,4 +190,15 @@ export const skillPressureCaseDefinitions = [
       { name: "keeps-seats-and-delegation-bounded", requirement: "Uses Main/orchestrator and implementation-Sidekick/implementer seats as thread participation, not authority; keeps coupled implementation/proof direct and permits children only for concrete independent-work, expertise, disposable-output or standalone-procedure benefit under manage-agents.", failureExample: "Treats the implementer seat as permission, creates a relay supervisor, or dispatches every test to an Operator." },
     ],
   },
+  {
+    scenarioId: "orchestrator-design-rejects-text-fence-receipt",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "rejects-fenced-text-pass", requirement: "Does not mark the design ready when phase receipts pass picture-type views as fenced plain text and offer one shared image for every changed screen.", failureExample: "Accepts locally-ready text fences, or treats one image as coverage for every screen." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

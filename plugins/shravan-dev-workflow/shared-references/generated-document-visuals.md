@@ -2,7 +2,7 @@
 
 This reference owns capability and authority verification, fixed-brief image execution, durable asset/embed handling, pixel and placement inspection, correction, freshness and exact-gap reporting for generated document visuals. `diagram-rendering-and-fallbacks.md` owns medium selection and the final per-view result.
 
-Expected inputs: artifact identity and destination; reader question; governing source pointer; main-authored brief containing exact entities, labels, relationships, semantic composition, invariants and exclusions; requested provider when any; intended asset destination; alt text and caption draft.
+Expected inputs: artifact identity and destination; reader question; governing source pointer; main-authored brief containing exact entities, labels, relationships, semantic composition, invariants and exclusions; for a UI picture, the current screen or the exact words `no current UI`; requested provider when any; intended asset destination; alt text and caption draft.
 
 Return: selected capability and authority basis; main-authored brief/source pointer; candidate and accepted asset paths; relative Markdown embed; image semantic/readability inspection; destination-preview result; correction or exact gap.
 
@@ -11,6 +11,8 @@ Return: selected capability and authority basis; main-authored brief/source poin
 Load the available `imagegen` skill by name for actual generation mechanics, but distinguish a listed skill from a callable generation tool. Prefer native Image Gen only when its callable capability is actually exposed. Use OpenRouter or another provider only when the user supplied or configured an authorized callable route and selected any material provider or model choice. A firewall allowance, environment-variable name, prompt file or skill listing does not prove availability.
 
 If no authorized callable route exists, return the exact missing capability or owner choice. Preserve any useful precise semantic views, but do not silently choose a paid/API route, invent credentials, generate a fake asset, or call a prompt an image.
+
+When the view is a screen the user sees, ground the brief in the current app: include the current screen from the running app or its source, plus the desired change. `no current UI` is the only alternative. A control, navigation, or visual language the current app does not have, and the requirement does not change, fails inspection. A non-UI explanatory image does not need a screen capture.
 
 ## Render the main-authored brief
 

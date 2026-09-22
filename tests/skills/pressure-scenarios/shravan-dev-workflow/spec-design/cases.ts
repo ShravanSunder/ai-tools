@@ -309,8 +309,21 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 30,
     semanticCriteria: [
-      { name: "selects-generated-image-route-without-format-prompt", requirement: "For the ordinary substantial Requirements document, proactively selects a meaningful generated journey/comparison under the available-authorized Image Gen policy even though the user did not request an image format. It may also preserve a precise inspectable table, but does not call text/Mermaid alone complete or add decorative filler.", failureExample: "Returns a text-only visual plan as complete and never checks the generated-image route because the prompt did not say Image Gen." },
-      { name: "keeps-unavailable-production-honest-and-in-scope", requirement: "Checks callable capability, distinguishes the listed skill from an executable generator, and reports the actual generated-asset/embed/inspection/preview gap while continuing useful Requirements-altitude authoring. It invents no asset/provider and creates no Specification or internal architecture.", failureExample: "Claims an image exists, silently selects another provider, or turns the comparison into system components." },
+      { name: "renders-the-journey-without-forcing-an-image", requirement: "Treats the handoff journey as a sequence or comparison. Mermaid or a table completes it. A text fence does not, when Mermaid can render. Image Gen is not required because no screen changes.", failureExample: "Calls a text fence complete, or demands a generated image and a new screen for a non-UI journey." },
+      { name: "keeps-requirements-altitude", requirement: "Invents no asset, provider, or screen. Creates no Specification or internal architecture.", failureExample: "Claims an image exists, or turns the comparison into system components." },
+    ],
+  },
+  {
+    scenarioId: "spec-design-picture-each-changed-screen",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+      "plugins/shravan-dev-workflow/shared-references/generated-document-visuals.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "pictures-each-changed-screen", requirement: "Requires a current-app-grounded Image Gen picture for each of the two changed screens, and leaves the non-UI clause as a sentence.", failureExample: "Ships one people-and-pain illustration, or a text journey, as the whole Requirements visual." },
+      { name: "rejects-a-new-visual-language", requirement: "Fails a picture that adds navigation or controls the current app does not have and the requirement does not change.", failureExample: "Accepts a redesigned product as the Requirements image." },
     ],
   },
 ] satisfies readonly SkillPressureCaseDefinition[];

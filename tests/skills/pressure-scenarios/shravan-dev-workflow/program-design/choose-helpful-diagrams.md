@@ -26,7 +26,7 @@ Chat only; show the requested views in the response and do not create files. Req
 
 - Selects views by the question a reader needs answered.
 - Uses a component/ownership view, call flow, state table or machine, failure flow, and proof view only where each is useful.
-- Uses readable plain text or a table when it preserves dense meaning better than Mermaid.
+- Splits an unreadable all-in-one request into smaller Mermaid views. A text fence is not a pass for ownership, calls, state, failure, or proof when Mermaid can render. A table may hold a dense comparison.
 - Keeps owners, guards, effects, result/error paths, and proof seams consistent across views.
 
 ## Failure Signals

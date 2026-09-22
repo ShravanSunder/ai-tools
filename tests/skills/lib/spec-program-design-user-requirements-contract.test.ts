@@ -87,9 +87,8 @@ describe("user requirements and design-view contracts", () => {
       expect(designSkill).toContain(
         "or the substantial per-document visual obligation applies even when no precise-view predicate fires",
       );
-      expect(designSkill).toContain(
-        "the default available-authorized Image Gen route",
-      );
+      expect(designSkill).toContain("no current UI");
+      expect(designSkill).toContain("text fence is not a pass");
     }
     expect(sharedReference).toContain(
       "selected medium: generated-image | mermaid | markdown-table | presentation-tui | fenced-plain-text",
@@ -517,6 +516,7 @@ describe("user requirements and design-view contracts", () => {
 
     for (const viewToken of [
       "journey map — specification",
+      "entity map",
       "context diagram",
       "requirement coverage table",
       "component tree",

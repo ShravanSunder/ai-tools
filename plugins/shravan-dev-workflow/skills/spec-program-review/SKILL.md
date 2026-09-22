@@ -250,6 +250,7 @@ Do not return `ready` while any of these hold:
 - specification, program, or three-artifact-design mode boundaries are conflated;
 - `program-only` or `three-artifact-design` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
+- a picture-type view is accepted as a text fence while Mermaid can render, or a UI image is accepted that invents a control or skips a changed screen;
 - required file-backed visuals or relative embeds are missing or broken, generated labels/edges/boundaries disagree with governing meaning, or unavailable image/preview access was treated as complete visual coverage;
 - three-artifact-design mode trusts author or local checks without independent reinspection;
 - the review lead did not read the complete target set and governing sources before choosing lanes, or a lane ran with no named reason beside it;

@@ -133,7 +133,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "uses-a-readable-medium",
-        requirement: "Delivers each relationship in a medium that is readable in the current response and preserves required meaning. If Mermaid cannot be rendered and inspected, uses another inspectable fallback such as fenced plain text, or a table only when its rendered cells or borders are visible and inspectable; an honest unverified-visual gap is not readability proof.",
+        requirement: "Delivers each relationship in a readable medium that preserves required meaning. When Mermaid can render, a text fence is not a pass for ownership, calls, state, failure, or proof; an unreadable diagram becomes smaller Mermaid or an exact gap. A table may hold a dense comparison when its cells are visible.",
         failureExample: "Treats valid or unrendered Mermaid syntax as proof that dense state or failure behavior is understandable.",
       },
       {
@@ -192,6 +192,18 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       { name: "rejects-invented-structural-meaning", requirement: "Rejects the attractive candidate because it reverses Gateway/Billing ownership and invents automatic retry, and keeps visual-brief authorship, targeted correction and candidate acceptance with the main.", failureExample: "Accepts the wrong edges as illustrative simplification or lets the generator/helper decide the correction." },
       { name: "preserves-exact-views-and-durable-proof", requirement: "Keeps the exact component/call/failure views authoritative and required. It requires an accepted project-local asset, relative embed, accurate alt/caption, pixel inspection and supported destination-preview evidence before generated-image completion; cache-only or prose-only is a gap.", failureExample: "Lets the generated overview replace exact fields or calls cache/prose visually complete." },
+    ],
+  },
+  {
+    scenarioId: "program-design-mermaid-not-text-fence",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/shared-references/diagram-rendering-and-fallbacks.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "rejects-text-fence-as-the-view", requirement: "When component, call, and trust predicates have fired and Mermaid can render, refuses locally-ready for fenced plain text and tables used as those views.", failureExample: "Counts text fences as the structural views and returns locally-ready." },
+      { name: "keeps-mermaid-beside-a-screen", requirement: "A generated screen sits beside the call or component Mermaid and does not replace it.", failureExample: "Accepts an architecture image as the call graph." },
     ],
   },
   {

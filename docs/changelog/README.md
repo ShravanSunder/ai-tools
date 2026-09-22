@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 rendered design views](2026-09-22-rendered-design-views.md)
 - [2026-09-22 voice reference and proof slices](2026-09-22-voice-and-proof-slices.md)
 - [2026-09-21 Stop-review JEV default](2026-09-21-stop-review-jev-default.md)
 - [2026-09-21 manage-agents Sidekick Luna xhigh](2026-09-21-manage-agents-sidekick-luna-xhigh.md)

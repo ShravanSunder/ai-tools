@@ -375,4 +375,15 @@ export const skillPressureCaseDefinitions = [
       { name: "returns-partial-visual-coverage-without-redesign", requirement: "Does not accept the author's beauty/syntax claim as image proof. With no actual project image or preview to inspect it reports exact partial visual coverage and the smallest correction route, without editing, inventing a replacement design, or accepting the artifacts.", failureExample: "Returns ready from Markdown syntax, designs a new architecture, or claims image inspection occurred." },
     ],
   },
+  {
+    scenarioId: "spec-program-review-reject-text-fence-and-invented-screen",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-common-method.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "rejects-text-fence-and-invented-control", requirement: "Reports a text-fence component view on a Mermaid destination, and a UI image that adds a navigation item the requirement does not change. Does not edit the artifact.", failureExample: "Returns ready because the prose is complete, or redesigns the screen." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];
