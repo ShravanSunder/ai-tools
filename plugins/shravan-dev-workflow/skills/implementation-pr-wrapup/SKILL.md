@@ -38,6 +38,7 @@ The assigned implementation Sidekick may carry its delivery assignment through t
        related URLs (only those already supplied); never-publish rules from step 2.
      Subagent loads `references/pr-description.md`.
      That reference MUST load `references/pr-outline-views.md` for Change outline views.
+     IF that reference drafts or rewrites Why or Special things to note, it loads `../../shared-references/humanizer.md` in embedded mode and returns only those two parts. Change outline fences stay out of that rewrite.
      Parallel-safe after local branch state is known and those packet slots are filled; may serialize with push.
      Instance authority is equal to or narrower than the lane maximum: draft the body file under tmp only; no push, merge, readiness claim, comment replies, or `gh pr edit`.
      Return complete | partial | blocked receipt against the receipt in `references/pr-description.md`.

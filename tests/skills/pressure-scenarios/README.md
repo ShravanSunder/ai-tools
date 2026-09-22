@@ -92,10 +92,12 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
 | `agent-collaboration` | `agent-collaboration-multi-pr-thread-local-seats` | Use thread-local implementer seats, existing root references, exact SessionRefs, and orchestrator-only agent resolution across planned PR assignments. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
+| `docs-maintain` | `docs-maintain-rewrite-leaves-fences.md` | When rewriting README prose, load humanizer and leave YAML and code fences unchanged. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-gh-watch-cadence-defaults.md` | Use a 120-second watch cadence by default and 240 seconds for slow jobs or systems; do not preserve shorter polling exceptions. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-file-list-changelog` | Refuse a file-list PR body; use Why / Special things to note / Change outline via Mini Worker. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-why-prose-outline-stable.md` | Rewrite a not-X-but-Y Why through humanizer and leave the Change outline diff fence unchanged. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-choose-to-views-omit` | Omit unused outline categories on a types-only diff. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-parent-does-not-inline-write` | Do not draft the outline in the parent or as Operator work. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-ready-blocked-on-file-list-body` | Green CI does not make a path-list PR body merge-ready. |
@@ -160,6 +162,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-update-existing-skill.md` | Do not turn existing-skill updates into create work or broad audits; preserve the owner and require update classification plus branch return contracts. |
 | `skills-creation` | `skills-creation-evaluate-draft.md` | Do not call a weak draft great without deterministic verdicts, blocker overrides, first revision, retest, and failure-form matching. |
 | `skills-creation` | `skills-creation-draft-artifact.md` | Do not refuse a requested draft artifact or require fake observed RED for a new skill; use a hypothesized baseline and produce real draft text. |
+| `skills-creation` | `skills-creation-humanizer-skips-description.md` | Load humanizer for body sentences. Leave the YAML description as a trigger. |
 | `skills-creation` | `skills-creation-platform-artifact-scale.md` | Do not treat one platform's validation or static proof as behavior proof for shared Codex/Claude skill changes. |
 | `skills-creation` | `skills-creation-security-and-cache-boundary.md` | Do not treat scripts, hooks, assets, package scripts, third-party source adoption, or installed-cache/home mutation as ordinary prose work. |
 | `skills-creation` | `skills-creation-spec-review-gate.md` | Do not implement non-trivial skill workflow changes before pre-implementation spec review unless the user explicitly skips review. |

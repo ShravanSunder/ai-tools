@@ -60,7 +60,10 @@ Ask whether the review could pass while the requested system is still missing. C
 - adapter or wrapper instead of authority or routing owner;
 - unit test instead of integration/runtime proof;
 - old end-to-end proof for a new path;
-- docs, exported type, or approval message instead of reachable enforced behavior.
+- docs, exported type, or approval message instead of reachable enforced behavior;
+- a tautological oracle, including a value compared to itself;
+- a mock or wiring call treated as the behavior;
+- an assertion that cannot fail for the claimed behavior.
 
 Name the weaker substitute, missing real boundary, concrete consequence, and proof that would fail if only the substitute existed.
 

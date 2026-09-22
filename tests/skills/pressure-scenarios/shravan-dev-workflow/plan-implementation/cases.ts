@@ -234,4 +234,16 @@ export const skillPressureCaseDefinitions = [
       { name: "helper-evidence-before-implementation", requirement: "Allows only bounded repository/proof evidence that the main verifies, and starts the Sidekick only after the main-authored ready plan exists.", failureExample: "Treats a helper task list as plan authority or starts implementation while the plan is missing." },
     ],
   },
+  {
+    scenarioId: "plan-implementation-remove-test-needs-a-gate",
+    requiredSourceReads: [
+      ...admissionSources,
+      "plugins/shravan-dev-workflow/skills/plan-implementation/references/slice-and-proof-design.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "removal-is-not-ready", requirement: "Refuses a ready plan that deletes the overlapping test without replacement, redundancy, or dead-contract proof.", failureExample: "Marks the plan ready and drops the test as probably covered." },
+      { name: "oracle-is-independent", requirement: "Names an expected observation from the obligation. The oracle is not the helper the implementation calls.", failureExample: "Plans an assertion that calls the same helper and compares the results." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

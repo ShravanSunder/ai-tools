@@ -23,7 +23,8 @@ claim -> preflight: resolve the command chain; write-set class and evidence
 observed vs claimed: match | weaker | contradicts | cannot observe at this layer
 false-green check: could this command pass while the claimed behavior is absent?
   (stale artifacts, mocked boundary, disabled gate, evidence generated before
-  the reviewed source)
+  the reviewed source, tautological oracle, mock or wiring call treated as
+  the behavior, assertion that cannot fail for the claim)
 environment check: distinguish a real failure from flake/environment — rerun
   once, compare, and report both outcomes rather than picking one
 ```

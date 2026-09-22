@@ -206,4 +206,16 @@ export const skillPressureCaseDefinitions = [
       { name: "keeps-mermaid-beside-a-screen", requirement: "A generated screen sits beside the call or component Mermaid and does not replace it.", failureExample: "Accepts an architecture image as the call graph." },
     ],
   },
+  {
+    scenarioId: "program-design-illegal-state-not-a-test-file",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/program-design/references/proof-architecture-and-traceability.md",
+    ],
+    maximumToolCalls: 30,
+    semanticCriteria: [
+      { name: "keeps-illegal-state-in-the-design", requirement: "States that the invalid invoice is unrepresentable or rejected at the trusted entry, and names an enforcement class.", failureExample: "The design is only a negative test, with no structural decision." },
+      { name: "does-not-plan-the-test", requirement: "Names no test file, test command, or red/green order. Planning owns the exact test.", failureExample: "Answers with a test path or a red/green step." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];
