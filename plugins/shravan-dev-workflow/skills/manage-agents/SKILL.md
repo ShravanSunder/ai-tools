@@ -122,7 +122,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Category follows the pair. Astra `high` is Frontier. Sol `low` and `medium` are Balanced; Sol `high` and `xhigh` are Frontier. Luna `high` and `xhigh` are Mini. Opus 5.5 `low` is Balanced; Opus 5.5 `medium` or `high` is Frontier. Fable 5.1 `medium` or `high` is Frontier. Operators use Luna `medium` or `high`. Workers and implementation or research Sidekicks use Luna `high` or `xhigh` for Mini work. An effort that is not in the role table is not a current choice. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Grok is a lineage, not a current role-table choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
+Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Category follows the pair. Astra `high` is Frontier. Sol `low` and `medium` are Balanced; Sol `high` and `xhigh` are Frontier. Luna `high` and `xhigh` are Mini. Opus 5.5 `low` is Balanced; Opus 5.5 `medium` or `high` is Frontier. Fable 5.1 `medium` or `high` is Frontier. Grok 4.7 `low` or `medium` is Balanced for Sidekicks and reviewers. Grok 4.7 `high` is Frontier and is a reviewer row. Workers do not select Grok. A reviewer uses Sol `medium`, a Frontier row, or Grok 4.7 `low`, `medium`, or `high`. Operators use Luna `medium` or `high`. Workers and implementation or research Sidekicks use Luna `high` or `xhigh` for Mini work. An effort that is not in the role table is not a current choice. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
 
 ### Commission an implementation Sidekick
 
@@ -191,6 +191,8 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 | Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
 | Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Balanced       | xAI Grok 4.7      | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | xAI Grok 4.7      | medium   | Complete or Partial direction; Local/Cross-domain.        |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
@@ -204,13 +206,14 @@ Use a separate persistent top-level thread for independent review or correction 
 
 | Model category | Model lineage     | Thinking        |
 |----------------|-------------------|-----------------|
-| Balanced       | OpenAI Sol        | low             |
 | Balanced       | OpenAI Sol        | medium          |
-| Balanced       | Claude Opus 5.5   | low             |
+| Balanced       | xAI Grok 4.7      | low             |
+| Balanced       | xAI Grok 4.7      | medium          |
 | Frontier       | OpenAI Astra      | high            |
 | Frontier       | Claude Opus 5.5   | medium or high  |
 | Frontier       | Claude Fable 5.1  | medium or high  |
 | Frontier       | OpenAI Sol        | high or xhigh   |
+| Frontier       | xAI Grok 4.7      | high            |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
