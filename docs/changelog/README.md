@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 Restore Choose a model](2026-09-22-restore-choose-a-model.md)
 - [2026-09-22 Cut the model essay](2026-09-22-cut-model-essay.md)
 - [2026-09-22 Mini definition](2026-09-22-mini-definition.md)
 - [2026-09-22 Codex provider lists ids only](2026-09-22-codex-provider-ids-only.md)
