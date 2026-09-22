@@ -8,14 +8,13 @@ Return per view: selected medium, fallback decision, semantic-preservation resul
 
 ## Choose the Medium
 
-Honor an exact user-requested format when it can preserve the required semantics. Otherwise choose by the relationship and destination:
+Honor an exact user-requested format when it can preserve the required semantics. Fenced plain text is not that format for a UI or Mermaid-bound view when the destination renders Mermaid. Otherwise the reader question picks the medium. Mermaid, a text tree, and a generated image are not interchangeable.
 
-- IF Mermaid is a candidate medium, load `mermaid-usage.md` to decide from the already-selected relationship and destination and return the use-or-fallback decision with its trigger and the readability/semantics check result;
-- for a newly authored or substantively revised substantial Requirements, Specification or Program Design document, select an available authorized Image Gen capability for a meaningful explanatory overview, journey or other reader-useful image instead of silently defaulting every document to Mermaid/table/text; an exact user format takes precedence, no filler image satisfies this rule, and an exact meaning/capability conflict returns for owner-directed deferral;
-- IF generated imagery is explicitly requested or selected by the rule above, load `generated-document-visuals.md` and return its capability/authority, durable asset/embed, semantic/readability inspection, preview and exact-gap result; a generated overview supplements rather than replaces any precise view whose required semantic fields it cannot preserve;
-- use a Markdown table for dense ownership, matrix, state, transition, or coverage data where comparison matters more than topology or time (`markdown-presentation-baseline.md` owns the table default);
-- for chat or terminal explanation, and only when visual structure materially helps, use the `presentation-*` skill matching the current surface; honor an exact user-requested format instead;
-- use readable fenced plain text when no renderer exists or Mermaid/table structure would hide the relationship.
+- A screen, page, or other UI surface the user sees: select Image Gen. The brief includes the current screen, or the exact words `no current UI`. load `generated-document-visuals.md` and return its capability/authority, durable asset/embed, semantic/readability inspection, preview, and exact-gap result. The image supplements normative prose and any precise view whose fields it cannot preserve.
+- Ownership, calls, sequence, state lifecycle, flow, failure, or a trust boundary, when the destination renders Mermaid: select Mermaid. load `mermaid-usage.md` for the readability check only. Do not apply its fenced-text or prose fallback to a UI or Mermaid-bound view. An unreadable diagram becomes a smaller Mermaid or an exact gap. It does not become prose or a text fence marked pass.
+- Dense comparison, coverage, or a single rule: use a Markdown table or prose (`markdown-presentation-baseline.md` owns the table default).
+- For chat or terminal explanation, and only when visual structure materially helps, use the `presentation-*` skill matching the current surface.
+- Fenced plain text is allowed only when no Mermaid renderer exists. For a UI or Mermaid-bound view, that result is a gap, not a pass.
 
 The medium serves the relationship. Do not select syntax first and force the meaning into it.
 
@@ -29,7 +28,7 @@ Bad: decorative boxes, prose labeled as a diagram, unreadable Mermaid, a table t
 
 ## Inspect and Fall Back
 
-Inspect the rendered output rather than inferring success from a fenced block, valid-looking syntax, prompt or file path. A directly visible fenced plain-text view can be inspected as shown. A table can be inspected as shown only when its rendered cells or borders are visible at the destination. A generated image requires inspection of the actual project-local pixels plus its resolved Markdown embed and supported destination preview under `generated-document-visuals.md`. When the destination renderer is not observable in-session, accept only an actual repository or browser preview of the rendered diagram, or a local Mermaid renderer when available; source-text inspection alone is never a visual pass for a rendered medium. When no rendered inspection is available, return `visual check: unverified (no renderer available)` with the reason, and either apply the required plain-text/table fallback or record the rendered result as an explicit gap — never a bare pass. Check:
+Inspect the rendered output rather than inferring success from a fenced block, valid-looking syntax, prompt or file path. A directly visible fenced plain-text view can be inspected as shown, and a UI or Mermaid-bound view still fails when the destination could have rendered Mermaid. A table can be inspected as shown only when its rendered cells or borders are visible at the destination. A generated image requires inspection of the actual project-local pixels plus its resolved Markdown embed and supported destination preview under `generated-document-visuals.md`. When the destination renderer is not observable in-session, accept only an actual repository or browser preview of the rendered diagram, or a local Mermaid renderer when available; source-text inspection alone is never a visual pass for a rendered medium. When no rendered inspection is available, return `visual check: unverified (no renderer available)` with the reason. For a UI or Mermaid-bound view, record an explicit gap, or a smaller Mermaid only when that smaller diagram can still be rendered and inspected. Plain text is not a completion fallback for those views. A comparison or coverage table may still be inspected as shown. Never record a bare pass. Check:
 
 - every required semantic field is visible;
 - labels and edges are readable at the destination;
@@ -37,7 +36,7 @@ Inspect the rendered output rather than inferring success from a fenced block, v
 - the view adds decision clarity rather than decoration;
 - normative meaning still has a prose or table home outside the diagram when the owning skill requires it.
 
-Fallback when the first medium is unavailable, malformed, unreadable, decorative, or semantically lossy. Prefer the next simplest medium that preserves the relationship. If none passes, return the missing field or destination capability as an exact gap; do not mark the view complete.
+Fallback when the first medium is unavailable, malformed, unreadable, decorative, or semantically lossy. For a UI or Mermaid-bound view, the next medium is a smaller Mermaid or an exact gap. Plain text and prose are not completion fallbacks for those views. For comparison or coverage, prefer the next simplest medium that preserves the relationship. If none passes, return the missing field or destination capability as an exact gap; do not mark the view complete.
 
 ## Return Shape
 
