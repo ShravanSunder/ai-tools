@@ -7,4 +7,4 @@
 - Operator: Luna medium or high. Worker and Sidekick tasks start on Luna high or xhigh. Sol medium is a Sidekick row. Reviewer Sol is low. Reviewer Grok is high.
 - Cursor ACP examples: Grok 4.7, Opus 5.5, and Grok 4.5 or 4.6 on request.
 - Stop-review JEV fallback and pressure subjects default to `gpt-6-luna`. Pressure subject effort is medium. The pressure judge is `gpt-6-luna` at xhigh.
-- Validation: `pnpm --dir tests/skills run test:unit` earlier on this branch, 122 passed. Later wording edits were not re-run. Live evals and cache refresh were not run.
+- Validation: pressure config and judge tests, 21 passed. Full `test:unit` was 122 passed earlier on this branch. Live evals and cache refresh were not run.
