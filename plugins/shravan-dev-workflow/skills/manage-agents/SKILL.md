@@ -203,13 +203,15 @@ Use a separate persistent top-level thread for independent review or correction 
 
 #### Model choices
 
-| Model lineage | Thinking       |
-|---------------|----------------|
-| OpenAI Sol    | medium or high |
-| OpenAI Astra  | high           |
-| Claude Opus   | medium or high |
-| Claude Fable  | medium or high |
-| xAI Grok      | high           |
+| Model lineage | Thinking       | When                                   |
+|---------------|----------------|----------------------------------------|
+| OpenAI Sol    | medium         | Contract check; Local or Cross-domain. |
+| Claude Opus   | medium         | Contract check; Local or Cross-domain. |
+| xAI Grok      | high           | Contract check; Local or Cross-domain. |
+| OpenAI Sol    | high           | Open challenge, or Cross-system.       |
+| OpenAI Astra  | high           | Open challenge, or Cross-system.       |
+| Claude Opus   | high           | Open challenge, or Cross-system.       |
+| Claude Fable  | medium or high | Open challenge, or Cross-system.       |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
@@ -229,7 +231,7 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 | Model category | Model lineage | Thinking       |
 |----------------|---------------|----------------|
 | Frontier       | OpenAI Astra  | high           |
-| Frontier       | Claude Opus   | medium or high |
+| Frontier       | Claude Opus   | high           |
 | Frontier       | Claude Fable  | medium or high |
 | Frontier       | OpenAI Sol    | high or xhigh  |
 
