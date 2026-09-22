@@ -23,7 +23,7 @@ Illustrative advertised Cursor ACP id examples (catalogs change):
 | `claude-fable-5-1`                 |
 | `gpt-6-sol`                        |
 
-- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. Current OpenAI examples are `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Claude rows are Fable 5.1 and Opus 5.5. Grok 4.7 `low` or `medium` is for Sidekicks and reviewers. Grok 4.7 `high` is for reviewers. If the live catalog still advertises only GPT-5.6, or an older Opus id such as `claude-opus-5`, report that gap; do not substitute `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, or `claude-opus-5`. If the selected effort is unavailable, report that gap; do not silently change effort.
+- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. Current OpenAI examples are `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Claude rows are Fable 5.1 and Opus 5.5. Grok 4.7 `low` or `medium` is for Sidekicks. Grok 4.7 `high` is the only Grok reviewer row. If the live catalog still advertises only GPT-5.6, or an older Opus id such as `claude-opus-5`, report that gap; do not substitute `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, or `claude-opus-5`. If the selected effort is unavailable, report that gap; do not silently change effort.
 
 Treat the short names from `agent --list-models` (`cursor-grok-4.7-low`, `cursor-grok-4.7-medium`, `cursor-grok-4.7-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
