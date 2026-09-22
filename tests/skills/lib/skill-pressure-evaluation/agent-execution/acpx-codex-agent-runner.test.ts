@@ -11,7 +11,7 @@ import { parseExactAgentJsonResponse } from "./parse-agent-json-response.js";
 
 const subjectSetup = {
   model: "gpt-6-luna",
-  reasoningEffort: "high",
+  reasoningEffort: "medium",
   timeoutSeconds: 90,
   permissionMode: "approve-reads",
 } satisfies AcpxCodexAgentSetup;
@@ -220,7 +220,7 @@ describe("createAcpxCodexAgentRunner", () => {
     expect(requests).toHaveLength(4);
     expect(requests[0]?.args).toContain("new");
     expect(requests[1]?.args).toEqual(
-      expect.arrayContaining(["set", "reasoning_effort", "high"]),
+      expect.arrayContaining(["set", "reasoning_effort", "medium"]),
     );
     expect(requests[2]?.args).toEqual(
       expect.arrayContaining(["--format", "json", "--json-strict"]),
