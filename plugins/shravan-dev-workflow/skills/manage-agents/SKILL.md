@@ -164,12 +164,12 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 #### Model choices
 
-| Model category | Model lineage | Thinking      | Task signals                            |
-|----------------|---------------|---------------|-----------------------------------------|
-| Mini           | OpenAI Luna   | high          | Exact steps; Local/Cross-domain.        |
-| Mini           | OpenAI Luna   | xhigh         | Exact steps; Local/Cross-domain.        |
-| Balanced       | OpenAI Sol    | low or medium | Complete direction; Local/Cross-domain. |
-| Balanced       | Claude Opus   | low           | Complete direction; Local/Cross-domain. |
+| Model category | Model lineage | Thinking | Task signals                            |
+|----------------|---------------|----------|-----------------------------------------|
+| Mini           | OpenAI Luna   | high     | Exact steps; Local/Cross-domain.        |
+| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.        |
+| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain. |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain. |
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
