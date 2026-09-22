@@ -38,7 +38,7 @@ it start empty and waste time.
 ## Expected Compliant Behavior
 
 - Skill is invoked; the review is a Delegate.
-- Route is native `spawn_agent` with `gpt-5.6-sol` and
+- Route is native `spawn_agent` with `gpt-6-sol` and
   `fork_turns="none"`.
 
 ## Failure Signals

@@ -6,7 +6,7 @@ need the same shortcut-resistance harness.
 
 Default model transport: ACPX with the `codex` adapter
 
-Default model: `gpt-5.6-luna`
+Default model: `gpt-6-luna`
 
 Default subject reasoning effort: `high`
 

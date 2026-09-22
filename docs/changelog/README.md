@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 GPT-6 Sol and Luna dispatch](2026-09-22-gpt-6-sol-luna.md)
 - [2026-09-22 rendered design views](2026-09-22-rendered-design-views.md)
 - [2026-09-22 voice reference and proof slices](2026-09-22-voice-and-proof-slices.md)
 - [2026-09-21 Stop-review JEV default](2026-09-21-stop-review-jev-default.md)

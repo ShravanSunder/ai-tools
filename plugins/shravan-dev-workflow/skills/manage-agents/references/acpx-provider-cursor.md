@@ -18,12 +18,12 @@ Illustrative advertised Cursor ACP id examples (catalogs change):
 | ---------------------------------- |
 | `grok-4.6[effort=high,fast=false]` |
 | `grok-4.6[effort=high,fast=true]`  |
-| `gpt-5.6-luna`                     |
+| `gpt-6-luna`                       |
 | `claude-fable-5-1`                 |
 | `claude-opus-5`                    |
-| `gpt-5.6-sol`                      |
+| `gpt-6-sol`                        |
 
-- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
+- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. Current OpenAI examples are `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. If the live catalog still advertises only GPT-5.6, report that gap; do not substitute `gpt-5.6-sol`, `gpt-5.6-terra`, or `gpt-5.6-luna`. If the selected effort is unavailable, report that gap; do not silently change effort.
 - Fable only on request.
 
 Treat the short names from `agent --list-models` (`cursor-grok-4.6-high`, `cursor-grok-4.6-medium`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.

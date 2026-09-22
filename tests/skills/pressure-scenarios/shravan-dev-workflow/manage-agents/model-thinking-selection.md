@@ -25,7 +25,7 @@ model name alone or invent a setting to satisfy a uniform schema.
 
 $shravan-dev-workflow:manage-agents
 
-Chat only. I can run GPT-5.6 Sol at every thinking level its provider currently
+Chat only. I can run GPT-6 Sol at every thinking level its provider currently
 advertises. Classify each combination into the current capability categories.
 Also classify Cursor Composer 2.5 and tell me which thinking setting to pass for
 it. Keep the answer to the model matrix.

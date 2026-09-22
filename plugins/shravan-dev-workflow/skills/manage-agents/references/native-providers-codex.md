@@ -8,12 +8,13 @@ This reference applies after `SKILL.md` selects a native Worker or Operator assi
 
 | Model id             | Note              |
 | -------------------- | ----------------- |
-| `gpt-6-astra`        |                   |
-| `gpt-5.6-sol`        |                   |
-| `gpt-5.6-terra`      |                   |
-| `gpt-5.6-luna`       |                   |
+| `gpt-6-astra`        | Frontier          |
+| `gpt-6-sol`          | Balanced          |
+| `gpt-6-luna`         | Mini              |
 
-Lib ids: `openai.gpt-6-astra`, `openai.gpt-5.6-{sol,terra,luna}`. Prefer short form unless the host requires `openai.`.
+Lib ids: `openai.gpt-6-astra`, `openai.gpt-6-sol`, `openai.gpt-6-luna`. Prefer short form unless the host requires `openai.`.
+
+These are the current dispatch ids. A host that still lists only GPT-5.6 is a reported gap, not a reason to select `gpt-5.6-sol`, `gpt-5.6-terra`, or `gpt-5.6-luna` for a new assignment.
 
 ## Effort
 

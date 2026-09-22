@@ -10,7 +10,7 @@ import type { AcpxCodexAgentSetup } from "../runtime-configuration/skill-pressur
 import { parseExactAgentJsonResponse } from "./parse-agent-json-response.js";
 
 const subjectSetup = {
-  model: "gpt-5.6-luna",
+  model: "gpt-6-luna",
   reasoningEffort: "high",
   timeoutSeconds: 90,
   permissionMode: "approve-reads",
@@ -26,7 +26,7 @@ describe("buildAcpxBaseArguments", () => {
       "--cwd",
       "/repo",
       "--model",
-      "gpt-5.6-luna",
+      "gpt-6-luna",
       "--approve-reads",
       "--non-interactive-permissions",
       "fail",

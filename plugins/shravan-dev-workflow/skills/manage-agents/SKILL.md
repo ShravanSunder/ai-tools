@@ -122,7 +122,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
+Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use the GPT-6 generation: Astra `gpt-6-astra` for Frontier, Sol `gpt-6-sol` for Balanced, and Luna `gpt-6-luna` for Mini. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
 
 ### Commission an implementation Sidekick
 
