@@ -205,7 +205,7 @@ Use a separate persistent top-level thread for independent review or correction 
 
 | Model category | Model lineage     | Thinking        |
 |----------------|-------------------|-----------------|
-| Balanced       | OpenAI Sol        | medium          |
+| Balanced       | OpenAI Sol        | low             |
 | Frontier       | OpenAI Astra      | high            |
 | Frontier       | Claude Opus 5.5   | medium or high  |
 | Frontier       | Claude Fable 5.1  | medium or high  |

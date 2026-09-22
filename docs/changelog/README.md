@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 Provider docs and reviewer Sol low](2026-09-22-provider-docs-and-reviewer.md)
 - [2026-09-22 Restore Choose a model](2026-09-22-restore-choose-a-model.md)
 - [2026-09-22 Cut the model essay](2026-09-22-cut-model-essay.md)
 - [2026-09-22 Mini definition](2026-09-22-mini-definition.md)

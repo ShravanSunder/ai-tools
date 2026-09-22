@@ -10,7 +10,7 @@ Agent token: `codex`. Use this provider when the host is not Codex native or whe
 | `gpt-6-sol`          |
 | `gpt-6-luna`         |
 
-Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix. New assignments use these GPT-6 ids. A catalog that still offers only GPT-5.6 is a reported gap; do not select `gpt-5.6-sol`, `gpt-5.6-terra`, or `gpt-5.6-luna` for a new session.
+Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix.
 
 ## Effort
 
