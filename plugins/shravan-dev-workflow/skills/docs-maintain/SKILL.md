@@ -1,6 +1,6 @@
 ---
 name: docs-maintain
-description: Use when maintaining project docs from settled code or decisions, including updating, cleaning up, reconciling, purging, archiving, or promoting AGENTS.md, README, changelogs, runbooks, architecture docs, or existing workflow artifacts. Not for deciding or authoring unsettled specification or program-design meaning, or independently reviewing specifications or program designs.
+description: Use when maintaining project docs from settled code or decisions, including updating, cleaning up, reconciling, purging, archiving, or promoting AGENTS.md, README, changelogs, runbooks, architecture docs, or existing workflow artifacts. Not for deciding or authoring unsettled specification or program-design meaning, independently reviewing specifications or program designs, or rewriting chat answers and presentation layout.
 ---
 
 # Docs Maintain
@@ -70,6 +70,7 @@ docs request
    - clear `README.md`
    - detailed docs under the appropriate docs folder
    - changelog entries when meta-instructions or workflows change
+   - IF the edit rewrites human sentences in a README, architecture doc, runbook, or changelog, load `../../shared-references/humanizer.md` in file mode and return the rewritten prose plus the fences, YAML, commands, and paths left unchanged. Classifying, purging, linking, or promoting without a prose rewrite does not load it. Completion: claims, names, numbers, dates, and quotes match the source, or the missing fact is named instead of invented.
 6. Validate:
    - no broken obvious links
    - no stale source-of-truth claims

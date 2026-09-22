@@ -1,6 +1,6 @@
 ---
 name: plan-implementation
-description: Use when writing or revising a repository-grounded implementation plan from current reviewed Requirements, Specification, and Program Design, an admitted repository-improvement handoff from an orchestrated goal or owner-requested direct delivery, or a direct planning request that must establish plan-only versus continued-delivery intent. Not for audit-only discovery, an existing plan handoff, tracker publication, implementation, or PR work.
+description: Use when writing or revising a repository-grounded implementation plan from current reviewed Requirements, Specification, and Program Design, an admitted repository-improvement handoff from an orchestrated goal or owner-requested direct delivery, or a direct planning request that must establish plan-only versus continued-delivery intent, including when existing tests must be kept, repaired, or removed. Not for audit-only discovery, an existing plan handoff, tracker publication, implementation, or PR work.
 ---
 
 # Plan Implementation
@@ -23,7 +23,7 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 
 1. Read the governing authority completely and re-anchor against current branch/HEAD, instructions, owners, interfaces, tests, commands, and proof seams.
    IF one bounded repository or proof question benefits from helper work, use `manage-agents` for an evidence-only assignment and verify its anchors before continuing. The main still authors every plan row and delivery boundary.
-2. MUST load `references/slice-and-proof-design.md` and return its vertical slice graph, obligation/proof map, necessary dependency edges, integration gates, false-green risks, and stop conditions.
+2. MUST load `references/slice-and-proof-design.md` and return its vertical slice graph, obligation/proof map, independent oracle, project proof-layer source or "project silent", property-versus-example choice when one rule covers the cases, existing-test keep/repair/remove disposition, necessary dependency edges, integration gates, false-green risks, and stop conditions. A remove row without replacement, redundancy, or dead-contract proof is not a ready plan.
 3. Choose the smallest coherent vertical grouping. If only one exists, use it without alternatives. If materially different groupings or PR topologies exist, present concrete choices with recommendation/tradeoffs and obtain the owner selection before finalizing.
 4. Ensure every contract-only or prefactoring slice names its downstream vertical consumer; every obligation has fitting proof; and no step invents Why, What, structural How, or external authority.
 5. MUST load `../../shared-references/canonical-implementation-plan.md` and apply its complete governing-basis, result, delivery-context, home, and validation contract.

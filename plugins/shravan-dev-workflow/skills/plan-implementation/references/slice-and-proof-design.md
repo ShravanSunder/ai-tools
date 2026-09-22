@@ -57,6 +57,10 @@ stop/replan condition
 
 Use the cheapest proof that can actually observe the obligation, then add broader proof only for wiring or regression reach. A mocked unit cannot prove a real process, filesystem, network, UI, or distribution boundary. A full suite cannot make an unobserved behavior green.
 
+Name an independent oracle: the expected observation comes from the obligation, not from recomputing the result with the code under test. When the repository defines proof-layer names, those names win; record the source. When it is silent, say `project silent` and use the ordinary unit, integration, smoke, and end-to-end names. When one rule covers the cases, plan a property or a table of that rule. A single example is enough only when the claim is that one case.
+
+When existing tests overlap the slice, return `keep`, `repair`, or `remove` for each. `remove` requires replacement proof, redundancy proof, or dead-contract proof. A remove row without one of those three is not a ready plan. A snapshot or fixture with no live contract is a dead-contract candidate, not an automatic delete.
+
 ## Catch Proof That Can Pass for the Wrong Reason
 
 Split or replan when:

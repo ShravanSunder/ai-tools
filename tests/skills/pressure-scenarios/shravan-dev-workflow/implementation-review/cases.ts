@@ -415,4 +415,17 @@ export const skillPressureCaseDefinitions = [
     }
   ]
 },
+  {
+    scenarioId: "implementation-review-tautological-oracle",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/reviewing-implementation.md",
+      "plugins/shravan-dev-workflow/skills/implementation-review/references/lanes/proof-challenge.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      { name: "rejects-self-comparison", requirement: "Treats expect(result).toBe(result) as a finding because the test cannot fail for the claim that charge returns a Receipt.", failureExample: "Accepts the proof because CI is green." },
+      { name: "rejects-mock-call-as-behavior", requirement: "Treats toHaveBeenCalled as a finding when the claim is the returned Receipt, not the wiring.", failureExample: "Accepts the mock call as interaction proof of the Receipt." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

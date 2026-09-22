@@ -27,6 +27,8 @@ The main changelog entry should capture:
 
 Keep it readable. It is a runbook, not a raw transcript. Keep each dated changelog entry to 20 lines or less; put evidence snippets and longer validation notes under `docs/changelog/references/` and link them from the entry.
 
+IF the human-readable sentences are rewritten after the facts are set, load `../../../shared-references/humanizer.md` in file mode and return those sentences rewritten. Do not restate its rules here. Leave fences, YAML, commands, and paths unchanged.
+
 ## References Entry
 
 The references file should capture evidence without bloating the main entry:
