@@ -32,7 +32,7 @@ Classify the assignment before selecting a role. Profiles guide selection; they 
 
 Missing intent, a task boundary, or governing design/plan required by the owning workflow is missing assignment input to clarify, not Partial direction.
 
-A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction without line-by-line code.
+A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction without line-by-line code. For a Worker or implementation or research Sidekick, that task starts on Luna.
 
 #### Architectural span
 
@@ -54,7 +54,7 @@ Architectural span does not measure task size or permission; every assignment re
 
 Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort.
 
-Luna (`gpt-6-luna`) is the efficient model for Mini work: focused execution, not a choice about approach. Operator Luna `medium` or `high` runs one prescribed procedure and returns the observed result. Worker and Sidekick Luna `high` or `xhigh` carries exact-steps execution, local or cross-domain, including a focused change whose done-state is already named. An unnamed method, a tradeoff, or a judgment about approach is Balanced or Frontier.
+Luna (`gpt-6-luna`) is the efficient model for Mini work: focused execution, not a choice about approach. Operator Luna `medium` or `high` runs one prescribed procedure and returns the observed result. A Worker or implementation or research Sidekick starts a task on Luna `high` when guidance is Exact steps or Complete direction and span is Local or Cross-domain, including a normal planned implementation. Use Luna `xhigh` for that same task when it is broad or Luna `high` struggled. Partial direction, Cross-system span, or a miss that is judgment about approach moves to a Balanced row. Do not start the task on Sol, Opus, or Grok because it is implementation.
 
 An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
 
@@ -124,7 +124,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Category follows the pair. Astra `high` is Frontier. Sol `low` and `medium` are Balanced; Sol `high` and `xhigh` are Frontier. Luna `high` and `xhigh` are Mini. Opus 5.5 `low` is Balanced; Opus 5.5 `medium` or `high` is Frontier. Fable 5.1 `medium` or `high` is Frontier. Grok 4.7 `low` or `medium` is Balanced for Sidekicks and reviewers. Grok 4.7 `high` is Frontier and is a reviewer row. Workers do not select Grok. A reviewer uses Sol `medium`, a Frontier row, or Grok 4.7 `low`, `medium`, or `high`. Operators use Luna `medium` or `high`. Workers and implementation or research Sidekicks use Luna `high` or `xhigh` for Mini work. An effort that is not in the role table is not a current choice. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
+Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Category follows the pair. Astra `high` is Frontier. Sol `low` and `medium` are Balanced; Sol `high` and `xhigh` are Frontier. Luna `high` and `xhigh` are Mini. Opus 5.5 `low` is Balanced; Opus 5.5 `medium` or `high` is Frontier. Fable 5.1 `medium` or `high` is Frontier. Grok 4.7 `low` or `medium` is Balanced for Sidekicks and reviewers. Grok 4.7 `high` is Frontier and is a reviewer row. Workers do not select Grok. A reviewer uses Sol `medium`, a Frontier row, or Grok 4.7 `low`, `medium`, or `high`. Operators use Luna `medium` or `high`. Workers and implementation or research Sidekicks start tasks on Luna `high` or `xhigh`. An effort that is not in the role table is not a current choice. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible when Luna is unavailable, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
 
 ### Commission an implementation Sidekick
 
@@ -168,13 +168,13 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 | Model category | Model lineage     | Thinking | Task signals                                              |
 |----------------|-------------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.                          |
-| Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
+| Mini           | OpenAI Luna       | high     | Start here. Exact steps or Complete direction; Local/Cross-domain. |
+| Mini           | OpenAI Luna       | xhigh    | Same task when it is broad or Luna high struggled.                  |
+| Balanced       | OpenAI Sol        | low      | Luna unavailable, or an existing Sol low session.                   |
+| Balanced       | Claude Opus 5.5   | low      | Luna unavailable and the executor is Claude.                        |
+| Balanced       | OpenAI Sol        | medium   | Partial direction, or Cross-system.                                 |
 
-Use this table for execution and research Workers. Luna `medium` is an Operator row, not a Worker row. A read-only review lane Worker uses the Review Sidekick catalog below.
+Use this table for execution and research Workers. A planned task starts on Luna `high`. Luna `medium` is an Operator row, not a Worker row. A read-only review lane Worker uses the Review Sidekick catalog below.
 
 ### Sidekick
 Use a Sidekick in a separate persistent top-level conversation for implementation, research, or review work that will resume and need continuing context.
@@ -188,13 +188,13 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 | Model category | Model lineage     | Thinking | Task signals                                              |
 |----------------|-------------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.                          |
-| Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok 4.7      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok 4.7      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Mini           | OpenAI Luna       | high     | Start here. Exact steps or Complete direction; Local/Cross-domain. |
+| Mini           | OpenAI Luna       | xhigh    | Same task when it is broad or Luna high struggled.                  |
+| Balanced       | OpenAI Sol        | low      | Luna unavailable, or an existing Sol low session.                   |
+| Balanced       | Claude Opus 5.5   | low      | Luna unavailable and the executor is Claude.                        |
+| Balanced       | OpenAI Sol        | medium   | Partial direction, or Cross-system.                                 |
+| Balanced       | xAI Grok 4.7      | low      | Luna unavailable and the executor is Grok.                          |
+| Balanced       | xAI Grok 4.7      | medium   | Partial direction; Local/Cross-domain.                              |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.

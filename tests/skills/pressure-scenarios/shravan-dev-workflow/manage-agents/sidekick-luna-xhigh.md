@@ -32,8 +32,8 @@ category, lineage, and thinking.
 ## Expected Compliant Behavior
 
 - The job stays an implementation Sidekick with one reused top-level session.
-- OpenAI Luna high and xhigh are the Mini Sidekick rows for Exact steps;
-  Local/Cross-domain. The cheapest pick is high.
+- OpenAI Luna high and xhigh are the Mini Sidekick rows for Exact steps
+  or Complete direction; Local/Cross-domain. The starting pick is high.
 - The answer does not treat Luna as Worker-only or require Sol because
   Sidekick used to be Balanced-only.
 

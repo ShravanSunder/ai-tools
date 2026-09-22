@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-22 Luna starts Worker and Sidekick tasks](2026-09-22-luna-default-task.md)
 - [2026-09-22 Luna Mini wording](2026-09-22-luna-mini-wording.md)
 - [2026-09-22 Grok 4.7 sidekick and reviewer rows](2026-09-22-grok-4-7-review-sidekick.md)
 - [2026-09-22 manage-agents effort matrix](2026-09-22-manage-agents-effort-matrix.md)
