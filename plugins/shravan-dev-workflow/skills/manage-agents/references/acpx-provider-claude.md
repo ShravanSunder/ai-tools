@@ -2,12 +2,11 @@
 
 ## Models
 
-| Model id             |
-| -------------------- |
-| `claude-fable-5-1`   |
-| `opus[1m]`           |
+| Model id             | Role-table lineage |
+| -------------------- | ------------------ |
+| `claude-fable-5-1`   | Fable 5.1          |
 
-The locally verified custom Fable id is `claude-fable-5-1`, not bare `fable`. User settings must expose that custom catalog. `opus[1m]` is the latest verified Claude ACP selection example. API model names are not guaranteed ACP selection IDs; the live catalog is authoritative. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
+The locally verified custom Fable id is `claude-fable-5-1`, not bare `fable`. User settings must expose that custom catalog. Opus 5.5 uses the id the live catalog advertises for that generation. `opus[1m]` and `claude-opus-5` are not the Opus 5.5 selection. API model names are not guaranteed ACP selection IDs; the live catalog is authoritative. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
 
 ```bash
 REPO=/absolute/repo
@@ -21,7 +20,7 @@ fable_acpx() {
 }
 ```
 
-The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Use the Models table thinking values for Frontier Fable and invoke every lifecycle command through the wrapper so the custom model environment remains part of the relationship.
+The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Fable 5.1 uses `medium` or `high`. Opus 5.5 uses `low` for Balanced and `medium` or `high` for Frontier. Invoke every lifecycle command through the wrapper so the custom model environment remains part of the relationship.
 
 ## Settings And Permissions
 

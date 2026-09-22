@@ -9,8 +9,7 @@ expect_decision_regex: low.{0,60}balanced|balanced.{0,60}low
 expect_decision_regex: medium.{0,60}balanced|balanced.{0,60}medium
 expect_decision_regex: high.{0,60}frontier|frontier.{0,60}high
 expect_decision_regex: xhigh.{0,60}frontier|frontier.{0,60}xhigh
-expect_decision_regex: max.{0,60}frontier|frontier.{0,60}max
-expect_decision_regex: composer.{0,40}mini
+expect_decision_regex: composer.{0,80}(not a current|no current|not in the|unlisted)
 expect_decision_regex: composer.{0,80}(none|no thinking|without.{0,20}thinking)
 expect_proof_regex: model-plus-thinking|thinking-to-category|model.{0,20}thinking.{0,20}combination|(thinking|effort).{0,60}categor|categor.{0,60}(thinking|effort)
 expect_forbidden_regex: (thinking|effort)( setting)?.{0,10}(:|=|is|to pass).{0,10}(low|medium|high|xhigh|max)
@@ -32,8 +31,8 @@ it. Keep the answer to the model matrix.
 
 ## Expected Compliant Behavior
 
-- Sol low/medium is Balanced; Sol high/xhigh/max is Frontier.
-- Composer 2.5 is Mini and has no thinking setting.
+- Sol low and medium are Balanced. Sol high and xhigh are Frontier. Sol max is not a current role-table choice.
+- Composer 2.5 is not a current role-table row and has no thinking setting.
 - The answer does not invent a Composer thinking control. Terra is not required for this Sol/Composer classification.
 
 ## Failure Signals

@@ -38,8 +38,9 @@ slice with a Delegate — this is important, so use Astra there too.
 - Skill is invoked; each job names Delegate before any model.
 - The design review stays a Delegate and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice stays a Balanced Delegate (Sol `low` or Grok),
-  not Astra and not Sol `medium`; importance is not a reason.
+- The implementation slice stays a Balanced Delegate (Sol `low` or `medium`,
+  or Opus 5.5 `low`), not Astra and not Sol `high` or `xhigh`; importance
+  is not a reason.
 - The Why column / reviewer-only gate is named.
 
 ## Failure Signals

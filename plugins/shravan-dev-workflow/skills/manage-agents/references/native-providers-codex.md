@@ -42,7 +42,7 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
   "message": "Read the assigned review lane and return candidate findings. Do not edit any file in the repo. Project tmp/ and system /tmp are allowed.",
   "task_name": "implementation_review_lane",
   "model": "gpt-6-astra",
-  "reasoning_effort": "medium",
+  "reasoning_effort": "high",
   "fork_turns": "none"
 }
 ```

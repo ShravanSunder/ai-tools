@@ -73,7 +73,7 @@ Router owns the seat schema and enforcement. A direct conversation, native child
 | Family | Models or harness                                 |
 |--------|---------------------------------------------------|
 | OpenAI | Astra, Sol, Terra, and Luna.                      |
-| Claude | Fable and Opus.                                   |
+| Claude | Fable 5.1 and Opus 5.5.                           |
 | xAI    | Grok.                                             |
 | Cursor | A harness and multi-model catalog, not a lineage. |
 
@@ -122,7 +122,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use the GPT-6 generation: Astra `gpt-6-astra` for Frontier, Sol `gpt-6-sol` for Balanced, and Luna `gpt-6-luna` for Mini. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
+Role tables list allowed model-and-effort choices and when to prefer each. New OpenAI assignments use `gpt-6-astra`, `gpt-6-sol`, and `gpt-6-luna`. Category follows the pair. Astra `high` is Frontier. Sol `low` and `medium` are Balanced; Sol `high` and `xhigh` are Frontier. Luna `high` and `xhigh` are Mini. Opus 5.5 `low` is Balanced; Opus 5.5 `medium` or `high` is Frontier. Fable 5.1 `medium` or `high` is Frontier. Operators use Luna `medium` or `high`. Workers and implementation or research Sidekicks use Luna `high` or `xhigh` for Mini work. An effort that is not in the role table is not a current choice. GPT-5.6 Sol, Terra, and Luna can still appear on a host during rollout; they are not a new-assignment choice. Grok is a lineage, not a current role-table choice. Keep an existing session on its recorded model until that relationship ends. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
 
 ### Commission an implementation Sidekick
 
@@ -150,9 +150,9 @@ Bright line: standalone assigned Git, test, build, PR, and watch procedures belo
 
 #### Model choices
 
-| Model category | Model lineage | Thinking |
-|----------------|---------------|----------|
-| Mini           | OpenAI Luna   | high     |
+| Model category | Model lineage | Thinking        |
+|----------------|---------------|-----------------|
+| Mini           | OpenAI Luna   | medium or high  |
 
 ### Worker
 Use for one clear bounded assignment. You manage and validate the work; continue the same worker through corrections belonging to that assignment.
@@ -164,17 +164,15 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 #### Model choices
 
-| Model category | Model lineage | Thinking | Task signals                                              |
-|----------------|---------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | Claude Opus   | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Model category | Model lineage     | Thinking | Task signals                                              |
+|----------------|-------------------|----------|-----------------------------------------------------------|
+| Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.                          |
+| Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.                          |
+| Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
 
-Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
+Use this table for execution and research Workers. Luna `medium` is an Operator row, not a Worker row. A read-only review lane Worker uses the Review Sidekick catalog below.
 
 ### Sidekick
 Use a Sidekick in a separate persistent top-level conversation for implementation, research, or review work that will resume and need continuing context.
@@ -186,15 +184,13 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 #### Implementation and research Sidekick model choices
 
-| Model category | Model lineage | Thinking | Task signals                                              |
-|----------------|---------------|----------|-----------------------------------------------------------|
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.                          |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.                   |
-| Balanced       | OpenAI Sol    | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | Claude Opus   | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.        |
+| Model category | Model lineage     | Thinking | Task signals                                              |
+|----------------|-------------------|----------|-----------------------------------------------------------|
+| Mini           | OpenAI Luna       | high     | Exact steps; Local/Cross-domain.                          |
+| Mini           | OpenAI Luna       | xhigh    | Exact steps; Local/Cross-domain.                          |
+| Balanced       | OpenAI Sol        | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | Claude Opus 5.5   | low      | Complete direction; Local/Cross-domain.                   |
+| Balanced       | OpenAI Sol        | medium   | Complete or Partial direction; Cross-domain/Cross-system. |
 
 ### Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
@@ -206,13 +202,15 @@ Use a separate persistent top-level thread for independent review or correction 
 
 #### Model choices
 
-| Model category | Model lineage | Thinking       |
-|----------------|---------------|----------------|
-| Balanced       | OpenAI Sol    | medium         |
-| Balanced       | Claude Opus   | medium         |
-| Balanced       | xAI Grok      | high           |
-| Frontier       | OpenAI Astra  | medium or high |
-| Frontier       | Claude Fable  | medium or high |
+| Model category | Model lineage     | Thinking        |
+|----------------|-------------------|-----------------|
+| Balanced       | OpenAI Sol        | low             |
+| Balanced       | OpenAI Sol        | medium          |
+| Balanced       | Claude Opus 5.5   | low             |
+| Frontier       | OpenAI Astra      | high            |
+| Frontier       | Claude Opus 5.5   | medium or high  |
+| Frontier       | Claude Fable 5.1  | medium or high  |
+| Frontier       | OpenAI Sol        | high or xhigh   |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
@@ -229,10 +227,12 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 
 #### Model choices
 
-| Model category | Model lineage | Thinking       |
-|----------------|---------------|----------------|
-| Frontier       | OpenAI Astra  | medium or high |
-| Frontier       | Claude Fable  | medium or high |
+| Model category | Model lineage     | Thinking        |
+|----------------|-------------------|-----------------|
+| Frontier       | OpenAI Astra      | high            |
+| Frontier       | Claude Opus 5.5   | medium or high  |
+| Frontier       | Claude Fable 5.1  | medium or high  |
+| Frontier       | OpenAI Sol        | high or xhigh   |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
 

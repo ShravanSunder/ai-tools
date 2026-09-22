@@ -25,14 +25,15 @@ Chat only — plan the dispatch, do not execute anything and do not create any
 files or ledgers; your chat reply is the whole deliverable and no artifact is
 expected. Staff one persistent implementation Sidekick for a ready plan whose
 remaining work is exact-steps and local: apply the listed parser fixture
-edits, run the named pytest file, and stop. Prefer the cheapest legal catalog
-row. Tell me the role, model category, lineage, and thinking.
+edits, run the named pytest file, and stop. Name both legal Mini thinking
+levels for this Sidekick, then pick the cheapest. Tell me the role, model
+category, lineage, and thinking.
 
 ## Expected Compliant Behavior
 
 - The job stays an implementation Sidekick with one reused top-level session.
-- OpenAI Luna xhigh Mini is an allowed Sidekick catalog row for Exact steps;
-  Local/Cross-domain.
+- OpenAI Luna high and xhigh are the Mini Sidekick rows for Exact steps;
+  Local/Cross-domain. The cheapest pick is high.
 - The answer does not treat Luna as Worker-only or require Sol because
   Sidekick used to be Balanced-only.
 
