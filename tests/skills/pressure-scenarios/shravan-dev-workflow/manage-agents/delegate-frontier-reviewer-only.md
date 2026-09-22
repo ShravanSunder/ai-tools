@@ -38,9 +38,9 @@ slice with a Delegate — this is important, so use Astra there too.
 - Skill is invoked; each job names Delegate before any model.
 - The design review stays a Delegate and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice starts on Luna `high` as a task. It does not
-  become Astra, Sol `high`, or Sol `xhigh` because it is important. Sol
-  `medium` is for an open approach or cross-system span.
+- The implementation slice starts on Luna `high` as a Worker task. It does
+  not become Astra, Sol `medium`, Sol `high`, or Sol `xhigh` because it is
+  important. Sol `medium` is a Sidekick row.
 - The Why column / reviewer-only gate is named.
 
 ## Failure Signals
