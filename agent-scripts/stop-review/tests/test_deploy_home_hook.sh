@@ -71,6 +71,7 @@ assert_file "${DEST}/review-runner.sh"
 assert_file "${DEST}/config.sh"
 assert_file "${DEST}/extract_stop_review_window.py"
 assert_file "${DEST}/jev_classifier.py"
+assert_file "${DEST}/jev_classifier.py.lock"
 assert_file "${DEST}/keyring_secrets.py"
 assert_file "${DEST}/classifier-prompt.md"
 assert_file "${DEST}/output-schema.json"
@@ -85,7 +86,21 @@ fi
 
 if grep -Eq 'pip install|uv pip|uv sync|python3 -m venv' "${DEST}/deploy-home-hook.sh"; then
   FAIL=$((FAIL + 1))
-  printf 'FAIL: deploy-home-hook.sh must not install packages\n' >&2
+  printf 'FAIL: deploy-home-hook.sh must not install packages into the home copy\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
+if ! grep -Fq 'uv run --no-project --script' "${DEST}/stop-review-hook.sh"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: deployed hook must run JEV via uv run --script\n' >&2
+else
+  PASS=$((PASS + 1))
+fi
+
+if ! grep -Fq '# /// script' "${DEST}/jev_classifier.py"; then
+  FAIL=$((FAIL + 1))
+  printf 'FAIL: deployed jev_classifier.py must declare PEP 723 script deps\n' >&2
 else
   PASS=$((PASS + 1))
 fi

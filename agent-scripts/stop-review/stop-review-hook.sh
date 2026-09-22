@@ -265,9 +265,7 @@ set +e
 CLASSIFIER_BACKEND="luna"
 if [[ "${STOP_REVIEW_BACKEND}" == "jev" ]]; then
   log_message "turn_id=${turn_id} session_id=${session_id} jev_start transport=openrouter-systemone model=${CODEX_STOP_REVIEW_JEV_MODEL:-${STOP_REVIEW_JEV_MODEL_DEFAULT}} stop_hook_active=${stop_hook_active} previous_continues=${BLOCK_COUNT} max_continues=${MAX_CONTINUES}"
-  JEV_PYTHON="${CODEX_STOP_REVIEW_PYTHON:-python3}"
   JEV_ARGS=(
-    "${JEV_PYTHON}" "${JEV_CLASSIFIER}"
     --window-file "${WINDOW_FILE}"
     --output "${OUT_FILE}"
     --previous-continues "${BLOCK_COUNT}"
@@ -276,8 +274,16 @@ if [[ "${STOP_REVIEW_BACKEND}" == "jev" ]]; then
   if [[ "${stop_hook_active}" == "true" ]]; then
     JEV_ARGS+=(--nested)
   fi
-  "${JEV_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
-  JEV_EXIT=$?
+  if [[ -n "${CODEX_STOP_REVIEW_PYTHON:-}" ]]; then
+    "${CODEX_STOP_REVIEW_PYTHON}" "${JEV_CLASSIFIER}" "${JEV_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
+    JEV_EXIT=$?
+  elif command -v uv >/dev/null 2>&1; then
+    uv run --no-project --script "${JEV_CLASSIFIER}" "${JEV_ARGS[@]}" >/dev/null 2>>"${PROJECT_LOG}"
+    JEV_EXIT=$?
+  else
+    printf '%s\n' "jev: uv not on PATH" >>"${PROJECT_LOG}"
+    JEV_EXIT=1
+  fi
   JEV_OUTPUT=""
   if [[ -f "${OUT_FILE}" ]]; then
     JEV_OUTPUT="$(cat "${OUT_FILE}" || true)"

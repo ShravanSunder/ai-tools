@@ -5,7 +5,8 @@ set -euo pipefail
 # Copy the sandbox-visible Stop-review runtime into ~/.agents/stop-review.
 # Codex Stop hooks cannot read ~/dev/ai-tools; the chezmoi wrapper must exec
 # this local copy via: bash "$HOME/.agents/stop-review/deploy-home-hook.sh" --run-hook
-# Deploy copies files only. It does not create a venv or install packages.
+# Deploy copies files only. JEV deps come from PEP 723 metadata via
+# `uv run --script` on first classify; deploy does not create a local venv.
 
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_ROOT="$(cd "${SOURCE_DIR}/.." && pwd)"
@@ -20,6 +21,7 @@ RUNTIME_FILES=(
   config.sh
   extract_stop_review_window.py
   jev_classifier.py
+  jev_classifier.py.lock
   classifier-prompt.md
   output-schema.json
   reviewer-config.toml

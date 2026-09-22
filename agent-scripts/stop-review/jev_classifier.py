@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "typesafe-sdk>=0.7.0",
+# ]
+# ///
 
 """Stop-review classifier via TypeSafe JEV Nouls over OpenRouter System One.
 
