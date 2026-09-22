@@ -13,6 +13,9 @@ In this repo: `skills-authoring/<date>-<name>/proposal.md` only.
 
 ## Other WIP Files
 
+- `2026-09-22-agent-structural-boundary-failure-postmortem.md`: postmortem of
+  an agent weakening an owner-confirmed repository structure between discussion,
+  design, implementation handoff, and acceptance.
 - `2026-06-10-skill-pressure-test-results.md`: pressure-test results.
 - `communications/2026-06-10-discuss-with-me-failure-brief.md`: agent
   communication brief.
