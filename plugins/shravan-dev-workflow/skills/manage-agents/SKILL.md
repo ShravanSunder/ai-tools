@@ -183,16 +183,15 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 #### Implementation and research Sidekick model choices
 
-| Model category | Model lineage | Thinking | Task signals                                          |
-|----------------|---------------|----------|-------------------------------------------------------|
-| Mini           | OpenAI Luna   | high     | Exact steps; Local.                                   |
-| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local.                                   |
-| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.               |
-| Balanced       | OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system.         |
-| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.               |
-| Balanced       | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system.         |
-| Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.               |
-| Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.    |
+| Model category | Model lineage | Thinking | Task signals                                  |
+|----------------|---------------|----------|-----------------------------------------------|
+| Mini           | OpenAI Luna   | high     | Exact steps; Local.                           |
+| Mini           | OpenAI Luna   | xhigh    | Exact steps; Local.                           |
+| Balanced       | OpenAI Sol    | low      | Complete direction; Local/Cross-domain.       |
+| Balanced       | OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system. |
+| Balanced       | Claude Opus   | low      | Complete direction; Local/Cross-domain.       |
+| Balanced       | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
+| Balanced       | xAI Grok      | medium   | Complete direction; Local/Cross-domain.       |
 
 ### 🔎 Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
