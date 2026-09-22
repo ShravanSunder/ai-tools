@@ -212,7 +212,8 @@ Use a separate persistent top-level thread for independent review or correction 
 | Frontier       | OpenAI Astra  | high           |
 | Balanced       | Claude Opus   | medium         |
 | Frontier       | Claude Opus   | high           |
-| Frontier       | Claude Fable  | medium or high |
+| Balanced       | Claude Fable  | medium         |
+| Frontier       | Claude Fable  | high           |
 | Frontier       | xAI Grok      | high           |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
@@ -234,7 +235,7 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 |----------------|---------------|----------------|
 | Frontier       | OpenAI Astra  | high           |
 | Frontier       | Claude Opus   | high           |
-| Frontier       | Claude Fable  | medium or high |
+| Frontier       | Claude Fable  | high           |
 | Frontier       | OpenAI Sol    | xhigh          |
 
 Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
