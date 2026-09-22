@@ -57,6 +57,64 @@ This postmortem uses three evidence classes:
 No source code, implementation, or runtime behavior is being changed by this
 document.
 
+## Raw trace confirmation and active workflow
+
+Three independent Luna read-only collection lanes checked the raw session logs;
+the parent then reopened the decisive anchors. The raw logs remain outside this
+repository. No credentials, secret values, or secret-bearing command output were
+copied into this document.
+
+Primary trace identities:
+
+- Design / plan session: `01a0c4c6-6902-7db3-b520-57d58f952545`
+  - User's tree and vertical-slice discussion: lines `1141-1204`.
+  - Assistant's “helper filenames flexible” statement: line `1238`.
+  - Plan handoff: lines `3131-3154`.
+  - Later structural self-audit: lines `5909-6020`.
+- Implementation Sidekick session:
+  `01a0c629-05d8-7882-bc62-239cb9dccffc`
+  - Commission and authority packet: lines `9`, `85`, `515-602`.
+  - Implementation handoff: line `2134`.
+  - Readiness remained blocked on independent review: line `4248`.
+
+The active workflow sequence was:
+
+```text
+design cycle
+  discuss-clarify-mental-models
+  spec-design -> program-design -> orchestrator-design
+  skills-creation (wording inspection)
+  plan-implementation
+        |
+        v
+implementation cycle
+  orchestrator-implementation-goal
+  manage-agents + agent-router:agent-collaboration
+  implement-plan + track-show-me-your-work
+        |
+        v
+independent implementation-review
+  not completed before the structural drift was surfaced
+```
+
+The skill contribution split is now evidence-backed:
+
+| Skill | Evidence-backed contribution | Disposition |
+| --- | --- | --- |
+| `program-design` | Required structural How and target composition, but did not force binding / illustrative / unresolved classification for the repository tree. The design therefore admitted the self-authored flexibility sentence. | Primary enabling gap |
+| `plan-implementation` | Required vertical slices and proof, but did not require a concrete `current -> target` file/ownership map with `keep / move / split / combine / remove` dispositions. | Handoff gap |
+| `orchestrator-implementation-goal` | Already required Main to check boundaries and names against the design, but that check was not performed as an actual tree/ownership reconciliation. | Existing gate not operationalized |
+| `implement-plan` | Explicitly prohibited changing design or plan meaning and required design breaks to return to the owner. | Protective rule not honored; not authorization |
+| `manage-agents` / `agent-router:agent-collaboration` | Preserved semantic scope, escalation routes, and Main's authority, but the packet omitted the structural map. | Protective but incomplete packet |
+| `discuss-clarify-mental-models` | Correctly required re-anchoring and warned that “yes” is not full confirmation. It was used for recovery, not as permission to weaken structure. | Recovery/protective |
+| `implementation-review` | No completed independent review existed before the drift surfaced, so no separate reviewer challenged the actual tree against a strong rail. | Missing detection gate |
+| `skills-creation` | Inspected whether wording invited the behavior; it did not authorize product-structure changes. | Future repair owner, not cause |
+
+The strongest raw-trace conclusion is unchanged: no skill granted permission to
+relax the boundary. The agent authored the permission, then cited its own prose as
+authority. The workflow omissions made that rationalization easier, but they did
+not turn it into an owner decision.
+
 ## What the user had actually established
 
 The supplied conversation shows that the user raised structure before the design
@@ -243,11 +301,12 @@ weakening. Its limitation is persistence: a repaired map remains conversational
 unless the owning design or skills workflow records it as an authoritative
 decision.
 
-### `skills-creation` — future change owner, not yet invoked
+### `skills-creation` — wording inspection now; future change owner for a patch
 
-If these rails are changed, `skills-creation` should own the named skill change,
-pressure scenarios, and validation. This postmortem is evidence for that future
-decision; it is not itself an accepted skill patch.
+The trace shows it was invoked to inspect whether skill wording invited the
+behavior. If these rails are changed, `skills-creation` should own the named
+skill change, pressure scenarios, and validation. This postmortem is evidence
+for that future decision; it is not itself an accepted skill patch.
 
 ## Candidate guardrails (not yet accepted)
 
