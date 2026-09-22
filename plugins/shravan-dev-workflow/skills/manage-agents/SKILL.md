@@ -132,7 +132,7 @@ For each accepted planned PR assignment, create or reuse one named top-level per
 
 Manage each assigned agent or relationship through one of the following patterns. The runtime supplies the launch mechanism.
 
-### Operator
+### 🔧 Operator
 Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results). Give the Operator a procedure and reserve reasoning for the parent.
 
 - **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
@@ -154,7 +154,7 @@ Bright line: standalone assigned Git, test, build, PR, and watch procedures belo
 |----------------|---------------|----------|
 | Mini           | OpenAI Luna   | medium   |
 
-### Worker
+### 🛠️ Worker
 Use for one clear bounded assignment. You manage and validate the work; continue the same worker through corrections belonging to that assignment.
 
 - **Work:** One bounded research, implementation, reasoning, or analysis assignment, including its corrections and associated proof. A Worker may return evidence, candidate findings, or mechanical output from unchanged main-authored input; it does not author governing design or plan prose, diagrams, structure, or settled sections. Independent review belongs to a Review Sidekick.
@@ -173,7 +173,7 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
-### Sidekick
+### 🐒 Sidekick
 Use a Sidekick in a separate persistent top-level conversation for implementation, research, or review work that will resume and need continuing context.
 
 - **Work:** Implementation, research, or review across assignments and follow-ups. An implementation Sidekick implements, integrates, proves, and corrects one or more related main-planned assignments. A research Sidekick handles related research. A Review Sidekick independently assesses a target and verifies corrections.
@@ -194,7 +194,7 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 | Balanced       | xAI Grok      | low      | Complete direction; Local/Cross-domain.               |
 | Balanced       | xAI Grok      | medium   | Complete or Partial direction; Local/Cross-domain.    |
 
-### Review Sidekick
+### 🔎 Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
 
 - **Work:** Source-grounded independent findings and verification of corrections; no implementation edits.
@@ -221,7 +221,7 @@ Use a separate persistent top-level thread for independent review or correction 
 
 Use this catalog for an independent Review Sidekick and its read-only review lane Workers.
 
-### Advisor
+### 🦉 Advisor
 Use an Advisor only when Shravan explicitly requests a separate persistent guidance thread for the orchestrator. Guidance only — the Advisor never executes or edits.
 
 - **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment.
