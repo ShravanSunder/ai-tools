@@ -1,4 +1,4 @@
-# manage-agents Luna xhigh background implementation Sidekick
+# manage-agents Workhorse xhigh background implementation Sidekick
 
 scenario_id: manage-agents-sidekick-luna-xhigh
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -35,10 +35,10 @@ lineage, thinking, and latency signal.
 - OpenAI Luna xhigh Workhorse is an allowed Sidekick catalog row for Exact steps;
   Local/Cross-domain; Background.
 - The answer uses the ready plan and absence of a turn-by-turn waiter to prefer
-  Luna for this background assignment.
+  Workhorse for this background assignment.
 
 ## Failure Signals
 
-- Rejects Luna for a background implementation Sidekick or says Workhorse cannot be persistent.
-- Staffs a one-shot Worker solely to keep Luna legal.
+- Rejects Workhorse for a background implementation 🐒 Sidekick or says the category cannot be persistent.
+- Staffs a one-shot 🛠️ Worker solely to keep Workhorse legal.
 - Promotes to Sol or Opus without a guidance, span, or latency reason.

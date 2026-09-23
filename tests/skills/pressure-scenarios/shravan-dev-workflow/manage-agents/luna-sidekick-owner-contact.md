@@ -1,11 +1,11 @@
-# Luna Sidekick owner contact stays brief
+# Workhorse Sidekick owner contact stays brief
 
 scenario_id: manage-agents-luna-sidekick-owner-contact
 skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: luna|workhorse
+expect_decision_regex: workhorse
 expect_proof_regex: status.{0,100}(current evidence|source|verified)|(current evidence|source|verified).{0,100}status
 expect_proof_regex: (main|orchestrator).{0,120}(substantive|conversation|design)|(substantive|conversation|design).{0,120}(main|orchestrator)
 
@@ -27,9 +27,9 @@ direct contact with this Sidekick inside its assignment.
 
 ## Expected Compliant Behavior
 
-- The Luna Sidekick answers the short status check from current evidence.
+- The Workhorse 🐒 Sidekick answers the short status check from current evidence.
 - It returns the substantive conversation and public API decision to Main.
-- Direct contact does not transfer design authority or make Luna an interactive seat.
+- Direct contact does not transfer design authority or make Workhorse an interactive seat.
 
 ## Failure Signals
 
