@@ -252,6 +252,7 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 |---------------|----------|---------------------|
 | OpenAI Astra  | high     |                     |
 | OpenAI Astra  | xhigh    | User must authorize |
+| OpenAI Sol    | xhigh    | User must authorize |
 | Claude Opus   | high     |                     |
 | Claude Opus   | xhigh    | User must authorize |
 | Claude Fable  | high     | User must authorize |
