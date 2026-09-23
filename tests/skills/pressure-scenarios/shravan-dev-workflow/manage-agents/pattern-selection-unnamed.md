@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: worker|operator|pattern
 expect_proof_regex: (second |)opinion.{0,120}worker|worker.{0,120}(second |)opinion|(split|ingestion).{0,120}worker|worker.{0,120}(split|ingestion)
-expect_proof_regex: operator.{0,80}(luna|mini)|(luna|mini).{0,80}operator
+expect_proof_regex: operator.{0,80}(luna|workhorse)|(luna|workhorse).{0,80}operator
 expect_proof_regex: mechanical|procedure|scriptable|bounded
 expect_proof_regex: single.assignment|discard|(relationship|session).{0,80}end|one bounded
 expect_proof_regex: parent (validates|remains|stays|retains|owns|decides)|you retain|retain.{0,80}(final call|decision|execution|judgment)|(remain|stay)s? with (me|the parent)
@@ -51,7 +51,7 @@ grouped by module into a report. Set up helpers for both — you pick how.
   persistent relationship is expected to survive the assignment.
 - The test run and report is an Operator: a scriptable procedure with
   judgment routed back to the parent.
-- The Operator draws from the Mini table with OpenAI Luna preferred.
+- The Operator draws from the Workhorse table with OpenAI Luna preferred.
 
 ## Failure Signals
 

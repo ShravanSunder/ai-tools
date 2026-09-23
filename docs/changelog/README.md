@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-23 Luna Workhorse routing](2026-09-23-luna-workhorse.md)
 - [2026-09-23 Model routing retier](2026-09-23-model-routing-retier.md)
 - [2026-09-23 Grok review and authorization catalog](2026-09-23-grok-review-authorization.md)
 - [2026-09-22 GPT-6 dispatch](2026-09-22-gpt-6-dispatch.md)

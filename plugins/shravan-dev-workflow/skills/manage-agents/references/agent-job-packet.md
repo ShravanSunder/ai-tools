@@ -14,7 +14,7 @@ A direct task instead uses a concise brief with outcome, relevant sources, expli
 
 Do not impose a universal field layout, date slug, classification string, or new identifier. Reuse existing names, paths, session identities, and source versions where they help bind evidence to the assignment.
 
-Same-assignment follow-ups carry only the delta and new evidence; preserve established scope and identity. A correction refreshes the contract without replacing a continuing Sidekick, Advisor, or Review Sidekick conversation.
+Same-assignment follow-ups carry only the delta and new evidence; preserve established scope and identity. A correction refreshes the contract without replacing a continuing 🐒 Sidekick, 🦉 Advisor, or 🔎 Review Sidekick conversation.
 
 ### Readers
 
@@ -26,9 +26,9 @@ Reader authority is stated once in the assignment contract: `workspace read-only
 
 Writer authority names the allowed paths once. Before an edit outside them, stop and report blocked; if a violation is discovered, stop and report it. Parent verification still checks the actual diff scope. How a host enforces or only declares that bound is owned by the native-provider or ACPX provider reference selected for the launch.
 
-## Operator Exception
+## 🔧 Operator Exception
 
-When an Operator reaches work requiring judgment or authority, return observed evidence, the needed decision, and a safe waiting state; proceed only after authorization.
+When an 🔧 Operator reaches work requiring judgment or authority, return observed evidence, the needed decision, and a safe waiting state; proceed only after authorization.
 
 ## Reduction
 

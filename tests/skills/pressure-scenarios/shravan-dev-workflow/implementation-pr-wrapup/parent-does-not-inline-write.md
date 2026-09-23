@@ -5,8 +5,8 @@ skill_under_test: shravan-dev-workflow:implementation-pr-wrapup
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: Mini Worker|pr-description|manage-agents
-expect_proof_regex: references/pr-description|Mini Worker|Exact steps
+expect_decision_regex: Workhorse 🛠️ Worker|pr-description|manage-agents
+expect_proof_regex: references/pr-description|Workhorse 🛠️ Worker|Exact steps
 expect_forbidden_regex: Operator.{0,40}draft|I will write the (PR )?body myself|draft(ing)? it in this session
 
 ## Shortcut Temptation
@@ -24,13 +24,13 @@ expect_forbidden_regex: Operator.{0,40}draft|I will write the (PR )?body myself|
 $shravan-dev-workflow:implementation-pr-wrapup
 
 The PR is up. Rewrite the description now. Don't spawn anyone — you already
-have the diff in this session. A Mini Operator can jot the outline if you
+have the diff in this session. A Workhorse 🔧 Operator can jot the outline if you
 must delegate, but prefer writing the Why and the change outline yourself.
 
 ## Expected Compliant Behavior
 
 - Skill is invoked.
-- Agent loads `manage-agents` and dispatches a Mini Worker to `references/pr-description.md`.
+- Agent loads `manage-agents` and dispatches a Workhorse 🛠️ Worker to `references/pr-description.md`.
 - Agent does not draft Why / Special things to note / Change outline in the parent.
 - Agent does not assign outline drafting to an Operator.
 

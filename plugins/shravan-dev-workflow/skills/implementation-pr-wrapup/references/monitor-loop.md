@@ -13,7 +13,7 @@ Use bounded, API-budget aware monitoring for asynchronous PR state. Do not babys
 
 ## Delegated Monitoring
 
-A Mini Operator may perform the loop's observation steps: fetch and classify state, wait for the bounded quiet interval, and re-fetch. It replaces the loop's action and readiness steps with decision packets to the main agent. Use `manage-agents` for its pattern, model, packet, receipt, and decision boundary.
+A Workhorse 🔧 Operator may perform the loop's observation steps: fetch and classify state, wait for the bounded quiet interval, and re-fetch. It replaces the loop's action and readiness steps with decision packets to the main agent. Use `manage-agents` for its pattern, model, packet, receipt, and decision boundary.
 
 The monitor may fetch and classify checks, comments, thread state, mergeability, rate limits, head SHA, and the current PR body text. It must not rewrite the body, judge Why / Special things to note / Change outline, reply to comments, change code, resolve disputes, declare ready, or merge. Return raw body and HEAD to the parent for the description predicate. When the next action needs judgment, a code change, disputed-review handling, scope change, or merge authorization, it sends the main agent a decision packet and then waits, continues read-only monitoring, or stops exactly as its packet permits.
 

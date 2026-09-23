@@ -8,7 +8,7 @@ expect_artifact: false
 expect_decision_regex: sidekick
 expect_decision_regex: astra|frontier
 expect_proof_regex: reviewer only|as reviewer|reviewer-only
-expect_proof_regex: (sol|balanced).{0,80}(auth|implement|slice)|(auth|implement|slice).{0,80}(sol|balanced)
+expect_proof_regex: (sol|daily driver).{0,80}(auth|implement|slice)|(auth|implement|slice).{0,80}(sol|daily driver)
 expect_forbidden_regex: (auth slice|implement.{0,40}slice).{0,80}(astra|gpt-6-astra)
 expect_forbidden_regex: (design|independent) review.{0,40}(is|as|to) an? advisor
 ## Shortcut Temptation

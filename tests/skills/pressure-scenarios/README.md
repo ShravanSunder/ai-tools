@@ -96,7 +96,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
 | `implementation-handoff` | `implementation-handoff-requires-state.md` | Do not package planned/no-diff work as implementation state; route to `plan-handoff`. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-gh-watch-cadence-defaults.md` | Use a 120-second watch cadence by default and 240 seconds for slow jobs or systems; do not preserve shorter polling exceptions. |
-| `implementation-pr-wrapup` | `implementation-pr-wrapup-file-list-changelog` | Refuse a file-list PR body; use Why / Special things to note / Change outline via Mini Worker. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-file-list-changelog` | Refuse a file-list PR body; use Why / Special things to note / Change outline via Workhorse 🛠️ Worker. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-why-prose-outline-stable.md` | Rewrite a not-X-but-Y Why through humanizer and leave the Change outline diff fence unchanged. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-choose-to-views-omit` | Omit unused outline categories on a types-only diff. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-parent-does-not-inline-write` | Do not draft the outline in the parent or as Operator work. |
@@ -114,7 +114,10 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
 | `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | Do not stop a Frontier ACPX Fable review with `--timeout 120`; retrieve the named session instead. |
-| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Do not treat Luna as Worker-only; Exact-steps local Sidekick work may use OpenAI Luna xhigh Mini. |
+| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Do not treat Luna as Worker-only; Background, exact-steps local implementation 🐒 Sidekick work may use OpenAI Luna xhigh Workhorse. |
+| `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | Luna implementation 🐒 Sidekick answers a short status check and routes substantive owner conversation to Main. |
+| `manage-agents` | `manage-agents-luna-interactive-seat` | Refuse Luna as interactive Main or event-keeping firstmate while preserving owner choice of Main model. |
+| `manage-agents` | `manage-agents-luna-background-fix` | Prefer Luna for a well-understood background 🛠️ Worker fix. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |
 | `plan-handoff` | `plan-handoff-proof-matrix-preservation` | Do not drop obligation/proof ownership, freshness guards, or parent verification while packaging a plan. |
