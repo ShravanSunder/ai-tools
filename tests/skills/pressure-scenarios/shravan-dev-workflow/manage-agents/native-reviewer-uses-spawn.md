@@ -13,7 +13,7 @@ expect_forbidden_regex: codex exec -m
 
 $shravan-dev-workflow:manage-agents
 
-Chat only. A different-lineage persistent Astra 🔎 Review Sidekick is already authorized for the current skill diff. The host native `spawn_agent` tool is available. The review cites one exact test command, and the lead has an execution grant after checking its write set. Plan the reviewer and proof routes. Do not launch either agent or run the command.
+Chat only. A persistent Frontier 🔎 Review Sidekick from a different author lineage is already authorized for the current skill diff. The host native `spawn_agent` tool is available. The review cites one exact test command. The lead has an execution grant after checking its write set. Plan the reviewer and proof routes. Do not launch either agent or run the command.
 
 ## Expected Compliant Behavior
 

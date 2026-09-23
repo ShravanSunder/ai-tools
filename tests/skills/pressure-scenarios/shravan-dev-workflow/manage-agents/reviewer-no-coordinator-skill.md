@@ -12,7 +12,7 @@ expect_proof_regex: mode-complete|ordered checks|walk.*checks
 
 $shravan-dev-workflow:manage-agents
 
-Chat only. Plan a three-artifact design review. An independent persistent Astra 🔎 Review Sidekick is available. The author proposes handing only `lane-schema.md` and `mode-complete-reviewer.md` to a native child because it can run one narrow check quickly. What should the lead receive and do? Do not launch an agent.
+Chat only. Plan a three-artifact design review. An independent persistent Frontier 🔎 Review Sidekick is available. The author proposes handing only `lane-schema.md` and `mode-complete-reviewer.md` to a native child for one narrow check. What should the lead receive and do? Do not launch an agent.
 
 ## Expected Compliant Behavior
 
