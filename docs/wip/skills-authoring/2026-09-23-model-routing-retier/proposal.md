@@ -27,7 +27,7 @@ An agent loading `manage-agents` chooses model and effort only from the matrix b
 | Role | Default rows | `User must authorize` rows |
 | --- | --- | --- |
 | Main | owner's choice; normally Sol medium/high or Opus low/medium | — (never self-escalated) |
-| Advisor | Opus high, Astra high | Opus xhigh, Astra xhigh, Sol xhigh, Fable high |
+| Advisor | Opus high, Astra high, Sol xhigh | Opus xhigh, Astra xhigh, Fable high |
 | Review Sidekick | Opus medium, Opus high, Sol high, Astra high, Grok 4.6 high, Grok 4.5 high | Opus xhigh, Astra xhigh, Sol xhigh, Fable high |
 | Implementation / research Sidekick | Sol medium, Sol high, Opus low, Opus medium, Luna high, Luna xhigh, Luna max | — |
 | Worker | Sol medium, Sol high, Opus low, Opus medium, Luna medium, Luna high, Luna xhigh | — |
@@ -48,10 +48,10 @@ Retired: Sol low, Fable medium, Astra medium/low, Terra, all GPT-5.x.
 | Main model is the owner's choice; skills never escalate it | Owner: "it's up to me"; daily drivers are far ahead and pleasant to talk to. |
 | Frontier defaults exist only for Advisor and Review | Owner: "only the frontier for advisors"; reviewers named explicitly. |
 | Opus medium moves Frontier -> Balanced; Opus high moves `User must authorize` -> default for Advisor/Review | Owner reversed #90's rows in this conversation. |
-| Sol xhigh becomes `User must authorize` (Review and Advisor) | Owner: "sol xhigh is on request". |
+| Sol xhigh is `User must authorize` for Review and a default Advisor row; the category row carries no mark so role tables decide | Owner: "sol xhigh is on request" (Review); later "no authorization required" (Advisor). |
 | Drop Sol low, Fable medium, Review Sol/Grok medium, Advisor Opus medium and Sol high/xhigh | Not in the owner's lists. |
 | Review keeps Opus medium as a default row | Owner post-review correction (2026-09-23). |
-| Advisor adds Sol xhigh as `User must authorize` | Owner post-review correction (2026-09-23); on-request like its Review row. |
+| Advisor adds Sol xhigh as a default row | Owner post-review correction (2026-09-23): no authorization required for Advisor. |
 | Grok review rows are 4.6 high and 4.5 high | Owner reviewer list; Balanced Grok rows unchanged. |
 | Reuse `User must authorize` instead of a new on-request label | Existing mechanism; no new vocabulary. |
 | "Sol is the executor, so Sol writes the spec" becomes model-neutral | Sol medium is now a normal Main choice; the rule is about the executor role. |

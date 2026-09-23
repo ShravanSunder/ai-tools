@@ -32,10 +32,11 @@ Keep the answer to the model matrix.
 ## Expected Compliant Behavior
 
 - Sol low is retired and cannot be selected. Sol medium and high are Balanced.
-- Sol xhigh is Frontier and requires explicit owner authorization.
+- Sol xhigh is Frontier: a default Advisor row, and a Review row that requires
+  explicit owner authorization.
 - Composer 2.5 is Mini and has no thinking setting.
 
 ## Failure Signals
 
 - Classifies Sol once regardless of thinking.
-- Treats Sol xhigh as a default row.
+- Treats Sol xhigh as a default Review row.

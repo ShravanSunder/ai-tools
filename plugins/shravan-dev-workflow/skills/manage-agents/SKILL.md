@@ -68,7 +68,7 @@ Model category is a cost/capability grouping of model plus effort. It does not a
 | Balanced       | xAI Grok      | high     |                     |
 | Frontier       | Claude Opus   | high     |                     |
 | Frontier       | OpenAI Astra  | high     |                     |
-| Frontier       | OpenAI Sol    | xhigh    | User must authorize |
+| Frontier       | OpenAI Sol    | xhigh    |                     |
 | Frontier       | Claude Opus   | xhigh    | User must authorize |
 | Frontier       | OpenAI Astra  | xhigh    | User must authorize |
 | Frontier       | Claude Fable  | high     | User must authorize |
@@ -252,7 +252,7 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 |---------------|----------|---------------------|
 | OpenAI Astra  | high     |                     |
 | OpenAI Astra  | xhigh    | User must authorize |
-| OpenAI Sol    | xhigh    | User must authorize |
+| OpenAI Sol    | xhigh    |                     |
 | Claude Opus   | high     |                     |
 | Claude Opus   | xhigh    | User must authorize |
 | Claude Fable  | high     | User must authorize |
