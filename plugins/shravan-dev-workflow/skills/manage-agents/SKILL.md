@@ -205,9 +205,9 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 | Model lineage | Thinking | Task signals                                  |
 |---------------|----------|-----------------------------------------------|
-| OpenAI Luna   | high     | Exact steps; Local.                           |
-| OpenAI Luna   | xhigh    | Exact steps; Local.                           |
-| OpenAI Luna   | max      | Exact steps; Local.                           |
+| OpenAI Luna   | high     | Exact steps; Local/Cross-domain.              |
+| OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.              |
+| OpenAI Luna   | max      | Exact steps; Local/Cross-domain.              |
 | OpenAI Sol    | medium   | Complete direction; Local/Cross-domain.       |
 | OpenAI Sol    | high     | Partial direction; Cross-domain/Cross-system. |
 | Claude Opus   | low      | Complete direction; Local/Cross-domain.       |
@@ -228,6 +228,7 @@ Use a separate persistent top-level thread for independent review or correction 
 | OpenAI Sol    | xhigh    | User must authorize |
 | OpenAI Astra  | high     |                     |
 | OpenAI Astra  | xhigh    | User must authorize |
+| Claude Opus   | medium   |                     |
 | Claude Opus   | high     |                     |
 | Claude Opus   | xhigh    | User must authorize |
 | Claude Fable  | high     | User must authorize |
