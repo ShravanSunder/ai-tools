@@ -1,6 +1,6 @@
 # Grok review and authorization catalog
 
-- Marketplace plugin: `shravan-dev-workflow` `2.55.0`.
+- Marketplace plugin: `shravan-dev-workflow` `2.56.0`.
 - Affected: `manage-agents` category table, Review/Sidekick/Advisor catalogs, Cursor ACP examples.
 - Grok is Review only, `4.6` medium or high. Grok `4.7` is removed. Sidekick no longer lists Grok.
 - `Opus medium` is Frontier. `Sol xhigh` is Balanced.
