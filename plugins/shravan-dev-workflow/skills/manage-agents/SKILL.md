@@ -52,25 +52,26 @@ Architectural span does not measure task size or permission; every assignment re
 | Balanced       | Execution or synthesis that needs judgment.    |
 | Frontier       | Demanding judgment, design, or review.         |
 
-Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here.
+Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here. Do not pick a `User must authorize` row unless Shravan explicitly authorizes that lineage and thinking.
 
-| Model category | Model lineage | Thinking |
-|----------------|---------------|----------|
-| Mini           | OpenAI Luna   | medium   |
-| Mini           | OpenAI Luna   | high     |
-| Mini           | OpenAI Luna   | xhigh    |
-| Balanced       | OpenAI Sol    | low      |
-| Balanced       | OpenAI Sol    | medium   |
-| Balanced       | OpenAI Sol    | high     |
-| Balanced       | Claude Opus   | low      |
-| Balanced       | Claude Opus   | medium   |
-| Balanced       | xAI Grok      | medium   |
-| Balanced       | xAI Grok      | high     |
-| Frontier       | OpenAI Sol    | xhigh    |
-| Frontier       | OpenAI Astra  | high     |
-| Frontier       | Claude Opus   | high     |
-| Frontier       | Claude Fable  | medium   |
-| Frontier       | Claude Fable  | high     |
+| Model category | Model lineage | Thinking | Use                 |
+|----------------|---------------|----------|---------------------|
+| Mini           | OpenAI Luna   | medium   |                     |
+| Mini           | OpenAI Luna   | high     |                     |
+| Mini           | OpenAI Luna   | xhigh    |                     |
+| Balanced       | OpenAI Sol    | low      |                     |
+| Balanced       | OpenAI Sol    | medium   |                     |
+| Balanced       | OpenAI Sol    | high     |                     |
+| Balanced       | OpenAI Sol    | xhigh    |                     |
+| Balanced       | Claude Opus   | low      |                     |
+| Balanced       | xAI Grok      | medium   |                     |
+| Balanced       | xAI Grok      | high     |                     |
+| Frontier       | Claude Opus   | medium   |                     |
+| Frontier       | OpenAI Astra  | high     |                     |
+| Frontier       | OpenAI Astra  | xhigh    | User must authorize |
+| Frontier       | Claude Opus   | high     | User must authorize |
+| Frontier       | Claude Fable  | medium   | User must authorize |
+| Frontier       | Claude Fable  | high     | User must authorize |
 
 An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
 
@@ -206,7 +207,6 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 | OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system. |
 | Claude Opus   | low      | Complete direction; Local/Cross-domain.       |
 | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
-| xAI Grok      | medium   | Complete direction; Local/Cross-domain.       |
 
 ### 🔎 Review Sidekick
 Use a separate persistent top-level thread for independent review or correction verification.
@@ -223,10 +223,12 @@ Use a separate persistent top-level thread for independent review or correction 
 | OpenAI Sol    | high     |
 | OpenAI Sol    | xhigh    |
 | OpenAI Astra  | high     |
+| OpenAI Astra  | xhigh    |
 | Claude Opus   | medium   |
 | Claude Opus   | high     |
 | Claude Fable  | medium   |
 | Claude Fable  | high     |
+| xAI Grok      | medium   |
 | xAI Grok      | high     |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
@@ -246,6 +248,7 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 | Model lineage | Thinking |
 |---------------|----------|
 | OpenAI Astra  | high     |
+| OpenAI Astra  | xhigh    |
 | Claude Opus   | medium   |
 | Claude Opus   | high     |
 | Claude Fable  | high     |
