@@ -222,8 +222,8 @@ Use a separate persistent top-level thread for independent review or correction 
 
 #### Model choices
 
-| Model lineage | Thinking |
-|---------------|----------|
+| Model lineage | Thinking | Use                 |
+|---------------|----------|---------------------|
 | OpenAI Sol    | high     |                     |
 | OpenAI Sol    | xhigh    | User must authorize |
 | OpenAI Astra  | high     |                     |
@@ -247,8 +247,8 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 
 #### Model choices
 
-| Model lineage | Thinking |
-|---------------|----------|
+| Model lineage | Thinking | Use                 |
+|---------------|----------|---------------------|
 | OpenAI Astra  | high     |                     |
 | OpenAI Astra  | xhigh    | User must authorize |
 | Claude Opus   | high     |                     |
