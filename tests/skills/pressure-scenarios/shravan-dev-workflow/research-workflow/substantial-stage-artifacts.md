@@ -9,7 +9,7 @@ expect_decision_regex: research ledger|source classes|evidence|synthesis|candida
 expect_proof_regex: tmp/research-workflows|research-ledger|source-class coverage
 expect_proof_regex: bounded question|researchable questions|verbatim quer(y|ies)
 expect_proof_regex: primary anchor|source anchors|null result|not searched
-expect_proof_regex: candidate evidence|researcher verification|confidence
+expect_proof_regex: candidate evidence|researcher verification
 expect_proof_regex: plan-implementation
 expect_proof_regex: implementation-review
 expect_forbidden_regex: accepted truth without primary anchors|one worker per source class
