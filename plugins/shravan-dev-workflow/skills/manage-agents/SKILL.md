@@ -52,7 +52,7 @@ Architectural span does not measure task size or permission; every assignment re
 | Balanced       | Execution or synthesis that needs judgment.    |
 | Frontier       | Demanding judgment, design, or review.         |
 
-Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here. Do not pick a `User must authorize` row unless Shravan explicitly authorizes that lineage and thinking.
+Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here. Do not pick a row marked `User must authorize` in this table or the role table unless Shravan explicitly authorizes that lineage and thinking; an empty category Use cell means the role table decides.
 
 | Model category | Model lineage | Thinking | Use                 |
 |----------------|---------------|----------|---------------------|
