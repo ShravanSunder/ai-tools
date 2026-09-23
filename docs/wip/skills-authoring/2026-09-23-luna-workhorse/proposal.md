@@ -1,6 +1,6 @@
 # Luna as the Workhorse tier
 
-Revision 3. Revision 2 was `accepted-to-implement`; Revision 3 adds the owner's emoji-by-example requirement (2026-09-23), a semantic expansion the owner authorized for one fresh proposal review. Main-authored multi-run skill-change spec. Owner plugin: `shravan-dev-workflow`. Stacks on PR A ([#91](https://github.com/ShravanSunder/ai-tools/pull/91)); implement after #91 merges or as a stacked branch on it.
+Revision 4. Revision 2 was `accepted-to-implement`; Revision 3 added the owner's emoji-by-example requirement (2026-09-23), a semantic expansion the owner authorized for one fresh proposal review. Main-authored multi-run skill-change spec. Owner plugin: `shravan-dev-workflow`. Stacks on PR A ([#91](https://github.com/ShravanSunder/ai-tools/pull/91)); implement after #91 merges or as a stacked branch on it.
 
 ## Problem and evidence
 
@@ -12,7 +12,7 @@ Revision 3. Revision 2 was `accepted-to-implement`; Revision 3 adds the owner's 
 
 ## Success definition
 
-An agent loading `manage-agents` calls Luna's tier **Workhorse**, puts Workhorse models only in background seats with well-understood work (no one waiting on each turn), never puts Luna in an interactive or event-keeping seat or on ambiguous planning, design, or review, and still chooses Luna over a daily driver when the work is clear and background, because it is the cheapest route to done.
+An agent loading `manage-agents` calls Luna's tier **Workhorse**, puts Workhorse models only in background seats with well-understood work (no one waiting on each turn), never puts Luna in an interactive or event-keeping seat or on ambiguous planning, design, or review, and still chooses Luna over a daily driver when the work is clear and background, because it is the cheapest route to done. Every in-scope skill, packet, and chat message names the five agent roles with their emoji (`Workhorse 🛠️ Worker`, `🐒 Sidekick`, `🔎 Review Sidekick`, `🔧 Operator`, `🦉 Advisor`).
 
 ## Decisions (owner may strike any row)
 
@@ -27,6 +27,7 @@ An agent loading `manage-agents` calls Luna's tier **Workhorse**, puts Workhorse
 | The rename does not rewrite category definition cells into seat names; categories stay cost/capability, Latency stays wait-on-turn | Otherwise Daily driver collapses to "Main only" while Worker/Sidekick Daily-driver rows still exist. |
 | Agents never select Luna as Main; a Main model the owner names stays the owner's choice | Keeps owner authority over Main while blocking agent self-selection. |
 | **Emoji by example:** whenever a skill, packet, or chat message names an agent role, write it with its role emoji: 🔧 Operator, 🛠️ Worker, 🐒 Sidekick, 🔎 Review Sidekick, 🦉 Advisor. The Agent Roles table stays the single owner of the emoji; every other skill shows the rule by example | Owner requirement 2026-09-23 ("show by example ... anytime you mention the Sidekick"); agents copy the vocabulary they read, so examples teach titles better than a rule alone. |
+| Prose pattern: the emoji sits immediately before the role word, and any qualifier goes before the emoji (`Workhorse 🛠️ Worker`, `implementation 🐒 Sidekick`); thread titles keep `<emoji> <role> · <purpose>`; the always-loaded `manage-agents` description (`SKILL.md:3`) stays plain because it is the trigger surface | Failure form: wrong output shape; one pattern prevents `🛠️ Workhorse Worker` / `Workhorse 🛠️ Worker` drift. |
 | Emoji applies only to agent roles, never to human operators, system workers, board seat values (`implementer`, `reviewer`), code identifiers, Linear ids, or diagram node labels | Prevents false edits and keeps seat and schema values stable. |
 | Skills the reviews-and-research-as-workflows PR rewrites (`implementation-review`, `spec-program-review`, `skills-creation` review stages, `research-swarm`, `discuss-pathfinding`, `discuss-clarify-mental-models`) get their emoji in that PR, not here | Avoids editing text that PR replaces. |
 | Rename category `Balanced` -> `Daily driver` everywhere (hard cutover) | Owner decision 2026-09-23; names the tier by its job (interactive main and everyday execution). |
@@ -37,17 +38,17 @@ An agent loading `manage-agents` calls Luna's tier **Workhorse**, puts Workhorse
 | # | Skill | Class | Main path | Depth | Proof |
 | --- | --- | --- | --- | --- | --- |
 | 1 | `manage-agents` | behavior-changing | rename category labels only (`Mini` -> `Workhorse`, `Balanced` -> `Daily driver`, `SKILL.md:51-68`; definition cells keep their cost/capability meaning). Add **Latency** as the third task signal with its own definition section beside Guidance and Architectural span, carrying the question "who is waiting on this agent's next turn?" and the decided edge seats (dispatched Worker and blocking-procedure Operator = `Background`; a human in conversation or a seat that must keep up with events = `Interactive`). Make Latency the third signal in every selection sentence: signal-cell order (45), select-an-agent formula (134), executor choice (138), Choose a model (144). Add a Workhorse fit rule at Choose a model (seats in / seats out, each paired with its failure form: many-turn latency or weak judgment). Carve Luna into the direct-contact sentences at 117 and 201 (status check only; substantive talk routes to Main) and state that agents never select Luna as Main while an owner-named Main stays the owner's choice (115). Workhorse Worker/Sidekick cells become `Exact steps or well-understood Complete direction; Local/Cross-domain; Background`; Operator table notes blocking procedures only. Extend the title rule at the Agent Roles table (111) to text: name every agent role with its emoji in skills, packets, and chat; apply that by example across this skill's prose and references | none expected; check `session-ledger.md` and provider refs for "Mini" | update fixtures that say Mini or Balanced (`model-thinking-selection`: update the Sol Balanced tokens only; its "Composer 2.5 is Mini" line and `composer.{0,40}mini` regex are pre-existing stale matrix text, remove them rather than renaming to Workhorse; `sidekick-luna-xhigh`, `pattern-selection-unnamed`, `wait-interval-cache-regimes`, `capability-economics`, `design-phase-not-sidekick-author`, and `agent-router/agent-collaboration/wake-interval-cache-regimes`); add three scenarios: Luna Sidekick declines substantive owner conversation and routes it to Main while answering a status check, Luna refused as interactive Main/firstmate, Luna chosen for a background well-understood fix |
-| 2 | `implementation-pr-wrapup` | behavior-changing | "Mini Worker" / "Mini Operator" -> "🛠️ Workhorse Worker" / "🔧 Workhorse Operator" (`SKILL.md:8,10,26,36,46,48,54,63,90`); other agent-role mentions gain their emoji | `references/monitor-loop.md:16`, `references/pr-description.md:8` | update `file-list-changelog` and `parent-does-not-inline-write` regexes |
-| 3 | `agent-collaboration` (`plugins/agent-router/skills/`) | scoped | emoji on agent-role mentions in `SKILL.md` | role mentions in its references | static |
-| 4 | `orchestrator-implementation-goal` | scoped | emoji on agent-role mentions in `SKILL.md` (Sidekick, Review Sidekick, Worker, Operator) | `references/goal-contract-and-routing.md` | static |
-| 5 | `orchestrator-design` | scoped | emoji on agent-role mentions | none | static |
-| 6 | `implement-plan` | scoped | emoji on agent-role mentions | `references/execution-and-proof.md` | static |
-| 7 | `track-show-me-your-work` | scoped | emoji on agent-role mentions (seat values `implementer`/`reviewer` stay plain) | references with role mentions | static |
-| 8 | `program-design` | scoped | emoji on the Advisor mention and any other agent-role mention | none | static |
-| 9 | `spec-design` | scoped | emoji on agent-role mentions only (human "operators" and system terms stay plain) | references with agent-role mentions | static |
-| 10 | `plan-implementation`, then `plan-improve-repo`, `spec-handoff`, `plan-handoff` as separate one-skill runs | scoped | emoji on each agent-role mention (1-2 per skill) | none | static |
+| 2 | `implementation-pr-wrapup` | behavior-changing | "Mini Worker" / "Mini Operator" -> "Workhorse 🛠️ Worker" / "Workhorse 🔧 Operator" (`SKILL.md:8,10,26,36,46,48,54,63,90`); other agent-role mentions gain their emoji | `references/monitor-loop.md:16`, `references/pr-description.md:8` | update `file-list-changelog` and `parent-does-not-inline-write` regexes |
+| 3 | `orchestrator-implementation-goal` | behavior-changing (two homes) | emoji on agent-role mentions in `SKILL.md` | `references/goal-contract-and-routing.md:5,22,42,44` | static |
+| 4 | `orchestrator-design` | scoped (`SKILL.md` only) | emoji on agent-role mentions | none | static |
+| 5 | `implement-plan` | behavior-changing (two homes) | emoji at `SKILL.md:12` and other role mentions | `references/execution-and-proof.md:34,36,61` | static |
+| 6 | `track-show-me-your-work` | scoped (`SKILL.md` only) | emoji on agent-role mentions (seat values `implementer`/`reviewer` stay plain) | none | static |
+| 7 | `program-design` | scoped (`SKILL.md` only) | emoji on the 🦉 Advisor mention and any other agent-role mention | none | static |
+| 8 | `plan-implementation` | scoped | emoji on its agent-role mentions | none | static |
+| 9 | `spec-handoff` | scoped | emoji on its agent-role mention | none | static |
+| 10 | `plan-handoff` | scoped | emoji on its agent-role mention | none | static |
 
-Runs 3-10 are one skill each; run 10 is written as one row only for brevity and executes as four sequential runs. Each is `scoped`: wording inside the skill's own homes, no trigger, call site, predicate, schema, or ownership change.
+Dropped as having no agent-role mention to edit: `agent-collaboration` (only the title template, already correct), `spec-design` (its hit is "Advisory", a different word), `plan-improve-repo` ("senior advisor" metaphor). `agent-router` stays at 0.14.0.
 
 Companion (not a skill run):
 
@@ -69,4 +70,4 @@ The reviews-and-research-as-workflows PR (combined PR B + C per owner, 2026-09-2
 
 ## Spec-review record
 
-Revision 1 reviewed by Grok 4.6 high via ACPX Cursor (workflow mode, four checklists complete): `targeted-revision`, `revise-first`, 6 accepted findings (1 blocker: incomplete hard-cutover consumer list), 9 rejected. Revision 2 applied all 6 as the single permitted remediation (the prefer-rule collision resolved by widening the Workhorse cells); the same lead verified all six and closed `accepted-to-implement`. Revision 3 adds emoji by example (owner-authorized expansion); awaiting one fresh review of the added scope.
+Revision 1 reviewed by Grok 4.6 high via ACPX Cursor (workflow mode, four checklists complete): `targeted-revision`, `revise-first`, 6 accepted findings (1 blocker: incomplete hard-cutover consumer list), 9 rejected. Revision 2 applied all 6 as the single permitted remediation (the prefer-rule collision resolved by widening the Workhorse cells); the same lead verified all six and closed `accepted-to-implement`. Revision 3 added emoji by example (owner-authorized expansion); its fresh review returned `targeted-revision` / `revise-first` with 5 accepted findings (1 blocker: run 10 named four skills). Revision 4 applies all 5: one skill per run, two-home runs reclassified, empty runs dropped, prose pattern set, emoji in the success definition. Awaiting the same lead's anchor verification.
