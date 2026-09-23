@@ -188,7 +188,6 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 | OpenAI Luna   | high     | Exact steps; Local/Cross-domain.        |
 | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.        |
 | OpenAI Sol    | medium   | Complete direction; Local/Cross-domain. |
-| OpenAI Sol    | high     | Partial direction; Cross-domain/Cross-system. |
 | Claude Opus   | low      | Complete direction; Local/Cross-domain. |
 | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
 
@@ -248,16 +247,16 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 
 #### Model choices
 
-| Model lineage | Thinking | Use                 |
-|---------------|----------|---------------------|
-| OpenAI Astra  | high     |                     |
-| OpenAI Astra  | xhigh    | User must authorize |
-| OpenAI Sol    | xhigh    |                     |
-| Claude Opus   | high     |                     |
-| Claude Opus   | xhigh    | User must authorize |
-| Claude Fable  | high     | User must authorize |
+| Model lineage | Thinking |
+|---------------|----------|
+| OpenAI Astra  | high     |
+| OpenAI Astra  | xhigh    |
+| OpenAI Sol    | xhigh    |
+| Claude Opus   | high     |
+| Claude Opus   | xhigh    |
+| Claude Fable  | high     |
 
-Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
+Shravan chooses every Advisor's model and effort from this table; an Advisor request is that authorization. Do not pick one yourself, escalate, or add another Advisor automatically.
 
 ## Execute the assignment
 

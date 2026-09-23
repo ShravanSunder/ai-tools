@@ -27,17 +27,17 @@ An agent loading `manage-agents` chooses model and effort only from the matrix b
 | Role | Default rows | `User must authorize` rows |
 | --- | --- | --- |
 | Main | owner's choice; normally Sol medium/high or Opus low/medium | — (never self-escalated) |
-| Advisor | Opus high, Astra high, Sol xhigh | Opus xhigh, Astra xhigh, Fable high |
+| Advisor | — (the owner chooses every Advisor row) | Opus high, Opus xhigh, Astra high, Astra xhigh, Sol xhigh, Fable high |
 | Review Sidekick | Opus medium, Opus high, Sol high, Astra high, Grok 4.6 high, Grok 4.5 high | Opus xhigh, Astra xhigh, Sol xhigh, Fable high |
 | Implementation / research Sidekick | Sol medium, Sol high, Opus low, Opus medium, Luna high, Luna xhigh, Luna max | — |
-| Worker | Sol medium, Sol high, Opus low, Opus medium, Luna medium, Luna high, Luna xhigh | — |
+| Worker | Sol medium, Opus low, Opus medium, Luna medium, Luna high, Luna xhigh | — |
 | Operator | Luna medium, Luna high | — |
 
 Model Categories table: Mini = Luna medium/high/xhigh/max; Balanced = Sol medium/high, Opus low/medium, Grok medium/high; Frontier = Opus high, Astra high, Sol xhigh (unmarked; role tables decide), plus the `User must authorize` rows. Claude-native only (only in `native-providers-claude.md`): Haiku for Operators, Sonnet for Workers.
 
 Grok versions: `SKILL.md` keeps unversioned `xAI Grok | high` rows (per #89's no-version-numbers rule); the 4.6 / 4.5 high ids live only in the Cursor catalog examples.
 
-Task signals: the Worker and Sidekick tables keep their Task-signals column; every added row maps to an existing sibling, no new scheme. Worker: Luna medium/high/xhigh -> "Exact steps; Local/Cross-domain."; Sol medium and Opus low -> "Complete direction; Local/Cross-domain."; Sol high and Opus medium -> "Partial direction; Cross-domain/Cross-system." Sidekick: Luna high/xhigh/max -> "Exact steps; Local/Cross-domain." (owner post-review correction 2026-09-23: same span as Worker); Sol medium and Opus low -> "Complete direction; Local/Cross-domain."; Sol high and Opus medium -> "Partial direction; Cross-domain/Cross-system." The Operator table has no signal column and gains Luna high.
+Task signals: the Worker and Sidekick tables keep their Task-signals column; every added row maps to an existing sibling, no new scheme. Worker: Luna medium/high/xhigh -> "Exact steps; Local/Cross-domain."; Sol medium and Opus low -> "Complete direction; Local/Cross-domain."; Opus medium -> "Partial direction; Cross-domain/Cross-system." (owner removed Worker Sol high, 2026-09-23). Sidekick: Luna high/xhigh/max -> "Exact steps; Local/Cross-domain." (owner post-review correction 2026-09-23: same span as Worker); Sol medium and Opus low -> "Complete direction; Local/Cross-domain."; Sol high and Opus medium -> "Partial direction; Cross-domain/Cross-system." The Operator table has no signal column and gains Luna high.
 
 Retired: Sol low, Fable medium, Astra medium/low, Terra, all GPT-5.x.
 
@@ -46,12 +46,13 @@ Retired: Sol low, Fable medium, Astra medium/low, Terra, all GPT-5.x.
 | Decision | Rationale |
 | --- | --- |
 | Main model is the owner's choice; skills never escalate it | Owner: "it's up to me"; daily drivers are far ahead and pleasant to talk to. |
-| Frontier defaults exist only for Advisor and Review | Owner: "only the frontier for advisors"; reviewers named explicitly. |
-| Opus medium moves Frontier -> Balanced; Opus high moves `User must authorize` -> default for Advisor/Review | Owner reversed #90's rows in this conversation. |
+| Frontier is used for Advisors (owner-chosen) and named Review rows only | Owner: "only the frontier for advisors"; reviewers named explicitly. |
+| Opus medium moves Frontier -> Balanced; Opus high moves `User must authorize` -> default Review row and an Advisor option | Owner reversed #90's rows in this conversation. |
 | Sol xhigh is `User must authorize` for Review and a default Advisor row; the category row carries no mark so role tables decide | Owner: "sol xhigh is on request" (Review); later "no authorization required" (Advisor). |
 | Drop Sol low, Fable medium, Review Sol/Grok medium, Advisor Opus medium and Sol high | Not in the owner's lists. |
 | Review keeps Opus medium as a default row | Owner post-review correction (2026-09-23). |
-| Advisor adds Sol xhigh as a default row | Owner post-review correction (2026-09-23): no authorization required for Advisor. |
+| Advisor rows carry no authorization column; the owner chooses every Advisor model, and an Advisor request is that authorization; Sol xhigh is added | Owner post-review corrections (2026-09-23): "all advisors is user". |
+| Worker drops Sol high | Owner post-review correction (2026-09-23); Sidekick keeps Sol high. |
 | Grok review rows are 4.6 high and 4.5 high | Owner reviewer list; Balanced Grok rows unchanged. |
 | Reuse `User must authorize` instead of a new on-request label | Existing mechanism; no new vocabulary. |
 | "Sol is the executor, so Sol writes the spec" becomes model-neutral | Sol medium is now a normal Main choice; the rule is about the executor role. |
