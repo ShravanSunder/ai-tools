@@ -295,7 +295,7 @@ one bounded external question could change feasibility/structure/proof
   -> references/lanes/external-prior-art-platform.md
 ```
 
-Before any optional dispatch, MUST use `manage-agents` to resolve the agent pattern, exact Sol model/reasoning when constrained by the caller, runtime, history, workspace access, permissions, packet, and receipt mechanics.
+Before any optional dispatch, MUST use `manage-agents` to resolve the agent pattern, model and reasoning when constrained by the caller, runtime, history, workspace access, permissions, packet, and receipt mechanics.
 
 IF a predicate holds and delegation is useful, MUST load `references/lanes/lane-schema.md` and return its shared evidence packet and receipt contract. Dispatch the selected lane with the exact assignment, governing source pointers, observed predicate and prerequisites, bounded evidence question and source scope, and any instance constraint that narrows the selected lane reference. The lane reference owns the invariant mission, maximum authority, return, and stop boundary.
 

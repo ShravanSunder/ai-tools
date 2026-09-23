@@ -33,7 +33,7 @@ The assigned implementation Sidekick may carry its delivery assignment through t
 4. IF this run created a PR, or the current body is missing `## Why the change` / `## Special things to note` / `## Change outline`, is a file-list changelog (`- path — note` bullets as the outline), stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite — including after a head/diff identity change and before a ready claim:
    ```text
    IF this run created a PR, or the current body is missing those headings, is a file-list changelog, stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite:
-     dispatch `pr-description` to a Mini Worker (Exact steps, Luna xhigh when native) using this packet:
+     dispatch `pr-description` to a Mini Worker (Exact steps) using this packet:
        pr number or create-intent; base; head SHA; diff identity; existing body;
        related URLs (only those already supplied); never-publish rules from step 2.
      Subagent loads `references/pr-description.md`.

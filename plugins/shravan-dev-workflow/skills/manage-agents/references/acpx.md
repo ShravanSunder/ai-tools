@@ -40,9 +40,9 @@ Resolve one stable `<provider-agent-command>` from the provider contract. It inc
 Review (named session only):
 
 ```bash
-<provider-agent-command> sessions new --name <relationship-name>
+<provider-agent-command> sessions new --name "🔎 Review Sidekick · <purpose>"
 
-<provider-agent-command> -s <relationship-name> \
+<provider-agent-command> -s "🔎 Review Sidekick · <purpose>" \
   --file tmp/agent-packet.md
 ```
 

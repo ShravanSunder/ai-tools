@@ -11,9 +11,9 @@ import type {
 } from "../../scenario-cases/scenario-case-types.js";
 import type { SkillPressureHarnessOutput } from "../../subject-execution/create-skill-pressure-subject-harness.js";
 import {
-  createAcpxTerraJudgeHarness,
+  createAcpxJudgeHarness,
   DEFAULT_JUDGE_REASONING_CONFIG_ID,
-} from "./terra-judge-harness.js";
+} from "./acpx-judge-harness.js";
 import {
   DEFAULT_JUDGE_MODEL,
   DEFAULT_JUDGE_REASONING_EFFORT,
@@ -44,7 +44,7 @@ const definition = {
 
 describe("Judge defaults", () => {
   test("preserves a bounded malformed response in the judge error", async () => {
-    const judgeHarness = createAcpxTerraJudgeHarness({
+    const judgeHarness = createAcpxJudgeHarness({
       judgeSetup: {
         model: DEFAULT_JUDGE_MODEL,
         reasoningEffort: DEFAULT_JUDGE_REASONING_EFFORT,
@@ -74,7 +74,7 @@ describe("Judge defaults", () => {
   test("preserves judge instructions and cancellation in the ACPX request", async () => {
     const requests: AcpxAgentRunRequest[] = [];
     const controller = new AbortController();
-    const judgeHarness = createAcpxTerraJudgeHarness({
+    const judgeHarness = createAcpxJudgeHarness({
       judgeSetup: {
         model: DEFAULT_JUDGE_MODEL,
         reasoningEffort: DEFAULT_JUDGE_REASONING_EFFORT,

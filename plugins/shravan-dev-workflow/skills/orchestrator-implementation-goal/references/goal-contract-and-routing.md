@@ -2,7 +2,7 @@
 
 This reference owns current-source orientation, planning and implementation admission, meaningful result verification, bounded recovery, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
-Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the main-authored canonical plan and PR assignments, implementation proof, main-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation Sidekicks, persistent review Sidekick when commissioned, executors when assigned, and known blockers.
+Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the main-authored canonical plan and PR assignments, implementation proof, main-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation Sidekicks, persistent Review Sidekick when commissioned, executors when assigned, and known blockers.
 
 Return: a concise orientation containing the objective, scope, current basis, requested terminal, evidence freshness, next owner or exact stop, and the continuation checkpoint and whole-work completion decision.
 
@@ -19,7 +19,7 @@ current plan, proof, and review evidence:
 known remediation and recovery history:
 authority and blockers:
 trail: <coordination root plus execution roots, or unshared checkpoint path> / whole-work responsibility | contribution
-responsibility: orchestrator and coordination/integration / planned PR assignment -> persistent implementer and execution root / review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>
+responsibility: orchestrator and coordination/integration / planned PR assignment -> persistent implementer and execution root / Review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>
 next owner or stop:
 ```
 
@@ -41,7 +41,7 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning and remains the default user conversation throughout delivery. After a ready plan, persistent implementation Sidekicks execute implementation, associated proof, and corrections directly by default in their planned PR assignments. The user may explicitly choose direct contact with an assigned Sidekick inside its scope; a ready plan alone does not choose that branch. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator. Main does not relay every internal progress turn or poll merely to keep the conversation active, and returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
 
-Under `manage-agents`, a Sidekick may select a bounded native Worker for independent work, needed expertise, or large disposable output whose expected benefit exceeds briefing, coordination, and verification cost, and may select a native Operator for a standalone prescribed procedure. Coupled implementation/proof stays with its executor and no relay-only supervisor is introduced. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
+Under `manage-agents`, a Sidekick may select a bounded native Worker for independent work, needed expertise, or large disposable output whose expected benefit exceeds briefing, coordination, and verification cost, and may select a native Operator for a standalone prescribed procedure. Coupled implementation/proof stays with its executor and no relay-only supervisor is introduced. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the Review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
 
 The source-phase workflow follows this order:
 
@@ -75,7 +75,7 @@ orchestrator assessment complete
   -> skills-creation implementation review for a composed runtime skill package
 
 accepted implementation finding; remediation count below three
-  -> implement-plan by the same implementer, fresh affected proof, then the same review Sidekick
+  -> implement-plan by the same implementer, fresh affected proof, then the same Review Sidekick
 
 accepted specification, design, or plan finding
   -> exact semantic owner, then resume the open implementation goal
@@ -93,7 +93,7 @@ A request for one direct phase bypasses this orchestrator. Optional `ops-*` trac
 
 ## Verify, Correct, and Recover
 
-After every owner returns, the orchestrator inspects the source anchors that control the next decision. The review Sidekick supplies its review result after detailed source reading and lane reduction. The orchestrator checks findings against cited evidence, records why rejected findings are invalid, and routes accepted findings to their actual owner. Contextual design feedback does not replace independent review.
+After every owner returns, the orchestrator inspects the source anchors that control the next decision. The Review Sidekick supplies its review result after detailed source reading and lane reduction. The orchestrator checks findings against cited evidence, records why rejected findings are invalid, and routes accepted findings to their actual owner. Contextual design feedback does not replace independent review.
 
 Normal implementation review permits at most three accepted remediation passes. After each accepted implementation correction, require fresh affected proof and fresh review coverage. Design or planning corrections follow their owners' review boundaries and do not become implementation-remediation passes.
 

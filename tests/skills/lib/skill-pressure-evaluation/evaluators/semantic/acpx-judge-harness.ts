@@ -5,7 +5,7 @@ import type { AcpxCodexAgentSetup } from "../../runtime-configuration/skill-pres
 
 export const DEFAULT_JUDGE_REASONING_CONFIG_ID = "reasoning_effort";
 
-export function createAcpxTerraJudgeHarness(props: {
+export function createAcpxJudgeHarness(props: {
   readonly judgeRunner: AcpxAgentRunner;
   readonly judgeSetup: AcpxCodexAgentSetup;
 }): JudgeHarness {

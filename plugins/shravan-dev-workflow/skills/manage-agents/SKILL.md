@@ -52,25 +52,25 @@ Architectural span does not measure task size or permission; every assignment re
 | Balanced       | Execution or synthesis that needs judgment.    |
 | Frontier       | Demanding judgment, design, or review.         |
 
-Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here. Do not pick a `User must authorize` row unless Shravan explicitly authorizes that lineage and thinking.
+Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here. Do not pick a row marked `User must authorize` in this table or the role table unless Shravan explicitly authorizes that lineage and thinking; an empty category Use cell means the role table decides. Advisor models are outside this mark: Shravan names every Advisor row, and the request is the authorization.
 
 | Model category | Model lineage | Thinking | Use                 |
 |----------------|---------------|----------|---------------------|
 | Mini           | OpenAI Luna   | medium   |                     |
 | Mini           | OpenAI Luna   | high     |                     |
 | Mini           | OpenAI Luna   | xhigh    |                     |
-| Balanced       | OpenAI Sol    | low      |                     |
+| Mini           | OpenAI Luna   | max      |                     |
 | Balanced       | OpenAI Sol    | medium   |                     |
 | Balanced       | OpenAI Sol    | high     |                     |
-| Balanced       | OpenAI Sol    | xhigh    |                     |
 | Balanced       | Claude Opus   | low      |                     |
+| Balanced       | Claude Opus   | medium   |                     |
 | Balanced       | xAI Grok      | medium   |                     |
 | Balanced       | xAI Grok      | high     |                     |
-| Frontier       | Claude Opus   | medium   |                     |
+| Frontier       | Claude Opus   | high     |                     |
 | Frontier       | OpenAI Astra  | high     |                     |
+| Frontier       | OpenAI Sol    | xhigh    |                     |
+| Frontier       | Claude Opus   | xhigh    | User must authorize |
 | Frontier       | OpenAI Astra  | xhigh    | User must authorize |
-| Frontier       | Claude Opus   | high     | User must authorize |
-| Frontier       | Claude Fable  | medium   | User must authorize |
 | Frontier       | Claude Fable  | high     | User must authorize |
 
 An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
@@ -91,7 +91,7 @@ Router owns the seat schema and enforcement. A direct conversation, native child
 
 | Family | Models or harness                                 |
 |--------|---------------------------------------------------|
-| OpenAI | Astra, Sol, Terra, and Luna.                      |
+| OpenAI | Astra, Sol, and Luna.                             |
 | Claude | Fable and Opus.                                   |
 | xAI    | Grok.                                             |
 | Cursor | A harness and multi-model catalog, not a lineage. |
@@ -112,7 +112,7 @@ Every non-main agent thread title starts with the emoji for its role in the Agen
 
 ## Main flow
 
-The user works with one user-facing orchestrator, which may be Frontier or Balanced and retains design authority plus all governing Requirements, Specification, Program Design, diagram, and implementation-plan authorship. The orchestrator loads the owning design and planning skills and writes those artifacts in its session. Workers, Operators, search, and tools may return bounded evidence or mechanically render unchanged main-authored input; they do not choose, organize, rewrite, or express governing design or plan content. For generated visuals, the main authors the reader question, exact labels and relationships, semantic composition and invariants, then inspects and accepts or corrects the candidate. A tool or helper may realize pixels, typography, spacing and style or run a prescribed generate/copy/preview procedure on that unchanged brief; it cannot choose semantic layout, revise the brief, accept the visual, or make the image the governing design. An explicitly user-designated successor main is the only portability exception: its packet names the recipient, the transferred design or plan scope, and the user's authorizing direction. A role label, handoff, board seat, or assistant continuation does not create that authority.
+The owner chooses the user-facing orchestrator's model, normally Sol medium or high or Opus low or medium. Agents do not escalate the Main model. The orchestrator retains design authority plus all governing Requirements, Specification, Program Design, diagram, and implementation-plan authorship. The orchestrator loads the owning design and planning skills and writes those artifacts in its session. Workers, Operators, search, and tools may return bounded evidence or mechanically render unchanged main-authored input; they do not choose, organize, rewrite, or express governing design or plan content. For generated visuals, the main authors the reader question, exact labels and relationships, semantic composition and invariants, then inspects and accepts or corrects the candidate. A tool or helper may realize pixels, typography, spacing and style or run a prescribed generate/copy/preview procedure on that unchanged brief; it cannot choose semantic layout, revise the brief, accept the visual, or make the image the governing design. An explicitly user-designated successor main is the only portability exception: its packet names the recipient, the transferred design or plan scope, and the user's authorizing direction. A role label, handoff, board seat, or assistant continuation does not create that authority.
 
 After a main-authored plan is ready, one persistent implementation Sidekick may own each useful planned PR assignment while Main remains the default user conversation throughout delivery. The user may explicitly choose direct contact with the assigned Sidekick inside that assignment. In either conversation branch, the Sidekick implements, integrates, proves, and corrects its scope directly by default. It returns material design or plan decisions, cross-assignment integration conflicts, permission boundaries, and completion evidence to the orchestrator with the exact question or concise source-backed receipt; Main does not relay every internal progress turn or poll merely to keep the conversation active. Direct user contact does not transfer governing authorship: Main still writes Requirements, Specification, Program Design, diagrams, and the implementation plan, and retains material decisions, integration, assessment, acceptance, and the final report. Returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
 
@@ -121,7 +121,7 @@ Several independent PR assignments may use several Sidekicks; dependent work wai
 | rationalization | reality |
 | --- | --- |
 | "spec-design owns artifacts, so spawn a Sidekick" | those skills own judgment; the orchestrator loads them and writes |
-| "Sol is the executor, so Sol writes the spec" | executor is implementation, research, or review support, not design author |
+| "the executor writes the spec" | executor is implementation, research, or review support, not design author |
 | "the design is settled, so a Worker can word the section" | section organization and expression are governing authorship; helpers return evidence only |
 | "the implementer already has context, so it can finish the plan" | the implementer returns the planning gap to the main, which loads the planning skill and authors the plan |
 | "I'll check the instructions first" | "you write it" is already the instruction |
@@ -141,7 +141,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Sol low remains eligible for matching assignments, and a suitable existing Sol low relationship continues rather than switching for an unrelated default. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
+Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Claude uses appropriate Opus effort and Cursor appropriate Grok effort. Prefer total completion cost, including rework, proof, and coordination.
 
 ### Commission an implementation Sidekick
 
@@ -171,6 +171,7 @@ Bright line: standalone assigned Git, test, build, PR, and watch procedures belo
 | Model lineage | Thinking |
 |---------------|----------|
 | OpenAI Luna   | medium   |
+| OpenAI Luna   | high     |
 
 ### 🛠️ Worker
 Use for one clear bounded assignment. You manage and validate the work; continue the same worker through corrections belonging to that assignment.
@@ -183,10 +184,12 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 | Model lineage | Thinking | Task signals                            |
 |---------------|----------|-----------------------------------------|
+| OpenAI Luna   | medium   | Exact steps; Local/Cross-domain.        |
 | OpenAI Luna   | high     | Exact steps; Local/Cross-domain.        |
 | OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.        |
-| OpenAI Sol    | low      | Complete direction; Local/Cross-domain. |
+| OpenAI Sol    | medium   | Complete direction; Local/Cross-domain. |
 | Claude Opus   | low      | Complete direction; Local/Cross-domain. |
+| Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
 
 Use this table for execution and research Workers. A read-only review lane Worker uses the Review Sidekick catalog below.
 
@@ -201,10 +204,11 @@ Use a Sidekick in a separate persistent top-level conversation for implementatio
 
 | Model lineage | Thinking | Task signals                                  |
 |---------------|----------|-----------------------------------------------|
-| OpenAI Luna   | high     | Exact steps; Local.                           |
-| OpenAI Luna   | xhigh    | Exact steps; Local.                           |
-| OpenAI Sol    | low      | Complete direction; Local/Cross-domain.       |
-| OpenAI Sol    | medium   | Partial direction; Cross-domain/Cross-system. |
+| OpenAI Luna   | high     | Exact steps; Local/Cross-domain.              |
+| OpenAI Luna   | xhigh    | Exact steps; Local/Cross-domain.              |
+| OpenAI Luna   | max      | Exact steps; Local/Cross-domain.              |
+| OpenAI Sol    | medium   | Complete direction; Local/Cross-domain.       |
+| OpenAI Sol    | high     | Partial direction; Cross-domain/Cross-system. |
 | Claude Opus   | low      | Complete direction; Local/Cross-domain.       |
 | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
 
@@ -217,19 +221,17 @@ Use a separate persistent top-level thread for independent review or correction 
 
 #### Model choices
 
-| Model lineage | Thinking |
-|---------------|----------|
-| OpenAI Sol    | medium   |
-| OpenAI Sol    | high     |
-| OpenAI Sol    | xhigh    |
-| OpenAI Astra  | high     |
-| OpenAI Astra  | xhigh    |
-| Claude Opus   | medium   |
-| Claude Opus   | high     |
-| Claude Fable  | medium   |
-| Claude Fable  | high     |
-| xAI Grok      | medium   |
-| xAI Grok      | high     |
+| Model lineage | Thinking | Use                 |
+|---------------|----------|---------------------|
+| OpenAI Sol    | high     |                     |
+| OpenAI Sol    | xhigh    | User must authorize |
+| OpenAI Astra  | high     |                     |
+| OpenAI Astra  | xhigh    | User must authorize |
+| Claude Opus   | medium   |                     |
+| Claude Opus   | high     |                     |
+| Claude Opus   | xhigh    | User must authorize |
+| Claude Fable  | high     | User must authorize |
+| xAI Grok      | high     |                     |
 
 - **Selection:** Establish author lineage from evidence. A final review includes at least one Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
 - **Continuity and evidence:** A continuing Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
@@ -249,13 +251,12 @@ Use an Advisor only when Shravan explicitly requests a separate persistent guida
 |---------------|----------|
 | OpenAI Astra  | high     |
 | OpenAI Astra  | xhigh    |
-| Claude Opus   | medium   |
-| Claude Opus   | high     |
-| Claude Fable  | high     |
-| OpenAI Sol    | high     |
 | OpenAI Sol    | xhigh    |
+| Claude Opus   | high     |
+| Claude Opus   | xhigh    |
+| Claude Fable  | high     |
 
-Use the model and effort chosen by the user; do not escalate or add another Advisor automatically.
+Shravan chooses every Advisor's model and effort from this table; an Advisor request is that authorization. Do not pick one yourself, escalate, or add another Advisor automatically.
 
 ## Execute the assignment
 

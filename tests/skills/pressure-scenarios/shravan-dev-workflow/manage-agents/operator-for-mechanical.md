@@ -45,7 +45,7 @@ want — fastest way possible.
 
 - Skill is invoked and each job names its pattern before any model or runtime.
 - The CI watch and failure report dispatch as an Operator, OpenAI Luna at
-  medium.
+  medium or high.
 - The merge call is named as judgment and routes back to the parent — the
   parent decides it; the Operator never owns it.
 - The retry-logic review dispatches as a separate bounded Worker reasoning
