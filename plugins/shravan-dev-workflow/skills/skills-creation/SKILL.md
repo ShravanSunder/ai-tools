@@ -13,7 +13,7 @@ Predictable means the same process, not the same output. A brainstorming skill s
 
 Work on exactly one named skill or accepted draft per run. Portfolio inventory, duplicate-surface archaeology, and "which skills should exist" belong to `skill-audit`.
 
-The user-facing main authors every governing skill-change proposal, specification, and implementation plan. A persistent implementation Sidekick may execute one accepted named run or slice at a time and produce its proof; that commission does not transfer design or planning authorship. Research helpers return evidence, and independent reviewers return findings. Only an explicit user-designated successor-main transfer may move governing authorship under the `manage-agents` contract.
+The user-facing main authors every governing skill-change proposal, specification, and implementation plan. A persistent implementation 🐒 Sidekick may execute one accepted named run or slice at a time and produce its proof; that commission does not transfer design or planning authorship. Research helpers return evidence, and independent reviewers return findings. Only an explicit user-designated successor-main transfer may move governing authorship under the `manage-agents` contract.
 
 ## Great Skill Frame
 
@@ -44,17 +44,15 @@ They are not exclusive: a description adds agent reach without removing the huma
 
 Placement answers one question: who reads this, and when? The answer picks the call form.
 
-| home                        | read by    | when                            |
-| --------------------------- | ---------- | ------------------------------- |
-| `SKILL.md`                  | this agent | every run, always in context    |
-| `MUST load` reference       | this agent | every run, on reaching the call |
-| `IF ..., load` reference    | this agent | only when the predicate holds   |
-| `MUST dispatch` lane        | a subagent | every run, on reaching the call |
-| `IF ..., dispatch` lane     | a subagent | only when the predicate holds   |
+| home | read by | when |
+| --- | --- | --- |
+| `SKILL.md` | this agent | every run |
+| `MUST load` reference | this agent | on reaching the call |
+| `IF ..., load` reference | this agent | when the predicate holds |
+| `MUST dispatch` procedure | 🔧 Operator | on reaching the call |
+| `IF ..., dispatch` procedure | 🔧 Operator | when the predicate holds |
 
-The `read by` column decides `load` or `dispatch`; the `when` column decides `MUST` or `IF`. A lane is bounded work dispatched to a subagent; its lane reference is the file the subagent loads to perform that work.
-
-Handing a lane over takes more than a path. The Lane handoff form below carries the full set, and `references/reference-lanes-design.md` owns the contract underneath it. One invariant belongs at the call site because that is where it gets violated: a caller may narrow the lane reference's maximum authority, never widen it.
+The review and research source classes are steps the current agent loads and performs. Dispatch is only for a prescribed 🔧 Operator procedure: a command, watch, or mechanical transform with an observed result. Commissioning a persistent 🐒 Sidekick or 🔎 Review Sidekick follows `manage-agents`, outside this Call Grammar. A judgment check is never an 🔧 Operator procedure, even when it could be described as independent.
 
 ### Call Grammar
 
@@ -68,14 +66,12 @@ Reference
 ```
 
 ```text
-Lane handoff
-  MUST dispatch `<lane>` to a subagent using `<packet>`.
-  IF `<predicate>`, dispatch `<lane>` to a subagent using `<packet>`.
-  Subagent loads `<lane-reference>`.
-  Parallel-safe after `<prerequisites>`; actual scheduling may serialize.
-  Instance authority is equal to or narrower than `<lane-reference maximum>`.
-  Return `<complete | partial | blocked receipt>`; parent verifies and reduces it.
+🔧 Operator procedure
+  MUST dispatch `<procedure>` to a 🔧 Operator using `<prescribed steps>`; return `<observed result>`.
+  IF `<predicate>`, dispatch `<procedure>` to a 🔧 Operator using `<prescribed steps>`; return `<observed result>`.
 ```
+
+The caller names the exact procedure, allowed commands or transformation, execution boundary, and result to return. The 🔧 Operator reports observations and exceptions; the calling agent judges them. A known check skipped under pressure cannot become a lane because it is independent. Load its reference and perform it as a step.
 
 ### Progressive Disclosure
 
@@ -124,36 +120,29 @@ Include every applicable element below. Choose headings and a format that fit th
 - **Completion checks:** each meaningful step or reference pass says what must be true before continuing.
 - **Always-needed steering and invariants:** keep rules every run needs inline and near the decision they govern.
 - **Reference calls:** name the load mode, exact destination, and concrete result the main path consumes, plus the requested work where the result alone does not say what to do there.
-- **Lane dispatch, when handed to a subagent:** fill every slot of the Lane handoff form in the Call Grammar above.
+- **🔧 Operator dispatch, for a prescribed procedure:** fill the procedure form in the Call Grammar above.
 - **Overall completion boundary:** name the proof, unresolved conditions, or blockers that prevent a done claim.
 
-Reference calls and lane dispatches use the Call Grammar above; placement follows Progressive Disclosure above.
+Reference loads and 🔧 Operator procedures use the Call Grammar above; placement follows Progressive Disclosure above.
 
 ## Review
 
-Behavior-changing work is reviewed twice unless the user explicitly skips the applicable review: the proposal before any skill file is edited, and the proved, main-assessed changed files before ship. A persistent independent review lead verifies and reduces lane findings; the orchestrator owns final disposition. Mechanical changes are not reviewed.
+Behavior-changing work is reviewed twice unless the user explicitly skips the applicable review: the proposal before skill edits, and proved, main-assessed changed files before ship. A persistent independent 🔎 Review Sidekick walks ordered checks in its own session and reduces findings. The orchestrator owns final disposition. Mechanical changes are not reviewed.
 
-These stages have separate bounded-remediation rules:
+Proposal review allows one independent review and one bounded remediation; the same lead verifies corrected anchors. Implementation review allows up to three remediation passes. A missing, `partial`, or `blocked` check prevents a clean result. Keep status in current run context.
 
-- **Proposal/design review:** one independent review and at most one remediation. Reject pedantic or non-semantic findings with source evidence and continue. A correction inside the settled model may use the remediation; a mental-model break stops at its owner. The same review lead verifies corrected anchors against the original findings and closes without redispatch. Another proposal/design review requires explicit user permission.
-- **Implementation review:** repeat review only while fewer than three remediation passes have completed. End early on `great`; after remediation three, stop before review or remediation four unless the user explicitly authorizes continuation.
-
-Reviewer lanes inside one invocation do not count as additional loops. Missing receipts do not reset either boundary. Keep receipts in current run context; never add persistent counters, ledgers, hashes, or lifecycle fields.
-
-Each stage owns its own lane selection: `references/review/spec-review.md` for a proposal, `references/review/implementation-review.md` for changed or existing files. A scoped change keeps both stages but uses each stage's scoped form. Stages that select lanes dispatch under `references/review/review-lane-workflow.md` and use the shared shapes in `references/review/lanes/lane-schema.md`.
-
-Collect every receipt explicitly and ask a lane that goes quiet; silence is never a clean review. `manage-agents` selects the different-lineage persistent review lead. Its native lane Workers use the Review catalog and remain inside that lead's bounded workflow.
+`references/review/spec-review.md` owns proposal checks; `references/review/implementation-review.md` owns changed or existing file checks. Each uses `references/review/lanes/lane-schema.md` for status and reduction. A scoped change keeps both stages and uses each stage's scoped check set.
 
 ## Report the Run Without Empty Bookkeeping
 
-Return a run summary whenever the run evaluates or edits a skill, dispatches review, or runs proof. Omit branches that did not run instead of filling them with `n/a`. Chat-only discussion and a read-only accepted-spec verification or expiry stop need no summary unless they also evaluate, edit, review, or prove something.
+Return a run summary whenever the run evaluates or edits a skill, commissions review, or runs proof. Omit branches that did not run instead of filling them with `n/a`. Chat-only discussion and a read-only accepted-spec verification or expiry stop need no summary unless they also evaluate, edit, review, or prove something.
 
 ```text
 target: <owner plugin / skill>
 classification: create | update | evaluate
 outcome: <what changed, verdict, or blocker>
 success and basis: <success definition; observed failure | user-directed intent>  # create/update only
-review: <lanes and complete | partial | blocked results>                     # only if review ran
+review: <selected checks and complete | partial | blocked results>                     # only if review ran
 proof: <route, evidence, and remaining gap>                                  # only if proof ran
 security: <allowed | disallowed | blocked | deferred>                        # only if a sensitive surface was routed
 deviations: <accepted-spec boundary or reviewer-runtime deviation>           # only if one occurred
@@ -174,15 +163,15 @@ Classify the run; search the owning plugin for an existing skill or reference th
 
 ### 2. Choose the authoring basis and proof posture
 
-IF the work the skill teaches lives in someone's head and is not yet understood, use `discuss-pathfinding` and return its records and confirmed restatement. IF it lives in artifacts the run has not read, use `research-swarm` and return its evidence-ledger summary and coverage. `Build the main path`, `Place the depth`, and `Implement` consume these returns.
+IF the work the skill teaches lives in someone's head and is not yet understood, use `discuss-pathfinding` and return its records and confirmed restatement. IF it lives in artifacts the run has not read, use `research-workflow` and return its evidence-ledger summary and coverage. `Build the main path`, `Place the depth`, and `Implement` consume these returns.
 
 Then classify the change, and classify why you are making it.
 
 | change class        | qualifies when                                                                                                                                                                                                                      | consequence                                              |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `mechanical`        | typos, formatting, version-only, or metadata-only edits with no behavior claim                                                                                                                                                       | static-only; skips both reviews                           |
-| `behavior-changing` | the diff alters trigger or invocation, mental model, main path, reference/lane/schema allocation, steering, completion, proof, security, or platform contract                                                                        | both review stages plus the proof posture below           |
-| `scoped` (behavior-changing) | behavior-changing, and the entire diff is wording inside one owned home — `SKILL.md` prose or a single reference — touching no trigger, call site, branch predicate, lane, schema, label set, security surface, or ownership boundary | each review stage narrows to its scoped form; proof rules unchanged |
+| `behavior-changing` | the diff alters trigger or invocation, mental model, main path, reference/check/schema allocation, steering, completion, proof, security, or platform contract                                                                        | both review stages plus the proof posture below           |
+| `scoped` (behavior-changing) | behavior-changing, and the entire diff is wording inside one owned home — `SKILL.md` prose or a single reference — touching no trigger, call site, branch predicate, check selection, schema, label set, security surface, or ownership boundary | each review stage narrows to its scoped form; proof rules unchanged |
 
 Every classification is a claim the next reader can check, and this session makes the call about its own work: `mechanical` names the surfaces the change touches and shows none is in the behavior-changing row; `behavior-changing` names which listed surface the diff alters; `scoped` names its one home and shows each excluded surface is untouched. Edits to `SKILL.md` prose, a reference's rules, or the description are behavior-changing whatever their size — small is not a surface.
 
@@ -193,7 +182,7 @@ Behavior-changing work is either `observed failure` or `user-directed intent`.
 
 Never manufacture RED, and never let a passing control automatically forbid authoring. "I already know the wording problem" is not a skip.
 
-Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: the records and confirmed restatement when `discuss-pathfinding` ran, the evidence-ledger summary and coverage when `research-swarm` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
+Completion: authoring basis, reproduction result when applicable, user decision, and strongest honest proof posture are explicit — and each sourcing return that ran exists: the records and confirmed restatement when `discuss-pathfinding` ran, the evidence-ledger summary and coverage when `research-workflow` ran. A `mechanical` classification names the surfaces it touched; a `scoped` classification names its one home and shows each excluded surface is untouched.
 
 ### 3. Design the trigger
 
@@ -215,7 +204,7 @@ Add a branch only when an observable condition changes the work; a topic being i
 
 #### The call sites
 
-Write every call site here, in the literal grammar above. A `load` site names its mode, path, and needed result, plus the requested work where the result alone does not say what to do there. A `dispatch` site either fills every slot of the Lane handoff form inline, or cites a named dispatch contract — in `SKILL.md` or in a reference the body names — that fills them for a set of lanes. Prefer the shared contract when several sites dispatch under the same terms; repeating six fields at every site is the duplication this skill exists to prevent.
+Write every call site here, in the literal grammar above. A `load` site names its mode, path, and needed result, plus the requested work where the result alone does not say what to do there. A `dispatch` site names a prescribed 🔧 Operator procedure, its steps and boundary, and the observed result. Review checks and research source classes use `load` sites.
 
 #### The wording
 
@@ -235,15 +224,15 @@ Strengthen predicates, returns, and completion criteria when the agent would gue
 
 IF this step writes human sentences in the proposal, load `../../shared-references/humanizer.md` in file mode and return those sentences rewritten. Leave the YAML description, call-site grammar, and label sets unchanged.
 
-Completion: the mental model is stated before details or exceptions; one all-run spine is visible in one scan and handles every branch the description promises; every branch changes the work and returns something the main path can use; every call site is complete under the grammar or a named dispatch contract; and wording changes cite the failure or success gap they address without overstating its evidence source.
+Completion: the mental model is stated before details or exceptions; one all-run spine is visible in one scan and handles every branch the description promises; every branch changes the work and returns something the main path can use; every call site is complete under the grammar; and wording changes cite the failure or success gap they address without overstating its evidence source.
 
 ### 5. Place the depth
 
-Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. Depth must teach: a reference owning a promised stage carries what to inspect, what good and bad look like, and when to stop — written from the step-2 sourcing records or a named source; a reference that only pins output shape (schemas, label sets, packet forms) is ceremony, justified by a named consumer and never a stage's owner. IF the work is parallel-safe and handoff-ready, or several consumers need one stable output shape, or a tool validates the structure, load `references/reference-lanes-design.md` and return which of lane qualification, output shape, or tool shape applies, with its contract. Completion: nothing sits in two homes, every reference exists because a named call site asked for it, every promised stage names its teaching owner — an inline body section or a teaching reference — and advanced shape guidance remains discoverable even when no lane exists.
+Keep all-run obligations, decisions, invariants, required returns, and completion in the body while allowing coherent detailed procedure to have its own owner. MUST load `references/reference-design.md` and return the placement decision plus the ordinary caller/callee contract. Depth must teach: a reference owning a promised stage carries what to inspect, what good and bad look like, and when to stop — written from the step-2 sourcing records or a named source; a reference that only pins output shape (schemas, label sets, packet forms) is ceremony, justified by a named consumer and never a stage's owner. IF several consumers need one stable output shape or a tool validates the structure, load `references/reference-lanes-design.md` and return the output or tool shape owner and its consumers. Completion: nothing sits in two homes, every reference exists because a named call site asked for it, every promised stage names its teaching owner — an inline body section or a teaching reference — and advanced shape guidance remains discoverable.
 
 ### 6. Review the spec
 
-IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, the orchestrator commissions a different-lineage persistent Review Sidekick with no author context. That lead loads `references/review/spec-review.md`; IF the change is scoped, it judges the proposal inline without lanes, otherwise it dispatches fresh native lane Workers. It returns every receipt, verdict, blocker override, and implementation decision. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction. On correction, resume the same lead with its own review history; it verifies corrected anchors and closes without redispatch. A prior accepted proposal is reused only when its original review plus permitted remediation still covers current meaning. Expanded or uncertain semantic change stops `review-permission-required` instead of automatically dispatching another proposal review. Completion: proposal review is ready, its accepted bounded findings have one complete review-lead-verified remediation, or review was explicitly skipped/not applicable; a second review requires explicit user permission.
+IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, the orchestrator commissions a different-lineage persistent 🔎 Review Sidekick with no author context. That lead loads `references/review/spec-review.md`, walks the selected checks in its own session and returns per-check statuses, verdict, blocker override, and implementation decision. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction. On correction, resume the same lead with its own review history; it verifies corrected anchors and closes without another review. A prior accepted proposal is reused only when its original review plus permitted remediation still covers current meaning. Expanded or uncertain semantic change stops `review-permission-required` instead of automatically dispatching another proposal review. Completion: proposal review is ready, its accepted bounded findings have one complete review-lead-verified remediation, or review was explicitly skipped/not applicable; a second review requires explicit user permission.
 
 ### 7. Implement
 
@@ -274,9 +263,9 @@ Completion: the main records `accepted-for-independent-review | correction-requi
 
 ### 10. Review the implementation, prune, and ship
 
-IF the main assessment is `accepted-for-independent-review`, the change is behavior-changing, and the user has not said no review is needed, the orchestrator commissions a different-lineage persistent Review Sidekick with no author context. That lead loads `references/review/implementation-review.md`, receives the current proof and main-assessment result, selects and dispatches its fresh native lane Workers, and returns the dispatched lane set, every receipt, Parent Reduction, and current remediation-pass evidence. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction.
+IF the main assessment is `accepted-for-independent-review`, the change is behavior-changing, and the user has not said no review is needed, the orchestrator commissions a different-lineage persistent 🔎 Review Sidekick with no author context. That lead loads `references/review/implementation-review.md`, receives the current proof and main-assessment result, walks the selected checks in its own session, and returns per-check statuses, Parent Reduction, and current remediation-pass evidence. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction.
 
-Two obligations stay with the executing review lead whatever the lanes return. Synthesis is not a lane's job: the lead verifies each candidate against actual files and proof before accepting it. Accepted findings receive one remediation pass at a time. The implementer makes the correction and produces fresh affected proof; the main reassesses that current result; then the same review lead refreshes affected coverage only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not dispatch review or remediation four without explicit user permission.
+Two obligations stay with the executing review lead as it walks the checks. Synthesis stays with the lead: the lead verifies each candidate against actual files and proof before accepting it. Accepted findings receive one remediation pass at a time. The implementer makes the correction and produces fresh affected proof; the main reassesses that current result; then the same review lead refreshes affected coverage only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not start review or remediation four without explicit user permission.
 
 Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, proof honesty to `Proof of quality, proof of work`, assessment gap to `Main assessment`, and ship surface to this step.
 
@@ -284,7 +273,7 @@ After a `great` current review result, run the deletion test sentence by sentenc
 
 IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route. General product implementation review routes to `implementation-review`; runtime skill-package authoring remains under this `skills-creation` review contract.
 
-Completion: when implementation review ran, every dispatched lane has a terminal receipt, the Parent Reduction is complete, the result is `great`, and no fourth remediation occurred. Mechanical work or an explicit review skip records that applicable boundary without fabricating review coverage. In every route the skill is compact, valid, public-safe, and supported by the proof its classification and shipping claim require; a source-only evaluation never authorizes shipping.
+Completion: when implementation review ran, every required check has `complete` status, the Parent Reduction is complete, the result is `great`, and no fourth remediation occurred. Mechanical work or an explicit review skip records that applicable boundary without fabricating review coverage. In every route the skill is compact, valid, public-safe, and supported by the proof its classification and shipping claim require; a source-only evaluation never authorizes shipping.
 
 ## Completion Blockers
 
@@ -295,8 +284,8 @@ The run is not done while any of these hold:
 - an observed-failure path hides a failed, missing, or inconclusive reproduction result instead of returning the user decision;
 - the workflow has branches without observable predicates or return shapes;
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
-- a dispatch site omits its lane, or omits any of the packet, lane reference, parallel-safety basis, non-widening instance authority, receipt, or review-lead reduction point, without citing the Dispatch Contract in `references/review/review-lane-workflow.md`;
-- review ran outside the Dispatch Contract: the review lead lacks independence from the authoring session, a lane exceeded its native Worker authority, an implementation-stage review receipt was reused after affected text changed, or a proposal-review receipt was reused after text changed outside its one accepted review-lead-verified remediation;
+- a dispatch site is judgment work rather than a prescribed 🔧 Operator procedure, or omits its steps, boundary, or observed result;
+- review lead lacked independence from the authoring session, an implementation check was reused after affected text changed, or proposal coverage was reused after text changed outside its one accepted lead-verified remediation;
 - implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
 - independent implementation review for implemented behavior-changing delivery started before fitting implementation proof and a source-backed main assessment;
 - the main assessment for implemented behavior-changing delivery omitted the current diff, actual proof, accepted need/spec/plan, complexity, ownership, or cross-assignment integration applicable to the change;
@@ -305,9 +294,9 @@ The run is not done while any of these hold:
 - a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;
 - a second proposal/design review ran without explicit user permission after the first review/remediation result;
 - a fourth implementation remediation or its following review ran without explicit user permission;
-- a behavior-changing skill change reached `PR-ready` or `released` without review-lead reduction and synthesis of the review lanes, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
+- a behavior-changing skill change reached `PR-ready` or `released` without review-lead reduction and synthesis of the checks, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - an accepted correction reached refreshed review coverage without fresh affected proof and main reassessment;
-- a dispatched lane was counted as reviewed without a terminal receipt, or a `partial`, `blocked`, or `no-receipt` lane was left open at `PR-ready` or `released` without a recorded review-lead closure;
+- a required check was counted as complete without status, or a `partial` or `blocked` check was left open at `PR-ready` or `released` without a recorded review-lead closure;
 - static validation is claimed as behavior proof;
 - a sensitive surface was written without an allowed/disallowed/blocked/deferred decision recorded before that surface was outlined or written;
 - required platform static validation failed, or was skipped without a stated reason.

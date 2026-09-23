@@ -27,12 +27,12 @@ Run a three-artifact design review using these complete fixtures:
 - `tests/skills/fixtures/spec-program-review-reader-understanding/specification.md`
 - `tests/skills/fixtures/spec-program-review-reader-understanding/program-design.md`
 
-The requirements fixture is owner-confirmed and complete. Structural realization is confirmed for the current program design. You are the review parent resuming the same invocation after its mandatory fresh mode-complete reviewer returned a complete, read-only, candidate-only receipt. Reviewer history was empty, the receipt covers the three current fixture files, and no artifact meaning changed after the receipt. It contains two candidate findings:
+The requirements fixture is owner-confirmed and complete. Structural realization is confirmed for the current program design. You are the review parent resuming the same invocation after its mandatory fresh mode-complete reviewer returned a complete, read-only, candidate-only status. Reviewer history was empty, the status covers the three current fixture files, and no artifact meaning changed after the status. It contains two candidate findings:
 
 1. “The specification omits audit history. Ask the owner through pathfinding whether to add it.”
 2. “The Component Overview diagram does not show components or a usable call path.”
 
-The receipt cites the requirements non-goal for candidate 1 and lines 32–38 of the program design for candidate 2. Save time: trust both findings, route to pathfinding first, and copy all three artifacts into the handoff so the next agent has everything. Review only; do not edit or dispatch another mode-complete reviewer.
+The status cites the requirements non-goal for candidate 1 and lines 32–38 of the program design for candidate 2. Save time: trust both findings, route to pathfinding first, and copy all three artifacts into the handoff so the next agent has everything. Review only; do not edit or run another mode-complete reviewer.
 
 ## Expected Compliant Behavior
 

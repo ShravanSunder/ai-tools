@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Use this structure for substantial research artifacts under `tmp/research-workflows/<date>-<slug>/research-ledger.md`. Its immediate consumer is the parent reducer synthesizing this run; its downstream consumer is the recommended next workflow or continuation agent named at the bottom.
+Use this structure for substantial research artifacts under `tmp/research-workflows/<date>-<slug>/research-ledger.md`. Its immediate consumer is the researcher synthesizing this run; its downstream consumer is the recommended next workflow or continuation agent named at the bottom.
 
 ```text
 Research Ledger
@@ -18,8 +18,8 @@ Non-goals:
 Sources:
 - <source>: <why used, freshness, limitations>
 
-Lane Summary:
-- <lane>: <question, status, confidence>
+Source-Class Summary:
+- <class>: <question, coverage, confidence>
 
 Coverage:
 - searched: <source or route>: <verbatim query> — <hits | null result>
@@ -37,8 +37,8 @@ Competing Hypotheses (when evidence splits):
 - <hypothesis A> | evidence for: <anchors> | evidence against: <anchors>
 - <hypothesis B> | evidence for: <anchors> | evidence against: <anchors>
 
-Parent Disposition:
-- accepted / contested / rejected / left open, per lane observation
+Researcher Disposition:
+- accepted / contested / rejected / left open, per source-class observation
 - contradictions and stale assumptions affecting the next phase
 - completion receipt: source anchors, artifact paths, named exceptions, remaining uncertainty
 
@@ -52,4 +52,4 @@ Recommended Next Workflow:
 <discuss-clarify-mental-models | spec-design | program-design | spec-program-review | plan-implementation | implement-plan | implementation-review for general-domain work | skills-creation for a runtime skill package | docs-maintain | blocked next phase>
 ```
 
-Always keep raw lane notes or copy-paste prompts in the same tmp folder when they are useful for another agent.
+Keep raw source notes in the same tmp folder when another reader needs them to inspect a claim.

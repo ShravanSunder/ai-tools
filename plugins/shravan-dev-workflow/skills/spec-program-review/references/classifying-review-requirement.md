@@ -29,7 +29,7 @@ decision branch: forced | matched-risk | non-substantial | semantic-fallback
 matched predicate / non-substantial basis / remaining semantic effect
 caller requirement
 semantic-change record: changed anchors, meaning changed yes/no/uncertain,
-affected mode and focused-lane predicates, evidence, and reused coverage
+affected mode and focused-check predicates, evidence, and reused coverage
 ```
 
 or:

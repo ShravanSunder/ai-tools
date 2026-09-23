@@ -1,16 +1,15 @@
 # Skill Review Lane Schema
 
-The shared field shapes every `references/review/lanes/*.md` review lane uses. This file owns field names, required slots, ordering, allowed values, and field semantics only.
+The shared field shapes every review check uses. This file owns field names, required slots, allowed values, and field semantics only.
 
-Its review contracts are: status and verdict labels, the review packet, each lane's receipt, each lane finding, and the parent's reduction. Review-stage and lane references own the behavior that produces and consumes these shapes.
+Its review contracts are status and verdict labels, per-check results, findings, and 🔎 Review Sidekick reduction. The stage and check references own behavior.
 
 ## Status Labels
 
 ```text
-complete    every required item was opened and inspected, and the lane's stop condition is met
-partial     at least one required item was not completed; the receipt names what remains
-blocked     the lane could not start; the receipt names the missing input
-no-receipt  a dispatched lane returned nothing
+complete    selected check finished, or optional check not selected with reason
+partial     selected check has exact unfinished coverage
+blocked     selected check lacks a required input or access
 ```
 
 ## Verdicts
@@ -24,58 +23,28 @@ significant-rewrite promise, trigger, workflow, or proof route must be redesigne
 reject-or-restart   the target behavior is not one named skill, or there is no reusable job
 ```
 
-Stage-specific meaning of each label is owned by the stage reference that selects the lanes.
+Stage-specific meaning of each label is owned by the stage reference that selects the checks.
 
-## Review Packet
-
-```text
-review target:
-review kind: spec | implementation
-artifact: proposal | changed files | existing files
-changed files:
-- <path>: <surface>
-diff or proposal summary:
-user constraints:
-source standards:
-- <standard or reference path>
-proof evidence:
-- <RED, GREEN, static validation, proof gap, scenario id, or command>
-non-goals:
-- <boundary>
-requested lane focus:
-```
-
-The `artifact` value sets the lane's scope. `proposal` is a design the skill's files do not yet implement — conversational or a spec doc; `changed files` scopes the lane to the diff, and `existing files` scopes the lane to whole files when there is no diff.
-
-Allowed `surface` labels. This schema owns the label set, and each stage rubric maps these labels to lanes. Classify a reference, lane, or schema file as `reference text`; record review depth in `status:`:
+## Per-Check Result
 
 ```text
-SKILL.md body
-reference text
-frontmatter or description
-a behavior-proof claim
-a sensitive surface
-```
-
-## Receipt
-
-Every lane opens its return with this block:
-
-```text
-receipt: complete | partial | blocked
+check: <reference name>
+status: complete | partial | blocked
+selection: required | selected: <reason> | not selected: <reason>
 coverage: <mission stages completed and exact uncovered boundary>
+result: <check-specific result or finding list>
 stop condition: met | not met, with what remains
 unresolved questions:
 ```
 
-Do not return a source inventory, separate reading receipt, file-content digest, hash, line count, or chunk range. Findings carry the source anchors needed to support them; `coverage` names the work completed and any gap without proving reading mechanics.
+Do not add a reading digest, hash, line count, or chunk range. Findings carry source anchors. A missing, partial, or blocked required check prevents `great`.
 
-## Lane Finding
+## Check Finding
 
-`lane` is the content lane name from `references/review/lanes/`.
+`check` is the content check name from `references/review/lanes/`.
 
 ```text
-lane:
+check:
 finding:
 severity:         blocker | important | minor | observation
                     blocker     = an agent following the skill produces the
@@ -89,45 +58,45 @@ source evidence:
 behavior risk:
 smallest fix:
 retest required:
-route:            <owning lane when the defect is outside this lane's boundary>
+route:            <owning check when the defect is outside this check's boundary>
 ```
 
-Severity is graded by effect on behavior, not by how wrong the text reads. `route` names the owning lane when the defect is outside the reporting lane's boundary.
+Severity is graded by effect on behavior, not by how wrong the text reads. `route` names the owning check when the defect is outside the reporting check's boundary.
 
-## Parent Reduction
+## Lead Reduction
 
-Every field below is filled by the review lead. `parent` means that immediate lead relative to a lane. `changed-file coverage` is derived from the review packet's changed-file list and review-lead-verified lane evidence.
+Every field below is filled by the review lead. The 🔎 Review Sidekick fills this reduction. `changed-file coverage` is derived from complete current files and check evidence.
 
 ```text
 review:
 required: yes | no
 kind: spec | implementation
 artifact: proposal | changed files | existing files
-lanes:
+checks:
 - name:
-  status: complete | partial | blocked | no-receipt | not dispatched
-  reason: <why, when the lane contributed no accepted finding>
+  status: complete | partial | blocked
+  selection: required | selected: <reason> | not selected: <reason>
 synthesis:
   ranked findings:
   - rank:
     defect:
     severity: blocker | important | minor | observation
-    lanes reporting it:
+    checks reporting it:
     evidence:
   merged duplicates:
   - defect:
     merged from:
-  lane conflicts:
+  check conflicts:
   - subject:
     positions:
     reading the artifact supports:
     what would settle it:
   routed findings:
   - defect:
-    owning lane:
-    dispatched: yes | no
+    owning check:
+    selected: yes | no
   coverage gaps:
-  - what no dispatched lane examined:
+  - what no selected check examined:
   first fix:
   why it is first:
 changed-file coverage:

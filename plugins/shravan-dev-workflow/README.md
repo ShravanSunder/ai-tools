@@ -16,7 +16,7 @@ shared understanding
        -> stop at reviewed three-artifact design or explicit gap; never enter planning automatically
   -> plan-implementation: one canonical plan + proof mapping
   -> implement-plan: approved immutable plan + implementation proof
-  -> implementation-review: coordinator-chosen review lanes + rails reduction
+  -> implementation-review: ordered checks in one independent 🔎 Review Sidekick session + rails reduction
        -> stop before corrections and PR work
 ```
 
@@ -31,7 +31,7 @@ Namespace            Concern                      Skills
 -------------------  ---------------------------  ----------------------------
 discuss-*            shared understanding          discuss-clarify-mental-models
                                                   discuss-pathfinding
-research-*           evidence gathering            research-swarm
+research-*           evidence gathering            research-workflow
 manage-*             subordinate agents            manage-agents
 orchestrator-*       bounded workflow routing      orchestrator-implementation-goal
                                                   orchestrator-design
@@ -119,7 +119,7 @@ Use `discuss-clarify-mental-models` when the shared picture is unstable before a
 
 Codex display titles use the `Category: Action` form (for example, `Discuss: Pathfinding` and `Spec: Design`). Skill IDs remain kebab-case for invocation. Cursor can load these plugin directories through its explicit `agent --plugin-dir <path>` path; this repository does not provide a separate Cursor marketplace.
 
-Use `research-swarm` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, routes source-specific lanes, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial swarm lanes use explicit packet contracts with source anchors, security context, candidate-evidence labels, and completion receipts; parent ledgers reduce lane evidence before anything becomes accepted truth.
+Use `research-workflow` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, walks source classes in order, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial runs use source-class coverage, primary anchors, and a verified research ledger.
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, workers, operators, subagents, and swarms. The user-facing main remains the default conversation and author of governing design and implementation plans. After a ready plan, the persistent implementation Sidekick executes its assignment and associated proof directly by default; the user may explicitly choose direct contact with that assigned Sidekick without transferring authority or execution ownership. Material design/plan or integration questions return to Main with evidence, while Main does not relay every internal progress turn. The Sidekick delegates only bounded independent work, needed expertise, or large disposable output whose benefit exceeds coordination cost; standalone prescribed procedures use Operators. PR wrap-up may stay with the assigned implementation Sidekick or run as a prescribed Operator procedure; Main retains acceptance and the user retains merge authority. The skill also owns the agent-role to board-seat mapping, while Router owns seat semantics and enforcement. Its core skill owns pattern, model, and native-versus-ACPX routing; `acpx.md` owns provider-resolved agent calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
@@ -135,7 +135,7 @@ Use `spec-design` to preserve two separate upstream concepts before program desi
 
 Use `program-design` to define structural How against the settled specification: current-system constraints, alternatives and crux, component trees, singular ownership, interfaces, state, source-anchored call paths and flows, failure/recovery, concurrency/consistency, trust boundaries, compatibility/cutover, and proof seams. A generated explanatory overview may aid the reader only after main-authored semantic composition and inspection; exact structural views and prose remain authoritative. It turns stack/trace evidence into implementable entrypoint-to-effect views and produces an executable mental model, not a task list.
 
-Use `spec-program-review` to independently classify and proportionally review a Specification, a Program Design, or the complete Requirements, Specification, and Program Design set. The coordinator reads the whole artifact set, reconstructs the smallest model satisfying the confirmed goal, and chooses the lanes: the mode-complete reviewer always, chunk reviewers along artifact seams when the set is large, a dispel lane that challenges over-engineered findings and unrequested design elements, proof-challenge only when the design cites executable proof, and focused lanes one per named unresolved risk. Every review includes a compact reader-reconstruction and deletion pass; file-backed visual review also resolves embedded assets and checks actual image/text agreement, or reports partial visual coverage when image/preview access is missing. It returns a coverage-bound verdict without editing artifacts or accepting the three-artifact design. After edits, the parent reruns only semantically affected coverage; parent-verified non-semantic changes such as formatting, link repair, review metadata, or typo-only corrections reuse coverage without model dispatch. Why/What findings route to `spec-design`; structural-How findings route to `program-design`.
+Use `spec-program-review` to classify and independently review a Specification, Program Design, or complete Requirements, Specification, and Program Design set. A different-lineage 🔎 Review Sidekick reads the whole artifact set, reconstructs the smallest model satisfying the confirmed goal, and walks mode-complete, sequential seam passes when large, proof-challenge for executable claims, dispel, and focused checks for named residual risks. Prescribed proof commands go to a 🔧 Operator under an exact grant. The lead returns a coverage-bound verdict without editing or accepting the design; semantically unaffected corrections may retain verified coverage. Why/What findings route to `spec-design`; structural How findings route to `program-design`.
 
 The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` source trees are preserved under [`retired-skills/`](retired-skills/) for provenance and are not runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `implementation-review` are new minimal implementations, not aliases or revivals of those retired trees; they do not restore swarms, controller briefs, worker protocols, transition ledgers, or a separate plan-review layer.
 
@@ -153,7 +153,7 @@ Use `plan-handoff` to package an existing implementation plan for another agent,
 
 Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
 
-Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, canonical ready plan path and current meaning, governing planning basis, delivery context, source, diff, and proof identities; the coordinator reads the whole map, chooses chunked, overlapping fresh-context lanes, each for a named reason (spec-compliance, chunk reviewers, dispel, proof-challenge); parent-verifies every candidate against the rails; and routes corrections by semantic cause without editing or accepting its own remediation. Runtime skill-package authoring remains under `skills-creation` review.
+Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, ready plan, source, diff, and proof identities. A different-lineage 🔎 Review Sidekick reads the whole map and walks spec-compliance, sequential overlapping chunk passes, proof challenge, dispel, and predicate-selected focused checks. It verifies candidates against the rails and routes corrections by semantic cause without editing. Runtime skill-package review remains under `skills-creation`.
 
 Use `implementation-pr-wrapup` to finish the GitHub PR lifecycle after implementation, typically after independent review on a delivery goal: push/open/update the PR, write a why-and-shape description, monitor checks and comments, process existing review threads, prove mergeability with current GitHub state, and merge only when user authorization exists. Fresh code-review discovery routes to `implementation-review`; PR wrap-up does not substitute for it. Independent-review coverage is not a wrap-up ready gate.
 
@@ -172,7 +172,7 @@ Use `implementation-handoff` when real implementation state exists: branch, diff
 
 ## External Counsel
 
-Review workflows do not use broad multi-model counsel by default. The persistent Review Sidekick lead, its native read-only lane Workers, and their model, runtime, history isolation, and authority are resolved through `manage-agents`.
+Review workflows do not use broad multi-model counsel by default. The persistent Review Sidekick lead, its ordered checks, and its model, runtime, history isolation, and authority are resolved through `manage-agents`.
 
 ```text
 normal review path
@@ -197,7 +197,7 @@ Use orchestrator-implementation-goal to carry this goal through planning, implem
 Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
 Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and `pr-ready-unmerged` delivery context, then return fresh implementation proof without starting review or PR work.
 Use implementation-review to independently review this implementation and proof without editing or starting PR lifecycle work.
-Use research-swarm to gather source-grounded evidence into a tmp ledger.
+Use research-workflow to gather source-grounded evidence into a tmp ledger.
 Use plan-improve-repo to audit this repo and write immutable canonical plan-only improvement plans. When delivery is requested later, route the admitted finding through plan-implementation to establish current delivery intent instead of upgrading the prior plan.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.

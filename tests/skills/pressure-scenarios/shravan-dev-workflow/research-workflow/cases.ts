@@ -2,9 +2,9 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
-    scenarioId: "research-swarm-question-first",
+    scenarioId: "research-workflow-question-first",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/research-swarm/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/research-workflow/SKILL.md",
     ],
     maximumToolCalls: 30,
     semanticCriteria: [
@@ -26,9 +26,9 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "research-swarm-substantial-stage-artifacts",
+    scenarioId: "research-workflow-substantial-stage-artifacts",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/research-swarm/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/research-workflow/SKILL.md",
       "tests/skills/fixtures/minimal-planning-delivery/requirements.md",
       "tests/skills/fixtures/minimal-planning-delivery/specification.md",
       "tests/skills/fixtures/minimal-planning-delivery/program-design.md",
@@ -38,13 +38,13 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "keeps-substantial-research-inspectable",
-        requirement: "Uses a repo-local research ledger and parent-written per-lane artifacts with bounded questions, source inputs, inspect lists, non-goals, output shapes, uncertainty, confidence, and completion receipts.",
-        failureExample: "Collapses helper opinions into one chat summary or dispatches broad uninspectable prompts.",
+        requirement: "Uses a repo-local research ledger, frames bounded questions, walks source classes in order, and records verbatim queries, primary anchors, null results, unsearched classes, contradictions, freshness, and uncertainty.",
+        failureExample: "Collapses multiple sources into one chat summary with no inspectable coverage.",
       },
       {
         name: "preserves-parent-evidence-authority",
-        requirement: "Treats helper outputs as candidate evidence until the parent verifies source anchors and synthesizes the result.",
-        failureExample: "Treats helper consensus as accepted truth.",
+        requirement: "Treats source-class observations as candidate evidence until the researcher verifies source anchors and synthesizes the result.",
+        failureExample: "Treats agreement between sources as accepted truth without reopening primary anchors.",
       },
       {
         name: "routes-exact-ready-design-to-planning",

@@ -1,12 +1,12 @@
 # Finding and Parent Reduction
 
-This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate review lead relative to a lane; the orchestrator later owns final disposition and delivery routing.
+This reference owns parent verification, candidate disposition, duplicate/conflict reduction, coverage accounting, and the final review result. `parent` means the immediate review lead for the ordered checks; the orchestrator later owns final disposition and delivery routing.
 
 ## Finding
 
 ```text
 finding identity
-review mode / lane
+review mode / check
 severity: blocker | important | minor | observation
 artifact and source anchor
 claim or rule
@@ -41,13 +41,13 @@ For each candidate:
 1. open the target and source anchor;
 2. before accepting, cite the accepted requirement identity, restate its meaning in plain language, and name the observable outcome that fails if the concern is unresolved;
 3. reproduce the contradiction or failure path;
-4. when direct source reading cannot answer one factual question, use `manage-agents` to dispatch one fresh, read-only Worker evidence lookup; its packet carries the exact requirement identity and meaning, the single factual question, bounded sources, and the non-goal `no redesign or review recommendation`; it returns a `complete | partial | blocked` evidence receipt with anchors and uncertainty for parent verification;
+4. when direct source reading cannot answer one factual question, perform one bounded source lookup in this session using the exact requirement identity, one factual question, and named sources; record anchors and uncertainty;
 5. accept, reject, mark contested, or mark unverified;
 6. record one-line evidence rationale;
 7. merge duplicates by root cause;
 8. preserve conflicting evidence.
 
-Missing evidence is `unverified`, not rejection. A category name is not an anchor: "the reliability requirement" fails the anchor fields until the exact governing clause is opened and quoted; a candidate whose anchor fields cannot be filled from an inspectable source is `unverified` or routes to an owner decision, never `accepted`. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false (the design assumes an interface, ordering, ownership, or guarantee the current system does not provide); a defect the basis already forbids and can name the fix for routes to its semantic owner as usual, while a break returns `decision-needed` or `blocked` to the owner instead of consuming a correction round. Weigh the dispel lane's classifications and over-delivery map as candidate evidence like any other receipt, and quote the rail text when overriding its class. A reviewer candidate that adds unrequested scope is `rejected: scope expansion` (an observation for the owner, not a decision the owner owes); an `absent`-mapped design element already in the artifacts is never rejected as harmless — it returns `decision-needed` (deletion recommended) or an accepted removal routed to `program-design`. An accepted finding names the unrealized obligation and its failure, never the reviewer's proposed mechanism. Style preference without reader or behavior effect is rejected. Before accepting missing contracts on a proposed mechanism, test whether deleting the mechanism preserves every confirmed requirement. Prefer deletion when it does. Reviewers never spawn reviewers or evidence lookups. The parent may dispatch one lookup as research, not as another review lane; it opens the returned anchors and reduces the evidence before disposition. A reviewer concern that cannot be tied to an accepted requirement and observable failure is advice awaiting investigation, not implementation authority.
+Missing evidence is `unverified`, not rejection. A category name is not an anchor: "the reliability requirement" fails the anchor fields until the exact governing clause is opened and quoted; a candidate whose anchor fields cannot be filled from an inspectable source is `unverified` or routes to an owner decision, never `accepted`. A candidate is a mental-model break — not an ordinary design finding — when its correction cannot be expressed inside the current governing basis because an assumption the basis itself relies on is false (the design assumes an interface, ordering, ownership, or guarantee the current system does not provide); a defect the basis already forbids and can name the fix for routes to its semantic owner as usual, while a break returns `decision-needed` or `blocked` to the owner instead of consuming a correction round. Weigh the dispel check's classifications and over-delivery map as candidate evidence like any other check result, and quote the rail text when overriding its class. A reviewer candidate that adds unrequested scope is `rejected: scope expansion` (an observation for the owner, not a decision the owner owes); an `absent`-mapped design element already in the artifacts is never rejected as harmless — it returns `decision-needed` (deletion recommended) or an accepted removal routed to `program-design`. An accepted finding names the unrealized obligation and its failure, never the reviewer's proposed mechanism. Style preference without reader or behavior effect is rejected. Before accepting missing contracts on a proposed mechanism, test whether deleting the mechanism preserves every confirmed requirement. Prefer deletion when it does. The 🔎 Review Sidekick opens the source anchors from its bounded lookup before disposition. A reviewer concern that cannot be tied to an accepted requirement and observable failure is advice awaiting investigation, not implementation authority.
 
 ## Coverage-Bound Result
 
@@ -56,7 +56,7 @@ mode and covered targets
 semantic coverage statement and any later semantic-change records
 governing-source coverage
 accepted-requirements and confirmed-goal-boundary coverage
-lane terminal states
+check statuses
 coverage gaps
 accepted/rejected/contested/unverified findings
 what held
@@ -104,19 +104,19 @@ Select one route from the reduced result:
 - invalid input or missing evidence -> stop `blocked`;
 - no required correction -> stop `ready`.
 
-An authoritative correction is not pathfinding work. A reviewer suggestion is not a route until the parent verifies and accepts it. `discuss-pathfinding` resolves only the named unmade meaning and returns to the supplied owner; it does not choose another phase.
+An authoritative correction is not pathfinding work. A reviewer suggestion is not a route until the 🔎 Review Sidekick verifies and accepts it. `discuss-pathfinding` resolves only the named unmade meaning and returns to the supplied owner; it does not choose another phase.
 
 `ready` requires complete semantically current mode coverage, no required coverage gap, no open blocker/important accepted finding, no unapproved scope expansion or requirement subtraction, and no remaining planner-owned semantic invention.
 
 Produce exactly one result:
 
-- `blocked`: a required artifact/source/access input is missing or stale, or required mode/lane coverage is partial, blocked, or `no-receipt`, so the review cannot truthfully judge the mode.
+- `blocked`: a required artifact/source/access input is missing or stale, or required mode/check coverage is partial, blocked, or missing status, so the review cannot truthfully judge the mode.
 - `decision-needed`: required coverage is complete enough to isolate an unresolved user/authority-owned choice, including a proposed scope expansion or requirement subtraction, and that choice—not missing evidence or author correction—is the first action needed.
 - `needs-revision`: coverage is sufficient to judge the artifact and at least one accepted blocker/important finding requires `spec-design`, `program-design`, or caller correction; this takes precedence over `decision-needed` when revision is independently required.
 - `ready`: the complete condition above holds.
 
 When states mix, apply precedence `blocked -> needs-revision -> decision-needed -> ready`.
 
-After each permitted correction round, the parent records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. After normal round one, return a concrete source-backed substantive residual to the second-round admission policy in `SKILL.md`; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. A third normal review requires explicit user permission after the second result is visible. The one-time recovery exception remains separate and adds no normal correction allowance.
+After each permitted correction round, the 🔎 Review Sidekick records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. After normal round one, return a concrete source-backed substantive residual to the second-round admission policy in `SKILL.md`; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. A third normal review requires explicit user permission after the second result is visible. The one-time recovery exception remains separate and adds no normal correction allowance.
 
-Complete when: every candidate and lane terminal state is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the result cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.
+Complete when: every candidate and check status is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the result cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.

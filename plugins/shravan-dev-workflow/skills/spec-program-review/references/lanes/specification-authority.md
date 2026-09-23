@@ -4,11 +4,11 @@ Mission: determine whether load-bearing Why/What claims are authorized obligatio
 
 Predicate: normative sources conflict, product meaning is load-bearing, or a requirement's basis is unclear.
 
-Expected inputs: lane-schema packet plus the specification claims and authority sources in scope.
+Expected inputs: review context plus the specification claims and authority sources in scope.
 
 Prerequisites: complete target/source set exists.
 
-Maximum authority: fresh-context, read-only, candidate-only.
+Check boundary: read-only.
 
 ## Inspection
 
@@ -33,8 +33,8 @@ Bad: current behavior treated as desired behavior; product slogans treated as re
 
 Calibration: report only authority defects that alter outcomes, requirements, contracts, non-goals, proof, or a human choice. Do not manufacture product context for a technical-only specification.
 
-Overlap boundary: `contract` owns the completeness of an observable contract; this lane owns why that contract is required. Report How concerns only as routed gaps.
+Overlap boundary: `contract` owns the completeness of an observable contract; this check owns why that contract is required. Report How concerns only as routed gaps.
 
-Return: lane-schema receipt with the authority trace, exact unsupported/conflicting claims, candidate findings, and `spec-design | caller` route.
+Return: check result with the authority trace, exact unsupported/conflicting claims, candidate findings, and `spec-design | caller` route.
 
 Stop when: every selected claim has an authority classification and downstream consequence, or missing authority evidence blocks a truthful judgment.

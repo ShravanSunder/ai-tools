@@ -1,8 +1,8 @@
 # Reviewing Implementation
 
-This reference owns the complete independent reconstruction method used by every reviewer lane that inspects source.
+This reference owns the complete independent reconstruction method used by the source-inspection check.
 
-Expected inputs: the shared review packet, the assigned chunk when there is one, lane authority, and the lane-specific mission.
+Expected inputs: the current review context, the assigned chunk when there is one, check boundary and mission.
 
 Return: source-to-proof coverage, normal and failure-path inspection, proof and reachability judgments, weaker-substitute risks, the riskiest-assumption result, candidate findings, and the uncovered boundary.
 
@@ -75,4 +75,4 @@ Identify the single assumption whose failure would most change the review result
 
 A candidate finding needs an exact source and implementation anchor, governing obligation or invariant, concrete failure or consequence, smallest correction, candidate owner, fitting confirmation evidence, and remaining uncertainty. If no well-supported candidate survives, return `No findings`; do not pad.
 
-The method is complete when every requested stage has returned its result: coverage or anchored-exclusion rows accounting for every assigned file whole, normal and applicable failure paths inspected, proof layers and source freshness checked, applicable runtime claims carrying reachability status, weaker substitutes and the riskiest assumption tested, candidate findings meeting the standard, and the uncovered boundary named. Each lane's own reference owns which stages it requests and when the lane stops.
+The method is complete when every requested stage has returned its result: coverage or anchored-exclusion rows accounting for every assigned file whole, normal and applicable failure paths inspected, proof layers and source freshness checked, applicable runtime claims carrying reachability status, weaker substitutes and the riskiest assumption tested, candidate findings meeting the standard, and the uncovered boundary named. Each check reference owns which stages it requests and when the lane stops.

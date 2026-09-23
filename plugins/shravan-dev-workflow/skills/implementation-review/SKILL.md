@@ -5,9 +5,7 @@ description: Use when independently reviewing implemented code, proof, a branch 
 
 # Implementation Review
 
-The first review dispatch creates a different-lineage persistent Review Sidekick with no author or orchestrator history. That review lead reads every governing source and the complete diff, decides which lane Workers to run and in what order, hands them complete files, quoted rails, and deliberate overlap, then verifies their candidate findings against those rails. The orchestrator disposes and routes the lead's assessment; it does not repeat the whole-target reading or detailed reduction. The bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times.
-
-In this skill, `parent` means the immediate review lead relative to a lane. The orchestrator retains final disposition; the review lead remains independent of the author and retains its own review history through corrections.
+The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. That lead reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment. The bounded delivery effort may remediate at most three times.
 
 The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
@@ -21,40 +19,39 @@ The rails are the confirmed requirements, Specification obligations, Program Des
 
 Completion: classification, governing sources, base and reviewed commits, diff and proof boundary, remediation-count evidence (or the recovery authorization and missing-evidence reason), and `admit | blocked-input | remediation-limit-reached` are stated.
 
-The caller completes admission. A non-substantial, blocked, or remediation-limit exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage Review Sidekick with no author or orchestrator history. The assigned lead executes this method and never commissions another lead.
+The caller completes admission. A non-substantial, blocked, or remediation-limit exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history. The assigned lead executes this method and never commissions another lead.
 
 ## Read the Whole Map
 
-Read the complete governing basis and the complete base-to-reviewed diff yourself before choosing any lanes — every file whole, never "enough to establish scope." Write the diff to a file in system tmp so every reviewer gets the same content, not a commit range it may not be able to expand. Gather what every reviewer will receive, in citable form: absolute paths to the governing artifacts, the goal boundary as quoted in/out statements with their source, obligations with section anchors, constraints with the authority that imposed them, proof claims, and any owner meaning that exists only in chat copied verbatim.
+Read the complete governing basis and the complete base-to-reviewed diff yourself before planning checks. Read every file whole. Gather citable governing artifacts, the quoted goal boundary, anchored obligations, authorized constraints, proof claims, and owner meaning that exists only in chat.
 
-Completion: you have listed every changed file, obligation, and proof claim from your own reading, and the reviewer packet contains nothing a fresh agent could not open or quote.
+Completion: list every changed file, obligation, and proof claim from your own reading.
 
-## Choose the Lanes
+## Plan the Checks
 
-MUST load `references/coordination-and-chunking.md` and return the chunk plan — which files and obligations each chunk reviewer gets, with overlap seams, or the decision that one chunk covers the whole diff — and which lanes run.
+MUST load `references/coordination-and-chunking.md` and return the sequential chunk-pass plan, including complete files, obligations, and overlap seams, or one pass covering the whole diff.
 
-Order is forced only by data dependencies: `spec-compliance` first, because an intent failure bounds everything after it; chunk reviewers in parallel after it; `proof-challenge` alongside them once the proof claims are collected, feeding reduction directly; `dispel` once every chunk receipt is in; focused lanes only after reduction names a concrete unresolved risk. If spec-compliance returns `misread requirement` or `scope underdelivery`, skip the fan-out and return `needs-revision` to the semantic owner.
+Run `spec-compliance` first. If it finds a misread requirement or scope underdelivery, return `needs-revision` to the semantic owner. Run chunk passes sequentially, then proof-challenge when proof claims exist, then dispel, then focused checks only for a named residual material risk.
 
-Spec-compliance, the chunk reviewers, and dispel always run. Every other lane runs because a named reason selects it — write that reason beside it — and you stop when no named unresolved risk selects another. Idle capacity, a broad topic, or reviewer curiosity is not a reason. Small changes use one chunk spanning the whole diff.
+Spec-compliance, chunk passes, and dispel always run. Record a reason for each optional check, including why it was not selected. Small changes use one pass spanning the whole diff.
 
-Completion: each chunk lists its complete file set and seams, and each optional lane kind in the reference's table — proof-challenge and focused lanes — either runs with its reason written beside it or is skipped with the reason it was not needed.
+Completion: each pass lists its complete file set and seams, and every optional check has a selection decision.
 
-## Dispatch
+## Walk the Checks
 
-The assigned lead MUST load `references/lanes/lane-schema.md` and return the filled packet for every dispatch below. The lead uses `manage-agents` for every lane Worker: fresh native context, single assignment, no parent conversation history, fork = none (Codex `fork_turns="none"`, a new Claude or Cursor agent with no resume), candidate-only authority, read-only workspace access, and no fan-out. Lane Workers may write under project `tmp/` or system tmp, never edit a tracked file. The packet's `lane instructions` carries the absolute paths of every reference the bullets below say the Worker loads (or their inlined text when the runtime cannot read the plugin cache); a Worker dispatched into the reviewed repo cannot resolve this skill's relative paths.
+MUST load `references/lanes/lane-schema.md` and record `complete | partial | blocked` for every check below. Return the per-check status block before the verdict. Record an unselected optional check as `complete` with `not selected: <reason>`. A missing, partial, or blocked check cannot support `ready`.
 
-- MUST dispatch `spec-compliance` to a fresh native lane Worker using the packet. Worker loads `references/lanes/lane-schema.md` and `references/lanes/spec-compliance.md`. Return `complete | partial | blocked`; the review lead verifies and reduces it.
-- MUST dispatch one fresh native `chunk-reviewer` Worker per chunk using the packet plus that chunk's files, obligations, and seams. Worker loads `references/lanes/lane-schema.md` and `references/lanes/chunk-reviewer.md`; that lane loads `references/reviewing-implementation.md` for the method. Return `complete | partial | blocked`; the review lead verifies and reduces each.
-- MUST dispatch `dispel` to a fresh native lane Worker once every chunk receipt is in, using the packet with the whole diff plus the candidate set (which may be empty). Worker loads `references/lanes/lane-schema.md` and `references/lanes/dispel.md`. Return its per-candidate correction class and its over-delivery map; the review lead verifies and reduces it.
-- IF the review carries proof claims, dispatch `proof-challenge` using the packet plus the claim inventory and an execution grant naming exactly the claimed commands and a tmp scratchpad path. Worker loads `references/lanes/lane-schema.md` and `references/lanes/proof-challenge.md`. This is the one lane allowed to execute — only those commands, with the lane's pre-run write-set check — and it still never edits. Return one row per claim (preflight write-set class, command run or challenge, observed vs claimed, false-green check, exit status, rerun comparison) plus every command run; the review lead confirms each ran inside the grant and that `git status --porcelain` in the worktree is unchanged, then reduces it.
-- IF a chunk touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, escalate that lane's reviewer to a Frontier Reviewer through `manage-agents` (reviewer-only per its catalog) and note which model ran.
-- IF reduction names a concrete unresolved material risk, dispatch one `focused-reviewer` for that risk using the packet plus the falsifiable question. Worker loads `references/lanes/lane-schema.md` and `references/lanes/focused-reviewer.md`; that lane loads `references/reviewing-implementation.md` for the method. Return the answer; the review lead verifies and reduces it.
+1. MUST load `references/lanes/spec-compliance.md` and compare asked-to-delivered and delivered-to-asked coverage across the whole diff.
+2. MUST load `references/lanes/chunk-reviewer.md` and `references/reviewing-implementation.md`; walk each planned chunk pass sequentially. Reopen every complete file in that pass and inspect overlap seams from both sides. Record coverage and candidate findings per pass.
+3. IF proof claims exist, load `references/lanes/proof-challenge.md` and challenge every claim. For prescribed commands, assign a 🔧 Operator under an exact execution grant. The 🔧 Operator performs the reference's write-set preflight and `git status --porcelain` comparison, executes only granted commands, and returns observed output and exit codes. The 🔎 Review Sidekick judges claimed against observed and records proof gaps. If there is no grant, inspect only and record the boundary.
+4. MUST load `references/lanes/dispel.md` after all chunk passes. Classify every candidate and map every delivered item to a rail or `absent`, even when there are no candidates.
+5. IF reduction leaves a named material risk, load `references/lanes/focused-reviewer.md` and answer one falsifiable question per risk. Stop when no named risk remains.
 
-Silence is `no-receipt` after explicit follow-up, never a clean review. `partial`, `blocked`, and `no-receipt` cannot support `ready`.
+When the review includes auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, the caller selects a Frontier 🔎 Review Sidekick from a different author lineage at commission time through `manage-agents`.
 
 ## Reduce on the Rails
 
-MUST load `references/finding-and-reduction.md` and return every candidate's disposition with its quoted rail anchor, merged duplicates, scope effects, and the review result. Here and in that reference, `parent` means the immediate review lead relative to a lane, never the author or orchestrator.
+MUST load `references/finding-and-reduction.md` and return every candidate's disposition with its quoted rail anchor, merged duplicates, scope effects, and the review result. In that reference, `parent` means the 🔎 Review Sidekick, never the author or orchestrator.
 
 Before accepting any finding, open the governing clause it claims to serve and quote it; ask whether the confirmed obligations still hold without the questioned mechanism, and whether the proposed mechanism is the smallest change that serves the clause or one of several. A reviewer proposal that adds unrequested scope is rejected as scope expansion — never escalated to the owner as if a decision were owed. An unrequested element the diff already delivers gets removal or an owner `decision-needed`, never "well built." A finding that breaks a load-bearing assumption of the governing design stops and returns to the user with the failed assumption, evidence, and consequence.
 
@@ -73,11 +70,11 @@ Return `ready | needs-revision | blocked-input | decision-needed | remediation-l
 
 Do not return `ready` while any of these hold:
 
-- you did not read the complete governing basis and diff yourself before choosing lanes;
+- you did not read the complete governing basis and diff yourself before planning checks;
 - a chunk split a call path, a changed contract from its callers, or an obligation-to-proof chain with no overlap seam; or a chunk's file set omits a current consumer of a changed contract;
 - any reviewer judged a file it did not read completely, or a coverage row spans less than the whole file it anchors;
-- any lane you ran lacks a terminal, verified receipt, or a lane is silent without follow-up;
-- a proof claim was accepted without a proof-challenge receipt (or a named proof gap), or a proof-challenge receipt lists a command outside the grant or left the worktree changed;
+- a required check lacks `complete` status, or an optional check has no selection reason;
+- a proof claim was accepted without a proof-challenge result (or a named proof gap), or a 🔧 Operator ran a command outside the grant or left the worktree changed;
 - an accepted finding lacks a quoted rail anchor, the deletion test, its scope effect, owner, or confirmation evidence;
 - a reviewer proposal that adds unrequested scope was accepted or returned `decision-needed`; or a delivered element dispel mapped `absent` (or spec-compliance marked `extra` or `scope overreach`) has neither an accepted removal nor a `decision-needed` return;
 - a mental-model break was pushed through remediation instead of returning to the user;

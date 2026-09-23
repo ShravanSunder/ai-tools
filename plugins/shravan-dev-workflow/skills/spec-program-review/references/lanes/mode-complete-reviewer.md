@@ -1,14 +1,14 @@
 # Mode-Complete Reviewer
 
-Mission: independently reconstruct and challenge the complete selected review mode. This lane prevents a collection of narrow checks from being mistaken for whole-artifact review.
+Mission: independently reconstruct and challenge the complete selected review mode. This check prevents a collection of narrow checks from being mistaken for whole-artifact review.
 
 Predicate: mandatory for every `review` invocation.
 
-Expected inputs: the complete lane-schema packet, complete current target set, complete governing-source set, and one selected mode reference.
+Expected inputs: the complete review context, complete current target set, complete governing-source set, and one selected mode reference.
 
 Prerequisites: the complete target set, governing-source coverage, confirmed goal boundary and accepted requirements set, plus structural-realization confirmation for `program-only` or `three-artifact-design`, are complete and unambiguous.
 
-Maximum authority: fresh-context, read-only, candidate-only. This lane may recommend `ready | needs-revision | blocked | decision-needed`; it may not issue the parent verdict, edit, remediate, plan, mutate lifecycle, or accept.
+Check boundary: read-only. This check may recommend `ready | needs-revision | blocked | decision-needed`; it may not issue the 🔎 Review Sidekick verdict, edit, remediate, plan, mutate lifecycle, or accept.
 
 ## Method
 
@@ -30,8 +30,8 @@ Good: every mode dimension is `required`, `satisfied by the existing system`, `n
 
 Bad: sampling sections, trusting summaries, treating every review category as mandatory architecture, proofreading, or recommending readiness despite incomplete required coverage.
 
-Overlap boundary: focused lanes may deepen one risk; the parent alone owns the final coverage-bound verdict.
+Overlap boundary: focused checks may deepen one risk; the 🔎 Review Sidekick alone owns the final coverage-bound verdict.
 
-Return: a lane-schema `complete | partial | blocked` receipt with full mode evidence, reader reconstruction, deletion-pass result, candidate findings, what held, gaps, and candidate recommendation.
+Return: a check `complete | partial | blocked` result with full mode evidence, reader reconstruction, deletion-pass result, candidate findings, what held, gaps, and candidate recommendation.
 
 Stop when: the complete mode is judged, or a missing/contradictory prerequisite makes further downstream judgment misleading. Report the exact boundary rather than filling it with inference.

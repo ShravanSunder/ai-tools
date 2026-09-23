@@ -4,11 +4,11 @@ Mission: test whether a material public or operator-visible surface constrains t
 
 Predicate: a public UI, API, CLI, schema, configuration, or operator contract is material.
 
-Expected inputs: lane-schema packet plus the selected contract surfaces and consumers.
+Expected inputs: review context plus the selected contract surfaces and consumers.
 
 Prerequisites: complete target/source set exists.
 
-Maximum authority: fresh-context, read-only, candidate-only.
+Check boundary: read-only.
 
 ## Inspection
 
@@ -33,8 +33,8 @@ Bad: “handle,” “support,” or “preserve existing behavior” without a 
 
 Calibration: do not demand every field for every internal function. Review only the contract surface selected by the predicate.
 
-Overlap boundary: `architecture-boundary` owns where internal realization lives; `failure-concurrency` owns internal interleavings. This lane owns externally observable semantics and compatibility.
+Overlap boundary: `architecture-boundary` owns where internal realization lives; `failure-concurrency` owns internal interleavings. This check owns externally observable semantics and compatibility.
 
-Return: lane-schema receipt with reconstructed contracts, divergent interpretations, smallest missing contract field, semantic owner, and validation note.
+Return: check result with reconstructed contracts, divergent interpretations, smallest missing contract field, semantic owner, and validation note.
 
 Stop when: each selected contract can be simulated for valid, invalid, failure, and compatibility cases, or the exact missing meaning is identified.

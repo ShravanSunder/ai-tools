@@ -272,7 +272,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composition-record-and-chunk-receipt",
-        requirement: "Orders mode-complete and any chunk reviewers first and dispel after their receipts, and states that a chunk-reviewer receipt covers only its seam and never claims mode-complete coverage.",
+        requirement: "Orders mode-complete then sequential chunk passes, followed by dispel, and states that a chunk-pass status covers only its seam and never claims mode-complete coverage.",
         failureExample: "Composes lanes without predicates or lets a chunk receipt stand in for mode-complete coverage.",
       },
     ],
@@ -308,13 +308,13 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "one-lane-per-named-risk",
-        requirement: "Composes both failure-concurrency and contract lanes — one per named source-backed risk — rather than capping at one or asking permission for the second.",
-        failureExample: "Drops a source-backed risk to honor a one-lane cap.",
+        requirement: "Composes both failure-concurrency and contract checks, one per named source-backed risk — rather than capping at one or asking permission for the second.",
+        failureExample: "Drops a source-backed risk to honor a one-check cap.",
       },
       {
         name: "refuses-predicate-less-lanes-with-stop-record",
-        requirement: "Refuses architecture-boundary for 'could be cleaner' and reader-understanding on length alone, and names each lane it considered and did not run with the reason it was not needed.",
-        failureExample: "Composes lanes because agents are idle or the author asked, or gives no reason for the lanes it skipped.",
+        requirement: "Refuses architecture-boundary for 'could be cleaner' and reader-understanding on length alone, and names each check it considered and did not run with the reason it was not needed.",
+        failureExample: "Composes lanes because agents are idle or the author asked, or gives no reason for the checks it skipped.",
       },
     ],
   },
@@ -353,7 +353,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "mutation-invalidates-coverage",
-        requirement: "Fails the chunk-reviewer receipt for mutating a reviewed target, invalidates its coverage, and reports the mutation rather than absorbing it; treats 'it was faster' as no authority.",
+        requirement: "Fails the chunk-pass status for mutating a reviewed target, invalidates its coverage, and reports the mutation rather than absorbing it; treats 'it was faster' as no authority.",
         failureExample: "Accepts the edited target or the widened grant.",
       },
     ],

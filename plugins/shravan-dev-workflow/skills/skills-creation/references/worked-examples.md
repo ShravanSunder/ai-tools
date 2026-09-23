@@ -2,7 +2,7 @@
 
 This reference owns the small end of the size range. Return the shape choice for the skill being authored: how much machinery its job actually earns.
 
-The review module in this skill — stage references, the review lanes, a shared schema, a dispatch contract — is the heavy end of the range, shown in place. Below is the light end: a complete skill, small because its job is small. Most skills live between. Match the machinery to the job, not to this skill.
+The review module in this skill — stage references, ordered review checks and a shared status schema — is the heavy end of the range, shown in place. Below is the light end: a complete skill, small because its job is small. Most skills live between. Match the machinery to the job, not to this skill.
 
 ## A Complete Small Skill
 
@@ -32,6 +32,6 @@ A flaky test is a measurement problem before it is a code problem: the test asse
 - The spine is five steps because order changes behavior, and every completion criterion demands legwork: a captured log, a side-by-side quote, a rerun count, a ticket reference.
 - Two branches exist, because only some runs need isolation mechanics and only a blocked fix quarantines; each predicate is observable from an earlier step's result, and each returns something the main path uses. That is the branch case of progressive disclosure — an attention decision. (The example's `references/isolation-recipes.md` lives in the fictional skill's own tree; paths inside the fenced example are not paths of this skill.)
 - One prohibition exists, because retry-masking is the known failure; it is a bright line paired with its positive target.
-- There are no lanes, no schema, no glossary, and no review module, because nothing here qualifies: no work is handed to a subagent, no shape has multiple consumers, no term is coined.
+- There is no separate check reference, schema, glossary, or review module because the job fits in the main path, no shape has multiple consumers, and no term is coined.
 
 Complete when: the authored skill's machinery is justified the same way — every element present because its qualification is met, every element absent because it is not.

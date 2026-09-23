@@ -10,7 +10,7 @@ expect_decision_regex: spec review|spec-review
 expect_decision_regex: references/review/spec-review\.md|spec-review\.md|spec-review
 expect_decision_regex: before (implementation|editing|files are edited)|pre-implementation|before files are edited
 expect_decision_regex: mental-model-fit|trigger-routing|rule-agreement
-expect_decision_regex: fresh[- ]context|not forked|no session history|Delegate
+expect_decision_regex: different[- ]lineage|no author history|Review Sidekick
 expect_proof_regex: authoring basis|user-directed intent|observed failure|reproduc\w+|RED.{0,80}(before|first)|proof gap
 expect_proof_regex: accepted-to-implement|accepted to implement|implementation decision|accept the design|spec accepted|required spec review|spec review before implementation
 expect_forbidden_regex: spec review.{0,120}(after|once).{0,80}(implementation|editing)
@@ -45,8 +45,8 @@ extra review ceremony unless the skill actually requires it.
   edited.
 - Agent routes the pre-implementation review to
   `references/review/spec-review.md`.
-- Agent names the review lanes it would dispatch from `references/lanes/` and
-  says reviewers run in fresh context, not forked from this session.
+- Agent names the ordered checks in `references/review/lanes/` and says one
+  independent 🔎 Review Sidekick walks them in its own session.
 - Agent says accepted findings return to the spec/design before implementation.
 
 ## Failure Signals

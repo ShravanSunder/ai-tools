@@ -4,11 +4,11 @@ Mission: verify that platform, framework, tool, sandbox, browser/native UI, agen
 
 Predicate: runtime, framework, tool, sandbox, browser, native UI, agent, or test harness constrains feasibility or proof.
 
-Expected inputs: lane-schema packet plus named platforms, supported clients, permissions, tooling, and proof claims.
+Expected inputs: review context plus named platforms, supported clients, permissions, tooling, and proof claims.
 
 Prerequisites: complete target/source set exists.
 
-Maximum authority: fresh-context, read-only, candidate-only.
+Check boundary: read-only.
 
 ## Inspection
 
@@ -31,8 +31,8 @@ Bad: provider-specific tools presented as portable; subagents without packets/au
 
 Calibration: report an issue only when it makes execution infeasible, changes behavior, or weakens proof. Do not demand portability from an explicitly single-platform design.
 
-Overlap boundary: `proof` owns modality-to-seam sufficiency; `artifact-navigation` owns loading/routing. This lane owns whether the named platform can perform the action.
+Overlap boundary: `proof` owns modality-to-seam sufficiency; `artifact-navigation` owns loading/routing. This check owns whether the named platform can perform the action.
 
-Return: lane-schema receipt with platform claim, verified source, real/fake boundary, failure/degradation consequence, and smallest design correction.
+Return: check result with platform claim, verified source, real/fake boundary, failure/degradation consequence, and smallest design correction.
 
 Stop when: every selected assumption is verified, explicitly unsupported, or identified as an unresolved feasibility/proof gap.

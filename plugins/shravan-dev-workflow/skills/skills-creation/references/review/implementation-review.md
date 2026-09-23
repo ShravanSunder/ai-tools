@@ -6,38 +6,21 @@ Return a verdict, changed-file coverage, accepted/rejected/unverified findings, 
 
 For final repo skill-work readiness, this reference supplies the bounded implementation-review packet, changed-file coverage, reduction, and targeted retest expectations. Runtime skill-package authoring stays here and does not route through the product `implementation-review` skill.
 
-## Lanes
+## Ordered Checks
 
-The artifact here is **changed files** on disk, so every applicable lane can run. Dispatch the union of every row whose surface the change touched. The rows are the four surfaces of the Great Skill Frame, plus the security gate:
+The artifact is changed or existing skill files. The independent 🔎 Review Sidekick loads `lanes/lane-schema.md` and walks the checks selected by touched surface in its own session. Keep the order below so placement and rule agreement can see the entire change before the final proof claim comparison.
 
-| reviewed surface                     | lanes dispatched                                 |
-| ------------------------------------ | ------------------------------------------------ |
-| `SKILL.md` body (main path)          | placement-and-calls, steering-strength,          |
-|                                      | mental-model-fit, no-op-pruning, rule-agreement, |
-|                                      | depth-coverage                                   |
-| reference text (depth)               | rule-agreement, no-op-pruning,                   |
-|                                      | placement-and-calls, depth-coverage              |
-| frontmatter or description (trigger) | trigger-routing                                 |
-| a behavior-proof claim (proof)       | claim-vs-evidence                               |
-| a sensitive surface                  | sensitive-surface                               |
+| Reviewed surface | Check references to load |
+| --- | --- |
+| `SKILL.md` body | `placement-and-calls`, `steering-strength`, `mental-model-fit`, `no-op-pruning`, `rule-agreement`, `depth-coverage` |
+| Reference text | `rule-agreement`, `no-op-pruning`, `placement-and-calls`, `depth-coverage` |
+| Frontmatter or description | `trigger-routing` |
+| Behavior-proof claim | `claim-vs-evidence` |
+| Sensitive surface | `sensitive-surface` |
 
-Each lane named above is `lanes/<name>.md`: `lanes/placement-and-calls.md`, `lanes/steering-strength.md`, `lanes/mental-model-fit.md`, `lanes/no-op-pruning.md`, `lanes/rule-agreement.md`, `lanes/depth-coverage.md`, `lanes/trigger-routing.md`, `lanes/claim-vs-evidence.md`, `lanes/sensitive-surface.md`.
+Each name resolves to `lanes/<name>.md`. Deduplicate the selected set. For a scoped wording change, load the check that owns the targeted failure form and `rule-agreement`; record all other checks `complete` with `not selected: <reason>`. For an on-disk `evaluate` run, use current files as the reviewed surface and read them whole. A `create` run reviews new files. Sensitive-surface ownership stays in `../security-gate.md`.
 
-**Scoped changes** dispatch exactly two lanes instead of the union: the lane whose mission owns the failure form the wording change targets (a completion-criterion fix goes to `steering-strength`; a deleted no-op to `no-op-pruning`; a ceremony-only-depth fix to `depth-coverage`), plus `rule-agreement`, because wording in one home can still drift against the homes that cite it. The union rule governs every other change.
-
-**Existing files** — evaluating a shipped skill nobody has edited — use the same table, with every row its current surfaces satisfy; there is no diff, so lanes read whole files. For classification `create`, the reviewed surface is the new files, not a diff.
-
-Sensitive surfaces are the set owned by `../security-gate.md`; plugin manifests and versioning are not among them and route to `../platform-mechanics.md` instead.
-
-MUST load `review-lane-workflow.md` to prepare dispatch and return the dispatch contract and receipt lifecycle before the first dispatch.
-
-MUST load `lanes/lane-schema.md` to fill the shared shapes and return the review packet and parent reduction shape before the first dispatch.
-
-IF the changed surface adds or changes a lane or shared shape, load `../reference-lanes-design.md` to verify lane qualification, authority, schema ownership, and real consumers and return the applicable contract before reduction.
-
-Receipts are synthesized by the executing review lead, not by another lane. `lanes/claim-vs-evidence.md` is the one most specific to this stage: it grades whether the evidence supports the claim being made.
-
-`manage-agents` selects the lead's required independent lineage. Lane Workers use the Review catalog under that lead.
+The lead records `complete | partial | blocked` per check, verifies candidates against source, and returns the per-check status block before one reduced verdict. IF a changed surface adds an output or tool shape, load `../reference-lanes-design.md` for its consumers and owner. A check cannot dispatch another agent. Prescribed proof commands may go to a 🔧 Operator under the exact grant; the lead judges the observations.
 
 ## Verdicts
 
@@ -50,9 +33,9 @@ Covers what only a whole-change ship decision can judge:
 - Every edited, added, or deleted source file is covered. Each file is reviewed semantically, marked source/static-only with its behavior status, or explicitly excluded by the accepted behavior-review boundary; deletions are verified through both absence and pointer inventory.
 - The implemented diff matches the accepted spec and user constraints without crossing the accepted source, behavior, or ship boundary.
 - For implemented behavior-changing delivery, fitting proof ran against the reviewed current files before this review; the main inspected the actual diff and proof against the original need, accepted spec/plan, ownership, complexity, and integration and returned `accepted-for-independent-review`. An `evaluate` run instead preserves the source-only, unverified/deferred behavior boundary above.
-- Every added or changed lane satisfies the returned lane contract: the work qualifies as a lane, its lane reference contains the complete bounded job contract, and caller authority stays equal to or narrower than the reference maximum.
-- Every added or changed lane, output, or tool schema satisfies the shared-shape and ownership contract returned by `../reference-lanes-design.md`; cite the returned contract rather than re-deriving its field or ownership rules.
-- For review lanes specifically, award a `great` verdict when `lanes/lane-schema.md` clearly and completely defines the status and verdict labels, review packet, lane receipt, lane finding, and parent reduction consumed by the review workflow.
+- Every added or changed check has one teaching owner, a complete stop condition, and a caller that loads it at the right step.
+- Every added or changed output or tool schema satisfies the shared-shape and ownership contract returned by `../reference-lanes-design.md`; cite the returned contract rather than re-deriving its field or ownership rules.
+- For review checks, award `great` only when `lanes/lane-schema.md` defines statuses, verdicts, finding fields, and reduction consumed by the review workflow.
 - Check every added or changed term against the glossary, including cases where `glossary.md` stayed unchanged. Award a `great` verdict when each definition in scope is concrete, has one owner, and matches how `SKILL.md` and the references use the term.
 - Guidance leads with the positive shape: the action to take, the result to produce, and the taste or judgment that distinguishes strong work. Use prohibitions only as bright-line boundaries for named failures, paired with the positive target.
 - Each rule has one live owner, with no aliases, forwarding stubs, or duplicate prose preserving a retired ownership.
@@ -61,7 +44,7 @@ Covers what only a whole-change ship decision can judge:
 - Sensitive surfaces, platform metadata, changelog, and cache decisions are handled when in scope.
 - The smallest accepted edit is clear enough to implement without broadening into portfolio audit.
 
-Cover each item with source-backed evidence. When a lane receipt already covers an item, cite the receipt rather than re-deriving it.
+Cover each item with source-backed evidence. When a check result already covers an item, cite it rather than re-deriving it.
 
 ## Reduction
 
@@ -69,7 +52,7 @@ The executing review lead verifies candidate findings against source files, pres
 
 Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation, prune, and ship`; that is the live owner.
 
-After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh main assessment. Resume the same review lead to refresh changed-lane coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never dispatch review or remediation four without explicit user permission.
+After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh main assessment. Resume the same review lead to refresh affected check coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never start review or remediation four without explicit user permission.
 
 At ship, reuse the semantically current review result when its changed-file coverage and proof remain current. Resume the same lead only when affected coverage needs refresh.
 

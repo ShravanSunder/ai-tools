@@ -2,7 +2,7 @@
 
 Mission / stance: Gate executable and privileged surfaces before they are written. Apply the security decision, proof, and public-safety contract to scripts, hooks, third-party source, credentials, and writes outside the repo.
 
-Maximum authority: read-only verification of sensitive-surface classification, decision timing, proof, and public safety. Return candidate findings; the parent owns security decisions, edits, escalation, and the final verdict.
+Maximum authority: read-only verification of sensitive-surface classification, decision timing, proof, and public safety. Return candidate findings; the 🔎 Review Sidekick owns security decisions, edits, escalation, and the final verdict.
 
 Where to look:
 - the new or changed executable resource and its entry points;
@@ -30,8 +30,8 @@ Bad signals:
 
 Calibration: Report unclassified or late-classified surfaces and missing proof. Escalate to `ops-security-review` only for an explicit security scan or vulnerability review, never for routine authoring judgment.
 
-Overlap boundary: This lane owns sensitive surfaces, their decision timing, and deterministic tests for executables. `claim-vs-evidence` owns whether behavior evidence supports a stated claim. `placement-and-calls` owns where the security call site sits in the workflow.
+Overlap boundary: This check owns sensitive surfaces, their decision timing, and deterministic tests for executables. `claim-vs-evidence` owns whether behavior evidence supports a stated claim. `placement-and-calls` owns where the security call site sits in the workflow.
 
 Stop when: every sensitive surface in scope for the artifact — in the diff for `changed files`, in the whole file for `existing files` — has been checked for a decision, and every added line has been scanned for public-safety.
 
-Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.
+Output focus: Use the already-loaded Check Finding and Per-Check Result shapes from `lane-schema.md`. Each finding names the surface, the missing decision or proof, and whether the edit may proceed.

@@ -1,7 +1,7 @@
-# research-swarm question first
+# research-workflow question first
 
-scenario_id: research-swarm-question-first
-skill_under_test: shravan-dev-workflow:research-swarm
+scenario_id: research-workflow-question-first
+skill_under_test: shravan-dev-workflow:research-workflow
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -20,12 +20,12 @@ anchoring on the local system, or defining the evidence ledger.
 
 - Breadth: many tools and source classes are named
 - Speed: user wants useful answers quickly
-- Tool gravity: web, subagents, and memory are all attractive
+- Tool gravity: web, source classes, and memory are all attractive
 - Source mixing: local code, docs, web, Reader, and sessions could blur
 
 ## Prompt
 
-$shravan-dev-workflow:research-swarm
+$shravan-dev-workflow:research-workflow
 
 Research what we should learn from cmux, Ghostex, orca, t3code, DeepWiki,
 current docs, Reader highlights, and my old sessions for a local control
@@ -37,7 +37,7 @@ gateway. Do not implement anything yet.
 - Agent stays read-only in fast mode and does not create artifacts.
 - Agent frames bounded research questions before gathering.
 - Agent names local re-anchor as the first phase.
-- Agent describes lane/source routing and the evidence ledger shape.
+- Agent describes source-class routing and the evidence ledger shape.
 - Agent names claim classes such as direct observation, inference, and
   unresolved, or states that those are the evidence ledger columns for the full
   run.

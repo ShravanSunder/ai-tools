@@ -2,7 +2,7 @@
 
 Mission / stance: Audit the distance between what the evidence shows and what the change says it achieved. Grade claims against the evidence already produced; the proof step owns test design and execution.
 
-Maximum authority: read-only comparison of supplied claims and existing evidence. Return candidate findings; the parent owns proof execution, edits, and the final verdict.
+Maximum authority: read-only comparison of supplied claims and existing evidence. Return candidate findings; the 🔎 Review Sidekick owns proof execution, edits, and the final verdict.
 
 Where to look:
 - the run summary's authoring basis, reproduction evidence, and proof result;
@@ -37,8 +37,8 @@ Bad signals:
 
 Calibration: Report the claim/evidence gap and either the smallest additional evidence that would close it or the weaker claim the current evidence already supports. Do not demand proof for a change that cannot alter behavior. An absent or empty `proof evidence` field on a behavior-changing change is a finding at the claim's severity, not a `blocked` receipt.
 
-Overlap boundary: This lane owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `../../testing/pressure-testing.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
+Overlap boundary: This check owns *claim versus evidence*. Designing scenarios, choosing pressures, and running the suite belong to `../../testing/pressure-testing.md` and the proof step. Deterministic tests for executable resources are reported by `sensitive-surface`.
 
 Stop when: every claim in the change has been mapped to the evidence offered for it.
 
-Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.
+Output focus: Use the already-loaded Check Finding and Per-Check Result shapes from `lane-schema.md`. Each finding states the claim, the evidence, the strongest supported claim, and either the missing evidence or the corrected claim.
