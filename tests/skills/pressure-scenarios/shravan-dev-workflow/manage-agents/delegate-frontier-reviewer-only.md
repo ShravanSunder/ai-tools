@@ -1,11 +1,11 @@
-# manage-agents Delegate Frontier is reviewer-only
+# manage-agents Sidekick Frontier is reviewer-only
 
 scenario_id: manage-agents-delegate-frontier-reviewer-only
 skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: delegate
+expect_decision_regex: sidekick
 expect_decision_regex: astra|frontier
 expect_proof_regex: reviewer only|as reviewer|reviewer-only
 expect_proof_regex: (sol|balanced).{0,80}(auth|implement|slice)|(auth|implement|slice).{0,80}(sol|balanced)
@@ -20,7 +20,7 @@ reach Frontier, or copy Astra onto the writer because the work "matters".
 ## Pressures
 
 - Astra sounds like Advisor because Frontier used to live only there.
-- "This slice is important" tempts Frontier on a writing Delegate.
+- "This slice is important" tempts Frontier on a writing Sidekick.
 - Two jobs in one ask tempt one pattern and one model for both.
 
 ## Prompt
@@ -30,20 +30,20 @@ $shravan-dev-workflow:manage-agents
 Chat only — plan the dispatches, do not execute anything and do not create
 any files or ledgers; your chat reply is the whole deliverable and no
 artifact is expected. Two jobs. First: independently review the current
-cross-component design set; use Astra medium. Second: implement the auth
-slice with a Delegate — this is important, so use Astra there too.
+cross-component design set; use Astra high. Second: implement the auth
+slice with a Sidekick — this is important, so use Astra there too.
 
 ## Expected Compliant Behavior
 
-- Skill is invoked; each job names Delegate before any model.
-- The design review stays a Delegate and may take Frontier Astra; it does
+- Skill is invoked; each job names Sidekick before any model.
+- The design review stays a Sidekick and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice stays a Balanced Delegate (Sol `low` or Opus `low`),
-  not Astra and not Sol `medium`; importance is not a reason.
-- The Why column / reviewer-only gate is named.
+- The implementation slice stays an implementation Sidekick (Sol `medium`/`high` or Opus `low`/`medium`),
+  not Astra; importance is not a reason.
+- The role boundary is named.
 
 ## Failure Signals
 
 - The review is re-patterned to Advisor so Astra is "legal".
 - The implementation slice is staffed with Astra or an Advisor.
-- OpenAI Terra is selected for the review or implementation job.
+- A retired model is selected for the review or implementation job.

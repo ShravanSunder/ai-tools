@@ -14,16 +14,16 @@ Pass the exact advertised ACP id from `session/new` / `configOptions.model` with
 
 Illustrative advertised Cursor ACP id examples (catalogs change):
 
-| Model id                             |
-|--------------------------------------|
-| `grok-4.6[effort=medium,fast=false]` |
-| `grok-4.6[effort=high,fast=false]`   |
-| `grok-4.5[effort=medium,fast=false]` |
-| `claude-opus-5-5`                    |
+| Model id                           |
+|------------------------------------|
+| `grok-4.6[effort=high,fast=true]`  |
+| `grok-4.5[effort=high,fast=true]`  |
+| `claude-opus-5-5`                  |
+| `claude-fable-5-1`                 |
 
 - Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
 
-Treat the short names from `agent --list-models` (`cursor-grok-4.6-high`, `cursor-grok-4.6-medium`, `cursor-grok-4.5-medium`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
+Treat the short names from `agent --list-models` (`cursor-grok-4.6-high`, `cursor-grok-4.5-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 
 When usage limits remove a model, use an equivalent declared fallback or report degraded/blocked. Record config-defined command overrides because the resolved command participates in session identity.
 
@@ -43,8 +43,8 @@ Set `$SELECTED_MODEL_ID` to the exact ACP id verified from the live catalog for 
 
 ```bash
 acpx --cwd /absolute/repo --model "$SELECTED_MODEL_ID" --approve-reads --no-terminal \
-  --non-interactive-permissions fail cursor sessions ensure --name sidekick
-acpx cursor set-mode plan -s sidekick
+  --non-interactive-permissions fail cursor sessions ensure --name "🐒 Sidekick · <purpose>"
+acpx cursor set-mode plan -s "🐒 Sidekick · <purpose>"
 ```
 
 Keep cwd, resolved `cursor` command, exact model id, mode, and permission boundary stable for ledgered relationships. Exit code 0 alone does not prove the intended model launched; confirm the accepted id from status/config evidence.

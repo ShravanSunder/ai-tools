@@ -16,7 +16,7 @@ STOP_REVIEW_JEV_YES_DEFAULT="0.8"
 # then ~/.agents/stop-review/machine.env.
 STOP_REVIEW_OPENROUTER_OP_REF_DEFAULT=""
 # none | low | medium | high | xhigh | max  (Luna rejects minimal)
-STOP_REVIEW_REASONING_EFFORT_DEFAULT="low"
+STOP_REVIEW_REASONING_EFFORT_DEFAULT="medium"
 STOP_REVIEW_REASONING_SUMMARY_DEFAULT="none"
 # Codex Fast mode service_tier: fast | priority.
 # default | off | empty = no service_tier override.

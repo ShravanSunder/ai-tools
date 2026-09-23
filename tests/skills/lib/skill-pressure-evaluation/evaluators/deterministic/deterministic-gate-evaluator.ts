@@ -27,7 +27,7 @@ export function createDeterministicGateEvaluator(
           failures,
           rationale: passed
             ? "Every deterministic evaluator passed."
-            : "At least one deterministic evaluator failed; Terra was not invoked.",
+            : "At least one deterministic evaluator failed; The semantic judge was not invoked.",
         },
       };
     },

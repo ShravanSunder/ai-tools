@@ -4,7 +4,7 @@
 
 model = "gpt-6-luna"
 model_provider = "codex-router"
-model_reasoning_effort = "low"
+model_reasoning_effort = "medium"
 model_reasoning_summary = "none"
 service_tier = "fast"
 approval_policy = "never"

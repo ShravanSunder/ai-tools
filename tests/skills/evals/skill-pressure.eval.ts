@@ -4,7 +4,7 @@ import { describeEval } from "vitest-evals";
 import { createAcpxCodexAgentRunner } from "../lib/skill-pressure-evaluation/agent-execution/acpx-codex-agent-runner.js";
 import { evaluatePressureAssertions } from "../lib/skill-pressure-evaluation/evaluators/deterministic/legacy-pressure-assertions.js";
 import { executeEvaluatorSequence } from "../lib/skill-pressure-evaluation/evaluation-execution/execute-evaluator-sequence.js";
-import { createAcpxTerraJudgeHarness } from "../lib/skill-pressure-evaluation/evaluators/semantic/terra-judge-harness.js";
+import { createAcpxJudgeHarness } from "../lib/skill-pressure-evaluation/evaluators/semantic/acpx-judge-harness.js";
 import {
   loadSkillPressureCase,
   validateNoOrphanCaseDefinitions,
@@ -88,7 +88,7 @@ describeEval(
       subjectRunner: acpxAgentRunner,
       subjectSetup: runtimeConfiguration.subject,
     }),
-    judgeHarness: createAcpxTerraJudgeHarness({
+    judgeHarness: createAcpxJudgeHarness({
       judgeRunner: acpxAgentRunner,
       judgeSetup: runtimeConfiguration.judge,
     }),

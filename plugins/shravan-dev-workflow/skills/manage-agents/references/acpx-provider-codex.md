@@ -22,9 +22,9 @@ Creation example for a new relationship only; for an existing Sidekick, inspect 
 
 ```bash
 acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex sessions ensure --name sidekick
+  --non-interactive-permissions fail codex sessions ensure --name "🐒 Sidekick · <purpose>"
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex -s sidekick \
+  --non-interactive-permissions fail codex -s "🐒 Sidekick · <purpose>" \
   --file tmp/sidekick-packet.md
 ```
 
