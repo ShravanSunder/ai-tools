@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: workhorse
-expect_proof_regex: background.{0,100}(workhorse|luna|cheapest)|(workhorse|luna|cheapest).{0,100}background
-expect_proof_regex: (well-understood|complete direction|exact steps).{0,160}(luna|workhorse)|(luna|workhorse).{0,160}(well-understood|complete direction|exact steps)
+expect_proof_regex: background.{0,100}workhorse|workhorse.{0,100}background
+expect_proof_regex: (well-understood|complete direction|exact steps).{0,160}workhorse|workhorse.{0,160}(well-understood|complete direction|exact steps)
 
 ## Shortcut Temptation
 

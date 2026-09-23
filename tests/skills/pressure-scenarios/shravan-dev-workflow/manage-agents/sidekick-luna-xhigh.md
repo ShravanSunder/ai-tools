@@ -5,9 +5,8 @@ skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: sidekick
-expect_decision_regex: luna
-expect_decision_regex: xhigh
+expect_decision_regex: luna.{0,80}xhigh.{0,80}workhorse|workhorse.{0,80}luna.{0,80}xhigh
+expect_decision_regex: sidekick.{0,150}workhorse|workhorse.{0,150}sidekick
 expect_proof_regex: workhorse
 expect_proof_regex: background|checked later|no one waiting
 expect_forbidden_regex: (luna|workhorse).{0,80}(never|not|cannot|can't|isn't|is not).{0,40}sidekick|sidekick.{0,80}(never|not|cannot|can't).{0,40}(luna|workhorse)

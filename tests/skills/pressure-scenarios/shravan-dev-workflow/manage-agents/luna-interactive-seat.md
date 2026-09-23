@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: workhorse
-expect_proof_regex: interactive|waiting on each turn|turn-by-turn
+expect_proof_regex: interactive latency|latency.{0,30}interactive|wait.{0,30}(each|next) turn
 expect_proof_regex: (main|firstmate|first mate).{0,120}(owner|daily driver|sol|opus)|(owner|daily driver|sol|opus).{0,120}(main|firstmate|first mate)
 
 ## Shortcut Temptation
