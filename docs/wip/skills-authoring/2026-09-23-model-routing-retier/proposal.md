@@ -48,7 +48,7 @@ Retired: Sol low, Fable medium, Astra medium/low, Terra, all GPT-5.x.
 | Main model is the owner's choice; skills never escalate it | Owner: "it's up to me"; daily drivers are far ahead and pleasant to talk to. |
 | Frontier defaults exist only for Advisor and Review | Owner: "only the frontier for advisors"; reviewers named explicitly. |
 | Opus medium moves Frontier -> Balanced; Opus high moves `User must authorize` -> default for Advisor/Review | Owner reversed #90's rows in this conversation. |
-| Sol xhigh becomes `User must authorize` (Review only) | Owner: "sol xhigh is on request". |
+| Sol xhigh becomes `User must authorize` (Review and Advisor) | Owner: "sol xhigh is on request". |
 | Drop Sol low, Fable medium, Review Sol/Grok medium, Advisor Opus medium and Sol high/xhigh | Not in the owner's lists. |
 | Review keeps Opus medium as a default row | Owner post-review correction (2026-09-23). |
 | Advisor adds Sol xhigh as `User must authorize` | Owner post-review correction (2026-09-23); on-request like its Review row. |
