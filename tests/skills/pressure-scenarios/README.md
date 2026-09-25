@@ -91,6 +91,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-per-artifact-visual-coverage` | Verify visual completion separately for Requirements, Specification, and Program Design while preserving main-authored meaning. |
 | `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the 🐒 Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
 | `agent-collaboration` | `agent-collaboration-multi-pr-thread-local-seats` | Use thread-local implementer seats, existing root references, exact SessionRefs, and orchestrator-only agent resolution across planned PR assignments. |
+| `agent-collaboration` | `agent-collaboration-tool-manual-vs-practice-routing` | Route a CLI how-to to the tool manual, a when-to-post decision to `practices-collaboration`, and a typo fix to neither. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `docs-maintain` | `docs-maintain-rewrite-leaves-fences.md` | When rewriting README prose, load humanizer and leave YAML and code fences unchanged. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
