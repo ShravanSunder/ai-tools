@@ -21,7 +21,7 @@ Illustrative advertised Cursor ACP id examples (catalogs change):
 | `claude-opus-5-5`                  |
 | `claude-fable-5-1`                 |
 
-- Select the model and effort from the `SKILL.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
+- Select the model and effort from the `model-catalog.md` role table and task signals, then use the exact live-advertised ACP id. If the selected effort is unavailable, report that gap; do not silently change effort.
 
 Treat the short names from `agent --list-models` (`cursor-grok-4.6-high`, `cursor-grok-4.5-high`, …) as Cursor CLI labels. Use and record the ACP-advertised id for ACPX calls.
 

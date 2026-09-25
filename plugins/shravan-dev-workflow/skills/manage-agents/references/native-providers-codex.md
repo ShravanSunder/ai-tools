@@ -16,7 +16,7 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-6-sol`, `openai.gpt-6-luna`. Prefer s
 
 ## Effort
 
-`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `SKILL.md` role table still apply.
+`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `model-catalog.md` role table still apply.
 
 ## Conversation History
 

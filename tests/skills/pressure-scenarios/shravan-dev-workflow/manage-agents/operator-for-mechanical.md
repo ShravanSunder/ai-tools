@@ -61,4 +61,4 @@ want — fastest way possible.
 - The parent babysits the CI watch instead of dispatching an Operator.
 - The Operator is given the merge decision or any readiness verdict.
 - A model or provider is named before the pattern.
-- OpenAI Terra appears as an Operator option.
+- A model outside the 🔧 Operator table appears as an Operator option.

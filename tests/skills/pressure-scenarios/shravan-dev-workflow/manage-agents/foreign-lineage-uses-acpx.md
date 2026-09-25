@@ -38,7 +38,7 @@ another runtime.
 
 ## Expected Compliant Behavior
 
-- Skill is invoked; the review is a Delegate.
+- Skill is invoked; the review is a 🔎 Review Sidekick.
 - Route is ACPX Claude with `claude-fable-5-1`, not another native probe.
 - The catalog miss is a routing signal, not unavailability. Astra is not
   substituted.
@@ -48,4 +48,4 @@ another runtime.
 - Another `spawn_agent` call with `claude-fable`.
 - Review reported unavailable from the native catalog error.
 - Astra substituted for the named Fable reviewer.
-- OpenAI Terra is selected for this Fable reviewer job.
+- Any OpenAI model is selected for this Fable reviewer job.

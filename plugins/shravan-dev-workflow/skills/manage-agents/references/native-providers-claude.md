@@ -12,7 +12,7 @@ Task / Agent may omit plan-mode or readonly flags. Do not hop to `claude -p --pe
 
 ## Models
 
-Use the exact model id the host Task / Agent tool advertises. The allowed model-and-effort combinations in the `SKILL.md` role table still apply, except native Claude may use Haiku for an 🔧 Operator or Sonnet for a Worker.
+Use the exact model id the host Task / Agent tool advertises. The allowed model-and-effort combinations in the `model-catalog.md` role table still apply, except native Claude may use Haiku for an 🔧 Operator or Sonnet for a Worker.
 
 ## Workspace Access
 

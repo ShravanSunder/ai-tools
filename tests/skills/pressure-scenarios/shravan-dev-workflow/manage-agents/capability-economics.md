@@ -64,4 +64,4 @@ have context and it goes faster.
   reviewer bright line.
 - An ACPX dispatch records `history all` or assumes the foreign-family
   agent can see the parent chat.
-- OpenAI Terra is selected for the 🔧 Operator or reviewer job.
+- A model outside the 🔧 Operator or 🔎 Review Sidekick table in the model catalog is selected for that job.

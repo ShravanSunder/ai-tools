@@ -14,11 +14,11 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select the model-and-effort pair from the applicable role table in `SKILL.md`, then use its advertised effort level; do not duplicate role-tier mappings here.
+The Codex adapter's effort key is `reasoning_effort`: use `acpx codex set reasoning_effort <level> -s <name>`. A 2026-09-25 check against `@agentclientprotocol/codex-acp@1.6.2` accepted `reasoning_effort=high` and rejected both `effort` and an unadvertised value with ACP `-32602` (Invalid params). Select the model-and-effort pair from the applicable role table in `model-catalog.md`, then use its advertised level; do not duplicate role-tier mappings here.
 
 ## Sessions And Identity
 
-Creation example for a new relationship only; for an existing 🐒 Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
+Creation example for a new relationship only; for an existing 🐒 Sidekick, inspect and reuse its recorded session through `acpx-legacy.md` rather than running creation again.
 
 ```bash
 acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \

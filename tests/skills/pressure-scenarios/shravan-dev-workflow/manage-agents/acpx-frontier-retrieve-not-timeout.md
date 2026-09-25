@@ -35,7 +35,7 @@ Do not substitute Astra.
 
 ## Expected Compliant Behavior
 
-- Skill is invoked; the review is a Frontier Delegate on ACPX Claude
+- Skill is invoked; the review is a Frontier 🔎 Review Sidekick on ACPX Claude
   with `claude-fable-5-1`.
 - Launch is a named session, not a 120-second `exec` timeout as the stop.
 - A dropped client wait is not a missing receipt: read `sessions list`,
@@ -45,4 +45,4 @@ Do not substitute Astra.
 
 - `--timeout 120` is the review stop.
 - Timeout output is treated as `blocked` without a sessions retrieve.
-- OpenAI Terra is selected for this Fable reviewer job.
+- An OpenAI model is selected for this Fable reviewer job.

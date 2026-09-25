@@ -5,358 +5,120 @@ description: Always load to manage agents, subagents, delegation, or agent swarm
 
 # Manage Agents
 
-## Shared Definitions
+Delegation moves bounded work to another agent without moving authority. Every assignment follows one route: classify the work, pick the role from the Agent Roles table, pick a model from the catalog, launch through a supported runtime, hand off with a packet, and verify the receipt. Where the work lives and how agents talk belong to `practices-collaboration`; recording it belongs to `practices-show-me-your-work`. Here, `parent` means the immediate assigning parent, and an executor performs assigned work within its role and authority, including fitting proof.
 
-Classify the assignment before selecting a role. Profiles guide selection; they are not benchmark ceilings. A task category does not grant authority: any capable agent may handle it only within its assigned role and scope. Keep raw collection separate from synthesis when the evidence needs independent interpretation.
+## Authority
 
-### Task Categories
-
-| Task category  | Result                               |
-|----------------|--------------------------------------|
-| Collection     | Traceable evidence and gaps.         |
-| Synthesis      | Interpretation from evidence.        |
-| Design         | Direction and tradeoffs with owner.  |
-| Implementation | A bounded change and proof.          |
-| Review         | Independent findings.                |
-| Operations     | A procedure and its observed result. |
-
-### Task Signals
-
-#### Guidance
-
-| Level              | Meaning                                                                                        |
-|--------------------|------------------------------------------------------------------------------------------------|
-| Exact steps        | Names the procedure, inputs, expected result, and checks.                                      |
-| Complete direction | Fixes the approach while allowing local implementation choices.                                |
-| Partial direction  | Fixes outcome, boundaries, constraints, and proof while the approach is developed within them. |
-
-Missing intent, a task boundary, or governing design/plan required by the owning workflow is missing assignment input to clarify, not Partial direction.
-
-A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction without line-by-line code.
-
-#### Architectural span
-
-| Level        | Meaning                                |
-|--------------|----------------------------------------|
-| Local        | One domain reasoned about at a time.   |
-| Cross-domain | Interacting domains within one system. |
-| Cross-system | Separate systems and contracts.        |
-
-Architectural span does not measure task size or permission. Every assignment remains bounded. Model-table signal cells follow this order: Guidance; Architectural span.
-
-### Model Categories
-
-| Model category | Definition                                     |
-|----------------|------------------------------------------------|
-| Workhorse      | Procedures, repeatable work, guided execution. |
-| Daily driver   | Execution or synthesis that needs judgment.    |
-| Frontier       | Demanding judgment, design, or review.         |
-
-Model category is a cost/capability grouping of model plus effort. It does not assign role authority or automatically promote effort. Role tables list lineage and thinking. Read category here. Do not pick a row marked `User must authorize` in this table or the role table unless Shravan explicitly authorizes that lineage and thinking; an empty category Use cell means the role table decides. 🦉 Advisor models are outside this mark: Shravan names every Advisor row, and the request is the authorization.
-
-| Model category | Model lineage | Thinking | Use                 |
-|----------------|---------------|----------|---------------------|
-| Workhorse      | OpenAI Luna   | medium   |                     |
-| Workhorse      | OpenAI Luna   | high     |                     |
-| Workhorse      | OpenAI Luna   | xhigh    |                     |
-| Workhorse      | OpenAI Luna   | max      |                     |
-| Daily driver   | OpenAI Sol    | medium   |                     |
-| Daily driver   | OpenAI Sol    | high     |                     |
-| Daily driver   | OpenAI Sol    | xhigh    |                     |
-| Daily driver   | Claude Opus   | low      |                     |
-| Daily driver   | Claude Opus   | medium   |                     |
-| Daily driver   | xAI Grok      | medium   |                     |
-| Daily driver   | xAI Grok      | high     |                     |
-| Daily driver   | Claude Opus   | high     |                     |
-| Frontier       | OpenAI Astra  | high     |                     |
-| Frontier       | Claude Opus   | xhigh    | User must authorize |
-| Frontier       | OpenAI Astra  | xhigh    | User must authorize |
-| Frontier       | Claude Fable  | high     | User must authorize |
-
-An agent's active function is independent of its session ancestry. The user-facing orchestrator owns the design conversation, routing, verification, and final report. When implementation is commissioned, the orchestrator holds the `orchestrator` seat and the implementation 🐒 Sidekick holds the `implementer` seat on that board thread. An `executor` performs assigned work within its role and authority; implementation includes fitting proof when applicable. Here, `parent` means the immediate assigning parent.
-
-Board seats describe participation on one discussion root; they do not grant agent authority or change conversation ancestry. This skill owns the complete role-to-seat mapping used by caller workflows:
-
-| Agent function | Board seat when joining |
-| --- | --- |
-| Main / user-facing orchestrator | `orchestrator` |
-| Implementation 🐒 Sidekick | `implementer` |
-| 🔎 Review Sidekick | `reviewer` |
-| Explicitly owner-requested 🦉 Advisor | `advisor` |
-| Research 🐒 Sidekick, Worker, Operator, or other bounded contributor | `participant` |
-
-Router owns the seat schema and enforcement. A direct conversation, native child, board thread, display name, or seat is not an assignment or permission grant; the caller workflow still supplies scope and authority.
-
-### Lineage Families
-
-| Family | Models or harness                                 |
-|--------|---------------------------------------------------|
-| OpenAI | Astra, Sol, and Luna.                             |
-| Claude | Fable and Opus.                                   |
-| xAI    | Grok.                                             |
-| Cursor | A harness and multi-model catalog, not a lineage. |
-
-### Agent Roles
-
-> 🔧 Operator owns a procedure. Worker owns an assignment. Sidekick owns continuing work. Review Sidekick owns independent assessment. Advisor owns guidance.
-
-| Role        | What it owns                                              | When to use it                                                                               | Continuity                                                                           |
-|-------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| 🔧 Operator | A prescribed procedure and its observed result.           | Git/PR operations, running checks, watching jobs, scraping or mechanical transformations.    | Completes the procedure and reports results or exceptions.                           |
-| 🛠️ Worker   | One bounded result, including corrections and proof.      | An implementation, investigation, collection or synthesis assignment.                        | Stays through follow-ups until that assignment is accepted.                          |
-| 🐒 Sidekick | Continuing implementation, research, or review work.     | Related assignments and follow-up questions need the same context.                          | Reuses one separate top-level session across assignments.                            |
-| 🔎 Review Sidekick | Independent assessment against requirements and evidence. | Challenge a design, implementation or claimed result.                                  | Reuses one separate top-level session and its own review history through corrections. |
-| 🦉 Advisor  | Continuing guidance, recommendations and pushback.        | You explicitly choose another agent to help think through decisions.                         | Reuses one separate session; advises without implementing.                           |
-
-In skills, packets, and chat, mark the first agent-role mention in each paragraph, bullet, or table cell with its emoji. Leave later role mentions in that unit plain. A heading may carry its role emoji once. Put qualifiers before the emoji, as in `Workhorse 🛠️ Worker`; titles use the role emoji first. Every non-main agent thread title starts with the emoji for its role in the Agent Roles table and follows `<emoji> <role> · <purpose>`, with a concrete purpose substituted; that table is the single runtime source of truth for role emoji. This applies to implementation and research Sidekicks, Review Sidekicks, explicitly assigned Advisors, Workers, Operators, and other helper threads when they have a visible title. Leave the user-facing main thread title untouched. For a persistent session, use a supported rename/display operation and verify its returned identity and saved visible title; its exact SessionRef remains separate. A ledger-only label or alias does not prove that the UI title changed. If the host cannot name it, report that capability gap without blocking otherwise useful work or replacing the session. Names do not replace session addresses or grant authority.
-
-## Main flow
-
-The owner chooses the user-facing orchestrator's model. Agents never select a Workhorse model as Main or escalate the owner's choice. The orchestrator retains design authority plus all governing Requirements, Specification, Program Design, diagram, and implementation-plan authorship. The orchestrator loads the owning design and planning skills and writes those artifacts in its session. 🛠️ Workers, Operators, search, and tools may return bounded evidence or mechanically render unchanged main-authored input; they do not choose, organize, rewrite, or express governing design or plan content. For generated visuals, the main authors the reader question, exact labels and relationships, semantic composition and invariants, then inspects and accepts or corrects the candidate. A tool or helper may realize pixels, typography, spacing and style or run a prescribed generate/copy/preview procedure on that unchanged brief; it cannot choose semantic layout, revise the brief, accept the visual, or make the image the governing design. An explicitly user-designated successor main is the only portability exception: its packet names the recipient, the transferred design or plan scope, and the user's authorizing direction. A role label, handoff, board seat, or assistant continuation does not create that authority.
-
-After a main-authored plan is ready, one persistent implementation 🐒 Sidekick may own each useful planned PR assignment while Main remains the default user conversation throughout delivery. The user may explicitly choose direct contact with the assigned Sidekick inside that assignment. A Workhorse Sidekick answers short owner status checks; substantive conversation routes through Main. In either conversation branch, the Sidekick implements, integrates, proves, and corrects its scope directly by default. It returns material design or plan decisions, cross-assignment integration conflicts, permission boundaries, and completion evidence to the orchestrator with the exact question or concise source-backed receipt; Main does not relay every internal progress turn or poll merely to keep the conversation active. Direct user contact does not transfer governing authorship: Main still writes Requirements, Specification, Program Design, diagrams, and the implementation plan, and retains material decisions, integration, assessment, acceptance, and the final report. Returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
-
-Several independent PR assignments may use several 🐒 Sidekicks; dependent work waits for verified prerequisites. The orchestrator assesses completed development and cross-PR integration before an independent Review Sidekick examines the implementation. A bounded research question uses a Worker; related research with follow-up questions may use a research Sidekick. Workers and Operators are native subagents that remain through assignment corrections, then finish.
+- **Main.** The owner chooses the user-facing Main's model; agents never select a Workhorse model as Main, never escalate the owner's choice, and never pick a `User must authorize` row unasked. Main owns the design conversation, routing, integration, assessment, acceptance, and the final report. Main loads the owning design and planning skills and writes every governing Requirements, Specification, Program Design, diagram, and implementation plan in its own session. Main assesses completed development and cross-PR integration before an independent 🔎 Review Sidekick examines the implementation.
+- **Helpers.** 🛠️ Workers, 🔧 Operators, search, and tools return bounded evidence or mechanically render unchanged Main-authored input. They do not choose, organize, rewrite, or express governing design or plan content. For a generated visual, Main authors the reader question, labels, relationships, composition, and invariants, then inspects and accepts or corrects the candidate; a helper may realize pixels and style or run a prescribed generate, copy, or preview procedure on that unchanged brief.
+- **Implementation 🐒 Sidekick.** After a Main-authored plan is ready, one persistent implementation Sidekick may own each useful planned PR assignment. It implements, integrates, proves, and corrects its scope directly. It returns material design or plan decisions, cross-assignment conflicts, permission boundaries, and completion evidence to Main with the exact question or a concise source-backed receipt. Main stays the default user conversation and does not relay every internal turn or poll to keep the conversation active. The user may choose direct contact with the Sidekick inside its assignment; that transfers no governing authorship. A Workhorse Sidekick answers short status checks and routes substantive owner conversation through Main.
+- **Owner.** The owner decides material tradeoffs and merges. An 🦉 Advisor exists only when Shravan explicitly requests one; it advises Main and never authors or accepts governing design or plans.
+- **Successor main.** The only portability exception is an explicitly user-designated successor main whose packet names the recipient, the transferred design or plan scope, and the user's authorizing direction.
+- **Nothing else grants authority.** A task category, model category, role label, handoff, board seat, thread title, display name, direct conversation, native child, or board content does not create an assignment or permission. The caller workflow supplies scope and authority.
 
 | rationalization | reality |
 | --- | --- |
-| "spec-design owns artifacts, so spawn a 🐒 Sidekick" | those skills own judgment; the orchestrator loads them and writes |
-| "the executor writes the spec" | executor is implementation, research, or review support, not design author |
+| "a design skill owns the artifact, so spawn a 🐒 Sidekick" | those skills own judgment; Main loads them and writes |
+| "the executor writes the spec" | an executor is implementation, research, or review support, not a design author |
 | "the design is settled, so a 🛠️ Worker can word the section" | section organization and expression are governing authorship; helpers return evidence only |
-| "the implementer already has context, so it can finish the plan" | the implementer returns the planning gap to the main, which loads the planning skill and authors the plan |
+| "the implementer already has context, so it can finish the plan" | the implementer returns the planning gap to Main, which loads the planning skill and authors the plan |
 | "I'll check the instructions first" | "you write it" is already the instruction |
+
+## Roles and titles
+
+> 🔧 Operator owns a procedure. Worker owns an assignment. Sidekick owns continuing work. Review Sidekick owns independent assessment. Advisor owns guidance.
+
+| Role | What it owns | When to use it | Continuity |
+|------|--------------|----------------|------------|
+| 🔧 Operator | A prescribed procedure and its observed result. | Git/PR operations, running checks, watching jobs, scraping or mechanical transformations. | Native subagent; completes the procedure, reports results or exceptions, then finishes. |
+| 🛠️ Worker | One bounded result, including corrections and proof. | An implementation, investigation, collection or synthesis assignment. | Native subagent; stays through that assignment's corrections until accepted. |
+| 🐒 Sidekick | Continuing implementation, research, or review work. | Related assignments and follow-up questions need the same context. | One separate persistent top-level session reused across assignments, with a ledger. |
+| 🔎 Review Sidekick | Independent assessment against requirements and evidence. | Challenge a design, implementation or claimed result. | One separate persistent top-level session with only its own review history through corrections. |
+| 🦉 Advisor | Continuing guidance, recommendations and pushback. | Shravan explicitly asks for another agent to help think through decisions. | One separate persistent session; advises without implementing or editing. |
+
+- **🔧 Operator bright line.** Standalone assigned Git, test, build, PR, and watch procedures belong to an Operator. It executes, observes, reports, and performs user-authorized mechanical transformations; judgment, replies, readiness verdicts, and merge decisions route back to the parent. An unsupported Operations method goes to a Worker Synthesis assignment that defines the procedure, then back to an Operator. An unexpected diagnosis goes to a Worker. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure.
+- **🛠️ Worker.** Packet-bounded work that the parent verifies. It does not recurse. It may return evidence, candidate findings, or mechanical output from unchanged Main-authored input.
+- **🐒 Sidekick.** An implementation Sidekick may assign bounded Workers and Operators only under the benefit test below. A research Sidekick follows its owning research workflow within its scope. A user may steer a named Sidekick inside its relationship; the Sidekick reports changed scope or material questions to Main.
+- **🔎 Review Sidekick.** Source-grounded candidate findings and correction verification, no implementation edits. Start a new relationship without author history. At least one review lead in a final review comes from a different author lineage, established from evidence; a single Review Sidekick must be different-lineage. In a larger round, allocate up to half of review leads to a different lineage by cost. A missing required lead is a reported gap, never a silent substitute; a contaminated or unavailable relationship is a reported gap before any replacement. A continuing Review Sidekick keeps only its own review history and inspects changed evidence rather than treating cache familiarity as current proof. It walks its owning review checks itself and may give prescribed proof commands to an Operator under its execution grant.
+
+| rationalization | reality |
+|-----------------|---------|
+| "it's faster to do it myself" | dispatch discipline buys parent attention, not speed; the watch you babysit costs every turn until it ends |
+| "this needs judgment" | split it: the procedure goes to the 🔧 Operator; the judgment routes back to you, and you decide or dispatch a separate Worker reasoning assignment |
+| "a 🛠️ Worker can handle it" | a separately assigned procedure is Operator work; an implementation Worker's associated proof stays with that Worker |
+
+**Titles.** Every non-main agent thread with a visible title uses `<emoji> <role> · <concrete purpose>`, with the emoji from the Agent Roles table, the single runtime source of role emoji. Leave Main's title untouched. In skills, packets, and chat, mark the first agent-role mention in each paragraph, bullet, or table cell with its emoji and leave later mentions in that unit plain; a heading may carry its emoji once; qualifiers come before the emoji, as in `Workhorse 🛠️ Worker`. Apply a title through a supported rename or display operation and verify the saved title and returned identity; a ledger-only label does not prove the UI changed. If the host cannot name the session, report that gap without blocking useful work or replacing the session. A title never replaces a session address.
 
 ## Select an agent
 
-> The orchestrator owns the overall-task verdict and verifies assignment evidence. Contributors may report or converse within their authorized assignment, but do not claim the whole work complete.
+Classify the assignment, then choose responsibility and continuity from the Agent Roles table:
 
-```text
-task category + Guidance + Architectural span -> Agent Roles responsibility and continuity
-  -> allowed model and effort -> runtime, packet, receipt
-```
+| Task category | Result |
+|---------------|--------|
+| Collection | Traceable evidence and gaps. |
+| Synthesis | Interpretation from evidence. |
+| Design | Direction and tradeoffs with owner. |
+| Implementation | A bounded change and proof. |
+| Review | Independent findings. |
+| Operations | A procedure and its observed result. |
 
-Retain the orchestrator's `orchestrator` board seat. Reuse a suitable executor assignment when work has not materially changed; otherwise choose an executor using task category, Guidance, Architectural span, useful existing context, and total completion cost including handoff, rework, and proof. This is internal task-fit selection, not an owner approval, form, or new agent requirement. Use the **Agent Roles** table to choose responsibility and continuity. Review uses independent context and its lineage rule; an 🦉 Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
+| Guidance | Meaning |
+|----------|---------|
+| Exact steps | Names the procedure, inputs, expected result, and checks. |
+| Complete direction | Fixes the approach while allowing local implementation choices. |
+| Partial direction | Fixes outcome, boundaries, constraints, and proof while the approach is developed within them. |
 
-An executor is not a design- or plan-author role. The orchestrator designs, plans, and verifies decisive evidence while assigning implementation and proof to eligible executors. An implementation 🐒 Sidekick executes its assigned change and associated proof directly by default. Delegate only when a child has bounded independent work, distinct expertise the executor needs, or large disposable output worth isolating, and the expected benefit exceeds briefing, coordination, and verification cost. Keep tightly coupled change-and-proof work with its executor; do not create a supervisor whose only job is to relay another agent's work. Standalone prescribed Git, PR, build, test, or watch procedures use an Operator, while tests and checks associated with an implementation assignment stay with that executor. PR wrap-up may remain with the implementation Sidekick as part of its delivery assignment or be assigned to an Operator as a prescribed procedure; Main retains acceptance and the user retains merge authority. Use a research Sidekick only when related research needs continuing context. The orchestrator may communicate, make control calls, and read decisive sources; report an unavailable required route rather than silently falling back inline.
+| Architectural span | Meaning |
+|--------------------|---------|
+| Local | One domain reasoned about at a time. |
+| Cross-domain | Interacting domains within one system. |
+| Cross-system | Separate systems and contracts. |
 
-### Choose a model
+Missing intent, a task boundary, or a governing design or plan the owning workflow requires is missing input to clarify, not Partial direction. A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction. Architectural span measures neither size nor permission. Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices; it never bypasses a governing design, specification, or plan gate the owning workflow requires. Keep raw collection separate from synthesis when the evidence needs independent interpretation.
 
-Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination.
+Reuse a suitable executor when the work has not materially changed; otherwise choose by task category, Guidance, Architectural span, useful existing context, and total completion cost including handoff, rework, and proof. Delegate only when a child has bounded independent work, distinct expertise, or large disposable output worth isolating, and the benefit exceeds briefing, coordination, and verification cost. Keep tightly coupled change-and-proof work with its executor, and never create a supervisor whose only job is to relay another agent's work. Tests and checks associated with an implementation stay with its executor; PR wrap-up may stay with the implementation 🐒 Sidekick or go to an 🔧 Operator as a prescribed procedure, while Main accepts and the user merges. Use a research Sidekick only when related research needs continuing context. Report an unavailable required route rather than silently falling back inline.
+
+MUST load `references/model-catalog.md` and return the selected role's model lineage, thinking level, and model category.
+
+## Runtime
+
+🐒 Sidekicks, 🔎 Review Sidekicks, and 🦉 Advisors run in separate persistent top-level conversations; 🛠️ Workers and 🔧 Operators run as native subagents. Reuse a persistent relationship's exact address across follow-ups and corrections. Persistence takes precedence over native availability: a native child never forms a persistent Sidekick. An unavailable native lineup is a reported gap, not a reason to create a top-level Worker or relabel another thread. Do not replace an adequate native assignment with a CLI wrapper to invent access flags.
+
+- **Router (persistent, Codex).** Prefer a supported Router top-level creation route with the exact model, effort, and access. IF a Router route is selected, load `agent-collaboration` and return the verified SessionRef, input capability, and model and access fit; verify the visible name and returned identity. When no Router route meets the requirement, report the exact gap and use a verified existing top-level conversation or the ACPX legacy route.
+- **Native (Workers and Operators).** IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding. IF Claude is spawning a Claude model, load `references/native-providers-claude.md` and return the Task / Agent and workspace-access encoding. IF Cursor is spawning an advertised Cursor model, load `references/native-providers-cursor.md` and return the Task and workspace-access encoding. When an own-lineage model is unavailable, choose a declared native fallback or report the route as degraded or blocked.
+- **ACPX (legacy).** IF the persistent relationship needs a Claude or Cursor lineage, or Router cannot meet its model, effort, or title requirement, load `references/acpx-legacy.md` and return the provider, exact model id, effort encoding, permission boundary, and retained session identity. ACPX agents never inherit parent history and never receive `--timeout`.
+- **Adapters.** IF you need to build, modify, or wrap an ACP-compatible adapter, load `references/building-acp-adapters.md` and return its build gate, security route, and smoke checklist.
 
 ### Commission an implementation 🐒 Sidekick
 
-For each accepted planned PR assignment, create or reuse one named top-level persistent implementation 🐒 Sidekick through a supported capability-verified route. Its commission includes the main-authored plan and PR scope, accepted direction, sources, worktree, coordination and execution work references, execution authority, proof expectations, real prerequisites, and route for design or plan questions. One thread has at most one open `implementer` seat: the orchestrator retains `orchestrator` on a coordination root, links one execution root per simultaneously active Sidekick through existing message references, and holds `orchestrator` on each execution root while that Sidekick joins it as `implementer` with `--actor self`. Treat setup as complete only after the Participant row on the exact execution root shows that role. `agent-collaboration` owns those mechanics; linked roots do not create a new Router relationship or authority mechanism. For Codex, use the supported Router route with the exact model, effort, and access on the implementation worktree; verify the target choice, access, visible name, and returned identity. If that route is unavailable, report the exact capability gap and use a verified existing top-level conversation or supported top-level ACPX route. Native children serve Workers and Operators; they do not form a persistent Sidekick. The orchestrator retains design, planning, integration, and disposition authority. An Advisor exists only when Shravan explicitly requests one and advises the orchestrator.
-
-## Patterns
-
-Manage each assigned agent or relationship through one of the following patterns. The runtime supplies the launch mechanism.
-
-### 🔧 Operator
-Use for mechanical actions: execution (running tests, building, deploying, etc.) / observe (gh watch) / scraping / watching (watching monitors) / report (grouping logs and results). Give the 🔧 Operator a procedure and reserve reasoning for the parent.
-
-- **Work:** A bounded procedure, monitor, simple `git`/`gh` or PR-state check, script, scrape, or structured report.
-- **Continuity and cardinality:** Native subagent for one procedure; keep it through procedure exceptions and finish after its result is accepted.
-- **Authority:** Execute, observe, report, and perform user-authorized mechanical transformations. It does not make implementation or design judgments; route those, replies, readiness verdicts, and merge decisions to the parent.
-
-Bright line: standalone assigned Git, test, build, PR, and watch procedures belong to an 🔧 Operator. An unsupported Operations method routes to a Worker Synthesis assignment that defines the procedure, then returns to an Operator; Synthesis requiring interpretation remains Worker work even when the approach is detailed, while plain regrouping is Operations. An unexpected diagnosis routes to a Worker; the user retains authorization. The parent verifies receipt scope, source or head, and evidence; it need not rerun a routine successful procedure unless evidence is missing or conflicts.
-
-| rationalization               | reality                                                                                                                                          |
-|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| "it's faster to do it myself" | dispatch discipline buys parent attention, not speed; the watch you babysit costs every turn until it ends                                       |
-| "this needs judgment"         | split it: the procedure goes to the 🔧 Operator; the judgment routes back to you, and you decide or dispatch a separate Worker reasoning assignment |
-| "a 🛠️ Worker can handle it"      | A separately assigned procedure is 🔧 Operator work; an implementation Worker's associated proof stays with that Worker.                            |
-
-#### Model choices
-
-| Model lineage | Thinking |
-|---------------|----------|
-| OpenAI Luna   | medium   |
-| OpenAI Luna   | high     |
-
-### 🛠️ Worker
-Use for one clear bounded assignment. You manage and validate the work; continue the same 🛠️ Worker through corrections belonging to that assignment.
-
-- **Work:** One bounded research, implementation, reasoning, or analysis assignment, including its corrections and associated proof. A 🛠️ Worker may return evidence, candidate findings, or mechanical output from unchanged main-authored input; it does not author governing design or plan prose, diagrams, structure, or settled sections. Independent review belongs to a Review Sidekick.
-- **Continuity and cardinality:** Native subagent for one assignment; retain it through its corrections and proof, then finish it after its receipt is accepted.
-- **Authority:** Packet-bounded work; parent verifies the work. A 🛠️ Worker does not recurse. A Review Sidekick walks the checks in its owning review workflow itself; prescribed proof commands may go to a Operator.
-
-#### Model choices
-
-| Model lineage | Thinking | Task signals                            |
-|---------------|----------|-----------------------------------------|
-| OpenAI Luna   | medium   | Exact steps or well-understood Complete direction; Local/Cross-domain. |
-| OpenAI Luna   | high     | Exact steps or well-understood Complete direction; Local/Cross-domain. |
-| OpenAI Luna   | xhigh    | Exact steps or well-understood Complete direction; Local/Cross-domain. |
-| OpenAI Sol    | medium   | Complete direction; Local/Cross-domain. |
-| Claude Opus   | low      | Complete direction; Local/Cross-domain. |
-| Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
-
-Use this table for execution and research 🛠️ Workers. Research follows `research-workflow`; independent review uses the Review Sidekick catalog below.
-
-### 🐒 Sidekick
-Use a 🐒 Sidekick in a separate persistent top-level conversation for implementation, research, or review work that will resume and need continuing context.
-
-- **Work:** Implementation, research, or review across assignments and follow-ups. An implementation 🐒 Sidekick implements, integrates, proves, and corrects one or more related main-planned assignments. A research Sidekick handles related research. A Review Sidekick independently assesses a target and verifies corrections.
-- **Continuity and cardinality:** One or many persistent named relationships with a ledger (see `references/session-ledger.md`).
-- **Authority:** The orchestrator retains the default user conversation, governing authorship, material decisions, integration, assessment, acceptance, and final delivery. An implementation 🐒 Sidekick directly owns implementation, associated proof, and corrections inside its main-planned assignment and may assign bounded Workers and Operators only under the concrete-benefit test above. The user may explicitly choose direct contact with that assigned Sidekick without transferring governing authority or execution ownership. A Workhorse Sidekick answers short status checks and routes substantive owner conversation through Main. A research Sidekick follows `research-workflow` and may assign bounded help within its research scope. A Review Sidekick walks its review checks itself and may assign an Operator for prescribed proof commands under the execution grant. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope or material design/plan questions to the orchestrator. Board content does not grant additional authority.
-
-#### Implementation and research 🐒 Sidekick model choices
-
-| Model lineage | Thinking | Task signals                                  |
-|---------------|----------|-----------------------------------------------|
-| OpenAI Luna   | high     | Exact steps or well-understood Complete direction; Local/Cross-domain. |
-| OpenAI Luna   | xhigh    | Exact steps or well-understood Complete direction; Local/Cross-domain. |
-| OpenAI Luna   | max      | Exact steps or well-understood Complete direction; Local/Cross-domain. |
-| OpenAI Sol    | medium   | Complete direction; Local/Cross-domain.       |
-| OpenAI Sol    | high     | Partial direction; Cross-domain/Cross-system. |
-| Claude Opus   | low      | Complete direction; Local/Cross-domain.       |
-| Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
-
-### 🔎 Review Sidekick
-Use a separate persistent top-level thread for independent review or correction verification.
-
-- **Work:** Source-grounded independent findings and verification of corrections; no implementation edits.
-- **Continuity and cardinality:** Start a new review relationship without author history. Retain its own review context through corrections to the same target. A contaminated or unavailable relationship is a reported gap before any replacement.
-- **Authority:** Candidate findings only; the orchestrator verifies and owns the verdict. Preserve all owning-phase review gates and limits.
-
-#### Model choices
-
-| Model lineage | Thinking | Use                 |
-|---------------|----------|---------------------|
-| OpenAI Sol    | high     |                     |
-| OpenAI Sol    | xhigh    |                     |
-| OpenAI Astra  | high     |                     |
-| OpenAI Astra  | xhigh    | User must authorize |
-| Claude Opus   | medium   |                     |
-| Claude Opus   | high     |                     |
-| Claude Opus   | xhigh    | User must authorize |
-| Claude Fable  | high     | User must authorize |
-| xAI Grok      | high     |                     |
-
-- **Selection:** Establish author lineage from evidence. A final review includes at least one 🔎 Review Sidekick from a different author lineage; a single Review Sidekick must be different-lineage. In a larger round, deliberately allocate up to half of review leads to a different lineage according to cost. If the required review lead is unavailable, report that gap without silently substituting.
-- **Continuity and evidence:** A continuing 🔎 Review Sidekick retains only its own review history, never the author's conversation; inspect changed evidence rather than treating cache familiarity as current proof.
-
-Use this catalog for an independent 🔎 Review Sidekick that walks the owning review workflow itself.
-
-### 🦉 Advisor
-Use an 🦉 Advisor only when Shravan explicitly requests a separate persistent guidance thread for the orchestrator. Guidance only — the Advisor never executes or edits.
-
-- **Work:** Candidate guidance, reflection, course correction, and completion checks across a problem that outlives any single assignment.
-- **Continuity and cardinality:** Persistent named guidance relationship, with ledger and deliberate continuity (see `references/session-ledger.md`). Use a 🔎 Review Sidekick for a bounded independent assessment.
-- **Authority:** The 🦉 Advisor returns guidance to the orchestrator, which decides with Shravan. It does not author or accept governing design or plans. The implementation Sidekick asks the orchestrator when it needs design or plan help.
-
-#### Model choices
-
-| Model lineage | Thinking |
-|---------------|----------|
-| OpenAI Astra  | high     |
-| OpenAI Astra  | xhigh    |
-| Claude Opus   | high     |
-| Claude Opus   | xhigh    |
-| Claude Fable  | high     |
-
-Shravan chooses every 🦉 Advisor's model and effort from this table; an Advisor request is that authorization. Do not pick one yourself, escalate, or add another Advisor automatically.
-
-## Execute the assignment
-
-### Context and access
-
-#### Parent conversation history
-
-- 🔎 Review Sidekicks: bright line — an independent review relationship NEVER receives inherited author or designer conversation history. Reviews judge from first principles; inherited context is contamination. The selected provider reference owns the exact encoding.
-- Non-reviewers: use the selected host's advertised history encoding by cost and benefit. History helps a subagent abide by decisions already made; it costs context and money. Include what the job's stop condition depends on; do not paste unrelated turns.
-- ACPX agents never inherit parent history — carry context in the phase brief instead (see ACPX dispatch). Dispatch configuration records `history none` for every ACPX assignment.
-- Self-fork and resume-self mechanisms (a subagent started from the parent's own conversation) are full-history inheritance and are forbidden for 🔎 Review Sidekicks on every host. "It already has all the context" is the rationalization; the context is the contamination.
-- Because a 🔎 Review Sidekick starts empty, its phase brief carries absolute source paths or inlined governing content for everything it will cite. Every assigned reference must resolve from its cwd; owner meaning that exists only in chat is copied verbatim. The Review Sidekick loads its owning review workflow and `manage-agents` before walking the checks.
-
-#### Workspace access
-
-The assignment contract records history, workspace access, and any declared enforcement notation through `references/agent-job-packet.md`.
-
-- Readers (review, 🦉 Advisor, research, guidance): state once that no repo edits are allowed except scratch files under project `tmp/` or system `/tmp`. Parent verifies the repo worktree is unchanged after the receipt.
-- 🔧 Operator proof procedure (`read-only + exec <listed commands>`): the Review Sidekick records an execution grant naming exact commands and scratchpad under `tmp/` or `/tmp`. The Operator checks the write set before each run, executes only listed commands, and compares `git status --porcelain` before and after. The Review Sidekick verifies commands and worktree state, then judges the observed proof; a mismatch invalidates that proof result.
-- Writers (🐒 Sidekicks, Workers, Operators that produce files): the contract names the write paths once. Before an edit outside them, stop and report blocked; if a violation is discovered, stop and report it. Parent still verifies the receipt's diff stayed inside the declared scope.
-
-Launch with the Router, native, or ACPX route returned by **Choose the runtime**. Host permission flags live in that provider reference. A missing sandbox or plan-mode flag is not a reason to leave native. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
-
-### Choose the runtime
-
-Select the role, model category, model lineage, and reasoning requirement first. 🐒 Sidekicks and Advisors use separate persistent top-level conversations. Reuse their named Router-addressable or ACPX session across follow-ups and corrections. For a new persistent Codex relationship, prefer a supported Router top-level creation route. Otherwise use a verified existing separate conversation or a supported named top-level ACPX session with the required model, effort, permissions, and retained identity. Other providers select their supported route. Report the concrete capability gap when no route meets the requirement. Workers and Operators use native subagents; an unavailable native lineup is a reported gap, not a reason to create a top-level Worker or relabel another thread. Router, native, and ACPX supply supported routes; each uses the same packet, authority, continuity, and parent-verification rules.
-
-IF a Router route is selected, load the `agent-collaboration` skill and return verified exact SessionRef, input capability, and model/access fit; reuse the original address.
-
-#### Native dispatch
-
-For 🛠️ Workers and Operators, use native dispatch in the host's available lineup. Independent review leads are persistent Review Sidekicks that walk their checks in one session. Sidekick and Advisor persistence takes precedence over native availability. Do not replace an adequate native assignment with a CLI wrapper merely to invent access flags.
-
-- IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
-- IF Claude is spawning a Claude model, load `references/native-providers-claude.md` and return the host Task / Agent encoding and workspace-access encoding.
-- IF Cursor is spawning an advertised Cursor model, load `references/native-providers-cursor.md` and return the host Task encoding and workspace-access encoding.
-- Use the exact model id and reasoning control supported by the native runtime.
-
-When an own-lineage model is unavailable, choose a declared native fallback or report the route as degraded or blocked.
-
-#### ACPX dispatch
-
-Use ACPX for a different-provider model or the persistent route selected by **Choose the runtime**.
-
-1. MUST load `references/acpx.md` and return the provider-neutral launcher, session, permission, and output mechanics for this dispatch.
-2. Select exactly one provider and MUST load its contract before constructing or executing the call, returning its exact model, effort, and permission encoding:
-   - `codex` -> `references/acpx-provider-codex.md`
-   - `claude` -> `references/acpx-provider-claude.md`
-   - `cursor` -> `references/acpx-provider-cursor.md`
-3. Use the exact model id and reasoning control specified by the provider contract. When the contract requires live catalog verification, use and record the exact id the provider advertises.
-4. When the selected provider has no provider contract, stop dispatch and report the route as unsupported.
-
-ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the assignment contract does. Before dispatch, include the decision target, settled decisions, resolvable sources, and `history none` as relevant to the assignment. ACPX is for persistent 🐒 Sidekick, Advisor, or Review Sidekick relationships. Preserve the identity selected by **Choose the runtime** and supply relevant new context.
-
-### Workflow
-
-1. Reuse the supplied plan or task contract read-only; do not require a plan where the owning workflow does not. Coordinate only multiple separately assigned jobs whose dependencies or interference need it: state prerequisites, actual read/write and shared-resource safety, and verification points inline. Different files are not proof; start dependent work only after prerequisite verification. Otherwise do not create a graph or coordination record. Bulk collection, log scans, and watches may still be handed off sequentially to conserve context. When one agent can own a bounded result, do not split it; a missing stop criterion calls for clarification, not automatic splitting.
-
-2. Reuse the orchestrator and existing assigned executor. When **Select an agent** requires a new executor choice, follow the owning phase. For implementation or research, assign an eligible 🛠️ Worker or Sidekick. For a design phase, the orchestrator authors; do not assign a Worker or Sidekick as design author. The owning phase supplies assignment, governing sources, authority bounds, completion or escalation conditions, and result or proof contract; those sources must resolve for a fresh recipient. For a direct task, state outcome, relevant sources, explicit authority, stop or escalation condition, and expected evidence in a concise brief. For a new agent assignment, MUST load `references/agent-job-packet.md` to resolve executor, model and effort, history, access, runtime, continuity, and acceptance in tool arguments or session configuration where supported; prose supplies only missing task context. Before the first prompt, resolve runtime, exact model, access, and history; IF persistent, load `references/session-ledger.md` and return its current identity row before prompting.
-
-3. Dispatch the whole assignment. A same-assignment follow-up carries a concise delta and retains identity and scope; a new assignment refreshes its assignment contract without replacing a 🐒 Sidekick, Advisor, or Review Sidekick conversation. At the decision point, use the selected Router, native, or ACPX contract: preserve review-history isolation, never pass ACPX `--timeout`, and inspect sessions after a dropped wait before calling it blocked. When no independent useful work remains, follow **Waiting** immediately.
-
-4. Verify evidence against the claim and request correction when needed; do not routinely redo the agent's execution. The orchestrator may read decisive sources. Every claim is accepted, rejected, or unverified against the assignment contract's verification point.
-
-Extra: IF you need to build, modify, or wrap an ACP-compatible adapter, load `references/building-acp-adapters.md` and return its build gate, security route, and smoke checklist.
-
-
-## Maintain continuity
-
-### Shared work context
-
-Use the relevant shared message-board thread to coordinate multi-session work, decisions, and handoffs. One coherent assignment reuses one exact root. Several planned PR assignments may share a coordination root while each simultaneously active implementation 🐒 Sidekick uses its own linked execution root and thread-local `implementer` seat. Carry both coordination and execution references across participating sessions; integration decisions stay on the coordination root and assignment discussion/proof stays on its execution root.
-
-When an assignment contributes to an existing work thread, carry its exact shared work reference with relevant sources and say whether the agent may post findings or must return them to the parent; a reference alone grants no posting or sending authority. `practices-show-me-your-work` owns the meaningful-checkpoint threshold. Scoped board catch-up or posting an approved checkpoint is an 🔧 Operator procedure through `agent-collaboration`; the orchestrator identifies consequential decisions and verifies evidence, then reuses that summary without a second narrative. Batch small lane receipts into the responsible agent's checkpoint; do not post per command, minor edit, or routine progress, and do not duplicate parent and Worker reports. Keep runtime identity, permissions, and receipt verification here. Contributors do not resolve the whole-work thread. To report current implementer activity, load `agent-collaboration` and return the scoped session row — worktree, model, effort, status or idle — for that exact SessionRef. Review Sidekicks receive bounded sources without inherited author conversation; a work thread is not a substitute for an independent review packet.
+For each accepted planned PR assignment, create or reuse one named persistent implementation Sidekick through a capability-verified route. Its commission carries the Main-authored plan and PR scope, accepted direction, sources, worktree, work references, execution authority, proof expectations, real prerequisites, and the route for design or plan questions. Seats and roots follow `practices-collaboration`: Main holds `orchestrator` on the coordination root and on each execution root, and the Sidekick joins its own execution root as `implementer` with `--actor self`. Setup is complete only after the Participant row on that exact execution root shows the role. Several independent PR assignments may run as several Sidekicks; dependent work waits for verified prerequisites.
 
 ### Waiting
 
-After dispatch, when no independent useful work remains, identify the dependency and select its supported wait or notification handling. The waiting owner selects the delivery lifetime; host limits bound a process wait. A wait may return early for activity; judge the requested bound and reason for returning, not elapsed time alone.
+When no independent useful work remains after dispatch, wait now. A native child's result arrives through the host completion notification or blocking wait; IF Codex native lifecycle tools apply, load `references/native-providers-codex.md` and return the explicit `timeout_ms` and observed lifecycle result. IF waiting on a separately addressed agent, load `practices-collaboration` and return its armed listener, saved wake, or capability gap. Give a long CI watch to an 🔧 Operator with its blocking watch, then wait for the Operator.
 
-| Dependency | Waiting path |
-| --- | --- |
-| Native child result | Use the host completion notification or blocking wait. IF Codex native lifecycle tools apply, load `references/native-providers-codex.md` and return the explicit `timeout_ms` and observed lifecycle result. |
-| Board activity in a separate conversation | IF awaiting activity, load `agent-collaboration` and select its supported Codex session notification for the exact thread; yield after an armed subscription or process a returned wait. Return subscription armed, received activity, timeout, or the exact capability gap. That skill owns the mechanics and capability check. |
-| A future event, deadline, or follow-up | Create an authorized wake through `agent-collaboration`, retaining the recipient, expiry, and saved wake id. This schedules a future event; it is not a passive wait. |
-| An owner decision | Record the meaningful checkpoint and yield. |
+## Hand off
 
-For a separate conversation without available board-listener capability, use its supported reply/event notification or an authorized wake, or report the capability gap. A Claude background command is eligible only when the host also supports a native completion notification; `&` alone does not prove a wake. When a supported board listener is available, do not substitute periodic wakes or list polls. When remaining implement/prove is on a separately addressed collaborator and no independent useful work remains, set one authorized `agent-collaboration` wake unless a supported listener is already armed, then state in the stop text that the wake or listener is saved/active. Stop-review cannot see the CLI or MCP call. Supported capability and permission recovery stays within `agent-collaboration`; do not use an alternate transport after access is denied.
+For a new agent assignment, MUST load `references/agent-job-packet.md` to resolve executor, model and effort, history, access, runtime, continuity, and acceptance in tool arguments or session configuration where supported; prose supplies only missing task context. IF the relationship is persistent, load `references/session-ledger.md` and return its current identity row before prompting. The owning phase supplies the assignment, governing sources, authority bounds, completion or escalation conditions, and result contract, and those sources must resolve for a fresh recipient. For a direct task, state outcome, sources, authority, stop condition, and expected evidence in a concise brief.
 
-On received activity, process the relevant receipt. On an empty timeout, rearm the selected wait only when the deadline and assignment still warrant it. Discovery, failure/recovery evidence, and liveness checks after a dropped wait remain valid reasons to inspect. A blocked wait process itself generates no model tokens, but handling its call/result and a wake consumes real turns; each model-driven poll reprocesses context. Do not call waiting free or claim every tool call costs the same. Assign a long CI watch to an 🔧 Operator with its blocking watch, then wait for the Operator.
+**History.** A 🔎 Review Sidekick NEVER receives inherited author or designer conversation history, on any host; self-fork and resume-self are full-history inheritance and are forbidden for it. "It already has all the context" is the rationalization; the context is the contamination. Its brief carries absolute source paths or inlined governing content for everything it will cite, owner meaning copied verbatim, and it loads its owning review workflow before walking the checks. Non-reviewers use the host's advertised history encoding by cost and benefit, including only what the stop condition depends on. ACPX assignments record `history none`.
 
-| Red flag | Required action |
-| --- | --- |
-| “just a quick check”; “the reply is probably in by now”; “one more list won’t hurt” | Do not list, inspect, or fetch solely for a reply. Continue the active wait; rearm only after it ends and waiting is still required. |
-| Stopping while a collaborator still owns remaining work, without a reported saved wake | Set the authorized wake (or keep the armed listener), say it is saved/active, then yield. Do not inspect the foreign session to keep this conversation alive. |
+**Access.** The packet records workspace access once:
 
-On observed resumption, cancel or adjust an obsolete wake through `agent-collaboration`. This does not alter ordinary user reminder cadence.
+- Readers (review, 🦉 Advisor, research, guidance): no repo edits except scratch under project `tmp/` or system `/tmp`; the parent verifies the worktree is unchanged after the receipt.
+- 🔧 Operator proof procedure (`read-only + exec <listed commands>`): the Review Sidekick records an execution grant naming exact commands and a scratchpad under `tmp/` or `/tmp`. The Operator checks the write set, runs only listed commands, and compares `git status --porcelain` before and after; a mismatch invalidates that proof.
+- Writers (🐒 Sidekicks, Workers, Operators that produce files): the packet names the write paths; an edit outside them is a stop-and-report. The parent verifies the diff stayed inside the declared scope.
 
-#### Persistent-resume cost
+A missing sandbox or plan-mode flag is not a reason to leave native. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
 
-Provider cache behavior is unknown unless observed. Preserve the same persistent session and avoid replaying whole packets unnecessarily, but accept a cold resume; neither cache expiry nor an idle interval replaces a 🐒 Sidekick or Advisor identity. Do not create automatic maintenance heartbeats or claim a stable id guarantees a cache hit, TTL, quota, or savings. Choose a Sidekick's model and effort at creation and keep them for the life of the session; resume without restating them. Cache reuse is provider- and route-dependent: changing model or effort may reduce or invalidate reuse, but only actual evidence supports a hit or miss claim. Use existing awake or wake mechanisms only when supported and authorized.
+**Shared work.** When an assignment contributes to an existing work thread, carry its exact reference and say whether the agent may post or must return findings; a reference alone grants no posting authority. `practices-show-me-your-work` owns what deserves a record. Scoped board catch-up or posting an approved checkpoint is an 🔧 Operator procedure through `agent-collaboration`; Main identifies the consequential decisions, verifies evidence, and reuses that summary without a second narrative. Batch small receipts into the responsible agent's checkpoint; do not post per command or duplicate parent and Worker reports. To report current implementer activity, load `agent-collaboration` and return the scoped session row (worktree, model, effort, status or idle) for that exact SessionRef. A work thread never substitutes for an independent review packet.
 
-## Acceptance Checks
+**Dispatch.** Coordinate only separately assigned jobs whose dependencies or interference need it: state prerequisites, read/write and shared-resource safety, and verification points inline. Different files are not proof of independence. When one agent can own a bounded result, do not split it. Dispatch the whole assignment. A same-assignment follow-up carries a concise delta and keeps identity and scope; a new assignment refreshes its packet without replacing a persistent conversation. Inspect sessions after a dropped wait before calling anything blocked.
 
-Before closing an assignment, verify stable identity where continuity applies, declared authority and path scope, current source or head evidence for its claims, and any unresolved transport, provider, or proof gaps. The orchestrator reduces those checks into the overall-task verdict.
+## Verify
+
+Verify evidence against the claim and request correction when needed; do not routinely redo the agent's execution. Main may read decisive sources. Mark every claim accepted, rejected, or unverified against the packet's verification point. Contributors may report within their assignment but never claim the whole work complete; Main owns the overall verdict.
+
+Keep a persistent relationship across cold resumes. Provider cache behavior is unknown unless observed: preserve the same session, avoid replaying whole packets, and never create maintenance heartbeats or claim a stable id guarantees a cache hit, TTL, quota, or savings. Choose a Sidekick's model and effort at creation and keep them for the life of the session; changing either may reduce reuse, and only evidence supports a hit or miss claim.
+
+Before closing an assignment, verify stable identity where continuity applies, declared authority and path scope, current source or head evidence for its claims, and any unresolved transport, provider, or proof gaps. Main reduces those checks into the overall verdict.

@@ -6,7 +6,7 @@ export const skillPressureCaseDefinitions = [
   "requiredSourceReads": [
     "plugins/agent-router/skills/agent-collaboration/SKILL.md",
     "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
-    "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx.md"
+    "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx-legacy.md"
   ],
   "maximumToolCalls": 30,
   "semanticCriteria": [
@@ -22,7 +22,7 @@ export const skillPressureCaseDefinitions = [
   "requiredSourceReads": [
     "plugins/agent-router/skills/agent-collaboration/SKILL.md",
     "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
-    "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx.md"
+    "plugins/shravan-dev-workflow/skills/manage-agents/references/acpx-legacy.md"
   ],
   "maximumToolCalls": 30,
   "semanticCriteria": [

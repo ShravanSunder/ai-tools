@@ -1,6 +1,13 @@
-# ACPX Agent Calls
+# ACPX Agent Calls (legacy route)
 
-Use ACPX for cross-provider persistent 🐒 Sidekick, Advisor, or Review Sidekick relationships.
+ACPX is no longer a default route. Router owns persistent Codex relationships. Use ACPX only for a persistent 🐒 Sidekick, Advisor, or Review Sidekick relationship that needs a Claude or Cursor lineage, or whose model, effort, or title requirement Router cannot meet yet. Return the provider, exact model id, effort encoding, permission boundary, and retained session identity.
+
+## Dispatch
+
+1. Select exactly one provider below and MUST load its contract before constructing or executing the call, returning its exact model, effort, and permission encoding.
+2. Use the exact model id and reasoning control the provider contract specifies. When the contract requires live catalog verification, use and record the exact id the provider advertises.
+3. When the selected provider has no contract, stop and report the route as unsupported.
+4. ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the assignment packet does. Include the decision target, settled decisions, resolvable sources, and `history none`. Preserve the identity selected for the relationship and supply relevant new context on each follow-up.
 
 ## Select The Provider
 
