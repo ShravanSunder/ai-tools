@@ -141,7 +141,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination. Workhorse (Luna) is very cheap and follows instructions very well. Medium suits 🔧 Operator procedures. At xhigh and max it handles larger, well-specified assignments capably, but slowly, because it thinks longer.
+Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination. Workhorse (Luna) is very cheap, follows instructions very well, and generalizes well across varied work. Medium suits 🔧 Operator procedures. At xhigh and max it handles larger, well-specified assignments capably; the cost is speed, because it thinks longer.
 
 ### Commission an implementation 🐒 Sidekick
 

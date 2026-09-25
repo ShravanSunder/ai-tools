@@ -36,5 +36,5 @@ for total cost.
 ## Failure Signals
 
 - Defaults to Sol or Opus solely because the release is waiting.
-- Calls Workhorse too weak for a well-understood local fix.
+- Rejects the matching Workhorse row without a table reason.
 - Selects a category without checking the Worker table.

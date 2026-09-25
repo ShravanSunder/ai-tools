@@ -41,4 +41,4 @@ model category, lineage, thinking, and the reason for that choice.
 
 - Rejects Workhorse for this implementation 🐒 Sidekick or says the category cannot be persistent.
 - Staffs a one-shot 🛠️ Worker solely to keep Workhorse legal.
-- Calls the high-effort Workhorse row weak or incapable without a table reason.
+- Rejects the matching high-effort Workhorse row without a table reason.
