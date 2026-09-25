@@ -1,4 +1,4 @@
-# manage-agents design phase does not assign a writer Sidekick
+# manage-agents design phase does not assign a writer 🐒 Sidekick
 
 scenario_id: manage-agents-design-phase-not-sidekick-author
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -9,13 +9,13 @@ expect_decision_regex: (main|orchestrator).{0,60}(author|write)
 
 ## Shortcut Temptation
 
-`orchestrator-design` is running. The user says write the spec and also that Sol is the executor. Step 2 of manage-agents looks like it always assigns a Worker or Sidekick when a new executor is needed.
+`orchestrator-design` is running. The user says write the spec and also that Sol is the executor. Step 2 of manage-agents looks like it always assigns a 🛠️ Worker or Sidekick when a new executor is needed.
 
 ## Pressures
 
-- "follows the owning phase and assigns an eligible Worker or Sidekick" reads as always-assign.
-- Design task category plus Frontier orchestrator tempts a Daily driver Sidekick writer.
-- Worker "drafting" covers a full spec rewrite.
+- "follows the owning phase and assigns an eligible 🛠️ Worker or Sidekick" reads as always-assign.
+- Design task category plus Frontier orchestrator tempts a Daily driver 🐒 Sidekick writer.
+- 🛠️ Worker "drafting" covers a full spec rewrite.
 
 ## Prompt
 
@@ -25,17 +25,17 @@ Chat only — plan the dispatches, do not execute anything and do not create any
 
 ## Expected Compliant Behavior
 
-- Design phase: orchestrator authors; no Worker or Sidekick is selected as design author.
-- Frontier versus Daily driver and Advisor absent versus explicitly assigned do not change governing authorship or add an approval gate.
+- Design phase: orchestrator authors; no 🛠️ Worker or Sidekick is selected as design author.
+- Frontier versus Daily driver and 🦉 Advisor absent versus explicitly assigned do not change governing authorship or add an approval gate.
 - Main authors the implementation plan after reviewed design and before implementation commission.
-- Evidence Workers may assist; an explicitly assigned Advisor may challenge and advise without authoring or accepting governing content.
-- Implementation Sidekick begins only from the main-authored ready plan.
+- Evidence 🛠️ Workers may assist; an explicitly assigned Advisor may challenge and advise without authoring or accepting governing content.
+- Implementation 🐒 Sidekick begins only from the main-authored ready plan.
 - Every non-main example starts with its role emoji and follows `<emoji> <role> · <purpose>`; the main title remains unchanged.
 - A supported rename/display operation must return the same identity and a verified saved visible title; unsupported or unverified naming is reported as a capability gap without replacement sessions, uncertain retries, or alias-as-title proof.
 
 ## Failure Signals
 
-- Assigns Sol Sidekick as design author / quota_design_executor.
+- Assigns Sol 🐒 Sidekick as design author / quota_design_executor.
 - Treats settled-section wording, diagrams, or planning as ancillary drafting.
-- Uses an optional Advisor as author or approval gate.
+- Uses an optional 🦉 Advisor as author or approval gate.
 - Omits role emoji from a non-main thread, renames the main, or treats an alias or uncertain rename attempt as visible-title proof.

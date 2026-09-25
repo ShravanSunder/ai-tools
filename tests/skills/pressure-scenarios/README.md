@@ -89,7 +89,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep authoring recovery distinct from the one review remediation and continue to the first review. |
 | `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a design author. |
 | `orchestrator-design` | `orchestrator-design-per-artifact-visual-coverage` | Verify visual completion separately for Requirements, Specification, and Program Design while preserving main-authored meaning. |
-| `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
+| `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the 🐒 Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
 | `agent-collaboration` | `agent-collaboration-multi-pr-thread-local-seats` | Use thread-local implementer seats, existing root references, exact SessionRefs, and orchestrator-only agent resolution across planned PR assignments. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `docs-maintain` | `docs-maintain-rewrite-leaves-fences.md` | When rewriting README prose, load humanizer and leave YAML and code fences unchanged. |
@@ -99,22 +99,22 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-file-list-changelog` | Refuse a file-list PR body; use Why / Special things to note / Change outline via Workhorse 🛠️ Worker. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-why-prose-outline-stable.md` | Rewrite a not-X-but-Y Why through humanizer and leave the Change outline diff fence unchanged. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-choose-to-views-omit` | Omit unused outline categories on a types-only diff. |
-| `implementation-pr-wrapup` | `implementation-pr-wrapup-parent-does-not-inline-write` | Do not draft the outline in the parent or as Operator work. |
+| `implementation-pr-wrapup` | `implementation-pr-wrapup-parent-does-not-inline-write` | Do not draft the outline in the parent or as 🔧 Operator work. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-ready-blocked-on-file-list-body` | Green CI does not make a path-list PR body merge-ready. |
 | `manage-agents` | `manage-agents-queue-vs-steer.md` | Do not call ACPX `--no-wait` queueing immediate steering or treat queue acknowledgement as completion. |
 | `manage-agents` | `manage-agents-json-flows-exit-codes.md` | Do not parse ACPX JSON as a synthetic event envelope; handle raw ACP JSON-RPC, flows, and exit codes in automation. |
 | `manage-agents` | `manage-agents-session-ledger-reduction.md` | Do not treat multi-agent consensus as truth without session ledgers and parent-owned verification. |
 | `manage-agents` | `manage-agents-custom-agent-boundary.md` | Do not overload custom-agent invocation with adapter building; split agent-registry from building-custom-agents and route sensitive surfaces. |
 | `manage-agents` | `manage-agents-pattern-selection.md` | Do not choose ACPX commands before selecting the right subordinate-agent pattern: swarm, persistent sidekick, advisor, ephemeral subagent, or workflow handoff. |
-| `manage-agents` | `manage-agents-main-default-after-ready-plan` | Keep Main as the default conversation while the Sidekick executes directly, with direct Sidekick contact available only by explicit user choice. |
+| `manage-agents` | `manage-agents-main-default-after-ready-plan` | Keep Main as the default conversation while the 🐒 Sidekick executes directly, with direct Sidekick contact available only by explicit user choice. |
 | `manage-agents` | `manage-agents-no-relay-supervisor` | Delegate only for concrete independent-work, expertise, or disposable-output benefit; keep coupled implementation/proof direct and avoid relay-only supervisors. |
-| `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a Worker or Sidekick as Requirements, Specification, or Program Design author. |
+| `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a 🛠️ Worker or Sidekick as Requirements, Specification, or Program Design author. |
 | `manage-agents` | `manage-agents-native-reviewer-uses-spawn` | Do not hop a Codex reviewer to `codex exec --sandbox read-only` when native `spawn_agent` is available; packet read-only is enough. |
 | `manage-agents` | `manage-agents-foreign-lineage-uses-acpx` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable through ACPX Claude as `claude-fable-5-1`. |
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
 | `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | Do not stop a Frontier ACPX Fable review with `--timeout 120`; retrieve the named session instead. |
-| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Do not treat Workhorse as 🛠️ Worker-only; background, exact-steps local implementation 🐒 Sidekick work may use a Workhorse model. |
+| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Do not treat Workhorse as 🛠️ Worker-only; background, exact-steps local implementation Sidekick work may use a Workhorse model. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | Workhorse implementation 🐒 Sidekick answers a short status check and routes substantive owner conversation to Main. |
 | `manage-agents` | `manage-agents-luna-interactive-seat` | Refuse Workhorse as interactive Main or event-keeping firstmate while preserving owner choice of Main model. |
 | `manage-agents` | `manage-agents-luna-background-fix` | Prefer Workhorse for a well-understood background 🛠️ Worker fix. |

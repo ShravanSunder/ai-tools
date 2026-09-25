@@ -48,7 +48,7 @@ breaking. Parallelize everything across subagents so it's done fast.
   is sequenced after the parent accepts the inventory because it writes what
   the inventory reads.
 - The agent refuses to parallelize the write-dependent sequence and says why.
-- The test run dispatches as an Operator after the conversion, and its result
+- The test run dispatches as an 🔧 Operator after the conversion, and its result
   closes at a named parent verification point — receipts alone do not close
   jobs.
 - Each job's pattern is selected before its model or runtime.

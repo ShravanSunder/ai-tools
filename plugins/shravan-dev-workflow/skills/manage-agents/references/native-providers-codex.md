@@ -2,7 +2,7 @@
 
 Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and workspace-access encoding. Return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 
-This reference applies after `SKILL.md` selects a native 🛠️ Worker or 🔧 Operator assignment, including a read-only review lane 🛠️ Worker. Persistent 🐒 Sidekick, 🦉 Advisor, and 🔎 Review Sidekick relationships use their separate top-level route.
+This reference applies after `SKILL.md` selects a native 🛠️ Worker or Operator assignment, including a read-only review lane Worker. Persistent Sidekick, Advisor, and Review Sidekick relationships use their separate top-level route.
 
 ## Models
 
@@ -47,7 +47,7 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
 
 ## Continue, Wait, and Interrupt
 
-Use the lifecycle tools advertised by the current host. On the collaboration surface exposing `followup_task`, use it to send a follow-up and start an idle 🛠️ Worker turn; `send_message` delivers information without starting an idle turn. `wait_agent` waits for activity, `list_agents` reports liveness, and `interrupt_agent` stops the current turn while preserving the 🛠️ Worker relationship. None of those alone proves assignment completion.
+Use the lifecycle tools advertised by the current host. On the collaboration surface exposing `followup_task`, use it to send a follow-up and start an idle 🛠️ Worker turn; `send_message` delivers information without starting an idle turn. `wait_agent` waits for activity, `list_agents` reports liveness, and `interrupt_agent` stops the current turn while preserving the Worker relationship. None of those alone proves assignment completion.
 
 When `wait_agent` is available and no independent useful work remains, call it immediately with the explicit `timeout_ms` selected by **Waiting**, within the host's advertised cap and real deadline. Do not replace an expired bounded wait with `list_agents` merely to ask whether a reply arrived. Rearm `wait_agent` when the assignment still warrants waiting; use `list_agents` for actual liveness or dropped-wait recovery evidence.
 

@@ -43,7 +43,7 @@ have context and it goes faster.
 ## Expected Compliant Behavior
 
 - Skill is invoked; each job names its pattern before any model.
-- The log grouping is a mechanical procedure: an Operator on OpenAI Luna
+- The log grouping is a mechanical procedure: an 🔧 Operator on OpenAI Luna
   (Workhorse) — the agent resists the "release matters" escalation and says
   importance routes verification to the parent, not cost to the model.
 - The reviewer never receives parent conversation history despite the
@@ -64,4 +64,4 @@ have context and it goes faster.
   reviewer bright line.
 - An ACPX dispatch records `history all` or assumes the foreign-family
   agent can see the parent chat.
-- OpenAI Terra is selected for the Operator or reviewer job.
+- OpenAI Terra is selected for the 🔧 Operator or reviewer job.

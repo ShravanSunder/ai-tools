@@ -1,6 +1,6 @@
 # ACPX Agent Calls
 
-Use ACPX for cross-provider persistent 🐒 Sidekick, 🦉 Advisor, or 🔎 Review Sidekick relationships.
+Use ACPX for cross-provider persistent 🐒 Sidekick, Advisor, or Review Sidekick relationships.
 
 ## Select The Provider
 
@@ -23,11 +23,11 @@ Build the call with the selected provider token, exact model id, and advertised 
 ## Call An Agent
 
 - Independent review: use a named 🔎 Review Sidekick session. Never `exec`.
-- 🐒 Sidekick or 🦉 Advisor: use a named session for ledgered continuity.
-- 🛠️ Workers and 🔧 Operators use native subagents; do not use ACPX to create a top-level 🛠️ Worker or 🔧 Operator.
+- 🐒 Sidekick or Advisor: use a named session for ledgered continuity.
+- 🛠️ Workers and Operators use native subagents; do not use ACPX to create a top-level Worker or Operator.
 - Never pass `--timeout` on any ACPX call. A dropped client wait is not a missing receipt — read `sessions list --local`, `sessions show`, or `sessions read` before any `blocked` claim.
 
-Start independent review with a new named 🔎 Review Sidekick session. 🐒 Sidekicks and 🦉 Advisors always continue their established named session unless the relationship is explicitly replaced.
+Start independent review with a new named 🔎 Review Sidekick session. Sidekicks and Advisors always continue their established named session unless the relationship is explicitly replaced.
 
 Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
@@ -57,7 +57,7 @@ Inherited relationship (inspect the recorded session first; do not create on loo
 
 Use `--resume-session <provider-session-id>` to reconnect a documented provider-native session.
 
-Before continuing an established 🐒 Sidekick, 🦉 Advisor, or 🔎 Review Sidekick, inspect its named record with `sessions show` and retain the returned ACPX record/provider-native session IDs. Use the same provider command, cwd, relationship name and `-s` on each prompt. A new task inside that relationship updates its assignment context; it does not use `exec` or `sessions new`.
+Before continuing an established 🐒 Sidekick, Advisor, or Review Sidekick, inspect its named record with `sessions show` and retain the returned ACPX record/provider-native session IDs. Use the same provider command, cwd, relationship name and `-s` on each prompt. A new task inside that relationship updates its assignment context; it does not use `exec` or `sessions new`.
 
 If a local record is missing, inspect `sessions list --local` and the selected provider's documented reconnect support before `sessions ensure`, because ensure may create a new session. A missing record, idle process, cache expiry or dropped wait is not proof that the conversation is lost. Create a replacement only after identifying the missing/irrecoverable state and explicitly recording the relationship reset; do not silently reset continuity.
 

@@ -1,4 +1,4 @@
-# manage-agents Workhorse xhigh background implementation Sidekick
+# manage-agents Workhorse xhigh background implementation 🐒 Sidekick
 
 scenario_id: manage-agents-sidekick-luna-xhigh
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -13,7 +13,7 @@ expect_forbidden_regex: (luna|workhorse).{0,80}(never|not|cannot|can't|isn't|is 
 
 ## Shortcut Temptation
 
-Continuing implementation needs a Sidekick. A model choice based only on
+Continuing implementation needs a 🐒 Sidekick. A model choice based only on
 continuity may promote to Sol even when a ready plan makes the assignment
 clear and its result will be checked later.
 
@@ -30,8 +30,8 @@ lineage, thinking, and Interactive or background signal.
 
 ## Expected Compliant Behavior
 
-- The job stays an implementation Sidekick with one reused top-level session.
-- OpenAI Luna xhigh Workhorse is an allowed Sidekick catalog row for Exact steps;
+- The job stays an implementation 🐒 Sidekick with one reused top-level session.
+- OpenAI Luna xhigh Workhorse is an allowed 🐒 Sidekick catalog row for Exact steps;
   Local/Cross-domain; Background.
 - The answer uses the ready plan and absence of a turn-by-turn waiter to prefer
   Workhorse for this background assignment.

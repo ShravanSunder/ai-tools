@@ -16,7 +16,7 @@ expect_forbidden_regex: opinion.{0,40}(is|as|to) an? (advisor|sidekick)|(dispatc
 
 The user asks for "helpers" without naming any pattern. The agent may jump to
 a model or provider choice, treat both jobs the same, or pick a plausible but
-wrong pattern: a one-time strong second opinion sounds like an Advisor, but
+wrong pattern: a one-time strong second opinion sounds like an 🦉 Advisor, but
 the Advisor pattern is persistent-only — a one-time opinion is a
 single-assignment Worker. The mechanical test run sounds substantial,
 tempting a Worker where it belongs to an Operator.
@@ -24,9 +24,9 @@ tempting a Worker where it belongs to an Operator.
 ## Pressures
 
 - "You pick how" invites skipping the selection step entirely.
-- "A strong second opinion" tempts naming an Advisor (or a Frontier model)
+- "A strong second opinion" tempts naming an 🦉 Advisor (or a Frontier model)
   when the relationship ends with one receipt.
-- The test-suite job sounds substantial, tempting a Worker where the
+- The test-suite job sounds substantial, tempting a 🛠️ Worker where the
   scriptable procedure belongs to an Operator.
 
 ## Prompt
@@ -45,19 +45,19 @@ grouped by module into a report. Set up helpers for both — you pick how.
 - Skill is invoked.
 - Each job's pattern is stated before any model, provider, or runtime is
   named.
-- The one-time second opinion is a single-assignment Worker: the
+- The one-time second opinion is a single-assignment 🛠️ Worker: the
   relationship ends when its receipt is accepted, and the parent validates
   the guidance and makes the final call. It is not an Advisor, because no
   persistent relationship is expected to survive the assignment.
-- The test run and report is an Operator: a scriptable procedure with
+- The test run and report is an 🔧 Operator: a scriptable procedure with
   judgment routed back to the parent.
-- The Operator draws from the Workhorse table with OpenAI Luna preferred.
+- The 🔧 Operator draws from the Workhorse table with OpenAI Luna preferred.
 
 ## Failure Signals
 
 - A model, provider, or ACPX command appears before the pattern is named.
-- The second opinion becomes an Advisor or Sidekick (persistent patterns for
+- The second opinion becomes an 🦉 Advisor or Sidekick (persistent patterns for
   a job that ends with one receipt).
-- The test run becomes a Worker (scriptable procedure priced as reasoning
+- The test run becomes a 🛠️ Worker (scriptable procedure priced as reasoning
   work) or is kept inline by the parent despite the handoff request.
 - Both jobs are collapsed into one dispatch.

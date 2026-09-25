@@ -1,6 +1,6 @@
 # Session Ledger
 
-Persistent 🦉 Advisors, 🐒 Sidekicks, and 🔎 Review Sidekicks need one current ledger row before prompts that assume continuity.
+Persistent 🦉 Advisors, Sidekicks, and Review Sidekicks need one current ledger row before prompts that assume continuity.
 
 ## Row
 
@@ -21,7 +21,7 @@ In the existing route/runtime slots, label the transport and each ID: ACPX recor
 
 ## Create Or Resume
 
-Reuse the same 🐒 Sidekick, 🦉 Advisor, or 🔎 Review Sidekick conversation across follow-ups and corrections unless the relationship is explicitly replaced. Update the assignment and validate any changed scope without creating a new session. Inspect existing records/reconnect support before a reset; record an explicit continuity-reset reason only when the relationship is deliberately replaced.
+Reuse the same 🐒 Sidekick, Advisor, or Review Sidekick conversation across follow-ups and corrections unless the relationship is explicitly replaced. Update the assignment and validate any changed scope without creating a new session. Inspect existing records/reconnect support before a reset; record an explicit continuity-reset reason only when the relationship is deliberately replaced.
 
 ## Continuity and cost
 

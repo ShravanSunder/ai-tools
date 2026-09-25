@@ -9,7 +9,7 @@ Implementation executes one immutable ready plan against current authority and r
 
 ## Execution Responsibility
 
-Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer and may execute and prove directly or select a bounded native 🛠️ Worker. An assigned 🛠️ Worker executes its slice and fitting proof without creating another 🐒 Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
+Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer and may execute and prove directly or select a bounded native Worker. An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
 
 ## Validate Before Editing
 

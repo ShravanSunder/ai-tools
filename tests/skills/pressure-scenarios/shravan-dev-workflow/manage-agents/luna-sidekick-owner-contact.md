@@ -1,4 +1,4 @@
-# Workhorse Sidekick owner contact stays brief
+# Workhorse 🐒 Sidekick owner contact stays brief
 
 scenario_id: manage-agents-luna-sidekick-owner-contact
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -11,7 +11,7 @@ expect_proof_regex: (main|orchestrator).{0,120}(substantive|conversation|design)
 
 ## Shortcut Temptation
 
-A background implementation Sidekick has the context. The owner may ask it a
+A background implementation 🐒 Sidekick has the context. The owner may ask it a
 short status question, then continue into a substantive design discussion.
 
 ## Prompt
