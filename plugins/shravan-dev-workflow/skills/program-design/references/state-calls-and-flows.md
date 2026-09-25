@@ -2,9 +2,9 @@
 
 This reference owns state/lifecycle models, normal end-to-end flows, and compatibility/migration/cutover phases.
 
-Expected inputs: component/ownership/interface model, requirements, external boundaries, and current-system constraints.
+Expected inputs: component/ownership/interface model, the entity binding table with its boundary shapes, requirements, external boundaries, and current-system constraints.
 
-Return in workflow order: first the applicable state/lifecycle model and current-to-proposed call-path comparison procedure; after the caller draws normal flows, return the state model, call-path deltas, control/data/call flows, migration phase model, authority rules, and gaps.
+Return in workflow order: first the applicable state/lifecycle model and current-to-proposed call-path comparison procedure; after the caller draws normal flows, return the state model, call-path deltas, control/data/call flows with the shape on each boundary-crossing edge, migration phase model, authority rules, and gaps.
 
 ## State and Lifecycle
 
@@ -35,6 +35,19 @@ consumer -> entry -> coordinator -> owner -> external boundary
 
 Include async callbacks, jobs, events, storage, caches, and proof paths when they alter semantics. Separate control flow from data authority.
 
+Every edge that crosses a process, service, storage, or queue boundary carries its shape from the binding table. In Mermaid, label the edge with the event or message name and put the fields in a note or an adjacent table; the reader should not have to leave the flow to learn what crosses it:
+
+```text
+edge: <producer> -> <consumer>
+  name: <event or message name>
+  discriminant: <field and value>
+  fields: <name: type, nullable?> ...
+  schema home: <module from the binding table>
+  new | existing
+```
+
+An edge whose shape the design has not settled reads `gap: <why>`. A label such as "sends the payload" is not a shape.
+
 ## Compare Current And Proposed Call Paths
 
 For every material runtime-behavior group, pair the source-anchored current entrypoint-to-effect chain from `current-system-model.md` with the proposed chain. A first design records proposed-only and explicitly states that no predecessor exists. Requirements sharing one path may cite the same delta.
@@ -50,7 +63,7 @@ intentionally unchanged
 
 Ordinary unaffected edges need no ceremony.
 
-For each edge, keep the owning component, operation or event, sync/async/event semantics, input authority, state read/write or side effect, result/error propagation, and the requirement or failure obligation it realizes. Preserve current-source anchors and explain the consequence of every removed or changed edge.
+For each edge, keep the owning component, operation or event with its shape, sync/async/event semantics, input authority, state read/write or side effect, result/error propagation, and the requirement or failure obligation it realizes. Preserve current-source anchors and explain the consequence of every removed or changed edge.
 
 Do not make a human mentally diff two separate prose sections or raw stack traces. Render the comparison as the smallest readable call graph, sequence, compact call tree, or delta table that keeps each applicable edge status visible.
 
@@ -58,7 +71,7 @@ Runtime call stacks and traces validate current execution; they are not copied a
 
 Good: the current/proposed view makes ownership, boundary crossings, state authority, result/error propagation, and every changed edge unambiguous.
 
-Bad: only boxes and arrows, separate current/target descriptions with no delta markers, a raw stack trace, signatures without call order, a removed edge hidden by omission, or a happy path that hides async and failure returns.
+Bad: only boxes and arrows, separate current/target descriptions with no delta markers, a raw stack trace, signatures without call order, a removed edge hidden by omission, a boundary-crossing edge with no shape, or a happy path that hides async and failure returns.
 
 ## Migration and Cutover
 
@@ -76,4 +89,4 @@ proof seam
 
 A temporary dual path is one coordination boundary with an authority rule per phase, not two sources of truth.
 
-Complete when: every material runtime-behavior group has a source-anchored current/proposed call-path delta or proposed-only no-predecessor result; every added, removed, or changed owner, call, state/effect, and result/error edge is explicit, with preservation-critical or contested unchanged edges marked; a human can trace effect and return without mentally diffing separate prose; state writes cannot bypass owners; and each migration phase has explicit authority, transition, rollback, failure, and proof.
+Complete when: every material runtime-behavior group has a source-anchored current/proposed call-path delta or proposed-only no-predecessor result; every added, removed, or changed owner, call, state/effect, and result/error edge is explicit, with preservation-critical or contested unchanged edges marked; every boundary-crossing edge names its shape or a `gap: <why>`; a human can trace effect and return without mentally diffing separate prose; state writes cannot bypass owners; and each migration phase has explicit authority, transition, rollback, failure, and proof.

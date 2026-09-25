@@ -67,6 +67,9 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `program-design` | `program-design-route-specification-gap` | Return missing observable product meaning to spec-design with one compact handoff and no direct-call orchestration state. |
 | `program-design` | `program-design-no-delegated-target-models` | Delegate only current-system/external evidence; keep alternatives, target models, risk realization, and prose with the main. |
 | `program-design` | `program-design-reject-inaccurate-generated-overview` | Reject attractive imagery that invents owners, edges, behavior, or non-durable asset proof. |
+| `program-design` | `program-design-bind-entities-before-components` | Bind every entity to an owner, home, schema home, and boundary shape in the repository's type conventions before composing components. |
+| `program-design` | `program-design-carry-durable-trace-table` | Carry one `U · R · E · owner · interface · shape and home · state · failure · proof` trace table in the design, marking missing design `gap:`. |
+| `program-design` | `program-design-stop-for-owner-before-review` | Show the binding table, trace table, one path, and deviations, then stop `decision-needed` before review. |
 | `spec-program-review` | `spec-program-review-find-unapproved-design` | Catch machinery that document agreement or existing code did not authorize. |
 | `spec-program-review` | `spec-program-review-find-missing-requirements-or-design` | Catch lost accepted requirements and missing executable structural behavior. |
 | `spec-program-review` | `spec-program-review-check-tests-match-claims` | Compare each claimed outcome with evidence that can actually observe it. |

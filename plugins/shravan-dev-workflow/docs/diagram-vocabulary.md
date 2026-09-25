@@ -19,6 +19,7 @@ This maintainer index records current view names, artifact altitude, semantic ow
 
 | View token | Altitude | Runtime semantic owner | Runtime rendering consumer |
 | --- | --- | --- | --- |
+| entity -> home map | structural How | `skills/program-design/SKILL.md` Required Views | `skills/program-design/SKILL.md` |
 | component tree | structural How | `skills/program-design/SKILL.md` Required Views | `skills/program-design/SKILL.md` |
 | call graph/sequence | structural How | `skills/program-design/SKILL.md` Required Views | `skills/program-design/SKILL.md` |
 | proof call graph | structural How | `skills/program-design/SKILL.md` Required Views | `skills/program-design/SKILL.md` |

@@ -519,6 +519,7 @@ describe("user requirements and design-view contracts", () => {
       "entity map",
       "context diagram",
       "requirement coverage table",
+      "entity -> home map",
       "component tree",
       "call graph/sequence",
       "proof call graph",

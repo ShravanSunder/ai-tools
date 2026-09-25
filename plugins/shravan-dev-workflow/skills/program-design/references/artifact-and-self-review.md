@@ -1,12 +1,12 @@
 # Program-Design Artifact and Self-Review
 
-This reference owns view application, artifact navigation, simplification, trace-integrity verification, and author integration self-check. `SKILL.md` owns view selection and required semantic fields. `proof-architecture-and-traceability.md` owns construction of the requirement/design/proof trace; this reference consumes that trace.
+This reference owns view application, artifact navigation, simplification, binding-table and trace-table verification, term agreement, and author integration self-check. `SKILL.md` owns view selection and required semantic fields. `components-ownership-interfaces.md` builds the entity binding table and `proof-architecture-and-traceability.md` builds the trace table; this reference verifies both.
 
-Expected inputs: distinct Requirements and Specification identities, governing Requirements and Specification contents, accepted requirements set, confirmed goal boundary, current/target models, decisions, debt, proof map, selected rendering results, and repo documentation conventions.
+Expected inputs: distinct Requirements and Specification identities, governing Requirements and Specification contents including the entity table, accepted requirements set, confirmed goal boundary, current/target models, entity binding table, decisions, debt, trace table, selected rendering results, and repo documentation conventions.
 
 Return in workflow order:
 
-1. Artifact structure and view application, artifact identity, verification of the consumed requirement/design/proof trace, view-verification result, and pruned elements.
+1. Artifact structure and view application, artifact identity, verification of the binding table and trace table, view-verification result, and pruned elements.
 2. After the caller runs the complete integration self-check stage, the self-check gaps.
 
 ## Apply Required Views
@@ -17,18 +17,20 @@ For call graph or sequence views, consume the current-to-proposed delta from `st
 
 - current and proposed paths, or an explicit no-predecessor case;
 - owner crossings;
-- synchronous, asynchronous, and event edges;
+- synchronous, asynchronous, and event edges, each boundary-crossing edge with its shape;
 - state reads and writes or side effects;
 - result and error propagation;
 - evidence anchors;
 - added, removed, and changed markers;
 - preservation-critical or contested unchanged edges.
 
-Diagrams do not replace behavioral interface or failure prose. Paths may anchor current evidence; do not turn the design into a future file/task list.
+Every entity -> home map row comes from the binding table. Verify the trace table against the design: one row per requirement, no blank cell, `gap: <why>` only where design is missing, each cell agreeing with the section it summarizes, and the returned coverage disposition matching the rows.
 
-For a substantial design, lead with the smallest integrated overview composed from already-fired views, then reveal detail. Make every selected call or flow view representative of the actual boundary crossing. The view must preserve the semantic fields selected by the caller; format never excuses a missing owner, edge status, state/effect, result/error path, or evidence anchor.
+Diagrams do not replace behavioral interface or failure prose. Paths may anchor current evidence; the design names owners, package or module homes, and schema homes, never a task list, write scopes, or exact files.
 
-Good: the smallest set of views lets a reader simulate composition, execution, and the riskiest failure.
+For a substantial design, lead with the smallest integrated overview composed from already-fired views, then reveal detail in the order a reader needs it: diagram, then table, then code shape. Make every selected call or flow view representative of the actual boundary crossing. The view must preserve the semantic fields selected by the caller; format never excuses a missing owner, edge status, state/effect, result/error path, or evidence anchor.
+
+Good: the smallest set of views lets a reader simulate composition, execution, and the riskiest failure, and find where each entity lives.
 
 Bad: prose labeled as a diagram, decorative boxes with no semantic owners, every possible view emitted mechanically, syntax chosen before the relationship is understood, or a passed result claimed with missing semantic fields.
 
@@ -58,15 +60,16 @@ Remove:
 Preserve:
 
 - authoritative provenance and negative space;
-- owners, interfaces, state, calls, and flows;
+- entity bindings, owners, interfaces, state, calls, and flows;
 - failure, recovery, trust, cutover, and proof decisions;
 - accepted debt with payer and revisit signal.
 
-After deletion or simplification, reuse the existing coverage view and report one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor. A bare "coverage intact" assertion is not a report.
+After deletion or simplification, derive the report from the trace table: one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor, taken from the requirement's trace row, and for identities that are not requirement rows (entities, constraints, variants, defaults, proof obligations), reported beside the table with their own anchors. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor. A bare "coverage intact" assertion is not a report. Deleting an entity is a coverage loss.
 
 Choose the expression that fits the relationship:
 
 - concise prose for one rule or rationale;
+- an entity -> home map for where each entity lives;
 - a component tree for ownership;
 - a call or sequence view for entrypoint-to-effect behavior;
 - a state table or machine for lifecycle;
@@ -83,22 +86,25 @@ Remove an “Architecture documentation impact” section when it only lists pos
 Re-read the whole artifact:
 
 - integrated overview matches detailed models;
+- every Specification entity has a binding row with owner, home, schema/type home, disposition, and convention, or a `gap: <why>`;
+- every boundary crossing has a shape in the found convention or a field list with nullability and discriminant;
+- each term means the same thing in the Specification and the design: design prose uses the `E` term, a code name appears only in shape and home cells, and a design noun with no `E` names the `E` or `R` it serves;
 - ownership is singular and dependency rules consistent;
-- interfaces match state and flows;
+- interfaces match state and flows, and every result or decision contract is a closed variant with a bounded reason set;
 - every applicable current/proposed call-path delta exposes added, removed, and changed edges plus preservation-critical or contested unchanged edges;
 - happy/failure/recovery/concurrency paths agree;
 - cross-cutting obligations map to structure/failure/proof;
-- every requirement has realization and seam;
-- every accepted requirement remains covered or has owner-authorized supersession;
+- every requirement has a trace row with realization and seam, and the rows agree with the returned coverage disposition;
+- every accepted requirement and entity remains covered or has owner-authorized supersession;
 - every design element has a legitimate basis;
 - every reader-facing element passes the human deletion test;
 - every generated visual has a current accepted asset/embed, accurate labels and edges, readable placement, and agreement with the authoritative prose and exact views;
 - progressive disclosure leads from specification obligation through owner, call/state/failure behavior, and proof without scratch or process notes;
-- structural-realization confirmation exposes complexity spent and every deviation from the confirmed goal boundary;
-- no planner-owned sequence/command detail leaked in;
-- no missing Why/What was invented;
+- the structural-realization confirmation shows the binding table, the trace table, one representative entry-to-effect path, and `deviations and unresolved decisions: none | list`;
+- no planner-owned file, sequence, or command detail leaked in;
+- no missing Why/What or entity meaning was invented;
 - Requirements and Specification remain separately identifiable, and the Program Design preserves rather than rewrites their authorized boundary and observable contract;
-- two capable implementers would build the same structural behavior.
+- two capable implementers would build the same structural behavior and the same contract shapes.
 
 Run the self-check against the current program design and governing specification. Keep target classification, source/review coverage, readiness, acceptance, planning, PR, and release state in the returned result rather than durable program-design prose. A source pointer may remain when later readers need it for authoritative lookup. The self-check is not independent review.
 
@@ -106,6 +112,6 @@ Complete when:
 
 - the artifact composes as one proportional structural realization;
 - every fired view has a passed rendering result with preserved semantics;
-- current/proposed call deltas, accepted-requirements coverage, and structural-realization confirmation are visible;
+- the binding table, trace table, current/proposed call deltas, accepted-requirements coverage, and structural-realization confirmation are visible;
 - unnecessary structure is pruned;
 - every known gap is exact.
