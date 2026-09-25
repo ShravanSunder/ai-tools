@@ -48,6 +48,7 @@ MUST load `references/lanes/lane-schema.md` and record `complete | partial | blo
 3. IF proof claims exist, load `references/lanes/proof-challenge.md` and challenge every claim. For prescribed commands, assign a 🔧 Operator under an exact execution grant. The 🔧 Operator performs the reference's write-set preflight and `git status --porcelain` comparison, executes only granted commands, and returns observed output and exit codes. The 🔎 Review Sidekick judges claimed against observed and records proof gaps. If there is no grant, inspect only and record the boundary.
 4. MUST load `references/lanes/dispel.md` after all chunk passes. Classify every candidate and map every delivered item to a rail or `absent`, even when there are no candidates.
 5. IF reduction leaves a named material risk, load `references/lanes/focused-reviewer.md` and answer one falsifiable question per risk. Stop when no named risk remains.
+6. List every stand-in in the diff and receipts, and check that none is counted as proof of the real interaction; a claim that rests on a stand-in is a finding.
 
 When the review includes auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, the caller selects a Frontier 🔎 Review Sidekick from a different author lineage at commission time through `manage-agents`.
 
