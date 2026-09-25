@@ -8,6 +8,8 @@ Owner correction (2026-09-25, remediation pass 3): Opus high is `Daily driver` w
 
 Owner addendum (2026-09-25, remediation pass 3): Sol xhigh remains a Daily driver category row and a default 🔎 Review Sidekick row. It is absent from the Advisor table.
 
+Owner correction (2026-09-25, remediation pass 4): Guidance and Architectural span are the only task signals. Use Workhorse for clear work off the critical path. Use a daily driver for conversation and work someone is blocked on now. Operator models remain Workhorse-only. This supersedes the pass 2 third-signal decision.
+
 ## Problem and evidence
 
 - `manage-agents/SKILL.md` names Luna's category "Mini" ("Procedures, repeatable work, guided execution", line 51). "Mini" signals a small, weak model. Early GPT-6 Luna reports describe the opposite shape: very cheap, eventually capable, but it takes many turns to finish (hypothesis from public early-user reports shared by the owner on 2026-09-23, not measured here).
