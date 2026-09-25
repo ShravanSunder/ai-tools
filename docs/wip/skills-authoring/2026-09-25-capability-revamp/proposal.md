@@ -71,7 +71,7 @@ Ops and presentation  own families at the practices level; any phase or orchestr
   ops-* (tickets and operations): ops-linear-tracking · ops-observability-stack · ops-security-review
   presentation-* (output): presentation-tui · presentation-webui
 Tool manuals    how to operate a tool; no when or why
-  agent-collaboration (vendored) · native spawn and Router mechanics (references owned by manage-agents until extracted)
+  agent-collaboration (vendored) · native spawn and agent-router mechanics (references owned by manage-agents until extracted)
 Shared references  follow the DAG: a module of its callers at its lowest caller's layer; its edges point down
 ```
 
@@ -138,7 +138,7 @@ Near misses each trigger must reject: "how do I post to a thread" loads the tool
 
 `practices-show-me-your-work`: `SKILL.md` keeps open/resume, publish, checkpoint, and resolve (tracker `SKILL.md:18-30`, moved not rewritten); its unshared fallback (`SKILL.md:34-38`) becomes the wip trace folder, the pre-board 🐒 Sidekick file, and the transfer procedure from the entry map; `references/markdown-view.md` stays (drops its `manage-agents` name). The board-discovery and seat text moves to `practices-collaboration`.
 
-`manage-agents`: `SKILL.md` keeps one Authority section, roles and title format, selection by table, runtime (native, Router; ACPX in `references/acpx-legacy.md`), handoff and verify. Model tables move to `references/model-catalog.md` (MUST load at selection). Waiting moves out as above.
+`manage-agents`: `SKILL.md` keeps one Authority section, roles and title format, selection by table, runtime (native, agent-router; ACPX in `references/acpx-legacy.md`), handoff and verify. Model tables move to `references/model-catalog.md` (MUST load at selection). Waiting moves out as above.
 
 ## Decisions (owner may strike any row)
 
@@ -158,7 +158,7 @@ Near misses each trigger must reject: "how do I post to a thread" loads the tool
 | Phase return tokens with payloads, resolved by the invoking orchestrator or by Main through the devfiles index | Revision 1 review: bare tokens lost routing information. |
 | Each phase gets one entry line and one completion line for the trace | Revision 1 review: a completion line alone misses directly invoked phases. |
 | A rename and every consumer's name swap land in one PR; consumer name swaps ride with the rename run as mechanical edits | Revision 1 review: staged renames shipped a broken intermediate plugin. |
-| ACPX stops being a default route: Router for Codex persistent agents; ACPX in one legacy reference until codex-router supports Claude/Cursor model, effort, and titles | Owner intends to drop ACPX; Claude/Cursor Router gaps today. |
+| ACPX stops being a default route: agent-router (never "Router") carries persistent Codex and Claude relationships over ACP; ACPX stays in one legacy reference only for providers agent-router does not yet cover (Cursor today) | Owner, 2026-09-25: "call it agent-router not router; it has acp for claude and codex now till I have all of it". Replaces the earlier Codex-only default. |
 | `ops-*` (tickets and operations) and `presentation-*` (output) stay separate families, not `practices-*`; they sit at the practices level for the direction rule | Owner, 2026-09-25: "ops-* is separate (for tickets and stuff). presentation-* is separate too". |
 | Board home: project `shravan-developer-workflows` (`01a0d9c3-1e9d-7b70-8880-06c89c6391c2`), board `Plugin and skill work` (`01a0d9c3-3b24-7212-a71b-df57bcdda357`), one topic per workstream | Owner created the project on 2026-09-25; Main chose board and topic layout. |
 | peekaboo and non-dev-workflow plugins are out of scope | Owner, 2026-09-25. |
@@ -226,7 +226,7 @@ None. Board project, PR grouping (owner: "make worktrees and prs"), and the ops/
 
 ## Non-goals
 
-Model matrix changes; peekaboo and other plugins; removing ACPX before codex-router closes the Claude/Cursor gaps; extracting gh/Linear/observability tool manuals out of their skills.
+Model matrix changes; peekaboo and other plugins; removing ACPX before codex-router closes the providers agent-router does not yet cover; extracting gh/Linear/observability tool manuals out of their skills.
 
 ## Spec-review record
 
