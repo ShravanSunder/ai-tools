@@ -35,4 +35,4 @@ direct contact with this Sidekick inside its assignment.
 
 - Refuses even the short status check.
 - Conducts the substantive owner discussion or decides the public API change.
-- Treats explicit direct contact as a reason to change the model's latency fit.
+- Treats explicit direct contact as a reason to change whether the seat is Interactive or Background.

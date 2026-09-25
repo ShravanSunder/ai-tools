@@ -42,9 +42,9 @@ A normal implementation backed by a reviewed Specification, Program Design, and 
 | Cross-domain | Interacting domains within one system. |
 | Cross-system | Separate systems and contracts.        |
 
-Architectural span does not measure task size or permission; every assignment remains bounded. Model-table signal cells follow this order: Guidance; Architectural span; Latency.
+Architectural span does not measure task size or permission. Every assignment remains bounded. Model-table signal cells follow this order: Guidance; Architectural span; Interactive or background.
 
-#### Latency
+#### Interactive or background
 
 Who is waiting on this agent's next turn?
 
@@ -71,13 +71,13 @@ Model category is a cost/capability grouping of model plus effort. It does not a
 | Workhorse      | OpenAI Luna   | max      |                     |
 | Daily driver   | OpenAI Sol    | medium   |                     |
 | Daily driver   | OpenAI Sol    | high     |                     |
+| Daily driver   | OpenAI Sol    | xhigh    |                     |
 | Daily driver   | Claude Opus   | low      |                     |
 | Daily driver   | Claude Opus   | medium   |                     |
 | Daily driver   | xAI Grok      | medium   |                     |
 | Daily driver   | xAI Grok      | high     |                     |
 | Frontier       | Claude Opus   | high     |                     |
 | Frontier       | OpenAI Astra  | high     |                     |
-| Frontier       | OpenAI Sol    | xhigh    |                     |
 | Frontier       | Claude Opus   | xhigh    | User must authorize |
 | Frontier       | OpenAI Astra  | xhigh    | User must authorize |
 | Frontier       | Claude Fable  | high     | User must authorize |
@@ -140,17 +140,17 @@ Several independent PR assignments may use several 🐒 Sidekicks; dependent wor
 > The orchestrator owns the overall-task verdict and verifies assignment evidence. Contributors may report or converse within their authorized assignment, but do not claim the whole work complete.
 
 ```text
-task category + Guidance + Architectural span + Latency -> Agent Roles responsibility and continuity
+task category + Guidance + Architectural span + Interactive or background -> Agent Roles responsibility and continuity
   -> allowed model and effort -> runtime, packet, receipt
 ```
 
-Retain the orchestrator's `orchestrator` board seat. Reuse a suitable executor assignment when work has not materially changed; otherwise choose an executor using task category, Guidance, Architectural span, Latency, useful existing context, and total completion cost including handoff, rework, and proof. This is internal task-fit selection, not an owner approval, form, or new agent requirement. Use the **Agent Roles** table to choose responsibility and continuity. Review uses independent context and its lineage rule; an 🦉 Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
+Retain the orchestrator's `orchestrator` board seat. Reuse a suitable executor assignment when work has not materially changed; otherwise choose an executor using task category, Guidance, Architectural span, Interactive or background, useful existing context, and total completion cost including handoff, rework, and proof. This is internal task-fit selection, not an owner approval, form, or new agent requirement. Use the **Agent Roles** table to choose responsibility and continuity. Review uses independent context and its lineage rule; an 🦉 Advisor remains explicitly owner-selected guidance. Required governing design, specification, and plan gates remain required in their owning workflows: Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices, never a bypass for a required governing design or plan.
 
 An executor is not a design- or plan-author role. The orchestrator designs, plans, and verifies decisive evidence while assigning implementation and proof to eligible executors. An implementation 🐒 Sidekick executes its assigned change and associated proof directly by default. Delegate only when a child has bounded independent work, distinct expertise the executor needs, or large disposable output worth isolating, and the expected benefit exceeds briefing, coordination, and verification cost. Keep tightly coupled change-and-proof work with its executor; do not create a supervisor whose only job is to relay another agent's work. Standalone prescribed Git, PR, build, test, or watch procedures use an 🔧 Operator, while tests and checks associated with an implementation assignment stay with that executor. PR wrap-up may remain with the implementation 🐒 Sidekick as part of its delivery assignment or be assigned to an 🔧 Operator as a prescribed procedure; Main retains acceptance and the user retains merge authority. Use a research 🐒 Sidekick only when related research needs continuing context. The orchestrator may communicate, make control calls, and read decisive sources; report an unavailable required route rather than silently falling back inline.
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance, Architectural span, and Latency. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination. Choose Workhorse for background 🛠️ Workers with exact steps or well-understood Complete direction, 🔧 Operators running blocking procedures, and implementation 🐒 Sidekicks executing a ready plan when their table signals fit; they are the cheapest route to done for that work. Many-turn latency makes Workhorse a poor fit for Main, a 🐒 Sidekick in substantive owner conversation, or a seat that must keep up with events or messages. Weak judgment makes it a poor fit for ambiguous planning, design, and independent review.
+Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance, Architectural span, and Interactive or background. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination. Choose Workhorse for background 🛠️ Workers with exact steps or well-understood Complete direction, 🔧 Operators running blocking procedures, and implementation 🐒 Sidekicks executing a ready plan when their table signals fit; they are the cheapest route to done for that work. Slow turns make Workhorse a poor fit for Main or a 🐒 Sidekick in substantive owner conversation. They also rule out seats that must keep up with events or messages. Weak judgment makes it a poor fit for ambiguous planning, design, and independent review.
 
 ### Commission an implementation 🐒 Sidekick
 
@@ -235,7 +235,7 @@ Use a separate persistent top-level thread for independent review or correction 
 | Model lineage | Thinking | Use                 |
 |---------------|----------|---------------------|
 | OpenAI Sol    | high     |                     |
-| OpenAI Sol    | xhigh    | User must authorize |
+| OpenAI Sol    | xhigh    |                     |
 | OpenAI Astra  | high     |                     |
 | OpenAI Astra  | xhigh    | User must authorize |
 | Claude Opus   | medium   |                     |

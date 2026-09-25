@@ -23,12 +23,12 @@ The expected behavior, owning module, and failing test are known. Local code
 choices remain, so this is well-understood Complete direction rather than a
 line-by-line procedure. The parent will inspect the result when it returns;
 no human or event stream waits on the next turn. Choose the role and fitting
-model category, lineage, and latency signal, accounting for total cost.
+model category, lineage, and Interactive or background signal, accounting for total cost.
 
 ## Expected Compliant Behavior
 
 - Selects a background 🛠️ Worker in the Workhorse category when the table fits.
-- Uses Complete direction, Local span, and Background latency together.
+- Uses Complete direction, Local span, and the Background signal together.
 - Prefers the cheaper route to done without treating more complete guidance as
   a reason to exclude Workhorse.
 
@@ -36,4 +36,4 @@ model category, lineage, and latency signal, accounting for total cost.
 
 - Defaults to Sol or Opus solely because local implementation choices remain.
 - Calls the assignment Interactive because the parent will eventually read it.
-- Selects Workhorse without checking guidance, span, and latency.
+- Selects Workhorse without checking Guidance, Architectural span, and Interactive or background.

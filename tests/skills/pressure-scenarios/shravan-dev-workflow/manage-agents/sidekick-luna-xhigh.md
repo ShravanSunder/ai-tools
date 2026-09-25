@@ -26,7 +26,7 @@ one persistent implementation Sidekick for a ready plan whose remaining work
 is exact-steps and local: apply the listed parser fixture edits, run the named
 pytest file, and report the result later. No one waits on the Sidekick's next
 turn. Prefer the cheapest fitting catalog row. Tell me the role, model category,
-lineage, thinking, and latency signal.
+lineage, thinking, and Interactive or background signal.
 
 ## Expected Compliant Behavior
 
@@ -40,4 +40,4 @@ lineage, thinking, and latency signal.
 
 - Rejects Workhorse for a background implementation 🐒 Sidekick or says the category cannot be persistent.
 - Staffs a one-shot 🛠️ Worker solely to keep Workhorse legal.
-- Promotes to Sol or Opus without a guidance, span, or latency reason.
+- Promotes to Sol or Opus without checking Guidance, Architectural span, or Interactive or background.

@@ -2,6 +2,8 @@
 
 Revision 4. Revision 2 was `accepted-to-implement`; Revision 3 added the owner's emoji-by-example requirement (2026-09-23), a semantic expansion the owner authorized for one fresh proposal review. Main-authored multi-run skill-change spec. Owner plugin: `shravan-dev-workflow`. Stacks on PR A ([#91](https://github.com/ShravanSunder/ai-tools/pull/91)); implement after #91 merges or as a stacked branch on it.
 
+Owner correction (2026-09-25, remediation pass 2): The third signal is **Interactive or background**, with `Interactive` and `Background` values. Sol xhigh is `Daily driver` with an empty category Use cell and a default 🔎 Review Sidekick row. The 🦉 Advisor table remains owner-chosen. These decisions supersede the earlier Revision 4 wording and matrix rows.
+
 ## Problem and evidence
 
 - `manage-agents/SKILL.md` names Luna's category "Mini" ("Procedures, repeatable work, guided execution", line 51). "Mini" signals a small, weak model. Early GPT-6 Luna reports describe the opposite shape: very cheap, eventually capable, but it takes many turns to finish (hypothesis from public early-user reports shared by the owner on 2026-09-23, not measured here).
