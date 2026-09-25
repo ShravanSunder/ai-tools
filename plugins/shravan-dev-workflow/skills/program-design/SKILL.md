@@ -5,6 +5,8 @@ description: Use when defining or revising structural How—the internal archite
 
 # Program Design
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 A program design is the structural realization of a fixed observable contract.
 
 The user-facing main loads this skill and authors the complete structural How: alternatives, selections, components, ownership, interfaces, state/failure policy, target views and diagrams, final prose and visual briefs. Bounded helpers may return current-system or external evidence. An explicitly owner-requested 🦉 Advisor may challenge and advise through `manage-agents`; advice is neither authorship nor acceptance. A rendering tool may realize pixels, typography, spacing and style from an unchanged main-authored brief, while semantic grouping, order, boundaries, labels, edges, invariants and candidate acceptance remain with the main.
@@ -84,7 +86,7 @@ Before recommending a skill, inspect that destination's declared inputs and retu
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
-Accept an optional call-scoped `new artifact home` policy. When `orchestrator-design` supplies `<project-root>/docs/specs/`, create any new file-backed Program Design beneath that home and return its exact path. Preserve an authoritative pre-existing Program Design elsewhere; do not relocate or reject it because of the policy. The artifact-home policy applies only to a new output in the current call and is not persisted as workflow state.
+Accept an optional call-scoped `new artifact home` policy. When the caller supplies `<project-root>/docs/specs/`, create any new file-backed Program Design beneath that home and return its exact path. Preserve an authoritative pre-existing Program Design elsewhere; do not relocate or reject it because of the policy. The artifact-home policy applies only to a new output in the current call and is not persisted as workflow state.
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements and Specification identity check plus the fixed observable-contract boundary. Require one Requirements identity and one different Specification identity using the valid representation for the work's medium. A combined `Requirements/spec` artifact, a Requirements-titled artifact that also serves as the observable contract, or either missing identity returns `specification-gap` to `spec-design` before structural work begins. Do not infer separation from headings inside one artifact and do not create or copy either upstream artifact.
 
@@ -334,3 +336,5 @@ Do not return `locally-ready` while any of these hold:
 - a continuation omits a next skill, recommends more than one, or contradicts the terminal mapping above;
 - a pathfinding recommendation lacks an unmade owner-controlled structural choice or omits `program-design` as its return owner;
 - a continuation handoff omits the destination's required exact gap, boundary state, or artifact pointers, or copies unrelated history.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
