@@ -5,6 +5,8 @@ description: Use when creating, updating, or evaluating one named skill or accep
 
 # Skills Design & Concepts
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 A skill wrangles determinism out of a stochastic system by making the agent follow a predictable process.
 
 Predictable means the same process, not the same output. A brainstorming skill should diverge every run and still take the same route to diverge.
@@ -300,3 +302,5 @@ The run is not done while any of these hold:
 - static validation is claimed as behavior proof;
 - a sensitive surface was written without an allowed/disallowed/blocked/deferred decision recorded before that surface was outlined or written;
 - required platform static validation failed, or was skipped without a stated reason.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
