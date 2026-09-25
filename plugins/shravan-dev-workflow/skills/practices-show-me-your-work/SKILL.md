@@ -1,6 +1,6 @@
 ---
 name: practices-show-me-your-work
-description: "Use at the start of a qualifying task to open or resume the work trace, when recording a decision, evidence, blocker, or outcome, when stopping or handing off, or when the user says show me your work or asks for a trail. Not for routine small edits."
+description: "Use at the start of a qualifying task to open or resume the work trace; while one is open, to record a decision, evidence, blocker, or outcome or to hand off; or when the user asks to show your work or for a trail. Not for routine small edits."
 ---
 
 # Practices: Show Me Your Work
