@@ -18,11 +18,11 @@ Program Design
   Structural realization of the fixed observable obligations.
 ```
 
-Nothing downstream may silently change the meaning owned upstream. Program Design may expose a missing or changed observable obligation, but that gap returns to `spec-design`. Specification may expose unmade owner meaning, but that gap returns through `discuss-pathfinding` to the phase that owns it.
+Nothing downstream may silently change the meaning owned upstream. Program Design may expose a missing or changed observable obligation; it returns that as `specification-gap`. Specification may expose unmade owner meaning; it returns that as `requirements-gap`. Tokens and payloads are defined in `phase-return-tokens.md`.
 
 ## The Specification Owns the Nouns
 
-Obligations are sentences about entities. The Specification defines each entity its obligations name — a stable `E` identifier, canonical term, identity rule (what makes two instances the same), relationships with cardinality, invariants, and observable states — without naming any type, schema, table, package, or wire shape. Requirements surfaces the owner's words; Program Design consumes the `E` identifiers as fixed input and owns their structural realization in its own workflow. A missing or wrong entity discovered downstream is a `specification-gap` returned to `spec-design`, never patched in design. The identity chain is `U -> E -> P -> O -> R -> C -> V`.
+Obligations are sentences about entities. The Specification defines each entity its obligations name — a stable `E` identifier, canonical term, identity rule (what makes two instances the same), relationships with cardinality, invariants, and observable states — without naming any type, schema, table, package, or wire shape. Requirements surfaces the owner's words; Program Design consumes the `E` identifiers as fixed input and owns their structural realization in its own workflow. A missing or wrong entity discovered downstream is returned as `specification-gap`, never patched in design. The identity chain is `U -> E -> P -> O -> R -> C -> V`.
 
 ## Keep The Identities Separate
 
@@ -34,7 +34,7 @@ Specification: one different resolvable artifact pointer
 Program Design: one different resolvable artifact pointer
 ```
 
-Reuse one already-admitted Requirements identity. Do not copy its contents into a new Requirements artifact merely to satisfy the shape. `spec-design` owns source qualification, admission, and normalization when settled authoritative meaning has no qualifying Requirements home.
+Reuse one already-admitted Requirements identity. Do not copy its contents into a new Requirements artifact merely to satisfy the shape. The Requirements and Specification author owns source qualification, admission, and normalization when settled authoritative meaning has no qualifying Requirements home.
 
 For chat-only work, Requirements and Specification may remain in chat, but they are two separately labeled records with different content and roles. Quick work changes the medium, not the semantic boundary.
 
@@ -73,10 +73,10 @@ The Requirements artifact records authorized needs, outcomes, priorities, and bo
 
 ## Pathfinding Clarifies Missing Meaning
 
-`discuss-pathfinding` helps the user and agent clarify unmade owner meaning that blocks Requirements, Specification, or a Program Design choice. It inspects evidence, explains the ambiguity, groups related questions, challenges assumptions, and uses a diagram when that materially improves shared understanding.
+Pathfinding helps the user and agent clarify unmade owner meaning that blocks Requirements, Specification, or a Program Design choice. It inspects evidence, explains the ambiguity, groups related questions, challenges assumptions, and uses a diagram when that materially improves shared understanding.
 
 Pathfinding returns clarified meaning to the recorded return owner. It does not replace or merge that owner's artifact. For structural work, it may clarify an owner-controlled tolerance or constraint such as acceptable cost, risk, compatibility, or policy; it does not invent components, interfaces, mechanisms, or architecture.
 
 ## Downstream Handoffs
 
-`program-design` consumes distinct Requirements and Specification identities plus their current phase state, including the Specification's `E` entity identifiers. Three-artifact design review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records and the entity identifiers, not copied companion artifacts.
+Program Design consumes distinct Requirements and Specification identities plus their current phase state, including the Specification's `E` entity identifiers. Three-artifact design review consumes distinct Requirements, Specification, and Program Design identities. A handoff carries pointers or separately labeled chat records and the entity identifiers, not copied companion artifacts.

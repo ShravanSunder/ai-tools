@@ -5,6 +5,8 @@ description: Use when authoring or revising durable Requirements from settled or
 
 # Spec Design
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Requirements, Specification, and Program Design are separate authoritative concepts:
 
 ```text
@@ -65,7 +67,7 @@ Routing cases:
 true:      "Write a durable Requirements document from these settled, user-confirmed decisions. Do not write the Specification yet."
 near miss: "Interview me to discover what users need and which boundary I actually want." -> discuss-pathfinding
 near miss: "Clean up this settled Requirements document without changing its meaning." -> docs-maintain
-near miss: "Take this through Requirements, Specification, Program Design, and independent three-artifact design review." -> orchestrator-design
+near miss: "Take this through Requirements, Specification, Program Design, and independent three-artifact design review." -> the full design-cycle workflow, not this phase
 ```
 
 ## Terminal Contract
@@ -105,7 +107,7 @@ When unmade owner meaning blocks Requirements or Specification, use `discuss-pat
 
 Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
-Accept an optional call-scoped `new artifact home` policy. When `orchestrator-design` supplies `<project-root>/docs/specs/`, create any new file-backed Requirements and Specification as distinct resolvable paths beneath that home and return both exact paths. Preserve authoritative pre-existing artifacts elsewhere; do not relocate or reject them because of the policy. The artifact-home policy applies only to new outputs in the current call and is not persisted as workflow state.
+Accept an optional call-scoped `new artifact home` policy. When the caller supplies `<project-root>/docs/specs/`, create any new file-backed Requirements and Specification as distinct resolvable paths beneath that home and return both exact paths. Preserve authoritative pre-existing artifacts elsewhere; do not relocate or reject them because of the policy. The artifact-home policy applies only to new outputs in the current call and is not persisted as workflow state.
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the applicable identity representation, the Requirements/Specification separation check, and the identities downstream phases must consume.
 
@@ -312,3 +314,5 @@ Do not return `locally-ready` while any of these hold:
 - a `locally-ready` result omits `program-design`, recommends more than one next skill, or routes to planning, implementation, or pathfinding;
 - a non-ready terminal invents a continuation instead of returning its exact decision, evidence, or deferral stop;
 - the continuation handoff omits the destination's required boundary and authority state or copies full artifacts and unrelated history.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
