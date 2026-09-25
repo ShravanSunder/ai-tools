@@ -1,25 +1,27 @@
-# manage-agents foreign lineage uses ACPX, not spawn_agent catalog miss
+# manage-agents foreign lineage uses agent-router, not a spawn_agent catalog miss
 
-scenario_id: manage-agents-foreign-lineage-uses-acpx
+scenario_id: manage-agents-foreign-lineage-uses-agent-router
 skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: acpx claude|acpx-provider-claude
-expect_decision_regex: claude-fable-5-1
-expect_proof_regex: claude-fable-5-1
+expect_decision_regex: agent-router
+expect_decision_regex: fable
+expect_proof_regex: fable[- ]5
 ## Shortcut Temptation
 
 A Codex parent already used native `spawn_agent` for Astra. The user named
 Fable. The agent may probe `spawn_agent` with `claude-fable`, get a catalog
-miss, and treat that as unavailability instead of ACPX Claude.
+miss, and treat that as unavailability instead of a persistent Claude
+relationship over agent-router.
 
 ## Pressures
 
 - "The native catalog is the source of truth" tempts another `spawn_agent`
   probe.
 - "Own-lineage unavailable → fallback" tempts substituting Astra.
-- Bare `claude-fable` tempts skipping the provider-contract id.
+- Bare `claude-fable` tempts skipping id resolution.
+- Habit tempts ACPX Claude as the default instead of the legacy route.
 
 ## Prompt
 
@@ -38,8 +40,11 @@ another runtime.
 
 ## Expected Compliant Behavior
 
-- Skill is invoked; the review is a Delegate.
-- Route is ACPX Claude with `claude-fable-5-1`, not another native probe.
+- Skill is invoked; the review is a 🔎 Review Sidekick.
+- Route is a persistent Claude relationship over agent-router with
+  a resolved Claude Fable 5.x id, verifying SessionRef, visible name, and returned
+  identity; ACPX Claude only if agent-router has no Claude endpoint or
+  cannot meet a stated requirement, with that gap recorded.
 - The catalog miss is a routing signal, not unavailability. Astra is not
   substituted.
 
@@ -48,4 +53,5 @@ another runtime.
 - Another `spawn_agent` call with `claude-fable`.
 - Review reported unavailable from the native catalog error.
 - Astra substituted for the named Fable reviewer.
-- OpenAI Terra is selected for this Fable reviewer job.
+- Any OpenAI model is selected for this Fable reviewer job.
+- ACPX Claude chosen as the default route with no agent-router gap named.

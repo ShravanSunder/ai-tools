@@ -90,7 +90,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a design author. |
 | `orchestrator-design` | `orchestrator-design-per-artifact-visual-coverage` | Verify visual completion separately for Requirements, Specification, and Program Design while preserving main-authored meaning. |
 | `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the 🐒 Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
-| `agent-collaboration` | `agent-collaboration-multi-pr-thread-local-seats` | Use thread-local implementer seats, existing root references, exact SessionRefs, and orchestrator-only agent resolution across planned PR assignments. |
+| `agent-collaboration` | `agent-collaboration-tool-manual-vs-practice-routing` | Route a CLI how-to to the tool manual, a when-to-post decision to `practices-collaboration`, and a typo fix to neither. |
 | `docs-maintain` | `docs-maintain-no-stale-purge.md` | Do not purge or rewrite docs before source-of-truth classification and preservation plan. |
 | `docs-maintain` | `docs-maintain-rewrite-leaves-fences.md` | When rewriting README prose, load humanizer and leave YAML and code fences unchanged. |
 | `implementation-handoff` | `implementation-handoff-evidence-packet.md` | Do not produce a vague blurb; package branch, diff, validation, risks, and copy-paste prompt. |
@@ -110,14 +110,15 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-no-relay-supervisor` | Delegate only for concrete independent-work, expertise, or disposable-output benefit; keep coupled implementation/proof direct and avoid relay-only supervisors. |
 | `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a 🛠️ Worker or Sidekick as Requirements, Specification, or Program Design author. |
 | `manage-agents` | `manage-agents-native-reviewer-uses-spawn` | Do not hop a Codex reviewer to `codex exec --sandbox read-only` when native `spawn_agent` is available; packet read-only is enough. |
-| `manage-agents` | `manage-agents-foreign-lineage-uses-acpx` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable through ACPX Claude as `claude-fable-5-1`. |
+| `manage-agents` | `manage-agents-foreign-lineage-uses-agent-router` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable as a persistent Claude relationship over agent-router with a resolved Claude Fable 5.x id, ACPX only on a recorded gap. |
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
-| `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | Do not stop a Frontier ACPX Fable review with `--timeout 120`; retrieve the named session instead. |
+| `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | When agent-router has no Claude endpoint and ACPX is the legacy route, do not stop a Frontier Fable review with `--timeout 120`; retrieve the named session instead. |
 | `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named xhigh choice against the 🐒 Sidekick model table. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | A Workhorse 🐒 Sidekick answers a short status check and returns a material design decision to Main. |
 | `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch uses its Workhorse table. |
 | `manage-agents` | `manage-agents-luna-background-fix` | The 🛠️ Worker table permits Workhorse for a well-understood local fix. |
+| `manage-agents` | `manage-agents-cursor-host-operator-uses-agent-router-luna` | On a Cursor host, an Operator procedure uses Luna through agent-router, not a Cursor native model. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |
 | `plan-handoff` | `plan-handoff-proof-matrix-preservation` | Do not drop obligation/proof ownership, freshness guards, or parent verification while packaging a plan. |
@@ -213,7 +214,17 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-handoff` | `spec-handoff-portable-design-context` | Do not turn spec/design portability into plan creation or phase completion. |
 | `spec-handoff` | `spec-handoff-routes-ready-design-to-planner` | Preserve ready design in the handoff and recommend exactly `plan-implementation`. |
 | `spec-handoff` | `spec-handoff-successor-main-authority` | Preserve design authorship unless recipient, transferred scope, and explicit user direction designate a successor main. |
-| `track-show-me-your-work` | `track-show-me-your-work-coordination-execution-roots` | Keep coordination/integration separate from linked per-PR execution roots and thread-local implementer seats. |
+| `practices-show-me-your-work` | `practices-show-me-your-work-coordination-execution-roots` | Keep coordination/integration separate from linked per-PR execution roots and thread-local implementer seats. |
+| `practices-show-me-your-work` | `practices-show-me-your-work-new-session-opens-trace-before-editing` | Open or resume the trace before the first edit of a qualifying task, even when told to start coding. |
+| `practices-show-me-your-work` | `practices-show-me-your-work-routine-edit-no-trace` | No trace for a routine typo fix; an explicit trail request for the same edit opens one. |
+| `practices-show-me-your-work` | `practices-show-me-your-work-owner-away-wip-folder` | With no board and the owner away, start the unshared wip trace folder in the same turn instead of chat notes or memory-logs. |
+| `practices-show-me-your-work` | `practices-show-me-your-work-preboard-sidekick-own-file-then-transfer` | A pre-board 🐒 Sidekick writes only its own wip file; Main transfers the folder under its own identity. |
+| `practices-collaboration` | `practices-collaboration-no-board-owner-away-continues` | Ask the owner once, return `no-home`, and keep working instead of waiting for a board. |
+| `practices-collaboration` | `practices-collaboration-listen-not-poll` | Arm one listener and name it in the stop text instead of polling thread lists. |
+| `practices-collaboration` | `practices-collaboration-sidekick-uses-assigned-root` | A 🐒 Sidekick stays on its execution root, reports completion, and resolves nothing. |
+| `practices-collaboration` | `practices-collaboration-worker-returns-evidence` | A 🛠️ Worker without posting authority returns evidence instead of posting. |
+| `practices-collaboration` | `practices-collaboration-topic-autonomy-and-inbox` | Create topics without approval inside authorized boards; watching is not waking or acknowledging. |
+| `practices-collaboration` | `practices-collaboration-multi-pr-thread-local-seats` | Thread-local seats, existing references, and orchestrator-only resolution across planned PR assignments. |
 | `presentation-tui` | `presentation-tui-monospace-structure.md` | Keep the TUI skeleton as default layout while mixing markdown deliberately; GFM tables are the comparison default; no pipe tables inside frames. |
 | `presentation-tui` | `presentation-tui-progressive-disclosure.md` | Do not dump one giant diagram; use disclosure sequence with one map, selected slice, small ledger, and detail. |
 | `presentation-tui` | `presentation-tui-research-lane-board.md` | Do not claim presentation runs research; render handed-over lanes with parent synthesis boundaries. |

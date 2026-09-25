@@ -86,7 +86,7 @@ export const skillPressureCaseDefinitions = [
   "requiredSourceReads": [
     "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/references/goal-contract-and-routing.md",
     "plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/SKILL.md",
-    "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"
+    "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md"
   ],
   "maximumToolCalls": 30,
   "semanticCriteria": [
@@ -249,7 +249,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: [
       ...routeSources,
       "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
-      "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md",
       "plugins/shravan-dev-workflow/skills/skills-creation/SKILL.md",
     ],
     maximumToolCalls: 35,

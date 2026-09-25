@@ -6,17 +6,16 @@ This reference applies after `SKILL.md` selects a native 🛠️ Worker or Opera
 
 ## Models
 
-| Model id             | Note              |
-| -------------------- | ----------------- |
-| `gpt-6-astra`        |                   |
-| `gpt-6-sol`          |                   |
-| `gpt-6-luna`         |                   |
+| Role | Model | Route |
+| --- | --- | --- |
+| 🛠️ Worker | OpenAI Luna or Sol, effort from the `model-catalog.md` role table | native `spawn_agent` |
+| 🔧 Operator | OpenAI Luna, effort from the `model-catalog.md` role table | native `spawn_agent` |
 
-Lib ids: `openai.gpt-6-astra`, `openai.gpt-6-sol`, `openai.gpt-6-luna`. Prefer short form unless the host requires `openai.`.
+Resolve the exact id with the Runtime rule in `SKILL.md`. If the host requires a provider prefix, it takes the form `openai.<resolved id>` (example format only).
 
 ## Effort
 
-`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `SKILL.md` role table still apply.
+`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `model-catalog.md` role table still apply.
 
 ## Conversation History
 
@@ -39,7 +38,7 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
 {
   "message": "Run only the prescribed proof command after write-set preflight. Capture output and exit code under tmp/, compare git status before and after, and return the observations. Do not edit tracked files.",
   "task_name": "review_proof_operator",
-  "model": "gpt-6-luna",
+  "model": "<resolved Luna id>",
   "reasoning_effort": "medium",
   "fork_turns": "none"
 }
@@ -51,4 +50,4 @@ Use the lifecycle tools advertised by the current host. On the collaboration sur
 
 When `wait_agent` is available and no independent useful work remains, call it immediately with the explicit `timeout_ms` selected by **Waiting**, within the host's advertised cap and real deadline. Do not replace an expired bounded wait with `list_agents` merely to ask whether a reply arrived. Rearm `wait_agent` when the assignment still warrants waiting; use `list_agents` for actual liveness or dropped-wait recovery evidence.
 
-Other hosts may expose `send_input`, `resume_agent`, or `close_agent`; use them only when actually advertised and follow their returned contracts. Do not invent missing tools or spawn a replacement merely because the 🛠️ Worker is idle. Reuse the returned task/session identity. Display names and Router SessionRefs are separate from native tool IDs. A native child can have its own session ID without supporting Router direct input.
+Other hosts may expose `send_input`, `resume_agent`, or `close_agent`; use them only when actually advertised and follow their returned contracts. Do not invent missing tools or spawn a replacement merely because the 🛠️ Worker is idle. Reuse the returned task/session identity. Display names and agent-router SessionRefs are separate from native tool IDs. A native child can have its own session ID without supporting agent-router direct input.

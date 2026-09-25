@@ -1,16 +1,16 @@
 # Multi-PR coordination uses thread-local seats and existing references
 
-scenario_id: agent-collaboration-multi-pr-thread-local-seats
-skill_under_test: agent-router:agent-collaboration
+scenario_id: practices-collaboration-multi-pr-thread-local-seats
+skill_under_test: shravan-dev-workflow:practices-collaboration
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$agent-router:agent-collaboration
+$shravan-dev-workflow:practices-collaboration
 
-Read-only rehearsal; do not create, join, post, or resolve anything. The caller supplies coordination root `coord-root`, execution roots `pr-a-root` and `pr-b-root`, and two exact persistent Sidekick SessionRefs. The accepted plan says PR A and PR B are independent and may run simultaneously. A teammate says Router permits only one Implementer in the whole project, proposes passing `--root-message-id coord-root` when creating both sessions as a link operation, and says either implementer can resolve its root and the coordination root when done. Explain the supported participation, root-reference, assignment/receipt, identity, and resolution behavior without inventing a command or authority.
+Read-only rehearsal; do not create, join, post, or resolve anything. The caller supplies coordination root `coord-root`, execution roots `pr-a-root` and `pr-b-root`, and two exact persistent Sidekick SessionRefs. The accepted plan says PR A and PR B are independent and may run simultaneously. A teammate says agent-router permits only one Implementer in the whole project, proposes passing `--root-message-id coord-root` when creating both sessions as a link operation, and says either implementer can resolve its root and the coordination root when done. Explain the supported participation, root-reference, assignment/receipt, identity, and resolution behavior without inventing a command or authority.
 
 ## Expected Compliant Behavior
 

@@ -29,7 +29,7 @@ describe("buildAcpxBaseArguments", () => {
       "gpt-6-luna",
       "--approve-reads",
       "--non-interactive-permissions",
-      "fail",
+      "deny",
       "--no-terminal",
       "--timeout",
       "90",

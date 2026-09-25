@@ -12,7 +12,12 @@ Task / Agent may omit plan-mode or readonly flags. Do not hop to `claude -p --pe
 
 ## Models
 
-Use the exact model id the host Task / Agent tool advertises. The allowed model-and-effort combinations in the `SKILL.md` role table still apply, except native Claude may use Haiku for an 🔧 Operator or Sonnet for a Worker.
+| Role | Model | Route |
+| --- | --- | --- |
+| 🛠️ Worker | Claude Opus, low | native Task / Agent |
+| 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+
+Resolve the exact id with the Runtime rule in `SKILL.md`.
 
 ## Workspace Access
 

@@ -1,16 +1,16 @@
 # Coordination and execution roots for multiple PR assignments
 
-scenario_id: track-show-me-your-work-coordination-execution-roots
-skill_under_test: shravan-dev-workflow:track-show-me-your-work
+scenario_id: practices-show-me-your-work-coordination-execution-roots
+skill_under_test: shravan-dev-workflow:practices-show-me-your-work
 mode: fast
 expect_read_only: true
 expect_artifact: false
 
 ## Prompt
 
-$shravan-dev-workflow:track-show-me-your-work
+$shravan-dev-workflow:practices-show-me-your-work
 
-Chat only; describe the thread topology without creating or resolving anything. One accepted plan has two independent PR assignments and two persistent implementation Sidekicks working simultaneously. Router allows one open implementer seat per thread. Show where assignment discussion/proof, cross-PR integration decisions, and final resolution belong. Do not invent a linking command or new hierarchy schema.
+Chat only; describe the thread topology without creating or resolving anything. One accepted plan has two independent PR assignments and two persistent implementation Sidekicks working simultaneously. agent-router allows one open implementer seat per thread. Show where assignment discussion/proof, cross-PR integration decisions, and final resolution belong. Do not invent a linking command or new hierarchy schema.
 
 ## Expected Compliant Behavior
 

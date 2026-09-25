@@ -1,30 +1,26 @@
 # ACPX Provider: Codex
 
-Agent token: `codex`. Use this provider when the host is not Codex native or when the relationship requires a separate persistent Codex conversation, including from a Codex parent. Prefer native Codex subagents for native-eligible bounded assignments; see `references/native-providers-codex.md`.
+Agent token: `codex`. Legacy route: agent-router carries persistent Codex relationships over ACP by default. Use this contract only when `acpx-legacy.md` admits ACPX because agent-router cannot meet a stated requirement, and record that gap in the ledger. Prefer native Codex subagents for native-eligible bounded assignments; see `references/native-providers-codex.md`.
 
 ## Models
 
-| Model id             |
-| -------------------- |
-| `gpt-6-astra`        |
-| `gpt-6-sol`          |
-| `gpt-6-luna`         |
+Examples: GPT-6 Luna, Sol, and Astra ids. Resolve the exact id with the Runtime rule in `SKILL.md`.
 
 Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix.
 
 ## Effort
 
-Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort control. Select the model-and-effort pair from the applicable role table in `SKILL.md`, then use its advertised effort level; do not duplicate role-tier mappings here.
+The Codex adapter's effort key is `reasoning_effort`: use `acpx codex set reasoning_effort <level> -s <name>`. A 2026-09-25 check against `@agentclientprotocol/codex-acp@1.6.2` accepted `reasoning_effort=high` and rejected both `effort` and an unadvertised value with ACP `-32602` (Invalid params). Select the model-and-effort pair from the applicable role table in `model-catalog.md`, then use its advertised level; do not duplicate role-tier mappings here.
 
 ## Sessions And Identity
 
-Creation example for a new relationship only; for an existing 🐒 Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
+Creation example for a new relationship only; for an existing 🐒 Sidekick, inspect and reuse its recorded session through `acpx-legacy.md` rather than running creation again.
 
 ```bash
-acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex sessions ensure --name "🐒 Sidekick · <purpose>"
+acpx --cwd /absolute/repo --model <resolved Sol id> --approve-reads --no-terminal \
+  --non-interactive-permissions deny codex sessions ensure --name "🐒 Sidekick · <purpose>"
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex -s "🐒 Sidekick · <purpose>" \
+  --non-interactive-permissions deny codex -s "🐒 Sidekick · <purpose>" \
   --file tmp/sidekick-packet.md
 ```
 
@@ -51,8 +47,8 @@ Codex CLI profiles currently do not apply to `app-server`; a `CODEX_PATH` launch
 
 ```bash
 CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
-  acpx --cwd /absolute/repo --model gpt-6-luna \
-  --approve-reads --no-terminal --non-interactive-permissions fail \
+  acpx --cwd /absolute/repo --model <resolved Luna id> \
+  --approve-reads --no-terminal --non-interactive-permissions deny \
   codex --file request.md
 ```
 
@@ -60,4 +56,4 @@ CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
 
 ## Permissions
 
-Use `--approve-reads` for source-grounded 🦉 Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.
+Use `--approve-reads` for source-grounded 🦉 Advisor and review work. Keep `--non-interactive-permissions deny` for unattended runs: unknown requests are denied, never approved, and the turn continues instead of aborting. The parent authorizes write access for non-review assignments.

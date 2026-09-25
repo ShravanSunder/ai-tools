@@ -1,6 +1,13 @@
-# ACPX Agent Calls
+# ACPX Agent Calls (legacy route)
 
-Use ACPX for cross-provider persistent 🐒 Sidekick, Advisor, or Review Sidekick relationships.
+ACPX is no longer a default route. agent-router carries persistent Codex and Claude relationships over ACP. Use ACPX only for a persistent 🐒 Sidekick, Advisor, or Review Sidekick relationship whose provider agent-router does not yet cover (Cursor today), or whose stated model, effort, access, or title requirement agent-router cannot meet; record that gap in the relationship ledger. Return the provider, exact model id, effort encoding, permission boundary, and retained session identity.
+
+## Dispatch
+
+1. Select exactly one provider below and MUST load its contract before constructing or executing the call, returning its exact model, effort, and permission encoding.
+2. Resolve the exact model id with the Runtime rule in `SKILL.md` (provider pages give examples only) and use the reasoning control the provider contract specifies. Record the id the provider accepted.
+3. When the selected provider has no contract, stop and report the route as unsupported.
+4. ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the assignment packet does. Include the decision target, settled decisions, resolvable sources, and `history none`. Preserve the identity selected for the relationship and supply relevant new context on each follow-up.
 
 ## Select The Provider
 
@@ -10,7 +17,7 @@ Use the first available launcher and keep it stable for persistent relationships
 acpx -> pnpm dlx acpx -> npx --yes acpx
 ```
 
-Before every call, select the provider that owns the chosen model lineage and load its contract:
+Before every call, select the provider that owns the chosen model lineage and load its contract. Cursor is the provider agent-router does not yet cover; the `codex` and `claude` contracts apply only after the recorded agent-router gap admitted ACPX.
 
 - OpenAI lineage: call the `codex` provider and load `acpx-provider-codex.md`.
 - Claude lineage: call the `claude` provider and load `acpx-provider-claude.md`.
@@ -31,9 +38,9 @@ Start independent review with a new named 🔎 Review Sidekick session. Sidekick
 
 Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
-- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. The assignment contract still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
-- `write <paths> (declared)`: `--approve-all` plus the assignment contract's bright-line authority — "edit only under <paths>; an edit outside them is a stop condition, return blocked." The parent verifies the receipt's diff stayed inside the declared scope.
-- Unattended call: `--non-interactive-permissions fail`.
+- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions deny` — auto-approves read and search requests and denies every other request, including writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. Use `deny`, not `fail`: an adapter can ask `execute` approval for a shell command that only reads a file, and `fail` aborts the whole turn while `deny` refuses that one request, never approving it, and lets the agent retry with a recognized read. The assignment contract still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
+- `write <paths> (declared)`: `--approve-all` plus the assignment contract's bright-line authority — "edit only under <paths>; an edit outside them is a stop condition, return blocked." `--approve-all` approves every request, so `--non-interactive-permissions` never applies; the declared paths and the parent's diff check are the only write boundary. The parent verifies the receipt's diff stayed inside the declared scope.
+- Unattended call: `--non-interactive-permissions deny`.
 
 Resolve one stable `<provider-agent-command>` from the provider contract. It includes the launcher, required environment, absolute cwd, permission boundary, provider token, and exact model selection. Use it for every lifecycle call in the relationship.
 

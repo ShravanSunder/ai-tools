@@ -8,7 +8,7 @@ Completion: the parent can state the missing capability that requires adapter im
 
 ## Security Route
 
-ACP adapters are sensitive-resource work. They usually involve subprocesses, network behavior, package scripts, auth material, filesystem access, or home configuration. Route through `skills-creation` security review before editing scripts, packages, hooks, assets, auth paths, or home/cache state.
+ACP adapters are sensitive-resource work. They usually involve subprocesses, network behavior, package scripts, auth material, filesystem access, or home configuration. Record an allowed, disallowed, blocked, or deferred security decision for each sensitive surface before editing scripts, packages, hooks, assets, auth paths, or home/cache state.
 
 Completion: sensitive surfaces, untrusted inputs, privileged actions, and required proof are named before implementation.
 

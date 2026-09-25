@@ -154,7 +154,7 @@ describe("goal delivery intent hard cutover", () => {
     );
     expect(designOrchestrator).toContain("<project-root>/docs/specs/");
     expect(designOrchestrator).toContain("central trail");
-    expect(goalOrchestrator).toContain("track-show-me-your-work");
+    expect(goalOrchestrator).toContain("practices-show-me-your-work");
     expect(specDesign).toContain("artifact-home policy");
     expect(programDesign).toContain("artifact-home policy");
     expect(
