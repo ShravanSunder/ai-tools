@@ -17,7 +17,7 @@ These verdicts live only in a separate current-state reconciliation receipt. The
 2. Inspect current git state and changed target files.
 3. Re-run only read-only evidence checks.
 4. Return the separate current-state receipt while preserving the plan record, governing basis, and delivery context unchanged.
-5. IF correction is required, route it to the recorded originating planner with the exact requested correction. The planner may create a corrected plan at a new path; reconciliation never edits the old completed plan in place.
+5. If correction is required, route it to the recorded originating planner with the exact requested correction. The planner may create a corrected plan at a new path; reconciliation never edits the old completed plan in place.
 6. Do not implement while reconciling.
 
 Report stale assumptions explicitly instead of silently refreshing them. When no corrected completed plan exists, do not fabricate one.

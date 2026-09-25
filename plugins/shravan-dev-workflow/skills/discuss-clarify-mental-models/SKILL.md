@@ -112,7 +112,7 @@ Every obligation has a carrier; a coverage-ledger obligation with no carrier at 
 
 IF the plain-words origin annotations start collapsing into one vague caveat, load `references/provenance-decomposition.md` and return the distinct origins.
 
-IF the repaired map gates a spec, plan, or named irreversible decision, reread the close map, evidence anchors, and non-goals as a final divergent self-check. Ask what the repaired map still fails to explain, verify each candidate against the artifacts, and fold surviving challenges into the map through the disposition track. IF an independent 🔎 Review Sidekick is already commissioned for this work, hand it that close map and question; do not commission one solely for this pass. Record `complete | partial | blocked` and the exact unresolved boundary.
+If the repaired map gates a spec, plan, or named irreversible decision, reread the close map, evidence anchors, and non-goals as a final divergent self-check. Ask what the repaired map still fails to explain, verify each candidate against the artifacts, and fold surviving challenges into the map through the disposition track. IF an independent 🔎 Review Sidekick is already commissioned for this work, hand it that close map and question; do not commission one solely for this pass. Record `complete | partial | blocked` and the exact unresolved boundary.
 
 ## Surface Language
 

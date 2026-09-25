@@ -27,7 +27,7 @@ A well-formed ticket contains:
 | **Dependencies** | `blockedBy`/`blocks` relations to other issues |
 | **Acceptance criteria** | How to verify this deliverable is complete |
 | **Checklists** | Implementation steps within the ticket (replaces sub-tasks) |
-| **Deferred items** | Explicitly called out: what is NOT in scope and why (with ticket refs if known) |
+| **Deferred items** | Explicitly called out: what is out of scope and why (with ticket refs if known) |
 
 See `references/ticket-templates.md` for full examples.
 
@@ -114,7 +114,7 @@ Update description checklists, mark completed items, adjust scope. If implementa
 
 ## Reference Files (read on demand)
 
-These files are NOT auto-loaded. Read them when you hit these situations:
+These files are not auto-loaded. Read them when you hit these situations:
 
 - **`references/mcp-tool-reference.md`** — Read when you need exact parameter names, response shapes, or filter options for any MCP tool call.
 - **`references/cli-reference.md`** — Read when using CLI for relation management, deletion, or `issue start`. Contains exact command syntax.

@@ -62,7 +62,7 @@ Closure is established by the latest permitted review result plus parent-verifie
 
 Record `target classification: general-domain | runtime-skill-package`.
 
-IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this review composition. Without it, return the `skills-creation` route and stop before classification or reviewer dispatch.
+If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this review composition. Without it, return the `skills-creation` route and stop before classification or reviewer dispatch.
 
 Completion: target classification and, when applicable, the `skills-creation` parent identity are recorded.
 

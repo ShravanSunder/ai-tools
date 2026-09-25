@@ -17,7 +17,7 @@ Inspired by the MIT-licensed `shadcn-improve` plugin mechanics: scout broadly, v
 
 Before repo recon, record `target classification: general-repo | runtime-skill-package`.
 
-IF the request directly creates, updates, evaluates, or plans changes to one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this composition. Without it, return the `skills-creation` route and stop before recon.
+If the request directly creates, updates, evaluates, or plans changes to one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this composition. Without it, return the `skills-creation` route and stop before recon.
 
 Vetted findings and prioritized backlogs may be returned without planning admission. Before writing a new completed plan or returning a `ready` current-state validation receipt for an existing completed canonical plan, classify its planning basis:
 
