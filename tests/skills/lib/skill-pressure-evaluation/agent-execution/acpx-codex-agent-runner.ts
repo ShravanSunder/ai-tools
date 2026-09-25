@@ -214,8 +214,11 @@ export function buildAcpxBaseArguments(props: {
     "--model",
     props.setup.model,
     ...permissionArguments,
+    // An unclassified shell read can request `execute` approval even in the
+    // read-only sandbox. Deny that request so the agent can retry with a
+    // recognized read operation; never auto-approve an unknown tool kind.
     "--non-interactive-permissions",
-    "fail",
+    "deny",
     "--no-terminal",
     ...allowedToolArguments,
     "--timeout",
