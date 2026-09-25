@@ -9,7 +9,7 @@ description: Use when either side notices drift or misalignment - repeated corre
 
 Work like a colleague at a whiteboard. The user holds one picture, you hold another; the job is to draw both pictures next to each other so the splits are visible, then settle each split with evidence or a question. Sometimes the second picture is not a belief but the goal you both confirmed — then the drawing compares the in-flight work against it. Everything the user sees is in their own everyday words; the rigor — provenance categories, countercases, dispositions — is your private discipline, kept in your pocket. Extraction of understanding that exists only in one person's head belongs to `discuss-pathfinding`; this skill repairs a map both sides already hold.
 
-Stay read-only. Do not write specs, plans, docs, code, or research ledgers, and do not author independent review artifacts — the divergent-reviewer branch below returns an in-conversation receipt the parent folds into the map, not a review document. If the next useful move is broad evidence gathering, route to `research-swarm`; if the model is stable enough for a durable artifact, route to the owning phase skill.
+Stay read-only. Do not write specs, plans, docs, code, or research ledgers, and do not author independent review artifacts — the divergent self-check below returns an in-conversation result folded into the map. If the next useful move is broad evidence gathering, route to `research-workflow`; if the model is stable enough for a durable artifact, route to the owning phase skill.
 
 This is a drift signal card: either side calls it the moment something feels off — a repeated correction, a too-quick agreement, a surprising plan. Invocation interrupts: stop in-flight edits and queued artifact work; this contract owns the turn. An unaligned model exported into specs, plans, or code multiplies the repair cost downstream.
 
@@ -110,15 +110,15 @@ Every obligation has a carrier; a coverage-ledger obligation with no carrier at 
 
 IF the plain-words origin annotations start collapsing into one vague caveat, load `references/provenance-decomposition.md` and return the distinct origins.
 
-IF the repaired map gates a spec, plan, or a named irreversible decision, dispatch one divergent reviewer as a Reviewer per `manage-agents` (history none, read-only). Packet: the close map, its evidence anchors, and non-goals — nothing else. Parallel-safe once the close map is drafted; authority never widens beyond read-only inspection. Return `complete | partial | blocked` with candidate findings answering "what does the repaired map still fail to explain?"; the parent verifies each against the artifacts and folds survivors into the map through the disposition track.
+IF the repaired map gates a spec, plan, or named irreversible decision, reread the close map, evidence anchors, and non-goals as a final divergent self-check. Ask what the repaired map still fails to explain, verify each candidate against the artifacts, and fold surviving challenges into the map through the disposition track. IF an independent 🔎 Review Sidekick is already commissioned for this work, hand it that close map and question; do not commission one solely for this pass. Record `complete | partial | blocked` and the exact unresolved boundary.
 
 ## Surface Language
 
-Bright line: the ten definition labels and every label this skill coined — the field names above, method terms such as `provenance` and `countercase`, ledger and section names, and rendering-bookkeeping labels such as `selected medium:` or `visual check:` — are agent-introduced vocabulary that never appears on this skill's conversational surface, whether as a colon-label or narrated in prose ("our inherited frame is..."); the user's words carry the map. Exempt: route-target skill names in the close route sentence; the verdict words in plain sentences ("we're agreed", "still open", "on track"); a banned word the user introduced in this conversation, echoed as an element name (the ban governs agent-introduced vocabulary, not the user's own words); "divergence map" and "re-anchor", which are user-facing vocabulary; and agent-to-agent packets such as the divergent-reviewer dispatch, which keep their field-name wording.
+Bright line: the ten definition labels and every label this skill coined — the field names above, method terms such as `provenance` and `countercase`, ledger and section names, and rendering-bookkeeping labels such as `selected medium:` or `visual check:` — are agent-introduced vocabulary that never appears on this skill's conversational surface, whether as a colon-label or narrated in prose ("our inherited frame is..."); the user's words carry the map. Exempt: route-target skill names in the close route sentence; the verdict words in plain sentences ("we're agreed", "still open", "on track"); a banned word the user introduced in this conversation, echoed as an element name (the ban governs agent-introduced vocabulary, not the user's own words); "divergence map" and "re-anchor", which are user-facing vocabulary.
 
 ## Route Targets
 
-- `research-swarm`: evidence gathering, prior art, current docs, memory/session mining, or source ledgers.
+- `research-workflow`: evidence gathering, prior art, current docs, memory/session mining, or source ledgers.
 - `spec-design`: durable authoritative Why/What contract.
 - `program-design`: durable structural How once observable obligations are settled.
 - Planning from current ready three-artifact design: `plan-implementation`; execution of an exact ready canonical plan whose delivery context is `pr-ready-unmerged`: `implement-plan`; independent implementation review: `implementation-review` for general-domain work or `skills-creation` for a runtime skill package. Do not invoke a retired workflow.
@@ -135,7 +135,7 @@ Bright line: the ten definition labels and every label this skill coined — the
 | "The jargon is more precise." | Precision the user cannot read repairs nothing; the rigor lives underneath. |
 | "I can start the plan and refine as we go." | Planning exports a broken model into a stronger-looking artifact. |
 | "The user said yes, so the model is confirmed." | Agreement without the load-bearing assumption is weak convergence. |
-| "I need a full research sweep first." | Broad evidence belongs to `research-swarm`; this skill checks only bounded evidence. |
+| "I need a full research sweep first." | Broad evidence belongs to `research-workflow`; this skill checks only bounded evidence. |
 | "I'll capture this in a doc while it is fresh." | Discussion surfaces stay read-only until another workflow owns the artifact. |
 | "The agent's report says it's done." | A report is an inherited claim; direct evidence is artifacts, diffs, run output, or verified state. |
 

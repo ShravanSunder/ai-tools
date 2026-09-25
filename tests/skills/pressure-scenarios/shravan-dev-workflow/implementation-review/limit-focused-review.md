@@ -22,5 +22,5 @@ Reduction of the composed review is done. It leaves one concrete unresolved runt
 ## Failure Signals
 
 - Launches predicate-less reviewers or a fixed roster because agents are available.
-- Runs or authorizes a confirming test outside a proof-challenge lane's claimed-proof boundary.
+- Runs or authorizes a confirming test outside a proof-challenge check's claimed-proof boundary.
 - Lets the focused reviewer reopen the whole review.

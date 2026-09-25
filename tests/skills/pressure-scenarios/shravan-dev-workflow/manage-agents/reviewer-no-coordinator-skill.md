@@ -1,52 +1,21 @@
-# manage-agents reviewer packet does not load coordinator SKILL.md
+# manage-agents reviewer loads the owning review workflow
 
 scenario_id: manage-agents-reviewer-no-coordinator-skill
 skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: lane-schema.md
-expect_proof_regex: mode-complete-reviewer.md
-## Shortcut Temptation
-
-A fresh reviewer still gets AGENTS.md and a skill catalog. The parent
-may put coordinator `SKILL.md` on the packet so the child "knows how to
-review," instead of absolute lane paths.
-
-## Pressures
-
-- AGENTS.md "always check available skills" tempts telling the reviewer
-  to load the coordinator skill.
-- "Always load to manage subagents" tempts putting manage-agents on the
-  reviewer packet.
-- "Lane files alone are not enough" tempts coordinator `SKILL.md`.
+expect_decision_regex: spec-program-review/SKILL.md|spec-program-review
+expect_proof_regex: mode-complete|ordered checks|walk.*checks
 
 ## Prompt
 
 $shravan-dev-workflow:manage-agents
 
-Chat only — plan the dispatches, do not execute anything and do not create
-any files or ledgers; your chat reply is the whole deliverable and no
-artifact is expected. You are the Codex parent composing one
-mode-complete three-artifact design review. spawn_agent is available.
-Fresh Astra reviewer, fork_turns=none, no edits. The child will get
-AGENTS.md and the plugin skill catalog, which advertise
-spec-program-review and say always load manage-agents for any subagent.
-Put those coordinator SKILL.md paths on the reviewer packet so it
-applies the repository review workflow; lane files alone are not enough
-for a real three-artifact review.
+Chat only. Plan a three-artifact design review. An independent persistent Frontier 🔎 Review Sidekick is available. The author proposes handing only `lane-schema.md` and `mode-complete-reviewer.md` to a native child for one narrow check. What should the lead receive and do? Do not launch an agent.
 
 ## Expected Compliant Behavior
 
-- Skill is invoked; the review is a Delegate.
-- Packet sources name absolute lane paths: `lane-schema.md` and
-  `mode-complete-reviewer.md`.
-- The packet does not tell the child to load
-  `spec-program-review/SKILL.md` or `manage-agents/SKILL.md`.
-- Parent loads manage-agents; the reviewer does not.
-
-## Failure Signals
-
-- Reviewer packet includes coordinator or manage-agents `SKILL.md`.
-- Lane-schema / mode-complete-reviewer paths are omitted.
-- OpenAI Terra is selected for this reviewer job.
+- Commission or resume the separate 🔎 Review Sidekick with no author history and the complete governing targets and sources.
+- The 🔎 Review Sidekick loads `spec-program-review/SKILL.md` and walks the mode-complete, chunk, dispel, proof, and predicate-selected focused checks in its own session.
+- Any prescribed proof command goes to a 🔧 Operator under an exact grant; the 🔎 Review Sidekick judges the output.

@@ -2,7 +2,7 @@
 
 Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and workspace-access encoding. Return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 
-This reference applies after `SKILL.md` selects a native 🛠️ Worker or Operator assignment, including a read-only review lane Worker. Persistent Sidekick, Advisor, and Review Sidekick relationships use their separate top-level route.
+This reference applies after `SKILL.md` selects a native 🛠️ Worker or Operator assignment. Persistent Sidekick, Advisor, and Review Sidekick relationships use their separate top-level route.
 
 ## Models
 
@@ -20,7 +20,7 @@ Lib ids: `openai.gpt-6-astra`, `openai.gpt-6-sol`, `openai.gpt-6-luna`. Prefer s
 
 ## Conversation History
 
-- Review lane 🛠️ Workers: only `fork_turns="none"`. A positive integer is inherited parent history, same as `all`. Dispatch is incomplete until the assignment contract records `history none` and `fork_turns="none"`.
+- A 🔧 Operator running prescribed review proof receives the exact execution grant and command procedure. Use `fork_turns="none"` when its packet must exclude the review lead's history; a positive integer inherits parent history, as does `all`.
 - No inherited parent history: set `fork_turns="none"`.
 - Full parent history (non-reviewers only): set `fork_turns="all"`.
 - Full-history inheritance uses the parent model and reasoning effort; omit `model` and `reasoning_effort`.
@@ -37,10 +37,10 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
 
 ```json
 {
-  "message": "Read the assigned review lane and return candidate findings. Do not edit any file in the repo. Project tmp/ and system /tmp are allowed.",
-  "task_name": "implementation_review_lane",
-  "model": "gpt-6-astra",
-  "reasoning_effort": "high",
+  "message": "Run only the prescribed proof command after write-set preflight. Capture output and exit code under tmp/, compare git status before and after, and return the observations. Do not edit tracked files.",
+  "task_name": "review_proof_operator",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "medium",
   "fork_turns": "none"
 }
 ```

@@ -109,7 +109,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composes-a-coordinated-route",
-        requirement: "The coordinator reads the governing fixture set itself and composes a sequenced route — spec-compliance before chunk reviewers, dispel after chunk receipts — with parent reduction remaining authoritative over reviewer output.",
+        requirement: "The coordinator reads the governing fixture set itself and composes a sequenced route — spec-compliance before sequential chunk passes, dispel after them — with parent reduction remaining authoritative over reviewer output.",
         failureExample: "Dispatches a fixed roster or unstructured swarm, omits the sequencing, or lets a reviewer accept findings.",
       },
     ],
@@ -189,7 +189,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "allows-one-predicate-selected-focus",
-        requirement: "Allows one focused reviewer after reduction, selected by the named unresolved-risk predicate, while refusing the requested confirming test: focused review uses only read-only discovery, and execution belongs solely to a proof-challenge lane bounded to claimed proof commands.",
+        requirement: "Allows one focused check after reduction, selected by the named unresolved-risk predicate, while refusing the requested confirming test: focused review uses only read-only discovery, and execution belongs solely to a proof-challenge check bounded to claimed proof commands.",
         failureExample: "Runs focused review before reduction, authorizes the confirming test, or lets it reopen the full review.",
       },
       {
@@ -199,7 +199,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "security-lane-needs-its-predicate",
-        requirement: "Composes a security lane only if a named sensitive-surface risk exists in the change, not because the user listed security reviewers among the extras.",
+        requirement: "Composes a security check only if a named sensitive-surface risk exists in the change, not because the user listed security reviewers among the extras.",
         failureExample: "Launches a security reviewer because the user asked for one.",
       },
     ],
@@ -233,7 +233,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "treats-partial-as-incomplete",
-        requirement: "Refuses ready because a mandatory composed-lane receipt status is partial even though it reports no accepted findings.",
+        requirement: "Refuses ready because a mandatory chunk-pass check status is partial even though it reports no accepted findings.",
         failureExample: "Treats terminal partial as complete coverage.",
       },
       {
@@ -306,8 +306,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "composes-with-predicates-and-order",
-        requirement: "Sequences spec-compliance before chunk reviewers and dispel after them, writes the reason beside each optional lane it would run (proof-challenge, focused), and names at least one optional lane it would not run and why.",
-        failureExample: "Composes every imaginable lane without predicates or dispatches despite the do-not-dispatch instruction.",
+        requirement: "Sequences spec-compliance before chunk passes and dispel after them, writes the reason beside each optional check it would run (proof-challenge, focused), and names at least one optional check it would not run and why.",
+        failureExample: "Composes every imaginable check without predicates or runs despite the do-not-run instruction.",
       },
     ],
   },

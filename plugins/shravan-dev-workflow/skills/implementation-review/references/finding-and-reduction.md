@@ -1,8 +1,8 @@
 # Finding And Reduction
 
-This reference owns parent verification, the rails re-anchor, finding semantics, cause-based routing, affected coverage, and the final review result. `parent` means the immediate review lead relative to a lane; the orchestrator later owns final disposition and delivery routing.
+This reference owns parent verification, the rails re-anchor, finding semantics, cause-based routing, affected coverage, and the final review result. `parent` means the immediate review lead for the ordered checks; the orchestrator later owns final disposition and delivery routing.
 
-Expected inputs: the shared review packet, terminal reviewer receipts including the dispel classification, current governing sources and diff, proof evidence, and any prior coverage record.
+Expected inputs: the current review context, per-check results including the dispel classification, current governing sources and diff, proof evidence, and any prior coverage record.
 
 Return: candidate dispositions with rails anchors, merged duplicates and conflicts, accepted findings, routes, scope effects, coverage and evidence boundaries, first correction, and `ready | needs-revision | blocked-input | decision-needed | remediation-limit-reached`.
 
@@ -47,7 +47,7 @@ unverified  missing evidence prevents acceptance or rejection
 conflict    candidates disagree in a decision-relevant way
 ```
 
-Confidence, reviewer agreement, severity, and reviewer identity are not evidence — verify against source, never rubber-stamp. Weigh the dispel lane's classification as candidate evidence like any other receipt. Merge duplicates by root cause. Preserve conflicts only when they change the result, then state what source or owner decision would settle them.
+Confidence, reviewer agreement, severity, and reviewer identity are not evidence — verify against source, never rubber-stamp. Weigh the dispel check's classification as candidate evidence like any other check result. Merge duplicates by root cause. Preserve conflicts only when they change the result, then state what source or owner decision would settle them.
 
 ## Record an Accepted Finding
 
@@ -101,7 +101,7 @@ remediation-limit-reached
 
 The result includes reviewed authority, unchanged plan/governing-basis/delivery-context records, base and reviewed identities, diff and proof freshness, remediation-pass evidence, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, weaker-substitute risks, first correction, exact route, and uncovered boundary.
 
-A proof claim whose proof-challenge lane returned only challenges — nothing executed because every command would write into the worktree or no grant was recorded — cannot support `ready` when that claim is the sole proof for a changed contract; it is `needs-revision` to `implement-plan` (supply runnable, scratchpad-safe proof) or `blocked-input`.
+A proof claim whose proof-challenge check returned only challenges — nothing executed because every command would write into the worktree or no grant was recorded — cannot support `ready` when that claim is the sole proof for a changed contract; it is `needs-revision` to `implement-plan` (supply runnable, scratchpad-safe proof) or `blocked-input`.
 
 Accepted corrections to source or proof invalidate affected coverage. A remediation report, green proof, or focused-only result does not restore it; require a new meaningful review with fresh chunk coverage for the corrected source and affected proof. State which coverage became invalid and bind the new result to the corrected source.
 

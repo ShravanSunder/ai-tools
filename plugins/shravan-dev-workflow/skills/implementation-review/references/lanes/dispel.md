@@ -2,11 +2,11 @@
 
 Mission: scope defense. Challenge the candidate findings and the implementation itself against the rails — the confirmed requirements, Specification obligations, Program Design elements, and goal boundary — so over-engineering dies before reduction instead of after merge. This is not a second general defect hunt.
 
-Expected inputs: every shared packet field from `lane-schema.md` with `chunk: whole-diff`, the complete diff (not summaries), the candidate-finding set from prior lanes — possibly empty — and the complete governing-basis artifacts.
+Expected inputs: the current review context with `chunk: whole-diff`, the complete diff (not summaries), the candidate-finding set from prior checks — possibly empty — and the complete governing-basis artifacts.
 
-Prerequisites: the governing basis and complete diff are inspectable; chunk receipts are terminal. An empty candidate set does not block this lane — the over-delivery sweep runs regardless.
+Prerequisites: the governing basis and complete diff are inspectable; chunk passes are complete. An empty candidate set does not block this check — the over-delivery sweep runs regardless.
 
-Maximum authority: fresh-context, read-only, candidate-only review. Read-only discovery commands and a tmp scratchpad only; no proof-generation commands, edits, or workflow decisions. Classifications are candidate evidence for the review lead, never dispositions.
+Check boundary: read-only review. Read-only discovery commands and a tmp scratchpad only; no proof-generation commands, edits, or workflow decisions. Classifications are candidate evidence for the review lead, never dispositions.
 
 ## Challenge the Candidates
 
@@ -23,7 +23,7 @@ correction class: required by anchor | gold-plating | scope expansion |
 evidence:
 ```
 
-The failure this lane exists to catch: a reviewer proposes completing an unrequested mechanism's missing contracts — retries it was never asked for, a hardening harness no obligation demands, an abstraction serving imagined future needs — and the correction reads as diligence. Name it. A candidate that would genuinely repair a confirmed obligation is classified `required by anchor` and passed through untouched; dispel is not reflexive rejection.
+The failure this check exists to catch: a reviewer proposes completing an unrequested mechanism's missing contracts — retries it was never asked for, a hardening harness no obligation demands, an abstraction serving imagined future needs — and the correction reads as diligence. Name it. A candidate that would genuinely repair a confirmed obligation is classified `required by anchor` and passed through untouched; dispel is not reflexive rejection.
 
 ## Challenge the Implementation
 
@@ -33,7 +33,7 @@ Good: every candidate carries a rails classification with evidence; unrequested 
 
 Bad: rejecting valid corrections as "over-engineering" without running the deletion test; blessing an unrequested subsystem because it looks professional; drifting into general code review.
 
-Return the shared `complete | partial | blocked` envelope plus:
+Return the check `complete | partial | blocked` status plus:
 
 ```text
 candidate classifications: <per candidate; empty when no candidates supplied>

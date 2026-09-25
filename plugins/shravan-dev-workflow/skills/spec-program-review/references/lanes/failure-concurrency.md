@@ -4,11 +4,11 @@ Mission: construct concrete failure paths and interleavings to test containment,
 
 Predicate: a fallible boundary, retry, partial success, cancellation, shared mutable state, or concurrent actors exist.
 
-Expected inputs: lane-schema packet plus state owners, flows, failure policies, and applicable specification obligations.
+Expected inputs: review context plus state owners, flows, failure policies, and applicable specification obligations.
 
 Prerequisites: complete target/source set exists.
 
-Maximum authority: fresh-context, read-only, candidate-only.
+Check boundary: read-only.
 
 ## Inspection
 
@@ -30,8 +30,8 @@ Bad: generic “retry,” “transaction,” “lock,” or “eventual consiste
 
 Calibration: do not invent product failure policy. When desired observable behavior is unspecified, route the missing obligation to `spec-design` and stop before choosing it.
 
-Overlap boundary: `architecture-boundary` owns component placement; `contract` owns externally visible semantics; this lane owns interleavings and recovery realization.
+Overlap boundary: `architecture-boundary` owns component placement; `contract` owns externally visible semantics; this check owns interleavings and recovery realization.
 
-Return: lane-schema receipt with scenario trace, broken/preserved invariant, consequence, smallest correction, semantic owner, and proof implication.
+Return: check result with scenario trace, broken/preserved invariant, consequence, smallest correction, semantic owner, and proof implication.
 
 Stop when: each selected high-risk path has explicit state, containment, recovery, and proof, or missing Why/What prevents structural judgment.

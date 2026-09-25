@@ -1,6 +1,6 @@
 {
   "name": "shravan-dev-workflow",
-  "version": "2.58.0",
+  "version": "2.59.0",
   "description": "Shravan's development workflow plugin with long-horizon delivery routing, bounded design orchestration, canonical planning, implementation and independent review, research, handoffs, PR lifecycle, debugging, operations, skill authoring, agent management, and surface-matched presentation (TUI and rendered web/chat).",
   "author": {
     "name": "Shravan Sunder"
@@ -34,7 +34,7 @@
     "interview",
     "mental-model",
     "reconverge",
-    "research-swarm",
+    "research-workflow",
     "research",
     "manage-agents",
     "acpx",
@@ -86,7 +86,7 @@
       "Use program-design to define structural How against this specification.",
       "Use discuss-clarify-mental-models to rebuild the shared map before artifact work.",
       "Use discuss-pathfinding to extract unwritten requirements or decisions before artifact work.",
-      "Use research-swarm to gather source-grounded evidence into a tmp ledger.",
+      "Use research-workflow to gather source-grounded evidence into a tmp ledger.",
       "Use manage-agents to spawn, resume, monitor, or reduce subordinate agent work.",
       "Use orchestrator-design to run this through one bounded Requirements, Specification, Program Design, and three-artifact design review cycle before planning.",
       "Use orchestrator-implementation-goal to carry this implementation goal through planning, implementation, proof, review, and PR readiness.",

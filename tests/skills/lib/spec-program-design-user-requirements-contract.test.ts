@@ -189,7 +189,7 @@ describe("user requirements and design-view contracts", () => {
     expect(specDesign).toContain("tmp/design-workflows/<date>-<slug>/");
     expect(specDesign).toContain("returned workflow state");
     expect(specDesign).toContain("spec-program-review`'s bounded review-and-correction-round policy");
-    expect(readPluginFile("skills/spec-program-review/SKILL.md")).toContain("parent-verified non-semantic edits preserve coverage");
+    expect(readPluginFile("skills/spec-program-review/SKILL.md")).toContain("carry the existing semantic coverage forward without another review");
     expect(specDesign).not.toContain("Any later artifact edit makes");
     expect(artifact).toContain("Human Deletion Test");
     expect(artifact).toContain("smallest Why/What model");
@@ -269,7 +269,7 @@ describe("user requirements and design-view contracts", () => {
     );
     expect(programDesign).toContain("tmp/design-workflows/<date>-<slug>/");
     expect(programDesign).toContain("spec-program-review`'s bounded review-and-correction-round policy");
-    expect(readPluginFile("skills/spec-program-review/SKILL.md")).toContain("parent-verified non-semantic edits preserve coverage");
+    expect(readPluginFile("skills/spec-program-review/SKILL.md")).toContain("carry the existing semantic coverage forward without another review");
     expect(programDesign).not.toContain("Any later edit to either artifact makes");
     expect(artifact).toContain("human deletion test");
     expect(artifact).toContain("Architecture documentation impact");
@@ -311,16 +311,16 @@ describe("user requirements and design-view contracts", () => {
     ].join("\n");
 
     expect(reviewSkill).toContain("reader understanding or readability");
-    expect(reviewSkill).toContain("mode-complete reviewer always");
-    expect(reviewSkill).toContain("the parent verifies and reduces it");
-    expect(reviewSkill).toContain("one focused assignment per named risk");
-    expect(reviewSkill).toContain("named unresolved risk selects it");
+    expect(reviewSkill).toContain("mode-complete check and every selected chunk pass have statuses");
+    expect(reviewSkill).toContain("walk the chunk passes sequentially");
+    expect(reviewSkill).toContain("one check per named risk");
+    expect(reviewSkill).toContain("Select a focused check only for a concrete unresolved risk");
     expect(reviewSkill).not.toContain("stop record");
     expect(reviewSkill).toContain(
-      "may never compose a lane without a predicate",
+      "A missing, partial, or blocked check cannot support `ready`",
     );
     expect(reviewSkill).toContain(
-      "narrow the composable set but never widen authority",
+      "Assign prescribed proof commands",
     );
     expect(reviewSkill).not.toContain("at most one focused reviewer by default");
     expect(reviewSkill).toContain(
@@ -365,8 +365,8 @@ describe("user requirements and design-view contracts", () => {
     expect(reduction).toContain("plain-language requirement meaning");
     expect(reduction).toContain("observable outcome that fails");
     expect(reduction).toContain("bounded evidence-lookup result");
-    expect(reduction).toContain("non-goal `no redesign or review recommendation`");
-    expect(reduction).toContain("Reviewers never spawn reviewers or evidence lookups");
+    expect(reduction).toContain("one bounded source lookup in this session");
+    expect(reduction).toContain("opens the source anchors from its bounded lookup");
     expect(laneSchema).toContain("one compact row per stable identity");
     expect(laneSchema).toContain("every member identity is enumerated");
     expect(commonMethod).toContain("every member identity is enumerated");
@@ -493,7 +493,7 @@ describe("user requirements and design-view contracts", () => {
       readPluginFile("shared-references/requirements-specification-program-design.md"),
       readPluginFile("README.md"),
       readPluginFile("skills/discuss-clarify-mental-models/SKILL.md"),
-      readPluginFile("skills/research-swarm/SKILL.md"),
+      readPluginFile("skills/research-workflow/SKILL.md"),
     ];
 
     for (const consumer of currentDesignReviewConsumers) {

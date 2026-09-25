@@ -78,7 +78,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 2. **Classify before asking.** Sort each unknown in working state:
 
    - **Observable now:** inspect the bounded file, document, log, behavior, or available session history.
-   - **Broad evidence:** use `research-swarm` when prior art or multiple sources are required, and consume its evidence before asking the related question.
+   - **Broad evidence:** use `research-workflow` when prior art or multiple sources are required, and consume its evidence before asking the related question.
    - **Judgment or tacit knowledge:** ask the user because only they can answer.
 
    Mark each important claim separately as **observed**, **authorized**, **provisional**, or **unresolved**. A user's description of inspectable behavior is useful context, but remains provisional until checked.
@@ -149,7 +149,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
 ## Routes
 
-- `research-swarm` — the broad-evidence bin in step 2 owns this call; never single facts a bounded read answers.
+- `research-workflow` — the broad-evidence bin in step 2 owns this call; never single facts a bounded read answers.
 - `discuss-clarify-mental-models` — IF mid-session the two of you disagree about a model you both already hold, use it to repair the drift and return the rebuilt shared model before extraction continues.
 - `presentation-tui` / `presentation-webui` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use the `presentation-*` skill matching the current surface for the conversational map; honor an exact user-requested format instead. It does not select or own durable specification views.
 - `spec-design` — a confirmed goal boundary from a user-requirements destination or proposed-change handoff routes here; otherwise return the exact owner decision rather than claiming readiness.

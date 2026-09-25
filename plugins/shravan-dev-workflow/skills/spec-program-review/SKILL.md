@@ -20,13 +20,11 @@ Requirements: WHY, for whom, and within what boundary?
 
 Requirements, Specification, and Program Design are separate authoritative concepts. Review reconstructs each one independently before judging their agreement; agreement inside a combined `Requirements/spec` document cannot substitute for a separately identifiable Requirements source and Specification.
 
-Fresh context, read-only access, and candidate-only authority create independence. The first review dispatch creates a different-lineage persistent Review Sidekick with no author or orchestrator history. That review lead reads the complete target set and governing sources, chooses its lanes — the mode-complete reviewer always, chunk lanes along artifact seams when the set is large, dispel always, proof-challenge and focused lanes only for a named reason — then verifies every candidate against the rails (accepted requirements, Specification obligations, confirmed goal boundary), tests deletion before addition, and owns the coverage-bound assessment. The orchestrator disposes and routes that assessment; it does not repeat the lead's whole-target reading or detailed reduction. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
-
-In this skill, `parent` means the immediate review lead relative to a lane. The orchestrator retains final disposition; the review lead remains independent of the author and retains its own review history through corrections.
+A different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history reads the complete target set and governing sources, then walks the ordered checks in its own session. The lead verifies candidates against accepted requirements, Specification obligations, and the confirmed goal boundary, tests deletion before addition, and owns the coverage-bound assessment. The orchestrator disposes and routes that assessment. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
 
 Prefer one independent review-and-correction round. After review-lead verification, allow one second normal round only when a concrete source-backed substantive issue remains or was introduced within the agreed design; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. Each round may span both semantic owners through the ordered `spec-design -> program-design` route, with each affected artifact corrected at most once in that round and every corrected anchor review-lead-verified. A third normal review requires explicit user permission given after the second result is visible.
 
-Disposition comes before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Route each valid correction set inside the settled mental model to its semantic owner. If a finding disproves a load-bearing assumption or exposes unmade owner meaning, return the failed assumption, evidence, consequence, and exact owner as `decision-needed` or `blocked`; do not spend the remediation allowance to push through a mental-model break. When the same result also contains an accepted bounded correction, preserve it explicitly as one `spec-design -> program-design` remediation round after the owner decision, with each affected artifact corrected at most once and one parent verification against the original findings; the break still stops current continuation and no second reviewer is dispatched.
+Disposition comes before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Route each valid correction set inside the settled mental model to its semantic owner. If a finding disproves a load-bearing assumption or exposes unmade owner meaning, return the failed assumption, evidence, consequence, and exact owner as `decision-needed` or `blocked`; do not spend the remediation allowance to push through a mental-model break. When the same result also contains an accepted bounded correction, preserve it explicitly as one `spec-design -> program-design` remediation round after the owner decision, with each affected artifact corrected at most once and one parent verification against the original findings; the break still stops current continuation and no second review is commissioned.
 
 ## Operations
 
@@ -44,15 +42,15 @@ review
     Program Design identity
   result: ready | needs-revision | blocked | decision-needed
   coverage: current meaning coverage for every target; uncertain semantic effect is stale
-  lanes: mode-complete reviewer always; chunk reviewers along artifact seams when
-    the set is large; dispel always after those receipts; proof-challenge when the
-    design cites executable proof; focused lanes one per named unresolved risk
+  checks: mode-complete always; sequential chunk passes along artifact seams when
+    the set is large; proof-challenge for executable claims; dispel always;
+    focused checks for named unresolved risks
 ```
 
 Review coverage follows meaning, not changed bytes. After each permitted correction round, the parent performs and records a semantic-change check before deciding whether review is complete:
 
 - if meaning changed inside the accepted correction and every accepted finding is resolved, preserve the review as the independent finding source and add parent-verified correction anchors for every accepted finding;
-- if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward and dispatch no model reviewer;
+- if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward without another review;
 - after the first round, if a concrete source-backed substantive issue remains or was introduced within the agreed design, admit the one permitted second normal round; reject a rerun based only on pedantry, style, an already-satisfied finding, confidence, or generic freshness;
 - after the second normal round, any third normal review stops `review-permission-required` until the user explicitly approves it.
 
@@ -70,7 +68,7 @@ Completion: target classification and, when applicable, the `skills-creation` pa
 
 IF operation is `classify-review-requirement`, load `references/classifying-review-requirement.md` and return its `review-required | non-substantial` result or blocked missing-input result.
 
-Dispatch no reviewer, select no lanes, and return no review verdict. `review-required` instructs the caller to make a separate fresh review invocation.
+Dispatch no reviewer, select no checks, and return no review verdict. `review-required` instructs the caller to make a separate fresh review invocation.
 
 Completion: classification returns immediately with zero reviewer dispatches.
 
@@ -104,7 +102,7 @@ A combined `Requirements/spec`, a Requirements-titled artifact that also stands 
 
 Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous; any recovery request is explicitly admitted or rejected with its reason.
 
-If one normal review-and-correction round already ran, admit a second normal round only for the recorded concrete source-backed substantive residual above. If two normal rounds already ran, require explicit user permission granted after the second result before a third normal review. An admissible orchestrator-authorized recovery request follows the one-time exception above and never resets or adds normal review or correction allowance. Switching modes, lanes, target labels, caller skills, or unknown history does not reset either boundary.
+If one normal review-and-correction round already ran, admit a second normal round only for the recorded concrete source-backed substantive residual above. If two normal rounds already ran, require explicit user permission granted after the second result before a third normal review. An admissible orchestrator-authorized recovery request follows the one-time exception above and never resets or adds normal review or correction allowance. Switching modes, checks, target labels, caller skills, or unknown history does not reset either boundary.
 
 ## 4. Select the Mode
 
@@ -122,35 +120,28 @@ Completion: exactly one mode and its complete required artifact set are selected
 
 ## 5. Resolve Reviewer Runtime and Authority
 
-The caller completes classification and admission before this step. A classification-only, non-substantial, or blocked exit dispatches no lead. For an admitted substantive review, the caller MUST use `manage-agents` to commission or resume one persistent, different-lineage Review Sidekick with no author or orchestrator history, read-only workspace access, and its selected model, reasoning, runtime, permissions, packet, and receipt mechanics. The assigned lead executes the review method and never commissions another lead. On a continuation, resume that exact lead with its own review history; do not recreate it, reset its limits, or reuse stale coverage. The lead uses `manage-agents` before each lane-worker dispatch: every lane Worker is fresh native context — fork = none (Codex `fork_turns="none"`, a new Claude or Cursor agent with no resume), never a self-fork, read-only, candidate-only, and unable to fan out. The one exception is `proof-challenge`: its packet records an execution grant naming exactly the proof commands the design cites, with output under project `tmp/` or system tmp; every lane may write there, none edits a tracked file. When a lane's seam touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, escalate that lane Worker to a Frontier Reviewer through `manage-agents` (reviewer-only per its catalog) and note which model ran.
+The caller completes classification and admission. For an admitted substantive review, MUST use `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history and read-only workspace access. Resume that exact lead through corrections. Candidate findings never become final disposition without lead verification. When the review touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, choose a Frontier 🔎 Review Sidekick from a different author lineage at commission time.
 
-Every reviewer gets the complete targets and governing sources but no parent conversation history, author conclusion, expected verdict, prior praise, or hidden context, and reads every artifact it receives completely before substantive findings. Reviewer findings remain candidate-only. Silence is `no-receipt`, never a clean review.
+A later semantic change outside an accepted correction invalidates affected check coverage. After normal round one, only a concrete source-backed substantive residual admits round two. A third normal review still requires explicit user permission.
 
-Coverage from a receipt expires when a later semantic change outside the accepted correction affects the mode dimensions, focused-lane predicate, or finding coverage it supplied. Parent-verified correction inside a permitted round and parent-verified non-semantic edits preserve coverage. After normal round one, only a concrete source-backed substantive residual admits normal round two; after normal round two, expanded or uncertain meaning stops `review-permission-required` until the user explicitly approves a third normal review.
+## 6. Walk the Mode and Chunk Checks
 
-Completion: fresh-context, read-only, candidate-only dispatch mechanics are recorded before the reviewer runs.
+The 🔎 Review Sidekick reads the complete target set and governing sources first, every artifact whole. MUST load `references/coordination-and-chunking.md` and return a sequential chunk-pass plan with complete seam text and overlap, or one mode-complete pass when the whole target fits.
 
-## 6. Choose the Lanes and Dispatch the Artifact Reviewers
+MUST load `references/lanes/lane-schema.md` and record `complete | partial | blocked` for every check. Return the per-check status block before the verdict. Record an unselected optional check as `complete` with `not selected: <reason>`. A missing, partial, or blocked check cannot support `ready`.
 
-The review lead reads the complete target set and governing sources first — every artifact whole — so the choices below come from its own reading, not a summary.
+1. MUST load `references/lanes/mode-complete-reviewer.md`, `references/reviewing-common-method.md`, and the selected mode reference. Reconstruct and judge the whole mode from complete artifacts.
+2. IF the plan composes chunks, load `references/lanes/chunk-reviewer.md` and walk the chunk passes sequentially. Reopen each complete artifact and the overlap seam in each pass. A chunk pass supplies seam coverage and never replaces mode-complete coverage.
 
-MUST load `references/coordination-and-chunking.md` and return the chunk plan (or the decision that the mode-complete reviewer alone covers the artifacts), the overlap seams, and the lanes to run with the reason for each; that reference owns design-chunk semantics, seam rules, and lane order.
+Completion: the mode-complete check and every selected chunk pass have statuses, each pass lists its seam sections, and every required dimension has current coverage.
 
-MUST load `references/lanes/lane-schema.md` and return the filled shared packet for every dispatch below. Its `lane instructions` field carries the absolute paths of every reference the bullets below say the lane Worker loads, or their inlined text when the runtime cannot read the plugin cache — a Worker dispatched into the reviewed repo cannot resolve this skill's relative paths; its goal-boundary field carries quoted statements with authority sources, and its constraints carry the authority that imposed them. Lane Workers are native and never started from the review lead's own conversation (no self-fork).
+## 7. Proof-Challenge, Dispel, and Focused Checks
 
-MUST dispatch `mode-complete-reviewer` to a fresh native lane Worker using that packet. The Worker loads `references/lanes/lane-schema.md` and `references/lanes/mode-complete-reviewer.md`; that lane MUST load `references/reviewing-common-method.md` and the selected mode reference before inspection. Parallel-safe after the complete target and governing-source set exists. Instance authority is fresh-context, read-only, candidate-only, and equal to or narrower than the lane maximum. Return `complete | partial | blocked`, or review-lead-recorded `no-receipt` after explicit follow-up; the lead verifies and reduces it.
+IF the design cites executable proof claims, load `references/lanes/proof-challenge.md` and challenge each claim. Assign prescribed proof commands to a 🔧 Operator under an exact execution grant. The 🔧 Operator performs the reference's write-set preflight, executes only granted commands with scratchpad output, compares `git status --porcelain` before and after, and returns commands, observations, and exit codes. The 🔎 Review Sidekick judges claimed against observed. Without a grant, inspect only and record the proof gap.
 
-IF the chunk plan composes chunks, dispatch one fresh native `chunk-reviewer` Worker per chunk using the shared packet plus that chunk's seam assignment and overlap seams. The Worker loads `references/lanes/lane-schema.md` and `references/lanes/chunk-reviewer.md`; that lane loads `references/reviewing-common-method.md` and the selected mode reference for its seam's dimensions only. Parallel-safe across chunks and with the mode-complete Worker once the shared context exists. Instance authority is fresh-context, read-only, candidate-only; a chunk receipt never claims mode-complete coverage. Return `complete | partial | blocked`; the lead verifies and reduces each.
+MUST load `references/lanes/dispel.md` after mode-complete and chunk checks. Classify every candidate and map delivered design elements to a rail or `absent`, even when the candidate set is empty.
 
-Completion: the mode-complete receipt and every chunk receipt are terminal and review-lead-reduced, each chunk lists its seam sections, and `partial`, `blocked`, and `no-receipt` are recorded as unable to yield `ready`.
-
-## 7. Dispel, Proof-Challenge, and Focused Lanes
-
-MUST dispatch `dispel` once the mode-complete and chunk receipts are terminal, using the shared packet with the complete target set plus the candidate set, which may be empty. The subagent loads `references/lanes/lane-schema.md` and `references/lanes/dispel.md`. Not parallel-safe with candidate producers; dispatch only after their receipts exist. Instance authority is fresh-context, read-only, candidate-only. Return its per-candidate `correction class` plus the design over-delivery map and findings; the parent verifies and reduces it.
-
-IF the reviewed design cites executable proof claims (commands, harnesses, reproducible evidence), dispatch `proof-challenge` using the shared packet plus the claim inventory and a recorded execution grant naming exactly those commands. The subagent loads `references/lanes/lane-schema.md` and `references/lanes/proof-challenge.md`. Parallel-safe with the artifact-review lanes once the claim inventory exists. Instance authority adds only that grant — scratchpad-only output, pre-run write-set check, untrusted-chain rule — and stays otherwise read-only and candidate-only; the lane reference owns the boundary and may never widen into edits. Return one row per claim plus every command run; the parent verifies each ran inside the grant and reduces it. When no executable claim exists, proof modality and seam sufficiency remain the read-only `proof` focused lane's subject.
-
-A broad topic does not select a focused reviewer. Compose a focused lane only when the parent can name a concrete unresolved risk, show why the artifact-review receipts did not settle it, and explain how the lane can resolve it:
+Select a focused check only for a concrete unresolved risk with a falsifiable question. Load `references/reviewing-common-method.md` and the selected reference below. Run one check per named risk after the earlier checks, and stop when no named risk remains:
 
 ```text
 material reader-comprehension risk, or an explicit deep-reader request from the
@@ -176,25 +167,19 @@ authoritative entry path, links, placement, or homes remain ambiguous
   -> references/lanes/artifact-navigation.md
 ```
 
-IF a named unresolved risk selects a lane above, dispatch that lane — one focused assignment per named risk — using the shared packet plus the falsifiable question. The subagent loads `references/lanes/lane-schema.md`, `references/reviewing-common-method.md`, and the selected lane. It runs only after parent reduction of the artifact-review receipts. Instance authority remains fresh-context, read-only, candidate-only, and excludes mode recommendation, verdict, editing, remediation, planning, and acceptance. Return `complete | partial | blocked` or parent-recorded `no-receipt`; the parent verifies and reduces it.
+After correction, verify affected finding anchors. A concrete substantive residual returns to normal-round admission. Stop a focused check when the risk is resolved, unsupported, outside the confirmed goal, or needs an owner decision.
 
-Run a focused lane because a named unresolved risk selects it — one focused assignment per named risk — and stop when no named risk selects another. A lane's predicate is the reason you write beside it. The reviewing parent may never compose a lane without a predicate — idle capacity, a broad topic, or reviewer curiosity is not one — and the pre-dispatch caller packet may narrow the composable set but never widen authority.
+Completion: dispel is complete, executable proof claims have challenge results or named gaps, and each focused check has a status and selection reason. Record every unselected optional check with `complete` and `not selected: <reason>`.
 
-After correction, do not rerun a focused lane inside the same invocation. The parent verifies affected finding anchors; any concrete source-backed substantive residual returns to the bounded normal-round admission policy, while a third normal review still requires explicit user permission.
+## 8. Verify Check Coverage
 
-Stop focused review when the risk is resolved, unsupported, outside the confirmed goal boundary, or needs an owner decision.
+Compare each check's covered target text with the current target. Confirm the 🔧 Operator ran only granted commands, wrote no tracked file, and returned an unchanged `git status --porcelain` result. A permitted correction is verified by the same 🔎 Review Sidekick against accepted findings without automatically starting another review round.
 
-Completion: the dispel receipt is terminal; proof-challenge ran when the design cites executable proof and its receipt is terminal; every focused lane you ran has a terminal receipt and the risk that selected it written beside it; and any lane the caller, the artifact's author, or your own reduction proposed that you did not run has the reason it was not needed.
-
-## 8. Verify Reviewer Independence
-
-The review lead confirms each receipt matches its assignment, lane-Worker history was empty, authority stayed candidate-only, and the Worker did not mutate the reviewed targets. Ordinary lanes must show access remained read-only; the `proof-challenge` receipt instead must show every command it ran appears in the packet's recorded execution grant with scratchpad-only output — a granted command passes, an unlisted command or any worktree write fails. Compare the covered target text to the reviewed target text. A later permitted remediation is closed by review-lead verification against accepted findings; it never causes automatic redispatch.
-
-Completion: each used receipt supplies semantically current coverage for the current target text, and no reviewer widened its authority beyond its lane maximum and recorded grant or mutated the worktree.
+Completion: each check supplies current coverage for its selected target, and proof execution stayed inside the recorded grant.
 
 ## 9. Verify and Reduce Findings
 
-MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result. Here and in that reference, `parent` means this immediate review lead relative to a lane, never the author or orchestrator.
+MUST load `references/finding-and-reduction-schema.md` and return its dispositions, merged duplicates/conflicts, coverage gaps, goal-relevance record, deletion-first decision, scope effect, and final coverage-bound result. In that reference, `parent` means the 🔎 Review Sidekick, never the author or orchestrator.
 
 Re-anchor before accepting a finding: identify the confirmed requirement or goal-boundary field it serves, whether the existing foundation already satisfies it or can supply the correction, the concrete failure if unresolved, the smallest correction, whether the confirmed obligations still hold without the questioned mechanism, whether the proposed mechanism is the smallest change that serves the quoted clause or one of several, and whether the correction stays inside the confirmed goal boundary. Then return the existing `accepted | rejected | contested | unverified` disposition; do not create a second checkpoint status. When evidence is missing, follow that reference's evidence-lookup branch before accepting. Question whether a proposed mechanism is needed before accepting findings that merely complete its missing contracts.
 
@@ -243,9 +228,9 @@ Do not return `ready` while any of these hold:
 - Requirements and Specification are not separately identifiable in any review mode, or a combined `Requirements/spec` is being used as both;
 - the complete target or governing-source set was not read;
 - the confirmed goal boundary, accepted requirements, or applicable structural-realization confirmation is missing or conflicting without an explicit returned authority gap;
-- no complete semantically current mode-complete receipt exists;
-- a selected lane is silent without explicit follow-up;
-- partial, blocked, or `no-receipt` coverage affects a required dimension;
+- no complete semantically current mode-complete check exists;
+- a selected check has no status;
+- partial or blocked coverage affects a required dimension;
 - a finding lacks an accepted requirement identity or confirmed goal-boundary field, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, semantic correction route, or disposition;
 - specification, program, or three-artifact-design mode boundaries are conflated;
 - `program-only` or `three-artifact-design` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
@@ -253,13 +238,13 @@ Do not return `ready` while any of these hold:
 - a picture-type view is accepted as a text fence while Mermaid can render, or a UI image is accepted that invents a control or skips a changed screen;
 - required file-backed visuals or relative embeds are missing or broken, generated labels/edges/boundaries disagree with governing meaning, or unavailable image/preview access was treated as complete visual coverage;
 - three-artifact-design mode trusts author or local checks without independent reinspection;
-- the review lead did not read the complete target set and governing sources before choosing lanes, or a lane ran with no named reason beside it;
-- a chunk plan split one requirement's trace to its obligation and realization, or one call-path delta with its owners and proof seam, across chunks with no overlap seam; or a chunk receipt was treated as mode-complete coverage;
+- the review lead did not read the complete target set and governing sources before planning checks, or an optional check lacks a selection reason;
+- a chunk plan split one requirement's trace to its obligation and realization, or one call-path delta with its owners and proof seam, across chunks with no overlap seam; or a chunk pass was treated as mode-complete coverage;
 - any reviewer judged an artifact it did not read completely, or the common method's coverage rows leave a target section neither covered nor excluded with a reason;
-- the dispel receipt is missing, or a design element dispel mapped `absent` lacks either a `decision-needed` return or an accepted removal routed to `program-design` — "well drawn" is not a disposition;
+- the dispel check is missing, or a design element dispel mapped `absent` lacks either a `decision-needed` return or an accepted removal routed to `program-design` — "well drawn" is not a disposition;
 - a reviewer candidate that adds unrequested scope was returned as `decision-needed` or accepted instead of rejected as scope expansion;
-- a proof-challenge receipt lists a command outside the packet's recorded grant, or an executable proof claim was accepted without a proof-challenge receipt or a named proof gap;
-- focused review began before parent reduction of the artifact-review receipts, a lane was composed without a named predicate, or a broad predicate was treated as sufficient selection;
+- a 🔧 Operator ran a command outside the recorded grant, or an executable proof claim was accepted without a proof-challenge result or a named proof gap;
+- focused review began before reduction of the earlier checks, a focused check was selected without a named predicate, or a broad predicate was treated as sufficient selection;
 - a second normal design review began without a concrete source-backed substantive residual from parent verification, or a third normal review began without explicit user permission granted after the second result;
 - a recovery review began after a previous recovery, from stale or wrong-source inspection, without the missing-evidence reason, or by fabricating unknown review history as zero; or recovery findings were corrected without known available correction allowance or explicit user authority;
 - the downstream consumer must invent meaning owned by the reviewed artifact;

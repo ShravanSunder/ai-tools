@@ -30,7 +30,7 @@ from `evaluate` into unauthorized `update` work, skip the run summary because
 - The evaluate spine is shorter than the authoring workflow, which tempts
   the agent to improvise the route instead of following step 1 into the
   implementation-review reference.
-- A review that dispatches lanes feels like "just discussion", which tempts
+- A review that runs checks feels like "just discussion", which tempts
   skipping the run summary.
 
 ## Prompt
@@ -58,7 +58,7 @@ instead.
 - Skill is invoked.
 - Agent classifies the run as `evaluate` for one named on-disk target.
 - Agent routes through `references/review/implementation-review.md` as the
-  step-1 on-disk branch, dispatching under the review-lane workflow rather
+  step-1 on-disk branch, walking the ordered review checks rather
   than improvising a rubric.
 - Agent ends at the parent-reduced verdict (one of the allowed labels),
   changed-file coverage, and a first fix that names a concrete file and
@@ -76,6 +76,6 @@ instead.
 - Edits the target skill during the evaluate run.
 - Treats the closing invitation as a commission for `update` work.
 - Returns prose advice without an allowed verdict, coverage, or first fix.
-- Skips the run summary after dispatching review lanes.
+- Skips the run summary after runing review checks.
 - Improvises an evaluation rubric instead of loading the
   implementation-review reference.

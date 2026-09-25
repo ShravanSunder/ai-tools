@@ -1,8 +1,8 @@
 # depth-coverage
 
-Mission / stance: Judge whether the depth teaches. A skill can be consistent, well placed, and fully called while every reference only pins output shape — deterministic about everything except the work. This lane owns the question no consistency check asks: does each promised stage have an owner that teaches it?
+Mission / stance: Judge whether the depth teaches. A skill can be consistent, well placed, and fully called while every reference only pins output shape — deterministic about everything except the work. This check owns the question no consistency check asks: does each promised stage have an owner that teaches it?
 
-Maximum authority: read-only classification of promised stages and their owners. Return candidate findings; the parent owns edits, ceremony rulings, and the final verdict.
+Maximum authority: read-only classification of promised stages and their owners. Return candidate findings; the 🔎 Review Sidekick owns edits, ceremony rulings, and the final verdict.
 
 Where to look, when the artifact is a **proposal**: the stages the proposed trigger and main path promise, and the planned reference tree with what each reference will carry.
 
@@ -25,8 +25,8 @@ Bad signals:
 
 Calibration: Classify with the deletion test, not with headings. Report the stage, its owner's classification, and the smallest edit — usually naming an owner, writing the missing teaching, or recording a ceremony consumer. Do not judge where material lives or whether calls are complete, and do not rewrite wording.
 
-Overlap boundary: This lane owns *depth teaches*. `placement-and-calls` owns *where material lives and whether calls are complete*. `no-op-pruning` owns *a sentence earns its place* — a file whose every sentence passes there can still be ceremony here. `steering-strength` owns *whether wording binds*; a present-but-soft rule inside a teaching reference is filed with `route: steering-strength`.
+Overlap boundary: This check owns *depth teaches*. `placement-and-calls` owns *where material lives and whether calls are complete*. `no-op-pruning` owns *a sentence earns its place* — a file whose every sentence passes there can still be ceremony here. `steering-strength` owns *whether wording binds*; a present-but-soft rule inside a teaching reference is filed with `route: steering-strength`.
 
 Stop when: every promised stage derived from the trigger and main path has a classified owner, and every reference in scope has a classification.
 
-Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names the stage, the owner and its classification, the failed test, and the smallest edit.
+Output focus: Use the already-loaded Check Finding and Per-Check Result shapes from `lane-schema.md`. Each finding names the stage, the owner and its classification, the failed test, and the smallest edit.

@@ -4,11 +4,11 @@ Mission: use current implementation, prototype, trace, or behavior as boundary-d
 
 Predicate: a current implementation, prototype, or trace may hide unstated decisions.
 
-Expected inputs: lane-schema packet plus exact implementation/trace anchors and any accepted/rejected current behaviors.
+Expected inputs: review context plus exact implementation/trace anchors and any accepted/rejected current behaviors.
 
 Prerequisites: complete target/source set exists and comparison evidence is inspectable.
 
-Maximum authority: fresh-context, read-only, candidate-only.
+Check boundary: read-only.
 
 ## Inspection
 
@@ -30,8 +30,8 @@ Bad: code treated as normative because it exists; every implementation detail co
 
 Calibration: report only differences that would cause material reimplementation, compatibility, migration, state, failure, or proof divergence.
 
-Overlap boundary: `specification-authority` decides desired Why/What; `architecture-boundary` judges target How. This lane owns the evidence gap between current and proposed systems.
+Overlap boundary: `specification-authority` decides desired Why/What; `architecture-boundary` judges target How. This check owns the evidence gap between current and proposed systems.
 
-Return: lane-schema receipt with anchored difference, authority status, divergence consequence, smallest missing decision/constraint, semantic owner, and validation note.
+Return: check result with anchored difference, authority status, divergence consequence, smallest missing decision/constraint, semantic owner, and validation note.
 
 Stop when: each selected difference is classified and routed, or unknown authority is explicitly returned for caller/user decision.

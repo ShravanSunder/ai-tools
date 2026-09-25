@@ -133,14 +133,12 @@ describe("goal delivery intent hard cutover", () => {
     expect(designOrchestrator).toContain("Prefer one review-and-correction round");
     expect(designOrchestrator).toContain("Ask before a third");
     expect(implementationReview).toContain(
-      "bounded delivery effort—an orchestrated goal or direct review loop—may remediate at most three times",
+      "bounded delivery effort may remediate at most three times",
     );
     expect(implementationReview).toContain("After remediation three, stop");
-    expect(skillsCreation).toContain("Proposal/design review:");
-    expect(skillsCreation).toContain("one independent review and at most one remediation");
-    expect(skillsCreation).toContain("Implementation review:");
-    expect(skillsCreation).toContain("fewer than three remediation passes");
-    expect(skillsCreation).toContain("stop before review or remediation four");
+    expect(skillsCreation).toContain("Proposal review allows one independent review and one bounded remediation");
+    expect(skillsCreation).toContain("Implementation review allows up to three remediation passes");
+    expect(skillsCreation).toContain("do not start review or remediation four");
   });
 
   test("uses distinct durable, project-temporary, and OS-temporary artifact homes", () => {

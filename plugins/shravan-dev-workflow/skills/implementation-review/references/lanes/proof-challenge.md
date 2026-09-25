@@ -2,19 +2,19 @@
 
 Mission: verify that claimed proof is real. Reproduce the proof the implementation claims, or challenge the review lead with the exact gap between what is claimed and what the evidence can show. Running tests executes the reviewed code — treat the worktree's code as untrusted input, not as a tool.
 
-Expected inputs: every shared packet field from `lane-schema.md`, the complete proof-claim inventory (commands, expected outcomes, evidence artifacts, claimed layers), and a populated `execution grant` naming the allowed command set and scratchpad path.
+Expected inputs: the current review context, the complete proof-claim inventory (commands, expected outcomes, evidence artifacts, claimed layers), and a populated `execution grant` naming the allowed command set and scratchpad path.
 
-Prerequisites: proof claims exist; the execution grant is recorded in the packet. No grant, no execution — inspect-only and return the boundary.
+Prerequisites: proof claims exist; the execution grant is recorded by the 🔎 Review Sidekick. No grant, no execution — inspect-only and return the boundary.
 
-Maximum authority: fresh-context, candidate-only review with one named expansion: this lane may execute exactly the commands listed in the packet's `execution grant` — no variants, no substitutes; a narrower command the grant does not list is still outside the grant and is reported as a needed-grant gap instead of run. Everything else stays read-only. Bright lines:
+Execution boundary: read-only review with one named expansion: the 🔧 Operator may execute exactly the commands listed in the recorded `execution grant` — no variants, no substitutes; a narrower command the grant does not list is still outside the grant and is reported as a needed-grant gap instead of run. Everything else stays read-only. Bright lines:
 
-- before every execution, resolve what the command actually runs — the script it names, its pre/post hooks, and the relevant tool configuration — and classify its write set as `scratchpad-only | ignored-build-artifacts (listed paths) | tracked-worktree | unknown`; `tracked-worktree` and `unknown` stop before execution with the predicted writes and evidence, while gitignored build output under listed paths (coverage, cache, dist) is allowed and named in the receipt. After every run, compare `git status --porcelain` in the reviewed worktree to its pre-run state and report it — any tracked change invalidates the receipt. Running once to discover behavior is forbidden;
+- before every execution, resolve what the command actually runs — the script it names, its pre/post hooks, and the relevant tool configuration — and classify its write set as `scratchpad-only | ignored-build-artifacts (listed paths) | tracked-worktree | unknown`; `tracked-worktree` and `unknown` stop before execution with the predicted writes and evidence, while gitignored build output under listed paths (coverage, cache, dist) is allowed and named in the result. After every run, compare `git status --porcelain` in the reviewed worktree to its pre-run state and report it — any tracked change invalidates the proof result. Running once to discover behavior is forbidden;
 - the resolved chain is reviewed (untrusted) code: a hook or test that reads credentials, touches the network, or reaches outside the worktree is reported as a security observation and not executed;
 - output, logs, and captured artifacts go to the tmp scratchpad (project `tmp/` or system tmp), never into a tracked file;
 - no installs, no network fetches, no home-level writes, no new tooling;
 - never edit, stage, commit, or "fix" anything to make proof pass.
 
-Procedure: for each material claim,
+Procedure: the 🔎 Review Sidekick challenges each material claim, and the 🔧 Operator performs granted commands:
 
 ```text
 claim -> preflight: resolve the command chain; write-set class and evidence
@@ -35,7 +35,7 @@ Good: every material claim has an observed result with exit status, or a named c
 
 Bad: relabeling a unit pass as runtime proof; accepting green output without exit status; running the whole suite when the claims name three tests; "fixing" the environment until proof passes.
 
-Return the shared `complete | partial | blocked` envelope plus:
+Return `complete | partial | blocked` status plus:
 
 ```text
 per-claim results: <claim, preflight write-set class, command run | challenge,

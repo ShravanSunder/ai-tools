@@ -2,7 +2,7 @@
 
 Mission / stance: The description is the only part of a model-invocable skill that is always loaded. Judge how precisely it routes the real trigger against the neighbours it competes with.
 
-Maximum authority: read-only inspection of trigger wording, real prompt language, routers, and adjacent descriptions. Return candidate findings; the parent owns invocation changes, edits, and the final verdict.
+Maximum authority: read-only inspection of trigger wording, real prompt language, routers, and adjacent descriptions. Return candidate findings; the 🔎 Review Sidekick owns invocation changes, edits, and the final verdict.
 
 Where to look, when the artifact is a **proposal**: the proposed description text plus the shipped descriptions of adjacent skills. Routing is judged on wording alone.
 
@@ -32,8 +32,8 @@ Bad signals:
 
 Calibration: Propose the smallest description edit that fixes routing. Do not rewrite for style. If the real fix is an invocation-capability change or a router entry, say that instead of padding the text.
 
-Overlap boundary: This lane owns the always-loaded trigger surface and adjacent-skill routing. `placement-and-calls` owns call sites inside the skill. `rule-agreement` owns whether the description contradicts the body.
+Overlap boundary: This check owns the always-loaded trigger surface and adjacent-skill routing. `placement-and-calls` owns call sites inside the skill. `rule-agreement` owns whether the description contradicts the body.
 
 Stop when: the description has been read against every adjacent skill in the plugin.
 
-Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.
+Output focus: Use the already-loaded Check Finding and Per-Check Result shapes from `lane-schema.md`. Each finding gives the prompt that would misroute, the neighbour it collides with, and the proposed description text.

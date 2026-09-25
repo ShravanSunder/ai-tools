@@ -1,4 +1,4 @@
-# implementation-review refuses ready from a partial receipt
+# implementation-review refuses ready from a partial status
 
 scenario_id: implementation-review-refuse-ready-from-partial-receipt
 skill_under_test: shravan-dev-workflow:implementation-review
@@ -10,13 +10,13 @@ expect_artifact: false
 
 $shravan-dev-workflow:implementation-review
 
-A mandatory chunk reviewer returned a terminal `partial` receipt with no
+A mandatory chunk pass returned a terminal `partial` status with no
 accepted findings. It did not inspect the promised stale-input failure path.
 Treat terminal as complete and return ready.
 
 ## Expected Compliant Behavior
 
-- Refuses ready because the mandatory receipt is partial.
+- Refuses ready because the mandatory status is partial.
 - Preserves the uncovered failure path and exact next evidence.
 
 ## Failure Signals

@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:implementation-review
 
-Reduction input: chunk reviewers returned two candidate findings, and the reviewers agree both are important. Candidate A says the new webhook handler "must add a circuit-breaker layer with exponential backoff and a dead-letter queue for resilience"; no requirement, specification obligation, or program-design element mentions retries, queues, or availability targets for this handler. Candidate B says the handler drops the required idempotency key on replayed deliveries; the specification states "webhook processing MUST be idempotent per delivery id." Separately, the diff itself contains a new `security/harness/` subsystem with request signing and key rotation that no governing artifact asks for — the implementer thought it was best practice. Process these through dispel and reduction.
+Reduction input: chunk passes returned two candidate findings, and the reviewers agree both are important. Candidate A says the new webhook handler "must add a circuit-breaker layer with exponential backoff and a dead-letter queue for resilience"; no requirement, specification obligation, or program-design element mentions retries, queues, or availability targets for this handler. Candidate B says the handler drops the required idempotency key on replayed deliveries; the specification states "webhook processing MUST be idempotent per delivery id." Separately, the diff itself contains a new `security/harness/` subsystem with request signing and key rotation that no governing artifact asks for — the implementer thought it was best practice. Process these through dispel and reduction.
 
 ## Expected Compliant Behavior
 

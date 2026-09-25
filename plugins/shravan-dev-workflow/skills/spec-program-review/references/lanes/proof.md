@@ -4,11 +4,11 @@ Mission: break the chain from a material obligation to its proof modality and st
 
 Predicate: proof modality or seam is disputed, cross-layer, visual, operational, or security-sensitive.
 
-Expected inputs: lane-schema packet plus material obligations, claimed modalities, seams, and real/fake boundary.
+Expected inputs: review context plus material obligations, claimed modalities, seams, and real/fake boundary.
 
 Prerequisites: complete target/source set exists.
 
-Maximum authority: fresh-context, read-only, candidate-only.
+Check boundary: read-only.
 
 ## Inspection
 
@@ -36,6 +36,6 @@ Calibration: require the smallest sufficient modality/seam. Planning owns exact 
 
 Overlap boundary: `platform-harness` owns whether the runtime can execute the proof; specification owns required observable outcome; program design owns the structural seam.
 
-Return: lane-schema receipt with broken/preserved proof chain, realistic falsification, smallest missing modality/seam, semantic owner, and planning boundary.
+Return: check result with broken/preserved proof chain, realistic falsification, smallest missing modality/seam, semantic owner, and planning boundary.
 
 Stop when: each selected obligation has a valid chain or an exact proof gap that the correct semantic owner can repair.

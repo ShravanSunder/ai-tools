@@ -2,7 +2,7 @@
 
 Mission / stance: Decide whether each obligation lives where the agent will actually meet it, and whether every call site says enough to act on. Material in the wrong home is silently skipped; a call site missing its return shape sends the agent away with nothing to bring back.
 
-Maximum authority: read-only inspection of placement, call sites, and reference reachability. Return candidate findings; the parent owns moves, edits, dispatch, and the final verdict.
+Maximum authority: read-only inspection of placement, call sites, and reference reachability. Return candidate findings; the 🔎 Review Sidekick owns reduction and the final review result. Edits route to the author.
 
 Where to look:
 - every call site and its literal form, in `SKILL.md` and in any reference under review; references hold call sites too, and are the callee half of every caller/callee contract;
@@ -16,11 +16,10 @@ How to inspect: Walk every call site and fill this row. A blank cell is the find
 
 ```text
 load site:      load mode | destination | requested work | needed result
-dispatch site:  packet | lane reference | parallel-safety | instance authority |
-                receipt | parent reduction
+🔧 Operator procedure: prescribed steps | exact authority | observed result
 ```
 
-A dispatch site that cites a named dispatch contract filling those slots for a set of lanes is complete; check that the contract exists and covers this site. Then walk the reverse direction: for each reference, name the caller that opens it, and check that caller's return shape. A caller with no return shape is a dead end. Finally, confirm that no all-run obligation, order, decision, required return, invariant, or completion boundary is visible only inside a reference.
+A dispatch site is complete only for a prescribed 🔧 Operator procedure with steps, authority, and observed result. Review checks and research source classes are loaded by the current agent. Then walk the reverse direction: for each reference, name the caller that opens it, and check that caller's return shape. A caller with no return shape is a dead end. Finally, confirm that no all-run obligation, order, decision, required return, invariant, or completion boundary is visible only inside a reference.
 
 Good signals:
 - every call site uses exactly one literal form and fills all four slots;
@@ -38,8 +37,8 @@ Bad signals:
 
 Calibration: Report placement and call-completeness defects with the exact site. Do not judge whether the rule itself is well worded; that is `steering-strength`. Do not count lines; length alone is not a finding here.
 
-Overlap boundary: This lane owns *where material lives and whether calls are complete*, including progressive-disclosure judgment. `rule-agreement` owns whether duplicate copies agree, and owns unreachability outright: a reference nothing calls, or a form declared and never used, is a `rule-agreement` finding, not one of this lane's. `no-op-pruning` owns whether a line earns its place at all. `depth-coverage` owns whether depth teaches — a reference can sit in the right home with a complete caller and still make nothing about its stage predictable.
+Overlap boundary: This check owns *where material lives and whether calls are complete*, including progressive-disclosure judgment. `rule-agreement` owns whether duplicate copies agree, and owns unreachability outright: a reference nothing calls, or a form declared and never used, is a `rule-agreement` finding, not one of this check's. `no-op-pruning` owns whether a line earns its place at all. `depth-coverage` owns whether depth teaches — a reference can sit in the right home with a complete caller and still make nothing about its stage predictable.
 
 Stop when: every call site has been walked and every reference traced back to a caller.
 
-Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.
+Output focus: Use the already-loaded Check Finding and Per-Check Result shapes from `lane-schema.md`. Each finding names the call site or reference path, the missing slot or wrong home, and the smallest edit that fixes it.

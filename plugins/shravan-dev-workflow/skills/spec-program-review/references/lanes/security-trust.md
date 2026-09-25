@@ -4,11 +4,11 @@ Mission: test whether the design assigns policy, enforcement, containment, and p
 
 Predicate: auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external service is in scope.
 
-Expected inputs: lane-schema packet plus sensitive surfaces, security obligations/non-goals, and relevant source anchors.
+Expected inputs: review context plus sensitive surfaces, security obligations/non-goals, and relevant source anchors.
 
 Prerequisites: complete target/source set exists.
 
-Maximum authority: fresh-context, read-only, candidate-only. This is a design-review lane, not a standalone security scan.
+Check boundary: read-only. This is a design-review check, not a standalone security scan.
 
 ## Inspection
 
@@ -28,8 +28,8 @@ Bad: “trusted internal” without a boundary; validation after privileged use;
 
 Calibration: report only source-backed design/requirement effects. Route an explicitly requested scan, audit, or threat model to `ops-security-review`.
 
-Overlap boundary: `failure-concurrency` owns non-security recovery mechanics; `platform-harness` owns actual sandbox/tool feasibility. This lane owns trust and enforcement design.
+Overlap boundary: `failure-concurrency` owns non-security recovery mechanics; `platform-harness` owns actual sandbox/tool feasibility. This check owns trust and enforcement design.
 
-Return: lane-schema receipt with asset/actor/boundary trace, concrete misuse path, control/containment gap, smallest correction, owner, and proof note.
+Return: check result with asset/actor/boundary trace, concrete misuse path, control/containment gap, smallest correction, owner, and proof note.
 
 Stop when: each selected trust transition has policy, enforcement, containment, and proof, or missing security authority blocks design choice.

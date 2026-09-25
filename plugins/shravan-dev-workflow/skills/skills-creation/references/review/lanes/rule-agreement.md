@@ -1,8 +1,8 @@
 # rule-agreement
 
-Mission / stance: Find where the skill contradicts itself. In a contract skill, contradiction is worse than absence: the agent follows whichever home it read last, and the run varies for reasons nobody can see. Two statements that disagree is this lane's only subject.
+Mission / stance: Find where the skill contradicts itself. In a contract skill, contradiction is worse than absence: the agent follows whichever home it read last, and the run varies for reasons nobody can see. Two statements that disagree is this check's only subject.
 
-Maximum authority: read-only inventory and comparison of rules, terms, labels, and external claims. Return candidate findings and a proposed owner; the parent chooses the owner, edits, and final verdict.
+Maximum authority: read-only inventory and comparison of rules, terms, labels, and external claims. Return candidate findings and a proposed owner; the 🔎 Review Sidekick chooses the owner, edits, and final verdict.
 
 Where to look, when the artifact is a **proposal**: the proposed rules, terms, and labels against what the shipped skill already states, and against the external sources the proposal cites. Nothing on disk has changed yet, so the comparison is proposal-versus-current, not diff-versus-diff.
 
@@ -26,7 +26,7 @@ unsupported claim a statement about an external tool, adjacent skill, or
 
 The fourth is the same failure with one statement living outside the skill. Open the cited source and check; a confidently wrong claim about a validator, flag, or adjacent skill passes every other lane.
 
-A rule with one home cannot fail this lane. A rule with five homes fails the moment any one of them is edited.
+A rule with one home cannot fail this check. A rule with five homes fails the moment any one of them is edited.
 
 Good signals:
 - each rule, term, and label set has exactly one authoritative home;
@@ -43,8 +43,8 @@ Bad signals:
 
 Calibration: Report contradictions with every home listed and one named as the proposed owner. A single statement you merely dislike belongs to `no-op-pruning` or `steering-strength`: file it with `route:` set rather than judging or dropping it. Do not redesign the rule itself, decide which home wins.
 
-Overlap boundary: This lane owns *two statements disagree* and *unreachability* — a reference nothing calls, or a form declared and never used, is this lane's finding. `placement-and-calls` owns whether a statement sits in the right home and whether a call site is complete; this lane owns whether its copies agree and whether what is declared is actually reached. `no-op-pruning` owns *a statement does nothing*: a weak leading word is `no-op-pruning`, a term carrying two definitions is `rule-agreement`.
+Overlap boundary: This check owns *two statements disagree* and *unreachability* — a reference nothing calls, or a form declared and never used, is this check's finding. `placement-and-calls` owns whether a statement sits in the right home and whether a call site is complete; this check owns whether its copies agree and whether what is declared is actually reached. `no-op-pruning` owns *a statement does nothing*: a weak leading word is `no-op-pruning`, a term carrying two definitions is `rule-agreement`.
 
 Stop when: every rule, term, label set, and external claim in the changed surface has been inventoried across all its homes.
 
-Output focus: Use the already-loaded Lane Finding and Receipt shapes from `lane-schema.md`. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.
+Output focus: Use the already-loaded Check Finding and Per-Check Result shapes from `lane-schema.md`. Each finding names every home with `path:line`, the proposed single owner, and what breaks today if a reader trusts the wrong copy.
