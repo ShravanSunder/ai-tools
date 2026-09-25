@@ -67,7 +67,9 @@ Phases          the steps of the work
   docs-maintain · debug-investigation · skills-creation · skill-audit
 Practices       always on; any phase or orchestrator uses them (lowest first)
   practices-collaboration < practices-show-me-your-work < manage-agents < practices-research
-  presentation-tui · presentation-webui · ops-linear-tracking · ops-observability-stack · ops-security-review (stand alone)
+Ops and presentation  own families at the practices level; any phase or orchestrator uses them
+  ops-* (tickets and operations): ops-linear-tracking · ops-observability-stack · ops-security-review
+  presentation-* (output): presentation-tui · presentation-webui
 Tool manuals    how to operate a tool; no when or why
   agent-collaboration (vendored) · native spawn and Router mechanics (references owned by manage-agents until extracted)
 Shared references  follow the DAG: a module of its callers at its lowest caller's layer; its edges point down
@@ -157,7 +159,8 @@ Near misses each trigger must reject: "how do I post to a thread" loads the tool
 | Each phase gets one entry line and one completion line for the trace | Revision 1 review: a completion line alone misses directly invoked phases. |
 | A rename and every consumer's name swap land in one PR; consumer name swaps ride with the rename run as mechanical edits | Revision 1 review: staged renames shipped a broken intermediate plugin. |
 | ACPX stops being a default route: Router for Codex persistent agents; ACPX in one legacy reference until codex-router supports Claude/Cursor model, effort, and titles | Owner intends to drop ACPX; Claude/Cursor Router gaps today. |
-| Presentation and ops skills keep their names; classified as practices | Owner named only the three `practices-*` skills. |
+| `ops-*` (tickets and operations) and `presentation-*` (output) stay separate families, not `practices-*`; they sit at the practices level for the direction rule | Owner, 2026-09-25: "ops-* is separate (for tickets and stuff). presentation-* is separate too". |
+| Board home: project `shravan-developer-workflows` (`01a0d9c3-1e9d-7b70-8880-06c89c6391c2`), board `Plugin and skill work` (`01a0d9c3-3b24-7212-a71b-df57bcdda357`), one topic per workstream | Owner created the project on 2026-09-25; Main chose board and topic layout. |
 | peekaboo and non-dev-workflow plugins are out of scope | Owner, 2026-09-25. |
 
 ## Runs in sequence
@@ -221,9 +224,7 @@ Plugin manifests and versions follow `skills-creation/references/platform-mechan
 
 ## Open owner decisions
 
-1. A board project for ai-tools: create one or name an existing project. Until then this work keeps a wip trace folder per the decision above.
-2. PR grouping P0/A/B/C as above.
-3. Whether presentation and ops skills join the `practices-*` family now or later.
+None. Board project, PR grouping (owner: "make worktrees and prs"), and the ops/presentation families were settled on 2026-09-25.
 
 ## Non-goals
 
