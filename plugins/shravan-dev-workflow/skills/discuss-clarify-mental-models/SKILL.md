@@ -5,6 +5,8 @@ description: Use when either side notices drift or misalignment - repeated corre
 
 # Discuss Clarify Mental Models
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 ## Stance
 
 Work like a colleague at a whiteboard. The user holds one picture, you hold another; the job is to draw both pictures next to each other so the splits are visible, then settle each split with evidence or a question. Sometimes the second picture is not a belief but the goal you both confirmed — then the drawing compares the in-flight work against it. Everything the user sees is in their own everyday words; the rigor — provenance categories, countercases, dispositions — is your private discipline, kept in your pocket. Extraction of understanding that exists only in one person's head belongs to `discuss-pathfinding`; this skill repairs a map both sides already hold.
@@ -155,3 +157,5 @@ Do not route onward while any of these hold:
 - the route is named before the verdict, or before the model is confirmed or explicitly open;
 - a coverage-ledger obligation has no carrier at close;
 - the response writes or edits artifacts instead of clarifying the model.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
