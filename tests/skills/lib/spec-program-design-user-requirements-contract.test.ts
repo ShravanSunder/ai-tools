@@ -493,7 +493,7 @@ describe("user requirements and design-view contracts", () => {
       readPluginFile("shared-references/requirements-specification-program-design.md"),
       readPluginFile("README.md"),
       readPluginFile("skills/discuss-clarify-mental-models/SKILL.md"),
-      readPluginFile("skills/research-workflow/SKILL.md"),
+      readPluginFile("skills/practices-research/SKILL.md"),
     ];
 
     for (const consumer of currentDesignReviewConsumers) {

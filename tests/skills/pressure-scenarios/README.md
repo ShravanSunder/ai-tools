@@ -173,8 +173,9 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-implementation-review-gate.md` | Do not advance non-trivial skill changes to PR-ready without implementation review reduction, changed-file coverage, and targeted retest. |
 | `skills-creation` | `skills-creation-separate-review-remediation-limits` | Keep one proposal review/remediation distinct from the three-pass implementation-review limit. |
 | `skills-creation` | `skills-creation-proof-main-assessment-review-order` | Require implementation proof, then source-backed main assessment, then independent review and fresh correction proof. |
-| `research-workflow` | `research-workflow-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
-| `research-workflow` | `research-workflow-substantial-stage-artifacts` | Walk source classes in order, record coverage and null results, and verify primary anchors in one research ledger. |
+| `practices-research` | `practices-research-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
+| `practices-research` | `practices-research-substantial-stage-artifacts` | Walk source classes in order, record coverage and null results, and verify primary anchors in one research ledger. |
+| `practices-research` | `practices-research-renamed-research-invocation` | The renamed skill uses `tmp/practices-research/` and ends with a return token instead of naming a phase. |
 | `implementation-review` | `implementation-review-classify-non-substantial` | Skip independent review only for verified non-semantic mechanical work. |
 | `implementation-review` | `implementation-review-block-missing-input` | Block rather than infer missing governing authority, ready plan context, source identity, diff, or proof boundary. |
 | `implementation-review` | `implementation-review-reject-stale-non-substantial-evidence` | Refuse a mechanical bypass when consumer-search evidence is stale for the reviewed source identity. |

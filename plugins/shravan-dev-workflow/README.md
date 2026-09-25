@@ -31,10 +31,10 @@ Namespace            Concern                      Skills
 -------------------  ---------------------------  ----------------------------
 discuss-*            shared understanding          discuss-clarify-mental-models
                                                   discuss-pathfinding
-research-*           evidence gathering            research-workflow
 manage-*             subordinate agents            manage-agents
 practices-*          always-on practices           practices-collaboration
                                                   practices-show-me-your-work
+                                                  practices-research
 orchestrator-*       bounded workflow routing      orchestrator-implementation-goal
                                                   orchestrator-design
 spec-*               design/spec boundary          spec-design
@@ -121,7 +121,7 @@ Use `discuss-clarify-mental-models` when the shared picture is unstable before a
 
 Codex display titles use the `Category: Action` form (for example, `Discuss: Pathfinding` and `Spec: Design`). Skill IDs remain kebab-case for invocation. Cursor can load these plugin directories through its explicit `agent --plugin-dir <path>` path; this repository does not provide a separate Cursor marketplace.
 
-Use `research-workflow` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, walks source classes in order, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial runs use source-class coverage, primary anchors, and a verified research ledger.
+Use `practices-research` when the next step is to gather evidence: local code/docs, sibling repos, DeepWiki-style repository research, current web/docs, Reader sources, memory, or session logs. It frames bounded research questions, walks source classes in order, labels claim quality, and writes tmp research ledgers for substantial runs. Substantial runs use source-class coverage, primary anchors, and a verified research ledger.
 
 Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekicks, workers, operators, subagents, and swarms. The user-facing main remains the default conversation and author of governing design and implementation plans. After a ready plan, the persistent implementation Sidekick executes its assignment and associated proof directly by default; the user may explicitly choose direct contact with that assigned Sidekick without transferring authority or execution ownership. Material design/plan or integration questions return to Main with evidence, while Main does not relay every internal progress turn. The Sidekick delegates only bounded independent work, needed expertise, or large disposable output whose benefit exceeds coordination cost; standalone prescribed procedures use Operators. PR wrap-up may stay with the assigned implementation Sidekick or run as a prescribed Operator procedure; Main retains acceptance and the user retains merge authority. Seats by role belong to `practices-collaboration`. Its core skill owns authority, roles and titles, selection, and native, agent-router, or legacy ACPX routing; `references/model-catalog.md` owns the model tables; `acpx-legacy.md` owns provider-resolved ACPX calls and relationships; `acpx-provider-*` references own exact model ids and provider controls; persistent sessions are ledgered before follow-ups; and child output remains candidate evidence until verified.
 
@@ -201,7 +201,7 @@ Use orchestrator-implementation-goal to carry this goal through planning, implem
 Use plan-implementation to create one repo-grounded proof-bearing plan from this reviewed design set.
 Use implement-plan to execute this ready canonical plan at its immutable path, current meaning, and `pr-ready-unmerged` delivery context, then return fresh implementation proof without starting review or PR work.
 Use implementation-review to independently review this implementation and proof without editing or starting PR lifecycle work.
-Use research-workflow to gather source-grounded evidence into a tmp ledger.
+Use practices-research to gather source-grounded evidence into a tmp ledger.
 Use plan-improve-repo to audit this repo and write immutable canonical plan-only improvement plans. When delivery is requested later, route the admitted finding through plan-implementation to establish current delivery intent instead of upgrading the prior plan.
 Use implementation-pr-wrapup to handle existing PR comments and prove merge readiness.
 Use implementation-handoff to package this branch for another agent to continue.

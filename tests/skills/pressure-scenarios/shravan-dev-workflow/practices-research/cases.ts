@@ -2,9 +2,9 @@ import type { SkillPressureCaseDefinition } from "../../../lib/skill-pressure-ev
 
 export const skillPressureCaseDefinitions = [
   {
-    scenarioId: "research-workflow-question-first",
+    scenarioId: "practices-research-question-first",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/research-workflow/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/practices-research/SKILL.md",
     ],
     maximumToolCalls: 30,
     semanticCriteria: [
@@ -20,15 +20,15 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "keeps-research-before-later-phases",
-        requirement: "Does not turn research into design, planning, or implementation and names the later owner only as a route after evidence is synthesized.",
+        requirement: "Does not turn research into design, planning, or implementation and names the later owner only as a return token after evidence is synthesized.",
         failureExample: "Writes a design or implementation plan from preliminary research.",
       },
     ],
   },
   {
-    scenarioId: "research-workflow-substantial-stage-artifacts",
+    scenarioId: "practices-research-substantial-stage-artifacts",
     requiredSourceReads: [
-      "plugins/shravan-dev-workflow/skills/research-workflow/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/practices-research/SKILL.md",
       "tests/skills/fixtures/minimal-planning-delivery/requirements.md",
       "tests/skills/fixtures/minimal-planning-delivery/specification.md",
       "tests/skills/fixtures/minimal-planning-delivery/program-design.md",
@@ -48,8 +48,28 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "routes-exact-ready-design-to-planning",
-        requirement: "Recognizes the supplied exact current ready Requirements, Specification, Program Design, and review identities, recommends plan-implementation as the next owner without creating the plan, and names implementation-review as the later owner for implemented work and proof without performing that review.",
-        failureExample: "Reports all planning unavailable, chooses a generic review route, or creates the plan inside research.",
+        requirement: "Recognizes the supplied exact current ready Requirements, Specification, Program Design, and review identities, returns `ready-for-planning` with those identities as the next-owner token without creating the plan, and says implemented work and proof later return `ready-for-review` (general-domain) without performing that review.",
+        failureExample: "Reports all planning unavailable, names a phase skill instead of the token, or creates the plan inside research.",
+      },
+    ],
+  },
+  {
+    scenarioId: "practices-research-renamed-research-invocation",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/practices-research/SKILL.md",
+      "plugins/shravan-dev-workflow/shared-references/phase-return-tokens.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "loads-renamed-skill",
+        requirement: "Uses practices-research for the request and places a substantial ledger under tmp/practices-research/, not the old tmp/research-workflows/ path.",
+        failureExample: "Looks for research-workflow, reports the skill missing, or uses the old ledger path.",
+      },
+      {
+        name: "returns-token-not-phase",
+        requirement: "Ends with a return token and payload (for example specification-gap with the evidence) instead of naming the next phase skill, and claims no written ledger in this read-only rehearsal.",
+        failureExample: "Names spec-design or another phase as the next step, or claims a ledger was written.",
       },
     ],
   },

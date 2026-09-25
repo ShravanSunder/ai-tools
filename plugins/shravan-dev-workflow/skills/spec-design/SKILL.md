@@ -145,7 +145,7 @@ A row is normative-eligible only when its producer-owned authority state is `aut
 
 Before deriving normative requirements, consume the explicitly confirmed goal boundary or apply the already-loaded reference's goal-boundary check to another governing source. Proposed meaning outside that boundary returns `decision-needed`; specification completeness does not authorize it.
 
-IF an external platform, protocol, library, policy, or empirical claim could change product meaning or an observable obligation and current local sources do not establish it, perform a bounded lookup directly or use `research-workflow`; return the exact external source identity/version, authority status, transfer assumptions, and remaining evidence gap before deriving the affected obligation.
+IF an external platform, protocol, library, policy, or empirical claim could change product meaning or an observable obligation and current local sources do not establish it, perform a bounded lookup directly or use `practices-research`; return the exact external source identity/version, authority status, transfer assumptions, and remaining evidence gap before deriving the affected obligation.
 
 Completion: the Requirements identity is qualifying, reused or materialized without duplication, and separate from the planned Specification identity; artifact boundary, consumers, decision authority, source classes, confirmed goal boundary, accepted-requirements recovery, and authority conflicts are explicit.
 

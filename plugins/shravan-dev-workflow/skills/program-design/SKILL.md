@@ -102,7 +102,7 @@ Completion: distinct Requirements and Specification identities, confirmed goal b
 
 MUST load `references/current-system-model.md` to reconstruct representative execution paths from real entrypoints through named callers/callees, owners, state mutations or side effects, and observable results/errors; use runtime stack traces, logs, traces, tests, and source navigation when available to validate the dynamic path. Return the source-grounded current-system model, normalized current call paths, and inference gaps.
 
-IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `research-workflow`. IF delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Evidence Help contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
+IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `practices-research`. IF delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Evidence Help contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
 
 Completion: current behavior and degree of constraint are source-backed, and `changes / remains authoritative` is explicit.
 
