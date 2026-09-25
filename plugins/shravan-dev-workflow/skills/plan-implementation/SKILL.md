@@ -5,6 +5,8 @@ description: Use when writing or revising a repository-grounded implementation p
 
 # Plan Implementation
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 An implementation plan is a proof route through current authority and repository reality. The user-facing main loads this skill and authors the complete plan, including strategy, slices, dependencies, proof mapping, and PR boundaries; helpers may return bounded repository or proof evidence but never plan prose or structure. The caller owns materially different delivery grouping and PR choices. A ready delivery plan is executable input, not a request for generic post-plan approval.
 
 ## Admit Planning
@@ -33,9 +35,11 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 ## Route the Result
 
 - A direct caller stops with a `plan-only` ready plan.
-- A direct main or `orchestrator-implementation-goal` validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question, only then commissioning or resuming implementation.
+- A direct main or an orchestrating caller validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question, only then commissioning or resuming implementation.
 - An implementation 🐒 Sidekick that encounters a missing governing plan returns the evidence and exact gap to the current main. It may choose local mechanics inside a ready plan but does not author or repair the plan.
 - `revision-requested` returns to the named semantic or planning owner; `blocked` returns to the named unblock owner.
 - Planning never edits product code, invokes tracking providers, reviews implementation, manages PR state, or infers merge authority.
 
 Completion: one main-authored ready immutable plan exists at the required path with complete current meaning, or one exact non-ready result exists. No approval record, document digest, lifecycle state, placeholder delivery choice, helper-authored section, or second plan authority exists.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
