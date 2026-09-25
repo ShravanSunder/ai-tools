@@ -17,10 +17,10 @@ describe("user requirements and design-view contracts", () => {
     const review = readPluginFile("skills/spec-program-review/SKILL.md");
 
     expect(clarification).toContain(
-      "re-anchor whether a shared model or in-flight work has drifted",
+      "reflect back, or re-anchor.",
     );
     expect(clarification).toContain(
-      "artifact editing, independent review, or evidence gathering",
+      "Not for artifact edits, review, evidence gathering, or first-pass extraction.",
     );
     expect(clarification).toContain(
       "Re-anchor: compare the confirmed goal and governing boundaries",

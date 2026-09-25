@@ -1,6 +1,6 @@
 ---
 name: manage-agents
-description: Always load to manage agents, subagents, delegation, or agent swarms. Always use during project planning, design, and execution to select execution ownership and coordinate multi-agent work. Use for spawning, assigning, steering, resuming, waiting for, and verifying Advisors, Sidekicks, Workers, Review Sidekicks, and Operators—including parallel agent swarms, native subagents, agent-router-managed conversations, and ACPX agents.
+description: "Use during project planning, design, and execution to choose who executes, and when spawning, assigning, steering, resuming, waiting for, or verifying Workers, Operators, Sidekicks, Review Sidekicks, Advisors, swarms, or agent-router and ACPX agents."
 ---
 
 # Manage Agents

@@ -1,6 +1,6 @@
 ---
 name: orchestrator-implementation-goal
-description: Use when starting, resuming, auditing, or completing an implementation delivery goal across planning, implementation, review, and PR readiness. Not for a design-only cycle, one direct phase, one named runtime skill package without explicit skills-creation composition, or unclear intent needing pathfinding.
+description: "Use when starting, resuming, auditing, or completing an implementation delivery goal across planning, implementation, review, and PR readiness. Not for a design-only cycle or one direct phase."
 ---
 
 # Implementation Goal Orchestration

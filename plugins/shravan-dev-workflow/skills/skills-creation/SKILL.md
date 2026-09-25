@@ -1,6 +1,6 @@
 ---
 name: skills-creation
-description: Use when creating, updating, or evaluating one named skill or accepted draft, including executing one run or slice of an accepted multi-run skill-change spec, especially when the skill's trigger, main path, reference hierarchy, steering, or proof quality needs judgment.
+description: "Use when creating, updating, or evaluating one named skill or accepted draft, or executing one run of an accepted multi-run skill-change spec, especially when its trigger, main path, references, steering, or proof need judgment."
 ---
 
 # Skills Design & Concepts

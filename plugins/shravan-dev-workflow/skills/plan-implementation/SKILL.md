@@ -1,6 +1,6 @@
 ---
 name: plan-implementation
-description: Use when writing or revising a repository-grounded implementation plan from current reviewed Requirements, Specification, and Program Design, an admitted repository-improvement handoff from an orchestrated goal or owner-requested direct delivery, or a direct planning request that must establish plan-only versus continued-delivery intent, including when existing tests must be kept, repaired, or removed. Not for audit-only discovery, an existing plan handoff, tracker publication, implementation, or PR work.
+description: "Use when writing or revising a repository-grounded implementation plan from reviewed Requirements, Specification, and Program Design, an admitted improvement finding, or a direct planning request. Not for audit-only discovery (plan-improve-repo)."
 ---
 
 # Plan Implementation

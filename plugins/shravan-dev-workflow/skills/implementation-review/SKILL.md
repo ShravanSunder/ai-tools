@@ -1,6 +1,6 @@
 ---
 name: implementation-review
-description: Use when independently reviewing implemented code, proof, a branch diff, commit, PR head, or one bounded remediation before PR readiness, including when governing authority, ready plan, source, diff, proof, or remediation-limit evidence is missing or conflicting. Not for design review (spec-program-review), runtime-skill-package review (skills-creation), security scans or audits (ops-security-review), reviewer handoff packets (implementation-handoff), remediation, or PR monitoring (implementation-pr-wrapup).
+description: "Use when independently reviewing implemented code, proof, a branch diff, commit, PR head, or one bounded remediation before PR readiness, including when governing inputs are missing or conflicting. Not for design review (spec-program-review)."
 ---
 
 # Implementation Review

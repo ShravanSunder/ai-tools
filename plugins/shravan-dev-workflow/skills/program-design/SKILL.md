@@ -1,6 +1,6 @@
 ---
 name: program-design
-description: Use when defining or revising structural How—the internal architecture—or its required structural views and diagrams, against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/recovery, concurrency/consistency, compatibility/cutover, trust boundaries, or proof seams. Not for authoring Why/What, in-chat explanation of settled architecture with no program-design authoring, pure format-only maintenance of settled program-design artifacts, review-only requests, implementation task planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: "Use when defining or revising structural How and its views: components, ownership, interfaces, state, flows, failure and recovery, trust boundaries, and proof seams against settled obligations. Not for authoring Why/What (spec-design)."
 ---
 
 # Program Design

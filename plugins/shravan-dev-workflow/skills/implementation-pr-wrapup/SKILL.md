@@ -1,6 +1,6 @@
 ---
 name: implementation-pr-wrapup
-description: Use when pushing, opening, updating, monitoring, or finishing a GitHub pull request after implementation work, especially when the PR description, checks, comments, existing review threads, mergeability, or "merge when ready" are involved. Not for fresh code-review discovery of a PR or diff; use implementation-review for general-domain work or skills-creation for a runtime skill package.
+description: "Use when pushing, opening, updating, monitoring, or finishing a GitHub pull request after implementation: its description, checks, comments, review threads, mergeability, or \"merge when ready\". Not for fresh code review (implementation-review)."
 ---
 
 # Implementation PR Wrap-up

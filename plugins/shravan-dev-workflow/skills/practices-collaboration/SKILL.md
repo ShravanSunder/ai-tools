@@ -1,6 +1,6 @@
 ---
 name: practices-collaboration
-description: "Use at the start of a qualifying task to find the repository's board project and work thread, and whenever agents coordinate: commissioning or messaging another session, choosing a message or a board post, seat meanings, waiting on another agent, or when no board project exists. A qualifying task spans sessions, commissions another agent, crosses components, or makes a decision someone will later inspect. Not for tool syntax."
+description: "Use at the start of a qualifying task to find the repository's board project and work thread, and whenever agents coordinate: messaging or commissioning a session, seats, message or post, waiting on another agent, or no board. Not for tool syntax."
 ---
 
 # Practices: Collaboration

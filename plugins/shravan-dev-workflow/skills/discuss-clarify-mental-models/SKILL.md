@@ -1,6 +1,6 @@
 ---
 name: discuss-clarify-mental-models
-description: Use when either side notices drift or misalignment - repeated corrections, hollow or instant agreement, surprise at a plan or architecture, the same term meaning different things - or when the user asks to reconverge, share understanding, reflect back, clarify a mental model, force an alignment check, rebuild a shared map, draw the two pictures side by side (what you think vs what I think — a divergence map of where our models match or split), or re-anchor whether a shared model or in-flight work has drifted from the confirmed goal, including what agents in a swarm session are doing, before specs, plans, docs, or code. Not for first-pass extraction of knowledge that lives only in one person's head (discuss-pathfinding), or for artifact editing, independent review, or evidence gathering merely because the prompt uses re-anchor, rails, or scope drift.
+description: "Use when shared understanding may have drifted (repeated corrections, hollow agreement, a term meaning two things) or the user asks to reconverge, share understanding, reflect back, or re-anchor. Not for artifact edits, review, evidence gathering, or first-pass extraction."
 ---
 
 # Discuss Clarify Mental Models

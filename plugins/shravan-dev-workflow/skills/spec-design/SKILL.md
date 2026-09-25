@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations, the domain entities those obligations are written over (canonical terms, identity, relationships, invariants, observable states), or its entity, journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How including binding entities to packages, schemas, types, or wire shapes, review-only requests, implementation planning, a full Requirements through Specification, Program Design, and review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: "Use when authoring or revising durable Requirements from settled meaning, or a Specification's observable obligations, domain entities, and coverage views. Not for eliciting genuinely unwritten owner meaning (discuss-pathfinding)."
 ---
 
 # Spec Design

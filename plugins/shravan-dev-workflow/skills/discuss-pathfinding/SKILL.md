@@ -1,6 +1,6 @@
 ---
 name: discuss-pathfinding
-description: Use when user or stakeholder requirements, user needs, behavioral personas, tacit process knowledge, domain terms, or owner-controlled cost, risk, compatibility, policy, or other design tolerances are unwritten and must be extracted from someone's head or decided collaboratively through interview or grilling, especially "grill me", "interview me", "think through with me", or "help me figure out what I actually want". Not for maintaining settled content, repairing a drifted shared model, gathering evidence from artifacts, authoring Requirements or Specification from settled sources, synthesizing components, interfaces, mechanisms, or other internal structural How from settled obligations, in-chat visuals with no extraction request, or independent review.
+description: "Use when requirements, user needs, domain terms, tacit process, or owner tolerances are unwritten and must be drawn out of someone's head: \"grill me\", \"interview me\", \"help me figure out what I actually want\". Not for authoring from settled sources."
 ---
 
 # Discuss Pathfinding
