@@ -57,7 +57,7 @@ MUST load `references/finding-and-reduction.md` and return every candidate's dis
 
 Before accepting any finding, open the governing clause it claims to serve and quote it; ask whether the confirmed obligations still hold without the questioned mechanism, and whether the proposed mechanism is the smallest change that serves the clause or one of several. A reviewer proposal that adds unrequested scope is rejected as scope expansion — never escalated to the owner as if a decision were owed. An unrequested element the diff already delivers gets removal or an owner `decision-needed`, never "well built." A finding that breaks a load-bearing assumption of the governing design stops and returns to the user with the failed assumption, evidence, and consequence.
 
-Return `ready | needs-revision | blocked-input | decision-needed | remediation-limit-reached` with the exact correction owner and affected coverage; `references/finding-and-reduction.md` owns these labels and their precedence.
+Return `ready | needs-revision | blocked-input | decision-needed | remediation-limit-reached` with the exact correction owner and affected coverage; `references/finding-and-reduction.md` owns these labels and their precedence. With it, answer: "What are the risks of merging this today, and what is the worst thing that could break?" and "List assumptions, environment details, or judgment calls you could not verify, and where you looked."
 
 ## Remediation Boundary
 
