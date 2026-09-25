@@ -6,12 +6,12 @@ This reference applies after `SKILL.md` selects a native 🛠️ Worker or Opera
 
 ## Models
 
-| Model id             | Note              |
-| -------------------- | ----------------- |
-| `gpt-6-luna`         |                   |
-| `gpt-6-sol`          |                   |
+| Role | Model | Route |
+| --- | --- | --- |
+| 🛠️ Worker | OpenAI Luna or Sol, effort from the `model-catalog.md` role table | native `spawn_agent` |
+| 🔧 Operator | OpenAI Luna, effort from the `model-catalog.md` role table | native `spawn_agent` |
 
-Lib ids: `openai.gpt-6-luna`, `openai.gpt-6-sol`. Prefer short form unless the host requires `openai.`. Other ids the host advertises are not used.
+Resolve the exact id with the Runtime rule in `SKILL.md`. If the host requires a provider prefix, it takes the form `openai.<resolved id>` (example format only).
 
 ## Effort
 
@@ -38,7 +38,7 @@ Launch with `spawn_agent`. `spawn_agent` has no sandbox field; do not switch to 
 {
   "message": "Run only the prescribed proof command after write-set preflight. Capture output and exit code under tmp/, compare git status before and after, and return the observations. Do not edit tracked files.",
   "task_name": "review_proof_operator",
-  "model": "gpt-6-luna",
+  "model": "<resolved Luna id>",
   "reasoning_effort": "medium",
   "fork_turns": "none"
 }

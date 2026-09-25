@@ -4,20 +4,15 @@ Legacy route. agent-router carries persistent Claude relationships over ACP by d
 
 ## Models
 
-| Model id             |
-| -------------------- |
-| `claude-fable-5-1`   |
-| `opus[1m]`           |
-
-The locally verified custom Fable id is `claude-fable-5-1`, not bare `fable`. User settings must expose that custom catalog. `opus[1m]` is the latest verified Claude ACP selection example. API model names are not guaranteed ACP selection IDs; the live catalog is authoritative. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
+Examples: Claude Fable 5.x and Claude Opus 5.5 ACP selection ids. Resolve the exact id with the Runtime rule in `SKILL.md`. A custom Fable id may differ from bare `fable`, and user settings must expose that custom catalog. API model names are not guaranteed ACP selection IDs; the live catalog is authoritative. For Fable, define one relationship wrapper so every lifecycle call keeps the same model environment, cwd, and permission boundary:
 
 ```bash
 REPO=/absolute/repo
 
 fable_acpx() {
   ACPX_CLAUDE_INCLUDE_USER_SETTINGS=1 \
-  ANTHROPIC_CUSTOM_MODEL_OPTION='claude-fable-5-1' \
-  ANTHROPIC_MODEL='claude-fable-5-1' \
+  ANTHROPIC_CUSTOM_MODEL_OPTION='<resolved Fable id>' \
+  ANTHROPIC_MODEL='<resolved Fable id>' \
   acpx --cwd "$REPO" --approve-reads --no-terminal \
     --non-interactive-permissions deny claude "$@"
 }

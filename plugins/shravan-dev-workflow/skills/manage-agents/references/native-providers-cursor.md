@@ -12,12 +12,12 @@ Task may omit a sandbox or `workspace_readonly` flag. Do not hop to Cursor CLI t
 
 ## Models
 
-| Role | Model id | Route |
+| Role | Model | Route |
 | --- | --- | --- |
-| 🛠️ Worker | `cursor-grok-4.6-medium` or `claude-opus-5-5-low` | native Task |
-| 🔧 Operator | Luna | agent-router (see Runtime in `SKILL.md`) |
+| 🛠️ Worker | xAI Grok 4.6, medium; or Claude Opus, low | native Task |
+| 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
 
-Other Opus levels (`claude-opus-5-5-*`) and Fable (`claude-fable-5-thinking-high`) only on owner request. Other ids the host advertises are not used. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
+Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
 
 ## Workspace Access
 

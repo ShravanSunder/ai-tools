@@ -4,11 +4,7 @@ Agent token: `codex`. Legacy route: agent-router carries persistent Codex relati
 
 ## Models
 
-| Model id             |
-| -------------------- |
-| `gpt-6-astra`        |
-| `gpt-6-sol`          |
-| `gpt-6-luna`         |
+Examples: GPT-6 Luna, Sol, and Astra ids. Resolve the exact id with the Runtime rule in `SKILL.md`.
 
 Pass the provider-advertised id with `--model` at session creation or `acpx codex set model <id> -s <name>` afterward. Unknown ids are rejected. Prefer the short form unless the adapter requires an `openai.` prefix.
 
@@ -21,7 +17,7 @@ The Codex adapter's effort key is `reasoning_effort`: use `acpx codex set reason
 Creation example for a new relationship only; for an existing 🐒 Sidekick, inspect and reuse its recorded session through `acpx-legacy.md` rather than running creation again.
 
 ```bash
-acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \
+acpx --cwd /absolute/repo --model <resolved Sol id> --approve-reads --no-terminal \
   --non-interactive-permissions deny codex sessions ensure --name "🐒 Sidekick · <purpose>"
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
   --non-interactive-permissions deny codex -s "🐒 Sidekick · <purpose>" \
@@ -51,7 +47,7 @@ Codex CLI profiles currently do not apply to `app-server`; a `CODEX_PATH` launch
 
 ```bash
 CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
-  acpx --cwd /absolute/repo --model gpt-6-luna \
+  acpx --cwd /absolute/repo --model <resolved Luna id> \
   --approve-reads --no-terminal --non-interactive-permissions deny \
   codex --file request.md
 ```

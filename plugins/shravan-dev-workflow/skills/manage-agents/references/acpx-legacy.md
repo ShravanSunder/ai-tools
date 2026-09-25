@@ -5,7 +5,7 @@ ACPX is no longer a default route. agent-router carries persistent Codex and Cla
 ## Dispatch
 
 1. Select exactly one provider below and MUST load its contract before constructing or executing the call, returning its exact model, effort, and permission encoding.
-2. Use the exact model id and reasoning control the provider contract specifies. When the contract requires live catalog verification, use and record the exact id the provider advertises.
+2. Resolve the exact model id with the Runtime rule in `SKILL.md` (provider pages give examples only) and use the reasoning control the provider contract specifies. Record the id the provider accepted.
 3. When the selected provider has no contract, stop and report the route as unsupported.
 4. ACPX agents start with zero parent context: parent conversation history never crosses the ACPX boundary; only the assignment packet does. Include the decision target, settled decisions, resolvable sources, and `history none`. Preserve the identity selected for the relationship and supply relevant new context on each follow-up.
 

@@ -1,5 +1,7 @@
 # Model catalog
 
+Rows name lineage and thinking, not ids; exact ids resolve per the Runtime rule in `SKILL.md` and the machine map `~/.config/agent-context/model-map.md`.
+
 Select one row for the chosen role. Return the model lineage, thinking level, and model category. Honor an explicit owner choice first; then match the task's Guidance and Architectural span to the row's signals. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically raise effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
 
 ## Categories

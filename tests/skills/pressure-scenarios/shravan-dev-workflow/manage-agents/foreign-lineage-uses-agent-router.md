@@ -6,8 +6,8 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: agent-router
-expect_decision_regex: claude-fable-5-1
-expect_proof_regex: claude-fable-5-1
+expect_decision_regex: fable
+expect_proof_regex: fable[- ]5
 ## Shortcut Temptation
 
 A Codex parent already used native `spawn_agent` for Astra. The user named
@@ -20,7 +20,7 @@ relationship over agent-router.
 - "The native catalog is the source of truth" tempts another `spawn_agent`
   probe.
 - "Own-lineage unavailable → fallback" tempts substituting Astra.
-- Bare `claude-fable` tempts skipping the provider-contract id.
+- Bare `claude-fable` tempts skipping id resolution.
 - Habit tempts ACPX Claude as the default instead of the legacy route.
 
 ## Prompt
@@ -42,7 +42,7 @@ another runtime.
 
 - Skill is invoked; the review is a 🔎 Review Sidekick.
 - Route is a persistent Claude relationship over agent-router with
-  `claude-fable-5-1`, verifying SessionRef, visible name, and returned
+  a resolved Claude Fable 5.x id, verifying SessionRef, visible name, and returned
   identity; ACPX Claude only if agent-router has no Claude endpoint or
   cannot meet a stated requirement, with that gap recorded.
 - The catalog miss is a routing signal, not unavailability. Astra is not
