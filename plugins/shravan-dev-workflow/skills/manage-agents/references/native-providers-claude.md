@@ -12,7 +12,12 @@ Task / Agent may omit plan-mode or readonly flags. Do not hop to `claude -p --pe
 
 ## Models
 
-Claude Code uses agent-router with Luna for 🛠️ Workers and 🔧 Operators; see Runtime in `SKILL.md`.
+| Role | Model | Route |
+| --- | --- | --- |
+| 🛠️ Worker | `claude-opus-5-5`, low effort | native Task / Agent |
+| 🔧 Operator | Luna | agent-router (see Runtime in `SKILL.md`) |
+
+Other ids the host advertises are not used.
 
 ## Workspace Access
 
