@@ -226,7 +226,7 @@ None. Board project, PR grouping (owner: "make worktrees and prs"), and the ops/
 
 ## Non-goals
 
-Model matrix changes; peekaboo and other plugins; removing ACPX before codex-router closes the providers agent-router does not yet cover; extracting gh/Linear/observability tool manuals out of their skills.
+Model matrix changes; peekaboo and other plugins; removing ACPX before agent-router covers every provider; extracting gh/Linear/observability tool manuals out of their skills.
 
 ## Spec-review record
 
