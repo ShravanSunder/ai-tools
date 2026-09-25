@@ -80,6 +80,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-proof-challenge-predicate` | Compose proof-challenge only for executable proof claims, with grant, preflight, and scratchpad boundaries. |
 | `spec-program-review` | `spec-program-review-independence-honors-execution-grant` | Pass granted execution and fail unlisted commands or target mutation at the independence check. |
 | `spec-program-review` | `spec-program-review-generated-image-integrity` | Catch cache-only embeds, image/text conflict, and unavailable image/preview coverage without redesigning. |
+| `spec-program-review` | `spec-program-review-returns-specification-gap` | A direct review-only run reports the Specification gap, names its owning phase, and stops at the result without authoring. |
 | `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |
 | `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact current phase return without reconstructing meaning from chat or requiring lifecycle state. |
 | `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
@@ -194,6 +195,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-review` | `implementation-review-chunk-keeps-contract-with-callers` | Chunk the review so a changed contract stays with its callers, with overlap seams and predicate-selected lanes. |
 | `implementation-review` | `implementation-review-dispel-over-delivery` | Dispel anchorless over-engineered findings, pass anchored ones through, and name unrequested subsystems in the diff. |
 | `implementation-review` | `implementation-review-whole-file-read-required` | Require whole-file reads with whole-file coverage rows instead of hunk-scoped review or reading inventories. |
+| `implementation-review` | `implementation-review-direct-entry-opens-trace` | A directly invoked qualifying review opens or resumes the trace before review work. |
 | `implementation-review` | `implementation-review-proof-challenge-boundary` | Keep proof-challenge execution inside the granted claim commands, scratchpad output, and would-write stops. |
 | `implementation-review` | `implementation-review-classify-missing-source` | Return the classifier state for unreadable governing sources instead of a readiness verdict. |
 | `orchestrator-implementation-goal` | `orchestrator-implementation-goal-start-at-design` | Route a fresh long-horizon goal to the bounded design owner without creating lifecycle state. |
