@@ -5,6 +5,8 @@ description: Use when independently reviewing implemented code, proof, a branch 
 
 # Implementation Review
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. That lead reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment. The bounded delivery effort may remediate at most three times.
 
 The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
@@ -79,3 +81,5 @@ Do not return `ready` while any of these hold:
 - a reviewer proposal that adds unrequested scope was accepted or returned `decision-needed`; or a delivered element dispel mapped `absent` (or spec-compliance marked `extra` or `scope overreach`) has neither an accepted removal nor a `decision-needed` return;
 - a mental-model break was pushed through remediation instead of returning to the user;
 - the result edits, exceeds the three-remediation boundary, or persists review bookkeeping.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
