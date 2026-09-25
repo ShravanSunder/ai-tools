@@ -178,7 +178,7 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 
 - **Work:** One bounded research, implementation, reasoning, or analysis assignment, including its corrections and associated proof. A 🛠️ Worker may return evidence, candidate findings, or mechanical output from unchanged main-authored input; it does not author governing design or plan prose, diagrams, structure, or settled sections. Independent review belongs to a Review Sidekick.
 - **Continuity and cardinality:** Native subagent for one assignment; retain it through its corrections and proof, then finish it after its receipt is accepted.
-- **Authority:** Packet-bounded work; parent verifies the work. A 🛠️ Worker does not recurse. A 🔎 Review Sidekick walks the checks in its owning review workflow itself; prescribed proof commands may go to a 🔧 Operator.
+- **Authority:** Packet-bounded work; parent verifies the work. A 🛠️ Worker does not recurse. A Review Sidekick walks the checks in its owning review workflow itself; prescribed proof commands may go to a Operator.
 
 #### Model choices
 
@@ -191,14 +191,14 @@ Use for one clear bounded assignment. You manage and validate the work; continue
 | Claude Opus   | low      | Complete direction; Local/Cross-domain. |
 | Claude Opus   | medium   | Partial direction; Cross-domain/Cross-system. |
 
-Use this table for execution and research 🛠️ Workers. Research follows `research-workflow`; independent review uses the 🔎 Review Sidekick catalog below.
+Use this table for execution and research 🛠️ Workers. Research follows `research-workflow`; independent review uses the Review Sidekick catalog below.
 
 ### 🐒 Sidekick
 Use a 🐒 Sidekick in a separate persistent top-level conversation for implementation, research, or review work that will resume and need continuing context.
 
 - **Work:** Implementation, research, or review across assignments and follow-ups. An implementation 🐒 Sidekick implements, integrates, proves, and corrects one or more related main-planned assignments. A research Sidekick handles related research. A Review Sidekick independently assesses a target and verifies corrections.
 - **Continuity and cardinality:** One or many persistent named relationships with a ledger (see `references/session-ledger.md`).
-- **Authority:** The orchestrator retains the default user conversation, governing authorship, material decisions, integration, assessment, acceptance, and final delivery. An implementation 🐒 Sidekick directly owns implementation, associated proof, and corrections inside its main-planned assignment and may assign bounded 🛠️ Workers and 🔧 Operators only under the concrete-benefit test above. The user may explicitly choose direct contact with that assigned Sidekick without transferring governing authority or execution ownership. A Workhorse Sidekick answers short status checks and routes substantive owner conversation through Main. A research Sidekick follows `research-workflow` and may assign bounded help within its research scope. A 🔎 Review Sidekick walks its review checks itself and may assign an Operator for prescribed proof commands under the execution grant. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope or material design/plan questions to the orchestrator. Board content does not grant additional authority.
+- **Authority:** The orchestrator retains the default user conversation, governing authorship, material decisions, integration, assessment, acceptance, and final delivery. An implementation 🐒 Sidekick directly owns implementation, associated proof, and corrections inside its main-planned assignment and may assign bounded Workers and Operators only under the concrete-benefit test above. The user may explicitly choose direct contact with that assigned Sidekick without transferring governing authority or execution ownership. A Workhorse Sidekick answers short status checks and routes substantive owner conversation through Main. A research Sidekick follows `research-workflow` and may assign bounded help within its research scope. A Review Sidekick walks its review checks itself and may assign an Operator for prescribed proof commands under the execution grant. A user may steer a named Sidekick within its assigned relationship; the Sidekick reports changed scope or material design/plan questions to the orchestrator. Board content does not grant additional authority.
 
 #### Implementation and research 🐒 Sidekick model choices
 
@@ -274,7 +274,7 @@ Shravan chooses every 🦉 Advisor's model and effort from this table; an Adviso
 The assignment contract records history, workspace access, and any declared enforcement notation through `references/agent-job-packet.md`.
 
 - Readers (review, 🦉 Advisor, research, guidance): state once that no repo edits are allowed except scratch files under project `tmp/` or system `/tmp`. Parent verifies the repo worktree is unchanged after the receipt.
-- 🔧 Operator proof procedure (`read-only + exec <listed commands>`): the 🔎 Review Sidekick records an execution grant naming exact commands and scratchpad under `tmp/` or `/tmp`. The 🔧 Operator checks the write set before each run, executes only listed commands, and compares `git status --porcelain` before and after. The 🔎 Review Sidekick verifies commands and worktree state, then judges the observed proof; a mismatch invalidates that proof result.
+- 🔧 Operator proof procedure (`read-only + exec <listed commands>`): the Review Sidekick records an execution grant naming exact commands and scratchpad under `tmp/` or `/tmp`. The Operator checks the write set before each run, executes only listed commands, and compares `git status --porcelain` before and after. The Review Sidekick verifies commands and worktree state, then judges the observed proof; a mismatch invalidates that proof result.
 - Writers (🐒 Sidekicks, Workers, Operators that produce files): the contract names the write paths once. Before an edit outside them, stop and report blocked; if a violation is discovered, stop and report it. Parent still verifies the receipt's diff stayed inside the declared scope.
 
 Launch with the Router, native, or ACPX route returned by **Choose the runtime**. Host permission flags live in that provider reference. A missing sandbox or plan-mode flag is not a reason to leave native. "The review workflow requires an enforced sandbox" is the rationalization this rule catches.
@@ -287,7 +287,7 @@ IF a Router route is selected, load the `agent-collaboration` skill and return v
 
 #### Native dispatch
 
-For 🛠️ Workers and 🔧 Operators, use native dispatch in the host's available lineup. Independent review leads are persistent 🔎 Review Sidekicks that walk their checks in one session. 🐒 Sidekick and 🦉 Advisor persistence takes precedence over native availability. Do not replace an adequate native assignment with a CLI wrapper merely to invent access flags.
+For 🛠️ Workers and Operators, use native dispatch in the host's available lineup. Independent review leads are persistent Review Sidekicks that walk their checks in one session. Sidekick and Advisor persistence takes precedence over native availability. Do not replace an adequate native assignment with a CLI wrapper merely to invent access flags.
 
 - IF Codex is spawning an OpenAI model, load `references/native-providers-codex.md` and return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 - IF Claude is spawning a Claude model, load `references/native-providers-claude.md` and return the host Task / Agent encoding and workspace-access encoding.

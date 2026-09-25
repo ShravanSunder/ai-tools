@@ -2,7 +2,7 @@
 
 Owns Codex native v2 `spawn_agent` model, effort, conversation-history, and workspace-access encoding. Return the exact `model`, `reasoning_effort`, `fork_turns`, and workspace-access encoding.
 
-This reference applies after `SKILL.md` selects a native 🛠️ Worker or 🔧 Operator assignment. Persistent 🐒 Sidekick, 🦉 Advisor, and 🔎 Review Sidekick relationships use their separate top-level route.
+This reference applies after `SKILL.md` selects a native 🛠️ Worker or Operator assignment. Persistent Sidekick, Advisor, and Review Sidekick relationships use their separate top-level route.
 
 ## Models
 
