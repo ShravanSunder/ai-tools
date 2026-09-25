@@ -6,13 +6,18 @@ This reference applies after `SKILL.md` selects a native 🛠️ Worker or Opera
 
 ## Launch
 
-Use the host Task tool for an advertised Cursor model. Do not substitute Cursor CLI or ACPX when Task can spawn the selected model.
+Use the host Task tool for a model listed below. Do not substitute Cursor CLI or ACPX when Task can spawn the selected model.
 
 Task may omit a sandbox or `workspace_readonly` flag. Do not hop to Cursor CLI to invent one.
 
 ## Models
 
-Use the exact model id the host Task tool advertises. The allowed model-and-effort combinations in the `model-catalog.md` role table still apply. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
+| Model id | Use |
+| --- | --- |
+| `claude-opus-5-5-*` | Only on owner request. |
+| `claude-fable-5-thinking-high` | Only on owner request. |
+
+Otherwise do not use a Cursor native model: use agent-router with Luna. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
 
 ## Workspace Access
 
