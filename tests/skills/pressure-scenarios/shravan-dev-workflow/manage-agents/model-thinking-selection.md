@@ -32,8 +32,7 @@ Keep the answer to the model matrix.
 ## Expected Compliant Behavior
 
 - Sol low is retired and cannot be selected. Sol medium and high are Daily driver.
-- Sol xhigh is Daily driver and a default Review row. It is an 🦉 Advisor option
-  only when the owner names it.
+- Sol xhigh is Daily driver and a default Review row. It is not an 🦉 Advisor option.
 - Opus xhigh, Astra xhigh, and Fable high still require explicit owner authorization
   outside the owner-chosen 🦉 Advisor table.
 

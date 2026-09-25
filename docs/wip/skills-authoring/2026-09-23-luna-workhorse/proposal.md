@@ -6,6 +6,8 @@ Owner correction (2026-09-25, remediation pass 2): The third signal is **Interac
 
 Owner correction (2026-09-25, remediation pass 3): Opus high is `Daily driver` with an empty category Use cell; its Review and 🦉 Advisor rows remain. Mark only the first agent-role mention in each paragraph, bullet, or table cell with its emoji. Later mentions stay plain. Headings may carry one emoji, and titles still use `<emoji> <role> · <purpose>`. This supersedes the earlier every-mention rule.
 
+Owner addendum (2026-09-25, remediation pass 3): Sol xhigh remains a Daily driver category row and a default 🔎 Review Sidekick row. It is absent from the Advisor table.
+
 ## Problem and evidence
 
 - `manage-agents/SKILL.md` names Luna's category "Mini" ("Procedures, repeatable work, guided execution", line 51). "Mini" signals a small, weak model. Early GPT-6 Luna reports describe the opposite shape: very cheap, eventually capable, but it takes many turns to finish (hypothesis from public early-user reports shared by the owner on 2026-09-23, not measured here).

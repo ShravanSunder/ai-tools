@@ -274,7 +274,6 @@ Use an 🦉 Advisor only when Shravan explicitly requests a separate persistent 
 |---------------|----------|
 | OpenAI Astra  | high     |
 | OpenAI Astra  | xhigh    |
-| OpenAI Sol    | xhigh    |
 | Claude Opus   | high     |
 | Claude Opus   | xhigh    |
 | Claude Fable  | high     |
