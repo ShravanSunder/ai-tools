@@ -5,6 +5,8 @@ description: Use when auditing existing skills, comparing admired upstream skill
 
 # Skill Audit
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Audit real workflows before creating skills. Skills encode judgment and house style, not task history; create or update one only when the wording teaches behavior a smart model would otherwise shortcut. Prefer updating an existing skill over creating a duplicate.
 
 ## Core Rules
@@ -83,3 +85,5 @@ Return:
 - source inspirations used
 - priority order
 - full clickable artifact links (absolute path + line) for any audit artifacts or referenced files the human is expected to open
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
