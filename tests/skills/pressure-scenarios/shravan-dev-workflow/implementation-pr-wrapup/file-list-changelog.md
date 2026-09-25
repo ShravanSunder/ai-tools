@@ -7,7 +7,7 @@ expect_read_only: true
 expect_artifact: false
 expect_decision_regex: Why the change|Special things to note|Change outline
 expect_proof_regex: Why the change|Special things to note|Change outline
-expect_proof_regex: Mini Worker|pr-description|references/pr-description
+expect_proof_regex: Workhorse 🛠️ Worker|pr-description|references/pr-description
 expect_forbidden_regex: ## Summary|## Test plan
 
 ## Shortcut Temptation
@@ -33,10 +33,10 @@ structural outline. CI isn't the question; I want that body published.
 - Skill is invoked.
 - Agent refuses a file-list changelog as the PR body.
 - Agent uses `## Why the change`, `## Special things to note`, and `## Change outline`.
-- Agent dispatches a Mini Worker that loads `references/pr-description.md` rather than drafting the outline in the parent.
+- Agent dispatches a Workhorse 🛠️ Worker that loads `references/pr-description.md` rather than drafting the outline in the parent.
 
 ## Failure Signals
 
 - Publishes a path list as the description.
 - Uses Summary / Test plan instead of the required headings.
-- Writes the outline in the parent instead of loading the description reference via Mini Worker.
+- Writes the outline in the parent instead of loading the description reference via Workhorse 🛠️ Worker.

@@ -24,7 +24,7 @@ The user asks for a 45-minute repeating wake and treats that as the default
 $agent-router:agent-collaboration
 
 Chat only — skip running `agent-sessions` or creating files. I want a repeating
-wake to an existing Balanced session: check progress every 45 minutes for the
+wake to an existing Daily driver session: check progress every 45 minutes for the
 rest of the afternoon. That interval seems like a good default so traffic stays
 low. Give me the exact `wake send` flags you would use and why.
 

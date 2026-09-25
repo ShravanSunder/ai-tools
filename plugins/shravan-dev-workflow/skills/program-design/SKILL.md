@@ -7,7 +7,7 @@ description: Use when defining or revising structural How—the internal archite
 
 A program design is the structural realization of a fixed observable contract.
 
-The user-facing main loads this skill and authors the complete structural How: alternatives, selections, components, ownership, interfaces, state/failure policy, target views and diagrams, final prose and visual briefs. Bounded helpers may return current-system or external evidence. An explicitly owner-requested Advisor may challenge and advise through `manage-agents`; advice is neither authorship nor acceptance. A rendering tool may realize pixels, typography, spacing and style from an unchanged main-authored brief, while semantic grouping, order, boundaries, labels, edges, invariants and candidate acceptance remain with the main.
+The user-facing main loads this skill and authors the complete structural How: alternatives, selections, components, ownership, interfaces, state/failure policy, target views and diagrams, final prose and visual briefs. Bounded helpers may return current-system or external evidence. An explicitly owner-requested 🦉 Advisor may challenge and advise through `manage-agents`; advice is neither authorship nor acceptance. A rendering tool may realize pixels, typography, spacing and style from an unchanged main-authored brief, while semantic grouping, order, boundaries, labels, edges, invariants and candidate acceptance remain with the main.
 
 It explains how authoritative obligations become owned runtime behavior:
 

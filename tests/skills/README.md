@@ -14,7 +14,9 @@ Default semantic judge: `gpt-6-luna` at `xhigh`
 
 Default safety: read-only sandbox
 
-The harness pins `@agentclientprotocol/codex-acp@1.6.2`, starts its real read-only mode, and keeps approval review with the client. Adapter 1.10.0 maps its `read-only` preset to workspace-write, so approval flags alone are insufficient. A live probe against the pinned route read source successfully and denied an attempted edit. Recheck that boundary before changing the pin; no global installation or configuration is required.
+The harness pins `@agentclientprotocol/codex-acp@1.6.2`, starts its real read-only mode, and keeps approval review with the client. Adapter 1.10.0 maps its `read-only` preset to workspace-write, so approval flags alone are insufficient. A live probe against the pinned route read source successfully and denied an attempted edit. Recheck that boundary before changing the pin; no global configuration change is required.
+
+If the pinned adapter's bundled Codex does not advertise the configured model, set `SKILL_PRESSURE_CODEX_PATH` to an absolute path for the installed Codex binary when running an eval. This changes the launched binary while retaining the read-only mode and client approval boundary. The harness ignores an inherited `CODEX_PATH` unless this explicit setting is supplied.
 
 Subject and judge children disable lifecycle hooks so personal Stop prompts cannot alter scenario inputs or judge output. This invocation-local setting does not change home configuration or sandbox permissions. Failed runs retain bounded diagnostics in their existing artifact directory.
 

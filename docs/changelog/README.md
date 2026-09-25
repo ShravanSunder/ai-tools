@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-23 Luna Workhorse routing](2026-09-23-luna-workhorse.md)
 - [2026-09-23 Model routing retier](2026-09-23-model-routing-retier.md)
 - [2026-09-23 Grok review and authorization catalog](2026-09-23-grok-review-authorization.md)
 - [2026-09-22 GPT-6 dispatch](2026-09-22-gpt-6-dispatch.md)
@@ -48,6 +49,7 @@ Public-safe release notes and local memory for ai-tools plugins, sidecar behavio
 
 ## Entries
 
+- [2026-09-23 Agent Router 0.15.0 skill sync](2026-09-23-agent-router-0-15-0-skill-sync.md)
 - [2026-09-21 Stop-review JEV default](2026-09-21-stop-review-jev-default.md)
 - [2026-09-21 manage-agents Sidekick Luna xhigh](2026-09-21-manage-agents-sidekick-luna-xhigh.md)
 - [2026-09-21 Cursor marketplace lists agent-router](2026-09-21-cursor-agent-router.md)

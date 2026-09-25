@@ -5,7 +5,7 @@ expected inputs: PR number or create-intent, base, head SHA, diff identity, exis
 return: tmp markdown path, `included_views`, head SHA, `complete | partial | blocked`
 complete when: the tmp file is the template below, filled, with only the views this diff needs
 
-The caller owns when this runs, Mini Worker dispatch, mechanical parent checks, and Operator `gh pr edit`. Do not push, merge, claim ready, reply to comments, or run `gh pr edit`.
+The caller owns when this runs, Workhorse 🛠️ Worker dispatch, mechanical parent checks, and Operator `gh pr edit`. Do not push, merge, claim ready, reply to comments, or run `gh pr edit`.
 
 MUST load `public-artifact-safety.md` and return redactions or refuse-to-publish.
 MUST load `pr-outline-views.md` and return the views used in Change outline.
