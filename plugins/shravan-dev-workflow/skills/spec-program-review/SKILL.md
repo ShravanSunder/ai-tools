@@ -83,7 +83,7 @@ target classification and skills-creation parent identity when applicable
 mode and complete target identities: file paths or separately labeled in-chat records
 governing sources, authority states, and coverage basis
 confirmed goal boundary and accepted requirements set, or the exact authority gap
-structural-realization confirmation for program-only or three-artifact-design, or the exact owner decision still needed
+structural-realization confirmation for program-only or three-artifact-design (an owner confirmation or `waived by owner`), or the exact owner decision still needed
 constraints and non-goals
 risk predicates
 claimed proof evidence or gaps
@@ -100,7 +100,7 @@ Use the owner-confirmed requirements record and confirmed goal boundary when ava
 
 A combined `Requirements/spec`, a Requirements-titled artifact that also stands in for the Specification, or an absent separate Requirements or Specification identity is a concrete blocker-level design finding, not permission for review to infer the missing identity. Record `needs-revision`, route the smallest correction to `spec-design`, and do not repair or create either artifact during review. Continue only with bounded findings that the available sources can support; never return `ready`.
 
-`program-only` also requires the governing Specification. `three-artifact-design` requires the current Requirements, Specification, and Program Design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `three-artifact-design`, may produce `decision-needed`; review does not infer acceptance from silence or a status label.
+`program-only` also requires the governing Specification. `three-artifact-design` requires the current Requirements, Specification, and Program Design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `three-artifact-design`, may produce `decision-needed`; review does not infer acceptance from silence or a status label. A recorded `structural-realization confirmation: waived by owner` is the confirmation: review proceeds and judges the design on its merits. A packet claim, a goal-boundary confirmation, or a `locally-ready` label is neither a confirmation nor a waiver.
 
 Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous; any recovery request is explicitly admitted or rejected with its reason.
 
@@ -116,7 +116,7 @@ program-only       -> references/reviewing-program-design.md
 three-artifact-design -> references/reviewing-three-artifact-design.md
 ```
 
-Specification review judges the governing Requirements authority and the Specification's observable What. Program review judges structural How and realization of the governing Specification. Three-artifact design review independently repeats both and judges traceability, integration, and planning readiness.
+Specification review judges the governing Requirements authority and the Specification's observable What. Program review judges structural How and realization of the governing Specification, including each entity's binding, the shape at each boundary, and closed result and decision variants. Three-artifact design review independently repeats both, walks the trace table row by row, checks that each term means the same thing in all three artifacts, and judges integration and planning readiness. A design noun with no entity routes `Route: spec-design` when it names no `E` or `R` it serves, or carries its own identity, lifecycle, or relationships; a synonym for an existing entity routes `Route: program-design`.
 
 Completion: exactly one mode and its complete required artifact set are selected.
 
@@ -236,6 +236,7 @@ Do not return `ready` while any of these hold:
 - a finding lacks an accepted requirement identity or confirmed goal-boundary field, its plain-language meaning, the observable outcome that fails, source-backed evidence, deletion test, scope effect, semantic correction route, or disposition;
 - specification, program, or three-artifact-design mode boundaries are conflated;
 - `program-only` or `three-artifact-design` omits an applicable current/proposed call path, explicit no-predecessor case, added/removed/changed edge status, or a preservation-critical or contested unchanged edge;
+- `program-only` or `three-artifact-design` accepts a Specification entity with no binding, a boundary shape written only as prose, or an open-string result or decision contract; or `three-artifact-design` passes traceability without walking every trace-table row or leaves a design noun unresolved against the entity table;
 - a material proof claim is accepted without evidence that can observe it at the required layer, or an applicable diagram is accepted without checking that it answers its reader question and agrees with the written meaning;
 - a picture-type view is accepted as a text fence while Mermaid can render, or a UI image is accepted that invents a control or skips a changed screen;
 - required file-backed visuals or relative embeds are missing or broken, generated labels/edges/boundaries disagree with governing meaning, or unavailable image/preview access was treated as complete visual coverage;

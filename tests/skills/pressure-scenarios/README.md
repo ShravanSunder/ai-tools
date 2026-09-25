@@ -84,6 +84,9 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-independence-honors-execution-grant` | Pass granted execution and fail unlisted commands or target mutation at the independence check. |
 | `spec-program-review` | `spec-program-review-generated-image-integrity` | Catch cache-only embeds, image/text conflict, and unavailable image/preview coverage without redesigning. |
 | `spec-program-review` | `spec-program-review-returns-specification-gap` | A direct review-only run reports the Specification gap, names its owning phase, and stops at the result without authoring. |
+| `spec-program-review` | `spec-program-review-check-trace-table-rows` | Walk the trace table cell by cell, route defective cells to `program-design`, and accept an owner waiver as the confirmation. |
+| `spec-program-review` | `spec-program-review-catch-noun-leak` | Route an entity-like design noun the Specification never defined to `spec-design` instead of accepting a design-local definition. |
+| `spec-program-review` | `spec-program-review-flag-missing-binding` | In program-only review, flag a missing entity binding, a prose boundary shape, and an open-string decision contract. |
 | `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |
 | `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact current phase return without reconstructing meaning from chat or requiring lifecycle state. |
 | `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
