@@ -1,6 +1,6 @@
 # Capability revamp: layers, practices, and the session path
 
-Revision 2.2 (Revision 2 plus its bounded remediation and one owner-authorized fix round; Revision 1 was `significant-rewrite`). Main-authored multi-run skill-change spec. Owner plugins: `shravan-dev-workflow` and `agent-router` (vendored from codex-router). Companion changes: devfiles `shared/my_agents.md`, codex-router `agent-skills/agent-collaboration`, and the `tests/skills` eval harness.
+Revision 2.2, accepted-to-implement 2026-09-25 (Revision 2 plus its bounded remediation and one owner-authorized fix round; Revision 1 was `significant-rewrite`). Main-authored multi-run skill-change spec. Owner plugins: `shravan-dev-workflow` and `agent-router` (vendored from codex-router). Companion changes: devfiles `shared/my_agents.md`, codex-router `agent-skills/agent-collaboration`, and the `tests/skills` eval harness.
 
 ## Problem and evidence
 
@@ -234,4 +234,4 @@ Model matrix changes; peekaboo and other plugins; removing ACPX before codex-rou
 - Revision 1: GPT-6 Sol high 🔎 Review Sidekick (ACPX session `01a0d98f-2079-7d22-a0df-e8d50c70812b`). Checks: mental-model-fit complete, trigger-routing blocked, rule-agreement complete, depth-coverage blocked. Verdict `significant-rewrite`, decision `restart`. Accepted: entry branches, layer route, run boundaries and cutover, proof allocation. Rejected: line count. Owner authorized a second review by the same lead on 2026-09-25.
 - Revision 2 (`f74cdcf0`): same lead, owner-authorized second review. All four checks complete. Verdict `targeted-revision`, decision `revise-first`. Accepted: shared-reference rule scope, pre-board 🐒 Sidekick path, release boundary and non-skill runs, tracker clauses and token discriminators and phase proof. Rejected: line count, cache age, naming style. Owner decisions 2026-09-25: DAG rule for shared references; wip folder then transfer; representative phase proof accepted.
 - Revision 2.1 (`a6b9cd65`): lead verification returned `targeted-revision`, findings 1-4 partly resolved; new issues: merged run 2/3 row, `product-code` classifier, transfer authorship. Stopped at `review-permission-required`; owner authorized one more bounded fix round with lead verification on 2026-09-25.
-- Revision 2.2: corrections for those items; pending lead verification.
+- Revision 2.2 (`b134213b`): lead verified all five open items resolved, no new issues. Verdict `great`, implementation decision `accepted-to-implement`. Proof boundary: planned live scenarios, per-PR validation, owner-accepted gap for 15 phases.
