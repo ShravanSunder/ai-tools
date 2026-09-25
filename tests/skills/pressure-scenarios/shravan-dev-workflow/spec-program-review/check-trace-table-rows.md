@@ -8,7 +8,7 @@ expect_artifact: false
 
 ## Shortcut Temptation
 
-A trace table with the right columns and one row per requirement looks complete at a glance. Passing traceability because the table exists is faster than opening each cell against the section it summarizes.
+A trace table with the right columns and one row per obligation looks complete at a glance. Passing traceability because the table exists is faster than opening each cell against the section it summarizes.
 
 ## Pressures
 

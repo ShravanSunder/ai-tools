@@ -209,7 +209,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "produces-the-trace-table-as-design-content",
-        requirement: "Shows a requirement/design/proof trace table as content of the design, one row for each of R1 through R5, with the columns U, R, E, owner, interface, shape and home, state, failure, and proof. Each U cell names the Requirements rows the obligation serves (U1–U3) or reads `none: <why>`, and each R cell names its obligation or observable contract.",
+        requirement: "Shows a requirement/design/proof trace table as content of the design, one row for each of R1 through R5, with the columns U, R, E, owner, interface, shape and home, state, failure, and proof. Each U cell names every Requirements row the obligation traces to (R4 lists U1 and U2) or reads `none: <why>`, and each R cell names its obligation or observable contract.",
         failureExample: "Keeps the trace in working state, asserts coverage without a table, omits the U column, or produces a table missing any of R1–R5.",
       },
       {

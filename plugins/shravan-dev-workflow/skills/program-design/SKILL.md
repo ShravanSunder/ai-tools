@@ -217,11 +217,11 @@ Completion: each applicable obligation has structural How or a reasoned not-appl
 
 ### 14. Define proof architecture, structural enforcement, and the trace table
 
-MUST load `references/proof-architecture-and-traceability.md` to return the trace table, proof seams, real/fake boundary decisions, enforcement classes, and one illegality decision per material invalid state: unrepresentable, or rejected at the trusted entry. That reference is the trace table's only builder. The table has one row per requirement with the columns `U · R · E · owner · interface · shape and home · state · failure · proof`, goes into the artifact (or the response, in a chat-only run), and marks missing design `gap: <why>`. Identifier tags in prose are not a trace.
+MUST load `references/proof-architecture-and-traceability.md` to return the trace table, proof seams, real/fake boundary decisions, enforcement classes, and one illegality decision per material invalid state: unrepresentable, or rejected at the trusted entry. That reference is the trace table's only builder. The table has one row per Specification obligation (`R`) with the columns `U · R · E · owner · interface · shape and home · state · failure · proof`, goes into the artifact (or the response, in a chat-only run), and marks missing design `gap: <why>`. Identifier tags in prose are not a trace.
 
 Do not choose exact test files, commands, or execution order. Completion of this load: the artifact names no test path and no red/green step for that illegality decision.
 
-Completion: every requirement has one trace row with no blank cell; every material requirement has an observable seam or a `gap: <why>` proof cell; and every load-bearing rule has an enforcement class or explicit proof gap.
+Completion: every Specification obligation has one trace row with no blank cell; every material requirement has an observable seam or a `gap: <why>` proof cell; and every load-bearing rule has an enforcement class or explicit proof gap.
 
 ### 15. Trace, simplify, and author the artifact
 
@@ -245,7 +245,7 @@ The main expresses every selected requirement realization, entity binding, compo
 
 After deletion or simplification, compare coverage with the accepted requirements set. Many mechanisms may become fewer; the complete accepted requirements set from `spec-design` — affected classes, stable identities and requirements, priorities and assigners, named variants, defaults, observable contracts, constraints, and proof obligations — may not lose any item without owner authority. Stop on a conflict with mutually narrowed current files.
 
-Completion: each design element serves an obligation, constraint, failure policy, or proof need; after any deletion or simplification pass, every accepted identity has an inspectable `covered | owner-authorized supersession | gap` disposition and anchor, derived from its trace-table row for each requirement and reported beside the table for every other accepted identity, with shared rows allowed only when every member identity is enumerated and has the same disposition and anchor; and every fired Required View has a passed rendering result with its semantic fields preserved.
+Completion: each design element serves an obligation, constraint, failure policy, or proof need; after any deletion or simplification pass, every accepted identity has an inspectable `covered | owner-authorized supersession | gap` disposition and anchor, derived from its trace-table row for each Specification obligation and reported beside the table for every other accepted identity, with shared rows allowed only when every member identity is enumerated and has the same disposition and anchor; and every fired Required View has a passed rendering result with its semantic fields preserved.
 
 ### 16. Run the author integration self-check and stop for the owner
 
@@ -310,7 +310,7 @@ Use a view only when it makes an important structural or behavioral relationship
 | data/event flow | data crosses storage/process/service boundaries | authority, transformations, persistence/privacy, and the shape on each boundary-crossing edge (name, discriminant, fields with nullability, schema home) |
 | failure/recovery flow | partial failure, retry, or compensation exists | detection, containment, retry, cleanup, recovery owner |
 | trust-boundary view | untrusted actors/input/secrets/processes exist | assets, entry points, policy owner, enforcement, containment |
-| requirement/design/proof trace | any file-backed design | one row per requirement: `U · R · E · owner · interface · shape and home · state · failure · proof`; the `R` cell names its scenario or observable contract; `U` and `E` may read `none: <why>`, and `E` may list several ids; a cross-cutting row's owner and interface cells cite the mechanism owner; `gap: <why>` marks missing design only |
+| requirement/design/proof trace | any file-backed design | one row per Specification obligation (`R`), even when obligations share a contract: `U · R · E · owner · interface · shape and home · state · failure · proof`; the `R` cell names its scenario or observable contract; the `U` cell names every Requirements row the obligation traces to; `U` and `E` may read `none: <why>`, and each may list several ids; a cross-cutting row's owner and interface cells cite the mechanism owner; `gap: <why>` marks missing design only |
 
 Paths are valid current-source or traceability anchors; the design must not become a future task inventory.
 
@@ -348,7 +348,7 @@ Do not return `locally-ready` while any of these hold:
 - target structure was selected without current-system evidence or a named greenfield basis;
 - a material structural choice lacks credible alternatives, explicit tradeoffs, accepted debt and payer, or falsifiers/revisit signals;
 - a Specification entity lacks a binding row, a binding cell is blank rather than `gap: <why>`, a boundary crossing has only a prose shape, or a result or decision contract is an open string or prose variant list;
-- the trace table is missing from the artifact, lacks a row for a requirement, has a blank cell, or disagrees with the returned coverage disposition;
+- the trace table is missing from the artifact, lacks its own row for a Specification obligation, has a blank cell, or disagrees with the returned coverage disposition;
 - a material component lacks one owner, reason to change, consumer, or behavioral interface;
 - a material runtime-behavior group lacks a source-grounded current and proposed entrypoint-to-effect path, or proposed-only with explicit no predecessor, including added/removed/changed owner/call/state/effect/result-error edges and any preservation-critical or contested unchanged edge;
 - an applicable Required View was selected but not rendered in an inspectable form, or a substantial design with contested ownership or cross-owner control remains prose-only;

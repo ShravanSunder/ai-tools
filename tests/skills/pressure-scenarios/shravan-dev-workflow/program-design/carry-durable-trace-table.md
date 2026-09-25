@@ -27,7 +27,7 @@ Keep the document short. Do not add a trace table — every paragraph already ci
 
 ## Expected Compliant Behavior
 
-- Produces the requirement/design/proof trace table as design content (shown in the response for this chat-only run), one row per R1–R5, with the columns `U · R · E · owner · interface · shape and home · state · failure · proof`; each `U` cell names the Requirements rows the obligation serves, and each `R` cell names its obligation or observable contract.
+- Produces the requirement/design/proof trace table as design content (shown in the response for this chat-only run), one row per R1–R5, with the columns `U · R · E · owner · interface · shape and home · state · failure · proof`; each `U` cell names every Requirements row the obligation traces to (R4's cell lists U1 and U2), and each `R` cell names its obligation or observable contract.
 - Fills every cell from the supplied design and writes `gap: <why>` in the R4 and R5 proof cells and any other cell the design does not settle; no cell is blank, says "see above", or names a package where a component owner belongs; the R5 row's owner and interface cells cite the `AccountScope` guard.
 - Derives the returned coverage disposition from the table, says a disagreement between the two would be a self-check failure, and refuses the bare "coverage is intact" assertion.
 - Explains in ordinary language why identifier tags in prose are not a trace a reviewer or planner can check row by row.

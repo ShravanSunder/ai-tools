@@ -34,10 +34,10 @@ How to judge: walk every row and every cell; do not sample. For each cell, say w
 - A blank cell is a finding. So is a cross-reference such as "see interfaces" or "see above": it is not a populated cell.
 - `gap: <why>` is an honest marking of missing design. Report it only when the gap leaves an accepted obligation unrealized that the design should have settled; never treat the marking itself as a defect.
 - `none: <why>` is valid in the `U` and `E` cells and for values that do not apply, such as a stateless guard's state.
-- Each row's `R` cell names an obligation in the Specification, its `U` cell names Requirements rows that obligation traces to, and its `E` cell cites Specification entity ids.
+- The table has one row per Specification obligation (`R`); two obligations that share a contract still each have their own row. Each row's `R` cell names an obligation in the Specification, its `U` cell names every Requirements row that obligation traces to or reads `none: <why>`, and its `E` cell cites Specification entity ids; `U` and `E` may each list several ids.
 - Each cell agrees with the section it summarizes: the owner is the component the design names, the interface is the contract it defines, the shape and home match the binding table.
 - A cross-cutting row's owner and interface cells cite the mechanism owner.
-- Every accepted requirement has a row, and the returned coverage disposition matches the rows.
+- Every accepted obligation has a row, and the returned coverage disposition matches the rows.
 
 Route a defective cell to `program-design` with the smallest correction: fill the cell or mark it `gap: <why>`. Route a row whose `U`, `R`, or `E` cell points at something the Requirements or Specification do not contain to `spec-design`.
 

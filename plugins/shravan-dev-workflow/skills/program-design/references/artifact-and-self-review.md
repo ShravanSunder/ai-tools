@@ -24,7 +24,7 @@ For call graph or sequence views, consume the current-to-proposed delta from `st
 - added, removed, and changed markers;
 - preservation-critical or contested unchanged edges.
 
-Every entity -> home map row comes from the binding table. Verify the trace table against the design: one row per requirement, no blank cell, `gap: <why>` only where design is missing, each cell agreeing with the section it summarizes, and the returned coverage disposition matching the rows.
+Every entity -> home map row comes from the binding table. Verify the trace table against the design: one row per Specification obligation (`R`), each `U` cell naming every Requirements row the obligation traces to or `none: <why>`, no blank cell, `gap: <why>` only where design is missing, each cell agreeing with the section it summarizes, and the returned coverage disposition matching the rows.
 
 Diagrams do not replace behavioral interface or failure prose. Paths may anchor current evidence; the design names owners, package or module homes, and schema homes, never a task list, write scopes, or exact files.
 
@@ -64,7 +64,7 @@ Preserve:
 - failure, recovery, trust, cutover, and proof decisions;
 - accepted debt with payer and revisit signal.
 
-After deletion or simplification, derive the report from the trace table: one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor, taken from the requirement's trace row, and for identities that are not requirement rows (entities, constraints, variants, defaults, proof obligations), reported beside the table with their own anchors. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor. A bare "coverage intact" assertion is not a report. Deleting an entity is a coverage loss.
+After deletion or simplification, derive the report from the trace table: one compact row per stable identity with `covered | owner-authorized supersession | gap` plus its anchor, taken from the obligation's trace row, and for identities that are not obligation rows (entities, constraints, variants, defaults, proof obligations), reported beside the table with their own anchors. Identities may share a row only when every member identity is enumerated and all share the same disposition and anchor. A bare "coverage intact" assertion is not a report. Deleting an entity is a coverage loss.
 
 Choose the expression that fits the relationship:
 
@@ -94,7 +94,7 @@ Re-read the whole artifact:
 - every applicable current/proposed call-path delta exposes added, removed, and changed edges plus preservation-critical or contested unchanged edges;
 - happy/failure/recovery/concurrency paths agree;
 - cross-cutting obligations map to structure/failure/proof;
-- every requirement has a trace row with realization and seam, and the rows agree with the returned coverage disposition;
+- every Specification obligation has its own trace row with realization and seam, and the rows agree with the returned coverage disposition;
 - every accepted requirement and entity remains covered or has owner-authorized supersession;
 - every design element has a legitimate basis;
 - every reader-facing element passes the human deletion test;

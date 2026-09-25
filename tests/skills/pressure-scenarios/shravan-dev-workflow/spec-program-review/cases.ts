@@ -397,7 +397,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "finds-the-two-defective-cells",
         requirement: "Walks the trace table cell by cell and raises findings anchored to both defective shape-and-home cells: R2's cell reading 'see interfaces' (a cross-reference is not a shape and home) and R4's blank cell (empty, not marked gap), naming the requirement each serves and what a planner would have to guess. It does not report the marked 'gap: seam undecided' proof cells for R4 and R5, or R5's 'none: stateless guard' state cell, as defects.",
-        failureExample: "Passes traceability because the table has the right columns and one row per requirement, misses the blank R4 cell, accepts 'see interfaces', or reports the honestly marked gap or none cells as defects.",
+        failureExample: "Passes traceability because the table has the right columns and one row per obligation, misses the blank R4 cell, accepts 'see interfaces', or reports the honestly marked gap or none cells as defects.",
       },
       {
         name: "routes-smallest-correction-to-program-design",
