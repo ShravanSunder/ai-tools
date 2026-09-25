@@ -107,6 +107,10 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 
 `observability/` owns the shared local OpenTelemetry and Victoria stack. `shravan-dev-workflow:ops-observability-stack` owns agent-facing query and debugging guidance. Do not move this stack into `devfiles`, and do not duplicate Docker Compose, collector, or generic Victoria query docs into app repos.
 
+### Skill layers
+
+Skills are layered by the role they play: orchestrators run a whole job; phases are its steps; practices (`practices-collaboration` < `practices-show-me-your-work` < `manage-agents` < `research-workflow`, which becomes `practices-research` in the next release) are always on, with `ops-*` and `presentation-*` at the same level; tool manuals such as `agent-collaboration` cover only how to call a tool. A skill names skills in its own layer (acyclic) or below, never above; an edge is a load, a route, or a commission. A shared reference takes the layer of its lowest caller, may declare consumers and carry data values, and routes only through return tokens. Devfiles is the session root outside the layers. The governing spec is `docs/wip/skills-authoring/2026-09-25-capability-revamp/proposal.md`.
+
 ### Current Plugin Skills
 
 | Skill | Location | Purpose |
@@ -117,7 +121,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | discuss-clarify-mental-models | `plugins/shravan-dev-workflow/skills/discuss-clarify-mental-models/` | Read-only reconvergence for unstable shared mental models before specs, plans, docs, or code: terms, boundaries, assumptions, source-of-truth questions, tradeoffs, branches, and countercase |
 | discuss-pathfinding | `plugins/shravan-dev-workflow/skills/discuss-pathfinding/` | Extract unwritten understanding from the user — requirements, tacit process knowledge, domain terms, design decisions — via batched grilling with attached reads, live challenge, and decision/glossary records as they crystallize |
 | research-workflow | `plugins/shravan-dev-workflow/skills/research-workflow/` | Evidence-gathering workflow for local code/docs, prior art, current web/docs, Reader, memory, and session-log research with ordered source classes and tmp research ledgers |
-| manage-agents | `plugins/shravan-dev-workflow/skills/manage-agents/` | Choose and manage advisors, sidekicks, workers, operators, subagents, and their allowed swarms across Frontier/Daily driver/Workhorse models, native runtimes, ACPX usage, and ACP adapter boundaries |
+| manage-agents | `plugins/shravan-dev-workflow/skills/manage-agents/` | Practice: authority, roles and titles, selection by table (`references/model-catalog.md`), runtime (native, Router, legacy ACPX), handoff, and verification for advisors, sidekicks, workers, operators, and subagents |
 | orchestrator-implementation-goal | `plugins/shravan-dev-workflow/skills/orchestrator-implementation-goal/` | Coordinate main-authored planning, planned-PR implementation/proof, main assessment, independent review, corrections, and the requested delivery boundary |
 | practices-collaboration | `plugins/shravan-dev-workflow/skills/practices-collaboration/` | Practice: find the repository's board project and work thread at entry (ask once and return `no-home` when none), seats by role, message vs post, waiting on another agent, and deliberate resolution |
 | practices-show-me-your-work | `plugins/shravan-dev-workflow/skills/practices-show-me-your-work/` | Practice: open or resume the work trace at the start of a qualifying task, record decisions, evidence, and outcomes, checkpoint at every stop; unshared `docs/wip/work-trails/` folder until a board exists, then Main transfers it |
@@ -141,7 +145,7 @@ Design-view ownership follows the same split: `shared-references/diagram-renderi
 | ops-linear-tracking | `plugins/shravan-dev-workflow/skills/ops-linear-tracking/` | Linear projects, milestones, issues, and dependencies using docs as truth and tickets as tracking |
 | peekaboo | `plugins/dev-workflow-tools/skills/peekaboo/` | macOS visual UI testing (common — works in both Claude and Codex) |
 | scaffold-project | `plugins/ai-scaffold/skills/scaffold-project/` | Project scaffolding (common) |
-| agent-collaboration | `plugins/agent-router/skills/agent-collaboration/` | Router boards, session messaging, wakes, and schedules (Codex, Claude Code, and Cursor via `agent-router`) |
+| agent-collaboration | `plugins/agent-router/skills/agent-collaboration/` | Tool manual for the agent-collaboration CLI and Router MCP: identity, sessions, boards, messages, listen/wait, wakes, schedules, uncertain-mutation recovery (Codex, Claude Code, and Cursor via `agent-router`) |
 
 Retired skill source is preserved under `plugins/shravan-dev-workflow/retired-skills/` and is not runtime-discoverable. The old `orchestrator-goal`, `plan-creation-swarm`, `plan-review-swarm`, `implementation-execute-plan`, and `implementation-review-swarm` trees remain there as provenance and never become runtime entrypoints. The active `orchestrator-implementation-goal`, `plan-implementation`, `implement-plan`, and `implementation-review` are new minimal implementations, not aliases or revivals of the retired goal controller, planning swarm, execution controller, or review swarm. The current runtime surface is exactly the active skills enumerated above.
 

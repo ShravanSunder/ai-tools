@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-25 Capability revamp: practices and the tool manual](2026-09-25-capability-revamp-practices.md)
 - [2026-09-23 Luna Workhorse routing](2026-09-23-luna-workhorse.md)
 - [2026-09-23 Review and research workflows](2026-09-23-review-research-workflows.md)
 - [2026-09-23 Model routing retier](2026-09-23-model-routing-retier.md)

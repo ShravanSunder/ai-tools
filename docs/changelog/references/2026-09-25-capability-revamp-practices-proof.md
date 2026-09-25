@@ -1,0 +1,21 @@
+# Capability revamp PR 1: proof notes
+
+## Harness
+
+- Cause: ACPX `--approve-reads` auto-approves only `read` and `search` permission kinds; the pinned `codex-acp@1.6.2` adapter can request `execute` for a shell command that only reads a file, and `--non-interactive-permissions fail` aborted the turn. The runner now passes `deny`: unknown kinds are denied, never approved; the read-only sandbox is unchanged.
+- Live: `track-show-me-your-work-historical-view` passed all five evaluators on the patched runner (2026-09-25 19:19Z) with three recorded `read` tool events (skill, reference, fixture). The deny path itself was not exercised in that run.
+
+## Behavior evals
+
+- 2026-09-25 19:29Z: seven scenarios (`agent-collaboration-tool-manual-vs-practice-routing` and six `practices-collaboration-*`) failed in the subject turn with `usageLimitExceeded` ("Your workspace is out of credits"). This is an environment gap, not a scenario result. Not retried.
+- The renamed `practices-show-me-your-work-*` scenarios, the four new trace scenarios, and the `manage-agents` scenarios were not run for the same reason. Claim level for runs 1-4: drafted from user intent; behavior not yet evaluated.
+
+## Effort key
+
+- `acpx --agent "npx -y @agentclientprotocol/codex-acp@1.6.2" ... set -s <scratch> reasoning_effort high` returned `config set: reasoning_effort=high (5 options)`. `set ... effort high` and `set ... reasoning_effort bogus` were rejected with ACP `-32602` (Invalid params).
+
+## Static
+
+- Layering: `agent-collaboration` names no workflow skill; `practices-collaboration` names only `agent-collaboration`; `practices-show-me-your-work` names `practices-collaboration` and `agent-collaboration`; `manage-agents` names both practices and `agent-collaboration`. No upward or cyclic edge among the PR 1 skills.
+- Renamed-name search (hidden directories included, excluding `docs/` history and `tmp/`) returns no active `track-show-me-your-work` occurrence.
+- `diff -r` of the vendored `agent-collaboration` against pin `0fb247c` differs in `SKILL.md`, `references/message-board.md`, `references/mcp-usage.md`, and the ai-tools-local `agents/` folder, as expected until the upstream change merges and the copy is re-pinned.

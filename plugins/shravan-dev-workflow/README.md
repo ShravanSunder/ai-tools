@@ -33,6 +33,8 @@ discuss-*            shared understanding          discuss-clarify-mental-models
                                                   discuss-pathfinding
 research-*           evidence gathering            research-workflow
 manage-*             subordinate agents            manage-agents
+practices-*          always-on practices           practices-collaboration
+                                                  practices-show-me-your-work
 orchestrator-*       bounded workflow routing      orchestrator-implementation-goal
                                                   orchestrator-design
 spec-*               design/spec boundary          spec-design
