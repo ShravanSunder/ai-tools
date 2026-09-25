@@ -5,6 +5,8 @@ description: Use when pushing, opening, updating, monitoring, or finishing a Git
 
 # Implementation PR Wrap-up
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Close the PR loop with current GitHub state and a reviewer-facing why-and-shape body. Green checks are one gate, not merge readiness. Independent-review coverage is not a wrap-up ready gate. Description authoring is Workhorse 🛠️ Worker Exact-steps work; parent gates stay mechanical. The body is HEAD-tied: a head or diff identity change re-enters description dispatch before ready.
 
 This is a low-thinking workflow by default: use repeatable state checks, reference files, API reads, and crisp gate decisions. Escalate reasoning only when PR state, review feedback, mergeability, security/public-artifact safety, or user authorization is ambiguous. Do not write the PR body in the parent — not at `gh pr create`, and not because a Workhorse 🔧 Operator can "jot the outline."
@@ -95,3 +97,5 @@ Missing independent-review coverage is not a wrap-up stop. Wrap-up does not clai
 - "The previous terminal output was enough."
 - "Pushed code will close the thread."
 - "Ready to merge means allowed to merge."
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
