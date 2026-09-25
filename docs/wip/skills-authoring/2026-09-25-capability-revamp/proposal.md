@@ -181,14 +181,14 @@ Prerequisite (not a skill run): **eval harness repair** in `tests/skills/lib/ski
 
 Integration companions (not separate runs; each lands in the same PR as the run that owns it):
 
-- `shared-references/phase-return-tokens.md` (new): lands with run 6, the first phase run in PR C; consumed by every phase run and runs 23-24. Proof: static layering check plus run 10's (`spec-program-review`) representative scenario.
+- `shared-references/phase-return-tokens.md` (new): lands with run 6, the first phase run in PR 2; consumed by every phase run and runs 23-24. Proof: static layering check plus run 10's (`spec-program-review`) representative scenario.
 - `shared-references/requirements-specification-program-design.md`: routing at lines 21, 76, 82 becomes tokens; lands with run 8 (`spec-design`). Proof: static layering check.
 - `shared-references/canonical-implementation-plan.md`: line 51's orchestrator terminal default moves to run 24; the `originating planner` field stays. Lands with run 11 (`plan-implementation`). Proof: static layering check.
 - Consumer-declaring references (`humanizer.md`, `diagram-semantics.md`, `mermaid-usage.md`, `markdown-presentation-baseline.md`, `diagram-rendering-and-fallbacks.md`, `generated-document-visuals.md`) are unchanged under the DAG rule.
 
 Companions:
 
-- devfiles `shared/my_agents.md`: Behaviors, short Concepts, Practices block, skill index with token rows, host note; emoji-once rule; remove the long board section it replaces. Private PRs paired with plugin releases: **devfiles-A** swaps `track-show-me-your-work` (today at `my_agents.md:127,293,315`) and adds the Practices block, merged and applied together with PR A's plugin install; **devfiles-C** swaps any research name and adds the skill index with token rows, applied with PR C's install. Proof: manual exercise in a fresh Cursor session and a fresh Codex session with a qualifying prompt, a routine-edit prompt, and a no-listed-skills host; transcripts inspected.
+- devfiles `shared/my_agents.md`: Behaviors, short Concepts, Practices block, skill index with token rows, host note; emoji-once rule; remove the long board section it replaces. One private PR paired with ai-tools PR 1: swaps `track-show-me-your-work` (today at `my_agents.md:127,293,315`), adds the Practices block and the skill index with token rows, merged and applied together with PR 1's plugin install. Proof: manual exercise in a fresh Cursor session and a fresh Codex session with a qualifying prompt, a routine-edit prompt, and a no-listed-skills host; transcripts inspected.
 - Repo docs: `AGENTS.md` skill table and layer description, plugin `README.md` namespace map, changelog, versions.
 - Cursor skill discovery: investigate why cached plugin skills were not auto-listed; fix, or keep the host note as the recorded workaround.
 
@@ -213,12 +213,10 @@ Plugin manifests and versions follow `skills-creation/references/platform-mechan
 
 ## Coordination
 
-- ai-tools branch base: `main` at `2023f3f1`. Stacked PRs, each validating on its own head:
-  - **P0** harness prerequisite.
-  - **A** runs 1-3 with every tracker consumer (after codex-router's run 1 PR merges; re-vendor at its SHA); paired with devfiles-A.
-  - **B** run 4.
-  - **C** run 5 with every research consumer, runs 6-24, and the integration companions; paired with devfiles-C.
-- Separate worktrees per independent PR; dependent layers use `gh stack`.
+- ai-tools branch base: `main` at `2023f3f1`. Two stacked PRs at most (owner, 2026-09-25), each validating on its own head:
+  - **PR 1** (`feat/capability-revamp`): this spec, the harness prerequisite, and runs 1-4 with every tracker consumer (re-vendor after codex-router's run 1 PR merges, at its SHA); paired with the single devfiles PR.
+  - **PR 2** (stacked on PR 1): run 5 with every research consumer, runs 6-24, and the integration companions. devfiles names no research skill today, so PR 2 needs no devfiles pairing; the devfiles skill index carries the token rows from PR 1 onward.
+- One worktree per PR.
 - Installation pairing: a plugin release and its paired devfiles PR are applied in the same step (plugin reinstall, then targeted `chezmoi apply` of `shared/my_agents.md`), and no new agent session starts until both are done; no shim keeps old names alive.
 - Versions: next minor of `shravan-dev-workflow` per PR; `agent-router` minor for the re-vendor. Changelog entry per PR.
 
