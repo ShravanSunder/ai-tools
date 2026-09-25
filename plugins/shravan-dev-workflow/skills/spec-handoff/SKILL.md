@@ -5,6 +5,8 @@ description: Use when packaging spec, design, architecture, or product-decision 
 
 # Spec Handoff
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Package spec/design context so another agent can continue without reconstructing the conversation. This is a portability boundary, not a completion boundary: handoff means the context is transferable, not that the spec is approved or the next phase is complete.
 
 ## Core Rules
@@ -66,3 +68,5 @@ Package spec/design context so another agent can continue without reconstructing
 - Asking the next agent to infer source files from chat history.
 - Packaging branch/diff/test state that belongs in `implementation-handoff`.
 - Inferring design-author authority from portability, a role label, or an implementation/review assignment.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

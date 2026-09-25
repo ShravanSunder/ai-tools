@@ -5,6 +5,8 @@ description: Use when classifying whether a specification-only or program-only c
 
 # Specification and Program Design Review
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Review is independent reconstruction of the smallest system that satisfies the confirmed goal. It is not proofreading, design by committee, or a search for mechanisms to complete.
 
 The reviewer rebuilds and challenges:
@@ -253,3 +255,5 @@ Do not return `ready` while any of these hold:
 - a pathfinding recommendation omits the review-selected return owner, or complete current authority/evidence already settles the correction;
 - a continuation copies artifact contents or unrelated history instead of returning the destination's compact pointer-based handoff;
 - the result implies edit, remediation, lifecycle, planning, or acceptance authority.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

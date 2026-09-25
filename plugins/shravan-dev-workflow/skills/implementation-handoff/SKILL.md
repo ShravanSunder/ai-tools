@@ -5,6 +5,8 @@ description: Use when packaging implementation state for another agent, reviewer
 
 # Implementation Handoff
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Package actual implementation state so another agent can review, continue, or audit the work without relying on chat history. This is an evidence packet, not a status update: preserve facts, claims, risks, validation, and the exact next decision. The packet's spine is its implementation proof section; a handoff without proof forces the reviewer to reconstruct it.
 
 ## Core Rules
@@ -72,3 +74,5 @@ Package actual implementation state so another agent can review, continue, or au
 - Asking the next agent to infer current state from branch name alone.
 - Omitting changed trust boundaries or unvalidated security risks from a handoff.
 - Omitting implementation proof and forcing the reviewer to reconstruct proof from chat or branch state.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

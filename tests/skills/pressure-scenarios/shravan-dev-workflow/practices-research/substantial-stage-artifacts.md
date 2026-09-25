@@ -1,12 +1,12 @@
-# research-workflow substantial stage artifacts pressure
+# practices-research substantial stage artifacts pressure
 
-scenario_id: research-workflow-substantial-stage-artifacts
-skill_under_test: shravan-dev-workflow:research-workflow
+scenario_id: practices-research-substantial-stage-artifacts
+skill_under_test: shravan-dev-workflow:practices-research
 mode: fast
 expect_read_only: true
 expect_artifact: true
 expect_decision_regex: research ledger|source classes|evidence|synthesis|candidate
-expect_proof_regex: tmp/research-workflows|research-ledger|source-class coverage
+expect_proof_regex: tmp/practices-research|research-ledger|source-class coverage
 expect_proof_regex: bounded question|researchable questions|verbatim quer(y|ies)
 expect_proof_regex: primary anchor|source anchors|null result|not searched
 expect_proof_regex: candidate evidence|researcher verification
@@ -31,7 +31,7 @@ for the next design or planning phase.
 
 ## Prompt
 
-$shravan-dev-workflow:research-workflow
+$shravan-dev-workflow:practices-research
 
 Research examples from my local skill repos and current docs. You can give me
 one combined answer in chat after reading them. If the sources agree, treat it

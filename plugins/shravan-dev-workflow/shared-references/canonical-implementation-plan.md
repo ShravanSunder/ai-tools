@@ -6,7 +6,7 @@ This reference owns the one active implementation-plan contract shared by plan p
 
 Before producing or validating a completed plan, inspect governing authority, current branch/HEAD, repository instructions, owners, paths, interfaces, tests, commands, proof obligations, security boundaries, and any existing completed plan.
 
-`plan-implementation` admits current reviewed three-artifact design and, for an orchestrated repository-improvement goal or owner-requested delivery of a direct improvement result, the complete current admitted-finding return from `plan-improve-repo`. Direct `plan-improve-repo` use separately admits its current design-ready or implementation-mechanics-only basis and defaults to `plan-only`.
+The `originating planner` values name the two planners: `plan-implementation`, the design planner, and `plan-improve-repo`, the improvement planner. The design planner admits current reviewed three-artifact design and, for an orchestrated repository-improvement goal or owner-requested delivery of a direct improvement result, the complete current admitted-finding return from the improvement planner. Direct use of the improvement planner separately admits its current design-ready or implementation-mechanics-only basis and defaults to `plan-only`.
 
 ## Canonical Result
 
@@ -48,7 +48,7 @@ result payload:
 
 ## Delivery Intent and Grouping
 
-`orchestrator-implementation-goal` defaults the requested terminal to `pr-ready-unmerged` unless the user supplied a narrower terminal. Direct planning uses an explicit terminal or asks once at entry when ambiguous. `plan-improve-repo` defaults direct use to `plan-only`.
+The caller supplies the requested terminal. Direct planning uses an explicit terminal or asks once at entry when ambiguous. The improvement planner defaults direct use to `plan-only`.
 
 Planning chooses technical strategy and the one coherent vertical grouping when only one exists. When materially different grouping or PR-topology options exist, it presents concrete choices, a recommendation, and tradeoffs, then waits for the owner selection before returning `ready`. One indivisible deliverable defaults to one PR. Do not ask about ordinary file, sequence, code, or proof mechanics.
 
@@ -56,7 +56,7 @@ Optional tracking remains outside this record. At planning entry, preserve an ex
 
 ## Plan Home
 
-For every `pr-ready-unmerged` plan, including orchestrated goals and direct continued-delivery planning, `plan-implementation` first resolves the project root, then verifies that the resolved project's ignore policy covers `tmp/*` equivalently, adds `tmp/*` to that project-root `.gitignore` only when coverage is absent, and finally writes exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
+For every `pr-ready-unmerged` plan, including orchestrated goals and direct continued-delivery planning, the design planner first resolves the project root, then verifies that the resolved project's ignore policy covers `tmp/*` equivalently, adds `tmp/*` to that project-root `.gitignore` only when coverage is absent, and finally writes exactly one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>.md` plan. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
 
 Direct plan-only work may use an established repository plan home. Otherwise use `docs/specs/<spec>/plans/` for durable direct planning or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work.
 

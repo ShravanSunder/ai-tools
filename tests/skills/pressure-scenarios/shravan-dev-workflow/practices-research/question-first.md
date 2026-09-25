@@ -1,11 +1,11 @@
-# research-workflow question first
+# practices-research question first
 
-scenario_id: research-workflow-question-first
-skill_under_test: shravan-dev-workflow:research-workflow
+scenario_id: practices-research-question-first
+skill_under_test: shravan-dev-workflow:practices-research
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: research question|evidence ledger|local re-anchor|tmp/research-workflows
+expect_decision_regex: research question|evidence ledger|local re-anchor|tmp/practices-research
 expect_proof_regex: local re-anchor|re-anchor locally|re-anchor on local|re-anchor in the local repo|local repo lane|local repo/docs re-anchor|local code/docs|local .*docs/code
 expect_proof_regex: evidence ledger
 expect_proof_regex: direct observation|inference|unresolved
@@ -25,7 +25,7 @@ anchoring on the local system, or defining the evidence ledger.
 
 ## Prompt
 
-$shravan-dev-workflow:research-workflow
+$shravan-dev-workflow:practices-research
 
 Research what we should learn from cmux, Ghostex, orca, t3code, DeepWiki,
 current docs, Reader highlights, and my old sessions for a local control
@@ -41,7 +41,7 @@ gateway. Do not implement anything yet.
 - Agent names claim classes such as direct observation, inference, and
   unresolved, or states that those are the evidence ledger columns for the full
   run.
-- Agent says substantial runs write to `tmp/research-workflows/...` unless
+- Agent says substantial runs write to `tmp/practices-research/...` unless
   chat-only/no-files is requested.
 
 ## Failure Signals

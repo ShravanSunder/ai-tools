@@ -1,0 +1,4 @@
+interface:
+  display_name: "Practices: Research"
+  short_description: "Gather evidence by walking source classes in order"
+  default_prompt: "Use practices-research to turn this into sharp research questions, gather source-grounded evidence, and write a tmp research ledger."

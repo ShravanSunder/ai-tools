@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Use this structure for substantial research artifacts under `tmp/research-workflows/<date>-<slug>/research-ledger.md`. Its immediate consumer is the researcher synthesizing this run; its downstream consumer is the recommended next workflow or continuation agent named at the bottom.
+Use this structure for substantial research artifacts under `tmp/practices-research/<date>-<slug>/research-ledger.md`. Its immediate consumer is the researcher synthesizing this run; its downstream consumer is the recommended next workflow or continuation agent named at the bottom.
 
 ```text
 Research Ledger
@@ -48,8 +48,8 @@ Synthesis:
 - complicated:
 - unresolved:
 
-Recommended Next Workflow:
-<discuss-clarify-mental-models | spec-design | program-design | spec-program-review | plan-implementation | implement-plan | implementation-review for general-domain work | skills-creation for a runtime skill package | docs-maintain | blocked next phase>
+Return Token:
+<requirements-gap | specification-gap | program-design-gap | ready-for-planning | ready-for-implementation | ready-for-review (general-domain | runtime-skill-package) | none: evidence complete, the caller decides | blocked: gap>
 ```
 
 Keep raw source notes in the same tmp folder when another reader needs them to inspect a claim.

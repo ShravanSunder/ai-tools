@@ -428,4 +428,16 @@ export const skillPressureCaseDefinitions = [
       { name: "rejects-mock-call-as-behavior", requirement: "Treats toHaveBeenCalled as a finding when the claim is the returned Receipt, not the wiring.", failureExample: "Accepts the mock call as interaction proof of the Receipt." },
     ],
   },
+  {
+    scenarioId: "implementation-review-direct-entry-opens-trace",
+    requiredSourceReads: [
+      "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+      "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md",
+    ],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "trace-before-review", requirement: "With no work reference in context and a qualifying review, opens or resumes the trace through practices-show-me-your-work as the first step, before reading the diff or other review work.", failureExample: "Reads the diff first and defers or skips the trace." },
+      { name: "honest-rehearsal", requirement: "Claims no executed trace write, board operation, or review verdict in this read-only rehearsal.", failureExample: "Claims a trace was opened or a verdict reached." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

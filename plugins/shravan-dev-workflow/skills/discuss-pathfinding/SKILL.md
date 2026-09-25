@@ -5,6 +5,8 @@ description: Use when user or stakeholder requirements, user needs, behavioral p
 
 # Discuss Pathfinding
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 The knowledge exists — in the user's head, unwritten — and the session is the instrument that gets it out before it shapes work. The job is extraction. The question sequence cannot be planned in advance because each answer opens the next branch.
 
 Asking is expensive: a turn spent on an observable fact is stolen from a judgment call only the user can make. Ask one to three related questions together when they share context and clarify one decision. Ask a determining question first when its answer decides whether another question applies. Separate unrelated questions. Raw understanding remains provisional until it has been checked and challenged.
@@ -78,7 +80,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 2. **Classify before asking.** Sort each unknown in working state:
 
    - **Observable now:** inspect the bounded file, document, log, behavior, or available session history.
-   - **Broad evidence:** use `research-workflow` when prior art or multiple sources are required, and consume its evidence before asking the related question.
+   - **Broad evidence:** use `practices-research` when prior art or multiple sources are required, and consume its evidence before asking the related question.
    - **Judgment or tacit knowledge:** ask the user because only they can answer.
 
    Mark each important claim separately as **observed**, **authorized**, **provisional**, or **unresolved**. A user's description of inspectable behavior is useful context, but remains provisional until checked.
@@ -149,7 +151,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
 ## Routes
 
-- `research-workflow` — the broad-evidence bin in step 2 owns this call; never single facts a bounded read answers.
+- `practices-research` — the broad-evidence bin in step 2 owns this call; never single facts a bounded read answers.
 - `discuss-clarify-mental-models` — IF mid-session the two of you disagree about a model you both already hold, use it to repair the drift and return the rebuilt shared model before extraction continues.
 - `presentation-tui` / `presentation-webui` — IF a material ambiguity is easier to understand as relationships, branches, or sequence, use the `presentation-*` skill matching the current surface for the conversational map; honor an exact user-requested format instead. It does not select or own durable specification views.
 - `spec-design` — a confirmed goal boundary from a user-requirements destination or proposed-change handoff routes here; otherwise return the exact owner decision rather than claiming readiness.
@@ -183,3 +185,5 @@ The session is not done while any of these hold:
 - an orchestrated confirmed return lacks its compact record identity, confirmed meaning, boundary status, exact destination, or destination reason, or turns an illustrative mechanism into normative meaning;
 - an orchestrated `decision-needed` result presents the frozen return destination as a current route or next action;
 - confirmed meaning that does not fit the recorded destination was routed to another phase instead of returned as an exact mismatch.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

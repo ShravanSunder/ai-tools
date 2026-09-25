@@ -5,7 +5,9 @@ description: Use when auditing a repository for improvement opportunities, backl
 
 # Plan Improve Repo
 
-Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an `orchestrator-implementation-goal` delivery, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to author the one delivery plan. This skill does not edit product code.
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
+Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to author the one delivery plan. This skill does not edit product code.
 
 Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the single plan for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
 
@@ -170,3 +172,5 @@ Return:
 - Marking a plan ready when it has stale paths, missing commands, oversized tasks, or vague validation.
 - Treating stale plans as still valid without reconciling them against the current repo.
 - Mutating the canonical planning result, governing basis, or delivery context during current-state validation.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

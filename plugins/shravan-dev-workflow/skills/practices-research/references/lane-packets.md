@@ -15,4 +15,4 @@ The researcher walks selected classes one at a time. Each class returns opened a
 
 For local re-anchor, read current implementation and its controlling artifacts before external comparison. For prior art, compare one target or axis at a time and return what fits or conflicts with the local system. For memory, treat older summaries as discovery until live evidence confirms drift-prone facts. For artifact consistency, read current specs, plans, runbooks, changelogs, and findings together; read newest-first runbooks in their established order.
 
-Substantial research writes one ledger under `tmp/research-workflows/<date>-<slug>/`. A chat-only, no-file, tiny single local read, or unavailable write surface names its exception. The ledger belongs to this researcher; source classes do not create separate packet or result files by default.
+Substantial research writes one ledger under `tmp/practices-research/<date>-<slug>/`. A chat-only, no-file, tiny single local read, or unavailable write surface names its exception. The ledger belongs to this researcher; source classes do not create separate packet or result files by default.

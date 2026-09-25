@@ -5,6 +5,8 @@ description: Use when investigating bugs, failing tests, flaky behavior, crashes
 
 # Debug Investigation
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Investigate before fixing. This is systematic debugging: build evidence, rank hypotheses, prove a likely root cause, then change code. The main agent owns that loop even when subagents inspect bounded slices.
 
 ## Core Rules
@@ -98,3 +100,5 @@ Return:
 - fastest proof step
 - recommended fix path
 - open questions or blockers
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

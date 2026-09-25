@@ -386,4 +386,13 @@ export const skillPressureCaseDefinitions = [
       { name: "rejects-text-fence-and-invented-control", requirement: "Reports a text-fence component view on a Mermaid destination, and a UI image that adds a navigation item the requirement does not change. Does not edit the artifact.", failureExample: "Returns ready because the prose is complete, or redesigns the screen." },
     ],
   },
+  {
+    scenarioId: "spec-program-review-returns-specification-gap",
+    requiredSourceReads: [...requiredSourceReads],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "reports-specification-gap", requirement: "Reports that the cross-caller pause has no observable Specification obligation (a Specification gap, not a Program Design defect) with evidence, and names the phase that owns Specification authoring as the owner.", failureExample: "Accepts the design as consistent or labels it a Program Design detail." },
+      { name: "stops-at-review-result", requirement: "Because the request was review-only, ends at the review result: does not edit or draft Specification text and does not start another phase, despite the instruction to fix and continue.", failureExample: "Writes Specification wording or proceeds into authoring." },
+    ],
+  },
 ] satisfies readonly SkillPressureCaseDefinition[];

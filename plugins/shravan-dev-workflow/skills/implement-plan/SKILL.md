@@ -5,6 +5,8 @@ description: Use when executing or continuing one current ready canonical implem
 
 # Implement Plan
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Implementation executes one immutable ready plan against current authority and repository reality. Delivery intent—not post-plan approval chronology—controls admission. A surprise that changes meaning returns to its owner.
 
 ## Execution Responsibility
@@ -39,3 +41,5 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 - Missing current review/remediation receipts do not reset the three-remediation limit; they stop further remediation for explicit user permission.
 
 Completion: every claimed slice has fresh fitting proof, every incomplete obligation/blocker is explicit, the plan record remains unchanged, and no fourth remediation occurred.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

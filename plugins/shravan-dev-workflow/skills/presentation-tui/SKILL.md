@@ -1,7 +1,7 @@
 ---
 name: presentation-tui
 description: >-
-  Use when composing a substantial architecture, comparison, tradeoff, flow, mockup, state-machine, or multi-section response on a monospace terminal or CLI host (Codex CLI, Claude Code CLI, Cursor CLI, or any session whose output is a raw monospace stream), or when host identity cannot be determined. Especially "draw this out", "show me", "compare these", "explain the architecture". Not for rendered proportional-font chat (presentation-webui); not for authoring durable Requirements, Specification, or Program Design (spec-design, program-design). Skip for user-requested exact formats, schema-bound output, code-only replies, or terse answers.
+  Use when composing a substantial architecture, comparison, tradeoff, flow, mockup, state-machine, or multi-section response on a monospace terminal or CLI host (Codex CLI, Claude Code CLI, Cursor CLI, or any session whose output is a raw monospace stream), or when host identity cannot be determined. Especially "draw this out", "show me", "compare these", "explain the architecture". Not for rendered proportional-font chat (presentation-webui); not for authoring durable Requirements, Specification, or Program Design. Skip for user-requested exact formats, schema-bound output, code-only replies, or terse answers.
 ---
 
 # Presentation: TUI

@@ -5,6 +5,8 @@ description: Use when maintaining project docs from settled code or decisions, i
 
 # Docs Maintain
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Maintain docs as durable working memory for humans and agents. This skill owns document lifecycle: keeping repo docs, `AGENTS.md`, `README.md`, changelogs, runbooks, architecture docs, and existing workflow artifacts aligned with current code and decisions.
 
 Core pipeline:
@@ -96,3 +98,5 @@ Return:
 - links/references updated
 - full clickable artifact links (absolute path + line) for docs or artifacts the human is expected to open
 - validation performed
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
