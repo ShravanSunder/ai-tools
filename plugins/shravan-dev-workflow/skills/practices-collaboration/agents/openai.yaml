@@ -1,0 +1,4 @@
+interface:
+  display_name: "Practices: Collaboration"
+  short_description: "Find the work home; coordinate agents on boards and messages."
+  default_prompt: "Use practices-collaboration to find this repository's work thread and coordinate with other agents."
