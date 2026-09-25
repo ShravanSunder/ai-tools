@@ -11,13 +11,13 @@
       "name": "scaffold-project",
       "source": "./plugins/ai-scaffold",
       "description": "Project scaffolding with standard dev configs (biome, ruff, vitest, pytest, cursor rules, claude hooks)",
-      "version": "0.2.1"
+      "version": "0.2.2"
     },
     {
       "name": "dev-workflow-tools",
       "source": "./plugins/dev-workflow-tools",
       "description": "Common development tool skills, including progressive native macOS UI automation with Peekaboo CLI",
-      "version": "0.1.0"
+      "version": "0.1.1"
     },
     {
       "name": "shravan-dev-workflow",
