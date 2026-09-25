@@ -1,6 +1,6 @@
 # ACPX Provider: Codex
 
-Agent token: `codex`. Use this provider when the host is not Codex native or when the relationship requires a separate persistent Codex conversation, including from a Codex parent. Prefer native Codex subagents for native-eligible bounded assignments; see `references/native-providers-codex.md`.
+Agent token: `codex`. Legacy route: agent-router carries persistent Codex relationships over ACP by default. Use this contract only when `acpx-legacy.md` admits ACPX because agent-router cannot meet a stated requirement, and record that gap in the ledger. Prefer native Codex subagents for native-eligible bounded assignments; see `references/native-providers-codex.md`.
 
 ## Models
 

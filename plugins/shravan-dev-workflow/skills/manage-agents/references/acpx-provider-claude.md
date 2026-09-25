@@ -1,5 +1,7 @@
 # ACPX Provider: Claude
 
+Legacy route. agent-router carries persistent Claude relationships over ACP by default. Use this contract only when `acpx-legacy.md` admits ACPX: the selected agent-router service has no Claude endpoint, or cannot meet a stated model, effort, access, or title requirement. Record that gap in the ledger.
+
 ## Models
 
 | Model id             |

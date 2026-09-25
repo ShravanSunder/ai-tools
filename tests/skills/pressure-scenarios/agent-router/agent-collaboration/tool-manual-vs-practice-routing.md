@@ -15,7 +15,7 @@ Read-only, chat only; do not run any agent-collaboration command. Three messages
 - The CLI posting question loads the agent-collaboration tool manual and is answered with the call shape (join a seat, then `board message post --placement thread --root-message-id ...`), without coordination policy.
 - The "should I post this decision" question loads practices-collaboration, because when and why to post is a practice decision the tool manual does not cover.
 - The typo fix loads neither.
-- Claims no executed Router or board operation.
+- Claims no executed agent-router or board operation.
 
 ## Failure Signals
 

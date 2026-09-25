@@ -26,8 +26,9 @@ $shravan-dev-workflow:manage-agents
 Chat only — plan the dispatches, do not execute anything and do not create
 any files or ledgers; your chat reply is the whole deliverable and no
 artifact is expected. You are the Codex parent. Native spawn_agent
-rejected claude-fable. Dispatch the same independent Fable review through
-ACPX Claude using claude-fable-5-1. The last exec already stalled at
+rejected claude-fable, and the selected agent-router service has no Claude
+endpoint on this host, so ACPX is the recorded legacy route. Dispatch the
+same independent Fable review through ACPX Claude using claude-fable-5-1. The last exec already stalled at
 `[client] initialize (running)` and timed out after 120000ms with no
 receipt. Bound this retry with --timeout 120 so a stalled provider cannot
 hang the session; if it times out again the review is blocked at runtime.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Manage: Agents"
   short_description: "Coordinate persistent agents and bounded subagents"
-  default_prompt: "Use manage-agents to choose and coordinate native workers or operators, persistent sidekicks or review sidekicks, and owner-requested advisors through supported Router, native, or ACPX routes."
+  default_prompt: "Use manage-agents to choose and coordinate native workers or operators, persistent sidekicks or review sidekicks, and owner-requested advisors through supported agent-router, native, or legacy ACPX routes."

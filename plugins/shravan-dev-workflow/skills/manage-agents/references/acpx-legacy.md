@@ -1,6 +1,6 @@
 # ACPX Agent Calls (legacy route)
 
-ACPX is no longer a default route. Router owns persistent Codex relationships. Use ACPX only for a persistent 🐒 Sidekick, Advisor, or Review Sidekick relationship that needs a Claude or Cursor lineage, or whose model, effort, or title requirement Router cannot meet yet. Return the provider, exact model id, effort encoding, permission boundary, and retained session identity.
+ACPX is no longer a default route. agent-router carries persistent Codex and Claude relationships over ACP. Use ACPX only for a persistent 🐒 Sidekick, Advisor, or Review Sidekick relationship whose provider agent-router does not yet cover (Cursor today), or whose stated model, effort, access, or title requirement agent-router cannot meet; record that gap in the relationship ledger. Return the provider, exact model id, effort encoding, permission boundary, and retained session identity.
 
 ## Dispatch
 
@@ -17,7 +17,7 @@ Use the first available launcher and keep it stable for persistent relationships
 acpx -> pnpm dlx acpx -> npx --yes acpx
 ```
 
-Before every call, select the provider that owns the chosen model lineage and load its contract:
+Before every call, select the provider that owns the chosen model lineage and load its contract. Cursor is the provider agent-router does not yet cover; the `codex` and `claude` contracts apply only after the recorded agent-router gap admitted ACPX.
 
 - OpenAI lineage: call the `codex` provider and load `acpx-provider-codex.md`.
 - Claude lineage: call the `claude` provider and load `acpx-provider-claude.md`.

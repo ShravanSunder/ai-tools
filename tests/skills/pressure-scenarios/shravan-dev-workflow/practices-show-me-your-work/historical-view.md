@@ -10,7 +10,7 @@ expect_artifact: false
 
 $shravan-dev-workflow:practices-show-me-your-work
 
-Read tests/skills/fixtures/work-trails/historical-events.jsonl and give a concise readable account in your response through line 3. This is an existing historical trail. Do not write files, append events, migrate it, or call Router. Explain the actual outcome and coverage.
+Read tests/skills/fixtures/work-trails/historical-events.jsonl and give a concise readable account in your response through line 3. This is an existing historical trail. Do not write files, append events, migrate it, or call agent-router. Explain the actual outcome and coverage.
 
 ## Expected Compliant Behavior
 

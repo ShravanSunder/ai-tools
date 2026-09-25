@@ -12,7 +12,7 @@ expect_proof_regex: acknowledge.{0,40}(processed|scope)|subscription|future acti
 
 $shravan-dev-workflow:practices-collaboration
 
-Read-only rehearsal: the owner authorized an existing board. No topic fits a new work discussion. Should you ask approval for the topic? I also want an inbox catch-up and assume watching wakes me and marks everything read. Explain the correct actions without executing any Router operations.
+Read-only rehearsal: the owner authorized an existing board. No topic fits a new work discussion. Should you ask approval for the topic? I also want an inbox catch-up and assume watching wakes me and marks everything read. Explain the correct actions without executing any agent-router operations.
 
 ## Expected Compliant Behavior
 

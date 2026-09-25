@@ -17,7 +17,7 @@ return expected / receipt level / return binding: <session, assignment id, decis
 parent verification / next follow-up:
 ```
 
-In the existing route/runtime slots, label the transport and each ID: ACPX record, provider-native session, or full Router SessionRef. An ACPX name/record ID is not a Router address. A Router mapping is usable only after discovery verifies the same provider-native conversation. Keep runtime-local ids with their originating runtime. A ledger agent name does not prove a visible session title; record verified rename/display evidence in the existing resolved-launcher or runtime-id slot when the host supports it. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
+In the existing route/runtime slots, label the transport and each ID: ACPX record, provider-native session, or full agent-router SessionRef. An ACPX name/record ID is not an agent-router address. An agent-router mapping is usable only after discovery verifies the same provider-native conversation. Keep runtime-local ids with their originating runtime. A ledger agent name does not prove a visible session title; record verified rename/display evidence in the existing resolved-launcher or runtime-id slot when the host supports it. Transfer identity through a provider-native id only when the receiving runtime documents support for it.
 
 ## Create Or Resume
 

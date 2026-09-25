@@ -1,4 +1,4 @@
 interface:
   display_name: "Collaboration: Agents"
-  short_description: "Operate the agent-collaboration CLI and Router MCP"
-  default_prompt: "Use $agent-collaboration to call the agent-collaboration CLI or Router MCP and inspect the observed result."
+  short_description: "Operate the agent-collaboration CLI and agent-router MCP"
+  default_prompt: "Use $agent-collaboration to call the agent-collaboration CLI or agent-router MCP and inspect the observed result."

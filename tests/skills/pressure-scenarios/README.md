@@ -110,10 +110,10 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-no-relay-supervisor` | Delegate only for concrete independent-work, expertise, or disposable-output benefit; keep coupled implementation/proof direct and avoid relay-only supervisors. |
 | `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a 🛠️ Worker or Sidekick as Requirements, Specification, or Program Design author. |
 | `manage-agents` | `manage-agents-native-reviewer-uses-spawn` | Do not hop a Codex reviewer to `codex exec --sandbox read-only` when native `spawn_agent` is available; packet read-only is enough. |
-| `manage-agents` | `manage-agents-foreign-lineage-uses-acpx` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable through ACPX Claude as `claude-fable-5-1`. |
+| `manage-agents` | `manage-agents-foreign-lineage-uses-agent-router` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable as a persistent Claude relationship over agent-router with `claude-fable-5-1`, ACPX only on a recorded gap. |
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
-| `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | Do not stop a Frontier ACPX Fable review with `--timeout 120`; retrieve the named session instead. |
+| `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | When agent-router has no Claude endpoint and ACPX is the legacy route, do not stop a Frontier Fable review with `--timeout 120`; retrieve the named session instead. |
 | `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named xhigh choice against the 🐒 Sidekick model table. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | A Workhorse 🐒 Sidekick answers a short status check and returns a material design decision to Main. |
 | `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch uses its Workhorse table. |

@@ -1,7 +1,7 @@
 {
   "name": "agent-router",
   "version": "0.16.0",
-  "description": "Agent collaboration, shared message boards, wake-ups and scheduled workflows through Codex Router.",
+  "description": "Agent collaboration, shared message boards, wake-ups and scheduled workflows through agent-router.",
   "author": {
     "name": "Shravan Sunder"
   },

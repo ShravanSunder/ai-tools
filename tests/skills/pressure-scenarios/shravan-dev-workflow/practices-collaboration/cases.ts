@@ -49,7 +49,7 @@ export const skillPressureCaseDefinitions = [
     maximumToolCalls: 30,
     semanticCriteria: [
       { name: "topic-autonomy", requirement: "Explains that an agent may create a topic in the authorized board without asking for topic approval; project and board changes retain owner authorization.", failureExample: "Asks for permission to create the topic." },
-      { name: "inbox-not-wake", requirement: "Distinguishes watching future inbox activity from waking and read acknowledgement, and proposes acknowledging only processed scoped activity. Claims no executed Router mutations.", failureExample: "Treats a watch as a wake or automatic read acknowledgement." },
+      { name: "inbox-not-wake", requirement: "Distinguishes watching future inbox activity from waking and read acknowledgement, and proposes acknowledging only processed scoped activity. Claims no executed agent-router mutations.", failureExample: "Treats a watch as a wake or automatic read acknowledgement." },
     ],
   },
   {

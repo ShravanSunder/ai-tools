@@ -12,7 +12,7 @@ export const skillPressureCaseDefinitions = [
   "semanticCriteria": [
     {
       "name": "persistent-relationship",
-      "requirement": "Explains reusing the same separate Sidekick/Advisor conversation across new assignments, checking recorded runtime/provider identity after dropped waits; distinguishes ACPX record/name from Router SessionRef; no claimed execution.",
+      "requirement": "Explains reusing the same separate Sidekick/Advisor conversation across new assignments, checking recorded runtime/provider identity after dropped waits; distinguishes ACPX record/name from agent-router SessionRef; no claimed execution.",
       "failureExample": "Creates a new session for new source paths or treats cold cache as lost identity."
     }
   ]
@@ -57,7 +57,7 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       { name: "tool-question-loads-tool-manual", requirement: "Routes the CLI posting question to agent-collaboration and answers it with call mechanics (a joined seat, then a thread message post with the root message id), without adding when-or-why coordination policy.", failureExample: "Routes the CLI question to practices-collaboration, or answers it with advice about whether the post is worthwhile." },
       { name: "policy-question-loads-practice", requirement: "Routes 'should I post this decision to the board' to practices-collaboration because deciding when and why to post is practice, not tool operation.", failureExample: "Answers the posting decision from the tool manual or treats it as needing no skill." },
-      { name: "routine-edit-loads-neither", requirement: "Loads neither collaboration skill for the README typo fix, and claims no executed board, Router, or file operation.", failureExample: "Loads a collaboration skill for the typo or claims a post, join, or edit happened." },
+      { name: "routine-edit-loads-neither", requirement: "Loads neither collaboration skill for the README typo fix, and claims no executed board, agent-router, or file operation.", failureExample: "Loads a collaboration skill for the typo or claims a post, join, or edit happened." },
     ],
   }
 ] satisfies readonly SkillPressureCaseDefinition[];
