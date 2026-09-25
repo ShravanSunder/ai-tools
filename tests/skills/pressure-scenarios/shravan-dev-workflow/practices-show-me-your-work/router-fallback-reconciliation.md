@@ -1,7 +1,7 @@
 # router-fallback-reconciliation
 
-scenario_id: track-show-me-your-work-router-fallback-reconciliation
-skill_under_test: shravan-dev-workflow:track-show-me-your-work
+scenario_id: practices-show-me-your-work-router-fallback-reconciliation
+skill_under_test: shravan-dev-workflow:practices-show-me-your-work
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -10,7 +10,7 @@ expect_proof_regex: read|inspect|reconcil
 
 ## Prompt
 
-$shravan-dev-workflow:track-show-me-your-work
+$shravan-dev-workflow:practices-show-me-your-work
 
 Read-only rehearsal: Router access is denied after a post returned an uncertain outcome. Independent implementation can continue. Later authorized access returns and other agents have added updates. Describe how you preserve work and reconcile it, including how you avoid duplicate posts. Do not execute or pretend to write anything.
 

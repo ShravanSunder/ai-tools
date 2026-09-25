@@ -1,0 +1,4 @@
+interface:
+  display_name: "Practices: Show Me Your Work"
+  short_description: "Open the work trace; record decisions and evidence; read it back."
+  default_prompt: "Use practices-show-me-your-work to open or resume the work trace and record decisions, evidence, and outcomes."

@@ -10,7 +10,7 @@ export const skillPressureCaseDefinitions = [
   "scenarioId": "orchestrator-design-shared-thread-checkpoint",
   "requiredSourceReads": [
     "plugins/shravan-dev-workflow/skills/orchestrator-design/SKILL.md",
-    "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"
+    "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md"
   ],
   "maximumToolCalls": 30,
   "semanticCriteria": [
@@ -28,7 +28,7 @@ export const skillPressureCaseDefinitions = [
 },
   {
     scenarioId: "orchestrator-design-starts-with-spec-design",
-    requiredSourceReads: [...requiredSourceReads, "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md"],
+    requiredSourceReads: [...requiredSourceReads, "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md"],
     maximumToolCalls: 30,
     semanticCriteria: [
       { name: "starts-with-spec-design-only", requirement: "Routes a fresh full-design request to spec-design and stops before planning or implementation.", failureExample: "Calls pathfinding, planning, or implementation first." },
@@ -37,7 +37,7 @@ export const skillPressureCaseDefinitions = [
   },
   {
     scenarioId: "orchestrator-design-resumes-exact-handoff",
-    requiredSourceReads: [...requiredSourceReads, "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md", "tests/skills/fixtures/minimal-planning-delivery/requirements.md", "tests/skills/fixtures/minimal-planning-delivery/specification.md"],
+    requiredSourceReads: [...requiredSourceReads, "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md", "tests/skills/fixtures/minimal-planning-delivery/requirements.md", "tests/skills/fixtures/minimal-planning-delivery/specification.md"],
     maximumToolCalls: 30,
     semanticCriteria: [
       { name: "uses-current-phase-return", requirement: "Uses the inspectable current spec-design return as the route source and selects program-design next without reinterpreting the producer's route.", failureExample: "Routes from teammate preference, requires a persisted lifecycle ledger, or selects review instead of program-design." },
@@ -128,7 +128,7 @@ export const skillPressureCaseDefinitions = [
     "plugins/shravan-dev-workflow/skills/orchestrator-design/SKILL.md",
     "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
     "plugins/shravan-dev-workflow/skills/spec-program-review/SKILL.md",
-    "plugins/shravan-dev-workflow/skills/track-show-me-your-work/SKILL.md",
+    "plugins/shravan-dev-workflow/skills/practices-show-me-your-work/SKILL.md",
     "tests/skills/fixtures/minimal-planning-delivery/requirements.md",
     "tests/skills/fixtures/minimal-planning-delivery/specification.md",
     "tests/skills/fixtures/minimal-planning-delivery/program-design.md"

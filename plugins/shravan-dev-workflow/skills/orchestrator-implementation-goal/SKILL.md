@@ -17,7 +17,7 @@ Each implementation 🐒 Sidekick executes its assigned change and associated pr
 
 1. Classify `general-domain | runtime-skill-package`. A runtime skill package requires the exact accepted `skills-creation` composition for this named run. If the composition is absent, stale, or mismatched, route to `skills-creation` and stop before product delivery.
 2. Establish `requested terminal: plan-only | pr-ready-unmerged`; default to `pr-ready-unmerged`. Merge is a separately authorized extension through `implementation-pr-wrapup`, never an inferred terminal.
-3. MUST invoke `track-show-me-your-work` and return the shared work reference (or explicitly unshared checkpoint path) plus responsibility for the whole work or a contribution. Reuse supplied work context for nested work. The tracker owns continuity, fallback, conditional views, and deliberate thread resolution.
+3. MUST invoke `practices-show-me-your-work` and return the shared work reference (or explicitly unshared checkpoint path) plus responsibility for the whole work or a contribution. Reuse supplied work context for nested work. The tracker owns continuity, fallback, conditional views, and deliberate thread resolution.
 4. MUST load `references/goal-contract-and-routing.md` and return the current orientation, admitted basis, next owner or exact stop, and finish decision.
 5. Read current repository instructions, relevant source and diff, governing artifacts, plan, proof, and review evidence. Use the trail to find evidence, then verify current facts at their source; a historical result is context, not current proof.
 
@@ -34,7 +34,7 @@ Each implementation 🐒 Sidekick executes its assigned change and associated pr
 7. Repeat correction, proof, and review while accepted findings remain and fewer than three implementation-remediation passes have completed. After remediation three, stop `remediation-limit-reached` before review or remediation four unless the user explicitly authorizes continuation.
 8. When review is ready, assign `implementation-pr-wrapup` to an 🔧 Operator or the assigned implementation Sidekick and require current PR gate evidence back to Main for verification. Operators own separately assigned Git, PR, and blocking-watch routines; wait for their notifications or authorized wakes through `manage-agents`, never by model polling. Stop at PR-ready and unmerged by default. Pass through explicit merge authority only after readiness.
 
-Record consequential decisions, accepted or rejected findings, corrections, proof outcomes, recovery use, blockers, and terminal results through `track-show-me-your-work`. Keep logging a companion to delivery: do not create another lifecycle ledger, copied receipt store, counter protocol, or result replay mechanism.
+Record consequential decisions, accepted or rejected findings, corrections, proof outcomes, recovery use, blockers, and terminal results through `practices-show-me-your-work`. Keep logging a companion to delivery: do not create another lifecycle ledger, copied receipt store, counter protocol, or result replay mechanism.
 
 ## Bounded Recovery
 

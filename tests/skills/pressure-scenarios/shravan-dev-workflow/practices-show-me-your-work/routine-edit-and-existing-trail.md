@@ -1,7 +1,7 @@
 # Routine edit and requested trail inspection
 
-scenario_id: track-show-me-your-work-routine-edit-and-existing-trail
-skill_under_test: shravan-dev-workflow:track-show-me-your-work
+scenario_id: practices-show-me-your-work-routine-edit-and-existing-trail
+skill_under_test: shravan-dev-workflow:practices-show-me-your-work
 mode: fast
 expect_read_only: true
 expect_artifact: false
@@ -10,7 +10,7 @@ expect_proof_regex: render|existing|readable
 
 ## Prompt
 
-$shravan-dev-workflow:track-show-me-your-work
+$shravan-dev-workflow:practices-show-me-your-work
 
 Read-only classification, no file writes: I have two unrelated requests. First, fix a spelling mistake in a README with no request for logging. Second, show the readable view of an existing work trail for a previous run. Does each request need a new trail, an existing trail operation, or neither? Explain briefly, without pretending either task has been performed.
 
