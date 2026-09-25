@@ -5,6 +5,8 @@ description: Use when user or stakeholder requirements, user needs, behavioral p
 
 # Discuss Pathfinding
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 The knowledge exists — in the user's head, unwritten — and the session is the instrument that gets it out before it shapes work. The job is extraction. The question sequence cannot be planned in advance because each answer opens the next branch.
 
 Asking is expensive: a turn spent on an observable fact is stolen from a judgment call only the user can make. Ask one to three related questions together when they share context and clarify one decision. Ask a determining question first when its answer decides whether another question applies. Separate unrelated questions. Raw understanding remains provisional until it has been checked and challenged.
@@ -183,3 +185,5 @@ The session is not done while any of these hold:
 - an orchestrated confirmed return lacks its compact record identity, confirmed meaning, boundary status, exact destination, or destination reason, or turns an illustrative mechanism into normative meaning;
 - an orchestrated `decision-needed` result presents the frozen return destination as a current route or next action;
 - confirmed meaning that does not fit the recorded destination was routed to another phase instead of returned as an exact mismatch.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
