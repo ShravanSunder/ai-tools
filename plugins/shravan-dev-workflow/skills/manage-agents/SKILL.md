@@ -141,7 +141,7 @@ An executor is not a design- or plan-author role. The orchestrator designs, plan
 
 ### Choose a model
 
-Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination. Use Workhorse for clear work that is off the critical path. Do not use it for conversation, including Main, a 🐒 Sidekick the user chats with, or a coordinator relaying live messages. Do not use it for work someone is blocked on right now. Use a daily driver for those cases. Weak judgment makes Workhorse a poor fit for ambiguous planning, design, and independent review.
+Role tables list allowed model-and-effort choices and when to prefer each. Honor an explicit user choice, then match Guidance and Architectural span. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically increase effort or claim universal benchmarks. Use the permitted effort in the tables. Prefer total completion cost, including rework, proof, and coordination. Workhorse (Luna) is very cheap and follows instructions very well. Medium suits 🔧 Operator procedures. At xhigh and max it handles larger, well-specified assignments capably, but slowly, because it thinks longer.
 
 ### Commission an implementation 🐒 Sidekick
 
@@ -167,8 +167,6 @@ Bright line: standalone assigned Git, test, build, PR, and watch procedures belo
 | "a 🛠️ Worker can handle it"      | A separately assigned procedure is 🔧 Operator work; an implementation Worker's associated proof stays with that Worker.                            |
 
 #### Model choices
-
-Workhorse fits clear 🔧 Operator procedures off the critical path.
 
 | Model lineage | Thinking |
 |---------------|----------|

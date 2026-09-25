@@ -10,6 +10,8 @@ Owner addendum (2026-09-25, remediation pass 3): Sol xhigh remains a Daily drive
 
 Owner correction (2026-09-25, remediation pass 4): Guidance and Architectural span are the only task signals. Use Workhorse for clear work off the critical path. Use a daily driver for conversation and work someone is blocked on now. Operator models remain Workhorse-only. This supersedes the pass 2 third-signal decision.
 
+Owner correction (2026-09-25, remediation pass 5): Model tables decide where Workhorse is allowed. Workhorse is cheap and follows instructions well; medium suits Operator procedures, while xhigh and max handle larger, well-specified assignments capably but slowly. The owner rejects the pass 4 critical-path and weak-judgment rules. Keep the never-Main and brief Sidekick status-check rules.
+
 ## Problem and evidence
 
 - `manage-agents/SKILL.md` names Luna's category "Mini" ("Procedures, repeatable work, guided execution", line 51). "Mini" signals a small, weak model. Early GPT-6 Luna reports describe the opposite shape: very cheap, eventually capable, but it takes many turns to finish (hypothesis from public early-user reports shared by the owner on 2026-09-23, not measured here).
