@@ -1,7 +1,6 @@
 ---
 name: presentation-webui
-description: >-
-  Use when composing a substantial architecture, comparison, tradeoff, flow, mockup, state-machine, or multi-section response on a rendered proportional-font chat host (Cursor IDE chat, Claude.ai, ChatGPT, or any session whose markdown renders as a formatted document). Especially "draw this out", "show me", "compare these", "explain the architecture". Not for monospace terminal or CLI (presentation-tui); not for authoring durable Requirements, Specification, or Program Design. Skip for user-requested exact formats, schema-bound output, code-only replies, or terse answers.
+description: "Use when composing a substantial architecture, comparison, tradeoff, flow, or multi-section response on a rendered markdown chat host (Cursor chat, Claude.ai, ChatGPT): \"draw this out\", \"compare these\". Not for a monospace CLI (presentation-tui)."
 ---
 
 # Presentation: Web UI

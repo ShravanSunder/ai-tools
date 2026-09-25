@@ -1,6 +1,6 @@
 ---
 name: program-design
-description: Use when defining or revising structural How—the internal architecture—or its required structural views and diagrams, against settled observable obligations, including components, ownership, internal interfaces, state, calls, flows, failure/recovery, concurrency/consistency, compatibility/cutover, trust boundaries, or proof seams. Not for authoring Why/What, in-chat explanation of settled architecture with no program-design authoring, pure format-only maintenance of settled program-design artifacts, review-only requests, implementation task planning, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: "Use when defining or revising structural How and its views: components, ownership, interfaces, state, flows, failure and recovery, trust boundaries, and proof seams against settled obligations. Not for authoring Why/What (spec-design)."
 ---
 
 # Program Design
@@ -84,7 +84,7 @@ Before recommending a skill, inspect that destination's declared inputs and retu
 
 ### 1. Validate authoritative Why/What
 
-Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
+Record `target classification: general-domain | runtime-skill-package`. If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before modeling How.
 
 Accept an optional call-scoped `new artifact home` policy. When the caller supplies `<project-root>/docs/specs/`, create any new file-backed Program Design beneath that home and return its exact path. Preserve an authoritative pre-existing Program Design elsewhere; do not relocate or reject it because of the policy. The artifact-home policy applies only to a new output in the current call and is not persisted as workflow state.
 
@@ -104,7 +104,7 @@ Completion: distinct Requirements and Specification identities, confirmed goal b
 
 MUST load `references/current-system-model.md` to reconstruct representative execution paths from real entrypoints through named callers/callees, owners, state mutations or side effects, and observable results/errors; use runtime stack traces, logs, traces, tests, and source navigation when available to validate the dynamic path. Return the source-grounded current-system model, normalized current call paths, and inference gaps.
 
-IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `practices-research`. IF delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Evidence Help contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
+IF an external platform, protocol, library, sandbox, runtime, or empirical claim could change feasibility, structure, or proof and current local sources do not establish it, perform a bounded lookup directly or use `practices-research`. If delegation is useful, the external-prior-art-platform lane may perform that lookup under the Bounded Evidence Help contract; delegation is not required. Return the exact external source identity/version, authority status, transfer assumptions, structural consequence, and remaining evidence gap before selection.
 
 Completion: current behavior and degree of constraint are source-backed, and `changes / remains authoritative` is explicit.
 

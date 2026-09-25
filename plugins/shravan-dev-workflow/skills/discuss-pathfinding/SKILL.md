@@ -1,6 +1,6 @@
 ---
 name: discuss-pathfinding
-description: Use when user or stakeholder requirements, user needs, behavioral personas, tacit process knowledge, domain terms, or owner-controlled cost, risk, compatibility, policy, or other design tolerances are unwritten and must be extracted from someone's head or decided collaboratively through interview or grilling, especially "grill me", "interview me", "think through with me", or "help me figure out what I actually want". Not for maintaining settled content, repairing a drifted shared model, gathering evidence from artifacts, authoring Requirements or Specification from settled sources, synthesizing components, interfaces, mechanisms, or other internal structural How from settled obligations, in-chat visuals with no extraction request, or independent review.
+description: "Use when requirements, user needs, domain terms, tacit process, or owner tolerances are unwritten and must be drawn out of someone's head: \"grill me\", \"interview me\", \"help me figure out what I actually want\". Not for authoring from settled sources."
 ---
 
 # Discuss Pathfinding
@@ -55,7 +55,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    IF the missing meaning blocks Requirements, Specification, or a Program Design choice, load `../../shared-references/requirements-specification-program-design.md` and return the three-concept boundary, the pathfinding boundary that applies to this destination, and the exact owner that must receive the clarified meaning.
 
-   IF a calling phase supplies a return destination, record that exact destination before questioning. It is a boundary, not a suggestion: this session may return confirmed meaning only to that destination and may not replace it with another plausible phase.
+   If a calling phase supplies a return destination, record that exact destination before questioning. It is a boundary, not a suggestion: this session may return confirmed meaning only to that destination and may not replace it with another plausible phase.
 
    Name whether the missing owner meaning blocks Requirements, Specification, or a Program Design choice. Do not turn every destination into a user-requirements record. For a Program Design destination, name the owner-controlled tolerance or constraint to clarify and explicitly exclude components, interfaces, ownership allocation, and mechanisms. If the request contains only structural synthesis from settled obligations, return the `program-design` route without starting an interview.
 
@@ -117,7 +117,7 @@ Speed may reduce breadth, never honesty about what remains unknown. When the bud
 
    For a user-requirements destination where extraction proceeds, return the classified inventory, draft rows, useful user-job sequence inputs, record identity and permitted home, confirmed goal boundary or exact owner decision still needed, and unresolved authority or evidence gaps. If extraction is declined, return the loaded reference's refusal or fallback result and exact gaps instead.
 
-   MUST load `references/decisions-and-docs.md` and return the records plus the proportional confirmed/provisional/open summary. IF a durable handoff could change implementation ownership, behavior, or proof when misunderstood, also return its reader-test receipt. When a generated visual was selected for a durable record or handoff, consume the shared rendering result, keep provisional labels visible, embed only an accepted project-local asset with a relative link, and preserve confirmed meaning plus open choices in text. Chat-only remains chat-only and does not invent an asset destination.
+   MUST load `references/decisions-and-docs.md` and return the records plus the proportional confirmed/provisional/open summary. If a durable handoff could change implementation ownership, behavior, or proof when misunderstood, also return its reader-test receipt. When a generated visual was selected for a durable record or handoff, consume the shared rendering result, keep provisional labels visible, embed only an accepted project-local asset with a relative link, and preserve confirmed meaning plus open choices in text. Chat-only remains chat-only and does not invent an asset destination.
 
    Completion: every crystallized item has one record in the user's language; confirmed meaning and negative space remain separate from assumptions and open choices; every required reader test is complete.
 

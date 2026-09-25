@@ -1,6 +1,6 @@
 ---
 name: implement-plan
-description: Use when executing or continuing one current ready canonical implementation plan whose delivery context authorizes implementation, or correcting one implementation-owned finding within the bounded implementation-review remediation route. Not for plan/design defects, independent review, tracker publication, or PR lifecycle work.
+description: "Use when executing or continuing one ready canonical implementation plan whose delivery context authorizes implementation, or correcting one implementation-owned review finding. Not for plan or design defects, independent review, or PR work."
 ---
 
 # Implement Plan
@@ -26,11 +26,11 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 
 1. MUST load `references/execution-and-proof.md` to validate current branch/HEAD, instructions, diff, named paths, dependencies, write scopes, commands, security assumptions, proof feasibility, and completion-report shape.
 2. Under the resolved execution owner, select the smallest ready frontier. IF the owner assigns a separate executor or procedure, MUST load `manage-agents` at that assignment point; otherwise continue with the existing assigned executor or direct implementation. Assignment may cover serial work. Parallelism is only eligible for plan-identified independent slices with disjoint writes after proven prerequisites. Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned, never once per test or proof command.
-3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate.
+3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate. When a dependency the slice needs is missing, put a contract-honoring stand-in at a boundary the plan names, record it as a stand-in through `practices-show-me-your-work`, and continue the slice. Claim no proof for the stubbed interaction. Route a replan only when the stand-in would change a public contract, persisted data format, or ownership.
 4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
 5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.
 6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same 🔎 Review Sidekick. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
-7. Return each slice report to its assigning implementer. When all planned development and fitting proof are complete, return the canonical plan record, governing basis, delivery context, and completion report to the orchestrator for assessment before the first independent review.
+7. Return each slice report, including decisions made and open stand-ins, to its assigning implementer. When all planned development and fitting proof are complete, return the canonical plan record, governing basis, delivery context, and completion report to the orchestrator for assessment before the first independent review.
 
 ## Boundaries
 

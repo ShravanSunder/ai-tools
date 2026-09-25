@@ -1,6 +1,6 @@
 ---
 name: practices-research
-description: "Use when a task needs source gathering, prior-art research, current docs or web evidence, memory or session-log mining, or saved-reader research before design, planning, review, or discussion can continue. Not for extracting unwritten owner meaning or repairing a shared model already held."
+description: "Use when a task needs source gathering, prior-art research, current docs or web evidence, or memory, session-log, or saved-reader research before design, planning, review, or discussion can continue. Not for extracting unwritten owner meaning."
 ---
 
 # Practices: Research

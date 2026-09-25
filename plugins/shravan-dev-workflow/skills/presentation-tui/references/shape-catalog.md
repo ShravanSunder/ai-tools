@@ -26,7 +26,7 @@ All examples below use canvas width 70 unless noted.
 
 ─── Shape catalog — full worked examples ────────────────────────────
 
-Each shape with a realistic worked example, commentary on geometry choices, and notes on when NOT to use it.
+Each shape with a realistic worked example, commentary on geometry choices, and notes on when not to use it.
 
 
 ─── Shape 1 — Framed card (titled) ──────────────────────────────────
@@ -630,7 +630,7 @@ Geometry choices:
 
   ▸ Each finding's body starts with a "Location:" field carrying a short plain label; the exact copyable path and line range sit immediately below the frame as inline code (labels-versus-atoms).  Then prose explanation.  Then an embedded flow diagram if useful (indented under a label line, per the cordoning rule).
 
-  ▸ Proposed fixes live OUTSIDE the finding frame — below it, shown as fenced code blocks with a prose lead-in.  Fixes are NOT part of the finding itself.
+  ▸ Proposed fixes live outside the finding frame — below it, shown as fenced code blocks with a prose lead-in.  Fixes are not part of the finding itself.
 
   ▸ Blank line between findings.  Findings are independent — one can be accepted without the other.
 
@@ -800,9 +800,9 @@ Layout and spacing notes:
 
   ▸ Subsection label: UPPERCASE, 2-space indent from left │.  Under- line: `─` characters at same indent, matching label width exactly.
 
-  ▸ Blank row BEFORE every subsection label (inside the frame) — separates this subsection visually from the previous one.
+  ▸ Blank row before every subsection label (inside the frame) — separates this subsection visually from the previous one.
 
-  ▸ Blank row AFTER every underline before content begins — gives the label its own visual space before the reader drops into content.
+  ▸ Blank row after every underline before content begins — gives the label its own visual space before the reader drops into content.
 
   ▸ Content width: 2-space indent from left │ for top-level content, +2 per nesting level (so 4 for files under paths, 6 for members under files).
 

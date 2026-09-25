@@ -1,6 +1,6 @@
 ---
 name: plan-improve-repo
-description: Use when auditing a repository for improvement opportunities, backlog-worthy refactors, quality gaps, or leverage points and turning admitted repository-improvement findings into self-contained implementation plans, including findings admitted as implementation-mechanics-only from current source. Not for directly translating a Requirements, Specification, and Program Design set into an implementation plan, or for directly creating, updating, evaluating, or planning changes to one named runtime skill package without explicit skills-creation composition.
+description: "Use when auditing a repository for improvement opportunities, backlog-worthy refactors, quality gaps, or leverage points and turning admitted findings into implementation plans. Not for planning directly from a reviewed design (plan-implementation)."
 ---
 
 # Plan Improve Repo
@@ -17,7 +17,7 @@ Inspired by the MIT-licensed `shadcn-improve` plugin mechanics: scout broadly, v
 
 Before repo recon, record `target classification: general-repo | runtime-skill-package`.
 
-IF the request directly creates, updates, evaluates, or plans changes to one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this composition. Without it, return the `skills-creation` route and stop before recon.
+If the request directly creates, updates, evaluates, or plans changes to one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this composition. Without it, return the `skills-creation` route and stop before recon.
 
 Vetted findings and prioritized backlogs may be returned without planning admission. Before writing a new completed plan or returning a `ready` current-state validation receipt for an existing completed canonical plan, classify its planning basis:
 

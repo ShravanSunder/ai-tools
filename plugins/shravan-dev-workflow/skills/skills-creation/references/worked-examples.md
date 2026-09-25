@@ -22,7 +22,7 @@ A flaky test is a measurement problem before it is a code problem: the test asse
 2. Name the unguaranteed thing: ordering, time, shared state, or an external dependency. Completion: the assertion and the guarantee it lacks are quoted side by side.
 3. IF step 2 names shared state or ordering, load `references/isolation-recipes.md` and return the recipe applied.
 4. Fix the guarantee or the assertion, then prove it: rerun as in step 1. Completion: the rerun count and zero failures are reported, and any retry annotation the test carried is removed.
-5. IF the fix cannot land in this change, quarantine instead: skip-with-ticket, the ticket naming the unguaranteed thing from step 2. Completion: the skip annotation and ticket reference are reported. Never quarantine by deleting the assertion or adding a retry.
+5. If the fix cannot land in this change, quarantine instead: skip-with-ticket, the ticket naming the unguaranteed thing from step 2. Completion: the skip annotation and ticket reference are reported. Never quarantine by deleting the assertion or adding a retry.
 ```
 
 ## Why Each Part Earns Its Place

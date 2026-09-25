@@ -42,7 +42,7 @@ RPCRouter already has:
 * [ ] Invalid params error (-32602)
 * [ ] Internal error (-32603)
 * [ ] EmptyParams path
-* [ ] Notification with no `id` → verify NO response generated
+* [ ] Notification with no `id` → verify no response is generated
 
 **Command acknowledgment and response**
 
@@ -72,7 +72,7 @@ RPCRouter already has:
 2. **Prior art acknowledged** — what already exists from earlier work
 3. **Scope grouped by doc section** — each group references the architecture doc section it implements
 4. **Checklists for implementation steps** — not sub-tasks, just markdown checkboxes
-5. **Deferred items are explicit** — what's NOT in scope, why, and which ticket covers it
+5. **Deferred items are explicit** — what's out of scope, why, and which ticket covers it
 6. **Doc section references** — precise section markers (`§5.2`, `§9.2`) that link to the architecture doc
 
 ## Minimal Task Ticket
@@ -204,7 +204,7 @@ Design doc: §4 Transport Layer
 ### Missing deferred items
 
 ```markdown
-## BAD: (nothing about what's NOT in scope)
+## BAD: (nothing about what's out of scope)
 ```
 
 **Why it's bad:** Without explicit deferral, scope creeps silently. An agent working on the ticket might implement deferred items, or a reviewer might flag them as missing.

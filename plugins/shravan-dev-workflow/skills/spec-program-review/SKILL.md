@@ -1,6 +1,6 @@
 ---
 name: spec-program-review
-description: Use when classifying whether a specification-only or program-only change semantically requires independent review, or when independently reviewing a Specification, Program Design, or complete Requirements, Specification, and Program Design set for authority, requirements, reader understanding or readability, architecture, failure, traceability, scope fidelity, crux, call-path, or planning-readiness gaps. Classification or review only; not for editing, remediation, acceptance, plan review or implementation review (implementation-review), creating/updating/evaluating one named runtime skill package, or a standalone security scan, audit, or threat model.
+description: "Use when independently reviewing a Specification, Program Design, or Requirements, Specification, and Program Design set, including reader understanding or readability, or deciding if a spec-only or program-only change needs review. Not for implementation review."
 ---
 
 # Specification and Program Design Review
@@ -62,7 +62,7 @@ Closure is established by the latest permitted review result plus parent-verifie
 
 Record `target classification: general-domain | runtime-skill-package`.
 
-IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this review composition. Without it, return the `skills-creation` route and stop before classification or reviewer dispatch.
+If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity authorizing this review composition. Without it, return the `skills-creation` route and stop before classification or reviewer dispatch.
 
 Completion: target classification and, when applicable, the `skills-creation` parent identity are recorded.
 

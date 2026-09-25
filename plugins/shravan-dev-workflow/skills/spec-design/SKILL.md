@@ -1,6 +1,6 @@
 ---
 name: spec-design
-description: Use when authoring or revising durable Requirements from settled or user-confirmed meaning, or defining or revising a Specification's authoritative observable obligations, the domain entities those obligations are written over (canonical terms, identity, relationships, invariants, observable states), or its entity, journey, context, and requirement-coverage views, including the problem, consumers, outcomes, constraints, failure behavior, or proof obligations. Not for eliciting genuinely unwritten owner meaning, reconverging a drifted shared model, maintaining settled text without semantic authoring, internal structural How including binding entities to packages, schemas, types, or wire shapes, review-only requests, implementation planning, a full Requirements through Specification, Program Design, and review cycle, creating/updating/evaluating one named runtime skill package, or a standalone security scan/audit/threat model.
+description: "Use when authoring or revising durable Requirements from settled meaning, or a Specification's observable obligations, domain entities, and coverage views. Not for eliciting genuinely unwritten owner meaning (discuss-pathfinding)."
 ---
 
 # Spec Design
@@ -105,7 +105,7 @@ When unmade owner meaning blocks Requirements or Specification, use `discuss-pat
 
 ### 1. Establish authority, audience, and artifact boundary
 
-Record `target classification: general-domain | runtime-skill-package`. IF the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
+Record `target classification: general-domain | runtime-skill-package`. If the target is one named runtime skill package, require the explicit `skills-creation` parent packet/result identity that authorizes this composition. Without it, return the `skills-creation` route and stop before authoring.
 
 Accept an optional call-scoped `new artifact home` policy. When the caller supplies `<project-root>/docs/specs/`, create any new file-backed Requirements and Specification as distinct resolvable paths beneath that home and return both exact paths. Preserve authoritative pre-existing artifacts elsewhere; do not relocate or reject them because of the policy. The artifact-home policy applies only to new outputs in the current call and is not persisted as workflow state.
 

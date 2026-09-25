@@ -1,6 +1,6 @@
 ---
 name: scaffold-project
-description: This skill should be used when the user asks to "scaffold a new project", "initialize a new repo", "set up a new TypeScript/Python/Swift project", "add linting configs", "retrofit an existing project with configs", "update project templates", "add vitest", "add playwright", "add browser testing", "add e2e tests", "set up testing", or mentions setting up oxlint, oxfmt, oxc, ruff, swiftlint, swiftformat, basedpyright, vitest, playwright, cursor rules, or CLAUDE.md. Provides guided project scaffolding with standard dev configs.
+description: "Use when scaffolding or initializing a new project or repo, retrofitting one with standard configs, or adding linting, formatting, type checks, or tests (vitest, playwright, pytest) or agent rules such as oxlint, ruff, cursor rules, or CLAUDE.md."
 version: 0.1.0
 ---
 

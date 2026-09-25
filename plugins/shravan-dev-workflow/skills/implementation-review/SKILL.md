@@ -1,6 +1,6 @@
 ---
 name: implementation-review
-description: Use when independently reviewing implemented code, proof, a branch diff, commit, PR head, or one bounded remediation before PR readiness, including when governing authority, ready plan, source, diff, proof, or remediation-limit evidence is missing or conflicting. Not for design review (spec-program-review), runtime-skill-package review (skills-creation), security scans or audits (ops-security-review), reviewer handoff packets (implementation-handoff), remediation, or PR monitoring (implementation-pr-wrapup).
+description: "Use when independently reviewing implemented code, proof, a branch diff, commit, PR head, or one bounded remediation before PR readiness, including when governing inputs are missing or conflicting. Not for design review (spec-program-review)."
 ---
 
 # Implementation Review
@@ -48,6 +48,7 @@ MUST load `references/lanes/lane-schema.md` and record `complete | partial | blo
 3. IF proof claims exist, load `references/lanes/proof-challenge.md` and challenge every claim. For prescribed commands, assign a 🔧 Operator under an exact execution grant. The 🔧 Operator performs the reference's write-set preflight and `git status --porcelain` comparison, executes only granted commands, and returns observed output and exit codes. The 🔎 Review Sidekick judges claimed against observed and records proof gaps. If there is no grant, inspect only and record the boundary.
 4. MUST load `references/lanes/dispel.md` after all chunk passes. Classify every candidate and map every delivered item to a rail or `absent`, even when there are no candidates.
 5. IF reduction leaves a named material risk, load `references/lanes/focused-reviewer.md` and answer one falsifiable question per risk. Stop when no named risk remains.
+6. List every stand-in in the diff and receipts, and check that none is counted as proof of the real interaction; a claim that rests on a stand-in is a finding.
 
 When the review includes auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, the caller selects a Frontier 🔎 Review Sidekick from a different author lineage at commission time through `manage-agents`.
 
@@ -57,7 +58,7 @@ MUST load `references/finding-and-reduction.md` and return every candidate's dis
 
 Before accepting any finding, open the governing clause it claims to serve and quote it; ask whether the confirmed obligations still hold without the questioned mechanism, and whether the proposed mechanism is the smallest change that serves the clause or one of several. A reviewer proposal that adds unrequested scope is rejected as scope expansion — never escalated to the owner as if a decision were owed. An unrequested element the diff already delivers gets removal or an owner `decision-needed`, never "well built." A finding that breaks a load-bearing assumption of the governing design stops and returns to the user with the failed assumption, evidence, and consequence.
 
-Return `ready | needs-revision | blocked-input | decision-needed | remediation-limit-reached` with the exact correction owner and affected coverage; `references/finding-and-reduction.md` owns these labels and their precedence.
+Return `ready | needs-revision | blocked-input | decision-needed | remediation-limit-reached` with the exact correction owner and affected coverage; `references/finding-and-reduction.md` owns these labels and their precedence. With it, answer: "What are the risks of merging this today, and what is the worst thing that could break?" and "List assumptions, environment details, or judgment calls you could not verify, and where you looked."
 
 ## Remediation Boundary
 

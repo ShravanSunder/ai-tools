@@ -1,6 +1,6 @@
 ---
 name: implementation-handoff
-description: Use when packaging implementation state for another agent, reviewer, CLI, or future session at any stage of work, especially when the user asks for a copy-paste blurb, reviewer prompt, Claude/Gemini/Codex handoff, unfinished-work handoff, or post-implementation review packet.
+description: "Use when packaging implementation state for another agent, reviewer, CLI, or future session: a copy-paste blurb, reviewer prompt, Claude/Gemini/Codex handoff, unfinished-work handoff, or post-implementation review packet."
 ---
 
 # Implementation Handoff
