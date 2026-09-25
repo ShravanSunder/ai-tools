@@ -5,6 +5,8 @@ description: Use when packaging an existing implementation plan for another agen
 
 # Plan Handoff
 
+IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
+
 Package an existing implementation plan so another agent can review or execute without reconstructing the conversation. This is a portability boundary, not a completion or authorship boundary: handoff preserves the plan's governing basis and delivery context without upgrading either.
 
 ## Core Rules
@@ -58,3 +60,5 @@ IF writing the handoff artifact or copy-paste prompt, load `references/handoff-t
 - The handoff drops evidence sources, freshness guards, or parent-owned verification, letting the next agent treat delegated evidence as completion.
 - The handoff changes the plan record, upgrades `plan-only`, or omits the governing basis or delivery context.
 - The packet silently promotes an implementer, reviewer, 🐒 Sidekick, or future session into plan author without the named successor, transferred scope, and explicit user direction.
+
+IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
