@@ -23,3 +23,8 @@
 - The canonical agent-router `agent-collaboration` tree at commit `f6eb23cd7cf2363529344a520a4cd13e043e3d23` (codex-router PR #77, merged 2026-09-25, verified on `origin/main`) was copied byte-for-byte into `plugins/agent-router/skills/agent-collaboration/`, excluding the preserved vendor-only `agents/openai.yaml`. The tree was read with `git archive f6eb23cd agent-skills/agent-collaboration`, not the working tree. `plugin-sources.json` pins that exact commit.
 - `diff -r <f6eb23cd tree> plugins/agent-router/skills/agent-collaboration -x agents` printed nothing (exit 0). The content matched the previously vendored copy at `e6ada0cd`; no vendored file was absent upstream, so none was removed.
 - Security gate, third-party source adoption: allowed (owner-owned repository, verbatim copy at a pinned merged commit, `diff -r` clean).
+
+## Owner acceptance at merge (2026-09-25)
+
+- Independent implementation review: skipped by the owner ("this PR is ready; you may merge").
+- Live behavior proof for runs 1-4: not run (Codex workspace out of credits); owner accepted the gap. Claim level stays "drafted from user intent; behavior not yet evaluated", except the harness fix, which passed one live tracker scenario.
