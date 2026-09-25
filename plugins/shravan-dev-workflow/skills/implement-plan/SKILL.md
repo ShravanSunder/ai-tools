@@ -9,7 +9,7 @@ Implementation executes one immutable ready plan against current authority and r
 
 ## Execution Responsibility
 
-Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation Sidekick is the implementer and may execute and prove directly or select a bounded native Worker. An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
+Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer and may execute and prove directly or select a bounded native Worker. An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
 
 ## Validate Before Editing
 
@@ -27,7 +27,7 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate.
 4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
 5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.
-6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same Review Sidekick. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
+6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same 🔎 Review Sidekick. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
 7. Return each slice report to its assigning implementer. When all planned development and fitting proof are complete, return the canonical plan record, governing basis, delivery context, and completion report to the orchestrator for assessment before the first independent review.
 
 ## Boundaries

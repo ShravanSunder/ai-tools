@@ -169,6 +169,12 @@ function createAcpxProcessEnvironment(
   delete environment["CODEX_CONFIG"];
   delete environment["MODEL_PROVIDER"];
   delete environment["CODEX_PATH"];
+  // The pinned adapter's bundled Codex predates current models; an explicit
+  // binary path is the only launcher override the harness accepts.
+  const explicitCodexPath = process.env["SKILL_PRESSURE_CODEX_PATH"];
+  if (explicitCodexPath !== undefined && explicitCodexPath !== "") {
+    environment["CODEX_PATH"] = explicitCodexPath;
+  }
 
   environment["INITIAL_AGENT_MODE"] = "read-only";
   environment["CODEX_CONFIG"] = JSON.stringify({

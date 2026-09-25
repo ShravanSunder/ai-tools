@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import {
   buildAcpxBaseArguments,
   createAcpxCodexAgentRunner,
@@ -129,6 +129,40 @@ function createAgentMessageChunkEvent(
 }
 
 describe("createAcpxCodexAgentRunner", () => {
+  test("passes an explicit Codex binary path without changing read-only mode", async () => {
+    vi.stubEnv("SKILL_PRESSURE_CODEX_PATH", "/opt/codex/bin/codex");
+    try {
+      const requests: AcpxProcessRequest[] = [];
+      const runner = createAcpxCodexAgentRunner({
+        repoRoot: "/repo",
+        adapterConfiguration: {},
+        processRunner: async (request) => {
+          requests.push(request);
+          if (request.stdin === "test prompt") {
+            return {
+              stdout: createAgentMessageChunkEvent("answer", '{"ok":true}'),
+              stderr: "",
+            };
+          }
+          return { stdout: "", stderr: "" };
+        },
+      });
+
+      await runner({
+        namePrefix: "subject",
+        prompt: "test prompt",
+        setup: subjectSetup,
+      });
+
+      expect(requests).toHaveLength(4);
+      expect(requests.every((request) => request.environment["CODEX_PATH"] === "/opt/codex/bin/codex")).toBe(true);
+      expect(requests.every((request) => request.environment["INITIAL_AGENT_MODE"] === "read-only")).toBe(true);
+      expect(requests.every((request) => request.args.includes("--approve-reads"))).toBe(true);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   test("associates all final messages with their explicit request", async () => {
     const runner = createAcpxCodexAgentRunner({
       repoRoot: "/repo",

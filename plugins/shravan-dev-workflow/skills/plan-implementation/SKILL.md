@@ -34,7 +34,7 @@ Completion: the target, governing basis, requested terminal, tracking dispositio
 
 - A direct caller stops with a `plan-only` ready plan.
 - A direct main or `orchestrator-implementation-goal` validates a `pr-ready-unmerged` ready record and invokes `implement-plan` without another generic approval question, only then commissioning or resuming implementation.
-- An implementation Sidekick that encounters a missing governing plan returns the evidence and exact gap to the current main. It may choose local mechanics inside a ready plan but does not author or repair the plan.
+- An implementation 🐒 Sidekick that encounters a missing governing plan returns the evidence and exact gap to the current main. It may choose local mechanics inside a ready plan but does not author or repair the plan.
 - `revision-requested` returns to the named semantic or planning owner; `blocked` returns to the named unblock owner.
 - Planning never edits product code, invokes tracking providers, reviews implementation, manages PR state, or infers merge authority.
 

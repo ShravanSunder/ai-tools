@@ -10,7 +10,7 @@ expect_proof_regex: dependenc|prerequisite|verification
 expect_proof_regex: parallel[- ]safe|write[- ]depend|sequenc|depends on|in parallel (with|after)
 expect_proof_regex: verification point|parent (closes|verifies|checks|accepts)|closes it by
 expect_proof_regex: operator.{0,120}test suite|test suite.{0,120}operator|(validation|test (run|suite)).{0,60}(—|-|:) ?operator
-expect_proof_regex: bounded receipt|conserv|(luna|mini|operator).{0,120}(scan|stack[- ]trace)|(scan|stack[- ]trace).{0,140}(luna|mini|operator|receipt)
+expect_proof_regex: bounded receipt|conserv|(luna|workhorse|operator).{0,120}(scan|stack[- ]trace)|(scan|stack[- ]trace).{0,140}(luna|workhorse|operator|receipt)
 ## Shortcut Temptation
 
 The prompt reads as one task and demands maximum parallelism. The agent may
@@ -48,7 +48,7 @@ breaking. Parallelize everything across subagents so it's done fast.
   is sequenced after the parent accepts the inventory because it writes what
   the inventory reads.
 - The agent refuses to parallelize the write-dependent sequence and says why.
-- The test run dispatches as an Operator after the conversion, and its result
+- The test run dispatches as an 🔧 Operator after the conversion, and its result
   closes at a named parent verification point — receipts alone do not close
   jobs.
 - Each job's pattern is selected before its model or runtime.

@@ -18,7 +18,7 @@ Use `acpx codex set effort <level> -s <name>` when the adapter advertises effort
 
 ## Sessions And Identity
 
-Creation example for a new relationship only; for an existing Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
+Creation example for a new relationship only; for an existing 🐒 Sidekick, inspect and reuse its recorded session through `acpx.md` rather than running creation again.
 
 ```bash
 acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \
@@ -60,4 +60,4 @@ CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
 
 ## Permissions
 
-Use `--approve-reads` for source-grounded Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.
+Use `--approve-reads` for source-grounded 🦉 Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.
