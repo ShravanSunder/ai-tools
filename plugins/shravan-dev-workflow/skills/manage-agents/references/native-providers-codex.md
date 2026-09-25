@@ -8,11 +8,10 @@ This reference applies after `SKILL.md` selects a native 🛠️ Worker or Opera
 
 | Model id             | Note              |
 | -------------------- | ----------------- |
-| `gpt-6-astra`        |                   |
-| `gpt-6-sol`          |                   |
 | `gpt-6-luna`         |                   |
+| `gpt-6-sol`          |                   |
 
-Lib ids: `openai.gpt-6-astra`, `openai.gpt-6-sol`, `openai.gpt-6-luna`. Prefer short form unless the host requires `openai.`. Other ids the host advertises are not used.
+Lib ids: `openai.gpt-6-luna`, `openai.gpt-6-sol`. Prefer short form unless the host requires `openai.`. Other ids the host advertises are not used.
 
 ## Effort
 
