@@ -22,9 +22,9 @@ Creation example for a new relationship only; for an existing 🐒 Sidekick, ins
 
 ```bash
 acpx --cwd /absolute/repo --model gpt-6-sol --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex sessions ensure --name "🐒 Sidekick · <purpose>"
+  --non-interactive-permissions deny codex sessions ensure --name "🐒 Sidekick · <purpose>"
 acpx --cwd /absolute/repo --approve-reads --no-terminal \
-  --non-interactive-permissions fail codex -s "🐒 Sidekick · <purpose>" \
+  --non-interactive-permissions deny codex -s "🐒 Sidekick · <purpose>" \
   --file tmp/sidekick-packet.md
 ```
 
@@ -52,7 +52,7 @@ Codex CLI profiles currently do not apply to `app-server`; a `CODEX_PATH` launch
 ```bash
 CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
   acpx --cwd /absolute/repo --model gpt-6-luna \
-  --approve-reads --no-terminal --non-interactive-permissions fail \
+  --approve-reads --no-terminal --non-interactive-permissions deny \
   codex --file request.md
 ```
 
@@ -60,4 +60,4 @@ CODEX_CONFIG='<JSON object>' MODEL_PROVIDER='<configured provider id>' \
 
 ## Permissions
 
-Use `--approve-reads` for source-grounded 🦉 Advisor and review work. Keep `--non-interactive-permissions fail` for unattended runs. The parent authorizes write access for non-review assignments.
+Use `--approve-reads` for source-grounded 🦉 Advisor and review work. Keep `--non-interactive-permissions deny` for unattended runs: unknown requests are denied, never approved, and the turn continues instead of aborting. The parent authorizes write access for non-review assignments.

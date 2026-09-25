@@ -38,9 +38,9 @@ Start independent review with a new named 🔎 Review Sidekick session. Sidekick
 
 Set the narrowest permission boundary that performs the assignment. ACPX permission policy matches tool names and kinds, never paths — it cannot scope writes to specific directories, and none of this is an OS sandbox:
 
-- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions fail` — auto-approves reads, fail-closed on writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. The assignment contract still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
-- `write <paths> (declared)`: `--approve-all` plus the assignment contract's bright-line authority — "edit only under <paths>; an edit outside them is a stop condition, return blocked." The parent verifies the receipt's diff stayed inside the declared scope.
-- Unattended call: `--non-interactive-permissions fail`.
+- `workspace read-only`: `--approve-reads --no-terminal --non-interactive-permissions deny` — auto-approves read and search requests and denies every other request, including writes and exec; an ACPX permission layer, not a read-only mount, and not a reason to skip native spawn. Use `deny`, not `fail`: an adapter can ask `execute` approval for a shell command that only reads a file, and `fail` aborts the whole turn while `deny` refuses that one request, never approving it, and lets the agent retry with a recognized read. The assignment contract still allows project `tmp/` and system `/tmp`; it still forbids repo file edits.
+- `write <paths> (declared)`: `--approve-all` plus the assignment contract's bright-line authority — "edit only under <paths>; an edit outside them is a stop condition, return blocked." `--approve-all` approves every request, so `--non-interactive-permissions` never applies; the declared paths and the parent's diff check are the only write boundary. The parent verifies the receipt's diff stayed inside the declared scope.
+- Unattended call: `--non-interactive-permissions deny`.
 
 Resolve one stable `<provider-agent-command>` from the provider contract. It includes the launcher, required environment, absolute cwd, permission boundary, provider token, and exact model selection. Use it for every lifecycle call in the relationship.
 
