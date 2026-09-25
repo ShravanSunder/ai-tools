@@ -8,8 +8,6 @@ expect_artifact: false
 expect_decision_regex: luna.{0,80}xhigh.{0,80}workhorse|workhorse.{0,80}luna.{0,80}xhigh
 expect_decision_regex: sidekick.{0,150}workhorse|workhorse.{0,150}sidekick
 expect_proof_regex: (well-understood|complete direction|exact steps).{0,160}workhorse|workhorse.{0,160}(well-understood|complete direction|exact steps)
-expect_proof_regex: (xhigh|max).{0,120}(capable|larger|well-specified)|(capable|larger|well-specified).{0,120}(xhigh|max)
-expect_proof_regex: (slow|longer).{0,120}(think|reason)|(think|reason).{0,120}(slow|longer)
 expect_forbidden_regex: (luna|workhorse).{0,80}(never|not|cannot|can't|isn't|is not).{0,40}sidekick|sidekick.{0,80}(never|not|cannot|can't).{0,40}(luna|workhorse)
 
 ## Shortcut Temptation
@@ -34,8 +32,6 @@ model category, lineage, thinking, and the reason for that choice.
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
 - OpenAI Luna xhigh Workhorse is an allowed Sidekick row for well-understood
   Complete direction and Cross-domain span.
-- Recognizes that xhigh can handle a larger, well-specified assignment capably,
-  with slower turns because it thinks longer.
 
 ## Failure Signals
 

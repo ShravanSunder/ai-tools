@@ -8,29 +8,25 @@ Owner correction (2026-09-25, remediation pass 3): Opus high is `Daily driver` w
 
 Owner addendum (2026-09-25, remediation pass 3): Sol xhigh remains a Daily driver category row and a default 🔎 Review Sidekick row. It is absent from the Advisor table.
 
-Owner correction (2026-09-25, remediation pass 4): Guidance and Architectural span are the only task signals. An additional timing rule was tried and later removed. 🔧 Operator models remain Workhorse-only. This supersedes the pass 2 third-signal decision.
-
-Owner correction (2026-09-25, remediation pass 5): Model tables decide where Workhorse is allowed. Workhorse is cheap, follows instructions very well, and generalizes well across varied work. Medium suits 🔧 Operator procedures; xhigh and max handle larger, well-specified assignments capably with slower turns. Keep the never-Main and brief Sidekick status-check rules. This supersedes the pass 4 timing rule.
+Owner correction (2026-09-25, remediation pass 4): Guidance and Architectural span are the only task signals. 🔧 Operator models remain Workhorse-only. This supersedes the pass 2 third-signal decision.
 
 ## Problem and evidence
 
-- `manage-agents/SKILL.md` named Luna's category "Mini" ("Procedures, repeatable work, guided execution", line 51). The owner chose "Workhorse" to convey low cost, strong instruction following, and broad task fit. Longer thinking slows high-effort turns.
-- Early reports discussed turnaround time in some seats. The owner later clarified that this says nothing about task breadth or judgment; the model tables decide eligibility.
+- `manage-agents/SKILL.md` named Luna's category "Mini" ("Procedures, repeatable work, guided execution", line 51).
 - The original task signals were Guidance and Architectural span (`SKILL.md:23-45`). Luna rows appeared in the 🔧 Operator, Worker, and Sidekick tables (`SKILL.md:173-209`) with only "Exact steps" as the signal.
 - "Mini" also appears in `implementation-pr-wrapup` (Mini Worker for the PR description, Mini Operator for the monitor: `SKILL.md:8,10,36,46,54,63,90`, `references/monitor-loop.md:16`, `references/pr-description.md:8`) and in eight pressure fixtures.
 - Stop-review falls back to Luna medium when JEV fails (`agent-scripts/stop-review/config.sh`), on the path where a session is trying to stop. Its latency at medium has not been measured.
 
 ## Success definition
 
-An agent loading `manage-agents` calls Luna's tier **Workhorse** and uses the model tables for eligible roles and effort. It never self-selects Workhorse as Main. A Workhorse 🐒 Sidekick answers brief status checks and routes substantive owner decisions to Main. Workhorse is cheap, follows instructions well, and generalizes across varied work; xhigh and max handle larger, well-specified assignments with slower turns. Every in-scope skill, packet, and chat message marks the first role mention in each prose unit with its emoji.
+An agent loading `manage-agents` calls Luna's tier **Workhorse** and uses the model tables for eligible roles and effort. It never self-selects Workhorse as Main. A Workhorse 🐒 Sidekick answers brief status checks and routes substantive owner decisions to Main. Every in-scope skill, packet, and chat message marks the first role mention in each prose unit with its emoji.
 
 ## Decisions (owner may strike any row)
 
 | Decision | Rationale |
 | --- | --- |
-| Rename category `Mini` -> `Workhorse` everywhere (hard cutover, no alias) | Owner choice 2026-09-23; Workhorse is cheap, follows instructions well, and generalizes across varied work. |
+| Rename category `Mini` -> `Workhorse` everywhere (hard cutover, no alias) | Owner choice 2026-09-23. |
 | Keep Guidance and Architectural span as the task signals | The role model tables decide eligibility and effort. |
-| Workhorse eligibility comes from the role model tables | Medium suits prescribed 🔧 Operator procedures; xhigh and max handle larger, well-specified assignments capably with slower turns. |
 | Workhorse rows exist for 🔧 Operators, Workers, and implementation Sidekicks | Each role table gives its allowed model and effort choices. |
 | Agents never self-select Workhorse as Main | The owner chooses the Main model. Other roles follow their model tables. |
 | Workhorse 🛠️ Worker and Sidekick cells read `Exact steps or well-understood Complete direction; Local/Cross-domain` | The tables own eligible model and effort choices. |
@@ -47,7 +43,7 @@ An agent loading `manage-agents` calls Luna's tier **Workhorse** and uses the mo
 
 | # | Skill | Class | Main path | Depth | Proof |
 | --- | --- | --- | --- | --- | --- |
-| 1 | `manage-agents` | behavior-changing | Rename `Mini` to `Workhorse` and `Balanced` to `Daily driver`; keep Guidance and Architectural span as task signals. Model tables decide eligible roles and effort. In Choose a model, describe Workhorse as cheap, strong at following instructions, and able to generalize across varied work; xhigh and max handle larger, well-specified assignments with slower turns. Preserve the never-Main and brief 🐒 Sidekick status-check rules. Mark the first role mention in each prose unit with its emoji. | none expected; check `session-ledger.md` and provider refs for `Mini` | Update the model-selection fixtures and the three Luna scenarios plus `sidekick-luna-xhigh`; check table use, Main authority, status checks, and the model description. |
+| 1 | `manage-agents` | behavior-changing | Rename `Mini` to `Workhorse` and `Balanced` to `Daily driver`; keep Guidance and Architectural span as task signals. Model tables decide eligible roles and effort. Preserve the never-Main and brief 🐒 Sidekick status-check rules. Mark the first role mention in each prose unit with its emoji. | none expected; check `session-ledger.md` and provider refs for `Mini` | Update the model-selection fixtures and the three Luna scenarios plus `sidekick-luna-xhigh`; check table use, Main authority, and status checks. |
 | 2 | `implementation-pr-wrapup` | behavior-changing | "Mini Worker" / "Mini Operator" -> "Workhorse 🛠️ Worker" / "Workhorse 🔧 Operator" (`SKILL.md:8,10,26,36,46,48,54,63,90`); other agent-role mentions gain their emoji | `references/monitor-loop.md:16`, `references/pr-description.md:8` | update `file-list-changelog` and `parent-does-not-inline-write` regexes |
 | 3 | `orchestrator-implementation-goal` | behavior-changing (two homes) | emoji on agent-role mentions in `SKILL.md` | `references/goal-contract-and-routing.md:5,22,42,44` | static |
 | 4 | `orchestrator-design` | scoped (`SKILL.md` only) | emoji on agent-role mentions | none | static |

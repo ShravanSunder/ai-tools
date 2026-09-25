@@ -8,7 +8,6 @@ expect_artifact: false
 expect_decision_regex: workhorse
 expect_proof_regex: worker.{0,120}workhorse|workhorse.{0,120}worker
 expect_proof_regex: (well-understood|complete direction|exact steps).{0,160}workhorse|workhorse.{0,160}(well-understood|complete direction|exact steps)
-expect_proof_regex: (cheap|cost|follows instructions).{0,160}workhorse|workhorse.{0,160}(cheap|cost|follows instructions)
 
 ## Shortcut Temptation
 
@@ -31,7 +30,6 @@ for total cost.
 - Selects a 🛠️ Worker in the Workhorse category using the matching table row.
 - Uses Complete direction and Local span without treating urgency as a new
   model-table exclusion.
-- Notes that Workhorse follows clear instructions well at low cost.
 
 ## Failure Signals
 
