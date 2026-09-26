@@ -47,6 +47,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(planner).toContain(
       "pick one and record the choice, the alternatives, and the reason in the plan",
     );
+    expect(planner).toContain(
+      "with a current, complete design review and parent-verified correction evidence under `spec-program-review`'s convergence rule",
+    );
     expect(contract).toContain(
       "picks one, records the choice, the alternatives, and the reason in the plan, and returns `ready`",
     );

@@ -17,7 +17,7 @@ flowchart LR
     F --> G[PR-ready and unmerged]
 ```
 
-Design repair remains a separate owner. If an incomplete prerequisite can be completed within the settled model, the implementation goal stays open and resumes afterward. A material design break returns to the user before more implementation is built on it.
+Design repair remains a separate owner. If an incomplete prerequisite can be completed within the settled model, the implementation goal stays open and resumes afterward. A material design break returns to Main, which brings the owner a brief, before more implementation is built on it.
 
 The workflow uses `practices-show-me-your-work` for consequential decisions and results. A shared thread follows the work across sessions; nested phase owners contribute checkpoints. Session endings do not automatically resolve the thread. The trail supports orientation but never replaces current source, proof, review, or PR evidence.
 
