@@ -1,0 +1,10 @@
+# 2026-09-26 Owner attention goes to design
+
+- `shravan-dev-workflow` 2.64.0. Implements runs 1 to 13 of `docs/wip/skills-authoring/2026-09-26-owner-attention-design-first/spec.md` (r5, owner amendment to the brief's first sentence).
+- New `shared-references/owner-decision-brief.md`: one brief per owner design decision, with today's model drawn, each option drawn as a change, a recommendation, and what deferral blocks. `spec-design`, `program-design`, `orchestrator-design`, `orchestrator-implementation-goal`, `docs-maintain`, and `skills-creation` load it at their owner-decision stops.
+- Review loops converge instead of counting. `implementation-review` replaces `remediation-limit-reached` with `not-converging`, and `spec-program-review` adds it. The rule is recurrence of a verified-closed finding, or two adjacent reviews without fewer open findings. Homes: `implementation-review/references/finding-and-reduction.md`, `spec-program-review/references/finding-and-reduction-schema.md`, and the `skills-creation` Review section. Recovery-review machinery is gone, and missing history sets a baseline.
+- Only corrections inside the accepted boundary get automatic further rounds. A correction that changes design meaning, scope, a contract, or an owner decision goes to the owner as a brief first.
+- `program-design` step 16 leads with a drawn component view and entry-to-effect path. The presentation skills also trigger when a design decision goes in front of the owner.
+- `practices-collaboration`: helpers return `no-home` instead of asking the owner. Main names the gap once under Waiting on owner. `plan-implementation` picks the PR grouping and records the choice, the alternatives, and the reason in the plan.
+- Validation: skill tests and typecheck, the cutover grep, Claude marketplace validation, and the Codex quick validator. Rewritten pressure scenarios were not run because the owner skipped pressure testing.
+- Codex, Claude, and Cursor cache refresh/reinstall: pending post-merge.

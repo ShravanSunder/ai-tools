@@ -283,12 +283,12 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "implementation-review-stops-before-fourth-remediation",
-    requiredSourceReads: reviewAdmissionSources,
+    scenarioId: "implementation-review-stops-when-not-converging",
+    requiredSourceReads: reviewMethodSources,
     maximumToolCalls: 15,
     semanticCriteria: [
-      { name: "stops-before-dispatch", requirement: "Returns remediation-limit-reached before reviewer dispatch because three remediation receipts already exist and no later explicit permission was supplied.", failureExample: "Dispatches review four or resets the count for a new invocation." },
-      { name: "preserves-gap", requirement: "Returns the unresolved or stale coverage boundary and requires explicit user permission before another review or remediation.", failureExample: "Calls the implementation ready or reconstructs a zero count from missing persistent state." },
+      { name: "returns-not-converging", requirement: "Returns not-converging under the convergence rule in references/finding-and-reduction.md, naming both the two adjacent non-drops (4, 4, 4) and the recurrence of verified-closed F3.", failureExample: "Routes another correction pass, or treats F3 as merely still open." },
+      { name: "routes-owner-brief", requirement: "Returns the stop to the orchestrator for an owner brief on what keeps failing instead of asking the owner for permission to review again.", failureExample: "Asks whether it may run another review round, or calls the implementation ready." },
     ],
   },
   {
@@ -399,19 +399,20 @@ export const skillPressureCaseDefinitions = [
 {
   "scenarioId": "implementation-review-admit-bounded-recovery-review",
   "requiredSourceReads": [
-    "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md"
+    "plugins/shravan-dev-workflow/skills/implementation-review/SKILL.md",
+    "plugins/shravan-dev-workflow/skills/implementation-review/references/finding-and-reduction.md"
   ],
   "maximumToolCalls": 30,
   "semanticCriteria": [
     {
-      "name": "admit-bounded-recovery",
-      "requirement": "Admits the explicit recovery with unavailable prior review evidence and a known-below-three or unavailable count; preserves known count or unknown without reset.",
-      "failureExample": "Demands the missing count as a precondition to recovery or fabricates zero."
+      "name": "baseline-from-current-review",
+      "requirement": "Admits an ordinary review with the missing history recorded and its reason, and treats the current review as the convergence baseline.",
+      "failureExample": "Blocks because the earlier count is unavailable, or invents a pass count."
     },
     {
-      "name": "stop-unsafe-corrections",
-      "requirement": "Rejects known three-pass exhaustion or prior recovery and asks before fixes if remaining correction capacity is unknown.",
-      "failureExample": "Allows repeated recovery, an exhausted remediation pass, or fixes with unknown budget."
+      "name": "routes-without-permission",
+      "requirement": "Routes accepted implementation-owned findings to implement-plan without a permission prompt and rejects a stale or wrong-source target.",
+      "failureExample": "Asks the owner before routing corrections, or reviews a stale or wrong-source target."
     }
   ]
 },

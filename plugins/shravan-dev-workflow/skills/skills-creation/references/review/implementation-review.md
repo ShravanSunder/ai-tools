@@ -52,7 +52,7 @@ The executing review lead verifies candidate findings against source files, pres
 
 Accepted findings route back to the owning phase using the routing in the skills-creation step `Review the implementation, prune, and ship`; that is the live owner.
 
-After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh main assessment. Resume the same review lead to refresh affected check coverage only while fewer than three remediation passes have completed. End early on `great`. After remediation three, stop `remediation-limit-reached`; never start review or remediation four without explicit user permission.
+After accepted edits, rerun the narrowest fitting pressure and static proof that can catch the issue, then require fresh main assessment. Resume the same review lead to refresh affected check coverage while the loop converges under the `SKILL.md` Review section's rule. End early on `great`. On `not-converging`, the lead returns the stop to Main for an owner brief.
 
 At ship, reuse the semantically current review result when its changed-file coverage and proof remain current. Resume the same lead only when affected coverage needs refresh.
 

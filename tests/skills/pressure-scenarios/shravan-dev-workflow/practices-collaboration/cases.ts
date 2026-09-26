@@ -12,7 +12,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads: [practiceSkill, workHomeDiscovery],
     maximumToolCalls: 20,
     semanticCriteria: [
-      { name: "ask-once-and-continue", requirement: "Asks the owner once which project to use or create, names what discovery found, and continues the refactor in the same turn instead of waiting for the away owner; only work needing another agent's board-mediated reply is held.", failureExample: "Stops all work until the owner returns, or asks repeatedly." },
+      { name: "name-gap-once-and-continue", requirement: "Main names what discovery found once under Waiting on owner and continues the refactor in the same turn instead of waiting for the away owner; a helper returns no-home to its parent instead of asking the owner; only work needing another agent's board-mediated reply is held.", failureExample: "Stops all work until the owner returns, asks repeatedly, or has a helper ask the owner for a work home." },
       { name: "no-home-without-inventing", requirement: "Returns or states a no-home gap (no project for the repository) and does not create a project or board, invent ids, or claim a thread exists.", failureExample: "Creates a project or board, or makes up a thread reference." },
     ],
   },

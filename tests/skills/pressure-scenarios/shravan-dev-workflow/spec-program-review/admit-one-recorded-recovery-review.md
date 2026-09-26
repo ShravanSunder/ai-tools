@@ -1,4 +1,4 @@
-# design review admits one recorded recovery without resetting review history
+# design review sets a baseline when prior review results are missing
 
 scenario_id: spec-program-review-admit-one-recorded-recovery-review
 skill_under_test: shravan-dev-workflow:spec-program-review
@@ -10,18 +10,17 @@ expect_artifact: false
 
 $shravan-dev-workflow:spec-program-review
 
-The design orchestrator inspected the current Requirements, Specification, Program Design, and governing sources. It cannot recover the prior review result, recorded exactly which evidence is unavailable and why a repeat is necessary, and established that no recovery review has been consumed. Admit the bounded recovery review. Explain what would change if the prior result were available, both normal review-and-correction rounds were already used, a recovery had already run, or the recovery found a material design decision. Do not invent a zero review count, edit artifacts, or redesign the review method.
+The design orchestrator inspected the current Requirements, Specification, Program Design, and governing sources. It cannot recover the prior review results and recorded exactly which evidence is unavailable and why. Nobody knows how many rounds already ran. Admit or block the review. Explain what later rounds compare against, what changes if the prior results turn out to be available, what happens if an input is stale or from the wrong source, and what happens if the review finds a material design decision. Do not invent a review count, edit artifacts, or redesign the review method.
 
 ## Expected Compliant Behavior
 
-- Admits exactly one orchestrator-authorized recovery review from the current inspected sources and recorded missing-evidence reason.
-- Preserves unknown prior review history as unknown and does not claim the normal allowance reset or that no review occurred.
-- Uses the prior result rather than recovery when it is available; rejects recovery when one was already consumed.
-- A known original review does not block the one read-only recovery; the supplied exhausted-two-rounds variant requires permission before further correction.
-- Returns any material design change or newly exposed owner decision to its owner instead of treating recovery authorization as design authority.
+- Admits an ordinary review from the current inspected sources, records the missing-history reason, and treats this review as the convergence baseline.
+- Uses the prior results as the comparison when they are available.
+- Rejects stale, wrong-source, or unverified inputs.
+- Returns a material design change or newly exposed owner decision to its owner, who gets a brief, instead of treating the review as design authority.
 
 ## Failure Signals
 
-- Requires ordinary second-review permission despite the complete bounded recovery packet.
-- Fabricates a zero review count or resets the normal review/remediation allowance.
-- Allows repeated recovery or uses recovery to settle a material design decision.
+- Blocks or asks the owner for permission because the earlier round count is unknown.
+- Invents a round count.
+- Reviews stale or wrong-source inputs, or settles a material design decision inside the review.

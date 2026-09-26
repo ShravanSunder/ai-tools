@@ -1,6 +1,6 @@
 # Goal Contract And Routing
 
-This reference owns current-source orientation, planning and implementation admission, meaningful result verification, bounded recovery, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
+This reference owns current-source orientation, planning and implementation admission, meaningful result verification, the missing-history baseline, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
 Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the main-authored canonical plan and PR assignments, implementation proof, main-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation 🐒 Sidekicks, persistent Review Sidekick when commissioned, executors when assigned, and known blockers.
 
@@ -16,7 +16,7 @@ requested terminal: plan-only | pr-ready-unmerged
 governing basis: reviewed design | admitted repository improvement | unresolved
 current source and material diff:
 current plan, proof, and review evidence:
-known remediation and recovery history:
+prior review findings or missing-history baseline:
 authority and blockers:
 trail: <coordination root plus execution roots, or unshared checkpoint path> / whole-work responsibility | contribution
 responsibility: orchestrator and coordination/integration / planned PR assignment -> persistent implementer and execution root / 🔎 Review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>
@@ -74,7 +74,7 @@ orchestrator assessment complete
   -> implementation-review for general-domain work
   -> skills-creation implementation review for a composed runtime skill package
 
-accepted implementation finding; remediation count below three
+accepted implementation finding; review has not returned not-converging
   -> implement-plan by the same implementer, fresh affected proof, then the same 🔎 Review Sidekick
 
 accepted specification, design, or plan finding
@@ -95,17 +95,9 @@ A request for one direct phase bypasses this orchestrator. Optional `ops-*` trac
 
 After every owner returns, the orchestrator inspects the source anchors that control the next decision. The 🔎 Review Sidekick supplies its review result after detailed source reading and lane reduction. The orchestrator checks findings against cited evidence, records why rejected findings are invalid, and routes accepted findings to their actual owner. Contextual design feedback does not replace independent review.
 
-Normal implementation review permits at most three accepted remediation passes. After each accepted implementation correction, require fresh affected proof and fresh review coverage. Design or planning corrections follow their owners' review boundaries and do not become implementation-remediation passes.
+Implementation review continues under the convergence rule in `implementation-review`'s `references/finding-and-reduction.md`. After each accepted implementation correction, require fresh affected proof and fresh review coverage. Design or planning corrections follow their owners' review boundaries and do not become implementation-remediation passes.
 
-If current evidence establishes that no review has run, use the ordinary first-review route. When prior review history should exist but its evidence cannot be inspected:
-
-1. Inspect the current source, diff, proof, and governing basis.
-2. Record which prior evidence is unavailable and why a review is necessary now.
-3. Establish that no prior recovery is known and that the normal allowance is not known exhausted.
-4. Pass an explicit one-time recovery request, the missing-evidence reason, current-source inspection, and the known or unknown remediation-count evidence to `implementation-review`.
-5. Record the recovery outcome in the work trail.
-
-Recovery does not fabricate a zero count, reset a known allowance, authorize repeated recovery, or excuse stale proof. If accepted findings return while the remaining correction budget is unknown, stop after reporting them and ask the user before correction.
+If current evidence establishes that no review has run, use the ordinary first-review route. When prior review history should exist but its evidence cannot be inspected, inspect the current source, diff, proof, and governing basis, record what is missing, and route an ordinary review; the current review sets the convergence baseline. Missing history never excuses stale proof.
 
 ## Finish the Goal
 
@@ -117,4 +109,4 @@ Before finishing, verify the material gates implied by the requested terminal, e
 
 Record the truthful outcome and continuation context through `practices-show-me-your-work`. Contributors leave the outer thread unresolved. The orchestrator follows the tracker to inspect current activity and completion before resolving. Readable views are conditional on a request or substantial synthesis need. For pending standalone Git, PR, or watch work, wait on the 🔧 Operator's completion notification or an authorized wake through `manage-agents`; never consume delivery turns polling a model.
 
-Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, bounded recovery/remediation rules are intact, and the finish decision matches the requested terminal and whole-work responsibility.
+Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, review returned ready, or not-converging reached the owner as a brief, and the finish decision matches the requested terminal and whole-work responsibility.

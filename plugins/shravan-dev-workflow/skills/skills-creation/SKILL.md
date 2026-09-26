@@ -131,7 +131,21 @@ Reference loads and 🔧 Operator procedures use the Call Grammar above; placeme
 
 Behavior-changing work is reviewed twice unless the user explicitly skips the applicable review: the proposal before skill edits, and proved, main-assessed changed files before ship. A persistent independent 🔎 Review Sidekick walks ordered checks in its own session and reduces findings. The orchestrator owns final disposition. Mechanical changes are not reviewed.
 
-Proposal review allows one independent review and one bounded remediation; the same lead verifies corrected anchors. Implementation review allows up to three remediation passes. A missing, `partial`, or `blocked` check prevents a clean result. Keep status in current run context.
+Proposal review prefers one independent review and one remediation; the same lead verifies corrected anchors. Both review stages then follow this convergence rule:
+
+> After each correction pass, compare this review with the previous one using the existing finding identity (anchor plus failure form). Return `not-converging` when either holds:
+> 1. **Recurrence.** A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
+> 2. **No progress.** The count of open accepted findings did not drop in two adjacent comparisons in a row: it stayed equal or rose from review N−1 to N, and again from N to N+1.
+>
+> When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
+
+The accepted boundary:
+
+> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
+
+IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, Main loads `../../shared-references/owner-decision-brief.md` and returns the brief; the review lead returns the stop to Main and stays read-only.
+
+A missing, `partial`, or `blocked` check prevents a clean result. Keep status in current run context.
 
 `references/review/spec-review.md` owns proposal checks; `references/review/implementation-review.md` owns changed or existing file checks. Each uses `references/review/lanes/lane-schema.md` for status and reduction. A scoped change keeps both stages and uses each stage's scoped check set.
 
@@ -234,7 +248,7 @@ Keep all-run obligations, decisions, invariants, required returns, and completio
 
 ### 6. Review the spec
 
-IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, the orchestrator commissions a different-lineage persistent 🔎 Review Sidekick with no author context. That lead loads `references/review/spec-review.md`, walks the selected checks in its own session and returns per-check statuses, verdict, blocker override, and implementation decision. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction. On correction, resume the same lead with its own review history; it verifies corrected anchors and closes without another review. A prior accepted proposal is reused only when its original review plus permitted remediation still covers current meaning. Expanded or uncertain semantic change stops `review-permission-required` instead of automatically dispatching another proposal review. Completion: proposal review is ready, its accepted bounded findings have one complete review-lead-verified remediation, or review was explicitly skipped/not applicable; a second review requires explicit user permission.
+IF the change is behavior-changing, before any skill file is edited and unless the user explicitly says no review is needed, the orchestrator commissions a different-lineage persistent 🔎 Review Sidekick with no author context. That lead loads `references/review/spec-review.md`, walks the selected checks in its own session and returns per-check statuses, verdict, blocker override, and implementation decision. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction. On correction, resume the same lead with its own review history; it verifies corrected anchors and closes without another review. A prior accepted proposal is reused only when its original review plus its lead-verified remediations still covers current meaning. A remediation inside the accepted boundary gets another proposal round under the Review section's convergence rule. An expanded or uncertain semantic change returns to Main for an owner brief first. Completion: proposal review is ready, its accepted bounded findings have review-lead-verified remediation, or review was explicitly skipped/not applicable.
 
 ### 7. Implement
 
@@ -265,9 +279,9 @@ Completion: the main records `accepted-for-independent-review | correction-requi
 
 ### 10. Review the implementation, prune, and ship
 
-IF the main assessment is `accepted-for-independent-review`, the change is behavior-changing, and the user has not said no review is needed, the orchestrator commissions a different-lineage persistent 🔎 Review Sidekick with no author context. That lead loads `references/review/implementation-review.md`, receives the current proof and main-assessment result, walks the selected checks in its own session, and returns per-check statuses, Parent Reduction, and current remediation-pass evidence. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction.
+IF the main assessment is `accepted-for-independent-review`, the change is behavior-changing, and the user has not said no review is needed, the orchestrator commissions a different-lineage persistent 🔎 Review Sidekick with no author context. That lead loads `references/review/implementation-review.md`, receives the current proof and main-assessment result, walks the selected checks in its own session, and returns per-check statuses, Parent Reduction, and the previous review's findings for the convergence comparison. The orchestrator makes final disposition and routes the lead's result without repeating detailed reduction.
 
-Two obligations stay with the executing review lead as it walks the checks. Synthesis stays with the lead: the lead verifies each candidate against actual files and proof before accepting it. Accepted findings receive one remediation pass at a time. The implementer makes the correction and produces fresh affected proof; the main reassesses that current result; then the same review lead refreshes affected coverage only while fewer than three remediation passes have completed. After remediation three, stop `remediation-limit-reached`; do not start review or remediation four without explicit user permission.
+Two obligations stay with the executing review lead as it walks the checks. Synthesis stays with the lead: the lead verifies each candidate against actual files and proof before accepting it. Accepted findings receive one remediation pass at a time. The implementer makes the correction and produces fresh affected proof; the main reassesses that current result; then the same review lead refreshes affected coverage until the result is great or the loop returns not-converging under the Review section's rule; on not-converging, bring the owner a brief.
 
 Route accepted findings back to the step that owns them: spec mismatch to `Review the spec`, wording or placement to `Implement`, proof honesty to `Proof of quality, proof of work`, assessment gap to `Main assessment`, and ship surface to this step.
 
@@ -275,7 +289,7 @@ After a `great` current review result, run the deletion test sentence by sentenc
 
 IF shipping, load `references/platform-mechanics.md` and return the validation, versioning, changelog, and cache/readback route. General product implementation review routes to `implementation-review`; runtime skill-package authoring remains under this `skills-creation` review contract.
 
-Completion: when implementation review ran, every required check has `complete` status, the Parent Reduction is complete, the result is `great`, and no fourth remediation occurred. Mechanical work or an explicit review skip records that applicable boundary without fabricating review coverage. In every route the skill is compact, valid, public-safe, and supported by the proof its classification and shipping claim require; a source-only evaluation never authorizes shipping.
+Completion: when implementation review ran, every required check has `complete` status, the Parent Reduction is complete, the result is `great`, and no round ran after not-converging. Mechanical work or an explicit review skip records that applicable boundary without fabricating review coverage. In every route the skill is compact, valid, public-safe, and supported by the proof its classification and shipping claim require; a source-only evaluation never authorizes shipping.
 
 ## Completion Blockers
 
@@ -287,15 +301,14 @@ The run is not done while any of these hold:
 - the workflow has branches without observable predicates or return shapes;
 - a promised stage or branch has no teaching owner — an inline body section or a reference that teaches it; a shape-only reference never owns a stage and separately requires a named consumer;
 - a dispatch site is judgment work rather than a prescribed 🔧 Operator procedure, or omits its steps, boundary, or observed result;
-- review lead lacked independence from the authoring session, an implementation check was reused after affected text changed, or proposal coverage was reused after text changed outside its one accepted lead-verified remediation;
+- review lead lacked independence from the authoring session, an implementation check was reused after affected text changed, or proposal coverage was reused after a semantic change outside the accepted boundary;
 - implementation completed without comparing the diff to the accepted spec boundary or reporting an actual deviation;
 - independent implementation review for implemented behavior-changing delivery started before fitting implementation proof and a source-backed main assessment;
 - the main assessment for implemented behavior-changing delivery omitted the current diff, actual proof, accepted need/spec/plan, complexity, ownership, or cross-assignment integration applicable to the change;
 - a behavior-changing shipped update has neither behavior proof nor an explicit user-accepted proof gap;
 - a change was classified `mechanical` without naming the surfaces it touched, or `scoped` without showing each excluded surface is untouched;
 - a behavior-changing skill change reached implementation without required spec review, citation of an unexpired accepted spec, or explicit user skip;
-- a second proposal/design review ran without explicit user permission after the first review/remediation result;
-- a fourth implementation remediation or its following review ran without explicit user permission;
+- a further round ran after not-converging, or outside the accepted boundary without an owner brief;
 - a behavior-changing skill change reached `PR-ready` or `released` without review-lead reduction and synthesis of the checks, changed-file coverage, and targeted retest, unless the user explicitly skipped review;
 - an accepted correction reached refreshed review coverage without fresh affected proof and main reassessment;
 - a required check was counted as complete without status, or a `partial` or `blocked` check was left open at `PR-ready` or `released` without a recorded review-lead closure;

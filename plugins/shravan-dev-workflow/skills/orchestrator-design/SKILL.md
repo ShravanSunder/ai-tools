@@ -48,26 +48,26 @@ For newly created file-backed artifacts, pass `new artifact home: <project-root>
 
 ## Review And Correction Rounds
 
-Prefer one review-and-correction round. Allow a second only for a concrete, substantive issue that remains or was introduced by the correction, within the agreed design. Pedantic, stylistic, or already-satisfied findings do not justify another round. Ask before a third.
+Prefer one review-and-correction round. Further rounds follow `spec-program-review`'s convergence rule in its `references/finding-and-reduction-schema.md`. Pedantic, stylistic, or already-satisfied findings do not justify another round. IF the review returns `not-converging`, load `../../shared-references/owner-decision-brief.md` and return a brief of what keeps failing.
 
 Reduce findings against the sources:
 
 - `ready` -> design terminal;
 - non-semantic or unsupported finding -> reject with evidence;
-- mental-model break or unmade owner meaning -> stop with assumption, evidence, consequence, and owner;
+- IF a mental-model break or unmade owner meaning appears, load `../../shared-references/owner-decision-brief.md` and return the brief with the failed assumption, evidence, and consequence; dependent work stops;
 - accepted bounded findings -> correct through the semantic owners; the retained independent 🔎 Review Sidekick checks corrected anchors and current affected evidence, then the orchestrator accepts the result.
 
-Each round may call `spec-design` then `program-design`, correcting each affected artifact once. The retained 🔎 Review Sidekick verifies those corrections within the same review relationship; this verification does not start another full review or expand the round allowance. Pre-review authoring does not consume a review round. `spec-program-review` owns review admission and coverage.
+Each round may call `spec-design` then `program-design`, correcting each affected artifact once. The retained 🔎 Review Sidekick verifies those corrections within the same review relationship; this verification does not start another full review or count as a round. Pre-review authoring does not consume a review round. `spec-program-review` owns review admission and coverage.
 
 ## Missing Review Evidence
 
-Pass `spec-program-review` one explicit orchestrator-authorized recovery request for unavailable prior results, using verified current artifacts and governing sources and a recorded reason. Preserve existing limits and unknown history; recovery grants no extra correction rounds. Reject repeated recovery or unverified inputs. Ask before corrections if the remaining allowance is exhausted or unknown. Route design breaks to their owner.
+If prior review results are unavailable, verify current artifacts and governing sources, record why, and run an ordinary review; the current review sets the baseline. Route design breaks to their owner.
 
 ## Trail And Completion
 
 At each owner return, record a meaningful checkpoint with decision, reason, evidence, and result through the tracker. At every terminal response, leave the actual design outcome and continuation context, including blocked, deferred, or stopped work. Nested work contributes without resolving the outer thread; the responsible whole-work agent follows the tracker's current-history and completion checks before resolution. Produce a readable view when requested or substantial synthesis is needed. Report unshared fallback or view gaps honestly; preserve the real design result and continue independent work unless shared recording was made a delivery gate.
 
-Return one status and the next skill or stop. `ready` requires distinct, current Requirements, Specification, and Program Design artifacts, independent review, retained 🔎 Review Sidekick verification of corrected anchors and current affected evidence, and orchestrator acceptance within the allowed rounds. It means design-ready, not implemented.
+Return one status and the next skill or stop. `ready` requires distinct, current Requirements, Specification, and Program Design artifacts, independent review, retained 🔎 Review Sidekick verification of corrected anchors and current affected evidence, and orchestrator acceptance. It means design-ready, not implemented.
 
 ## Design-Ready Continuation
 

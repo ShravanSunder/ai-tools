@@ -76,7 +76,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-check-diagrams-explain-system` | Check that diagrams answer their reader question and agree with written meaning. |
 | `spec-program-review` | `spec-program-review-give-useful-findings` | Return concrete findings, consequences, smallest corrections, owners, and confirming evidence in ordinary language. |
 | `spec-program-review` | `spec-program-review-route-only-validated-findings` | Let only parent-validated findings select one correction owner and keep direct review outside orchestration state. |
-| `spec-program-review` | `spec-program-review-one-review-one-remediation` | Close one design review from original findings plus parent-verified remediation without automatic rereview. |
+| `spec-program-review` | `spec-program-review-one-review-one-remediation` | Close resolved findings by parent verification and keep running rounds while the loop converges inside the accepted boundary, without a permission prompt. |
 | `spec-program-review` | `spec-program-review-chunk-design-seams` | Keep the mode-complete reviewer mandatory and chunk a large design along artifact seams, never by file. |
 | `spec-program-review` | `spec-program-review-dispel-design-over-delivery` | Run dispel on an empty candidate set and name unrequested design elements as over-delivery. |
 | `spec-program-review` | `spec-program-review-compose-focused-lanes-by-predicate` | Compose one focused lane per named source-backed risk, with a reason beside each lane run or skipped. |
@@ -90,10 +90,10 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `orchestrator-design` | `orchestrator-design-starts-with-spec-design` | Start a fresh full cycle with spec-design and leave requirements admission to that phase. |
 | `orchestrator-design` | `orchestrator-design-resumes-exact-handoff` | Resume from the exact current phase return without reconstructing meaning from chat or requiring lifecycle state. |
 | `orchestrator-design` | `orchestrator-design-blocks-invalid-route` | Block a target outside the design cycle without repairing or replacing it. |
-| `orchestrator-design` | `orchestrator-design-stops-before-second-review` | Close from original findings plus parent-verified remediation without automatically reviewing again. |
+| `orchestrator-design` | `orchestrator-design-continues-while-converging` | Close resolved findings by parent verification, keep correcting while the loop converges, and brief the owner on `not-converging`. |
 | `orchestrator-design` | `orchestrator-design-enters-post-review-correction` | Route one bounded design remediation to its semantic owner while preserving a genuine mental-model-break stop. |
 | `orchestrator-design` | `orchestrator-design-blocks-pathfinding-return-mismatch` | Block a completed pathfinding handoff that names a different phase than its initiating handoff. |
-| `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep authoring recovery distinct from the one review remediation and continue to the first review. |
+| `orchestrator-design` | `orchestrator-design-bounds-pre-review-recovery` | Keep pre-review authoring distinct from review correction passes and continue to the first review. |
 | `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a design author. |
 | `orchestrator-design` | `orchestrator-design-per-artifact-visual-coverage` | Verify visual completion separately for Requirements, Specification, and Program Design while preserving main-authored meaning. |
 | `orchestrator-design` | `orchestrator-design-ready-plan-keeps-main-default-contact` | Main authors the plan and remains the default conversation while the 🐒 Sidekick directly owns implementation and proof; direct Sidekick contact requires explicit user choice. |
@@ -178,7 +178,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-security-and-cache-boundary.md` | Do not treat scripts, hooks, assets, package scripts, third-party source adoption, or installed-cache/home mutation as ordinary prose work. |
 | `skills-creation` | `skills-creation-spec-review-gate.md` | Do not implement non-trivial skill workflow changes before pre-implementation spec review unless the user explicitly skips review. |
 | `skills-creation` | `skills-creation-implementation-review-gate.md` | Do not advance non-trivial skill changes to PR-ready without implementation review reduction, changed-file coverage, and targeted retest. |
-| `skills-creation` | `skills-creation-separate-review-remediation-limits` | Keep one proposal review/remediation distinct from the three-pass implementation-review limit. |
+| `skills-creation` | `skills-creation-review-stages-converge` | Run proposal and implementation review rounds while they converge inside the accepted boundary, and bring the owner a brief on `not-converging` or an out-of-boundary change. |
 | `skills-creation` | `skills-creation-proof-main-assessment-review-order` | Require implementation proof, then source-backed main assessment, then independent review and fresh correction proof. |
 | `practices-research` | `practices-research-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
 | `practices-research` | `practices-research-substantial-stage-artifacts` | Walk source classes in order, record coverage and null results, and verify primary anchors in one research ledger. |
@@ -196,8 +196,8 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-review` | `implementation-review-invalidate-corrected-coverage` | Invalidate affected review coverage after correction and require fresh review of corrected source and proof. |
 | `implementation-review` | `implementation-review-preserve-read-only-authority` | Keep reviewer and workflow authority read-only, candidate-only, and outside remediation or PR lifecycle work. |
 | `implementation-review` | `implementation-review-runtime-skill-package-route` | Route runtime skill-package review to `skills-creation`, not through product implementation review. |
-| `implementation-review` | `implementation-review-stops-before-fourth-remediation` | Stop after implementation remediation three instead of dispatching review or remediation four. |
-| `implementation-review` | `implementation-review-admit-bounded-recovery-review` | Admit exactly one orchestrator-authorized recovery review, keeping an unknown remediation count unknown and never resetting the allowance. |
+| `implementation-review` | `implementation-review-stops-when-not-converging` | Return `not-converging` on a recurrence or two adjacent non-drops and route an owner brief instead of another correction pass. |
+| `implementation-review` | `implementation-review-admit-bounded-recovery-review` | When review history is missing, admit an ordinary review that records the gap and sets the convergence baseline; reject a stale or wrong source. |
 | `implementation-review` | `implementation-review-chunk-keeps-contract-with-callers` | Chunk the review so a changed contract stays with its callers, with overlap seams and predicate-selected lanes. |
 | `implementation-review` | `implementation-review-dispel-over-delivery` | Dispel anchorless over-engineered findings, pass anchored ones through, and name unrequested subsystems in the diff. |
 | `implementation-review` | `implementation-review-whole-file-read-required` | Require whole-file reads with whole-file coverage rows instead of hunk-scoped review or reading inventories. |
@@ -228,7 +228,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `practices-show-me-your-work` | `practices-show-me-your-work-routine-edit-no-trace` | No trace for a routine typo fix; an explicit trail request for the same edit opens one. |
 | `practices-show-me-your-work` | `practices-show-me-your-work-owner-away-wip-folder` | With no board and the owner away, start the unshared wip trace folder in the same turn instead of chat notes or memory-logs. |
 | `practices-show-me-your-work` | `practices-show-me-your-work-preboard-sidekick-own-file-then-transfer` | A pre-board 🐒 Sidekick writes only its own wip file; Main transfers the folder under its own identity. |
-| `practices-collaboration` | `practices-collaboration-no-board-owner-away-continues` | Ask the owner once, return `no-home`, and keep working instead of waiting for a board. |
+| `practices-collaboration` | `practices-collaboration-no-board-owner-away-continues` | Main names the gap once under Waiting on owner, helpers return `no-home` to their parent, and work continues instead of waiting for a board. |
 | `practices-collaboration` | `practices-collaboration-listen-not-poll` | Arm one listener and name it in the stop text instead of polling thread lists. |
 | `practices-collaboration` | `practices-collaboration-sidekick-uses-assigned-root` | A 🐒 Sidekick stays on its execution root, reports completion, and resolves nothing. |
 | `practices-collaboration` | `practices-collaboration-worker-returns-evidence` | A 🛠️ Worker without posting authority returns evidence instead of posting. |

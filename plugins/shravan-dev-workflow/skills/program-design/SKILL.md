@@ -65,7 +65,7 @@ Produce terminal labels by observable condition:
 - `locally-ready`: every completion blocker is cleared and the complete return above exists.
 - `specification-gap`: governing Why/What, including an entity the design needs, is missing, conflicting, stale, or would be silently invented; return the exact gap and `spec-design` route.
 - `evidence-blocked`: load-bearing current-system, platform, feasibility, or proof-path evidence is missing, inaccessible, stale, or contradictory; return the exact evidence and access/state change needed.
-- `decision-needed`: two or more viable structural directions remain and selection requires owner-controlled cost, risk, compatibility, or policy tolerance not settled by the specification; return the decision owner, alternatives, tradeoffs, falsifiers, and deferral consequence. It is also the result when the structural-realization confirmation is missing: return the human owner as decision owner and the views step 16 showed.
+- `decision-needed`: two or more viable structural directions remain and selection requires owner-controlled cost, risk, compatibility, or policy tolerance not settled by the specification; return the decision owner and falsifiers, and load `../../shared-references/owner-decision-brief.md` and return the brief. It is also the result when the structural-realization confirmation is missing: return the human owner as decision owner and the views step 16 showed.
 - `deferred`: an authorized caller explicitly postpones scoped work after its consequence is recorded; return completed coverage, deferred scope, authority for deferral, consequence, and re-entry condition.
 
 After producing the terminal result, return exactly one phase-guided route:
@@ -251,16 +251,17 @@ Completion: each design element serves an obligation, constraint, failure policy
 
 Using the Integration Self-Check procedure in the already-loaded `references/artifact-and-self-review.md`, re-read the complete artifact for entity bindings and boundary shapes, term agreement with the Specification, component composition, singular ownership, dependency direction, interfaces, call-path deltas, state/flow/failure consistency, concurrency, cross-cutting realization, proof seams, the trace table and accepted-requirements coverage, process residue, obscure headings, plan leakage, and unresolved specification meaning. Consume each generated visual's accepted project asset, relative embed, semantic/readability inspection and destination-preview result, then return the integration self-check with exact gaps.
 
-Before review or planning, ask the authorized owner to confirm the current structural realization, and end the turn. Show these in the response body:
+Before review or planning, ask the authorized owner to confirm the current structural realization, and end the turn. Lead with pictures the owner can read, then the tables:
 
 ```text
+component view, drawn
+one representative entry-to-effect path, drawn
 binding table
 trace table
-one representative entry-to-effect path
 deviations and unresolved decisions: none | list
 ```
 
-New components and contracts, complexity spent, and accepted-requirements coverage are read from those tables. Saying the tables exist is not showing them; a read-only or chat-only run puts them in the response. Reuse confirmation only when it covers this same binding table, trace table, and path. When requested machinery falls outside the confirmed goal boundary, reject it and continue with the authorized design; that rejected pressure does not create a new owner decision. Missing confirmation or a real material expansion in the selected design returns `decision-needed`, and step 17 runs only on a later turn, after the owner replies. Confirmation state stays in the returned result rather than a durable status field.
+New components and contracts, complexity spent, and accepted-requirements coverage are read from those tables. Saying the tables exist is not showing them; a read-only or chat-only run puts them in the response. Reuse confirmation only when it covers this same component view, entry-to-effect path, binding table, trace table, and deviations list. When requested machinery falls outside the confirmed goal boundary, reject it and continue with the authorized design; that rejected pressure does not create a new owner decision. Missing confirmation or a real material expansion in the selected design returns `decision-needed`, and step 17 runs only on a later turn, after the owner replies. Confirmation state stays in the returned result rather than a durable status field.
 
 An explicit owner instruction to skip this confirmation and go to review is a waiver. Record `structural-realization confirmation: waived by owner`, still show the same views, and step 17 may then run in the same turn. A packet claim, a goal-boundary confirmation, a caller's instruction, or silence is not a waiver.
 
@@ -284,9 +285,9 @@ When required, invoke `spec-program-review` separately in `program-only` mode wi
 - constraints, non-goals, risk predicates, and claimed proof evidence or gaps;
 - the readiness question and any prior coverage plus semantic-change record.
 
-Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. Follow `spec-program-review`'s bounded review-and-correction-round policy for per-artifact correction limits, parent verification, and any later review.
+Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. Follow `spec-program-review`'s bounded review-and-correction-round policy for its convergence rule, parent verification, and any later review.
 
-Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact non-substantial basis, block, or permission requirement is recorded.
+Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact non-substantial basis or block is recorded.
 
 ### 18. Return the local result
 

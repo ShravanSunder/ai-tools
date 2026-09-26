@@ -31,8 +31,8 @@ flowchart TD
 
 - Requirements or observable-behavior problems return to `spec-design`; structural problems to `program-design`; slice or proof-map problems to the originating planner; code and proof problems to `implement-plan`.
 - A reviewer proposal that adds unrequested scope is rejected; an unrequested element already in the diff gets removal or an owner decision.
-- Corrected work may be reviewed again only within the three-remediation limit.
+- Corrected work inside the accepted boundary is reviewed again until the loop is ready or stops converging; a correction that changes design meaning goes to the owner as a brief first.
 
 ## Output
 
-One result — ready, needs revision, blocked input, decision needed, or remediation limit reached — with rails-anchored findings, rejected findings with evidence, remaining uncertainty, and exact routes.
+One result — ready, needs revision, blocked input, decision needed, or not converging — with rails-anchored findings, rejected findings with evidence, remaining uncertainty, and exact routes.

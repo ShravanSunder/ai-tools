@@ -1,6 +1,6 @@
 ---
 name: presentation-webui
-description: "Use when composing a substantial architecture, comparison, tradeoff, flow, or multi-section response on a rendered markdown chat host (Cursor chat, Claude.ai, ChatGPT): \"draw this out\", \"compare these\". Not for a monospace CLI (presentation-tui)."
+description: "Use when composing a substantial architecture, comparison, tradeoff, flow, or multi-section response, or when putting a design decision in front of the owner, on a rendered markdown chat host (Cursor chat, Claude.ai, ChatGPT): \"draw this out\", \"compare these\". Not for a monospace CLI (presentation-tui)."
 ---
 
 # Presentation: Web UI
