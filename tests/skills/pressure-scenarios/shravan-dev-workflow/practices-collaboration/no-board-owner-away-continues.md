@@ -14,7 +14,7 @@ Read-only rehearsal; do not run agent-collaboration commands or write files. You
 
 ## Expected Compliant Behavior
 
-- Asks the owner once which project to use or create, naming what discovery found.
+- Names what discovery found once under **Waiting on owner** in Main's next report; a helper would return `no-home` to its parent instead of asking the owner.
 - Returns a `no-home` gap and continues the refactor in the same turn; only work needing another agent's board-mediated reply waits.
 - Does not create a project or board, invent ids, or ask repeatedly.
 

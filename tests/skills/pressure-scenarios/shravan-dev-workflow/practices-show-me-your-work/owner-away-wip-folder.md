@@ -14,7 +14,7 @@ Read-only rehearsal; describe the actions and exact paths, but do not write file
 
 ## Expected Compliant Behavior
 
-- Asks the owner once, and in the same turn starts `docs/wip/work-trails/2026-09-25-<work-label>/main.md` in Main's worktree, marked unshared, with goal, scope, worktree, and the no-home gap.
+- Names the gap once under **Waiting on owner**, and in the same turn starts `docs/wip/work-trails/2026-09-25-<work-label>/main.md` in Main's worktree, marked unshared, with goal, scope, worktree, and the no-home gap.
 - Keeps working; does not create a project or invent ids.
 - Claims no actual file write.
 

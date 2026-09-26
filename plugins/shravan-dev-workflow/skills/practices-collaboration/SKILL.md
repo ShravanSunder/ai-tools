@@ -15,7 +15,7 @@ For a qualifying task, before other work, MUST load `references/work-home-discov
 
 ## No home: ask once and keep working
 
-When discovery returns no project for the repository, no access, or several candidates it cannot choose between, ask the owner once which project to use or create, naming the candidates or the gap. The owner controls projects and boards; do not create one without that answer. In the same turn, return `no-home: <gap>` to the caller and continue the work. Only work that needs another agent's board-mediated reply waits. Do not ask again in the session unless the owner answers or the gap changes, and never invent an id to fill it.
+When discovery returns no project for the repository, no access, or several candidates it cannot choose between, a helper does not ask the owner; it returns `no-home: <gap>` to its parent and handles its trace under the role and grant rules below. Main names the candidates or the gap once under **Waiting on owner** in its next report and keeps working. The owner controls projects and boards; do not create one without that answer. Only work that needs another agent's board-mediated reply waits. Do not ask again in the session unless the owner answers or the gap changes, and never invent an id to fill it.
 
 ## Seats by role
 

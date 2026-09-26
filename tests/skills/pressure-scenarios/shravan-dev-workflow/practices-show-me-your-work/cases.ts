@@ -142,7 +142,7 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "wip-folder-same-turn", requirement: "On no-home with the owner away, says it asks the owner once and, in the same turn, starts docs/wip/work-trails/<yyyy-mm-dd-work-label>/main.md in Main's worktree marked unshared with goal, scope, worktree, and the no-home gap, then keeps working.", failureExample: "Waits for the owner, writes the checkpoint under ~/dev/memory-logs, or keeps the trace only in chat." },
+      { name: "wip-folder-same-turn", requirement: "On no-home with the owner away, says Main names the gap once under Waiting on owner (a helper returns no-home to its parent instead of asking) and, in the same turn, starts docs/wip/work-trails/<yyyy-mm-dd-work-label>/main.md in Main's worktree marked unshared with goal, scope, worktree, and the no-home gap, then keeps working.", failureExample: "Waits for the owner, writes the checkpoint under ~/dev/memory-logs, or keeps the trace only in chat." },
       { name: "no-invented-home", requirement: "Does not create a board project, invent thread ids, or claim anything was shared; claims no actual file write in this rehearsal.", failureExample: "Creates a project, makes up a root id, or claims the file was written." },
     ],
   },

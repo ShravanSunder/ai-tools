@@ -228,7 +228,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `practices-show-me-your-work` | `practices-show-me-your-work-routine-edit-no-trace` | No trace for a routine typo fix; an explicit trail request for the same edit opens one. |
 | `practices-show-me-your-work` | `practices-show-me-your-work-owner-away-wip-folder` | With no board and the owner away, start the unshared wip trace folder in the same turn instead of chat notes or memory-logs. |
 | `practices-show-me-your-work` | `practices-show-me-your-work-preboard-sidekick-own-file-then-transfer` | A pre-board 🐒 Sidekick writes only its own wip file; Main transfers the folder under its own identity. |
-| `practices-collaboration` | `practices-collaboration-no-board-owner-away-continues` | Ask the owner once, return `no-home`, and keep working instead of waiting for a board. |
+| `practices-collaboration` | `practices-collaboration-no-board-owner-away-continues` | Main names the gap once under Waiting on owner, helpers return `no-home` to their parent, and work continues instead of waiting for a board. |
 | `practices-collaboration` | `practices-collaboration-listen-not-poll` | Arm one listener and name it in the stop text instead of polling thread lists. |
 | `practices-collaboration` | `practices-collaboration-sidekick-uses-assigned-root` | A 🐒 Sidekick stays on its execution root, reports completion, and resolves nothing. |
 | `practices-collaboration` | `practices-collaboration-worker-returns-evidence` | A 🛠️ Worker without posting authority returns evidence instead of posting. |
