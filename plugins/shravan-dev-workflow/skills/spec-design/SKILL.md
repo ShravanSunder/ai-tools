@@ -88,7 +88,7 @@ For an explicitly Requirements-only request, finish the Requirements identity an
 Produce terminal labels by observable condition:
 
 - `locally-ready`: every completion blocker is cleared and the complete return above exists.
-- `decision-needed`: legitimate sources cannot settle load-bearing product meaning, public behavior, compatibility, policy, or cost/risk tolerance; return the decision owner, options, evidence, and deferral consequence.
+- `decision-needed`: legitimate sources cannot settle load-bearing product meaning, public behavior, compatibility, policy, or cost/risk tolerance; return the decision owner and evidence, and IF returning `decision-needed`, load `../../shared-references/owner-decision-brief.md` and return the brief.
 - `evidence-blocked`: required governing or observational evidence is missing, inaccessible, stale, or contradictory enough that a truthful obligation cannot be derived; return the exact evidence and access/state change needed.
 - `deferred`: an authorized caller explicitly postpones scoped work after its consequence is recorded; return completed coverage, deferred scope, authority for deferral, consequence, and re-entry condition.
 
@@ -193,7 +193,7 @@ Completion: each goal has an observable success condition, each material non-goa
 
 Search legitimate sources before asking. Ask only when product meaning, public behavior, irreversible compatibility, policy, or cost/risk tolerance remains undecidable.
 
-Ask one load-bearing decision at a time with options, recommendation, evidence, gain, cost, foreclosed choices, and consequence of deferral. Delegation, vague assent, silence, or a topic change is not decision authority.
+Ask one load-bearing decision at a time: load `../../shared-references/owner-decision-brief.md` and return the brief, including foreclosed choices. Delegation, vague assent, silence, or a topic change is not decision authority.
 
 Completion: each load-bearing branch has durable authority evidence, is explicitly deferred with consequence, or produces `decision-needed`.
 
@@ -257,7 +257,7 @@ Call `spec-program-review` using its `classify-review-requirement` operation wit
 
 When `review-required`, invoke `spec-program-review` separately in `specification-only` mode with fresh context and read-only authority, carrying the target classification, distinct Requirements and Specification identities, governing sources, confirmed goal boundary, accepted requirements set, constraints, non-goals, proof claims or gaps, and the exact `skills-creation` parent packet/result identity when applicable. Route accepted Why/What findings back here and follow `spec-program-review`'s bounded review-and-correction-round policy for correction limits, parent verification, and any later review.
 
-Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact `non-substantial` basis, block, or permission requirement is recorded.
+Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact `non-substantial` basis or block is recorded.
 
 ### 12. Return the local result
 
