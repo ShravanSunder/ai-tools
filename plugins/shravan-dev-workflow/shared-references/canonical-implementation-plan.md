@@ -50,7 +50,7 @@ result payload:
 
 The caller supplies the requested terminal. Direct planning uses an explicit terminal or asks once at entry when ambiguous. The improvement planner defaults direct use to `plan-only`.
 
-Planning chooses technical strategy and the one coherent vertical grouping when only one exists. When materially different grouping or PR-topology options exist, it presents concrete choices, a recommendation, and tradeoffs, then waits for the owner selection before returning `ready`. One indivisible deliverable defaults to one PR. Do not ask about ordinary file, sequence, code, or proof mechanics.
+Planning chooses technical strategy and the one coherent vertical grouping when only one exists. When materially different grouping or PR-topology options exist, it picks one, records the choice, the alternatives, and the reason in the plan, and returns `ready`. One indivisible deliverable defaults to one PR. Do not ask about ordinary file, sequence, code, or proof mechanics.
 
 Optional tracking remains outside this record. At planning entry, preserve an existing tracking selection or offer once between no tracking and one available named `ops-*` owner. No tracking continues immediately. A named selection is returned as separate current call context for the goal or direct-planning caller to invoke; tracker state never gates delivery.
 
