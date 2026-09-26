@@ -54,12 +54,16 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
-    scenarioId: "orchestrator-design-stops-before-second-review",
-    requiredSourceReads,
+    scenarioId: "orchestrator-design-continues-while-converging",
+    requiredSourceReads: [
+      ...requiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/finding-and-reduction-schema.md",
+      "plugins/shravan-dev-workflow/shared-references/owner-decision-brief.md",
+    ],
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "closes-by-parent-verification", requirement: "For the fully resolved original scenario, uses the review findings plus parent verification as current design closure; generic freshness alone does not justify review two.", failureExample: "Applies generic freshness language to rerun design review." },
-      { name: "permission-gates-another-review", requirement: "Allows a second review-and-correction round for the supplied concrete substantive ordering hazard after round one; requires explicit user approval for a third. Does not treat teammate preference as authority.", failureExample: "Allows a second round merely for reassurance, blocks the substantive second round for lack of extra approval, or permits an unapproved third round." },
+      { name: "closes-by-parent-verification", requirement: "For the fully resolved original scenario, uses the review findings plus parent verification as current design closure; generic freshness alone does not justify another review.", failureExample: "Applies generic freshness language to rerun design review." },
+      { name: "rounds-follow-convergence", requirement: "For 4, 2, 1 inside the accepted boundary, runs another round for the substantive hazard without asking the owner for permission; for 3, 3, 3, recognizes not-converging and returns an owner-decision brief of what keeps failing.", failureExample: "Asks permission to continue a converging loop, or keeps correcting after two adjacent non-drops." },
     ],
   },
   {
@@ -67,7 +71,7 @@ export const skillPressureCaseDefinitions = [
     requiredSourceReads,
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "routes-one-bounded-remediation", requirement: "Routes accepted Why/What findings to spec-design and structural How findings to program-design for the single permitted remediation.", failureExample: "Uses the wrong owner, remediates twice, or starts another review." },
+      { name: "routes-one-correction-round", requirement: "Routes accepted Why/What findings to spec-design and structural How findings to program-design, correcting each affected artifact once in the round.", failureExample: "Uses the wrong owner, corrects an artifact twice in one round, or starts another review without a substantive residual." },
       { name: "keeps-mental-model-break-stop", requirement: "Stops a genuine mental-model break with assumption, evidence, consequence, and owner instead of consuming remediation.", failureExample: "Forces a broken model through the bounded correction path." },
     ],
   },
@@ -91,7 +95,7 @@ export const skillPressureCaseDefinitions = [
     ],
     maximumToolCalls: 25,
     semanticCriteria: [
-      { name: "routes-current-specification-gap", requirement: "Routes the current program-design specification-gap return to spec-design, then follows its current return to program-design without treating that authoring recovery as design-review remediation.", failureExample: "Stops on a fabricated counter or consumes the review remediation allowance before review." },
+      { name: "routes-current-specification-gap", requirement: "Routes the current program-design specification-gap return to spec-design, then follows its current return to program-design without treating that authoring recovery as design-review remediation.", failureExample: "Stops on a fabricated counter or treats pre-review authoring as a review correction pass." },
       { name: "prefers-one-review", requirement: "After current distinct artifacts exist, routes to the first independent three-artifact review without implying an automatic second round.", failureExample: "Skips review, enters planning, or offers automatic repeat review." },
     ],
   },
@@ -136,14 +140,14 @@ export const skillPressureCaseDefinitions = [
   "maximumToolCalls": 30,
   "semanticCriteria": [
     {
-      "name": "one-recorded-source-based-recovery",
-      "requirement": "Inspects current artifacts and sources, records the missing review evidence and reason, preserves known/unknown history, and selects one orchestrator-authorized recovery route to spec-program-review.",
-      "failureExample": "Invents zero history, repeats recovery, or treats a log as current proof."
+      "name": "baseline-from-current-review",
+      "requirement": "Inspects current artifacts and sources, records the missing review evidence and reason, and routes an ordinary spec-program-review whose result sets the convergence baseline, without a permission prompt.",
+      "failureExample": "Asks the owner for permission, invents a round count, or treats a log as current proof."
     },
     {
       "name": "honest-trail-and-correction-scope",
-      "requirement": "Rejects project-local lifecycle bookkeeping or a second logging mechanism, claims no trail/view writes in the read-only run, and preserves unknown correction capacity without restoring or silently extending a used round.",
-      "failureExample": "Creates project lifecycle bookkeeping, silently extends correction authority, or claims a rendered file without writing it."
+      "requirement": "Rejects project-local lifecycle bookkeeping or a second logging mechanism, claims no trail/view writes in the read-only run, and routes a newly exposed owner decision as a brief rather than settling it.",
+      "failureExample": "Creates project lifecycle bookkeeping, settles an owner decision inside the run, or claims a rendered file without writing it."
     }
   ]
 },

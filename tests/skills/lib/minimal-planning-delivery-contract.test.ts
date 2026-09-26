@@ -153,7 +153,12 @@ describe("goal delivery intent hard cutover", () => {
       "precedence `not-converging -> blocked -> needs-revision",
     );
     expect(designOrchestrator).toContain("Prefer one review-and-correction round");
-    expect(designOrchestrator).toContain("Ask before a third");
+    expect(designOrchestrator).toContain(
+      "Further rounds follow `spec-program-review`'s convergence rule",
+    );
+    expect(designOrchestrator).toContain(
+      "IF the review returns `not-converging`, load `../../shared-references/owner-decision-brief.md` and return a brief of what keeps failing.",
+    );
     expect(implementationReviewResults).toContain(convergenceRecurrenceText);
     expect(implementationReviewResults).toContain(convergenceNoProgressText);
     expect(implementationReviewResults).toContain(convergenceBaselineText);
@@ -202,7 +207,7 @@ describe("goal delivery intent hard cutover", () => {
       "orchestrator-implementation-goal/respect-narrow-terminal.md",
       "plan-implementation/direct-planning-establishes-intent.md",
       "plan-implementation/orchestrated-plan-uses-project-tmp.md",
-      "orchestrator-design/stops-before-second-review.md",
+      "orchestrator-design/continues-while-converging.md",
       "orchestrator-design/ready-plan-keeps-main-default-contact.md",
       "manage-agents/main-default-after-ready-plan.md",
       "manage-agents/no-relay-supervisor.md",
