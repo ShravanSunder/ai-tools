@@ -1,6 +1,6 @@
 # Goal Contract And Routing
 
-This reference owns current-source orientation, planning and implementation admission, meaningful result verification, bounded recovery, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
+This reference owns current-source orientation, planning and implementation admission, meaningful result verification, the missing-history baseline, and finish decisions for one implementation delivery goal. Phase skills retain their own input and return contracts.
 
 Expected inputs: the user's objective and requested terminal, repository instructions, current source and diff, governing artifacts, admitted-improvement evidence when applicable, the main-authored canonical plan and PR assignments, implementation proof, main-assessment evidence, review evidence, supplied authority, coordination and execution work references or unshared checkpoint path and whole-work responsibility, the orchestrator, persistent implementation 🐒 Sidekicks, persistent Review Sidekick when commissioned, executors when assigned, and known blockers.
 
@@ -16,7 +16,7 @@ requested terminal: plan-only | pr-ready-unmerged
 governing basis: reviewed design | admitted repository improvement | unresolved
 current source and material diff:
 current plan, proof, and review evidence:
-known remediation and recovery history:
+prior review findings or missing-history baseline:
 authority and blockers:
 trail: <coordination root plus execution roots, or unshared checkpoint path> / whole-work responsibility | contribution
 responsibility: orchestrator and coordination/integration / planned PR assignment -> persistent implementer and execution root / 🔎 Review Sidekick: <persistent session or not yet commissioned> / executor: <assigned or implementer direct>

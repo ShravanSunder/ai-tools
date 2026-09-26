@@ -285,7 +285,7 @@ When required, invoke `spec-program-review` separately in `program-only` mode wi
 - constraints, non-goals, risk predicates, and claimed proof evidence or gaps;
 - the readiness question and any prior coverage plus semantic-change record.
 
-Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. Follow `spec-program-review`'s bounded review-and-correction-round policy for per-artifact correction limits, parent verification, and any later review.
+Consume each accepted finding's ordered correction route: Why/What returns to `spec-design`; structural How returns here; `both` returns to `spec-design` first and resumes here only after the observable contract is settled; caller-owned decisions return to the caller and this design does not resume until they are resolved. Follow `spec-program-review`'s bounded review-and-correction-round policy for its convergence rule, parent verification, and any later review.
 
 Completion: the permitted independent review coverage and parent-verified corrections are ready under `spec-program-review`'s policy, or the exact non-substantial basis or block is recorded.
 

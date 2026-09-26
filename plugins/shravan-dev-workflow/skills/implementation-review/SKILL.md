@@ -77,7 +77,7 @@ Do not return `ready` while any of these hold:
 - a proof claim was accepted without a proof-challenge result (or a named proof gap), or a 🔧 Operator ran a command outside the grant or left the worktree changed;
 - an accepted finding lacks a quoted rail anchor, the deletion test, its scope effect, owner, or confirmation evidence;
 - a reviewer proposal that adds unrequested scope was accepted or returned `decision-needed`; or a delivered element dispel mapped `absent` (or spec-compliance marked `extra` or `scope overreach`) has neither an accepted removal nor a `decision-needed` return;
-- a mental-model break was pushed through remediation instead of returning to the user;
+- a mental-model break was pushed through remediation instead of returning to the orchestrator for an owner brief;
 - the result edits, continues after not-converging, or persists review bookkeeping.
 
 IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.

@@ -13,9 +13,9 @@ Every call goes through the tool manual: MUST load `agent-collaboration` for the
 
 For a qualifying task, before other work, MUST load `references/work-home-discovery.md` and return either the exact work thread reference (service, project, board, topic, root message id) or `no-home: <gap>`. A new session continues the existing work thread; it does not start a new one.
 
-## No home: ask once and keep working
+## No home: return it and keep working
 
-When discovery returns no project for the repository, no access, or several candidates it cannot choose between, a helper does not ask the owner; it returns `no-home: <gap>` to its parent and handles its trace under the role and grant rules below. Main names the candidates or the gap once under **Waiting on owner** in its next report and keeps working. The owner controls projects and boards; do not create one without that answer. Only work that needs another agent's board-mediated reply waits. Do not ask again in the session unless the owner answers or the gap changes, and never invent an id to fill it.
+When discovery returns no project for the repository, no access, or several candidates it cannot choose between, a helper does not ask the owner; it returns `no-home: <gap>` to its parent and handles its trace under the seats below and the trace-grant rules in `practices-show-me-your-work`. Main names the candidates or the gap once under **Waiting on owner** in its next report and keeps working. The owner controls projects and boards; do not create one without that answer. Only work that needs another agent's board-mediated reply waits. Do not ask again in the session unless the owner answers or the gap changes, and never invent an id to fill it.
 
 ## Seats by role
 

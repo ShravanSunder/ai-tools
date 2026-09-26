@@ -44,6 +44,12 @@ describe("goal delivery intent hard cutover", () => {
     expect(planner).toContain("If a direct request is ambiguous, ask once at entry");
     expect(planner).toContain("Choose the smallest coherent vertical grouping");
     expect(planner).toContain("materially different groupings or PR topologies");
+    expect(planner).toContain(
+      "pick one and record the choice, the alternatives, and the reason in the plan",
+    );
+    expect(contract).toContain(
+      "picks one, records the choice, the alternatives, and the reason in the plan, and returns `ready`",
+    );
     expect(planner).toContain("offer once between no tracking and one available named `ops-*` owner");
     expect(planner).toContain("first resolve the project root");
     expect(planner).toContain(

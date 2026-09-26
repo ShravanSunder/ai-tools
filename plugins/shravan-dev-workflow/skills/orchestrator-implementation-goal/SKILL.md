@@ -35,7 +35,7 @@ Each implementation 🐒 Sidekick executes its assigned change and associated pr
 7. Repeat correction, proof, and review while accepted findings remain. IF the review returns `not-converging`, load `../../shared-references/owner-decision-brief.md` and return a brief of what keeps failing and why.
 8. When review is ready, assign `implementation-pr-wrapup` to an 🔧 Operator or the assigned implementation Sidekick and require current PR gate evidence back to Main for verification. Operators own separately assigned Git, PR, and blocking-watch routines; wait for their notifications or authorized wakes through `manage-agents`, never by model polling. Stop at PR-ready and unmerged by default. Pass through explicit merge authority only after readiness.
 
-Record consequential decisions, accepted or rejected findings, corrections, proof outcomes, recovery use, blockers, and terminal results through `practices-show-me-your-work`. Keep logging a companion to delivery: do not create another lifecycle ledger, copied receipt store, counter protocol, or result replay mechanism.
+Record consequential decisions, accepted or rejected findings, corrections, proof outcomes, any missing-history baseline, blockers, and terminal results through `practices-show-me-your-work`. Keep logging a companion to delivery: do not create another lifecycle ledger, copied receipt store, counter protocol, or result replay mechanism.
 
 If prior review evidence is unavailable, inspect the current source and proof boundary, record what is missing, and route an ordinary review; the current review sets the convergence baseline.
 

@@ -2,7 +2,7 @@
 
 `orchestrator-implementation-goal` carries a delivery goal across main-authored planning, planned-PR implementation and proof, main assessment, independent review, accepted correction, and PR readiness. The user-facing main owns governing design and plans; persistent implementation Sidekicks receive bounded PR assignments.
 
-The runtime contract is [SKILL.md](./SKILL.md). Current-source orientation, routing examples, recovery, and finish checks are in [goal-contract-and-routing.md](./references/goal-contract-and-routing.md).
+The runtime contract is [SKILL.md](./SKILL.md). Current-source orientation, routing examples, the missing-history baseline, and finish checks are in [goal-contract-and-routing.md](./references/goal-contract-and-routing.md).
 
 ```mermaid
 flowchart LR
