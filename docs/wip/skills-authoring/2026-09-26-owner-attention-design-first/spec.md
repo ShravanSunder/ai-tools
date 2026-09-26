@@ -338,3 +338,12 @@ After implementation, the cutover grep in the proof plan checks this table; it d
 - **r5:** applies exactly the two corrections the lead prescribed. Under the current `spec-review.md:62`, another look by the lead needs explicit owner permission.
 - **Acceptance:** the owner accepted r5 on 2026-09-26 and declined a further lead check. D13 (PR grouping is procedure) is kept. Implementation decision: `accepted-to-implement`.
 - **Owner amendment (2026-09-26, after acceptance):** the C3 first sentence now names the owner's design list: domain boundaries, storage boundaries, architecture, contracts, product behavior, and the shape of the design. This is owner-directed wording with no change to structure or to any call site.
+
+## Implementation record
+
+- **Implementation:** Claude Opus implementation 🐒 Sidekick (agent-router `claude-local`, session `181d4034`). Runs 4, 1–3, 5–13 plus ship prep, one commit per run. The proof-gate commit removed only the Sidekick's own transient guards.
+- **Main assessment:** proof re-run (17 files, 123 tests; typecheck 0; cutover `rg` 0). One correction pass (`c0b58a22`) fixed six stale consumers the disposition table missed.
+- **Implementation review:** fresh GPT-6 Astra high 🔎 Review Sidekick (session `01a0df8d-ac91`), using the base `skills-creation` implementation-review stage. Verdict `targeted-revision`: F1 (plan-implementation admission still counted remediations) and F2 (a break routed a helper straight to the user), both accepted. Rejected: pressure runs (D10), a numeric budget (D1), and weakened-proof on the dropped guards. Correction `9f07dc8d` fixed both and a same-pattern README site. The same lead's affected-coverage verification returned `great`, a PR-ready candidate.
+- **Deletion test:** `owner-decision-brief.md` checked sentence by sentence; nothing to cut.
+- **Proof boundary:** static only. Behavior is not evaluated (D10). Cache refresh and Codex version readback happen after merge.
+
