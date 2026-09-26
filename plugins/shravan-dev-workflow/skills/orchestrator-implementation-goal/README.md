@@ -21,4 +21,4 @@ Design repair remains a separate owner. If an incomplete prerequisite can be com
 
 The workflow uses `practices-show-me-your-work` for consequential decisions and results. A shared thread follows the work across sessions; nested phase owners contribute checkpoints. Session endings do not automatically resolve the thread. The trail supports orientation but never replaces current source, proof, review, or PR evidence.
 
-Normal implementation correction is capped at three remediation passes. One bounded recovery review is possible when prior evidence is unavailable and current source has been inspected, but recovery cannot reset known history or be repeated. Merge always requires explicit authority.
+Implementation correction repeats while the review loop converges; when it stops converging, the owner gets a brief of what keeps failing. When prior review evidence is unavailable, the current review sets the baseline. Merge always requires explicit authority.
