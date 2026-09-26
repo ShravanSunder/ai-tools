@@ -387,6 +387,71 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
+    scenarioId: "spec-program-review-check-trace-table-rows",
+    requiredSourceReads: [
+      ...separateArtifactReviewRequiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-three-artifact-design.md",
+    ],
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "finds-the-two-defective-cells",
+        requirement: "Walks the trace table cell by cell and raises findings anchored to both defective shape-and-home cells: R2's cell reading 'see interfaces' (a cross-reference is not a shape and home) and R4's blank cell (empty, not marked gap), naming the requirement each serves and what a planner would have to guess. It does not report the marked 'gap: seam undecided' proof cells for R4 and R5, or R5's 'none: stateless guard' state cell, as defects.",
+        failureExample: "Passes traceability because the table has the right columns and one row per obligation, misses the blank R4 cell, accepts 'see interfaces', or reports the honestly marked gap or none cells as defects.",
+      },
+      {
+        name: "routes-smallest-correction-to-program-design",
+        requirement: "Gives each cell finding its own `Route: program-design` with the smallest correction (fill the cell or mark it gap with a reason), returns needs-revision, and does not repair the table itself.",
+        failureExample: "Returns ready, fixes the cells in the review, leaves the route implicit, or routes the table defect to spec-design.",
+      },
+      {
+        name: "accepts-the-owner-waiver",
+        requirement: "Treats 'structural-realization confirmation: waived by owner' as the confirmation: it does not return decision-needed or an authority gap for a missing confirmation, and it does not let the waiver excuse the cell defects.",
+        failureExample: "Returns decision-needed asking the owner to confirm the structure despite the recorded waiver, or treats the waiver as a reason to pass traceability.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-catch-noun-leak",
+    requiredSourceReads: [
+      ...separateArtifactReviewRequiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-three-artifact-design.md",
+    ],
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "finds-the-undefined-entity",
+        requirement: "Resolves every Program Design noun against the Specification's E table and flags HoldOccurrence as a noun with no E that carries its own identity (minted per Hold), lifetime (persisted in the wait payload), and relationship (one Reminder per HoldOccurrence), which signal a possible missing Specification entity, instead of accepting it as an internal concept because the design defines it consistently or because E3's prose says 'occurrence'.",
+        failureExample: "Accepts HoldOccurrence as a design-local internal concept, or treats it as a rename of Ticket Change routed only to program-design.",
+      },
+      {
+        name: "routes-definition-to-spec-design",
+        requirement: "Raises a term finding with `Route: spec-design` (or the ordered `spec-design -> program-design`) so spec-design decides whether HoldOccurrence is a new entity or already covered by E3's identity rule before the design binds it; review does not define it and returns needs-revision.",
+        failureExample: "Routes to program-design alone, defines HoldOccurrence in the review, or returns ready.",
+      },
+    ],
+  },
+  {
+    scenarioId: "spec-program-review-flag-missing-binding",
+    requiredSourceReads: [
+      ...separateArtifactReviewRequiredSourceReads,
+      "plugins/shravan-dev-workflow/skills/spec-program-review/references/reviewing-program-design.md",
+    ],
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "finds-the-binding-and-shape-gaps",
+        requirement: "Checks each Specification entity against the binding table and finds that E3 Delivery Exception has no binding row (no owner, home, schema/type home, disposition, or shape); finds that the event-bus payload to DispatcherNotifier is prose with no name, discriminant, fields, nullability, or schema home despite the declared Zod discriminated-union convention; and finds that the decision contract's `status: string` is an open string where a closed variant with a bounded reason set belongs.",
+        failureExample: "Misses the absent E3 row, accepts 'the exception payload with the relevant shipment details' as a shape, or accepts `status: string` as a result contract.",
+      },
+      {
+        name: "routes-structural-findings-and-stays-read-only",
+        requirement: "Gives each finding a plain title, the consequence a planner would face, the smallest correction, and its own `Route: program-design`; returns needs-revision despite the strong component tree, call path, and owner confirmation; and does not write the binding row or schema itself.",
+        failureExample: "Returns ready, routes these structural corrections to spec-design, or writes the missing binding and schema in the review.",
+      },
+    ],
+  },
+  {
     scenarioId: "spec-program-review-returns-specification-gap",
     requiredSourceReads: [...requiredSourceReads],
     maximumToolCalls: 20,

@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-25 Domain model and trace in design](2026-09-25-domain-model-and-trace.md)
 - [2026-09-25 Skill guidance refresh](2026-09-25-skill-guidance-refresh.md)
 - [2026-09-25 Capability revamp: phases, tokens, and research](2026-09-25-capability-revamp-phases.md)
 - [2026-09-25 Capability revamp: practices and the tool manual](2026-09-25-capability-revamp-practices.md)

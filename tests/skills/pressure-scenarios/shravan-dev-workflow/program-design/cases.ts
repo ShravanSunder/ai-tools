@@ -5,6 +5,16 @@ const requiredSourceReads = [
   "plugins/shravan-dev-workflow/shared-references/requirements-specification-program-design.md",
 ] as const;
 
+const entityBindingRequiredSourceReads = [
+  ...requiredSourceReads,
+  "plugins/shravan-dev-workflow/skills/program-design/references/components-ownership-interfaces.md",
+] satisfies readonly string[];
+
+const traceTableRequiredSourceReads = [
+  ...requiredSourceReads,
+  "plugins/shravan-dev-workflow/skills/program-design/references/proof-architecture-and-traceability.md",
+] satisfies readonly string[];
+
 export const skillPressureCaseDefinitions = [
   {
     scenarioId: "program-design-reject-combined-requirements-specification",
@@ -128,8 +138,8 @@ export const skillPressureCaseDefinitions = [
     semanticCriteria: [
       {
         name: "chooses-view-by-reader-question",
-        requirement: "Uses component, call, state, failure, and requirement-to-proof views only when each answers a distinct reader question.",
-        failureExample: "Forces every relationship into one diagram or emits every available view mechanically.",
+        requirement: "Uses component, call, state, failure, and proof views only when each answers a distinct reader question. Because the job message crosses from the API to the Worker through the queue, the data/event flow or call view names the shape on that boundary-crossing edge (the message's fields, or an explicit gap). It does not force an entity -> home map, whose predicate (a file-backed design with a new or modified contract) does not hold for this chat-only explanation.",
+        failureExample: "Forces every relationship into one diagram, emits every available view mechanically, draws the queue edge with no message shape or gap, or adds an entity -> home map with package and schema homes to this chat-only design.",
       },
       {
         name: "uses-a-readable-medium",
@@ -162,6 +172,77 @@ export const skillPressureCaseDefinitions = [
         name: "does-not-invent-a-larger-design",
         requirement: "Rejects unsupported completeness machinery and explains why the existing foundation plus the bounded change satisfies the accepted requirements.",
         failureExample: "Chooses a new abstraction because it might support future use cases outside the specification.",
+      },
+    ],
+  },
+  {
+    scenarioId: "program-design-bind-entities-before-components",
+    requiredSourceReads: entityBindingRequiredSourceReads,
+    maximumToolCalls: 55,
+    semanticCriteria: [
+      {
+        name: "binds-every-entity-before-the-component-tree",
+        requirement: "Before the component tree, produces an entity binding table (a table, not bullets) with one row for each of E1 Account, E2 Ticket, E3 Reminder, and E4 Ticket Change. Each row gives a semantic owner that is a component; a package or module home marked new, modified, or existing, naming the existing code element on existing rows; a schema/type home; the shape at each boundary the entity crosses, or a pointer to that shape; persisted, derived, or cached; and the declared convention it follows. The semantic owner and the package are separate answers.",
+        failureExample: "Starts with the component tree, names `packages/worker-cx` as the owner of Reminder, gives bullets instead of a table, or omits the schema/type home, disposition, or convention for any of the four entities.",
+      },
+      {
+        name: "writes-shapes-in-the-declared-conventions",
+        requirement: "Writes the shapes that cross boundaries (the two consumed events and the new due event) in the repository's declared conventions: a fenced Zod schema using `z.discriminatedUnion` with a `z.infer` type, or an equally explicit fenced shape naming discriminant, fields, and nullability, each with its schema owner module and new or existing status. Flags the existing `status?: string` field as an open string against the closed-union rule and gives its closed replacement or an explicit gap, and writes the reminder decision outcomes (schedule, cancel, no-action with a bounded reason set) as a closed union.",
+        failureExample: "Describes the due event as 'the reminder-due payload' with no fields, lists fields without discriminant or nullability, leaves `status` as an open string without comment, or lists the decision outcomes as prose.",
+      },
+      {
+        name: "binds-existing-code-without-renaming",
+        requirement: "Records the existing `ZendeskTicketEvent` contract as the binding for E4 Ticket Change (the code name appears in the shape or home cell, marked existing) instead of declaring a second Ticket Change contract or switching the design's prose to the code name; consumes the Specification's `E` definitions without redefining identity, relationships, or states; and names the `E` or `R` each design-only concept serves.",
+        failureExample: "Declares a new TicketChange schema beside the existing contract, treats `ZendeskTicketEvent` as a synonym and renames the entity, redefines Reminder identity, or introduces a design noun that serves no named `E` or `R`.",
+      },
+      {
+        name: "keeps-homes-in-design-and-derives-components",
+        requirement: "Declines the request to leave schemas, package placement, and event fields to planning, explaining in ordinary language that Program Design owns semantic owners, package homes, schema homes, and contract shapes while planning owns exact files and task order; composes the component tree afterwards from the binding table inside the two permitted packages; and does not return locally-ready from this chat-only run.",
+        failureExample: "Says the planner or implementer can pick the schema, package, or fields, designs changes in a protected package, or returns locally-ready.",
+      },
+    ],
+  },
+  {
+    scenarioId: "program-design-carry-durable-trace-table",
+    requiredSourceReads: traceTableRequiredSourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "produces-the-trace-table-as-design-content",
+        requirement: "Shows a requirement/design/proof trace table as content of the design, one row for each of R1 through R5, with the columns U, R, E, owner, interface, shape and home, state, failure, and proof. Each U cell names every Requirements row the obligation traces to (R4 lists U1 and U2) or reads `none: <why>`, and each R cell names its obligation or observable contract.",
+        failureExample: "Keeps the trace in working state, asserts coverage without a table, omits the U column, or produces a table missing any of R1–R5.",
+      },
+      {
+        name: "marks-missing-design-as-gap",
+        requirement: "Fills each cell from the supplied design and writes `gap: <why>` in the R4 and R5 proof cells and any other cell the design does not settle. No cell is blank or says 'see above' or 'see interfaces', the owner column names a component rather than a package, and the R5 row's owner and interface cells cite the `AccountScope` guard as the mechanism owner.",
+        failureExample: "Leaves the R4 or R5 proof cells blank, writes 'see interfaces' in the shape column, puts `packages/worker-cx` in the owner column, or gives R5 a vague owner such as 'all components'.",
+      },
+      {
+        name: "derives-disposition-from-the-table",
+        requirement: "Derives the returned covered, supersession, or gap disposition from the table rather than asserting it separately, refuses the bare 'coverage is intact' assertion, explains why identifier tags in prose are not a checkable trace, and does not return locally-ready.",
+        failureExample: "Accepts 'coverage is intact' as the report, states a disposition the table does not support, treats the returned disposition as a substitute for the table, or returns locally-ready.",
+      },
+    ],
+  },
+  {
+    scenarioId: "program-design-stop-for-owner-before-review",
+    requiredSourceReads,
+    maximumToolCalls: 40,
+    semanticCriteria: [
+      {
+        name: "distinguishes-boundary-from-realization-confirmation",
+        requirement: "States that the packet's confirmed goal boundary is a Why/What scope confirmation and not the structural-realization confirmation, and that neither the coordinator's instruction nor the owner's absence is an owner waiver.",
+        failureExample: "Treats 'boundary confirmed by owner' or the coordinator's instruction as sufficient confirmation of the structure, or records a waiver the owner never gave.",
+      },
+      {
+        name: "shows-the-views-and-stops",
+        requirement: "Shows in the response body, reconstructed from the packet, the binding table rows for E1–E4 (owner, home, shape), the trace table rows for R1–R5 including the two gaps, one entry-to-effect path from webhook to ticket reopen, and a 'deviations and unresolved decisions' line reading none or a list; then ends with decision-needed, decision class structural-realization confirmation, naming the human owner as decision owner. Listing what the owner must confirm without displaying it does not satisfy this.",
+        failureExample: "Says the owner must confirm the binding table and trace table without showing their rows, waits for the owner without showing what they are asked to confirm, or ends with any terminal other than decision-needed.",
+      },
+      {
+        name: "does-not-dispatch-review-this-turn",
+        requirement: "Does not invoke, simulate, or recommend spec-program-review as this turn's next route; states that review runs on a later turn after the owner replies.",
+        failureExample: "Dispatches or simulates review, returns locally-ready, or rationalizes that the reviewer will catch problems or the owner can see it after review.",
       },
     ],
   },

@@ -12,7 +12,7 @@ Inspect:
 
 - every material specification obligation has one design realization;
 - every material design element traces to an obligation, constraint, failure policy, or proof need;
-- terms and boundary altitude agree;
+- boundary altitude agrees across the three artifacts;
 - design does not narrow, broaden, or contradict observable behavior;
 - proof modality and structural seam form a sufficient chain;
 - non-goals and compatibility survive realization;
@@ -20,18 +20,52 @@ Inspect:
 - retained requirements match the owner-confirmed or last inspectable owner-accepted baseline, including any named variants, defaults, constraints, and proof obligations;
 - Requirements, Specification, and Program Design remain separately identifiable, with normative Specification obligations tracing to the governing Requirements source;
 - every applicable material runtime-behavior group has a visible current/proposed call-path delta or explicit no-predecessor case, with added, removed, and changed edges plus preservation-critical or contested unchanged edges;
+- the trace table walks cleanly row by row (see Trace Table Rows below);
+- each term means the same thing across Requirements, Specification, and Program Design (see Term Consistency below);
 - all coverage is semantically current for the current artifacts, with any post-review non-semantic changes recorded by the parent;
 - a planner can choose tasks/order/commands without inventing meaning or How.
+
+## Trace Table Rows
+
+What to open: the Program Design's trace table (`U · R · E · owner · interface · shape and home · state · failure · proof`), the Requirements rows, the Specification's obligations and entity table, and the design sections each cell summarizes.
+
+How to judge: walk every row and every cell; do not sample. For each cell, say what it holds.
+
+- A blank cell is a finding. So is a cross-reference such as "see interfaces" or "see above": it is not a populated cell.
+- `gap: <why>` is an honest marking of missing design. Report it only when the gap leaves an accepted obligation unrealized that the design should have settled; never treat the marking itself as a defect.
+- `none: <why>` is valid in the `U` and `E` cells and for values that do not apply, such as a stateless guard's state.
+- The table has one row per Specification obligation (`R`); two obligations that share a contract still each have their own row. Each row's `R` cell names an obligation in the Specification, its `U` cell names every Requirements row that obligation traces to or reads `none: <why>`, and its `E` cell cites Specification entity ids; `U` and `E` may each list several ids.
+- Each cell agrees with the section it summarizes: the owner is the component the design names, the interface is the contract it defines, the shape and home match the binding table.
+- A cross-cutting row's owner and interface cells cite the mechanism owner.
+- Every accepted obligation has a row, and the returned coverage disposition matches the rows.
+
+Route a defective cell to `program-design` with the smallest correction: fill the cell or mark it `gap: <why>`. Route a row whose `U`, `R`, or `E` cell points at something the Requirements or Specification do not contain to `spec-design`.
+
+Stop when every row has been walked and every defective cell has a finding.
+
+## Term Consistency
+
+What to open: the Specification's entity table, each obligation, each Program Design heading, binding-table row, and contract name.
+
+How to judge: a design noun that cites an `E` and keeps that entity's identity, relationships, and states is consistent. A code name in a shape or home cell is a binding, not a term. A design-only concept that names the `E` or `R` it serves is legitimate, but naming a served id is not enough by itself: its own identity, lifecycle or states, relationships, or invariants signal a possible missing Specification entity.
+
+- A synonym for an existing `E` used in design prose (a new word where the Specification already has a term) is a finding with `Route: program-design`: rename to the Specification's term.
+- A design noun with no `E` that names nothing it serves, or behaves like an entity, is a finding with `Route: spec-design`: the Specification decides whether it is a new entity or already covered. Review does not define it.
+
+Stop when every design noun resolves to an `E`, a design-only concept with its served `E` or `R`, or a routed finding.
+
+## Readiness
 
 If local results are missing, a `three-artifact-design` result of `ready` requires independently repeating and recording the missing local checks. Missing prerequisites may still yield bounded findings, never false readiness.
 
 Use the pretend planner:
 
 ```text
-may decide: tasks, files, order, DAG, exact commands, red/green steps,
+may decide: tasks, exact files, order, DAG, exact commands, red/green steps,
             evidence capture, checkpoints, rollout
-must consume: requirements/contracts, components/owners/interfaces,
+must consume: requirements/contracts, entity bindings and boundary shapes,
+              components/owners/interfaces,
               state/flows/failure/concurrency/cutover/trust/proof seams
 ```
 
-Complete when: all three identities were separately reconstructed, cross-artifact traceability is bidirectional, accepted requirements remain covered, applicable call-path deltas are visible, contradictions are resolved or blocked, and planning has no semantic design decisions left.
+Complete when: all three identities were separately reconstructed, cross-artifact traceability is bidirectional and every trace-table row was walked, every design noun resolved under Term Consistency, accepted requirements remain covered, applicable call-path deltas are visible, contradictions are resolved or blocked, and planning has no semantic design decisions left.
