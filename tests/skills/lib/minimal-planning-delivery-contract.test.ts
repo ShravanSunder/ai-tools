@@ -12,6 +12,15 @@ const pressureRoot = path.join(
 const readPluginFile = (relativePath: string): string =>
   readFileSync(path.join(pluginRoot, relativePath), "utf8");
 
+const convergenceRecurrenceText =
+  "A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.";
+const convergenceNoProgressText =
+  "The count of open accepted findings did not drop in two adjacent comparisons in a row";
+const convergenceBaselineText =
+  "When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there.";
+const acceptedBoundaryText =
+  "A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically.";
+
 describe("goal delivery intent hard cutover", () => {
   test("uses one ready canonical plan with governing basis and delivery context", () => {
     const contract = readPluginFile(
@@ -112,11 +121,14 @@ describe("goal delivery intent hard cutover", () => {
     expect(readme).not.toContain("Plan awaits approval");
   });
 
-  test("keeps design and implementation review limits separate", () => {
+  test("review loops converge under one owner each", () => {
     const designReview = readPluginFile("skills/spec-program-review/SKILL.md");
     const designOrchestrator = readPluginFile("skills/orchestrator-design/SKILL.md");
     const implementationReview = readPluginFile(
       "skills/implementation-review/SKILL.md",
+    );
+    const implementationReviewResults = readPluginFile(
+      "skills/implementation-review/references/finding-and-reduction.md",
     );
     const skillsCreation = readPluginFile("skills/skills-creation/SKILL.md");
 
@@ -132,10 +144,17 @@ describe("goal delivery intent hard cutover", () => {
     expect(designReview).toContain("A third normal review requires explicit user permission");
     expect(designOrchestrator).toContain("Prefer one review-and-correction round");
     expect(designOrchestrator).toContain("Ask before a third");
-    expect(implementationReview).toContain(
-      "bounded delivery effort may remediate at most three times",
+    expect(implementationReviewResults).toContain(convergenceRecurrenceText);
+    expect(implementationReviewResults).toContain(convergenceNoProgressText);
+    expect(implementationReviewResults).toContain(convergenceBaselineText);
+    expect(implementationReviewResults).toContain(acceptedBoundaryText);
+    expect(implementationReviewResults).toContain(
+      "precedence `not-converging -> blocked-input",
     );
-    expect(implementationReview).toContain("After remediation three, stop");
+    expect(implementationReview).toContain(
+      "The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`",
+    );
+    expect(implementationReview).not.toContain("remediation-limit-reached");
     expect(skillsCreation).toContain("Proposal review allows one independent review and one bounded remediation");
     expect(skillsCreation).toContain("Implementation review allows up to three remediation passes");
     expect(skillsCreation).toContain("do not start review or remediation four");
@@ -178,7 +197,7 @@ describe("goal delivery intent hard cutover", () => {
       "manage-agents/main-default-after-ready-plan.md",
       "manage-agents/no-relay-supervisor.md",
       "spec-program-review/one-review-one-remediation.md",
-      "implementation-review/stops-before-fourth-remediation.md",
+      "implementation-review/stops-when-not-converging.md",
       "skills-creation/separate-review-remediation-limits.md",
     ];
 

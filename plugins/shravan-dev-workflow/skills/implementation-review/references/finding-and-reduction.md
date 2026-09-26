@@ -4,7 +4,7 @@ This reference owns parent verification, the rails re-anchor, finding semantics,
 
 Expected inputs: the current review context, per-check results including the dispel classification, current governing sources and diff, proof evidence, and any prior coverage record.
 
-Return: candidate dispositions with rails anchors, merged duplicates and conflicts, accepted findings, routes, scope effects, coverage and evidence boundaries, first correction, and `ready | needs-revision | blocked-input | decision-needed | remediation-limit-reached`.
+Return: candidate dispositions with rails anchors, merged duplicates and conflicts, accepted findings, routes, scope effects, coverage and evidence boundaries, first correction, and `ready | needs-revision | blocked-input | decision-needed | not-converging`.
 
 ## Re-anchor on the Rails
 
@@ -76,7 +76,7 @@ Route by cause, not severity:
 
 ## Decide the Review Result
 
-This reference owns the review-result labels. Return exactly one using precedence `remediation-limit-reached -> blocked-input -> needs-revision -> decision-needed -> ready`:
+This reference owns the review-result labels. Return exactly one using precedence `not-converging -> blocked-input -> needs-revision -> decision-needed -> ready`:
 
 ```text
 ready
@@ -94,10 +94,23 @@ decision-needed
   current evidence leaves a real owner-controlled choice or conflict, including
   a correction that would expand scope or weaken a requirement
 
-remediation-limit-reached
-  three remediation passes already exist and no explicit user continuation
-  authority was supplied
+not-converging
+  the correction loop meets the convergence rule below: a verified-closed
+  finding recurred, or open accepted findings did not drop in two adjacent
+  comparisons
 ```
+
+Convergence (this reference is its home for implementation review):
+
+> After each correction pass, compare this review with the previous one using the existing finding identity (anchor plus failure form). Return `not-converging` when either holds:
+> 1. **Recurrence.** A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
+> 2. **No progress.** The count of open accepted findings did not drop in two adjacent comparisons in a row: it stayed equal or rose from review N−1 to N, and again from N to N+1.
+>
+> When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
+
+Accepted boundary:
+
+> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
 
 The result includes reviewed authority, unchanged plan/governing-basis/delivery-context records, base and reviewed identities, diff and proof freshness, remediation-pass evidence, obligation coverage, normal/failure-path coverage, runtime reachability when applicable, accepted/rejected/unverified findings, conflicts, weaker-substitute risks, first correction, exact route, and uncovered boundary.
 

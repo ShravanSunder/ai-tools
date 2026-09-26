@@ -196,8 +196,8 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implementation-review` | `implementation-review-invalidate-corrected-coverage` | Invalidate affected review coverage after correction and require fresh review of corrected source and proof. |
 | `implementation-review` | `implementation-review-preserve-read-only-authority` | Keep reviewer and workflow authority read-only, candidate-only, and outside remediation or PR lifecycle work. |
 | `implementation-review` | `implementation-review-runtime-skill-package-route` | Route runtime skill-package review to `skills-creation`, not through product implementation review. |
-| `implementation-review` | `implementation-review-stops-before-fourth-remediation` | Stop after implementation remediation three instead of dispatching review or remediation four. |
-| `implementation-review` | `implementation-review-admit-bounded-recovery-review` | Admit exactly one orchestrator-authorized recovery review, keeping an unknown remediation count unknown and never resetting the allowance. |
+| `implementation-review` | `implementation-review-stops-when-not-converging` | Return `not-converging` on a recurrence or two adjacent non-drops and route an owner brief instead of another correction pass. |
+| `implementation-review` | `implementation-review-admit-bounded-recovery-review` | When review history is missing, admit an ordinary review that records the gap and sets the convergence baseline; reject a stale or wrong source. |
 | `implementation-review` | `implementation-review-chunk-keeps-contract-with-callers` | Chunk the review so a changed contract stays with its callers, with overlap seams and predicate-selected lanes. |
 | `implementation-review` | `implementation-review-dispel-over-delivery` | Dispel anchorless over-engineered findings, pass anchored ones through, and name unrequested subsystems in the diff. |
 | `implementation-review` | `implementation-review-whole-file-read-required` | Require whole-file reads with whole-file coverage rows instead of hunk-scoped review or reading inventories. |
