@@ -54,7 +54,7 @@ Reduce findings against the sources:
 
 - `ready` -> design terminal;
 - non-semantic or unsupported finding -> reject with evidence;
-- IF a mental-model break or unmade owner meaning appears, stop, load `../../shared-references/owner-decision-brief.md`, and return the brief with the failed assumption, evidence, and consequence;
+- IF a mental-model break or unmade owner meaning appears, load `../../shared-references/owner-decision-brief.md` and return the brief with the failed assumption, evidence, and consequence; dependent work stops;
 - accepted bounded findings -> correct through the semantic owners; the retained independent 🔎 Review Sidekick checks corrected anchors and current affected evidence, then the orchestrator accepts the result.
 
 Each round may call `spec-design` then `program-design`, correcting each affected artifact once. The retained 🔎 Review Sidekick verifies those corrections within the same review relationship; this verification does not start another full review or expand the round allowance. Pre-review authoring does not consume a review round. `spec-program-review` owns review admission and coverage.

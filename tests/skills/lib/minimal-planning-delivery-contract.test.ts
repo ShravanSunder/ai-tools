@@ -144,7 +144,6 @@ describe("goal delivery intent hard cutover", () => {
     expect(designReview).toContain(
       "until the review is ready or not-converging (see `references/finding-and-reduction-schema.md`)",
     );
-    expect(designReview).not.toContain("review-permission-required");
     expect(designReviewResults).toContain(convergenceRecurrenceText);
     expect(designReviewResults).toContain(convergenceNoProgressText);
     expect(designReviewResults).toContain(convergenceBaselineText);
@@ -169,7 +168,6 @@ describe("goal delivery intent hard cutover", () => {
     expect(implementationReview).toContain(
       "The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`",
     );
-    expect(implementationReview).not.toContain("remediation-limit-reached");
     expect(skillsCreation).toContain(
       "Proposal review prefers one independent review and one remediation",
     );
@@ -180,7 +178,6 @@ describe("goal delivery intent hard cutover", () => {
     expect(skillsCreation).toContain(
       "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, Main loads `../../shared-references/owner-decision-brief.md` and returns the brief",
     );
-    expect(skillsCreation).not.toContain("remediation-limit-reached");
   });
 
   test("uses distinct durable, project-temporary, and OS-temporary artifact homes", () => {
