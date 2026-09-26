@@ -60,7 +60,7 @@ check statuses
 coverage gaps
 accepted/rejected/contested/unverified findings
 what held
-result: ready | needs-revision | blocked | decision-needed
+result: ready | needs-revision | blocked | decision-needed | not-converging
 first required revision
 correction verification and parent-verified remediation anchors
 planning-readiness boundary
@@ -110,13 +110,26 @@ An authoritative correction is not pathfinding work. A reviewer suggestion is no
 
 Produce exactly one result:
 
+- `not-converging`: the correction loop meets the convergence rule below; the orchestrator brings the owner a brief of what keeps failing.
 - `blocked`: a required artifact/source/access input is missing or stale, or required mode/check coverage is partial, blocked, or missing status, so the review cannot truthfully judge the mode.
 - `decision-needed`: required coverage is complete enough to isolate an unresolved user/authority-owned choice, including a proposed scope expansion or requirement subtraction, and that choice—not missing evidence or author correction—is the first action needed.
 - `needs-revision`: coverage is sufficient to judge the artifact and at least one accepted blocker/important finding requires `spec-design`, `program-design`, or caller correction; this takes precedence over `decision-needed` when revision is independently required.
 - `ready`: the complete condition above holds.
 
-When states mix, apply precedence `blocked -> needs-revision -> decision-needed -> ready`.
+When states mix, apply precedence `not-converging -> blocked -> needs-revision -> decision-needed -> ready`.
 
-After each permitted correction round, the 🔎 Review Sidekick records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. After normal round one, return a concrete source-backed substantive residual to the second-round admission policy in `SKILL.md`; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. A third normal review requires explicit user permission after the second result is visible. The one-time recovery exception remains separate and adds no normal correction allowance.
+Convergence (this reference is its home for design review):
+
+> After each correction pass, compare this review with the previous one using the existing finding identity (anchor plus failure form). Return `not-converging` when either holds:
+> 1. **Recurrence.** A finding the lead verified closed in an earlier review is accepted again. A finding whose correction never closed is still open, which is not a recurrence.
+> 2. **No progress.** The count of open accepted findings did not drop in two adjacent comparisons in a row: it stayed equal or rose from review N−1 to N, and again from N to N+1.
+>
+> When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
+
+Accepted boundary:
+
+> A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.
+
+After each correction round, the 🔎 Review Sidekick records whether each accepted finding was corrected and cites the current anchors. Do not rerun affected coverage automatically. A concrete source-backed substantive residual inside the accepted boundary admits another round under the convergence rule above; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify.
 
 Complete when: every candidate and check status is accounted for; every accepted candidate names the requirement or boundary, plain-language meaning, failure and downstream ambiguity, and verified evidence; accepted requirements and goal relevance are preserved; deletion was tested before addition; the result cannot exceed semantically current coverage; any later semantic-change records are explicit; and the result contains one parent-selected compact continuation handoff or an exact stop.

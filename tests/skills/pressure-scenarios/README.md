@@ -76,7 +76,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `spec-program-review` | `spec-program-review-check-diagrams-explain-system` | Check that diagrams answer their reader question and agree with written meaning. |
 | `spec-program-review` | `spec-program-review-give-useful-findings` | Return concrete findings, consequences, smallest corrections, owners, and confirming evidence in ordinary language. |
 | `spec-program-review` | `spec-program-review-route-only-validated-findings` | Let only parent-validated findings select one correction owner and keep direct review outside orchestration state. |
-| `spec-program-review` | `spec-program-review-one-review-one-remediation` | Close one design review from original findings plus parent-verified remediation without automatic rereview. |
+| `spec-program-review` | `spec-program-review-one-review-one-remediation` | Close resolved findings by parent verification and keep running rounds while the loop converges inside the accepted boundary, without a permission prompt. |
 | `spec-program-review` | `spec-program-review-chunk-design-seams` | Keep the mode-complete reviewer mandatory and chunk a large design along artifact seams, never by file. |
 | `spec-program-review` | `spec-program-review-dispel-design-over-delivery` | Run dispel on an empty candidate set and name unrequested design elements as over-delivery. |
 | `spec-program-review` | `spec-program-review-compose-focused-lanes-by-predicate` | Compose one focused lane per named source-backed risk, with a reason beside each lane run or skipped. |

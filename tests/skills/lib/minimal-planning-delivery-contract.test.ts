@@ -123,6 +123,9 @@ describe("goal delivery intent hard cutover", () => {
 
   test("review loops converge under one owner each", () => {
     const designReview = readPluginFile("skills/spec-program-review/SKILL.md");
+    const designReviewResults = readPluginFile(
+      "skills/spec-program-review/references/finding-and-reduction-schema.md",
+    );
     const designOrchestrator = readPluginFile("skills/orchestrator-design/SKILL.md");
     const implementationReview = readPluginFile(
       "skills/implementation-review/SKILL.md",
@@ -139,9 +142,16 @@ describe("goal delivery intent hard cutover", () => {
       "each affected artifact corrected at most once in that round",
     );
     expect(designReview).toContain(
-      "After each permitted correction round",
+      "until the review is ready or not-converging (see `references/finding-and-reduction-schema.md`)",
     );
-    expect(designReview).toContain("A third normal review requires explicit user permission");
+    expect(designReview).not.toContain("review-permission-required");
+    expect(designReviewResults).toContain(convergenceRecurrenceText);
+    expect(designReviewResults).toContain(convergenceNoProgressText);
+    expect(designReviewResults).toContain(convergenceBaselineText);
+    expect(designReviewResults).toContain(acceptedBoundaryText);
+    expect(designReviewResults).toContain(
+      "precedence `not-converging -> blocked -> needs-revision",
+    );
     expect(designOrchestrator).toContain("Prefer one review-and-correction round");
     expect(designOrchestrator).toContain("Ask before a third");
     expect(implementationReviewResults).toContain(convergenceRecurrenceText);

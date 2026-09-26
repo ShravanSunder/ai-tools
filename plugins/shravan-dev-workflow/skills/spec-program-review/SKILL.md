@@ -24,7 +24,7 @@ Requirements, Specification, and Program Design are separate authoritative conce
 
 A different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history reads the complete target set and governing sources, then walks the ordered checks in its own session. The lead verifies candidates against accepted requirements, Specification obligations, and the confirmed goal boundary, tests deletion before addition, and owns the coverage-bound assessment. The orchestrator disposes and routes that assessment. This skill never edits artifacts, mutates their lifecycle, plans, or accepts a design.
 
-Prefer one independent review-and-correction round. After review-lead verification, allow one second normal round only when a concrete source-backed substantive issue remains or was introduced within the agreed design; pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. Each round may span both semantic owners through the ordered `spec-design -> program-design` route, with each affected artifact corrected at most once in that round and every corrected anchor review-lead-verified. A third normal review requires explicit user permission given after the second result is visible.
+Prefer one independent review-and-correction round. After review-lead verification, run further rounds only for a concrete source-backed substantive issue that remains or was introduced inside the accepted boundary, until the review is `ready` or `not-converging` (see `references/finding-and-reduction-schema.md`); pedantic, stylistic, already-satisfied, confidence-only, and generic-freshness concerns do not qualify. Each round may span both semantic owners through the ordered `spec-design -> program-design` route, with each affected artifact corrected at most once in that round and every corrected anchor review-lead-verified.
 
 Disposition comes before remediation. Reject pedantic, stylistic, already-satisfied, or otherwise non-semantic findings with source evidence and continue. Route each valid correction set inside the settled mental model to its semantic owner. If a finding disproves a load-bearing assumption or exposes unmade owner meaning, return the failed assumption, evidence, consequence, and exact owner as `decision-needed` or `blocked`; do not spend the remediation allowance to push through a mental-model break. When the same result also contains an accepted bounded correction, preserve it explicitly as one `spec-design -> program-design` remediation round after the owner decision, with each affected artifact corrected at most once and one parent verification against the original findings; the break still stops current continuation and no second review is commissioned.
 
@@ -42,7 +42,7 @@ review
     Requirements identity
     Specification identity
     Program Design identity
-  result: ready | needs-revision | blocked | decision-needed
+  result: ready | needs-revision | blocked | decision-needed | not-converging
   coverage: current meaning coverage for every target; uncertain semantic effect is stale
   checks: mode-complete always; sequential chunk passes along artifact seams when
     the set is large; proof-challenge for executable claims; dispel always;
@@ -53,8 +53,7 @@ Review coverage follows meaning, not changed bytes. After each permitted correct
 
 - if meaning changed inside the accepted correction and every accepted finding is resolved, preserve the review as the independent finding source and add parent-verified correction anchors for every accepted finding;
 - if the parent verifies that meaning did not change—for example, a formatting, link-repair, process-metadata, or typo-only edit—carry the existing semantic coverage forward without another review;
-- after the first round, if a concrete source-backed substantive issue remains or was introduced within the agreed design, admit the one permitted second normal round; reject a rerun based only on pedantry, style, an already-satisfied finding, confidence, or generic freshness;
-- after the second normal round, any third normal review stops `review-permission-required` until the user explicitly approves it.
+- run further rounds for concrete source-backed substantive issues inside the accepted boundary until the review is ready or not-converging (see `references/finding-and-reduction-schema.md`); reject a rerun based only on pedantry, style, an already-satisfied finding, confidence, or generic freshness.
 
 Closure is established by the latest permitted review result plus parent-verified correction evidence for the current artifacts. Keep this call-scoped record out of durable design artifacts and do not add persistent review bookkeeping.
 
@@ -89,10 +88,10 @@ risk predicates
 claimed proof evidence or gaps
 review question when narrower than readiness
 prior review coverage and semantic-change record when coverage is being reused
-bounded design-review status: no prior review | one prior round with a concrete source-backed substantive residual | explicit user permission for a third review | one orchestrator-authorized recovery request
+bounded design-review status: no prior review | prior rounds with their findings | earlier results unavailable
 ```
 
-One orchestrator-authorized recovery is admissible when the prior result is unavailable, the current target and governing sources were inspected, the missing evidence and reason were recorded, and no prior recovery is known. Preserve existing limits and unknown history; recovery does not reset them, add a correction round, replace an available result, or authorize another recovery. Reject repeated recovery and stale, wrong-source, or unverified inputs. If the remaining correction allowance is exhausted or unknown, report the findings and ask before correction. Route any material design break or newly exposed owner decision to its owner.
+When prior results are unavailable, inspect the current target and governing sources, record the reason, and review against the current baseline (see the convergence rule in `references/finding-and-reduction-schema.md`). Reject stale, wrong-source, or unverified inputs. Route any material design break or newly exposed owner decision to its owner.
 
 MUST load `../../shared-references/requirements-specification-program-design.md` and return the Requirements, Specification, and Program Design identity status for the selected mode. `specification-only` inspects separately identifiable Requirements and Specification sources. `program-only` and `three-artifact-design` inspect separately identifiable Requirements, Specification, and Program Design sources. Reuse resolvable file pointers for file-backed records. Separately labeled in-chat records are copied verbatim into the tmp review packet — a fresh reviewer cannot follow a pointer into a conversation — but never into a durable combined review artifact.
 
@@ -102,9 +101,9 @@ A combined `Requirements/spec`, a Requirements-titled artifact that also stands 
 
 `program-only` also requires the governing Specification. `three-artifact-design` requires the current Requirements, Specification, and Program Design. A missing confirmed goal boundary, or missing structural-realization confirmation for `program-only` or `three-artifact-design`, may produce `decision-needed`; review does not infer acceptance from silence or a status label. A recorded `structural-realization confirmation: waived by owner` is the confirmation: review proceeds and judges the design on its merits. A packet claim, a goal-boundary confirmation, or a `locally-ready` label is neither a confirmation nor a waiver.
 
-Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous; any recovery request is explicitly admitted or rejected with its reason.
+Completion: the complete target set, governing sources, accepted requirements, boundaries, open authority decisions, and any prior-coverage semantic-change record are unambiguous; any missing-history baseline is recorded with its reason.
 
-If one normal review-and-correction round already ran, admit a second normal round only for the recorded concrete source-backed substantive residual above. If two normal rounds already ran, require explicit user permission granted after the second result before a third normal review. An admissible orchestrator-authorized recovery request follows the one-time exception above and never resets or adds normal review or correction allowance. Switching modes, checks, target labels, caller skills, or unknown history does not reset either boundary.
+If a review-and-correction round already ran, admit another only under the convergence rule and accepted boundary in `references/finding-and-reduction-schema.md`. Switching modes, checks, target labels, or caller skills does not reset the convergence comparison.
 
 ## 4. Select the Mode
 
@@ -124,7 +123,7 @@ Completion: exactly one mode and its complete required artifact set are selected
 
 The caller completes classification and admission. For an admitted substantive review, MUST use `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history and read-only workspace access. Resume that exact lead through corrections. Candidate findings never become final disposition without lead verification. When the review touches auth, secrets, untrusted input, parsing, filesystem, network, subprocess, plugin, agent, or external-service surfaces, choose a Frontier 🔎 Review Sidekick from a different author lineage at commission time.
 
-A later semantic change outside an accepted correction invalidates affected check coverage. After normal round one, only a concrete source-backed substantive residual admits round two. A third normal review still requires explicit user permission.
+A later semantic change outside an accepted correction invalidates affected check coverage. Further rounds follow the convergence rule in `references/finding-and-reduction-schema.md`.
 
 ## 6. Walk the Mode and Chunk Checks
 
@@ -248,8 +247,7 @@ Do not return `ready` while any of these hold:
 - a reviewer candidate that adds unrequested scope was returned as `decision-needed` or accepted instead of rejected as scope expansion;
 - a 🔧 Operator ran a command outside the recorded grant, or an executable proof claim was accepted without a proof-challenge result or a named proof gap;
 - focused review began before reduction of the earlier checks, a focused check was selected without a named predicate, or a broad predicate was treated as sufficient selection;
-- a second normal design review began without a concrete source-backed substantive residual from parent verification, or a third normal review began without explicit user permission granted after the second result;
-- a recovery review began after a previous recovery, from stale or wrong-source inspection, without the missing-evidence reason, or by fabricating unknown review history as zero; or recovery findings were corrected without known available correction allowance or explicit user authority;
+- a round ran after not-converging, or outside the accepted boundary without an owner brief;
 - the downstream consumer must invent meaning owned by the reviewed artifact;
 - the result recommends no next skill, more than one next skill, or a route selected from an unreduced reviewer candidate when a validated continuation exists;
 - a continuation omits the current boundary status or makes the destination choose among correction alternatives instead of carrying one smallest verified correction;
