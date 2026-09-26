@@ -1,6 +1,6 @@
 ---
 name: presentation-tui
-description: "Use when composing a substantial architecture, comparison, tradeoff, flow, or multi-section response on a monospace terminal or CLI host, or when the host is unknown: \"draw this out\", \"compare these\". Not for rendered chat (presentation-webui)."
+description: "Use when composing a substantial architecture, comparison, tradeoff, flow, or multi-section response, or when putting a design decision in front of the owner, on a monospace terminal or CLI host, or when the host is unknown: \"draw this out\", \"compare these\". Not for rendered chat (presentation-webui)."
 ---
 
 # Presentation: TUI
