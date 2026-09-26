@@ -178,7 +178,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `skills-creation` | `skills-creation-security-and-cache-boundary.md` | Do not treat scripts, hooks, assets, package scripts, third-party source adoption, or installed-cache/home mutation as ordinary prose work. |
 | `skills-creation` | `skills-creation-spec-review-gate.md` | Do not implement non-trivial skill workflow changes before pre-implementation spec review unless the user explicitly skips review. |
 | `skills-creation` | `skills-creation-implementation-review-gate.md` | Do not advance non-trivial skill changes to PR-ready without implementation review reduction, changed-file coverage, and targeted retest. |
-| `skills-creation` | `skills-creation-separate-review-remediation-limits` | Keep one proposal review/remediation distinct from the three-pass implementation-review limit. |
+| `skills-creation` | `skills-creation-review-stages-converge` | Run proposal and implementation review rounds while they converge inside the accepted boundary, and bring the owner a brief on `not-converging` or an out-of-boundary change. |
 | `skills-creation` | `skills-creation-proof-main-assessment-review-order` | Require implementation proof, then source-backed main assessment, then independent review and fresh correction proof. |
 | `practices-research` | `practices-research-question-first` | Frame bounded questions, re-anchor locally, and define an evidence ledger before broad gathering. |
 | `practices-research` | `practices-research-substantial-stage-artifacts` | Walk source classes in order, record coverage and null results, and verify primary anchors in one research ledger. |

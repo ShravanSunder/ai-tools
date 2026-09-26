@@ -170,9 +170,17 @@ describe("goal delivery intent hard cutover", () => {
       "The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`",
     );
     expect(implementationReview).not.toContain("remediation-limit-reached");
-    expect(skillsCreation).toContain("Proposal review allows one independent review and one bounded remediation");
-    expect(skillsCreation).toContain("Implementation review allows up to three remediation passes");
-    expect(skillsCreation).toContain("do not start review or remediation four");
+    expect(skillsCreation).toContain(
+      "Proposal review prefers one independent review and one remediation",
+    );
+    expect(skillsCreation).toContain(convergenceRecurrenceText);
+    expect(skillsCreation).toContain(convergenceNoProgressText);
+    expect(skillsCreation).toContain(convergenceBaselineText);
+    expect(skillsCreation).toContain(acceptedBoundaryText);
+    expect(skillsCreation).toContain(
+      "IF a review stage returns `not-converging` or a semantic change outside the accepted boundary, Main loads `../../shared-references/owner-decision-brief.md` and returns the brief",
+    );
+    expect(skillsCreation).not.toContain("remediation-limit-reached");
   });
 
   test("uses distinct durable, project-temporary, and OS-temporary artifact homes", () => {
@@ -213,7 +221,7 @@ describe("goal delivery intent hard cutover", () => {
       "manage-agents/no-relay-supervisor.md",
       "spec-program-review/one-review-one-remediation.md",
       "implementation-review/stops-when-not-converging.md",
-      "skills-creation/separate-review-remediation-limits.md",
+      "skills-creation/review-stages-converge.md",
     ];
 
     for (const scenarioPath of scenarioPaths) {
