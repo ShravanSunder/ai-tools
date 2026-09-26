@@ -29,7 +29,7 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate. When a dependency the slice needs is missing, put a contract-honoring stand-in at a boundary the plan names, record it as a stand-in through `practices-show-me-your-work`, and continue the slice. Claim no proof for the stubbed interaction. Route a replan only when the stand-in would change a public contract, persisted data format, or ownership.
 4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
 5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.
-6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof only when the bounded delivery effort—an orchestrated goal, direct review loop, or `skills-creation` route—has fewer than three completed remediation passes. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same 🔎 Review Sidekick. After remediation three, return `remediation-limit-reached` and do not launch or authorize review/remediation four without explicit user permission.
+6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same 🔎 Review Sidekick. When the review returns `not-converging`, stop correcting and return it to the orchestrator.
 7. Return each slice report, including decisions made and open stand-ins, to its assigning implementer. When all planned development and fitting proof are complete, return the canonical plan record, governing basis, delivery context, and completion report to the orchestrator for assessment before the first independent review.
 
 ## Boundaries
@@ -38,8 +38,7 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 - This phase does not mutate PR state; the same implementer may later run separately authorized `implementation-pr-wrapup` after assessment and review prerequisites are satisfied.
 - Orchestrator feedback may inform execution, but neither it nor partial direction supplies absent architecture or changes required plan meaning; return those gaps to the orchestrator or originating-plan owner.
 - A completed slice is not independent review. General-domain work routes to `implementation-review`; runtime-skill work remains under `skills-creation`.
-- Missing current review/remediation receipts do not reset the three-remediation limit; they stop further remediation for explicit user permission.
 
-Completion: every claimed slice has fresh fitting proof, every incomplete obligation/blocker is explicit, the plan record remains unchanged, and no fourth remediation occurred.
+Completion: every claimed slice has fresh fitting proof, every incomplete obligation/blocker is explicit, the plan record remains unchanged, and no correction continued after `not-converging`.
 
 IF a trace is open, at phase completion record the outcome, evidence, and next owner or return token as a checkpoint through `practices-show-me-your-work`.
