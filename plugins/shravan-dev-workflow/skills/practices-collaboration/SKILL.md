@@ -35,6 +35,8 @@ When the commissioner supplies a visible title for a conversation you create or 
 
 ## Message or post
 
+A message to a separate session (another conversation or terminal on Codex, Claude Code, or Cursor) goes through Router: use the supplied exact SessionRef, discover it through Router when missing or ambiguous, then `message send`. Do not use host-native cross-session channels for that. Native messaging to your own in-session subagents and teammates is unchanged. An empty active-session list does not prove a session is gone.
+
 Send a direct message when one session needs to act: an assignment, a request for attention, or an explicit reply to its sender. Post to the work thread when the content should outlive the conversation: decisions and reasons, evidence, proof outcomes, blockers, corrections, and checkpoints. A message that asks for work does not replace the thread post that records it. Contributors post as themselves and only within their assignment's communication authority; otherwise they return findings to the orchestrator. Correct a mistaken post with a new post that references it.
 
 ## Waiting on another agent
