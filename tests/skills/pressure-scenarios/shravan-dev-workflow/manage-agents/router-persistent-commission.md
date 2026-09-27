@@ -5,9 +5,9 @@ skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: agent-router
+expect_decision_regex: router
 expect_decision_regex: title
-expect_decision_regex: Approver
+expect_decision_regex: approver
 
 ## Prompt
 

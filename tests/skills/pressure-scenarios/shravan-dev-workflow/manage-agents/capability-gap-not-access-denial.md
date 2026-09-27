@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: gap
-expect_decision_regex: ACPX
+expect_decision_regex: acpx
 expect_decision_regex: denial
 
 ## Prompt
