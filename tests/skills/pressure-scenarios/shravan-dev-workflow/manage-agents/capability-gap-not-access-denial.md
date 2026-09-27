@@ -8,8 +8,8 @@ expect_artifact: false
 expect_decision_regex: gap
 expect_decision_regex: acpx
 expect_decision_regex: denial
-expect_forbidden_regex: router does not cover (that provider|cursor)
-expect_forbidden_regex: cursor (today|is the provider agent-router does not yet cover)
+expect_decision_regex: grant
+expect_forbidden_regex: (agent-)?router (does not|doesn't|cannot) (yet )?cover
 
 ## Prompt
 

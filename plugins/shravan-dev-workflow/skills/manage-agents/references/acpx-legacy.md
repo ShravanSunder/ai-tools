@@ -1,6 +1,6 @@
 # ACPX Agent Calls (legacy route)
 
-ACPX is no longer a default route. Enter this procedure only for an observed agent-router capability gap recorded under `manage-agents`; return the provider, exact model id, effort encoding, permission boundary, and retained session identity. Router covers Codex, Claude Code, and Cursor when their requirements fit; provider identity alone is never a gap.
+ACPX is no longer a default route. Enter this procedure only for an observed agent-router capability gap; record that gap in the relationship ledger and return the provider, exact model id, effort encoding, permission boundary, and retained session identity. Router covers Codex, Claude Code, and Cursor when their requirements fit; provider identity alone is never a gap.
 
 ## Dispatch
 

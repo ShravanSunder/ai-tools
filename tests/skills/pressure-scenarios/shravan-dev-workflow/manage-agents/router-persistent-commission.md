@@ -6,8 +6,9 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: router
-expect_decision_regex: title
+expect_decision_regex: titl[^.]{0,160}(before|then)[^.]{0,80}(send|assignment)
 expect_decision_regex: approver
+expect_decision_regex: (real|actual|invoking) caller
 
 ## Prompt
 
