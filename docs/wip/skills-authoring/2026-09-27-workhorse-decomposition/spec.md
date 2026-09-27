@@ -1,6 +1,6 @@
 # Workhorse-first decomposition
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r5**, 2026-09-27. Status: **draft**. r3 applies the owner's hub model: Main plans and cuts, the plan is design-reviewed through Main, then Main hands the reviewed plan and delegation to the Sidekick (D1, D15, C2). r4 grounded every run in current source at `c08ab7af`, dropped review fan-out, and coordinated with the pstack comparison. r5 reads every touched file whole and every prior spec on delegation and tiers, and reconciles with those owner decisions (Prior decisions, D5, D10, D11, D16). No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r6**, 2026-09-27. Status: **draft**. r3 applies the owner's hub model: Main plans and cuts, the plan is design-reviewed through Main, then Main hands the reviewed plan and delegation to the Sidekick (D1, D15, C2). r4 grounded every run in current source at `c08ab7af`, dropped review fan-out, and coordinated with the pstack comparison. r5 reads every touched file whole and every prior spec on delegation and tiers, and reconciles with those owner decisions (Prior decisions, D5, D10, D11, D16). r6 applies the proposal review's six accepted findings (Spec-review record). No skill file changes before `accepted-to-implement`.
 
 A companion devfiles change updates `shared/my_agents.md` (Model tiers and Main's role) and the machine model map. Either PR can land first; this plugin change stands alone.
 
@@ -10,12 +10,12 @@ The owner's hub model (2026-09-27): "main talks to advisor and reviewer. sidekic
 
 The owner's picture (2026-09-26): "I'm using Opus Medium to do most of my planning and talking … Astra High X High for reviews … those would break down the work for the sidekick. The sidekick and work could be the workhorse, depending on work size, so we need to break down the work better. This means planning needs to be better and incentivize using managed agents to use the workhorse better." And: "for research and other workflows skills we could use workhorse as well and fan out more for things that matter."
 
-Cost. Artificial Analysis's Intelligence-vs-cost chart (2026-09-22, read by eye): GPT-6 Luna runs about $0.01 to 0.06 per task across its effort levels (index 29 to 37). GPT-6 Sol runs about $0.13 to 1.05 (34 to 47), Claude Opus low about $0.55, and GPT-6 Astra high about $1.70. At matched catalog rows Luna is roughly 9 to 14× cheaper than Sol or Opus low, and Luna max outscores Sol low at about half its price. Raising Luna's effort costs cents.
+Cost. The owner supplied an image of Artificial Analysis's Intelligence-vs-cost chart (data 2026-09-22); Main read it by eye, and the figures are not independently verified: GPT-6 Luna runs about $0.01 to 0.06 per task across its effort levels (index 29 to 37). GPT-6 Sol runs about $0.13 to 1.05 (34 to 47), Claude Opus low about $0.55, and GPT-6 Astra high about $1.70. At matched catalog rows Luna is roughly 9 to 14× cheaper than Sol or Opus low, and Luna max outscores Sol low at about half its price. Raising Luna's effort costs cents.
 
 A log audit of 2026-09-25 18:00 to 2026-09-26 22:00 covered 108 Luna, 64 Sol, and 25 Astra Codex sessions and 24 Claude Code sessions. Three Luna xhigh Workers read per-model digests; Main verified the decisive counts and quotes against the digests.
 
 1. **Luna succeeds on well-cut work.** Log scraping 4/4 completed. Audit partitions (a test-hunt wave supervised by a 🐒 Sidekick) 30/34 completed; the strongest packets pinned checkout, HEAD, partition, output file, and done condition. The *executors* did not fail on judgment in the sample.
-2. **Luna's implementation partials are planning misses.** 15 of 29 Luna implementation sessions ended partial, and nearly all were correct stops: the unit needed a production seam or signal outside its authorized write set ("Completing it requires a production signal … the unit forbids editing `Sources/`"). The slice crossed a boundary the plan did not name.
+2. **Luna's partials include boundary stops.** 15 of 29 Luna implementation sessions ended partial. Several were correct stops at a write boundary (u011: "Completing it requires a production signal … the unit forbids editing `Sources/`"); others were external gates (an approval policy rejecting a merge or a bulk deletion). The session digests cannot say which stops were mis-cut slices, so D13 replays at unit level.
 3. **Bigger models did Luna-shaped work.** 28 of 64 Sol sessions carried exact or fully specified local packets ("execute this brief", literal choreography tables, lint-fix briefs, CI measurement, single evidence lanes). Six packets bundled independent units, for example thirteen slices assigned to one session.
 4. **On a Claude host the cheap path leaks off-catalog.** Claude Main launched 78 native Opus, 40 Sonnet, and 12 Haiku subagents; Sonnet and Haiku are not in the model catalog. Router-launched Luna appeared in 18 raw commands.
 5. **The skills never route by piece.** Current source at `c08ab7af`:
@@ -25,7 +25,7 @@ A log audit of 2026-09-25 18:00 to 2026-09-26 22:00 covered 108 Luna, 64 Sol, an
    - `practices-research/SKILL.md:8`: "The assigned researcher owns the entire walk"; `:24` "Walk selected source classes one at a time"; `references/lane-packets.md:3` and `:18` repeat the serial walk and "source classes do not create separate packet or result files by default".
    - Already right and kept: Main authors every plan (`manage-agents/SKILL.md` Authority; `plan-implementation/SKILL.md:10,39`), review findings route through the orchestrator (`orchestrator-implementation-goal/SKILL.md:33`), and the 🦉 Advisor advises Main only (`manage-agents/SKILL.md:15`).
 
-Prior art agrees (sources in the research record, Main's scratchpad `workhorse/out-prior-art.md`): 39% of multi-agent failures trace to specification and system design (MAST, 2025); planner/executor splits beat single models (Aider architect/editor 85% vs 79.7%; Anthropic's lead-plus-subagents research system); practitioners route "Luna when the change is contained and checkable locally; Sol when it traces or changes shared behavior". The same sources name the catch: verification is the bottleneck, so cheap executors must return artifacts a parent can check mechanically.
+Prior art points the same way (Main's scratchpad `workhorse/out-prior-art.md`; its figures come from search snippets and are not verified against every primary source): 39% of multi-agent failures trace to specification and system design (MAST, 2025); planner/executor splits beat single models (Aider architect/editor 85% vs 79.7%; Anthropic's lead-plus-subagents research system); practitioners route "Luna when the change is contained and checkable locally; Sol when it traces or changes shared behavior". The same sources name the catch: verification is the bottleneck, so cheap executors must return artifacts a parent can check mechanically.
 
 This spec was researched the way it proposes: Main cut 280 MB of transcripts into per-model digests with one question set each, and Luna xhigh Workers returned cited ledgers. The one failure was transport: `conversation prompt` hit its wait ceiling and cancelled the xhigh turns.
 
@@ -35,9 +35,9 @@ Every row below was read in full at `c08ab7af`. A change to an owner decision is
 
 | Date | Source | Decision | This spec |
 |---|---|---|---|
-| 2026-08-07 | `05bbe238` (`plan-improve-repo/SKILL.md:55,66`, `references/audit-lanes.md:3,5,39`) | Audit categories are inspected in-parent; "Do not turn the category list into a default swarm." | Superseded by the 09-25 fan-out authorization below, which never reached this skill. Run 5 completes that cutover. |
+| 2026-08-07 | `05bbe238` (`plan-improve-repo/SKILL.md:55,66`, `references/audit-lanes.md:3,5,39`) | Audit categories are inspected in-parent; "Do not turn the category list into a default swarm." | Kept for categories. Run 5 adds delegation by C1-passing evidence unit under the 09-25 authorization (D11); the category list never becomes the dispatch unit. |
 | 2026-09-20 | `2026-09-20-efficient-delegation/spec.md` | The implementation 🐒 Sidekick executes directly "unless a bounded delegation has a concrete benefit", to prevent "a supervisor-of-supervisors pattern"; coupled implementation and proof stay with the executor. | Kept. D16: a PR whose slices are all Workhorse gets a Luna Sidekick, so no Daily-driver Sidekick becomes a relay; a Daily-driver Sidekick dispatches only independent Workhorse slices. |
-| 2026-09-23 | `2026-09-23-luna-workhorse/proposal.md` | Tiers named Workhorse / Daily driver / Frontier; Guidance and Architectural span are the only task signals; Luna Sidekick rows exist; a Luna Sidekick takes only short owner status checks. | Kept and used: C1 is expressed in those two signals; D16 uses the existing Luna Sidekick rows. |
+| 2026-09-23 | `2026-09-23-luna-workhorse/proposal.md` | Tiers named Workhorse / Daily driver / Frontier; Guidance and Architectural span are the only task signals; Luna Worker and Sidekick rows cover "Exact steps or well-understood Complete direction; Local/Cross-domain"; a Luna Sidekick takes only short owner status checks. | Kept, except the span: Luna rows narrow to Local (D2), so cross-domain work goes to the Daily driver. C1 is expressed in the two signals; D16 uses the Luna Sidekick rows. |
 | 2026-09-23 | `2026-09-23-review-research-workflows/proposal.md`, PR #93 | Owner: "You should not be doing swarm stuff anymore." A 🔎 Review Sidekick walks every check itself; research is one ordered workflow by one researcher; `research-swarm` lanes removed. | Review: kept (D12). Research: kept, with one narrow addition that the owner decides (D10). |
 | 2026-09-25 | `2026-09-25-capability-revamp/proposal.md` D163 | Native Worker per host: Claude Code Opus low; Cursor Grok 4.6 medium or Opus low; Codex Luna or Sol. Operator: Luna, native on Codex, else agent-router. With no native row for the catalog model, use agent-router with Luna, no native stand-in. | Kept. D5 narrows it: Workhorse-fit work on Claude Code and Cursor goes to agent-router Luna; the native Opus low and Grok rows stay for Daily-driver Workers. |
 | 2026-09-25 | PR #101 (`manage-agents/SKILL.md` Select an agent; devfiles `my_agents.md` Concepts) | "Work that splits into many independent units (an audit, a migration, or a review across services or files) is pre-authorized to fan out: one 🛠️ Worker per unit." | The authority runs 4 and 5 apply. |
@@ -51,14 +51,14 @@ Every row below was read in full at `c08ab7af`. A change to an owner decision is
    │  the plan cuts work into slices; each records guidance × span
    │  → tier · reason (C2), and a Workhorse slice passes C1
    │
-   │  design review of the plan ◄──► 🔎 Reviewer / 🦉 Advisor
-   │  (Main is their only contact)
+   │  design (R/S/PD) reviewed first ◄──► 🔎 Reviewer / 🦉 Advisor
+   │  (existing gate; Main is their only contact)
    │
-   │  reviewed plan + delegation ─► 🐒 Sidekick (per PR; Luna when
-   ▼                                 every slice is Workhorse, D16)
-                                     runs coupled and Daily-driver
-                                     slices itself; independent
-                                     Workhorse slices → 🛠️ Luna Workers
+   │  plan + delegation ─► 🐒 Sidekick (per PR, D16 table)
+   ▼                        all Workhorse → Luna Sidekick, runs it all
+                            mixed → Daily driver runs its own and coupled
+                            slices; plan-marked independent Workhorse
+                            slices → 🛠️ Luna Workers
  boundary stop ─► back to Main as a plan defect ─► Main re-slices
 ```
 
@@ -66,9 +66,9 @@ Decomposition is Main's design work, and the executor tier is a consequence of i
 
 ## Success definition
 
-1. Main's plan records each slice's guidance, span, tier, and reason, and every Workhorse slice passes the Workhorse fit test. The plan is design-reviewed through Main before the Sidekick is commissioned.
-2. The Sidekick executes Daily-driver slices and dispatches Workhorse slices to Luna 🛠️ Workers as the plan records. A boundary stop returns to Main as a plan defect. Only Main talks to the Advisor and the Reviewer.
-3. Audit categories fan out to Luna Workers, one per category. If D10 is accepted, a research corpus that splits into independent units fans out one Luna Worker per unit inside the researcher's ordered walk. The cut, verification, synthesis, and admission stay with the researcher or Main. Independent review does not fan out.
+1. Main's plan records each slice's guidance, span, tier, and reason, and every Workhorse slice passes the Workhorse fit test before the plan is ready. Design review stays the existing gate before planning.
+2. The Sidekick executes and dispatches per the D16 table: a Luna Sidekick executes an all-Workhorse PR directly; a Daily-driver Sidekick dispatches only plan-marked independent Workhorse slices. A boundary stop returns to Main as a plan defect. Only Main talks to the Advisor and the Reviewer.
+3. Audit work fans out to Luna Workers by independent evidence unit that passes C1, never by whole category. If D10 is accepted, a research corpus that splits into independent units fans out one Luna Worker per unit inside the researcher's ordered walk. The cut, verification, synthesis, and admission stay with the researcher or Main. Independent review does not fan out.
 4. Workhorse work runs on Luna: native on Codex, through agent-router on Claude Code and Cursor. No skill routes to Sonnet or Haiku. A PR whose slices are all Workhorse gets a Luna Sidekick.
 5. Every Workhorse packet pins inputs, commands, output file, and done condition, and the parent verifies the artifact, not prose.
 
@@ -78,8 +78,8 @@ Each row is a default with its rationale. Strike or change any row before review
 
 | # | Default taken | Rationale |
 |---|---|---|
-| D1 | **Owner hub model.** Main's plan cuts the work and records each slice's tier (Contract C2). Main gets the plan design-reviewed through the 🔎 Reviewer or 🦉 Advisor, then hands the reviewed plan and the delegation to the implementation 🐒 Sidekick. The Sidekick does not author or re-cut the plan. | Owner direction, 2026-09-27 ("sidekick doesn't make the plan"). Tier chosen after the breakdown, by the executor, is where mis-sized slices came from (evidence 2 and 5). Adds one field to the canonical plan contract. |
-| D2 | Workhorse fit is exactly Contract C1, owned by `manage-agents/references/model-catalog.md`. Every other site cites it. | One live owner for the test that planners, Sidekicks, research, and audits all apply. |
+| D1 | **Owner hub model.** Design is reviewed through Main before planning, using the existing gate (`plan-implementation` admits only reviewed Requirements, Specification, and Program Design; `orchestrator-implementation-goal` step 2). Main then writes the plan, cutting slices and recording each slice's tier (C2), and hands the plan and the delegation to the implementation 🐒 Sidekick. The Sidekick does not author or re-cut the plan. No new plan-review stage is added; `plan-implementation`'s completion check gains "every Workhorse slice passes C1". | Owner direction, 2026-09-27 ("sidekick doesn't make the plan"; "main should make implementation plan and give it to sidekick"). r5 read "review for design first" as a new plan review; the proposal review found that stage had no teaching owner (F4), and the existing design gate already matches the owner's words. |
+| D2 | Workhorse fit is exactly Contract C1, owned by `manage-agents/references/model-catalog.md`, and is stated in the catalog's own signals (Guidance and Architectural span). The Luna Worker and Sidekick rows' span cells narrow from "Local/Cross-domain" to "Local", so the table and C1 agree. Every other site cites C1. | Proposal review F1. Narrowing the span changes a 09-23 owner row; the basis is the owner's 2026-09-26 words ("There's something about a bigger model that does things a lot better—cross-domain and domain stuff") and model choice being Main's call under Owner Attention. |
 | D3 | The Workhorse tier is the default for work that passes C1. Escalation happens on evidence (a boundary stop, a failed check, a named cross-domain need), and the reason is recorded. | Evidence 1 to 3; prior art's escalate-on-evidence cascades. |
 | D4 | A Luna boundary stop returns to Main as a plan defect; Main re-slices or re-tags with a reason. It is not silently re-run on a bigger model, and the Sidekick does not re-cut it. | Evidence 2: the stop is information about the plan. |
 | D5 | Workhorse-fit work runs on Luna: native on Codex, and through agent-router on Claude Code and Cursor, which have no native Luna. The existing native Daily-driver Worker rows stay (Claude Code Opus low; Cursor Grok 4.6 medium or Opus low). Sonnet and Haiku are never selected on any host. | Owner, 2026-09-27: "i dont think we will use sonnet or haiku we can use agent router and luna". Evidence 4. Consistent with the 09-25 D163 route "no native row → agent-router with Luna". |
@@ -88,12 +88,20 @@ Each row is a default with its rationale. Strike or change any row before review
 | D8 | Contract C3, the Workhorse packet, lives in `manage-agents/references/agent-job-packet.md`. | The best audit-partition packets and the September Operator failure logs (wrong worktree, command drift, summarized proof, early terminal, stale head) name the same five pins. |
 | D9 | A long agent-router Workhorse turn starts as `conversation create` then `message send`, with the parent waiting on the output file; `conversation prompt` fits short turns or takes an explicit `--timeout-seconds` sized to the work. Its default (300 s) cancels the remote turn rather than detaching. | Logged at `memory-logs/skills/log/2026-09-26-router-prompt-timeout-cancels-long-turns.md` (7 cancelled turns across two sessions; the log's own follow-up asks manage-agents for exactly this). |
 | D10 | **OPEN, owner decision (brief).** The researcher keeps the ordered source-class walk (09-23). Inside one source class, a corpus that splits into independent units (many session logs, many repositories or services) may fan out one Luna 🛠️ Worker per unit under the 09-25 pre-authorization; the researcher cuts the units, verifies each result's decisive anchors, and keeps the one ledger. Recommended: accept. | This research's own route (280 MB of transcripts, three Luna digests) versus the 09-23 decision, which removed one lane per *source class*. The addition fans out *units of one class*, never classes. It changes an owner decision three days old, so the owner decides. |
-| D11 | `plan-improve-repo` applies the 09-25 fan-out authorization it never received: one Luna Worker per selected audit category, returning evidence and candidates. A category small enough for one read stays in-parent. Admission, prioritization, and plans stay with Main. | Cutover completion of PR #101. The 08-07 in-parent rule predates it. |
+| D11 | `plan-improve-repo` delegates audit work by **evidence unit**: after recon, Main cuts each selected category into independently bounded units (one owner, one question, pinned paths) and gives each unit that passes C1 to a Luna 🛠️ Worker; a unit that fails C1 stays in-parent or goes to a Daily-driver Worker. Categories stay the coverage dimensions and their completion returns (`audit-lanes.md:50`). Admission, prioritization, and plans stay with Main. | Proposal review F3: a whole category (security, architecture) is often cross-domain, so it is not itself a Workhorse unit. The 09-25 pre-authorization covers work that already splits into independent units; the cut makes that true. |
 | D12 | **Dropped in r4.** Independent review does not fan out. `implementation-review/SKILL.md:28` has the lead read "the complete governing basis and the complete base-to-reviewed diff yourself", which is what makes it independent. The 30/34 Luna partition successes were audit hunts supervised by a Sidekick, which run 5 covers. | Current source; evidence 1 re-read. |
-| D13 | Proof is static plus a replay walkthrough: C1 applied to the 29 logged Luna implementation units and the 28 Sol candidates must mark the boundary-stop units as misses and the completed ones as fits. No new pressure scenarios. | A cheap, grounded check of the one new judgment rule. The owner can strike this row to ask for pressure testing. |
+| D13 | Proof is static plus a **blind unit-level replay** of C1. Corpus: the 29 frozen pre-dispatch briefs of one test-hunt wave (`agent-studio-worktrees/test-hunt/tmp/test-hunt/fix/wave1/units/u001-brief.md` to `u029-brief.md`). A Luna 🛠️ Worker classifies each brief under C1 from the brief alone (fit, miss with the condition, or unknown), with no outcome files in its inputs. Main then compares with the recorded outcomes (`validation.tsv`, `editor-reports/`) and reports agreements, disagreements, missing inputs, and stops caused by external gates. No result is required in advance. | Proposal review F6: sessions bundle several units, digests lack briefs, and a prediction made after reading outcomes proves nothing. A session-level replay on 2026-09-27 left 17 of 29 Luna rows unknown for exactly that reason. |
 | D14 | One PR, one minor version bump (2.64.0 to 2.65.0) across every version surface, one changelog entry. | Runs share C1 and C2. |
 | D15 | Main is the only contact for the Advisor and the Reviewer. A correction goes back to the Reviewer through Main. | Owner direction, 2026-09-27. Mostly existing (`orchestrator-implementation-goal` step 5); the re-review handoff at `goal-contract-and-routing.md:78` is made explicit. |
-| D16 | A PR's Sidekick tier follows its slices (`manage-agents/SKILL.md:118`: "Different files are not proof of independence"). When every slice is Workhorse, Main commissions a Luna 🐒 Sidekick for the PR. A Daily-driver Sidekick dispatches a Workhorse slice to a Luna Worker only when the plan marks it independent (disjoint writes, its own proof); a coupled Workhorse slice stays with the Sidekick. No Sidekick exists only to relay Workers. | 09-20 efficient-delegation: no supervisor-of-supervisors, coupled work stays with its executor. Uses the existing Luna Sidekick rows (09-23). |
+| D16 | A PR's Sidekick tier and execution follow the plan's slice records and dependency edges (`manage-agents/SKILL.md:118`: "Different files are not proof of independence"). See the D16 table below. The executor never infers independence from the tier. | 09-20 efficient-delegation: no supervisor-of-supervisors, coupled work stays with its executor. Uses the existing Luna Sidekick rows (09-23). |
+
+### D16 table
+
+| PR's slices | Sidekick | What the Sidekick executes itself | What goes to Luna 🛠️ Workers |
+|---|---|---|---|
+| all Workhorse | Luna | every slice, directly | nothing by default; the benefit test at `manage-agents/SKILL.md:79` still governs any child |
+| mixed tiers | Daily driver | Daily-driver slices, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent (no `requires` or `serial` edge to in-flight work, disjoint writes, own proof), when the benefit test holds |
+| all Daily driver | Daily driver | every slice | nothing by default |
 
 ## Contracts
 
@@ -101,14 +109,12 @@ Each row is a default with its rationale. Strike or change any row before review
 
 Home: `manage-agents/references/model-catalog.md`, new section after Categories.
 
-> **Workhorse fit.** A unit of work fits the Workhorse tier when all five hold:
-> 1. **One objective** with a done condition a reader can check.
-> 2. **Pinned inputs**: the files, paths, head, corpus slice, or brief are given, not discovered.
-> 3. **One domain**: it changes or reads one owner and does not trace or change shared behavior across a boundary.
-> 4. **Checkable output**: a file, a test or check result with its exit code, or a diff within declared paths.
-> 5. **A named stop**: the packet says what to do at its boundary, which is to stop and return, not to widen.
+> **Workhorse fit.** A unit of work fits the Workhorse tier when its Guidance is Exact steps, or Complete direction with the approach already fixed, its Architectural span is Local, and it has:
+> 1. **Pinned inputs**: the files, paths, head, corpus slice, or brief are given, not discovered.
+> 2. **A checkable output**: a file, a test or check result with its exit code, or a diff within declared paths.
+> 3. **A named stop**: the packet says what to do at its boundary, which is to stop and return, not to widen.
 >
-> A unit that misses one is split until its parts fit, or it goes to the Daily-driver tier with the missing condition as the reason. Cost is why this is the default: at the dated snapshot below, Luna costs about an order of magnitude less per task than Sol or Opus low, and its highest effort still costs cents. A boundary stop from a Workhorse unit is evidence about the cut, so the assigner re-slices or re-tags it with a reason.
+> A unit that misses any of these is split until its parts fit, or it goes to the Daily-driver tier with the missing condition as the reason. A packet that fixes the outcome but leaves the approach open is Partial direction and does not fit. Cost is why this is the default: at the dated snapshot below, Luna costs about an order of magnitude less per task than Sol or Opus low, and its highest effort still costs cents. A boundary stop from a Workhorse unit is evidence about the cut, so the assigner re-slices or re-tags it with a reason.
 
 ### C2. Slice executor record
 
@@ -129,16 +135,16 @@ Each run names one skill. Anchors are at base `c08ab7af`. The Consumer dispositi
 ### Run 1: `manage-agents` (owns C1 and C3)
 
 - **Surfaces:** main path (Select an agent, Runtime, Waiting), depth (`model-catalog.md`, `agent-job-packet.md`, `native-providers-claude.md`, `native-providers-cursor.md`).
-- **Changes:** add C1 and the dated snapshot to `model-catalog.md`; drop Luna medium from the Worker and Sidekick tables (D6); add C3 to `agent-job-packet.md`; in the benefit test, say that a plan slice carrying C2 already is the brief; `native-providers-claude.md` and `native-providers-cursor.md` add a Workhorse 🛠️ Worker row routed through agent-router on Luna next to their unchanged Daily-driver rows (D5); Waiting adds the long-turn route (D9).
+- **Changes:** add C1 and the dated snapshot to `model-catalog.md`; narrow the Luna Worker and Sidekick span cells to Local and drop Luna medium from the Worker table (D2, D6); add C3 to `agent-job-packet.md`; in the benefit test, say that a plan slice carrying C2 already is the brief; `native-providers-claude.md` and `native-providers-cursor.md` add a Workhorse 🛠️ Worker row routed through agent-router on Luna next to their unchanged Daily-driver rows (D5); Waiting adds the long-turn route (D9).
 
 ### Run 2: `plan-implementation` (owns C2 via `canonical-implementation-plan.md`)
 
 - **Surfaces:** main path steps 2 to 4, depth (`slice-and-proof-design.md`, `canonical-implementation-plan.md`).
-- **Changes:** each slice records C2; a slice that bundles independent units is split (evidence 3); a slice that would cross a boundary is split at that boundary or tagged Daily driver with the reason (evidence 2); required plan fields add the executor record.
+- **Changes:** each slice records C2; a slice that bundles independent units is split (evidence 3); a slice that would cross a boundary is split at that boundary or tagged Daily driver with the reason (evidence 2); required plan fields add the executor record; the completion check adds "every Workhorse slice passes C1" (D1).
 
 ### Run 3a: `orchestrator-implementation-goal`
 
-- **Changes:** a design-review step for the plan runs through Main before the Sidekick commission (D1); the commission carries the reviewed plan and delegation, and Main picks the Sidekick's tier from its slices (D16); `SKILL.md:14`, `:29` and `references/goal-contract-and-routing.md:42,44` ("directly by default", "native Workers only for … benefit exceeds briefing") become: Daily-driver and coupled slices directly, independent Workhorse slices to Luna Workers under C3 as the plan records; a boundary stop returns to Main as a plan defect (D4); `goal-contract-and-routing.md:78` names Main as the handoff to re-review (D15).
+- **Changes:** at commission, Main picks the Sidekick's tier from the plan's slice records per the D16 table; `SKILL.md:14`, `:29` and `references/goal-contract-and-routing.md:42,44` cite the D16 table in place of "directly by default" and the bare benefit gate; a Workhorse boundary stop returns to Main as a plan defect (D4); `goal-contract-and-routing.md:78` names Main as the handoff to re-review (D15). No new review step (D1).
 
 ### Run 3b: `implement-plan`
 
@@ -151,8 +157,8 @@ Each run names one skill. Anchors are at base `c08ab7af`. The Consumer dispositi
 
 ### Run 5: `plan-improve-repo`
 
-- **Rewrite:** `SKILL.md:55` ("in-parent by default") becomes: one Luna 🛠️ Worker per selected audit category under C3, returning evidence and candidates; a category small enough to inspect in one read stays in-parent (D11).
-- **Kept:** `:56-57` (candidates are not truth; Main re-opens cited files; Main admits, prioritizes, and authors every plan).
+- **Rewrite:** `SKILL.md:55,66,143` and `references/audit-lanes.md:3,5,39`: categories stay in-parent coverage dimensions; after recon, Main may cut a category into independent evidence units and give each C1-passing unit to a Luna 🛠️ Worker under C3; the "one bounded question" packet at `audit-lanes.md:7-27` becomes the unit packet (D11). `improvement-plan-template.md` carries the C2 record for each slice (the skill is a C2 producer).
+- **Kept:** `:56-57` (candidates are not truth; Main re-opens cited files; Main admits, prioritizes, and authors every plan); `audit-lanes.md:50` category completion.
 
 ### Run 6: ship prep
 
@@ -174,13 +180,21 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 | 2 | `plan-implementation/references/slice-and-proof-design.md:18,45` | slice = smallest provable change; per-slice fields omit executor | rewrite: per-slice C2 record; split bundles; split or tag at a boundary |
 | 2 | `shared-references/canonical-implementation-plan.md:63` | required plan fields | rewrite: add the per-slice executor record (C2) |
 | 2 | `plan-handoff/SKILL.md:19` | handoff carries the obligation-to-slice-to-proof mapping | cite: the mapping carries each slice's C2 record |
-| 3a | `orchestrator-implementation-goal/SKILL.md:14,29` | "executes … directly by default"; native Workers only past the benefit gate | rewrite per D16 and D1 |
+| 3a | `orchestrator-implementation-goal/SKILL.md:14,29` | "executes … directly by default"; native Workers only past the benefit gate | rewrite per the D16 table |
 | 3a | `orchestrator-implementation-goal/references/goal-contract-and-routing.md:42,44,78` | same default and gate; re-review handoff implicit | rewrite per D16; `:78` names Main as the re-review handoff (D15) |
 | 3a | new step before commission | no plan design review through Main | rewrite: add it (D1) |
 | 3b | `implement-plan/SKILL.md:14`, `references/execution-and-proof.md:34` | "native Worker" | rewrite: follow C2 and D16; route through `manage-agents` for the host's Workhorse route (D5) |
 | 4 | `practices-research/SKILL.md:24`, `references/lane-packets.md:3` | serial source-class walk | rewrite (only if D10 is accepted): add the in-class unit branch; the serial walk stays |
 | 5 | `plan-improve-repo/SKILL.md:55,66,143` | "in-parent by default"; `deep` delegates only under the predicate | rewrite per D11 |
 | 5 | `plan-improve-repo/references/audit-lanes.md:3,5,39` | "never a flow default"; "category count does not satisfy the predicate"; "Do not turn the category list into a default swarm" | rewrite per D11; the category-pass completion at `:50` stays and becomes each Worker's return |
+| 3a | `orchestrator-design/SKILL.md:78` | commissions after a ready plan and restates direct execution | rewrite: cite the D16 table |
+| 2 | `plan-implementation/SKILL.md:38` | ready record → `implement-plan` → commission | cite: the ready record carries C2; no new gate (D1) |
+| 1 | `manage-agents/SKILL.md:96` | commission per planned PR assignment | rewrite: tier from the D16 table |
+| ship | `AGENTS.md:69` | repo operating instruction repeats "directly by default" and the benefit wording | rewrite in ship prep (repo doc companion) |
+| fixtures | `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md:23-39`, `handoff-plan.md:23-36`, `improvement-plan.md:21-24` | ready plans with no C2 record | test-update: add a C2 record per slice so canonical admission still admits them |
+| tests | `…/implement-plan/cases.ts:13-16,35-37` | admits the exact unchanged `existing-plan.md` | test-update: stays true once the fixture carries C2 |
+| tests | `…/orchestrator-implementation-goal/continue-ready-plan-without-approval.md:18-21` | commission and direct execution | test-update per the D16 table; no approval step added (D1) |
+| tests | `…/manage-agents/sidekick-luna-xhigh.md:23-40` | Luna xhigh allowed for a Cross-domain Sidekick | test-update per D2: the scenario's parser/validation/reporting plan becomes Local, or the expected tier becomes Daily driver |
 | tests | `tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/no-relay-supervisor.md:31,33` | coupled parser slice stays with the Sidekick; benefit gate | test-update: keep both; add that a plan-marked independent Workhorse slice goes to a Luna Worker |
 | tests | `…/manage-agents/main-default-after-ready-plan.md:34` | Sidekick "implements and proves directly by default" | test-update per D16 |
 | tests | `…/orchestrator-implementation-goal/cases.ts:243,244` | "keeps implementation and associated proof direct"; "Keeps the Sidekick direct by default" | test-update per D16 |
@@ -194,16 +208,16 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 ## Authoring basis and proof plan
 
 - **Authoring basis:** `user-directed intent`, with the log audit and prior art as supporting evidence. No RED is claimed.
-- **Claim ceiling:** "drafted from user intent; C1 replay-checked against logged units; behavior not evaluated."
+- **Claim ceiling:** "drafted from user intent; C1 replayed blind on 29 logged unit briefs; behavior not evaluated."
 - **Structural proof:** `pnpm --dir tests/skills test` and `pnpm --dir tests/skills typecheck` pass. Every C1 and C3 citing site names its home by exact path. `rg -i "sonnet|haiku"` over `plugins/shravan-dev-workflow/skills` returns no routing rows.
-- **Replay walkthrough (D13):** apply C1 to the logged Luna implementation units and Sol candidates; report fits, misses, and the missed condition, compared with each session's recorded outcome.
+- **Replay (D13):** blind unit-level classification of the 29 wave-1 briefs, then Main's comparison with recorded outcomes. The 28 Sol entries stay candidates, not demonstrated Luna successes.
 - **Security:** no script, hook, asset, or network surface. The ship step's plugin reinstall is the standard cache refresh: `allowed`, at ship only.
 
 ## Coordination
 
 - **Base:** `origin/main` at `c08ab7af`, branch `chore/workhorse-decomposition`, worktree `~/dev/ai-tools.chore-workhorse-decomposition`.
 - **Landing:** run 1 first (C1, C3 homes), then 2, 3a, 3b, 4, 5, 6 on one branch as one PR (D14).
-- **Overlap with the pstack comparison** (`docs/wip/2026-09-27-pstack-vs-ours/reduction.md`, recommendation 6, not yet a spec): it targets the same two homes, `manage-agents/references/agent-job-packet.md` and `orchestrator-implementation-goal`. This spec takes the packet fields that overlap C3 (verify, forbidden, report, and timebox as the done condition) and the router long-turn route (D9). The rolling dispatch window and drain loop stay with that later spec. Whichever lands second rebases onto the first.
+- **Overlap with the pstack comparison** (`/Users/shravansunder/dev/ai-tools/docs/wip/2026-09-27-pstack-vs-ours/reduction.md` in the main checkout, uncommitted; recommendation 6, not yet a spec): it targets the same two homes, `manage-agents/references/agent-job-packet.md` and `orchestrator-implementation-goal`. This spec takes the packet fields that overlap C3 (verify, forbidden, report, and timebox as the done condition) and the router long-turn route (D9). The rolling dispatch window and drain loop stay with that later spec. Whichever lands second rebases onto the first.
 - **Router timeout:** already logged at `memory-logs/skills/log/2026-09-26-router-prompt-timeout-cancels-long-turns.md`; cite it, do not re-log.
 - **Version:** 2.64.0 to 2.65.0 in the three plugin manifests and both marketplace entries, then the platform validation and readback from `skills-creation/references/platform-mechanics.md`.
 
@@ -217,4 +231,5 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 
 ## Spec-review record
 
-None yet.
+- **Review 1** (r5, commit `c48a5ed3`): different-lineage 🔎 Review Sidekick, GPT-6 Astra high, agent-router session `01a0e2a0-6835-7171-9512-410133d40c29`, no author history. Checks: mental-model-fit complete, trigger-routing complete, rule-agreement partial (external benchmark figures and the full audit corpus not reverified), depth-coverage complete. Verdict `targeted-revision`, implementation decision `revise-first`, blocker override applies. Accepted F1 to F6 (blockers F4, F5). Rejected: D10's openness as a defect, a blanket no-swarm reading, restoring review fan-out, Sidekick plan repair, raising Operator effort, removing native Daily-driver rows, C3 as an unjustified schema, D9 as fabricated, required pressure runs, one-target violation, a missing Codex marketplace version.
+- **r6 remediation** (Main): F1 → C1 restated in Guidance and span, Luna span narrowed to Local (D2); F2 → D16 table; F3 → audit delegation by C1-passing evidence unit (D11); F4 → no new plan review, existing design gate plus a plan completion check (D1); F5 → disposition rows for the commission paths, `AGENTS.md:69`, three ready-plan fixtures, and three more scenarios; F6 → blind unit-level replay (D13) and a narrowed evidence 2. Main also found that the session-level replay's own summary misstated its table (it named c4; the table shows 0 c4 and 20 c5 misses), recorded here as evidence for C3's "verify the file, not the prose".
