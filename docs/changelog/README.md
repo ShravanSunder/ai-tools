@@ -1,5 +1,6 @@
 # Changelog
 
+- [2026-09-27 Agent Router 0.17.0 skill sync](2026-09-27-agent-router-0-17-0-skill-sync.md)
 - [2026-09-27 Router-first agent communications](2026-09-27-router-first-agent-communications.md)
 - [2026-09-26 Owner attention goes to design](2026-09-26-owner-attention-design-first.md)
 - [2026-09-25 Domain model and trace in design](2026-09-25-domain-model-and-trace.md)
