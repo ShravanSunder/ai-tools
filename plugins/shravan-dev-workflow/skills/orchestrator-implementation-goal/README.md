@@ -1,20 +1,23 @@
 # Orchestrator: Implementation Goal
 
-`orchestrator-implementation-goal` carries a delivery goal across main-authored planning, planned-PR implementation and proof, main assessment, independent review, accepted correction, and PR readiness. The user-facing main owns governing design and plans; persistent implementation Sidekicks receive bounded PR assignments.
+`orchestrator-implementation-goal` carries a delivery goal from a ready breakdown and PR plans through per-PR implementation and proof, main assessment, independent review per PR or stack, accepted correction, integration gates, and PR readiness. The user-facing main writes the breakdown and each PR plan with `plan-implementation` before this skill admits them; persistent implementation Sidekicks each receive one PR, and Main sequences a stack's layers.
 
 The runtime contract is [SKILL.md](./SKILL.md). Current-source orientation, routing examples, the missing-history baseline, and finish checks are in [goal-contract-and-routing.md](./references/goal-contract-and-routing.md).
 
 ```mermaid
 flowchart LR
-    A[Current reviewed design or admitted improvement] --> B[Main authors plan]
-    B -->|plan-only| G[Requested terminal]
-    B --> C[Sidekick assignments implement and prove]
-    C --> H[Main assessment and integration check]
-    H --> D[Independent review]
+    A[Current reviewed design or admitted improvement] --> P[Main plans with plan-implementation: breakdown and first PR plans]
+    P -->|plan-only| G[Requested terminal]
+    P --> B[Goal admits the ready breakdown and PR plans]
+    B -->|plan missing| P
+    B --> C[One Sidekick per PR implements and proves]
+    C --> H[Main assesses each PR]
+    H --> D[Independent review per PR, or per stack layer]
     D -->|accepted finding| E[Correct and re-prove]
     E --> D
-    D -->|ready| F[PR wrap-up]
-    F --> G[PR-ready and unmerged]
+    D -->|ready| F[PR wrap-up per PR, stacks lowest layer first]
+    F --> I[Main runs integration gates]
+    I --> G[PR-ready and unmerged]
 ```
 
 Design repair remains a separate owner. If an incomplete prerequisite can be completed within the settled model, the implementation goal stays open and resumes afterward. A material design break returns to Main, which brings the owner a brief, before more implementation is built on it.
