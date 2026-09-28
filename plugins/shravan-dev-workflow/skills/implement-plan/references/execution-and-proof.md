@@ -31,11 +31,12 @@ Record the inspected branch/HEAD, pre-existing changes, instruction sources, val
 
 The ready frontier is the smallest plan slice whose prerequisites are proven and whose write scope does not collide with in-flight work. Prefer one vertical slice that changes behavior and proves it at the cheapest fitting observation seam.
 
-- The ready plan, selected slice, and any scoped handoff remain the contract for this implementation phase: their inputs, authoritative artifacts, task boundary, completion or escalation, and proof/results travel with the executor. Reuse an already assigned suitable executor. In an orchestrated project flow, the implementation 🐒 Sidekick selects a native Worker only at an actual assignment point through `manage-agents`; that Worker executes its bounded slice and fitting proof through assignment corrections, and a direct bounded implementation remains direct. `SKILL.md` owns execution responsibility; `manage-agents` adds dispatch details without regenerating that contract.
+- The ready plan, selected slice, and any scoped handoff remain the contract for this implementation phase: their inputs, authoritative artifacts, task boundary, completion or escalation, and proof/results travel with the executor. Reuse an already assigned suitable executor. In an orchestrated project flow, the implementation 🐒 Sidekick dispatches a slice only when its executor record and the staffing table in `manage-agents` say so (a plan-marked independent Workhorse slice under a Daily-driver Sidekick), at an actual assignment point, through `manage-agents` for the host's Workhorse route; that Worker executes its bounded slice and fitting proof through assignment corrections, and a direct bounded implementation remains direct. `SKILL.md` owns execution responsibility; `manage-agents` adds dispatch details without regenerating that contract.
 - Assignment may cover serial work. Parallel work is advisory and only eligible when the ready canonical plan identifies independent slices with disjoint writes after proven prerequisites. `manage-agents` owns dispatch mechanics.
 - Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned; never assign an 🔧 Operator for each test or proof command.
 - Contract-only or prefactoring work must name the downstream consumer it unlocks and integrate at that consumer's first interaction.
 - A slice too large to prove inside scope returns a split or plan-defect route before edits.
+- A Workhorse slice that stops at its boundary returns a plan-defect route with the stop evidence. The implementer does not re-cut it or re-run it on a bigger model.
 
 Return the selected slice, prerequisites, allowed writes, non-goals, collision decision, and first integration gate. For one isolated slice with no separately changed parts, return `integration gate: not applicable` with that reason instead of inventing a gate.
 
@@ -75,7 +76,8 @@ design break
   -> return to the orchestrator, which routes to spec-design or program-design as the affected meaning requires
 
 plan defect
-  slice, sequence, dependency, collision, write scope, or proof mapping is wrong
+  slice, sequence, dependency, collision, write scope, proof mapping, or executor
+  record is wrong, including a Workhorse slice that stops at its boundary
   -> stop at the recorded originating planner
 
 out-of-scope infrastructure failure

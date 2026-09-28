@@ -242,6 +242,26 @@ export const skillPressureCaseDefinitions = [
     ],
   },
   {
+    scenarioId: "implement-plan-follows-slice-executor-record",
+    requiredSourceReads: [
+      ...executionSources,
+      "plugins/shravan-dev-workflow/skills/manage-agents/SKILL.md",
+    ],
+    maximumToolCalls: 25,
+    semanticCriteria: [
+      {
+        name: "dispatches-by-executor-record",
+        requirement: "Keeps the Daily-driver slice with the Sidekick and treats the Workhorse slice's dispatch as following its executor record, the plan's independent mark, and the manage-agents staffing table.",
+        failureExample: "Treats the executor record as advisory, dispatches the Daily-driver slice, or pulls the Workhorse slice back without reason.",
+      },
+      {
+        name: "returns-workhorse-stop-as-plan-defect",
+        requirement: "Returns the Workhorse boundary stop as a plan-defect to the originating planner with the missing-seam evidence, without re-cutting the slice or re-running it on a bigger model.",
+        failureExample: "Widens the slice to add the missing hook, or re-runs it on Opus or Sol without a planner decision.",
+      },
+    ],
+  },
+  {
     scenarioId: "implement-plan-eligible-disjoint-delegation",
     requiredSourceReads: executionSources,
     maximumToolCalls: 25,
