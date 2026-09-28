@@ -2,7 +2,7 @@
 
 ## Static proof
 
-- `pnpm --dir tests/skills test`: 17 files, 125 tests passed, exit 0. `pnpm --dir tests/skills typecheck`: exit 0.
+- `pnpm --dir tests/skills test`: 17 files, 126 tests passed, exit 0. `pnpm --dir tests/skills typecheck`: exit 0.
 - `claude plugin validate .` and `claude plugin validate plugins/shravan-dev-workflow`: passed. Codex `skill-creator` quick validator: 12 of 12 changed skills valid. Cursor and Codex manifests parse as JSON.
 - `rg -i "sonnet|haiku" plugins/shravan-dev-workflow/skills`: two exclusion lines, no routing row. `rg "directly by default"` over the skills, the plugin README, and `AGENTS.md`: no match.
 - Every file that cites Workhorse fit, the tier record, the job pins, the plan review, the staffing table, the breakdown record, or the PR independence test names that contract's home by path.

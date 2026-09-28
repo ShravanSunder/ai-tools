@@ -8,5 +8,5 @@
 - `orchestrator-design` ends continued delivery at the breakdown and first plans. `implement-plan`, `implementation-review`, `implementation-pr-wrapup`, `plan-handoff`, and `plan-improve-repo` follow the per-PR unit; a Workhorse boundary stop is a `plan-defect`. `plan-improve-repo` delegates audits by Workhorse-fit evidence unit, and `practices-research` may fan out units inside one source class.
 - `practices-collaboration` and `practices-show-me-your-work`: bounded Workers and Operators skip work-home discovery and the trace entry.
 - Cohesion pass (r14): each rule now has one home and its consumers cite it; the plan field is renamed `tier:`, the review file `plan-review.md`, Choose by job replaces the role tables, and the cost snapshot moved here. The skills and shared references shrink on net.
-- Validation: `pnpm --dir tests/skills test` 125/125, typecheck clean, `claude plugin validate` for the marketplace and plugin. Pressure evals not run. Evidence: `references/2026-09-28-workhorse-decomposition-and-breakdown.md`.
+- Validation: `pnpm --dir tests/skills test` 126/126, typecheck clean, `claude plugin validate` for the marketplace and plugin. Pressure evals not run. Evidence: `references/2026-09-28-workhorse-decomposition-and-breakdown.md`.
 - Codex, Claude, and Cursor cache refresh/reinstall: pending post-merge.
