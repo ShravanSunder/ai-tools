@@ -16,13 +16,13 @@ A compact plan (one low-risk owner and one or two proof gates, per `slice-and-pr
 
 Read the draft as the executor who will receive it, with only the plan and its cited sources.
 
-1. **Tier records.** For each Workhorse slice, reopen the cited source at the slice's base and check each Workhorse fit condition (`../../manage-agents/references/model-catalog.md`); a name that matches in the brief is not a seam that exists. For each Daily-driver slice, confirm the missing condition is real and named.
+1. **Tier records.** For each Workhorse slice, reopen the cited source at the slice's base and check each Workhorse fit condition (`../../manage-agents/references/model-catalog.md`); a name that matches in the brief is not a seam that exists. For each Daily-driver slice, confirm its reason is one of the three and is real.
 2. **Throughput checkpoint.** Every item in the Throughput Checkpoint in `slice-and-proof-design.md` is filled or `n/a: <reason>`; for every slice marked independent, compare its write surfaces with every slice that may run beside it and confirm its own proof.
 3. **Boundaries and seams.** No slice crosses an assigned authority or contract boundary it does not name, and every dependency is declared. A seam the PR takes from outside itself that is missing at the PR's actual base leaves the node pending or returns its gap, under the PR Independence Test in `slice-and-proof-design.md`.
 4. **Proof.** Every obligation maps to proof that can observe it, per `slice-and-proof-design.md`.
 5. **Bundles.** No slice carries several independent units that one session would otherwise receive as one assignment.
 
-Good point: `slice S4 · records Workhorse, but the deadline handler it observes has no completion signal at base (only clock continuations) · add contract slice S3a that exposes completion, or tag S4 Daily driver with "seam missing"`.
+Good point: `slice S4 · records Workhorse, but the deadline handler it observes has no completion signal at base (only clock continuations) · add contract slice S3a that exposes completion, or tag S4 Daily driver with judged tough: no completion seam at base and no contract slice can add one`.
 
 Weak point: `S4 might be risky`. It names no anchor, no problem the executor would hit, and no change, so it cannot be taken or declined.
 
