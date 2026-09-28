@@ -1,6 +1,6 @@
 # Workhorse-first decomposition
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r10**, 2026-09-28. Status: **accepted-to-implement** (r10, verified 2026-09-28), with the owner's catalog amendment, accepted at r13 (2026-09-28). **r14.1** (2026-09-28): the owner's cohesion amendment (horizon as a job property, one job table, net-deletion cleanup), **accepted-to-implement** (verified 2026-09-28). r3 applies the owner's hub model: Main plans and cuts, the plan is design-reviewed through Main, then Main hands the reviewed plan and delegation to the Sidekick (D1, D15, C2). r4 grounded every run in current source at `c08ab7af`, dropped review fan-out, and coordinated with the pstack comparison. r5 reads every touched file whole and every prior spec on delegation and tiers, and reconciles with those owner decisions (Prior decisions, D5, D10, D11, D16). r6 applies the proposal review's six accepted findings; r7 applies the verification's residuals and F7 and the agreed pstack-audit items; r8 applies the owner's answer on plan review: Main writes the plan, an 🦉 Advisor reviews it (D1, D17, C4); r9 adds the D13 replay result and the seam condition it exposed (C1), and reverts D17 to "the project's Advisor, if it has one" per the owner; r10 applies the r9 verification (F4 residuals, F8, F9) and rebases onto `main` at `59eec035` (plugin 2.65.0). No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r10**, 2026-09-28. Status: **accepted-to-implement** (r10, verified 2026-09-28), with the owner's catalog amendment, accepted at r13 (2026-09-28). **r14.1** (2026-09-28): the owner's cohesion amendment (horizon as a job property, one job table, net-deletion cleanup), **accepted-to-implement** (verified 2026-09-28). **r15** (2026-09-28): the owner's role bands (Operator Luna medium; Worker high to xhigh; Sidekick high to max), escalation off Luna only with a recorded reason, signal definitions with tests, general examples, and a whole-skill alignment pass; pending review. r3 applies the owner's hub model: Main plans and cuts, the plan is design-reviewed through Main, then Main hands the reviewed plan and delegation to the Sidekick (D1, D15, C2). r4 grounded every run in current source at `c08ab7af`, dropped review fan-out, and coordinated with the pstack comparison. r5 reads every touched file whole and every prior spec on delegation and tiers, and reconciles with those owner decisions (Prior decisions, D5, D10, D11, D16). r6 applies the proposal review's six accepted findings; r7 applies the verification's residuals and F7 and the agreed pstack-audit items; r8 applies the owner's answer on plan review: Main writes the plan, an 🦉 Advisor reviews it (D1, D17, C4); r9 adds the D13 replay result and the seam condition it exposed (C1), and reverts D17 to "the project's Advisor, if it has one" per the owner; r10 applies the r9 verification (F4 residuals, F8, F9) and rebases onto `main` at `59eec035` (plugin 2.65.0). No skill file changes before `accepted-to-implement`.
 
 A companion devfiles change updates `shared/my_agents.md` (Model tiers; Main's role; Practices steps 1 and 2 apply to Main and Sidekicks, not bounded Workers, matching runs 7 and 8) and the machine model map. Either PR can land first; this plugin change stands alone.
 
@@ -415,6 +415,115 @@ C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers
 - C3 with a Sidekick commission: a supplied root (join, then trace there), an invalid root (return the gap; no search for a replacement), and no board yet (the authorized `docs/wip` fallback).
 - For each R-group, the surviving home and the caller that still reaches it.
 - Deletion test, sentence by sentence, on every line the C-runs add or keep in the changed paragraphs; report what was cut.
+
+## Role bands and escalation by reason (r15, 2026-09-28)
+
+**Why.** Owner, 2026-09-28, after r14.1: "make sure we choose luna sidekicks and bounded tasks by lead [to] sidekicks are high to max. luna workers are high/xhigh. luna operators are medium/high"; then "for operator lets just set it to medium always for luna". "I think we only need sol medium if work is gnarly but it should be thought about not by default. same for opus sidekicks. it should be by my recommendation or model thinks something is tough or luna failed etc." "That's why the scope, horizon, the other column should be well defined and easy to understand. maybe agents need some examples that are general for sidekicks they can use that for the rest." Then: "ok make those changes and get it reviewed make sure whole skill is aligned read everything."
+
+**Main's recorded assumption (owner away):** Partial direction, including open diagnosis, stays on Luna by default like Cross-system span and Open horizon: all three are flags that raise effort and ask Main to decide, never automatic routes off Luna.
+
+### Decisions
+
+| # | Decision | Replaces |
+|---|---|---|
+| D29 | **Role sets the Luna band; the job picks the effort inside it.** 🔧 Operator: Luna medium, always. 🛠️ Worker: Luna high or xhigh. 🐒 Sidekick: Luna high, xhigh, or max. A job starts at its band's lowest effort and rises one level for each demanding signal (Partial direction; Cross-domain or Cross-system span; Run or Open horizon), capped at the band's top. | r14 job table (ceiling rows) and its off-Luna rule; D18's role rows as reshaped by D22 |
+| D30 | **Off Luna only with a recorded reason.** Sol medium or Opus (medium, or high on evidence) takes a job only when one of three reasons is recorded: the owner recommended it; Main judges the job too tough for Luna at its band's top and names why (a fit condition the cut cannot supply counts, named); or Luna failed on this job (a failed check or result after corrections, not a boundary stop, which stays a plan defect). Before escalating a flagged job, Main tries to fix the cut: write the open choice into the plan (Open becomes Task), split at the system boundary, or fix the diagnostic approach. Sol medium fits fixed-approach Cross-system work; Opus fits open judgment. | r14's automatic Partial/Open → Opus and Cross-system → Sol; C1's "goes to the Daily-driver tier with the missing condition" |
+| D31 | **Signals defined with a test each** in `manage-agents/SKILL.md` Select an agent (text below); **general examples** for each role in the catalog, Sidekick examples first, so an agent can classify a job it has not seen. | the r14 examples table |
+| D32 | **Staffing** defaults every PR to a Luna Sidekick; a Daily-driver Sidekick only when a slice is escalated with a recorded reason (table below). | r14 Staffing rows |
+| D33 | **Tier record:** a Daily-driver slice's `<reason>` names one D30 reason (`owner recommended`, `judged tough: <why>`, `Luna failed: <evidence>`). The planner re-tags after a Luna failure; the implementer still never re-tags or re-runs on a bigger model (D4). | C2's "names the fit condition it misses" |
+| D34 | **Whole-skill alignment pass.** After the D-runs, every file this PR changes (`git diff --name-only 59eec035..HEAD -- plugins tests AGENTS.md docs/changelog`) is read whole against r14.1 plus r15; stale statements are cut or cited, not re-explained. Net deletion still applies to the whole C- and D-run set. | — |
+
+### Contract text
+
+**Signals** (home `manage-agents/SKILL.md` Select an agent; replaces the Guidance, Architectural span, and Horizon tables; the sentence "Horizon belongs to the job, not the role…" and the paragraphs after the tables stay):
+
+| Direction | The brief fixes | Test |
+|---|---|---|
+| Exact steps | every command or edit, its inputs, and its checks | a script could do it; no choice is left |
+| Complete | the approach; the agent makes only local choices nothing else depends on | two capable agents would hand back interchangeable results |
+| Partial | the outcome, bounds, and proof, not the approach | the agent must choose between approaches |
+
+| Span | The agent must hold | Test |
+|---|---|---|
+| Local | one domain or owner, through its own code and the contracts it uses | reading that owner's code and its contracts is enough to get it right; size does not count, so a 500-file rename inside one owner is Local |
+| Cross-domain | two or more interacting domains in one system | getting it right means reading another domain's internals or keeping two owners' contracts in step |
+| Cross-system | separate systems, repos, or deployables with their own contracts | the change crosses a process, service, or repo boundary, or a wire or persisted-data contract |
+
+| Horizon | The agent drives | Test |
+|---|---|---|
+| Step | one command, procedure, or lookup, then reports what it observed | what happens next is someone else's decision |
+| Task | one slice or bounded result, then stops for acceptance | it hands back one reviewable result |
+| Run | several slices in order, every choice already fixed by the plan | chained results with nothing to decide between them |
+| Open | choices later work builds on that no plan fixed | a later slice is right only if this job chooses well |
+
+**Choose by job** (home `model-catalog.md`; replaces r14's section of the same name):
+
+> Every job starts on Luna. The role sets the band; the job picks the effort inside it.
+>
+> | Role | Luna band | Effort |
+> |---|---|---|
+> | 🔧 Operator | medium | always medium |
+> | 🛠️ Worker | high to xhigh | high; xhigh when any signal is demanding |
+> | 🐒 Sidekick | high to max | high; xhigh with one demanding signal; max with two or more |
+>
+> Demanding signals: Partial direction; Cross-domain or Cross-system span; Run or Open horizon (definitions in `SKILL.md` Select an agent). Luna never goes below its band; work that needs no judgment is 🔧 Operator work.
+>
+> **Leaving Luna.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. Sol medium (fixed-approach Cross-system work) or Opus medium (open judgment; Opus high on evidence) takes a job only with one recorded reason: the owner recommended it; Main judges it too tough for Luna at its band's top and names why; or Luna failed on it (a failed check or result after corrections; a boundary stop is a plan defect instead). Record the reason in the slice's tier record or the assignment.
+>
+> Sidekick examples (use them to classify any assignment):
+>
+> | Assignment | Signals | Luna effort |
+> |---|---|---|
+> | "Implement slice 3 of this PR (add the config field and its tests), then report back." | Complete · Local · Task | high |
+> | "Fix this bug in one module; the cause is known and the fix approach is in the brief." | Complete · Local · Task | high |
+> | "Implement this PR: four slices in one module, every choice written in the plan." | Complete · Local · Run | xhigh |
+> | "Take slices 2 and 3 across the API and storage layers, then report back." | Complete · Cross-domain · Task | xhigh |
+> | "Implement this PR: one domain publishes a new event, another consumes it; both contracts are in the plan." | Complete · Cross-domain · Run | max |
+> | "Find why sync drops messages under load and fix it." | Partial · Local · Open | max; flagged: fix the diagnostic approach first, or escalate with a reason |
+> | "Move the client and the server to the new wire format." | Complete · Cross-system · Run | max; flagged: split into one PR per system first, or Sol medium with a reason |
+>
+> Worker and Operator examples:
+>
+> | Job | Role · signals | Luna effort |
+> |---|---|---|
+> | Classify these findings with this rubric | 🛠️ · Complete · Local · Task | high |
+> | Read one service and list each call to X with file:line | 🛠️ · Complete · Local · Task | high |
+> | Implement one slice whose fixed approach touches two modules | 🛠️ · Complete · Cross-domain · Task | xhigh |
+> | Diagnose a failing test without a known cause | 🛠️ · Partial · Local · Task | xhigh |
+> | Run a suite, watch CI to terminal, apply a scripted transform, run PR wrap-up checks | 🔧 · Exact · any · Step | medium |
+> | Independent review | 🔎 Review Sidekick table; never Luna | — |
+>
+> Luna max is a Sidekick effort only.
+
+**C1 Workhorse fit** (revised lead and closing paragraph; conditions 1 to 4 unchanged):
+
+> **Workhorse fit.** Every job starts on Luna (Choose by job). It fits the Workhorse tier when it has:
+> 1. … 4. (unchanged)
+>
+> A job that misses a condition is re-cut until it fits: pin its inputs, name its output and stop, or add a contract slice for a missing seam. A job the cut cannot fit leaves Luna only with a recorded reason (Choose by job), and the reason names the missing condition.
+
+**C2 tier record** (second sentence revised): "A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names its reason for leaving Luna: `owner recommended`, `judged tough: <why>`, or `Luna failed: <evidence>`." The rest of C2 stands.
+
+**Staffing** (replaces r14's table):
+
+> | PR's slices | Sidekick | What the Sidekick executes itself | What goes to Luna 🛠️ Workers |
+> |---|---|---|---|
+> | all Workhorse | Luna, effort by Choose by job | every slice | nothing by default; the benefit test in Select an agent governs any child |
+> | any slice off Luna with a recorded reason | the Daily driver that reason names | slices off Luna, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent, when the benefit test holds |
+
+**Other sites:** `slice-and-proof-design.md` Record Each Slice's Tier ("a Daily-driver slice names its reason", split at a boundary; tag Daily driver only with a D30 reason); `plan-review.md` item 1 ("For each Daily-driver slice, confirm its reason is one of the three and is real"); the improvement-plan template's tier line; `native-providers-*` and `acpx-provider-*` rows that name Luna efforts for a role; fixtures and scenarios naming Luna medium for a Worker, Luna high for an Operator, or automatic Opus/Sol routes.
+
+### Runs
+
+D-1 `manage-agents` (SKILL.md signals and Staffing; catalog Choose by job, C1; provider pages) · D-2 `plan-implementation` with `canonical-implementation-plan.md` (C2, slice-and-proof-design, plan-review) · D-3 `plan-improve-repo` (template) · D-4 ship prep (fixtures, scenarios, `cases.ts`, contract tests, README, `AGENTS.md`, changelog) · D-5 whole-skill alignment pass (D34): read every PR-changed file whole, one commit per skill for any fix, and a per-file line in the receipt (`aligned` or what was cut).
+
+### Proof
+
+- Tests, typecheck, `claude plugin validate`, with counts.
+- Searches return no live text giving: a Worker Luna medium; an Operator Luna high; Luna max outside Sidekicks; Opus or Sol selected by a signal alone (`Partial direction goes to Opus`, `off-Luna row`, `Open → Opus`, `Cross-system → Sol`); r14's ceiling wording (`Each Luna row is a ceiling`).
+- Walkthroughs: every example row recomputed from the counting rule; plus a Worker Complete · Local · Run (xhigh), a Sidekick Partial · Cross-domain · Run (max, flagged), an Operator on a Cross-system procedure (medium), a Luna failure after corrections (planner re-tags with `Luna failed`; the implementer does not), a boundary stop (plan defect, no escalation), and an owner-recommended Opus Sidekick.
+- Net deletion across C- and D-runs against `0915b6fa`, with the `--shortstat` output.
+- D34's per-file alignment list.
 
 ## Spec-review record
 
