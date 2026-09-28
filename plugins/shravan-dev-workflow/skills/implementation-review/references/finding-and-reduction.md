@@ -108,6 +108,8 @@ Convergence (this reference is its home for implementation review):
 >
 > When earlier review history is unavailable, the current review sets the baseline, and both conditions count from there. A correction outside the accepted boundary is not a pass.
 
+The previous review is the previous review of the same PR, or of the same stack layer; reviews of other PRs or layers never enter the comparison.
+
 Accepted boundary:
 
 > A correction is inside the accepted boundary when it changes no design meaning, scope, contract, or owner decision. Only those corrections get further review rounds automatically. A correction that changes, or might change, any of those returns to Main, which brings the owner a brief. Once the owner settles it, review continues under the convergence rule without a permission prompt.

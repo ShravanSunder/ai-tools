@@ -7,21 +7,21 @@ description: "Use when independently reviewing implemented code, proof, a branch
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. That lead reads every governing source and the complete diff, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
+The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. The review unit is one PR, or one stack layer judged against its parent: each independent PR gets its own lead, and a stack keeps one lead relationship that reviews its layers in order. That lead reads every governing source and the complete diff of its unit, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
 
-The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
+The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. The unit's PR plan partitions that work: it says which obligations this PR or layer delivers, and it is not itself a rail. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
 ## Admit Review
 
 1. Classify `general-domain | runtime-skill-package`; runtime skill packages route to the skill-package review stage of `skills-creation`.
 2. Classify `meaningful-review-required | non-substantial | blocked-input`. Non-substantial is limited to fully inspected formatting, typo, link, or generated-metadata changes with no semantic consumer; a non-substantial return lists, per changed file, the path, the diff inspected, the consumer search performed, and the no-effect conclusion. A `blocked-input` return names each missing identity and who can restore it.
-3. For meaningful review, MUST load `../../shared-references/canonical-implementation-plan.md` to validate the unchanged ready plan record, governing planning basis, delivery context, base/reviewed commits, diff range, instructions, proof claims/evidence, constraints, and known gaps, and return `admit | blocked-input`; take earlier review findings from the caller, never from the plan, as the convergence baseline in `references/finding-and-reduction.md`.
+3. For meaningful review, MUST load `../../shared-references/canonical-implementation-plan.md` to validate the unchanged ready plan record for the reviewed PR node with its breakdown and base, governing planning basis, delivery context, base/reviewed commits and the node's base-to-head diff range (a stack layer's parent head to its head), instructions, proof claims/evidence, constraints, and known gaps, and return `admit | blocked-input`; take earlier review findings from the caller, never from the plan, as the convergence baseline in `references/finding-and-reduction.md`.
 4. Admit reviewed-design and admitted-repository-improvement governing-basis variants through their canonical fields. Reject missing, stale, malformed, plan-only, mismatched, wrong-origin, or unproven authority without inference. With no plan record at all, review only when the user explicitly asked for a diff-only review with no risk trigger present, or when a risk trigger (runtime authority, security boundary, public capability, cross-module surface) forces review with the user's confirmed goal statement as the sole rail — and say plainly that source-backed readiness cannot be claimed. Never infer a plan or design from the PR description.
 5. When prior review evidence is missing, inspect the current source and proof, record what is missing, and review against the current baseline (see `references/finding-and-reduction.md`). Reject a stale or wrong source or proof.
 
 Completion: classification, governing sources, base and reviewed commits, diff and proof boundary, prior-findings evidence (or the missing-evidence reason), and `admit | blocked-input` are stated.
 
-The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history. The assigned lead executes this method and never commissions another lead.
+The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history: a new lead for each independent PR, or the stack's existing lead for its next layer. The assigned lead executes this method and never commissions another lead.
 
 ## Read the Whole Map
 
@@ -63,7 +63,7 @@ Return `ready | needs-revision | blocked-input | decision-needed | not-convergin
 ## Remediation Boundary
 
 - This skill never edits. Accepted implementation-owned findings route to `implement-plan`.
-- After each correction inside the accepted boundary, the caller invokes another review with fresh diff/proof until the result is `ready` or `not-converging`; corrected source invalidates affected coverage. The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`. Do not persist counters, ledgers, hashes, or review state in the plan.
+- After each correction inside the accepted boundary, the caller invokes another review of the same PR or stack layer with fresh diff/proof until the result is `ready` or `not-converging`; corrected source invalidates affected coverage, and convergence is compared per PR or per stack layer. The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`. Do not persist counters, ledgers, hashes, or review state in the plan.
 - Design/spec/plan defects return to their semantic owner and follow that owner's bounded review policy; they do not consume implementation remediation authority.
 
 ## Completion Blockers
