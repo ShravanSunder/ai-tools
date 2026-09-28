@@ -10,7 +10,7 @@ Pass the provider-advertised id with `--model` at session creation or `acpx code
 
 ## Effort
 
-The Codex adapter's effort key is `reasoning_effort`: use `acpx codex set reasoning_effort <level> -s <name>`. A 2026-09-25 check against `@agentclientprotocol/codex-acp@1.6.2` accepted `reasoning_effort=high` and rejected both `effort` and an unadvertised value with ACP `-32602` (Invalid params). Select the model-and-effort pair from `model-catalog.md` Choose by job (or the review or Advisor table), then use its advertised level; do not duplicate role-tier mappings here.
+The Codex adapter's effort key is `reasoning_effort`: use `acpx codex set reasoning_effort <level> -s <name>`. A 2026-09-25 check against `@agentclientprotocol/codex-acp@1.6.2` accepted `reasoning_effort=high` and rejected both `effort` and an unadvertised value with ACP `-32602` (Invalid params). Select the model-and-effort pair from `model-catalog.md` effort bands (or the review or Advisor table), then use its advertised level; do not duplicate role-tier mappings here.
 
 ## Sessions And Identity
 
