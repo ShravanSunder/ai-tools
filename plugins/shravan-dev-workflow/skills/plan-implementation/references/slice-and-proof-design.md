@@ -33,16 +33,13 @@ Each slice carries its tier record (`../../../shared-references/canonical-implem
 Cut the work so the record is honest:
 
 - A slice that bundles independent units is split into one slice per unit.
-- Split a slice that fails Workhorse fit or crosses an assigned authority or contract boundary at that boundary; tag it Daily driver only with an escalation reason.
+- Split a slice that fails Workhorse fit, or that crosses an assigned authority or contract boundary, at that boundary.
 
 ## Throughput Checkpoint
 
-The plan records five items. Keep every item and write `n/a: <reason>` when one does not apply:
+The plan records two items:
 
 - **choices later slices depend on**: each one written into the plan (the slice that makes it becomes Task), or left to the Sidekick with the reason (that slice stays Open);
-- **blocking first steps**: the slices everything else waits on;
-- **independent workstreams**: disjoint files, services, or layers that can proceed at once;
-- **shared mutable state**: state, fixtures, or generated artifacts several slices would write; split the target before serializing on it;
 - **smallest safe decomposition**: the fewest executors that keep every slice fitting its record; if one executor is best, say why.
 
 A slice earns the `independent` mark, which Staffing (`manage-agents`) dispatches on, only after a shared-write check: no `requires` or `serial` edge to in-flight work, write surfaces disjoint from every slice that may run beside it, and its own proof. Different files alone do not show independence.
@@ -76,7 +73,7 @@ parallel A || B   advisory only; both are independent after named prerequisites
 
 Do not add `parallel` merely to advertise concurrency. The executor may serialize any advisory edge. These edges order slices inside one plan; PR independence is the PR Independence Test above.
 
-Place an integration gate at the earliest slice where separately changed components first interact. Do not postpone all wiring proof to final validation. A gate where two PRs first meet belongs to the breakdown, not to either plan.
+Place an integration gate at the earliest slice where separately changed components first interact. Do not postpone all wiring proof to final validation.
 
 ## Match Proof to Each Change
 
