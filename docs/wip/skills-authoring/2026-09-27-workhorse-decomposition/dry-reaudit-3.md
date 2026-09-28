@@ -106,3 +106,62 @@ Yes, four things. Each should come back in tier-neutral, one-home form:
 4. **The research Sidekick's tier** (B4). The old "Implementation and research 🐒 Sidekick" coverage. Restoring it means deleting one word ("implementation") at catalog:36.
 
 Correctly cut, and should stay cut: the removed role tables (replaced by effort bands), "Luna never goes below its band" (the bands imply it), the orchestrator's restated routing rows, orchestrator-design's commission and concurrency paragraph (now owned by orchestrator-implementation-goal step 3), the README Plan/Implement/Review restatements, the wrap-up "Exact steps" and Collection+Synthesis sentences, and plan-improve-repo's in-parent-only delegation text (replaced by evidence units).
+
+## Verification (audit-tree HEAD 5b127ee4; devfiles 326d28a)
+
+Method: I re-read `git diff 0ea7a7b9..5b127ee4` for every item's file and read the current text at each fix site. I also grepped for leftover copies and re-checked every `dry-audit.md` §8 phrase against current text. The scope is the same as before: text the PR added or changed, plus the devfiles companion.
+
+### Status per blocking item
+
+| Item | Status | Evidence at HEAD |
+|---|---|---|
+| B1 | closed | catalog:46 "Opus medium for open judgment (Opus high on evidence) and Sol medium otherwise"; catalog:15 "the effort bands, Escalation, or the Review Sidekick table decide" |
+| B2 | closed | cursor:21 no longer carries the Opus/Fable clause. model-map (326d28a) lists "🛠️ Worker (Daily driver) \| Opus high"; only xhigh and Fable keep "On owner request only", which matches the catalog `User must authorize` rows |
+| B3 | closed | SKILL:94 (3) "route the named lineage through agent-router (the map's agent-router table)"; :97 "A job never takes another tier's native model as a stand-in"; :92 "unless their provider page routes them through agent-router" |
+| B4 | closed | catalog:36 "Every 🔧 Operator, 🛠️ Worker, and 🐒 Sidekick job starts on the Workhorse tier." |
+| B5 | closed | catalog:67 "xhigh; flagged: fix the diagnostic approach first, or escalate with a reason" |
+| B6 | closed | slice:3 now returns "independent oracle, proof-layer source or `project silent`, property-or-example choice, and existing-test keep/repair/remove rows" |
+| B7 | closed | orch:28 "Main plans it with `plan-implementation` in this session and the goal resumes at step 3 while other PRs continue"; orch:23 maps to skills; tokens:22 names both tokens |
+| B8 | closed (option a) | wrapup:30 "each moved layer's plan is stale (canonical Preserve and Admit) and returns to Main before its gates re-run". Option (b) is the owner's follow-up |
+| B9 | closed | orch:30 "boundaries and names match the design, and no unplanned complexity or compatibility machinery was added" |
+| R1 | closed | catalog:5 is now only "Select one row for the job. …"; the return lives at SKILL:88 |
+| R2 | closed | A grep for "node and base / with its breakdown / breakdown node and base / (trunk commit or parent PR head)" over skills and shared-references finds only orch:12's return list, which was not a listed site. Handoff SKILL:10/18/33, template:13/17/68/69, implement-plan:33, execution-and-proof:5/97, implementation-review:18, plan-impl:47, canonical:94, and manage-agents:103 are all cut as specified |
+| R3 | closed | canonical:90 "writes the breakdown and each plan as …"; plan-impl step 4's first sentence is gone |
+| R4 | closed | orch Boundaries bullet "Verify producer results proportionally…" is deleted |
+| R5 | closed | manage-agents:86 no longer has "Tests and checks associated…" |
+| R6 | closed | execution-and-proof's restated phase-contract bullet is deleted; the section still reads cleanly (:33-37) |
+| R7 | closed | AGENTS.md:69 "For execution ownership, load `manage-agents` and follow it decisively." |
+| R8 | closed | plan-improve-repo:109 is back to its base text |
+| D1 | closed | orchestrator-design's last sentence is deleted |
+| D2 | closed | wrapup:30 no longer has "Independent PRs wrap up separately…" |
+| D3 | closed | canonical:13's admitted-basis sentence is deleted; the template keeps the field |
+| L1 | closed | canonical:98 "(Workhorse fit and escalation reasons: `manage-agents`)" |
+| L2 | closed | The conflicting policy row is gone. The remaining "On owner request only" labels on Opus xhigh and Fable high are pre-existing and agree with the catalog, so they are optional and not blocking |
+| L3 | closed | cursor:21 now starts "Resolve the exact id…" |
+| L4 | closed | orch:12 "Seats follow `practices-collaboration`." |
+| P1 | closed | catalog:15 "A tier (model category) is a cost and capability grouping of a model and its effort (the Thinking column)." |
+
+**25 closed, 0 open.**
+
+### New findings introduced by the fixes
+
+| # | Where | Quote | Problem | Fix |
+|---|---|---|---|---|
+| N1 **B** | `orchestrator-implementation-goal/SKILL.md:23`, `:28`; `shared-references/phase-return-tokens.md:22` | orch:23 "Main runs both in this session"; orch:28 "Main plans it with `plan-implementation` in this session … while other PRs continue"; tokens:22 "Main resolves `ready-for-planning` and `plan-defect` in its own session; PRs the token does not touch continue." | One fact now has three homes. My B7 fix text caused this: it added the session rule and the continue rule to both files. tokens:22 is the home. Step 6 already maps the token to `plan-implementation`. | orch:23: delete "Main runs both in this session;". orch:28 → "…return `ready-for-planning` for that node; the goal resumes at step 3 once its plan is ready." |
+| N2 **O** | `manage-agents/SKILL.md:97` | "report the route as degraded or blocked" | The clause lost the condition it depended on ("When an own-lineage model is unavailable"). Step (3) also reports a gap only for a Frontier role, so if agent-router lacks a Worker's lineage, the only fallback is this unconditioned clause. | → "…as a stand-in; when agent-router also lacks the lineage, report the route as degraded or blocked." |
+| N3 **O** | `implementation-pr-wrapup/SKILL.md:30` | "(canonical Preserve and Admit)" | The same bare-"canonical" pointer as P3. | Use the shared-reference path. |
+
+No other new repetition, leak, dead sentence, or behavior bug. No model names outside their homes (unchanged: only the guard-exempt SKILL:94). The new routes are consistent with each other. Escalated Sol off Codex and escalated Opus off Claude both resolve through step (3) to the map's agent-router rows (map:48-52). The Staffing row "the Daily-driver row Escalation names" now always has a target.
+
+### §8 behaviors
+
+All 22 still hold. Each key phrase is present exactly once at HEAD: "re-run it on a bigger model", the four F16 tie-breakers, "Main first fixes the cut", "a boundary stop is a plan defect", "checked in source by the planner", "routes substantive owner conversation through Main", "gets a new session", "300-second default", "write the script and give it", "does not touch continue" (tokens:22, reworded but same meaning), "records in the trace the exact PR heads", "does not contact the reviewer directly", "one writer per branch", "reuse the same Sidekick session", "stays pending", "parent head moves", "not an approval stop", "never records plan paths", "is not itself a rail", "never enter the comparison", job pins (TIMEBOX), "stays serial and yours", "re-cut or stays in-parent", the Worker and Operator skip (practices-collaboration:16 and my_agents:51), the plan-review good and weak point examples, and "Complexity decides the Sidekick".
+
+### Convergence
+
+| | Blocking |
+|---|---|
+| Before (HEAD 0ea7a7b9) | 25 |
+| Now (HEAD 5b127ee4) | 1 (N1, new) |
+
+Optional items are unchanged except for two additions (N2, N3). They were skipped on purpose.
