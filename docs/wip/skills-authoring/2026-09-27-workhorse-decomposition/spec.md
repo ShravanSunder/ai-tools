@@ -334,7 +334,7 @@ The MUST load at `:89` returns "the job's model lineage, thinking level, and mod
 
 **Job table** (home `model-catalog.md`, new section `## Choose by job` after Categories):
 
-> Each Luna column is a ceiling: it fits a job when the job's direction, span, and horizon are each at or below that column's value (Exact steps below Complete; Local below Cross-domain; Step below Task below Run). Take the leftmost column that fits.
+> Each Luna row is a ceiling: it fits a job when the job's direction, span, and horizon are each at or below that row's value (Exact steps below Complete; Local below Cross-domain; Step below Task below Run). Take the first row that fits.
 >
 > | Luna row | Direction up to | Span up to | Horizon up to |
 > |---|---|---|---|
@@ -342,7 +342,7 @@ The MUST load at `:89` returns "the job's model lineage, thinking level, and mod
 > | Luna high | Complete | Local | Task |
 > | Luna xhigh | Complete | Cross-domain | Run |
 >
-> A job leaves Luna when any signal is above every column: Partial direction, Cross-system span, or Open horizon. Off Luna, Partial direction or Open horizon selects Opus medium; otherwise (Cross-system span with a fixed approach) Sol medium. A signal that cannot be classified is missing input (`SKILL.md` Select an agent), not a guess.
+> A job leaves Luna when any signal is above every row: Partial direction, Cross-system span, or Open horizon. Off Luna, Partial direction or Open horizon selects Opus medium; otherwise (Cross-system span with a fixed approach) Sol medium. A signal that cannot be classified is missing input (`SKILL.md` Select an agent), not a guess.
 >
 > A prescribed procedure (Exact steps, no judgment) is 🔧 Operator work at any span: Luna medium at Step, Luna high at Task. Luna max and Opus high are escalations on evidence within Luna xhigh's and Opus medium's bands, never a starting row.
 >
