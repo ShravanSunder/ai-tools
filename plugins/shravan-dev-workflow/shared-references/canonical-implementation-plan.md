@@ -95,9 +95,7 @@ Every plan includes its result, governing basis, delivery context with its break
 
 ## Slice Tier Record
 
-Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names its reason for leaving the Workhorse tier: `owner recommended`, `judged tough: <why>`, or `Workhorse failed: <evidence>`. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
-
-Workhorse fit lives in `../skills/manage-agents/references/model-catalog.md`.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit; a Daily-driver slice names its escalation reason (both in `../skills/manage-agents/references/model-catalog.md`). The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect.
 
 ## Preserve and Admit
 
@@ -111,6 +109,6 @@ An executor returns exactly one:
 
 Validation, handoff, tickets, tracker state, or plan completion never upgrade the requested terminal or repair the canonical record.
 
-Good signals: one ready breakdown per delivery, one immutable plan path per executable PR node, current governing authority, complete delivery context, proof attached to obligations, only meaningful edges, explicit design-gap routes, and no redundant approval stop.
+Good signals: one immutable plan path, current governing authority, complete delivery context, proof attached to obligations, only meaningful edges, explicit design-gap routes, and no redundant approval stop.
 
-Bad signals: a slice without a tier record, a Workhorse slice that misses a fit condition, tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, PR grouping or topology inside a plan, a plan without its breakdown node and base, a breakdown that records plan paths, PR numbers, or progress, inferred implementation authority, or a carrier silently repairing the plan.
+Bad signals: tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, PR grouping or topology inside a plan, inferred implementation authority, or a carrier silently repairing the plan.
