@@ -62,30 +62,30 @@ Classify the assignment, then choose responsibility and continuity from the Agen
 | Review | Independent findings. |
 | Operations | A procedure and its observed result. |
 
-| Guidance | Meaning |
-|----------|---------|
-| Exact steps | Names the procedure, inputs, expected result, and checks. |
-| Complete direction | Fixes the approach while allowing local implementation choices. |
-| Partial direction | Fixes outcome, boundaries, constraints, and proof while the approach is developed within them. |
+| Direction | The brief fixes | Test |
+|---|---|---|
+| Exact steps | every command or edit, its inputs, and its checks | a script could do it; no choice is left |
+| Complete | the approach, by name; the agent chooses only details nothing else depends on | the brief or plan names the approach; if several approaches would do and none is named, it is Partial even when their results would be interchangeable |
+| Partial | the outcome, bounds, and proof, not the approach | the agent must choose between approaches |
 
-| Architectural span | Meaning |
-|--------------------|---------|
-| Local | One domain reasoned about at a time. |
-| Cross-domain | Interacting domains within one system. |
-| Cross-system | Separate systems and contracts. |
+| Span | The agent must hold | Test |
+|---|---|---|
+| Local | one domain or owner, through its own code and the contracts it uses | reading that owner's code and its contracts is enough to get it right; size does not count (a 500-file rename inside one owner is Local), nor do modules (two modules of one owner are Local), nor does storage only that owner reads and writes |
+| Cross-domain | two or more interacting domains or owners in one system | getting it right means reading another owner's internals or keeping two owners' contracts in step |
+| Cross-system | separate systems, repos, or deployables with their own contracts | the change alters a contract another independently owned or deployed system consumes: a service API, a wire format, a client, or stored data another system reads |
 
-| Horizon | The agent drives |
-|---------|------------------|
-| Step | one command, procedure, or lookup, then reports what it observed. |
-| Task | one slice or bounded result, then stops for acceptance. |
-| Run | several slices in order, with every choice already fixed by the plan. |
-| Open | making choices later work builds on that no plan has fixed. |
+| Horizon | The agent drives | Test |
+|---|---|---|
+| Step | one command, procedure, or lookup, then reports what it observed | what happens next is someone else's decision |
+| Task | one slice or one bounded result (a diagnosis, an inventory, a classification), then stops for acceptance | exactly one slice or result before the next acceptance; a final report over several planned slices does not make them one Task |
+| Run | two or more slices in order, every choice already fixed by the plan | two or more slices before the next acceptance, nothing left to decide between them |
+| Open | choices later work builds on that no plan fixed | the brief says a later slice or job depends on a choice this job makes; Open wins over Task and Run when both apply |
 
 Horizon belongs to the job, not the role: a 🐒 Sidekick given one slice at a time works at Task; the same Sidekick driving its whole PR works at Run.
 
-Missing intent, a task boundary, or a governing design or plan the owning workflow requires is missing input to clarify, not Partial direction. A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction. Architectural span measures neither size nor permission. Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices; it never bypasses a governing design, specification, or plan gate the owning workflow requires. Keep raw collection separate from synthesis when the evidence needs independent interpretation.
+Missing intent, a task boundary, or a governing design or plan the owning workflow requires is missing input to clarify, not Partial direction. A normal implementation backed by a reviewed Specification, Program Design, and ready plan is Complete direction, unless the plan leaves an approach open for that slice (Partial). Span does not measure permission. Partial direction permits bounded investigations, proposals, and authorized implementation-mechanics choices; it never bypasses a governing design, specification, or plan gate the owning workflow requires. Keep raw collection separate from synthesis when the evidence needs independent interpretation.
 
-Reuse a suitable executor when the work has not materially changed; otherwise choose by task category, Guidance, Architectural span, horizon, useful existing context, and total completion cost including handoff, rework, and proof. Delegate only when a child has bounded independent work, distinct expertise, or large disposable output worth isolating, and the benefit exceeds briefing, coordination, and verification cost. Work that splits into many independent units (an audit, a migration, or a review across services or files) is pre-authorized to fan out: one 🛠️ Worker per unit, check each result's evidence before accepting it, finish with one table. Keep tightly coupled change-and-proof work with its executor, and never create a supervisor whose only job is to relay another agent's work. Tests and checks associated with an implementation stay with its executor; PR wrap-up may stay with the implementation 🐒 Sidekick or go to an 🔧 Operator as a prescribed procedure, while Main accepts and the user merges. Use a research Sidekick only when related research needs continuing context. Report an unavailable required route rather than silently falling back inline.
+Reuse a suitable executor when the work has not materially changed; otherwise choose by task category, direction, span, horizon, useful existing context, and total completion cost including handoff, rework, and proof. Delegate only when a child has bounded independent work, distinct expertise, or large disposable output worth isolating, and the benefit exceeds briefing, coordination, and verification cost. Work that splits into many independent units (an audit, a migration, or a review across services or files) is pre-authorized to fan out: one 🛠️ Worker per unit, check each result's evidence before accepting it, finish with one table. Keep tightly coupled change-and-proof work with its executor, and never create a supervisor whose only job is to relay another agent's work. Tests and checks associated with an implementation stay with its executor; PR wrap-up may stay with the implementation 🐒 Sidekick or go to an 🔧 Operator as a prescribed procedure, while Main accepts and the user merges. Use a research Sidekick only when related research needs continuing context. Report an unavailable required route rather than silently falling back inline.
 
 MUST load `references/model-catalog.md` and return the job's model lineage, thinking level, and model category, plus the Workhorse fit result when the job could run on Luna.
 
@@ -108,9 +108,8 @@ For each started PR node of a ready breakdown, create or reuse one named persist
 
 | PR's slices | Sidekick | What the Sidekick executes itself | What goes to Luna 🛠️ Workers |
 |---|---|---|---|
-| all Workhorse, none Open | Luna, by the job table | every slice | nothing by default; the benefit test in Select an agent governs any child |
-| mixed tiers, or any Open slice | Daily driver: the job table's off-Luna row for the signal that forced it | Daily-driver slices, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent, when the benefit test holds |
-| all Daily driver | Daily driver | every slice | nothing by default |
+| all Workhorse | Luna, effort by Choose by job | every slice | nothing by default; the benefit test in Select an agent governs any child |
+| any slice off Luna with a recorded reason | the Daily driver that reason names | slices off Luna, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent, when the benefit test holds |
 
 ### Waiting
 

@@ -8,14 +8,14 @@ This reference applies after `SKILL.md` selects a native 🛠️ Worker or Opera
 
 | Role | Model | Route |
 | --- | --- | --- |
-| 🛠️ Worker | OpenAI Luna or Sol, effort from the `model-catalog.md` job table | native `spawn_agent` |
-| 🔧 Operator | OpenAI Luna, effort from the `model-catalog.md` job table | native `spawn_agent` |
+| 🛠️ Worker | OpenAI Luna or Sol, effort from `model-catalog.md` Choose by job | native `spawn_agent` |
+| 🔧 Operator | OpenAI Luna, effort from `model-catalog.md` Choose by job | native `spawn_agent` |
 
 Resolve the exact id with the Runtime rule in `SKILL.md`. If the host requires a provider prefix, it takes the form `openai.<resolved id>` (example format only).
 
 ## Effort
 
-`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in the `model-catalog.md` job table still apply.
+`none` | `minimal` | `low` | `medium` (default) | `high` | `xhigh` | `max` | `ultra` | custom string. The allowed model-and-effort combinations in `model-catalog.md` Choose by job still apply.
 
 ## Conversation History
 
