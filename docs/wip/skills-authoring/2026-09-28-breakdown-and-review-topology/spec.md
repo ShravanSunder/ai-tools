@@ -45,8 +45,8 @@ Prior art (read at the pinned commits): pstack `poteto-mode/playbooks/multi-phas
    slices · tiers (Spec A) · proof · Main review (C4)
  ═══════════════════════ handoff ══════════════════════════
  EXECUTION SIDE · orchestrator-implementation-goal
-   per independent PR, or per stack, in parallel:
-   🐒 Sidekick (tier by span) ─► Main assessment
+   per PR (a stack's layers in order, independent PRs in parallel):
+   🐒 Sidekick, one PR each (tier by span) ─► Main assessment
      ─► 🔎 one independent reviewer (per PR; per stack,
         judging each layer) ─► fixes via Main ─► wrap-up
    Main runs each integration gate ─► owner merges
@@ -83,6 +83,7 @@ Complexity decides the Sidekick; size decides the slices. A PR is an independent
 | B14 | Return tokens carry the breakdown. In `shared-references/phase-return-tokens.md`: `ready-for-planning` carries the admitted basis (reviewed design identities, or the admitted improvement pointer and basis class) and, for a later frontier, the breakdown identity and node id; `ready-for-implementation` carries the breakdown identity, node id, plan path, and base; `plan-defect` carries the breakdown identity and node id with its existing fields. Main resolves `ready-for-planning` by the admitted basis and `plan-defect` through the plan's recorded `originating planner`, each in its own session. | Review BF4: today's payloads cannot carry a node or an improvement basis. |
 | B15 | After Spec A's runs, Spec B changes the container from goal-wide plan to per-PR plan and keeps Spec A intact: C4 runs for each newly written full PR plan; C2 stays per slice; D16's table in `manage-agents` stays the one staffing owner; the seam check stays at plan time as Spec A's per-slice Workhorse condition, and CB2 checks only external prerequisites; nothing restores "directly by default". | Review advice 5. |
 | B16 | An integration gate records the exact PR heads it tested together. A change it discovers routes to the affected PR's Sidekick and reviewer through Main. Per-PR readiness is never reported as delivery readiness before the named gates pass. | Review advice 3. |
+| B17 | A 🐒 Sidekick's assignment and horizon is one PR. The Lead owns a stack: it sequences the layers, commissions each layer as a one-PR assignment (the next layer may reuse the same Sidekick session with a new assignment), and integrates across PRs. The per-stack review relationship (B8) is unchanged. | Owner, 2026-09-28: "horizon is for sidekicks … we not in a stage where im gonna have long horizon task to a sidekick"; Spec A D18. |
 
 ## Contracts
 
@@ -108,7 +109,7 @@ One skill per run; anchors at `c08ab7af`. Spec A's runs land first on the same b
 | Run | Skill | Change |
 |---|---|---|
 | B-1 | `plan-implementation` (owns `canonical-implementation-plan.md` and, here, the token payloads in `phase-return-tokens.md`) | CB1 and CB2; one plan per PR bound to its node and base (B3); breakdown whole, plans at their frontier (B4); gates (B6, B16); ordering (B7); the drawn PR map (B9); authority per admitted basis (B2); token payloads (B14); returns tokens and never names an orchestrator (B1) |
-| B-2 | `orchestrator-implementation-goal` | admits a ready breakdown and each started PR's plan; never authors or repairs a plan, and maps `ready-for-planning` and `plan-defect` back to Main, which keeps the originating planner (B1, B14); per-PR or per-stack lifecycle; review topology (B8); gates (B6, B16); wrap-up per PR or stack (B10); description, `agents/openai.yaml`, and README match |
+| B-2 | `orchestrator-implementation-goal` | admits a ready breakdown and each started PR's plan; never authors or repairs a plan, and maps `ready-for-planning` and `plan-defect` back to Main, which keeps the originating planner (B1, B14); per-PR Sidekick lifecycle, with the Lead sequencing a stack's layers (B17); review topology (B8); gates (B6, B16); wrap-up per PR or stack (B10); description, `agents/openai.yaml`, and README match |
 | B-2a | `implement-plan` | admits one PR's plan with its node and base; a boundary stop returns `plan-defect` with the node |
 | B-2b | `manage-agents` | the Commission section names the PR node and base; the D16 table stays the staffing owner (B15) |
 | B-3 | `orchestrator-design` | continued delivery ends at the ready breakdown and first plans, then hands off; no commissioning (B1) |
@@ -160,6 +161,8 @@ Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill
 - Changing Spec A's decisions.
 
 ## Spec-review record
+
+- **Owner amendment** (2026-09-28): B17, a Sidekick's horizon is one PR and the Lead owns stacks; owner-settled meaning, applied without a new review round.
 
 - **Review 1** (r2, commit `3fe81561`): GPT-6 Astra high, session `01a0e2a0` (the owner-authorized advisor and reviewer for both specs), skills-creation loaded. Verdict `targeted-revision`, `revise-first`, blocker override applies. Accepted BF1 (owner boundaries became a PR-count rule), BF2 (ready breakdown lacked a contract), BF3 (CB2 could not certify future nodes), BF4 (tokens, descriptions, READMEs, and two contract-test lines kept the old routing; a phase must not name an orchestrator), BF5 (B-2 held other skills' semantic edits), BF6 (the mechanics-only planning path was dropped). Rejected: expanding B8 into `skills-creation` (kept as scope, reworded); B8 weakening review (the whole-read rule stays).
 - **Verification of r5** (same lead): `great`, implementation decision `accepted-to-implement`; BF1 closed; no new finding; converged 6, 4, 1, 0 with no recurrence.
