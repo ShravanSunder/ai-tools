@@ -60,7 +60,13 @@ For every `pr-ready-unmerged` plan, including orchestrated goals and direct cont
 
 Direct plan-only work may use an established repository plan home. Otherwise use `docs/specs/<spec>/plans/` for durable direct planning or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work.
 
-Every plan includes its result, governing basis, delivery context, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
+Every plan includes its result, governing basis, delivery context, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices each with its executor record, the throughput checkpoint, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
+
+## Slice Executor Record
+
+Every slice records `executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names the fit condition it misses. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
+
+Workhorse fit lives in `../skills/manage-agents/references/model-catalog.md`. The PR's Sidekick tier and what it dispatches follow the staffing table in `manage-agents` (Commission an implementation 🐒 Sidekick), which reads these records and the plan's dependency edges.
 
 ## Preserve and Admit
 
@@ -76,4 +82,4 @@ Validation, handoff, tickets, tracker state, or plan completion never upgrade th
 
 Good signals: one immutable plan path, current governing authority, complete delivery context, proof attached to obligations, only meaningful edges, explicit design-gap routes, and no redundant approval stop.
 
-Bad signals: tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, placeholder grouping/topology, inferred implementation authority, or a carrier silently repairing the plan.
+Bad signals: a slice without an executor record, a Workhorse slice that misses a fit condition, tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, placeholder grouping/topology, inferred implementation authority, or a carrier silently repairing the plan.

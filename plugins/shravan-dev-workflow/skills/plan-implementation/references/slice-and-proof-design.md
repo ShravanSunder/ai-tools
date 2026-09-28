@@ -1,6 +1,6 @@
 # Divide the Work and Attach Proof
 
-Use this reference to turn obligations allowed by the planning start check into a proportional implementation sequence. Return the slice graph, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
+Use this reference to turn obligations allowed by the planning start check into a proportional implementation sequence. Return the slice graph with each slice's executor record, the throughput checkpoint, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
 
 ## Start From Obligations
 
@@ -15,7 +15,7 @@ Every normative requirement, specified behavior, program-design boundary, migrat
 
 ## Choose Small Changes That Can Be Proven
 
-A slice is the smallest coherent change that can earn evidence without leaving the repository in an invalid intermediate state.
+A slice is the smallest coherent change that can earn evidence without leaving the repository in an invalid intermediate state, cut so that one executor tier fits it (Record Each Slice's Executor, below).
 
 - `vertical`: crosses the real entrypoint-to-effect path and proves behavior at the narrowest useful layer. Prefer this default.
 - `contract`: establishes a type, interface, schema, protocol, or fixture before behavior. It must name the first downstream slice that consumes it.
@@ -25,6 +25,29 @@ A slice is the smallest coherent change that can earn evidence without leaving t
 - `proof-only`: adds a missing observation for already-required behavior. It cannot substitute for the behavior change.
 
 Use a compact plan for one low-risk owner and one or two proof gates. Use a full plan when the change crosses owners, trust boundaries, state, concurrency, compatibility, migrations, or multiple proof layers. Proportional means fewer fields, never weaker obligations.
+
+## Record Each Slice's Executor
+
+Every slice records `executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>`; the contract lives in `../../../shared-references/canonical-implementation-plan.md`. Decide the tier with Workhorse fit in `../../manage-agents/references/model-catalog.md`. A Workhorse slice passes all four conditions, including a source check at the slice's base that every seam, signal, event, or API it relies on exists and supports the observation it needs. A matching name in a brief is not that check. A Daily-driver slice names the condition it misses.
+
+Cut the work so the record is honest:
+
+- A slice that bundles independent units is split into one slice per unit. Thirteen slices handed to one session as a single assignment is the failure this catches.
+- A slice that would cross a domain or ownership boundary is split at that boundary, or tagged Daily driver with the boundary as its reason.
+- A slice that needs a seam missing at its base gets a contract slice first, or goes to the Daily driver with the missing seam as its reason.
+
+A Workhorse slice that later stops at its boundary is evidence about this cut. It returns to the originating planner as a plan defect, and the planner re-slices or re-tags it with a reason.
+
+## Throughput Checkpoint
+
+The plan records four items. Keep every item and write `n/a: <reason>` when one does not apply:
+
+- **blocking first steps**: the slices everything else waits on;
+- **independent workstreams**: disjoint files, services, or layers that can proceed at once;
+- **shared mutable state**: state, fixtures, or generated artifacts several slices would write; split the target before serializing on it;
+- **smallest safe decomposition**: the fewest executors that keep every slice fitting its record; if one executor is best, say why.
+
+A slice earns the `independent` mark, which the staffing table in `manage-agents` dispatches on, only after a shared-write check: no `requires` or `serial` edge to in-flight work, write surfaces disjoint from every slice that may run beside it, and its own proof. Different files alone do not show independence.
 
 ## Order Only Real Dependencies
 
@@ -46,6 +69,7 @@ For each slice, name:
 
 ```text
 obligation covered
+executor record
 write surfaces
 pre-change signal or approved exception
 focused automated proof
@@ -72,6 +96,7 @@ Split or replan when:
 - a migration is tested only on an empty state;
 - a manual check is described but no runnable surface exists;
 - a slice changes several owners and cannot isolate its failure;
+- a slice records Workhorse but misses a Workhorse fit condition, or relies on a seam no one checked at its base;
 - completing the slice would require an unmade product or structural decision.
 
 Return the exact gap and its owner instead of padding the plan with speculative tasks.
