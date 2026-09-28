@@ -7,7 +7,7 @@ When a phase, practice, or shared reference must send work elsewhere, it returns
 | `requirements-gap` | the missing owner meaning, evidence |
 | `specification-gap` | the missing observable obligation, evidence |
 | `program-design-gap` | the structural gap, evidence |
-| `ready-for-planning` | the admitted basis (reviewed design identities, or the admitted improvement pointer and basis class) and, for a later frontier, the breakdown identity and node id |
+| `ready-for-planning` | the admitted basis (reviewed design identities, or the admitted improvement pointer and basis class) and, for later executable nodes, the breakdown identity and node id |
 | `plan-defect` | plan anchor, defect, evidence, the plan's existing `originating planner` field, and the breakdown identity and node id |
 | `ready-for-implementation` | breakdown identity, node id, plan path, and base |
 | `ready-for-review` | diff, proof, assessment, and the classification `general-domain \| runtime-skill-package` |

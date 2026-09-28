@@ -1,6 +1,6 @@
 # Divide the Work and Attach Proof
 
-Use this reference to cut a delivery into PR nodes and then turn each node's obligations into a proportional implementation sequence. Return the PR cut (nodes, planned independence, stacks, contract nodes, integration gates, order), then per plan the slice graph with each slice's executor record, the throughput checkpoint, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
+Use this reference to cut a delivery into PR nodes and then turn each node's obligations into a proportional implementation sequence. Return the PR cut (nodes, planned independence, stacks, contract nodes, integration gates, order), then per plan the slice graph with each slice's tier record, the throughput checkpoint, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
 
 ## Start From Obligations
 
@@ -15,7 +15,7 @@ Every normative requirement, specified behavior, program-design boundary, migrat
 
 ## Choose Small Changes That Can Be Proven
 
-A slice is the smallest coherent change that can earn evidence without leaving the repository in an invalid intermediate state, cut so that one executor tier fits it (Record Each Slice's Executor, below).
+A slice is the smallest coherent change that can earn evidence without leaving the repository in an invalid intermediate state, cut so that one tier fits it (Record Each Slice's Tier, below).
 
 - `vertical`: crosses the real entrypoint-to-effect path and proves behavior at the narrowest useful layer. Prefer this default.
 - `contract`: establishes a type, interface, schema, protocol, or fixture before behavior. It must name the first downstream slice that consumes it.
@@ -26,23 +26,20 @@ A slice is the smallest coherent change that can earn evidence without leaving t
 
 Use a compact plan for one low-risk owner and one or two proof gates. Use a full plan when the change crosses owners, trust boundaries, state, concurrency, compatibility, migrations, or multiple proof layers. Proportional means fewer fields, never weaker obligations.
 
-## Record Each Slice's Executor
+## Record Each Slice's Tier
 
-Every slice records `executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>`; the contract lives in `../../../shared-references/canonical-implementation-plan.md`. Decide the tier with Workhorse fit in `../../manage-agents/references/model-catalog.md`. A Workhorse slice passes all four conditions, including a source check at the slice's base that every seam, signal, event, or API it relies on exists and supports the observation it needs. A matching name in a brief is not that check. A Daily-driver slice names the condition it misses.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`; the contract lives in `../../../shared-references/canonical-implementation-plan.md`. Decide the tier with Workhorse fit in `../../manage-agents/references/model-catalog.md`; a Daily-driver slice names the condition it misses.
 
 Cut the work so the record is honest:
 
-- A slice that bundles independent units is split into one slice per unit. Thirteen slices handed to one session as a single assignment is the failure this catches.
-- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, or tag it Daily driver with the boundary as its reason. A Cross-domain span alone is never the reason, since a Luna xhigh row covers it.
-- A slice that needs a seam missing at its base gets a contract slice first, or goes to the Daily driver with the missing seam as its reason.
-
-A Workhorse slice that later stops at its boundary is evidence about this cut. It returns to the originating planner as a plan defect, and the planner re-slices or re-tags it with a reason.
+- A slice that bundles independent units is split into one slice per unit.
+- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, or tag it Daily driver with the boundary as its reason.
 
 ## Throughput Checkpoint
 
 The plan records five items. Keep every item and write `n/a: <reason>` when one does not apply:
 
-- **choices later slices depend on**: each one written into the plan, or named as left to an Opus Sidekick with the reason. This sets the PR's Sidekick under the staffing table in `manage-agents` (`../../manage-agents/SKILL.md`, Commission an implementation 🐒 Sidekick): a PR whose dependent choices are all written in the plan and whose slices are all Workhorse keeps a Luna Sidekick;
+- **choices later slices depend on**: each one written into the plan (the slice that makes it becomes Task), or left to the Sidekick with the reason (that slice stays Open);
 - **blocking first steps**: the slices everything else waits on;
 - **independent workstreams**: disjoint files, services, or layers that can proceed at once;
 - **shared mutable state**: state, fixtures, or generated artifacts several slices would write; split the target before serializing on it;
@@ -52,11 +49,11 @@ A slice earns the `independent` mark, which the staffing table in `manage-agents
 
 ## Cut the Delivery into PRs
 
-Cut PRs before slices. Complexity decides the Sidekick; size decides the slices. A PR is an independently buildable and reviewable outcome. Program Design's owners and edges (or, for a mechanics-only improvement, current-source ownership) are the candidate cuts:
+Cut PRs before slices. Complexity decides the Sidekick; size decides the slices. A PR is an independently buildable and reviewable outcome. The admitted basis supplies the candidate cuts (`../../../shared-references/canonical-implementation-plan.md`):
 
 - a large local change stays one PR with many Workhorse slices;
 - two disjoint features become two PRs;
-- a behavior change that must land across two owners at once stays one PR, and its Sidekick follows Workhorse fit and the staffing table in `manage-agents`: a Luna xhigh Sidekick when every slice fits and every dependent choice is in the plan; otherwise the Daily driver the staffing table selects by the failed signal (Sol medium for fixed-approach Cross-system work, Opus for Partial direction or an open dependent choice);
+- a behavior change that must land across two owners at once stays one PR; its Sidekick follows the staffing table in `manage-agents`;
 - a contract PR exists only when a real shared seam lets two consumers proceed independently.
 
 The number of PRs follows independence, never owner or file count. Order the nodes riskiest unknown first among those whose prerequisites are met, and name an integration gate wherever independently built PRs first interact, with the proof that shows it.
@@ -65,9 +62,7 @@ The number of PRs follows independence, never owner or file count. Order the nod
 
 **Planned (at breakdown).** A node is independent of its siblings when its write surface is disjoint from theirs, its rails and proof let a reviewer judge it without depending on an unmerged sibling change, and where it first meets another node is a named integration gate. A node that needs another node's behavior is stacked on it; nodes that need the same new interface wait for a contract node that adds it. "C is executable now; X and Y wait for C's interface" is a correct planned state.
 
-**Eligible (at plan time).** When Main writes a node's plan, it checks the node's actual base in source: every seam, interface, or signal the node takes from outside itself exists there and supports the observation it needs. Seams the node adds under its own plan are its work, not prerequisites; Workhorse fit (`../../manage-agents/references/model-catalog.md`) still applies per slice. A node with an unmet external prerequisite stays pending, or its gap returns to its owner (`plan-defect`, or `program-design-gap` for a missing structural decision). A stack child whose parent head moves after its plan was written follows the existing freshness and plan-defect rules.
-
-The eligible check covers only what the node takes from outside itself. Whether one slice that adds or uses a new seam is Workhorse is the per-slice Workhorse fit decision above.
+**Eligible (at plan time).** When Main writes a node's plan, it checks the node's actual base in source: every seam, interface, or signal the node takes from outside itself exists there and supports the observation it needs. Seams the node adds under its own plan are its work, not prerequisites; Workhorse fit (`../../manage-agents/references/model-catalog.md`) still applies per slice. A node with an unmet external prerequisite stays pending, or its gap returns to its owner (`plan-defect`, or `program-design-gap` for a missing structural decision).
 
 ## Order Only Real Dependencies
 
@@ -89,7 +84,7 @@ For each slice, name:
 
 ```text
 obligation covered
-executor record
+tier record
 write surfaces
 pre-change signal or approved exception
 focused automated proof
@@ -116,7 +111,7 @@ Split or replan when:
 - a migration is tested only on an empty state;
 - a manual check is described but no runnable surface exists;
 - a slice changes several owners and cannot isolate its failure;
-- a slice records Workhorse but misses a Workhorse fit condition, or relies on a seam no one checked at its base;
+- a slice records Workhorse but misses a Workhorse fit condition;
 - completing the slice would require an unmade product or structural decision.
 
 Return the exact gap and its owner instead of padding the plan with speculative tasks.

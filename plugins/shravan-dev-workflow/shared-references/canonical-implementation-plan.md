@@ -10,7 +10,7 @@ The `originating planner` values name the two planners: `plan-implementation`, t
 
 ## Breakdown Record
 
-A breakdown is one Markdown file per delivery, `<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main with `plan-implementation`, even when it has one node. It lives beside its plans under the Plan Home rule below: `<project-root>/tmp/plan-workflows/` for a delivery plan, or the durable plan home (`docs/specs/<spec>/plans/` or the repository's established home) for plan-only work. It records its admitted basis (reviewed design identities, or an admitted improvement pointer and basis class). Each node records: `id`; `outcome` (what this PR makes true, in the owner's words); `scope` (the owner or component, from Program Design or current-source ownership); `rails` (the obligation identities it delivers); `write surface`; `depends on` (node ids, planned); `stack` (a stack id or `none`); `kind` (`feature | contract | integration`). It also lists integration gates (the nodes that meet, the proof, Main as owner) and the order, riskiest unknown first. It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
+A breakdown is one Markdown file per delivery, `<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main, even when it has one node. It lives beside its plans (Plan Home). It records its admitted basis (reviewed design identities, or an admitted improvement pointer and basis class). It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
 
 ```text
 breakdown path: <plan home>/<yyyy-mm-dd>-<slug>-breakdown.md
@@ -36,9 +36,9 @@ supersedes: none | <earlier breakdown path and the nodes whose plans it supersed
 
 The breakdown's authority follows the admitted basis. A reviewed design supplies Program Design's owners and dependency edges as candidate cuts. An admitted `implementation-mechanics-only` improvement supplies its current-source ownership and applicability evidence, and planning invents no Program Design for it. A real missing structural decision returns `program-design-gap`.
 
-A node is executable when its base exists: trunk contains every node it depends on, or, for a stack child, its parent PR has a head. The base is that trunk commit or that parent PR head. Each PR's plan is written when its node becomes executable; the first frontier's plans are written with the breakdown.
+A node is executable when its base exists: trunk contains every node it depends on, or, for a stack child, its parent PR has a head. The base is that trunk commit or that parent PR head. Each PR's plan is written when its node becomes executable; the first executable nodes' plans are written with the breakdown.
 
-An integration gate runs after its participating PRs are PR-ready. Main runs it and records in the trace the exact PR heads it tested together; a change the gate discovers routes through Main to the affected PR's Sidekick and reviewer. Per-PR readiness is never reported as delivery readiness before the named gates pass.
+Each integration gate names the nodes that meet and the proof; Main runs it during delivery.
 
 ## Canonical Result
 
@@ -93,13 +93,13 @@ For every `pr-ready-unmerged` delivery, including orchestrated goals and direct 
 
 Direct plan-only work may use an established repository plan home. Otherwise use `docs/specs/<spec>/plans/` for durable direct planning or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work. In every home, the breakdown sits beside its plans.
 
-Every plan includes its result, governing basis, delivery context with its breakdown, node, and base, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices each with its executor record, the throughput checkpoint, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
+Every plan includes its result, governing basis, delivery context with its breakdown, node, and base, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices each with its tier record, the throughput checkpoint, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
 
-## Slice Executor Record
+## Slice Tier Record
 
-Every slice records `executor: <Workhorse | Daily driver> · <guidance>/<span> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names the fit condition it misses. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names the fit condition it misses. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
 
-Workhorse fit lives in `../skills/manage-agents/references/model-catalog.md`. The PR's Sidekick tier and what it dispatches follow the staffing table in `manage-agents` (Commission an implementation 🐒 Sidekick), which reads these records and the plan's dependency edges.
+Workhorse fit lives in `../skills/manage-agents/references/model-catalog.md`.
 
 ## Preserve and Admit
 
@@ -115,4 +115,4 @@ Validation, handoff, tickets, tracker state, or plan completion never upgrade th
 
 Good signals: one ready breakdown per delivery, one immutable plan path per executable PR node, current governing authority, complete delivery context, proof attached to obligations, only meaningful edges, explicit design-gap routes, and no redundant approval stop.
 
-Bad signals: a slice without an executor record, a Workhorse slice that misses a fit condition, tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, PR grouping or topology inside a plan, a plan without its breakdown node and base, a breakdown that records plan paths, PR numbers, or progress, inferred implementation authority, or a carrier silently repairing the plan.
+Bad signals: a slice without a tier record, a Workhorse slice that misses a fit condition, tickets as another plan, `Status: approved`, approval evidence, mutable progress, validation changing the result, document hashes, PR grouping or topology inside a plan, a plan without its breakdown node and base, a breakdown that records plan paths, PR numbers, or progress, inferred implementation authority, or a carrier silently repairing the plan.
