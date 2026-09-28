@@ -75,6 +75,6 @@ When the caller or user has requested continued delivery, preserve this design t
 
 For a substantive design loop that uses agent help, the orchestrator uses the owner's model choice, normally a daily driver. It works with the user on material design meaning and authors every governing section, diagram, artifact and visual brief through this workflow. 🛠️ Workers can gather bounded evidence. A tool may realize pixels, typography, spacing and style from an unchanged orchestrator-authored brief, while the orchestrator owns semantic composition, labels, relationships, invariants and acceptance. A helper may run only the prescribed generation/copy/preview procedure and report its result. A research Sidekick is useful when related assignments need continuing context. Only an explicitly requested Advisor assists the orchestrator with design choices; advice is neither authorship nor acceptance.
 
-If continued delivery is requested, the orchestrator MUST load `plan-implementation` in this session and return the ready breakdown and the plans for its first executable nodes. This design cycle then ends: hand them to `orchestrator-implementation-goal`. This skill commissions no implementation Sidekick.
+If continued delivery is requested, the orchestrator MUST load `plan-implementation` in this session and return the ready breakdown and its plans. This design cycle then ends: hand them to `orchestrator-implementation-goal`. This skill commissions no implementation Sidekick.
 
 Design or plan gaps return to the orchestrator and user.
