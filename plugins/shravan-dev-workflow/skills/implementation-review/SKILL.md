@@ -9,7 +9,7 @@ IF no work reference is in context and the task qualifies, open or resume the tr
 
 The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. The review scope is one PR, or one stack layer judged against its parent: each independent PR gets its own lead, and a stack keeps one lead relationship that reviews its layers in order. That lead reads every governing source and the complete diff of its scope, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
 
-The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. The unit's PR plan partitions that work: it says which obligations this PR or layer delivers, and it is not itself a rail. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
+The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. The scope's PR plan partitions that work: it says which obligations this PR or layer delivers, and it is not itself a rail. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
 ## Admit Review
 
