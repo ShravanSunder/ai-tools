@@ -27,7 +27,7 @@ Do not use this for fresh code-review discovery. If the user asks to review a PR
 
 The assigned implementation 🐒 Sidekick may carry its delivery assignment through this workflow, or an Operator may run the authorized prescribed wrap-up procedure. Either executor returns current PR gate evidence to Main, which retains final acceptance and whole-goal disposition; merge still requires explicit user authority. An Operator that lacks the required draft or encounters a semantic decision returns that need to its assigning agent instead of authoring the draft, deciding the issue, or acquiring delegation authority.
 
-One run wraps up one PR. Independent PRs wrap up separately, each on its own branch. A stack wraps up per layer from its lowest layer up through `gh stack`: after a lower layer changes, `gh stack rebase` then `gh stack submit` moves every layer above it to a new head, which re-enters description dispatch and the gates for those layers.
+One run wraps up one PR. Independent PRs wrap up separately, each on its own branch. In a stack, after a lower layer changes, `gh stack rebase` then `gh stack submit` moves every layer above it to a new head, which re-enters description dispatch and the gates for those layers.
 
 ## Core Flow
 
@@ -37,7 +37,7 @@ One run wraps up one PR. Independent PRs wrap up separately, each on its own bra
 4. IF this run created a PR, or the current body is missing `## Why the change` / `## Special things to note` / `## Change outline`, is a file-list changelog (`- path — note` bullets as the outline), stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite — including after a head/diff identity change and before a ready claim:
    ```text
    IF this run created a PR, or the current body is missing those headings, is a file-list changelog, stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite:
-     dispatch `pr-description` to a Workhorse 🛠️ Worker (Complete direction) using this packet:
+     dispatch `pr-description` to a 🛠️ Worker using this packet:
        pr number or create-intent; base; head SHA; diff identity; existing body;
        related URLs (only those already supplied); never-publish rules from step 2.
      Subagent loads `references/pr-description.md`.
