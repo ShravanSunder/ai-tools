@@ -73,8 +73,8 @@ The Lead uses this table while planning a PR's slices. Thinking level follows th
 | Evidence: sweep one unit | 🛠️ Worker | Luna medium |
 | Evidence: classify with a fixed rubric | 🛠️ Worker | Luna high |
 | Monitoring and procedures: suites, CI watches to terminal, PR wrap-up checks, scripted transforms | 🔧 Operator | Luna medium |
-| Diagnosis in one domain | 🛠️ Worker | Luna high or xhigh |
-| Diagnosis across systems | 🛠️ Worker | a Daily-driver row |
+| Diagnosis with a prescribed diagnostic approach | 🛠️ Worker | Luna high or xhigh, by span |
+| Open diagnosis (Partial direction) | 🛠️ Worker | Opus medium, any span |
 | Independent review | 🔎 Review Sidekick | a different-lineage reviewer, usually Grok high; never Luna |
 
 Luna max shares xhigh's band and is kept for a Luna Sidekick carrying a long PR.
@@ -107,7 +107,7 @@ Use for execution and research 🛠️ Workers. Independent review uses the 🔎
 | OpenAI Luna | high | Complete direction; Local. |
 | OpenAI Luna | xhigh | Complete direction; Local/Cross-domain. |
 | OpenAI Sol | medium | Complete direction; Cross-system. |
-| Claude Opus | medium | Partial direction; Cross-domain/Cross-system. |
+| Claude Opus | medium | Partial direction; any span. |
 
 ## Implementation and research 🐒 Sidekick
 
@@ -116,9 +116,9 @@ Use for execution and research 🛠️ Workers. Independent review uses the 🔎
 | OpenAI Luna | high | Complete direction; Local. |
 | OpenAI Luna | xhigh | Complete direction; Local/Cross-domain. |
 | OpenAI Luna | max | Complete direction; Local/Cross-domain. |
-| OpenAI Sol | medium | Complete direction; Cross-system. |
-| Claude Opus | medium | Partial direction; Cross-domain/Cross-system. |
-| Claude Opus | high | Partial direction; Cross-domain/Cross-system. |
+| OpenAI Sol | medium | Complete direction; Cross-system; every dependent choice in the plan. |
+| Claude Opus | medium | Partial direction, any span; or Complete direction, any span, when a later slice depends on a local choice the plan leaves to the Sidekick. |
+| Claude Opus | high | Partial direction, any span; or Complete direction, any span, when a later slice depends on a local choice the plan leaves to the Sidekick. |
 
 A Sidekick's horizon is one PR. A Luna Sidekick carries context across its PR but makes no choice that later slices depend on: every such choice is already in the plan, and needing a new one is a plan defect for the Lead. An Opus Sidekick may make local choices later slices build on and records each. Long-horizon Sidekick work is not in use, so Luna max shares Luna xhigh's band and Opus high shares Opus medium's.
 

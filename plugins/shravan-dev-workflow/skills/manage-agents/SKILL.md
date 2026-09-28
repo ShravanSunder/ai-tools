@@ -108,7 +108,7 @@ For each started PR node of a ready breakdown, create or reuse one named persist
 | PR's slices | Sidekick | What the Sidekick executes itself | What goes to Luna 🛠️ Workers |
 |---|---|---|---|
 | all Workhorse, and every choice a later slice depends on is written in the plan | Luna | every slice, directly | nothing by default; the benefit test in Select an agent still governs any child |
-| mixed tiers, or a later slice depends on a local choice the plan leaves to the Sidekick | Daily driver (Opus) | Daily-driver slices, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent (no `requires` or `serial` edge to in-flight work, disjoint writes, own proof), when the benefit test holds |
+| mixed tiers, or a later slice depends on a local choice the plan leaves to the Sidekick | Daily driver, chosen by the signal that failed: Sol medium when the only reason is fixed-approach Cross-system work; Opus when direction is Partial or a dependent choice is left open | Daily-driver slices, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent (no `requires` or `serial` edge to in-flight work, disjoint writes, own proof), when the benefit test holds |
 | all Daily driver | Daily driver | every slice | nothing by default |
 
 A Luna Sidekick uses a Luna row from the 🐒 Sidekick table in `references/model-catalog.md`. A Workhorse slice that stops at its boundary goes back to Main as a plan defect, and the Sidekick does not re-cut it.
