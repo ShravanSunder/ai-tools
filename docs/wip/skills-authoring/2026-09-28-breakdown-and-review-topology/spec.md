@@ -116,6 +116,7 @@ To be filled from a Luna sweep over the active skills, shared references, fixtur
 
 ## Coordination
 
+- **Every agent loads `skills-creation`:** the implementation 🐒 Sidekick, every 🔎 Review Sidekick, any 🦉 Advisor, and every 🛠️ Worker on this work loads the `skills-creation` skill at the start of its assignment, and each packet says so. Owner, 2026-09-28: "advisor and all agents working on it should load the skill creation skill".
 - **Reviewer:** GPT-6 Astra high 🔎 Review Sidekick, different lineage, no author history, for proposal and implementation review. Owner, 2026-09-28: "the specs and skill should be written 5.5 and reviewed by a astra advisor high"; the independent Review Sidekick role is kept because `skills-creation` review requires no author history, which an Advisor working with Main would not have.
 - **Implementer:** one Claude Opus 5.5 implementation 🐒 Sidekick (agent-router `claude-local`, the owner's saved default model) writes every run of Spec A and Spec B in full, one commit per run, then the proof. Owner, 2026-09-28: "for skills especially and design i kind of expect another opus model to write it fully". Skill prose is an open-approach judgment task, so it fails Workhorse fit (C1) and goes to the Daily driver. Luna 🛠️ Workers stay on evidence: sweeps, replays, digests.
 - Branch `chore/workhorse-decomposition`, worktree `~/dev/ai-tools.chore-workhorse-decomposition`, one PR with Spec A, one version bump.
