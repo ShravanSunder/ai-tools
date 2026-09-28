@@ -25,3 +25,9 @@ Add one contract test in `tests/skills/lib/` that fails when a model or lineage 
 
 ## Proof
 Tests, typecheck, plugin validate; the new guard passes; `git diff --shortstat 59eec035..HEAD -- plugins/shravan-dev-workflow/skills plugins/shravan-dev-workflow/shared-references` shows the PR's net added lines at least 35% lower than `+418/−219`; an independent re-audit (fresh subagent, same method as `dry-audit.md`) reports no remaining PR-origin repeated fact or deletion-test failure it can cite.
+
+## Round 2 (after `dry-reaudit.md`, head `97659feb`)
+Apply every item in `dry-reaudit.md` §2 (R1–R18, D1–D16, L1–L5, L8–L9, V1–V6, P1–P8), with these settings:
+- P1: catalog Escalation gains exactly: "Escalated work takes Sol medium when the approach is fixed and the span is Cross-system, and Opus medium for open judgment (Opus high on evidence); a Cursor-native 🛠️ Worker may take Grok medium." Staffing's second row reads "the Daily-driver row Escalation names (catalog)". The Codex provider page reads "effort from the catalog row".
+- P8: the Throughput Checkpoint keeps "choices later slices depend on" and "smallest safe decomposition" plus the `independent` shared-write check; the other three items and their copies (template, canonical, plan-review) go.
+- L6 (devfiles) is Main's; L7 stays as is.
