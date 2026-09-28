@@ -48,9 +48,6 @@ Read-only context:
 ## Throughput Checkpoint
 
 - Choices later slices depend on: <… or n/a: reason>
-- Blocking first steps: <… or n/a: reason>
-- Independent workstreams: <… or n/a: reason>
-- Shared mutable state: <… or n/a: reason>
 - Smallest safe decomposition: <… or n/a: reason>
 
 ## Dependencies And Collisions

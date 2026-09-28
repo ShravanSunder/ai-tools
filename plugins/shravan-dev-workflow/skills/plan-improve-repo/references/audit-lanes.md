@@ -2,11 +2,11 @@
 
 Use these categories to structure broad repo audits. They are coverage dimensions: the parent owns each one, keeps synthesis, and verifies every accepted candidate against current source.
 
-Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. A unit that passes Workhorse fit (`../../manage-agents/references/model-catalog.md`) goes to a Workhorse 🛠️ Worker through `manage-agents` with the job pins (`../../manage-agents/references/agent-job-packet.md`); a unit that fails fit is re-cut or stays in-parent, and escalates only with a recorded reason. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
+Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. Each unit goes to a 🛠️ Worker through `manage-agents`; a unit that `manage-agents` cannot fit is re-cut or stays in-parent. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
 
 ## Evidence Unit Packet
 
-Fill this for each unit, alongside the job pins.
+Fill this for each unit.
 
 ```text
 You are a read-only improvement-audit evidence unit.

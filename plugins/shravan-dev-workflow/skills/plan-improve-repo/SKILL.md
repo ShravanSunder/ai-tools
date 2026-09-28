@@ -7,9 +7,9 @@ description: "Use when auditing a repository for improvement opportunities, back
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to write the finding's breakdown and its plans for its first executable nodes. This skill does not edit product code.
+Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to write the finding's breakdown and plans. This skill does not edit product code.
 
-Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the breakdown and plans for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
+Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning. Both use the same canonical plan contract without sharing audit authority.
 
 Inspired by the MIT-licensed `shadcn-improve` plugin mechanics: scout broadly, verify claims yourself, then produce plans a cheaper/faster executor can run.
 
@@ -52,7 +52,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
 - Write plan artifacts only for admitted findings unless the user explicitly asks for chat-only output; preserve design-required findings in the shortlist/backlog and route them to their semantic owner.
 - Use the repository home and proportional Markdown form returned by `../../shared-references/canonical-implementation-plan.md`.
 - Read repo instructions, README/docs, package/tooling files, tests, CI, and recent git history before recommending work.
-- Delegate audit work only by evidence unit, never by whole category (`references/audit-lanes.md`); the main verifies each return before it counts.
+- Delegate only by evidence unit (`references/audit-lanes.md`).
 - Treat subagent findings as candidates, not truth. Re-open cited files before accepting a finding.
 - Delegated audit work returns evidence and candidate findings only. Bounded mechanical validation or proof checks may also return observed results. The main performs admission, prioritization, all plan structure and prose, and the governing validation/acceptance judgment; no helper authors or accepts the plan.
 - Never quote or copy secret values. Report secret classes and file locations only when relevant.
@@ -104,7 +104,6 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - the user-facing main authors the entire plan; delegated evidence is verified input, never plan text or planning judgment
    - default to the top 3-5 in non-interactive runs
    - one focused plan per node, never a mega-plan
-   - write the breakdown under `../../shared-references/canonical-implementation-plan.md`
    - instantiate the canonical plan record with originating planner `plan-improve-repo`
    - return `ready` with `requested terminal: plan-only`, or return `revision-requested | blocked` with `plan identity: none` and no artifact write
    - include planning-basis identity, exact files, current-state evidence, proof-bearing slices each with its tier record (`../../shared-references/canonical-implementation-plan.md`), the throughput checkpoint, proof gates, and stop conditions
