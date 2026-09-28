@@ -5,7 +5,7 @@ description: "Use when starting, resuming, auditing, or completing an implementa
 
 # Implementation Goal Orchestration
 
-An implementation goal stays with the orchestrator, who remains the default user conversation and owns design decisions with the user, every governing design artifact, the breakdown and every PR plan, the coordination root, integration gates, disposition, acceptance, and the final report. It never authors or repairs a plan. After a PR's plan is ready, one persistent implementation 🐒 Sidekick owns that one PR's implementation, associated proof, and corrections. The user may explicitly choose direct contact with an assigned Sidekick inside its scope without changing execution ownership or governing authority.
+An implementation goal stays with the orchestrator, who remains the default user conversation and owns design decisions with the user, every governing design artifact, the breakdown and every PR plan, the coordination root, integration gates, disposition, acceptance, and the final report. It never authors or repairs a plan. After a PR's plan is ready, one persistent implementation 🐒 Sidekick owns that one PR's implementation, associated proof, and corrections.
 
 ## Execution Responsibility
 
