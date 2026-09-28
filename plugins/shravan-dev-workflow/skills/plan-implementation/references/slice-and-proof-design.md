@@ -1,6 +1,6 @@
 # Divide the Work and Attach Proof
 
-Use this reference to cut a delivery into PR nodes and then turn each node's obligations into a proportional implementation sequence. Return the PR cut (nodes, planned independence, stacks, contract nodes, integration gates, order), then per plan the slice graph with each slice's tier record, the throughput checkpoint, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
+Use this reference to cut a delivery into PR nodes and then turn each node's obligations into a proportional implementation sequence. Return the PR cut (nodes, planned independence, stacks, contract nodes, integration gates, order), then per plan the slice graph with each slice's tier record, the throughput checkpoint, obligation/proof mapping with its independent oracle, proof-layer source or `project silent`, property-or-example choice, and existing-test keep/repair/remove rows, necessary edges, integration gates, false-green risks, and any split or replan stop.
 
 ## Start From Obligations
 
