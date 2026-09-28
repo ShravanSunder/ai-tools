@@ -106,7 +106,7 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - one focused plan per node, never a mega-plan
    - instantiate the canonical plan record with originating planner `plan-improve-repo`
    - return `ready` with `requested terminal: plan-only`, or return `revision-requested | blocked` with `plan identity: none` and no artifact write
-   - include planning-basis identity, exact files, current-state evidence, proof-bearing slices each with its tier record (`../../shared-references/canonical-implementation-plan.md`), the throughput checkpoint, proof gates, and stop conditions
+   - include planning-basis identity, exact files, current-state evidence, proof-bearing slices, proof gates, and stop conditions
    - before returning `ready`, IF the plan is a full plan, load `../plan-implementation/references/plan-review.md` and return every review point's take or decline with its reason; a compact plan records its skip reason instead
 8. Validate each generated ready plan without changing its plan record or planning result. A new `revision-requested` or `blocked` result has `plan identity: none` and skips artifact validation:
    - read the plan back after writing it
