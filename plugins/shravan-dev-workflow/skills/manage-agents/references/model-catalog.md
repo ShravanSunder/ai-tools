@@ -33,7 +33,7 @@ A model category is a cost and capability grouping of model plus effort. It does
 
 ## Effort bands
 
-Every job starts on the Workhorse tier. The role sets the effort band; the job's demanding signals pick the effort inside it.
+Every 🔧 Operator, 🛠️ Worker, and implementation 🐒 Sidekick job starts on the Workhorse tier. The role sets the effort band; the job's demanding signals pick the effort inside it.
 
 | Role | Effort band | Effort |
 |---|---|---|
@@ -43,7 +43,7 @@ Every job starts on the Workhorse tier. The role sets the effort band; the job's
 
 Demanding signals: Partial direction; Cross-domain or Cross-system span; Run or Open horizon (definitions in `SKILL.md` Select an agent).
 
-**Escalation.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. A Daily-driver model takes a job only with one recorded escalation reason: `owner recommended`; `judged tough: <missing condition>`, when Main judges it too tough for the Workhorse tier at its band's top; or `Workhorse failed: <evidence>`, after a failed check or result through corrections (a boundary stop is a plan defect instead). Record it in the slice's tier record or the assignment.
+**Escalation.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. A Daily-driver model takes a job only with one recorded escalation reason: `owner recommended`; `judged tough: <missing condition>`, when Main judges it too tough for the Workhorse tier at its band's top; or `Workhorse failed: <evidence>`, after a failed check or result through corrections (a boundary stop is a plan defect instead). Escalated work takes Sol medium when the approach is fixed and the span is Cross-system, and Opus medium for open judgment (Opus high on evidence); a Cursor-native 🛠️ Worker may take Grok medium. Record it in the slice's tier record or the assignment.
 
 Sidekick examples (use them to classify any assignment):
 
@@ -55,7 +55,7 @@ Sidekick examples (use them to classify any assignment):
 | "Take slice 2, which changes the orders and billing domains' shared contract as the plan specifies, then report back." | Complete · Cross-domain · Task | xhigh |
 | "Implement this PR: three planned slices, one domain publishes a new event and another consumes it; the event contract and both sides' approach are in the plan." | Complete · Cross-domain · Run | max |
 | "Find why sync drops messages under load, fix it, and choose the retry policy the next two slices build on." | Partial · Local · Open | max; flagged: fix the diagnostic approach or the retry choice in the plan first, or escalate with a reason |
-| "Move the client and the server to the new wire format: the plan names the format and the migration approach in four ordered slices." | Complete · Cross-system · Run | max; flagged: split into PRs only where the PR independence test passes (an independently landable seam exists); otherwise keep one PR at max, or escalate with a reason |
+| "Move the client and the server to the new wire format: the plan names the format and the migration approach in four ordered slices." | Complete · Cross-system · Run | max; flagged (Escalation) |
 
 Worker and Operator examples:
 
