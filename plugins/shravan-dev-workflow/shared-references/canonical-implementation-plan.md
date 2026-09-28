@@ -38,8 +38,6 @@ The breakdown's authority follows the admitted basis. A reviewed design supplies
 
 A node is executable when its base exists: trunk contains every node it depends on, or, for a stack child, its parent PR has a head. The base is that trunk commit or that parent PR head. Each PR's plan is written when its node becomes executable; the first executable nodes' plans are written with the breakdown.
 
-Each integration gate names the nodes that meet and the proof; Main runs it during delivery.
-
 ## Canonical Result
 
 A ready plan belongs to one breakdown node and returns:
