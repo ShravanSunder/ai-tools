@@ -24,9 +24,6 @@ Planned at branch/HEAD: fixture / 3333333333333333333333333333333333333333
 ## Throughput Checkpoint
 
 - Choices later slices depend on: the grouped-summary shape, fixed in the Specification and written here; none left to the Sidekick.
-- Blocking first steps: the formatter slice; validation builds on it.
-- Independent workstreams: n/a: both slices write the same formatter file.
-- Shared mutable state: the formatter file; the two slices run serially.
 - Smallest safe decomposition: one executor; both slices share one file and one proof loop.
 
 ## Obligation And Proof Mapping

@@ -22,9 +22,6 @@ Planned at branch/HEAD: fixture / 2222222222222222222222222222222222222222
 ## Throughput Checkpoint
 
 - Choices later slices depend on: n/a: one slice.
-- Blocking first steps: n/a: one slice.
-- Independent workstreams: n/a: one slice.
-- Shared mutable state: n/a: no state beyond the slice's own files.
 - Smallest safe decomposition: one executor; the change is one pure owner with one proof loop.
 
 ## Change And Proof

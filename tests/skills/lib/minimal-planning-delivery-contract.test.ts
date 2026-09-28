@@ -68,7 +68,6 @@ describe("goal delivery intent hard cutover", () => {
     expect(contract).toContain("base: <trunk commit | parent PR head>");
     expect(contract).toContain("## Slice Tier Record");
     expect(contract).toContain("tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>");
-    expect(contract).toContain("It lives beside its plans (Plan Home).");
     expect(contract).toContain("In every home, the breakdown sits beside its plans.");
     expect(contract).not.toContain("breakdown path: <project-root>/tmp/plan-workflows/");
     expect(contract).toContain("planning result: revision-requested | blocked");
@@ -78,7 +77,7 @@ describe("goal delivery intent hard cutover", () => {
 
     expect(planner).toContain("Establish `requested terminal: plan-only | pr-ready-unmerged`");
     expect(planner).toContain("If a direct request is ambiguous, ask once at entry");
-    expect(planner).toContain("Write the breakdown first, whole.");
+    expect(planner).toContain("Check each node's eligibility under the PR Independence Test.");
     expect(contract).toContain("written by Main, even when it has one node");
     expect(planner).toContain("choose the smallest coherent vertical grouping of slices");
     expect(planner).toContain("load `references/plan-review.md`");
@@ -125,9 +124,6 @@ describe("goal delivery intent hard cutover", () => {
     );
     for (const checkpointItem of [
       "- Choices later slices depend on:",
-      "- Blocking first steps:",
-      "- Independent workstreams:",
-      "- Shared mutable state:",
       "- Smallest safe decomposition:",
     ]) {
       expect(template).toContain(checkpointItem);
@@ -176,7 +172,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(orchestrator).toContain("It never authors or repairs a plan");
     expect(orchestrator).toContain("end this run with `ready-for-planning`; do not load a planner here. Add no second plan review.");
     expect(orchestrator).toContain("A stack runs through `gh stack` from its lowest layer up");
-    expect(orchestrator).toContain("Commission one 🔎 Review Sidekick per review scope in `implementation-review`");
+    expect(orchestrator).toContain("commissions the 🔎 Review Sidekick for its review scope (`implementation-review`)");
     expect(orchestrator).not.toContain("loads `plan-implementation` itself");
     expect(orchestrator).toContain("Stop at PR-ready and unmerged by default");
     expect(orchestrator).toContain("Merge is a separately authorized extension");
