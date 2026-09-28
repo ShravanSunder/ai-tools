@@ -1,6 +1,6 @@
 # Improvement Plan Template
 
-Write one file per accepted improvement only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
+Each accepted improvement gets one breakdown under the canonical contract's breakdown record: one node, or one per independent outcome, and owner count does not decide. Write one plan file per breakdown node only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
 
 ```markdown
 # <Improvement Title>
@@ -83,18 +83,19 @@ Read-only context:
 ## Delivery Context
 
 - Requested terminal: plan-only
-- Delivery grouping: single:<name>
-- PR topology: not-applicable
+- Breakdown: <breakdown path>
+- Node: <node id>
+- Base: <trunk commit | parent PR head>
 ```
 
-Also maintain a `plans/README.md` or local index when writing multiple plans:
+Also maintain a `plans/README.md` or local index when writing multiple plans, pointing each plan back to its breakdown node:
 
 ```markdown
 # Improvement Plans
 
-| Planning result | Plan identity |
-| --- | --- |
-| ready | <immutable plan path> |
+| Planning result | Breakdown · node | Plan identity |
+| --- | --- | --- |
+| ready | <breakdown path> · <node id> | <immutable plan path> |
 ```
 
-The index projects ready canonical plan paths only. It never owns or mutates the plan record, governing basis, delivery context, validation state, or execution progress. Non-ready results have no plan path and do not enter this index.
+The index projects ready canonical plan paths and their breakdown nodes only; it is call context, and the breakdown itself never records plan paths. It never owns or mutates the plan record, governing basis, delivery context, validation state, or execution progress. Non-ready results have no plan path and do not enter this index.

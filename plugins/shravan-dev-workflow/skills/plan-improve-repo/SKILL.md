@@ -7,9 +7,9 @@ description: "Use when auditing a repository for improvement opportunities, back
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to author the one delivery plan. This skill does not edit product code.
+Audit a repo like a senior advisor and let the user-facing main turn admitted findings into completed immutable canonical plans. Before admission, the product is a vetted finding or prioritized backlog routed to the missing semantic owner. Direct planning defaults to `plan-only`. In an orchestrated delivery goal, this skill returns the admitted finding and basis to `plan-implementation`, which the main loads to write the finding's breakdown (one node, or one per independent outcome) and its first-frontier plans. This skill does not edit product code.
 
-Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the single plan for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
+Its direct authority is the admitted repository-improvement finding. `plan-implementation` owns direct reviewed-design planning and the breakdown and plans for an orchestrated improvement delivery. Both use the same canonical plan contract without sharing audit authority.
 
 Inspired by the MIT-licensed `shadcn-improve` plugin mechanics: scout broadly, verify claims yourself, then produce plans a cheaper/faster executor can run.
 
@@ -100,10 +100,11 @@ Completion: target classification and, when applicable, the exact `skills-creati
    - write plans only for `current-three-artifact-design-ready` or `implementation-mechanics-only`
    - preserve and route `design-required` findings without turning them into execution tasks
 6. IF producing or revising a completed direct plan result, or validating or preserving an extant completed plan, load `../../shared-references/canonical-implementation-plan.md` to keep this skill's admitted-improvement and implementation-mechanics-only admission inline while applying the shared producer/validator contract, and return the complete canonical plan record or non-ready result plus any blocking discrepancy. For an orchestrated goal, return the admitted-finding handoff instead of writing the delivery plan. Audit-only runs and pre-artifact admission failures do not load it.
-7. Write one plan per admitted improvement that can return `ready`:
+7. Write a breakdown for each admitted improvement and one plan per breakdown node that can return `ready`. A finding is one node unless it truly holds independent outcomes; an atomic change across two owners is one node, and one owner's finding with two independent outcomes is two. Owner count does not decide:
    - the user-facing main authors the entire plan; delegated evidence is verified input, never plan text or planning judgment
    - default to the top 3-5 in non-interactive runs
-   - one focused plan per finding, not a mega-plan
+   - one focused plan per independent outcome, never a mega-plan; every finding gets a breakdown, even of one node
+   - write the breakdown under `../../shared-references/canonical-implementation-plan.md`; each plan records its breakdown, node, and base
    - instantiate the canonical plan record with originating planner `plan-improve-repo`
    - return `ready` with `requested terminal: plan-only`, or return `revision-requested | blocked` with `plan identity: none` and no artifact write
    - include planning-basis identity, exact files, current-state evidence, proof-bearing slices each with its executor record (`../../shared-references/canonical-implementation-plan.md`), the throughput checkpoint, proof gates, and stop conditions
