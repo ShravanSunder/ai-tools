@@ -66,7 +66,7 @@ When doing skill work in this repo:
 7. For user-visible plugin behavior changes, update `docs/changelog/`, bump plugin version metadata, and record refresh / reinstall status.
 8. After implementation, run fitting proof and return the current diff/evidence to the user-facing main for assessment against the accepted need, spec, plan, ownership, complexity, and integration. Only after that assessment perform the bounded fresh-context implementation review, then use `shravan-dev-workflow:implementation-pr-wrapup` for push / PR / checks / review-thread / merge-readiness proof. Refresh installed Codex/Claude caches only as an explicit post-push or release proof step; it is a home-level mutation and not a substitute for PR readiness.
 
-For execution ownership, load `manage-agents` and follow it decisively. Main uses the owner's model choice, normally a daily driver, remains the default user conversation, and always authors governing Requirements, Specification, Program Design, diagrams, the breakdown of a delivery into PRs, and one implementation plan per PR.
+For execution ownership, load `manage-agents` and follow it decisively.
 
 Detailed mechanics stay in the owning skills and references:
 
