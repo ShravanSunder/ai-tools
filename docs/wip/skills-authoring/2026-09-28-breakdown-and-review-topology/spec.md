@@ -1,6 +1,6 @@
 # Breakdown and review topology
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r4**, 2026-09-28. Status: **draft**. r2 added the consumer disposition from the sweep; r3 applied the proposal review's six findings and its advice; r4 applies the verification's residuals (BF1, BF2, BF4) and BF7 (Spec-review record). Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r5**, 2026-09-28. Status: **draft**. r2 added the consumer disposition from the sweep; r3 applied the proposal review's six findings and its advice; r4 applies the verification's residuals (BF1, BF2, BF4) and BF7 (Spec-review record). Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
 
 ## Owner meaning (verbatim, 2026-09-27 and 2026-09-28)
 
@@ -120,7 +120,7 @@ One skill per run; anchors at `c08ab7af`. Spec A's runs land first on the same b
 
 ## Consumer disposition
 
-Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill, shared reference, fixture, scenario, and contract test whole and returned 162 non-keep rows; the complete row list is `consumer-sweep.tsv` beside this spec. Main spot-checked the load-bearing and surprising rows against source at `fb2f18df`. Every row in that file is in scope with its stated disposition except the rejections below; rows 20, 37, 60, 72, 76 to 78, 135, and 145 were corrected in r4 to match BF1, BF2, and B1.
+Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill, shared reference, fixture, scenario, and contract test whole and returned 162 non-keep rows; the complete row list is `consumer-sweep.tsv` beside this spec. Main spot-checked the load-bearing and surprising rows against source at `fb2f18df`. Every row in that file is in scope with its stated disposition except the rejections below; rows 20, 37, 60, 72, 76 to 80, 135, and 145 were corrected in r4 and r5 to match BF1, BF2, and B1.
 
 | Run | Files (lines) | Change |
 |---|---|---|
@@ -161,6 +161,7 @@ Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill
 ## Spec-review record
 
 - **Review 1** (r2, commit `3fe81561`): GPT-6 Astra high, session `01a0e2a0` (the owner-authorized advisor and reviewer for both specs), skills-creation loaded. Verdict `targeted-revision`, `revise-first`, blocker override applies. Accepted BF1 (owner boundaries became a PR-count rule), BF2 (ready breakdown lacked a contract), BF3 (CB2 could not certify future nodes), BF4 (tokens, descriptions, READMEs, and two contract-test lines kept the old routing; a phase must not name an orchestrator), BF5 (B-2 held other skills' semantic edits), BF6 (the mechanics-only planning path was dropped). Rejected: expanding B8 into `skills-creation` (kept as scope, reworded); B8 weakening review (the whole-read rule stays).
+- **Verification of r4** (same lead): `targeted-revision`; BF2, BF4, BF7 closed; BF1 open in two adjacent sweep rows (79, 80) that kept an owner-count breakdown trigger. Converging: four open became one. **r5** rewrites both rows to outcome-based nodes with a breakdown for every finding; a search of the sweep for owner-count phrasing finds no other copy.
 - **Verification of r3** (same lead): `targeted-revision`, `revise-first`. BF3, BF5, BF6 closed; BF1, BF2, BF4 open as residual copies (sweep rows still adopted; plan-defect bypassed the originating planner); new BF7 (CB2 widened Spec A's Workhorse seam condition into a gate on every PR). Converging: six open became four.
 - **r4 remediation** (Main): corrected sweep rows 20, 37, 60, 72, 76 to 78, 135, 145 and B-7's disposition to independent outcomes, plans pointing up, and token returns (BF1, BF2, BF4A); `plan-defect` resolves through the recorded originating planner (BF4B); CB2 and B5 check only external prerequisites, leaving per-slice Workhorse fit to Spec A (BF7).
 - **r3 remediation** (Main): mental model and success 2 (BF1); CB1 rewritten with identity, home, basis, validity, readiness, immutability, and plans pointing up (BF2); CB2 split into planned and eligible (BF3); B14 token payloads, B1 routing, and the missed surfaces and assertions (BF4); runs B-2a and B-2b (BF5); B2 authority per admitted basis (BF6); advice adopted as B15 (A+B composition), B16 (integration evidence), and the planned-versus-executable wording in CB2.
