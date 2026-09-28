@@ -16,7 +16,7 @@ Package one existing PR implementation plan, with its breakdown node, so another
 - If the source is branch, diff, changed files, commits, validation, or blocker evidence, use `implementation-handoff`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
 - Include the repo/worktree, branch, source plan path, its breakdown path, node id, node scope, and PR base, referenced code/docs, open questions, and exact requested task.
-- Include the plan's obligation-to-slice-to-proof mapping (path or excerpt), with each slice's executor record from `../../shared-references/canonical-implementation-plan.md` carried unchanged, or its compact proof line, plus evidence sources, freshness guards, proof layers, split triggers, open proof gaps, and the parent-verification rule for any downstream subagent/reviewer/driver evidence.
+- Include the plan's obligation-to-slice-to-proof mapping (path or excerpt), with each slice's tier record from `../../shared-references/canonical-implementation-plan.md` carried unchanged, or its compact proof line, plus evidence sources, freshness guards, proof layers, split triggers, open proof gaps, and the parent-verification rule for any downstream subagent/reviewer/driver evidence.
 - When the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services, include the applicable entry points, trust boundaries, invariants, non-goals, and proof. Otherwise record only `Security: not applicable`.
 - If a plan file is available, read it end to end before packaging. Carry the plan path and useful repository identities, but do not return a separate reading receipt, line count, chunk range, or file-content hash or digest.
 - Keep the handoff portable. Avoid local-only assumptions unless the target agent must inspect that local path.
@@ -56,7 +56,7 @@ IF writing the handoff artifact or copy-paste prompt, load `references/handoff-t
 - The handoff hides uncertainty instead of listing exact open questions.
 - The packet is overbroad and asks the next agent to understand the entire repo.
 - Sensitive trust-boundary assumptions are omitted, forcing the next agent to invent a threat model.
-- The obligation/slice/proof mapping is omitted, or its slice executor records are dropped, forcing the next agent to infer how the plan will be proven or who executes each slice.
+- The obligation/slice/proof mapping is omitted, or its slice tier records are dropped, forcing the next agent to infer how the plan will be proven or at which tier each slice runs.
 - The handoff drops evidence sources, freshness guards, or parent-owned verification, letting the next agent treat delegated evidence as completion.
 - The handoff changes the plan record, upgrades `plan-only`, or omits the governing basis or delivery context.
 - The packet silently promotes an implementer, reviewer, 🐒 Sidekick, or future session into plan author without the named successor, transferred scope, and explicit user direction.
