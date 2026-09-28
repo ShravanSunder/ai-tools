@@ -56,7 +56,7 @@ Cut PRs before slices. Complexity decides the Sidekick; size decides the slices.
 
 - a large local change stays one PR with many Workhorse slices;
 - two disjoint features become two PRs;
-- a behavior change that must land across two owners at once stays one PR, with a Daily-driver Sidekick;
+- a behavior change that must land across two owners at once stays one PR, and its Sidekick follows Workhorse fit and the staffing table in `manage-agents`: a Luna xhigh Sidekick when every slice fits and every dependent choice is in the plan, Opus otherwise;
 - a contract PR exists only when a real shared seam lets two consumers proceed independently.
 
 The number of PRs follows independence, never owner or file count. Order the nodes riskiest unknown first among those whose prerequisites are met, and name an integration gate wherever independently built PRs first interact, with the proof that shows it.
