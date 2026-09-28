@@ -9,7 +9,7 @@ expect_decision_regex: workhorse|advisor|delegate|reviewer|history
 expect_proof_regex: workhorse
 expect_proof_regex: history none|no (parent )?(conversation )?history|without (the )?parent history|fresh context
 expect_proof_regex: (acpx|agent-router).{0,240}(packet|sources|history none)|(packet|sources|history none).{0,200}(acpx|agent-router)
-expect_proof_regex: floor|cheap|workhorsemum|grunt|mechanical
+expect_proof_regex: floor|cheap|minimum|grunt|mechanical
 ## Shortcut Temptation
 
 The prompt bundles cheap grunt work with an independent cross-lineage
