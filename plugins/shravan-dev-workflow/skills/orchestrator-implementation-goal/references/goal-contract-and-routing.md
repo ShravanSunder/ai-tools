@@ -39,7 +39,7 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 ## Select the Current Owner
 
-The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal; execution responsibility is `SKILL.md`'s Execution Responsibility.
+The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal.
 
 The source-phase workflow follows this order:
 
@@ -52,9 +52,6 @@ incomplete design prerequisite
 
 material design break discovered during planning or implementation
   -> orchestrator and user decision; do not build on the break
-
-no ready breakdown, or an executable node without its plan (preserve any plan-improve-repo admission)
-  -> end this run with ready-for-planning
 
 ready plan; terminal is plan-only
   -> finish at plan-only
