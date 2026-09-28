@@ -170,7 +170,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(orchestrator).toContain("continues immediately");
     expect(orchestrator).toContain("ready delivery plan continues immediately");
     expect(orchestrator).toContain("It never authors or repairs a plan");
-    expect(orchestrator).toContain("end this run with `ready-for-planning`; do not load a planner here. Add no second plan review.");
+    expect(orchestrator).toContain("return `ready-for-planning` for that node; Main plans it with `plan-implementation` in this session and the goal resumes at step 3 while other PRs continue. Add no second plan review.");
     expect(orchestrator).toContain("A stack runs through `gh stack` from its lowest layer up");
     expect(orchestrator).toContain("commissions the 🔎 Review Sidekick for its review scope (`implementation-review`)");
     expect(orchestrator).not.toContain("loads `plan-implementation` itself");
