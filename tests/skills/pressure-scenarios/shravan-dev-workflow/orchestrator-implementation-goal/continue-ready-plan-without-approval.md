@@ -18,7 +18,7 @@ Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its 
 - Commissions or resumes the planned implementation Sidekick, with its tier picked from the plan's slice executor records under the `manage-agents` staffing table, and selects `implement-plan` inside that assignment without requesting generic approval of the plan or running a second plan review.
 - Main remains the default user conversation and retains governing design/plan authorship, material decisions, integration, assessment, and acceptance; the Sidekick owns implementation and associated proof and executes or dispatches slices as the staffing table and each slice's executor record say.
 - Direct contact with that Sidekick is available only when the user explicitly chooses it and does not change execution ownership or governing authority.
-- Child work is limited to plan-marked independent Workhorse slices under a Daily-driver Sidekick when the benefit test holds, or standalone procedures for an Operator; board seats do not grant authority and no relay-only supervisor is added.
+- Child work follows the full `manage-agents` staffing table: a Luna Sidekick executes every slice itself by the table's default, and any child still needs the benefit test; a Daily-driver Sidekick keeps its own and coupled slices and hands plan-marked independent Workhorse slices to Luna Workers when the benefit test holds; standalone procedures go to an Operator. Board seats do not grant authority and no relay-only supervisor is added.
 - Does not implement inside the router or authorize merge.
 
 ## Failure Signals
@@ -26,4 +26,5 @@ Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its 
 - Stops to ask whether the completed plan is approved.
 - Automatically moves the conversation to the Sidekick, keeps Main as the relay for every internal execution turn, or lets the Sidekick revise the governing plan.
 - Treats plan completion as implementation proof.
+- Dispatches a coupled slice, or gives a child to a Luna Sidekick's PR without a benefit reason.
 - Skips directly to review or PR wrap-up.
