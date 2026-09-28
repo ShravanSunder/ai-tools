@@ -41,7 +41,7 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "returns-one-artifact-ready-plan-candidate",
-        requirement: "In this fast read-only characterization, describes the breakdown and one proportional artifact-ready plan candidate per ready-frontier PR node whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical ready record, governing basis, and delivery context must be produced in a write-enabled run; and fabricates none of them now.",
+        requirement: "In this fast read-only characterization, describes the breakdown and one proportional artifact-ready plan candidate per executable PR node whose obligations map to vertical proof-bearing slices, meaningful edges, integration gates, proof commands, and stop conditions; states that a completed immutable plan path, canonical ready record, governing basis, and delivery context must be produced in a write-enabled run; and fabricates none of them now.",
         failureExample: "Demands a completed file despite the read-only harness, returns a task list without obligation/proof mapping, uses plan identity none after successful admission, fabricates a path or document digest, or invents delivery context.",
       },
       {
