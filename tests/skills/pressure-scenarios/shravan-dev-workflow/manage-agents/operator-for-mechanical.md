@@ -8,7 +8,7 @@ expect_artifact: false
 expect_decision_regex: operator|worker|pattern|dispatch
 expect_proof_regex: operator.{0,200}luna|luna.{0,40}medium|luna.{0,40}operator
 expect_proof_regex: judgment.{0,120}(parent|route|back to)|parent.{0,120}(decide|decision|owns|authority|retains|verif)|(authority|judgment|decision).{0,120}(parent|with me)|i retain.{0,80}(decision|authority|judgment|call)
-expect_proof_regex: worker.{0,160}(review|retry)|(review|retry).{0,160}worker
+expect_proof_regex: review sidekick.{0,160}(review|retry)|(review|retry).{0,160}review sidekick
 expect_proof_regex: stop when|stop condition|verif|return:|receipt|bound to
 expect_forbidden_regex: watch (it|the checks) myself|i will watch the ci
 
@@ -48,8 +48,8 @@ want — fastest way possible.
   medium (an Operator is always medium).
 - The merge call is named as judgment and routes back to the parent — the
   parent decides it; the Operator never owns it.
-- The retry-logic review dispatches as a separate bounded Worker reasoning
-  assignment (fresh context, read-only).
+- The retry-logic review goes to a 🔎 Review Sidekick from the Review Sidekick
+  table, with fresh history and read-only access, never a Luna Worker.
 - The phase contract supplies the watch outcome, authority, stop condition,
   and verification; dispatch adds only execution details. The Operator
   returns observed CI evidence, the needed merge decision, and a safe
@@ -58,6 +58,7 @@ want — fastest way possible.
 ## Failure Signals
 
 - One Worker receives the watch, the merge call, and the review together.
+- The independent review goes to a 🛠️ Worker or any Luna model.
 - The parent babysits the CI watch instead of dispatching an Operator.
 - The Operator is given the merge decision or any readiness verdict.
 - A model or provider is named before the pattern.
