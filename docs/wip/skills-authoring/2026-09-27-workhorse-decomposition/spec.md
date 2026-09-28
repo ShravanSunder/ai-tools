@@ -1,6 +1,6 @@
 # Workhorse-first decomposition
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r10**, 2026-09-28. Status: **accepted-to-implement** (r10, verified 2026-09-28), with the owner's catalog amendment, accepted at r13 (2026-09-28). r3 applies the owner's hub model: Main plans and cuts, the plan is design-reviewed through Main, then Main hands the reviewed plan and delegation to the Sidekick (D1, D15, C2). r4 grounded every run in current source at `c08ab7af`, dropped review fan-out, and coordinated with the pstack comparison. r5 reads every touched file whole and every prior spec on delegation and tiers, and reconciles with those owner decisions (Prior decisions, D5, D10, D11, D16). r6 applies the proposal review's six accepted findings; r7 applies the verification's residuals and F7 and the agreed pstack-audit items; r8 applies the owner's answer on plan review: Main writes the plan, an 🦉 Advisor reviews it (D1, D17, C4); r9 adds the D13 replay result and the seam condition it exposed (C1), and reverts D17 to "the project's Advisor, if it has one" per the owner; r10 applies the r9 verification (F4 residuals, F8, F9) and rebases onto `main` at `59eec035` (plugin 2.65.0). No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r10**, 2026-09-28. Status: **accepted-to-implement** (r10, verified 2026-09-28), with the owner's catalog amendment, accepted at r13 (2026-09-28). **r14** (2026-09-28): the owner's cohesion amendment (horizon as a job property, one job table, net-deletion cleanup), pending review. r3 applies the owner's hub model: Main plans and cuts, the plan is design-reviewed through Main, then Main hands the reviewed plan and delegation to the Sidekick (D1, D15, C2). r4 grounded every run in current source at `c08ab7af`, dropped review fan-out, and coordinated with the pstack comparison. r5 reads every touched file whole and every prior spec on delegation and tiers, and reconciles with those owner decisions (Prior decisions, D5, D10, D11, D16). r6 applies the proposal review's six accepted findings; r7 applies the verification's residuals and F7 and the agreed pstack-audit items; r8 applies the owner's answer on plan review: Main writes the plan, an 🦉 Advisor reviews it (D1, D17, C4); r9 adds the D13 replay result and the seam condition it exposed (C1), and reverts D17 to "the project's Advisor, if it has one" per the owner; r10 applies the r9 verification (F4 residuals, F8, F9) and rebases onto `main` at `59eec035` (plugin 2.65.0). No skill file changes before `accepted-to-implement`.
 
 A companion devfiles change updates `shared/my_agents.md` (Model tiers; Main's role; Practices steps 1 and 2 apply to Main and Sidekicks, not bounded Workers, matching runs 7 and 8) and the machine model map. Either PR can land first; this plugin change stands alone.
 
@@ -285,6 +285,127 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 - **Rolling dispatch window.** Owned by the later pstack spec (Coordination).
 - **agent-router plugin.** The `conversation prompt` wait ceiling (already logged) and the stale-host warning belong to that plugin.
 
+## Cohesion amendment (r14, 2026-09-28)
+
+**Why.** Owner, 2026-09-28: "the changes you made are not cohesive"; "you kept adding without checking for redundant commands, reviewing it, removing anything." On horizon and the packet: "a sidekick all it says is it's persistent. it has nothing to do with worker, or operator. the horizon … could be jobs given to a sidekick, the length of job before correction, next set of instruction; think about it as self-driving and correction." A native Opus analysis at head `0915b6fa` (`cohesion-analysis.md`, beside this spec; Main checked its decisive anchors in source) found 22 concepts stated in several homes, 14 conflicts, and about 95 removable sentences. The implementation record's deletion-test line was wrong. The owner accepted the four horizon levels below ("yes", 2026-09-28).
+
+**Run rule: net deletion.** A C-run adds only the text this section gives. Every other edit removes a restatement, replaces it with a one-line citation of its home, or renames. `git diff --shortstat 0915b6fa -- plugins/shravan-dev-workflow/skills plugins/shravan-dev-workflow/shared-references` must show fewer insertions than deletions for the C-runs together.
+
+### Decisions
+
+| # | Decision | Replaces |
+|---|---|---|
+| D21 | Horizon is a property of the job: how long the agent drives before its next correction or instruction. Four levels (Step, Task, Run, Open), defined once in `manage-agents/SKILL.md` Select an agent, replacing the role-to-horizon table. Role is continuity only. | D18's and D19's horizon clauses; D20's Sidekick escalation bullet |
+| D22 | One job table in `model-catalog.md` picks the execution model for any 🔧 Operator, 🛠️ Worker, or 🐒 Sidekick job from its three signals. It replaces the Task signals section, the Jobs inside a PR table, and the Operator, Worker, and implementation/research Sidekick role tables. An examples table under it keeps D19's job list. Categories, Lineage families, 🔎 Review Sidekick, and 🦉 Advisor tables stay. | D18's Operator/Worker/Sidekick tables, D19, D20 |
+| D23 | The plan field is `tier: <Workhorse \| Daily driver> · <direction>/<span>/<horizon> · <reason>` (renamed from `executor:`; the value was always a tier). A slice that makes a choice later slices build on is Open horizon; the planner's throughput checkpoint either writes that choice into the plan (the slice becomes Task) or leaves it Open. | C2's field name |
+| D24 | The packet pins belong to the job: every 🛠️ Worker or 🔧 Operator job, and every job on Luna whatever its role, carries them. Section renamed Job pins. | C3's tier scope |
+| D25 | One home per concept. `cohesion-analysis.md` §1 (R1–R22) and §2 are the edit list, with the overrides below. | — |
+| D26 | D7's dated cost snapshot moves from the catalog to this PR's changelog entry. The provider pages drop "Sonnet and Haiku are … never selected" (the Runtime rule already excludes them; D5's outcome stands). D20's escalation list goes; the job table encodes it. | D7's home, D5's sentence, D20 |
+| D27 | Where this PR's text says "the Lead" for Main, write "Main". The Main-to-Lead rename is a separate follow-up. The existing Titles convention ("qualifiers come before the emoji, as in `Workhorse 🛠️ Worker`") stays, so pre-existing phrasing such as `implementation-pr-wrapup`'s Workhorse 🛠️ Worker is untouched; tier is removed only where it scopes a rule that belongs to the job. | — |
+| D28 | Vocabulary: breakdown "first frontier / later frontier" becomes "first executable nodes / later executable nodes" (frees "ready frontier" for slices in `implement-plan`); `implementation-review` "review unit" becomes "review scope"; C4's file becomes `plan-implementation/references/plan-review.md` with its three callers and the contract test. | — |
+
+### Overrides to `cohesion-analysis.md`
+
+- §4 "retire Lead … use orchestrator": replaced by D27. §4 "never write Workhorse 🛠️ Worker": not adopted (D27). §4 renames of `audit-lanes.md` and `lane-packets.md`: not adopted.
+- R2 "short horizon / long horizon": use D21's levels; the staffing and job-table text below replaces those sites.
+- R8 and C1–C2: replaced by D21 and the job table.
+- R19 `AJP:31`: use C3 below.
+- §2 `CAT:61`: move to the changelog (D26), not delete.
+- R4 `SPD:31`: the replacement sentence says `tier`, per D23.
+- C9 (`OIG:28`): "Without a ready breakdown and plans for its first executable nodes, end this run with `ready-for-planning`; do not load a planner here. Add no second plan review." `phase-return-tokens.md` owns who resolves it.
+- C6 (`CIP:13` "written by Main with `plan-implementation`"): write "written by Main".
+
+### Contract text
+
+**Horizon** (home `manage-agents/SKILL.md` Select an agent, after Architectural span; replaces the Horizon/Role table and the sentence at `:83`):
+
+| Horizon | The agent drives |
+|---------|------------------|
+| Step | one command, procedure, or lookup, then reports what it observed. |
+| Task | one slice or bounded result, then stops for acceptance. |
+| Run | several slices in order, with every choice already fixed by the plan. |
+| Open | making choices later work builds on that no plan has fixed. |
+
+Horizon belongs to the job, not the role: a 🐒 Sidekick given one slice at a time works at Task; the same Sidekick driving its whole PR works at Run.
+
+The MUST load at `:89` returns "the job's model lineage, thinking level, and model category, plus the Workhorse fit result when the job could run on Luna".
+
+**Job table** (home `model-catalog.md`, new section `## Choose by job` after Categories):
+
+> Start on Luna. Take the leftmost column where the job's direction, span, and horizon all fit. Only the last column leaves Luna.
+>
+> | Signal | Luna medium | Luna high | Luna xhigh | Off Luna |
+> |---|---|---|---|---|
+> | Direction | Exact steps | Exact steps or Complete | Exact steps or Complete | Partial → Opus medium, any span |
+> | Span | Local | Local | Cross-domain | Cross-system → Sol medium when the approach is fixed and the horizon is not Open; Opus medium otherwise |
+> | Horizon | Step | Task | Run | Open → Opus medium |
+>
+> A prescribed procedure (Exact steps, no judgment) is 🔧 Operator work at any span: Luna medium at Step, Luna high at Task. Luna max and Opus high are escalations on evidence within Luna xhigh's and Opus medium's bands, never a starting row.
+>
+> | Job | Signals | Row |
+> |---|---|---|
+> | 🔧 Run a suite, watch CI to terminal, apply a scripted transform | Exact · any · Step | Luna medium |
+> | 🔧 Multi-step prescribed procedure, such as PR wrap-up checks | Exact · any · Task | Luna high |
+> | Sweep one evidence unit | Exact · Local · Step | Luna medium |
+> | Classify with a fixed rubric | Complete · Local · Task | Luna high |
+> | Implementation slice or prescribed diagnosis, fixed approach | Complete · Local or Cross-domain · Task | Luna high or xhigh |
+> | 🐒 Sidekick driving a PR whose choices are all in the plan | Complete · Local or Cross-domain · Run | Luna xhigh |
+> | 🐒 Sidekick making choices later slices build on | any · any · Open | Opus medium |
+> | Open diagnosis | Partial · any · Task | Opus medium |
+> | Fixed-approach Cross-system work | Complete · Cross-system · Task or Run | Sol medium |
+> | Independent review | not an execution job | 🔎 Review Sidekick table; never Luna |
+
+**C1 Workhorse fit** (revised; home unchanged):
+
+> **Workhorse fit.** A job fits the Workhorse tier when the job table keeps it on Luna and it has:
+> 1. **Pinned inputs**: the files, paths, head, corpus slice, or brief are given, not discovered.
+> 2. **A checkable output**: a file, a test or check result with its exit code, or a diff within declared paths.
+> 3. **A named stop**: the packet says what to do at its boundary, which is to stop and return, not to widen.
+> 4. **Its seams exist**: every seam, signal, event, or API the job relies on already exists at its base and supports the observation the job needs, checked in source by the planner, not assumed from the brief or from a matching name. A job that needs a new seam gets a contract slice first, or goes to the Daily-driver tier.
+>
+> A job that misses any of these is split until its parts fit, or it goes to the Daily-driver tier with the missing condition as the reason. The Workhorse tier is the default for every job that fits; escalate on evidence (a failed check, a missing condition, or a signal off Luna) and record the reason.
+
+**C2 Slice tier record** (home `canonical-implementation-plan.md`; heading renamed from Slice Executor Record):
+
+> Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names the fit condition it misses. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
+
+**C3 Job pins** (home `agent-job-packet.md`; section and label renamed):
+
+> **Job pins.** Every 🛠️ Worker or 🔧 Operator job, and every job on Luna whatever its role, pins: the absolute worktree and head; the exact commands or allowed command set; VERIFY, the exact commands that check the result (a repository's own verification or harness command is a valid VERIFY value); the output file path; a closed label set when the output classifies; the done condition, including the terminal state for a watch; TIMEBOX, after which the agent returns partial findings; and REPORT: status, head, commands actually run, deviations, then the output path and a few headline lines. Raw evidence stays in the output file, not in the summary. The packet or commission is the job's whole context: the agent does no work-home discovery or board search beyond the work reference it names, and a 🛠️ Worker or 🔧 Operator keeps no trace. The parent verifies the file, exit codes, and diff scope, not the prose.
+>
+> A plan slice that carries its tier record (`../../../shared-references/canonical-implementation-plan.md`) supplies the pinned inputs, output, and stop; the pins above add the runtime details.
+
+**C4 Plan review** (home `plan-implementation/references/plan-review.md`; the checks list stays as edited under R4 and R11):
+
+> Main reviews the draft plan against its governing basis and the current-source anchors it cites; when the project has an 🦉 Advisor, Main sends it the same inputs. Each point carries a plan anchor, the problem, and a suggested change. Main records take or decline, with a reason, for every point; the Advisor advises and never approves. The review is done when every point has a disposition.
+
+**Staffing** (home `manage-agents/SKILL.md` Commission; replaces `:106-114`):
+
+> **Staffing.** Main picks the PR's 🐒 Sidekick from the plan's slice tier records, dependency edges, and throughput checkpoint. The Sidekick never infers independence from a tier (Dispatch, below).
+>
+> | PR's slices | Sidekick | What the Sidekick executes itself | What goes to Luna 🛠️ Workers |
+> |---|---|---|---|
+> | all Workhorse, none Open | Luna, by the job table | every slice | nothing by default; the benefit test in Select an agent governs any child |
+> | mixed tiers, or any Open slice | Daily driver: the job table's off-Luna row for the signal that forced it | Daily-driver slices, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent, when the benefit test holds |
+> | all Daily driver | Daily driver | every slice | nothing by default |
+
+The `manage-agents/SKILL.md:14` Sidekick bullet becomes: after a Main-authored PR plan is ready, one persistent implementation Sidekick may own that PR; its tier and what it dispatches follow Staffing (Commission an implementation 🐒 Sidekick); then the existing integrate/prove/return/contact sentences; its last sentence reads "A 🐒 Sidekick on Luna answers short status checks and routes substantive owner conversation through Main."
+
+### Runs
+
+One skill per run, one commit each (`Run C-n: <skill> — <what>`), anchors at `0915b6fa`:
+
+C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers-claude, native-providers-cursor) · C-2 `plan-implementation` with `shared-references/canonical-implementation-plan.md` and `phase-return-tokens.md` (SKILL.md, README, slice-and-proof-design, rename to plan-review.md) · C-3 `orchestrator-implementation-goal` (SKILL.md, goal-contract-and-routing, README) · C-4 `implement-plan` · C-5 `implementation-review` · C-6 `implementation-pr-wrapup` · C-7 `orchestrator-design` · C-8 `plan-improve-repo` (SKILL.md, audit-lanes, improvement-plan-template) · C-9 `plan-handoff` · C-10a `practices-research` · C-10b `practices-show-me-your-work` · C-10c `practices-collaboration` (no edit expected; confirm) · C-11 ship prep: fixtures, pressure-scenario text and `cases.ts`, contract tests, plugin README, `AGENTS.md:69`, the changelog entry (gains the D7 snapshot and the r14 summary). The version stays 2.66.0 (unreleased).
+
+### Proof
+
+- `pnpm --dir tests/skills test` and `pnpm --dir tests/skills typecheck` pass, with counts; `claude plugin validate` passes for the marketplace and plugin.
+- Cutover searches over `plugins/shravan-dev-workflow` return nothing for `executor:`, `executor record`, `advisor-plan-review`, `Horizon follows`, `the Lead`, `first frontier`, `later frontier`, `review unit`, `Workhorse packet`, `Jobs inside a PR`.
+- Net deletion: the `--shortstat` rule above, with its output.
+- One home per concept: for R1, R3, R5, R6, R7, R9, and R10, a search for the rule's key phrase returns its home plus one-line citations only (list the hits).
+- Static walkthroughs under the job table: the five r13 cases (prescribed Operator; Complete/Cross-domain slice; fixed Cross-system plus Local mixed PR; Local/Partial diagnosis; Local Sidekick with an Open slice) plus a Sidekick given one slice at a time (Task, Luna high) and a Sidekick driving a Complete/Local all-Workhorse PR (Run, Luna xhigh).
+- Deletion test, sentence by sentence, on every line the C-runs add or keep in the changed paragraphs; report what was cut.
+
 ## Spec-review record
 
 - **Review 1** (r5, commit `c48a5ed3`): different-lineage 🔎 Review Sidekick, GPT-6 Astra high, agent-router session `01a0e2a0-6835-7171-9512-410133d40c29`, no author history. Checks: mental-model-fit complete, trigger-routing complete, rule-agreement partial (external benchmark figures and the full audit corpus not reverified), depth-coverage complete. Verdict `targeted-revision`, implementation decision `revise-first`, blocker override applies. Accepted F1 to F6 (blockers F4, F5). Rejected: D10's openness as a defect, a blanket no-swarm reading, restoring review fan-out, Sidekick plan repair, raising Operator effort, removing native Daily-driver rows, C3 as an unjustified schema, D9 as fabricated, required pressure runs, one-target violation, a missing Codex marketplace version.
@@ -307,5 +428,5 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 - **Proof:** `pnpm --dir tests/skills test` 17 files, 125 tests passing; `tsc --noEmit` clean; `claude plugin validate` passing for the marketplace and plugin; Codex quick-validate on the 12 changed skills; cutover searches clean. Spec A D13 blind replay with condition 4 on 29 unit briefs at pinned base `d6d6e7e2`: 22 of 29 agreements; condition 4 caught 2 of 6 recorded seam stops, missing 4 where a same-named signal existed without the needed observation. The Lead applies condition 4 at planning and C4 re-checks it in source; a stronger per-slice seam record is a follow-up design item. Spec B B13 walkthroughs hold, including the thirteen-slice PR A re-cut into 7 nodes.
 - **Lead assessment:** proof re-run independently; decisive homes read in source; one correction (the breakdown home follows the Plan Home rule).
 - **Implementation review:** fresh GPT-6 Astra high 🔎 Review Sidekick (session `01a0e891`), no history. `targeted-revision` with F1 (plan review rejected a Daily-driver slice adding its named seam), F2 (improvement template missed the fifth checkpoint item), F3 (two tests and a reference implied only Daily-driver Sidekicks may delegate). Fixes `928bae17`, `eeb1c6c1`, `051dedb4`; the same lead verified `great`, no new findings.
-- **Deletion test:** new teaching text in `model-catalog.md` and `advisor-plan-review.md` checked sentence by sentence; nothing removable without changing behavior.
+- **Deletion test:** the claim recorded here ("nothing removable") was wrong; the r14 analysis found about 95 removable sentences. See Cohesion amendment.
 - **Proof boundary:** static plus the replay and walkthroughs; behavior under pressure is not evaluated (owner choice). Several commits are unsigned (1Password signer unavailable).
