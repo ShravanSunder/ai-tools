@@ -28,12 +28,12 @@ Use a compact plan for one low-risk owner and one or two proof gates. Use a full
 
 ## Record Each Slice's Tier
 
-Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`; the contract lives in `../../../shared-references/canonical-implementation-plan.md`. Decide the tier with Workhorse fit in `../../manage-agents/references/model-catalog.md`; a Daily-driver slice names its reason for leaving Luna.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`; the contract lives in `../../../shared-references/canonical-implementation-plan.md`. Decide the tier with Workhorse fit in `../../manage-agents/references/model-catalog.md`; a Daily-driver slice names its reason for leaving the Workhorse tier.
 
 Cut the work so the record is honest:
 
 - A slice that bundles independent units is split into one slice per unit.
-- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, and tag it Daily driver only with a reason from Leaving Luna in the catalog.
+- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, and tag it Daily driver only with a reason from Leaving the Workhorse tier in the catalog.
 
 ## Throughput Checkpoint
 

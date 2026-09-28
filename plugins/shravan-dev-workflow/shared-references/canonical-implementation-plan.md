@@ -95,7 +95,7 @@ Every plan includes its result, governing basis, delivery context with its break
 
 ## Slice Tier Record
 
-Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names its reason for leaving Luna: `owner recommended`, `judged tough: <why>`, or `Luna failed: <evidence>`. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a Daily-driver slice names its reason for leaving the Workhorse tier: `owner recommended`, `judged tough: <why>`, or `Workhorse failed: <evidence>`. The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect; the implementer does not re-cut it.
 
 Workhorse fit lives in `../skills/manage-agents/references/model-catalog.md`.
 
