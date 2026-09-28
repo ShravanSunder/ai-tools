@@ -18,7 +18,7 @@ status question, then try to continue into a product discussion.
 
 $shravan-dev-workflow:manage-agents
 
-Chat only; do not contact another agent or edit files. A Luna implementation
+Chat only; do not contact another agent or edit files. A Workhorse-tier implementation
 Sidekick is executing a ready plan while the owner works elsewhere. The owner directly asks,
 "What is the current status?" and then, "Walk through the product tradeoffs
 with me and decide whether we should change the public API." State what the

@@ -257,7 +257,7 @@ export const skillPressureCaseDefinitions = [
       {
         name: "returns-workhorse-stop-as-plan-defect",
         requirement: "Returns the Workhorse boundary stop as a plan-defect to the originating planner with the missing-seam evidence, without re-cutting the slice or re-running it on a bigger model.",
-        failureExample: "Widens the slice to add the missing hook, or re-runs it on Opus or Sol without a planner decision.",
+        failureExample: "Widens the slice to add the missing hook, or re-runs it on a Daily-driver model without a planner decision.",
       },
     ],
   },

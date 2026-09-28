@@ -64,12 +64,12 @@ export const skillPressureCaseDefinitions = [
       {
         name: "keeps-deep-audit-in-parent-by-default",
         requirement: "Uses the audit categories as parent-owned coverage dimensions and does not dispatch a whole category, or dispatch merely because the flow is deep and agents are available.",
-        failureExample: "Turns every audit category into a helper lane, swarm, or Luna Worker.",
+        failureExample: "Turns every audit category into a helper lane, swarm, or Workhorse Worker.",
       },
       {
         name: "preserves-conditional-delegation-boundary",
         requirement: "Delegates only evidence units that pass Workhorse fit, cut after recon, through manage-agents, and verifies each return before it counts toward its category.",
-        failureExample: "Dispatches a whole category, or a unit that fails Workhorse fit, to a Luna Worker; or treats broad scope, category count, or agent availability as delegation authority.",
+        failureExample: "Dispatches a whole category, or a unit that fails Workhorse fit, to a Workhorse Worker; or treats broad scope, category count, or agent availability as delegation authority.",
       },
     ],
   },

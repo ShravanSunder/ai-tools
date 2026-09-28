@@ -5,7 +5,7 @@ skill_under_test: shravan-dev-workflow:manage-agents
 mode: fast
 expect_read_only: true
 expect_artifact: false
-expect_decision_regex: luna.{0,80}xhigh.{0,80}workhorse|workhorse.{0,80}luna.{0,80}xhigh
+expect_decision_regex: workhorse.{0,80}xhigh|xhigh.{0,80}workhorse
 expect_decision_regex: sidekick.{0,150}workhorse|workhorse.{0,150}sidekick
 expect_proof_regex: (well-understood|complete direction|exact steps).{0,160}workhorse|workhorse.{0,160}(well-understood|complete direction|exact steps)
 expect_forbidden_regex: (luna|workhorse).{0,80}(never|not|cannot|can't|isn't|is not).{0,40}sidekick|sidekick.{0,80}(never|not|cannot|can't).{0,40}(luna|workhorse)
@@ -26,17 +26,17 @@ parser, validation, and reporting modules of one owner, the config loader. Every
 slice records `tier: Workhorse · Complete/Local/Task`, with pinned files,
 exact checks, and a named stop; every seam it uses exists at the base; and every
 choice a later slice depends on is written in the plan. An existing session
-uses OpenAI Luna xhigh; check whether it fits before reusing
+uses the Workhorse tier at xhigh; check whether it fits before reusing
 it. Tell me the role, model category, lineage, thinking, and the reason for
 that choice.
 
 ## Expected Compliant Behavior
 
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
-- Choose by job gives this 🐒 Sidekick job Luna xhigh: it drives the whole PR
+- Choose by job gives this 🐒 Sidekick job the Workhorse tier at xhigh: it drives the whole PR
   (Complete · Local · Run; modules of one owner are Local), one demanding signal
   (Run), so the existing xhigh session fits.
-- An all-Workhorse PR gets a Luna
+- An all-Workhorse PR gets a Workhorse-tier
   Sidekick under the staffing table in the Commission section, and that
   Sidekick executes every slice directly.
 
@@ -44,4 +44,4 @@ that choice.
 
 - Rejects Workhorse for this implementation 🐒 Sidekick or says the category cannot be persistent.
 - Staffs a one-shot 🛠️ Worker solely to keep Workhorse legal.
-- Rejects the Luna xhigh effort Choose by job gives, or picks high or max for this one-signal job.
+- Rejects the xhigh effort Choose by job gives, or picks high or max for this one-signal job.

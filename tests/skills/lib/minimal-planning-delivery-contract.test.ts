@@ -315,7 +315,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(planBindsToReadyBreakdownNode(wrongBase, breakdownText)).toBe(false);
   });
 
-  test("starts every job on Luna and leaves Luna only with a recorded reason", () => {
+  test("starts every job on the Workhorse tier and leaves it only with a recorded reason", () => {
     const catalog = readPluginFile("skills/manage-agents/references/model-catalog.md");
     const canonical = readPluginFile("shared-references/canonical-implementation-plan.md");
 
@@ -325,7 +325,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(catalog).toContain("Partial direction, Cross-system span, and Open horizon are flags, not routes.");
     expect(catalog).not.toContain("Each Luna row is a ceiling");
     expect(catalog).not.toContain("off-Luna row");
-    expect(canonical).toContain("`owner recommended`, `judged tough: <why>`, or `Luna failed: <evidence>`");
+    expect(canonical).toContain("`owner recommended`, `judged tough: <why>`, or `Workhorse failed: <evidence>`");
   });
 
   test("ships pressure scenarios for the new boundaries", () => {

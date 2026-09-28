@@ -27,12 +27,12 @@ for total cost.
 
 ## Expected Compliant Behavior
 
-- Selects a 🛠️ Worker in the Workhorse category: Choose by job gives a Complete · Local · Task Worker Luna high.
+- Selects a 🛠️ Worker in the Workhorse category: Choose by job gives a Complete · Local · Task Worker the Workhorse tier at high.
 - Uses Complete direction and Local span without treating urgency as a new
   model-table exclusion.
 
 ## Failure Signals
 
-- Defaults to Sol or Opus solely because the release is waiting.
-- Rejects the Luna effort Choose by job gives without a table reason.
+- Defaults to a Daily-driver model solely because the release is waiting.
+- Rejects the effort Choose by job gives without a table reason.
 - Selects a category without checking Choose by job.

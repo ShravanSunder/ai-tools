@@ -114,17 +114,17 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-custom-agent-boundary.md` | Do not overload custom-agent invocation with adapter building; split agent-registry from building-custom-agents and route sensitive surfaces. |
 | `manage-agents` | `manage-agents-pattern-selection.md` | Do not choose ACPX commands before selecting the right subordinate-agent pattern: swarm, persistent sidekick, advisor, ephemeral subagent, or workflow handoff. |
 | `manage-agents` | `manage-agents-main-default-after-ready-plan` | Keep Main as the default conversation while the 🐒 Sidekick executes under the staffing table, with direct Sidekick contact available only by explicit user choice. |
-| `manage-agents` | `manage-agents-no-relay-supervisor` | Keep coupled implementation/proof with the Sidekick, send a plan-marked independent Workhorse slice to a Luna Worker under a mixed-tier Daily-driver Sidekick, and avoid relay-only supervisors. |
+| `manage-agents` | `manage-agents-no-relay-supervisor` | Keep coupled implementation/proof with the Sidekick, send a plan-marked independent Workhorse slice to a Workhorse Worker under a mixed-tier Daily-driver Sidekick, and avoid relay-only supervisors. |
 | `manage-agents` | `manage-agents-design-phase-not-sidekick-author.md` | Design-phase assignment does not pick a 🛠️ Worker or Sidekick as Requirements, Specification, or Program Design author. |
 | `manage-agents` | `manage-agents-native-reviewer-uses-spawn` | Do not hop a Codex reviewer to `codex exec --sandbox read-only` when native `spawn_agent` is available; packet read-only is enough. |
 | `manage-agents` | `manage-agents-foreign-lineage-uses-agent-router` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailability; route Fable as a persistent Claude relationship over agent-router with a resolved Claude Fable 5.x id, ACPX only on a recorded gap. |
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
 | `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | When agent-router has no Claude endpoint and ACPX is the legacy route, do not stop a Frontier Fable review with `--timeout 120`; retrieve the named session instead. |
-| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Luna xhigh choice against Choose by job and the staffing table for an all-Workhorse Local PR the Sidekick drives at Run. |
+| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Workhorse xhigh choice against Choose by job and the staffing table for an all-Workhorse Local PR the Sidekick drives at Run. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | A Workhorse 🐒 Sidekick answers a short status check and returns a material design decision to Main. |
-| `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch takes Luna medium, the Operator band in Choose by job. |
-| `manage-agents` | `manage-agents-luna-background-fix` | Choose by job keeps a well-understood local fix on Workhorse (Luna high). |
+| `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch takes the Workhorse tier at medium, the Operator band in Choose by job. |
+| `manage-agents` | `manage-agents-luna-background-fix` | Choose by job keeps a well-understood local fix on the Workhorse tier at high. |
 | `manage-agents` | `manage-agents-cursor-host-operator-uses-agent-router-luna` | On a Cursor host, an Operator procedure uses Luna through agent-router, not a Cursor native model. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |

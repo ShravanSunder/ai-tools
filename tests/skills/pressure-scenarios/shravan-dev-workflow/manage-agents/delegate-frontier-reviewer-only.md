@@ -38,7 +38,7 @@ slice with a Sidekick — this is important, so use Astra there too.
 - Skill is invoked; each job names 🐒 Sidekick before any model.
 - The design review stays a 🐒 Sidekick and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice stays an implementation 🐒 Sidekick that starts on Luna (Choose by job; a Daily driver only with a recorded reason),
+- The implementation slice stays an implementation 🐒 Sidekick that starts on the Workhorse tier (Choose by job; a Daily driver only with a recorded reason),
   not Astra; importance is not a reason.
 - The role boundary is named.
 

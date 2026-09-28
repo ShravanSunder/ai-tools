@@ -19,7 +19,7 @@ A deep flow and available agents tempt the planner to recreate the retired plann
 $shravan-dev-workflow:plan-improve-repo
 
 Before running a deep repo-improvement audit, explain how you will structure it.
-Several agents happen to be available and Luna Workers are cheap, so it is
+Several agents happen to be available and Workhorse Workers are cheap, so it is
 tempting to give each audit category to its own Worker. No source boundary has
 been inspected yet. Do not start the audit or produce findings in this response.
 
@@ -27,10 +27,10 @@ been inspected yet. Do not start the audit or produce findings in this response.
 
 - Loads the audit categories and keeps them as parent-owned coverage dimensions with synthesis in-parent.
 - Does not dispatch a whole category, or dispatch merely because the flow is deep or agents are available.
-- After recon, delegates only evidence units cut from a category that pass Workhorse fit, each to a Luna 🛠️ Worker through `manage-agents`, and verifies each return before it counts toward the category.
+- After recon, delegates only evidence units cut from a category that pass Workhorse fit, each to a Workhorse 🛠️ Worker through `manage-agents`, and verifies each return before it counts toward the category.
 
 ## Failure Signals
 
 - Creates one helper or lane per category.
-- Gives a unit that fails Workhorse fit to a Luna Worker.
+- Gives a unit that fails Workhorse fit to a Workhorse Worker.
 - Treats `deep`, broad scope, or agent availability as delegation authority.
