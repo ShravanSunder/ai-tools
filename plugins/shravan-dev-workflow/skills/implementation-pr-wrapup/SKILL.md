@@ -7,7 +7,7 @@ description: "Use when pushing, opening, updating, monitoring, or finishing a Gi
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-Close the PR loop with current GitHub state and a reviewer-facing why-and-shape body. Green checks are one gate, not merge readiness. Independent-review coverage is not a wrap-up ready gate. Description authoring is Workhorse 🛠️ Worker judgment under Complete direction; parent gates stay mechanical. The body is HEAD-tied: a head or diff identity change re-enters description dispatch before ready.
+Close the PR loop with current GitHub state and a reviewer-facing why-and-shape body. Green checks are one gate, not merge readiness. Independent-review coverage is not a wrap-up ready gate. Parent gates stay mechanical. The body is HEAD-tied: a head or diff identity change re-enters description dispatch before ready.
 
 This is a low-thinking workflow by default: use repeatable state checks, reference files, API reads, and crisp gate decisions. Escalate reasoning only when PR state, review feedback, mergeability, security/public-artifact safety, or user authorization is ambiguous. Do not write the PR body in the parent — not at `gh pr create`, and not because a Workhorse 🔧 Operator can "jot the outline."
 
@@ -25,9 +25,9 @@ Do not use this for fresh code-review discovery. If the user asks to review a PR
 
 ## Execution Ownership
 
-The assigned implementation 🐒 Sidekick may carry its delivery assignment through this workflow, or an Operator may run the authorized prescribed wrap-up procedure. Either executor returns current PR gate evidence to Main, which retains final acceptance and whole-goal disposition; merge still requires explicit user authority. Description drafting remains Workhorse Worker work. An Operator that lacks the required draft or encounters a semantic decision returns that need to its assigning agent instead of authoring the draft, deciding the issue, or acquiring delegation authority.
+The assigned implementation 🐒 Sidekick may carry its delivery assignment through this workflow, or an Operator may run the authorized prescribed wrap-up procedure. Either executor returns current PR gate evidence to Main, which retains final acceptance and whole-goal disposition; merge still requires explicit user authority. An Operator that lacks the required draft or encounters a semantic decision returns that need to its assigning agent instead of authoring the draft, deciding the issue, or acquiring delegation authority.
 
-One run wraps up one PR. Independent PRs wrap up separately, each on its own branch. A stack wraps up per layer from its lowest layer up through `gh stack`: each layer's base is its parent PR, and after a lower layer changes, `gh stack rebase` then `gh stack submit` moves every layer above it to a new head, which re-enters description dispatch and the gates for those layers.
+One run wraps up one PR. Independent PRs wrap up separately, each on its own branch. A stack wraps up per layer from its lowest layer up through `gh stack`: after a lower layer changes, `gh stack rebase` then `gh stack submit` moves every layer above it to a new head, which re-enters description dispatch and the gates for those layers.
 
 ## Core Flow
 
@@ -47,7 +47,7 @@ One run wraps up one PR. Independent PRs wrap up separately, each on its own bra
      Instance authority is equal to or narrower than the lane maximum: draft the body file under tmp only; no push, merge, readiness claim, comment replies, or `gh pr edit`.
      Return complete | partial | blocked receipt against the receipt in `references/pr-description.md`.
    ```
-   Description is Collection+Synthesis under Complete direction: Workhorse 🛠️ Worker drafts Why, Special things to note, and views. Do not apply manage-agents Operator PR-ops to that draft. Workhorse Operator is the monitor. Operator publishes only the already-verified tmp file with `gh pr edit --body-file`.
+   Do not apply manage-agents Operator PR-ops to that draft. Workhorse Operator is the monitor. Operator publishes only the already-verified tmp file with `gh pr edit --body-file`.
    Parent mechanical-verifies only a `complete` receipt: the three headings are present as those exact strings; `included_views` is non-empty; the outline is not `- path — note` bullets; the receipt head SHA matches the current PR head; public-artifact-safety holds. Do not require catalog tokens to equal outline heading text. Parent does not re-pick views or rewrite Why / Special things to note. Then dispatch an Operator to `gh pr edit --body-file` the verified tmp file. Completion: GitHub body matches the verified file, or a named blocker.
 5. Monitor checks, comments, review threads, mergeability, head SHA, and the current PR body. MUST load `references/monitor-loop.md` and return current gate state. MUST load `manage-agents` before dispatching or resuming a Workhorse 🔧 Operator monitor. When head SHA or diff identity changes, re-evaluate step 4 before claiming ready.
 6. Handle existing PR feedback. MUST load `../../shared-references/code-review-feedback-handling.md` and return the next fix, reply, ask, or route action.
