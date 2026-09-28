@@ -2,6 +2,8 @@
 
 Wait only on a real dependency, through the path that delivers it. While independent useful work remains, do that work instead.
 
+A board post alone does not wake an assignee; send the assignment directly. An armed listener still delivers board activity.
+
 ## Choose the waiting path
 
 | Dependency | Path |
