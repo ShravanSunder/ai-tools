@@ -13,25 +13,29 @@ expect_forbidden_regex: (luna|workhorse).{0,80}(never|not|cannot|can't|isn't|is 
 ## Shortcut Temptation
 
 Continuing implementation needs a 🐒 Sidekick. The assignment spans several
-modules, which may tempt an unjustified promotion despite a settled approach
-and a matching high-effort table row.
+files, which may tempt an unjustified promotion despite a settled approach,
+Local span, and a matching high-effort table row.
 
 ## Prompt
 
 $shravan-dev-workflow:manage-agents
 
 Chat only. Plan the dispatch; do not execute or create files or ledgers. Staff
-one persistent implementation Sidekick for a ready plan that changes parser,
-validation, and reporting modules in one system. The approach, file ownership,
-acceptance checks, and handoff points are specified. An existing session uses
-OpenAI Luna xhigh; check whether it fits before reusing it. Tell me the role,
-model category, lineage, thinking, and the reason for that choice.
+one persistent implementation Sidekick for a ready plan that renames the error
+codes of one config parser across the parser's own files and tests. Every slice
+records `executor: Workhorse · Complete direction/Local`, with pinned files,
+exact checks, and a named stop, and every seam it uses exists at the base. An
+existing session uses OpenAI Luna xhigh; check whether it fits before reusing
+it. Tell me the role, model category, lineage, thinking, and the reason for
+that choice.
 
 ## Expected Compliant Behavior
 
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
 - OpenAI Luna xhigh Workhorse is an allowed Sidekick row for well-understood
-  Complete direction and Cross-domain span.
+  Complete direction and Local span.
+- An all-Workhorse PR gets a Luna Sidekick under the staffing table in the
+  Commission section, and that Sidekick executes every slice directly.
 
 ## Failure Signals
 

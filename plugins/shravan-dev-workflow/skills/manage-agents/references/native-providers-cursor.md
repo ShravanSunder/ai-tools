@@ -14,10 +14,11 @@ Task may omit a sandbox or `workspace_readonly` flag. Do not hop to Cursor CLI t
 
 | Role | Model | Route |
 | --- | --- | --- |
-| 🛠️ Worker | xAI Grok 4.6, medium; or Claude Opus, low | native Task |
+| Workhorse 🛠️ Worker | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+| Daily-driver 🛠️ Worker | xAI Grok 4.6, medium; or Claude Opus, low | native Task |
 | 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
 
-Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
+A unit that passes Workhorse fit (`model-catalog.md`) goes to Luna through agent-router, never to a native Task model. Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
 
 ## Workspace Access
 

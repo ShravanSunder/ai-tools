@@ -31,7 +31,7 @@ Chat only. Main has written and accepted a ready implementation plan for one PR 
 ## Expected Compliant Behavior
 
 - Main remains the default user conversation after commission.
-- The implementation Sidekick implements and proves directly by default without Main relaying or polling every internal progress turn.
+- The implementation Sidekick executes and proves its assignment under the staffing table in the Commission section (a Luna Sidekick executes an all-Workhorse PR directly; a Daily-driver Sidekick executes its own and coupled slices) without Main relaying or polling every internal progress turn.
 - The user may explicitly choose direct contact with the assigned Sidekick inside its scope; that choice does not transfer governing authority or execution ownership.
 - Main retains Requirements, Specification, Program Design, diagrams, implementation-plan authorship, material decisions, integration, assessment, acceptance, and final report.
 - A material design/plan question returns with evidence and one exact unresolved decision; completion returns as a concise source-backed receipt.

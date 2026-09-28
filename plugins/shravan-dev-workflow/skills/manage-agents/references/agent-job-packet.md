@@ -26,6 +26,12 @@ Reader authority is stated once in the assignment contract: `workspace read-only
 
 Writer authority names the allowed paths once. Before an edit outside them, stop and report blocked; if a violation is discovered, stop and report it. Parent verification still checks the actual diff scope. How a host enforces or only declares that bound is owned by the native-provider or ACPX provider reference selected for the launch.
 
+## Workhorse packet
+
+**Workhorse packet.** A Workhorse assignment pins: the absolute worktree and head; the exact commands or allowed command set; VERIFY, the exact commands that check the result (a repository's own verification or harness command is a valid VERIFY value); the output file path; a closed label set when the output classifies; the done condition, including the terminal state for a watch; TIMEBOX, after which the Worker returns partial findings; and REPORT: status, head, commands actually run, deviations, then the output path and a few headline lines. Raw evidence stays in the output file, not in the summary. A Workhorse 🛠️ Worker or 🔧 Operator does no work-home discovery, board search, or trace; the packet is its whole context. The parent verifies the file, exit codes, and diff scope, not the prose.
+
+A unit gets this packet only after it passes Workhorse fit in `model-catalog.md`. A plan slice that carries its executor record (`../../../shared-references/canonical-implementation-plan.md`) supplies the pinned inputs, output, and stop; the packet adds the runtime pins above.
+
 ## 🔧 Operator Exception
 
 When an 🔧 Operator reaches work requiring judgment or authority, return observed evidence, the needed decision, and a safe waiting state; proceed only after authorization.
