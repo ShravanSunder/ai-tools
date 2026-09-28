@@ -224,7 +224,7 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 | 2 | `plan-implementation/SKILL.md:38` | ready record → `implement-plan` → commission | cite: the ready record carries C2; no new gate (D1) |
 | 1 | `manage-agents/SKILL.md:94-96` (Commission an implementation 🐒 Sidekick) | commission per planned PR assignment; no staffing table | rewrite: install the D16 staffing table here as its one runtime home; every other site cites this section |
 | tests | `…/manage-agents/design-phase-not-sidekick-author.md:29,31,40` | an Advisor is never an approval gate | keep: C4 keeps it true |
-| tests | `…/manage-agents/persistent-vs-single-assignment.md:66-68`, `pattern-selection-unnamed.md:19-27` | an Advisor exists because the user asked; a one-time opinion is not an Advisor | keep: the plan-review Advisor is persistent across a goal and exists by the owner's standing request |
+| tests | `…/manage-agents/persistent-vs-single-assignment.md:66-68`, `pattern-selection-unnamed.md:19-27` | an Advisor exists because the user asked; a one-time opinion is not an Advisor | keep: C4 uses the project's Advisor only when the owner already requested one |
 | ship | `AGENTS.md:69` | repo operating instruction repeats "directly by default" and the benefit wording | rewrite in ship prep (repo doc companion) |
 | fixtures | `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md:23-39`, `handoff-plan.md:23-36`, `improvement-plan.md:21-24` | ready plans with no C2 record | test-update: add a C2 record per slice so canonical admission still admits them |
 | tests | `…/implement-plan/cases.ts:13-16,35-37` | admits the exact unchanged `existing-plan.md` | test-update: stays true once the fixture carries C2 |
