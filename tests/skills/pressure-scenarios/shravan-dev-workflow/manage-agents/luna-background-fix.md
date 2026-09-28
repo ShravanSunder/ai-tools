@@ -27,7 +27,7 @@ for total cost.
 
 ## Expected Compliant Behavior
 
-- Selects a 🛠️ Worker in the Workhorse category using the matching table row.
+- Selects a 🛠️ Worker in the Workhorse category using the matching table row (Luna high: Complete direction, Local).
 - Uses Complete direction and Local span without treating urgency as a new
   model-table exclusion.
 

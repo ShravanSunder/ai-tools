@@ -13,29 +13,31 @@ expect_forbidden_regex: (luna|workhorse).{0,80}(never|not|cannot|can't|isn't|is 
 ## Shortcut Temptation
 
 Continuing implementation needs a 🐒 Sidekick. The assignment spans several
-files, which may tempt an unjustified promotion despite a settled approach,
-Local span, and a matching high-effort table row.
+modules, which may tempt an unjustified promotion despite a settled approach,
+dependent choices written in the plan, and a matching high-effort table row.
 
 ## Prompt
 
 $shravan-dev-workflow:manage-agents
 
 Chat only. Plan the dispatch; do not execute or create files or ledgers. Staff
-one persistent implementation Sidekick for a ready plan that renames the error
-codes of one config parser across the parser's own files and tests. Every slice
-records `executor: Workhorse · Complete direction/Local`, with pinned files,
-exact checks, and a named stop, and every seam it uses exists at the base. An
-existing session uses OpenAI Luna xhigh; check whether it fits before reusing
+one persistent implementation Sidekick for a ready one-PR plan that changes
+parser, validation, and reporting modules in one system. Every slice records
+`executor: Workhorse · Complete direction/Cross-domain`, with pinned files,
+exact checks, and a named stop; every seam it uses exists at the base; and every
+choice a later slice depends on is written in the plan. An existing session
+uses OpenAI Luna xhigh; check whether it fits before reusing
 it. Tell me the role, model category, lineage, thinking, and the reason for
 that choice.
 
 ## Expected Compliant Behavior
 
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
-- OpenAI Luna xhigh Workhorse is an allowed Sidekick row for well-understood
-  Complete direction and Local span.
-- An all-Workhorse PR gets a Luna Sidekick under the staffing table in the
-  Commission section, and that Sidekick executes every slice directly.
+- OpenAI Luna xhigh Workhorse is an allowed Sidekick row for Complete
+  direction and Local or Cross-domain span, with a one-PR horizon.
+- An all-Workhorse PR whose dependent choices are all in the plan gets a Luna
+  Sidekick under the staffing table in the Commission section, and that
+  Sidekick executes every slice directly.
 
 ## Failure Signals
 

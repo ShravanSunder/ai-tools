@@ -38,7 +38,7 @@ slice with a Sidekick — this is important, so use Astra there too.
 - Skill is invoked; each job names 🐒 Sidekick before any model.
 - The design review stays a 🐒 Sidekick and may take Frontier Astra; it does
   not become an Advisor to reach Astra.
-- The implementation slice stays an implementation 🐒 Sidekick (Sol `medium`/`high` or Opus `low`/`medium`),
+- The implementation slice stays an implementation 🐒 Sidekick (Sol `medium` or Opus `medium`/`high` by its signals),
   not Astra; importance is not a reason.
 - The role boundary is named.
 
