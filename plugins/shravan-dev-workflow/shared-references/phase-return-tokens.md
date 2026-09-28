@@ -19,7 +19,7 @@ A Specification gap (missing observable behavior, contract, or proof obligation)
 - When an orchestrator invoked the work, the orchestrator maps the token to the next skill in its own `SKILL.md`.
 - When the work ran directly, Main maps the token through the devfiles skill index, which carries the same rows.
 
-Main resolves both planning tokens in its own session, while PRs the defect does not touch continue.
+Main resolves `ready-for-planning` and `plan-defect` in its own session; PRs the token does not touch continue.
 
 Mapping names the next owner; it does not widen the requested task. A request that asked only for this step ends with the returned token and its payload, and the next owner starts only when the requester asks for it.
 

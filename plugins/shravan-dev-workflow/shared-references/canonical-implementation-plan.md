@@ -10,7 +10,7 @@ The `originating planner` values name the two planners: `plan-implementation`, t
 
 ## Breakdown Record
 
-A breakdown is one Markdown file per delivery, `<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main, even when it has one node. It records its admitted basis (reviewed design identities, or an admitted improvement pointer and basis class). It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
+A breakdown is one Markdown file per delivery, `<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main, even when it has one node. It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
 
 ```text
 breakdown path: <plan home>/<yyyy-mm-dd>-<slug>-breakdown.md
@@ -87,15 +87,15 @@ Optional tracking remains outside this record. At planning entry, preserve an ex
 
 ## Plan Home
 
-For every `pr-ready-unmerged` delivery, including orchestrated goals and direct continued-delivery planning, the design planner first resolves the project root, then verifies that the resolved project's ignore policy covers `tmp/*` equivalently, adds `tmp/*` to that project-root `.gitignore` only when coverage is absent, and finally writes the breakdown and one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-<node-id>.md` plan per executable node. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
+For every `pr-ready-unmerged` delivery, including orchestrated goals and direct continued-delivery planning, the design planner first resolves the project root, then verifies that the resolved project's ignore policy covers `tmp/*` equivalently, adds `tmp/*` to that project-root `.gitignore` only when coverage is absent, and finally writes the breakdown and each plan as `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-<node-id>.md`. It never uses `.git/info/exclude`, a checked-in plan home, or a user-global fallback.
 
 Direct plan-only work may use an established repository plan home. Otherwise use `docs/specs/<spec>/plans/` for durable direct planning or `<repo-root>/tmp/plan-workflows/` for temporary/advisory work. In every home, the breakdown sits beside its plans.
 
-Every plan includes its result, governing basis, delivery context with its breakdown, node, and base, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices each with its tier record, the throughput checkpoint, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
+Every plan includes its result, governing basis, delivery context, planned-at branch/HEAD, goal, scope/non-goals, current evidence, write surfaces, proof-bearing slices each with its tier record, the throughput checkpoint, necessary dependency edges, obligation-to-proof mapping, integration gates, risks, and stop/replan conditions.
 
 ## Slice Tier Record
 
-Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit; a Daily-driver slice names its escalation reason (both in `../skills/manage-agents/references/model-catalog.md`). The implementer follows the record.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit; a Daily-driver slice names its escalation reason (Workhorse fit and escalation reasons: `manage-agents`). The implementer follows the record.
 
 ## Preserve and Admit
 
