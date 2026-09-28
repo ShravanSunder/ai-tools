@@ -66,8 +66,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(contract).toContain("breakdown: <breakdown path>");
     expect(contract).toContain("node: <node id>");
     expect(contract).toContain("base: <trunk commit | parent PR head>");
-    expect(contract).toContain("## Slice Executor Record");
-    expect(contract).toContain("It lives beside its plans under the Plan Home rule below");
+    expect(contract).toContain("## Slice Tier Record");
+    expect(contract).toContain("tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>");
+    expect(contract).toContain("It lives beside its plans (Plan Home).");
     expect(contract).toContain("In every home, the breakdown sits beside its plans.");
     expect(contract).not.toContain("breakdown path: <project-root>/tmp/plan-workflows/");
     expect(contract).toContain("planning result: revision-requested | blocked");
@@ -77,12 +78,10 @@ describe("goal delivery intent hard cutover", () => {
 
     expect(planner).toContain("Establish `requested terminal: plan-only | pr-ready-unmerged`");
     expect(planner).toContain("If a direct request is ambiguous, ask once at entry");
-    expect(planner).toContain("Write the breakdown first, whole, even when it has one node");
+    expect(planner).toContain("Write the breakdown first, whole.");
+    expect(contract).toContain("written by Main, even when it has one node");
     expect(planner).toContain("choose the smallest coherent vertical grouping of slices");
-    expect(planner).toContain(
-      "If materially different cuts exist, pick one and record the choice, the alternatives, and the reason in the breakdown",
-    );
-    expect(planner).toContain("load `references/advisor-plan-review.md`");
+    expect(planner).toContain("load `references/plan-review.md`");
     expect(planner).toContain(
       "with a current, complete design review and parent-verified correction evidence under `spec-program-review`'s convergence rule",
     );
@@ -97,7 +96,6 @@ describe("goal delivery intent hard cutover", () => {
     expect(planner).toContain("return `ready-for-implementation`");
     expect(planner).toContain("without another generic approval question");
     expect(planner).not.toContain("invokes `implement-plan`");
-    expect(planner).toContain("This phase returns a token and names no orchestrator");
   });
 
   test("keeps direct improvement planning plan-only and routes orchestrated delivery through one planner", () => {
@@ -134,7 +132,7 @@ describe("goal delivery intent hard cutover", () => {
     ]) {
       expect(template).toContain(checkpointItem);
     }
-    expect(template).toContain("left to an Opus Sidekick with the reason");
+    expect(template).toContain("left to the Sidekick with the reason");
     expect(template).not.toContain("PR topology:");
     expect(template).toContain(
       "For `revision-requested` or `blocked`, return `plan identity: none`",
@@ -174,9 +172,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(orchestrator).toContain("continues immediately");
     expect(orchestrator).toContain("ready delivery plan continues immediately");
     expect(orchestrator).toContain("It never authors or repairs a plan");
-    expect(orchestrator).toContain("return `ready-for-planning` to Main");
+    expect(orchestrator).toContain("end this run with `ready-for-planning`; do not load a planner here. Add no second plan review.");
     expect(orchestrator).toContain("A stack runs through `gh stack` from its lowest layer up");
-    expect(orchestrator).toContain("Each independent PR gets its own different-lineage 🔎 Review Sidekick");
+    expect(orchestrator).toContain("Commission one 🔎 Review Sidekick per review scope in `implementation-review`");
     expect(orchestrator).not.toContain("loads `plan-implementation` itself");
     expect(orchestrator).toContain("Stop at PR-ready and unmerged by default");
     expect(orchestrator).toContain("Merge is a separately authorized extension");
@@ -279,7 +277,7 @@ describe("goal delivery intent hard cutover", () => {
       const breakdownText = readFileSync(path.join(repoRoot, binding?.breakdownPath ?? ""), "utf8");
 
       expect(planBindsToReadyBreakdownNode(planText, breakdownText), planFile).toBe(true);
-      expect(planText, planFile).toContain("executor: Workhorse");
+      expect(planText, planFile).toContain("tier: Workhorse");
       expect(planText, planFile).toContain("## Throughput Checkpoint");
       expect(breakdownText, planFile).not.toMatch(/-plan\.md|PR #\d+/);
     }
@@ -312,7 +310,7 @@ describe("goal delivery intent hard cutover", () => {
       "orchestrator-design/ready-plan-keeps-main-default-contact.md",
       "manage-agents/main-default-after-ready-plan.md",
       "manage-agents/no-relay-supervisor.md",
-      "implement-plan/follows-slice-executor-record.md",
+      "implement-plan/follows-slice-tier-record.md",
       "spec-program-review/one-review-one-remediation.md",
       "implementation-review/stops-when-not-converging.md",
       "skills-creation/review-stages-converge.md",

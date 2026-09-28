@@ -24,7 +24,7 @@ Chat only. Requirements, Specification, and Program Design are current, separate
 
 ## Expected Compliant Behavior
 
-- Main loads `plan-implementation` and authors the breakdown and first-frontier PR plans, then hands them to `orchestrator-implementation-goal`, which commissions the implementers; `orchestrator-design` commissions no Sidekick.
+- Main loads `plan-implementation` and authors the breakdown and the PR plans for its first executable nodes, then hands them to `orchestrator-implementation-goal`, which commissions the implementers; `orchestrator-design` commissions no Sidekick.
 - Main remains the default user conversation and retains all governing design, diagram, and plan authorship plus material decisions, integration, assessment, and acceptance.
 - Once commissioned by the delivery goal, each PR's implementation Sidekick owns implementation, associated proof, and corrections; the user may explicitly choose direct contact inside its assignment.
 - Material design/plan questions, integration conflicts, permission boundaries, and concise completion evidence return to Main; Main does not relay or poll every internal progress turn.

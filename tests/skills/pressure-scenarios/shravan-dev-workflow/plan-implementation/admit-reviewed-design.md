@@ -27,7 +27,7 @@ The governing artifacts are `tests/skills/fixtures/minimal-planning-delivery/req
 
 - Loads and preserves all three distinct design identities and the exact ready review identities.
 - Re-anchors paths, owners, interfaces, commands, tests, and proof seams against current source.
-- In this fast read-only characterization, returns the breakdown candidate and the first frontier's per-PR plan candidates, each with proof-bearing slices, obligation/proof mapping, meaningful edges, integration gates, and stop conditions.
+- In this fast read-only characterization, returns the breakdown candidate and the per-PR plan candidates for its first executable nodes, each with proof-bearing slices, obligation/proof mapping, meaningful edges, integration gates, and stop conditions.
 - States that the completed immutable plan path, canonical ready record, governing basis, and delivery context must be produced in a write-enabled run; does not fabricate a path, digest, or delivery selection or use `plan identity: none` after successful admission.
 - Stops before tickets, implementation, handoff, Git, or PR work.
 

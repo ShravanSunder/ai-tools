@@ -23,7 +23,7 @@ $shravan-dev-workflow:manage-agents
 Chat only. Plan the dispatch; do not execute or create files or ledgers. Staff
 one persistent implementation Sidekick for a ready one-PR plan that changes
 parser, validation, and reporting modules in one system. Every slice records
-`executor: Workhorse · Complete direction/Cross-domain`, with pinned files,
+`tier: Workhorse · Complete/Cross-domain/Task`, with pinned files,
 exact checks, and a named stop; every seam it uses exists at the base; and every
 choice a later slice depends on is written in the plan. An existing session
 uses OpenAI Luna xhigh; check whether it fits before reusing
@@ -34,8 +34,9 @@ that choice.
 
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
 - OpenAI Luna xhigh Workhorse is an allowed Sidekick row for Complete
-  direction and Local or Cross-domain span, with a one-PR horizon.
-- An all-Workhorse PR whose dependent choices are all in the plan gets a Luna
+  direction and Local or Cross-domain span at Run horizon (it drives its whole PR
+  with every choice fixed by the plan).
+- An all-Workhorse PR with no Open slice gets a Luna
   Sidekick under the staffing table in the Commission section, and that
   Sidekick executes every slice directly.
 

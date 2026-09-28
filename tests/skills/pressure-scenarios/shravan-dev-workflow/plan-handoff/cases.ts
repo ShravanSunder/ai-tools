@@ -90,8 +90,8 @@ export const skillPressureCaseDefinitions = [
       },
       {
         name: "preserves-obligation-proof-context",
-        requirement: "Preserves the immutable handoff-plan.md ready record with its breakdown node, governing basis, plan-only delivery context, evidence sources, freshness guards, split triggers, open proof gaps, and parent-owned verification with the obligation-to-slice-to-proof mapping and each slice's executor record without a document digest.",
-        failureExample: "Carries commands but drops ownership, freshness, slice executor records, or delegated-evidence verification.",
+        requirement: "Preserves the immutable handoff-plan.md ready record with its breakdown node, governing basis, plan-only delivery context, evidence sources, freshness guards, split triggers, open proof gaps, and parent-owned verification with the obligation-to-slice-to-proof mapping and each slice's tier record without a document digest.",
+        failureExample: "Carries commands but drops ownership, freshness, slice tier records, or delegated-evidence verification.",
       },
     ],
   },

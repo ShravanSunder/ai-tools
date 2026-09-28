@@ -32,7 +32,7 @@ Chat only. A ready mixed-tier plan assigns one Daily-driver implementation Sidek
 - It rejects a relay-only supervisor.
 - Delegation is justified only when bounded independent work, needed distinct expertise, or isolated large disposable output has expected benefit above briefing, coordination, and verification cost.
 - The historical-document inventory may be delegated as bounded independent high-volume output with an exact receipt.
-- Under this mixed-tier Daily-driver Sidekick, the plan-marked independent Workhorse inventory slice goes to a Luna 🛠️ Worker with a Workhorse packet when the benefit test holds; the plan slice's executor record already is the brief.
+- Under this mixed-tier Daily-driver Sidekick, the plan-marked independent Workhorse inventory slice goes to a Luna 🛠️ Worker with the job pins when the benefit test holds; the plan slice's tier record supplies its inputs, output, and stop.
 - A standalone prescribed test procedure would be Operator work, but the implementation-associated focused tests stay with the executor here.
 
 ## Failure Signals

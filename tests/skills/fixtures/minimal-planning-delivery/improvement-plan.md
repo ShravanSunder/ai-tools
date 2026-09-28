@@ -30,5 +30,5 @@ Planned at branch/HEAD: fixture / 2222222222222222222222222222222222222222
 ## Change And Proof
 
 1. Remove the duplicate private sort call and keep existing focused unit coverage.
-   executor: Workhorse · Exact steps/Local · one pinned call site, existing tests, no new seam
+   tier: Workhorse · Exact steps/Local/Step · one pinned call site, existing tests, no new seam
 2. Run the focused unit test, full skill unit suite, and typecheck.

@@ -32,7 +32,7 @@ Planned at branch/HEAD: fixture / 1111111111111111111111111111111111111111
 ## Change And Proof
 
 1. Add the pure formatter at `tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.ts` and focused unit tests at `tests/skills/lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.test.ts`.
-   executor: Workhorse · Complete direction/Local · pinned formatter and test paths, exact proof commands, named stops below; the scenario-case loader it reads exists at base
+   tier: Workhorse · Complete/Local/Task · pinned formatter and test paths, exact proof commands, named stops below; the scenario-case loader it reads exists at base
 2. Run focused proof with `pnpm --dir tests/skills exec vitest run lib/skill-pressure-evaluation/scenario-cases/format-scenario-summary.test.ts --config vitest.config.ts`.
 3. Run the full skill unit suite with `pnpm --dir tests/skills run test:unit` and quality proof with `pnpm --dir tests/skills run typecheck`.
 

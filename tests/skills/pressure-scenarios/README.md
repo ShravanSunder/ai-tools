@@ -155,7 +155,7 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `implement-plan` | `implement-plan-stop-on-stale-plan` | Re-anchor current source and stop instead of silently translating a stale ready plan. |
 | `implement-plan` | `implement-plan-block-plan-only-improvement-plan` | Recognize plan-improve-repo as a canonical origin while preserving its direct plan-only terminal. |
 | `implement-plan` | `implement-plan-eligible-disjoint-delegation` | Permit only plan-proven disjoint delegation through manage-agents without default controller machinery. |
-| `implement-plan` | `implement-plan-follows-slice-executor-record` | Follow each slice's executor record and return a Workhorse boundary stop as a plan-defect instead of re-cutting or re-running it on a bigger model. |
+| `implement-plan` | `implement-plan-follows-slice-tier-record` | Follow each slice's tier record and return a Workhorse boundary stop as a plan-defect instead of re-cutting or re-running it on a bigger model. |
 | `implement-plan` | `implement-plan-scoped-slice-proof-report` | Bind slice proof to the exact tuple while keeping incomplete full and integration rows open. |
 | `implementation-pr-wrapup` | `implementation-pr-wrapup-missing-implementation-review` | Do not block wrap-up ready on missing independent review; wrap-up does not claim it reviewed the diff. |
 | `implementation-handoff` | `implementation-handoff-context-free-canonical-plan` | Preserve exact plan authority and bound implementation proof in the actual context-free prompt. |

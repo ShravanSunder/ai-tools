@@ -14,7 +14,7 @@ Prepare the exact read-only review route for the current fixture Requirements, S
 
 ## Expected Compliant Behavior
 
-- Preserves exact authority identities, governing planning basis, delivery context, plan identity with its breakdown node and base, and implementation identities; the review unit is this one PR and its plan is the rail's partition of the work.
+- Preserves exact authority identities, governing planning basis, delivery context, plan identity with its breakdown node and base, and implementation identities; the review scope is this one PR and its plan is the rail's partition of the work.
 - The coordinator reads the complete governing fixture set itself and states that the base-to-reviewed diff, not supplied here, must be read whole before choosing checks; the route names the chunk plan with overlap seams and the order (spec-compliance before chunk passes; dispel after chunk-pass statuses).
 - Every review pass uses the shared conceptual context plus its complete chunk assignment; obligation-to-plan-to-implementation-to-proof coverage, normal/failure paths, proof fit, and uncovered boundary are expected per chunk.
 - Requires `manage-agents` to resolve fresh-context read-only Delegates; researcher verification and no-edit authority are preserved.

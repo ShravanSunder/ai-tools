@@ -31,10 +31,10 @@ Planned at branch/HEAD: fixture / 3333333333333333333333333333333333333333
 
 ## Obligation And Proof Mapping
 
-| Obligation | Slice | Executor | Evidence source | Focused proof | Integration/manual proof | Freshness guard |
+| Obligation | Slice | Tier | Evidence source | Focused proof | Integration/manual proof | Freshness guard |
 | --- | --- | --- | --- | --- | --- | --- |
-| Stable grouped summary | formatter plus units | executor: Workhorse · Complete direction/Local · pinned formatter paths and proof commands | Specification and current scenario-case loader | focused formatter unit | full skill unit suite | stop if scenario identity shape changes |
-| Duplicate rejection | formatter validation | executor: Workhorse · Complete direction/Local · pinned validation path; loader duplicate checks exist at base | Specification and current loader duplicate checks | duplicate-focused unit | typecheck | split if loader ownership changes |
+| Stable grouped summary | formatter plus units | tier: Workhorse · Complete/Local/Task · pinned formatter paths and proof commands | Specification and current scenario-case loader | focused formatter unit | full skill unit suite | stop if scenario identity shape changes |
+| Duplicate rejection | formatter validation | tier: Workhorse · Complete/Local/Task · pinned validation path; loader duplicate checks exist at base | Specification and current loader duplicate checks | duplicate-focused unit | typecheck | split if loader ownership changes |
 
 ## Delegated Evidence Boundary
 
