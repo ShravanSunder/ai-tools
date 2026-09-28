@@ -18,7 +18,7 @@ Task / Agent may omit plan-mode or readonly flags. Do not hop to `claude -p --pe
 | Daily-driver 🛠️ Worker | Claude Opus, medium | native Task / Agent |
 | 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
 
-A unit that passes Workhorse fit (`model-catalog.md`) goes to Luna through agent-router, never to a native Claude model. Sonnet and Haiku are not catalog models and are never selected. Resolve the exact id with the Runtime rule in `SKILL.md`.
+Resolve the exact id with the Runtime rule in `SKILL.md`.
 
 ## Workspace Access
 
