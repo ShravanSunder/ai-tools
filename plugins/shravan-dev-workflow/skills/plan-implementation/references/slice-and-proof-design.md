@@ -1,6 +1,6 @@
 # Divide the Work and Attach Proof
 
-Use this reference to turn obligations allowed by the planning start check into a proportional implementation sequence. Return the slice graph with each slice's executor record, the throughput checkpoint, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
+Use this reference to cut a delivery into PR nodes and then turn each node's obligations into a proportional implementation sequence. Return the PR cut (nodes, planned independence, stacks, contract nodes, integration gates, order), then per plan the slice graph with each slice's executor record, the throughput checkpoint, obligation/proof mapping, necessary edges, integration gates, false-green risks, and any split or replan stop.
 
 ## Start From Obligations
 
@@ -49,6 +49,25 @@ The plan records four items. Keep every item and write `n/a: <reason>` when one 
 
 A slice earns the `independent` mark, which the staffing table in `manage-agents` dispatches on, only after a shared-write check: no `requires` or `serial` edge to in-flight work, write surfaces disjoint from every slice that may run beside it, and its own proof. Different files alone do not show independence.
 
+## Cut the Delivery into PRs
+
+Cut PRs before slices. Complexity decides the Sidekick; size decides the slices. A PR is an independently buildable and reviewable outcome. Program Design's owners and edges (or, for a mechanics-only improvement, current-source ownership) are the candidate cuts:
+
+- a large local change stays one PR with many Workhorse slices;
+- two disjoint features become two PRs;
+- a behavior change that must land across two owners at once stays one PR, with a Daily-driver Sidekick;
+- a contract PR exists only when a real shared seam lets two consumers proceed independently.
+
+The number of PRs follows independence, never owner or file count. Order the nodes riskiest unknown first among those whose prerequisites are met, and name an integration gate wherever independently built PRs first interact, with the proof that shows it.
+
+### PR Independence Test
+
+**Planned (at breakdown).** A node is independent of its siblings when its write surface is disjoint from theirs, its rails and proof let a reviewer judge it without depending on an unmerged sibling change, and where it first meets another node is a named integration gate. A node that needs another node's behavior is stacked on it; nodes that need the same new interface wait for a contract node that adds it. "C is executable now; X and Y wait for C's interface" is a correct planned state.
+
+**Eligible (at plan time).** When Main writes a node's plan, it checks the node's actual base in source: every seam, interface, or signal the node takes from outside itself exists there and supports the observation it needs. Seams the node adds under its own plan are its work, not prerequisites; Workhorse fit (`../../manage-agents/references/model-catalog.md`) still applies per slice. A node with an unmet external prerequisite stays pending, or its gap returns to its owner (`plan-defect`, or `program-design-gap` for a missing structural decision). A stack child whose parent head moves after its plan was written follows the existing freshness and plan-defect rules.
+
+The eligible check covers only what the node takes from outside itself. Whether one slice that adds or uses a new seam is Workhorse is the per-slice Workhorse fit decision above.
+
 ## Order Only Real Dependencies
 
 Record an edge only when it changes safe execution:
@@ -59,9 +78,9 @@ serial A <-> B    overlapping writes, state, fixtures, or generated artifacts co
 parallel A || B   advisory only; both are independent after named prerequisites
 ```
 
-Do not add `parallel` merely to advertise concurrency. The executor may serialize any advisory edge.
+Do not add `parallel` merely to advertise concurrency. The executor may serialize any advisory edge. These edges order slices inside one plan; PR independence is the PR Independence Test above.
 
-Place an integration gate at the earliest slice where separately changed components first interact. Do not postpone all wiring proof to final validation.
+Place an integration gate at the earliest slice where separately changed components first interact. Do not postpone all wiring proof to final validation. A gate where two PRs first meet belongs to the breakdown, not to either plan.
 
 ## Match Proof to Each Change
 

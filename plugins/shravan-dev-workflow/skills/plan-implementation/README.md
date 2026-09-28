@@ -1,6 +1,6 @@
 # Plan Implementation
 
-`plan-implementation` lets the user-facing main turn reviewed design into one practical Markdown implementation plan. The main reads the Requirements, Specification, and Program Design, checks them against the current repository, and authors the small slices and matching proof. Helpers may gather bounded evidence; implementation Sidekicks receive the finished plan rather than write it.
+`plan-implementation` lets the user-facing main turn reviewed design into a breakdown of PR nodes and one practical Markdown implementation plan per PR. The main reads the Requirements, Specification, and Program Design, checks them against the current repository, cuts the delivery into independently buildable and reviewable PRs, and authors each PR's small slices and matching proof when that PR can start. Helpers may gather bounded evidence; implementation Sidekicks receive a finished PR plan rather than write it.
 
 The runtime contract remains in [SKILL.md](./SKILL.md). Detailed slicing guidance lives in [slice-and-proof-design.md](./references/slice-and-proof-design.md).
 
@@ -11,9 +11,10 @@ flowchart TD
     A[Reviewed Requirements, Specification, and Program Design] --> B{Current, separate, and ready?}
     B -- No --> C[Stop and route the gap to its design owner]
     B -- Yes --> D[Inspect the current repository]
-    D --> E[Map each obligation to a small change and fitting proof]
+    D --> BD[Write the breakdown: PR nodes, stacks, contract PRs, gates]
+    BD --> E[Map each node's obligations to small changes and fitting proof]
     E --> F[Order only real dependencies and collisions]
-    F --> G[Write one Markdown implementation plan]
+    F --> G[Write one Markdown plan per executable PR node]
     G --> H[Return ready, revision requested, or blocked]
     H --> I{Delivery terminal}
     I -- plan-only --> J[Stop at the ready plan]
@@ -30,4 +31,4 @@ flowchart TD
 
 ## Output
 
-One proportional Markdown plan that names the work, order, proof, integration points, and stop conditions. It contains no progress tracking, approval state, document digest, or PR state.
+One breakdown per delivery, and one proportional Markdown plan per PR node that names the work, order, proof, integration points, and stop conditions. Neither contains progress tracking, approval state, document digest, or PR state.
