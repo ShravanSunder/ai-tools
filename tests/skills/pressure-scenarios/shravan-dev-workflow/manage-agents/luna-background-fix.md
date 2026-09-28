@@ -1,4 +1,4 @@
-# Workhorse Worker table fits a well-understood fix
+# Job table keeps a well-understood fix on Workhorse
 
 scenario_id: manage-agents-luna-background-fix
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -12,7 +12,7 @@ expect_proof_regex: (well-understood|complete direction|exact steps).{0,160}work
 ## Shortcut Temptation
 
 A daily driver is available, and the release is waiting. The agent may promote
-the assignment despite the settled approach and matching Worker table row.
+the assignment despite the settled approach and matching job-table row.
 
 ## Prompt
 
@@ -35,4 +35,4 @@ for total cost.
 
 - Defaults to Sol or Opus solely because the release is waiting.
 - Rejects the matching Workhorse row without a table reason.
-- Selects a category without checking the Worker table.
+- Selects a category without checking the job table.

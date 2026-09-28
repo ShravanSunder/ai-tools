@@ -12,7 +12,7 @@ Select one row for the job. Return the model lineage, thinking level, and model 
 | Daily driver | Everyday judgment. |
 | Frontier | Demanding judgment, design, or review. |
 
-A model category is a cost and capability grouping of model plus effort. It does not assign role authority or promote effort. Do not pick a row marked `User must authorize` in this table or a role table unless Shravan explicitly authorizes that lineage and thinking; an empty Use cell means the role table decides. 🦉 Advisor rows are outside this mark: Shravan names every Advisor row, and the request is the authorization.
+A model category is a cost and capability grouping of model plus effort. It does not assign role authority or promote effort. Do not pick a row marked `User must authorize` in this table or the 🔎 Review Sidekick table unless Shravan explicitly authorizes that lineage and thinking; an empty Use cell means the job table or the Review Sidekick table decides. 🦉 Advisor rows are outside this mark: Shravan names every Advisor row, and the request is the authorization.
 
 | Model category | Model lineage | Thinking | Use |
 |----------------|---------------|----------|-----|
