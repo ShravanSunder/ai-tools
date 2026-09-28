@@ -33,7 +33,7 @@ Every slice records `executor: <Workhorse | Daily driver> Â· <guidance>/<span> Â
 Cut the work so the record is honest:
 
 - A slice that bundles independent units is split into one slice per unit. Thirteen slices handed to one session as a single assignment is the failure this catches.
-- A slice that would cross a write or ownership boundary is split at that boundary, or tagged Daily driver with the boundary as its reason.
+- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, or tag it Daily driver with the boundary as its reason. A Cross-domain span alone is never the reason, since a Luna xhigh row covers it.
 - A slice that needs a seam missing at its base gets a contract slice first, or goes to the Daily driver with the missing seam as its reason.
 
 A Workhorse slice that later stops at its boundary is evidence about this cut. It returns to the originating planner as a plan defect, and the planner re-slices or re-tags it with a reason.
