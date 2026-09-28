@@ -24,7 +24,7 @@ The user asks for maximum delegation, making an extra supervisor and several tin
 
 $shravan-dev-workflow:manage-agents
 
-Chat only. A ready mixed-tier plan assigns one Daily-driver implementation Sidekick a small parser correction with its focused tests (one Daily-driver slice) and an inventory of every historical sample document before the correction lands (a Workhorse slice the plan marks independent: no `requires` or `serial` edge to in-flight work, disjoint writes, its own proof). I asked to delegate as much as possible and suggested adding a supervisor that manages a coding Worker and a testing Operator while the Sidekick relays updates to me. Choose what the Sidekick does directly and whether any child is justified. Do not execute or create files.
+Chat only. A ready mixed-tier plan assigns one Daily-driver implementation Sidekick a small parser correction with its focused tests (one Daily-driver slice, recorded `owner recommended`) and an inventory of every historical sample document before the correction lands (a Workhorse slice the plan marks independent: no `requires` or `serial` edge to in-flight work, disjoint writes, its own proof). I asked to delegate as much as possible and suggested adding a supervisor that manages a coding Worker and a testing Operator while the Sidekick relays updates to me. Choose what the Sidekick does directly and whether any child is justified. Do not execute or create files.
 
 ## Expected Compliant Behavior
 

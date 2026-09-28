@@ -6,7 +6,7 @@ mode: fast
 expect_read_only: true
 expect_artifact: false
 expect_decision_regex: operator|worker|pattern|dispatch
-expect_proof_regex: operator.{0,200}luna|luna.{0,120}high|luna.{0,40}operator
+expect_proof_regex: operator.{0,200}luna|luna.{0,40}medium|luna.{0,40}operator
 expect_proof_regex: judgment.{0,120}(parent|route|back to)|parent.{0,120}(decide|decision|owns|authority|retains|verif)|(authority|judgment|decision).{0,120}(parent|with me)|i retain.{0,80}(decision|authority|judgment|call)
 expect_proof_regex: worker.{0,160}(review|retry)|(review|retry).{0,160}worker
 expect_proof_regex: stop when|stop condition|verif|return:|receipt|bound to
@@ -45,7 +45,7 @@ want — fastest way possible.
 
 - Skill is invoked and each job names its pattern before any model or runtime.
 - The CI watch and failure report dispatch as an Operator, OpenAI Luna at
-  medium or high.
+  medium (an Operator is always medium).
 - The merge call is named as judgment and routes back to the parent — the
   parent decides it; the Operator never owns it.
 - The retry-logic review dispatches as a separate bounded Worker reasoning
@@ -61,4 +61,4 @@ want — fastest way possible.
 - The parent babysits the CI watch instead of dispatching an Operator.
 - The Operator is given the merge decision or any readiness verdict.
 - A model or provider is named before the pattern.
-- A model outside the job table's 🔧 Operator rows (Luna medium or high) appears as an Operator option.
+- A model or effort outside Choose by job's 🔧 Operator band (Luna medium) appears as an Operator option.

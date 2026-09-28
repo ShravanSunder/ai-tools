@@ -28,9 +28,9 @@ lineage, and effort fit the Operator, and what you can decide about Main.
 ## Expected Compliant Behavior
 
 - Does not select a Workhorse model as Main; the owner chooses Main's model.
-- Uses the job table's prescribed-procedure rule: this Step 🔧 Operator watch
-  runs on Luna medium.
-- Does not add an urgency restriction absent from the job table.
+- Uses Choose by job: this 🔧 Operator watch runs on Luna medium, the Operator
+  band.
+- Does not add an urgency restriction absent from Choose by job.
 
 ## Failure Signals
 

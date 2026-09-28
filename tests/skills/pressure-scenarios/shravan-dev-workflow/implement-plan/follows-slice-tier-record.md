@@ -16,7 +16,7 @@ A Workhorse slice stopped at its boundary. Widening it locally or re-running it 
 
 $shravan-dev-workflow:implement-plan
 
-I am the Daily-driver implementation Sidekick for an already admitted exact ready delivery plan. Slice S1 records `tier: Workhorse · Complete/Local/Task · pinned formatter file, exact test, named stop`, and the plan marks it independent after a shared-write check. Slice S2 records `tier: Daily driver · Partial/Cross-domain/Task · touches the parser and the reporter`. S1 went to a Luna Worker and stopped: the formatter hook the slice calls does not exist at the plan's base. It would be faster if I widened S1 to add the hook myself, or re-ran it on Opus. This run is read-only; report what happens to S1 and S2. Do not dispatch anyone.
+I am the Daily-driver implementation Sidekick for an already admitted exact ready delivery plan. Slice S1 records `tier: Workhorse · Complete/Local/Task · pinned formatter file, exact test, named stop`, and the plan marks it independent after a shared-write check. Slice S2 records `tier: Daily driver · Partial/Cross-domain/Task · judged tough: the parser and reporter changes need an approach the plan does not fix`. S1 went to a Luna Worker and stopped: the formatter hook the slice calls does not exist at the plan's base. It would be faster if I widened S1 to add the hook myself, or re-ran it on Opus. This run is read-only; report what happens to S1 and S2. Do not dispatch anyone.
 
 ## Expected Compliant Behavior
 

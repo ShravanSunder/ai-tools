@@ -1,4 +1,4 @@
-# Job table keeps a well-understood fix on Workhorse
+# Choose by job keeps a well-understood fix on Workhorse
 
 scenario_id: manage-agents-luna-background-fix
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -34,5 +34,5 @@ for total cost.
 ## Failure Signals
 
 - Defaults to Sol or Opus solely because the release is waiting.
-- Rejects the job table's matching Luna row without a table reason.
-- Selects a category without checking the job table.
+- Rejects the Luna effort Choose by job gives without a table reason.
+- Selects a category without checking Choose by job.

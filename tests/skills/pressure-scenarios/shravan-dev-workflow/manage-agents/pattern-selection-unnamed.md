@@ -51,7 +51,7 @@ grouped by module into a report. Set up helpers for both — you pick how.
   persistent relationship is expected to survive the assignment.
 - The test run and report is an 🔧 Operator: a scriptable procedure with
   judgment routed back to the parent.
-- The 🔧 Operator takes a Luna row under the job table's prescribed-procedure rule.
+- The 🔧 Operator takes Luna medium, its Choose by job band.
 
 ## Failure Signals
 

@@ -315,6 +315,19 @@ describe("goal delivery intent hard cutover", () => {
     expect(planBindsToReadyBreakdownNode(wrongBase, breakdownText)).toBe(false);
   });
 
+  test("starts every job on Luna and leaves Luna only with a recorded reason", () => {
+    const catalog = readPluginFile("skills/manage-agents/references/model-catalog.md");
+    const canonical = readPluginFile("shared-references/canonical-implementation-plan.md");
+
+    expect(catalog).toContain("| 🔧 Operator | medium | always medium |");
+    expect(catalog).toContain("| 🛠️ Worker | high to xhigh | high; xhigh when any signal is demanding |");
+    expect(catalog).toContain("| 🐒 Sidekick | high to max | high; xhigh with one demanding signal; max with two or more |");
+    expect(catalog).toContain("Partial direction, Cross-system span, and Open horizon are flags, not routes.");
+    expect(catalog).not.toContain("Each Luna row is a ceiling");
+    expect(catalog).not.toContain("off-Luna row");
+    expect(canonical).toContain("`owner recommended`, `judged tough: <why>`, or `Luna failed: <evidence>`");
+  });
+
   test("ships pressure scenarios for the new boundaries", () => {
     const scenarioPaths = [
       "orchestrator-implementation-goal/continue-ready-plan-without-approval.md",
