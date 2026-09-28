@@ -31,3 +31,9 @@ Apply every item in `dry-reaudit.md` §2 (R1–R18, D1–D16, L1–L5, L8–L9, 
 - P1: catalog Escalation gains exactly: "Escalated work takes Sol medium when the approach is fixed and the span is Cross-system, and Opus medium for open judgment (Opus high on evidence); a Cursor-native 🛠️ Worker may take Grok medium." Staffing's second row reads "the Daily-driver row Escalation names (catalog)". The Codex provider page reads "effort from the catalog row".
 - P8: the Throughput Checkpoint keeps "choices later slices depend on" and "smallest safe decomposition" plus the `independent` shared-write check; the other three items and their copies (template, canonical, plan-review) go.
 - L6 (devfiles) is Main's; L7 stays as is.
+
+## Round 3 (after `dry-reaudit-3.md`, head `0ea7a7b9`)
+Apply every **blocking** item (B1–B9, the repeated facts, deletion-test failures, and layer leaks marked **B**) with the report's exact fix text. Skip every optional (**O**) item. Settings:
+- B3: Main authorizes the three minimal edits in the Runtime paragraph (restoring the pre-PR "no native stand-in" guard without a model name).
+- B8: take option (a): keep canonical's stale rule and make wrap-up route a moved layer's plan to Main; option (b) (child based on the parent branch) changes an accepted contract and goes to the owner as a follow-up.
+- B2's model-map half is Main's (devfiles).
