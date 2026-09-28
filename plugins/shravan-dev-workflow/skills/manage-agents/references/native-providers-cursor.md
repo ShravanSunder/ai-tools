@@ -18,7 +18,7 @@ Task may omit a sandbox or `workspace_readonly` flag. Do not hop to Cursor CLI t
 | Daily-driver 🛠️ Worker | xAI Grok 4.6, medium; or Claude Opus, medium | native Task |
 | 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
 
-Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
+Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short names as CLI labels, not native Task ids, unless the host requires them.
 
 ## Workspace Access
 

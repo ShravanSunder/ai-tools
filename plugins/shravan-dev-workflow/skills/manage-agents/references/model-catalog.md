@@ -2,7 +2,7 @@
 
 Rows name lineage and thinking, not ids; exact ids resolve per the Runtime rule in `SKILL.md` and the machine map `~/.config/agent-context/model-map.md`.
 
-Select one row for the job. Return the model lineage, thinking level, and model category, plus the Workhorse fit result when the job could run on the Workhorse tier. Honor an explicit owner choice first. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically raise effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
+Select one row for the job. Honor an explicit owner choice first. More complete guidance does not disqualify a capable model. Reassess from evidence when a choice struggles; do not automatically raise effort or claim universal benchmarks. Prefer total completion cost, including rework, proof, and coordination.
 
 ## Categories
 
@@ -12,7 +12,7 @@ Select one row for the job. Return the model lineage, thinking level, and model 
 | Daily driver | Everyday judgment. |
 | Frontier | Demanding judgment, design, or review. |
 
-A model category is a cost and capability grouping of model plus effort. It does not assign role authority or promote effort. Do not pick a row marked `User must authorize` in this table or the 🔎 Review Sidekick table unless Shravan explicitly authorizes that lineage and thinking; an empty Use cell means the effort bands or the Review Sidekick table decide. 🦉 Advisor rows are outside this mark: Shravan names every Advisor row, and the request is the authorization.
+A tier (model category) is a cost and capability grouping of a model and its effort (the Thinking column). It does not assign role authority or promote effort. Do not pick a row marked `User must authorize` in this table or the 🔎 Review Sidekick table unless Shravan explicitly authorizes that lineage and thinking; an empty Use cell means the effort bands, Escalation, or the Review Sidekick table decide. 🦉 Advisor rows are outside this mark: Shravan names every Advisor row, and the request is the authorization.
 
 | Model category | Model lineage | Thinking | Use |
 |----------------|---------------|----------|-----|
@@ -33,7 +33,7 @@ A model category is a cost and capability grouping of model plus effort. It does
 
 ## Effort bands
 
-Every 🔧 Operator, 🛠️ Worker, and implementation 🐒 Sidekick job starts on the Workhorse tier. The role sets the effort band; the job's demanding signals pick the effort inside it.
+Every 🔧 Operator, 🛠️ Worker, and 🐒 Sidekick job starts on the Workhorse tier. The role sets the effort band; the job's demanding signals pick the effort inside it.
 
 | Role | Effort band | Effort |
 |---|---|---|
@@ -43,7 +43,7 @@ Every 🔧 Operator, 🛠️ Worker, and implementation 🐒 Sidekick job starts
 
 Demanding signals: Partial direction; Cross-domain or Cross-system span; Run or Open horizon (definitions in `SKILL.md` Select an agent).
 
-**Escalation.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. A Daily-driver model takes a job only with one recorded escalation reason: `owner recommended`; `judged tough: <missing condition>`, when Main judges it too tough for the Workhorse tier at its band's top; or `Workhorse failed: <evidence>`, after a failed check or result through corrections (a boundary stop is a plan defect instead). Escalated work takes Sol medium when the approach is fixed and the span is Cross-system, and Opus medium for open judgment (Opus high on evidence); a Cursor-native 🛠️ Worker may take Grok medium. Record it in the slice's tier record or the assignment.
+**Escalation.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choice into the plan, split at the system boundary, or fix the diagnostic approach. A Daily-driver model takes a job only with one recorded escalation reason: `owner recommended`; `judged tough: <missing condition>`, when Main judges it too tough for the Workhorse tier at its band's top; or `Workhorse failed: <evidence>`, after a failed check or result through corrections (a boundary stop is a plan defect instead). Escalated work takes Opus medium for open judgment (Opus high on evidence) and Sol medium otherwise; a Cursor-native 🛠️ Worker may take Grok medium. Record it in the slice's tier record or the assignment.
 
 Sidekick examples (use them to classify any assignment):
 
@@ -64,7 +64,7 @@ Worker and Operator examples:
 | Classify these findings with this rubric | 🛠️ · Complete · Local · Task | high |
 | Read one service and list each call to X with file:line | 🛠️ · Complete · Local · Task | high |
 | Implement one slice whose fixed approach keeps the orders and billing domains' contract in step | 🛠️ · Complete · Cross-domain · Task | xhigh |
-| Diagnose a failing test without a known cause | 🛠️ · Partial · Local · Task | xhigh |
+| Diagnose a failing test without a known cause | 🛠️ · Partial · Local · Task | xhigh; flagged: fix the diagnostic approach first, or escalate with a reason |
 | Run a suite, watch CI to terminal, apply a scripted transform, run PR wrap-up checks | 🔧 · Exact · any · Step | medium |
 | Independent review | 🔎 Review Sidekick table; never the Workhorse tier | — |
 
