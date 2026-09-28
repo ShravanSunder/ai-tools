@@ -40,7 +40,7 @@ Upstream checkouts for the trees above are submodules under `ai-dev-skills` (for
 
 Current local reference: `/Users/shravansunder/Documents/dev/open-source/agent-skills/ai-dev-skills/cursor-plugins/pstack/skills/show-me-your-work/SKILL.md`.
 
-Inspected 2026-09-06 at local `cursor-plugins` revision `68836dd`; remote freshness has not been checked. Re-read the local reference before adapting it. A focused work-log skill is deferred: preserve concise decisions, evidence pointers, and checkpoints; evaluate transcript audits, cross-model review, and correction policy separately. No runtime skill change is adopted by this pointer.
+Inspected 2026-09-26 at local `cursor-plugins` revision `ecc249f`. Preserve/avoid unchanged. A focused work-log skill is deferred: preserve concise decisions, evidence pointers, and checkpoints; evaluate transcript audits, cross-model review, and correction policy separately. No runtime skill change is adopted by this pointer.
 
 ## Current Local Mapping (lite)
 
