@@ -1,6 +1,6 @@
 # Breakdown and review topology
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r1**, 2026-09-28. Status: **draft**. Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r2**, 2026-09-28. Status: **draft**. r2 adds the consumer disposition from the sweep. Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
 
 ## Owner meaning (verbatim, 2026-09-27 and 2026-09-28)
 
@@ -112,7 +112,23 @@ One skill per run; anchors at `c08ab7af`. Spec A's runs land first on the same b
 
 ## Consumer disposition
 
-To be filled from a Luna sweep over the active skills, shared references, fixtures, and scenarios for multi-PR plans, `PR topology`, `delivery grouping`, planning inside `orchestrator-implementation-goal`, commissioning inside `orchestrator-design`, and single-review-per-goal wording; Main verifies every row against source.
+Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill, shared reference, fixture, scenario, and contract test whole and returned 162 non-keep rows; the complete row list is `consumer-sweep.tsv` beside this spec. Main spot-checked the load-bearing and surprising rows against source at `fb2f18df`. Every row in that file is in scope with its stated disposition except the rejections below.
+
+| Run | Files (lines) | Change |
+|---|---|---|
+| B-1 | `shared-references/canonical-implementation-plan.md` (1, 33, 34, 53, 59, 79) | CB1 breakdown section; plan record = one PR node and base; grouping and topology move to the breakdown (B2, B3, B4) |
+| B-1 | `plan-implementation/SKILL.md` (10, 29, 32, 38, 43); `references/slice-and-proof-design.md` | breakdown first, one plan per PR, CB2 beside Spec A's throughput checkpoint, gates, ordering, drawn PR map (B2 to B9) |
+| B-2 | `orchestrator-implementation-goal/SKILL.md` (8, 12, 23, 28 to 36, 40, 44, 51); `references/goal-contract-and-routing.md` (5, 22, 42, 59, 62, 68, 71, 74, 78, 90, 104, 107, 112) | admit a ready breakdown and per-PR plans; `ready-for-planning` to Main otherwise; per-PR or per-stack lifecycle; review topology; gates; wrap-up per PR or stack |
+| B-3 | `orchestrator-design/SKILL.md` (78, 80) | continued delivery ends at the breakdown and first plans; no commissioning |
+| B-4 | `implementation-review/SKILL.md` (10, 18, 24) | review unit is one PR, or one stack layer against its parent; the rail is that PR's plan; `:28` whole-read and `:66` fresh-review stay |
+| B-2 | `implement-plan/SKILL.md` (19, 32, 33) | admits one PR's plan; returns to its PR's reviewer through Main |
+| B-6 | `plan-handoff/SKILL.md` (10, 19, 33); `references/handoff-template.md` (12, 16, 67, 68) | one PR's plan plus its breakdown node |
+| B-7 | `plan-improve-repo/SKILL.md` (10, 12, 103); `references/improvement-plan-template.md` (3, 77, 78, 81, 91) | an admitted finding yields a one-PR plan, or a breakdown when it spans owners |
+| B-2 | `manage-agents/SKILL.md` (12, 96) | Commission names the PR node; `:42` is kept and cited (a single Review Sidekick is already different-lineage) |
+| B-8 | `AGENTS.md` (67, 125, 131, 134); plugin `README.md` (11, 17, 19, 67, 75, 132, 152, 156, 162, 188, 202, 203) | docs follow the runs |
+| B-8 | fixtures `existing-plan.md`, `handoff-plan.md`, `improvement-plan.md` (topology lines), `active-orchestration-commission.md` (13 sites); `tests/skills/lib/minimal-planning-delivery-contract.test.ts` (10 assertions); scenarios under `implementation-handoff`, `implementation-review`, `orchestrator-design`, `orchestrator-implementation-goal`, `plan-handoff`, `plan-implementation` (per `consumer-sweep.tsv`) | test-update: one plan per PR, breakdown admission, per-PR review; each rewritten criterion keeps its paired failure example |
+
+**Rejected sweep rows:** all nine `skills-creation` rows (`SKILL.md:174, 265, 276, 282, 284, 292, 304, 307, 312`) and `references/review/implementation-review.md:3, 35`. A runtime skill package ships as one PR (these two specs share one), so its review stage stays per package run; per-PR and per-stack review topology is for general-domain delivery. `manage-agents/SKILL.md:42` is kept, not rewritten.
 
 ## Coordination
 
@@ -127,6 +143,7 @@ To be filled from a Luna sweep over the active skills, shared references, fixtur
 
 - `discuss-pathfinding` (B12).
 - A typed workflow runner (B11).
+- `skills-creation`'s review stages: a runtime skill package ships as one PR, so its review stays per package run.
 - Merge authority: the owner merges.
 - Changing Spec A's decisions.
 
