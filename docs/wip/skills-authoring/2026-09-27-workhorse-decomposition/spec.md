@@ -440,21 +440,21 @@ C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers
 | Direction | The brief fixes | Test |
 |---|---|---|
 | Exact steps | every command or edit, its inputs, and its checks | a script could do it; no choice is left |
-| Complete | the approach; the agent makes only local choices nothing else depends on | two capable agents would hand back interchangeable results |
+| Complete | the approach, by name; the agent chooses only details nothing else depends on | the brief or plan names the approach; if several approaches would do and none is named, it is Partial even when their results would be interchangeable |
 | Partial | the outcome, bounds, and proof, not the approach | the agent must choose between approaches |
 
 | Span | The agent must hold | Test |
 |---|---|---|
-| Local | one domain or owner, through its own code and the contracts it uses | reading that owner's code and its contracts is enough to get it right; size does not count, so a 500-file rename inside one owner is Local |
-| Cross-domain | two or more interacting domains in one system | getting it right means reading another domain's internals or keeping two owners' contracts in step |
-| Cross-system | separate systems, repos, or deployables with their own contracts | the change crosses a process, service, or repo boundary, or a wire or persisted-data contract |
+| Local | one domain or owner, through its own code and the contracts it uses | reading that owner's code and its contracts is enough to get it right; size does not count (a 500-file rename inside one owner is Local), nor do modules (two modules of one owner are Local), nor does storage only that owner reads and writes |
+| Cross-domain | two or more interacting domains or owners in one system | getting it right means reading another owner's internals or keeping two owners' contracts in step |
+| Cross-system | separate systems, repos, or deployables with their own contracts | the change alters a contract another independently owned or deployed system consumes: a service API, a wire format, a client, or stored data another system reads |
 
 | Horizon | The agent drives | Test |
 |---|---|---|
 | Step | one command, procedure, or lookup, then reports what it observed | what happens next is someone else's decision |
-| Task | one slice or bounded result, then stops for acceptance | it hands back one reviewable result |
-| Run | several slices in order, every choice already fixed by the plan | chained results with nothing to decide between them |
-| Open | choices later work builds on that no plan fixed | a later slice is right only if this job chooses well |
+| Task | one slice, then stops for acceptance | exactly one slice before the next acceptance |
+| Run | two or more slices in order, every choice already fixed by the plan | two or more slices before the next acceptance, nothing left to decide between them |
+| Open | choices later work builds on that no plan fixed | the brief says a later slice or job depends on a choice this job makes; Open wins over Task and Run when both apply |
 
 **Choose by job** (home `model-catalog.md`; replaces r14's section of the same name):
 
@@ -477,10 +477,10 @@ C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers
 > | "Implement slice 3 of this PR (add the config field and its tests), then report back." | Complete · Local · Task | high |
 > | "Fix this bug in one module; the cause is known and the fix approach is in the brief." | Complete · Local · Task | high |
 > | "Implement this PR: four slices in one module, every choice written in the plan." | Complete · Local · Run | xhigh |
-> | "Take slices 2 and 3 across the API and storage layers, then report back." | Complete · Cross-domain · Task | xhigh |
+> | "Take slice 2, which changes the orders and billing domains' shared contract as the plan specifies, then report back." | Complete · Cross-domain · Task | xhigh |
 > | "Implement this PR: one domain publishes a new event, another consumes it; both contracts are in the plan." | Complete · Cross-domain · Run | max |
-> | "Find why sync drops messages under load and fix it." | Partial · Local · Open | max; flagged: fix the diagnostic approach first, or escalate with a reason |
-> | "Move the client and the server to the new wire format." | Complete · Cross-system · Run | max; flagged: split into one PR per system first, or Sol medium with a reason |
+> | "Find why sync drops messages under load, fix it, and choose the retry policy the next two slices build on." | Partial · Local · Open | max; flagged: fix the diagnostic approach or the retry choice in the plan first, or escalate with a reason |
+> | "Move the client and the server to the new wire format." | Complete · Cross-system · Run | max; flagged: split into PRs only where the PR independence test passes (an independently landable seam exists); otherwise keep one PR at max, or Sol medium with a reason |
 >
 > Worker and Operator examples:
 >
@@ -488,7 +488,7 @@ C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers
 > |---|---|---|
 > | Classify these findings with this rubric | 🛠️ · Complete · Local · Task | high |
 > | Read one service and list each call to X with file:line | 🛠️ · Complete · Local · Task | high |
-> | Implement one slice whose fixed approach touches two modules | 🛠️ · Complete · Cross-domain · Task | xhigh |
+> | Implement one slice whose fixed approach keeps the orders and billing domains' contract in step | 🛠️ · Complete · Cross-domain · Task | xhigh |
 > | Diagnose a failing test without a known cause | 🛠️ · Partial · Local · Task | xhigh |
 > | Run a suite, watch CI to terminal, apply a scripted transform, run PR wrap-up checks | 🔧 · Exact · any · Step | medium |
 > | Independent review | 🔎 Review Sidekick table; never Luna | — |
@@ -511,7 +511,7 @@ C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers
 > | all Workhorse | Luna, effort by Choose by job | every slice | nothing by default; the benefit test in Select an agent governs any child |
 > | any slice off Luna with a recorded reason | the Daily driver that reason names | slices off Luna, and every Workhorse slice the plan does not mark independent | Workhorse slices the plan marks independent, when the benefit test holds |
 
-**Other sites:** `slice-and-proof-design.md` Record Each Slice's Tier ("a Daily-driver slice names its reason", split at a boundary; tag Daily driver only with a D30 reason); `plan-review.md` item 1 ("For each Daily-driver slice, confirm its reason is one of the three and is real"); the improvement-plan template's tier line; `native-providers-*` and `acpx-provider-*` rows that name Luna efforts for a role; fixtures and scenarios naming Luna medium for a Worker, Luna high for an Operator, or automatic Opus/Sol routes.
+**Other sites:** `manage-agents/SKILL.md:86` "A normal implementation backed by … a ready plan is Complete direction" gains "unless the plan leaves an approach open for that slice (Partial)"; `plan-implementation/SKILL.md:34` (a Daily-driver slice names its reason, not only a missing condition); `plan-review.md`'s good-point example uses a D30 reason; C1 condition 4's "or goes to the Daily-driver tier" cites Leaving Luna; `implementation-pr-wrapup/SKILL.md:40` labels description drafting as Worker judgment (Complete), not Exact steps, without handing drafting to an Operator; scenarios `operator-for-mechanical.md` and `sidekick-luna-xhigh.md` and mixed-tier fixtures update paired assertions and failure examples; `slice-and-proof-design.md` Record Each Slice's Tier ("a Daily-driver slice names its reason", split at a boundary; tag Daily driver only with a D30 reason); `plan-review.md` item 1 ("For each Daily-driver slice, confirm its reason is one of the three and is real"); the improvement-plan template's tier line; `native-providers-*` and `acpx-provider-*` rows that name Luna efforts for a role; fixtures and scenarios naming Luna medium for a Worker, Luna high for an Operator, or automatic Opus/Sol routes.
 
 ### Runs
 
@@ -521,6 +521,7 @@ D-1 `manage-agents` (SKILL.md signals and Staffing; catalog Choose by job, C1; p
 
 - Tests, typecheck, `claude plugin validate`, with counts.
 - Searches return no live text giving: a Worker Luna medium; an Operator Luna high; Luna max outside Sidekicks; Opus or Sol selected by a signal alone (`Partial direction goes to Opus`, `off-Luna row`, `Open → Opus`, `Cross-system → Sol`); r14's ceiling wording (`Each Luna row is a ceiling`).
+- Blind classification (F16): classify these raw briefs before reading any tuple, then apply the counter: one fixed slice vs two ordered fixed slices before acceptance; an investigation ending at one accepted fix vs one whose choice a later slice consumes; two modules of one owner vs two domains' shared contract; storage only one owner reads vs data another system reads; outputs interchangeable but no approach named. A wire migration with an independently landable seam vs an atomic client/server cutover (F17): both flagged, only the first split.
 - Walkthroughs: every example row recomputed from the counting rule; plus a Worker Complete · Local · Run (xhigh), a Sidekick Partial · Cross-domain · Run (max, flagged), an Operator on a Cross-system procedure (medium), a Luna failure after corrections (planner re-tags with `Luna failed`; the implementer does not), a boundary stop (plan defect, no escalation), and an owner-recommended Opus Sidekick.
 - Net deletion across C- and D-runs against `0915b6fa`, with the `--shortstat` output.
 - D34's per-file alignment list.
@@ -529,6 +530,7 @@ D-1 `manage-agents` (SKILL.md signals and Staffing; catalog Choose by job, C1; p
 
 - **Review 1** (r5, commit `c48a5ed3`): different-lineage 🔎 Review Sidekick, GPT-6 Astra high, agent-router session `01a0e2a0-6835-7171-9512-410133d40c29`, no author history. Checks: mental-model-fit complete, trigger-routing complete, rule-agreement partial (external benchmark figures and the full audit corpus not reverified), depth-coverage complete. Verdict `targeted-revision`, implementation decision `revise-first`, blocker override applies. Accepted F1 to F6 (blockers F4, F5). Rejected: D10's openness as a defect, a blanket no-swarm reading, restoring review fan-out, Sidekick plan repair, raising Operator effort, removing native Daily-driver rows, C3 as an unjustified schema, D9 as fabricated, required pressure runs, one-target violation, a missing Codex marketplace version.
 - **r6 remediation** (Main): F1 → C1 restated in Guidance and span, Luna span narrowed to Local (D2); F2 → D16 table; F3 → audit delegation by C1-passing evidence unit (D11); F4 → no new plan review, existing design gate plus a plan completion check (D1); F5 → disposition rows for the commission paths, `AGENTS.md:69`, three ready-plan fixtures, and three more scenarios; F6 → blind unit-level replay (D13) and a narrowed evidence 2. Main also found that the session-level replay's own summary misstated its table (it named c4; the table shows 0 c4 and 20 c5 misses), recorded here as evidence for C3's "verify the file, not the prose".
+- **r15 proposal review** (same lead, `review/r15-review.md`): `targeted-revision`, `revise-first`; counting rule total and all 12 examples compute; D30 consistent with D4/C2; no runtime consumer outside Other sites plus D34. F16 (signal tests and example briefs split on Task/Run, module vs domain, private storage vs cross-system contract, interchangeable output vs fixed approach) and F17 (the wire example made system count a PR-cut rule). Baseline 2 open. **r15.1**: tests sharpened (Task = one slice before acceptance, Run = two or more, Open wins; modules and owner-only storage are Local; Cross-system = a contract another system consumes; Complete = the approach is named); example briefs expose the deciding fact; the wire example splits only where the PR independence test passes; reviewer-named sites added to Other sites; blind classification added to Proof.
 - **r14 proposal review** (same lead, `review/r14-review.md` in Main's scratch): `targeted-revision`, `revise-first`; F14 (the job table's all-cells rule excluded its own examples; blocker) and F15 (R1's revert restored "native Worker"). No sole-statement outcome lost; C3 and Sidekick board joins compatible. Baseline 2 open. Verification: `great`, `accepted-to-implement`, 2 to 0, converged. **r14.1**: ceiling rule with off-Luna precedence; R1 `EAP:35` override; added predicate, non-native, and C3 walkthroughs to the proof.
 - **Verification of r13** (same lead): `great`, `accepted-to-implement` for the amendment; F11, F12, F13 closed; no new finding; converged 2, 3, 0. Five static cases pass (prescribed Operator; Complete/Cross-domain slice; fixed Cross-system plus Local mixed PR; Local/Partial diagnosis; Local Sidekick with an open dependent choice). Implementation residual: `slice-and-proof-design.md:59` "Opus otherwise" must follow D16's failed-signal choice before implementation review.
 - **Verification of r12** (same lead): `targeted-revision`; F10 closed; F11 residual in `slice-and-proof-design.md:36` (split or tag on any domain crossing); new F12 (D16 sent every mixed PR to Opus, bypassing D20's Sol route) and F13 (Opus rows omitted Local, leaving Local Partial work and Local dependent-choice Sidekicks unmatched). First non-decreasing comparison (2 to 3). **r13** fixes all three: run A-2's split rule, D16's model chosen by the failed signal, Opus rows at any span, D19's diagnosis made conditional on Guidance.
