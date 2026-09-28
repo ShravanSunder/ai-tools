@@ -10,7 +10,7 @@ The `originating planner` values name the two planners: `plan-implementation`, t
 
 ## Breakdown Record
 
-A breakdown is one Markdown file per delivery, `<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main, even when it has one node. It lives beside its plans (Plan Home). It records its admitted basis (reviewed design identities, or an admitted improvement pointer and basis class). It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
+A breakdown is one Markdown file per delivery, `<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main, even when it has one node. It records its admitted basis (reviewed design identities, or an admitted improvement pointer and basis class). It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
 
 ```text
 breakdown path: <plan home>/<yyyy-mm-dd>-<slug>-breakdown.md
@@ -95,7 +95,7 @@ Every plan includes its result, governing basis, delivery context with its break
 
 ## Slice Tier Record
 
-Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit; a Daily-driver slice names its escalation reason (both in `../skills/manage-agents/references/model-catalog.md`). The implementer follows the record. A Workhorse slice that stops at a boundary, or an executor that disagrees with its record, returns to the originating planner as a plan defect.
+Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit; a Daily-driver slice names its escalation reason (both in `../skills/manage-agents/references/model-catalog.md`). The implementer follows the record.
 
 ## Preserve and Admit
 
