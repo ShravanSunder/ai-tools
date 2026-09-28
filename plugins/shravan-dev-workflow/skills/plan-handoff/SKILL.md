@@ -7,7 +7,7 @@ description: Use when packaging an existing implementation plan for another agen
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-Package one existing PR implementation plan, with its breakdown node, so another agent can review or execute without reconstructing the conversation. Sibling PRs appear only through the breakdown pointer. This is a portability boundary, not a completion or authorship boundary: handoff preserves the plan's governing basis and delivery context without upgrading either.
+Package one existing PR implementation plan so another agent can review or execute without reconstructing the conversation. Sibling PRs appear only through the breakdown pointer. This is a portability boundary, not a completion or authorship boundary: handoff preserves the plan's governing basis and delivery context without upgrading either.
 
 ## Core Rules
 
@@ -15,7 +15,7 @@ Package one existing PR implementation plan, with its breakdown node, so another
 - If the source is spec/design context without an implementation plan, use `spec-handoff` for portability. If the caller wants a plan and carries current ready three-artifact design authority, route to `plan-implementation`; never create the plan inside the handoff.
 - If the source is branch, diff, changed files, commits, validation, or blocker evidence, use `implementation-handoff`.
 - Prefer repo-local temp artifacts: `<repo-root>/tmp/plan-workflows/<yyyy-mm-dd>-<repo>-<branch>-<plan-slug>/`.
-- Include the repo/worktree, branch, source plan path, its breakdown path, node id, node scope, and PR base, referenced code/docs, open questions, and exact requested task.
+- Include the repo/worktree, branch, source plan path, node scope, referenced code/docs, open questions, and exact requested task.
 - Include the plan's obligation-to-slice-to-proof mapping (path or excerpt), with each slice's tier record from `../../shared-references/canonical-implementation-plan.md` carried unchanged, or its compact proof line, plus evidence sources, freshness guards, proof layers, split triggers, open proof gaps, and the parent-verification rule for any downstream subagent/reviewer/driver evidence.
 - When the plan touches auth, parsing, filesystem, network, secrets, subprocesses, plugins, MCP, CI, package scripts, dependencies, agents, or external services, include the applicable entry points, trust boundaries, invariants, non-goals, and proof. Otherwise record only `Security: not applicable`.
 - If a plan file is available, read it end to end before packaging. Carry the plan path and useful repository identities, but do not return a separate reading receipt, line count, chunk range, or file-content hash or digest.
@@ -30,7 +30,7 @@ Package one existing PR implementation plan, with its breakdown node, so another
 1. Resolve the repo root with `git rev-parse --show-toplevel` when possible.
 2. Resolve the source plan artifact or plan packet. If none exists, apply the core routing rule and stop.
 3. If a source file exists, read the whole file before summarizing. A heading search, path listing, or user summary is not a substitute for the plan contents.
-4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring, and return the unchanged plan record, governing basis, delivery context with its breakdown node and base, and any blocking discrepancy for the handoff packet.
+4. MUST load `../../shared-references/canonical-implementation-plan.md` to validate the existing completed plan and preserve it without re-authoring, and return the unchanged plan record, governing basis, delivery context, and any blocking discrepancy for the handoff packet.
 5. Inspect only the secondary code/docs needed to make the handoff grounded.
 6. Record `authoring transfer: none | user-designated successor main`. For a transfer, include the named recipient, transferred plan scope, and exact user-direction evidence; otherwise preserve the current main as planning owner.
 7. Create the temp artifact directory. Include repo, branch/worktree, and plan slug in the path.

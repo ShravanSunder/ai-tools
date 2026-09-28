@@ -10,11 +10,11 @@ Date: <yyyy-mm-dd>
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <absolute or repo-relative path>
-Breakdown: <breakdown path> · node <node id> · scope <node scope> · base <trunk commit | parent PR head>
+Node scope: <node scope>
 Originating planner: plan-implementation | plan-improve-repo
 Planning result and payload: ready | revision-requested | blocked — <payload>
 Governing planning basis: <complete unchanged basis>
-Delivery context: <complete unchanged per-PR context: requested terminal, breakdown, node, base>
+Delivery context: <complete unchanged context>
 Prepared for: <agent/CLI/session target>
 Authoring transfer: none | user-designated successor main
 Successor-main evidence: <named recipient, transferred planning scope, explicit user direction | not applicable>
@@ -65,8 +65,8 @@ You are taking over a plan/design handoff.
 Repo: <absolute repo path>
 Branch/worktree: <branch or detached/head state>
 Source plan: <path>
-Canonical plan record: <immutable path, originating planner, result and payload, breakdown node id and base>
-Governing planning basis and delivery context: <complete unchanged values, with a pointer to the breakdown node>
+Canonical plan record: <immutable path, originating planner, result and payload>
+Governing planning basis and delivery context: <complete unchanged values>
 
 Your task:
 <task>
