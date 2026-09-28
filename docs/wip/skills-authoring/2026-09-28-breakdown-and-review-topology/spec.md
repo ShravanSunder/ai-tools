@@ -52,7 +52,7 @@ Prior art (read at the pinned commits): pstack `poteto-mode/playbooks/multi-phas
    Main runs each integration gate ─► owner merges
 ```
 
-Complexity decides the Sidekick; size decides the slices. A PR is an independently buildable and reviewable outcome. Program design's owners and edges are the candidate cuts: a large local change stays one PR with many Workhorse slices; two disjoint features become two PRs; a behavior change that must land across two owners at once stays one PR with a Daily-driver Sidekick; a contract PR exists only when a real shared seam lets two consumers proceed independently. The number of PRs follows independence, never owner or file count.
+Complexity decides the Sidekick; size decides the slices. A PR is an independently buildable and reviewable outcome. Program design's owners and edges are the candidate cuts: a large local change stays one PR with many Workhorse slices; two disjoint features become two PRs; a behavior change that must land across two owners at once stays one PR, and its Sidekick follows Spec A's C1 and D16 (a Luna xhigh Sidekick when every slice fits and every dependent choice is in the plan, Opus otherwise); a contract PR exists only when a real shared seam lets two consumers proceed independently. The number of PRs follows independence, never owner or file count.
 
 ## Success definition
 
