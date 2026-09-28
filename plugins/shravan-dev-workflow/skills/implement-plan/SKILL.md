@@ -11,7 +11,7 @@ Implementation executes one immutable ready plan, the plan for one PR node of a 
 
 ## Execution Responsibility
 
-Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer. Dispatch follows each slice's tier record (`../../shared-references/canonical-implementation-plan.md`) and the `manage-agents` staffing table (`../manage-agents/SKILL.md`, Commission an implementation 🐒 Sidekick). An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
+Use the ready plan, selected slice, and any scoped handoff as the implementation phase context. In an orchestrated project flow, the persistent implementation 🐒 Sidekick is the implementer. Dispatch follows each slice's tier record (`../../shared-references/canonical-implementation-plan.md`) and Staffing (`manage-agents`). An assigned Worker executes its slice and fitting proof without creating another Sidekick; a direct bounded implementation assignment remains direct. Reuse an existing suitable executor through its corrections. The orchestrator retains design decisions and final disposition.
 
 ## Validate Before Editing
 
@@ -29,7 +29,7 @@ Completion: the unchanged ready plan record, governing basis, delivery context, 
 3. Execute one slice inside its write scope, using red/green when required and preserving every proof gate. When a dependency the slice needs is missing, put a contract-honoring stand-in at a boundary the plan names, record it as a stand-in through `practices-show-me-your-work`, and continue the slice. Claim no proof for the stubbed interaction. Route a replan only when the stand-in would change a public contract, persisted data format, or ownership.
 4. Re-anchor and prove the slice before advancing; integrate only at the plan's named gate.
 5. Classify surprises as `reversible drift | design break | plan defect | out-of-scope infrastructure failure | evidence gap`. Correct reversible drift inside scope and route every other class to its owner before building on it.
-6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same 🔎 Review Sidekick assigned to this PR or its stack. When the review returns `not-converging`, stop correcting and return it to the orchestrator.
+6. For an accepted implementation-owned review finding, apply the smallest correction and fresh proof. In an orchestrated project flow, return the affected proof through orchestrator disposition to the same 🔎 Review Sidekick of this review scope. When the review returns `not-converging`, stop correcting and return it to the orchestrator.
 7. Return each slice report, including decisions made and open stand-ins, to its assigning implementer. When all of this PR's planned development and fitting proof are complete, return the canonical plan record with its node and base, governing basis, delivery context, and completion report to the orchestrator for that PR's assessment before its first independent review.
 
 ## Boundaries

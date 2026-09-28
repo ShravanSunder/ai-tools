@@ -36,7 +36,6 @@ The ready frontier is the smallest plan slice whose prerequisites are proven and
 - Route standalone procedures or long watches through `manage-agents` only when they are actually separately assigned; never assign an 🔧 Operator for each test or proof command.
 - Contract-only or prefactoring work must name the downstream consumer it unlocks and integrate at that consumer's first interaction.
 - A slice too large to prove inside scope returns a split or plan-defect route before edits.
-- A Workhorse slice that stops at its boundary returns a plan-defect route with the stop evidence. The implementer does not re-cut it or re-run it on a bigger model.
 
 Return the selected slice, prerequisites, allowed writes, non-goals, collision decision, and first integration gate. For one isolated slice with no separately changed parts, return `integration gate: not applicable` with that reason instead of inventing a gate.
 
@@ -77,7 +76,8 @@ design break
 
 plan defect
   slice, sequence, dependency, collision, write scope, proof mapping, or tier
-  record is wrong, including a Workhorse slice that stops at its boundary
+  record is wrong, including a Workhorse slice that stops at its boundary; the
+  implementer does not re-cut it or re-run it on a bigger model
   -> stop at the recorded originating planner
 
 out-of-scope infrastructure failure
