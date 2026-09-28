@@ -7,7 +7,7 @@ description: "Use when pushing, opening, updating, monitoring, or finishing a Gi
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-Close the PR loop with current GitHub state and a reviewer-facing why-and-shape body. Green checks are one gate, not merge readiness. Independent-review coverage is not a wrap-up ready gate. Description authoring is Workhorse 🛠️ Worker Exact-steps work; parent gates stay mechanical. The body is HEAD-tied: a head or diff identity change re-enters description dispatch before ready.
+Close the PR loop with current GitHub state and a reviewer-facing why-and-shape body. Green checks are one gate, not merge readiness. Independent-review coverage is not a wrap-up ready gate. Description authoring is Workhorse 🛠️ Worker judgment under Complete direction; parent gates stay mechanical. The body is HEAD-tied: a head or diff identity change re-enters description dispatch before ready.
 
 This is a low-thinking workflow by default: use repeatable state checks, reference files, API reads, and crisp gate decisions. Escalate reasoning only when PR state, review feedback, mergeability, security/public-artifact safety, or user authorization is ambiguous. Do not write the PR body in the parent — not at `gh pr create`, and not because a Workhorse 🔧 Operator can "jot the outline."
 
@@ -37,7 +37,7 @@ One run wraps up one PR. Independent PRs wrap up separately, each on its own bra
 4. IF this run created a PR, or the current body is missing `## Why the change` / `## Special things to note` / `## Change outline`, is a file-list changelog (`- path — note` bullets as the outline), stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite — including after a head/diff identity change and before a ready claim:
    ```text
    IF this run created a PR, or the current body is missing those headings, is a file-list changelog, stale against the current HEAD/diff, secret-unsafe, or the user asked to rewrite:
-     dispatch `pr-description` to a Workhorse 🛠️ Worker (Exact steps) using this packet:
+     dispatch `pr-description` to a Workhorse 🛠️ Worker (Complete direction) using this packet:
        pr number or create-intent; base; head SHA; diff identity; existing body;
        related URLs (only those already supplied); never-publish rules from step 2.
      Subagent loads `references/pr-description.md`.
@@ -47,7 +47,7 @@ One run wraps up one PR. Independent PRs wrap up separately, each on its own bra
      Instance authority is equal to or narrower than the lane maximum: draft the body file under tmp only; no push, merge, readiness claim, comment replies, or `gh pr edit`.
      Return complete | partial | blocked receipt against the receipt in `references/pr-description.md`.
    ```
-   Description is Collection+Synthesis under Exact steps: Workhorse 🛠️ Worker drafts Why, Special things to note, and views. Do not apply manage-agents Operator PR-ops to that draft. Workhorse Operator is the monitor. Operator publishes only the already-verified tmp file with `gh pr edit --body-file`.
+   Description is Collection+Synthesis under Complete direction: Workhorse 🛠️ Worker drafts Why, Special things to note, and views. Do not apply manage-agents Operator PR-ops to that draft. Workhorse Operator is the monitor. Operator publishes only the already-verified tmp file with `gh pr edit --body-file`.
    Parent mechanical-verifies only a `complete` receipt: the three headings are present as those exact strings; `included_views` is non-empty; the outline is not `- path — note` bullets; the receipt head SHA matches the current PR head; public-artifact-safety holds. Do not require catalog tokens to equal outline heading text. Parent does not re-pick views or rewrite Why / Special things to note. Then dispatch an Operator to `gh pr edit --body-file` the verified tmp file. Completion: GitHub body matches the verified file, or a named blocker.
 5. Monitor checks, comments, review threads, mergeability, head SHA, and the current PR body. MUST load `references/monitor-loop.md` and return current gate state. MUST load `manage-agents` before dispatching or resuming a Workhorse 🔧 Operator monitor. When head SHA or diff identity changes, re-evaluate step 4 before claiming ready.
 6. Handle existing PR feedback. MUST load `../../shared-references/code-review-feedback-handling.md` and return the next fix, reply, ask, or route action.
