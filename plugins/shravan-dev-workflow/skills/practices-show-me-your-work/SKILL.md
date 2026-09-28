@@ -11,7 +11,7 @@ A task qualifies when the work spans more than one session, commissions another 
 
 ## Open or resume the trace
 
-At the start of a qualifying task, Main and 🐒 Sidekicks, before other work, MUST load `practices-collaboration` and return the exact work thread reference or `no-home: <gap>`. A bounded 🛠️ Worker or 🔧 Operator skips this entry: it reads its packet first, keeps no trace, and returns evidence to its assigner. That practice owns discovery, seats, and resolution; `agent-collaboration` owns the calls. Then act by what came back:
+At the start of a qualifying task, Main and 🐒 Sidekicks, before other work, MUST load `practices-collaboration` and return the exact work thread reference or `no-home: <gap>`. A bounded 🛠️ Worker or 🔧 Operator skips this entry (`practices-collaboration`). That practice owns discovery, seats, and resolution; `agent-collaboration` owns the calls. Then act by what came back:
 
 | Situation | Do this now |
 | --- | --- |
