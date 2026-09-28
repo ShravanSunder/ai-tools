@@ -28,12 +28,12 @@ Use a compact plan for one low-risk owner and one or two proof gates. Use a full
 
 ## Record Each Slice's Tier
 
-Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`; the contract lives in `../../../shared-references/canonical-implementation-plan.md`. Decide the tier with Workhorse fit in `../../manage-agents/references/model-catalog.md`; a Daily-driver slice names its reason for leaving the Workhorse tier.
+Each slice carries its tier record (`../../../shared-references/canonical-implementation-plan.md`).
 
 Cut the work so the record is honest:
 
 - A slice that bundles independent units is split into one slice per unit.
-- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, and tag it Daily driver only with a reason from Leaving the Workhorse tier in the catalog.
+- Split a slice that fails Workhorse fit or crosses an assigned authority or contract boundary at that boundary; tag it Daily driver only with an escalation reason.
 
 ## Throughput Checkpoint
 
@@ -45,7 +45,7 @@ The plan records five items. Keep every item and write `n/a: <reason>` when one 
 - **shared mutable state**: state, fixtures, or generated artifacts several slices would write; split the target before serializing on it;
 - **smallest safe decomposition**: the fewest executors that keep every slice fitting its record; if one executor is best, say why.
 
-A slice earns the `independent` mark, which the staffing table in `manage-agents` dispatches on, only after a shared-write check: no `requires` or `serial` edge to in-flight work, write surfaces disjoint from every slice that may run beside it, and its own proof. Different files alone do not show independence.
+A slice earns the `independent` mark, which Staffing (`manage-agents`) dispatches on, only after a shared-write check: no `requires` or `serial` edge to in-flight work, write surfaces disjoint from every slice that may run beside it, and its own proof. Different files alone do not show independence.
 
 ## Cut the Delivery into PRs
 
@@ -53,7 +53,7 @@ Cut PRs before slices. Complexity decides the Sidekick; size decides the slices.
 
 - a large local change stays one PR with many Workhorse slices;
 - two disjoint features become two PRs;
-- a behavior change that must land across two owners at once stays one PR; its Sidekick follows the staffing table in `manage-agents`;
+- a behavior change that must land across two owners at once stays one PR;
 - a contract PR exists only when a real shared seam lets two consumers proceed independently.
 
 The number of PRs follows independence, never owner or file count. Order the nodes riskiest unknown first among those whose prerequisites are met, and name an integration gate wherever independently built PRs first interact, with the proof that shows it.
@@ -62,7 +62,7 @@ The number of PRs follows independence, never owner or file count. Order the nod
 
 **Planned (at breakdown).** A node is independent of its siblings when its write surface is disjoint from theirs, its rails and proof let a reviewer judge it without depending on an unmerged sibling change, and where it first meets another node is a named integration gate. A node that needs another node's behavior is stacked on it; nodes that need the same new interface wait for a contract node that adds it. "C is executable now; X and Y wait for C's interface" is a correct planned state.
 
-**Eligible (at plan time).** When Main writes a node's plan, it checks the node's actual base in source: every seam, interface, or signal the node takes from outside itself exists there and supports the observation it needs. Seams the node adds under its own plan are its work, not prerequisites; Workhorse fit (`../../manage-agents/references/model-catalog.md`) still applies per slice. A node with an unmet external prerequisite stays pending, or its gap returns to its owner (`plan-defect`, or `program-design-gap` for a missing structural decision).
+**Eligible (at plan time).** When Main writes a node's plan, it checks the node's actual base in source: every seam, interface, or signal the node takes from outside itself exists there and supports the observation it needs. Seams the node adds under its own plan are its work, not prerequisites. A node with an unmet external prerequisite stays pending, or its gap returns to its owner (`plan-defect`, or `program-design-gap` for a missing structural decision).
 
 ## Order Only Real Dependencies
 
@@ -111,7 +111,6 @@ Split or replan when:
 - a migration is tested only on an empty state;
 - a manual check is described but no runnable surface exists;
 - a slice changes several owners and cannot isolate its failure;
-- a slice records Workhorse but misses a Workhorse fit condition;
 - completing the slice would require an unmade product or structural decision.
 
 Return the exact gap and its owner instead of padding the plan with speculative tasks.
