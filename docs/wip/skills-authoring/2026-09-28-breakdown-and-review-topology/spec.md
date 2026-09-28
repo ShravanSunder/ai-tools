@@ -1,6 +1,6 @@
 # Breakdown and review topology
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r2**, 2026-09-28. Status: **draft**. r2 adds the consumer disposition from the sweep. Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r3**, 2026-09-28. Status: **draft**. r2 added the consumer disposition from the sweep; r3 applies the proposal review's six findings (BF1 to BF6) and its advice (Spec-review record). Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
 
 ## Owner meaning (verbatim, 2026-09-27 and 2026-09-28)
 
@@ -52,12 +52,12 @@ Prior art (read at the pinned commits): pstack `poteto-mode/playbooks/multi-phas
    Main runs each integration gate ─► owner merges
 ```
 
-Complexity decides the Sidekick; size decides the slices. A PR is a unit of independent work cut along the architecture, so a large but local change stays one PR with many Workhorse slices, and a small change that crosses two owners becomes two PRs or a contract PR plus two.
+Complexity decides the Sidekick; size decides the slices. A PR is an independently buildable and reviewable outcome. Program design's owners and edges are the candidate cuts: a large local change stays one PR with many Workhorse slices; two disjoint features become two PRs; a behavior change that must land across two owners at once stays one PR with a Daily-driver Sidekick; a contract PR exists only when a real shared seam lets two consumers proceed independently. The number of PRs follows independence, never owner or file count.
 
 ## Success definition
 
 1. `orchestrator-implementation-goal` never authors a plan. It admits a ready breakdown and the ready plan for each PR it starts, and returns `ready-for-planning` to Main otherwise.
-2. Before execution, Main produces one breakdown: a PR map derived from program-design's owners and dependency direction, where every PR passes the independence test or is placed in a stack or behind a contract PR. The owner sees the map.
+2. Before execution, Main produces one ready breakdown (CB1), even for a single PR: the PR map with planned dependencies, stacks, contract PRs, and integration gates, drawn from the admitted basis. A PR is executable only when its plan is written and CB2 passes against its actual base. The owner sees the map.
 3. Every PR has its own implementation plan, written when its base exists, and that plan is the rail its Sidekick executes and its reviewer judges.
 4. Every independent PR gets its own independent 🔎 Review Sidekick; a stack gets one that judges each layer against that layer's plan.
 5. Main runs every integration gate named in the breakdown.
@@ -67,11 +67,11 @@ Complexity decides the Sidekick; size decides the slices. A PR is a unit of inde
 
 | # | Default taken | Rationale |
 |---|---|---|
-| B1 | Planning is Main's and happens before execution. `orchestrator-implementation-goal` admits a ready breakdown and per-PR plans and runs execution, review, and wrap-up. With no ready plan it returns `ready-for-planning` to Main, which loads `plan-implementation` in its own session (directly, or through `orchestrator-design`'s continued-delivery step). `orchestrator-design:78` stops commissioning Sidekicks; it hands the ready plan set to `orchestrator-implementation-goal`. | Owner, 2026-09-27. One home for planning (evidence 1). |
-| B2 | The **breakdown** is a new record, owned by `plan-implementation` and defined in `shared-references/canonical-implementation-plan.md` (Contract CB1). Main derives its PR nodes from program-design's ownership and dependency maps; a design without them routes `program-design-gap`. | Owner: "complexity means architecture". PR boundaries become a projection of the component model the owner already reviews. |
-| B3 | One canonical implementation plan per PR. `PR topology` and multi-PR `delivery grouping` leave the plan record; the breakdown carries them. A plan names its PR node and base. | Owner, 2026-09-28. Evidence 2. Hard cutover. |
-| B4 | Each PR's plan is written when its PR can start: its base exists (trunk, a landed PR, or the stack parent's head). The breakdown and the plans for the first frontier are written together. | Owner accepted 2026-09-28. Avoids plans written against code that does not exist yet. |
-| B5 | The **PR independence test** is Contract CB2. A PR that fails it is stacked on the PR it depends on, or placed after a contract PR that adds the shared seam (Matt's expand step). | pstack's disjoint write set and "independent and first"; Matt's blocking edges; Spec A's seam finding. |
+| B1 | Planning is Main's and happens before execution. `orchestrator-implementation-goal` admits a ready breakdown and the plan for each PR it starts, and runs execution, review, and wrap-up. It never authors or repairs a plan: a missing breakdown, a missing frontier plan, and a plan defect all return a token (B14) that Main resolves by loading `plan-implementation` in its own session, while unaffected PRs continue. `orchestrator-design`'s continued-delivery step produces the breakdown and first plans and stops; it no longer commissions Sidekicks. Phases return tokens and never name an orchestrator (`AGENTS.md:112`). | Owner, 2026-09-27. One home for planning (evidence 1); review BF4. |
+| B2 | The **breakdown** (CB1) is owned by `plan-implementation` and defined in `shared-references/canonical-implementation-plan.md`. Its authority follows the admitted basis: a reviewed design supplies Program Design's owners and dependency edges as candidate cuts; an admitted `implementation-mechanics-only` improvement supplies its current-source ownership and applicability evidence, with no Program Design invented. A real missing structural decision still returns `program-design-gap`. | Owner: "complexity means architecture". Review BF1 (candidates, not a count rule) and BF6 (keep the mechanics-only path). |
+| B3 | One canonical implementation plan per PR node. A plan names its breakdown identity, its node id, and its concrete base (trunk commit or parent PR head) when written. `PR topology` and multi-PR `delivery grouping` leave the plan record; the breakdown carries them. | Owner, 2026-09-28. Evidence 2. Hard cutover. |
+| B4 | The breakdown is written once, whole, with planned dependencies. Each PR's plan is written when that PR becomes executable (its base exists), so the breakdown lists nodes, never plan paths; plans point up to their node. The first frontier's plans are written with the breakdown. | Owner accepted 2026-09-28. Review BF2 and BF3: the breakdown never mutates as plans arrive. |
+| B5 | The **PR independence test** (CB2) has two times. At breakdown, Main records planned structure: each node's rails, write surface, and dependencies, and whether it stacks on a node or waits for a contract node. At plan time, Main checks execution eligibility against the actual base in source: every seam the PR uses exists there and supports the observation it needs (Spec A C1 condition 4). A node that fails at plan time stays pending or returns to its owner. | pstack disjoint writes; Matt's blocking edges; Spec A's seam finding; review BF3. |
 | B6 | The breakdown names every **integration gate**: where independently built PRs first interact, and the proof that shows it. Main runs each gate after its PRs are PR-ready. | Matt's integrate-and-verify ticket; `slice-and-proof-design.md:41` already places gates at first interaction. |
 | B7 | The breakdown orders PRs **riskiest unknown first** among those whose prerequisites are met. | pstack-audit hand-off, 2026-09-27. |
 | B8 | Review topology: Main assesses each PR before independent review. Each independent PR gets its own 🔎 Review Sidekick (different lineage, no author history). A stack gets one Review Sidekick relationship that reviews each layer's diff against its parent and that layer's plan. Findings route through Main to the PR's Sidekick. | Owner, 2026-09-27; stack unit accepted 2026-09-28. Keeps `implementation-review/SKILL.md:28`'s whole-read rule per PR or layer. |
@@ -79,35 +79,43 @@ Complexity decides the Sidekick; size decides the slices. A PR is a unit of inde
 | B10 | Stacks use `gh stack` (global prompt); independent PRs use separate branches or worktrees. `implementation-pr-wrapup` runs per PR, and per stack from its lowest layer up. | Global prompt Git section. |
 | B11 | Records are typed fields (CB1), so a future workflow runner (typed script over agent-collaboration with persistence) can read them. No runner is built here. | Owner's stated direction, 2026-09-28. |
 | B12 | `discuss-pathfinding` does not change. | Owner, 2026-09-28. |
-| B13 | Proof is static plus a walkthrough: re-cut one real multi-PR effort from the log audit (the thirteen-slice PR A assignment) into a breakdown under CB1 and CB2, and show where it would have split, stacked, or added a contract PR. No pressure runs. | Same posture as Spec A. |
+| B13 | Proof is static plus walkthroughs: the review's cases (a large local change, two disjoint features, a two-owner atomic change, a contract with two consumers, a stack whose parent head moves, a mechanics-only single-owner improvement, a singleton plan-only request) and re-cut one real multi-PR effort from the log audit (the thirteen-slice PR A assignment) into a breakdown under CB1 and CB2, and show where it would have split, stacked, or added a contract PR. No pressure runs. | Same posture as Spec A. |
+| B14 | Return tokens carry the breakdown. In `shared-references/phase-return-tokens.md`: `ready-for-planning` carries the admitted basis (reviewed design identities, or the admitted improvement pointer and basis class) and, for a later frontier, the breakdown identity and node id; `ready-for-implementation` carries the breakdown identity, node id, plan path, and base; `plan-defect` carries the breakdown identity and node id with its existing fields. Main resolves `ready-for-planning` and `plan-defect` by loading `plan-implementation` in its own session. | Review BF4: today's payloads cannot carry a node or an improvement basis. |
+| B15 | After Spec A's runs, Spec B changes the container from goal-wide plan to per-PR plan and keeps Spec A intact: C4 runs for each newly written full PR plan; C2 stays per slice; D16's table in `manage-agents` stays the one staffing owner; the seam check stays at plan time; nothing restores "directly by default". | Review advice 5. |
+| B16 | An integration gate records the exact PR heads it tested together. A change it discovers routes to the affected PR's Sidekick and reviewer through Main. Per-PR readiness is never reported as delivery readiness before the named gates pass. | Review advice 3. |
 
 ## Contracts
 
 ### CB1. Breakdown record
 
-Home: `shared-references/canonical-implementation-plan.md`, new section.
+Home: `shared-references/canonical-implementation-plan.md`, new section beside the plan record.
 
-> A breakdown lists PR nodes and the edges between them. Each node records: `id`; `scope` (the owner or component from program-design it changes); `rails` (the obligation identities it delivers); `write surface`; `base` (`trunk | <node id>`); `depends on` (node ids); `stack` (a stack id or `none`); `kind` (`feature | contract | integration`); `plan` (the plan path once written, or `not yet`). The breakdown also lists integration gates (the nodes that meet, the proof, the owner: Main) and the order, riskiest unknown first. Every node passes the PR independence test or names the stack or contract node that makes it pass.
+> A breakdown is one Markdown file per delivery at `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-breakdown.md`, written by Main with `plan-implementation`, even when it has one node. It records its admitted basis (reviewed design identities, or an admitted improvement pointer and basis class). Each node records: `id`; `outcome` (what this PR makes true, in the owner's words); `scope` (the owner or component, from Program Design or current-source ownership); `rails` (the obligation identities it delivers); `write surface`; `depends on` (node ids, planned); `stack` (a stack id or `none`); `kind` (`feature | contract | integration`). It also lists integration gates (the nodes that meet, the proof, Main as owner) and the order, riskiest unknown first. It is `ready` when node ids are unique, dependencies are acyclic, every obligation of the admitted basis belongs to exactly one node or gate, every stack is linear, and every contract node names its consumers. A ready breakdown is immutable: a topology change writes a new breakdown and marks which nodes' plans it supersedes. Plans point up to their node; the breakdown never records plan paths, PR numbers, or progress.
 
 ### CB2. PR independence test
 
-Home: `plan-implementation/references/slice-and-proof-design.md`, new section, beside Spec A's throughput checkpoint.
+Home: `plan-implementation/references/slice-and-proof-design.md`, new section beside Spec A's throughput checkpoint.
 
-> A PR is independent when: its write surface is disjoint from every sibling's; every seam, interface, or signal it uses exists at its base, landed or added by a contract PR below it; its rails and proof let a reviewer judge it without reading a sibling; and where it first meets another PR is a named integration gate. A PR that needs another PR's behavior is stacked on it. Two PRs that need the same new interface sit on a contract PR that adds it.
+> **Planned (at breakdown).** A node is independent of its siblings when its write surface is disjoint from theirs, its rails and proof let a reviewer judge it without depending on an unmerged sibling change, and where it first meets another node is a named integration gate. A node that needs another node's behavior is stacked on it; nodes that need the same new interface wait for a contract node that adds it. "C is executable now; X and Y wait for C's interface" is a correct planned state.
+>
+> **Eligible (at plan time).** When Main writes a node's plan, it checks the node's actual base in source: every seam, interface, or signal the node uses exists there and supports the observation it needs. A node that fails stays pending, or its gap returns to its owner (`plan-defect`, or `program-design-gap` for a missing structural decision). A stack child whose parent head moves after its plan was written follows the existing freshness and plan-defect rules.
 
+## Runs
 ## Runs
 
 One skill per run; anchors at `c08ab7af`. Spec A's runs land first on the same branch, since both specs edit `plan-implementation`, the canonical plan, and both orchestrators.
 
 | Run | Skill | Change |
 |---|---|---|
-| B-1 | `plan-implementation` (owns `canonical-implementation-plan.md`) | CB1 and CB2; one plan per PR (B3); breakdown first, plans at their frontier (B4); gates (B6); ordering (B7); the drawn PR map for the owner (B9); `program-design-gap` when owners or edges are missing (B2) |
-| B-2 | `orchestrator-implementation-goal` | admits a ready breakdown and per-PR plans; never authors a plan (B1); per-PR or per-stack lifecycle; review topology (B8); integration gates (B6); wrap-up per PR or stack (B10) |
-| B-3 | `orchestrator-design` | continued delivery produces the breakdown and first plans, then hands off; no commissioning (B1) |
-| B-4 | `implementation-review` | review unit is one PR, or one stack layer against its parent; the rail is that PR's plan (B8) |
+| B-1 | `plan-implementation` (owns `canonical-implementation-plan.md` and, here, the token payloads in `phase-return-tokens.md`) | CB1 and CB2; one plan per PR bound to its node and base (B3); breakdown whole, plans at their frontier (B4); gates (B6, B16); ordering (B7); the drawn PR map (B9); authority per admitted basis (B2); token payloads (B14); returns tokens and never names an orchestrator (B1) |
+| B-2 | `orchestrator-implementation-goal` | admits a ready breakdown and each started PR's plan; never authors or repairs a plan, and maps `ready-for-planning` and `plan-defect` back to Main (B1, B14); per-PR or per-stack lifecycle; review topology (B8); gates (B6, B16); wrap-up per PR or stack (B10); description, `agents/openai.yaml`, and README match |
+| B-2a | `implement-plan` | admits one PR's plan with its node and base; a boundary stop returns `plan-defect` with the node |
+| B-2b | `manage-agents` | the Commission section names the PR node and base; the D16 table stays the staffing owner (B15) |
+| B-3 | `orchestrator-design` | continued delivery ends at the ready breakdown and first plans, then hands off; no commissioning (B1) |
+| B-4 | `implementation-review` | review unit is one PR, or one stack layer against its parent; the per-PR plan partitions the work while Requirements, Specification, Program Design, and the goal stay the rails; `:28` whole-read and consumer coverage stay; convergence is compared per layer (B8) |
 | B-5 | `implementation-pr-wrapup` | per PR, and per stack from its lowest layer (B10) |
 | B-6 | `plan-handoff` | carries one PR's plan plus its breakdown node |
-| B-7 | `plan-improve-repo` | an admitted finding produces a one-PR plan, or a breakdown when it spans owners |
+| B-7 | `plan-improve-repo` | an admitted finding yields a single-node breakdown and one plan, or more nodes when it truly spans independent outcomes (B2) |
 | B-8 | ship prep | version, changelog, README, tests and fixtures |
 
 ## Consumer disposition
@@ -121,14 +129,17 @@ Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill
 | B-2 | `orchestrator-implementation-goal/SKILL.md` (8, 12, 23, 28 to 36, 40, 44, 51); `references/goal-contract-and-routing.md` (5, 22, 42, 59, 62, 68, 71, 74, 78, 90, 104, 107, 112) | admit a ready breakdown and per-PR plans; `ready-for-planning` to Main otherwise; per-PR or per-stack lifecycle; review topology; gates; wrap-up per PR or stack |
 | B-3 | `orchestrator-design/SKILL.md` (78, 80) | continued delivery ends at the breakdown and first plans; no commissioning |
 | B-4 | `implementation-review/SKILL.md` (10, 18, 24) | review unit is one PR, or one stack layer against its parent; the rail is that PR's plan; `:28` whole-read and `:66` fresh-review stay |
-| B-2 | `implement-plan/SKILL.md` (19, 32, 33) | admits one PR's plan; returns to its PR's reviewer through Main |
+| B-2a | `implement-plan/SKILL.md` (19, 32, 33) | admits one PR's plan with node and base; returns to its PR's reviewer through Main |
 | B-6 | `plan-handoff/SKILL.md` (10, 19, 33); `references/handoff-template.md` (12, 16, 67, 68) | one PR's plan plus its breakdown node |
 | B-7 | `plan-improve-repo/SKILL.md` (10, 12, 103); `references/improvement-plan-template.md` (3, 77, 78, 81, 91) | an admitted finding yields a one-PR plan, or a breakdown when it spans owners |
-| B-2 | `manage-agents/SKILL.md` (12, 96) | Commission names the PR node; `:42` is kept and cited (a single Review Sidekick is already different-lineage) |
+| B-2b | `manage-agents/SKILL.md` (12, 96) | Commission names the PR node; `:42` is kept and cited (a single Review Sidekick is already different-lineage) |
+| B-1 | `shared-references/phase-return-tokens.md` (`ready-for-planning`, `plan-defect`, `ready-for-implementation` rows) | payloads per B14 |
+| B-2 | `orchestrator-implementation-goal/SKILL.md:3` (description), `:23` (token map), `agents/openai.yaml:4`, `README.md:3-17` (mermaid shows "Main authors plan" inside the goal) | rewrite per B1 and B14 |
+| B-1 | `plan-implementation/agents/openai.yaml:4`, `README.md:3` | "one repo-grounded implementation plan" becomes a breakdown and per-PR plans |
 | B-8 | `AGENTS.md` (67, 125, 131, 134); plugin `README.md` (11, 17, 19, 67, 75, 132, 152, 156, 162, 188, 202, 203) | docs follow the runs |
-| B-8 | fixtures `existing-plan.md`, `handoff-plan.md`, `improvement-plan.md` (topology lines), `active-orchestration-commission.md` (13 sites); `tests/skills/lib/minimal-planning-delivery-contract.test.ts` (10 assertions); scenarios under `implementation-handoff`, `implementation-review`, `orchestrator-design`, `orchestrator-implementation-goal`, `plan-handoff`, `plan-implementation` (per `consumer-sweep.tsv`) | test-update: one plan per PR, breakdown admission, per-PR review; each rewritten criterion keeps its paired failure example |
+| B-8 | fixtures `existing-plan.md`, `handoff-plan.md`, `improvement-plan.md` (topology lines), `active-orchestration-commission.md` (13 sites); `tests/skills/lib/minimal-planning-delivery-contract.test.ts` (10 assertions, plus `:61` "invokes `implement-plan`" and `:85-86` "Write one file per accepted improvement"; assert the plan and breakdown sections separately, node and base binding, and rejection of a mismatched fixture); a new breakdown fixture beside the per-PR fixtures; scenarios under `implementation-handoff`, `implementation-review`, `orchestrator-design`, `orchestrator-implementation-goal`, `plan-handoff`, `plan-implementation` (per `consumer-sweep.tsv`) | test-update: one plan per PR, breakdown admission, per-PR review; each rewritten criterion keeps its paired failure example |
 
-**Rejected sweep rows:** all nine `skills-creation` rows (`SKILL.md:174, 265, 276, 282, 284, 292, 304, 307, 312`) and `references/review/implementation-review.md:3, 35`. A runtime skill package ships as one PR (these two specs share one), so its review stage stays per package run; per-PR and per-stack review topology is for general-domain delivery. `manage-agents/SKILL.md:42` is kept, not rewritten.
+**Rejected sweep rows:** all nine `skills-creation` rows (`SKILL.md:174, 265, 276, 282, 284, 292, 304, 307, 312`) and `references/review/implementation-review.md:3, 35`. This A+B delivery ships as one PR, so `skills-creation`'s review stage stays per package run here; per-PR and per-stack review topology is scoped to general-domain delivery. `skills-creation/SKILL.md:274` still handles several PR assignments with integrated source identities, and none of its full-diff or assessment obligations is waived. `manage-agents/SKILL.md:42` is kept, not rewritten.
 
 ## Coordination
 
@@ -143,10 +154,11 @@ Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill
 
 - `discuss-pathfinding` (B12).
 - A typed workflow runner (B11).
-- `skills-creation`'s review stages: a runtime skill package ships as one PR, so its review stays per package run.
+- `skills-creation`'s review stages: this delivery ships as one PR, so its review stays per package run.
 - Merge authority: the owner merges.
 - Changing Spec A's decisions.
 
 ## Spec-review record
 
-None yet.
+- **Review 1** (r2, commit `3fe81561`): GPT-6 Astra high, session `01a0e2a0` (the owner-authorized advisor and reviewer for both specs), skills-creation loaded. Verdict `targeted-revision`, `revise-first`, blocker override applies. Accepted BF1 (owner boundaries became a PR-count rule), BF2 (ready breakdown lacked a contract), BF3 (CB2 could not certify future nodes), BF4 (tokens, descriptions, READMEs, and two contract-test lines kept the old routing; a phase must not name an orchestrator), BF5 (B-2 held other skills' semantic edits), BF6 (the mechanics-only planning path was dropped). Rejected: expanding B8 into `skills-creation` (kept as scope, reworded); B8 weakening review (the whole-read rule stays).
+- **r3 remediation** (Main): mental model and success 2 (BF1); CB1 rewritten with identity, home, basis, validity, readiness, immutability, and plans pointing up (BF2); CB2 split into planned and eligible (BF3); B14 token payloads, B1 routing, and the missed surfaces and assertions (BF4); runs B-2a and B-2b (BF5); B2 authority per admitted basis (BF6); advice adopted as B15 (A+B composition), B16 (integration evidence), and the planned-versus-executable wording in CB2.
