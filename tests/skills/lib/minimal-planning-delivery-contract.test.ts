@@ -270,6 +270,18 @@ describe("goal delivery intent hard cutover", () => {
   });
 
   test("binds every ready plan fixture to its ready breakdown node and base", () => {
+    const expectedTierRecords: Readonly<Record<string, readonly string[]>> = {
+      "existing-plan.md": [
+        "tier: Workhorse · Complete/Local/Task · pinned formatter and test paths, exact proof commands, named stops below; the scenario-case loader it reads exists at base",
+      ],
+      "handoff-plan.md": [
+        "tier: Workhorse · Complete/Local/Task · pinned formatter paths and proof commands",
+        "tier: Workhorse · Complete/Local/Task · pinned validation path; loader duplicate checks exist at base",
+      ],
+      "improvement-plan.md": [
+        "tier: Workhorse · Exact steps/Local/Task · one pinned call site, existing tests, no new seam",
+      ],
+    };
     for (const planFile of ["existing-plan.md", "handoff-plan.md", "improvement-plan.md"]) {
       const planText = readFileSync(path.join(fixtureRoot, planFile), "utf8");
       const binding = readPlanNodeBinding(planText);
@@ -277,7 +289,10 @@ describe("goal delivery intent hard cutover", () => {
       const breakdownText = readFileSync(path.join(repoRoot, binding?.breakdownPath ?? ""), "utf8");
 
       expect(planBindsToReadyBreakdownNode(planText, breakdownText), planFile).toBe(true);
-      expect(planText, planFile).toContain("tier: Workhorse");
+      for (const tierRecord of expectedTierRecords[planFile] ?? []) {
+        expect(planText, planFile).toContain(tierRecord);
+      }
+      expect(planText.match(/tier: /g)?.length, planFile).toBe(expectedTierRecords[planFile]?.length);
       expect(planText, planFile).toContain("## Throughput Checkpoint");
       expect(breakdownText, planFile).not.toMatch(/-plan\.md|PR #\d+/);
     }

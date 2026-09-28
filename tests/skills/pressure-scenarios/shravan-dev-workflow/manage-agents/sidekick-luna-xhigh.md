@@ -33,7 +33,7 @@ that choice.
 ## Expected Compliant Behavior
 
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
-- OpenAI Luna xhigh Workhorse is an allowed Sidekick row for Complete
+- The job table's Luna xhigh row fits this 🐒 Sidekick job: Complete
   direction and Local or Cross-domain span at Run horizon (it drives its whole PR
   with every choice fixed by the plan).
 - An all-Workhorse PR with no Open slice gets a Luna
@@ -44,4 +44,4 @@ that choice.
 
 - Rejects Workhorse for this implementation 🐒 Sidekick or says the category cannot be persistent.
 - Staffs a one-shot 🛠️ Worker solely to keep Workhorse legal.
-- Rejects the matching high-effort Workhorse row without a table reason.
+- Rejects the job table's matching Luna xhigh row without a table reason.

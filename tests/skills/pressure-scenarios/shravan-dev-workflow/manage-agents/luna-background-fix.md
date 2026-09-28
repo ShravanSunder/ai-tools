@@ -34,5 +34,5 @@ for total cost.
 ## Failure Signals
 
 - Defaults to Sol or Opus solely because the release is waiting.
-- Rejects the matching Workhorse row without a table reason.
+- Rejects the job table's matching Luna row without a table reason.
 - Selects a category without checking the job table.
