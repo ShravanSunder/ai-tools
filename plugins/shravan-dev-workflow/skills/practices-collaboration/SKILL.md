@@ -11,7 +11,9 @@ Every call goes through the tool manual: MUST load `agent-collaboration` for the
 
 ## At entry: find the work home
 
-For a qualifying task, before other work, MUST load `references/work-home-discovery.md` and return either the exact work thread reference (service, project, board, topic, root message id) or `no-home: <gap>`. A new session continues the existing work thread; it does not start a new one.
+For a qualifying task, Main and 🐒 Sidekicks, before other work, MUST load `references/work-home-discovery.md` and return either the exact work thread reference (service, project, board, topic, root message id) or `no-home: <gap>`. A new session continues the existing work thread; it does not start a new one.
+
+A bounded 🛠️ Worker or 🔧 Operator skips discovery. It uses the packet and any work reference it was given, and returns to its assigner; its packet is its whole context.
 
 ## No home: return it and keep working
 
