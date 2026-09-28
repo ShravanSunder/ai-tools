@@ -2,7 +2,7 @@
 
 This reference owns pre-edit repository validation, ready-frontier selection, slice-local proof, integration gates, surprise classification, and implementation completion reporting for an already admitted plan.
 
-Expected inputs: the unchanged complete canonical plan record with its breakdown, node, and base, governing planning basis, delivery context, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
+Expected inputs: the unchanged complete canonical plan record, governing planning basis, delivery context, current repository path and intended branch, governing instructions, allowed writes, and known evidence gaps.
 
 Return: the pre-edit verdict, ready frontier, proof and integration contract, classified surprise routes, and completion report.
 
@@ -95,7 +95,7 @@ Orchestrator feedback may inform execution, but neither it nor partial direction
 
 ## Report What Changed and What Was Proven
 
-Return implementation evidence keyed to the unchanged canonical plan record, its breakdown node and base, governing basis, and delivery context:
+Return implementation evidence keyed to the unchanged canonical plan record, governing basis, and delivery context:
 
 ```text
 implementation base/HEAD/diff:
