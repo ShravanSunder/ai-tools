@@ -102,7 +102,7 @@ flowchart LR
     specReview --> planImplementation
     planImplementation --> planHandoff
     planImplementation -.->|"ready delivery context"| implementPlan
-    planHandoff -.->|"when exact approval is preserved"| implementPlan
+    planHandoff -.->|"preserved delivery context"| implementPlan
     implementPlan --> implementationReview
     implementationReview -.->|"accepted implementation correction"| implementPlan
     implementationReview --> implWrap
@@ -157,7 +157,7 @@ Use `plan-handoff` to package one existing PR implementation plan, with its brea
 
 ### Implementation boundary
 
-Use `implement-plan` to validate and execute one immutable-path canonical `draft` plan only after separate later owner approval names that exact path and current meaning. It re-anchors before edits, works inline by default, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
+Use `implement-plan` to execute one ready PR plan whose delivery context is `pr-ready-unmerged`; delivery intent, not a separate approval, admits it (`shared-references/canonical-implementation-plan.md`). Each slice runs at its tier record, and the PR's Sidekick executes or dispatches slices per Staffing in `manage-agents`. It re-anchors before edits, advances through the smallest ready proof-bearing slice, preserves proof gates, and stops with an exact semantic route when current reality breaks the plan or design. It stops before independent review and PR work.
 
 Use `implementation-review` for independent product implementation and proof review after execution. It admits exact governing authority, the ready plan of one PR node, source, diff, and proof identities. The review scope is one PR, or one stack layer against its parent; each independent PR gets its own different-lineage 🔎 Review Sidekick, and a stack keeps one. The lead reads the whole map and walks spec-compliance, sequential overlapping chunk passes, proof challenge, dispel, and predicate-selected focused checks. It verifies candidates against the rails and routes corrections by semantic cause without editing. Runtime skill-package review remains under `skills-creation`.
 
