@@ -67,6 +67,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(contract).toContain("node: <node id>");
     expect(contract).toContain("base: <trunk commit | parent PR head>");
     expect(contract).toContain("## Slice Executor Record");
+    expect(contract).toContain("It lives beside its plans under the Plan Home rule below");
+    expect(contract).toContain("In every home, the breakdown sits beside its plans.");
+    expect(contract).not.toContain("breakdown path: <project-root>/tmp/plan-workflows/");
     expect(contract).toContain("planning result: revision-requested | blocked");
     expect(contract).toContain("A meaning change creates a new plan path");
     expect(contract).not.toContain("approval evidence: absent");
