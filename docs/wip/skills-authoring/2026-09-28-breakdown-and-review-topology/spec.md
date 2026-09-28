@@ -1,6 +1,6 @@
 # Breakdown and review topology
 
-Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r5**, 2026-09-28. Status: **draft**. r2 added the consumer disposition from the sweep; r3 applied the proposal review's six findings and its advice; r4 applies the verification's residuals (BF1, BF2, BF4) and BF7 (Spec-review record). Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
+Multi-run skill-change spec for the `shravan-dev-workflow` plugin. Revision **r5**, 2026-09-28. Status: **accepted-to-implement** (r5, verified 2026-09-28). r2 added the consumer disposition from the sweep; r3 applied the proposal review's six findings and its advice; r4 applies the verification's residuals (BF1, BF2, BF4) and BF7 (Spec-review record). Companion to `2026-09-27-workhorse-decomposition/spec.md` (Spec A) on the same branch and PR. No skill file changes before `accepted-to-implement`.
 
 ## Owner meaning (verbatim, 2026-09-27 and 2026-09-28)
 
@@ -143,6 +143,7 @@ Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill
 
 ## Coordination
 
+- **Work thread:** topic "Workhorse-first decomposition and breakdown topology" (`01a0e83f-1023-71c2-94c4-c546305adbed`), coordination root `01a0e83f-326f-7bc2-b39b-a494da4b4de9`.
 - **Every agent loads `skills-creation`:** the implementation 🐒 Sidekick, every 🔎 Review Sidekick, any 🦉 Advisor, and every 🛠️ Worker on this work loads the `skills-creation` skill at the start of its assignment, and each packet says so. Owner, 2026-09-28: "advisor and all agents working on it should load the skill creation skill".
 - **Reviewer:** GPT-6 Astra high 🔎 Review Sidekick, different lineage, no author history, for proposal and implementation review. Owner, 2026-09-28: "the specs and skill should be written 5.5 and reviewed by a astra advisor high"; the independent Review Sidekick role is kept because `skills-creation` review requires no author history, which an Advisor working with Main would not have.
 - **Advisor and proposal reviewer are one agent (owner-authorized deviation):** the GPT-6 Astra high session `01a0e2a0-6835-7171-9512-410133d40c29` advises Main on both specs and runs their proposal reviews. Owner, 2026-09-28: "it can be the same agent that advises and reviews for now". Its advice gives it authoring context, which `skills-creation` proposal review normally excludes; the implementation review therefore goes to a fresh Astra high 🔎 Review Sidekick with no history.
@@ -161,6 +162,7 @@ Source: two Luna xhigh 🛠️ Workers (skills-creation loaded) read every skill
 ## Spec-review record
 
 - **Review 1** (r2, commit `3fe81561`): GPT-6 Astra high, session `01a0e2a0` (the owner-authorized advisor and reviewer for both specs), skills-creation loaded. Verdict `targeted-revision`, `revise-first`, blocker override applies. Accepted BF1 (owner boundaries became a PR-count rule), BF2 (ready breakdown lacked a contract), BF3 (CB2 could not certify future nodes), BF4 (tokens, descriptions, READMEs, and two contract-test lines kept the old routing; a phase must not name an orchestrator), BF5 (B-2 held other skills' semantic edits), BF6 (the mechanics-only planning path was dropped). Rejected: expanding B8 into `skills-creation` (kept as scope, reworded); B8 weakening review (the whole-read rule stays).
+- **Verification of r5** (same lead): `great`, implementation decision `accepted-to-implement`; BF1 closed; no new finding; converged 6, 4, 1, 0 with no recurrence.
 - **Verification of r4** (same lead): `targeted-revision`; BF2, BF4, BF7 closed; BF1 open in two adjacent sweep rows (79, 80) that kept an owner-count breakdown trigger. Converging: four open became one. **r5** rewrites both rows to outcome-based nodes with a breakdown for every finding; a search of the sweep for owner-count phrasing finds no other copy.
 - **Verification of r3** (same lead): `targeted-revision`, `revise-first`. BF3, BF5, BF6 closed; BF1, BF2, BF4 open as residual copies (sweep rows still adopted; plan-defect bypassed the originating planner); new BF7 (CB2 widened Spec A's Workhorse seam condition into a gate on every PR). Converging: six open became four.
 - **r4 remediation** (Main): corrected sweep rows 20, 37, 60, 72, 76 to 78, 135, 145 and B-7's disposition to independent outcomes, plans pointing up, and token returns (BF1, BF2, BF4A); `plan-defect` resolves through the recorded originating planner (BF4B); CB2 and B5 check only external prerequisites, leaving per-slice Workhorse fit to Spec A (BF7).

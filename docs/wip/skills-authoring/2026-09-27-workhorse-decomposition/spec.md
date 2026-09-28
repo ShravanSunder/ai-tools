@@ -262,6 +262,7 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 
 ## Coordination
 
+- **Work thread:** topic "Workhorse-first decomposition and breakdown topology" (`01a0e83f-1023-71c2-94c4-c546305adbed`), coordination root `01a0e83f-326f-7bc2-b39b-a494da4b4de9`.
 - **Every agent loads `skills-creation`:** the implementation 🐒 Sidekick, every 🔎 Review Sidekick, any 🦉 Advisor, and every 🛠️ Worker on this work loads the `skills-creation` skill at the start of its assignment, and each packet says so. Owner, 2026-09-28: "advisor and all agents working on it should load the skill creation skill".
 - **Reviewer:** GPT-6 Astra high 🔎 Review Sidekick, different lineage, no author history, for proposal and implementation review. Owner, 2026-09-28: "the specs and skill should be written 5.5 and reviewed by a astra advisor high"; the independent Review Sidekick role is kept because `skills-creation` review requires no author history, which an Advisor working with Main would not have.
 - **Advisor and proposal reviewer are one agent (owner-authorized deviation):** the GPT-6 Astra high session `01a0e2a0-6835-7171-9512-410133d40c29` advises Main on both specs and runs their proposal reviews. Owner, 2026-09-28: "it can be the same agent that advises and reviews for now". Its advice gives it authoring context, which `skills-creation` proposal review normally excludes; the implementation review therefore goes to a fresh Astra high 🔎 Review Sidekick with no history.
