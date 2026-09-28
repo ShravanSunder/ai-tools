@@ -1,6 +1,6 @@
 # Orchestrator: Implementation Goal
 
-`orchestrator-implementation-goal` carries a delivery goal from a ready breakdown and PR plans through per-PR implementation and proof, main assessment, independent review per PR or stack, accepted correction, integration gates, and PR readiness. The user-facing main writes the breakdown and each PR plan with `plan-implementation` before this skill admits them; persistent implementation Sidekicks each receive one PR, and Main sequences a stack's layers.
+`orchestrator-implementation-goal` carries a delivery goal from a ready breakdown and PR plans through per-PR implementation and proof, main assessment, independent review per review scope, accepted correction, integration gates, and PR readiness. The user-facing main writes the breakdown and each PR plan with `plan-implementation` before this skill admits them; persistent implementation Sidekicks each receive one PR, and Main sequences a stack's layers.
 
 The runtime contract is [SKILL.md](./SKILL.md). Current-source orientation, routing examples, the missing-history baseline, and finish checks are in [goal-contract-and-routing.md](./references/goal-contract-and-routing.md).
 
@@ -12,7 +12,7 @@ flowchart LR
     B -->|plan missing| P
     B --> C[One Sidekick per PR implements and proves]
     C --> H[Main assesses each PR]
-    H --> D[Independent review per PR, or per stack layer]
+    H --> D[Independent review per review scope]
     D -->|accepted finding| E[Correct and re-prove]
     E --> D
     D -->|ready| F[PR wrap-up per PR, stacks lowest layer first]

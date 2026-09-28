@@ -53,49 +53,18 @@ incomplete design prerequisite
 material design break discovered during planning or implementation
   -> orchestrator and user decision; do not build on the break
 
-current reviewed design; no ready breakdown or plans for the first executable nodes
-  -> end this run with ready-for-planning
-
-admitted repository improvement; no ready breakdown or plan
-  -> preserve the plan-improve-repo admission and end this run with ready-for-planning
-
-a node's base now exists; its plan is not written
+no ready breakdown, or an executable node without its plan (preserve any plan-improve-repo admission)
   -> end this run with ready-for-planning
 
 ready plan; terminal is plan-only
   -> finish at plan-only
 
-ready breakdown and a ready PR plan; implementation or proof incomplete
-  -> commission/resume that PR's implementation 🐒 Sidekick (SKILL.md step 3); then implement-plan per PR
-
-Workhorse slice stops at its boundary, or an executor disagrees with its record
-  -> plan-defect to Main (`../../../shared-references/canonical-implementation-plan.md`, Slice Tier Record)
-
-a PR's development and fitting proof complete
-  -> orchestrator assessment of that PR against the original need, design, its plan, node, base, current diff, actual proof, complexity, and scope
-
-a PR's assessment complete
-  -> that PR's 🔎 Review Sidekick
-  -> implementation-review for general-domain work
-  -> skills-creation implementation review for a composed runtime skill package
-
-accepted implementation finding; review has not returned not-converging
-  -> implement-plan by that PR's implementer, fresh affected proof, then Main hands the corrected result to the same 🔎 Review Sidekick for that PR or stack
+ready breakdown and a ready PR plan
+  -> SKILL.md Carry the Delivery Loop, steps 3-9
 
 accepted specification, design, or plan finding
   -> exact semantic owner, then resume the open implementation goal
-
-a PR's review ready; its PR gates not current
-  -> that PR's implementation 🐒 Sidekick or a 🔧 Operator runs implementation-pr-wrapup and returns current PR gate evidence to Main
-
-the PRs an integration gate names are PR-ready
-  -> Main runs the gate (SKILL.md step 9)
-
-every PR ready and unmerged; every named gate passed
-  -> default terminal; merge only under separately supplied authority
 ```
-
-The assessment result makes its source-backed inspection and outcome clear rather than compressing them into “looks done.” Inspect the original need and accepted design, that PR's main-authored plan, node, base, and scope, current diff, actual proof and gaps, ownership and naming, unnecessary complexity, and its prerequisites. Do not reject adequate evidence merely because a label or field is absent.
 
 A request for one direct phase bypasses this orchestrator. Optional `ops-*` tracking is a separate authorized side route; resume from canonical artifacts afterward because tickets prove no delivery result. A tracker 🔧 Operator logs meaningful decisions, results, and blockers through the existing trail contract, never each routine execution step.
 
@@ -111,10 +80,9 @@ If current evidence establishes that no review has run for a review scope, use t
 
 Before finishing, verify the material gates implied by the requested terminal, the breakdown's named integration gates, explicit proof expectations, unresolved findings and decisions, affected review coverage, and the current terminal owner's evidence.
 
-- `plan-only`: the current ready breakdown, its plans, and the governing basis are inspectable; later delivery gates are outside the requested terminal.
-- `pr-ready-unmerged`: for every PR, implementation proof, a current bounded independent review per review scope, and current PR checks, comments, threads, head and mergeability are ready under `implementation-pr-wrapup`; and every named integration gate passed on recorded heads.
+- `plan-only` / `pr-ready-unmerged`: as SKILL.md Completion.
 - `blocked | partial | stopped`: name the exact completed boundary, missing evidence or authority, and next owner or user decision.
 
 Record the truthful outcome and continuation context through `practices-show-me-your-work`. Contributors leave the outer thread unresolved. The orchestrator follows the tracker to inspect current activity and completion before resolving. Readable views are conditional on a request or substantial synthesis need. For pending standalone Git, PR, or watch work, wait on the 🔧 Operator's completion notification or an authorized wake through `manage-agents`; never consume delivery turns polling a model.
 
-Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, review returned ready for every independent PR and every stack layer, or not-converging reached the owner as a brief, and the finish decision matches the requested terminal and whole-work responsibility.
+Complete when the next owner or stop follows from current evidence, producer judgment has not been duplicated, review returned ready for every review scope, or not-converging reached the owner as a brief, and the finish decision matches the requested terminal and whole-work responsibility.
