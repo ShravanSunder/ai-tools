@@ -64,4 +64,4 @@ have context and it goes faster.
   reviewer bright line.
 - An ACPX dispatch records `history all` or assumes the foreign-family
   agent can see the parent chat.
-- A model outside Choose by job or the 🔎 Review Sidekick table in the model catalog is selected for that job.
+- A model outside the effort bands or the 🔎 Review Sidekick table in the model catalog is selected for that job.

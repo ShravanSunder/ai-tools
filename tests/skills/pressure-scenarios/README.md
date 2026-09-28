@@ -121,10 +121,10 @@ SKILL_PRESSURE_TIMEOUT_SECONDS=900 \
 | `manage-agents` | `manage-agents-reviewer-fork-turns-none` | Do not give an independent reviewer `fork_turns=15`; reviewers get `fork_turns=none`. |
 | `manage-agents` | `manage-agents-reviewer-no-coordinator-skill` | Do not put coordinator `SKILL.md` or manage-agents on a reviewer packet; load only absolute lane paths. |
 | `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | When agent-router has no Claude endpoint and ACPX is the legacy route, do not stop a Frontier Fable review with `--timeout 120`; retrieve the named session instead. |
-| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Workhorse xhigh choice against Choose by job and the staffing table for an all-Workhorse Local PR the Sidekick drives at Run. |
+| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Workhorse xhigh choice against the effort bands and Staffing for an all-Workhorse Local PR the Sidekick drives at Run. |
 | `manage-agents` | `manage-agents-luna-sidekick-owner-contact` | A Workhorse 🐒 Sidekick answers a short status check and returns a material design decision to Main. |
-| `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch takes the Workhorse tier at medium, the Operator band in Choose by job. |
-| `manage-agents` | `manage-agents-luna-background-fix` | Choose by job keeps a well-understood local fix on the Workhorse tier at high. |
+| `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch takes the Workhorse tier at medium, the Operator effort band. |
+| `manage-agents` | `manage-agents-luna-background-fix` | The effort bands keep a well-understood local fix on the Workhorse tier at high. |
 | `manage-agents` | `manage-agents-cursor-host-operator-uses-agent-router-luna` | On a Cursor host, an Operator procedure uses Luna through agent-router, not a Cursor native model. |
 | `plan-handoff` | `plan-handoff-full-packet` | Do not create a thin paste prompt; require coverage and a portable handoff packet. |
 | `plan-handoff` | `plan-handoff-existing-plan-only` | Do not package spec/design context as an existing plan; route portability to `spec-handoff` and current ready design planning to `plan-implementation`. |

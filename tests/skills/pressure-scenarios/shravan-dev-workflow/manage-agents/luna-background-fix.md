@@ -1,4 +1,4 @@
-# Choose by job keeps a well-understood fix on Workhorse
+# The effort bands keep a well-understood fix on Workhorse
 
 scenario_id: manage-agents-luna-background-fix
 skill_under_test: shravan-dev-workflow:manage-agents
@@ -27,12 +27,12 @@ for total cost.
 
 ## Expected Compliant Behavior
 
-- Selects a 🛠️ Worker in the Workhorse category: Choose by job gives a Complete · Local · Task Worker the Workhorse tier at high.
+- Selects a 🛠️ Worker in the Workhorse category: the effort bands give a Complete · Local · Task Worker the Workhorse tier at high.
 - Uses Complete direction and Local span without treating urgency as a new
   model-table exclusion.
 
 ## Failure Signals
 
 - Defaults to a Daily-driver model solely because the release is waiting.
-- Rejects the effort Choose by job gives without a table reason.
-- Selects a category without checking Choose by job.
+- Rejects the effort the bands give without a table reason.
+- Selects a category without checking the effort bands.

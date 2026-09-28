@@ -89,10 +89,8 @@ describe("goal delivery intent hard cutover", () => {
       "picks one, records the choice, the alternatives, and the reason in the breakdown, and returns `ready`",
     );
     expect(planner).toContain("offer once between no tracking and one available named `ops-*` owner");
-    expect(planner).toContain("first resolve the project root");
-    expect(planner).toContain(
-      "write the breakdown at `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-breakdown.md` and one `<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-<node-id>.md` plan per executable node",
-    );
+    expect(contract).toContain("first resolves the project root");
+    expect(planner).toContain("at the canonical Plan Home and return their exact paths");
     expect(planner).toContain("return `ready-for-implementation`");
     expect(planner).toContain("without another generic approval question");
     expect(planner).not.toContain("invokes `implement-plan`");
@@ -122,7 +120,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(template).toContain(
       "Write one plan file per breakdown node only when planning can return `ready`",
     );
-    expect(template).toContain("owner count does not decide");
+    expect(improvementPlanner).toContain(
+      "Cut its nodes by the PR cut in `../plan-implementation/references/slice-and-proof-design.md`",
+    );
     for (const checkpointItem of [
       "- Choices later slices depend on:",
       "- Blocking first steps:",
@@ -132,7 +132,9 @@ describe("goal delivery intent hard cutover", () => {
     ]) {
       expect(template).toContain(checkpointItem);
     }
-    expect(template).toContain("left to the Sidekick with the reason");
+    expect(
+      readPluginFile("skills/plan-implementation/references/slice-and-proof-design.md"),
+    ).toContain("left to the Sidekick with the reason");
     expect(template).not.toContain("PR topology:");
     expect(template).toContain(
       "For `revision-requested` or `blocked`, return `plan identity: none`",
@@ -250,10 +252,12 @@ describe("goal delivery intent hard cutover", () => {
     const specDesign = readPluginFile("skills/spec-design/SKILL.md");
     const programDesign = readPluginFile("skills/program-design/SKILL.md");
 
-    expect(planner).toContain("project-root `.gitignore`");
-    expect(planner).toContain(
+    const contract = readPluginFile("shared-references/canonical-implementation-plan.md");
+    expect(contract).toContain("project-root `.gitignore`");
+    expect(contract).toContain(
       "`<project-root>/tmp/plan-workflows/<yyyy-mm-dd>-<slug>-<node-id>.md`",
     );
+    expect(planner).toContain("canonical Plan Home");
     expect(designOrchestrator).toContain("<project-root>/docs/specs/");
     expect(designOrchestrator).toContain("central trail");
     expect(goalOrchestrator).toContain("practices-show-me-your-work");
@@ -315,7 +319,7 @@ describe("goal delivery intent hard cutover", () => {
     expect(planBindsToReadyBreakdownNode(wrongBase, breakdownText)).toBe(false);
   });
 
-  test("starts every job on the Workhorse tier and leaves it only with a recorded reason", () => {
+  test("starts every job on the Workhorse tier and escalates only with a recorded reason", () => {
     const catalog = readPluginFile("skills/manage-agents/references/model-catalog.md");
     const canonical = readPluginFile("shared-references/canonical-implementation-plan.md");
 
@@ -325,7 +329,9 @@ describe("goal delivery intent hard cutover", () => {
     expect(catalog).toContain("Partial direction, Cross-system span, and Open horizon are flags, not routes.");
     expect(catalog).not.toContain("Each Luna row is a ceiling");
     expect(catalog).not.toContain("off-Luna row");
-    expect(canonical).toContain("`owner recommended`, `judged tough: <why>`, or `Workhorse failed: <evidence>`");
+    expect(catalog).toContain("`owner recommended`; `judged tough: <missing condition>`");
+    expect(catalog).toContain("`Workhorse failed: <evidence>`");
+    expect(canonical).toContain("a Daily-driver slice names its escalation reason");
   });
 
   test("ships pressure scenarios for the new boundaries", () => {

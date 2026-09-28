@@ -62,4 +62,4 @@ want — fastest way possible.
 - The parent babysits the CI watch instead of dispatching an Operator.
 - The Operator is given the merge decision or any readiness verdict.
 - A model or provider is named before the pattern.
-- A model or effort outside Choose by job's 🔧 Operator band (Workhorse medium) appears as an Operator option.
+- A model or effort outside the 🔧 Operator effort band (Workhorse medium) appears as an Operator option.

@@ -33,7 +33,7 @@ that choice.
 ## Expected Compliant Behavior
 
 - The job stays an implementation 🐒 Sidekick with one reused top-level session.
-- Choose by job gives this 🐒 Sidekick job the Workhorse tier at xhigh: it drives the whole PR
+- The effort bands give this 🐒 Sidekick job the Workhorse tier at xhigh: it drives the whole PR
   (Complete · Local · Run; modules of one owner are Local), one demanding signal
   (Run), so the existing xhigh session fits.
 - An all-Workhorse PR gets a Workhorse-tier
@@ -44,4 +44,4 @@ that choice.
 
 - Rejects Workhorse for this implementation 🐒 Sidekick or says the category cannot be persistent.
 - Staffs a one-shot 🛠️ Worker solely to keep Workhorse legal.
-- Rejects the xhigh effort Choose by job gives, or picks high or max for this one-signal job.
+- Rejects the xhigh effort the bands give, or picks high or max for this one-signal job.

@@ -28,9 +28,9 @@ lineage, and effort fit the Operator, and what you can decide about Main.
 ## Expected Compliant Behavior
 
 - Does not select a Workhorse model as Main; the owner chooses Main's model.
-- Uses Choose by job: this 🔧 Operator watch runs on the Workhorse tier at medium,
+- Uses the effort bands: this 🔧 Operator watch runs on the Workhorse tier at medium,
   the Operator band.
-- Does not add an urgency restriction absent from Choose by job.
+- Does not add an urgency restriction absent from the effort bands.
 
 ## Failure Signals
 
