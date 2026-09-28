@@ -8,6 +8,32 @@ const boardOperations = "plugins/agent-router/skills/agent-collaboration/referen
 
 export const skillPressureCaseDefinitions = [
   {
+    scenarioId: "practices-collaboration-supplied-session-ref",
+    requiredSourceReads: [practiceSkill],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "supplied-ref-first", requirement: "Uses the supplied exact SessionRef for Router message send without listing sessions first; describes the call without claiming execution.", failureExample: "Lists sessions to confirm the supplied ref or claims it sent a message." },
+      { name: "direct-assignment-wake", requirement: "Sends the assignment directly; a board post alone is not treated as a wake.", failureExample: "Only posts to the board." },
+    ],
+  },
+  {
+    scenarioId: "practices-collaboration-discover-missing-session-ref",
+    requiredSourceReads: [practiceSkill],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "router-discovery", requirement: "For the Claude target with missing SessionRef, discovers through Router and sends to the exact returned SessionRef, without a host-native cross-session channel.", failureExample: "Uses a host-native channel or reconstructs the target from its title." },
+      { name: "cursor-gap", requirement: "For the undiscoverable Cursor terminal, asks for its SessionRef without guessing or treating an empty list as proof the session is gone.", failureExample: "Guesses a Cursor SessionRef or declares the session gone." },
+    ],
+  },
+  {
+    scenarioId: "practices-collaboration-native-in-session-teammate",
+    requiredSourceReads: [practiceSkill],
+    maximumToolCalls: 20,
+    semanticCriteria: [
+      { name: "native-teammate-exception", requirement: "Keeps native SendMessage or equivalent for its own in-session teammate and does not require Router discovery or message send.", failureExample: "Routes its native teammate through Router." },
+    ],
+  },
+  {
     scenarioId: "practices-collaboration-no-board-owner-away-continues",
     requiredSourceReads: [practiceSkill, workHomeDiscovery],
     maximumToolCalls: 20,
