@@ -19,7 +19,7 @@ A compact plan (one low-risk owner and one or two proof gates, per `slice-and-pr
 Read the draft as the executor who will receive it, with only the plan and its cited sources.
 
 1. **Executor records.** For each Workhorse slice, reopen the cited source at the slice's base. Confirm the inputs are pinned, the output is checkable, the stop is named, and every seam, signal, event, or API the slice relies on exists there and supports the observation the slice needs. A name that matches in the brief is not a seam that exists. For each Daily-driver slice, confirm the missing condition is real and named.
-2. **Throughput checkpoint.** All four items are present, each filled or `n/a: <reason>`. For every slice marked independent, compare its write surfaces with every slice that may run beside it (files, fixtures, generated artifacts, state) and confirm it has its own proof.
+2. **Throughput checkpoint.** All five items are present, and every choice a later slice depends on is either written in the plan or named as left to an Opus Sidekick with its reason, each filled or `n/a: <reason>`. For every slice marked independent, compare its write surfaces with every slice that may run beside it (files, fixtures, generated artifacts, state) and confirm it has its own proof.
 3. **Boundaries and seams.** No slice crosses an owner or domain boundary it does not name, and no slice depends on a seam that neither exists at base nor is added by an earlier contract slice.
 4. **Proof.** Every obligation maps to proof that can observe it, per `slice-and-proof-design.md`.
 5. **Bundles.** No slice carries several independent units that one session would otherwise receive as one assignment.

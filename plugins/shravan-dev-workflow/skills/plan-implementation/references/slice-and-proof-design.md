@@ -40,8 +40,9 @@ A Workhorse slice that later stops at its boundary is evidence about this cut. I
 
 ## Throughput Checkpoint
 
-The plan records four items. Keep every item and write `n/a: <reason>` when one does not apply:
+The plan records five items. Keep every item and write `n/a: <reason>` when one does not apply:
 
+- **choices later slices depend on**: each one written into the plan, or named as left to an Opus Sidekick with the reason. This sets the PR's Sidekick under the staffing table in `manage-agents`: a PR whose dependent choices are all written in the plan and whose slices are all Workhorse keeps a Luna Sidekick;
 - **blocking first steps**: the slices everything else waits on;
 - **independent workstreams**: disjoint files, services, or layers that can proceed at once;
 - **shared mutable state**: state, fixtures, or generated artifacts several slices would write; split the target before serializing on it;
