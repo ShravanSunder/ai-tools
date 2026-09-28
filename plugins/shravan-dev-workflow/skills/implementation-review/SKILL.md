@@ -7,7 +7,7 @@ description: "Use when independently reviewing implemented code, proof, a branch
 
 IF no work reference is in context and the task qualifies, open or resume the trace through `practices-show-me-your-work` before phase work.
 
-The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. The review unit is one PR, or one stack layer judged against its parent: each independent PR gets its own lead, and a stack keeps one lead relationship that reviews its layers in order. That lead reads every governing source and the complete diff of its unit, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
+The caller commissions a different-lineage persistent 🔎 Review Sidekick with no author or orchestrator history. The review scope is one PR, or one stack layer judged against its parent: each independent PR gets its own lead, and a stack keeps one lead relationship that reviews its layers in order. That lead reads every governing source and the complete diff of its scope, walks the checks below in its own session, and reduces findings against the rails. The orchestrator disposes and routes the assessment.
 
 The rails are the confirmed requirements, Specification obligations, Program Design elements, and goal boundary. The unit's PR plan partitions that work: it says which obligations this PR or layer delivers, and it is not itself a rail. A finding that cannot be anchored to a quoted clause from them is not accepted, however well-argued or however many reviewers agree.
 
@@ -21,7 +21,7 @@ The rails are the confirmed requirements, Specification obligations, Program Des
 
 Completion: classification, governing sources, base and reviewed commits, diff and proof boundary, prior-findings evidence (or the missing-evidence reason), and `admit | blocked-input` are stated.
 
-The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history: a new lead for each independent PR, or the stack's existing lead for its next layer. The assigned lead executes this method and never commissions another lead.
+The caller completes admission. A non-substantial or blocked exit commissions no lead. For an admitted meaningful review, the caller uses `manage-agents` to commission or resume one persistent, different-lineage 🔎 Review Sidekick with no author or orchestrator history per review scope above. The assigned lead executes this method and never commissions another lead.
 
 ## Read the Whole Map
 
@@ -63,7 +63,7 @@ Return `ready | needs-revision | blocked-input | decision-needed | not-convergin
 ## Remediation Boundary
 
 - This skill never edits. Accepted implementation-owned findings route to `implement-plan`.
-- After each correction inside the accepted boundary, the caller invokes another review of the same PR or stack layer with fresh diff/proof until the result is `ready` or `not-converging`; corrected source invalidates affected coverage, and convergence is compared per PR or per stack layer. The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`. Do not persist counters, ledgers, hashes, or review state in the plan.
+- After each correction inside the accepted boundary, the caller invokes another review of the same PR or stack layer with fresh diff/proof until the result is `ready` or `not-converging`; corrected source invalidates affected coverage. The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`. Do not persist counters, ledgers, hashes, or review state in the plan.
 - Design/spec/plan defects return to their semantic owner and follow that owner's bounded review policy; they do not consume implementation remediation authority.
 
 ## Completion Blockers
