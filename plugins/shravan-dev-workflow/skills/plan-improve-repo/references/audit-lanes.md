@@ -2,11 +2,11 @@
 
 Use these categories to structure broad repo audits. They are coverage dimensions: the parent owns each one, keeps synthesis, and verifies every accepted candidate against current source.
 
-Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. A unit that passes Workhorse fit (`../../manage-agents/references/model-catalog.md`) goes to a Workhorse 🛠️ Worker through `manage-agents` with the job pins (`../../manage-agents/references/agent-job-packet.md`); a unit that fails fit is re-cut or stays in-parent, and leaves the Workhorse tier only with a recorded reason (Leaving the Workhorse tier in the catalog). A security or architecture category as a whole usually leaves the approach open, so it is not itself a Workhorse unit. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
+Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. A unit that passes Workhorse fit (`../../manage-agents/references/model-catalog.md`) goes to a Workhorse 🛠️ Worker through `manage-agents` with the job pins (`../../manage-agents/references/agent-job-packet.md`); a unit that fails fit is re-cut or stays in-parent, and escalates only with a recorded reason. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
 
 ## Evidence Unit Packet
 
-Fill this for each unit, alongside the job pins (output file, VERIFY, TIMEBOX, REPORT).
+Fill this for each unit, alongside the job pins.
 
 ```text
 You are a read-only improvement-audit evidence unit.
@@ -40,8 +40,6 @@ Return:
 - `performance-reliability`: slow paths, retries, cleanup, partial failure, concurrency, observability.
 - `dx-tooling`: confusing scripts, validation friction, generated output drift.
 - `docs-onboarding`: README/AGENTS/runbook drift that blocks future agents or maintainers.
-
-The parent owns every category. Do not turn the category list into a swarm.
 
 ## Flow Selection
 

@@ -1,6 +1,6 @@
 # Improvement Plan Template
 
-Each accepted improvement gets one breakdown under the canonical contract's breakdown record (`../../../shared-references/canonical-implementation-plan.md`): one node, or one per independent outcome, and owner count does not decide. Write one plan file per breakdown node only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
+Each accepted improvement gets one breakdown under the canonical contract's breakdown record (`../../../shared-references/canonical-implementation-plan.md`). Write one plan file per breakdown node only when planning can return `ready`. For `revision-requested` or `blocked`, return `plan identity: none` with the result payload and do not instantiate this template.
 
 ```markdown
 # <Improvement Title>
@@ -40,18 +40,18 @@ Read-only context:
 ## Task Sequence
 
 1. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
-   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Workhorse failed: <evidence>>
+   tier: <tier record>
 2. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
-   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Workhorse failed: <evidence>>
+   tier: <tier record>
 3. <integration gate where separately changed parts first meet>
 
 ## Throughput Checkpoint
 
-- Choices later slices depend on: <each written into this plan, or left to the Sidekick with the reason, or n/a: reason> (owner: Throughput Checkpoint in `../../plan-implementation/references/slice-and-proof-design.md`)
-- Blocking first steps: <slices or n/a: reason>
-- Independent workstreams: <disjoint files, services, or layers, or n/a: reason>
-- Shared mutable state: <state several slices write, or n/a: reason>
-- Smallest safe decomposition: <fewest executors; if one, why>
+- Choices later slices depend on: <… or n/a: reason>
+- Blocking first steps: <… or n/a: reason>
+- Independent workstreams: <… or n/a: reason>
+- Shared mutable state: <… or n/a: reason>
+- Smallest safe decomposition: <… or n/a: reason>
 
 ## Dependencies And Collisions
 
