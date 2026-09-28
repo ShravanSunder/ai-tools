@@ -2,7 +2,7 @@
 
 Use these categories to structure broad repo audits. They are coverage dimensions: the parent owns each one, keeps synthesis, and verifies every accepted candidate against current source.
 
-Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. A unit that passes Workhorse fit (`../../manage-agents/references/model-catalog.md`) goes to a Luna 🛠️ Worker through `manage-agents` under the Workhorse packet; a unit that fails fit stays in-parent or goes to a Daily-driver Worker. A security or architecture category as a whole usually spans domains, so it is not itself a Workhorse unit. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
+Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one question, pinned paths or commands. A unit that passes Workhorse fit (`../../manage-agents/references/model-catalog.md`) goes to a Luna 🛠️ Worker through `manage-agents` under the Workhorse packet; a unit that fails fit stays in-parent or goes to a Daily-driver Worker. A security or architecture category as a whole usually leaves the approach open, so it is not itself a Workhorse unit. Agent availability, `deep`, or category count does not justify a cut. A delegated unit stays read-only and returns candidate evidence only.
 
 ## Evidence Unit Packet
 
