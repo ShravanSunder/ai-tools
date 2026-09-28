@@ -27,7 +27,7 @@ Do not use this for fresh code-review discovery. If the user asks to review a PR
 
 The assigned implementation 🐒 Sidekick may carry its delivery assignment through this workflow, or an Operator may run the authorized prescribed wrap-up procedure. Either executor returns current PR gate evidence to Main, which retains final acceptance and whole-goal disposition; merge still requires explicit user authority. An Operator that lacks the required draft or encounters a semantic decision returns that need to its assigning agent instead of authoring the draft, deciding the issue, or acquiring delegation authority.
 
-One run wraps up one PR. Independent PRs wrap up separately, each on its own branch. In a stack, after a lower layer changes, `gh stack rebase` then `gh stack submit` moves every layer above it to a new head, which re-enters description dispatch and the gates for those layers.
+One run wraps up one PR. In a stack, after a lower layer changes, `gh stack rebase` then `gh stack submit` moves every layer above it to a new head, which re-enters description dispatch and the gates for those layers; each moved layer's plan is stale (canonical Preserve and Admit) and returns to Main before its gates re-run.
 
 ## Core Flow
 
