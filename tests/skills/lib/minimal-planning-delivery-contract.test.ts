@@ -125,6 +125,16 @@ describe("goal delivery intent hard cutover", () => {
       "Write one plan file per breakdown node only when planning can return `ready`",
     );
     expect(template).toContain("owner count does not decide");
+    for (const checkpointItem of [
+      "- Choices later slices depend on:",
+      "- Blocking first steps:",
+      "- Independent workstreams:",
+      "- Shared mutable state:",
+      "- Smallest safe decomposition:",
+    ]) {
+      expect(template).toContain(checkpointItem);
+    }
+    expect(template).toContain("left to an Opus Sidekick with the reason");
     expect(template).not.toContain("PR topology:");
     expect(template).toContain(
       "For `revision-requested` or `blocked`, return `plan identity: none`",

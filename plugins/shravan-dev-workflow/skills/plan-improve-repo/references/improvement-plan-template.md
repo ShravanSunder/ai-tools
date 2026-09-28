@@ -47,6 +47,7 @@ Read-only context:
 
 ## Throughput Checkpoint
 
+- Choices later slices depend on: <each written into this plan, or left to an Opus Sidekick with the reason, or n/a: reason> (owner: Throughput Checkpoint in `../../plan-implementation/references/slice-and-proof-design.md`)
 - Blocking first steps: <slices or n/a: reason>
 - Independent workstreams: <disjoint files, services, or layers, or n/a: reason>
 - Shared mutable state: <state several slices write, or n/a: reason>
