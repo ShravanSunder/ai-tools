@@ -40,9 +40,9 @@ Read-only context:
 ## Task Sequence
 
 1. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
-   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Luna failed: <evidence>>
+   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Workhorse failed: <evidence>>
 2. <proof-bearing slice: obligation, write surfaces, proof, stop condition>
-   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Luna failed: <evidence>>
+   tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Workhorse failed: <evidence>>
 3. <integration gate where separately changed parts first meet>
 
 ## Throughput Checkpoint
