@@ -314,6 +314,8 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 - R4 `SPD:31`: the replacement sentence says `tier`, per D23.
 - C9 (`OIG:28`): "Without a ready breakdown and plans for its first executable nodes, end this run with `ready-for-planning`; do not load a planner here. Add no second plan review." `phase-return-tokens.md` owns who resolves it.
 - C6 (`CIP:13` "written by Main with `plan-implementation`"): write "written by Main".
+- R1 `EAP:35` (F15): do not revert to the pre-change sentence, which says "native Worker" and contradicts the agent-router Luna route. Delete only the repeated staffing detail; keep the actual-assignment boundary and a route-neutral "selects and dispatches through `manage-agents`".
+- `goal-contract-and-routing.md:22` `executor:` names an assigned executor, not C2's tier; it keeps its meaning and is excluded from the `executor:` cutover search.
 
 ### Contract text
 
@@ -332,15 +334,19 @@ The MUST load at `:89` returns "the job's model lineage, thinking level, and mod
 
 **Job table** (home `model-catalog.md`, new section `## Choose by job` after Categories):
 
-> Start on Luna. Take the leftmost column where the job's direction, span, and horizon all fit. Only the last column leaves Luna.
+> Each Luna column is a ceiling: it fits a job when the job's direction, span, and horizon are each at or below that column's value (Exact steps below Complete; Local below Cross-domain; Step below Task below Run). Take the leftmost column that fits.
 >
-> | Signal | Luna medium | Luna high | Luna xhigh | Off Luna |
-> |---|---|---|---|---|
-> | Direction | Exact steps | Exact steps or Complete | Exact steps or Complete | Partial → Opus medium, any span |
-> | Span | Local | Local | Cross-domain | Cross-system → Sol medium when the approach is fixed and the horizon is not Open; Opus medium otherwise |
-> | Horizon | Step | Task | Run | Open → Opus medium |
+> | Luna row | Direction up to | Span up to | Horizon up to |
+> |---|---|---|---|
+> | Luna medium | Exact steps | Local | Step |
+> | Luna high | Complete | Local | Task |
+> | Luna xhigh | Complete | Cross-domain | Run |
+>
+> A job leaves Luna when any signal is above every column: Partial direction, Cross-system span, or Open horizon. Off Luna, Partial direction or Open horizon selects Opus medium; otherwise (Cross-system span with a fixed approach) Sol medium. A signal that cannot be classified is missing input (`SKILL.md` Select an agent), not a guess.
 >
 > A prescribed procedure (Exact steps, no judgment) is 🔧 Operator work at any span: Luna medium at Step, Luna high at Task. Luna max and Opus high are escalations on evidence within Luna xhigh's and Opus medium's bands, never a starting row.
+>
+> The examples below illustrate the rule; the rule decides.
 >
 > | Job | Signals | Row |
 > |---|---|---|
@@ -404,12 +410,17 @@ C-1 `manage-agents` (SKILL.md, model-catalog, agent-job-packet, native-providers
 - Net deletion: the `--shortstat` rule above, with its output.
 - One home per concept: for R1, R3, R5, R6, R7, R9, and R10, a search for the rule's key phrase returns its home plus one-line citations only (list the hits).
 - Static walkthroughs under the job table: the five r13 cases (prescribed Operator; Complete/Cross-domain slice; fixed Cross-system plus Local mixed PR; Local/Partial diagnosis; Local Sidekick with an Open slice) plus a Sidekick given one slice at a time (Task, Luna high) and a Sidekick driving a Complete/Local all-Workhorse PR (Run, Luna xhigh).
+- Job-table predicate walk (F14): each case checked against the ceiling rule first, then the examples: the seven cases above, Complete/Local/Step (Luna high), Complete/Cross-domain/Task (xhigh), Complete/Local/Run (xhigh), Complete/Cross-system/Task (Sol medium), Partial/Local/Task (Opus medium), Cross-system/Open (Opus medium), and a tuple both Partial and Cross-system (Opus medium).
+- Non-native host (F15): a Workhorse slice a Sidekick dispatches on Claude Code or Cursor selects Luna through agent-router; on Codex, native Luna.
+- C3 with a Sidekick commission: a supplied root (join, then trace there), an invalid root (return the gap; no search for a replacement), and no board yet (the authorized `docs/wip` fallback).
+- For each R-group, the surviving home and the caller that still reaches it.
 - Deletion test, sentence by sentence, on every line the C-runs add or keep in the changed paragraphs; report what was cut.
 
 ## Spec-review record
 
 - **Review 1** (r5, commit `c48a5ed3`): different-lineage 🔎 Review Sidekick, GPT-6 Astra high, agent-router session `01a0e2a0-6835-7171-9512-410133d40c29`, no author history. Checks: mental-model-fit complete, trigger-routing complete, rule-agreement partial (external benchmark figures and the full audit corpus not reverified), depth-coverage complete. Verdict `targeted-revision`, implementation decision `revise-first`, blocker override applies. Accepted F1 to F6 (blockers F4, F5). Rejected: D10's openness as a defect, a blanket no-swarm reading, restoring review fan-out, Sidekick plan repair, raising Operator effort, removing native Daily-driver rows, C3 as an unjustified schema, D9 as fabricated, required pressure runs, one-target violation, a missing Codex marketplace version.
 - **r6 remediation** (Main): F1 → C1 restated in Guidance and span, Luna span narrowed to Local (D2); F2 → D16 table; F3 → audit delegation by C1-passing evidence unit (D11); F4 → no new plan review, existing design gate plus a plan completion check (D1); F5 → disposition rows for the commission paths, `AGENTS.md:69`, three ready-plan fixtures, and three more scenarios; F6 → blind unit-level replay (D13) and a narrowed evidence 2. Main also found that the session-level replay's own summary misstated its table (it named c4; the table shows 0 c4 and 20 c5 misses), recorded here as evidence for C3's "verify the file, not the prose".
+- **r14 proposal review** (same lead, `review/r14-review.md` in Main's scratch): `targeted-revision`, `revise-first`; F14 (the job table's all-cells rule excluded its own examples; blocker) and F15 (R1's revert restored "native Worker"). No sole-statement outcome lost; C3 and Sidekick board joins compatible. Baseline 2 open. **r14.1**: ceiling rule with off-Luna precedence; R1 `EAP:35` override; added predicate, non-native, and C3 walkthroughs to the proof.
 - **Verification of r13** (same lead): `great`, `accepted-to-implement` for the amendment; F11, F12, F13 closed; no new finding; converged 2, 3, 0. Five static cases pass (prescribed Operator; Complete/Cross-domain slice; fixed Cross-system plus Local mixed PR; Local/Partial diagnosis; Local Sidekick with an open dependent choice). Implementation residual: `slice-and-proof-design.md:59` "Opus otherwise" must follow D16's failed-signal choice before implementation review.
 - **Verification of r12** (same lead): `targeted-revision`; F10 closed; F11 residual in `slice-and-proof-design.md:36` (split or tag on any domain crossing); new F12 (D16 sent every mixed PR to Opus, bypassing D20's Sol route) and F13 (Opus rows omitted Local, leaving Local Partial work and Local dependent-choice Sidekicks unmatched). First non-decreasing comparison (2 to 3). **r13** fixes all three: run A-2's split rule, D16's model chosen by the failed signal, Opus rows at any span, D19's diagnosis made conditional on Guidance.
 - **Verification of r11** (same lead): `targeted-revision` for the amendment only (r10 acceptance of other runs stands). F10: C1 had no evaluable Operator branch. F11: the escalation sentence kept "cross-domain need", Cursor native kept Opus low, and Spec B's two-owner example hard-coded a Daily-driver Sidekick. **r12** adds C1's Operator branch, rewrites D3, D5, and A-1b's scope, notes Grok's lineage limit, and fixes Spec B's example.
