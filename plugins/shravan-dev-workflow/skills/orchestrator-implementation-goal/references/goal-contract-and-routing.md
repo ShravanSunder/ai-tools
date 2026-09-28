@@ -105,7 +105,7 @@ After every owner returns, the orchestrator inspects the source anchors that con
 
 Implementation review continues under the convergence rule in `implementation-review`'s `references/finding-and-reduction.md`. After each accepted implementation correction, require fresh affected proof and fresh review coverage. Design or planning corrections follow their owners' review boundaries and do not become implementation-remediation passes.
 
-If current evidence establishes that no review has run for a PR or stack layer, use the ordinary first-review route. When prior review history for that review scope should exist but its evidence cannot be inspected, inspect the current source, diff, proof, and governing basis, record what is missing, and route an ordinary review; the current review sets the convergence baseline. Missing history never excuses stale proof.
+If current evidence establishes that no review has run for a review scope, use the ordinary first-review route. When prior review history for that review scope should exist but its evidence cannot be inspected, inspect the current source, diff, proof, and governing basis, record what is missing, and route an ordinary review; the current review sets the convergence baseline. Missing history never excuses stale proof.
 
 ## Finish the Goal
 
