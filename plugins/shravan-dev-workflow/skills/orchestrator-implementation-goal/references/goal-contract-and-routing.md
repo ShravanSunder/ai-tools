@@ -39,9 +39,9 @@ The work trail is a navigation and continuity aid. Reopen its evidence before re
 
 ## Select the Current Owner
 
-The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning and remains the default user conversation throughout delivery. After a ready plan, persistent implementation 🐒 Sidekicks execute implementation, associated proof, and corrections directly by default in their planned PR assignments. The user may explicitly choose direct contact with an assigned Sidekick inside its scope; a ready plan alone does not choose that branch. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator. Main does not relay every internal progress turn or poll merely to keep the conversation active, and returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
+The orchestrator routes the smallest owner that can resolve the current delivery decision, verifies decisive evidence, and continues the goal. The current goal context or applicable handoff and the next phase's existing input/result contract remain authoritative. The orchestrator authors design and planning and remains the default user conversation throughout delivery. After a ready plan, persistent implementation 🐒 Sidekicks execute implementation, associated proof, and corrections in their planned PR assignments, with each Sidekick's tier and dispatch set by the staffing table in `manage-agents` (`../../manage-agents/SKILL.md`, Commission an implementation 🐒 Sidekick) from the plan's slice executor records. The user may explicitly choose direct contact with an assigned Sidekick inside its scope; a ready plan alone does not choose that branch. Material design/plan decisions, cross-assignment integration conflicts, permission boundaries, and concise completion receipts return to the orchestrator. Main does not relay every internal progress turn or poll merely to keep the conversation active, and returning to Main for conversation does not pause authorized implementation or transfer execution ownership.
 
-Under `manage-agents`, a 🐒 Sidekick may select a bounded native Worker for independent work, needed expertise, or large disposable output whose expected benefit exceeds briefing, coordination, and verification cost, and may select a native Operator for a standalone prescribed procedure. Coupled implementation/proof stays with its executor and no relay-only supervisor is introduced. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the Review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
+Under that table, a Daily-driver 🐒 Sidekick dispatches only plan-marked independent Workhorse slices to Luna 🛠️ Workers when the benefit test holds (a slice carrying its executor record already is the brief), and any Sidekick may select an 🔧 Operator for a standalone prescribed procedure. Coupled implementation/proof stays with its executor and no relay-only supervisor is introduced. The orchestrator keeps the coordination and execution roots as `orchestrator`; each implementation Sidekick contributes as `implementer` only on its execution root and the Review Sidekick contributes where commissioned. Those seats describe thread participation, not authority.
 
 The source-phase workflow follows this order:
 
@@ -56,7 +56,7 @@ material design break discovered during planning or implementation
   -> orchestrator and user decision; do not build on the break
 
 current reviewed design; no ready plan
-  -> orchestrator loads plan-implementation and authors the plan
+  -> orchestrator loads plan-implementation and authors the plan; plan-implementation reviews its full draft before ready, so no second review follows here
 
 admitted repository improvement; no ready delivery plan
   -> preserve the plan-improve-repo admission; orchestrator loads plan-implementation and authors the plan
@@ -67,6 +67,9 @@ ready plan; terminal is plan-only
 ready delivery plan; implementation or proof incomplete
   -> commission/resume the planned PR implementation 🐒 Sidekick(s) while Main remains the default user conversation; use direct 🐒 Sidekick contact only when the user explicitly chooses it; then implement-plan per assignment after real prerequisites
 
+Workhorse slice stops at its boundary, or an executor disagrees with its record
+  -> plan defect to Main, which re-slices or re-tags it with a reason through the originating planner; not re-run on a bigger model, not re-cut by the Sidekick
+
 development and fitting proof complete
   -> orchestrator assessment against the original need, design, plan, current diff, actual proof, complexity, PR boundaries, and integration
 
@@ -75,7 +78,7 @@ orchestrator assessment complete
   -> skills-creation implementation review for a composed runtime skill package
 
 accepted implementation finding; review has not returned not-converging
-  -> implement-plan by the same implementer, fresh affected proof, then the same 🔎 Review Sidekick
+  -> implement-plan by the same implementer, fresh affected proof, then Main hands the corrected result to the same 🔎 Review Sidekick
 
 accepted specification, design, or plan finding
   -> exact semantic owner, then resume the open implementation goal

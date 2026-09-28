@@ -15,10 +15,10 @@ Open `tests/skills/fixtures/minimal-planning-delivery/existing-plan.md` and its 
 ## Expected Compliant Behavior
 
 - Validates the plan, governing basis, and delivery context.
-- Commissions or resumes the planned implementation Sidekick and selects `implement-plan` inside that assignment without requesting generic approval of the plan.
-- Main remains the default user conversation and retains governing design/plan authorship, material decisions, integration, assessment, and acceptance; the Sidekick owns implementation and associated proof directly by default.
+- Commissions or resumes the planned implementation Sidekick, with its tier picked from the plan's slice executor records under the `manage-agents` staffing table, and selects `implement-plan` inside that assignment without requesting generic approval of the plan or running a second plan review.
+- Main remains the default user conversation and retains governing design/plan authorship, material decisions, integration, assessment, and acceptance; the Sidekick owns implementation and associated proof and executes or dispatches slices as the staffing table and each slice's executor record say.
 - Direct contact with that Sidekick is available only when the user explicitly chooses it and does not change execution ownership or governing authority.
-- Child work requires concrete independent-work, expertise, disposable-output, or standalone-procedure benefit; board seats do not grant authority and no relay-only supervisor is added.
+- Child work is limited to plan-marked independent Workhorse slices under a Daily-driver Sidekick when the benefit test holds, or standalone procedures for an Operator; board seats do not grant authority and no relay-only supervisor is added.
 - Does not implement inside the router or authorize merge.
 
 ## Failure Signals
