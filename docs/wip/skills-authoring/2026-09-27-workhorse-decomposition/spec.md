@@ -526,6 +526,22 @@ D-1 `manage-agents` (SKILL.md signals and Staffing; catalog Choose by job, C1; p
 - Net deletion across C- and D-runs against `0915b6fa`, with the `--shortstat` output.
 - D34's per-file alignment list.
 
+## Tiers in rules, models only in the catalog (r16, 2026-09-28)
+
+**Why.** Owner, 2026-09-28: "Workhorse (Luna) … i dont want you to say luna here i thought i said dont over fit?" and "you've done it repeatedly, go do an inventory, you don't listen to me." r14 and r15 wrote a current model's name into rules, tables, templates, and examples across the plugin. Rules written in model names rot when models change.
+
+**D35. Rule.** Model names (Luna, Sol, Opus, Astra, Grok, Fable) appear only where a tier maps to a model: the catalog's model tables (Categories, 🔎 Review Sidekick, 🦉 Advisor) and one short mapping paragraph in the catalog; the host routing pages (`native-providers-*`, `acpx-provider-*`, `acpx-legacy.md`); the Runtime id-resolution rule in `manage-agents/SKILL.md`; and the machine model map. Every other rule, table, example, template, scenario criterion, and prompt names the tier (Workhorse, Daily driver, Frontier) and an effort. The meaning of r15 is unchanged; this is vocabulary.
+
+**Renames.** "starts on Luna" → "starts on the Workhorse tier"; "Luna band" → "Workhorse band"; "Leaving Luna" → "Leaving the Workhorse tier"; "Luna 🛠️ Workers" → "Workhorse 🛠️ Workers"; "Luna effort" → "effort"; "Luna max is a Sidekick effort only" → "max is a Sidekick effort only"; "Luna failed: <evidence>" → "Workhorse failed: <evidence>"; "never Luna" (review) → "never the Workhorse tier". Leaving the Workhorse tier names "a Daily-driver model" and cites the catalog mapping paragraph for which one fits (today: fixed-approach Cross-system → Sol medium; open judgment → Opus medium, Opus high on evidence).
+
+**Inventory** (Main, at `cfbc97d4`; files beside this spec):
+- `model-name-inventory.tsv`: every plugin runtime line naming a model, marked `this PR` or `pre-existing` and `home` or `outside`. 15 `outside · this PR` lines: `manage-agents/SKILL.md:14,90,109,111,112`; `agent-job-packet.md:31`; `canonical-implementation-plan.md:98`; `plan-implementation/SKILL.md:34`; `slice-and-proof-design.md:31,36`; `audit-lanes.md:5`; `improvement-plan-template.md:43,45`; `practices-research/SKILL.md:25`; plugin `README.md:128`. Inside the catalog, 12 `this PR` rule lines name Luna where they state policy, not mapping (`model-catalog.md:5,36,38,44,46,50,58,62,69,71,75,82,120`). The 3 `outside · pre-existing` lines (`AGENTS.md:22` names a Stop-review tool; `manage-agents/SKILL.md:94` agent-router fallback; `:96` the Runtime id rule) are homes or tool names and stay.
+- `model-name-inventory-tests.txt`: every test, fixture, scenario, and changelog line naming a model. Scenario criteria and fixtures follow D35 (tier and effort); a scenario about id resolution or host routing may name the model it resolves. The changelog may name models as dated history.
+
+**Run E-1** (one commit per skill): apply D35 to every `outside · this PR` line and the catalog policy lines; tests, fixtures, scenarios per the tests inventory; changelog wording. Net deletion or neutral.
+
+**Proof.** `rg -n '\b(Luna|Sol|Opus|Astra|Grok|Fable)\b'` over `plugins/shravan-dev-workflow` returns hits only in the D35 homes (list them); over `tests/skills`, only id-resolution or routing scenarios (list them); tests, typecheck, plugin validate pass; the r15 walkthroughs still compute (tier and effort unchanged).
+
 ## Spec-review record
 
 - **Review 1** (r5, commit `c48a5ed3`): different-lineage 🔎 Review Sidekick, GPT-6 Astra high, agent-router session `01a0e2a0-6835-7171-9512-410133d40c29`, no author history. Checks: mental-model-fit complete, trigger-routing complete, rule-agreement partial (external benchmark figures and the full audit corpus not reverified), depth-coverage complete. Verdict `targeted-revision`, implementation decision `revise-first`, blocker override applies. Accepted F1 to F6 (blockers F4, F5). Rejected: D10's openness as a defect, a blanket no-swarm reading, restoring review fan-out, Sidekick plan repair, raising Operator effort, removing native Daily-driver rows, C3 as an unjustified schema, D9 as fabricated, required pressure runs, one-target violation, a missing Codex marketplace version.

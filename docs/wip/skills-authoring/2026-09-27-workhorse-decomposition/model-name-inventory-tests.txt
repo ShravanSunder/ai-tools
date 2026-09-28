@@ -1,0 +1,98 @@
+docs/changelog/references/2026-09-28-workhorse-decomposition-and-breakdown.md:12:A Luna xhigh Worker classified the 29 wave-1 briefs of one test-hunt wave from the briefs plus source at the wave's pin
+docs/changelog/2026-09-28-workhorse-decomposition-and-breakdown.md:4:- `manage-agents`: direction, span, and horizon (Step, Task, Run, Open) are defined with a test each. Every job starts on Luna: the
+docs/changelog/2026-09-28-workhorse-decomposition-and-breakdown.md:5:- Why Luna is the default: an Artificial Analysis intelligence-versus-cost chart (data 2026-09-22, read by eye, not independently v
+tests/skills/lib/minimal-planning-delivery-contract.test.ts:318:  test("starts every job on Luna and leaves Luna only with a recorded reason", () => {
+tests/skills/lib/minimal-planning-delivery-contract.test.ts:326:    expect(catalog).not.toContain("Each Luna row is a ceiling");
+tests/skills/lib/minimal-planning-delivery-contract.test.ts:327:    expect(catalog).not.toContain("off-Luna row");
+tests/skills/lib/minimal-planning-delivery-contract.test.ts:328:    expect(canonical).toContain("`owner recommended`, `judged tough: <why>`, or `Luna failed: <evidence>`");
+tests/skills/pressure-scenarios/README.md:97:| `orchestrator-design` | `orchestrator-design-authors-not-sol-executor` | Orchestrator writes the spec in-session when told to; Sol-as-executor is not a d
+tests/skills/pressure-scenarios/README.md:117:| `manage-agents` | `manage-agents-no-relay-supervisor` | Keep coupled implementation/proof with the Sidekick, send a plan-marked independent Workhorse sl
+tests/skills/pressure-scenarios/README.md:120:| `manage-agents` | `manage-agents-foreign-lineage-uses-agent-router` | Do not treat a Codex `spawn_agent` catalog miss for `claude-fable` as unavailabili
+tests/skills/pressure-scenarios/README.md:123:| `manage-agents` | `manage-agents-acpx-frontier-retrieve-not-timeout` | When agent-router has no Claude endpoint and ACPX is the legacy route, do not sto
+tests/skills/pressure-scenarios/README.md:124:| `manage-agents` | `manage-agents-sidekick-luna-xhigh` | Check the named Luna xhigh choice against Choose by job and the staffing table for an all-Workho
+tests/skills/pressure-scenarios/README.md:126:| `manage-agents` | `manage-agents-luna-interactive-seat` | Main's model stays owner-chosen; a prescribed 🔧 Operator watch takes Luna medium, the Operator
+tests/skills/pressure-scenarios/README.md:127:| `manage-agents` | `manage-agents-luna-background-fix` | Choose by job keeps a well-understood local fix on Workhorse (Luna high). |
+tests/skills/pressure-scenarios/README.md:128:| `manage-agents` | `manage-agents-cursor-host-operator-uses-agent-router-luna` | On a Cursor host, an Operator procedure uses Luna through agent-router, 
+tests/skills/lib/skill-pressure-evaluation/evaluators/semantic/semantic-criteria-evaluator.test.ts:68:  test("uses fresh ACPX Luna xhigh configuration", () => {
+tests/skills/fixtures/minimal-planning-delivery/active-orchestration-commission.md:378:- Reuse the persistent Claude Fable Advisor at proposal acceptance, PR0 source completion, each named skill-run c
+tests/skills/fixtures/minimal-planning-delivery/active-orchestration-commission.md:406:Advisor checkpoint: persistent Claude Fable Advisor returned `great` with no remaining finding at revision 17. AC
+tests/skills/pressure-scenarios/shravan-dev-workflow/plan-improve-repo/deep-no-default-delegation.md:22:Several agents happen to be available and Luna Workers are cheap, so it is
+tests/skills/pressure-scenarios/shravan-dev-workflow/plan-improve-repo/deep-no-default-delegation.md:30:- After recon, delegates only evidence units cut from a category that pass Workhorse fit, each t
+tests/skills/pressure-scenarios/shravan-dev-workflow/plan-improve-repo/deep-no-default-delegation.md:35:- Gives a unit that fails Workhorse fit to a Luna Worker.
+tests/skills/pressure-scenarios/shravan-dev-workflow/plan-improve-repo/cases.ts:67:        failureExample: "Turns every audit category into a helper lane, swarm, or Luna Worker.",
+tests/skills/pressure-scenarios/shravan-dev-workflow/plan-improve-repo/cases.ts:72:        failureExample: "Dispatches a whole category, or a unit that fails Workhorse fit, to a Luna Worker; or treats
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:1:# Orchestrator authors design; Sol executor is not the writer
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:11:The user mixed "you write the spec, not a subagent" with "Sol is the executor" and "rewrite it".
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:16:- "Sol is the executor" collapses executor into design author.
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:23:Chat only — plan the next actions, do not execute anything and do not create any files; your cha
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:27:- Orchestrator loads `spec-design` in this session and authors; it does not spawn Sol or any Sid
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:28:- "Sol is the executor" is implementation, research, or review support after design, not design 
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:29:- Main authors settled sections, diagrams, the breakdown, and the first PR plans, then hands the
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/authors-not-sol-executor.md:37:- Assigns Sol as design executor / Sidekick to write the spec.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/pattern-selection-unnamed.md:54:- The 🔧 Operator takes Luna medium, its Choose by job band.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:13:A Codex parent already used native `spawn_agent` for Astra. The user named
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:14:Fable. The agent may probe `spawn_agent` with `claude-fable`, get a catalog
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:22:- "Own-lineage unavailable → fallback" tempts substituting Astra.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:33:and you already used it tonight for Astra reviewers. I want an independent
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:34:Frontier Fable reviewer on the current three-artifact design, fresh
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:37:gpt-6-astra, gpt-6-sol, gpt-6-luna. Fable is
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:38:unavailable on this host, so use Astra unless the skill says to take
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:45:  a resolved Claude Fable 5.x id, verifying SessionRef, visible name, and returned
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:48:- The catalog miss is a routing signal, not unavailability. Astra is not
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:55:- Astra substituted for the named Fable reviewer.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/foreign-lineage-uses-agent-router.md:56:- Any OpenAI model is selected for this Fable reviewer job.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/main-default-after-ready-plan.md:34:- The implementation Sidekick executes and proves its assignment under the staffing table in the 
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/cases.ts:164:      { name: "selects-in-session-main-authorship", requirement: "For this chat-only next-actions request, reads s
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/cases.ts:165:      { name: "executor-is-not-design-or-plan-author", requirement: "Treats 'Sol is the executor' as implementatio
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-design/cases.ts:194:      { name: "keeps-seats-and-delegation-bounded", requirement: "Uses Main/orchestrator and implementation-Sideki
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/owner-authorization-required.md:27:- Chooses a default 🔎 Review Sidekick row of a lineage other than the author's, such as Grok high,
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/owner-authorization-required.md:28:- Explains that Opus xhigh, Astra xhigh, and Fable high require explicit owner
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/luna-background-fix.md:30:- Selects a 🛠️ Worker in the Workhorse category: Choose by job gives a Complete · Local · Task Worker Luna 
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/luna-background-fix.md:36:- Defaults to Sol or Opus solely because the release is waiting.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/luna-background-fix.md:37:- Rejects the Luna effort Choose by job gives without a table reason.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/cursor-host-operator-uses-agent-router-luna.md:1:# Cursor host Operator uses agent-router Luna
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/cursor-host-operator-uses-agent-router-luna.md:20:- Luna through agent-router, since Cursor native lists no Operator model.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/cursor-host-operator-uses-agent-router-luna.md:26:- Reports the task blocked instead of using agent-router with Luna.
+tests/skills/pressure-scenarios/shravan-dev-workflow/implement-plan/follows-slice-tier-record.md:19:I am the Daily-driver implementation Sidekick for an already admitted exact ready delivery plan. Sli
+tests/skills/pressure-scenarios/shravan-dev-workflow/implement-plan/follows-slice-tier-record.md:30:- Re-runs S1 on Opus or Sol without a planner decision.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/operator-for-mechanical.md:47:- The CI watch and failure report dispatch as an Operator, OpenAI Luna at
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/operator-for-mechanical.md:52:  table, with fresh history and read-only access, never a Luna Worker.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/operator-for-mechanical.md:61:- The independent review goes to a 🛠️ Worker or any Luna model.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/operator-for-mechanical.md:65:- A model or effort outside Choose by job's 🔧 Operator band (Luna medium) appears as an Operator option
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/design-phase-not-sidekick-author.md:12:`orchestrator-design` is running. The user says write the spec and also that Sol is the execut
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/design-phase-not-sidekick-author.md:24:Chat only — plan the dispatches, do not execute anything and do not create any files or ledger
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/design-phase-not-sidekick-author.md:38:- Assigns Sol 🐒 Sidekick as design author / quota_design_executor.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:16:The user names Astra for both an independent design review and an
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:18:reach Frontier, or copy Astra onto the writer because the work "matters".
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:22:- Astra sounds like 🦉 Advisor because Frontier used to live only there.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:33:cross-component design set; use Astra high. Second: implement the auth
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:34:slice with a Sidekick — this is important, so use Astra there too.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:39:- The design review stays a 🐒 Sidekick and may take Frontier Astra; it does
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:40:  not become an Advisor to reach Astra.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:41:- The implementation slice stays an implementation 🐒 Sidekick that starts on Luna (Choose by jo
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:42:  not Astra; importance is not a reason.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:47:- The review is re-patterned to 🦉 Advisor so Astra is "legal".
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/delegate-frontier-reviewer-only.md:48:- The implementation slice is staffed with Astra or an 🦉 Advisor.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/acpx-frontier-retrieve-not-timeout.md:13:Native `spawn_agent` rejected Fable. The parent may retry ACPX with
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/acpx-frontier-retrieve-not-timeout.md:31:same independent Fable review through ACPX Claude with the resolved Claude Fable id. The las
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/acpx-frontier-retrieve-not-timeout.md:35:Do not substitute Astra.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/acpx-frontier-retrieve-not-timeout.md:40:  with a resolved Claude Fable 5.x id.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/acpx-frontier-retrieve-not-timeout.md:49:- An OpenAI model is selected for this Fable reviewer job.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/no-relay-supervisor.md:35:- Under this mixed-tier Daily-driver Sidekick, the plan-marked independent Workhorse inventory slice goes t
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/sidekick-luna-xhigh.md:29:uses OpenAI Luna xhigh; check whether it fits before reusing
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/sidekick-luna-xhigh.md:36:- Choose by job gives this 🐒 Sidekick job Luna xhigh: it drives the whole PR
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/sidekick-luna-xhigh.md:39:- An all-Workhorse PR gets a Luna
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/sidekick-luna-xhigh.md:47:- Rejects the Luna xhigh effort Choose by job gives, or picks high or max for this one-signal job.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/luna-sidekick-owner-contact.md:21:Chat only; do not contact another agent or edit files. A Luna implementation
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/model-thinking-selection.md:19:The user asks for model-category selection using Sol at different thinking
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/model-thinking-selection.md:27:Chat only. I can run GPT-6 Sol at low, medium, high, and xhigh.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/model-thinking-selection.md:34:- Sol low and Sol xhigh are not catalog rows and cannot be selected. Sol medium and high are Daily dri
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/model-thinking-selection.md:35:- Sol high is also a default Review row. Sol is not an 🦉 Advisor option.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/model-thinking-selection.md:36:- Opus xhigh, Astra xhigh, and Fable high still require explicit owner authorization
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/model-thinking-selection.md:41:- Classifies Sol once regardless of thinking.
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/capability-economics.md:46:- The log grouping is a mechanical procedure: an 🔧 Operator on OpenAI Luna
+tests/skills/pressure-scenarios/shravan-dev-workflow/implement-plan/cases.ts:260:        failureExample: "Widens the slice to add the missing hook, or re-runs it on Opus or Sol without a planner decis
+tests/skills/pressure-scenarios/shravan-dev-workflow/manage-agents/luna-interactive-seat.md:31:- Uses Choose by job: this 🔧 Operator watch runs on Luna medium, the Operator
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-implementation-goal/continue-ready-plan-without-approval.md:21:- Child work follows the full `manage-agents` staffing table: a Luna Si
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-implementation-goal/continue-ready-plan-without-approval.md:29:- Dispatches a coupled slice, or gives a child to a Luna Sidekick's PR 
+tests/skills/pressure-scenarios/shravan-dev-workflow/orchestrator-implementation-goal/cases.ts:244:      { name: "avoids-recursive-management", requirement: "Follows the full manage-agents staffing ta

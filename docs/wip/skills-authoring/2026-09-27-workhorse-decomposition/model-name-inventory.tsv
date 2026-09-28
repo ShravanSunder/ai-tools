@@ -1,0 +1,84 @@
+file	line	models	origin	home	text
+AGENTS.md	22	Luna	pre-existing	outside	│   ├── stop-review/                  # Luna Stop-review; deploy-home-hook.sh copies runtime to ~/.agents/stop-review
+README.md	128	Luna	this PR	outside	Use `manage-agents` when subordinate AI-agent mechanics are the work: spawning, calling, resuming, steering, queueing, monitoring, or reducing advisors, sidekic
+shared-references/canonical-implementation-plan.md	98	Luna	this PR	outside	Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`. A Workhorse slice passes Workhorse fit in `manage-agents`; a D
+skills/manage-agents/SKILL.md	14	Luna	this PR	outside	- **Implementation 🐒 Sidekick.** After a Main-authored PR plan is ready, one persistent implementation Sidekick may own that PR; its tier and what it dispatches
+skills/manage-agents/SKILL.md	90	Luna	this PR	outside	MUST load `references/model-catalog.md` and return the job's model lineage, thinking level, and model category, plus the Workhorse fit result when the job could
+skills/manage-agents/SKILL.md	94	Luna	pre-existing	outside	🐒 Sidekicks, 🔎 Review Sidekicks, and 🦉 Advisors run in separate persistent top-level conversations; 🛠️ Workers and 🔧 Operators run as native subagents. Reuse a 
+skills/manage-agents/SKILL.md	96	Astra,Fable,GPT-6,Grok,Luna,Opus,Sol,Sonnet	pre-existing	outside	**Resolve the exact model id.** Skills name lineage and effort, never ids. (1) If `~/.config/agent-context/model-map.md` exists and has a row for this host and 
+skills/manage-agents/SKILL.md	109	Luna	this PR	outside	| PR's slices | Sidekick | What the Sidekick executes itself | What goes to Luna 🛠️ Workers |
+skills/manage-agents/SKILL.md	111	Luna	this PR	outside	| all Workhorse | Luna, effort by Choose by job | every slice | nothing by default; the benefit test in Select an agent governs any child |
+skills/manage-agents/SKILL.md	112	Luna	this PR	outside	| any slice off Luna with a recorded reason | the Daily driver that reason names | slices off Luna, and every Workhorse slice the plan does not mark independent
+skills/manage-agents/references/acpx-provider-claude.md	7	Fable,Opus	pre-existing	home	Examples: Claude Fable 5.x and Claude Opus 5.5 ACP selection ids. Resolve the exact id with the Runtime rule in `SKILL.md`. A custom Fable id may differ from ba
+skills/manage-agents/references/acpx-provider-claude.md	14	Fable	pre-existing	home	ANTHROPIC_CUSTOM_MODEL_OPTION='<resolved Fable id>' \
+skills/manage-agents/references/acpx-provider-claude.md	15	Fable	pre-existing	home	ANTHROPIC_MODEL='<resolved Fable id>' \
+skills/manage-agents/references/acpx-provider-claude.md	21	Fable	pre-existing	home	The adapter observed `default`, `low`, `medium`, `high`, `xhigh`, and `max`. Use the Models table thinking values for Frontier Fable and invoke every lifecycle 
+skills/manage-agents/references/acpx-provider-claude.md	27	Fable	pre-existing	home	A friendly alias or exit code 0 does not prove Fable launched; verify capability evidence and record the accepted id in the ledger.
+skills/manage-agents/references/acpx-provider-codex.md	7	Astra,GPT-6,Luna,Sol	pre-existing	home	Examples: GPT-6 Luna, Sol, and Astra ids. Resolve the exact id with the Runtime rule in `SKILL.md`.
+skills/manage-agents/references/acpx-provider-codex.md	20	Luna	this PR	home	acpx --cwd /absolute/repo --model <resolved Luna id> --approve-reads --no-terminal \
+skills/manage-agents/references/acpx-provider-codex.md	50	Luna	pre-existing	home	acpx --cwd /absolute/repo --model <resolved Luna id> \
+skills/manage-agents/references/acpx-provider-cursor.md	9	Grok	pre-existing	home	Cursor is a multi-model ACPX provider. It owns a catalog mapping, not a single model lineage. Use it for Grok 4.6 or any other id the adapter advertises. Model 
+skills/manage-agents/references/acpx-provider-cursor.md	15	Fable,Grok,Opus	pre-existing	home	Examples: Grok 4.6, Claude Opus 5.5, and Claude Fable 5.x ACP ids; catalogs change. Resolve the exact id with the Runtime rule in `SKILL.md`.
+skills/manage-agents/references/agent-job-packet.md	31	Luna	this PR	outside	**Job pins.** Every 🛠️ Worker or 🔧 Operator job, and every job on Luna whatever its role, pins: the absolute worktree and head; the exact commands or allowed co
+skills/manage-agents/references/model-catalog.md	5	Luna	this PR	home	Select one row for the job. Return the model lineage, thinking level, and model category, plus the Workhorse fit result when the job could run on Luna. Honor an
+skills/manage-agents/references/model-catalog.md	19	Luna	pre-existing	home	| Workhorse | OpenAI Luna | medium | |
+skills/manage-agents/references/model-catalog.md	20	Luna	pre-existing	home	| Workhorse | OpenAI Luna | high | |
+skills/manage-agents/references/model-catalog.md	21	Luna	pre-existing	home	| Workhorse | OpenAI Luna | xhigh | |
+skills/manage-agents/references/model-catalog.md	22	Luna	pre-existing	home	| Workhorse | OpenAI Luna | max | |
+skills/manage-agents/references/model-catalog.md	23	Opus	pre-existing	home	| Daily driver | Claude Opus | medium | |
+skills/manage-agents/references/model-catalog.md	24	Opus	pre-existing	home	| Daily driver | Claude Opus | high | |
+skills/manage-agents/references/model-catalog.md	25	Sol	pre-existing	home	| Daily driver | OpenAI Sol | medium | |
+skills/manage-agents/references/model-catalog.md	26	Sol	pre-existing	home	| Daily driver | OpenAI Sol | high | |
+skills/manage-agents/references/model-catalog.md	27	Grok	pre-existing	home	| Daily driver | xAI Grok | medium | |
+skills/manage-agents/references/model-catalog.md	28	Grok	pre-existing	home	| Daily driver | xAI Grok | high | |
+skills/manage-agents/references/model-catalog.md	29	Astra	pre-existing	home	| Frontier | OpenAI Astra | high | |
+skills/manage-agents/references/model-catalog.md	30	Opus	pre-existing	home	| Frontier | Claude Opus | xhigh | User must authorize |
+skills/manage-agents/references/model-catalog.md	31	Astra	pre-existing	home	| Frontier | OpenAI Astra | xhigh | User must authorize |
+skills/manage-agents/references/model-catalog.md	32	Fable	pre-existing	home	| Frontier | Claude Fable | high | User must authorize |
+skills/manage-agents/references/model-catalog.md	36	Luna	this PR	home	Every job starts on Luna. The role sets the band; the job picks the effort inside it.
+skills/manage-agents/references/model-catalog.md	38	Luna	this PR	home	| Role | Luna band | Effort |
+skills/manage-agents/references/model-catalog.md	44	Luna	this PR	home	Demanding signals: Partial direction; Cross-domain or Cross-system span; Run or Open horizon (definitions in `SKILL.md` Select an agent). Luna never goes below 
+skills/manage-agents/references/model-catalog.md	46	Luna,Opus,Sol	this PR	home	**Leaving Luna.** Partial direction, Cross-system span, and Open horizon are flags, not routes. For a flagged job, Main first fixes the cut: write the open choi
+skills/manage-agents/references/model-catalog.md	50	Luna	this PR	home	| Assignment | Signals | Luna effort |
+skills/manage-agents/references/model-catalog.md	58	Sol	this PR	home	| "Move the client and the server to the new wire format: the plan names the format and the migration approach in four ordered slices." | Complete · Cross-syste
+skills/manage-agents/references/model-catalog.md	62	Luna	this PR	home	| Job | Role · signals | Luna effort |
+skills/manage-agents/references/model-catalog.md	69	Luna	this PR	home	| Independent review | 🔎 Review Sidekick table; never Luna | — |
+skills/manage-agents/references/model-catalog.md	71	Luna	this PR	home	Luna max is a Sidekick effort only.
+skills/manage-agents/references/model-catalog.md	75	Luna	this PR	home	**Workhorse fit.** Every job starts on Luna (Choose by job). It fits the Workhorse tier when it has:
+skills/manage-agents/references/model-catalog.md	80	Luna	this PR	home	4. **Its seams exist**: every seam, signal, event, or API the job relies on already exists at its base and supports the observation the job needs, checked in so
+skills/manage-agents/references/model-catalog.md	82	Luna	this PR	home	A job that misses a condition is re-cut until it fits: pin its inputs, name its output and stop, or add a contract slice for a missing seam. A job the cut canno
+skills/manage-agents/references/model-catalog.md	88	Astra,Luna,Sol	pre-existing	home	| OpenAI | Astra, Sol, and Luna. |
+skills/manage-agents/references/model-catalog.md	89	Fable,Opus	pre-existing	home	| Claude | Fable and Opus. |
+skills/manage-agents/references/model-catalog.md	90	Grok	pre-existing	home	| xAI | Grok. |
+skills/manage-agents/references/model-catalog.md	97	Grok	pre-existing	home	| xAI Grok | high | |
+skills/manage-agents/references/model-catalog.md	98	Astra	pre-existing	home	| OpenAI Astra | high | |
+skills/manage-agents/references/model-catalog.md	99	Sol	pre-existing	home	| OpenAI Sol | high | |
+skills/manage-agents/references/model-catalog.md	100	Opus	pre-existing	home	| Claude Opus | medium | |
+skills/manage-agents/references/model-catalog.md	101	Opus	pre-existing	home	| Claude Opus | high | |
+skills/manage-agents/references/model-catalog.md	102	Astra	pre-existing	home	| OpenAI Astra | xhigh | User must authorize |
+skills/manage-agents/references/model-catalog.md	103	Opus	pre-existing	home	| Claude Opus | xhigh | User must authorize |
+skills/manage-agents/references/model-catalog.md	104	Fable	pre-existing	home	| Claude Fable | high | User must authorize |
+skills/manage-agents/references/model-catalog.md	106	Grok	this PR	home	Grok high is the usual pick because it is a third lineage.
+skills/manage-agents/references/model-catalog.md	112	Astra	pre-existing	home	| OpenAI Astra | high |
+skills/manage-agents/references/model-catalog.md	113	Astra	pre-existing	home	| OpenAI Astra | xhigh |
+skills/manage-agents/references/model-catalog.md	114	Opus	pre-existing	home	| Claude Opus | high |
+skills/manage-agents/references/model-catalog.md	115	Opus	pre-existing	home	| Claude Opus | xhigh |
+skills/manage-agents/references/model-catalog.md	116	Fable	pre-existing	home	| Claude Fable | high |
+skills/manage-agents/references/model-catalog.md	120	Luna	this PR	home	Complete when one row is selected for the job, it is not an unauthorized `User must authorize` row, a job leaves Luna only with a recorded reason, and the linea
+skills/manage-agents/references/native-providers-claude.md	17	Luna	this PR	home	| Workhorse 🛠️ Worker | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+skills/manage-agents/references/native-providers-claude.md	18	Opus	this PR	home	| Daily-driver 🛠️ Worker | Claude Opus, medium | native Task / Agent |
+skills/manage-agents/references/native-providers-claude.md	19	Luna	pre-existing	home	| 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+skills/manage-agents/references/native-providers-codex.md	11	Luna,Sol	this PR	home	| 🛠️ Worker | OpenAI Luna or Sol, effort from `model-catalog.md` Choose by job | native `spawn_agent` |
+skills/manage-agents/references/native-providers-codex.md	12	Luna	this PR	home	| 🔧 Operator | OpenAI Luna, effort from `model-catalog.md` Choose by job | native `spawn_agent` |
+skills/manage-agents/references/native-providers-codex.md	41	Luna	pre-existing	home	"model": "<resolved Luna id>",
+skills/manage-agents/references/native-providers-cursor.md	17	Luna	this PR	home	| Workhorse 🛠️ Worker | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+skills/manage-agents/references/native-providers-cursor.md	18	Grok,Opus	this PR	home	| Daily-driver 🛠️ Worker | xAI Grok 4.6, medium; or Claude Opus, medium | native Task |
+skills/manage-agents/references/native-providers-cursor.md	19	Luna	pre-existing	home	| 🔧 Operator | OpenAI Luna | agent-router (see Runtime in `SKILL.md`) |
+skills/manage-agents/references/native-providers-cursor.md	21	Fable,Opus	pre-existing	home	Other Claude Opus efforts and Claude Fable only on owner request. Resolve the exact id with the Runtime rule in `SKILL.md`. Treat `agent --list-models` short na
+skills/plan-implementation/SKILL.md	34	Luna	this PR	outside	6. Ensure every slice names its external dependencies and the boundary where a stand-in is allowed if one is missing; every contract-only or prefactoring slice 
+skills/plan-implementation/references/slice-and-proof-design.md	31	Luna	this PR	outside	Every slice records `tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason>`; the contract lives in `../../../shared-references/canonical-im
+skills/plan-implementation/references/slice-and-proof-design.md	36	Luna	this PR	outside	- Split or retag a slice only when it fails Workhorse fit or would cross an assigned authority or contract boundary; split it at that boundary, and tag it Daily
+skills/plan-improve-repo/references/audit-lanes.md	5	Luna	this PR	outside	Delegation happens by evidence unit, never by category. After recon, the parent may cut a selected category into independently bounded units: one owner, one que
+skills/plan-improve-repo/references/improvement-plan-template.md	43	Luna	this PR	outside	tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Luna failed: <evidenc
+skills/plan-improve-repo/references/improvement-plan-template.md	45	Luna	this PR	outside	tier: <Workhorse | Daily driver> · <direction>/<span>/<horizon> · <reason; a Daily-driver slice: owner recommended | judged tough: <why> | Luna failed: <evidenc
+skills/practices-research/SKILL.md	25	Luna	this PR	outside	IF a selected source class's corpus splits into independent units too large to read in one pass (many session logs, many repositories or services), cut it into 
