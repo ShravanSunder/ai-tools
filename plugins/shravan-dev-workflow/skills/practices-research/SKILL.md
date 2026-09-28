@@ -5,7 +5,7 @@ description: "Use when a task needs source gathering, prior-art research, curren
 
 # Practices: Research
 
-Turn a fuzzy evidence need into bounded questions, walk relevant source classes in order, and return a verified ledger that another workflow can inspect. The assigned researcher owns the entire walk. Research gathers evidence; the receiving phase owns design, plans, implementation, and review verdicts.
+Turn a fuzzy evidence need into bounded questions, walk relevant source classes in order, and return a verified ledger that another workflow can inspect. The assigned researcher owns the entire walk, including any cut of a source class into units and the verification of what unit Workers return. Research gathers evidence; the receiving phase owns design, plans, implementation, and review verdicts.
 
 ## Boundaries
 
@@ -22,6 +22,7 @@ Turn a fuzzy evidence need into bounded questions, walk relevant source classes 
 2. Re-anchor locally when a repo is involved: read current code, docs, specs, plans, runbooks, findings, and relevant sibling repos. Treat memory and session summaries as discovery.
 3. MUST load `references/tool-routing.md` and return the source routes for the questions. MUST load `references/lane-packets.md` as source-class checklists and return the selected classes in order with a reason for each skipped class.
 4. Walk selected source classes one at a time. Record verbatim queries, opened sources, null results, and unsearched classes. Use current web or docs sources where freshness matters. Keep evidence classes separate from inference.
+   IF a selected source class's corpus splits into independent units too large to read in one pass (many session logs, many repositories or services), cut it into per-unit inputs and assign each unit to a Luna 🛠️ Worker through `manage-agents` under the Workhorse packet (`../manage-agents/references/agent-job-packet.md`); verify each result's decisive anchors before it enters the ledger. Units split one class; the walk across classes stays serial and yours.
 5. Verify load-bearing claims against primary sources, compare stale memory with live files, and surface contradictions or competing hypotheses. IF a conclusion is load-bearing or embeds the user's own hypothesis, the assignment owner with coordination authority may commission or resume one independent 🔎 Review Sidekick through `manage-agents`. A bounded 🛠️ Worker returns the claim and anchors to that owner. IF the countercheck is commissioned, MUST load `references/countercheck.md` for its handoff and return per-claim `complete | partial | blocked` results before synthesis. Otherwise record why it was not selected.
 6. Synthesize by question. Findings move from `lead` to `investigated`, then `accepted | refuted | unresolved`. Zero accepted findings is valid. State supported, refuted, complicated, and unresolved claims with their anchors, then name the next owner as a return token.
 

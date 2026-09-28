@@ -1,6 +1,6 @@
 # Source-Class Checklists
 
-The researcher walks selected classes one at a time. Each class returns opened anchors, verbatim queries, null results, contradictions, freshness, and what remains unsearched. Select by the question and preserve named targets. These checks produce candidate evidence; the researcher verifies load-bearing conclusions before synthesis.
+The researcher walks selected classes one at a time. Each class returns opened anchors, verbatim queries, null results, contradictions, freshness, and what remains unsearched. Select by the question and preserve named targets. These checks produce candidate evidence; the researcher verifies load-bearing conclusions before synthesis. Inside one class, a corpus that splits into independent units may go one unit per Luna 🛠️ Worker (`SKILL.md` step 4); the researcher cuts the units, verifies each return's decisive anchors, and keeps the one ledger.
 
 | Source class | Use when | Inspect and return | Fallback |
 | --- | --- | --- | --- |
@@ -15,4 +15,4 @@ The researcher walks selected classes one at a time. Each class returns opened a
 
 For local re-anchor, read current implementation and its controlling artifacts before external comparison. For prior art, compare one target or axis at a time and return what fits or conflicts with the local system. For memory, treat older summaries as discovery until live evidence confirms drift-prone facts. For artifact consistency, read current specs, plans, runbooks, changelogs, and findings together; read newest-first runbooks in their established order.
 
-Substantial research writes one ledger under `tmp/practices-research/<date>-<slug>/`. A chat-only, no-file, tiny single local read, or unavailable write surface names its exception. The ledger belongs to this researcher; source classes do not create separate packet or result files by default.
+Substantial research writes one ledger under `tmp/practices-research/<date>-<slug>/`. A chat-only, no-file, tiny single local read, or unavailable write surface names its exception. The ledger belongs to this researcher; source classes do not create separate packet or result files by default. Unit Worker outputs are raw source notes in the same folder, which `evidence-ledger.md` already allows.
