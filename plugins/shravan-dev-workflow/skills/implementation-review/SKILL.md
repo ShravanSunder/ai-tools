@@ -63,7 +63,7 @@ Return `ready | needs-revision | blocked-input | decision-needed | not-convergin
 ## Remediation Boundary
 
 - This skill never edits. Accepted implementation-owned findings route to `implement-plan`.
-- After each correction inside the accepted boundary, the caller invokes another review of the same PR or stack layer with fresh diff/proof until the result is `ready` or `not-converging`; corrected source invalidates affected coverage. The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`. Do not persist counters, ledgers, hashes, or review state in the plan.
+- After each correction inside the accepted boundary, the caller invokes another review of the same review scope with fresh diff/proof until the result is `ready` or `not-converging`; corrected source invalidates affected coverage. The convergence rule and the accepted boundary live in `references/finding-and-reduction.md`. Do not persist counters, ledgers, hashes, or review state in the plan.
 - Design/spec/plan defects return to their semantic owner and follow that owner's bounded review policy; they do not consume implementation remediation authority.
 
 ## Completion Blockers
