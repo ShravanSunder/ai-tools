@@ -250,6 +250,7 @@ Source: three Luna xhigh 🛠️ Workers read 60+ files whole (planning, agent m
 
 ## Coordination
 
+- **Implementer:** one Claude Opus implementation 🐒 Sidekick (agent-router `claude-local`) writes every run of Spec A and Spec B in full, one commit per run, then the proof. Owner, 2026-09-28: "for skills especially and design i kind of expect another opus model to write it fully". Skill prose is an open-approach judgment task, so it fails Workhorse fit (C1) and goes to the Daily driver. Luna 🛠️ Workers stay on evidence: sweeps, replays, digests.
 - **Base:** `origin/main` at `c08ab7af`, branch `chore/workhorse-decomposition`, worktree `~/dev/ai-tools.chore-workhorse-decomposition`.
 - **Landing:** run 1 first (C1, C3, and D16 table homes), then 2, 2b, 3a, 3b, 3c, 4, 5, 6 on one branch as one PR (D14).
 - **Overlap with the pstack comparison** (`/Users/shravansunder/dev/ai-tools/docs/wip/2026-09-27-pstack-vs-ours/reduction.md` in the main checkout, uncommitted; recommendation 6, not yet a spec): it targets the same two homes, `manage-agents/references/agent-job-packet.md` and `orchestrator-implementation-goal`. This spec takes the packet fields that overlap C3 (verify, forbidden, report, and timebox as the done condition) and the router long-turn route (D9). The rolling dispatch window and drain loop stay with that later spec. Whichever lands second rebases onto the first.
